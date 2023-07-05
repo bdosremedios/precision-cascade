@@ -14,11 +14,11 @@ template <typename T>
 class LinearSolve {
     
     protected:
-
         // Linear System Attributes
         Matrix<T, Dynamic, Dynamic> A;
         Matrix<T, Dynamic, 1> b;
         Matrix<T, Dynamic, 1> x_0;
+        int m; int n;
 
         // Solution Tracking Attributes
         Matrix<T, Dynamic, 1> x;
@@ -26,18 +26,17 @@ class LinearSolve {
         vector<double> res_norm_hist;
         bool initiated = false;
         bool converged = false;
+        int iteration = 0;
 
         // Virtual function that returns the next iterate using previous iterates and
         // the linear solver's linear system
         virtual Matrix<T, Dynamic, 1> iterate() const = 0;
 
     public:
-
         // Constructors/Destructors
         LinearSolve(const Matrix<T, Dynamic, Dynamic> arg_A,
                     const Matrix<T, Dynamic, 1> arg_b) {
-            int n = arg_A.cols();
-            constructorHelper(arg_A, arg_b, Matrix<T, Dynamic, 1>::Ones(n, 1));
+            constructorHelper(arg_A, arg_b, Matrix<T, Dynamic, 1>::Ones(arg_A.cols(), 1));
         }
 
         LinearSolve(const Matrix<T, Dynamic, Dynamic> arg_A,
@@ -52,8 +51,8 @@ class LinearSolve {
             const Matrix<T, Dynamic, 1> arg_x_0) {
 
                 // Ensure compatability to matrices
-                int m = arg_A.rows();
-                int n = arg_A.cols();
+                m = arg_A.rows();
+                n = arg_A.cols();
                 assert(((m == arg_b.rows()), "A not compatible with b for linear system"));
                 assert(((n == arg_x_0.rows()), "A not compatible with initial guess x_0"));
 
@@ -81,7 +80,6 @@ class LinearSolve {
             initiated = true;
             
             // Assume all vectors/matrices are compatible or else Eigen will return an error
-            int curr_iter = 0;
             int m = A.rows();
             x = x_0;
             x_hist = Matrix<T, Dynamic, Dynamic>(m, max_iter+1);
@@ -89,22 +87,22 @@ class LinearSolve {
             double res_norm = (b - A*x).norm();
             res_norm_hist.push_back(res_norm);
 
-            while(((res_norm/res_norm_hist[0]) > target_rel_res) && (curr_iter < max_iter)) {
+            while(((res_norm/res_norm_hist[0]) > target_rel_res) && (iteration < max_iter)) {
 
                 // Iterate solution and set new solution to it
-                ++curr_iter;
+                ++iteration;
                 x = iterate();
 
                 // Update accumulators
                 res_norm = (b - A*x).norm();
-                x_hist(Eigen::placeholders::all, curr_iter) = x;
+                x_hist(Eigen::placeholders::all, iteration) = x;
                 res_norm_hist.push_back(res_norm);
 
             }
 
             // On convergence flag as converged and remove extra zeros on x_hist
             if ((res_norm/res_norm_hist[0]) <= target_rel_res) {
-                x_hist.conservativeResize(m, curr_iter+1);
+                x_hist.conservativeResize(m, iteration+1);
                 converged = true;
             }
 
@@ -139,7 +137,7 @@ class LinearSolve {
             }
 
             // Find which in height buckets each plot point should be in
-            int height = 10;
+            int height = 12;
             vector<double> plot_y_bucket_index;
             vector<double> bucket_ends;
             double min = *std::min_element(plot_y.cbegin(), plot_y.cend());
@@ -176,7 +174,7 @@ class LinearSolve {
             }
             if (arg == "log") { cout << "10^"; };
             cout << static_cast<int>(min) << " " << string(length-1, '-') << endl;
-            cout << "Iter: 1 " << string(length-5, ' ') << "Iter: " << res_norm_hist.size() << endl;
+            cout << "Iter: 1" << string(length-10, ' ') << "Iter: " << res_norm_hist.size() << endl;
 
         }
 

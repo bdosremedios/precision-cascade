@@ -1,45 +1,35 @@
-// #include "gtest/gtest.h"
-// #include "Eigen/Dense"
-// #include "read_matrix/MatrixReader.h"
-// #include <string>
+#include "gtest/gtest.h"
+#include "Eigen/Dense"
+#include "read_matrix/MatrixReader.h"
+#include <string>
 
-// #include "solvers/Jacobi.h"
+#include "solvers/GMRES.h"
 
-// using mxread::MatrixReader;
-// using Eigen::MatrixXd;
-// using std::string;
-// using std::cout, std::endl;
+using mxread::MatrixReader;
+using Eigen::MatrixXd;
+using std::string;
+using std::cout, std::endl;
 
-// class JacobiTest: public testing::Test {
+class GMRESTest: public testing::Test {
 
-//     protected:
-//         MatrixReader mr;
-//         string matrix_dir = "/home/bdosremedios/learn/gmres/test/solve_matrices/";
+    protected:
+        MatrixReader mr;
+        string matrix_dir = "/home/bdosremedios/learn/gmres/test/solve_matrices/";
 
-//     public:
-//         JacobiTest() {
-//             mr = MatrixReader();
-//         }
-//         ~JacobiTest() = default;
+    public:
+        GMRESTest() {
+            mr = MatrixReader();
+        }
+        ~GMRESTest() = default;
 
-// };
+};
 
-// TEST_F(JacobiTest, SolveSmallerMatrix) {
+TEST_F(GMRESTest, SolveSmallerMatrix) {
     
-//     Matrix<double, Dynamic, Dynamic> A = mr.read_file_d(matrix_dir + "conv_diff_64_A.csv");
-//     Matrix<double, Dynamic, Dynamic> b = mr.read_file_d(matrix_dir + "conv_diff_64_b.csv");
-//     JacobiSolve<double> jacobi_solve_d(A, b);
-//     jacobi_solve_d.solve();
-//     jacobi_solve_d.view_relres_plot("log");
+    Matrix<double, Dynamic, Dynamic> A = mr.read_file_d(matrix_dir + "conv_diff_64_A.csv");
+    Matrix<double, Dynamic, Dynamic> b = mr.read_file_d(matrix_dir + "conv_diff_64_b.csv");
+    GMRESSolve<double> gmres_solve_d(A, b);
+    // gmres_solve_d.solve();
+    // gmres_solve_d.view_relres_plot("log");
 
-// }
-
-// TEST_F(JacobiTest, SolveLargerMatrix) {
-    
-//     Matrix<double, Dynamic, Dynamic> A = mr.read_file_d(matrix_dir + "conv_diff_256_A.csv");
-//     Matrix<double, Dynamic, Dynamic> b = mr.read_file_d(matrix_dir + "conv_diff_256_b.csv");
-//     JacobiSolve<double> jacobi_solve_d(A, b);
-//     jacobi_solve_d.solve();
-//     jacobi_solve_d.view_relres_plot("log");
-    
-// }
+}

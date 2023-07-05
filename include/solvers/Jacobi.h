@@ -12,7 +12,6 @@ template <typename T>
 class JacobiSolve: public LinearSolve<T> {
 
     protected:
-
         Matrix<T, Dynamic, 1> iterate() const override {
 
             Matrix<T, Dynamic, 1> A_diag = this->A.diagonal();
@@ -23,7 +22,6 @@ class JacobiSolve: public LinearSolve<T> {
         }
     
     public:
-    
         // Inherit constructors
         using LinearSolve<T>::LinearSolve;
 
