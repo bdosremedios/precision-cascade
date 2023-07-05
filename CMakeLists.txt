@@ -1,0 +1,37 @@
+cmake_minimum_required(VERSION 3.22)
+
+project(gmres)
+
+add_subdirectory(include)
+add_subdirectory(src)
+
+message(STATUS "Adding eigen...")
+add_subdirectory(eigen)
+message(STATUS "Adding googletest...")
+add_subdirectory(googletest)
+
+option(
+    BUILD_MAIN
+    "Whether to build main"
+    ON
+)
+
+option(
+    BUILD_TEST
+    "Whether to build test"
+    ON
+)
+
+if(BUILD_MAIN)
+    
+    message(STATUS "Building main...")
+    add_subdirectory(main)
+
+endif()
+
+if(BUILD_MAIN)
+    
+    message(STATUS "Building test...")
+    add_subdirectory(test)
+
+endif()
