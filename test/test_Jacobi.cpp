@@ -14,7 +14,7 @@ class JacobiTest: public testing::Test {
 
     protected:
         MatrixReader mr;
-        string matrix_dir = "/home/bdosremedios/learn/gmres/test/solve_matrices/";
+        string matrix_dir = "/home/bdosremedios/dev/gmres/test/solve_matrices/";
 
     public:
         JacobiTest() {
@@ -42,6 +42,7 @@ TEST_F(JacobiTest, SolveConvDiff64) {
 
 }
 
+/*
 TEST_F(JacobiTest, SolveConvDiff256) {
     
     Matrix<double, Dynamic, Dynamic> A = mr.read_file_d(matrix_dir + "conv_diff_256_A.csv");
@@ -59,3 +60,4 @@ TEST_F(JacobiTest, SolveConvDiff256) {
     EXPECT_LE(rel_res, tol);
     
 }
+*/

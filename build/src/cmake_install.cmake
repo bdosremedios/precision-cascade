@@ -1,4 +1,4 @@
-# Install script for directory: /home/bdosremedios/learn/gmres/src
+# Install script for directory: /home/bdosremedios/dev/gmres/src
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -44,6 +44,6 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/bdosremedios/learn/gmres/build/src/read_matrix/cmake_install.cmake")
+  include("/home/bdosremedios/dev/gmres/build/src/read_matrix/cmake_install.cmake")
 endif()
 

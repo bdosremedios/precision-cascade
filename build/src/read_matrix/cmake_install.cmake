@@ -1,4 +1,4 @@
-# Install script for directory: /home/bdosremedios/learn/gmres/src/read_matrix
+# Install script for directory: /home/bdosremedios/dev/gmres/src/read_matrix
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

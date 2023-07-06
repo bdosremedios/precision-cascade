@@ -1,4 +1,4 @@
-# Install script for directory: /home/bdosremedios/learn/gmres
+# Install script for directory: /home/bdosremedios/dev/gmres
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -44,32 +44,32 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/bdosremedios/learn/gmres/build/include/cmake_install.cmake")
+  include("/home/bdosremedios/dev/gmres/build/include/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/bdosremedios/learn/gmres/build/src/cmake_install.cmake")
+  include("/home/bdosremedios/dev/gmres/build/src/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/bdosremedios/learn/gmres/build/eigen/cmake_install.cmake")
+  include("/home/bdosremedios/dev/gmres/build/eigen/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/bdosremedios/learn/gmres/build/googletest/cmake_install.cmake")
+  include("/home/bdosremedios/dev/gmres/build/googletest/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/bdosremedios/learn/gmres/build/main/cmake_install.cmake")
+  include("/home/bdosremedios/dev/gmres/build/main/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/bdosremedios/learn/gmres/build/test/cmake_install.cmake")
+  include("/home/bdosremedios/dev/gmres/build/test/cmake_install.cmake")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -80,5 +80,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/bdosremedios/learn/gmres/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/bdosremedios/dev/gmres/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

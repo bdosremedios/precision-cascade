@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/bdosremedios/learn/gmres/src/read_matrix/../../include -I/home/bdosremedios/learn/gmres/eigen
+CXX_INCLUDES = -I/home/bdosremedios/dev/gmres/src/read_matrix/../../include -I/home/bdosremedios/dev/gmres/eigen
 
 CXX_FLAGS = 
 

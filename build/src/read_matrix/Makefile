@@ -57,10 +57,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/bdosremedios/learn/gmres
+CMAKE_SOURCE_DIR = /home/bdosremedios/dev/gmres
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/bdosremedios/learn/gmres/build
+CMAKE_BINARY_DIR = /home/bdosremedios/dev/gmres/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -132,14 +132,14 @@ install/strip/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/bdosremedios/learn/gmres/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/bdosremedios/learn/gmres/build/CMakeFiles /home/bdosremedios/learn/gmres/build/src/read_matrix//CMakeFiles/progress.marks
-	cd /home/bdosremedios/learn/gmres/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/read_matrix/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/bdosremedios/learn/gmres/build/CMakeFiles 0
+	cd /home/bdosremedios/dev/gmres/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/bdosremedios/dev/gmres/build/CMakeFiles /home/bdosremedios/dev/gmres/build/src/read_matrix//CMakeFiles/progress.marks
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/read_matrix/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/bdosremedios/dev/gmres/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/bdosremedios/learn/gmres/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/read_matrix/clean
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/read_matrix/clean
 .PHONY : clean
 
 # The main clean target
@@ -148,22 +148,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/bdosremedios/learn/gmres/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/read_matrix/preinstall
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/read_matrix/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/bdosremedios/learn/gmres/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/read_matrix/preinstall
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/read_matrix/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/bdosremedios/learn/gmres/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/bdosremedios/dev/gmres/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 src/read_matrix/CMakeFiles/matrixReader.dir/rule:
-	cd /home/bdosremedios/learn/gmres/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/read_matrix/CMakeFiles/matrixReader.dir/rule
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/read_matrix/CMakeFiles/matrixReader.dir/rule
 .PHONY : src/read_matrix/CMakeFiles/matrixReader.dir/rule
 
 # Convenience name for target.
@@ -172,7 +172,7 @@ matrixReader: src/read_matrix/CMakeFiles/matrixReader.dir/rule
 
 # fast build rule for target.
 matrixReader/fast:
-	cd /home/bdosremedios/learn/gmres/build && $(MAKE) $(MAKESILENT) -f src/read_matrix/CMakeFiles/matrixReader.dir/build.make src/read_matrix/CMakeFiles/matrixReader.dir/build
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f src/read_matrix/CMakeFiles/matrixReader.dir/build.make src/read_matrix/CMakeFiles/matrixReader.dir/build
 .PHONY : matrixReader/fast
 
 MatrixReader.o: MatrixReader.cpp.o
@@ -180,7 +180,7 @@ MatrixReader.o: MatrixReader.cpp.o
 
 # target to build an object file
 MatrixReader.cpp.o:
-	cd /home/bdosremedios/learn/gmres/build && $(MAKE) $(MAKESILENT) -f src/read_matrix/CMakeFiles/matrixReader.dir/build.make src/read_matrix/CMakeFiles/matrixReader.dir/MatrixReader.cpp.o
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f src/read_matrix/CMakeFiles/matrixReader.dir/build.make src/read_matrix/CMakeFiles/matrixReader.dir/MatrixReader.cpp.o
 .PHONY : MatrixReader.cpp.o
 
 MatrixReader.i: MatrixReader.cpp.i
@@ -188,7 +188,7 @@ MatrixReader.i: MatrixReader.cpp.i
 
 # target to preprocess a source file
 MatrixReader.cpp.i:
-	cd /home/bdosremedios/learn/gmres/build && $(MAKE) $(MAKESILENT) -f src/read_matrix/CMakeFiles/matrixReader.dir/build.make src/read_matrix/CMakeFiles/matrixReader.dir/MatrixReader.cpp.i
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f src/read_matrix/CMakeFiles/matrixReader.dir/build.make src/read_matrix/CMakeFiles/matrixReader.dir/MatrixReader.cpp.i
 .PHONY : MatrixReader.cpp.i
 
 MatrixReader.s: MatrixReader.cpp.s
@@ -196,7 +196,7 @@ MatrixReader.s: MatrixReader.cpp.s
 
 # target to generate assembly for a file
 MatrixReader.cpp.s:
-	cd /home/bdosremedios/learn/gmres/build && $(MAKE) $(MAKESILENT) -f src/read_matrix/CMakeFiles/matrixReader.dir/build.make src/read_matrix/CMakeFiles/matrixReader.dir/MatrixReader.cpp.s
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f src/read_matrix/CMakeFiles/matrixReader.dir/build.make src/read_matrix/CMakeFiles/matrixReader.dir/MatrixReader.cpp.s
 .PHONY : MatrixReader.cpp.s
 
 # Help Target
@@ -226,6 +226,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/bdosremedios/learn/gmres/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/bdosremedios/dev/gmres/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

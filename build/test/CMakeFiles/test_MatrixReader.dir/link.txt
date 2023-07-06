@@ -1,2 +1,0 @@
-/usr/bin/ar qc libtest_MatrixReader.a CMakeFiles/test_MatrixReader.dir/test_MatrixReader.cpp.o
-/usr/bin/ranlib libtest_MatrixReader.a

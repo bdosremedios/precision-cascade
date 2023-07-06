@@ -12,12 +12,12 @@ template <typename T>
 class JacobiSolve: public LinearSolve<T> {
 
     protected:
-        Matrix<T, Dynamic, 1> iterate() const override {
+        void iterate() override {
 
             Matrix<T, Dynamic, 1> A_diag = this->A.diagonal();
             Matrix<T, Dynamic, Dynamic> invD = DiagonalMatrix<T, Dynamic>(A_diag.array().inverse());
 
-            return this->x + invD*(this->b-this->A*this->x);
+            this->x += invD*((this->b)-(this->A)*(this->x));
 
         }
     

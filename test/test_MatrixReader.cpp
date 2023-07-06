@@ -13,7 +13,7 @@ class MatrixReaderTest: public testing::Test {
 
     protected:
         MatrixReader mr;
-        string matrix_dir = "/home/bdosremedios/learn/gmres/test/read_matrices/";
+        string matrix_dir = "/home/bdosremedios/dev/gmres/test/read_matrices/";
 
     
     MatrixReaderTest() {

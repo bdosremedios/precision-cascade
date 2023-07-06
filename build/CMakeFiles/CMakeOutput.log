@@ -10,7 +10,7 @@ The output was:
 
 Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
 
-The C compiler identification is GNU, found in "/home/bdosremedios/learn/gmres/build/CMakeFiles/3.22.1/CompilerIdC/a.out"
+The C compiler identification is GNU, found in "/home/bdosremedios/dev/gmres/build/CMakeFiles/3.22.1/CompilerIdC/a.out"
 
 Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
 Compiler: /usr/bin/c++ 
@@ -23,15 +23,15 @@ The output was:
 
 Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
 
-The CXX compiler identification is GNU, found in "/home/bdosremedios/learn/gmres/build/CMakeFiles/3.22.1/CompilerIdCXX/a.out"
+The CXX compiler identification is GNU, found in "/home/bdosremedios/dev/gmres/build/CMakeFiles/3.22.1/CompilerIdCXX/a.out"
 
 Detecting C compiler ABI info compiled with the following output:
-Change Dir: /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp
+Change Dir: /home/bdosremedios/dev/gmres/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_3232e/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_3232e.dir/build.make CMakeFiles/cmTC_3232e.dir/build
-gmake[1]: Entering directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_3232e.dir/CMakeCCompilerABI.c.o
-/usr/bin/cc   -v -o CMakeFiles/cmTC_3232e.dir/CMakeCCompilerABI.c.o -c /usr/share/cmake-3.22/Modules/CMakeCCompilerABI.c
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_3caa7/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_3caa7.dir/build.make CMakeFiles/cmTC_3caa7.dir/build
+gmake[1]: Entering directory '/home/bdosremedios/dev/gmres/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_3caa7.dir/CMakeCCompilerABI.c.o
+/usr/bin/cc   -v -o CMakeFiles/cmTC_3caa7.dir/CMakeCCompilerABI.c.o -c /usr/share/cmake-3.22/Modules/CMakeCCompilerABI.c
 Using built-in specs.
 COLLECT_GCC=/usr/bin/cc
 OFFLOAD_TARGET_NAMES=nvptx-none:amdgcn-amdhsa
@@ -41,8 +41,8 @@ Configured with: ../src/configure -v --with-pkgversion='Ubuntu 11.3.0-1ubuntu1~2
 Thread model: posix
 Supported LTO compression algorithms: zlib zstd
 gcc version 11.3.0 (Ubuntu 11.3.0-1ubuntu1~22.04.1) 
-COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_3232e.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_3232e.dir/'
- /usr/lib/gcc/x86_64-linux-gnu/11/cc1 -quiet -v -imultiarch x86_64-linux-gnu /usr/share/cmake-3.22/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_3232e.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mtune=generic -march=x86-64 -version -fasynchronous-unwind-tables -fstack-protector-strong -Wformat -Wformat-security -fstack-clash-protection -fcf-protection -o /tmp/cchznNZs.s
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_3caa7.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_3caa7.dir/'
+ /usr/lib/gcc/x86_64-linux-gnu/11/cc1 -quiet -v -imultiarch x86_64-linux-gnu /usr/share/cmake-3.22/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_3caa7.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mtune=generic -march=x86-64 -version -fasynchronous-unwind-tables -fstack-protector-strong -Wformat -Wformat-security -fstack-clash-protection -fcf-protection -o /tmp/cc3RXnhn.s
 GNU C17 (Ubuntu 11.3.0-1ubuntu1~22.04.1) version 11.3.0 (x86_64-linux-gnu)
 	compiled by GNU C version 11.3.0, GMP version 6.2.1, MPFR version 4.1.0, MPC version 1.2.1, isl version isl-0.24-GMP
 
@@ -62,15 +62,15 @@ GNU C17 (Ubuntu 11.3.0-1ubuntu1~22.04.1) version 11.3.0 (x86_64-linux-gnu)
 
 GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
 Compiler executable checksum: e13e2dc98bfa673227c4000e476a9388
-COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_3232e.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_3232e.dir/'
- as -v --64 -o CMakeFiles/cmTC_3232e.dir/CMakeCCompilerABI.c.o /tmp/cchznNZs.s
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_3caa7.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_3caa7.dir/'
+ as -v --64 -o CMakeFiles/cmTC_3caa7.dir/CMakeCCompilerABI.c.o /tmp/cc3RXnhn.s
 GNU assembler version 2.38 (x86_64-linux-gnu) using BFD version (GNU Binutils for Ubuntu) 2.38
 COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/
 LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../:/lib/:/usr/lib/
-COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_3232e.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_3232e.dir/CMakeCCompilerABI.c.'
-Linking C executable cmTC_3232e
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_3232e.dir/link.txt --verbose=1
-/usr/bin/cc  -v CMakeFiles/cmTC_3232e.dir/CMakeCCompilerABI.c.o -o cmTC_3232e 
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_3caa7.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_3caa7.dir/CMakeCCompilerABI.c.'
+Linking C executable cmTC_3caa7
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_3caa7.dir/link.txt --verbose=1
+/usr/bin/cc  -v CMakeFiles/cmTC_3caa7.dir/CMakeCCompilerABI.c.o -o cmTC_3caa7 
 Using built-in specs.
 COLLECT_GCC=/usr/bin/cc
 COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/11/lto-wrapper
@@ -83,10 +83,10 @@ Supported LTO compression algorithms: zlib zstd
 gcc version 11.3.0 (Ubuntu 11.3.0-1ubuntu1~22.04.1) 
 COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/
 LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../:/lib/:/usr/lib/
-COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_3232e' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_3232e.'
- /usr/lib/gcc/x86_64-linux-gnu/11/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/11/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/11/lto-wrapper -plugin-opt=-fresolution=/tmp/ccnPyLbC.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_3232e /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/11/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/11 -L/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/11/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/11/../../.. CMakeFiles/cmTC_3232e.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-linux-gnu/11/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/crtn.o
-COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_3232e' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_3232e.'
-gmake[1]: Leaving directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
+COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_3caa7' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_3caa7.'
+ /usr/lib/gcc/x86_64-linux-gnu/11/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/11/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/11/lto-wrapper -plugin-opt=-fresolution=/tmp/ccY8tPPT.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_3caa7 /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/11/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/11 -L/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/11/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/11/../../.. CMakeFiles/cmTC_3caa7.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-linux-gnu/11/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/crtn.o
+COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_3caa7' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_3caa7.'
+gmake[1]: Leaving directory '/home/bdosremedios/dev/gmres/build/CMakeFiles/CMakeTmp'
 
 
 
@@ -107,12 +107,12 @@ Parsed C implicit include dir info from above output: rv=done
 
 Parsed C implicit link information from above output:
   link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
-  ignore line: [Change Dir: /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp]
+  ignore line: [Change Dir: /home/bdosremedios/dev/gmres/build/CMakeFiles/CMakeTmp]
   ignore line: []
-  ignore line: [Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_3232e/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_3232e.dir/build.make CMakeFiles/cmTC_3232e.dir/build]
-  ignore line: [gmake[1]: Entering directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp']
-  ignore line: [Building C object CMakeFiles/cmTC_3232e.dir/CMakeCCompilerABI.c.o]
-  ignore line: [/usr/bin/cc   -v -o CMakeFiles/cmTC_3232e.dir/CMakeCCompilerABI.c.o -c /usr/share/cmake-3.22/Modules/CMakeCCompilerABI.c]
+  ignore line: [Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_3caa7/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_3caa7.dir/build.make CMakeFiles/cmTC_3caa7.dir/build]
+  ignore line: [gmake[1]: Entering directory '/home/bdosremedios/dev/gmres/build/CMakeFiles/CMakeTmp']
+  ignore line: [Building C object CMakeFiles/cmTC_3caa7.dir/CMakeCCompilerABI.c.o]
+  ignore line: [/usr/bin/cc   -v -o CMakeFiles/cmTC_3caa7.dir/CMakeCCompilerABI.c.o -c /usr/share/cmake-3.22/Modules/CMakeCCompilerABI.c]
   ignore line: [Using built-in specs.]
   ignore line: [COLLECT_GCC=/usr/bin/cc]
   ignore line: [OFFLOAD_TARGET_NAMES=nvptx-none:amdgcn-amdhsa]
@@ -122,8 +122,8 @@ Parsed C implicit link information from above output:
   ignore line: [Thread model: posix]
   ignore line: [Supported LTO compression algorithms: zlib zstd]
   ignore line: [gcc version 11.3.0 (Ubuntu 11.3.0-1ubuntu1~22.04.1) ]
-  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_3232e.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_3232e.dir/']
-  ignore line: [ /usr/lib/gcc/x86_64-linux-gnu/11/cc1 -quiet -v -imultiarch x86_64-linux-gnu /usr/share/cmake-3.22/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_3232e.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mtune=generic -march=x86-64 -version -fasynchronous-unwind-tables -fstack-protector-strong -Wformat -Wformat-security -fstack-clash-protection -fcf-protection -o /tmp/cchznNZs.s]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_3caa7.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_3caa7.dir/']
+  ignore line: [ /usr/lib/gcc/x86_64-linux-gnu/11/cc1 -quiet -v -imultiarch x86_64-linux-gnu /usr/share/cmake-3.22/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_3caa7.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mtune=generic -march=x86-64 -version -fasynchronous-unwind-tables -fstack-protector-strong -Wformat -Wformat-security -fstack-clash-protection -fcf-protection -o /tmp/cc3RXnhn.s]
   ignore line: [GNU C17 (Ubuntu 11.3.0-1ubuntu1~22.04.1) version 11.3.0 (x86_64-linux-gnu)]
   ignore line: [	compiled by GNU C version 11.3.0  GMP version 6.2.1  MPFR version 4.1.0  MPC version 1.2.1  isl version isl-0.24-GMP]
   ignore line: []
@@ -143,15 +143,15 @@ Parsed C implicit link information from above output:
   ignore line: []
   ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
   ignore line: [Compiler executable checksum: e13e2dc98bfa673227c4000e476a9388]
-  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_3232e.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_3232e.dir/']
-  ignore line: [ as -v --64 -o CMakeFiles/cmTC_3232e.dir/CMakeCCompilerABI.c.o /tmp/cchznNZs.s]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_3caa7.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_3caa7.dir/']
+  ignore line: [ as -v --64 -o CMakeFiles/cmTC_3caa7.dir/CMakeCCompilerABI.c.o /tmp/cc3RXnhn.s]
   ignore line: [GNU assembler version 2.38 (x86_64-linux-gnu) using BFD version (GNU Binutils for Ubuntu) 2.38]
   ignore line: [COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/]
   ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../:/lib/:/usr/lib/]
-  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_3232e.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_3232e.dir/CMakeCCompilerABI.c.']
-  ignore line: [Linking C executable cmTC_3232e]
-  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_3232e.dir/link.txt --verbose=1]
-  ignore line: [/usr/bin/cc  -v CMakeFiles/cmTC_3232e.dir/CMakeCCompilerABI.c.o -o cmTC_3232e ]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_3caa7.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_3caa7.dir/CMakeCCompilerABI.c.']
+  ignore line: [Linking C executable cmTC_3caa7]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_3caa7.dir/link.txt --verbose=1]
+  ignore line: [/usr/bin/cc  -v CMakeFiles/cmTC_3caa7.dir/CMakeCCompilerABI.c.o -o cmTC_3caa7 ]
   ignore line: [Using built-in specs.]
   ignore line: [COLLECT_GCC=/usr/bin/cc]
   ignore line: [COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/11/lto-wrapper]
@@ -164,13 +164,13 @@ Parsed C implicit link information from above output:
   ignore line: [gcc version 11.3.0 (Ubuntu 11.3.0-1ubuntu1~22.04.1) ]
   ignore line: [COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/]
   ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../:/lib/:/usr/lib/]
-  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_3232e' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_3232e.']
-  link line: [ /usr/lib/gcc/x86_64-linux-gnu/11/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/11/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/11/lto-wrapper -plugin-opt=-fresolution=/tmp/ccnPyLbC.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_3232e /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/11/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/11 -L/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/11/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/11/../../.. CMakeFiles/cmTC_3232e.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-linux-gnu/11/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/crtn.o]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_3caa7' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_3caa7.']
+  link line: [ /usr/lib/gcc/x86_64-linux-gnu/11/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/11/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/11/lto-wrapper -plugin-opt=-fresolution=/tmp/ccY8tPPT.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_3caa7 /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/11/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/11 -L/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/11/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/11/../../.. CMakeFiles/cmTC_3caa7.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-linux-gnu/11/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/crtn.o]
     arg [/usr/lib/gcc/x86_64-linux-gnu/11/collect2] ==> ignore
     arg [-plugin] ==> ignore
     arg [/usr/lib/gcc/x86_64-linux-gnu/11/liblto_plugin.so] ==> ignore
     arg [-plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/11/lto-wrapper] ==> ignore
-    arg [-plugin-opt=-fresolution=/tmp/ccnPyLbC.res] ==> ignore
+    arg [-plugin-opt=-fresolution=/tmp/ccY8tPPT.res] ==> ignore
     arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
     arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
     arg [-plugin-opt=-pass-through=-lc] ==> ignore
@@ -188,7 +188,7 @@ Parsed C implicit link information from above output:
     arg [-znow] ==> ignore
     arg [-zrelro] ==> ignore
     arg [-o] ==> ignore
-    arg [cmTC_3232e] ==> ignore
+    arg [cmTC_3caa7] ==> ignore
     arg [/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/Scrt1.o] ==> obj [/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/Scrt1.o]
     arg [/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/crti.o] ==> obj [/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/crti.o]
     arg [/usr/lib/gcc/x86_64-linux-gnu/11/crtbeginS.o] ==> obj [/usr/lib/gcc/x86_64-linux-gnu/11/crtbeginS.o]
@@ -200,7 +200,7 @@ Parsed C implicit link information from above output:
     arg [-L/usr/lib/x86_64-linux-gnu] ==> dir [/usr/lib/x86_64-linux-gnu]
     arg [-L/usr/lib/../lib] ==> dir [/usr/lib/../lib]
     arg [-L/usr/lib/gcc/x86_64-linux-gnu/11/../../..] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/11/../../..]
-    arg [CMakeFiles/cmTC_3232e.dir/CMakeCCompilerABI.c.o] ==> ignore
+    arg [CMakeFiles/cmTC_3caa7.dir/CMakeCCompilerABI.c.o] ==> ignore
     arg [-lgcc] ==> lib [gcc]
     arg [--push-state] ==> ignore
     arg [--as-needed] ==> ignore
@@ -232,12 +232,12 @@ Parsed C implicit link information from above output:
 
 
 Detecting CXX compiler ABI info compiled with the following output:
-Change Dir: /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp
+Change Dir: /home/bdosremedios/dev/gmres/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_583d8/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_583d8.dir/build.make CMakeFiles/cmTC_583d8.dir/build
-gmake[1]: Entering directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_583d8.dir/CMakeCXXCompilerABI.cpp.o
-/usr/bin/c++   -v -o CMakeFiles/cmTC_583d8.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.22/Modules/CMakeCXXCompilerABI.cpp
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_7f310/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_7f310.dir/build.make CMakeFiles/cmTC_7f310.dir/build
+gmake[1]: Entering directory '/home/bdosremedios/dev/gmres/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_7f310.dir/CMakeCXXCompilerABI.cpp.o
+/usr/bin/c++   -v -o CMakeFiles/cmTC_7f310.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.22/Modules/CMakeCXXCompilerABI.cpp
 Using built-in specs.
 COLLECT_GCC=/usr/bin/c++
 OFFLOAD_TARGET_NAMES=nvptx-none:amdgcn-amdhsa
@@ -247,8 +247,8 @@ Configured with: ../src/configure -v --with-pkgversion='Ubuntu 11.3.0-1ubuntu1~2
 Thread model: posix
 Supported LTO compression algorithms: zlib zstd
 gcc version 11.3.0 (Ubuntu 11.3.0-1ubuntu1~22.04.1) 
-COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_583d8.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_583d8.dir/'
- /usr/lib/gcc/x86_64-linux-gnu/11/cc1plus -quiet -v -imultiarch x86_64-linux-gnu -D_GNU_SOURCE /usr/share/cmake-3.22/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_583d8.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mtune=generic -march=x86-64 -version -fasynchronous-unwind-tables -fstack-protector-strong -Wformat -Wformat-security -fstack-clash-protection -fcf-protection -o /tmp/ccvpi3SJ.s
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_7f310.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_7f310.dir/'
+ /usr/lib/gcc/x86_64-linux-gnu/11/cc1plus -quiet -v -imultiarch x86_64-linux-gnu -D_GNU_SOURCE /usr/share/cmake-3.22/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_7f310.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mtune=generic -march=x86-64 -version -fasynchronous-unwind-tables -fstack-protector-strong -Wformat -Wformat-security -fstack-clash-protection -fcf-protection -o /tmp/ccwAeRo9.s
 GNU C++17 (Ubuntu 11.3.0-1ubuntu1~22.04.1) version 11.3.0 (x86_64-linux-gnu)
 	compiled by GNU C version 11.3.0, GMP version 6.2.1, MPFR version 4.1.0, MPC version 1.2.1, isl version isl-0.24-GMP
 
@@ -272,15 +272,15 @@ GNU C++17 (Ubuntu 11.3.0-1ubuntu1~22.04.1) version 11.3.0 (x86_64-linux-gnu)
 
 GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
 Compiler executable checksum: 2b9b53ff7f3a6952e2fe60119c16be53
-COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_583d8.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_583d8.dir/'
- as -v --64 -o CMakeFiles/cmTC_583d8.dir/CMakeCXXCompilerABI.cpp.o /tmp/ccvpi3SJ.s
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_7f310.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_7f310.dir/'
+ as -v --64 -o CMakeFiles/cmTC_7f310.dir/CMakeCXXCompilerABI.cpp.o /tmp/ccwAeRo9.s
 GNU assembler version 2.38 (x86_64-linux-gnu) using BFD version (GNU Binutils for Ubuntu) 2.38
 COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/
 LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../:/lib/:/usr/lib/
-COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_583d8.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_583d8.dir/CMakeCXXCompilerABI.cpp.'
-Linking CXX executable cmTC_583d8
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_583d8.dir/link.txt --verbose=1
-/usr/bin/c++  -v CMakeFiles/cmTC_583d8.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_583d8 
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_7f310.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_7f310.dir/CMakeCXXCompilerABI.cpp.'
+Linking CXX executable cmTC_7f310
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7f310.dir/link.txt --verbose=1
+/usr/bin/c++  -v CMakeFiles/cmTC_7f310.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_7f310 
 Using built-in specs.
 COLLECT_GCC=/usr/bin/c++
 COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/11/lto-wrapper
@@ -293,10 +293,10 @@ Supported LTO compression algorithms: zlib zstd
 gcc version 11.3.0 (Ubuntu 11.3.0-1ubuntu1~22.04.1) 
 COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/
 LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../:/lib/:/usr/lib/
-COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_583d8' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_583d8.'
- /usr/lib/gcc/x86_64-linux-gnu/11/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/11/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/11/lto-wrapper -plugin-opt=-fresolution=/tmp/ccyNnTnB.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_583d8 /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/11/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/11 -L/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/11/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/11/../../.. CMakeFiles/cmTC_583d8.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-linux-gnu/11/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/crtn.o
-COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_583d8' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_583d8.'
-gmake[1]: Leaving directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
+COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_7f310' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_7f310.'
+ /usr/lib/gcc/x86_64-linux-gnu/11/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/11/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/11/lto-wrapper -plugin-opt=-fresolution=/tmp/ccHk8xGW.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_7f310 /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/11/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/11 -L/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/11/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/11/../../.. CMakeFiles/cmTC_7f310.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-linux-gnu/11/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/crtn.o
+COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_7f310' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_7f310.'
+gmake[1]: Leaving directory '/home/bdosremedios/dev/gmres/build/CMakeFiles/CMakeTmp'
 
 
 
@@ -323,12 +323,12 @@ Parsed CXX implicit include dir info from above output: rv=done
 
 Parsed CXX implicit link information from above output:
   link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
-  ignore line: [Change Dir: /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp]
+  ignore line: [Change Dir: /home/bdosremedios/dev/gmres/build/CMakeFiles/CMakeTmp]
   ignore line: []
-  ignore line: [Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_583d8/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_583d8.dir/build.make CMakeFiles/cmTC_583d8.dir/build]
-  ignore line: [gmake[1]: Entering directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp']
-  ignore line: [Building CXX object CMakeFiles/cmTC_583d8.dir/CMakeCXXCompilerABI.cpp.o]
-  ignore line: [/usr/bin/c++   -v -o CMakeFiles/cmTC_583d8.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.22/Modules/CMakeCXXCompilerABI.cpp]
+  ignore line: [Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_7f310/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_7f310.dir/build.make CMakeFiles/cmTC_7f310.dir/build]
+  ignore line: [gmake[1]: Entering directory '/home/bdosremedios/dev/gmres/build/CMakeFiles/CMakeTmp']
+  ignore line: [Building CXX object CMakeFiles/cmTC_7f310.dir/CMakeCXXCompilerABI.cpp.o]
+  ignore line: [/usr/bin/c++   -v -o CMakeFiles/cmTC_7f310.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.22/Modules/CMakeCXXCompilerABI.cpp]
   ignore line: [Using built-in specs.]
   ignore line: [COLLECT_GCC=/usr/bin/c++]
   ignore line: [OFFLOAD_TARGET_NAMES=nvptx-none:amdgcn-amdhsa]
@@ -338,8 +338,8 @@ Parsed CXX implicit link information from above output:
   ignore line: [Thread model: posix]
   ignore line: [Supported LTO compression algorithms: zlib zstd]
   ignore line: [gcc version 11.3.0 (Ubuntu 11.3.0-1ubuntu1~22.04.1) ]
-  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_583d8.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_583d8.dir/']
-  ignore line: [ /usr/lib/gcc/x86_64-linux-gnu/11/cc1plus -quiet -v -imultiarch x86_64-linux-gnu -D_GNU_SOURCE /usr/share/cmake-3.22/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_583d8.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mtune=generic -march=x86-64 -version -fasynchronous-unwind-tables -fstack-protector-strong -Wformat -Wformat-security -fstack-clash-protection -fcf-protection -o /tmp/ccvpi3SJ.s]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_7f310.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_7f310.dir/']
+  ignore line: [ /usr/lib/gcc/x86_64-linux-gnu/11/cc1plus -quiet -v -imultiarch x86_64-linux-gnu -D_GNU_SOURCE /usr/share/cmake-3.22/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_7f310.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mtune=generic -march=x86-64 -version -fasynchronous-unwind-tables -fstack-protector-strong -Wformat -Wformat-security -fstack-clash-protection -fcf-protection -o /tmp/ccwAeRo9.s]
   ignore line: [GNU C++17 (Ubuntu 11.3.0-1ubuntu1~22.04.1) version 11.3.0 (x86_64-linux-gnu)]
   ignore line: [	compiled by GNU C version 11.3.0  GMP version 6.2.1  MPFR version 4.1.0  MPC version 1.2.1  isl version isl-0.24-GMP]
   ignore line: []
@@ -363,15 +363,15 @@ Parsed CXX implicit link information from above output:
   ignore line: []
   ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
   ignore line: [Compiler executable checksum: 2b9b53ff7f3a6952e2fe60119c16be53]
-  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_583d8.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_583d8.dir/']
-  ignore line: [ as -v --64 -o CMakeFiles/cmTC_583d8.dir/CMakeCXXCompilerABI.cpp.o /tmp/ccvpi3SJ.s]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_7f310.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_7f310.dir/']
+  ignore line: [ as -v --64 -o CMakeFiles/cmTC_7f310.dir/CMakeCXXCompilerABI.cpp.o /tmp/ccwAeRo9.s]
   ignore line: [GNU assembler version 2.38 (x86_64-linux-gnu) using BFD version (GNU Binutils for Ubuntu) 2.38]
   ignore line: [COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/]
   ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../:/lib/:/usr/lib/]
-  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_583d8.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_583d8.dir/CMakeCXXCompilerABI.cpp.']
-  ignore line: [Linking CXX executable cmTC_583d8]
-  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_583d8.dir/link.txt --verbose=1]
-  ignore line: [/usr/bin/c++  -v CMakeFiles/cmTC_583d8.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_583d8 ]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_7f310.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_7f310.dir/CMakeCXXCompilerABI.cpp.']
+  ignore line: [Linking CXX executable cmTC_7f310]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7f310.dir/link.txt --verbose=1]
+  ignore line: [/usr/bin/c++  -v CMakeFiles/cmTC_7f310.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_7f310 ]
   ignore line: [Using built-in specs.]
   ignore line: [COLLECT_GCC=/usr/bin/c++]
   ignore line: [COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/11/lto-wrapper]
@@ -384,13 +384,13 @@ Parsed CXX implicit link information from above output:
   ignore line: [gcc version 11.3.0 (Ubuntu 11.3.0-1ubuntu1~22.04.1) ]
   ignore line: [COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/]
   ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/11/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/11/../../../:/lib/:/usr/lib/]
-  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_583d8' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_583d8.']
-  link line: [ /usr/lib/gcc/x86_64-linux-gnu/11/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/11/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/11/lto-wrapper -plugin-opt=-fresolution=/tmp/ccyNnTnB.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_583d8 /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/11/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/11 -L/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/11/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/11/../../.. CMakeFiles/cmTC_583d8.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-linux-gnu/11/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/crtn.o]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_7f310' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_7f310.']
+  link line: [ /usr/lib/gcc/x86_64-linux-gnu/11/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/11/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/11/lto-wrapper -plugin-opt=-fresolution=/tmp/ccHk8xGW.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_7f310 /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/11/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/11 -L/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/11/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/11/../../.. CMakeFiles/cmTC_7f310.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-linux-gnu/11/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/crtn.o]
     arg [/usr/lib/gcc/x86_64-linux-gnu/11/collect2] ==> ignore
     arg [-plugin] ==> ignore
     arg [/usr/lib/gcc/x86_64-linux-gnu/11/liblto_plugin.so] ==> ignore
     arg [-plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/11/lto-wrapper] ==> ignore
-    arg [-plugin-opt=-fresolution=/tmp/ccyNnTnB.res] ==> ignore
+    arg [-plugin-opt=-fresolution=/tmp/ccHk8xGW.res] ==> ignore
     arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
     arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
     arg [-plugin-opt=-pass-through=-lc] ==> ignore
@@ -408,7 +408,7 @@ Parsed CXX implicit link information from above output:
     arg [-znow] ==> ignore
     arg [-zrelro] ==> ignore
     arg [-o] ==> ignore
-    arg [cmTC_583d8] ==> ignore
+    arg [cmTC_7f310] ==> ignore
     arg [/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/Scrt1.o] ==> obj [/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/Scrt1.o]
     arg [/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/crti.o] ==> obj [/usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/crti.o]
     arg [/usr/lib/gcc/x86_64-linux-gnu/11/crtbeginS.o] ==> obj [/usr/lib/gcc/x86_64-linux-gnu/11/crtbeginS.o]
@@ -420,7 +420,7 @@ Parsed CXX implicit link information from above output:
     arg [-L/usr/lib/x86_64-linux-gnu] ==> dir [/usr/lib/x86_64-linux-gnu]
     arg [-L/usr/lib/../lib] ==> dir [/usr/lib/../lib]
     arg [-L/usr/lib/gcc/x86_64-linux-gnu/11/../../..] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/11/../../..]
-    arg [CMakeFiles/cmTC_583d8.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+    arg [CMakeFiles/cmTC_7f310.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
     arg [-lstdc++] ==> lib [stdc++]
     arg [-lm] ==> lib [m]
     arg [-lgcc_s] ==> lib [gcc_s]
@@ -447,395 +447,31 @@ Parsed CXX implicit link information from above output:
   implicit fwks: []
 
 
-Performing C++ SOURCE FILE Test standard_math_library_linked_to_automatically succeeded with the following output:
-Change Dir: /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp
-
-Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_95f24/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_95f24.dir/build.make CMakeFiles/cmTC_95f24.dir/build
-gmake[1]: Entering directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_95f24.dir/src.cxx.o
-/usr/bin/c++ -Dstandard_math_library_linked_to_automatically   -o CMakeFiles/cmTC_95f24.dir/src.cxx.o -c /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp/src.cxx
-Linking CXX executable cmTC_95f24
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_95f24.dir/link.txt --verbose=1
-/usr/bin/c++ CMakeFiles/cmTC_95f24.dir/src.cxx.o -o cmTC_95f24 
-gmake[1]: Leaving directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-
-
-Source file was:
-
-#include<cmath>
-int main(int argc, char **){
-  return int(std::sin(double(argc)) + std::log(double(argc)));
-}
-Performing C++ SOURCE FILE Test COMPILER_SUPPORT_WERROR succeeded with the following output:
-Change Dir: /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp
-
-Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_59886/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_59886.dir/build.make CMakeFiles/cmTC_59886.dir/build
-gmake[1]: Entering directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_59886.dir/src.cxx.o
-/usr/bin/c++ -DCOMPILER_SUPPORT_WERROR  -Werror -o CMakeFiles/cmTC_59886.dir/src.cxx.o -c /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp/src.cxx
-Linking CXX executable cmTC_59886
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_59886.dir/link.txt --verbose=1
-/usr/bin/c++ CMakeFiles/cmTC_59886.dir/src.cxx.o -o cmTC_59886 
-gmake[1]: Leaving directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-
-
-Source file was:
-int main() { return 0; }
-Performing C++ SOURCE FILE Test COMPILER_SUPPORT_pedantic succeeded with the following output:
-Change Dir: /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp
-
-Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_0aade/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_0aade.dir/build.make CMakeFiles/cmTC_0aade.dir/build
-gmake[1]: Entering directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_0aade.dir/src.cxx.o
-/usr/bin/c++ -DCOMPILER_SUPPORT_pedantic  -Werror   -pedantic -o CMakeFiles/cmTC_0aade.dir/src.cxx.o -c /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp/src.cxx
-Linking CXX executable cmTC_0aade
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0aade.dir/link.txt --verbose=1
-/usr/bin/c++  -Werror CMakeFiles/cmTC_0aade.dir/src.cxx.o -o cmTC_0aade 
-gmake[1]: Leaving directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-
-
-Source file was:
-int main() { return 0; }
-Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Wall succeeded with the following output:
-Change Dir: /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp
-
-Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_538bb/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_538bb.dir/build.make CMakeFiles/cmTC_538bb.dir/build
-gmake[1]: Entering directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_538bb.dir/src.cxx.o
-/usr/bin/c++ -DCOMPILER_SUPPORT_Wall  -pedantic -Werror   -Wall -o CMakeFiles/cmTC_538bb.dir/src.cxx.o -c /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp/src.cxx
-Linking CXX executable cmTC_538bb
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_538bb.dir/link.txt --verbose=1
-/usr/bin/c++  -pedantic -Werror CMakeFiles/cmTC_538bb.dir/src.cxx.o -o cmTC_538bb 
-gmake[1]: Leaving directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-
-
-Source file was:
-int main() { return 0; }
-Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Wextra succeeded with the following output:
-Change Dir: /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp
-
-Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_bddcd/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_bddcd.dir/build.make CMakeFiles/cmTC_bddcd.dir/build
-gmake[1]: Entering directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_bddcd.dir/src.cxx.o
-/usr/bin/c++ -DCOMPILER_SUPPORT_Wextra  -pedantic -Wall -Werror   -Wextra -o CMakeFiles/cmTC_bddcd.dir/src.cxx.o -c /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp/src.cxx
-Linking CXX executable cmTC_bddcd
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_bddcd.dir/link.txt --verbose=1
-/usr/bin/c++  -pedantic -Wall -Werror CMakeFiles/cmTC_bddcd.dir/src.cxx.o -o cmTC_bddcd 
-gmake[1]: Leaving directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-
-
-Source file was:
-int main() { return 0; }
-Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Wundef succeeded with the following output:
-Change Dir: /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp
-
-Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_0d695/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_0d695.dir/build.make CMakeFiles/cmTC_0d695.dir/build
-gmake[1]: Entering directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_0d695.dir/src.cxx.o
-/usr/bin/c++ -DCOMPILER_SUPPORT_Wundef  -pedantic -Wall -Wextra -Werror   -Wundef -o CMakeFiles/cmTC_0d695.dir/src.cxx.o -c /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp/src.cxx
-Linking CXX executable cmTC_0d695
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0d695.dir/link.txt --verbose=1
-/usr/bin/c++  -pedantic -Wall -Wextra -Werror CMakeFiles/cmTC_0d695.dir/src.cxx.o -o cmTC_0d695 
-gmake[1]: Leaving directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-
-
-Source file was:
-int main() { return 0; }
-Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Wcastalign succeeded with the following output:
-Change Dir: /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp
-
-Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_63980/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_63980.dir/build.make CMakeFiles/cmTC_63980.dir/build
-gmake[1]: Entering directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_63980.dir/src.cxx.o
-/usr/bin/c++ -DCOMPILER_SUPPORT_Wcastalign  -pedantic -Wall -Wextra -Wundef -Werror   -Wcast-align -o CMakeFiles/cmTC_63980.dir/src.cxx.o -c /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp/src.cxx
-Linking CXX executable cmTC_63980
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_63980.dir/link.txt --verbose=1
-/usr/bin/c++  -pedantic -Wall -Wextra -Wundef -Werror CMakeFiles/cmTC_63980.dir/src.cxx.o -o cmTC_63980 
-gmake[1]: Leaving directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-
-
-Source file was:
-int main() { return 0; }
-Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Wcharsubscripts succeeded with the following output:
-Change Dir: /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp
-
-Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_89804/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_89804.dir/build.make CMakeFiles/cmTC_89804.dir/build
-gmake[1]: Entering directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_89804.dir/src.cxx.o
-/usr/bin/c++ -DCOMPILER_SUPPORT_Wcharsubscripts  -pedantic -Wall -Wextra -Wundef -Wcast-align -Werror   -Wchar-subscripts -o CMakeFiles/cmTC_89804.dir/src.cxx.o -c /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp/src.cxx
-Linking CXX executable cmTC_89804
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_89804.dir/link.txt --verbose=1
-/usr/bin/c++  -pedantic -Wall -Wextra -Wundef -Wcast-align -Werror CMakeFiles/cmTC_89804.dir/src.cxx.o -o cmTC_89804 
-gmake[1]: Leaving directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-
-
-Source file was:
-int main() { return 0; }
-Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Wnonvirtualdtor succeeded with the following output:
-Change Dir: /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp
-
-Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_fdc9d/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_fdc9d.dir/build.make CMakeFiles/cmTC_fdc9d.dir/build
-gmake[1]: Entering directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_fdc9d.dir/src.cxx.o
-/usr/bin/c++ -DCOMPILER_SUPPORT_Wnonvirtualdtor  -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Werror   -Wnon-virtual-dtor -o CMakeFiles/cmTC_fdc9d.dir/src.cxx.o -c /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp/src.cxx
-Linking CXX executable cmTC_fdc9d
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_fdc9d.dir/link.txt --verbose=1
-/usr/bin/c++  -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Werror CMakeFiles/cmTC_fdc9d.dir/src.cxx.o -o cmTC_fdc9d 
-gmake[1]: Leaving directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-
-
-Source file was:
-int main() { return 0; }
-Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Wunusedlocaltypedefs succeeded with the following output:
-Change Dir: /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp
-
-Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_50bfe/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_50bfe.dir/build.make CMakeFiles/cmTC_50bfe.dir/build
-gmake[1]: Entering directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_50bfe.dir/src.cxx.o
-/usr/bin/c++ -DCOMPILER_SUPPORT_Wunusedlocaltypedefs  -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Werror   -Wunused-local-typedefs -o CMakeFiles/cmTC_50bfe.dir/src.cxx.o -c /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp/src.cxx
-Linking CXX executable cmTC_50bfe
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_50bfe.dir/link.txt --verbose=1
-/usr/bin/c++  -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Werror CMakeFiles/cmTC_50bfe.dir/src.cxx.o -o cmTC_50bfe 
-gmake[1]: Leaving directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-
-
-Source file was:
-int main() { return 0; }
-Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Wpointerarith succeeded with the following output:
-Change Dir: /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp
-
-Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_75836/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_75836.dir/build.make CMakeFiles/cmTC_75836.dir/build
-gmake[1]: Entering directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_75836.dir/src.cxx.o
-/usr/bin/c++ -DCOMPILER_SUPPORT_Wpointerarith  -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Werror   -Wpointer-arith -o CMakeFiles/cmTC_75836.dir/src.cxx.o -c /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp/src.cxx
-Linking CXX executable cmTC_75836
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_75836.dir/link.txt --verbose=1
-/usr/bin/c++  -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Werror CMakeFiles/cmTC_75836.dir/src.cxx.o -o cmTC_75836 
-gmake[1]: Leaving directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-
-
-Source file was:
-int main() { return 0; }
-Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Wwritestrings succeeded with the following output:
-Change Dir: /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp
-
-Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_25a10/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_25a10.dir/build.make CMakeFiles/cmTC_25a10.dir/build
-gmake[1]: Entering directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_25a10.dir/src.cxx.o
-/usr/bin/c++ -DCOMPILER_SUPPORT_Wwritestrings  -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Werror   -Wwrite-strings -o CMakeFiles/cmTC_25a10.dir/src.cxx.o -c /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp/src.cxx
-Linking CXX executable cmTC_25a10
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_25a10.dir/link.txt --verbose=1
-/usr/bin/c++  -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Werror CMakeFiles/cmTC_25a10.dir/src.cxx.o -o cmTC_25a10 
-gmake[1]: Leaving directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-
-
-Source file was:
-int main() { return 0; }
-Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Wformatsecurity succeeded with the following output:
-Change Dir: /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp
-
-Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_5f2a0/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_5f2a0.dir/build.make CMakeFiles/cmTC_5f2a0.dir/build
-gmake[1]: Entering directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_5f2a0.dir/src.cxx.o
-/usr/bin/c++ -DCOMPILER_SUPPORT_Wformatsecurity  -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Werror   -Wformat-security -o CMakeFiles/cmTC_5f2a0.dir/src.cxx.o -c /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp/src.cxx
-Linking CXX executable cmTC_5f2a0
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5f2a0.dir/link.txt --verbose=1
-/usr/bin/c++  -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Werror CMakeFiles/cmTC_5f2a0.dir/src.cxx.o -o cmTC_5f2a0 
-gmake[1]: Leaving directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-
-
-Source file was:
-int main() { return 0; }
-Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Wlogicalop succeeded with the following output:
-Change Dir: /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp
-
-Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_fbd03/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_fbd03.dir/build.make CMakeFiles/cmTC_fbd03.dir/build
-gmake[1]: Entering directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_fbd03.dir/src.cxx.o
-/usr/bin/c++ -DCOMPILER_SUPPORT_Wlogicalop  -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Werror   -Wlogical-op -o CMakeFiles/cmTC_fbd03.dir/src.cxx.o -c /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp/src.cxx
-Linking CXX executable cmTC_fbd03
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_fbd03.dir/link.txt --verbose=1
-/usr/bin/c++  -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Werror CMakeFiles/cmTC_fbd03.dir/src.cxx.o -o cmTC_fbd03 
-gmake[1]: Leaving directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-
-
-Source file was:
-int main() { return 0; }
-Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Wenumconversion succeeded with the following output:
-Change Dir: /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp
-
-Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_81190/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_81190.dir/build.make CMakeFiles/cmTC_81190.dir/build
-gmake[1]: Entering directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_81190.dir/src.cxx.o
-/usr/bin/c++ -DCOMPILER_SUPPORT_Wenumconversion  -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Werror   -Wenum-conversion -o CMakeFiles/cmTC_81190.dir/src.cxx.o -c /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp/src.cxx
-Linking CXX executable cmTC_81190
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_81190.dir/link.txt --verbose=1
-/usr/bin/c++  -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Werror CMakeFiles/cmTC_81190.dir/src.cxx.o -o cmTC_81190 
-gmake[1]: Leaving directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-
-
-Source file was:
-int main() { return 0; }
-Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Wdoublepromotion succeeded with the following output:
-Change Dir: /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp
-
-Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_be3f3/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_be3f3.dir/build.make CMakeFiles/cmTC_be3f3.dir/build
-gmake[1]: Entering directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_be3f3.dir/src.cxx.o
-/usr/bin/c++ -DCOMPILER_SUPPORT_Wdoublepromotion  -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wenum-conversion -Werror   -Wdouble-promotion -o CMakeFiles/cmTC_be3f3.dir/src.cxx.o -c /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp/src.cxx
-Linking CXX executable cmTC_be3f3
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_be3f3.dir/link.txt --verbose=1
-/usr/bin/c++  -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wenum-conversion -Werror CMakeFiles/cmTC_be3f3.dir/src.cxx.o -o cmTC_be3f3 
-gmake[1]: Leaving directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-
-
-Source file was:
-int main() { return 0; }
-Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Wshadow succeeded with the following output:
-Change Dir: /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp
-
-Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_4b627/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_4b627.dir/build.make CMakeFiles/cmTC_4b627.dir/build
-gmake[1]: Entering directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_4b627.dir/src.cxx.o
-/usr/bin/c++ -DCOMPILER_SUPPORT_Wshadow  -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wenum-conversion -Wdouble-promotion -Werror   -Wshadow -o CMakeFiles/cmTC_4b627.dir/src.cxx.o -c /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp/src.cxx
-Linking CXX executable cmTC_4b627
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_4b627.dir/link.txt --verbose=1
-/usr/bin/c++  -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wenum-conversion -Wdouble-promotion -Werror CMakeFiles/cmTC_4b627.dir/src.cxx.o -o cmTC_4b627 
-gmake[1]: Leaving directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-
-
-Source file was:
-int main() { return 0; }
-Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Wnopsabi succeeded with the following output:
-Change Dir: /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp
-
-Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_27c96/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_27c96.dir/build.make CMakeFiles/cmTC_27c96.dir/build
-gmake[1]: Entering directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_27c96.dir/src.cxx.o
-/usr/bin/c++ -DCOMPILER_SUPPORT_Wnopsabi  -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wenum-conversion -Wdouble-promotion -Wshadow -Werror   -Wno-psabi -o CMakeFiles/cmTC_27c96.dir/src.cxx.o -c /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp/src.cxx
-Linking CXX executable cmTC_27c96
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_27c96.dir/link.txt --verbose=1
-/usr/bin/c++  -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wenum-conversion -Wdouble-promotion -Wshadow -Werror CMakeFiles/cmTC_27c96.dir/src.cxx.o -o cmTC_27c96 
-gmake[1]: Leaving directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-
-
-Source file was:
-int main() { return 0; }
-Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Wnovariadicmacros succeeded with the following output:
-Change Dir: /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp
-
-Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_0f28f/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_0f28f.dir/build.make CMakeFiles/cmTC_0f28f.dir/build
-gmake[1]: Entering directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_0f28f.dir/src.cxx.o
-/usr/bin/c++ -DCOMPILER_SUPPORT_Wnovariadicmacros  -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wenum-conversion -Wdouble-promotion -Wshadow -Wno-psabi -Werror   -Wno-variadic-macros -o CMakeFiles/cmTC_0f28f.dir/src.cxx.o -c /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp/src.cxx
-Linking CXX executable cmTC_0f28f
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0f28f.dir/link.txt --verbose=1
-/usr/bin/c++  -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wenum-conversion -Wdouble-promotion -Wshadow -Wno-psabi -Werror CMakeFiles/cmTC_0f28f.dir/src.cxx.o -o cmTC_0f28f 
-gmake[1]: Leaving directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-
-
-Source file was:
-int main() { return 0; }
-Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Wnolonglong succeeded with the following output:
-Change Dir: /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp
-
-Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_e4500/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_e4500.dir/build.make CMakeFiles/cmTC_e4500.dir/build
-gmake[1]: Entering directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_e4500.dir/src.cxx.o
-/usr/bin/c++ -DCOMPILER_SUPPORT_Wnolonglong  -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wenum-conversion -Wdouble-promotion -Wshadow -Wno-psabi -Wno-variadic-macros -Werror   -Wno-long-long -o CMakeFiles/cmTC_e4500.dir/src.cxx.o -c /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp/src.cxx
-Linking CXX executable cmTC_e4500
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e4500.dir/link.txt --verbose=1
-/usr/bin/c++  -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wenum-conversion -Wdouble-promotion -Wshadow -Wno-psabi -Wno-variadic-macros -Werror CMakeFiles/cmTC_e4500.dir/src.cxx.o -o cmTC_e4500 
-gmake[1]: Leaving directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-
-
-Source file was:
-int main() { return 0; }
-Performing C++ SOURCE FILE Test COMPILER_SUPPORT_fnochecknew succeeded with the following output:
-Change Dir: /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp
-
-Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_61313/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_61313.dir/build.make CMakeFiles/cmTC_61313.dir/build
-gmake[1]: Entering directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_61313.dir/src.cxx.o
-/usr/bin/c++ -DCOMPILER_SUPPORT_fnochecknew  -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wenum-conversion -Wdouble-promotion -Wshadow -Wno-psabi -Wno-variadic-macros -Wno-long-long -Werror   -fno-check-new -o CMakeFiles/cmTC_61313.dir/src.cxx.o -c /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp/src.cxx
-Linking CXX executable cmTC_61313
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_61313.dir/link.txt --verbose=1
-/usr/bin/c++  -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wenum-conversion -Wdouble-promotion -Wshadow -Wno-psabi -Wno-variadic-macros -Wno-long-long -Werror CMakeFiles/cmTC_61313.dir/src.cxx.o -o cmTC_61313 
-gmake[1]: Leaving directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-
-
-Source file was:
-int main() { return 0; }
-Performing C++ SOURCE FILE Test COMPILER_SUPPORT_fnocommon succeeded with the following output:
-Change Dir: /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp
-
-Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_8632d/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_8632d.dir/build.make CMakeFiles/cmTC_8632d.dir/build
-gmake[1]: Entering directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_8632d.dir/src.cxx.o
-/usr/bin/c++ -DCOMPILER_SUPPORT_fnocommon  -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wenum-conversion -Wdouble-promotion -Wshadow -Wno-psabi -Wno-variadic-macros -Wno-long-long -fno-check-new -Werror   -fno-common -o CMakeFiles/cmTC_8632d.dir/src.cxx.o -c /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp/src.cxx
-Linking CXX executable cmTC_8632d
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8632d.dir/link.txt --verbose=1
-/usr/bin/c++  -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wenum-conversion -Wdouble-promotion -Wshadow -Wno-psabi -Wno-variadic-macros -Wno-long-long -fno-check-new -Werror CMakeFiles/cmTC_8632d.dir/src.cxx.o -o cmTC_8632d 
-gmake[1]: Leaving directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-
-
-Source file was:
-int main() { return 0; }
-Performing C++ SOURCE FILE Test COMPILER_SUPPORT_fstrictaliasing succeeded with the following output:
-Change Dir: /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp
-
-Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_d5485/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_d5485.dir/build.make CMakeFiles/cmTC_d5485.dir/build
-gmake[1]: Entering directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_d5485.dir/src.cxx.o
-/usr/bin/c++ -DCOMPILER_SUPPORT_fstrictaliasing  -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wenum-conversion -Wdouble-promotion -Wshadow -Wno-psabi -Wno-variadic-macros -Wno-long-long -fno-check-new -fno-common -Werror   -fstrict-aliasing -o CMakeFiles/cmTC_d5485.dir/src.cxx.o -c /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp/src.cxx
-Linking CXX executable cmTC_d5485
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_d5485.dir/link.txt --verbose=1
-/usr/bin/c++  -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wenum-conversion -Wdouble-promotion -Wshadow -Wno-psabi -Wno-variadic-macros -Wno-long-long -fno-check-new -fno-common -Werror CMakeFiles/cmTC_d5485.dir/src.cxx.o -o cmTC_d5485 
-gmake[1]: Leaving directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-
-
-Source file was:
-int main() { return 0; }
-Performing C++ SOURCE FILE Test COMPILER_SUPPORT_OPENMP succeeded with the following output:
-Change Dir: /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp
-
-Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_5bdc9/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_5bdc9.dir/build.make CMakeFiles/cmTC_5bdc9.dir/build
-gmake[1]: Entering directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_5bdc9.dir/src.cxx.o
-/usr/bin/c++ -DCOMPILER_SUPPORT_OPENMP  -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wenum-conversion -Wdouble-promotion -Wshadow -Wno-psabi -Wno-variadic-macros -Wno-long-long -fno-check-new -fno-common -fstrict-aliasing    -fopenmp -o CMakeFiles/cmTC_5bdc9.dir/src.cxx.o -c /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp/src.cxx
-Linking CXX executable cmTC_5bdc9
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5bdc9.dir/link.txt --verbose=1
-/usr/bin/c++  -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wenum-conversion -Wdouble-promotion -Wshadow -Wno-psabi -Wno-variadic-macros -Wno-long-long -fno-check-new -fno-common -fstrict-aliasing  CMakeFiles/cmTC_5bdc9.dir/src.cxx.o -o cmTC_5bdc9 
-gmake[1]: Leaving directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-
-
-Source file was:
-int main() { return 0; }
 Determining if the include file pthread.h exists passed with the following output:
-Change Dir: /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp
+Change Dir: /home/bdosremedios/dev/gmres/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_ab8a6/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_ab8a6.dir/build.make CMakeFiles/cmTC_ab8a6.dir/build
-gmake[1]: Entering directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_ab8a6.dir/CheckIncludeFile.c.o
-/usr/bin/cc    -o CMakeFiles/cmTC_ab8a6.dir/CheckIncludeFile.c.o -c /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
-Linking C executable cmTC_ab8a6
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ab8a6.dir/link.txt --verbose=1
-/usr/bin/cc CMakeFiles/cmTC_ab8a6.dir/CheckIncludeFile.c.o -o cmTC_ab8a6 
-gmake[1]: Leaving directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_63877/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_63877.dir/build.make CMakeFiles/cmTC_63877.dir/build
+gmake[1]: Entering directory '/home/bdosremedios/dev/gmres/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_63877.dir/CheckIncludeFile.c.o
+/usr/bin/cc    -o CMakeFiles/cmTC_63877.dir/CheckIncludeFile.c.o -c /home/bdosremedios/dev/gmres/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTC_63877
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_63877.dir/link.txt --verbose=1
+/usr/bin/cc CMakeFiles/cmTC_63877.dir/CheckIncludeFile.c.o -o cmTC_63877 
+gmake[1]: Leaving directory '/home/bdosremedios/dev/gmres/build/CMakeFiles/CMakeTmp'
 
 
 
 Performing C SOURCE FILE Test CMAKE_HAVE_LIBC_PTHREAD succeeded with the following output:
-Change Dir: /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp
+Change Dir: /home/bdosremedios/dev/gmres/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_6934c/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_6934c.dir/build.make CMakeFiles/cmTC_6934c.dir/build
-gmake[1]: Entering directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_6934c.dir/src.c.o
-/usr/bin/cc -DCMAKE_HAVE_LIBC_PTHREAD   -o CMakeFiles/cmTC_6934c.dir/src.c.o -c /home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp/src.c
-Linking C executable cmTC_6934c
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_6934c.dir/link.txt --verbose=1
-/usr/bin/cc CMakeFiles/cmTC_6934c.dir/src.c.o -o cmTC_6934c 
-gmake[1]: Leaving directory '/home/bdosremedios/learn/gmres/build/CMakeFiles/CMakeTmp'
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_cc679/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_cc679.dir/build.make CMakeFiles/cmTC_cc679.dir/build
+gmake[1]: Entering directory '/home/bdosremedios/dev/gmres/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_cc679.dir/src.c.o
+/usr/bin/cc -DCMAKE_HAVE_LIBC_PTHREAD   -o CMakeFiles/cmTC_cc679.dir/src.c.o -c /home/bdosremedios/dev/gmres/build/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_cc679
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_cc679.dir/link.txt --verbose=1
+/usr/bin/cc CMakeFiles/cmTC_cc679.dir/src.c.o -o cmTC_cc679 
+gmake[1]: Leaving directory '/home/bdosremedios/dev/gmres/build/CMakeFiles/CMakeTmp'
 
 
 Source file was:

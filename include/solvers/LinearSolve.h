@@ -28,9 +28,9 @@ class LinearSolve {
         bool converged = false;
         int iteration = 0;
 
-        // Virtual function that returns the next iterate using previous iterates and
+        // Virtual function that returns advances the iterate x using previous iterates and
         // the linear solver's linear system
-        virtual Matrix<T, Dynamic, 1> iterate() const = 0;
+        virtual void iterate() = 0;
 
     public:
         // Constructors/Destructors
@@ -89,9 +89,9 @@ class LinearSolve {
 
             while(((res_norm/res_norm_hist[0]) > target_rel_res) && (iteration < max_iter)) {
 
-                // Iterate solution and set new solution to it
+                // Iterate solution
                 ++iteration;
-                x = iterate();
+                iterate();
 
                 // Update accumulators
                 res_norm = (b - A*x).norm();

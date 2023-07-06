@@ -1,4 +1,4 @@
-# Install script for directory: /home/bdosremedios/learn/gmres/include/solvers
+# Install script for directory: /home/bdosremedios/dev/gmres/include/solvers
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
