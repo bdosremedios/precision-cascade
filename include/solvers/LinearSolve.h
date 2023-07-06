@@ -87,7 +87,9 @@ class LinearSolve {
             double res_norm = (b - A*x).norm();
             res_norm_hist.push_back(res_norm);
 
-            while(((res_norm/res_norm_hist[0]) > target_rel_res) && (iteration < max_iter)) {
+            // Run while relative residual is still high, and under max iterations, and has not been
+            // flagged as converged
+            while((((res_norm/res_norm_hist[0]) > target_rel_res) && (iteration < max_iter)) && !converged) {
 
                 // Iterate solution
                 ++iteration;
