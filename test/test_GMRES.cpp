@@ -252,45 +252,84 @@ TEST_F(GMRESTest, H_QR_Update) {
     test_mock.update_subspace_k();
     test_mock.update_next_q_Hkplus1_convergence();
 
-    Matrix<double, Dynamic, Dynamic> save_R_H;
+    Matrix<double, 6, 4> save_Q_H;
+    Matrix<double, 6, 4> save_R_H;
 
-    // for (int kry_dim = 1; kry_dim <= 4; ++kry_dim) {
+    for (int kry_dim=1; kry_dim<=4; ++kry_dim) {
 
-    //     // Set krylov dimension to kry_dim and update QR
-    //     test_mock.krylov_subspace_dim = kry_dim;
+        int k = kry_dim-1;
 
-    //     // Check that previous
+        // Set krylov dimension to kry_dim and update QR
+        test_mock.krylov_subspace_dim = kry_dim;
+        test_mock.update_QR_fact();
 
-    //     // Save
-    //     save_R_H
+        // Check that previous columns are unchanged by new update
+        for (int i=0; i<k; ++i) {
+            EXPECT_EQ(test_mock.Q_H.col(i), save_Q_H.col(i));
+            EXPECT_EQ(test_mock.R_H.col(i), save_R_H.col(i));
+        }
 
-    // }
+        // Save second last new basis vector and new column of R
+        save_Q_H.col(k) = test_mock.Q_H.col(k);
+        save_R_H.col(k) = test_mock.R_H.col(k);
+
+        // Test that k+1 by k+1 block of Q_H is orthogonal
+        Matrix<double, Dynamic, Dynamic> orthog_check = test_mock.Q_H.block(0, 0, k+2, k+2)*
+                                                        test_mock.Q_H.block(0, 0, k+2, k+2).transpose();
+        for (int i=0; i<k+1; ++i) {
+            for (int j=0; j<k+1; ++j) {
+                if (i == j) {
+                    EXPECT_NEAR(orthog_check(i, j), 1, double_tolerance);
+                } else {
+                    EXPECT_NEAR(orthog_check(i, j), 0, double_tolerance);
+                }
+            }
+        }
+        
+        // Test that k+1 by k block of R_H is uppertriangular
+        for (int j=0; j<k; ++j) {
+            for (int i=k+1; i>j; --i) {
+                EXPECT_EQ(test_mock.R_H(i, j), 0);
+            }
+        }
+
+        // Test that k+1 by k+1 block of Q_H is and k+1 by k block of R_H
+        // constructs k+1 by k block of H
+        Matrix<double, Dynamic, Dynamic> construct_H = test_mock.Q_H.block(0, 0, k+2, k+2)*
+                                                       test_mock.R_H.block(0, 0, k+2, k+1);
+        for (int i=0; i<k+1; ++i) {
+            for (int j=0; j<k; ++j) {
+                EXPECT_NEAR(construct_H(i, j), test_mock.H(i, j), double_tolerance);
+            }
+        }
+
+    }
 
     // Set krylov dimension to original 1
-    test_mock.krylov_subspace_dim = 1;
-    test_mock.update_QR_fact();
-    cout << test_mock.Q_H << endl;
-    cout << test_mock.R_H << endl;
-    cout << test_mock.H << endl;
-    cout << test_mock.Q_H.block(0, 0, 2, 2)*test_mock.R_H.block(0, 0, 2, 1) << endl << endl;
-    test_mock.krylov_subspace_dim = 2;
-    test_mock.update_QR_fact();
-    cout << test_mock.Q_H << endl;
-    cout << test_mock.R_H << endl;
-    cout << test_mock.H << endl;
-    cout << test_mock.Q_H.block(0, 0, 3, 3)*test_mock.R_H.block(0, 0, 3, 2) << endl << endl;
-    test_mock.krylov_subspace_dim = 3;
-    test_mock.update_QR_fact();
-    cout << test_mock.Q_H << endl;
-    cout << test_mock.R_H << endl;
-    cout << test_mock.H << endl;
-    cout << test_mock.Q_H.block(0, 0, 4, 4)*test_mock.R_H.block(0, 0, 4, 3) << endl << endl;
-    test_mock.krylov_subspace_dim = 4;
-    test_mock.update_QR_fact();
-    cout << test_mock.Q_H << endl;
-    cout << test_mock.R_H << endl;
-    cout << test_mock.H << endl;
-    cout << test_mock.Q_H.block(0, 0, 5, 5)*test_mock.R_H.block(0, 0, 5, 4) << endl << endl;
+    // test_mock.krylov_subspace_dim = 1;
+    // test_mock.update_QR_fact();
+    // cout << test_mock.Q_H << endl;
+    // cout << test_mock.R_H << endl;
+    // cout << test_mock.H << endl;
+    // cout << test_mock.Q_H.block(0, 0, 2, 2)*test_mock.R_H.block(0, 0, 2, 1) << endl << endl;
+    // test_mock.krylov_subspace_dim = 2;
+    // test_mock.update_QR_fact();
+    // cout << test_mock.Q_H << endl;
+    // cout << test_mock.R_H << endl;
+    // cout << test_mock.H << endl;
+    // cout << test_mock.Q_H.block(0, 0, 3, 3)*test_mock.R_H.block(0, 0, 3, 2) << endl << endl;
+    // test_mock.krylov_subspace_dim = 3;
+    // test_mock.update_QR_fact();
+    // cout << test_mock.Q_H << endl;
+    // cout << test_mock.R_H << endl;
+    // cout << test_mock.H << endl;
+    // cout << test_mock.Q_H.block(0, 0, 4, 4)*test_mock.R_H.block(0, 0, 4, 3) << endl << endl;
+    // test_mock.krylov_subspace_dim = 4;
+    // test_mock.update_QR_fact();
+    // cout << test_mock.Q_H << endl;
+    // cout << test_mock.R_H << endl;
+    // cout << test_mock.H << endl;
+    // cout << test_mock.Q_H.block(0, 0, 5, 5)*test_mock.R_H.block(0, 0, 5, 4) << endl << endl;
     
 }
 

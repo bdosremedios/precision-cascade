@@ -83,6 +83,7 @@ class GMRESSolve: public LinearSolve<T> {
             //     R_H(i, k) = a*c-b*s;
             //     R_H(i+1, k) = a*s+b*c;
             // }
+            // I think this can be made to be O(n)
             R_H.block(0, k, k+2, 1) = Q_H.block(0, 0, k+2, k+2).transpose()*R_H.block(0, k, k+2, 1);
 
             // Apply the final Given's rotation manually making 
@@ -92,12 +93,6 @@ class GMRESSolve: public LinearSolve<T> {
             T r = sqrt(pow(a, 2) + pow(b, 2));
             T c = a/r;
             T s = -b/r;
-            // Matrix<T, Dynamic, Dynamic> givens_ = Matrix<T, Dynamic, Dynamic>::Identity(k+2, k+2);
-            // givens_(k, k) = c;
-            // givens_(k, k+1) = -s;
-            // givens_(k+1, k) = s;
-            // givens_(k+1, k+1) = c;
-            // R_H.block(0, k, k+2, 1) = givens_*R_H.block(0, k, k+2, 1);
             R_H(k, k) = r;
             R_H(k+1, k) = 0;
 
@@ -108,10 +103,7 @@ class GMRESSolve: public LinearSolve<T> {
             givens(k, k+1) = -s;
             givens(k+1, k) = s;
             givens(k+1, k+1) = c;
-            // cout << Q_H.block(0, 0, k+2, k+2) << endl;
             Q_H.block(0, 0, k+2, k+2) = Q_H.block(0, 0, k+2, k+2)*(givens.transpose());
-            // cout << Q_H.block(0, 0, k+2, k+2)*givens << endl;
-            // Q_H = Q_H*(givens.transpose());
 
         }
 
