@@ -14,6 +14,7 @@ template <typename T>
 class LinearSolve {
     
     protected:
+
         // Linear System Attributes
         Matrix<T, Dynamic, Dynamic> A;
         Matrix<T, Dynamic, 1> b;
@@ -22,14 +23,17 @@ class LinearSolve {
 
         // Solution Tracking Attributes
         Matrix<T, Dynamic, 1> x;
-        Matrix<T, Dynamic, Dynamic> x_hist;
-        vector<double> res_norm_hist;
         bool initiated = false;
         bool converged = false;
         int iteration = 0;
 
+        // Variables only valid once solve has been initiated
+        Matrix<T, Dynamic, Dynamic> x_hist;
+        vector<double> res_norm_hist;
+
         // Virtual function that returns advances the iterate x using previous iterates and
         // the linear solver's linear system
+        // * WILL NOT BE CALLED IF CONVERGED = true so can assume converged is not true
         virtual void iterate() = 0;
 
     public:
@@ -61,6 +65,9 @@ class LinearSolve {
                 b = arg_b;
                 x_0 = arg_x_0;
 
+                // Load initial guess as initial solution
+                x = x_0;
+
         };
 
         virtual ~LinearSolve() = default; // Virtual to determine destructors at runtime for correctness
@@ -76,12 +83,8 @@ class LinearSolve {
         // Perform linear solve with given iterate scheme
         void solve(const int max_iter=1000, const double target_rel_res=1e-12) {
 
-            // Mark as linear solve started
+            // Mark as linear solve started and start histories
             initiated = true;
-            
-            // Assume all vectors/matrices are compatible or else Eigen will return an error
-            int m = A.rows();
-            x = x_0;
             x_hist = Matrix<T, Dynamic, Dynamic>(m, max_iter+1);
             x_hist(Eigen::placeholders::all, 0) = x_0;
             double res_norm = (b - A*x).norm();
