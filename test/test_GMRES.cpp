@@ -31,6 +31,7 @@ TEST_F(GMRESTest, CheckConstruction5x5) {
     Matrix<double, Dynamic, Dynamic> A = mr.read_file_d(matrix_dir + "A_5.csv");
     Matrix<double, Dynamic, Dynamic> b = mr.read_file_d(matrix_dir + "b_5.csv");
     GMRESSolveTestingMock<double> test_mock(A, b, 8.88e-16);
+    ASSERT_EQ(test_mock.rho, (b - A*MatrixXd::Ones(5, 1)).norm());
     
     ASSERT_EQ(test_mock.Q_kry_basis.rows(), 5);
     ASSERT_EQ(test_mock.Q_kry_basis.cols(), 5);
@@ -75,6 +76,7 @@ TEST_F(GMRESTest, CheckConstruction64x64) {
     Matrix<double, Dynamic, Dynamic> A = mr.read_file_d(matrix_dir + "conv_diff_64_A.csv");
     Matrix<double, Dynamic, Dynamic> b = mr.read_file_d(matrix_dir + "conv_diff_64_b.csv");
     GMRESSolveTestingMock<double> test_mock(A, b, 8.88e-16);
+    ASSERT_EQ(test_mock.rho, (b - A*MatrixXd::Ones(64, 1)).norm());
     
     ASSERT_EQ(test_mock.Q_kry_basis.rows(), 64);
     ASSERT_EQ(test_mock.Q_kry_basis.cols(), 64);
@@ -304,32 +306,6 @@ TEST_F(GMRESTest, H_QR_Update) {
         }
 
     }
-
-    // Set krylov dimension to original 1
-    // test_mock.krylov_subspace_dim = 1;
-    // test_mock.update_QR_fact();
-    // cout << test_mock.Q_H << endl;
-    // cout << test_mock.R_H << endl;
-    // cout << test_mock.H << endl;
-    // cout << test_mock.Q_H.block(0, 0, 2, 2)*test_mock.R_H.block(0, 0, 2, 1) << endl << endl;
-    // test_mock.krylov_subspace_dim = 2;
-    // test_mock.update_QR_fact();
-    // cout << test_mock.Q_H << endl;
-    // cout << test_mock.R_H << endl;
-    // cout << test_mock.H << endl;
-    // cout << test_mock.Q_H.block(0, 0, 3, 3)*test_mock.R_H.block(0, 0, 3, 2) << endl << endl;
-    // test_mock.krylov_subspace_dim = 3;
-    // test_mock.update_QR_fact();
-    // cout << test_mock.Q_H << endl;
-    // cout << test_mock.R_H << endl;
-    // cout << test_mock.H << endl;
-    // cout << test_mock.Q_H.block(0, 0, 4, 4)*test_mock.R_H.block(0, 0, 4, 3) << endl << endl;
-    // test_mock.krylov_subspace_dim = 4;
-    // test_mock.update_QR_fact();
-    // cout << test_mock.Q_H << endl;
-    // cout << test_mock.R_H << endl;
-    // cout << test_mock.H << endl;
-    // cout << test_mock.Q_H.block(0, 0, 5, 5)*test_mock.R_H.block(0, 0, 5, 4) << endl << endl;
     
 }
 
@@ -337,8 +313,35 @@ TEST_F(GMRESTest, SolveConvDiff64) {
     
     Matrix<double, Dynamic, Dynamic> A = mr.read_file_d(matrix_dir + "conv_diff_64_A.csv");
     Matrix<double, Dynamic, Dynamic> b = mr.read_file_d(matrix_dir + "conv_diff_64_b.csv");
+    Matrix<double, Dynamic, 1> x_0 = MatrixXd::Ones(64, 1);
+    Matrix<double, Dynamic, 1> r_0 = b - A*x_0;
     GMRESSolve<double> gmres_solve_d(A, b, 8.88e-16);
-    // gmres_solve_d.solve();
-    // gmres_solve_d.view_relres_plot("log");
+    double tol = 1e-14;
+
+    gmres_solve_d.solve(100, tol);
+    gmres_solve_d.view_relres_plot("log");
+    
+    EXPECT_TRUE(gmres_solve_d.check_converged());
+    double rel_res = (b - A*gmres_solve_d.soln()).norm()/r_0.norm();
+    EXPECT_LE(rel_res, tol);
+
+}
+
+
+TEST_F(GMRESTest, SolveConvDiff256) {
+    
+    Matrix<double, Dynamic, Dynamic> A = mr.read_file_d(matrix_dir + "conv_diff_256_A.csv");
+    Matrix<double, Dynamic, Dynamic> b = mr.read_file_d(matrix_dir + "conv_diff_256_b.csv");
+    Matrix<double, Dynamic, 1> x_0 = MatrixXd::Ones(256, 1);
+    Matrix<double, Dynamic, 1> r_0 = b - A*x_0;
+    GMRESSolve<double> gmres_solve_d(A, b, 8.88e-16);
+    double tol = 1e-14;
+
+    gmres_solve_d.solve(100, tol);
+    gmres_solve_d.view_relres_plot("log");
+    
+    EXPECT_TRUE(gmres_solve_d.check_converged());
+    double rel_res = (b - A*gmres_solve_d.soln()).norm()/r_0.norm();
+    EXPECT_LE(rel_res, tol);
 
 }
