@@ -470,8 +470,26 @@ main/CMakeFiles/main.dir/main.cpp.o: ../main/main.cpp \
   ../eigen/Eigen/src/Eigenvalues/GeneralizedEigenSolver.h \
   ../eigen/Eigen/src/Eigenvalues/RealQZ.h \
   ../eigen/Eigen/src/Eigenvalues/MatrixBaseEigenvalues.h \
-  ../include/read_matrix/MatrixReader.h
+  ../include/read_matrix/MatrixReader.h \
+  /usr/include/c++/11/fstream \
+  /usr/include/c++/11/bits/codecvt.h \
+  /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
+  /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
+  /usr/include/c++/11/bits/fstream.tcc \
+  ../include/solvers/Jacobi.h \
+  ../include/solvers/LinearSolve.h \
+  ../include/solvers/GMRES.h
 
+
+../include/solvers/GMRES.h:
+
+/usr/include/c++/11/bits/fstream.tcc:
+
+/usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h:
+
+/usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h:
+
+/usr/include/c++/11/fstream:
 
 ../eigen/Eigen/src/Eigenvalues/RealQZ.h:
 
@@ -752,6 +770,8 @@ main/CMakeFiles/main.dir/main.cpp.o: ../main/main.cpp \
 /usr/include/c++/11/backward/binders.h:
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/c++allocator.h:
+
+../include/solvers/LinearSolve.h:
 
 /usr/include/c++/11/bits/locale_classes.h:
 
@@ -1331,6 +1351,8 @@ main/CMakeFiles/main.dir/main.cpp.o: ../main/main.cpp \
 
 /usr/include/c++/11/bits/hashtable_policy.h:
 
+/usr/include/c++/11/bits/codecvt.h:
+
 /usr/include/c++/11/bits/basic_ios.tcc:
 
 /usr/include/c++/11/bits/enable_special_members.h:
@@ -1358,6 +1380,8 @@ main/CMakeFiles/main.dir/main.cpp.o: ../main/main.cpp \
 /usr/include/c++/11/bits/stl_bvector.h:
 
 /usr/include/c++/11/bits/vector.tcc:
+
+../include/solvers/Jacobi.h:
 
 /usr/include/c++/11/pstl/execution_defs.h:
 

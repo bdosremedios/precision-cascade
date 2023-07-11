@@ -3,7 +3,7 @@
 #include "read_matrix/MatrixReader.h"
 #include <string>
 
-using mxread::MatrixReader;
+using read_matrix::read_matrix_csv;
 using Eigen::MatrixXd;
 using std::string;
 using std::cout, std::endl;
@@ -12,13 +12,7 @@ using std::runtime_error;
 class MatrixReaderTest: public testing::Test {
 
     protected:
-        MatrixReader mr;
         string matrix_dir = "/home/bdosremedios/dev/gmres/test/read_matrices/";
-
-    
-    MatrixReaderTest() {
-        mr = MatrixReader();
-    }
 
 };
 
@@ -34,8 +28,8 @@ TEST_F(MatrixReaderTest, ReadSquareMatrix) {
                       {21, 22, 23, 24, 25}};
     string square1_file = matrix_dir + "square1.csv";
     string square2_file = matrix_dir + "square2.csv";
-    MatrixXd test1(mr.read_file_d(square1_file));
-    MatrixXd test2(mr.read_file_d(square2_file));
+    MatrixXd test1(read_matrix_csv<double>(square1_file));
+    MatrixXd test2(read_matrix_csv<double>(square2_file));
 
     // Check that read is correct for first file
     ASSERT_EQ(test1.rows(), 3);
@@ -67,8 +61,8 @@ TEST_F(MatrixReaderTest, ReadWideTallMatrix) {
                           {7, 8}};
     string wide_file = matrix_dir + "wide.csv";
     string tall_file = matrix_dir + "tall.csv";
-    MatrixXd test_wide(mr.read_file_d(wide_file));
-    MatrixXd test_tall(mr.read_file_d(tall_file));
+    MatrixXd test_wide(read_matrix_csv<double>(wide_file));
+    MatrixXd test_tall(read_matrix_csv<double>(tall_file));
 
     // Check that read is correct for first file
     ASSERT_EQ(test_wide.rows(), 2);
@@ -93,7 +87,7 @@ TEST_F(MatrixReaderTest, ReadWideTallMatrix) {
 TEST_F(MatrixReaderTest, ReadEmptyMatrix) {
 
     string empty_file = matrix_dir + "empty.csv";
-    MatrixXd test_empty(mr.read_file_d(empty_file));
+    MatrixXd test_empty(read_matrix_csv<double>(empty_file));
     ASSERT_EQ(test_empty.rows(), 0);
     ASSERT_EQ(test_empty.cols(), 0);
 
@@ -105,7 +99,7 @@ TEST_F(MatrixReaderTest, ReadPreciseMatrix) {
     MatrixXd target_precise {{2.71828182845905, 3.71828182845905},
                              {4.71828182845904, 5.71828182845904}};
     string precise_file = matrix_dir + "precise.csv";
-    MatrixXd test_precise(mr.read_file_d(precise_file));
+    MatrixXd test_precise(read_matrix_csv<double>(precise_file));
 
     ASSERT_EQ(test_precise.rows(), 2);
     ASSERT_EQ(test_precise.cols(), 2);
@@ -122,7 +116,7 @@ TEST_F(MatrixReaderTest, ReadBadFiles) {
     // Try to load non-existent file
     string bad_file_0 = matrix_dir + "thisfile";
     try {
-        MatrixXd test(mr.read_file_d(bad_file_0));
+        MatrixXd test(read_matrix_csv<double>(bad_file_0));
         FAIL();
     } catch (runtime_error e) {
         EXPECT_EQ(
@@ -134,7 +128,7 @@ TEST_F(MatrixReaderTest, ReadBadFiles) {
     // Try to load file with too small row
     string bad_file_1 = matrix_dir + "bad1.csv";
     try {
-        MatrixXd test(mr.read_file_d(bad_file_1));
+        MatrixXd test(read_matrix_csv<double>(bad_file_1));
         FAIL();
     } catch (runtime_error e) {
         EXPECT_EQ(
@@ -146,7 +140,7 @@ TEST_F(MatrixReaderTest, ReadBadFiles) {
     // Try to load file with too big rows
     string bad_file_2 = matrix_dir + "bad2.csv";
     try {
-        MatrixXd test(mr.read_file_d(bad_file_2));
+        MatrixXd test(read_matrix_csv<double>(bad_file_2));
         FAIL();
     } catch (runtime_error e) {
         EXPECT_EQ(
@@ -158,7 +152,7 @@ TEST_F(MatrixReaderTest, ReadBadFiles) {
     // Try to load file with invalid character argument
     string bad_file_3 = matrix_dir + "bad3.csv";
     try {
-        MatrixXd test(mr.read_file_d(bad_file_3));
+        MatrixXd test(read_matrix_csv<double>(bad_file_3));
         FAIL();
     } catch (runtime_error e) {
         EXPECT_EQ(

@@ -223,30 +223,6 @@ test_GMRES.cpp.s:
 	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_GMRES.cpp.s
 .PHONY : test_GMRES.cpp.s
 
-test_Jacobi.o: test_Jacobi.cpp.o
-.PHONY : test_Jacobi.o
-
-# target to build an object file
-test_Jacobi.cpp.o:
-	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_Jacobi.cpp.o
-.PHONY : test_Jacobi.cpp.o
-
-test_Jacobi.i: test_Jacobi.cpp.i
-.PHONY : test_Jacobi.i
-
-# target to preprocess a source file
-test_Jacobi.cpp.i:
-	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_Jacobi.cpp.i
-.PHONY : test_Jacobi.cpp.i
-
-test_Jacobi.s: test_Jacobi.cpp.s
-.PHONY : test_Jacobi.s
-
-# target to generate assembly for a file
-test_Jacobi.cpp.s:
-	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_Jacobi.cpp.s
-.PHONY : test_Jacobi.cpp.s
-
 test_MatrixReader.o: test_MatrixReader.cpp.o
 .PHONY : test_MatrixReader.o
 
@@ -290,9 +266,6 @@ help:
 	@echo "... test_GMRES.o"
 	@echo "... test_GMRES.i"
 	@echo "... test_GMRES.s"
-	@echo "... test_Jacobi.o"
-	@echo "... test_Jacobi.i"
-	@echo "... test_Jacobi.s"
 	@echo "... test_MatrixReader.o"
 	@echo "... test_MatrixReader.i"
 	@echo "... test_MatrixReader.s"

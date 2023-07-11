@@ -3,8 +3,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/test.dir/test.cpp.o.d"
   "CMakeFiles/test.dir/test_GMRES.cpp.o"
   "CMakeFiles/test.dir/test_GMRES.cpp.o.d"
-  "CMakeFiles/test.dir/test_Jacobi.cpp.o"
-  "CMakeFiles/test.dir/test_Jacobi.cpp.o.d"
   "CMakeFiles/test.dir/test_MatrixReader.cpp.o"
   "CMakeFiles/test.dir/test_MatrixReader.cpp.o.d"
   "test"

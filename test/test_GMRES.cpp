@@ -5,7 +5,7 @@
 
 #include "solvers/GMRES.h"
 
-using mxread::MatrixReader;
+using read_matrix::read_matrix_csv;
 using Eigen::MatrixXd;
 using std::string;
 using std::cout, std::endl;
@@ -14,22 +14,15 @@ using Eigen::placeholders::all;
 class GMRESTest: public testing::Test {
 
     protected:
-        MatrixReader mr;
         string matrix_dir = "/home/bdosremedios/dev/gmres/test/solve_matrices/";
         double double_tolerance = 5*2.22e-16;
-
-    public:
-        GMRESTest() {
-            mr = MatrixReader();
-        }
-        ~GMRESTest() = default;
 
 };
 
 TEST_F(GMRESTest, CheckConstruction5x5) {
     
-    Matrix<double, Dynamic, Dynamic> A = mr.read_file_d(matrix_dir + "A_5.csv");
-    Matrix<double, Dynamic, Dynamic> b = mr.read_file_d(matrix_dir + "b_5.csv");
+    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_5.csv");
+    Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_5.csv");
     GMRESSolveTestingMock<double> test_mock(A, b, 8.88e-16);
     ASSERT_EQ(test_mock.rho, (b - A*MatrixXd::Ones(5, 1)).norm());
     
@@ -73,8 +66,8 @@ TEST_F(GMRESTest, CheckConstruction5x5) {
 
 TEST_F(GMRESTest, CheckConstruction64x64) {
     
-    Matrix<double, Dynamic, Dynamic> A = mr.read_file_d(matrix_dir + "conv_diff_64_A.csv");
-    Matrix<double, Dynamic, Dynamic> b = mr.read_file_d(matrix_dir + "conv_diff_64_b.csv");
+    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "conv_diff_64_A.csv");
+    Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "conv_diff_64_b.csv");
     GMRESSolveTestingMock<double> test_mock(A, b, 8.88e-16);
     ASSERT_EQ(test_mock.rho, (b - A*MatrixXd::Ones(64, 1)).norm());
     
@@ -118,8 +111,8 @@ TEST_F(GMRESTest, CheckConstruction64x64) {
 
 TEST_F(GMRESTest, KrylovInstantiationAndUpdates) {
     
-    Matrix<double, Dynamic, Dynamic> A = mr.read_file_d(matrix_dir + "A_5.csv");
-    Matrix<double, Dynamic, Dynamic> b = mr.read_file_d(matrix_dir + "b_5.csv");
+    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_5.csv");
+    Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_5.csv");
     GMRESSolveTestingMock<double> test_mock(A, b, double_tolerance);
     test_mock.x = MatrixXd::Ones(5, 1); // Manually instantiate initial guess
     Matrix<double, Dynamic, 1> r_0 = b - A*MatrixXd::Ones(5, 1);
@@ -182,8 +175,8 @@ TEST_F(GMRESTest, KrylovInstantiationAndUpdates) {
 
 TEST_F(GMRESTest, KrylovLuckyBreakFirstIter) {
     
-    Matrix<double, Dynamic, Dynamic> A = mr.read_file_d(matrix_dir + "A_5_easysoln.csv");
-    Matrix<double, Dynamic, Dynamic> b = mr.read_file_d(matrix_dir + "b_5.csv");
+    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_5_easysoln.csv");
+    Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_5.csv");
     MatrixXd soln = MatrixXd::Ones(5, 1); // Instantiate initial guess as true solution
     GMRESSolveTestingMock<double> test_mock(A, b, soln, double_tolerance);
 
@@ -209,8 +202,8 @@ TEST_F(GMRESTest, KrylovLuckyBreakFirstIter) {
 
 TEST_F(GMRESTest, KrylovLuckyBreakLaterIter) {
     
-    Matrix<double, Dynamic, Dynamic> A = mr.read_file_d(matrix_dir + "A_5_easysoln.csv");
-    Matrix<double, Dynamic, Dynamic> b = mr.read_file_d(matrix_dir + "b_5.csv");
+    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_5_easysoln.csv");
+    Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_5.csv");
     MatrixXd soln = MatrixXd::Zero(5, 1); // Initialize as near solution
     soln(0) = 1;
     GMRESSolveTestingMock<double> test_mock(A, b, soln, double_tolerance);
@@ -236,8 +229,8 @@ TEST_F(GMRESTest, KrylovLuckyBreakLaterIter) {
 
 TEST_F(GMRESTest, H_QR_Update) {
     
-    Matrix<double, Dynamic, Dynamic> A = mr.read_file_d(matrix_dir + "A_5.csv");
-    Matrix<double, Dynamic, Dynamic> b = mr.read_file_d(matrix_dir + "b_5.csv");
+    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_5.csv");
+    Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_5.csv");
     GMRESSolveTestingMock<double> test_mock(A, b, double_tolerance);
     test_mock.x = MatrixXd::Ones(5, 1); // Manually instantiate initial guess
     Matrix<double, Dynamic, 1> r_0 = b - A*MatrixXd::Ones(5, 1);
@@ -311,8 +304,8 @@ TEST_F(GMRESTest, H_QR_Update) {
 
 TEST_F(GMRESTest, SolveConvDiff64) {
     
-    Matrix<double, Dynamic, Dynamic> A = mr.read_file_d(matrix_dir + "conv_diff_64_A.csv");
-    Matrix<double, Dynamic, Dynamic> b = mr.read_file_d(matrix_dir + "conv_diff_64_b.csv");
+    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "conv_diff_64_A.csv");
+    Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "conv_diff_64_b.csv");
     Matrix<double, Dynamic, 1> x_0 = MatrixXd::Ones(64, 1);
     Matrix<double, Dynamic, 1> r_0 = b - A*x_0;
     GMRESSolve<double> gmres_solve_d(A, b, 8.88e-16);
@@ -330,14 +323,32 @@ TEST_F(GMRESTest, SolveConvDiff64) {
 
 TEST_F(GMRESTest, SolveConvDiff256) {
     
-    Matrix<double, Dynamic, Dynamic> A = mr.read_file_d(matrix_dir + "conv_diff_256_A.csv");
-    Matrix<double, Dynamic, Dynamic> b = mr.read_file_d(matrix_dir + "conv_diff_256_b.csv");
+    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "conv_diff_256_A.csv");
+    Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "conv_diff_256_b.csv");
     Matrix<double, Dynamic, 1> x_0 = MatrixXd::Ones(256, 1);
     Matrix<double, Dynamic, 1> r_0 = b - A*x_0;
     GMRESSolve<double> gmres_solve_d(A, b, 8.88e-16);
     double tol = 1e-14;
 
     gmres_solve_d.solve(100, tol);
+    gmres_solve_d.view_relres_plot("log");
+    
+    EXPECT_TRUE(gmres_solve_d.check_converged());
+    double rel_res = (b - A*gmres_solve_d.soln()).norm()/r_0.norm();
+    EXPECT_LE(rel_res, tol);
+
+}
+
+TEST_F(GMRESTest, SolveRand20) {
+    
+    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_20_rand.csv");
+    Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_20_rand.csv");
+    Matrix<double, Dynamic, 1> x_0 = MatrixXd::Ones(20, 1);
+    Matrix<double, Dynamic, 1> r_0 = b - A*x_0;
+    GMRESSolve<double> gmres_solve_d(A, b, 8.88e-16);
+    double tol = 1e-14;
+
+    gmres_solve_d.solve(20, tol);
     gmres_solve_d.view_relres_plot("log");
     
     EXPECT_TRUE(gmres_solve_d.check_converged());

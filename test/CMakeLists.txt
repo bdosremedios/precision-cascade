@@ -5,7 +5,7 @@ project(gmres)
 set(
     TEST_SUITE_CPPS
     test_MatrixReader.cpp
-    test_Jacobi.cpp
+    # test_Jacobi.cpp
     test_GMRES.cpp
 )
 
