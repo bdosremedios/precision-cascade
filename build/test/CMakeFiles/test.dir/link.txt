@@ -1,1 +1,1 @@
-/usr/bin/c++ CMakeFiles/test.dir/test.cpp.o CMakeFiles/test.dir/test_MatrixReader.cpp.o CMakeFiles/test.dir/test_GMRES.cpp.o -o test  ../lib/libgtest_main.a ../src/read_matrix/libmatrixReader.a ../lib/libgtest.a 
+/usr/bin/c++ CMakeFiles/test.dir/test.cpp.o CMakeFiles/test.dir/test_MatrixReader.cpp.o CMakeFiles/test.dir/test_GMRES.cpp.o -o test  ../lib/libgtest_main.a ../lib/libgtest.a 

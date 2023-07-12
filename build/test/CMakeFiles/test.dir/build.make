@@ -125,7 +125,6 @@ test/test: test/CMakeFiles/test.dir/test_MatrixReader.cpp.o
 test/test: test/CMakeFiles/test.dir/test_GMRES.cpp.o
 test/test: test/CMakeFiles/test.dir/build.make
 test/test: lib/libgtest_main.a
-test/test: src/read_matrix/libmatrixReader.a
 test/test: lib/libgtest.a
 test/test: test/CMakeFiles/test.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/bdosremedios/dev/gmres/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable test"

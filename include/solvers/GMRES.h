@@ -73,54 +73,14 @@ class GMRESSolve: public LinearSolve<T> {
             R_H(all, k) = H(all, k);
 
             // Apply previous Given's rotations to new column
-            // T prev_s = 0; // First Given's has no previous Given's so just modify by one
-            // T prev_c = 1; // and set cos as initially zero so ondt add
-            // Matrix<T, Dynamic, 1> test_R_H = R_H.col(k);
-            // cout << "START LAST COL: " << endl;
-            // cout << test_R_H << endl << endl;
-            // cout << R_H.col(k) << endl << endl;
-            // cout << Q_H.block(0, 0, k+1, k+1).transpose() << endl << endl;
             R_H.block(0, k, k+1, 1) = Q_H.block(0, 0, k+1, k+1).transpose()*R_H.block(0, k, k+1, 1);
-            // for (int i=0; i<k; ++i) {
-
-            //     // Get original entries on diagonal and subdiagonal from H corresponding to
-            //     // ith Given's rotation
-            //     T a_Givens = H(i, i);
-            //     T b_Givens = H(i+1, i);
-
-            //     // Modify diagonal value by previous Given's rotation second row since would be
-            //     // effected by it
-            //     a_Givens = a_Givens*prev_s+a_Givens*prev_c;
-
-            //     // Calculate previous Given's rotation
-            //     T r = sqrt(pow(a_Givens, 2) + pow(b_Givens, 2));
-            //     T c = a_Givens/r;
-            //     T s = -b_Givens/r;
-
-            //     // Perform effect on new column
-            //     T a_R = test_R_H(i);
-            //     T b_R = test_R_H(i+1);
-            //     // R_H(i, k) = a_R*c-b_R*s;
-            //     // R_H(i+1, k) = a_R*s+b_R*c;
-            //     test_R_H(i) = a_R*c-b_R*s;
-            //     test_R_H(i+1) = a_R*s+b_R*c;
-
-            //     // Store current Given's rotation as previous for next modification
-            //     T prev_c = c;
-            //     T prev_s = s;
-
-            // }
-            // I think this can be made to be O(n)
-            
-            // cout << "NEW LAST COL: " << endl;
-            // cout << test_R_H << endl << endl;
-            // cout << R_H.col(k) << endl << endl;
 
             // Apply the final Given's rotation manually making 
             // R_H upper triangular
             T a = R_H(k, k);
             T b = R_H(k+1, k);
-            T r = sqrt(pow(a, 2) + pow(b, 2));
+            T r_sqr = a*a + b*b; // Explicit intermediate variable to ensure no auto casting into sqrt
+            T r = sqrt(r_sqr);
             T c = a/r;
             T s = -b/r;
             R_H(k, k) = r;

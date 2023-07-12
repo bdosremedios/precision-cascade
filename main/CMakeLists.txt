@@ -5,7 +5,6 @@ project(gmres)
 add_executable(main main.cpp)
 
 target_link_libraries(main eigen)
-target_link_libraries(main matrixReader)
 
 target_include_directories(
     main

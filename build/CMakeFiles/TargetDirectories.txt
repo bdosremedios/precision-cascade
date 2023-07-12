@@ -28,13 +28,6 @@
 /home/bdosremedios/dev/gmres/build/src/CMakeFiles/install.dir
 /home/bdosremedios/dev/gmres/build/src/CMakeFiles/install/local.dir
 /home/bdosremedios/dev/gmres/build/src/CMakeFiles/install/strip.dir
-/home/bdosremedios/dev/gmres/build/src/read_matrix/CMakeFiles/matrixReader.dir
-/home/bdosremedios/dev/gmres/build/src/read_matrix/CMakeFiles/edit_cache.dir
-/home/bdosremedios/dev/gmres/build/src/read_matrix/CMakeFiles/rebuild_cache.dir
-/home/bdosremedios/dev/gmres/build/src/read_matrix/CMakeFiles/list_install_components.dir
-/home/bdosremedios/dev/gmres/build/src/read_matrix/CMakeFiles/install.dir
-/home/bdosremedios/dev/gmres/build/src/read_matrix/CMakeFiles/install/local.dir
-/home/bdosremedios/dev/gmres/build/src/read_matrix/CMakeFiles/install/strip.dir
 /home/bdosremedios/dev/gmres/build/eigen/CMakeFiles/edit_cache.dir
 /home/bdosremedios/dev/gmres/build/eigen/CMakeFiles/rebuild_cache.dir
 /home/bdosremedios/dev/gmres/build/eigen/CMakeFiles/list_install_components.dir

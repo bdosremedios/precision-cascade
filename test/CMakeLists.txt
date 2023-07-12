@@ -24,5 +24,5 @@ target_include_directories(
 target_link_libraries(
     test
     PRIVATE
-    gtest_main matrixReader
+    gtest_main eigen
 )

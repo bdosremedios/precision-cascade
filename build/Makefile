@@ -162,19 +162,6 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named matrixReader
-
-# Build rule for target.
-matrixReader: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 matrixReader
-.PHONY : matrixReader
-
-# fast build rule for target.
-matrixReader/fast:
-	$(MAKE) $(MAKESILENT) -f src/read_matrix/CMakeFiles/matrixReader.dir/build.make src/read_matrix/CMakeFiles/matrixReader.dir/build
-.PHONY : matrixReader/fast
-
-#=============================================================================
 # Target rules for targets named gmock
 
 # Build rule for target.
@@ -269,7 +256,6 @@ help:
 	@echo "... gtest"
 	@echo "... gtest_main"
 	@echo "... main"
-	@echo "... matrixReader"
 	@echo "... test"
 .PHONY : help
 

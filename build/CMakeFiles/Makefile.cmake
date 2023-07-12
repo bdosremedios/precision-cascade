@@ -26,7 +26,6 @@ set(CMAKE_MAKEFILE_DEPENDS
   "../include/solvers/CMakeLists.txt"
   "../main/CMakeLists.txt"
   "../src/CMakeLists.txt"
-  "../src/read_matrix/CMakeLists.txt"
   "../test/CMakeLists.txt"
   "/usr/share/cmake-3.22/Modules/BasicConfigVersion-AnyNewerVersion.cmake.in"
   "/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake"
@@ -74,7 +73,6 @@ set(CMAKE_MAKEFILE_PRODUCTS
   "include/read_matrix/CMakeFiles/CMakeDirectoryInformation.cmake"
   "include/solvers/CMakeFiles/CMakeDirectoryInformation.cmake"
   "src/CMakeFiles/CMakeDirectoryInformation.cmake"
-  "src/read_matrix/CMakeFiles/CMakeDirectoryInformation.cmake"
   "eigen/CMakeFiles/CMakeDirectoryInformation.cmake"
   "googletest/CMakeFiles/CMakeDirectoryInformation.cmake"
   "googletest/googletest/generated/gmock.pc"
@@ -91,7 +89,6 @@ set(CMAKE_MAKEFILE_PRODUCTS
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
-  "src/read_matrix/CMakeFiles/matrixReader.dir/DependInfo.cmake"
   "googletest/googlemock/CMakeFiles/gmock.dir/DependInfo.cmake"
   "googletest/googlemock/CMakeFiles/gmock_main.dir/DependInfo.cmake"
   "googletest/googletest/CMakeFiles/gtest.dir/DependInfo.cmake"
