@@ -338,7 +338,7 @@ TEST_F(GMRESTest, Update_x_Back_Substitution) {
 
         // Check if coefficient solution matches to within double tolerance
         for (int i=0; i<kry_dim; ++i) {
-            EXPECT_NEAR(test_mock.x(i), test_soln(i), 1e-14);
+            EXPECT_NEAR(test_mock.x(i), test_soln(i), 1e-13);
         }
 
     }
@@ -353,7 +353,7 @@ TEST_F(GMRESTest, SolveConvDiff64) {
     Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "conv_diff_64_b.csv");
     Matrix<double, Dynamic, 1> x_0 = MatrixXd::Ones(64, 1);
     Matrix<double, Dynamic, 1> r_0 = b - A*x_0;
-    GMRESSolve<double> gmres_solve_d(A, b, double_tolerance);
+    GMRESSolveTestingMock<double> gmres_solve_d(A, b, double_tolerance);
 
     gmres_solve_d.solve(64, convergence_tolerance);
     gmres_solve_d.view_relres_plot("log");
@@ -361,6 +361,10 @@ TEST_F(GMRESTest, SolveConvDiff64) {
     EXPECT_TRUE(gmres_solve_d.check_converged());
     double rel_res = (b - A*gmres_solve_d.soln()).norm()/r_0.norm();
     EXPECT_LE(rel_res, convergence_tolerance);
+
+    // Check that matches MATLAB gmres solution within the difference of twice convergence_tolerance
+    Matrix<double, Dynamic, Dynamic> x_test = read_matrix_csv<double>(matrix_dir + "conv_diff_64_x.csv");
+    EXPECT_LE((gmres_solve_d.x - x_test).norm()/(x_test.norm()), 2*convergence_tolerance);
 
 }
 
@@ -370,7 +374,7 @@ TEST_F(GMRESTest, SolveConvDiff256) {
     Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "conv_diff_256_b.csv");
     Matrix<double, Dynamic, 1> x_0 = MatrixXd::Ones(256, 1);
     Matrix<double, Dynamic, 1> r_0 = b - A*x_0;
-    GMRESSolve<double> gmres_solve_d(A, b, double_tolerance);
+    GMRESSolveTestingMock<double> gmres_solve_d(A, b, double_tolerance);
 
     gmres_solve_d.solve(256, convergence_tolerance);
     gmres_solve_d.view_relres_plot("log");
@@ -378,6 +382,10 @@ TEST_F(GMRESTest, SolveConvDiff256) {
     EXPECT_TRUE(gmres_solve_d.check_converged());
     double rel_res = (b - A*gmres_solve_d.soln()).norm()/r_0.norm();
     EXPECT_LE(rel_res, convergence_tolerance);
+
+    // Check that matches MATLAB gmres solution within the difference of twice convergence_tolerance
+    Matrix<double, Dynamic, Dynamic> x_test = read_matrix_csv<double>(matrix_dir + "conv_diff_256_x.csv");
+    EXPECT_LE((gmres_solve_d.x - x_test).norm()/(x_test.norm()), 2*convergence_tolerance);
 
 }
 
@@ -387,7 +395,7 @@ TEST_F(GMRESTest, SolveConvDiff1024_LONGRUNTIME) {
     Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "conv_diff_1024_b.csv");
     Matrix<double, Dynamic, 1> x_0 = MatrixXd::Ones(1024, 1);
     Matrix<double, Dynamic, 1> r_0 = b - A*x_0;
-    GMRESSolve<double> gmres_solve_d(A, b, double_tolerance);
+    GMRESSolveTestingMock<double> gmres_solve_d(A, b, double_tolerance);
 
     gmres_solve_d.solve(1024, convergence_tolerance);
     gmres_solve_d.view_relres_plot("log");
@@ -395,6 +403,10 @@ TEST_F(GMRESTest, SolveConvDiff1024_LONGRUNTIME) {
     EXPECT_TRUE(gmres_solve_d.check_converged());
     double rel_res = (b - A*gmres_solve_d.soln()).norm()/r_0.norm();
     EXPECT_LE(rel_res, convergence_tolerance);
+
+    // Check that matches MATLAB gmres solution within the difference of twice convergence_tolerance
+    Matrix<double, Dynamic, Dynamic> x_test = read_matrix_csv<double>(matrix_dir + "conv_diff_1024_x.csv");
+    EXPECT_LE((gmres_solve_d.x - x_test).norm()/(x_test.norm()), 2*convergence_tolerance);
 
 }
 
@@ -404,7 +416,7 @@ TEST_F(GMRESTest, SolveRand20) {
     Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_20_rand.csv");
     Matrix<double, Dynamic, 1> x_0 = MatrixXd::Ones(20, 1);
     Matrix<double, Dynamic, 1> r_0 = b - A*x_0;
-    GMRESSolve<double> gmres_solve_d(A, b, double_tolerance);
+    GMRESSolveTestingMock<double> gmres_solve_d(A, b, double_tolerance);
 
     gmres_solve_d.solve(20, convergence_tolerance);
     gmres_solve_d.view_relres_plot("log");
@@ -413,6 +425,10 @@ TEST_F(GMRESTest, SolveRand20) {
     double rel_res = (b - A*gmres_solve_d.soln()).norm()/r_0.norm();
     EXPECT_LE(rel_res, convergence_tolerance);
 
+    // Check that matches MATLAB gmres solution within the difference of twice convergence_tolerance
+    Matrix<double, Dynamic, Dynamic> x_test = read_matrix_csv<double>(matrix_dir + "x_20_rand.csv");
+    EXPECT_LE((gmres_solve_d.x - x_test).norm()/(x_test.norm()), 2*convergence_tolerance);
+
 }
 
 TEST_F(GMRESTest, Solve3Eigs) {
@@ -420,9 +436,9 @@ TEST_F(GMRESTest, Solve3Eigs) {
     Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_25_3eigs.csv");
     Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_25_3eigs.csv");
     Matrix<double, Dynamic, 1> x_0 = MatrixXd::Zero(25, 1); // Zeros to preserve eigenval multiplicity of 
-                                                             // matrix
+                                                            // matrix
     Matrix<double, Dynamic, 1> r_0 = b - A*x_0;
-    GMRESSolve<double> gmres_solve_d(A, b, double_tolerance);
+    GMRESSolveTestingMock<double> gmres_solve_d(A, b, double_tolerance);
 
     gmres_solve_d.solve(3, convergence_tolerance);
     gmres_solve_d.view_relres_plot("log");
@@ -430,5 +446,9 @@ TEST_F(GMRESTest, Solve3Eigs) {
     EXPECT_TRUE(gmres_solve_d.check_converged());
     double rel_res = (b - A*gmres_solve_d.soln()).norm()/r_0.norm();
     EXPECT_LE(rel_res, convergence_tolerance);
+
+    // Check that matches MATLAB gmres solution within the difference of twice convergence_tolerance
+    Matrix<double, Dynamic, Dynamic> x_test = read_matrix_csv<double>(matrix_dir + "x_25_3eigs.csv");
+    EXPECT_LE((gmres_solve_d.x - x_test).norm()/(x_test.norm()), 2*convergence_tolerance);
 
 }

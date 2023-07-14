@@ -8,7 +8,7 @@ using std::string;
 int main(int argc, char **argv) {
 
     testing::InitGoogleTest();
-    if ((argc > 1) && ((string(argv[1]) == "--run_long_tests") || (string(argv[1]) == "--rlt"))) {
+    if ((argc > 1) && ((string(argv[1]) == "--run_long_tests") || (string(argv[1]) == "-rlt"))) {
         cout << "Running long tests..." << endl;
     } else {
         cout << "Skipping long tests..." << endl;
