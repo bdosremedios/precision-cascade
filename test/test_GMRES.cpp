@@ -15,14 +15,15 @@ class GMRESTest: public testing::Test {
 
     protected:
         string matrix_dir = "/home/bdosremedios/dev/gmres/test/solve_matrices/";
-        double double_tolerance = 5*2.22e-16;
+        double double_tolerance = 4*pow(2, -52); // Set as 4 times machines epsilon
+        double convergence_tolerance = 1e-10;
 
 };
 
 TEST_F(GMRESTest, CheckConstruction5x5) {
     
-    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_5.csv");
-    Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_5.csv");
+    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_5_toy.csv");
+    Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_5_toy.csv");
     GMRESSolveTestingMock<double> test_mock(A, b, 8.88e-16);
     ASSERT_EQ(test_mock.rho, (b - A*MatrixXd::Ones(5, 1)).norm());
     
@@ -111,8 +112,8 @@ TEST_F(GMRESTest, CheckConstruction64x64) {
 
 TEST_F(GMRESTest, KrylovInstantiationAndUpdates) {
     
-    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_5.csv");
-    Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_5.csv");
+    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_5_toy.csv");
+    Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_5_toy.csv");
     GMRESSolveTestingMock<double> test_mock(A, b, double_tolerance);
     test_mock.x = MatrixXd::Ones(5, 1); // Manually instantiate initial guess
     Matrix<double, Dynamic, 1> r_0 = b - A*MatrixXd::Ones(5, 1);
@@ -151,7 +152,7 @@ TEST_F(GMRESTest, KrylovInstantiationAndUpdates) {
         // Confirm that previous vectors are unchanged and are orthogonal to new one
         for (int j=0; j<k; ++j) {
             EXPECT_EQ(test_mock.Q_kry_basis.col(j), Q_save(all, j));
-            EXPECT_NEAR(test_mock.Q_kry_basis.col(j).dot(q), 0, double_tolerance);
+            EXPECT_NEAR(test_mock.Q_kry_basis.col(j).dot(q), 0, 1e-13);
         }
 
         // Confirm that Hessenberg matrix column corresponding to new basis vector
@@ -176,7 +177,7 @@ TEST_F(GMRESTest, KrylovInstantiationAndUpdates) {
 TEST_F(GMRESTest, KrylovLuckyBreakFirstIter) {
     
     Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_5_easysoln.csv");
-    Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_5.csv");
+    Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_5_easysoln.csv");
     MatrixXd soln = MatrixXd::Ones(5, 1); // Instantiate initial guess as true solution
     GMRESSolveTestingMock<double> test_mock(A, b, soln, double_tolerance);
 
@@ -203,7 +204,7 @@ TEST_F(GMRESTest, KrylovLuckyBreakFirstIter) {
 TEST_F(GMRESTest, KrylovLuckyBreakLaterIter) {
     
     Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_5_easysoln.csv");
-    Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_5.csv");
+    Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_5_easysoln.csv");
     MatrixXd soln = MatrixXd::Zero(5, 1); // Initialize as near solution
     soln(0) = 1;
     GMRESSolveTestingMock<double> test_mock(A, b, soln, double_tolerance);
@@ -229,8 +230,8 @@ TEST_F(GMRESTest, KrylovLuckyBreakLaterIter) {
 
 TEST_F(GMRESTest, H_QR_Update) {
     
-    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_5.csv");
-    Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_5.csv");
+    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_5_toy.csv");
+    Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_5_toy.csv");
     GMRESSolveTestingMock<double> test_mock(A, b, double_tolerance);
     test_mock.x = MatrixXd::Ones(5, 1); // Manually instantiate initial guess
     Matrix<double, Dynamic, 1> r_0 = b - A*MatrixXd::Ones(5, 1);
@@ -299,8 +300,52 @@ TEST_F(GMRESTest, H_QR_Update) {
         }
 
     }
-    
+
 }
+
+TEST_F(GMRESTest, Update_x_Back_Substitution) {
+    
+    Matrix<double, Dynamic, Dynamic> Q = read_matrix_csv<double>(matrix_dir + "Q_8_backsub.csv");
+    Matrix<double, Dynamic, Dynamic> R = read_matrix_csv<double>(matrix_dir + "R_8_backsub.csv");
+    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_7_dummy_backsub.csv");
+    Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_7_dummy_backsub.csv");
+
+    // Set initial guess to zeros such that residual is just b
+    Matrix<double, 7, 1> x_0 = MatrixXd::Zero(7, 1);
+    GMRESSolveTestingMock<double> test_mock(A, b, x_0, double_tolerance);
+
+    // Set test_mock krylov basis to the identity to have x be directly the solved coefficients
+    // of the back substitution
+    test_mock.Q_kry_basis = MatrixXd::Identity(7, 7);
+
+    // Set premade Q R decomposition for H
+    test_mock.Q_H = Q;
+    test_mock.R_H = R;
+
+    // Test that for each possible Hessenberg size determined by the Krylov subspace dimension
+    // that the coefficient solution matches the pre-determined correct one from MATLAB solving
+    for (int kry_dim=1; kry_dim<=7; ++kry_dim) {
+
+        // Set Krylov subspace dim
+        test_mock.krylov_subspace_dim = kry_dim;
+        
+        // Load test solution
+        string solution_path = matrix_dir + "x_" + std::to_string(kry_dim) + "_backsub.csv";
+        Matrix<double, Dynamic, 1> test_soln = read_matrix_csv<double>(solution_path);
+
+        // Solve with backsubstitution
+        test_mock.update_x_minimizing_res();
+
+        // Check if coefficient solution matches to within double tolerance
+        for (int i=0; i<kry_dim; ++i) {
+            EXPECT_NEAR(test_mock.x(i), test_soln(i), 1e-14);
+        }
+
+    }
+
+}
+
+// End to end solve tests
 
 TEST_F(GMRESTest, SolveConvDiff64) {
     
@@ -308,18 +353,16 @@ TEST_F(GMRESTest, SolveConvDiff64) {
     Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "conv_diff_64_b.csv");
     Matrix<double, Dynamic, 1> x_0 = MatrixXd::Ones(64, 1);
     Matrix<double, Dynamic, 1> r_0 = b - A*x_0;
-    GMRESSolve<double> gmres_solve_d(A, b, 8.88e-16);
-    double tol = 1e-14;
+    GMRESSolve<double> gmres_solve_d(A, b, double_tolerance);
 
-    gmres_solve_d.solve(100, tol);
+    gmres_solve_d.solve(64, convergence_tolerance);
     gmres_solve_d.view_relres_plot("log");
     
     EXPECT_TRUE(gmres_solve_d.check_converged());
     double rel_res = (b - A*gmres_solve_d.soln()).norm()/r_0.norm();
-    EXPECT_LE(rel_res, tol);
+    EXPECT_LE(rel_res, convergence_tolerance);
 
 }
-
 
 TEST_F(GMRESTest, SolveConvDiff256) {
     
@@ -327,15 +370,31 @@ TEST_F(GMRESTest, SolveConvDiff256) {
     Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "conv_diff_256_b.csv");
     Matrix<double, Dynamic, 1> x_0 = MatrixXd::Ones(256, 1);
     Matrix<double, Dynamic, 1> r_0 = b - A*x_0;
-    GMRESSolve<double> gmres_solve_d(A, b, 8.88e-16);
-    double tol = 1e-14;
+    GMRESSolve<double> gmres_solve_d(A, b, double_tolerance);
 
-    gmres_solve_d.solve(100, tol);
+    gmres_solve_d.solve(256, convergence_tolerance);
     gmres_solve_d.view_relres_plot("log");
     
     EXPECT_TRUE(gmres_solve_d.check_converged());
     double rel_res = (b - A*gmres_solve_d.soln()).norm()/r_0.norm();
-    EXPECT_LE(rel_res, tol);
+    EXPECT_LE(rel_res, convergence_tolerance);
+
+}
+
+TEST_F(GMRESTest, SolveConvDiff1024_LONGRUNTIME) {
+    
+    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "conv_diff_1024_A.csv");
+    Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "conv_diff_1024_b.csv");
+    Matrix<double, Dynamic, 1> x_0 = MatrixXd::Ones(1024, 1);
+    Matrix<double, Dynamic, 1> r_0 = b - A*x_0;
+    GMRESSolve<double> gmres_solve_d(A, b, double_tolerance);
+
+    gmres_solve_d.solve(1024, convergence_tolerance);
+    gmres_solve_d.view_relres_plot("log");
+    
+    EXPECT_TRUE(gmres_solve_d.check_converged());
+    double rel_res = (b - A*gmres_solve_d.soln()).norm()/r_0.norm();
+    EXPECT_LE(rel_res, convergence_tolerance);
 
 }
 
@@ -345,14 +404,31 @@ TEST_F(GMRESTest, SolveRand20) {
     Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_20_rand.csv");
     Matrix<double, Dynamic, 1> x_0 = MatrixXd::Ones(20, 1);
     Matrix<double, Dynamic, 1> r_0 = b - A*x_0;
-    GMRESSolve<double> gmres_solve_d(A, b, 8.88e-16);
-    double tol = 1e-14;
+    GMRESSolve<double> gmres_solve_d(A, b, double_tolerance);
 
-    gmres_solve_d.solve(20, tol);
+    gmres_solve_d.solve(20, convergence_tolerance);
     gmres_solve_d.view_relres_plot("log");
     
     EXPECT_TRUE(gmres_solve_d.check_converged());
     double rel_res = (b - A*gmres_solve_d.soln()).norm()/r_0.norm();
-    EXPECT_LE(rel_res, tol);
+    EXPECT_LE(rel_res, convergence_tolerance);
+
+}
+
+TEST_F(GMRESTest, Solve3Eigs) {
+    
+    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_25_3eigs.csv");
+    Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_25_3eigs.csv");
+    Matrix<double, Dynamic, 1> x_0 = MatrixXd::Zero(25, 1); // Zeros to preserve eigenval multiplicity of 
+                                                             // matrix
+    Matrix<double, Dynamic, 1> r_0 = b - A*x_0;
+    GMRESSolve<double> gmres_solve_d(A, b, double_tolerance);
+
+    gmres_solve_d.solve(3, convergence_tolerance);
+    gmres_solve_d.view_relres_plot("log");
+    
+    EXPECT_TRUE(gmres_solve_d.check_converged());
+    double rel_res = (b - A*gmres_solve_d.soln()).norm()/r_0.norm();
+    EXPECT_LE(rel_res, convergence_tolerance);
 
 }

@@ -46,6 +46,7 @@ class GMRESSolve: public LinearSolve<T> {
                 // normalization in H for H_{kplus1, k}
                 int k = krylov_subspace_dim-1;
                 next_q = (this->A)*Q_kry_basis(all, k);
+
                 for (int i=0; i<=k; ++i) {
                     // MGS since newly orthogonalized q is used for orthogonalizing
                     // each next vector
@@ -73,10 +74,10 @@ class GMRESSolve: public LinearSolve<T> {
             R_H(all, k) = H(all, k);
 
             // Apply previous Given's rotations to new column
+            // TODO: Can reduce run time by 2 since we know is upper triag
             R_H.block(0, k, k+1, 1) = Q_H.block(0, 0, k+1, k+1).transpose()*R_H.block(0, k, k+1, 1);
 
-            // Apply the final Given's rotation manually making 
-            // R_H upper triangular
+            // Apply the final Given's rotation manually making R_H upper triangular
             T a = R_H(k, k);
             T b = R_H(k+1, k);
             T r_sqr = a*a + b*b; // Explicit intermediate variable to ensure no auto casting into sqrt
@@ -86,14 +87,12 @@ class GMRESSolve: public LinearSolve<T> {
             R_H(k, k) = r;
             R_H(k+1, k) = 0;
 
-            // Right multiply Q_H by transpose of new matrix to get
-            // updated Q_H
-            Matrix<T, Dynamic, Dynamic> givens = Matrix<T, Dynamic, Dynamic>::Identity(k+2, k+2);
-            givens(k, k) = c;
-            givens(k, k+1) = -s;
-            givens(k+1, k) = s;
-            givens(k+1, k+1) = c;
-            Q_H.block(0, 0, k+2, k+2) = Q_H.block(0, 0, k+2, k+2)*(givens.transpose());
+            // Right multiply Q_H by transpose of new matrix to get updated Q_H
+            // *will only modify last two columns so save time by just doing those 
+            Matrix<T, 2, 2> givens_trans;
+            givens_trans(0, 0) = c; givens_trans(0, 1) = s;
+            givens_trans(1, 0) = -s; givens_trans(1, 1) = c;
+            Q_H.block(0, k, k+2, 2) = Q_H.block(0, k, k+2, 2)*givens_trans;
 
         }
 
@@ -195,6 +194,7 @@ class GMRESSolveTestingMock: public GMRESSolve<T> {
         using GMRESSolve<T>::update_subspace_k;
         using GMRESSolve<T>::update_next_q_Hkplus1_convergence;
         using GMRESSolve<T>::update_QR_fact;
+        using GMRESSolve<T>::update_x_minimizing_res;
 
 };
 

@@ -1,0 +1,3 @@
+echo 'Copying MATLAB generated solve matrices...'
+cp ~/win_dosre/dev/solve_matrices/* ~/dev/gmres/test/solve_matrices/
+echo 'Done'

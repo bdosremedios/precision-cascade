@@ -35,8 +35,7 @@ TEST_F(JacobiTest, SolveConvDiff64) {
 
 }
 
-
-TEST_F(JacobiTest, SolveConvDiff256) {
+TEST_F(JacobiTest, SolveConvDiff256_LONGRUNTIME) {
     
     Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "conv_diff_256_A.csv");
     Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "conv_diff_256_b.csv");

@@ -37,6 +37,7 @@ class LinearSolve {
         virtual void iterate() = 0;
 
     public:
+
         // Constructors/Destructors
         LinearSolve(const Matrix<T, Dynamic, Dynamic> arg_A,
                     const Matrix<T, Dynamic, 1> arg_b) {
@@ -113,6 +114,16 @@ class LinearSolve {
 
         } // end solve
 
+        // Helper for plotting
+        int min_three_int(int num) {
+            if (num < 3) {
+                return 3;
+            } else {
+                return num;
+            }
+        }
+
+        // Plot relative residual
         void view_relres_plot(string arg = "normal") {
 
             // Get max max_length entries to plot
@@ -164,9 +175,9 @@ class LinearSolve {
             if (arg != "log") {
                 cout << "1 ";
             } else {
-                cout << "10^0";
+                cout << "10^0 ";
             }
-            cout << string(length-1, '-') << endl;
+            cout << string(min_three_int(length-1), '-') << endl;
             for (int i=height-1; i>=0; --i) {
                 for (int j=-1; j<length; ++j) {
                     if (plot_y_bucket_index[j] == i) {
@@ -178,8 +189,8 @@ class LinearSolve {
                 cout << endl;
             }
             if (arg == "log") { cout << "10^"; };
-            cout << static_cast<int>(min) << " " << string(length-1, '-') << endl;
-            cout << "Iter: 1" << string(length-10, ' ') << "Iter: " << res_norm_hist.size() << endl;
+            cout << static_cast<int>(min) << " " << string(min_three_int(length-1), '-') << endl;
+            cout << "Iter: 1" << string(min_three_int(length-10), ' ') << "Iter: " << iteration << endl;
 
         }
 
