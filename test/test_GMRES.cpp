@@ -27,6 +27,7 @@ TEST_F(GMRESComponentTest, CheckConstruction5x5) {
     Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_5_toy.csv");
     Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_5_toy.csv");
     GMRESSolveTestingMock<double> test_mock(A, b, double_tolerance);
+    ASSERT_EQ(test_mock.max_krylov_subspace_dim, 5);
     ASSERT_EQ(test_mock.rho, (b - A*MatrixXd::Ones(5, 1)).norm());
     
     ASSERT_EQ(test_mock.Q_kry_basis.rows(), 5);
@@ -72,6 +73,7 @@ TEST_F(GMRESComponentTest, CheckConstruction64x64) {
     Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "conv_diff_64_A.csv");
     Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "conv_diff_64_b.csv");
     GMRESSolveTestingMock<double> test_mock(A, b, double_tolerance);
+    ASSERT_EQ(test_mock.max_krylov_subspace_dim, 64);
     ASSERT_EQ(test_mock.rho, (b - A*MatrixXd::Ones(64, 1)).norm());
     
     ASSERT_EQ(test_mock.Q_kry_basis.rows(), 64);
@@ -112,6 +114,19 @@ TEST_F(GMRESComponentTest, CheckConstruction64x64) {
 
 }
 
+TEST_F(GMRESComponentTest, CheckAssertSquareness) {
+    
+    Matrix<double, Dynamic, Dynamic> A = MatrixXd(6, 5);
+    Matrix<double, Dynamic, Dynamic> b = MatrixXd(6, 1);
+    try {
+        GMRESSolveTestingMock<double> test_mock(A, b, double_tolerance);
+        FAIL();
+    } catch (runtime_error e) {
+        ;
+    }
+ 
+}
+
 TEST_F(GMRESComponentTest, KrylovInstantiationAndUpdates) {
     
     Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_5_toy.csv");
@@ -140,7 +155,7 @@ TEST_F(GMRESComponentTest, KrylovInstantiationAndUpdates) {
     
     // Subsequent updates
     for (int k=1; k<5; ++k) {
-        cout << k << endl;
+
         // Iterate Krylov subspace and Hessenberg
         test_mock.iterate_no_soln_solve();
         Q_save(all, k) = test_mock.Q_kry_basis.col(k);
@@ -588,30 +603,31 @@ TEST_F(GMRESSingleTest, Solve3Eigs) {
 
 }
 
-// TEST_F(GMRESSingleTest, DivergeBeyondSingleCapabilities) {
+TEST_F(GMRESSingleTest, DivergeBeyondSingleCapabilities) {
     
-//     Matrix<float, Dynamic, Dynamic> A = read_matrix_csv<float>(matrix_dir + "A_5_toy.csv");
-//     Matrix<float, Dynamic, Dynamic> b = read_matrix_csv<float>(matrix_dir + "b_5_toy.csv");
-//     Matrix<float, Dynamic, 1> x_0 = MatrixXf::Ones(5, 1); 
-//     Matrix<float, Dynamic, 1> r_0 = b - A*x_0;
+    Matrix<float, Dynamic, Dynamic> A = read_matrix_csv<float>(matrix_dir + "conv_diff_64_A.csv");
+    Matrix<float, Dynamic, Dynamic> b = read_matrix_csv<float>(matrix_dir + "conv_diff_64_b.csv");
+    Matrix<float, Dynamic, 1> x_0 = MatrixXf::Ones(64, 1); 
+    Matrix<float, Dynamic, 1> r_0 = b - A*x_0;
 
-//     // Check convergence under single capabilities
-//     // GMRESSolveTestingMock<float> gmres_solve_s(A, b, x_0, single_tolerance);
+    // Check convergence under single capabilities
+    GMRESSolveTestingMock<float> gmres_solve_s(A, b, x_0, single_tolerance);
 
-//     // gmres_solve_s.solve(5, convergence_tolerance);
-//     // gmres_solve_s.view_relres_plot("log");
+    gmres_solve_s.solve(128, convergence_tolerance);
+    gmres_solve_s.view_relres_plot("log");
     
-//     // EXPECT_TRUE(gmres_solve_s.check_converged());
-//     // double rel_res = (b - A*gmres_solve_s.soln()).norm()/r_0.norm();
-//     // EXPECT_LE(rel_res, 2*convergence_tolerance);
+    EXPECT_TRUE(gmres_solve_s.check_converged());
+    double rel_res = (b - A*gmres_solve_s.soln()).norm()/r_0.norm();
+    EXPECT_LE(rel_res, 2*convergence_tolerance);
 
-//     // Check divergence beyond single capability of the single machine epsilon
-//     GMRESSolveTestingMock<float> gmres_solve_s_to_fail(A, b, x_0, single_tolerance);
-//     gmres_solve_s_to_fail.solve(5, 1e-8);
-//     gmres_solve_s_to_fail.view_relres_plot("log");
+    // Check divergence beyond single capability of the single machine epsilon
+    GMRESSolveTestingMock<float> gmres_solve_s_to_fail(A, b, x_0, single_tolerance);
+    gmres_solve_s_to_fail.solve(128, 1e-8);
+    gmres_solve_s_to_fail.view_relres_plot("log");
+    cout << "Watch iter: " << gmres_solve_s_to_fail.get_iteration() << endl;
     
-//     EXPECT_FALSE(gmres_solve_s_to_fail.check_converged());
-//     double rel_res_to_fail = (b - A*gmres_solve_s_to_fail.soln()).norm()/r_0.norm();
-//     EXPECT_GE(rel_res_to_fail, 2e-8);
+    EXPECT_FALSE(gmres_solve_s_to_fail.check_converged());
+    double rel_res_to_fail = (b - A*gmres_solve_s_to_fail.soln()).norm()/r_0.norm();
+    EXPECT_GE(rel_res_to_fail, 2e-8);
 
-// }
+}

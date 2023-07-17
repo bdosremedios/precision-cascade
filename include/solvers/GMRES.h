@@ -21,6 +21,7 @@ class GMRESSolve: public LinearSolve<T> {
         Matrix<T, Dynamic, Dynamic> R_H;
         Matrix<T, Dynamic, 1> next_q;
         int krylov_subspace_dim = 0;
+        int max_krylov_subspace_dim;
         T basis_zero_tol;
         T rho;
 
@@ -40,7 +41,7 @@ class GMRESSolve: public LinearSolve<T> {
             
         }
 
-        void update_nextq_Hkplus1() {
+        void update_nextq_and_Hkplus1() {
 
             // Orthogonlize next_q to previous basis vectors and store coefficients and
             // normalization in H for H_{kplus1, k}
@@ -121,13 +122,17 @@ class GMRESSolve: public LinearSolve<T> {
         }
 
         void iterate() override {
-            
-            if (!this -> terminated) {
-                update_subspace_k();
-                update_nextq_Hkplus1();
-                update_QR_fact();
-                update_x_minimizing_res();
-                check_termination();
+
+            // Check isn't terminated and that solver isn't attempting to exceed
+            // krylov subspace dimension, if is just do nothing
+            if (!this->terminated) {
+                if (krylov_subspace_dim < max_krylov_subspace_dim) {
+                    update_subspace_k();
+                    update_nextq_and_Hkplus1();
+                    update_QR_fact();
+                    update_x_minimizing_res();
+                    check_termination();
+                }
             }
 
         }
@@ -152,12 +157,18 @@ class GMRESSolve: public LinearSolve<T> {
 
         void constructorHelper() {
 
+            // Check matrix squareness
+            if (this->m != this->n) { throw runtime_error("A not square"); };
+
             // Pre-allocate all possible space needed to prevent memory
             // re-allocation
             Q_kry_basis = Matrix<T, Dynamic, Dynamic>::Zero(this->m, this->n);
             H = Matrix<T, Dynamic, Dynamic>::Zero(this->n+1, this->n);
             Q_H = Matrix<T, Dynamic, Dynamic>::Identity(this->n+1, this->n+1);
             R_H = Matrix<T, Dynamic, Dynamic>::Zero(this->n+1, this->n);
+
+            // Specify max dimension for krylov subspace
+            max_krylov_subspace_dim = this->n;
 
             // Set rho as initial residual norm
             Matrix<T, Dynamic, 1> r_0 = this->b - (this->A)*(this->x_0);
@@ -187,8 +198,10 @@ class GMRESSolveTestingMock: public GMRESSolve<T> {
         using GMRESSolve<T>::Q_H;
         using GMRESSolve<T>::R_H;
         using GMRESSolve<T>::krylov_subspace_dim;
+        using GMRESSolve<T>::max_krylov_subspace_dim;
         using GMRESSolve<T>::next_q;
         using GMRESSolve<T>::rho;
+        using GMRESSolve<T>::iteration;
 
         using GMRESSolve<T>::update_QR_fact;
         using GMRESSolve<T>::update_x_minimizing_res;
@@ -196,7 +209,7 @@ class GMRESSolveTestingMock: public GMRESSolve<T> {
 
         void iterate_no_soln_solve() {
             this->update_subspace_k();
-            this->update_nextq_Hkplus1();
+            this->update_nextq_and_Hkplus1();
             this->check_termination();
         }
 

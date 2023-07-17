@@ -82,7 +82,7 @@ class LinearSolve {
         bool check_initiated() { return initiated; };
         bool check_converged() { return converged; };
         bool check_terminated() { return terminated; };
-        bool get_iteration() { return iteration; };
+        int get_iteration() { return iteration; };
         double relres() {
             if (initiated) {
                 return (b-A*x).norm()/res_norm_hist[0];
@@ -131,7 +131,7 @@ class LinearSolve {
         } // end solve
 
         // Helper for plotting
-        int min_three_int(int num) {
+        int min_three_int(int num) const {
             if (num < 3) {
                 return 3;
             } else {
@@ -140,7 +140,7 @@ class LinearSolve {
         }
 
         // Plot relative residual
-        void view_relres_plot(string arg = "normal") {
+        void view_relres_plot(string arg = "normal") const {
 
             // Get max max_length entries to plot
             int max_length = 70;
