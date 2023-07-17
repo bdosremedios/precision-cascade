@@ -124,12 +124,8 @@ class GMRESSolve: public LinearSolve<T> {
     
             update_subspace_k();
             update_next_q_Hkplus1_convergence();
-            // Don't update if already terminated since linear system of Hessenberg
-            // should be unsolvable
-            if (!this->terminated) {
-                update_QR_fact();
-                update_x_minimizing_res();
-            }
+            update_QR_fact();
+            update_x_minimizing_res();
 
         }
     

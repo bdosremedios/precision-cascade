@@ -83,6 +83,13 @@ class LinearSolve {
         bool check_converged() { return converged; };
         bool check_terminated() { return terminated; };
         bool get_iteration() { return iteration; };
+        double relres() {
+            if (initiated) {
+                return (b-A*x).norm()/res_norm_hist[0];
+            } else {
+                return -1;
+            }
+        }
 
         // Perform linear solve with given iterate scheme
         void solve(const int max_iter=100, const double target_rel_res=1e-10) {

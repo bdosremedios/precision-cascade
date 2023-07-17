@@ -228,7 +228,7 @@ TEST_F(GMRESComponentTest, KrylovLuckyBreakLaterIter) {
     
     // Check basis Q has one normalized basis vector and others are empty and
     // has been marked terminated but not converged since we want to delay that
-    // check for
+    // check for LinearSolve
     EXPECT_FALSE(test_mock.check_converged());
     EXPECT_TRUE(test_mock.check_terminated());
     EXPECT_EQ(test_mock.krylov_subspace_dim, 1);
@@ -356,6 +356,34 @@ TEST_F(GMRESComponentTest, Update_x_Back_Substitution) {
 
     }
 
+}
+
+TEST_F(GMRESComponentTest, KrylovLuckyBreakThroughSolve) {
+    
+    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_5_easysoln.csv");
+    Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_5_easysoln.csv");
+    MatrixXd soln = MatrixXd::Zero(5, 1); // Initialize as near solution
+    soln(0) = 1;
+    GMRESSolveTestingMock<double> test_mock(A, b, soln, double_tolerance);
+
+    // Attempt to update and solve through solve of LinearSolve
+    test_mock.solve(5, 1e-10);
+    
+    // Check we have terminated at second iteration and have converged
+    EXPECT_TRUE(test_mock.check_converged());
+    EXPECT_TRUE(test_mock.check_terminated());
+    EXPECT_EQ(test_mock.get_iteration(), 1);
+
+    // Check that subspace has not gone beyond 1 dimension and that krylov basis
+    // as expected to have only a single column
+    EXPECT_EQ(test_mock.krylov_subspace_dim, 1);
+    EXPECT_NEAR(test_mock.Q_kry_basis.col(0).norm(), 1, double_tolerance);
+    for (int i=0; i<5; ++i) {
+        for (int j=1; j<5; ++j) {
+            EXPECT_EQ(test_mock.Q_kry_basis(i, j), 0);
+        }
+    }
+    
 }
 
 // Double type GMRES end to end solve tests
@@ -578,18 +606,18 @@ TEST_F(GMRESSingleTest, Solve3Eigs) {
 //     Matrix<float, Dynamic, 1> r_0 = b - A*x_0;
 
 //     // Check convergence under single capabilities
-//     GMRESSolveTestingMock<float> gmres_solve_s(A, b, x_0, single_tolerance);
+//     // GMRESSolveTestingMock<float> gmres_solve_s(A, b, x_0, single_tolerance);
 
-//     gmres_solve_s.solve(5, convergence_tolerance);
-//     gmres_solve_s.view_relres_plot("log");
+//     // gmres_solve_s.solve(5, convergence_tolerance);
+//     // gmres_solve_s.view_relres_plot("log");
     
-//     EXPECT_TRUE(gmres_solve_s.check_converged());
-//     double rel_res = (b - A*gmres_solve_s.soln()).norm()/r_0.norm();
-//     EXPECT_LE(rel_res, 2*convergence_tolerance);
+//     // EXPECT_TRUE(gmres_solve_s.check_converged());
+//     // double rel_res = (b - A*gmres_solve_s.soln()).norm()/r_0.norm();
+//     // EXPECT_LE(rel_res, 2*convergence_tolerance);
 
 //     // Check divergence beyond single capability of the single machine epsilon
 //     GMRESSolveTestingMock<float> gmres_solve_s_to_fail(A, b, x_0, single_tolerance);
-//     gmres_solve_s_to_fail.solve(7, 1e-8);
+//     gmres_solve_s_to_fail.solve(5, 1e-8);
 //     gmres_solve_s_to_fail.view_relres_plot("log");
     
 //     EXPECT_FALSE(gmres_solve_s_to_fail.check_converged());
