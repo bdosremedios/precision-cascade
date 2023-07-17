@@ -25,6 +25,7 @@ class LinearSolve {
         Matrix<T, Dynamic, 1> x;
         bool initiated = false;
         bool converged = false;
+        bool terminated = false;
         int iteration = 0;
 
         // Variables only valid once solve has been initiated
@@ -78,11 +79,13 @@ class LinearSolve {
         Matrix<T, Dynamic, 1> soln() { return x; };
         Matrix<T, Dynamic, Dynamic> soln_hist() { return x_hist; };
         vector<double> get_res_norm_hist() { return res_norm_hist; };
-        bool check_converged() { return converged; };
         bool check_initiated() { return initiated; };
+        bool check_converged() { return converged; };
+        bool check_terminated() { return terminated; };
+        bool get_iteration() { return iteration; };
 
         // Perform linear solve with given iterate scheme
-        void solve(const int max_iter=1000, const double target_rel_res=1e-12) {
+        void solve(const int max_iter=100, const double target_rel_res=1e-10) {
 
             // Mark as linear solve started and start histories
             initiated = true;
@@ -93,7 +96,7 @@ class LinearSolve {
 
             // Run while relative residual is still high, and under max iterations, and has not been
             // flagged as converged
-            while((((res_norm/res_norm_hist[0]) > target_rel_res) && (iteration < max_iter)) && !converged) {
+            while(!terminated && (!converged && ((iteration < max_iter) && ((res_norm/res_norm_hist[0]) > target_rel_res)))) {
 
                 // Iterate solution
                 ++iteration;
@@ -106,8 +109,14 @@ class LinearSolve {
 
             }
 
-            // On convergence flag as converged and remove extra zeros on x_hist
+            // On convergence flag as converged and remove extra zeros on x_hist.
+            // Convergence is either a small relative residual or otherwise
+            // if no iterations have been performed, that there is a small residual
+            // relative to the RHS
             if ((res_norm/res_norm_hist[0]) <= target_rel_res) {
+                x_hist.conservativeResize(m, iteration+1);
+                converged = true;
+            } else if ((iteration == 0) && ((res_norm/b.norm()) <= target_rel_res)) {
                 x_hist.conservativeResize(m, iteration+1);
                 converged = true;
             }

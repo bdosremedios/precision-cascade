@@ -6,25 +6,27 @@
 #include "solvers/GMRES.h"
 
 using read_matrix::read_matrix_csv;
-using Eigen::MatrixXd;
+using Eigen::MatrixXd, Eigen::MatrixXf;
+using MatrixXh = Eigen::Matrix<Eigen::half, Dynamic, Dynamic>;
 using std::string;
 using std::cout, std::endl;
 using Eigen::placeholders::all;
 
-class GMRESTest: public testing::Test {
+class GMRESComponentTest: public testing::Test {
 
     protected:
         string matrix_dir = "/home/bdosremedios/dev/gmres/test/solve_matrices/";
         double double_tolerance = 4*pow(2, -52); // Set as 4 times machines epsilon
-        double convergence_tolerance = 1e-10;
 
 };
 
-TEST_F(GMRESTest, CheckConstruction5x5) {
+// General GMRES Tests
+
+TEST_F(GMRESComponentTest, CheckConstruction5x5) {
     
     Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_5_toy.csv");
     Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_5_toy.csv");
-    GMRESSolveTestingMock<double> test_mock(A, b, 8.88e-16);
+    GMRESSolveTestingMock<double> test_mock(A, b, double_tolerance);
     ASSERT_EQ(test_mock.rho, (b - A*MatrixXd::Ones(5, 1)).norm());
     
     ASSERT_EQ(test_mock.Q_kry_basis.rows(), 5);
@@ -65,11 +67,11 @@ TEST_F(GMRESTest, CheckConstruction5x5) {
 
 }
 
-TEST_F(GMRESTest, CheckConstruction64x64) {
+TEST_F(GMRESComponentTest, CheckConstruction64x64) {
     
     Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "conv_diff_64_A.csv");
     Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "conv_diff_64_b.csv");
-    GMRESSolveTestingMock<double> test_mock(A, b, 8.88e-16);
+    GMRESSolveTestingMock<double> test_mock(A, b, double_tolerance);
     ASSERT_EQ(test_mock.rho, (b - A*MatrixXd::Ones(64, 1)).norm());
     
     ASSERT_EQ(test_mock.Q_kry_basis.rows(), 64);
@@ -110,7 +112,7 @@ TEST_F(GMRESTest, CheckConstruction64x64) {
 
 }
 
-TEST_F(GMRESTest, KrylovInstantiationAndUpdates) {
+TEST_F(GMRESComponentTest, KrylovInstantiationAndUpdates) {
     
     Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_5_toy.csv");
     Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_5_toy.csv");
@@ -174,7 +176,7 @@ TEST_F(GMRESTest, KrylovInstantiationAndUpdates) {
     
 }
 
-TEST_F(GMRESTest, KrylovLuckyBreakFirstIter) {
+TEST_F(GMRESComponentTest, KrylovLuckyBreakFirstIter) {
     
     Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_5_easysoln.csv");
     Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_5_easysoln.csv");
@@ -186,8 +188,10 @@ TEST_F(GMRESTest, KrylovLuckyBreakFirstIter) {
     test_mock.update_next_q_Hkplus1_convergence();
     
     // Check basis Q and H are empty and Krylov hasn't been updated since already
-    // hit the lucky break so can't build subspace
-    EXPECT_TRUE(test_mock.check_converged());
+    // hit the lucky break so can't build subspace and check that terminated but
+    // not converged
+    EXPECT_FALSE(test_mock.check_converged());
+    EXPECT_TRUE(test_mock.check_terminated());
     EXPECT_EQ(test_mock.krylov_subspace_dim, 0);
     for (int i=0; i<5; ++i) {
         for (int j=0; j<5; ++j) {
@@ -199,9 +203,16 @@ TEST_F(GMRESTest, KrylovLuckyBreakFirstIter) {
                 EXPECT_EQ(test_mock.H(i, j), 0);
         }
     }
+
+    // Attempt to solve and check that iteration does not occur since
+    // should be terminated already but that convergence is updated
+    test_mock.solve(100, 1e-10);
+    EXPECT_TRUE(test_mock.check_converged());
+    EXPECT_EQ(test_mock.get_iteration(), 0);
+
 }
 
-TEST_F(GMRESTest, KrylovLuckyBreakLaterIter) {
+TEST_F(GMRESComponentTest, KrylovLuckyBreakLaterIter) {
     
     Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_5_easysoln.csv");
     Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_5_easysoln.csv");
@@ -216,8 +227,10 @@ TEST_F(GMRESTest, KrylovLuckyBreakLaterIter) {
     test_mock.update_next_q_Hkplus1_convergence();
     
     // Check basis Q has one normalized basis vector and others are empty and
-    // has been marked converged
-    EXPECT_TRUE(test_mock.check_converged());
+    // has been marked terminated but not converged since we want to delay that
+    // check for
+    EXPECT_FALSE(test_mock.check_converged());
+    EXPECT_TRUE(test_mock.check_terminated());
     EXPECT_EQ(test_mock.krylov_subspace_dim, 1);
     EXPECT_NEAR(test_mock.Q_kry_basis.col(0).norm(), 1, double_tolerance);
     for (int i=0; i<5; ++i) {
@@ -228,7 +241,7 @@ TEST_F(GMRESTest, KrylovLuckyBreakLaterIter) {
     
 }
 
-TEST_F(GMRESTest, H_QR_Update) {
+TEST_F(GMRESComponentTest, H_QR_Update) {
     
     Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_5_toy.csv");
     Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_5_toy.csv");
@@ -303,7 +316,7 @@ TEST_F(GMRESTest, H_QR_Update) {
 
 }
 
-TEST_F(GMRESTest, Update_x_Back_Substitution) {
+TEST_F(GMRESComponentTest, Update_x_Back_Substitution) {
     
     Matrix<double, Dynamic, Dynamic> Q = read_matrix_csv<double>(matrix_dir + "Q_8_backsub.csv");
     Matrix<double, Dynamic, Dynamic> R = read_matrix_csv<double>(matrix_dir + "R_8_backsub.csv");
@@ -345,15 +358,24 @@ TEST_F(GMRESTest, Update_x_Back_Substitution) {
 
 }
 
-// End to end solve tests
+// Double type GMRES end to end solve tests
 
-TEST_F(GMRESTest, SolveConvDiff64) {
+class GMRESDoubleTest: public testing::Test {
+
+    protected:
+        string matrix_dir = "/home/bdosremedios/dev/gmres/test/solve_matrices/";
+        double double_tolerance = 4*pow(2, -52); // Set as 4 times machines epsilon
+        double convergence_tolerance = 1e-11;
+
+};
+
+TEST_F(GMRESDoubleTest, SolveConvDiff64) {
     
     Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "conv_diff_64_A.csv");
     Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "conv_diff_64_b.csv");
     Matrix<double, Dynamic, 1> x_0 = MatrixXd::Ones(64, 1);
     Matrix<double, Dynamic, 1> r_0 = b - A*x_0;
-    GMRESSolveTestingMock<double> gmres_solve_d(A, b, double_tolerance);
+    GMRESSolveTestingMock<double> gmres_solve_d(A, b, x_0, double_tolerance);
 
     gmres_solve_d.solve(64, convergence_tolerance);
     gmres_solve_d.view_relres_plot("log");
@@ -368,13 +390,13 @@ TEST_F(GMRESTest, SolveConvDiff64) {
 
 }
 
-TEST_F(GMRESTest, SolveConvDiff256) {
+TEST_F(GMRESDoubleTest, SolveConvDiff256) {
     
     Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "conv_diff_256_A.csv");
     Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "conv_diff_256_b.csv");
     Matrix<double, Dynamic, 1> x_0 = MatrixXd::Ones(256, 1);
     Matrix<double, Dynamic, 1> r_0 = b - A*x_0;
-    GMRESSolveTestingMock<double> gmres_solve_d(A, b, double_tolerance);
+    GMRESSolveTestingMock<double> gmres_solve_d(A, b, x_0, double_tolerance);
 
     gmres_solve_d.solve(256, convergence_tolerance);
     gmres_solve_d.view_relres_plot("log");
@@ -389,13 +411,13 @@ TEST_F(GMRESTest, SolveConvDiff256) {
 
 }
 
-TEST_F(GMRESTest, SolveConvDiff1024_LONGRUNTIME) {
+TEST_F(GMRESDoubleTest, SolveConvDiff1024_LONGRUNTIME) {
     
     Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "conv_diff_1024_A.csv");
     Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "conv_diff_1024_b.csv");
     Matrix<double, Dynamic, 1> x_0 = MatrixXd::Ones(1024, 1);
     Matrix<double, Dynamic, 1> r_0 = b - A*x_0;
-    GMRESSolveTestingMock<double> gmres_solve_d(A, b, double_tolerance);
+    GMRESSolveTestingMock<double> gmres_solve_d(A, b, x_0, double_tolerance);
 
     gmres_solve_d.solve(1024, convergence_tolerance);
     gmres_solve_d.view_relres_plot("log");
@@ -410,13 +432,13 @@ TEST_F(GMRESTest, SolveConvDiff1024_LONGRUNTIME) {
 
 }
 
-TEST_F(GMRESTest, SolveRand20) {
+TEST_F(GMRESDoubleTest, SolveRand20) {
     
     Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_20_rand.csv");
     Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_20_rand.csv");
     Matrix<double, Dynamic, 1> x_0 = MatrixXd::Ones(20, 1);
     Matrix<double, Dynamic, 1> r_0 = b - A*x_0;
-    GMRESSolveTestingMock<double> gmres_solve_d(A, b, double_tolerance);
+    GMRESSolveTestingMock<double> gmres_solve_d(A, b, x_0, double_tolerance);
 
     gmres_solve_d.solve(20, convergence_tolerance);
     gmres_solve_d.view_relres_plot("log");
@@ -431,14 +453,13 @@ TEST_F(GMRESTest, SolveRand20) {
 
 }
 
-TEST_F(GMRESTest, Solve3Eigs) {
+TEST_F(GMRESDoubleTest, Solve3Eigs) {
     
     Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_25_3eigs.csv");
     Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_25_3eigs.csv");
-    Matrix<double, Dynamic, 1> x_0 = MatrixXd::Zero(25, 1); // Zeros to preserve eigenval multiplicity of 
-                                                            // matrix
+    Matrix<double, Dynamic, 1> x_0 = MatrixXd::Ones(25, 1);
     Matrix<double, Dynamic, 1> r_0 = b - A*x_0;
-    GMRESSolveTestingMock<double> gmres_solve_d(A, b, double_tolerance);
+    GMRESSolveTestingMock<double> gmres_solve_d(A, b, x_0, double_tolerance);
 
     gmres_solve_d.solve(3, convergence_tolerance);
     gmres_solve_d.view_relres_plot("log");
@@ -452,3 +473,127 @@ TEST_F(GMRESTest, Solve3Eigs) {
     EXPECT_LE((gmres_solve_d.x - x_test).norm()/(x_test.norm()), 2*convergence_tolerance);
 
 }
+
+// Single type GMRES end to end solve tests
+
+class GMRESSingleTest: public testing::Test {
+
+    protected:
+        string matrix_dir = "/home/bdosremedios/dev/gmres/test/solve_matrices/";
+        double single_tolerance = 4*pow(2, -23); // Set as 4 times machines epsilon
+        double convergence_tolerance = 1e-5;
+
+};
+
+TEST_F(GMRESSingleTest, SolveConvDiff64) {
+    
+    Matrix<float, Dynamic, Dynamic> A = read_matrix_csv<float>(matrix_dir + "conv_diff_64_A.csv");
+    Matrix<float, Dynamic, Dynamic> b = read_matrix_csv<float>(matrix_dir + "conv_diff_64_b.csv");
+    Matrix<float, Dynamic, 1> x_0 = MatrixXf::Ones(64, 1);
+    Matrix<float, Dynamic, 1> r_0 = b - A*x_0;
+    GMRESSolveTestingMock<float> gmres_solve_s(A, b, x_0, single_tolerance);
+
+    gmres_solve_s.solve(64, convergence_tolerance);
+    gmres_solve_s.view_relres_plot("log");
+    
+    EXPECT_TRUE(gmres_solve_s.check_converged());
+    double rel_res = (b - A*gmres_solve_s.soln()).norm()/r_0.norm();
+    EXPECT_LE(rel_res, 2*convergence_tolerance);
+
+}
+
+TEST_F(GMRESSingleTest, SolveConvDiff256) {
+    
+    Matrix<float, Dynamic, Dynamic> A = read_matrix_csv<float>(matrix_dir + "conv_diff_256_A.csv");
+    Matrix<float, Dynamic, Dynamic> b = read_matrix_csv<float>(matrix_dir + "conv_diff_256_b.csv");
+    Matrix<float, Dynamic, 1> x_0 = MatrixXf::Ones(256, 1);
+    Matrix<float, Dynamic, 1> r_0 = b - A*x_0;
+    GMRESSolveTestingMock<float> gmres_solve_s(A, b, x_0, single_tolerance);
+
+    gmres_solve_s.solve(256, convergence_tolerance);
+    gmres_solve_s.view_relres_plot("log");
+    
+    EXPECT_TRUE(gmres_solve_s.check_converged());
+    float rel_res = (b - A*gmres_solve_s.soln()).norm()/r_0.norm();
+    EXPECT_LE(rel_res, 2*convergence_tolerance);
+
+}
+
+TEST_F(GMRESSingleTest, SolveConvDiff1024_LONGRUNTIME) {
+    
+    Matrix<float, Dynamic, Dynamic> A = read_matrix_csv<float>(matrix_dir + "conv_diff_1024_A.csv");
+    Matrix<float, Dynamic, Dynamic> b = read_matrix_csv<float>(matrix_dir + "conv_diff_1024_b.csv");
+    Matrix<float, Dynamic, 1> x_0 = MatrixXf::Ones(1024, 1);
+    Matrix<float, Dynamic, 1> r_0 = b - A*x_0;
+    GMRESSolveTestingMock<float> gmres_solve_s(A, b, x_0, single_tolerance);
+
+    gmres_solve_s.solve(1024, convergence_tolerance);
+    gmres_solve_s.view_relres_plot("log");
+    
+    EXPECT_TRUE(gmres_solve_s.check_converged());
+    double rel_res = (b - A*gmres_solve_s.soln()).norm()/r_0.norm();
+    EXPECT_LE(rel_res, 2*convergence_tolerance);
+
+}
+
+TEST_F(GMRESSingleTest, SolveRand20) {
+    
+    Matrix<float, Dynamic, Dynamic> A = read_matrix_csv<float>(matrix_dir + "A_20_rand.csv");
+    Matrix<float, Dynamic, Dynamic> b = read_matrix_csv<float>(matrix_dir + "b_20_rand.csv");
+    Matrix<float, Dynamic, 1> x_0 = MatrixXf::Ones(20, 1);
+    Matrix<float, Dynamic, 1> r_0 = b - A*x_0;
+    GMRESSolveTestingMock<float> gmres_solve_s(A, b, x_0, single_tolerance);
+
+    gmres_solve_s.solve(20, convergence_tolerance);
+    gmres_solve_s.view_relres_plot("log");
+    
+    EXPECT_TRUE(gmres_solve_s.check_converged());
+    double rel_res = (b - A*gmres_solve_s.soln()).norm()/r_0.norm();
+    EXPECT_LE(rel_res, 2*convergence_tolerance);
+
+}
+
+TEST_F(GMRESSingleTest, Solve3Eigs) {
+    
+    Matrix<float, Dynamic, Dynamic> A = read_matrix_csv<float>(matrix_dir + "A_25_3eigs.csv");
+    Matrix<float, Dynamic, Dynamic> b = read_matrix_csv<float>(matrix_dir + "b_25_3eigs.csv");
+    Matrix<float, Dynamic, 1> x_0 = MatrixXf::Ones(25, 1);
+    Matrix<float, Dynamic, 1> r_0 = b - A*x_0;
+    GMRESSolveTestingMock<float> gmres_solve_s(A, b, x_0, single_tolerance);
+
+    gmres_solve_s.solve(3, convergence_tolerance);
+    gmres_solve_s.view_relres_plot("log");
+    
+    EXPECT_TRUE(gmres_solve_s.check_converged());
+    double rel_res = (b - A*gmres_solve_s.soln()).norm()/r_0.norm();
+    EXPECT_LE(rel_res, 2*convergence_tolerance);
+
+}
+
+// TEST_F(GMRESSingleTest, DivergeBeyondSingleCapabilities) {
+    
+//     Matrix<float, Dynamic, Dynamic> A = read_matrix_csv<float>(matrix_dir + "A_5_toy.csv");
+//     Matrix<float, Dynamic, Dynamic> b = read_matrix_csv<float>(matrix_dir + "b_5_toy.csv");
+//     Matrix<float, Dynamic, 1> x_0 = MatrixXf::Ones(5, 1); 
+//     Matrix<float, Dynamic, 1> r_0 = b - A*x_0;
+
+//     // Check convergence under single capabilities
+//     GMRESSolveTestingMock<float> gmres_solve_s(A, b, x_0, single_tolerance);
+
+//     gmres_solve_s.solve(5, convergence_tolerance);
+//     gmres_solve_s.view_relres_plot("log");
+    
+//     EXPECT_TRUE(gmres_solve_s.check_converged());
+//     double rel_res = (b - A*gmres_solve_s.soln()).norm()/r_0.norm();
+//     EXPECT_LE(rel_res, 2*convergence_tolerance);
+
+//     // Check divergence beyond single capability of the single machine epsilon
+//     GMRESSolveTestingMock<float> gmres_solve_s_to_fail(A, b, x_0, single_tolerance);
+//     gmres_solve_s_to_fail.solve(7, 1e-8);
+//     gmres_solve_s_to_fail.view_relres_plot("log");
+    
+//     EXPECT_FALSE(gmres_solve_s_to_fail.check_converged());
+//     double rel_res_to_fail = (b - A*gmres_solve_s_to_fail.soln()).norm()/r_0.norm();
+//     EXPECT_GE(rel_res_to_fail, 2e-8);
+
+// }

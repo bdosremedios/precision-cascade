@@ -26,8 +26,8 @@ class GMRESSolve: public LinearSolve<T> {
 
         void update_subspace_k() {
 
-            // Protect against updating if converged already
-            if (!this->converged) {
+            // Protect against updating if terminated already
+            if (!this->terminated) {
 
                 // Update krylov subspace with orthonormalized new vector next_q
                 Q_kry_basis(all, krylov_subspace_dim) = next_q;
@@ -39,8 +39,8 @@ class GMRESSolve: public LinearSolve<T> {
 
         void update_next_q_Hkplus1_convergence() {
 
-            // Protect against updating if converged already
-            if (!this->converged) {
+            // Protect against updating if terminated already
+            if (!this->terminated) {
 
                 // Orthogonlize next_q to previous basis vectors and store coefficients and
                 // normalization in H for H_{kplus1, k}
@@ -55,12 +55,13 @@ class GMRESSolve: public LinearSolve<T> {
                 }
                 H(k+1, k) = next_q.norm();
 
-                // Check for convergence with exact being reached if next basis vector
-                // is in the existing Krylov subspace, otherwise normalize next vector
+                // Check for termination condition with inability to expand subspace if
+                // next basis vector is in the existing Krylov subspace, otherwise normalize
+                // next vector for addition to basis
                 if (next_q.norm() > basis_zero_tol) {
                     next_q /= next_q.norm();
                 } else {
-                    this->converged = true;
+                    this->terminated = true;
                 }
 
             }
@@ -123,8 +124,9 @@ class GMRESSolve: public LinearSolve<T> {
     
             update_subspace_k();
             update_next_q_Hkplus1_convergence();
-            // Don't update if already converged
-            if (!this->converged) {
+            // Don't update if already terminated since linear system of Hessenberg
+            // should be unsolvable
+            if (!this->terminated) {
                 update_QR_fact();
                 update_x_minimizing_res();
             }
@@ -162,13 +164,13 @@ class GMRESSolve: public LinearSolve<T> {
             Matrix<T, Dynamic, 1> r_0 = this->b - (this->A)*(this->x_0);
             rho = r_0.norm();
 
-            // Initialize next vector q as initial residual marking convergence
-            // if residual is already zero
+            // Initialize next vector q as initial residual marking termination
+            // since can not build Krylov subspace on zero vector
             next_q = r_0;
             if (next_q.norm() > basis_zero_tol) {
                 next_q = next_q/next_q.norm();
             } else {
-                this->converged = true;
+                this->terminated = true;
             }
 
         }
