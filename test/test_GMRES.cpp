@@ -126,14 +126,13 @@ TEST_F(GMRESComponentTest, KrylovInstantiationAndUpdates) {
 
     // First update check first vector for basis is residual norm
     // and that Hessenberg first vector contructs next vector with entries
-    test_mock.update_subspace_k();
+    test_mock.iterate_no_soln_solve();
+
     ASSERT_EQ(test_mock.Q_kry_basis.col(0), r_0/r_0.norm());
-    test_mock.update_next_q_Hkplus1_convergence();
     Matrix<double, Dynamic, 1> next_q = A*test_mock.Q_kry_basis.col(0);
     next_q -= test_mock.H(0, 0)*test_mock.Q_kry_basis.col(0);
     ASSERT_EQ(next_q.norm(), test_mock.H(1, 0));
-    ASSERT_EQ(test_mock.next_q, next_q/next_q.norm());
-    EXPECT_NEAR(test_mock.next_q.norm(), 1, double_tolerance);
+    ASSERT_EQ(test_mock.next_q, next_q);
 
     // Save basis and H entries to check that they remain unchanged
     Q_save(all, 0) = test_mock.Q_kry_basis.col(0);
@@ -141,10 +140,9 @@ TEST_F(GMRESComponentTest, KrylovInstantiationAndUpdates) {
     
     // Subsequent updates
     for (int k=1; k<5; ++k) {
-        
-        // Update subspace and convergence
-        test_mock.update_subspace_k();
-        test_mock.update_next_q_Hkplus1_convergence();
+        cout << k << endl;
+        // Iterate Krylov subspace and Hessenberg
+        test_mock.iterate_no_soln_solve();
         Q_save(all, k) = test_mock.Q_kry_basis.col(k);
         H_save(all, k) = test_mock.H.col(k);
 
@@ -176,71 +174,6 @@ TEST_F(GMRESComponentTest, KrylovInstantiationAndUpdates) {
     
 }
 
-TEST_F(GMRESComponentTest, KrylovLuckyBreakFirstIter) {
-    
-    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_5_easysoln.csv");
-    Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_5_easysoln.csv");
-    MatrixXd soln = MatrixXd::Ones(5, 1); // Instantiate initial guess as true solution
-    GMRESSolveTestingMock<double> test_mock(A, b, soln, double_tolerance);
-
-    // Attempt to update subspace and convergence
-    test_mock.update_subspace_k();
-    test_mock.update_next_q_Hkplus1_convergence();
-    
-    // Check basis Q and H are empty and Krylov hasn't been updated since already
-    // hit the lucky break so can't build subspace and check that terminated but
-    // not converged
-    EXPECT_FALSE(test_mock.check_converged());
-    EXPECT_TRUE(test_mock.check_terminated());
-    EXPECT_EQ(test_mock.krylov_subspace_dim, 0);
-    for (int i=0; i<5; ++i) {
-        for (int j=0; j<5; ++j) {
-            EXPECT_EQ(test_mock.Q_kry_basis(i, j), 0);
-        }
-    }
-    for (int i=0; i<6; ++i) {
-            for (int j=0; j<5; ++j) {
-                EXPECT_EQ(test_mock.H(i, j), 0);
-        }
-    }
-
-    // Attempt to solve and check that iteration does not occur since
-    // should be terminated already but that convergence is updated
-    test_mock.solve(100, 1e-10);
-    EXPECT_TRUE(test_mock.check_converged());
-    EXPECT_EQ(test_mock.get_iteration(), 0);
-
-}
-
-TEST_F(GMRESComponentTest, KrylovLuckyBreakLaterIter) {
-    
-    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_5_easysoln.csv");
-    Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_5_easysoln.csv");
-    MatrixXd soln = MatrixXd::Zero(5, 1); // Initialize as near solution
-    soln(0) = 1;
-    GMRESSolveTestingMock<double> test_mock(A, b, soln, double_tolerance);
-
-    // Attempt to update subspace and convergence twice
-    test_mock.update_subspace_k();
-    test_mock.update_next_q_Hkplus1_convergence();
-    test_mock.update_subspace_k();
-    test_mock.update_next_q_Hkplus1_convergence();
-    
-    // Check basis Q has one normalized basis vector and others are empty and
-    // has been marked terminated but not converged since we want to delay that
-    // check for LinearSolve
-    EXPECT_FALSE(test_mock.check_converged());
-    EXPECT_TRUE(test_mock.check_terminated());
-    EXPECT_EQ(test_mock.krylov_subspace_dim, 1);
-    EXPECT_NEAR(test_mock.Q_kry_basis.col(0).norm(), 1, double_tolerance);
-    for (int i=0; i<5; ++i) {
-        for (int j=1; j<5; ++j) {
-            EXPECT_EQ(test_mock.Q_kry_basis(i, j), 0);
-        }
-    }
-    
-}
-
 TEST_F(GMRESComponentTest, H_QR_Update) {
     
     Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_5_toy.csv");
@@ -250,16 +183,11 @@ TEST_F(GMRESComponentTest, H_QR_Update) {
     Matrix<double, Dynamic, 1> r_0 = b - A*MatrixXd::Ones(5, 1);
 
     // Fully create Hessenberg matrix
-    test_mock.update_subspace_k();
-    test_mock.update_next_q_Hkplus1_convergence();
-    test_mock.update_subspace_k();
-    test_mock.update_next_q_Hkplus1_convergence();
-    test_mock.update_subspace_k();
-    test_mock.update_next_q_Hkplus1_convergence();
-    test_mock.update_subspace_k();
-    test_mock.update_next_q_Hkplus1_convergence();
-    test_mock.update_subspace_k();
-    test_mock.update_next_q_Hkplus1_convergence();
+    test_mock.iterate_no_soln_solve();
+    test_mock.iterate_no_soln_solve();
+    test_mock.iterate_no_soln_solve();
+    test_mock.iterate_no_soln_solve();
+    test_mock.iterate_no_soln_solve();
 
     Matrix<double, 6, 4> save_Q_H;
     Matrix<double, 6, 4> save_R_H;
@@ -356,6 +284,68 @@ TEST_F(GMRESComponentTest, Update_x_Back_Substitution) {
 
     }
 
+}
+
+TEST_F(GMRESComponentTest, KrylovLuckyBreakFirstIter) {
+    
+    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_5_easysoln.csv");
+    Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_5_easysoln.csv");
+    MatrixXd soln = MatrixXd::Ones(5, 1); // Instantiate initial guess as true solution
+    GMRESSolveTestingMock<double> test_mock(A, b, soln, double_tolerance);
+
+    // Attempt to update subspace and Hessenberg
+    test_mock.iterate();
+    
+    // Check basis Q and H are empty and Krylov hasn't been updated since already
+    // hit the lucky break so can't build subspace and check that terminated but
+    // not converged
+    EXPECT_FALSE(test_mock.check_converged());
+    EXPECT_TRUE(test_mock.check_terminated());
+    EXPECT_EQ(test_mock.krylov_subspace_dim, 0);
+    for (int i=0; i<5; ++i) {
+        for (int j=0; j<5; ++j) {
+            EXPECT_EQ(test_mock.Q_kry_basis(i, j), 0);
+        }
+    }
+    for (int i=0; i<6; ++i) {
+            for (int j=0; j<5; ++j) {
+                EXPECT_EQ(test_mock.H(i, j), 0);
+        }
+    }
+
+    // Attempt to solve and check that iteration does not occur since
+    // should be terminated already but that convergence is updated
+    test_mock.solve(100, 1e-10);
+    EXPECT_TRUE(test_mock.check_converged());
+    EXPECT_EQ(test_mock.get_iteration(), 0);
+
+}
+
+TEST_F(GMRESComponentTest, KrylovLuckyBreakLaterIter) {
+    
+    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_5_easysoln.csv");
+    Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_5_easysoln.csv");
+    MatrixXd soln = MatrixXd::Zero(5, 1); // Initialize as near solution
+    soln(0) = 1;
+    GMRESSolveTestingMock<double> test_mock(A, b, soln, double_tolerance);
+
+    // Attempt to update subspace and convergence twice
+    test_mock.iterate();
+    test_mock.iterate();
+    
+    // Check basis Q has one normalized basis vector and others are empty and
+    // has been marked terminated but not converged since we want to delay that
+    // check for LinearSolve
+    EXPECT_FALSE(test_mock.check_converged());
+    EXPECT_TRUE(test_mock.check_terminated());
+    EXPECT_EQ(test_mock.krylov_subspace_dim, 1);
+    EXPECT_NEAR(test_mock.Q_kry_basis.col(0).norm(), 1, double_tolerance);
+    for (int i=0; i<5; ++i) {
+        for (int j=1; j<5; ++j) {
+            EXPECT_EQ(test_mock.Q_kry_basis(i, j), 0);
+        }
+    }
+    
 }
 
 TEST_F(GMRESComponentTest, KrylovLuckyBreakThroughSolve) {
