@@ -5,6 +5,8 @@
 #include <vector>
 #include <algorithm>
 #include <cmath>
+#include <iostream>
+#include <iomanip>
 
 using Eigen::Matrix, Eigen::Dynamic;
 using std::vector;
@@ -188,12 +190,12 @@ class LinearSolve {
 
             // Iterate over grid and mark x wherever there is a plot entry
             cout << "Display of Relative Residual L-2 Norm: " << endl;
-            if (arg != "log") {
-                cout << "1 ";
+            if (arg == "log") {
+                cout << std::setprecision(3) << std::pow(10, max);
             } else {
-                cout << "10^0 ";
-            }
-            cout << string(min_three_int(length-1), '-') << endl;
+                cout << std::setprecision(3) << max;
+            };
+            cout << " " << string(min_three_int(length-1), '-') << endl;
             for (int i=height-1; i>=0; --i) {
                 for (int j=-1; j<length; ++j) {
                     if (plot_y_bucket_index[j] == i) {
@@ -204,8 +206,12 @@ class LinearSolve {
                 }
                 cout << endl;
             }
-            if (arg == "log") { cout << "10^"; };
-            cout << static_cast<int>(min) << " " << string(min_three_int(length-1), '-') << endl;
+            if (arg == "log") {
+                cout << std::setprecision(3) << std::pow(10, min);
+            } else {
+                cout << std::setprecision(3) << min;
+            };
+            cout << " " << string(min_three_int(length-1), '-') << endl;
             cout << "Iter: 1" << string(min_three_int(length-10), ' ') << "Iter: " << iteration << endl;
 
         }

@@ -76,7 +76,7 @@ class GMRESSolve: public LinearSolve<T> {
             T c = a/r;
             T s = -b/r;
             R_H(k, k) = r;
-            R_H(k+1, k) = 0;
+            R_H(k+1, k) = static_cast<T>(0);
 
             // Right multiply Q_H by transpose of new matrix to get updated Q_H
             // *will only modify last two columns so save time by just doing those 
@@ -92,7 +92,7 @@ class GMRESSolve: public LinearSolve<T> {
             // Calculate RHS to solve
             int k = krylov_subspace_dim-1;
             Matrix<T, Dynamic, 1> e1 = Matrix<T, Dynamic, 1>::Zero(k+2, 1);
-            e1(0) = 1;
+            e1(0) = static_cast<T>(1);
             Matrix<T, Dynamic, 1> rhs = rho*Q_H.block(0, 0, k+2, k+2).transpose()*e1;
 
             // Use back substitution to solve
