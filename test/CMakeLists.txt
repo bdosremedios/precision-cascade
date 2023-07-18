@@ -6,14 +6,23 @@ set(
     TEST_SUITE_CPPS
     test_MatrixReader.cpp
     test_Jacobi.cpp
-    test_GMRES.cpp
+)
+
+set(
+    TEST_GMRES_CPPS
+    test_GMRES/test_GMRESComponents.cpp
+    test_GMRES/test_GMRESDouble.cpp
+    test_GMRES/test_GMRESSingle.cpp
+    test_GMRES/test_GMRESHalf.cpp
 )
 
 add_executable(
     test
     test.cpp
     ${TEST_SUITE_CPPS}
+    ${TEST_GMRES_CPPS}
 )
+
 
 target_include_directories(
     test
