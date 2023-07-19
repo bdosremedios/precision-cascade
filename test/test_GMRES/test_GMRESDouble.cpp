@@ -31,7 +31,7 @@ TEST_F(GMRESDoubleTest, SolveConvDiff64) {
     gmres_solve_d.view_relres_plot("log");
     
     EXPECT_TRUE(gmres_solve_d.check_converged());
-    double rel_res = (b - A*gmres_solve_d.soln()).norm()/r_0.norm();
+    double rel_res = (b - A*gmres_solve_d.get_soln()).norm()/r_0.norm();
     EXPECT_LE(rel_res, convergence_tolerance);
 
     // Check that matches MATLAB gmres solution within the difference of twice convergence_tolerance
@@ -52,7 +52,7 @@ TEST_F(GMRESDoubleTest, SolveConvDiff256) {
     gmres_solve_d.view_relres_plot("log");
     
     EXPECT_TRUE(gmres_solve_d.check_converged());
-    double rel_res = (b - A*gmres_solve_d.soln()).norm()/r_0.norm();
+    double rel_res = (b - A*gmres_solve_d.get_soln()).norm()/r_0.norm();
     EXPECT_LE(rel_res, convergence_tolerance);
 
     // Check that matches MATLAB gmres solution within the difference of twice convergence_tolerance
@@ -73,7 +73,7 @@ TEST_F(GMRESDoubleTest, SolveConvDiff1024_LONGRUNTIME) {
     gmres_solve_d.view_relres_plot("log");
     
     EXPECT_TRUE(gmres_solve_d.check_converged());
-    double rel_res = (b - A*gmres_solve_d.soln()).norm()/r_0.norm();
+    double rel_res = (b - A*gmres_solve_d.get_soln()).norm()/r_0.norm();
     EXPECT_LE(rel_res, convergence_tolerance);
 
     // Check that matches MATLAB gmres solution within the difference of twice convergence_tolerance
@@ -94,7 +94,7 @@ TEST_F(GMRESDoubleTest, SolveRand20) {
     gmres_solve_d.view_relres_plot("log");
     
     EXPECT_TRUE(gmres_solve_d.check_converged());
-    double rel_res = (b - A*gmres_solve_d.soln()).norm()/r_0.norm();
+    double rel_res = (b - A*gmres_solve_d.get_soln()).norm()/r_0.norm();
     EXPECT_LE(rel_res, convergence_tolerance);
 
     // Check that matches MATLAB gmres solution within the difference of twice convergence_tolerance
@@ -115,7 +115,7 @@ TEST_F(GMRESDoubleTest, Solve3Eigs) {
     gmres_solve_d.view_relres_plot("log");
     
     EXPECT_TRUE(gmres_solve_d.check_converged());
-    double rel_res = (b - A*gmres_solve_d.soln()).norm()/r_0.norm();
+    double rel_res = (b - A*gmres_solve_d.get_soln()).norm()/r_0.norm();
     EXPECT_LE(rel_res, convergence_tolerance);
 
     // Check that matches MATLAB gmres solution within the difference of twice convergence_tolerance

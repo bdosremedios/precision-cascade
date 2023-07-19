@@ -30,7 +30,7 @@ TEST_F(JacobiTest, SolveConvDiff64) {
     jacobi_solve_d.view_relres_plot("log");
     
     EXPECT_TRUE(jacobi_solve_d.check_converged());
-    double rel_res = (b - A*jacobi_solve_d.soln()).norm()/r_0.norm();
+    double rel_res = (b - A*jacobi_solve_d.get_soln()).norm()/r_0.norm();
     EXPECT_LE(rel_res, tol);
 
 }
@@ -48,7 +48,7 @@ TEST_F(JacobiTest, SolveConvDiff256_LONGRUNTIME) {
     jacobi_solve_d.view_relres_plot("log");
     
     EXPECT_TRUE(jacobi_solve_d.check_converged());
-    double rel_res = (b - A*jacobi_solve_d.soln()).norm()/r_0.norm();
+    double rel_res = (b - A*jacobi_solve_d.get_soln()).norm()/r_0.norm();
     EXPECT_LE(rel_res, tol);
     
 }

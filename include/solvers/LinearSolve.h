@@ -11,6 +11,7 @@
 using Eigen::Matrix, Eigen::Dynamic;
 using std::vector;
 using std::cout, std::endl;
+using Eigen::placeholders::all;
 
 template <typename T>
 class LinearSolve {
@@ -31,7 +32,7 @@ class LinearSolve {
         int iteration = 0;
 
         // Variables only valid once solve has been initiated
-        Matrix<T, Dynamic, Dynamic> x_hist;
+        Matrix<T, Dynamic, Dynamic> res_hist;
         vector<double> res_norm_hist;
 
         // Virtual function that returns advances the iterate x using previous iterates and
@@ -78,8 +79,8 @@ class LinearSolve {
                                           // in dynamic memory usage
 
         // Getters
-        Matrix<T, Dynamic, 1> soln() { return x; };
-        Matrix<T, Dynamic, Dynamic> soln_hist() { return x_hist; };
+        Matrix<T, Dynamic, 1> get_soln() { return x; };
+        Matrix<T, Dynamic, Dynamic> get_res_hist() { return res_hist; };
         vector<double> get_res_norm_hist() { return res_norm_hist; };
         bool check_initiated() { return initiated; };
         bool check_converged() { return converged; };
@@ -87,7 +88,7 @@ class LinearSolve {
         int get_iteration() { return iteration; };
         double relres() {
             if (initiated) {
-                return (b-A*x).norm()/res_norm_hist[0];
+                return res_hist(all, iteration).norm()/res_norm_hist[0];
             } else {
                 return -1;
             }
@@ -98,9 +99,9 @@ class LinearSolve {
 
             // Mark as linear solve started and start histories
             initiated = true;
-            x_hist = Matrix<T, Dynamic, Dynamic>(m, max_iter+1);
-            x_hist(Eigen::placeholders::all, 0) = x_0;
-            double res_norm = (b - A*x).norm();
+            res_hist = Matrix<T, Dynamic, Dynamic>(m, max_iter+1);
+            res_hist(all, 0) = b - A*x;
+            double res_norm = res_hist(all, 0).norm();
             res_norm_hist.push_back(res_norm);
 
             // Run while relative residual is still high, and under max iterations, and has not been
@@ -111,9 +112,9 @@ class LinearSolve {
                 ++iteration;
                 iterate();
 
-                // Update accumulators
-                res_norm = (b - A*x).norm();
-                x_hist(Eigen::placeholders::all, iteration) = x;
+                // Update residual tracking
+                res_hist(all, iteration) = b - A*x;
+                res_norm = res_hist(all, iteration).norm();
                 res_norm_hist.push_back(res_norm);
 
             }
@@ -123,10 +124,10 @@ class LinearSolve {
             // if no iterations have been performed, that there is a small residual
             // relative to the RHS
             if ((res_norm/res_norm_hist[0]) <= target_rel_res) {
-                x_hist.conservativeResize(m, iteration+1);
+                res_hist.conservativeResize(m, iteration+1);
                 converged = true;
             } else if ((iteration == 0) && ((res_norm/b.norm()) <= target_rel_res)) {
-                x_hist.conservativeResize(m, iteration+1);
+                res_hist.conservativeResize(m, iteration+1);
                 converged = true;
             }
 
@@ -142,13 +143,14 @@ class LinearSolve {
         }
 
         // Plot relative residual
-        void view_relres_plot(string arg = "normal") const {
+        void view_relres_plot(string arg="normal") const {
 
             // Get max max_length entries to plot
             int max_length = 70;
             vector<double> plot_y;
             if (res_norm_hist.size() > max_length) {
-                double h = (static_cast<double>(res_norm_hist.size())-1.0)/(static_cast<double>(max_length)-1.0);
+                double h = (static_cast<double>(res_norm_hist.size())-1.0)/
+                           (static_cast<double>(max_length)-1.0);
                 for (int i=0; i<max_length; ++i) {
                     plot_y.push_back(res_norm_hist[static_cast<int>(i*h)]);
                 }
