@@ -32,8 +32,7 @@ TEST_F(GMRESHalfTest, SolveConvDiff64) {
     gmres_solve_h.view_relres_plot("log");
     
     EXPECT_TRUE(gmres_solve_h.check_converged());
-    double rel_res = (b - A*gmres_solve_h.get_soln()).norm()/r_0.norm();
-    EXPECT_LE(rel_res, 2*convergence_tolerance);
+    EXPECT_LE(gmres_solve_h.get_relres(), 2*convergence_tolerance);
 
 }
 
@@ -49,8 +48,7 @@ TEST_F(GMRESHalfTest, SolveConvDiff256) {
     gmres_solve_h.view_relres_plot("log");
     
     EXPECT_TRUE(gmres_solve_h.check_converged());
-    half rel_res = (b - A*gmres_solve_h.get_soln()).norm()/r_0.norm();
-    EXPECT_LE(rel_res, 4*2*convergence_tolerance);
+    EXPECT_LE(gmres_solve_h.get_relres(), 4*2*convergence_tolerance);
 
 }
 
@@ -66,8 +64,7 @@ TEST_F(GMRESHalfTest, SolveConvDiff1024_LONGRUNTIME) {
     gmres_solve_h.view_relres_plot("log");
     
     EXPECT_TRUE(gmres_solve_h.check_converged());
-    double rel_res = (b - A*gmres_solve_h.get_soln()).norm()/r_0.norm();
-    EXPECT_LE(rel_res, 16*2*convergence_tolerance);
+    EXPECT_LE(gmres_solve_h.get_relres(), 16*2*convergence_tolerance);
 
 }
 
@@ -83,8 +80,7 @@ TEST_F(GMRESHalfTest, SolveRand20) {
     gmres_solve_h.view_relres_plot("log");
     
     EXPECT_TRUE(gmres_solve_h.check_converged());
-    double rel_res = (b - A*gmres_solve_h.get_soln()).norm()/r_0.norm();
-    EXPECT_LE(rel_res, 2*convergence_tolerance);
+    EXPECT_LE(gmres_solve_h.get_relres(), 2*convergence_tolerance);
 
 }
 
@@ -102,8 +98,7 @@ TEST_F(GMRESHalfTest, Solve3Eigs) {
     // TODO: Figure out better check for 3eig since convergence tolerance
     //       isnt reached
     // EXPECT_TRUE(gmres_solve_h.check_converged());
-    double rel_res = (b - A*gmres_solve_h.get_soln()).norm()/r_0.norm();
-    EXPECT_LE(rel_res, 2*convergence_tolerance);
+    EXPECT_LE(gmres_solve_h.get_relres(), 2*convergence_tolerance);
 
 }
 
@@ -121,8 +116,7 @@ TEST_F(GMRESHalfTest, DivergeBeyondHalfCapabilities) {
     gmres_solve_h.view_relres_plot("log");
     
     EXPECT_TRUE(gmres_solve_h.check_converged());
-    double rel_res = (b - A*gmres_solve_h.get_soln()).norm()/r_0.norm();
-    EXPECT_LE(rel_res, 2*convergence_tolerance);
+    EXPECT_LE(gmres_solve_h.get_relres(), 2*convergence_tolerance);
 
     // Check divergence beyond single capability of the single machine epsilon
     GMRESSolveTestingMock<half> gmres_solve_h_to_fail(A, b, x_0, half_tolerance);
@@ -130,7 +124,6 @@ TEST_F(GMRESHalfTest, DivergeBeyondHalfCapabilities) {
     gmres_solve_h_to_fail.view_relres_plot("log");
     
     EXPECT_FALSE(gmres_solve_h_to_fail.check_converged());
-    double rel_res_to_fail = (b - A*gmres_solve_h_to_fail.get_soln()).norm()/r_0.norm();
-    EXPECT_GE(rel_res_to_fail, 2e-8);
+    EXPECT_GT(gmres_solve_h_to_fail.get_relres(), 2e-8);
 
 }

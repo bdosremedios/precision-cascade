@@ -65,6 +65,9 @@ class LinearSolve {
                 assert(((m == arg_b.rows()), "A not compatible with b for linear system"));
                 assert(((n == arg_x_0.rows()), "A not compatible with initial guess x_0"));
 
+                // Check matrix squareness
+                if (this->m != this->n) { throw runtime_error("A is not square"); };
+
                 // Load linear system variables if compatible
                 A = arg_A;
                 b = arg_b;
@@ -86,9 +89,9 @@ class LinearSolve {
         bool check_converged() { return converged; };
         bool check_terminated() { return terminated; };
         int get_iteration() { return iteration; };
-        double relres() {
+        double get_relres() {
             if (initiated) {
-                return res_hist(all, iteration).norm()/res_norm_hist[0];
+                return res_norm_hist[iteration]/res_norm_hist[0];
             } else {
                 return -1;
             }
@@ -115,7 +118,7 @@ class LinearSolve {
                 // Update residual tracking
                 res_hist(all, iteration) = b - A*x;
                 res_norm = res_hist(all, iteration).norm();
-                res_norm_hist.push_back(res_norm);
+                res_norm_hist.push_back(static_cast<double>(res_norm));
 
             }
 

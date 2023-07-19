@@ -157,9 +157,6 @@ class GMRESSolve: public LinearSolve<T> {
 
         void constructorHelper() {
 
-            // Check matrix squareness
-            if (this->m != this->n) { throw runtime_error("A not square"); };
-
             // Pre-allocate all possible space needed to prevent memory
             // re-allocation
             Q_kry_basis = Matrix<T, Dynamic, Dynamic>::Zero(this->m, this->n);
