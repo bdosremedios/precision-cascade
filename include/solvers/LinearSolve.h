@@ -40,6 +40,9 @@ class LinearSolve {
         // * WILL NOT BE CALLED IF CONVERGED = true so can assume converged is not true
         virtual void iterate() = 0;
 
+        // Plotting var
+        double solve_target_relres;
+
     public:
 
         // Constructors/Destructors
@@ -99,6 +102,9 @@ class LinearSolve {
 
         // Perform linear solve with given iterate scheme
         void solve(const int max_iter=100, const double target_rel_res=1e-10) {
+
+            // Store target residual
+            solve_target_relres = target_rel_res;
 
             // Mark as linear solve started and start histories
             initiated = true;
@@ -181,6 +187,16 @@ class LinearSolve {
             vector<double> bucket_ends;
             double min = *std::min_element(plot_y.cbegin(), plot_y.cend());
             double max = *std::max_element(plot_y.cbegin(), plot_y.cend());
+            
+            // Get minimal of target relres and minimum if initiated for bottom of plot
+            if (initiated) {
+                if (arg == "log") {
+                    min = std::min(min, std::log(solve_target_relres)/std::log(10));
+                } else {
+                    min = std::min(min, solve_target_relres);
+                }
+            }
+
             double bucket_width = (max-min)/static_cast<double>(height);
             for (double i=1; i<height; ++i) {bucket_ends.push_back(i*bucket_width+min);}
             bucket_ends.push_back(max);

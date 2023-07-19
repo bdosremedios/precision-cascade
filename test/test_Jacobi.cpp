@@ -6,10 +6,12 @@
 #include "solvers/Jacobi.h"
 
 using read_matrix::read_matrix_csv;
+
 using Eigen::MatrixXd;
 using Eigen::MatrixXf;
 using Eigen::half;
 using MatrixXh = Eigen::Matrix<Eigen::half, Dynamic, Dynamic>;
+
 using std::string;
 using std::cout, std::endl;
 
@@ -72,6 +74,23 @@ TEST_F(JacobiTest, SolveConvDiff64_Single) {
 
 }
 
+TEST_F(JacobiTest, SolveConvDiff256_Single_LONGRUNTIME) {
+    
+    Matrix<float, Dynamic, Dynamic> A = read_matrix_csv<float>(matrix_dir + "conv_diff_256_A.csv");
+    Matrix<float, Dynamic, Dynamic> b = read_matrix_csv<float>(matrix_dir + "conv_diff_256_b.csv");
+    Matrix<float, Dynamic, 1> x_0 = MatrixXf::Ones(256, 1);
+    Matrix<float, Dynamic, 1> r_0 = b - A*x_0;
+    double tol = 1e-5;
+
+    JacobiSolve<float> jacobi_solve_s(A, b);
+    jacobi_solve_s.solve(max_iter, tol);
+    jacobi_solve_s.view_relres_plot("log");
+    
+    EXPECT_TRUE(jacobi_solve_s.check_converged());
+    EXPECT_LE(jacobi_solve_s.get_relres(), tol);
+
+}
+
 TEST_F(JacobiTest, SolveConvDiff64_SingleFailBeyondEpsilon) {
     
     Matrix<float, Dynamic, Dynamic> A = read_matrix_csv<float>(matrix_dir + "conv_diff_64_A.csv");
@@ -94,6 +113,23 @@ TEST_F(JacobiTest, SolveConvDiff64_Half) {
     Matrix<half, Dynamic, Dynamic> A = read_matrix_csv<half>(matrix_dir + "conv_diff_64_A.csv");
     Matrix<half, Dynamic, Dynamic> b = read_matrix_csv<half>(matrix_dir + "conv_diff_64_b.csv");
     Matrix<half, Dynamic, 1> x_0 = MatrixXh::Ones(64, 1);
+    Matrix<half, Dynamic, 1> r_0 = b - A*x_0;
+    double tol = 0.0997/2;
+
+    JacobiSolve<half> jacobi_solve_h(A, b);
+    jacobi_solve_h.solve(max_iter, tol);
+    jacobi_solve_h.view_relres_plot("log");
+    
+    EXPECT_TRUE(jacobi_solve_h.check_converged());
+    EXPECT_LE(jacobi_solve_h.get_relres(), tol);
+
+}
+
+TEST_F(JacobiTest, SolveConvDiff256_Half_LONGRUNTIME) {
+    
+    Matrix<half, Dynamic, Dynamic> A = read_matrix_csv<half>(matrix_dir + "conv_diff_256_A.csv");
+    Matrix<half, Dynamic, Dynamic> b = read_matrix_csv<half>(matrix_dir + "conv_diff_256_b.csv");
+    Matrix<half, Dynamic, 1> x_0 = MatrixXh::Ones(256, 1);
     Matrix<half, Dynamic, 1> r_0 = b - A*x_0;
     double tol = 0.0997/2;
 
