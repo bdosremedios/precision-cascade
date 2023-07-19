@@ -13,15 +13,24 @@ class JacobiSolve: public LinearSolve<T> {
 
     protected:
 
+        using LinearSolve<T>::m;
+        using LinearSolve<T>::A;
+        using LinearSolve<T>::b;
+        using LinearSolve<T>::x;
+
         void iterate() override {
             
-            for (int i=0; i<this->m; ++i) {
-                Matrix<T, Dynamic, 1> x_temp = this->x;
-                T acc = this->b(i);
-                for (int j=0; j<this->m; ++j) {
-                    acc -= this->A(i, j)*x_temp(j);
+            for (int i=0; i<m; ++i) {
+
+                Matrix<T, Dynamic, 1> x_temp = x;
+
+                T acc = b(i);
+                for (int j=0; j<m; ++j) {
+                    acc -= A(i, j)*x_temp(j);
                 }
-                this->x(i) += (static_cast<T>(1)/(this->A(i, i)))*acc;
+
+                x(i) += (static_cast<T>(1)/(A(i, i)))*acc;
+
             }
 
         }

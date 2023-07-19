@@ -3,6 +3,7 @@
 
 #include "LinearSolve.h"
 #include "Eigen/Dense"
+
 #include <iostream>
 #include <cmath>
 
@@ -14,6 +15,12 @@ template <typename T>
 class GMRESSolve: public LinearSolve<T> {
 
     protected:
+
+        using LinearSolve<T>::m;
+        using LinearSolve<T>::A;
+        using LinearSolve<T>::b;
+        using LinearSolve<T>::x;
+        using LinearSolve<T>::x_0;
 
         Matrix<T, Dynamic, Dynamic> Q_kry_basis;
         Matrix<T, Dynamic, Dynamic> H;
@@ -46,7 +53,7 @@ class GMRESSolve: public LinearSolve<T> {
             // Orthogonlize next_q to previous basis vectors and store coefficients and
             // normalization in H for H_{kplus1, k}
             int k = krylov_subspace_dim-1;
-            next_q = (this->A)*Q_kry_basis(all, k);
+            next_q = A*Q_kry_basis(all, k);
 
             for (int i=0; i<=k; ++i) {
                 // MGS since newly orthogonalized q is used for orthogonalizing
@@ -69,12 +76,12 @@ class GMRESSolve: public LinearSolve<T> {
             R_H.block(0, k, k+1, 1) = Q_H.block(0, 0, k+1, k+1).transpose()*R_H.block(0, k, k+1, 1);
 
             // Apply the final Given's rotation manually making R_H upper triangular
-            T a = R_H(k, k);
-            T b = R_H(k+1, k);
-            T r_sqr = a*a + b*b; // Explicit intermediate variable to ensure no auto casting into sqrt
+            T alpha = R_H(k, k);
+            T beta = R_H(k+1, k);
+            T r_sqr = alpha*alpha + beta*beta; // Explicit intermediate variable to ensure no auto casting into sqrt
             T r = sqrt(r_sqr);
-            T c = a/r;
-            T s = -b/r;
+            T c = alpha/r;
+            T s = -beta/r;
             R_H(k, k) = r;
             R_H(k+1, k) = static_cast<T>(0);
 
@@ -106,7 +113,7 @@ class GMRESSolve: public LinearSolve<T> {
             }
 
             // Update x
-            this->x = this->x_0 + Q_kry_basis.block(0, 0, this->m, krylov_subspace_dim)*y;
+            x = x_0 + Q_kry_basis.block(0, 0, m, krylov_subspace_dim)*y;
 
         }
 
@@ -159,16 +166,16 @@ class GMRESSolve: public LinearSolve<T> {
 
             // Pre-allocate all possible space needed to prevent memory
             // re-allocation
-            Q_kry_basis = Matrix<T, Dynamic, Dynamic>::Zero(this->m, this->n);
-            H = Matrix<T, Dynamic, Dynamic>::Zero(this->n+1, this->n);
-            Q_H = Matrix<T, Dynamic, Dynamic>::Identity(this->n+1, this->n+1);
-            R_H = Matrix<T, Dynamic, Dynamic>::Zero(this->n+1, this->n);
+            Q_kry_basis = Matrix<T, Dynamic, Dynamic>::Zero(m, m);
+            H = Matrix<T, Dynamic, Dynamic>::Zero(m+1, m);
+            Q_H = Matrix<T, Dynamic, Dynamic>::Identity(m+1, m+1);
+            R_H = Matrix<T, Dynamic, Dynamic>::Zero(m+1, m);
 
             // Specify max dimension for krylov subspace
-            max_krylov_subspace_dim = this->n;
+            max_krylov_subspace_dim = m;
 
             // Set rho as initial residual norm
-            Matrix<T, Dynamic, 1> r_0 = this->b - (this->A)*(this->x_0);
+            Matrix<T, Dynamic, 1> r_0 = b - A*x_0;
             rho = r_0.norm();
 
             // Initialize next vector q as initial residual marking termination

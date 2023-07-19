@@ -232,7 +232,7 @@ class LinearSolve {
             } else {
                 cout << std::setprecision(3) << min;
             };
-            cout << " " << string(min_three_int(length-1), '-') << endl;
+            cout << " " << string(min_three_int(length-4), '-') << endl;
             cout << "Iter: 1" << string(min_three_int(length-10), ' ') << "Iter: " << iteration << endl;
 
         }
