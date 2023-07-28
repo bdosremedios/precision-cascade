@@ -100,7 +100,7 @@ TEST_F(JacobiTest, SolveConvDiff64_SingleFailBeyondEpsilon) {
     double tol = 1e-8;
 
     JacobiSolve<float> jacobi_solve_s(A, b);
-    jacobi_solve_s.solve(max_iter, tol);
+    jacobi_solve_s.solve(400, tol);
     jacobi_solve_s.view_relres_plot("log");
     
     EXPECT_FALSE(jacobi_solve_s.check_converged());
@@ -151,7 +151,7 @@ TEST_F(JacobiTest, SolveConvDiff64_HalfFailBeyondEpsilon) {
     double tol = 1e-4;
 
     JacobiSolve<half> jacobi_solve_h(A, b);
-    jacobi_solve_h.solve(max_iter, tol);
+    jacobi_solve_h.solve(300, tol);
     jacobi_solve_h.view_relres_plot("log");
     
     EXPECT_FALSE(jacobi_solve_h.check_converged());

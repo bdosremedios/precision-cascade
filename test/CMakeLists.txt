@@ -11,11 +11,17 @@ set(
 )
 
 set(
+    TEST_SOR_CPPS
+    test_SOR/test_GaussSeidel.cpp
+    test_SOR/test_SOR.cpp
+)
+
+set(
     TEST_SUITE_CPPS
     test_MatrixReader.cpp
     test_Jacobi.cpp
-    test_SOR.cpp
     ${TEST_GMRES_CPPS}
+    ${TEST_SOR_CPPS}
 )
 add_executable(
     test

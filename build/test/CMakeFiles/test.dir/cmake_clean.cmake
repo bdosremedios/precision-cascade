@@ -13,8 +13,10 @@ file(REMOVE_RECURSE
   "CMakeFiles/test.dir/test_Jacobi.cpp.o.d"
   "CMakeFiles/test.dir/test_MatrixReader.cpp.o"
   "CMakeFiles/test.dir/test_MatrixReader.cpp.o.d"
-  "CMakeFiles/test.dir/test_SOR.cpp.o"
-  "CMakeFiles/test.dir/test_SOR.cpp.o.d"
+  "CMakeFiles/test.dir/test_SOR/test_GaussSeidel.cpp.o"
+  "CMakeFiles/test.dir/test_SOR/test_GaussSeidel.cpp.o.d"
+  "CMakeFiles/test.dir/test_SOR/test_SOR.cpp.o"
+  "CMakeFiles/test.dir/test_SOR/test_SOR.cpp.o.d"
   "test"
   "test.pdb"
 )

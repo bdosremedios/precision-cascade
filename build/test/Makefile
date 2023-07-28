@@ -343,29 +343,53 @@ test_MatrixReader.cpp.s:
 	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_MatrixReader.cpp.s
 .PHONY : test_MatrixReader.cpp.s
 
-test_SOR.o: test_SOR.cpp.o
-.PHONY : test_SOR.o
+test_SOR/test_GaussSeidel.o: test_SOR/test_GaussSeidel.cpp.o
+.PHONY : test_SOR/test_GaussSeidel.o
 
 # target to build an object file
-test_SOR.cpp.o:
-	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_SOR.cpp.o
-.PHONY : test_SOR.cpp.o
+test_SOR/test_GaussSeidel.cpp.o:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_SOR/test_GaussSeidel.cpp.o
+.PHONY : test_SOR/test_GaussSeidel.cpp.o
 
-test_SOR.i: test_SOR.cpp.i
-.PHONY : test_SOR.i
+test_SOR/test_GaussSeidel.i: test_SOR/test_GaussSeidel.cpp.i
+.PHONY : test_SOR/test_GaussSeidel.i
 
 # target to preprocess a source file
-test_SOR.cpp.i:
-	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_SOR.cpp.i
-.PHONY : test_SOR.cpp.i
+test_SOR/test_GaussSeidel.cpp.i:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_SOR/test_GaussSeidel.cpp.i
+.PHONY : test_SOR/test_GaussSeidel.cpp.i
 
-test_SOR.s: test_SOR.cpp.s
-.PHONY : test_SOR.s
+test_SOR/test_GaussSeidel.s: test_SOR/test_GaussSeidel.cpp.s
+.PHONY : test_SOR/test_GaussSeidel.s
 
 # target to generate assembly for a file
-test_SOR.cpp.s:
-	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_SOR.cpp.s
-.PHONY : test_SOR.cpp.s
+test_SOR/test_GaussSeidel.cpp.s:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_SOR/test_GaussSeidel.cpp.s
+.PHONY : test_SOR/test_GaussSeidel.cpp.s
+
+test_SOR/test_SOR.o: test_SOR/test_SOR.cpp.o
+.PHONY : test_SOR/test_SOR.o
+
+# target to build an object file
+test_SOR/test_SOR.cpp.o:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_SOR/test_SOR.cpp.o
+.PHONY : test_SOR/test_SOR.cpp.o
+
+test_SOR/test_SOR.i: test_SOR/test_SOR.cpp.i
+.PHONY : test_SOR/test_SOR.i
+
+# target to preprocess a source file
+test_SOR/test_SOR.cpp.i:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_SOR/test_SOR.cpp.i
+.PHONY : test_SOR/test_SOR.cpp.i
+
+test_SOR/test_SOR.s: test_SOR/test_SOR.cpp.s
+.PHONY : test_SOR/test_SOR.s
+
+# target to generate assembly for a file
+test_SOR/test_SOR.cpp.s:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_SOR/test_SOR.cpp.s
+.PHONY : test_SOR/test_SOR.cpp.s
 
 # Help Target
 help:
@@ -401,9 +425,12 @@ help:
 	@echo "... test_MatrixReader.o"
 	@echo "... test_MatrixReader.i"
 	@echo "... test_MatrixReader.s"
-	@echo "... test_SOR.o"
-	@echo "... test_SOR.i"
-	@echo "... test_SOR.s"
+	@echo "... test_SOR/test_GaussSeidel.o"
+	@echo "... test_SOR/test_GaussSeidel.i"
+	@echo "... test_SOR/test_GaussSeidel.s"
+	@echo "... test_SOR/test_SOR.o"
+	@echo "... test_SOR/test_SOR.i"
+	@echo "... test_SOR/test_SOR.s"
 .PHONY : help
 
 
