@@ -2,6 +2,7 @@
 #define GMRES_H
 
 #include "LinearSolve.h"
+#include "preconditioners/Implemented_Preconditioners.h"
 #include "Eigen/Dense"
 
 #include <iostream>
@@ -11,7 +12,7 @@ using std::cout, std::endl;
 using Eigen::placeholders::all;
 using std::sqrt, std::pow;
 
-template <typename T>
+template <typename T, typename U>
 class GMRESSolve: public LinearSolve<T> {
 
     protected:
@@ -21,6 +22,8 @@ class GMRESSolve: public LinearSolve<T> {
         using LinearSolve<T>::b;
         using LinearSolve<T>::x;
         using LinearSolve<T>::x_0;
+
+        LeftPreconditioner<U> left_precond(NoPreconditioner<U>());
 
         Matrix<T, Dynamic, Dynamic> Q_kry_basis;
         Matrix<T, Dynamic, Dynamic> H;
@@ -150,7 +153,8 @@ class GMRESSolve: public LinearSolve<T> {
         GMRESSolve(const Matrix<T, Dynamic, Dynamic> arg_A,
                    const Matrix<T, Dynamic, 1> arg_b,
                    T arg_basis_zero_tol):
-            basis_zero_tol(arg_basis_zero_tol), LinearSolve<T>::LinearSolve(arg_A, arg_b) {
+            basis_zero_tol(arg_basis_zero_tol), LinearSolve<T>::LinearSolve(arg_A, arg_b)
+        {
             constructorHelper();
         }
 
@@ -158,7 +162,8 @@ class GMRESSolve: public LinearSolve<T> {
                    const Matrix<T, Dynamic, 1> arg_b, 
                    const Matrix<T, Dynamic, 1> arg_x_0,
                    T arg_basis_zero_tol):
-            basis_zero_tol(arg_basis_zero_tol), LinearSolve<T>::LinearSolve(arg_A, arg_b, arg_x_0) {
+            basis_zero_tol(arg_basis_zero_tol), LinearSolve<T>::LinearSolve(arg_A, arg_b, arg_x_0)
+        {
             constructorHelper();
         }
 
@@ -189,27 +194,27 @@ class GMRESSolve: public LinearSolve<T> {
 
 };
 
-template <typename T>
-class GMRESSolveTestingMock: public GMRESSolve<T> {
+template <typename T, typename U>
+class GMRESSolveTestingMock: public GMRESSolve<T, U> {
 
     public:
 
-        using GMRESSolve<T>::GMRESSolve;
-        using GMRESSolve<T>::x;
+        using GMRESSolve<T, U>::GMRESSolve;
+        using GMRESSolve<T, U>::x;
         
-        using GMRESSolve<T>::H;
-        using GMRESSolve<T>::Q_kry_basis;
-        using GMRESSolve<T>::Q_H;
-        using GMRESSolve<T>::R_H;
-        using GMRESSolve<T>::krylov_subspace_dim;
-        using GMRESSolve<T>::max_krylov_subspace_dim;
-        using GMRESSolve<T>::next_q;
-        using GMRESSolve<T>::rho;
-        using GMRESSolve<T>::iteration;
+        using GMRESSolve<T, U>::H;
+        using GMRESSolve<T, U>::Q_kry_basis;
+        using GMRESSolve<T, U>::Q_H;
+        using GMRESSolve<T, U>::R_H;
+        using GMRESSolve<T, U>::krylov_subspace_dim;
+        using GMRESSolve<T, U>::max_krylov_subspace_dim;
+        using GMRESSolve<T, U>::next_q;
+        using GMRESSolve<T, U>::rho;
+        using GMRESSolve<T, U>::iteration;
 
-        using GMRESSolve<T>::update_QR_fact;
-        using GMRESSolve<T>::update_x_minimizing_res;
-        using GMRESSolve<T>::iterate;
+        using GMRESSolve<T, U>::update_QR_fact;
+        using GMRESSolve<T, U>::update_x_minimizing_res;
+        using GMRESSolve<T, U>::iterate;
 
         void iterate_no_soln_solve() {
             this->update_subspace_k();

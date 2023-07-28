@@ -4,3 +4,4 @@ project(gmres)
 
 add_subdirectory(read_matrix)
 add_subdirectory(solvers)
+add_subdirectory(preconditioners)

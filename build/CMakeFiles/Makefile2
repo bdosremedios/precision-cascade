@@ -161,17 +161,35 @@ googletest/googletest/clean: googletest/googletest/CMakeFiles/gtest_main.dir/cle
 # Recursive "all" directory target.
 include/all: include/read_matrix/all
 include/all: include/solvers/all
+include/all: include/preconditioners/all
 .PHONY : include/all
 
 # Recursive "preinstall" directory target.
 include/preinstall: include/read_matrix/preinstall
 include/preinstall: include/solvers/preinstall
+include/preinstall: include/preconditioners/preinstall
 .PHONY : include/preinstall
 
 # Recursive "clean" directory target.
 include/clean: include/read_matrix/clean
 include/clean: include/solvers/clean
+include/clean: include/preconditioners/clean
 .PHONY : include/clean
+
+#=============================================================================
+# Directory level rules for directory include/preconditioners
+
+# Recursive "all" directory target.
+include/preconditioners/all:
+.PHONY : include/preconditioners/all
+
+# Recursive "preinstall" directory target.
+include/preconditioners/preinstall:
+.PHONY : include/preconditioners/preinstall
+
+# Recursive "clean" directory target.
+include/preconditioners/clean:
+.PHONY : include/preconditioners/clean
 
 #=============================================================================
 # Directory level rules for directory include/read_matrix

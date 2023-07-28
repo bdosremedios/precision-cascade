@@ -25,7 +25,7 @@ TEST_F(GMRESDoubleTest, SolveConvDiff64) {
     Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "conv_diff_64_b.csv");
     Matrix<double, Dynamic, 1> x_0 = MatrixXd::Ones(64, 1);
     Matrix<double, Dynamic, 1> r_0 = b - A*x_0;
-    GMRESSolveTestingMock<double> gmres_solve_d(A, b, x_0, double_tolerance);
+    GMRESSolveTestingMock<double, double> gmres_solve_d(A, b, x_0, double_tolerance);
 
     gmres_solve_d.solve(64, convergence_tolerance);
     gmres_solve_d.view_relres_plot("log");
@@ -45,7 +45,7 @@ TEST_F(GMRESDoubleTest, SolveConvDiff256) {
     Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "conv_diff_256_b.csv");
     Matrix<double, Dynamic, 1> x_0 = MatrixXd::Ones(256, 1);
     Matrix<double, Dynamic, 1> r_0 = b - A*x_0;
-    GMRESSolveTestingMock<double> gmres_solve_d(A, b, x_0, double_tolerance);
+    GMRESSolveTestingMock<double, double> gmres_solve_d(A, b, x_0, double_tolerance);
 
     gmres_solve_d.solve(256, convergence_tolerance);
     gmres_solve_d.view_relres_plot("log");
@@ -65,7 +65,7 @@ TEST_F(GMRESDoubleTest, SolveConvDiff1024_LONGRUNTIME) {
     Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "conv_diff_1024_b.csv");
     Matrix<double, Dynamic, 1> x_0 = MatrixXd::Ones(1024, 1);
     Matrix<double, Dynamic, 1> r_0 = b - A*x_0;
-    GMRESSolveTestingMock<double> gmres_solve_d(A, b, x_0, double_tolerance);
+    GMRESSolveTestingMock<double, double> gmres_solve_d(A, b, x_0, double_tolerance);
 
     gmres_solve_d.solve(1024, convergence_tolerance);
     gmres_solve_d.view_relres_plot("log");
@@ -85,7 +85,7 @@ TEST_F(GMRESDoubleTest, SolveRand20) {
     Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_20_rand.csv");
     Matrix<double, Dynamic, 1> x_0 = MatrixXd::Ones(20, 1);
     Matrix<double, Dynamic, 1> r_0 = b - A*x_0;
-    GMRESSolveTestingMock<double> gmres_solve_d(A, b, x_0, double_tolerance);
+    GMRESSolveTestingMock<double, double> gmres_solve_d(A, b, x_0, double_tolerance);
 
     gmres_solve_d.solve(20, convergence_tolerance);
     gmres_solve_d.view_relres_plot("log");
@@ -105,7 +105,7 @@ TEST_F(GMRESDoubleTest, Solve3Eigs) {
     Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_25_3eigs.csv");
     Matrix<double, Dynamic, 1> x_0 = MatrixXd::Ones(25, 1);
     Matrix<double, Dynamic, 1> r_0 = b - A*x_0;
-    GMRESSolveTestingMock<double> gmres_solve_d(A, b, x_0, double_tolerance);
+    GMRESSolveTestingMock<double, double> gmres_solve_d(A, b, x_0, double_tolerance);
 
     gmres_solve_d.solve(3, convergence_tolerance);
     gmres_solve_d.view_relres_plot("log");

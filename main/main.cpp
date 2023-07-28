@@ -44,17 +44,17 @@ int main() {
     Matrix<half, Dynamic, 1> guess = MatrixXh::Random(n, 1);
 
     // Look at solve with each precision
-    GMRESSolve<half> gmres_solve_h(
+    GMRESSolve<half, half> gmres_solve_h(
         A_half, b_half, guess, half_tolerance_zero
     );
     gmres_solve_h.solve(n, convergence_tolerance_double);
 
-    GMRESSolve<float> gmres_solve_s(
+    GMRESSolve<float, float> gmres_solve_s(
         A_single, b_single, guess.cast<float>(), single_tolerance_zero
     );
     gmres_solve_s.solve(n, convergence_tolerance_double);
 
-    GMRESSolve<double> gmres_solve_d(
+    GMRESSolve<double, double> gmres_solve_d(
         A_double, b_double, guess.cast<double>(), double_tolerance_zero
     );
     gmres_solve_d.solve(n, convergence_tolerance_double);
@@ -63,17 +63,17 @@ int main() {
     gmres_solve_s.view_relres_plot("log");
     gmres_solve_d.view_relres_plot("log");
 
-    GMRESSolve<half> gmres_solve_h_2(
+    GMRESSolve<half, half> gmres_solve_h_2(
         A_half, b_half, guess, half_tolerance_zero
     );
     gmres_solve_h_2.solve(n, convergence_tolerance_single);
 
-    GMRESSolve<float> gmres_solve_s_2(
+    GMRESSolve<float, float> gmres_solve_s_2(
         A_single, b_single, guess.cast<float>(), single_tolerance_zero
     );
     gmres_solve_s_2.solve(n, convergence_tolerance_single);
 
-    GMRESSolve<double> gmres_solve_d_2(
+    GMRESSolve<double, double> gmres_solve_d_2(
         A_double, b_double, guess.cast<double>(), double_tolerance_zero
     );
     gmres_solve_d_2.solve(n, convergence_tolerance_single);
