@@ -15,6 +15,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/bdosremedios/dev/gmres/test/test_GMRES/test_GMRESSingle.cpp" "test/CMakeFiles/test.dir/test_GMRES/test_GMRESSingle.cpp.o" "gcc" "test/CMakeFiles/test.dir/test_GMRES/test_GMRESSingle.cpp.o.d"
   "/home/bdosremedios/dev/gmres/test/test_Jacobi.cpp" "test/CMakeFiles/test.dir/test_Jacobi.cpp.o" "gcc" "test/CMakeFiles/test.dir/test_Jacobi.cpp.o.d"
   "/home/bdosremedios/dev/gmres/test/test_MatrixReader.cpp" "test/CMakeFiles/test.dir/test_MatrixReader.cpp.o" "gcc" "test/CMakeFiles/test.dir/test_MatrixReader.cpp.o.d"
+  "/home/bdosremedios/dev/gmres/test/test_SOR.cpp" "test/CMakeFiles/test.dir/test_SOR.cpp.o" "gcc" "test/CMakeFiles/test.dir/test_SOR.cpp.o.d"
   )
 
 # Targets to which this target links.

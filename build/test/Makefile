@@ -343,6 +343,30 @@ test_MatrixReader.cpp.s:
 	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_MatrixReader.cpp.s
 .PHONY : test_MatrixReader.cpp.s
 
+test_SOR.o: test_SOR.cpp.o
+.PHONY : test_SOR.o
+
+# target to build an object file
+test_SOR.cpp.o:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_SOR.cpp.o
+.PHONY : test_SOR.cpp.o
+
+test_SOR.i: test_SOR.cpp.i
+.PHONY : test_SOR.i
+
+# target to preprocess a source file
+test_SOR.cpp.i:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_SOR.cpp.i
+.PHONY : test_SOR.cpp.i
+
+test_SOR.s: test_SOR.cpp.s
+.PHONY : test_SOR.s
+
+# target to generate assembly for a file
+test_SOR.cpp.s:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_SOR.cpp.s
+.PHONY : test_SOR.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -377,6 +401,9 @@ help:
 	@echo "... test_MatrixReader.o"
 	@echo "... test_MatrixReader.i"
 	@echo "... test_MatrixReader.s"
+	@echo "... test_SOR.o"
+	@echo "... test_SOR.i"
+	@echo "... test_SOR.s"
 .PHONY : help
 
 

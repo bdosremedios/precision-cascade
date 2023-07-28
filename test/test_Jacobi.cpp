@@ -19,7 +19,7 @@ class JacobiTest: public testing::Test {
 
     protected:
         string matrix_dir = "/home/bdosremedios/dev/gmres/test/solve_matrices/";
-        int max_iter = 1000;
+        int max_iter = 2000;
 
 };
 

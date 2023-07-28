@@ -19,17 +19,17 @@ class JacobiSolve: public LinearSolve<T> {
         using LinearSolve<T>::x;
 
         void iterate() override {
+
+            Matrix<T, Dynamic, 1> x_temp = x;
             
             for (int i=0; i<m; ++i) {
-
-                Matrix<T, Dynamic, 1> x_temp = x;
 
                 T acc = b(i);
                 for (int j=0; j<m; ++j) {
                     acc -= A(i, j)*x_temp(j);
                 }
 
-                x(i) += (static_cast<T>(1)/(A(i, i)))*acc;
+                x(i) = x_temp(i) + acc/(A(i, i));
 
             }
 
