@@ -3,6 +3,7 @@
 
 #include "LinearSolve.h"
 #include "preconditioners/ImplementedPreconditioners.h"
+#include "tools/Substitution.h"
 #include "Eigen/Dense"
 
 #include <iostream>
@@ -117,14 +118,7 @@ class GMRESSolve: public LinearSolve<T> {
             Matrix<T, Dynamic, 1> rhs = Q_H.block(0, 0, k+2, k+2).transpose()*rho_e1;
 
             // Use back substitution to solve
-            Matrix<T, Dynamic, 1> y = Matrix<T, Dynamic, 1>::Zero(krylov_subspace_dim, 1);
-            for (int i=k; i>=0; --i) {
-                y(i) = rhs(i);
-                for (int j=i+1; j<=k; ++j) {
-                    y(i) -= R_H(i, j)*y(j);
-                }
-                y(i) /= R_H(i, i);
-            }
+            Matrix<T, Dynamic, 1> y = back_substitution(R_H, rhs, krylov_subspace_dim);
 
             // Update x
             x = x_0 + Q_kry_basis.block(0, 0, m, krylov_subspace_dim)*y;

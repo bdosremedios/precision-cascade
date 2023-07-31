@@ -441,6 +441,7 @@ main/CMakeFiles/main.dir/main.cpp.o: \
  /usr/include/c++/11/bits/quoted_string.h \
  /home/bdosremedios/dev/gmres/main/../include/preconditioners/ImplementedPreconditioners.h \
  /home/bdosremedios/dev/gmres/main/../include/preconditioners/Preconditioner.h \
+ /home/bdosremedios/dev/gmres/main/../include/tools/Substitution.h \
  /usr/include/c++/11/memory \
  /usr/include/c++/11/bits/stl_raw_storage_iter.h \
  /usr/include/c++/11/bits/align.h /usr/include/c++/11/bit \
