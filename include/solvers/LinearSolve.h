@@ -84,6 +84,10 @@ class LinearSolve {
         virtual ~LinearSolve() = default; // Virtual to determine destructors at runtime for correctness
                                           // in dynamic memory usage
 
+        // Disable copy constructor and copy assignment
+        LinearSolve(const LinearSolve &) = delete;
+        LinearSolve & operator=(LinearSolve &) = delete;
+
         // Getters
         Matrix<T, Dynamic, 1> get_soln() { return x; };
         Matrix<T, Dynamic, Dynamic> get_res_hist() { return res_hist; };

@@ -494,6 +494,7 @@ main/CMakeFiles/main.dir/main.cpp.o: ../main/main.cpp \
   /usr/include/c++/11/bits/quoted_string.h \
   ../include/preconditioners/ImplementedPreconditioners.h \
   ../include/preconditioners/Preconditioner.h \
+  ../include/tools/Substitution.h \
   /usr/include/c++/11/memory \
   /usr/include/c++/11/bits/stl_raw_storage_iter.h \
   /usr/include/c++/11/bits/align.h \
@@ -518,6 +519,8 @@ main/CMakeFiles/main.dir/main.cpp.o: ../main/main.cpp \
 /usr/include/c++/11/bit:
 
 /usr/include/c++/11/bits/stl_raw_storage_iter.h:
+
+../include/tools/Substitution.h:
 
 /usr/include/c++/11/bits/atomic_base.h:
 

@@ -154,7 +154,7 @@ class GMRESSolve: public LinearSolve<T> {
     
     public:
 
-        // Constructors / Destructors
+        // Constructors/Destructors
         GMRESSolve(const Matrix<T, Dynamic, Dynamic> arg_A,
                    const Matrix<T, Dynamic, 1> arg_b,
                    T arg_basis_zero_tol):
@@ -200,17 +200,6 @@ class GMRESSolve: public LinearSolve<T> {
             if (next_q.norm() <= basis_zero_tol) {
                 this->terminated = true;
             }
-
-        }
-
-        ~GMRESSolve() {
-
-            // // Clear dynamic left and right preconditioners
-            // delete left_precond_ptr;
-            // left_precond_ptr = nullptr;
-
-            // delete right_precond_ptr;
-            // right_precond_ptr = nullptr;
 
         }
 

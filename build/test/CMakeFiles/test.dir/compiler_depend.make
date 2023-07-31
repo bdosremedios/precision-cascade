@@ -936,7 +936,8 @@ test/CMakeFiles/test.dir/test_GMRES/test_GMRESComponents.cpp.o: ../test/test_GMR
   ../include/solvers/GMRES.h \
   ../include/solvers/LinearSolve.h \
   ../include/preconditioners/ImplementedPreconditioners.h \
-  ../include/preconditioners/Preconditioner.h
+  ../include/preconditioners/Preconditioner.h \
+  ../include/tools/Substitution.h
 
 test/CMakeFiles/test.dir/test_GMRES/test_GMRESDouble.cpp.o: ../test/test_GMRES/test_GMRESDouble.cpp \
   /usr/include/stdc-predef.h \
@@ -1535,7 +1536,8 @@ test/CMakeFiles/test.dir/test_GMRES/test_GMRESDouble.cpp.o: ../test/test_GMRES/t
   ../include/solvers/GMRES.h \
   ../include/solvers/LinearSolve.h \
   ../include/preconditioners/ImplementedPreconditioners.h \
-  ../include/preconditioners/Preconditioner.h
+  ../include/preconditioners/Preconditioner.h \
+  ../include/tools/Substitution.h
 
 test/CMakeFiles/test.dir/test_GMRES/test_GMRESHalf.cpp.o: ../test/test_GMRES/test_GMRESHalf.cpp \
   /usr/include/stdc-predef.h \
@@ -2134,7 +2136,8 @@ test/CMakeFiles/test.dir/test_GMRES/test_GMRESHalf.cpp.o: ../test/test_GMRES/tes
   ../include/solvers/GMRES.h \
   ../include/solvers/LinearSolve.h \
   ../include/preconditioners/ImplementedPreconditioners.h \
-  ../include/preconditioners/Preconditioner.h
+  ../include/preconditioners/Preconditioner.h \
+  ../include/tools/Substitution.h
 
 test/CMakeFiles/test.dir/test_GMRES/test_GMRESSingle.cpp.o: ../test/test_GMRES/test_GMRESSingle.cpp \
   /usr/include/stdc-predef.h \
@@ -2733,7 +2736,8 @@ test/CMakeFiles/test.dir/test_GMRES/test_GMRESSingle.cpp.o: ../test/test_GMRES/t
   ../include/solvers/GMRES.h \
   ../include/solvers/LinearSolve.h \
   ../include/preconditioners/ImplementedPreconditioners.h \
-  ../include/preconditioners/Preconditioner.h
+  ../include/preconditioners/Preconditioner.h \
+  ../include/tools/Substitution.h
 
 test/CMakeFiles/test.dir/test_Jacobi.cpp.o: ../test/test_Jacobi.cpp \
   /usr/include/stdc-predef.h \
@@ -5133,6 +5137,8 @@ test/CMakeFiles/test.dir/test_SOR/test_SOR.cpp.o: ../test/test_SOR/test_SOR.cpp 
 ../test/test_Jacobi.cpp:
 
 ../test/test_GMRES/test_GMRESSingle.cpp:
+
+../include/tools/Substitution.h:
 
 ../include/preconditioners/Preconditioner.h:
 

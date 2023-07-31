@@ -939,6 +939,7 @@ test/CMakeFiles/test.dir/test_GMRES/test_GMRESComponents.cpp.o
  /home/bdosremedios/dev/gmres/include/solvers/LinearSolve.h
  /home/bdosremedios/dev/gmres/include/preconditioners/ImplementedPreconditioners.h
  /home/bdosremedios/dev/gmres/include/preconditioners/Preconditioner.h
+ /home/bdosremedios/dev/gmres/include/tools/Substitution.h
 
 test/CMakeFiles/test.dir/test_GMRES/test_GMRESDouble.cpp.o
  /home/bdosremedios/dev/gmres/test/test_GMRES/test_GMRESDouble.cpp
@@ -1539,6 +1540,7 @@ test/CMakeFiles/test.dir/test_GMRES/test_GMRESDouble.cpp.o
  /home/bdosremedios/dev/gmres/include/solvers/LinearSolve.h
  /home/bdosremedios/dev/gmres/include/preconditioners/ImplementedPreconditioners.h
  /home/bdosremedios/dev/gmres/include/preconditioners/Preconditioner.h
+ /home/bdosremedios/dev/gmres/include/tools/Substitution.h
 
 test/CMakeFiles/test.dir/test_GMRES/test_GMRESHalf.cpp.o
  /home/bdosremedios/dev/gmres/test/test_GMRES/test_GMRESHalf.cpp
@@ -2139,6 +2141,7 @@ test/CMakeFiles/test.dir/test_GMRES/test_GMRESHalf.cpp.o
  /home/bdosremedios/dev/gmres/include/solvers/LinearSolve.h
  /home/bdosremedios/dev/gmres/include/preconditioners/ImplementedPreconditioners.h
  /home/bdosremedios/dev/gmres/include/preconditioners/Preconditioner.h
+ /home/bdosremedios/dev/gmres/include/tools/Substitution.h
 
 test/CMakeFiles/test.dir/test_GMRES/test_GMRESSingle.cpp.o
  /home/bdosremedios/dev/gmres/test/test_GMRES/test_GMRESSingle.cpp
@@ -2739,6 +2742,7 @@ test/CMakeFiles/test.dir/test_GMRES/test_GMRESSingle.cpp.o
  /home/bdosremedios/dev/gmres/include/solvers/LinearSolve.h
  /home/bdosremedios/dev/gmres/include/preconditioners/ImplementedPreconditioners.h
  /home/bdosremedios/dev/gmres/include/preconditioners/Preconditioner.h
+ /home/bdosremedios/dev/gmres/include/tools/Substitution.h
 
 test/CMakeFiles/test.dir/test_Jacobi.cpp.o
  /home/bdosremedios/dev/gmres/test/test_Jacobi.cpp
