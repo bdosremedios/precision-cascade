@@ -2,6 +2,7 @@
 #define LINEARSOLVER_H
 
 #include "Eigen/Dense"
+
 #include <vector>
 #include <algorithm>
 #include <cmath>
@@ -65,11 +66,11 @@ class LinearSolve {
                 // Ensure compatability to matrices
                 m = arg_A.rows();
                 n = arg_A.cols();
-                assert(((m == arg_b.rows()), "A not compatible with b for linear system"));
-                assert(((n == arg_x_0.rows()), "A not compatible with initial guess x_0"));
+                if (m != arg_b.rows()) { throw runtime_error("A not compatible with b for linear system"); }
+                if (n != arg_x_0.rows()) { throw runtime_error("A not compatible with initial guess x_0"); }
 
                 // Check matrix squareness
-                if (this->m != this->n) { throw runtime_error("A is not square"); };
+                if (this->m != this->n) { throw runtime_error("A is not square"); }
 
                 // Load linear system variables if compatible
                 A = arg_A;

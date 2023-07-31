@@ -188,6 +188,14 @@ class GMRESSolve: public LinearSolve<T> {
 
         void constructorHelper() {
 
+            // Assert compatibility of preconditioners with matrix
+            if (!left_precond_ptr->check_compatibility_left(this->m, this->n)) {
+                throw runtime_error("Left preconditioner is not compatible with linear system");
+            }
+            if (!right_precond_ptr->check_compatibility_left(this->m, this->n)) {
+                throw runtime_error("Right preconditioner is not compatible with linear system");
+            }
+
             // Pre-allocate all possible space needed to prevent memory
             // re-allocation
             Q_kry_basis = Matrix<T, Dynamic, Dynamic>::Zero(m, m);
