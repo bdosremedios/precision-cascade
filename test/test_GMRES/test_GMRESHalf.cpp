@@ -26,7 +26,7 @@ TEST_F(GMRESHalfTest, SolveConvDiff64) {
     Matrix<half, Dynamic, Dynamic> b = read_matrix_csv<half>(matrix_dir + "conv_diff_64_b.csv");
     Matrix<half, Dynamic, 1> x_0 = MatrixXh::Ones(64, 1);
     Matrix<half, Dynamic, 1> r_0 = b - A*x_0;
-    GMRESSolveTestingMock<half, half> gmres_solve_h(A, b, x_0, half_tolerance);
+    GMRESSolveTestingMock<half> gmres_solve_h(A, b, x_0, half_tolerance);
 
     gmres_solve_h.solve(64, convergence_tolerance);
     gmres_solve_h.view_relres_plot("log");
@@ -42,7 +42,7 @@ TEST_F(GMRESHalfTest, SolveConvDiff256) {
     Matrix<half, Dynamic, Dynamic> b = read_matrix_csv<half>(matrix_dir + "conv_diff_256_b.csv");
     Matrix<half, Dynamic, 1> x_0 = MatrixXh::Ones(256, 1);
     Matrix<half, Dynamic, 1> r_0 = b - A*x_0;
-    GMRESSolveTestingMock<half, half> gmres_solve_h(A, b, x_0, half_tolerance);
+    GMRESSolveTestingMock<half> gmres_solve_h(A, b, x_0, half_tolerance);
 
     gmres_solve_h.solve(256, 4*convergence_tolerance);
     gmres_solve_h.view_relres_plot("log");
@@ -58,7 +58,7 @@ TEST_F(GMRESHalfTest, SolveConvDiff1024_LONGRUNTIME) {
     Matrix<half, Dynamic, Dynamic> b = read_matrix_csv<half>(matrix_dir + "conv_diff_1024_b.csv");
     Matrix<half, Dynamic, 1> x_0 = MatrixXh::Ones(1024, 1);
     Matrix<half, Dynamic, 1> r_0 = b - A*x_0;
-    GMRESSolveTestingMock<half, half> gmres_solve_h(A, b, x_0, half_tolerance);
+    GMRESSolveTestingMock<half> gmres_solve_h(A, b, x_0, half_tolerance);
 
     gmres_solve_h.solve(1024, 16*convergence_tolerance);
     gmres_solve_h.view_relres_plot("log");
@@ -74,7 +74,7 @@ TEST_F(GMRESHalfTest, SolveRand20) {
     Matrix<half, Dynamic, Dynamic> b = read_matrix_csv<half>(matrix_dir + "b_20_rand.csv");
     Matrix<half, Dynamic, 1> x_0 = MatrixXh::Ones(20, 1);
     Matrix<half, Dynamic, 1> r_0 = b - A*x_0;
-    GMRESSolveTestingMock<half, half> gmres_solve_h(A, b, x_0, half_tolerance);
+    GMRESSolveTestingMock<half> gmres_solve_h(A, b, x_0, half_tolerance);
 
     gmres_solve_h.solve(20, convergence_tolerance);
     gmres_solve_h.view_relres_plot("log");
@@ -90,7 +90,7 @@ TEST_F(GMRESHalfTest, Solve3Eigs) {
     Matrix<half, Dynamic, Dynamic> b = read_matrix_csv<half>(matrix_dir + "b_25_3eigs.csv");
     Matrix<half, Dynamic, 1> x_0 = MatrixXh::Ones(25, 1);
     Matrix<half, Dynamic, 1> r_0 = b - A*x_0;
-    GMRESSolveTestingMock<half, half> gmres_solve_h(A, b, x_0, half_tolerance);
+    GMRESSolveTestingMock<half> gmres_solve_h(A, b, x_0, half_tolerance);
 
     gmres_solve_h.solve(3, convergence_tolerance);
     gmres_solve_h.view_relres_plot("log");
@@ -110,7 +110,7 @@ TEST_F(GMRESHalfTest, DivergeBeyondHalfCapabilities) {
     Matrix<half, Dynamic, 1> r_0 = b - A*x_0;
 
     // Check convergence under single capabilities
-    GMRESSolveTestingMock<half, half> gmres_solve_h(A, b, x_0, half_tolerance);
+    GMRESSolveTestingMock<half> gmres_solve_h(A, b, x_0, half_tolerance);
 
     gmres_solve_h.solve(128, convergence_tolerance);
     gmres_solve_h.view_relres_plot("log");
@@ -119,7 +119,7 @@ TEST_F(GMRESHalfTest, DivergeBeyondHalfCapabilities) {
     EXPECT_LE(gmres_solve_h.get_relres(), 2*convergence_tolerance);
 
     // Check divergence beyond single capability of the single machine epsilon
-    GMRESSolveTestingMock<half, half> gmres_solve_h_to_fail(A, b, x_0, half_tolerance);
+    GMRESSolveTestingMock<half> gmres_solve_h_to_fail(A, b, x_0, half_tolerance);
     gmres_solve_h_to_fail.solve(128, 1e-4);
     gmres_solve_h_to_fail.view_relres_plot("log");
     

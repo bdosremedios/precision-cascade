@@ -6,14 +6,14 @@
 using Eigen::Matrix, Eigen::Dynamic;
 
 template <typename U>
-class LeftPreconditioner {
+class Preconditioner {
 
     public:
 
-        LeftPreconditioner() = default;
-        virtual ~LeftPreconditioner() = default;
+        Preconditioner() = default;
+        virtual ~Preconditioner() = default;
 
-        // Apply action of inverse M on the given vector
+        // Apply action of inverse M on given vector
         virtual Matrix<U, Dynamic, 1> action_inv_M(Matrix<U, Dynamic, 1> vec) const = 0;
 
 };

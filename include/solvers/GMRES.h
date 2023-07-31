@@ -2,17 +2,20 @@
 #define GMRES_H
 
 #include "LinearSolve.h"
-#include "preconditioners/Implemented_Preconditioners.h"
+#include "preconditioners/ImplementedPreconditioners.h"
 #include "Eigen/Dense"
 
 #include <iostream>
+#include <memory>
 #include <cmath>
 
 using std::cout, std::endl;
-using Eigen::placeholders::all;
-using std::sqrt, std::pow;
+using std::shared_ptr, std::make_shared;
+using std::sqrt;
 
-template <typename T, typename U>
+using Eigen::placeholders::all;
+
+template <typename T, typename U=T>
 class GMRESSolve: public LinearSolve<T> {
 
     protected:
@@ -23,13 +26,15 @@ class GMRESSolve: public LinearSolve<T> {
         using LinearSolve<T>::x;
         using LinearSolve<T>::x_0;
 
-        LeftPreconditioner<U> left_precond(NoPreconditioner<U>());
+        shared_ptr<Preconditioner<U>> left_precond_ptr;
+        shared_ptr<Preconditioner<U>> right_precond_ptr;
 
         Matrix<T, Dynamic, Dynamic> Q_kry_basis;
         Matrix<T, Dynamic, Dynamic> H;
         Matrix<T, Dynamic, Dynamic> Q_H;
         Matrix<T, Dynamic, Dynamic> R_H;
         Matrix<T, Dynamic, 1> next_q;
+
         int krylov_subspace_dim = 0;
         int max_krylov_subspace_dim;
         T basis_zero_tol;
@@ -53,11 +58,16 @@ class GMRESSolve: public LinearSolve<T> {
 
         void update_nextq_and_Hkplus1() {
 
-            // Orthogonlize next_q to previous basis vectors and store coefficients and
-            // normalization in H for H_{kplus1, k}
             int k = krylov_subspace_dim-1;
-            next_q = A*Q_kry_basis(all, k);
+            
+            // Find next vector power of linear system
+            next_q = Q_kry_basis(all, k);
+            next_q = right_precond_ptr->action_inv_M(next_q); // Apply action of right preconditioner
+            next_q = A*next_q; // Apply matrix A
+            next_q = left_precond_ptr->action_inv_M(next_q); // Apply action of left preconditioner
 
+            // Orthogonlize next_q to previous basis vectors and store coefficients and
+            // normalization in H for H_{kplus1, k} applying preconditioning
             for (int i=0; i<=k; ++i) {
                 // MGS since newly orthogonalized q is used for orthogonalizing
                 // each next vector
@@ -81,7 +91,8 @@ class GMRESSolve: public LinearSolve<T> {
             // Apply the final Given's rotation manually making R_H upper triangular
             T alpha = R_H(k, k);
             T beta = R_H(k+1, k);
-            T r_sqr = alpha*alpha + beta*beta; // Explicit intermediate variable to ensure no auto casting into sqrt
+            T r_sqr = alpha*alpha + beta*beta; // Explicit intermediate variable to ensure
+                                               // no auto casting into sqrt
             T r = sqrt(r_sqr);
             T c = alpha/r;
             T s = -beta/r;
@@ -101,9 +112,9 @@ class GMRESSolve: public LinearSolve<T> {
 
             // Calculate RHS to solve
             int k = krylov_subspace_dim-1;
-            Matrix<T, Dynamic, 1> e1 = Matrix<T, Dynamic, 1>::Zero(k+2, 1);
-            e1(0) = static_cast<T>(1);
-            Matrix<T, Dynamic, 1> rhs = rho*Q_H.block(0, 0, k+2, k+2).transpose()*e1;
+            Matrix<T, Dynamic, 1> rho_e1 = Matrix<T, Dynamic, 1>::Zero(k+2, 1);
+            rho_e1(0) = rho;
+            Matrix<T, Dynamic, 1> rhs = Q_H.block(0, 0, k+2, k+2).transpose()*rho_e1;
 
             // Use back substitution to solve
             Matrix<T, Dynamic, 1> y = Matrix<T, Dynamic, 1>::Zero(krylov_subspace_dim, 1);
@@ -149,11 +160,14 @@ class GMRESSolve: public LinearSolve<T> {
     
     public:
 
-        // Constructors
+        // Constructors / Destructors
         GMRESSolve(const Matrix<T, Dynamic, Dynamic> arg_A,
                    const Matrix<T, Dynamic, 1> arg_b,
                    T arg_basis_zero_tol):
-            basis_zero_tol(arg_basis_zero_tol), LinearSolve<T>::LinearSolve(arg_A, arg_b)
+            basis_zero_tol(arg_basis_zero_tol),
+            LinearSolve<T>::LinearSolve(arg_A, arg_b),
+            left_precond_ptr(make_shared<NoPreconditioner<T>>()),
+            right_precond_ptr(make_shared<NoPreconditioner<T>>())
         {
             constructorHelper();
         }
@@ -162,7 +176,10 @@ class GMRESSolve: public LinearSolve<T> {
                    const Matrix<T, Dynamic, 1> arg_b, 
                    const Matrix<T, Dynamic, 1> arg_x_0,
                    T arg_basis_zero_tol):
-            basis_zero_tol(arg_basis_zero_tol), LinearSolve<T>::LinearSolve(arg_A, arg_b, arg_x_0)
+            basis_zero_tol(arg_basis_zero_tol),
+            LinearSolve<T>::LinearSolve(arg_A, arg_b, arg_x_0),
+            left_precond_ptr(make_shared<NoPreconditioner<T>>()),
+            right_precond_ptr(make_shared<NoPreconditioner<T>>())
         {
             constructorHelper();
         }
@@ -192,16 +209,27 @@ class GMRESSolve: public LinearSolve<T> {
 
         }
 
+        ~GMRESSolve() {
+
+            // // Clear dynamic left and right preconditioners
+            // delete left_precond_ptr;
+            // left_precond_ptr = nullptr;
+
+            // delete right_precond_ptr;
+            // right_precond_ptr = nullptr;
+
+        }
+
 };
 
-template <typename T, typename U>
+template <typename T, typename U=T>
 class GMRESSolveTestingMock: public GMRESSolve<T, U> {
 
     public:
 
         using GMRESSolve<T, U>::GMRESSolve;
         using GMRESSolve<T, U>::x;
-        
+
         using GMRESSolve<T, U>::H;
         using GMRESSolve<T, U>::Q_kry_basis;
         using GMRESSolve<T, U>::Q_H;

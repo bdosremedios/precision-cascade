@@ -22,7 +22,7 @@ TEST_F(GMRESComponentTest, CheckConstruction5x5) {
     
     Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_5_toy.csv");
     Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_5_toy.csv");
-    GMRESSolveTestingMock<double, double> test_mock(A, b, double_tolerance);
+    GMRESSolveTestingMock<double> test_mock(A, b, double_tolerance);
     ASSERT_EQ(test_mock.max_krylov_subspace_dim, 5);
     ASSERT_EQ(test_mock.rho, (b - A*MatrixXd::Ones(5, 1)).norm());
     
@@ -68,7 +68,7 @@ TEST_F(GMRESComponentTest, CheckConstruction64x64) {
     
     Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "conv_diff_64_A.csv");
     Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "conv_diff_64_b.csv");
-    GMRESSolveTestingMock<double, double> test_mock(A, b, double_tolerance);
+    GMRESSolveTestingMock<double> test_mock(A, b, double_tolerance);
     ASSERT_EQ(test_mock.max_krylov_subspace_dim, 64);
     ASSERT_EQ(test_mock.rho, (b - A*MatrixXd::Ones(64, 1)).norm());
     
@@ -115,7 +115,7 @@ TEST_F(GMRESComponentTest, CheckAssertSquareness) {
     Matrix<double, Dynamic, Dynamic> A = MatrixXd(6, 5);
     Matrix<double, Dynamic, Dynamic> b = MatrixXd(6, 1);
     try {
-        GMRESSolveTestingMock<double, double> test_mock(A, b, double_tolerance);
+        GMRESSolveTestingMock<double> test_mock(A, b, double_tolerance);
         FAIL();
     } catch (runtime_error e) {
         ;
@@ -127,7 +127,7 @@ TEST_F(GMRESComponentTest, KrylovInstantiationAndUpdates) {
     
     Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_5_toy.csv");
     Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_5_toy.csv");
-    GMRESSolveTestingMock<double, double> test_mock(A, b, double_tolerance);
+    GMRESSolveTestingMock<double> test_mock(A, b, double_tolerance);
     test_mock.x = MatrixXd::Ones(5, 1); // Manually instantiate initial guess
     Matrix<double, Dynamic, 1> r_0 = b - A*MatrixXd::Ones(5, 1);
 
@@ -189,7 +189,7 @@ TEST_F(GMRESComponentTest, H_QR_Update) {
     
     Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_5_toy.csv");
     Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_5_toy.csv");
-    GMRESSolveTestingMock<double, double> test_mock(A, b, double_tolerance);
+    GMRESSolveTestingMock<double> test_mock(A, b, double_tolerance);
     test_mock.x = MatrixXd::Ones(5, 1); // Manually instantiate initial guess
     Matrix<double, Dynamic, 1> r_0 = b - A*MatrixXd::Ones(5, 1);
 
@@ -264,7 +264,7 @@ TEST_F(GMRESComponentTest, Update_x_Back_Substitution) {
 
     // Set initial guess to zeros such that residual is just b
     Matrix<double, 7, 1> x_0 = MatrixXd::Zero(7, 1);
-    GMRESSolveTestingMock<double, double> test_mock(A, b, x_0, double_tolerance);
+    GMRESSolveTestingMock<double> test_mock(A, b, x_0, double_tolerance);
 
     // Set test_mock krylov basis to the identity to have x be directly the solved coefficients
     // of the back substitution
@@ -302,7 +302,7 @@ TEST_F(GMRESComponentTest, KrylovLuckyBreakFirstIter) {
     Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_5_easysoln.csv");
     Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_5_easysoln.csv");
     MatrixXd soln = MatrixXd::Ones(5, 1); // Instantiate initial guess as true solution
-    GMRESSolveTestingMock<double, double> test_mock(A, b, soln, double_tolerance);
+    GMRESSolveTestingMock<double> test_mock(A, b, soln, double_tolerance);
 
     // Attempt to update subspace and Hessenberg
     test_mock.iterate();
@@ -338,7 +338,7 @@ TEST_F(GMRESComponentTest, KrylovLuckyBreakLaterIter) {
     Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_5_easysoln.csv");
     MatrixXd soln = MatrixXd::Zero(5, 1); // Initialize as near solution
     soln(0) = 1;
-    GMRESSolveTestingMock<double, double> test_mock(A, b, soln, double_tolerance);
+    GMRESSolveTestingMock<double> test_mock(A, b, soln, double_tolerance);
 
     // Attempt to update subspace and convergence twice
     test_mock.iterate();
@@ -365,7 +365,7 @@ TEST_F(GMRESComponentTest, KrylovLuckyBreakThroughSolve) {
     Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_5_easysoln.csv");
     MatrixXd soln = MatrixXd::Zero(5, 1); // Initialize as near solution
     soln(0) = 1;
-    GMRESSolveTestingMock<double, double> test_mock(A, b, soln, double_tolerance);
+    GMRESSolveTestingMock<double> test_mock(A, b, soln, double_tolerance);
 
     // Attempt to update and solve through solve of LinearSolve
     test_mock.solve(5, 1e-10);
