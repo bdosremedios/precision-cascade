@@ -104,6 +104,22 @@ class LinearSolve {
             }
         }
 
+        // Reset solve to initial state
+        virtual void reset() {
+
+            // Reset all variables
+            initiated = false;
+            converged = false;
+            terminated = false;
+            iteration = 0;
+            x = x_0;
+            res_norm_hist.clear();
+
+            // Leave res_hist since will be reset automatically on next solve
+            Matrix<T, Dynamic, Dynamic> res_hist;
+
+        }
+
         // Perform linear solve with given iterate scheme
         void solve(const int max_iter=100, const double target_rel_res=1e-10) {
 

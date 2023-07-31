@@ -155,25 +155,33 @@ class GMRESSolve: public LinearSolve<T> {
     public:
 
         // Constructors/Destructors
-        GMRESSolve(const Matrix<T, Dynamic, Dynamic> arg_A,
-                   const Matrix<T, Dynamic, 1> arg_b,
-                   T arg_basis_zero_tol):
+        GMRESSolve(
+            const Matrix<T, Dynamic, Dynamic> arg_A,
+            const Matrix<T, Dynamic, 1> arg_b,
+            T arg_basis_zero_tol,
+            shared_ptr<Preconditioner<U>> arg_left_precond_ptr = make_shared<NoPreconditioner<T>>(),
+            shared_ptr<Preconditioner<U>> arg_right_precond_ptr = make_shared<NoPreconditioner<T>>()
+        ):
             basis_zero_tol(arg_basis_zero_tol),
             LinearSolve<T>::LinearSolve(arg_A, arg_b),
-            left_precond_ptr(make_shared<NoPreconditioner<T>>()),
-            right_precond_ptr(make_shared<NoPreconditioner<T>>())
+            left_precond_ptr(arg_left_precond_ptr),
+            right_precond_ptr(arg_right_precond_ptr)
         {
             constructorHelper();
         }
 
-        GMRESSolve(const Matrix<T, Dynamic, Dynamic> arg_A,
-                   const Matrix<T, Dynamic, 1> arg_b, 
-                   const Matrix<T, Dynamic, 1> arg_x_0,
-                   T arg_basis_zero_tol):
+        GMRESSolve(
+            const Matrix<T, Dynamic, Dynamic> arg_A,
+            const Matrix<T, Dynamic, 1> arg_b,
+            const Matrix<T, Dynamic, 1> arg_x_0,
+            T arg_basis_zero_tol,
+            shared_ptr<Preconditioner<U>> arg_left_precond_ptr = make_shared<NoPreconditioner<T>>(),
+            shared_ptr<Preconditioner<U>> arg_right_precond_ptr = make_shared<NoPreconditioner<T>>()
+        ):
             basis_zero_tol(arg_basis_zero_tol),
             LinearSolve<T>::LinearSolve(arg_A, arg_b, arg_x_0),
-            left_precond_ptr(make_shared<NoPreconditioner<T>>()),
-            right_precond_ptr(make_shared<NoPreconditioner<T>>())
+            left_precond_ptr(arg_left_precond_ptr),
+            right_precond_ptr(arg_right_precond_ptr)
         {
             constructorHelper();
         }
