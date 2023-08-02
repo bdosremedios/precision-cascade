@@ -1,12 +1,14 @@
-#include <string>
-#include <vector>
-#include <iostream>
-
 #include "gtest/gtest.h"
 #include "Eigen/Dense"
 
+#include "test.h"
+
 #include "read_matrix/MatrixReader.h"
 #include "solvers/LinearSolve.h"
+
+#include <string>
+#include <vector>
+#include <iostream>
 
 using Eigen::MatrixXd;
 using read_matrix::read_matrix_csv;
@@ -15,18 +17,13 @@ using std::cout, std::endl;
 using std::string;
 using std::vector;
 
-class LinearSolveTest: public testing::Test {
-    
-    public:
-        string matrix_dir = "/home/bdosremedios/dev/gmres/test/solve_matrices/";
-
-};
+class LinearSolveTest: public TestBase {};
 
 TEST_F(LinearSolveTest, TestConstructor64) {
     
-    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "conv_diff_64_A.csv");
-    Matrix<double, Dynamic, 1> b = read_matrix_csv<double>(matrix_dir + "conv_diff_64_b.csv");
-    Matrix<double, Dynamic, 1> x = read_matrix_csv<double>(matrix_dir + "conv_diff_64_x.csv");
+    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_A.csv");
+    Matrix<double, Dynamic, 1> b = read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_b.csv");
+    Matrix<double, Dynamic, 1> x = read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_x.csv");
     LinearSolveTestingMock test_mock(A, b, x);
 
     ASSERT_EQ(test_mock.A, A);
@@ -46,9 +43,9 @@ TEST_F(LinearSolveTest, TestConstructor64) {
 
 TEST_F(LinearSolveTest, TestConstructor256) {
     
-    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "conv_diff_256_A.csv");
-    Matrix<double, Dynamic, 1> b = read_matrix_csv<double>(matrix_dir + "conv_diff_256_b.csv");
-    Matrix<double, Dynamic, 1> x = read_matrix_csv<double>(matrix_dir + "conv_diff_256_x.csv");
+    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(solve_matrix_dir + "conv_diff_256_A.csv");
+    Matrix<double, Dynamic, 1> b = read_matrix_csv<double>(solve_matrix_dir + "conv_diff_256_b.csv");
+    Matrix<double, Dynamic, 1> x = read_matrix_csv<double>(solve_matrix_dir + "conv_diff_256_x.csv");
     LinearSolveTestingMock test_mock(A, b, x);
 
     ASSERT_EQ(test_mock.A, A);
@@ -68,9 +65,9 @@ TEST_F(LinearSolveTest, TestConstructor256) {
 
 TEST_F(LinearSolveTest, TestSolve) {
     
-    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "conv_diff_64_A.csv");
-    Matrix<double, Dynamic, 1> b = read_matrix_csv<double>(matrix_dir + "conv_diff_64_b.csv");
-    Matrix<double, Dynamic, 1> x = read_matrix_csv<double>(matrix_dir + "conv_diff_64_x.csv");
+    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_A.csv");
+    Matrix<double, Dynamic, 1> b = read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_b.csv");
+    Matrix<double, Dynamic, 1> x = read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_x.csv");
     LinearSolveTestingMock test_mock(A, b, x);
 
     // Call solve
@@ -105,9 +102,9 @@ TEST_F(LinearSolveTest, TestSolve) {
 
 TEST_F(LinearSolveTest, TestReset) {
     
-    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "conv_diff_64_A.csv");
-    Matrix<double, Dynamic, 1> b = read_matrix_csv<double>(matrix_dir + "conv_diff_64_b.csv");
-    Matrix<double, Dynamic, 1> x = read_matrix_csv<double>(matrix_dir + "conv_diff_64_x.csv");
+    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_A.csv");
+    Matrix<double, Dynamic, 1> b = read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_b.csv");
+    Matrix<double, Dynamic, 1> x = read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_x.csv");
     LinearSolveTestingMock test_mock(A, b, x);
 
     // Call solve and then reset

@@ -1,10 +1,16 @@
 #include "gtest/gtest.h"
 
+#include "test.h"
+
 #include <string>
 #include <iostream>
 
-using std::cout, std::endl;
 using std::string;
+using std::cout, std::endl;
+
+double gamma(int n, double u) {
+    return n*u/(1-n*u);
+}
 
 int main(int argc, char **argv) {
 
