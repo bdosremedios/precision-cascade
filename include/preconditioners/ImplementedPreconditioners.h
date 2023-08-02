@@ -29,11 +29,11 @@ class MatrixInverse: public Preconditioner<U> {
         MatrixInverse(Matrix<U, Dynamic, Dynamic> arg_inv_M): inv_M(arg_inv_M) {}
 
         bool check_compatibility_left(int arg_m) const override {
-            return ((inv_M.cols == arg_m) && (inv_M.rows == arg_m));
+            return ((inv_M.cols() == arg_m) && (inv_M.rows() == arg_m));
         };
 
         bool check_compatibility_right(int arg_n) const override {
-            return ((inv_M.cols == arg_n) && (inv_M.rows == arg_n));
+            return ((inv_M.cols() == arg_n) && (inv_M.rows() == arg_n));
         };
 
         Matrix<U, Dynamic, 1> action_inv_M(Matrix<U, Dynamic, 1> vec) const override {

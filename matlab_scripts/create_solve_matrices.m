@@ -52,7 +52,6 @@ writematrix(x_7, "solve_matrices\\x_7_backsub.csv");
 
 % End-to-end matrices
 convergence_tolerance_double = 1e-10;
-convergence_tolerance_single = 1e-4;
 
 % Create 64x64 convection diffusion with rhs sin(x)cos(y)
 [A_convdiff64, b_convdiff64] = generate_conv_diff_rhs_sinxcosy(3, 0.5, 0.5);
@@ -92,7 +91,8 @@ writematrix(full(x_convdiff1024), "solve_matrices\\conv_diff_1024_x.csv");
 
 % Create Matrix random which should converge slowest
 A_20_rand = randn(20, 20);
-b_20_rand = rand(20, 1);
+xtrue_20_rand = randn(20, 1);
+b_20_rand = A_20_rand*xtrue_20_rand;
 x_20_rand = gmres( ...
     A_20_rand, b_20_rand, ...
     [], convergence_tolerance_double, 20 ...
@@ -109,16 +109,22 @@ saddle = [A_saddle, B_saddle'; B_saddle, zeros(5, 5)];
 pre_cond = [A_saddle, zeros(20, 5);
             zeros(5, 20), B_saddle*inv(A_saddle)*B_saddle'];
 inv_pre_cond = inv(pre_cond);
+xtrue_saddle = randn(25, 1);
+b_saddle = saddle*xtrue_saddle;
 A_3eigs = inv_pre_cond*saddle;
-b_3eigs = randn(25, 1);
+b_3eigs = inv_pre_cond*b_saddle;
 x_3eigs = gmres( ...
-    A_3eigs, b_3eigs, ...
-    [], convergence_tolerance_double, 3 ...
+    A_3eigs, b_3eigs, [], convergence_tolerance_double, 3 ...
+);
+x_saddle = gmres( ...
+    saddle, b_saddle, [], convergence_tolerance_double, 3, pre_cond ...
 );
 writematrix(A_3eigs, "solve_matrices\\A_25_3eigs.csv");
 writematrix(b_3eigs, "solve_matrices\\b_25_3eigs.csv");
 writematrix(x_3eigs, "solve_matrices\\x_25_3eigs.csv");
 writematrix(saddle, "solve_matrices\\A_25_saddle.csv");
+writematrix(b_saddle, "solve_matrices\\b_25_saddle.csv");
+writematrix(x_saddle, "solve_matrices\\x_25_saddle.csv");
 writematrix(inv_pre_cond, "solve_matrices\\A_25_invprecond_saddle.csv");
 
 % Create upper triangular to check backward substitution solve
@@ -129,6 +135,12 @@ b_90 = U_tri_90*x_90;
 writematrix(U_tri_90, "solve_matrices\\U_tri_90.csv");
 writematrix(x_90, "solve_matrices\\x_tri_90.csv");
 writematrix(b_90, "solve_matrices\\b_tri_90.csv");
+
+% Create Matrix and Inverse to test inverse preconditioner
+A_inv_test = randn(45, 45);
+Ainv_inv_test = inv(A_inv_test);
+writematrix(A_inv_test, "solve_matrices\\A_inv_45.csv");
+writematrix(Ainv_inv_test, "solve_matrices\\Ainv_inv_45.csv");
 
 function [A, b] = generate_conv_diff_rhs_sinxcosy(k, sigma, tau)
 

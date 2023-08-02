@@ -8,7 +8,9 @@
 #include <iostream>
 
 using read_matrix::read_matrix_csv;
+
 using Eigen::Matrix;
+
 using std::string;
 using std::cout, std::endl;
 
