@@ -163,9 +163,9 @@ class GMRESSolve: public LinearSolve<T> {
             shared_ptr<Preconditioner<U>> arg_right_precond_ptr = make_shared<NoPreconditioner<T>>()
         ):
             basis_zero_tol(arg_basis_zero_tol),
-            LinearSolve<T>::LinearSolve(arg_A, arg_b),
             left_precond_ptr(arg_left_precond_ptr),
-            right_precond_ptr(arg_right_precond_ptr)
+            right_precond_ptr(arg_right_precond_ptr),
+            LinearSolve<T>::LinearSolve(arg_A, arg_b)
         {
             constructorHelper();
         }
@@ -179,9 +179,9 @@ class GMRESSolve: public LinearSolve<T> {
             shared_ptr<Preconditioner<U>> arg_right_precond_ptr = make_shared<NoPreconditioner<T>>()
         ):
             basis_zero_tol(arg_basis_zero_tol),
-            LinearSolve<T>::LinearSolve(arg_A, arg_b, arg_x_0),
             left_precond_ptr(arg_left_precond_ptr),
-            right_precond_ptr(arg_right_precond_ptr)
+            right_precond_ptr(arg_right_precond_ptr),
+            LinearSolve<T>::LinearSolve(arg_A, arg_b, arg_x_0)
         {
             constructorHelper();
         }
@@ -189,10 +189,10 @@ class GMRESSolve: public LinearSolve<T> {
         void constructorHelper() {
 
             // Assert compatibility of preconditioners with matrix
-            if (!left_precond_ptr->check_compatibility_left(this->m, this->n)) {
+            if (!left_precond_ptr->check_compatibility_left(this->m)) {
                 throw runtime_error("Left preconditioner is not compatible with linear system");
             }
-            if (!right_precond_ptr->check_compatibility_left(this->m, this->n)) {
+            if (!right_precond_ptr->check_compatibility_right(this->n)) {
                 throw runtime_error("Right preconditioner is not compatible with linear system");
             }
 

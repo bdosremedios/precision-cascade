@@ -1,0 +1,182 @@
+#include <string>
+#include <vector>
+#include <iostream>
+
+#include "gtest/gtest.h"
+#include "Eigen/Dense"
+
+#include "read_matrix/MatrixReader.h"
+#include "solvers/LinearSolve.h"
+
+using Eigen::MatrixXd;
+using read_matrix::read_matrix_csv;
+
+using std::cout, std::endl;
+using std::string;
+using std::vector;
+
+class LinearSolveTest: public testing::Test {
+    
+    public:
+        string matrix_dir = "/home/bdosremedios/dev/gmres/test/solve_matrices/";
+
+};
+
+TEST_F(LinearSolveTest, TestConstructor64) {
+    
+    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "conv_diff_64_A.csv");
+    Matrix<double, Dynamic, 1> b = read_matrix_csv<double>(matrix_dir + "conv_diff_64_b.csv");
+    Matrix<double, Dynamic, 1> x = read_matrix_csv<double>(matrix_dir + "conv_diff_64_x.csv");
+    LinearSolveTestingMock test_mock(A, b, x);
+
+    ASSERT_EQ(test_mock.A, A);
+    ASSERT_EQ(test_mock.b, b);
+    ASSERT_EQ(test_mock.m, 64);
+    ASSERT_EQ(test_mock.n, 64);
+    ASSERT_EQ(test_mock.x_0, (Matrix<double, Dynamic, Dynamic>::Ones(64, 1)));
+
+    ASSERT_EQ(test_mock.x, (Matrix<double, Dynamic, Dynamic>::Ones(64, 1)));
+    ASSERT_FALSE(test_mock.initiated);
+    ASSERT_FALSE(test_mock.converged);
+    ASSERT_FALSE(test_mock.terminated);
+    ASSERT_EQ(test_mock.iteration, 0);
+    ASSERT_EQ(test_mock.res_norm_hist, vector<double>());
+
+}
+
+TEST_F(LinearSolveTest, TestConstructor256) {
+    
+    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "conv_diff_256_A.csv");
+    Matrix<double, Dynamic, 1> b = read_matrix_csv<double>(matrix_dir + "conv_diff_256_b.csv");
+    Matrix<double, Dynamic, 1> x = read_matrix_csv<double>(matrix_dir + "conv_diff_256_x.csv");
+    LinearSolveTestingMock test_mock(A, b, x);
+
+    ASSERT_EQ(test_mock.A, A);
+    ASSERT_EQ(test_mock.b, b);
+    ASSERT_EQ(test_mock.m, 256);
+    ASSERT_EQ(test_mock.n, 256);
+    ASSERT_EQ(test_mock.x_0, (Matrix<double, Dynamic, Dynamic>::Ones(256, 1)));
+
+    ASSERT_EQ(test_mock.x, (Matrix<double, Dynamic, Dynamic>::Ones(256, 1)));
+    ASSERT_FALSE(test_mock.initiated);
+    ASSERT_FALSE(test_mock.converged);
+    ASSERT_FALSE(test_mock.terminated);
+    ASSERT_EQ(test_mock.iteration, 0);
+    ASSERT_EQ(test_mock.res_norm_hist, vector<double>());
+
+}
+
+TEST_F(LinearSolveTest, TestSolve) {
+    
+    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "conv_diff_64_A.csv");
+    Matrix<double, Dynamic, 1> b = read_matrix_csv<double>(matrix_dir + "conv_diff_64_b.csv");
+    Matrix<double, Dynamic, 1> x = read_matrix_csv<double>(matrix_dir + "conv_diff_64_x.csv");
+    LinearSolveTestingMock test_mock(A, b, x);
+
+    // Call solve
+    test_mock.solve();
+
+    // Make sure other variables don't change
+    ASSERT_EQ(test_mock.A, A);
+    ASSERT_EQ(test_mock.b, b);
+    ASSERT_EQ(test_mock.m, 64);
+    ASSERT_EQ(test_mock.n, 64);
+    ASSERT_EQ(test_mock.x_0, (Matrix<double, Dynamic, Dynamic>::Ones(64, 1)));
+    ASSERT_EQ(test_mock.x, x);
+
+    // Check convergence
+    ASSERT_TRUE(test_mock.initiated);
+    ASSERT_TRUE(test_mock.converged);
+    ASSERT_TRUE(test_mock.terminated);
+    ASSERT_EQ(test_mock.iteration, 1);
+
+    // Check residual history matches size and has initial norm and solved norm
+    ASSERT_EQ(test_mock.res_hist.cols(), 2);
+    ASSERT_EQ(test_mock.res_hist.rows(), 64);
+    ASSERT_EQ(test_mock.res_norm_hist.size(), 2);
+    ASSERT_EQ(test_mock.res_hist.col(0), b-A*test_mock.x_0);
+    ASSERT_EQ(test_mock.res_hist.col(1), b-A*x);
+    ASSERT_EQ(test_mock.res_norm_hist[0], (b-A*test_mock.x_0).norm());
+    ASSERT_EQ(test_mock.res_norm_hist[1], (b-A*x).norm());
+
+    test_mock.view_relres_plot();
+
+}
+
+TEST_F(LinearSolveTest, TestReset) {
+    
+    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "conv_diff_64_A.csv");
+    Matrix<double, Dynamic, 1> b = read_matrix_csv<double>(matrix_dir + "conv_diff_64_b.csv");
+    Matrix<double, Dynamic, 1> x = read_matrix_csv<double>(matrix_dir + "conv_diff_64_x.csv");
+    LinearSolveTestingMock test_mock(A, b, x);
+
+    // Call solve and then reset
+    test_mock.solve();
+    test_mock.reset();
+
+    // Make sure other variables don't change
+    ASSERT_EQ(test_mock.A, A);
+    ASSERT_EQ(test_mock.b, b);
+    ASSERT_EQ(test_mock.m, 64);
+    ASSERT_EQ(test_mock.n, 64);
+    ASSERT_EQ(test_mock.x_0, (Matrix<double, Dynamic, Dynamic>::Ones(64, 1)));
+
+    // Check solve variables are all reset
+    ASSERT_EQ(test_mock.x, (Matrix<double, Dynamic, Dynamic>::Ones(64, 1)));
+    ASSERT_FALSE(test_mock.initiated);
+    ASSERT_FALSE(test_mock.converged);
+    ASSERT_FALSE(test_mock.terminated);
+    ASSERT_EQ(test_mock.iteration, 0);
+    ASSERT_EQ(test_mock.res_norm_hist, vector<double>());
+
+}
+
+TEST_F(LinearSolveTest, TestErrorEmptyMatrix) {
+
+    try {
+        LinearSolveTestingMock<double> test(
+            Matrix<double, Dynamic, Dynamic>::Ones(0, 1),
+            Matrix<double, Dynamic, Dynamic>::Ones(0, 1),
+            Matrix<double, Dynamic, Dynamic>::Ones(0, 1));
+        FAIL();
+    } catch (runtime_error e) { cout << e.what() << endl; }
+
+}
+
+TEST_F(LinearSolveTest, TestErrorMismatchedCols) {
+
+    try {
+        LinearSolveTestingMock<double> test(
+            Matrix<double, Dynamic, Dynamic>::Ones(64, 64),
+            Matrix<double, Dynamic, Dynamic>::Ones(64, 1),
+            Matrix<double, Dynamic, Dynamic>::Ones(5, 1),
+            Matrix<double, Dynamic, Dynamic>::Ones(5, 1));
+        FAIL();
+    } catch (runtime_error e) { cout << e.what() << endl; }
+
+}
+
+TEST_F(LinearSolveTest, TestErrorMismatchedRows) {
+
+    try {
+        LinearSolveTestingMock<double> test(
+            Matrix<double, Dynamic, Dynamic>::Ones(64, 64),
+            Matrix<double, Dynamic, Dynamic>::Ones(8, 1),
+            Matrix<double, Dynamic, Dynamic>::Ones(64, 1),
+            Matrix<double, Dynamic, Dynamic>::Ones(64, 1));
+        FAIL();
+    } catch (runtime_error e) { cout << e.what() << endl; }
+
+}
+
+TEST_F(LinearSolveTest, TestErrorNonSquare) {
+
+    try {
+        LinearSolveTestingMock<double> test_mock(
+            Matrix<double, Dynamic, Dynamic>::Ones(43, 64),
+            Matrix<double, Dynamic, Dynamic>::Ones(43, 1),
+            Matrix<double, Dynamic, Dynamic>::Ones(64, 1));
+        FAIL();
+    } catch (runtime_error e) { cout << e.what() << endl; }
+ 
+}

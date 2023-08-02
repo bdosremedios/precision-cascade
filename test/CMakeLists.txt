@@ -19,9 +19,10 @@ set(
 set(
     TEST_SUITE_CPPS
     test_MatrixReader.cpp
+    test_LinearSolve.cpp
     test_Jacobi.cpp
-    ${TEST_GMRES_CPPS}
     ${TEST_SOR_CPPS}
+    ${TEST_GMRES_CPPS}
 )
 add_executable(
     test

@@ -63,9 +63,10 @@ class LinearSolve {
             const Matrix<T, Dynamic, 1> arg_b, 
             const Matrix<T, Dynamic, 1> arg_x_0) {
 
-                // Ensure compatability to matrices
+                // Ensure compatability to matrices and not empty
                 m = arg_A.rows();
                 n = arg_A.cols();
+                if ((m < 1) || (n < 1)) { throw runtime_error("Empty Matrix A"); }
                 if (m != arg_b.rows()) { throw runtime_error("A not compatible with b for linear system"); }
                 if (n != arg_x_0.rows()) { throw runtime_error("A not compatible with initial guess x_0"); }
 
@@ -148,6 +149,9 @@ class LinearSolve {
                 res_norm_hist.push_back(static_cast<double>(res_norm));
 
             }
+
+            // Ensure terminated if leave solve loop
+            terminated = true;
 
             // On convergence flag as converged and remove extra zeros on x_hist.
             // Convergence is either a small relative residual or otherwise
@@ -257,6 +261,45 @@ class LinearSolve {
             cout << "Iter: 1" << string(min_three_int(length-10), ' ') << "Iter: " << iteration << endl;
 
         }
+
+};
+
+template <typename T>
+class LinearSolveTestingMock: public LinearSolve<T> {
+
+    void iterate() override {
+        x = soln;
+    }
+
+    public:
+        Matrix<T, Dynamic, 1> soln;
+
+        using LinearSolve<T>::A;
+        using LinearSolve<T>::b;
+        using LinearSolve<T>::x_0;
+        using LinearSolve<T>::m;
+        using LinearSolve<T>::n;
+        using LinearSolve<T>::x;
+
+        using LinearSolve<T>::initiated;
+        using LinearSolve<T>::converged;
+        using LinearSolve<T>::terminated;
+        using LinearSolve<T>::iteration;
+        using LinearSolve<T>::res_hist;
+        using LinearSolve<T>::res_norm_hist;
+
+        LinearSolveTestingMock(
+            const Matrix<T, Dynamic, Dynamic> arg_A,
+            const Matrix<T, Dynamic, 1> arg_b,
+            const Matrix<T, Dynamic, 1> arg_soln
+        ): soln(arg_soln), LinearSolve<T>::LinearSolve(arg_A, arg_b) {}
+
+        LinearSolveTestingMock(
+            const Matrix<T, Dynamic, Dynamic> arg_A,
+            const Matrix<T, Dynamic, 1> arg_b,
+            const Matrix<T, Dynamic, 1> arg_x_0,
+            const Matrix<T, Dynamic, 1> arg_soln
+        ): soln(arg_soln), LinearSolve<T>::LinearSolve(arg_A, arg_b, arg_x_0) {}
 
 };
 

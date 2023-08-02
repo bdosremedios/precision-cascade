@@ -319,6 +319,30 @@ test_Jacobi.cpp.s:
 	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_Jacobi.cpp.s
 .PHONY : test_Jacobi.cpp.s
 
+test_LinearSolve.o: test_LinearSolve.cpp.o
+.PHONY : test_LinearSolve.o
+
+# target to build an object file
+test_LinearSolve.cpp.o:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_LinearSolve.cpp.o
+.PHONY : test_LinearSolve.cpp.o
+
+test_LinearSolve.i: test_LinearSolve.cpp.i
+.PHONY : test_LinearSolve.i
+
+# target to preprocess a source file
+test_LinearSolve.cpp.i:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_LinearSolve.cpp.i
+.PHONY : test_LinearSolve.cpp.i
+
+test_LinearSolve.s: test_LinearSolve.cpp.s
+.PHONY : test_LinearSolve.s
+
+# target to generate assembly for a file
+test_LinearSolve.cpp.s:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_LinearSolve.cpp.s
+.PHONY : test_LinearSolve.cpp.s
+
 test_MatrixReader.o: test_MatrixReader.cpp.o
 .PHONY : test_MatrixReader.o
 
@@ -422,6 +446,9 @@ help:
 	@echo "... test_Jacobi.o"
 	@echo "... test_Jacobi.i"
 	@echo "... test_Jacobi.s"
+	@echo "... test_LinearSolve.o"
+	@echo "... test_LinearSolve.i"
+	@echo "... test_LinearSolve.s"
 	@echo "... test_MatrixReader.o"
 	@echo "... test_MatrixReader.i"
 	@echo "... test_MatrixReader.s"

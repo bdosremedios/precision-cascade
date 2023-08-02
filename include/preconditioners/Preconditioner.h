@@ -18,8 +18,8 @@ class Preconditioner {
 
         // Abstract functions to check compatibility of preconditioner with linear system
         // on both left and right
-        virtual bool check_compatibility_left(int m, int n) const = 0;
-        virtual bool check_compatibility_right(int m, int n) const = 0;
+        virtual bool check_compatibility_left(int m) const = 0;
+        virtual bool check_compatibility_right(int n) const = 0;
 
 };
 

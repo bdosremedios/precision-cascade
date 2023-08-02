@@ -1,6 +1,8 @@
 #include "gtest/gtest.h"
 #include "Eigen/Dense"
+
 #include "read_matrix/MatrixReader.h"
+
 #include <string>
 #include <cmath>
 

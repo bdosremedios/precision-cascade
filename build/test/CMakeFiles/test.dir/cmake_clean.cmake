@@ -11,6 +11,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/test.dir/test_GMRES/test_GMRESSingle.cpp.o.d"
   "CMakeFiles/test.dir/test_Jacobi.cpp.o"
   "CMakeFiles/test.dir/test_Jacobi.cpp.o.d"
+  "CMakeFiles/test.dir/test_LinearSolve.cpp.o"
+  "CMakeFiles/test.dir/test_LinearSolve.cpp.o.d"
   "CMakeFiles/test.dir/test_MatrixReader.cpp.o"
   "CMakeFiles/test.dir/test_MatrixReader.cpp.o.d"
   "CMakeFiles/test.dir/test_SOR/test_GaussSeidel.cpp.o"
