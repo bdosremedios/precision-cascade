@@ -415,6 +415,30 @@ test_SOR/test_SOR.cpp.s:
 	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_SOR/test_SOR.cpp.s
 .PHONY : test_SOR/test_SOR.cpp.s
 
+test_Substitution.o: test_Substitution.cpp.o
+.PHONY : test_Substitution.o
+
+# target to build an object file
+test_Substitution.cpp.o:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_Substitution.cpp.o
+.PHONY : test_Substitution.cpp.o
+
+test_Substitution.i: test_Substitution.cpp.i
+.PHONY : test_Substitution.i
+
+# target to preprocess a source file
+test_Substitution.cpp.i:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_Substitution.cpp.i
+.PHONY : test_Substitution.cpp.i
+
+test_Substitution.s: test_Substitution.cpp.s
+.PHONY : test_Substitution.s
+
+# target to generate assembly for a file
+test_Substitution.cpp.s:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_Substitution.cpp.s
+.PHONY : test_Substitution.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -458,6 +482,9 @@ help:
 	@echo "... test_SOR/test_SOR.o"
 	@echo "... test_SOR/test_SOR.i"
 	@echo "... test_SOR/test_SOR.s"
+	@echo "... test_Substitution.o"
+	@echo "... test_Substitution.i"
+	@echo "... test_Substitution.s"
 .PHONY : help
 
 

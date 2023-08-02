@@ -37,7 +37,7 @@ class MatrixInverse: public Preconditioner<U> {
         };
 
         Matrix<U, Dynamic, 1> action_inv_M(Matrix<U, Dynamic, 1> vec) const override {
-            return vec;
+            return inv_M*vec;
         }
 
 };

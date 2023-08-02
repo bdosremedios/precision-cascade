@@ -17,8 +17,14 @@ set(
 )
 
 set(
+    TEST_TOOLS_CPPS
+    test_Substitution.cpp
+)
+
+set(
     TEST_SUITE_CPPS
     test_MatrixReader.cpp
+    ${TEST_TOOLS_CPPS}
     test_LinearSolve.cpp
     test_Jacobi.cpp
     ${TEST_SOR_CPPS}
