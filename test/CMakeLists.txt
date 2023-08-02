@@ -3,6 +3,16 @@ cmake_minimum_required(VERSION 3.22)
 project(gmres)
 
 set(
+    TEST_TOOLS_CPPS
+    test_Substitution.cpp
+)
+
+set(
+    TEST_PRECONDITIONER_CPPS
+    test_Preconditioner/test_Preconditioner.cpp
+)
+
+set(
     TEST_GMRES_CPPS
     test_GMRES/test_GMRESComponents.cpp
     test_GMRES/test_GMRESDouble.cpp
@@ -17,11 +27,6 @@ set(
 )
 
 set(
-    TEST_TOOLS_CPPS
-    test_Substitution.cpp
-)
-
-set(
     TEST_SUITE_CPPS
     test_MatrixReader.cpp
     ${TEST_TOOLS_CPPS}
@@ -29,13 +34,14 @@ set(
     test_Jacobi.cpp
     ${TEST_SOR_CPPS}
     ${TEST_GMRES_CPPS}
+    ${TEST_PRECONDITIONER_CPPS}
 )
+
 add_executable(
     test
     test.cpp
     ${TEST_SUITE_CPPS}
 )
-
 
 target_include_directories(
     test

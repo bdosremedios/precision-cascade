@@ -5,10 +5,13 @@
 #include "solvers/GMRES.h"
 
 #include <string>
+#include <iostream>
 
-using read_matrix::read_matrix_csv;
 using Eigen::half;
 using MatrixXh = Eigen::Matrix<Eigen::half, Dynamic, Dynamic>;
+
+using read_matrix::read_matrix_csv;
+
 using std::string;
 using std::cout, std::endl;
 

@@ -15,6 +15,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/test.dir/test_LinearSolve.cpp.o.d"
   "CMakeFiles/test.dir/test_MatrixReader.cpp.o"
   "CMakeFiles/test.dir/test_MatrixReader.cpp.o.d"
+  "CMakeFiles/test.dir/test_Preconditioner/test_Preconditioner.cpp.o"
+  "CMakeFiles/test.dir/test_Preconditioner/test_Preconditioner.cpp.o.d"
   "CMakeFiles/test.dir/test_SOR/test_GaussSeidel.cpp.o"
   "CMakeFiles/test.dir/test_SOR/test_GaussSeidel.cpp.o.d"
   "CMakeFiles/test.dir/test_SOR/test_SOR.cpp.o"

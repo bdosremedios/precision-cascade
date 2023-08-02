@@ -10,9 +10,10 @@
 #include <iomanip>
 
 using Eigen::Matrix, Eigen::Dynamic;
+using Eigen::placeholders::all;
+
 using std::vector;
 using std::cout, std::endl;
-using Eigen::placeholders::all;
 
 template <typename T>
 class LinearSolve {

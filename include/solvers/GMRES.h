@@ -233,6 +233,7 @@ class GMRESSolveTestingMock: public GMRESSolve<T, U> {
         using GMRESSolve<T, U>::Q_kry_basis;
         using GMRESSolve<T, U>::Q_H;
         using GMRESSolve<T, U>::R_H;
+
         using GMRESSolve<T, U>::krylov_subspace_dim;
         using GMRESSolve<T, U>::max_krylov_subspace_dim;
         using GMRESSolve<T, U>::next_q;
