@@ -9,6 +9,8 @@ square2 = [
     1, 2, 3, 4, 5;
     6, 7, 8, 9, 10;
     11, 12, 13, 14, 15;
+    16, 17, 18, 19, 20;
+    21, 22, 23, 24, 25;
 ];
 writematrix(square2, "read_matrices\\square2.csv");
 
@@ -29,6 +31,20 @@ writematrix(tall, "read_matrices\\tall.csv");
 empty = [];
 writematrix(empty, "read_matrices\\empty.csv");
 
-precise = [exp(1), exp(1)+1;
-           exp(1)+2, exp(1)+3];
-writematrix(precise, "read_matrices\\precise.csv");
+half_precise = [
+    1.123, 1.124;
+    1.125, 1.126
+];
+writematrix(half_precise, "read_matrices\\half_precise.csv");
+
+single_precise = [
+    1.12345672, 1.12345674;
+    1.12345676, 1.12345678
+];
+writematrix(single_precise, "read_matrices\\single_precise.csv");
+
+double_precise = [
+    1.12345678901232, 1.12345678901234;
+    1.12345678901236, 1.12345678901238
+];
+writematrix(double_precise, "read_matrices\\double_precise.csv");

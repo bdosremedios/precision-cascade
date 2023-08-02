@@ -164,8 +164,8 @@ TEST_F(MatrixReadDoubleTest, ReadWideTallMatrix) {
 
 TEST_F(MatrixReadDoubleTest, ReadPreciseMatrix) {
 
-    MatrixXd target_precise {{1.1234567890123452, 1.1234567890123454},
-                             {1.1234567890123456, 1.1234567890123458}};
+    MatrixXd target_precise {{1.12345678901232, 1.12345678901234},
+                             {1.12345678901236, 1.12345678901238}};
     string precise_file = matrix_dir + "double_precise.csv";
     MatrixXd test_precise(read_matrix_csv<double>(precise_file));
 
@@ -181,12 +181,50 @@ TEST_F(MatrixReadDoubleTest, ReadPreciseMatrix) {
 
 TEST_F(MatrixReadDoubleTest, ReadDifferentThanPreciseMatrix) {
 
+    double eps = 1.5*pow(10, -14);
+    MatrixXd miss_precise_up {{1.12345678901232+eps, 1.12345678901234+eps},
+                              {1.12345678901236+eps, 1.12345678901238+eps}};
+    MatrixXd miss_precise_down {{1.12345678901232-eps, 1.12345678901234-eps},
+                                {1.12345678901236-eps, 1.12345678901238-eps}};
+    string precise_file = matrix_dir + "double_precise.csv";
+    MatrixXd test_precise(read_matrix_csv<double>(precise_file));
+
+    ASSERT_EQ(test_precise.rows(), 2);
+    ASSERT_EQ(test_precise.cols(), 2);
+    for (int i=0; i<2; ++i) {
+        for (int j=0; j<2; ++j) {
+            EXPECT_LT(test_precise(i, j), miss_precise_up(i, j));
+            EXPECT_GT(test_precise(i, j), miss_precise_down(i, j));
+        }
+    }
+
+}
+
+TEST_F(MatrixReadDoubleTest, ReadPreciseMatrixDoubleLimit) {
+
+    MatrixXd target_precise {{1.1234567890123452, 1.1234567890123454},
+                             {1.1234567890123456, 1.1234567890123458}};
+    string precise_file = matrix_dir + "double_precise_manual.csv";
+    MatrixXd test_precise(read_matrix_csv<double>(precise_file));
+
+    ASSERT_EQ(test_precise.rows(), 2);
+    ASSERT_EQ(test_precise.cols(), 2);
+    for (int i=0; i<2; ++i) {
+        for (int j=0; j<2; ++j) {
+            EXPECT_NEAR(test_precise(i, j), target_precise(i, j), tol);
+        }
+    }
+
+}
+
+TEST_F(MatrixReadDoubleTest, ReadDifferentThanPreciseMatrixDoubleLimit) {
+
     double eps = 1.5*tol;
     MatrixXd miss_precise_up {{1.1234567890123452+eps, 1.1234567890123454+eps},
                               {1.1234567890123456+eps, 1.1234567890123458+eps}};
     MatrixXd miss_precise_down {{1.1234567890123452-eps, 1.1234567890123454-eps},
                                 {1.1234567890123456-eps, 1.1234567890123458-eps}};
-    string precise_file = matrix_dir + "double_precise.csv";
+    string precise_file = matrix_dir + "double_precise_manual.csv";
     MatrixXd test_precise(read_matrix_csv<double>(precise_file));
 
     ASSERT_EQ(test_precise.rows(), 2);
