@@ -1,0 +1,8 @@
+ #!/bin/bash
+
+echo 'Copying MATLAB scripts...'
+cp ~/win_dosre/dev/create_read_matrices.m ~/dev/gmres/matlab_scripts/create_read_matrices.m
+cp ~/win_dosre/dev/create_solve_matrices.m ~/dev/gmres/matlab_scripts/create_solve_matrices.m
+echo 'Copying MATLAB generated solve matrices...'
+cp ~/win_dosre/dev/solve_matrices/* ~/dev/gmres/test/solve_matrices/
+echo 'Done'
