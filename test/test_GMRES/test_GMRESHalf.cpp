@@ -30,14 +30,13 @@ TEST_F(GMRESHalfTest, SolveConvDiff64) {
     
     Matrix<half, Dynamic, Dynamic> A(read_matrix_csv<half>(solve_matrix_dir + "conv_diff_64_A.csv"));
     Matrix<half, Dynamic, 1> b(read_matrix_csv<half>(solve_matrix_dir + "conv_diff_64_b.csv"));
-    GMRESSolveTestingMock<half> gmres_solve_h(A, b, static_cast<half>(u_hlf));
+    GMRESSolve<half> gmres_solve_h(A, b, static_cast<half>(u_hlf));
 
     gmres_solve_h.solve(64, conv_tol_hlf);
     gmres_solve_h.view_relres_plot("log");
     
     EXPECT_TRUE(gmres_solve_h.check_converged());
     EXPECT_LE(gmres_solve_h.get_relres(), 2*conv_tol_hlf);
-    cout << gmres_solve_h.get_relres() << endl;
 
 }
 
@@ -45,14 +44,13 @@ TEST_F(GMRESHalfTest, SolveConvDiff256) {
     
     Matrix<half, Dynamic, Dynamic> A(read_matrix_csv<half>(solve_matrix_dir + "conv_diff_256_A.csv"));
     Matrix<half, Dynamic, 1> b(read_matrix_csv<half>(solve_matrix_dir + "conv_diff_256_b.csv"));
-    GMRESSolveTestingMock<half> gmres_solve_h(A, b, static_cast<half>(u_hlf));
+    GMRESSolve<half> gmres_solve_h(A, b, static_cast<half>(u_hlf));
 
     gmres_solve_h.solve(max_iter, large_matrix_error_mod_stag*conv_tol_hlf);
     gmres_solve_h.view_relres_plot("log");
     
     EXPECT_TRUE(gmres_solve_h.check_converged());
     EXPECT_LE(gmres_solve_h.get_relres(), 2*large_matrix_error_mod_stag*conv_tol_hlf);
-    cout << gmres_solve_h.get_relres() << endl;
 
 }
 
@@ -60,14 +58,13 @@ TEST_F(GMRESHalfTest, SolveConvDiff1024_LONGRUNTIME) {
     
     Matrix<half, Dynamic, Dynamic> A(read_matrix_csv<half>(solve_matrix_dir + "conv_diff_1024_A.csv"));
     Matrix<half, Dynamic, 1> b(read_matrix_csv<half>(solve_matrix_dir + "conv_diff_1024_b.csv"));
-    GMRESSolveTestingMock<half> gmres_solve_h(A, b, static_cast<half>(u_hlf));
+    GMRESSolve<half> gmres_solve_h(A, b, static_cast<half>(u_hlf));
 
     gmres_solve_h.solve(max_iter, large_matrix_error_mod_stag*conv_tol_hlf);
     gmres_solve_h.view_relres_plot("log");
     
     EXPECT_TRUE(gmres_solve_h.check_converged());
     EXPECT_LE(gmres_solve_h.get_relres(), 2*large_matrix_error_mod_stag*conv_tol_hlf);
-    cout << gmres_solve_h.get_relres() << endl;
 
 }
 
@@ -75,7 +72,7 @@ TEST_F(GMRESHalfTest, SolveRand20) {
     
     Matrix<half, Dynamic, Dynamic> A(read_matrix_csv<half>(solve_matrix_dir + "A_20_rand.csv"));
     Matrix<half, Dynamic, 1> b(read_matrix_csv<half>(solve_matrix_dir + "b_20_rand.csv"));
-    GMRESSolveTestingMock<half> gmres_solve_h(A, b, static_cast<half>(u_hlf));
+    GMRESSolve<half> gmres_solve_h(A, b, static_cast<half>(u_hlf));
 
     gmres_solve_h.solve(20, conv_tol_hlf);
     gmres_solve_h.view_relres_plot("log");
@@ -89,13 +86,14 @@ TEST_F(GMRESHalfTest, Solve3Eigs) {
     
     Matrix<half, Dynamic, Dynamic> A(read_matrix_csv<half>(solve_matrix_dir + "A_25_3eigs.csv"));
     Matrix<half, Dynamic, 1> b(read_matrix_csv<half>(solve_matrix_dir + "b_25_3eigs.csv"));
-    GMRESSolveTestingMock<half> gmres_solve_h(A, b, static_cast<half>(u_hlf));
+    GMRESSolve<half> gmres_solve_h(A, b, static_cast<half>(u_hlf));
 
-    gmres_solve_h.solve(3, conv_tol_hlf);
+    gmres_solve_h.solve(25, conv_tol_hlf);
     gmres_solve_h.view_relres_plot("log");
     
     // TODO: Figure out better check for 3eig since convergence tolerance
     //       isnt reached
+    EXPECT_EQ(gmres_solve_h.get_iteration(), 3);
     EXPECT_TRUE(gmres_solve_h.check_converged());
     EXPECT_LE(gmres_solve_h.get_relres(), 2*conv_tol_hlf);
 
@@ -107,7 +105,7 @@ TEST_F(GMRESHalfTest, DivergeBeyondHalfCapabilities) {
     Matrix<half, Dynamic, 1> b(read_matrix_csv<half>(solve_matrix_dir + "conv_diff_64_b.csv"));
 
     // Check convergence under half capabilities
-    GMRESSolveTestingMock<half> gmres_solve_h(A, b, static_cast<half>(u_hlf));
+    GMRESSolve<half> gmres_solve_h(A, b, static_cast<half>(u_hlf));
 
     gmres_solve_h.solve(128, conv_tol_hlf);
     gmres_solve_h.view_relres_plot("log");
@@ -116,7 +114,7 @@ TEST_F(GMRESHalfTest, DivergeBeyondHalfCapabilities) {
     EXPECT_LE(gmres_solve_h.get_relres(), 2*conv_tol_hlf);
 
     // Check divergence beyond single capability of the single machine epsilon
-    GMRESSolveTestingMock<half> gmres_solve_h_to_fail(A, b, static_cast<half>(u_hlf));
+    GMRESSolve<half> gmres_solve_h_to_fail(A, b, static_cast<half>(u_hlf));
     gmres_solve_h_to_fail.solve(128, 0.1*u_hlf);
     gmres_solve_h_to_fail.view_relres_plot("log");
     

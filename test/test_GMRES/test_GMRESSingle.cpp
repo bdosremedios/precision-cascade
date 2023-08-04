@@ -80,9 +80,10 @@ TEST_F(GMRESSingleTest, Solve3Eigs) {
     Matrix<float, Dynamic, 1> b(read_matrix_csv<float>(solve_matrix_dir + "b_25_3eigs.csv"));
     GMRESSolveTestingMock<float> gmres_solve_s(A, b, u_sgl);
 
-    gmres_solve_s.solve(3, conv_tol_sgl);
+    gmres_solve_s.solve(25, conv_tol_sgl);
     gmres_solve_s.view_relres_plot("log");
     
+    EXPECT_EQ(gmres_solve_s.get_iteration(), 3);
     EXPECT_TRUE(gmres_solve_s.check_converged());
     EXPECT_LE(gmres_solve_s.get_relres(), 2*conv_tol_sgl);
 

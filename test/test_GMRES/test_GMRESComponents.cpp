@@ -255,7 +255,7 @@ TEST_F(GMRESComponentTest, Update_x_Back_Substitution) {
     Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "b_7_dummy_backsub.csv"));
 
     // Set initial guess to zeros such that residual is just b
-    Matrix<double, 7, 1> x_0 = MatrixXd::Zero(7, 1);
+    Matrix<double, 7, 1> x_0(MatrixXd::Zero(7, 1));
     GMRESSolveTestingMock<double> test_mock(A, b, x_0, u_dbl);
 
     // Set test_mock krylov basis to the identity to have x be directly the solved coefficients

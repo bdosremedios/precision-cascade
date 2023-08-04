@@ -319,6 +319,78 @@ test_GMRES/test_PGMRES.cpp.s:
 	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_GMRES/test_PGMRES.cpp.s
 .PHONY : test_GMRES/test_PGMRES.cpp.s
 
+test_Jacobi.o: test_Jacobi.cpp.o
+.PHONY : test_Jacobi.o
+
+# target to build an object file
+test_Jacobi.cpp.o:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_Jacobi.cpp.o
+.PHONY : test_Jacobi.cpp.o
+
+test_Jacobi.i: test_Jacobi.cpp.i
+.PHONY : test_Jacobi.i
+
+# target to preprocess a source file
+test_Jacobi.cpp.i:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_Jacobi.cpp.i
+.PHONY : test_Jacobi.cpp.i
+
+test_Jacobi.s: test_Jacobi.cpp.s
+.PHONY : test_Jacobi.s
+
+# target to generate assembly for a file
+test_Jacobi.cpp.s:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_Jacobi.cpp.s
+.PHONY : test_Jacobi.cpp.s
+
+test_LinearSolve.o: test_LinearSolve.cpp.o
+.PHONY : test_LinearSolve.o
+
+# target to build an object file
+test_LinearSolve.cpp.o:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_LinearSolve.cpp.o
+.PHONY : test_LinearSolve.cpp.o
+
+test_LinearSolve.i: test_LinearSolve.cpp.i
+.PHONY : test_LinearSolve.i
+
+# target to preprocess a source file
+test_LinearSolve.cpp.i:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_LinearSolve.cpp.i
+.PHONY : test_LinearSolve.cpp.i
+
+test_LinearSolve.s: test_LinearSolve.cpp.s
+.PHONY : test_LinearSolve.s
+
+# target to generate assembly for a file
+test_LinearSolve.cpp.s:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_LinearSolve.cpp.s
+.PHONY : test_LinearSolve.cpp.s
+
+test_MatrixReader.o: test_MatrixReader.cpp.o
+.PHONY : test_MatrixReader.o
+
+# target to build an object file
+test_MatrixReader.cpp.o:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_MatrixReader.cpp.o
+.PHONY : test_MatrixReader.cpp.o
+
+test_MatrixReader.i: test_MatrixReader.cpp.i
+.PHONY : test_MatrixReader.i
+
+# target to preprocess a source file
+test_MatrixReader.cpp.i:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_MatrixReader.cpp.i
+.PHONY : test_MatrixReader.cpp.i
+
+test_MatrixReader.s: test_MatrixReader.cpp.s
+.PHONY : test_MatrixReader.s
+
+# target to generate assembly for a file
+test_MatrixReader.cpp.s:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_MatrixReader.cpp.s
+.PHONY : test_MatrixReader.cpp.s
+
 test_Preconditioner/test_Preconditioner.o: test_Preconditioner/test_Preconditioner.cpp.o
 .PHONY : test_Preconditioner/test_Preconditioner.o
 
@@ -342,6 +414,78 @@ test_Preconditioner/test_Preconditioner.s: test_Preconditioner/test_Precondition
 test_Preconditioner/test_Preconditioner.cpp.s:
 	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_Preconditioner/test_Preconditioner.cpp.s
 .PHONY : test_Preconditioner/test_Preconditioner.cpp.s
+
+test_SOR/test_GaussSeidel.o: test_SOR/test_GaussSeidel.cpp.o
+.PHONY : test_SOR/test_GaussSeidel.o
+
+# target to build an object file
+test_SOR/test_GaussSeidel.cpp.o:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_SOR/test_GaussSeidel.cpp.o
+.PHONY : test_SOR/test_GaussSeidel.cpp.o
+
+test_SOR/test_GaussSeidel.i: test_SOR/test_GaussSeidel.cpp.i
+.PHONY : test_SOR/test_GaussSeidel.i
+
+# target to preprocess a source file
+test_SOR/test_GaussSeidel.cpp.i:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_SOR/test_GaussSeidel.cpp.i
+.PHONY : test_SOR/test_GaussSeidel.cpp.i
+
+test_SOR/test_GaussSeidel.s: test_SOR/test_GaussSeidel.cpp.s
+.PHONY : test_SOR/test_GaussSeidel.s
+
+# target to generate assembly for a file
+test_SOR/test_GaussSeidel.cpp.s:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_SOR/test_GaussSeidel.cpp.s
+.PHONY : test_SOR/test_GaussSeidel.cpp.s
+
+test_SOR/test_SOR.o: test_SOR/test_SOR.cpp.o
+.PHONY : test_SOR/test_SOR.o
+
+# target to build an object file
+test_SOR/test_SOR.cpp.o:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_SOR/test_SOR.cpp.o
+.PHONY : test_SOR/test_SOR.cpp.o
+
+test_SOR/test_SOR.i: test_SOR/test_SOR.cpp.i
+.PHONY : test_SOR/test_SOR.i
+
+# target to preprocess a source file
+test_SOR/test_SOR.cpp.i:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_SOR/test_SOR.cpp.i
+.PHONY : test_SOR/test_SOR.cpp.i
+
+test_SOR/test_SOR.s: test_SOR/test_SOR.cpp.s
+.PHONY : test_SOR/test_SOR.s
+
+# target to generate assembly for a file
+test_SOR/test_SOR.cpp.s:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_SOR/test_SOR.cpp.s
+.PHONY : test_SOR/test_SOR.cpp.s
+
+test_Substitution.o: test_Substitution.cpp.o
+.PHONY : test_Substitution.o
+
+# target to build an object file
+test_Substitution.cpp.o:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_Substitution.cpp.o
+.PHONY : test_Substitution.cpp.o
+
+test_Substitution.i: test_Substitution.cpp.i
+.PHONY : test_Substitution.i
+
+# target to preprocess a source file
+test_Substitution.cpp.i:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_Substitution.cpp.i
+.PHONY : test_Substitution.cpp.i
+
+test_Substitution.s: test_Substitution.cpp.s
+.PHONY : test_Substitution.s
+
+# target to generate assembly for a file
+test_Substitution.cpp.s:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_Substitution.cpp.s
+.PHONY : test_Substitution.cpp.s
 
 # Help Target
 help:
@@ -374,9 +518,27 @@ help:
 	@echo "... test_GMRES/test_PGMRES.o"
 	@echo "... test_GMRES/test_PGMRES.i"
 	@echo "... test_GMRES/test_PGMRES.s"
+	@echo "... test_Jacobi.o"
+	@echo "... test_Jacobi.i"
+	@echo "... test_Jacobi.s"
+	@echo "... test_LinearSolve.o"
+	@echo "... test_LinearSolve.i"
+	@echo "... test_LinearSolve.s"
+	@echo "... test_MatrixReader.o"
+	@echo "... test_MatrixReader.i"
+	@echo "... test_MatrixReader.s"
 	@echo "... test_Preconditioner/test_Preconditioner.o"
 	@echo "... test_Preconditioner/test_Preconditioner.i"
 	@echo "... test_Preconditioner/test_Preconditioner.s"
+	@echo "... test_SOR/test_GaussSeidel.o"
+	@echo "... test_SOR/test_GaussSeidel.i"
+	@echo "... test_SOR/test_GaussSeidel.s"
+	@echo "... test_SOR/test_SOR.o"
+	@echo "... test_SOR/test_SOR.i"
+	@echo "... test_SOR/test_SOR.s"
+	@echo "... test_Substitution.o"
+	@echo "... test_Substitution.i"
+	@echo "... test_Substitution.s"
 .PHONY : help
 
 
