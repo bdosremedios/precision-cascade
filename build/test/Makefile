@@ -391,6 +391,30 @@ test_MatrixReader.cpp.s:
 	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_MatrixReader.cpp.s
 .PHONY : test_MatrixReader.cpp.s
 
+test_Preconditioner/test_ILU.o: test_Preconditioner/test_ILU.cpp.o
+.PHONY : test_Preconditioner/test_ILU.o
+
+# target to build an object file
+test_Preconditioner/test_ILU.cpp.o:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_Preconditioner/test_ILU.cpp.o
+.PHONY : test_Preconditioner/test_ILU.cpp.o
+
+test_Preconditioner/test_ILU.i: test_Preconditioner/test_ILU.cpp.i
+.PHONY : test_Preconditioner/test_ILU.i
+
+# target to preprocess a source file
+test_Preconditioner/test_ILU.cpp.i:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_Preconditioner/test_ILU.cpp.i
+.PHONY : test_Preconditioner/test_ILU.cpp.i
+
+test_Preconditioner/test_ILU.s: test_Preconditioner/test_ILU.cpp.s
+.PHONY : test_Preconditioner/test_ILU.s
+
+# target to generate assembly for a file
+test_Preconditioner/test_ILU.cpp.s:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_Preconditioner/test_ILU.cpp.s
+.PHONY : test_Preconditioner/test_ILU.cpp.s
+
 test_Preconditioner/test_Preconditioner.o: test_Preconditioner/test_Preconditioner.cpp.o
 .PHONY : test_Preconditioner/test_Preconditioner.o
 
@@ -527,6 +551,9 @@ help:
 	@echo "... test_MatrixReader.o"
 	@echo "... test_MatrixReader.i"
 	@echo "... test_MatrixReader.s"
+	@echo "... test_Preconditioner/test_ILU.o"
+	@echo "... test_Preconditioner/test_ILU.i"
+	@echo "... test_Preconditioner/test_ILU.s"
 	@echo "... test_Preconditioner/test_Preconditioner.o"
 	@echo "... test_Preconditioner/test_Preconditioner.i"
 	@echo "... test_Preconditioner/test_Preconditioner.s"

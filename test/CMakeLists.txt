@@ -10,6 +10,7 @@ set(
 set(
     TEST_PRECONDITIONER_CPPS
     test_Preconditioner/test_Preconditioner.cpp
+    test_Preconditioner/test_ILU.cpp
 )
 
 set(
