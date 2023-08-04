@@ -3,6 +3,9 @@
 
 #include "read_matrix/MatrixReader.h"
 #include "solvers/GMRES.h"
+#include "preconditioners/ImplementedPreconditioners.h"
+
+#include "test.h"
 
 #include <string>
 #include <iostream>
@@ -14,11 +17,11 @@ using read_matrix::read_matrix_csv;
 using std::string;
 using std::cout, std::endl;
 
-class PGMRESTest: public testing::Test {
+class PGMRESTest: public TestBase;
 
-    protected:
-        string matrix_dir = "/home/bdosremedios/dev/gmres/test/solve_matrices/";
-        double double_tolerance = 4*pow(2, -52); // Set as 4 times machines epsilon
-        double convergence_tolerance = 1e-11;
+TEST_F(PGMRESTest, TestLeftPreconditioning_3eigs) {
 
-};
+    Matrix<double, Dynamic, Dynamic> A(read_matrix_csv(solve_matrix_dir + "conv_diff_64.csv"));
+    // GMRESSolveTestingMock<double>()
+
+}

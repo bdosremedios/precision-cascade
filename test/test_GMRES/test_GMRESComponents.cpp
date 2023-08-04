@@ -72,7 +72,7 @@ TEST_F(GMRESComponentTest, CheckConstruction5x5) {
 TEST_F(GMRESComponentTest, CheckConstruction64x64) {
     
     Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_A.csv");
-    Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_b.csv");
+    Matrix<double, Dynamic, 1> b = read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_b.csv");
     GMRESSolveTestingMock<double> test_mock(A, b, u_dbl);
     ASSERT_EQ(test_mock.max_krylov_subspace_dim, 64);
     ASSERT_EQ(test_mock.rho, (b - A*MatrixXd::Ones(64, 1)).norm());
