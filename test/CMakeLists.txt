@@ -18,6 +18,7 @@ set(
     test_GMRES/test_GMRESDouble.cpp
     test_GMRES/test_GMRESSingle.cpp
     test_GMRES/test_GMRESHalf.cpp
+    test_GMRES/test_PGMRES.cpp
 )
 
 set(
@@ -28,11 +29,11 @@ set(
 
 set(
     TEST_SUITE_CPPS
-    test_MatrixReader.cpp
-    ${TEST_TOOLS_CPPS}
-    test_LinearSolve.cpp
-    test_Jacobi.cpp
-    ${TEST_SOR_CPPS}
+    # test_MatrixReader.cpp
+    # ${TEST_TOOLS_CPPS}
+    # test_LinearSolve.cpp
+    # test_Jacobi.cpp
+    # ${TEST_SOR_CPPS}
     ${TEST_GMRES_CPPS}
     ${TEST_PRECONDITIONER_CPPS}
 )

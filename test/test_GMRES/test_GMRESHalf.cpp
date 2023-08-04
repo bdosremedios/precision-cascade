@@ -28,8 +28,8 @@ class GMRESHalfTest: public TestBase {
 
 TEST_F(GMRESHalfTest, SolveConvDiff64) {
     
-    Matrix<half, Dynamic, Dynamic> A = read_matrix_csv<half>(solve_matrix_dir + "conv_diff_64_A.csv");
-    Matrix<half, Dynamic, 1> b = read_matrix_csv<half>(solve_matrix_dir + "conv_diff_64_b.csv");
+    Matrix<half, Dynamic, Dynamic> A(read_matrix_csv<half>(solve_matrix_dir + "conv_diff_64_A.csv"));
+    Matrix<half, Dynamic, 1> b(read_matrix_csv<half>(solve_matrix_dir + "conv_diff_64_b.csv"));
     GMRESSolveTestingMock<half> gmres_solve_h(A, b, static_cast<half>(u_hlf));
 
     gmres_solve_h.solve(64, conv_tol_hlf);
@@ -43,8 +43,8 @@ TEST_F(GMRESHalfTest, SolveConvDiff64) {
 
 TEST_F(GMRESHalfTest, SolveConvDiff256) {
     
-    Matrix<half, Dynamic, Dynamic> A = read_matrix_csv<half>(solve_matrix_dir + "conv_diff_256_A.csv");
-    Matrix<half, Dynamic, 1> b = read_matrix_csv<half>(solve_matrix_dir + "conv_diff_256_b.csv");
+    Matrix<half, Dynamic, Dynamic> A(read_matrix_csv<half>(solve_matrix_dir + "conv_diff_256_A.csv"));
+    Matrix<half, Dynamic, 1> b(read_matrix_csv<half>(solve_matrix_dir + "conv_diff_256_b.csv"));
     GMRESSolveTestingMock<half> gmres_solve_h(A, b, static_cast<half>(u_hlf));
 
     gmres_solve_h.solve(max_iter, large_matrix_error_mod_stag*conv_tol_hlf);
@@ -58,8 +58,8 @@ TEST_F(GMRESHalfTest, SolveConvDiff256) {
 
 TEST_F(GMRESHalfTest, SolveConvDiff1024_LONGRUNTIME) {
     
-    Matrix<half, Dynamic, Dynamic> A = read_matrix_csv<half>(solve_matrix_dir + "conv_diff_1024_A.csv");
-    Matrix<half, Dynamic, 1> b = read_matrix_csv<half>(solve_matrix_dir + "conv_diff_1024_b.csv");
+    Matrix<half, Dynamic, Dynamic> A(read_matrix_csv<half>(solve_matrix_dir + "conv_diff_1024_A.csv"));
+    Matrix<half, Dynamic, 1> b(read_matrix_csv<half>(solve_matrix_dir + "conv_diff_1024_b.csv"));
     GMRESSolveTestingMock<half> gmres_solve_h(A, b, static_cast<half>(u_hlf));
 
     gmres_solve_h.solve(max_iter, large_matrix_error_mod_stag*conv_tol_hlf);
@@ -73,8 +73,8 @@ TEST_F(GMRESHalfTest, SolveConvDiff1024_LONGRUNTIME) {
 
 TEST_F(GMRESHalfTest, SolveRand20) {
     
-    Matrix<half, Dynamic, Dynamic> A = read_matrix_csv<half>(solve_matrix_dir + "A_20_rand.csv");
-    Matrix<half, Dynamic, 1> b = read_matrix_csv<half>(solve_matrix_dir + "b_20_rand.csv");
+    Matrix<half, Dynamic, Dynamic> A(read_matrix_csv<half>(solve_matrix_dir + "A_20_rand.csv"));
+    Matrix<half, Dynamic, 1> b(read_matrix_csv<half>(solve_matrix_dir + "b_20_rand.csv"));
     GMRESSolveTestingMock<half> gmres_solve_h(A, b, static_cast<half>(u_hlf));
 
     gmres_solve_h.solve(20, conv_tol_hlf);
@@ -87,8 +87,8 @@ TEST_F(GMRESHalfTest, SolveRand20) {
 
 TEST_F(GMRESHalfTest, Solve3Eigs) {
     
-    Matrix<half, Dynamic, Dynamic> A = read_matrix_csv<half>(solve_matrix_dir + "A_25_3eigs.csv");
-    Matrix<half, Dynamic, 1> b = read_matrix_csv<half>(solve_matrix_dir + "b_25_3eigs.csv");
+    Matrix<half, Dynamic, Dynamic> A(read_matrix_csv<half>(solve_matrix_dir + "A_25_3eigs.csv"));
+    Matrix<half, Dynamic, 1> b(read_matrix_csv<half>(solve_matrix_dir + "b_25_3eigs.csv"));
     GMRESSolveTestingMock<half> gmres_solve_h(A, b, static_cast<half>(u_hlf));
 
     gmres_solve_h.solve(3, conv_tol_hlf);
@@ -103,8 +103,8 @@ TEST_F(GMRESHalfTest, Solve3Eigs) {
 
 TEST_F(GMRESHalfTest, DivergeBeyondHalfCapabilities) {
     
-    Matrix<half, Dynamic, Dynamic> A = read_matrix_csv<half>(solve_matrix_dir + "conv_diff_64_A.csv");
-    Matrix<half, Dynamic, 1> b = read_matrix_csv<half>(solve_matrix_dir + "conv_diff_64_b.csv");
+    Matrix<half, Dynamic, Dynamic> A(read_matrix_csv<half>(solve_matrix_dir + "conv_diff_64_A.csv"));
+    Matrix<half, Dynamic, 1> b(read_matrix_csv<half>(solve_matrix_dir + "conv_diff_64_b.csv"));
 
     // Check convergence under half capabilities
     GMRESSolveTestingMock<half> gmres_solve_h(A, b, static_cast<half>(u_hlf));

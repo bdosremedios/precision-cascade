@@ -139,8 +139,10 @@ writematrix(b_90, "solve_matrices\\b_tri_90.csv");
 % Create Matrix and Inverse to test inverse preconditioner
 A_inv_test = randn(45, 45);
 Ainv_inv_test = inv(A_inv_test);
+b_inv_test = randn(45, 1);
 writematrix(A_inv_test, "solve_matrices\\A_inv_45.csv");
 writematrix(Ainv_inv_test, "solve_matrices\\Ainv_inv_45.csv");
+writematrix(b_inv_test, "solve_matrices\\b_inv_45.csv");
 
 function [A, b] = generate_conv_diff_rhs_sinxcosy(k, sigma, tau)
 

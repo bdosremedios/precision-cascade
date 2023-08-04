@@ -20,8 +20,8 @@ class GMRESSingleTest: public TestBase {};
 
 TEST_F(GMRESSingleTest, SolveConvDiff64) {
     
-    Matrix<float, Dynamic, Dynamic> A = read_matrix_csv<float>(solve_matrix_dir + "conv_diff_64_A.csv");
-    Matrix<float, Dynamic, 1> b = read_matrix_csv<float>(solve_matrix_dir + "conv_diff_64_b.csv");
+    Matrix<float, Dynamic, Dynamic> A(read_matrix_csv<float>(solve_matrix_dir + "conv_diff_64_A.csv"));
+    Matrix<float, Dynamic, 1> b(read_matrix_csv<float>(solve_matrix_dir + "conv_diff_64_b.csv"));
     GMRESSolveTestingMock<float> gmres_solve_s(A, b, u_sgl);
 
     gmres_solve_s.solve(64, conv_tol_sgl);
@@ -34,8 +34,8 @@ TEST_F(GMRESSingleTest, SolveConvDiff64) {
 
 TEST_F(GMRESSingleTest, SolveConvDiff256) {
     
-    Matrix<float, Dynamic, Dynamic> A = read_matrix_csv<float>(solve_matrix_dir + "conv_diff_256_A.csv");
-    Matrix<float, Dynamic, 1> b = read_matrix_csv<float>(solve_matrix_dir + "conv_diff_256_b.csv");
+    Matrix<float, Dynamic, Dynamic> A(read_matrix_csv<float>(solve_matrix_dir + "conv_diff_256_A.csv"));
+    Matrix<float, Dynamic, 1> b(read_matrix_csv<float>(solve_matrix_dir + "conv_diff_256_b.csv"));
     GMRESSolveTestingMock<float> gmres_solve_s(A, b, u_sgl);
 
     gmres_solve_s.solve(256, conv_tol_sgl);
@@ -48,8 +48,8 @@ TEST_F(GMRESSingleTest, SolveConvDiff256) {
 
 TEST_F(GMRESSingleTest, SolveConvDiff1024_LONGRUNTIME) {
     
-    Matrix<float, Dynamic, Dynamic> A = read_matrix_csv<float>(solve_matrix_dir + "conv_diff_1024_A.csv");
-    Matrix<float, Dynamic, 1> b = read_matrix_csv<float>(solve_matrix_dir + "conv_diff_1024_b.csv");
+    Matrix<float, Dynamic, Dynamic> A(read_matrix_csv<float>(solve_matrix_dir + "conv_diff_1024_A.csv"));
+    Matrix<float, Dynamic, 1> b(read_matrix_csv<float>(solve_matrix_dir + "conv_diff_1024_b.csv"));
     GMRESSolveTestingMock<float> gmres_solve_s(A, b, u_sgl);
 
     gmres_solve_s.solve(1024, conv_tol_sgl);
@@ -62,8 +62,8 @@ TEST_F(GMRESSingleTest, SolveConvDiff1024_LONGRUNTIME) {
 
 TEST_F(GMRESSingleTest, SolveRand20) {
     
-    Matrix<float, Dynamic, Dynamic> A = read_matrix_csv<float>(solve_matrix_dir + "A_20_rand.csv");
-    Matrix<float, Dynamic, 1> b = read_matrix_csv<float>(solve_matrix_dir + "b_20_rand.csv");
+    Matrix<float, Dynamic, Dynamic> A(read_matrix_csv<float>(solve_matrix_dir + "A_20_rand.csv"));
+    Matrix<float, Dynamic, 1> b(read_matrix_csv<float>(solve_matrix_dir + "b_20_rand.csv"));
     GMRESSolveTestingMock<float> gmres_solve_s(A, b, u_sgl);
 
     gmres_solve_s.solve(20, conv_tol_sgl);
@@ -76,8 +76,8 @@ TEST_F(GMRESSingleTest, SolveRand20) {
 
 TEST_F(GMRESSingleTest, Solve3Eigs) {
     
-    Matrix<float, Dynamic, Dynamic> A = read_matrix_csv<float>(solve_matrix_dir + "A_25_3eigs.csv");
-    Matrix<float, Dynamic, 1> b = read_matrix_csv<float>(solve_matrix_dir + "b_25_3eigs.csv");
+    Matrix<float, Dynamic, Dynamic> A(read_matrix_csv<float>(solve_matrix_dir + "A_25_3eigs.csv"));
+    Matrix<float, Dynamic, 1> b(read_matrix_csv<float>(solve_matrix_dir + "b_25_3eigs.csv"));
     GMRESSolveTestingMock<float> gmres_solve_s(A, b, u_sgl);
 
     gmres_solve_s.solve(3, conv_tol_sgl);
@@ -90,8 +90,8 @@ TEST_F(GMRESSingleTest, Solve3Eigs) {
 
 TEST_F(GMRESSingleTest, DivergeBeyondSingleCapabilities) {
     
-    Matrix<float, Dynamic, Dynamic> A = read_matrix_csv<float>(solve_matrix_dir + "conv_diff_64_A.csv");
-    Matrix<float, Dynamic, 1> b = read_matrix_csv<float>(solve_matrix_dir + "conv_diff_64_b.csv");
+    Matrix<float, Dynamic, Dynamic> A(read_matrix_csv<float>(solve_matrix_dir + "conv_diff_64_A.csv"));
+    Matrix<float, Dynamic, 1> b(read_matrix_csv<float>(solve_matrix_dir + "conv_diff_64_b.csv"));
 
     // Check convergence under single capabilities
     GMRESSolveTestingMock<float> gmres_solve_s(A, b, u_sgl);

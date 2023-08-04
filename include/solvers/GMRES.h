@@ -120,8 +120,8 @@ class GMRESSolve: public LinearSolve<T> {
             // Use back substitution to solve
             Matrix<T, Dynamic, 1> y = back_substitution(R_H, rhs, krylov_subspace_dim);
 
-            // Update x
-            x = x_0 + Q_kry_basis.block(0, 0, m, krylov_subspace_dim)*y;
+            // Update x adjusting with right preconditioning
+            x = x_0 + right_precond_ptr->action_inv_M(Q_kry_basis.block(0, 0, m, krylov_subspace_dim)*y);
 
         }
 
@@ -159,8 +159,8 @@ class GMRESSolve: public LinearSolve<T> {
             const Matrix<T, Dynamic, Dynamic> arg_A,
             const Matrix<T, Dynamic, 1> arg_b,
             T arg_basis_zero_tol,
-            shared_ptr<Preconditioner<U>> arg_left_precond_ptr = make_shared<NoPreconditioner<T>>(),
-            shared_ptr<Preconditioner<U>> arg_right_precond_ptr = make_shared<NoPreconditioner<T>>()
+            shared_ptr<Preconditioner<U>> arg_left_precond_ptr=make_shared<NoPreconditioner<T>>(),
+            shared_ptr<Preconditioner<U>> arg_right_precond_ptr=make_shared<NoPreconditioner<T>>()
         ):
             basis_zero_tol(arg_basis_zero_tol),
             left_precond_ptr(arg_left_precond_ptr),
@@ -207,7 +207,9 @@ class GMRESSolve: public LinearSolve<T> {
             max_krylov_subspace_dim = m;
 
             // Set rho as initial residual norm
-            Matrix<T, Dynamic, 1> r_0 = b - A*x_0;
+            Matrix<T, Dynamic, 1> Minv_A_x0(left_precond_ptr->action_inv_M(A*x_0));
+            Matrix<T, Dynamic, 1> Minv_b(left_precond_ptr->action_inv_M(b));
+            Matrix<T, Dynamic, 1> r_0(Minv_b - Minv_A_x0);
             rho = r_0.norm();
 
             // Initialize next vector q as initial residual marking termination

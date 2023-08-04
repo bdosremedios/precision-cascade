@@ -21,9 +21,9 @@ class LinearSolveTest: public TestBase {};
 
 TEST_F(LinearSolveTest, TestConstructor64) {
     
-    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_A.csv");
-    Matrix<double, Dynamic, 1> b = read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_b.csv");
-    Matrix<double, Dynamic, 1> x = read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_x.csv");
+    Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_A.csv"));
+    Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_b.csv"));
+    Matrix<double, Dynamic, 1> x(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_x.csv"));
     LinearSolveTestingMock test_mock(A, b, x);
 
     ASSERT_EQ(test_mock.A, A);
@@ -43,9 +43,9 @@ TEST_F(LinearSolveTest, TestConstructor64) {
 
 TEST_F(LinearSolveTest, TestConstructor256) {
     
-    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(solve_matrix_dir + "conv_diff_256_A.csv");
-    Matrix<double, Dynamic, 1> b = read_matrix_csv<double>(solve_matrix_dir + "conv_diff_256_b.csv");
-    Matrix<double, Dynamic, 1> x = read_matrix_csv<double>(solve_matrix_dir + "conv_diff_256_x.csv");
+    Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_256_A.csv"));
+    Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_256_b.csv"));
+    Matrix<double, Dynamic, 1> x(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_256_x.csv"));
     LinearSolveTestingMock test_mock(A, b, x);
 
     ASSERT_EQ(test_mock.A, A);
@@ -65,9 +65,9 @@ TEST_F(LinearSolveTest, TestConstructor256) {
 
 TEST_F(LinearSolveTest, TestSolve) {
     
-    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_A.csv");
-    Matrix<double, Dynamic, 1> b = read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_b.csv");
-    Matrix<double, Dynamic, 1> x = read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_x.csv");
+    Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_A.csv"));
+    Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_b.csv"));
+    Matrix<double, Dynamic, 1> x(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_x.csv"));
     LinearSolveTestingMock test_mock(A, b, x);
 
     // Call solve
@@ -102,9 +102,9 @@ TEST_F(LinearSolveTest, TestSolve) {
 
 TEST_F(LinearSolveTest, TestReset) {
     
-    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_A.csv");
-    Matrix<double, Dynamic, 1> b = read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_b.csv");
-    Matrix<double, Dynamic, 1> x = read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_x.csv");
+    Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_A.csv"));
+    Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_b.csv"));
+    Matrix<double, Dynamic, 1> x(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_x.csv"));
     LinearSolveTestingMock test_mock(A, b, x);
 
     // Call solve and then reset
