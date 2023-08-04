@@ -1,6 +1,8 @@
 #include "gtest/gtest.h"
 #include "Eigen/Dense"
 
+#include "../test.h"
+
 #include "read_matrix/MatrixReader.h"
 #include "solvers/GMRES.h"
 
@@ -15,119 +17,110 @@ using read_matrix::read_matrix_csv;
 using std::string;
 using std::cout, std::endl;
 
-class GMRESHalfTest: public testing::Test {
-
-    protected:
-        string matrix_dir = "/home/bdosremedios/dev/gmres/test/solve_matrices/";
-        half half_tolerance = static_cast<half>(4*pow(2, -10)); // Set as 4 times machines epsilon
-        double convergence_tolerance = 0.0997/2; // 2 orders of magnitude above unit round off
+class GMRESHalfTest: public TestBase {
+    
+    public:
+        int max_iter = 100;
+        double large_matrix_error_mod_stag = 4.; // Modification to account for stagnation for
+                                                 // error accumulation in larger matrix sizes
 
 };
 
 TEST_F(GMRESHalfTest, SolveConvDiff64) {
     
-    Matrix<half, Dynamic, Dynamic> A = read_matrix_csv<half>(matrix_dir + "conv_diff_64_A.csv");
-    Matrix<half, Dynamic, Dynamic> b = read_matrix_csv<half>(matrix_dir + "conv_diff_64_b.csv");
-    Matrix<half, Dynamic, 1> x_0 = MatrixXh::Ones(64, 1);
-    Matrix<half, Dynamic, 1> r_0 = b - A*x_0;
-    GMRESSolveTestingMock<half> gmres_solve_h(A, b, x_0, half_tolerance);
+    Matrix<half, Dynamic, Dynamic> A = read_matrix_csv<half>(solve_matrix_dir + "conv_diff_64_A.csv");
+    Matrix<half, Dynamic, Dynamic> b = read_matrix_csv<half>(solve_matrix_dir + "conv_diff_64_b.csv");
+    GMRESSolveTestingMock<half> gmres_solve_h(A, b, static_cast<half>(u_hlf));
 
-    gmres_solve_h.solve(64, convergence_tolerance);
+    gmres_solve_h.solve(64, conv_tol_hlf);
     gmres_solve_h.view_relres_plot("log");
     
     EXPECT_TRUE(gmres_solve_h.check_converged());
-    EXPECT_LE(gmres_solve_h.get_relres(), 2*convergence_tolerance);
+    EXPECT_LE(gmres_solve_h.get_relres(), 2*conv_tol_hlf);
+    cout << gmres_solve_h.get_relres() << endl;
 
 }
 
 TEST_F(GMRESHalfTest, SolveConvDiff256) {
     
-    Matrix<half, Dynamic, Dynamic> A = read_matrix_csv<half>(matrix_dir + "conv_diff_256_A.csv");
-    Matrix<half, Dynamic, Dynamic> b = read_matrix_csv<half>(matrix_dir + "conv_diff_256_b.csv");
-    Matrix<half, Dynamic, 1> x_0 = MatrixXh::Ones(256, 1);
-    Matrix<half, Dynamic, 1> r_0 = b - A*x_0;
-    GMRESSolveTestingMock<half> gmres_solve_h(A, b, x_0, half_tolerance);
+    Matrix<half, Dynamic, Dynamic> A = read_matrix_csv<half>(solve_matrix_dir + "conv_diff_256_A.csv");
+    Matrix<half, Dynamic, Dynamic> b = read_matrix_csv<half>(solve_matrix_dir + "conv_diff_256_b.csv");
+    GMRESSolveTestingMock<half> gmres_solve_h(A, b, static_cast<half>(u_hlf));
 
-    gmres_solve_h.solve(256, 4*convergence_tolerance);
+    gmres_solve_h.solve(max_iter, large_matrix_error_mod_stag*conv_tol_hlf);
     gmres_solve_h.view_relres_plot("log");
     
     EXPECT_TRUE(gmres_solve_h.check_converged());
-    EXPECT_LE(gmres_solve_h.get_relres(), 4*2*convergence_tolerance);
+    EXPECT_LE(gmres_solve_h.get_relres(), 2*large_matrix_error_mod_stag*conv_tol_hlf);
+    cout << gmres_solve_h.get_relres() << endl;
 
 }
 
 TEST_F(GMRESHalfTest, SolveConvDiff1024_LONGRUNTIME) {
     
-    Matrix<half, Dynamic, Dynamic> A = read_matrix_csv<half>(matrix_dir + "conv_diff_1024_A.csv");
-    Matrix<half, Dynamic, Dynamic> b = read_matrix_csv<half>(matrix_dir + "conv_diff_1024_b.csv");
-    Matrix<half, Dynamic, 1> x_0 = MatrixXh::Ones(1024, 1);
-    Matrix<half, Dynamic, 1> r_0 = b - A*x_0;
-    GMRESSolveTestingMock<half> gmres_solve_h(A, b, x_0, half_tolerance);
+    Matrix<half, Dynamic, Dynamic> A = read_matrix_csv<half>(solve_matrix_dir + "conv_diff_1024_A.csv");
+    Matrix<half, Dynamic, Dynamic> b = read_matrix_csv<half>(solve_matrix_dir + "conv_diff_1024_b.csv");
+    GMRESSolveTestingMock<half> gmres_solve_h(A, b, static_cast<half>(u_hlf));
 
-    gmres_solve_h.solve(1024, 16*convergence_tolerance);
+    gmres_solve_h.solve(max_iter, large_matrix_error_mod_stag*conv_tol_hlf);
     gmres_solve_h.view_relres_plot("log");
     
     EXPECT_TRUE(gmres_solve_h.check_converged());
-    EXPECT_LE(gmres_solve_h.get_relres(), 16*2*convergence_tolerance);
+    EXPECT_LE(gmres_solve_h.get_relres(), 2*large_matrix_error_mod_stag*conv_tol_hlf);
+    cout << gmres_solve_h.get_relres() << endl;
 
 }
 
 TEST_F(GMRESHalfTest, SolveRand20) {
     
-    Matrix<half, Dynamic, Dynamic> A = read_matrix_csv<half>(matrix_dir + "A_20_rand.csv");
-    Matrix<half, Dynamic, Dynamic> b = read_matrix_csv<half>(matrix_dir + "b_20_rand.csv");
-    Matrix<half, Dynamic, 1> x_0 = MatrixXh::Ones(20, 1);
-    Matrix<half, Dynamic, 1> r_0 = b - A*x_0;
-    GMRESSolveTestingMock<half> gmres_solve_h(A, b, x_0, half_tolerance);
+    Matrix<half, Dynamic, Dynamic> A = read_matrix_csv<half>(solve_matrix_dir + "A_20_rand.csv");
+    Matrix<half, Dynamic, Dynamic> b = read_matrix_csv<half>(solve_matrix_dir + "b_20_rand.csv");
+    GMRESSolveTestingMock<half> gmres_solve_h(A, b, static_cast<half>(u_hlf));
 
-    gmres_solve_h.solve(20, convergence_tolerance);
+    gmres_solve_h.solve(20, conv_tol_hlf);
     gmres_solve_h.view_relres_plot("log");
     
     EXPECT_TRUE(gmres_solve_h.check_converged());
-    EXPECT_LE(gmres_solve_h.get_relres(), 2*convergence_tolerance);
+    EXPECT_LE(gmres_solve_h.get_relres(), 2*conv_tol_hlf);
 
 }
 
 TEST_F(GMRESHalfTest, Solve3Eigs) {
     
-    Matrix<half, Dynamic, Dynamic> A = read_matrix_csv<half>(matrix_dir + "A_25_3eigs.csv");
-    Matrix<half, Dynamic, Dynamic> b = read_matrix_csv<half>(matrix_dir + "b_25_3eigs.csv");
-    Matrix<half, Dynamic, 1> x_0 = MatrixXh::Ones(25, 1);
-    Matrix<half, Dynamic, 1> r_0 = b - A*x_0;
-    GMRESSolveTestingMock<half> gmres_solve_h(A, b, x_0, half_tolerance);
+    Matrix<half, Dynamic, Dynamic> A = read_matrix_csv<half>(solve_matrix_dir + "A_25_3eigs.csv");
+    Matrix<half, Dynamic, Dynamic> b = read_matrix_csv<half>(solve_matrix_dir + "b_25_3eigs.csv");
+    GMRESSolveTestingMock<half> gmres_solve_h(A, b, static_cast<half>(u_hlf));
 
-    gmres_solve_h.solve(3, convergence_tolerance);
+    gmres_solve_h.solve(3, conv_tol_hlf);
     gmres_solve_h.view_relres_plot("log");
     
     // TODO: Figure out better check for 3eig since convergence tolerance
     //       isnt reached
-    // EXPECT_TRUE(gmres_solve_h.check_converged());
-    EXPECT_LE(gmres_solve_h.get_relres(), 2*convergence_tolerance);
+    EXPECT_TRUE(gmres_solve_h.check_converged());
+    EXPECT_LE(gmres_solve_h.get_relres(), 2*conv_tol_hlf);
 
 }
 
 TEST_F(GMRESHalfTest, DivergeBeyondHalfCapabilities) {
     
-    Matrix<half, Dynamic, Dynamic> A = read_matrix_csv<half>(matrix_dir + "conv_diff_64_A.csv");
-    Matrix<half, Dynamic, Dynamic> b = read_matrix_csv<half>(matrix_dir + "conv_diff_64_b.csv");
-    Matrix<half, Dynamic, 1> x_0 = MatrixXh::Ones(64, 1); 
-    Matrix<half, Dynamic, 1> r_0 = b - A*x_0;
+    Matrix<half, Dynamic, Dynamic> A = read_matrix_csv<half>(solve_matrix_dir + "conv_diff_64_A.csv");
+    Matrix<half, Dynamic, Dynamic> b = read_matrix_csv<half>(solve_matrix_dir + "conv_diff_64_b.csv");
 
-    // Check convergence under single capabilities
-    GMRESSolveTestingMock<half> gmres_solve_h(A, b, x_0, half_tolerance);
+    // Check convergence under half capabilities
+    GMRESSolveTestingMock<half> gmres_solve_h(A, b, static_cast<half>(u_hlf));
 
-    gmres_solve_h.solve(128, convergence_tolerance);
+    gmres_solve_h.solve(128, conv_tol_hlf);
     gmres_solve_h.view_relres_plot("log");
     
     EXPECT_TRUE(gmres_solve_h.check_converged());
-    EXPECT_LE(gmres_solve_h.get_relres(), 2*convergence_tolerance);
+    EXPECT_LE(gmres_solve_h.get_relres(), 2*conv_tol_hlf);
 
     // Check divergence beyond single capability of the single machine epsilon
-    GMRESSolveTestingMock<half> gmres_solve_h_to_fail(A, b, x_0, half_tolerance);
-    gmres_solve_h_to_fail.solve(128, 1e-4);
+    GMRESSolveTestingMock<half> gmres_solve_h_to_fail(A, b, static_cast<half>(u_hlf));
+    gmres_solve_h_to_fail.solve(128, 0.1*u_hlf);
     gmres_solve_h_to_fail.view_relres_plot("log");
     
     EXPECT_FALSE(gmres_solve_h_to_fail.check_converged());
-    EXPECT_GT(gmres_solve_h_to_fail.get_relres(), 2e-8);
+    EXPECT_GT(gmres_solve_h_to_fail.get_relres(), 0.1*u_hlf);
 
 }

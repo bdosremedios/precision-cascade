@@ -1,6 +1,8 @@
 #include "gtest/gtest.h"
 #include "Eigen/Dense"
 
+#include "../test.h"
+
 #include "read_matrix/MatrixReader.h"
 #include "solvers/GMRES.h"
 
@@ -14,19 +16,18 @@ using read_matrix::read_matrix_csv;
 using std::string;
 using std::cout, std::endl;
 
-class GMRESComponentTest: public testing::Test {
-
-    protected:
-        string matrix_dir = "/home/bdosremedios/dev/gmres/test/solve_matrices/";
-        double double_tolerance = 4*pow(2, -52); // Set as 4 times machines epsilon
+class GMRESComponentTest: public TestBase {
+    
+    public:
+        double accum_error_mod = pow(10, 2);
 
 };
 
 TEST_F(GMRESComponentTest, CheckConstruction5x5) {
     
-    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_5_toy.csv");
-    Matrix<double, Dynamic, 1> b = read_matrix_csv<double>(matrix_dir + "b_5_toy.csv");
-    GMRESSolveTestingMock<double> test_mock(A, b, double_tolerance);
+    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(solve_matrix_dir + "A_5_toy.csv");
+    Matrix<double, Dynamic, 1> b = read_matrix_csv<double>(solve_matrix_dir + "b_5_toy.csv");
+    GMRESSolveTestingMock<double> test_mock(A, b, u_dbl);
     ASSERT_EQ(test_mock.max_krylov_subspace_dim, 5);
     ASSERT_EQ(test_mock.rho, (b - A*MatrixXd::Ones(5, 1)).norm());
     
@@ -70,9 +71,9 @@ TEST_F(GMRESComponentTest, CheckConstruction5x5) {
 
 TEST_F(GMRESComponentTest, CheckConstruction64x64) {
     
-    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "conv_diff_64_A.csv");
-    Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "conv_diff_64_b.csv");
-    GMRESSolveTestingMock<double> test_mock(A, b, double_tolerance);
+    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_A.csv");
+    Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_b.csv");
+    GMRESSolveTestingMock<double> test_mock(A, b, u_dbl);
     ASSERT_EQ(test_mock.max_krylov_subspace_dim, 64);
     ASSERT_EQ(test_mock.rho, (b - A*MatrixXd::Ones(64, 1)).norm());
     
@@ -116,9 +117,9 @@ TEST_F(GMRESComponentTest, CheckConstruction64x64) {
 
 TEST_F(GMRESComponentTest, KrylovInstantiationAndUpdates) {
     
-    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_5_toy.csv");
-    Matrix<double, Dynamic, 1> b = read_matrix_csv<double>(matrix_dir + "b_5_toy.csv");
-    GMRESSolveTestingMock<double> test_mock(A, b, double_tolerance);
+    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(solve_matrix_dir + "A_5_toy.csv");
+    Matrix<double, Dynamic, 1> b = read_matrix_csv<double>(solve_matrix_dir + "b_5_toy.csv");
+    GMRESSolveTestingMock<double> test_mock(A, b, u_dbl);
     test_mock.x = MatrixXd::Ones(5, 1); // Manually instantiate initial guess
     Matrix<double, Dynamic, 1> r_0 = b - A*MatrixXd::Ones(5, 1);
 
@@ -154,7 +155,7 @@ TEST_F(GMRESComponentTest, KrylovInstantiationAndUpdates) {
         // Confirm that previous vectors are unchanged and are orthogonal to new one
         for (int j=0; j<k; ++j) {
             EXPECT_EQ(test_mock.Q_kry_basis.col(j), Q_save(all, j));
-            EXPECT_NEAR(test_mock.Q_kry_basis.col(j).dot(q), 0, 1e-13);
+            EXPECT_NEAR(test_mock.Q_kry_basis.col(j).dot(q), 0, accum_error_mod*(j+1)*gamma(5, u_dbl));
         }
 
         // Confirm that Hessenberg matrix column corresponding to new basis vector
@@ -178,9 +179,9 @@ TEST_F(GMRESComponentTest, KrylovInstantiationAndUpdates) {
 
 TEST_F(GMRESComponentTest, H_QR_Update) {
     
-    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_5_toy.csv");
-    Matrix<double, Dynamic, 1> b = read_matrix_csv<double>(matrix_dir + "b_5_toy.csv");
-    GMRESSolveTestingMock<double> test_mock(A, b, double_tolerance);
+    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(solve_matrix_dir + "A_5_toy.csv");
+    Matrix<double, Dynamic, 1> b = read_matrix_csv<double>(solve_matrix_dir + "b_5_toy.csv");
+    GMRESSolveTestingMock<double> test_mock(A, b, u_dbl);
     test_mock.x = MatrixXd::Ones(5, 1); // Manually instantiate initial guess
     Matrix<double, Dynamic, 1> r_0 = b - A*MatrixXd::Ones(5, 1);
 
@@ -218,9 +219,9 @@ TEST_F(GMRESComponentTest, H_QR_Update) {
         for (int i=0; i<k+1; ++i) {
             for (int j=0; j<k+1; ++j) {
                 if (i == j) {
-                    EXPECT_NEAR(orthog_check(i, j), 1, double_tolerance);
+                    EXPECT_NEAR(orthog_check(i, j), 1, u_dbl);
                 } else {
-                    EXPECT_NEAR(orthog_check(i, j), 0, double_tolerance);
+                    EXPECT_NEAR(orthog_check(i, j), 0, u_dbl);
                 }
             }
         }
@@ -238,7 +239,7 @@ TEST_F(GMRESComponentTest, H_QR_Update) {
                                                        test_mock.R_H.block(0, 0, k+2, k+1);
         for (int i=0; i<k+1; ++i) {
             for (int j=0; j<k; ++j) {
-                EXPECT_NEAR(construct_H(i, j), test_mock.H(i, j), double_tolerance);
+                EXPECT_NEAR(construct_H(i, j), test_mock.H(i, j), u_dbl);
             }
         }
 
@@ -248,14 +249,14 @@ TEST_F(GMRESComponentTest, H_QR_Update) {
 
 TEST_F(GMRESComponentTest, Update_x_Back_Substitution) {
     
-    Matrix<double, Dynamic, Dynamic> Q = read_matrix_csv<double>(matrix_dir + "Q_8_backsub.csv");
-    Matrix<double, Dynamic, Dynamic> R = read_matrix_csv<double>(matrix_dir + "R_8_backsub.csv");
-    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_7_dummy_backsub.csv");
-    Matrix<double, Dynamic, 1> b = read_matrix_csv<double>(matrix_dir + "b_7_dummy_backsub.csv");
+    Matrix<double, Dynamic, Dynamic> Q = read_matrix_csv<double>(solve_matrix_dir + "Q_8_backsub.csv");
+    Matrix<double, Dynamic, Dynamic> R = read_matrix_csv<double>(solve_matrix_dir + "R_8_backsub.csv");
+    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(solve_matrix_dir + "A_7_dummy_backsub.csv");
+    Matrix<double, Dynamic, 1> b = read_matrix_csv<double>(solve_matrix_dir + "b_7_dummy_backsub.csv");
 
     // Set initial guess to zeros such that residual is just b
     Matrix<double, 7, 1> x_0 = MatrixXd::Zero(7, 1);
-    GMRESSolveTestingMock<double> test_mock(A, b, x_0, double_tolerance);
+    GMRESSolveTestingMock<double> test_mock(A, b, x_0, u_dbl);
 
     // Set test_mock krylov basis to the identity to have x be directly the solved coefficients
     // of the back substitution
@@ -273,7 +274,7 @@ TEST_F(GMRESComponentTest, Update_x_Back_Substitution) {
         test_mock.krylov_subspace_dim = kry_dim;
         
         // Load test solution
-        string solution_path = matrix_dir + "x_" + std::to_string(kry_dim) + "_backsub.csv";
+        string solution_path = solve_matrix_dir + "x_" + std::to_string(kry_dim) + "_backsub.csv";
         Matrix<double, Dynamic, 1> test_soln = read_matrix_csv<double>(solution_path);
 
         // Solve with backsubstitution
@@ -281,7 +282,7 @@ TEST_F(GMRESComponentTest, Update_x_Back_Substitution) {
 
         // Check if coefficient solution matches to within double tolerance
         for (int i=0; i<kry_dim; ++i) {
-            EXPECT_NEAR(test_mock.x(i), test_soln(i), 1e-13);
+            EXPECT_NEAR(test_mock.x(i), test_soln(i), accum_error_mod*(i+1)*gamma(kry_dim, u_dbl));
         }
 
     }
@@ -290,10 +291,10 @@ TEST_F(GMRESComponentTest, Update_x_Back_Substitution) {
 
 TEST_F(GMRESComponentTest, KrylovLuckyBreakFirstIter) {
     
-    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_5_easysoln.csv");
-    Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(matrix_dir + "b_5_easysoln.csv");
+    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(solve_matrix_dir + "A_5_easysoln.csv");
+    Matrix<double, Dynamic, Dynamic> b = read_matrix_csv<double>(solve_matrix_dir + "b_5_easysoln.csv");
     MatrixXd soln = MatrixXd::Ones(5, 1); // Instantiate initial guess as true solution
-    GMRESSolveTestingMock<double> test_mock(A, b, soln, double_tolerance);
+    GMRESSolveTestingMock<double> test_mock(A, b, soln, u_dbl);
 
     // Attempt to update subspace and Hessenberg
     test_mock.iterate();
@@ -317,7 +318,7 @@ TEST_F(GMRESComponentTest, KrylovLuckyBreakFirstIter) {
 
     // Attempt to solve and check that iteration does not occur since
     // should be terminated already but that convergence is updated
-    test_mock.solve(100, 1e-10);
+    test_mock.solve(100, conv_tol_dbl);
     EXPECT_TRUE(test_mock.check_converged());
     EXPECT_EQ(test_mock.get_iteration(), 0);
 
@@ -325,11 +326,11 @@ TEST_F(GMRESComponentTest, KrylovLuckyBreakFirstIter) {
 
 TEST_F(GMRESComponentTest, KrylovLuckyBreakLaterIter) {
     
-    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_5_easysoln.csv");
-    Matrix<double, Dynamic, 1> b = read_matrix_csv<double>(matrix_dir + "b_5_easysoln.csv");
+    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(solve_matrix_dir + "A_5_easysoln.csv");
+    Matrix<double, Dynamic, 1> b = read_matrix_csv<double>(solve_matrix_dir + "b_5_easysoln.csv");
     MatrixXd soln = MatrixXd::Zero(5, 1); // Initialize as near solution
     soln(0) = 1;
-    GMRESSolveTestingMock<double> test_mock(A, b, soln, double_tolerance);
+    GMRESSolveTestingMock<double> test_mock(A, b, soln, u_dbl);
 
     // Attempt to update subspace and convergence twice
     test_mock.iterate();
@@ -341,7 +342,7 @@ TEST_F(GMRESComponentTest, KrylovLuckyBreakLaterIter) {
     EXPECT_FALSE(test_mock.check_converged());
     EXPECT_TRUE(test_mock.check_terminated());
     EXPECT_EQ(test_mock.krylov_subspace_dim, 1);
-    EXPECT_NEAR(test_mock.Q_kry_basis.col(0).norm(), 1, double_tolerance);
+    EXPECT_NEAR(test_mock.Q_kry_basis.col(0).norm(), 1, gamma(5, u_dbl));
     for (int i=0; i<5; ++i) {
         for (int j=1; j<5; ++j) {
             EXPECT_EQ(test_mock.Q_kry_basis(i, j), 0);
@@ -352,14 +353,14 @@ TEST_F(GMRESComponentTest, KrylovLuckyBreakLaterIter) {
 
 TEST_F(GMRESComponentTest, KrylovLuckyBreakThroughSolve) {
     
-    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(matrix_dir + "A_5_easysoln.csv");
-    Matrix<double, Dynamic, 1> b = read_matrix_csv<double>(matrix_dir + "b_5_easysoln.csv");
+    Matrix<double, Dynamic, Dynamic> A = read_matrix_csv<double>(solve_matrix_dir + "A_5_easysoln.csv");
+    Matrix<double, Dynamic, 1> b = read_matrix_csv<double>(solve_matrix_dir + "b_5_easysoln.csv");
     MatrixXd soln = MatrixXd::Zero(5, 1); // Initialize as near solution
     soln(0) = 1;
-    GMRESSolveTestingMock<double> test_mock(A, b, soln, double_tolerance);
+    GMRESSolveTestingMock<double> test_mock(A, b, soln, u_dbl);
 
     // Attempt to update and solve through solve of LinearSolve
-    test_mock.solve(5, 1e-10);
+    test_mock.solve(5, conv_tol_dbl);
     
     // Check we have terminated at second iteration and have converged
     EXPECT_TRUE(test_mock.check_converged());
@@ -369,7 +370,7 @@ TEST_F(GMRESComponentTest, KrylovLuckyBreakThroughSolve) {
     // Check that subspace has not gone beyond 1 dimension and that krylov basis
     // as expected to have only a single column
     EXPECT_EQ(test_mock.krylov_subspace_dim, 1);
-    EXPECT_NEAR(test_mock.Q_kry_basis.col(0).norm(), 1, double_tolerance);
+    EXPECT_NEAR(test_mock.Q_kry_basis.col(0).norm(), 1, gamma(5, u_dbl));
     for (int i=0; i<5; ++i) {
         for (int j=1; j<5; ++j) {
             EXPECT_EQ(test_mock.Q_kry_basis(i, j), 0);
