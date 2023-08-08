@@ -10,9 +10,9 @@
 
 using read_matrix::read_matrix_csv;
 
-class PreconditionerTest: public TestBase {};
+class ILUTest: public TestBase {};
 
-TEST_F(PreconditionerTest, TestStraightLU) {
+TEST_F(ILUTest, TestStraightLU) {
 
     // Test that using a completely dense matrix one just gets a LU
     Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "A_7_dummy_backsub.csv"));

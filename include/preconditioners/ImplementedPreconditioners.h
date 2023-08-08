@@ -58,9 +58,10 @@ class ILU {
             int m = A.rows(); 
             LU = A;
 
-            for (int k=0; k<m; ++k) {
-                if (abs(LU(k, k)) > zero_tol) {
-                    for (int i=k+1; i<m; ++i) {
+            // Use IKJ variant for better predictability of modification
+            for (int i=1; i<m; ++i) {
+                for (int k=0; k<=i-1; ++k) {
+                    if (abs(LU(k, k)) > zero_tol) {
                         T coeff = LU(i, k)/LU(k, k);
                         LU(i, k) = coeff;
                         for (int j=k+1; j<m; ++j) {
@@ -68,11 +69,10 @@ class ILU {
                                 LU(i, j) = LU(i, j) - coeff*LU(k, j);
                             }
                         }
+                    } else {
+                        throw runtime_error("ILU encountered zero diagonal entry");
                     }
-                } else {
-                    throw runtime_error("ILU encountered Zero Diagonal entry");
                 }
-
             }
 
         }
