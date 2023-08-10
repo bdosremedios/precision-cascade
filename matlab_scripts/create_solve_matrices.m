@@ -131,10 +131,16 @@ writematrix(inv_pre_cond, "solve_matrices\\A_25_invprecond_saddle.csv");
 A_2_temp = randi(100, 90, 90);
 U_tri_90 = triu(A_2_temp);
 x_90 = randi(100, 90, 1);
-b_90 = U_tri_90*x_90;
+Ub_90 = U_tri_90*x_90;
 writematrix(U_tri_90, "solve_matrices\\U_tri_90.csv");
 writematrix(x_90, "solve_matrices\\x_tri_90.csv");
-writematrix(b_90, "solve_matrices\\b_tri_90.csv");
+writematrix(Ub_90, "solve_matrices\\Ub_tri_90.csv");
+L_tri_90 = tril(A_2_temp);
+Lb_90 = L_tri_90*x_90;
+writematrix(L_tri_90, "solve_matrices\\L_tri_90.csv");
+writematrix(Lb_90, "solve_matrices\\Lb_tri_90.csv");
+
+% Create lower triangular to check forward substitution
 
 % Create Matrix and Inverse to test inverse preconditioner
 A_inv_test = randn(45, 45);

@@ -30,13 +30,29 @@ Matrix<T, Dynamic, 1> back_substitution(
 
 }
 
-// template <typename T>
-// Matrix<T, Dynamic, 1> fwrd_substitution(
-//     Matrix<T, Dynamic, Dynamic> const &LT, Matrix<T, Dynamic, 1> const &rhs
-// ) {
+template <typename T>
+Matrix<T, Dynamic, 1> frwd_substitution(
+    Matrix<T, Dynamic, Dynamic> const &LT, Matrix<T, Dynamic, 1> const &rhs
+) {
 
-//     // Assume compatibility of rhs and LT and assume LT is lower triangular
+    // Check squareness and compatibility
+    if (LT.rows() != LT.cols()) { throw runtime_error("Non square matrix in forward substitution"); }
+    if (LT.rows() != rhs.rows()) { throw runtime_error("Incompatible matrix and rhs"); }
 
-// }
+    // Assume LT is lower triangular
+    Matrix<T, Dynamic, 1> x = Matrix<T, Dynamic, 1>::Zero(LT.cols(), 1);
+    for (int i=0; i<LT.rows(); ++i) {
+        if (LT(i, i) != 0) { // Skip if coefficient is zero
+            x(i) = rhs(i);
+            for (int j=0; j<i; ++j) {
+                x(i) -= LT(i, j)*x(j);
+            }
+            x(i) /= LT(i, i);
+        }
+    }
+
+    return x;
+
+}
 
 #endif

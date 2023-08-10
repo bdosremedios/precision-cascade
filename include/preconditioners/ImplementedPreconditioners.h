@@ -81,7 +81,7 @@ class ILU: public Preconditioner<T> {
 
         }
 
-        Matrix<T, Dynamic, Dynamic> get_L() {
+        Matrix<T, Dynamic, Dynamic> get_L() const {
 
             Matrix<T, Dynamic, Dynamic> L(Matrix<T, Dynamic, Dynamic>::Identity(m, m));
             for (int i=0; i<m; ++i) {
@@ -94,7 +94,7 @@ class ILU: public Preconditioner<T> {
 
         }
 
-        Matrix<T, Dynamic, Dynamic> get_U() {
+        Matrix<T, Dynamic, Dynamic> get_U() const {
 
             Matrix<T, Dynamic, Dynamic> U(Matrix<T, Dynamic, Dynamic>::Zero(m, m));
             for (int i=0; i<m; ++i) {
@@ -108,7 +108,7 @@ class ILU: public Preconditioner<T> {
         }
 
         Matrix<T, Dynamic, 1> action_inv_M(Matrix<T, Dynamic, 1> const &vec) const override {
-            return Matrix<T, Dynamic, 1>::Zero(1, 1);
+            return frwd_substitution(get_L(), back_substitution(get_U(), vec));
         }
 
         bool check_compatibility_left(int const &arg_m) const override {

@@ -338,7 +338,11 @@ test/CMakeFiles/test.dir/test.cpp.o: ../test/test.cpp \
   ../googletest/googletest/include/gtest/gtest-typed-test.h \
   ../googletest/googletest/include/gtest/gtest_pred_impl.h \
   ../googletest/googletest/include/gtest/gtest_prod.h \
-  ../test/test.h \
+  ../eigen/Eigen/Dense \
+  ../eigen/Eigen/Core \
+  ../eigen/Eigen/src/Core/util/DisableStupidWarnings.h \
+  ../eigen/Eigen/src/Core/util/Macros.h \
+  ../eigen/Eigen/src/Core/InternalHeaderCheck.h \
   /usr/include/c++/11/cmath \
   /usr/include/math.h \
   /usr/include/x86_64-linux-gnu/bits/math-vector.h \
@@ -362,7 +366,231 @@ test/CMakeFiles/test.dir/test.cpp.o: ../test/test.cpp \
   /usr/include/c++/11/tr1/modified_bessel_func.tcc \
   /usr/include/c++/11/tr1/poly_hermite.tcc \
   /usr/include/c++/11/tr1/poly_laguerre.tcc \
-  /usr/include/c++/11/tr1/riemann_zeta.tcc
+  /usr/include/c++/11/tr1/riemann_zeta.tcc \
+  ../eigen/Eigen/src/Core/util/ConfigureVectorization.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/mmintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/emmintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/xmmintrin.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/mm_malloc.h \
+  /usr/include/c++/11/complex \
+  ../eigen/Eigen/src/Core/util/MKL_support.h \
+  /usr/include/c++/11/cstring \
+  /usr/include/c++/11/climits \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/syslimits.h \
+  /usr/include/limits.h \
+  /usr/include/x86_64-linux-gnu/bits/posix1_lim.h \
+  /usr/include/x86_64-linux-gnu/bits/local_lim.h \
+  /usr/include/linux/limits.h \
+  /usr/include/x86_64-linux-gnu/bits/posix2_lim.h \
+  /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
+  /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
+  /usr/include/c++/11/algorithm \
+  /usr/include/c++/11/pstl/glue_algorithm_defs.h \
+  ../eigen/Eigen/src/Core/util/Constants.h \
+  ../eigen/Eigen/src/Core/util/Meta.h \
+  ../eigen/Eigen/src/Core/util/Assert.h \
+  ../eigen/Eigen/src/Core/util/ForwardDeclarations.h \
+  ../eigen/Eigen/src/Core/util/StaticAssert.h \
+  ../eigen/Eigen/src/Core/util/XprHelper.h \
+  ../eigen/Eigen/src/Core/util/Memory.h \
+  ../eigen/Eigen/src/Core/util/IntegralConstant.h \
+  ../eigen/Eigen/src/Core/util/Serializer.h \
+  ../eigen/Eigen/src/Core/util/SymbolicIndex.h \
+  ../eigen/Eigen/src/Core/util/EmulateArray.h \
+  ../eigen/Eigen/src/Core/util/MoreMeta.h \
+  ../eigen/Eigen/src/Core/NumTraits.h \
+  ../eigen/Eigen/src/Core/InternalHeaderCheck.h \
+  ../eigen/Eigen/src/Core/MathFunctions.h \
+  ../eigen/Eigen/src/Core/GenericPacketMath.h \
+  ../eigen/Eigen/src/Core/MathFunctionsImpl.h \
+  ../eigen/Eigen/src/Core/arch/Default/ConjHelper.h \
+  ../eigen/Eigen/src/Core/InternalHeaderCheck.h \
+  ../eigen/Eigen/src/Core/arch/Default/Half.h \
+  ../eigen/Eigen/src/Core/arch/Default/BFloat16.h \
+  ../eigen/Eigen/src/Core/arch/Default/GenericPacketMathFunctionsFwd.h \
+  ../eigen/Eigen/src/Core/arch/SSE/PacketMath.h \
+  ../eigen/Eigen/src/Core/InternalHeaderCheck.h \
+  ../eigen/Eigen/src/Core/arch/SSE/TypeCasting.h \
+  ../eigen/Eigen/src/Core/arch/SSE/MathFunctions.h \
+  ../eigen/Eigen/src/Core/arch/SSE/Complex.h \
+  ../eigen/Eigen/src/Core/arch/Default/Settings.h \
+  ../eigen/Eigen/src/Core/arch/Default/GenericPacketMathFunctions.h \
+  ../eigen/Eigen/src/Core/functors/TernaryFunctors.h \
+  ../eigen/Eigen/src/Core/InternalHeaderCheck.h \
+  ../eigen/Eigen/src/Core/functors/BinaryFunctors.h \
+  ../eigen/Eigen/src/Core/functors/UnaryFunctors.h \
+  ../eigen/Eigen/src/Core/functors/NullaryFunctors.h \
+  ../eigen/Eigen/src/Core/functors/StlFunctors.h \
+  ../eigen/Eigen/src/Core/functors/AssignmentFunctors.h \
+  ../eigen/Eigen/src/Core/util/IndexedViewHelper.h \
+  ../eigen/Eigen/src/Core/util/ReshapedHelper.h \
+  ../eigen/Eigen/src/Core/ArithmeticSequence.h \
+  ../eigen/Eigen/src/Core/IO.h \
+  ../eigen/Eigen/src/Core/DenseCoeffsBase.h \
+  ../eigen/Eigen/src/Core/DenseBase.h \
+  ../eigen/Eigen/src/plugins/CommonCwiseUnaryOps.h \
+  ../eigen/Eigen/src/plugins/BlockMethods.h \
+  ../eigen/Eigen/src/plugins/IndexedViewMethods.h \
+  ../eigen/Eigen/src/plugins/ReshapedMethods.h \
+  ../eigen/Eigen/src/plugins/ReshapedMethods.h \
+  ../eigen/Eigen/src/Core/MatrixBase.h \
+  ../eigen/Eigen/src/plugins/CommonCwiseBinaryOps.h \
+  ../eigen/Eigen/src/plugins/MatrixCwiseUnaryOps.h \
+  ../eigen/Eigen/src/plugins/MatrixCwiseBinaryOps.h \
+  ../eigen/Eigen/src/Core/EigenBase.h \
+  ../eigen/Eigen/src/Core/Product.h \
+  ../eigen/Eigen/src/Core/CoreEvaluators.h \
+  ../eigen/Eigen/src/Core/AssignEvaluator.h \
+  ../eigen/Eigen/src/Core/Assign.h \
+  ../eigen/Eigen/src/Core/ArrayBase.h \
+  ../eigen/Eigen/src/plugins/ArrayCwiseUnaryOps.h \
+  ../eigen/Eigen/src/plugins/ArrayCwiseBinaryOps.h \
+  ../eigen/Eigen/src/Core/util/BlasUtil.h \
+  ../eigen/Eigen/src/Core/DenseStorage.h \
+  ../eigen/Eigen/src/Core/NestByValue.h \
+  ../eigen/Eigen/src/Core/ReturnByValue.h \
+  ../eigen/Eigen/src/Core/NoAlias.h \
+  ../eigen/Eigen/src/Core/PlainObjectBase.h \
+  ../eigen/Eigen/src/Core/Matrix.h \
+  ../eigen/Eigen/src/Core/Array.h \
+  ../eigen/Eigen/src/Core/CwiseTernaryOp.h \
+  ../eigen/Eigen/src/Core/CwiseBinaryOp.h \
+  ../eigen/Eigen/src/Core/CwiseUnaryOp.h \
+  ../eigen/Eigen/src/Core/CwiseNullaryOp.h \
+  ../eigen/Eigen/src/Core/CwiseUnaryView.h \
+  ../eigen/Eigen/src/Core/SelfCwiseBinaryOp.h \
+  ../eigen/Eigen/src/Core/Dot.h \
+  ../eigen/Eigen/src/Core/StableNorm.h \
+  ../eigen/Eigen/src/Core/Stride.h \
+  ../eigen/Eigen/src/Core/MapBase.h \
+  ../eigen/Eigen/src/Core/Map.h \
+  ../eigen/Eigen/src/Core/Ref.h \
+  ../eigen/Eigen/src/Core/Block.h \
+  ../eigen/Eigen/src/Core/VectorBlock.h \
+  ../eigen/Eigen/src/Core/IndexedView.h \
+  ../eigen/Eigen/src/Core/Reshaped.h \
+  ../eigen/Eigen/src/Core/Transpose.h \
+  ../eigen/Eigen/src/Core/DiagonalMatrix.h \
+  ../eigen/Eigen/src/Core/Diagonal.h \
+  ../eigen/Eigen/src/Core/DiagonalProduct.h \
+  ../eigen/Eigen/src/Core/SkewSymmetricMatrix3.h \
+  ../eigen/Eigen/src/Core/Redux.h \
+  ../eigen/Eigen/src/Core/Visitor.h \
+  ../eigen/Eigen/src/Core/Fuzzy.h \
+  ../eigen/Eigen/src/Core/Swap.h \
+  ../eigen/Eigen/src/Core/CommaInitializer.h \
+  ../eigen/Eigen/src/Core/GeneralProduct.h \
+  ../eigen/Eigen/src/Core/Solve.h \
+  ../eigen/Eigen/src/Core/Inverse.h \
+  ../eigen/Eigen/src/Core/SolverBase.h \
+  ../eigen/Eigen/src/Core/PermutationMatrix.h \
+  ../eigen/Eigen/src/Core/Transpositions.h \
+  ../eigen/Eigen/src/Core/TriangularMatrix.h \
+  ../eigen/Eigen/src/Core/SelfAdjointView.h \
+  ../eigen/Eigen/src/Core/products/GeneralBlockPanelKernel.h \
+  ../eigen/Eigen/src/Core/InternalHeaderCheck.h \
+  ../eigen/Eigen/src/Core/products/Parallelizer.h \
+  ../eigen/Eigen/src/Core/ProductEvaluators.h \
+  ../eigen/Eigen/src/Core/products/GeneralMatrixVector.h \
+  ../eigen/Eigen/src/Core/products/GeneralMatrixMatrix.h \
+  ../eigen/Eigen/src/Core/SolveTriangular.h \
+  ../eigen/Eigen/src/Core/products/GeneralMatrixMatrixTriangular.h \
+  ../eigen/Eigen/src/Core/products/SelfadjointMatrixVector.h \
+  ../eigen/Eigen/src/Core/products/SelfadjointMatrixMatrix.h \
+  ../eigen/Eigen/src/Core/products/SelfadjointProduct.h \
+  ../eigen/Eigen/src/Core/products/SelfadjointRank2Update.h \
+  ../eigen/Eigen/src/Core/products/TriangularMatrixVector.h \
+  ../eigen/Eigen/src/Core/products/TriangularMatrixMatrix.h \
+  ../eigen/Eigen/src/Core/products/TriangularSolverMatrix.h \
+  ../eigen/Eigen/src/Core/products/TriangularSolverVector.h \
+  ../eigen/Eigen/src/Core/BandMatrix.h \
+  ../eigen/Eigen/src/Core/CoreIterators.h \
+  ../eigen/Eigen/src/Core/ConditionEstimator.h \
+  ../eigen/Eigen/src/Core/Select.h \
+  ../eigen/Eigen/src/Core/VectorwiseOp.h \
+  ../eigen/Eigen/src/Core/PartialReduxEvaluator.h \
+  ../eigen/Eigen/src/Core/Random.h \
+  ../eigen/Eigen/src/Core/Replicate.h \
+  ../eigen/Eigen/src/Core/Reverse.h \
+  ../eigen/Eigen/src/Core/ArrayWrapper.h \
+  ../eigen/Eigen/src/Core/StlIterators.h \
+  ../eigen/Eigen/src/Core/GlobalFunctions.h \
+  ../eigen/Eigen/src/Core/util/ReenableStupidWarnings.h \
+  ../eigen/Eigen/LU \
+  ../eigen/Eigen/src/misc/Kernel.h \
+  ../eigen/Eigen/src/misc/InternalHeaderCheck.h \
+  ../eigen/Eigen/src/misc/Image.h \
+  ../eigen/Eigen/src/LU/FullPivLU.h \
+  ../eigen/Eigen/src/LU/InternalHeaderCheck.h \
+  ../eigen/Eigen/src/LU/PartialPivLU.h \
+  ../eigen/Eigen/src/LU/Determinant.h \
+  ../eigen/Eigen/src/LU/InverseImpl.h \
+  ../eigen/Eigen/src/LU/arch/InverseSize4.h \
+  ../eigen/Eigen/src/LU/InternalHeaderCheck.h \
+  ../eigen/Eigen/Cholesky \
+  ../eigen/Eigen/Jacobi \
+  ../eigen/Eigen/src/Jacobi/Jacobi.h \
+  ../eigen/Eigen/src/Jacobi/InternalHeaderCheck.h \
+  ../eigen/Eigen/src/Cholesky/LLT.h \
+  ../eigen/Eigen/src/Cholesky/InternalHeaderCheck.h \
+  ../eigen/Eigen/src/Cholesky/LDLT.h \
+  ../eigen/Eigen/QR \
+  ../eigen/Eigen/Householder \
+  ../eigen/Eigen/src/Householder/Householder.h \
+  ../eigen/Eigen/src/Householder/InternalHeaderCheck.h \
+  ../eigen/Eigen/src/Householder/HouseholderSequence.h \
+  ../eigen/Eigen/src/Householder/BlockHouseholder.h \
+  ../eigen/Eigen/src/QR/HouseholderQR.h \
+  ../eigen/Eigen/src/QR/InternalHeaderCheck.h \
+  ../eigen/Eigen/src/QR/FullPivHouseholderQR.h \
+  ../eigen/Eigen/src/QR/ColPivHouseholderQR.h \
+  ../eigen/Eigen/src/QR/CompleteOrthogonalDecomposition.h \
+  ../eigen/Eigen/SVD \
+  ../eigen/Eigen/src/misc/RealSvd2x2.h \
+  ../eigen/Eigen/src/SVD/UpperBidiagonalization.h \
+  ../eigen/Eigen/src/SVD/InternalHeaderCheck.h \
+  ../eigen/Eigen/src/SVD/SVDBase.h \
+  ../eigen/Eigen/src/SVD/JacobiSVD.h \
+  ../eigen/Eigen/src/SVD/BDCSVD.h \
+  ../eigen/Eigen/Geometry \
+  ../eigen/Eigen/src/Geometry/OrthoMethods.h \
+  ../eigen/Eigen/src/Geometry/InternalHeaderCheck.h \
+  ../eigen/Eigen/src/Geometry/EulerAngles.h \
+  ../eigen/Eigen/src/Geometry/Homogeneous.h \
+  ../eigen/Eigen/src/Geometry/RotationBase.h \
+  ../eigen/Eigen/src/Geometry/Rotation2D.h \
+  ../eigen/Eigen/src/Geometry/Quaternion.h \
+  ../eigen/Eigen/src/Geometry/AngleAxis.h \
+  ../eigen/Eigen/src/Geometry/Transform.h \
+  ../eigen/Eigen/src/Geometry/Translation.h \
+  ../eigen/Eigen/src/Geometry/Scaling.h \
+  ../eigen/Eigen/src/Geometry/Hyperplane.h \
+  ../eigen/Eigen/src/Geometry/ParametrizedLine.h \
+  ../eigen/Eigen/src/Geometry/AlignedBox.h \
+  ../eigen/Eigen/src/Geometry/Umeyama.h \
+  ../eigen/Eigen/src/Geometry/arch/Geometry_SIMD.h \
+  ../eigen/Eigen/src/Geometry/InternalHeaderCheck.h \
+  ../eigen/Eigen/Eigenvalues \
+  ../eigen/Eigen/src/Eigenvalues/Tridiagonalization.h \
+  ../eigen/Eigen/src/Eigenvalues/InternalHeaderCheck.h \
+  ../eigen/Eigen/src/Eigenvalues/RealSchur.h \
+  ../eigen/Eigen/src/Eigenvalues/HessenbergDecomposition.h \
+  ../eigen/Eigen/src/Eigenvalues/InternalHeaderCheck.h \
+  ../eigen/Eigen/src/Eigenvalues/EigenSolver.h \
+  ../eigen/Eigen/src/Eigenvalues/RealSchur.h \
+  ../eigen/Eigen/src/Eigenvalues/SelfAdjointEigenSolver.h \
+  ../eigen/Eigen/src/Eigenvalues/Tridiagonalization.h \
+  ../eigen/Eigen/src/Eigenvalues/GeneralizedSelfAdjointEigenSolver.h \
+  ../eigen/Eigen/src/Eigenvalues/HessenbergDecomposition.h \
+  ../eigen/Eigen/src/Eigenvalues/ComplexSchur.h \
+  ../eigen/Eigen/src/Eigenvalues/ComplexEigenSolver.h \
+  ../eigen/Eigen/src/Eigenvalues/ComplexSchur.h \
+  ../eigen/Eigen/src/Eigenvalues/RealQZ.h \
+  ../eigen/Eigen/src/Eigenvalues/GeneralizedEigenSolver.h \
+  ../eigen/Eigen/src/Eigenvalues/RealQZ.h \
+  ../eigen/Eigen/src/Eigenvalues/MatrixBaseEigenvalues.h \
+  ../test/test.h
 
 test/CMakeFiles/test.dir/test_GMRES/test_GMRESComponents.cpp.o: ../test/test_GMRES/test_GMRESComponents.cpp \
   /usr/include/stdc-predef.h \
@@ -8190,6 +8418,8 @@ test/CMakeFiles/test.dir/test_Substitution.cpp.o: ../test/test_Substitution.cpp 
 
 ../include/read_matrix/MatrixReader.h:
 
+../test/test.h:
+
 ../eigen/Eigen/src/Eigenvalues/MatrixBaseEigenvalues.h:
 
 ../eigen/Eigen/src/Eigenvalues/GeneralizedEigenSolver.h:
@@ -8257,10 +8487,6 @@ test/CMakeFiles/test.dir/test_Substitution.cpp.o: ../test/test_Substitution.cpp 
 ../googletest/googletest/include/gtest/gtest-message.h:
 
 /usr/include/c++/11/string:
-
-../eigen/Eigen/src/misc/RealSvd2x2.h:
-
-/usr/include/x86_64-linux-gnu/bits/uio_lim.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/struct___jmp_buf_tag.h:
 
@@ -8449,8 +8675,6 @@ test/CMakeFiles/test.dir/test_Substitution.cpp.o: ../test/test_Substitution.cpp 
 ../eigen/Eigen/src/Core/util/ReenableStupidWarnings.h:
 
 /usr/include/c++/11/bits/stl_pair.h:
-
-../test/test.h:
 
 /usr/include/c++/11/bits/stl_function.h:
 
@@ -8868,6 +9092,12 @@ test/CMakeFiles/test.dir/test_Substitution.cpp.o: ../test/test_Substitution.cpp 
 
 /usr/include/c++/11/bits/cxxabi_forced.h:
 
+../test/test_GMRES/test_GMRESComponents.cpp:
+
+../eigen/Eigen/src/Core/ConditionEstimator.h:
+
+/usr/include/c++/11/bits/functional_hash.h:
+
 ../test/test_Preconditioner/test_Preconditioner.cpp:
 
 /usr/include/c++/11/bits/string_view.tcc:
@@ -9036,6 +9266,16 @@ test/CMakeFiles/test.dir/test_Substitution.cpp.o: ../test/test_Substitution.cpp 
 
 ../eigen/Eigen/src/Core/Solve.h:
 
+../eigen/Eigen/Core:
+
+../eigen/Eigen/src/Eigenvalues/RealQZ.h:
+
+/usr/include/string.h:
+
+../eigen/Eigen/src/Core/util/DisableStupidWarnings.h:
+
+../eigen/Eigen/src/Core/InternalHeaderCheck.h:
+
 /usr/include/c++/11/complex:
 
 ../googletest/googletest/include/gtest/gtest-typed-test.h:
@@ -9062,6 +9302,10 @@ test/CMakeFiles/test.dir/test_Substitution.cpp.o: ../test/test_Substitution.cpp 
 
 /usr/include/c++/11/tr1/bessel_function.tcc:
 
+../eigen/Eigen/src/Core/util/Macros.h:
+
+../eigen/Eigen/src/Core/MapBase.h:
+
 /usr/include/c++/11/tr1/exp_integral.tcc:
 
 /usr/include/c++/11/tr1/hypergeometric.tcc:
@@ -9075,28 +9319,6 @@ test/CMakeFiles/test.dir/test_Substitution.cpp.o: ../test/test_Substitution.cpp 
 ../eigen/Eigen/src/Householder/BlockHouseholder.h:
 
 /usr/include/c++/11/tr1/riemann_zeta.tcc:
-
-../eigen/Eigen/src/Core/ConditionEstimator.h:
-
-/usr/include/c++/11/bits/functional_hash.h:
-
-../test/test_GMRES/test_GMRESComponents.cpp:
-
-../eigen/Eigen/src/Core/VectorBlock.h:
-
-../eigen/Eigen/Core:
-
-../eigen/Eigen/src/Eigenvalues/RealQZ.h:
-
-/usr/include/string.h:
-
-../eigen/Eigen/src/Core/util/DisableStupidWarnings.h:
-
-../eigen/Eigen/src/Core/MapBase.h:
-
-../eigen/Eigen/src/Core/util/Macros.h:
-
-../eigen/Eigen/src/Core/InternalHeaderCheck.h:
 
 /usr/lib/gcc/x86_64-linux-gnu/11/include/mmintrin.h:
 
@@ -9182,13 +9404,13 @@ test/CMakeFiles/test.dir/test_Substitution.cpp.o: ../test/test_Substitution.cpp 
 
 ../eigen/Eigen/src/plugins/IndexedViewMethods.h:
 
-../eigen/Eigen/src/SVD/UpperBidiagonalization.h:
-
 /usr/include/c++/11/system_error:
 
 /usr/include/features-time64.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/locale_t.h:
+
+../eigen/Eigen/src/SVD/UpperBidiagonalization.h:
 
 ../eigen/Eigen/src/Core/Swap.h:
 
@@ -9251,6 +9473,8 @@ test/CMakeFiles/test.dir/test_Substitution.cpp.o: ../test/test_Substitution.cpp 
 ../eigen/Eigen/src/Core/Ref.h:
 
 ../eigen/Eigen/src/Jacobi/InternalHeaderCheck.h:
+
+../eigen/Eigen/src/Core/VectorBlock.h:
 
 /usr/include/c++/11/bits/stl_multiset.h:
 
@@ -9353,3 +9577,7 @@ test/CMakeFiles/test.dir/test_Substitution.cpp.o: ../test/test_Substitution.cpp 
 ../eigen/Eigen/src/QR/CompleteOrthogonalDecomposition.h:
 
 ../eigen/Eigen/SVD:
+
+/usr/include/x86_64-linux-gnu/bits/uio_lim.h:
+
+../eigen/Eigen/src/misc/RealSvd2x2.h:

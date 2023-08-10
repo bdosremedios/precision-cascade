@@ -2,14 +2,20 @@
 #define TEST_H
 
 #include "gtest/gtest.h"
+#include "Eigen/Dense"
 
 #include <cmath>
 #include <string>
 
+using Eigen::Matrix, Eigen::Dynamic;
 using std::pow;
 using std::string;
 
 double gamma(int n, double u);
+
+bool matrix_near(Matrix<double, Dynamic, Dynamic>, Matrix<double, Dynamic, Dynamic>, double);
+bool matrix_zero(Matrix<double, Dynamic, Dynamic>, double);
+bool matrix_eye(Matrix<double, Dynamic, Dynamic>, double);
 
 class TestBase: public testing::Test {
 

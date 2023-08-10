@@ -49,20 +49,23 @@ class LinearSolve {
 
         // Constructors/Destructors
         LinearSolve(Matrix<T, Dynamic, Dynamic> const &arg_A,
-                    Matrix<T, Dynamic, 1> const &arg_b) {
+                    Matrix<T, Dynamic, 1> const &arg_b
+        ) {
             constructorHelper(arg_A, arg_b, Matrix<T, Dynamic, 1>::Ones(arg_A.cols(), 1));
         }
 
         LinearSolve(Matrix<T, Dynamic, Dynamic> const &arg_A,
                     Matrix<T, Dynamic, 1> const &arg_b, 
-                    Matrix<T, Dynamic, 1> const &arg_x_0) {
+                    Matrix<T, Dynamic, 1> const &arg_x_0
+        ) {
             constructorHelper(arg_A, arg_b, arg_x_0);
         };
 
         void constructorHelper(
             Matrix<T, Dynamic, Dynamic> const &arg_A,
             Matrix<T, Dynamic, 1> const &arg_b, 
-            Matrix<T, Dynamic, 1> const &arg_x_0) {
+            Matrix<T, Dynamic, 1> const &arg_x_0
+        ) {
 
                 // Ensure compatability to matrices and not empty
                 m = arg_A.rows();
