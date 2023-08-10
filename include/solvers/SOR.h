@@ -43,15 +43,15 @@ class SORSolve: public LinearSolve<T> {
     public:
 
         // Constructors
-        SORSolve(const Matrix<T, Dynamic, Dynamic> arg_A,
-                 const Matrix<T, Dynamic, 1> arg_b,
-                   T arg_w):
+        SORSolve(Matrix<T, Dynamic, Dynamic> const &arg_A,
+                 Matrix<T, Dynamic, 1> const &arg_b,
+                 T const &arg_w):
             w(arg_w), LinearSolve<T>::LinearSolve(arg_A, arg_b) {}
 
-        SORSolve(const Matrix<T, Dynamic, Dynamic> arg_A,
-                 const Matrix<T, Dynamic, 1> arg_b, 
-                 const Matrix<T, Dynamic, 1> arg_x_0,
-                 T arg_w):
+        SORSolve(Matrix<T, Dynamic, Dynamic> const &arg_A,
+                 Matrix<T, Dynamic, 1> const &arg_b, 
+                 Matrix<T, Dynamic, 1> const &arg_x_0,
+                 T const &arg_w):
             w(arg_w), LinearSolve<T>::LinearSolve(arg_A, arg_b, arg_x_0) {}
 
 };

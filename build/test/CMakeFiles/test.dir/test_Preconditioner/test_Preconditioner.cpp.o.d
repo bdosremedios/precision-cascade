@@ -530,4 +530,5 @@ test/CMakeFiles/test.dir/test_Preconditioner/test_Preconditioner.cpp.o: \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
  /usr/include/c++/11/bits/fstream.tcc \
  /home/bdosremedios/dev/gmres/test/../include/preconditioners/ImplementedPreconditioners.h \
- /home/bdosremedios/dev/gmres/test/../include/preconditioners/Preconditioner.h
+ /home/bdosremedios/dev/gmres/test/../include/preconditioners/Preconditioner.h \
+ /home/bdosremedios/dev/gmres/test/../include/tools/Substitution.h

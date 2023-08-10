@@ -17,7 +17,7 @@ namespace read_matrix
 {
 
 template <typename T>
-Matrix<T, Dynamic, Dynamic> read_matrix_csv(string const & path) {
+Matrix<T, Dynamic, Dynamic> read_matrix_csv(string const &path) {
 
     // Open given file
     ifstream file_in;

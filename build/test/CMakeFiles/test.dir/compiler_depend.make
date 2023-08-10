@@ -5756,7 +5756,8 @@ test/CMakeFiles/test.dir/test_Preconditioner/test_ILU.cpp.o: ../test/test_Precon
   /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
   /usr/include/c++/11/bits/fstream.tcc \
   ../include/preconditioners/ImplementedPreconditioners.h \
-  ../include/preconditioners/Preconditioner.h
+  ../include/preconditioners/Preconditioner.h \
+  ../include/tools/Substitution.h
 
 test/CMakeFiles/test.dir/test_Preconditioner/test_Preconditioner.cpp.o: ../test/test_Preconditioner/test_Preconditioner.cpp \
   /usr/include/stdc-predef.h \
@@ -6354,7 +6355,8 @@ test/CMakeFiles/test.dir/test_Preconditioner/test_Preconditioner.cpp.o: ../test/
   /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
   /usr/include/c++/11/bits/fstream.tcc \
   ../include/preconditioners/ImplementedPreconditioners.h \
-  ../include/preconditioners/Preconditioner.h
+  ../include/preconditioners/Preconditioner.h \
+  ../include/tools/Substitution.h
 
 test/CMakeFiles/test.dir/test_SOR/test_GaussSeidel.cpp.o: ../test/test_SOR/test_GaussSeidel.cpp \
   /usr/include/stdc-predef.h \

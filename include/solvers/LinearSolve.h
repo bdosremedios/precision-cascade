@@ -48,21 +48,21 @@ class LinearSolve {
     public:
 
         // Constructors/Destructors
-        LinearSolve(const Matrix<T, Dynamic, Dynamic> arg_A,
-                    const Matrix<T, Dynamic, 1> arg_b) {
+        LinearSolve(Matrix<T, Dynamic, Dynamic> const &arg_A,
+                    Matrix<T, Dynamic, 1> const &arg_b) {
             constructorHelper(arg_A, arg_b, Matrix<T, Dynamic, 1>::Ones(arg_A.cols(), 1));
         }
 
-        LinearSolve(const Matrix<T, Dynamic, Dynamic> arg_A,
-                    const Matrix<T, Dynamic, 1> arg_b, 
-                    const Matrix<T, Dynamic, 1> arg_x_0) {
+        LinearSolve(Matrix<T, Dynamic, Dynamic> const &arg_A,
+                    Matrix<T, Dynamic, 1> const &arg_b, 
+                    Matrix<T, Dynamic, 1> const &arg_x_0) {
             constructorHelper(arg_A, arg_b, arg_x_0);
         };
 
         void constructorHelper(
-            const Matrix<T, Dynamic, Dynamic> arg_A,
-            const Matrix<T, Dynamic, 1> arg_b, 
-            const Matrix<T, Dynamic, 1> arg_x_0) {
+            Matrix<T, Dynamic, Dynamic> const &arg_A,
+            Matrix<T, Dynamic, 1> const &arg_b, 
+            Matrix<T, Dynamic, 1> const &arg_x_0) {
 
                 // Ensure compatability to matrices and not empty
                 m = arg_A.rows();
@@ -88,7 +88,7 @@ class LinearSolve {
                                           // in dynamic memory usage
 
         // Disable copy constructor and copy assignment
-        LinearSolve(const LinearSolve &) = delete;
+        LinearSolve(LinearSolve const &) = delete;
         LinearSolve & operator=(LinearSolve &) = delete;
 
         // Getters
@@ -124,7 +124,7 @@ class LinearSolve {
         }
 
         // Perform linear solve with given iterate scheme
-        void solve(const int max_iter=100, const double target_rel_res=1e-10) {
+        void solve(int const &max_iter=100, double const &target_rel_res=1e-10) {
 
             // Store target residual
             solve_target_relres = target_rel_res;
@@ -169,7 +169,7 @@ class LinearSolve {
         } // end solve
 
         // Helper for plotting
-        int min_three_int(int num) const {
+        int min_three_int(int const &num) const {
             if (num < 3) {
                 return 3;
             } else {
@@ -178,7 +178,7 @@ class LinearSolve {
         }
 
         // Plot relative residual
-        void view_relres_plot(string arg="normal") const {
+        void view_relres_plot(string const &arg="normal") const {
 
             // Get max max_length entries to plot
             int max_length = 70;
@@ -290,16 +290,16 @@ class LinearSolveTestingMock: public LinearSolve<T> {
         using LinearSolve<T>::res_norm_hist;
 
         LinearSolveTestingMock(
-            const Matrix<T, Dynamic, Dynamic> arg_A,
-            const Matrix<T, Dynamic, 1> arg_b,
-            const Matrix<T, Dynamic, 1> arg_soln
+            Matrix<T, Dynamic, Dynamic> const &arg_A,
+            Matrix<T, Dynamic, 1> const &arg_b,
+            Matrix<T, Dynamic, 1> const &arg_soln
         ): soln(arg_soln), LinearSolve<T>::LinearSolve(arg_A, arg_b) {}
 
         LinearSolveTestingMock(
-            const Matrix<T, Dynamic, Dynamic> arg_A,
-            const Matrix<T, Dynamic, 1> arg_b,
-            const Matrix<T, Dynamic, 1> arg_x_0,
-            const Matrix<T, Dynamic, 1> arg_soln
+            Matrix<T, Dynamic, Dynamic> const &arg_A,
+            Matrix<T, Dynamic, 1> const &arg_b,
+            Matrix<T, Dynamic, 1> const &arg_x_0,
+            Matrix<T, Dynamic, 1> const &arg_soln
         ): soln(arg_soln), LinearSolve<T>::LinearSolve(arg_A, arg_b, arg_x_0) {}
 
 };

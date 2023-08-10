@@ -7,7 +7,7 @@ using Eigen::Matrix;
 
 template <typename T>
 Matrix<T, Dynamic, 1> back_substitution(
-    const Matrix<T, Dynamic, Dynamic> &UT, const Matrix<T, Dynamic, 1> &rhs, const int solve_size
+    Matrix<T, Dynamic, Dynamic> const &UT, Matrix<T, Dynamic, 1> const &rhs, int const &solve_size
 ) {
 
     Matrix<T, Dynamic, 1> x = Matrix<T, Dynamic, 1>::Zero(solve_size, 1);
@@ -24,7 +24,9 @@ Matrix<T, Dynamic, 1> back_substitution(
 }
 
 // template <typename T>
-// Matrix<T, Dynamic, 1> fwrd_substitution(Matrix<T, Dynamic, Dynamic> &LT, Matrix<T, Dynamic, 1> rhs) {
+// Matrix<T, Dynamic, 1> fwrd_substitution(
+//     const Matrix<T, Dynamic, Dynamic> &LT, Matrix<T, Dynamic, 1> rhs
+// ) {
 
 // }
 

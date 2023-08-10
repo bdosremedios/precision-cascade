@@ -2,60 +2,66 @@
 #define IMPLEMENTED_PRECONDITIONERS_H
 
 #include "Preconditioner.h"
+#include "tools/Substitution.h"
 
 #include <cmath>
 
 using std::abs;
 
-template <typename U>
-class NoPreconditioner: public Preconditioner<U> {
+template <typename T>
+class NoPreconditioner: public Preconditioner<T> {
 
     public:
 
-        using Preconditioner<U>::Preconditioner;
+        using Preconditioner<T>::Preconditioner;
     
-        Matrix<U, Dynamic, 1> action_inv_M(Matrix<U, Dynamic, 1> vec) const override {
+        Matrix<T, Dynamic, 1> action_inv_M(Matrix<T, Dynamic, 1> const &vec) const override {
             return vec;
         }
 
-        bool check_compatibility_left(int m) const override { return true; };
-        bool check_compatibility_right(int n) const override { return true; };
+        bool check_compatibility_left(int const &arg_m) const override { return true; };
+        bool check_compatibility_right(int const &arg_n) const override { return true; };
 
 };
 
-template <typename U>
-class MatrixInverse: public Preconditioner<U> {
+template <typename T>
+class MatrixInverse: public Preconditioner<T> {
 
     public:
 
-        Matrix<U, Dynamic, Dynamic> inv_M;
+        Matrix<T, Dynamic, Dynamic> inv_M;
 
-        MatrixInverse(Matrix<U, Dynamic, Dynamic> arg_inv_M): inv_M(arg_inv_M) {}
+        MatrixInverse(Matrix<T, Dynamic, Dynamic> const &arg_inv_M): inv_M(arg_inv_M) {}
 
-        bool check_compatibility_left(int arg_m) const override {
+        bool check_compatibility_left(int const &arg_m) const override {
             return ((inv_M.cols() == arg_m) && (inv_M.rows() == arg_m));
         };
 
-        bool check_compatibility_right(int arg_n) const override {
+        bool check_compatibility_right(int const &arg_n) const override {
             return ((inv_M.cols() == arg_n) && (inv_M.rows() == arg_n));
         };
 
-        Matrix<U, Dynamic, 1> action_inv_M(Matrix<U, Dynamic, 1> vec) const override {
+        Matrix<T, Dynamic, 1> action_inv_M(Matrix<T, Dynamic, 1> const &vec) const override {
             return inv_M*vec;
         }
 
 };
 
 template <typename T>
-class ILU {
+class ILU: public Preconditioner<T> {
 
     public:
 
         Matrix<T, Dynamic, Dynamic> LU;
+        int m;
 
-        ILU(Matrix<T, Dynamic, Dynamic> A, T drop_tol, T zero_tol) {
+        ILU(Matrix<T, Dynamic, Dynamic> const &A, T const &drop_tol, T const &zero_tol) {
             
-            int m = A.rows(); 
+            if (A.rows() != A.cols()) {
+                throw runtime_error("Non square matrix A");
+            }
+
+            m = A.rows(); 
             LU = A;
 
             // Use IKJ variant for better predictability of modification
@@ -79,7 +85,6 @@ class ILU {
 
         Matrix<T, Dynamic, Dynamic> get_L() {
 
-            int m = LU.rows(); 
             Matrix<T, Dynamic, Dynamic> L(Matrix<T, Dynamic, Dynamic>::Identity(m, m));
             for (int i=0; i<m; ++i) {
                 for (int j=0; j<i; ++j) {
@@ -93,7 +98,6 @@ class ILU {
 
         Matrix<T, Dynamic, Dynamic> get_U() {
 
-            int m = LU.rows(); 
             Matrix<T, Dynamic, Dynamic> U(Matrix<T, Dynamic, Dynamic>::Zero(m, m));
             for (int i=0; i<m; ++i) {
                 for (int j=i; j<m; ++j) {
@@ -105,12 +109,17 @@ class ILU {
 
         }
 
-        virtual Matrix<T, Dynamic, 1> action_inv_M(Matrix<T, Dynamic, 1> vec) const {
+        Matrix<T, Dynamic, 1> action_inv_M(Matrix<T, Dynamic, 1> const &vec) const override {
             return Matrix<T, Dynamic, 1>::Zero(1, 1);
         }
 
-        virtual bool check_compatibility_left(int m) const { return false; };
-        virtual bool check_compatibility_right(int n) const { return false; };
+        bool check_compatibility_left(int const &arg_m) const override {
+            return arg_m == m;
+        };
+
+        bool check_compatibility_right(int const &arg_n) const override {
+            return arg_n == m;
+        };
 
 };
 

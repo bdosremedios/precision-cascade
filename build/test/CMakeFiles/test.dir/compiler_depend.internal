@@ -5767,6 +5767,7 @@ test/CMakeFiles/test.dir/test_Preconditioner/test_ILU.cpp.o
  /usr/include/c++/11/bits/fstream.tcc
  /home/bdosremedios/dev/gmres/include/preconditioners/ImplementedPreconditioners.h
  /home/bdosremedios/dev/gmres/include/preconditioners/Preconditioner.h
+ /home/bdosremedios/dev/gmres/include/tools/Substitution.h
 
 test/CMakeFiles/test.dir/test_Preconditioner/test_Preconditioner.cpp.o
  /home/bdosremedios/dev/gmres/test/test_Preconditioner/test_Preconditioner.cpp
@@ -6366,6 +6367,7 @@ test/CMakeFiles/test.dir/test_Preconditioner/test_Preconditioner.cpp.o
  /usr/include/c++/11/bits/fstream.tcc
  /home/bdosremedios/dev/gmres/include/preconditioners/ImplementedPreconditioners.h
  /home/bdosremedios/dev/gmres/include/preconditioners/Preconditioner.h
+ /home/bdosremedios/dev/gmres/include/tools/Substitution.h
 
 test/CMakeFiles/test.dir/test_SOR/test_GaussSeidel.cpp.o
  /home/bdosremedios/dev/gmres/test/test_SOR/test_GaussSeidel.cpp

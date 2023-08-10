@@ -156,11 +156,11 @@ class GMRESSolve: public LinearSolve<T> {
 
         // Constructors/Destructors
         GMRESSolve(
-            const Matrix<T, Dynamic, Dynamic> arg_A,
-            const Matrix<T, Dynamic, 1> arg_b,
-            T arg_basis_zero_tol,
-            shared_ptr<Preconditioner<U>> arg_left_precond_ptr=make_shared<NoPreconditioner<T>>(),
-            shared_ptr<Preconditioner<U>> arg_right_precond_ptr=make_shared<NoPreconditioner<T>>()
+            Matrix<T, Dynamic, Dynamic> const &arg_A,
+            Matrix<T, Dynamic, 1> const &arg_b,
+            T const &arg_basis_zero_tol,
+            shared_ptr<Preconditioner<U>> const &arg_left_precond_ptr = make_shared<NoPreconditioner<T>>(),
+            shared_ptr<Preconditioner<U>> const &arg_right_precond_ptr = make_shared<NoPreconditioner<T>>()
         ):
             basis_zero_tol(arg_basis_zero_tol),
             left_precond_ptr(arg_left_precond_ptr),
@@ -171,12 +171,12 @@ class GMRESSolve: public LinearSolve<T> {
         }
 
         GMRESSolve(
-            const Matrix<T, Dynamic, Dynamic> arg_A,
-            const Matrix<T, Dynamic, 1> arg_b,
-            const Matrix<T, Dynamic, 1> arg_x_0,
-            T arg_basis_zero_tol,
-            shared_ptr<Preconditioner<U>> arg_left_precond_ptr = make_shared<NoPreconditioner<T>>(),
-            shared_ptr<Preconditioner<U>> arg_right_precond_ptr = make_shared<NoPreconditioner<T>>()
+            Matrix<T, Dynamic, Dynamic> const &arg_A,
+            Matrix<T, Dynamic, 1> const &arg_b,
+            Matrix<T, Dynamic, 1> const &arg_x_0,
+            T const &arg_basis_zero_tol,
+            shared_ptr<Preconditioner<U>> const &arg_left_precond_ptr = make_shared<NoPreconditioner<T>>(),
+            shared_ptr<Preconditioner<U>> const &arg_right_precond_ptr = make_shared<NoPreconditioner<T>>()
         ):
             basis_zero_tol(arg_basis_zero_tol),
             left_precond_ptr(arg_left_precond_ptr),
