@@ -28,7 +28,7 @@ TEST_F(GMRESComponentTest, CheckConstruction5x5) {
     Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "A_5_toy.csv"));
     Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "b_5_toy.csv"));
     GMRESSolveTestingMock<double> test_mock(A, b, u_dbl);
-    ASSERT_EQ(test_mock.max_krylov_subspace_dim, 5);
+    ASSERT_EQ(test_mock.max_kry_space_dim, 5);
     ASSERT_EQ(test_mock.rho, (b - A*MatrixXd::Ones(5, 1)).norm());
     
     ASSERT_EQ(test_mock.Q_kry_basis.rows(), 5);
@@ -74,7 +74,7 @@ TEST_F(GMRESComponentTest, CheckConstruction64x64) {
     Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_A.csv"));
     Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_b.csv"));
     GMRESSolveTestingMock<double> test_mock(A, b, u_dbl);
-    ASSERT_EQ(test_mock.max_krylov_subspace_dim, 64);
+    ASSERT_EQ(test_mock.max_kry_space_dim, 64);
     ASSERT_EQ(test_mock.rho, (b - A*MatrixXd::Ones(64, 1)).norm());
     
     ASSERT_EQ(test_mock.Q_kry_basis.rows(), 64);
@@ -200,7 +200,7 @@ TEST_F(GMRESComponentTest, H_QR_Update) {
         int k = kry_dim-1;
 
         // Set krylov dimension to kry_dim and update QR
-        test_mock.krylov_subspace_dim = kry_dim;
+        test_mock.kry_space_dim = kry_dim;
         test_mock.update_QR_fact();
 
         // Check that previous columns are unchanged by new update
@@ -271,7 +271,7 @@ TEST_F(GMRESComponentTest, Update_x_Back_Substitution) {
     for (int kry_dim=1; kry_dim<=7; ++kry_dim) {
 
         // Set Krylov subspace dim
-        test_mock.krylov_subspace_dim = kry_dim;
+        test_mock.kry_space_dim = kry_dim;
         
         // Load test solution
         string solution_path = solve_matrix_dir + "x_" + std::to_string(kry_dim) + "_backsub.csv";
@@ -282,7 +282,7 @@ TEST_F(GMRESComponentTest, Update_x_Back_Substitution) {
 
         // Check if coefficient solution matches to within double tolerance
         for (int i=0; i<kry_dim; ++i) {
-            EXPECT_NEAR(test_mock.x(i), test_soln(i), accum_error_mod*(i+1)*gamma(kry_dim, u_dbl));
+            ASSERT_NEAR(test_mock.x(i), test_soln(i), accum_error_mod*(i+1)*gamma(kry_dim, u_dbl));
         }
 
     }
@@ -304,7 +304,7 @@ TEST_F(GMRESComponentTest, KrylovLuckyBreakFirstIter) {
     // not converged
     EXPECT_FALSE(test_mock.check_converged());
     EXPECT_TRUE(test_mock.check_terminated());
-    EXPECT_EQ(test_mock.krylov_subspace_dim, 0);
+    EXPECT_EQ(test_mock.kry_space_dim, 0);
     for (int i=0; i<5; ++i) {
         for (int j=0; j<5; ++j) {
             EXPECT_EQ(test_mock.Q_kry_basis(i, j), 0);
@@ -341,7 +341,7 @@ TEST_F(GMRESComponentTest, KrylovLuckyBreakLaterIter) {
     // check for LinearSolve
     EXPECT_FALSE(test_mock.check_converged());
     EXPECT_TRUE(test_mock.check_terminated());
-    EXPECT_EQ(test_mock.krylov_subspace_dim, 1);
+    EXPECT_EQ(test_mock.kry_space_dim, 1);
     EXPECT_NEAR(test_mock.Q_kry_basis.col(0).norm(), 1, gamma(5, u_dbl));
     for (int i=0; i<5; ++i) {
         for (int j=1; j<5; ++j) {
@@ -369,7 +369,7 @@ TEST_F(GMRESComponentTest, KrylovLuckyBreakThroughSolve) {
 
     // Check that subspace has not gone beyond 1 dimension and that krylov basis
     // as expected to have only a single column
-    EXPECT_EQ(test_mock.krylov_subspace_dim, 1);
+    EXPECT_EQ(test_mock.kry_space_dim, 1);
     EXPECT_NEAR(test_mock.Q_kry_basis.col(0).norm(), 1, gamma(5, u_dbl));
     for (int i=0; i<5; ++i) {
         for (int j=1; j<5; ++j) {

@@ -36,8 +36,8 @@ class GMRESSolve: public LinearSolve<T> {
         Matrix<T, Dynamic, Dynamic> R_H;
         Matrix<T, Dynamic, 1> next_q;
 
-        int krylov_subspace_dim = 0;
-        int max_krylov_subspace_dim;
+        int kry_space_dim = 0;
+        int max_kry_space_dim;
         T basis_zero_tol;
         T rho;
 
@@ -47,19 +47,19 @@ class GMRESSolve: public LinearSolve<T> {
             // checked in previous iteration that vector q was not zero vector
             // by checking H(k+1, k), with exception to zeroth iteration which
             // similarly checks the direct norm
-            int k = krylov_subspace_dim-1;
-            if (krylov_subspace_dim == 0) {
-                Q_kry_basis(all, krylov_subspace_dim) = next_q/next_q.norm();
+            int k = kry_space_dim-1;
+            if (kry_space_dim == 0) {
+                Q_kry_basis(all, kry_space_dim) = next_q/next_q.norm();
             } else {
-                Q_kry_basis(all, krylov_subspace_dim) = next_q/H(k+1, k);
+                Q_kry_basis(all, kry_space_dim) = next_q/H(k+1, k);
             }
-            ++krylov_subspace_dim; // Update krylov dimension count
+            ++kry_space_dim; // Update krylov dimension count
             
         }
 
         void update_nextq_and_Hkplus1() {
 
-            int k = krylov_subspace_dim-1;
+            int k = kry_space_dim-1;
             
             // Find next vector power of linear system
             next_q = Q_kry_basis(all, k);
@@ -82,7 +82,7 @@ class GMRESSolve: public LinearSolve<T> {
         void update_QR_fact() {
 
             // Initiate next column of QR fact as most recent of H
-            int k = krylov_subspace_dim-1;
+            int k = kry_space_dim-1;
             R_H(all, k) = H(all, k);
 
             // Apply previous Given's rotations to new column
@@ -112,16 +112,22 @@ class GMRESSolve: public LinearSolve<T> {
         void update_x_minimizing_res() {
 
             // Calculate RHS to solve
-            int k = krylov_subspace_dim-1;
-            Matrix<T, Dynamic, 1> rho_e1 = Matrix<T, Dynamic, 1>::Zero(k+2, 1);
+            Matrix<T, Dynamic, 1> rho_e1 = Matrix<T, Dynamic, 1>::Zero(kry_space_dim+1, 1);
             rho_e1(0) = rho;
-            Matrix<T, Dynamic, 1> rhs = Q_H.block(0, 0, k+2, k+2).transpose()*rho_e1;
+            Matrix<T, Dynamic, 1> rhs = (
+                Q_H.block(0, 0, kry_space_dim+1, kry_space_dim+1).transpose()*rho_e1
+            );
 
             // Use back substitution to solve
-            Matrix<T, Dynamic, 1> y = back_substitution(R_H, rhs, krylov_subspace_dim);
+            Matrix<T, Dynamic, 1> y = back_substitution(
+                static_cast<Matrix<T, Dynamic, Dynamic>>(R_H.block(0, 0, kry_space_dim, kry_space_dim)),
+                // Trim off last entry of rhs for solve since solve of least squares problem
+                // does not have coefficient to deal with it
+                static_cast<Matrix<T, Dynamic, 1>>(rhs.block(0, 0, kry_space_dim, 1))
+            );
 
             // Update x adjusting with right preconditioning
-            x = x_0 + right_precond_ptr->action_inv_M(Q_kry_basis.block(0, 0, m, krylov_subspace_dim)*y);
+            x = x_0 + right_precond_ptr->action_inv_M(Q_kry_basis.block(0, 0, m, kry_space_dim)*y);
 
         }
 
@@ -129,7 +135,7 @@ class GMRESSolve: public LinearSolve<T> {
 
             // Check for termination condition with inability to expand subspace if
             // next basis vector is was in the existing Krylov subspace to basis_zero_tol
-            int k = krylov_subspace_dim-1;
+            int k = kry_space_dim-1;
             if (H(k+1, k) <= basis_zero_tol) {
                 this->terminated = true;
             }
@@ -141,7 +147,7 @@ class GMRESSolve: public LinearSolve<T> {
             // Check isn't terminated and that solver isn't attempting to exceed
             // krylov subspace dimension, if is just do nothing
             if (!this->terminated) {
-                if (krylov_subspace_dim < max_krylov_subspace_dim) {
+                if (kry_space_dim < max_kry_space_dim) {
                     update_subspace_k();
                     update_nextq_and_Hkplus1();
                     update_QR_fact();
@@ -204,7 +210,7 @@ class GMRESSolve: public LinearSolve<T> {
             R_H = Matrix<T, Dynamic, Dynamic>::Zero(m+1, m);
 
             // Specify max dimension for krylov subspace
-            max_krylov_subspace_dim = m;
+            max_kry_space_dim = m;
 
             // Set rho as initial residual norm
             Matrix<T, Dynamic, 1> Minv_A_x0(left_precond_ptr->action_inv_M(A*x_0));
@@ -236,8 +242,8 @@ class GMRESSolveTestingMock: public GMRESSolve<T, U> {
         using GMRESSolve<T, U>::Q_H;
         using GMRESSolve<T, U>::R_H;
 
-        using GMRESSolve<T, U>::krylov_subspace_dim;
-        using GMRESSolve<T, U>::max_krylov_subspace_dim;
+        using GMRESSolve<T, U>::kry_space_dim;
+        using GMRESSolve<T, U>::max_kry_space_dim;
         using GMRESSolve<T, U>::next_q;
         using GMRESSolve<T, U>::rho;
         using GMRESSolve<T, U>::iteration;

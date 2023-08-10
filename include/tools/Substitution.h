@@ -7,16 +7,23 @@ using Eigen::Matrix;
 
 template <typename T>
 Matrix<T, Dynamic, 1> back_substitution(
-    Matrix<T, Dynamic, Dynamic> const &UT, Matrix<T, Dynamic, 1> const &rhs, int const &solve_size
+    Matrix<T, Dynamic, Dynamic> const &UT, Matrix<T, Dynamic, 1> const &rhs
 ) {
 
-    Matrix<T, Dynamic, 1> x = Matrix<T, Dynamic, 1>::Zero(solve_size, 1);
-    for (int i=solve_size-1; i>=0; --i) {
-        x(i) = rhs(i);
-        for (int j=i+1; j<=solve_size-1; ++j) {
-            x(i) -= UT(i, j)*x(j);
+    // Check squareness and compatibility
+    if (UT.rows() != UT.cols()) { throw runtime_error("Non square matrix in back substitution"); }
+    if (UT.rows() != rhs.rows()) { throw runtime_error("Incompatible matrix and rhs"); }
+
+    // Assume UT is upper triangular
+    Matrix<T, Dynamic, 1> x = Matrix<T, Dynamic, 1>::Zero(UT.cols(), 1);
+    for (int i=UT.rows()-1; i>=0; --i) {
+        if (UT(i, i) != 0) { // Skip if coefficient is zero
+            x(i) = rhs(i);
+            for (int j=i+1; j<=UT.rows()-1; ++j) {
+                x(i) -= UT(i, j)*x(j);
+            }
+            x(i) /= UT(i, i);
         }
-        x(i) /= UT(i, i);
     }
 
     return x;
@@ -25,8 +32,10 @@ Matrix<T, Dynamic, 1> back_substitution(
 
 // template <typename T>
 // Matrix<T, Dynamic, 1> fwrd_substitution(
-//     const Matrix<T, Dynamic, Dynamic> &LT, Matrix<T, Dynamic, 1> rhs
+//     Matrix<T, Dynamic, Dynamic> const &LT, Matrix<T, Dynamic, 1> const &rhs
 // ) {
+
+//     // Assume compatibility of rhs and LT and assume LT is lower triangular
 
 // }
 

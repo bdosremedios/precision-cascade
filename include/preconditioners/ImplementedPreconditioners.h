@@ -57,9 +57,7 @@ class ILU: public Preconditioner<T> {
 
         ILU(Matrix<T, Dynamic, Dynamic> const &A, T const &drop_tol, T const &zero_tol) {
             
-            if (A.rows() != A.cols()) {
-                throw runtime_error("Non square matrix A");
-            }
+            if (A.rows() != A.cols()) { throw runtime_error("Non square matrix A"); }
 
             m = A.rows(); 
             LU = A;
