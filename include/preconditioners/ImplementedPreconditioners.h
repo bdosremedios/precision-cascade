@@ -5,6 +5,7 @@
 #include "tools/Substitution.h"
 
 #include <cmath>
+#include <functional>
 
 using std::abs;
 
@@ -56,7 +57,32 @@ class ILU: public Preconditioner<T> {
         Matrix<T, Dynamic, Dynamic> U;
         int m;
 
-        ILU(Matrix<T, Dynamic, Dynamic> const &A, T const &drop_tol, T const &zero_tol) {
+        // ILU(0)
+        ILU(Matrix<T, Dynamic, Dynamic> const &A, T const &zero_tol) {
+
+            std::function<bool(T const &, T const &)> drop_if_orig_0 = [zero_tol] (
+                T const &entry, T const &orig_entry
+            ) -> bool { return (abs(orig_entry) <= zero_tol); };
+            constructionHelper(A, zero_tol, drop_if_orig_0);
+
+        }
+
+        // ILUT(eps)
+        ILU(Matrix<T, Dynamic, Dynamic> const &A, T const &zero_tol, T const &eps) {
+
+            std::function<bool(T const &, T const &)> drop_if_lt = [eps] (
+                T const &entry, T const &orig_entry
+            ) -> bool { return (abs(entry) < eps); };
+            constructionHelper(A, zero_tol, drop_if_lt);
+
+        }
+
+        void constructionHelper(
+            Matrix<T, Dynamic, Dynamic> const &A,
+            T const &zero_tol,
+            std::function<bool(T const &, T const &)> drop_rule // Function to drop value if true for
+                                                                // entry value given original value and itself
+        ) {
             
             if (A.rows() != A.cols()) { throw runtime_error("Non square matrix A"); }
 
@@ -69,22 +95,31 @@ class ILU: public Preconditioner<T> {
 
             // Use IKJ variant for better predictability of modification
             for (int i=1; i<m; ++i) {
+
                 for (int k=0; k<=i-1; ++k) {
+                    // Ensure pivot is non-zero
                     if (abs(U(k, k)) > zero_tol) {
                         T coeff = U(i, k)/U(k, k);
-                        U(i, k) = 0;
-                        L(i, k) = coeff;
-                        for (int j=k+1; j<m; ++j) {
-                            if (abs(U(i, j)) > zero_tol) {
+                        // Apply dropping rule to zero-ing val, skipping subsequent calcs in row if dropped
+                        if (!drop_rule(coeff, A(i, k))) {
+                            L(i, k) = coeff;
+                            for (int j=k+1; j<m; ++j) {
                                 U(i, j) = U(i, j) - coeff*U(k, j);
                             }
-                        }
+                        } 
+                        U(i, k) = 0;
                     } else {
                         throw runtime_error("ILU encountered zero diagonal entry");
                     }
                 }
-            }
+                
+                // Iterate through the row again to ensure enforcement of drop rule
+                for (int j=0; j<m; ++j) {
+                    if (drop_rule(L(i, j), A(i, j))) { L(i, j) = 0; }
+                    if (drop_rule(U(i, j), A(i, j))) { U(i, j) = 0; }
+                }
 
+            }
         }
 
         Matrix<T, Dynamic, 1> action_inv_M(Matrix<T, Dynamic, 1> const &vec) const override {

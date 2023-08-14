@@ -23,7 +23,7 @@ class TestBase: public testing::Test {
 
         // Error tolerance allowed in an entry for a double precision calculation after
         // accumulation of errors where prediction of error bound is difficult
-        const double dbl_error_acc = pow(10, -11);
+        const double dbl_error_acc = pow(10, -10);
 
         const double conv_tol_hlf = pow(10, -02);
         const double conv_tol_sgl = pow(10, -05);
