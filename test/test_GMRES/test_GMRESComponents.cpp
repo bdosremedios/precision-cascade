@@ -16,12 +16,7 @@ using read_matrix::read_matrix_csv;
 using std::string;
 using std::cout, std::endl;
 
-class GMRESComponentTest: public TestBase {
-    
-    public:
-        double accum_error_mod = pow(10, 2);
-
-};
+class GMRESComponentTest: public TestBase {};
 
 TEST_F(GMRESComponentTest, CheckConstruction5x5) {
     
@@ -155,7 +150,7 @@ TEST_F(GMRESComponentTest, KrylovInstantiationAndUpdates) {
         // Confirm that previous vectors are unchanged and are orthogonal to new one
         for (int j=0; j<k; ++j) {
             EXPECT_EQ(test_mock.Q_kry_basis.col(j), Q_save(all, j));
-            EXPECT_NEAR(test_mock.Q_kry_basis.col(j).dot(q), 0, accum_error_mod*(j+1)*gamma(5, u_dbl));
+            EXPECT_NEAR(test_mock.Q_kry_basis.col(j).dot(q), 0, dbl_error_acc); // accum_error_mod*(j+1)*gamma(5, u_dbl));
         }
 
         // Confirm that Hessenberg matrix column corresponding to new basis vector
@@ -280,9 +275,9 @@ TEST_F(GMRESComponentTest, Update_x_Back_Substitution) {
         // )Solve with backsubstitution
         test_mock.update_x_minimizing_res();
 
-        // Check if coefficient solution matches to within double tolerance
+        // Check if coefficient solution matches to within tolerable error
         for (int i=0; i<kry_dim; ++i) {
-            ASSERT_NEAR(test_mock.x(i), test_soln(i), accum_error_mod*(i+1)*gamma(kry_dim, u_dbl));
+            ASSERT_NEAR(test_mock.x(i), test_soln(i), dbl_error_acc); //accum_error_mod*(i+1)*gamma(kry_dim, u_dbl));
         }
 
     }

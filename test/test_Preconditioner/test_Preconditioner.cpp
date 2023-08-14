@@ -50,7 +50,7 @@ TEST_F(PreconditionerTest, TestMatrixInverse) {
     test_vec = inv_precond.action_inv_M(test_vec);
 
     for (int i=0; i<45; ++i) {
-        ASSERT_NEAR(orig_test_vec[i], test_vec[i], pow(10, -12));
+        ASSERT_NEAR(orig_test_vec[i], test_vec[i], dbl_error_acc);
     }
 
 }

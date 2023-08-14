@@ -52,25 +52,31 @@ class ILU: public Preconditioner<T> {
 
     public:
 
-        Matrix<T, Dynamic, Dynamic> LU;
+        Matrix<T, Dynamic, Dynamic> L;
+        Matrix<T, Dynamic, Dynamic> U;
         int m;
 
         ILU(Matrix<T, Dynamic, Dynamic> const &A, T const &drop_tol, T const &zero_tol) {
             
             if (A.rows() != A.cols()) { throw runtime_error("Non square matrix A"); }
 
-            m = A.rows(); 
-            LU = A;
+            m = A.rows();
+            L = Matrix<T, Dynamic, Dynamic>::Identity(m, m);
+            U = Matrix<T, Dynamic, Dynamic>::Zero(m, m);
+
+            // Set U to be A and perform ILU
+            U = A;
 
             // Use IKJ variant for better predictability of modification
             for (int i=1; i<m; ++i) {
                 for (int k=0; k<=i-1; ++k) {
-                    if (abs(LU(k, k)) > zero_tol) {
-                        T coeff = LU(i, k)/LU(k, k);
-                        LU(i, k) = coeff;
+                    if (abs(U(k, k)) > zero_tol) {
+                        T coeff = U(i, k)/U(k, k);
+                        U(i, k) = 0;
+                        L(i, k) = coeff;
                         for (int j=k+1; j<m; ++j) {
-                            if (abs(A(i, j)) > zero_tol) {
-                                LU(i, j) = LU(i, j) - coeff*LU(k, j);
+                            if (abs(U(i, j)) > zero_tol) {
+                                U(i, j) = U(i, j) - coeff*U(k, j);
                             }
                         }
                     } else {
@@ -81,43 +87,15 @@ class ILU: public Preconditioner<T> {
 
         }
 
-        Matrix<T, Dynamic, Dynamic> get_L() const {
-
-            Matrix<T, Dynamic, Dynamic> L(Matrix<T, Dynamic, Dynamic>::Identity(m, m));
-            for (int i=0; i<m; ++i) {
-                for (int j=0; j<i; ++j) {
-                    L(i, j) = LU(i, j);
-                }
-            }
-
-            return L;
-
-        }
-
-        Matrix<T, Dynamic, Dynamic> get_U() const {
-
-            Matrix<T, Dynamic, Dynamic> U(Matrix<T, Dynamic, Dynamic>::Zero(m, m));
-            for (int i=0; i<m; ++i) {
-                for (int j=i; j<m; ++j) {
-                    U(i, j) = LU(i, j);
-                }
-            }
-
-            return U;
-
-        }
-
         Matrix<T, Dynamic, 1> action_inv_M(Matrix<T, Dynamic, 1> const &vec) const override {
-            return frwd_substitution(get_L(), back_substitution(get_U(), vec));
+            return frwd_substitution(L, back_substitution(U, vec));
         }
 
-        bool check_compatibility_left(int const &arg_m) const override {
-            return arg_m == m;
-        };
+        Matrix<T, Dynamic, Dynamic> get_L() const { return L; }
+        Matrix<T, Dynamic, Dynamic> get_U() const { return U; }
 
-        bool check_compatibility_right(int const &arg_n) const override {
-            return arg_n == m;
-        };
+        bool check_compatibility_left(int const &arg_m) const override { return arg_m == m; };
+        bool check_compatibility_right(int const &arg_n) const override { return arg_n == m; };
 
 };
 

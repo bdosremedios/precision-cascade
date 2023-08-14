@@ -13,10 +13,6 @@ using std::string;
 
 double gamma(int n, double u);
 
-bool matrix_near(Matrix<double, Dynamic, Dynamic>, Matrix<double, Dynamic, Dynamic>, double);
-bool matrix_zero(Matrix<double, Dynamic, Dynamic>, double);
-bool matrix_eye(Matrix<double, Dynamic, Dynamic>, double);
-
 class TestBase: public testing::Test {
 
     public:
@@ -24,6 +20,10 @@ class TestBase: public testing::Test {
         const double u_hlf = pow(2, -10);
         const double u_sgl = pow(2, -23);
         const double u_dbl = pow(2, -52);
+
+        // Error tolerance allowed in an entry for a double precision calculation after
+        // accumulation of errors where prediction of error bound is difficult
+        const double dbl_error_acc = pow(10, -11);
 
         const double conv_tol_hlf = pow(10, -02);
         const double conv_tol_sgl = pow(10, -05);

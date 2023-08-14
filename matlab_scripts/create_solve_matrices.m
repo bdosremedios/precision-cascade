@@ -20,7 +20,8 @@ b_5_easysoln = [1;2;0;0;0];
 writematrix(A_5_easysoln, "solve_matrices\\A_5_easysoln.csv");
 writematrix(b_5_easysoln, "solve_matrices\\b_5_easysoln.csv");
 
-% Create backsubstitution test
+% Create backsubstitution test with matrices to test backsub in GMRES
+% specifically
 A_7_backsub = randn(7, 7);
 b_7_backsub = randn(7, 1);
 rho = norm(b_7_backsub);
@@ -127,7 +128,7 @@ writematrix(b_saddle, "solve_matrices\\b_25_saddle.csv");
 writematrix(x_saddle, "solve_matrices\\x_25_saddle.csv");
 writematrix(inv_pre_cond, "solve_matrices\\A_25_invprecond_saddle.csv");
 
-% Create upper triangular to check backward substitution solve
+% Create lower/upper triangular to check substitution solve
 A_2_temp = randi(100, 90, 90);
 U_tri_90 = triu(A_2_temp);
 x_90 = randi(100, 90, 1);
@@ -140,15 +141,37 @@ Lb_90 = L_tri_90*x_90;
 writematrix(L_tri_90, "solve_matrices\\L_tri_90.csv");
 writematrix(Lb_90, "solve_matrices\\Lb_tri_90.csv");
 
-% Create lower triangular to check forward substitution
-
 % Create Matrix and Inverse to test inverse preconditioner
-A_inv_test = randn(45, 45);
+A_inv_test = randi(45, 45);
 Ainv_inv_test = inv(A_inv_test);
 b_inv_test = randn(45, 1);
 writematrix(A_inv_test, "solve_matrices\\A_inv_45.csv");
 writematrix(Ainv_inv_test, "solve_matrices\\Ainv_inv_45.csv");
 writematrix(b_inv_test, "solve_matrices\\b_inv_45.csv");
+
+% Create ILU and sparse ILU
+ilu_A = 10*randn(8, 8);
+[ilu_L, ilu_U] = ilu(sparse(ilu_A));
+writematrix(ilu_A, "solve_matrices\\ilu_A.csv");
+writematrix(full(ilu_L), "solve_matrices\\ilu_L.csv");
+writematrix(full(ilu_U), "solve_matrices\\ilu_U.csv");
+
+ilu_sparse_A = 8*randn(8, 8);
+ilu_sparse_A(1, 2) = 0; ilu_sparse_A(1, 3) = 0; ilu_sparse_A(1, 6) = 0; ilu_sparse_A(1, 7) = 0;
+ilu_sparse_A(2, 1) = 0; ilu_sparse_A(2, 5) = 0; ilu_sparse_A(2, 6) = 0; ilu_sparse_A(2, 8) = 0;
+ilu_sparse_A(3, 2) = 0; ilu_sparse_A(3, 4) = 0; ilu_sparse_A(3, 5) = 0; ilu_sparse_A(3, 7) = 0;
+ilu_sparse_A(4, 1) = 0; ilu_sparse_A(4, 2) = 0; ilu_sparse_A(4, 3) = 0; ilu_sparse_A(4, 5) = 0;
+ilu_sparse_A(5, 2) = 0; ilu_sparse_A(5, 3) = 0; ilu_sparse_A(5, 6) = 0; ilu_sparse_A(5, 7) = 0;
+ilu_sparse_A(6, 3) = 0; ilu_sparse_A(6, 4) = 0; ilu_sparse_A(6, 7) = 0; ilu_sparse_A(6, 8) = 0;
+ilu_sparse_A(7, 3) = 0; ilu_sparse_A(7, 5) = 0; ilu_sparse_A(7, 6) = 0; ilu_sparse_A(7, 8) = 0;
+ilu_sparse_A(8, 2) = 0; ilu_sparse_A(8, 4) = 0; ilu_sparse_A(8, 5) = 0; ilu_sparse_A(8, 6) = 0;
+for i=1:8
+    ilu_sparse_A(i, :) = i/8*ilu_sparse_A(i, :);
+end
+[ilu_sparse_L, ilu_sparse_U] = ilu(sparse(ilu_sparse_A));
+writematrix(ilu_sparse_A, "solve_matrices\\ilu_sparse_A.csv");
+writematrix(full(ilu_sparse_L), "solve_matrices\\ilu_sparse_L.csv");
+writematrix(full(ilu_sparse_U), "solve_matrices\\ilu_sparse_U.csv");
 
 function [A, b] = generate_conv_diff_rhs_sinxcosy(k, sigma, tau)
 
