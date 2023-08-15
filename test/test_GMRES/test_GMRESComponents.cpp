@@ -30,7 +30,7 @@ TEST_F(GMRESComponentTest, CheckConstruction5x5) {
     ASSERT_EQ(test_mock.Q_kry_basis.cols(), 5);
     for (int i=0; i<5; ++i) {
         for (int j=0; j<5; ++j) {
-            EXPECT_EQ(test_mock.Q_kry_basis(i, j), 0);
+            ASSERT_EQ(test_mock.Q_kry_basis(i, j), 0);
         }
     }
 
@@ -38,7 +38,7 @@ TEST_F(GMRESComponentTest, CheckConstruction5x5) {
     ASSERT_EQ(test_mock.H.cols(), 5);
     for (int i=0; i<6; ++i) {
         for (int j=0; j<5; ++j) {
-            EXPECT_EQ(test_mock.H(i, j), 0);
+            ASSERT_EQ(test_mock.H(i, j), 0);
         }
     }
 
@@ -47,9 +47,9 @@ TEST_F(GMRESComponentTest, CheckConstruction5x5) {
     for (int i=0; i<6; ++i) {
         for (int j=0; j<6; ++j) {
             if (i == j) {
-                EXPECT_EQ(test_mock.Q_H(i, j), 1);
+                ASSERT_EQ(test_mock.Q_H(i, j), 1);
             } else {
-                EXPECT_EQ(test_mock.Q_H(i, j), 0);
+                ASSERT_EQ(test_mock.Q_H(i, j), 0);
             }
         }
     }
@@ -58,7 +58,7 @@ TEST_F(GMRESComponentTest, CheckConstruction5x5) {
     ASSERT_EQ(test_mock.R_H.cols(), 5);
     for (int i=0; i<6; ++i) {
         for (int j=0; j<5; ++j) {
-            EXPECT_EQ(test_mock.R_H(i, j), 0);
+            ASSERT_EQ(test_mock.R_H(i, j), 0);
         }
     }
 
@@ -76,7 +76,7 @@ TEST_F(GMRESComponentTest, CheckConstruction64x64) {
     ASSERT_EQ(test_mock.Q_kry_basis.cols(), 64);
     for (int i=0; i<64; ++i) {
         for (int j=0; j<64; ++j) {
-            EXPECT_EQ(test_mock.Q_kry_basis(i, j), 0);
+            ASSERT_EQ(test_mock.Q_kry_basis(i, j), 0);
         }
     }
 
@@ -84,7 +84,7 @@ TEST_F(GMRESComponentTest, CheckConstruction64x64) {
     ASSERT_EQ(test_mock.H.cols(), 64);
     for (int i=0; i<65; ++i) {
         for (int j=0; j<64; ++j) {
-            EXPECT_EQ(test_mock.H(i, j), 0);
+            ASSERT_EQ(test_mock.H(i, j), 0);
         }
     }
 
@@ -93,9 +93,9 @@ TEST_F(GMRESComponentTest, CheckConstruction64x64) {
     for (int i=0; i<65; ++i) {
         for (int j=0; j<65; ++j) {
             if (i == j) {
-                EXPECT_EQ(test_mock.Q_H(i, j), 1);
+                ASSERT_EQ(test_mock.Q_H(i, j), 1);
             } else {
-                EXPECT_EQ(test_mock.Q_H(i, j), 0);
+                ASSERT_EQ(test_mock.Q_H(i, j), 0);
             }
         }
     }
@@ -104,7 +104,7 @@ TEST_F(GMRESComponentTest, CheckConstruction64x64) {
     ASSERT_EQ(test_mock.R_H.cols(), 64);
     for (int i=0; i<65; ++i) {
         for (int j=0; j<64; ++j) {
-            EXPECT_EQ(test_mock.R_H(i, j), 0);
+            ASSERT_EQ(test_mock.R_H(i, j), 0);
         }
     }
 
@@ -149,8 +149,8 @@ TEST_F(GMRESComponentTest, KrylovInstantiationAndUpdates) {
 
         // Confirm that previous vectors are unchanged and are orthogonal to new one
         for (int j=0; j<k; ++j) {
-            EXPECT_EQ(test_mock.Q_kry_basis.col(j), Q_save(all, j));
-            EXPECT_NEAR(test_mock.Q_kry_basis.col(j).dot(q), 0, dbl_error_acc); // accum_error_mod*(j+1)*gamma(5, u_dbl));
+            ASSERT_EQ(test_mock.Q_kry_basis.col(j), Q_save(all, j));
+            ASSERT_NEAR(test_mock.Q_kry_basis.col(j).dot(q), 0, dbl_error_acc); // accum_error_mod*(j+1)*gamma(5, u_dbl));
         }
 
         // Confirm that Hessenberg matrix column corresponding to new basis vector
@@ -158,14 +158,14 @@ TEST_F(GMRESComponentTest, KrylovInstantiationAndUpdates) {
         Matrix<double, Dynamic, 1> h = test_mock.H.col(k);
         Matrix<double, Dynamic, 1> construct_q = A*test_mock.Q_kry_basis.col(k);
         for (int i=0; i<=k; ++i) {
-            EXPECT_EQ(test_mock.Q_kry_basis.col(i).dot(construct_q), h(i));
+            ASSERT_EQ(test_mock.Q_kry_basis.col(i).dot(construct_q), h(i));
             construct_q -= h(i)*test_mock.Q_kry_basis.col(i);
         }
         EXPECT_EQ(construct_q.norm(), h(k+1));
         
         // Confirm that previous Hessenberg columns are untouched
         for (int j=0; j<=k; ++j) {
-            EXPECT_EQ(test_mock.H.col(j), H_save(all, j));
+            ASSERT_EQ(test_mock.H.col(j), H_save(all, j));
         }
 
     }
@@ -200,8 +200,8 @@ TEST_F(GMRESComponentTest, H_QR_Update) {
 
         // Check that previous columns are unchanged by new update
         for (int i=0; i<k; ++i) {
-            EXPECT_EQ(test_mock.Q_H.col(i), save_Q_H.col(i));
-            EXPECT_EQ(test_mock.R_H.col(i), save_R_H.col(i));
+            ASSERT_EQ(test_mock.Q_H.col(i), save_Q_H.col(i));
+            ASSERT_EQ(test_mock.R_H.col(i), save_R_H.col(i));
         }
 
         // Save second last new basis vector and new column of R
@@ -214,9 +214,9 @@ TEST_F(GMRESComponentTest, H_QR_Update) {
         for (int i=0; i<k+1; ++i) {
             for (int j=0; j<k+1; ++j) {
                 if (i == j) {
-                    EXPECT_NEAR(orthog_check(i, j), 1, u_dbl);
+                    ASSERT_NEAR(orthog_check(i, j), 1, u_dbl);
                 } else {
-                    EXPECT_NEAR(orthog_check(i, j), 0, u_dbl);
+                    ASSERT_NEAR(orthog_check(i, j), 0, u_dbl);
                 }
             }
         }
@@ -224,7 +224,7 @@ TEST_F(GMRESComponentTest, H_QR_Update) {
         // Test that k+1 by k block of R_H is uppertriangular
         for (int j=0; j<k; ++j) {
             for (int i=k+1; i>j; --i) {
-                EXPECT_EQ(test_mock.R_H(i, j), 0);
+                ASSERT_EQ(test_mock.R_H(i, j), 0);
             }
         }
 
@@ -234,7 +234,7 @@ TEST_F(GMRESComponentTest, H_QR_Update) {
                                                        test_mock.R_H.block(0, 0, k+2, k+1);
         for (int i=0; i<k+1; ++i) {
             for (int j=0; j<k; ++j) {
-                EXPECT_NEAR(construct_H(i, j), test_mock.H(i, j), u_dbl);
+                ASSERT_NEAR(construct_H(i, j), test_mock.H(i, j), u_dbl);
             }
         }
 
@@ -302,12 +302,12 @@ TEST_F(GMRESComponentTest, KrylovLuckyBreakFirstIter) {
     EXPECT_EQ(test_mock.kry_space_dim, 0);
     for (int i=0; i<5; ++i) {
         for (int j=0; j<5; ++j) {
-            EXPECT_EQ(test_mock.Q_kry_basis(i, j), 0);
+            ASSERT_EQ(test_mock.Q_kry_basis(i, j), 0);
         }
     }
     for (int i=0; i<6; ++i) {
-            for (int j=0; j<5; ++j) {
-                EXPECT_EQ(test_mock.H(i, j), 0);
+        for (int j=0; j<5; ++j) {
+            ASSERT_EQ(test_mock.H(i, j), 0);
         }
     }
 
@@ -340,7 +340,7 @@ TEST_F(GMRESComponentTest, KrylovLuckyBreakLaterIter) {
     EXPECT_NEAR(test_mock.Q_kry_basis.col(0).norm(), 1, gamma(5, u_dbl));
     for (int i=0; i<5; ++i) {
         for (int j=1; j<5; ++j) {
-            EXPECT_EQ(test_mock.Q_kry_basis(i, j), 0);
+            ASSERT_EQ(test_mock.Q_kry_basis(i, j), 0);
         }
     }
     
@@ -368,7 +368,7 @@ TEST_F(GMRESComponentTest, KrylovLuckyBreakThroughSolve) {
     EXPECT_NEAR(test_mock.Q_kry_basis.col(0).norm(), 1, gamma(5, u_dbl));
     for (int i=0; i<5; ++i) {
         for (int j=1; j<5; ++j) {
-            EXPECT_EQ(test_mock.Q_kry_basis(i, j), 0);
+            ASSERT_EQ(test_mock.Q_kry_basis(i, j), 0);
         }
     }
     

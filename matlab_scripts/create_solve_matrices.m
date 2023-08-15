@@ -70,13 +70,6 @@ x_convdiff256 = gmres( ...
     A_convdiff256, b_convdiff256, ...
     [], convergence_tolerance_double, 256 ...
 );
-% h = 1/15;
-% [X, Y] = meshgrid(0:h:1, 0:h:1);
-% u = sin(pi*X).*cos(pi*Y);
-% v = A_convdiff256*(reshape(u, [256, 1]));
-% surf(reshape(v, [16, 16]));
-% hold on;
-% surf(reshape(b_convdiff256+0.1, [16, 16]));
 writematrix(full(A_convdiff256), "solve_matrices\\conv_diff_256_A.csv");
 writematrix(full(b_convdiff256), "solve_matrices\\conv_diff_256_b.csv");
 writematrix(full(x_convdiff256), "solve_matrices\\conv_diff_256_x.csv");
@@ -173,18 +166,18 @@ end
 writematrix(ilu_sparse_A, "solve_matrices\\ilu_sparse_A.csv");
 writematrix(full(ilu_sparse_L), "solve_matrices\\ilu_sparse_L.csv");
 writematrix(full(ilu_sparse_U), "solve_matrices\\ilu_sparse_U.csv");
-options.type="ilutp"; options.droptol=0.01;
-[ilu_sparse_L_0_01, ilu_sparse_U_0_01] = ilu(sparse(ilu_sparse_A), options);
-writematrix(full(ilu_sparse_L_0_01), "solve_matrices\\ilut_0_01_sparse_L.csv");
-writematrix(full(ilu_sparse_U_0_01), "solve_matrices\\ilut_0_01_sparse_U.csv");
-options.type="ilutp"; options.droptol=0.1;
-[ilu_sparse_L_0_1, ilu_sparse_U_0_1] = ilu(sparse(ilu_sparse_A), options);
-writematrix(full(ilu_sparse_L_0_1), "solve_matrices\\ilut_0_1_sparse_L.csv");
-writematrix(full(ilu_sparse_U_0_1), "solve_matrices\\ilut_0_1_sparse_U.csv");
-options.type="ilutp"; options.droptol=0.2;
-[ilu_sparse_L_0_2, ilu_sparse_U_0_2] = ilu(sparse(ilu_sparse_A), options);
-writematrix(full(ilu_sparse_L_0_2), "solve_matrices\\ilut_0_2_sparse_L.csv");
-writematrix(full(ilu_sparse_U_0_2), "solve_matrices\\ilut_0_2_sparse_U.csv");
+% options.type="ilutp"; options.droptol=0.01;
+% [ilu_sparse_L_0_01, ilu_sparse_U_0_01, P] = ilu(sparse(ilu_sparse_A), options);
+% writematrix(full(ilu_sparse_L_0_01), "solve_matrices\\ilut_0_01_sparse_L.csv");
+% writematrix(full(ilu_sparse_U_0_01), "solve_matrices\\ilut_0_01_sparse_U.csv");
+% options.type="ilutp"; options.droptol=0.1;
+% [ilu_sparse_L_0_1, ilu_sparse_U_0_1] = ilu(sparse(ilu_sparse_A), options);
+% writematrix(full(ilu_sparse_L_0_1), "solve_matrices\\ilut_0_1_sparse_L.csv");
+% writematrix(full(ilu_sparse_U_0_1), "solve_matrices\\ilut_0_1_sparse_U.csv");
+% options.type="ilutp"; options.droptol=0.2;
+% [ilu_sparse_L_0_2, ilu_sparse_U_0_2] = ilu(sparse(ilu_sparse_A), options);
+% writematrix(full(ilu_sparse_L_0_2), "solve_matrices\\ilut_0_2_sparse_L.csv");
+% writematrix(full(ilu_sparse_U_0_2), "solve_matrices\\ilut_0_2_sparse_U.csv");
 
 function [A, b] = generate_conv_diff_rhs_sinxcosy(k, sigma, tau)
 

@@ -10,8 +10,22 @@
 #include <float.h>
 
 using read_matrix::read_matrix_csv;
+using std::abs;
 
 class ILUTest: public TestBase {};
+
+int count_zeros(Matrix<double, Dynamic, Dynamic> A, double zero_tol) {
+
+    int count = 0;
+    for (int i=0; i<A.rows(); ++i) {
+        for (int j=0; j<A.cols(); ++j) {
+            if (abs(A(i, j)) <= zero_tol) { ++count; }
+        }
+    }
+
+    return count;
+
+}
 
 TEST_F(ILUTest, TestSquareCheck) {
 
@@ -70,9 +84,22 @@ TEST_F(ILUTest, TestCorrectDenseLU) {
 
     for (int i=0; i<8; ++i) {
         for (int j=0; j<8; ++j) {
-            EXPECT_NEAR(test(i, j), 0, dbl_error_acc);
+            ASSERT_NEAR(test(i, j), 0, dbl_error_acc);
         }
     }
+
+    // Test correct L and U triangularity
+    for (int i=0; i<8; ++i) {
+        for (int j=i+1; j<8; ++j) {
+            ASSERT_NEAR(ilu.get_L()(i, j), 0, dbl_error_acc);
+        }
+    }
+    for (int i=0; i<8; ++i) {
+        for (int j=0; j<i; ++j) {
+            ASSERT_NEAR(ilu.get_U()(i, j), 0, dbl_error_acc);
+        }
+    }
+
 
     // Test matching ILU to MATLAB for the dense matrix
     Matrix<double, Dynamic, Dynamic> L(read_matrix_csv<double>(solve_matrix_dir + "ilu_L.csv"));
@@ -80,8 +107,8 @@ TEST_F(ILUTest, TestCorrectDenseLU) {
 
     for (int i=0; i<8; ++i) {
         for (int j=0; j<8; ++j) {
-            EXPECT_NEAR(ilu.get_L()(i, j), L(i, j), dbl_error_acc);
-            EXPECT_NEAR(ilu.get_U()(i, j), U(i, j), dbl_error_acc);
+            ASSERT_NEAR(ilu.get_L()(i, j), L(i, j), dbl_error_acc);
+            ASSERT_NEAR(ilu.get_U()(i, j), U(i, j), dbl_error_acc);
         }
     }
 
@@ -96,10 +123,22 @@ TEST_F(ILUTest, TestSparseILU0) {
     for (int i=0; i<8; ++i) {
         for (int j=0; j<8; ++j) {
             if (A(i, j) == 0.) {
-                EXPECT_EQ(ilu.get_L()(i, j), 0.);
-                EXPECT_EQ(ilu.get_U()(i, j), 0.);
-                EXPECT_NEAR(ilu.get_L()(i, j)*ilu.get_U()(i, j), 0, dbl_error_acc);
+                ASSERT_EQ(ilu.get_L()(i, j), 0.);
+                ASSERT_EQ(ilu.get_U()(i, j), 0.);
+                ASSERT_NEAR(ilu.get_L()(i, j)*ilu.get_U()(i, j), 0, dbl_error_acc);
             }
+        }
+    }
+    
+    // Test correct L and U triangularity
+    for (int i=0; i<8; ++i) {
+        for (int j=i+1; j<8; ++j) {
+            ASSERT_NEAR(ilu.get_L()(i, j), 0, dbl_error_acc);
+        }
+    }
+    for (int i=0; i<8; ++i) {
+        for (int j=0; j<i; ++j) {
+            ASSERT_NEAR(ilu.get_U()(i, j), 0, dbl_error_acc);
         }
     }
 
@@ -109,8 +148,8 @@ TEST_F(ILUTest, TestSparseILU0) {
 
     for (int i=0; i<8; ++i) {
         for (int j=0; j<8; ++j) {
-            EXPECT_NEAR(ilu.get_L()(i, j), L(i, j), dbl_error_acc);
-            EXPECT_NEAR(ilu.get_U()(i, j), U(i, j), dbl_error_acc);
+            ASSERT_NEAR(ilu.get_L()(i, j), L(i, j), dbl_error_acc);
+            ASSERT_NEAR(ilu.get_U()(i, j), U(i, j), dbl_error_acc);
         }
     }
 
@@ -126,8 +165,8 @@ TEST_F(ILUTest, TestEquivalentILUTNoDropAndDenseILU0) {
     for (int i=0; i<8; ++i) {
         for (int j=0; j<8; ++j) {
             if (A(i, j) == 0.) {
-                EXPECT_EQ(ilu0.get_L()(i, j), ilut0.get_L()(i, j));
-                EXPECT_EQ(ilu0.get_U()(i, j), ilut0.get_U()(i, j));
+                ASSERT_EQ(ilu0.get_L()(i, j), ilut0.get_L()(i, j));
+                ASSERT_EQ(ilu0.get_U()(i, j), ilut0.get_U()(i, j));
             }
         }
     }
@@ -138,21 +177,70 @@ TEST_F(ILUTest, TestILUTDropping) {
 
     Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "ilu_sparse_A.csv"));
 
-    // Test MATLAB ilut with 0.01 drop tolerance matches to within double accumulation error
+    // Check multiple rising thresholds ensuring that each ilu is closer to the matrix and that
+    // all have correct form for L and U
     ILU<double> ilut0_01(A, u_dbl, 0.01);
-    Matrix<double, Dynamic, Dynamic> L_0_01(read_matrix_csv<double>(solve_matrix_dir + "ilut_0_01_sparse_L.csv"));
-    Matrix<double, Dynamic, Dynamic> U_0_01(read_matrix_csv<double>(solve_matrix_dir + "ilut_0_01_sparse_U.csv"));
+    ILU<double> ilut0_1(A, u_dbl, 0.1);
+    ILU<double> ilut0_2(A, u_dbl, 0.2);
+    ILU<double> ilut0_5(A, u_dbl, 0.5);
 
-    Matrix<double, Dynamic, Dynamic> ilutAbar = ilut0_01.get_L()*ilut0_01.get_U();
-    Matrix<double, Dynamic, Dynamic> matlabAbar = L_0_01*U_0_01;
-
+    // Test correct L and U triangularity
     for (int i=0; i<8; ++i) {
-        for (int j=0; j<8; ++j) {
-            if (A(i, j) == 0.) {
-                EXPECT_NEAR(ilutAbar(i, j), matlabAbar(i, j), dbl_error_acc);
-            }
+        for (int j=i+1; j<8; ++j) {
+            ASSERT_NEAR(ilut0_01.get_L()(i, j), 0, dbl_error_acc);
+            ASSERT_NEAR(ilut0_1.get_L()(i, j), 0, dbl_error_acc);
+            ASSERT_NEAR(ilut0_2.get_L()(i, j), 0, dbl_error_acc);
+            ASSERT_NEAR(ilut0_5.get_L()(i, j), 0, dbl_error_acc);
+        }
+    }
+    for (int i=0; i<8; ++i) {
+        for (int j=0; j<i; ++j) {
+            ASSERT_NEAR(ilut0_01.get_U()(i, j), 0, dbl_error_acc);
+            ASSERT_NEAR(ilut0_1.get_U()(i, j), 0, dbl_error_acc);
+            ASSERT_NEAR(ilut0_2.get_U()(i, j), 0, dbl_error_acc);
+            ASSERT_NEAR(ilut0_5.get_U()(i, j), 0, dbl_error_acc);
         }
     }
 
+    // Test that each lower threshold is better than the higher one
+    EXPECT_LE((A-ilut0_01.get_L()*ilut0_01.get_U()).norm(),
+              (A-ilut0_1.get_L()*ilut0_1.get_U()).norm());
+    EXPECT_LE((A-ilut0_1.get_L()*ilut0_1.get_U()).norm(),
+              (A-ilut0_2.get_L()*ilut0_2.get_U()).norm());
+    EXPECT_LE((A-ilut0_2.get_L()*ilut0_2.get_U()).norm(),
+              (A-ilut0_5.get_L()*ilut0_5.get_U()).norm());
+
+    // Test that each higher threshold has more zeros
+    EXPECT_LE(count_zeros(ilut0_01.get_L(), u_dbl),
+              count_zeros(ilut0_1.get_L(), u_dbl));
+    EXPECT_LE(count_zeros(ilut0_1.get_L(), u_dbl),
+              count_zeros(ilut0_2.get_L(), u_dbl));
+    EXPECT_LE(count_zeros(ilut0_2.get_L(), u_dbl),
+              count_zeros(ilut0_5.get_L(), u_dbl));
+    EXPECT_LE(count_zeros(ilut0_01.get_U(), u_dbl),
+              count_zeros(ilut0_1.get_U(), u_dbl));
+    EXPECT_LE(count_zeros(ilut0_1.get_U(), u_dbl),
+              count_zeros(ilut0_2.get_U(), u_dbl));
+    EXPECT_LE(count_zeros(ilut0_2.get_U(), u_dbl),
+              count_zeros(ilut0_5.get_U(), u_dbl));
+
+}
+TEST_F(ILUTest, TestILUTDroppingLimits) {
+
+    // Test that max dropping just gives the diagonal since everything else gets dropped
+    Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "ilu_sparse_A.csv"));
+    ILU<double> ilu_all_drop(A, u_dbl, DBL_MAX);
+
+    for (int i=0; i<8; ++i) {
+        for (int j=0; j<8; ++j) {
+            if (i != j) {
+                ASSERT_NEAR(ilu_all_drop.get_L()(i, j), 0., dbl_error_acc);
+                ASSERT_NEAR(ilu_all_drop.get_U()(i, j), 0., dbl_error_acc);
+            } else {
+                ASSERT_NEAR(ilu_all_drop.get_L()(i, j), 1., dbl_error_acc);
+                ASSERT_NEAR(ilu_all_drop.get_U()(i, j), A(i, j), dbl_error_acc);
+            }
+        }
+    }
 
 }

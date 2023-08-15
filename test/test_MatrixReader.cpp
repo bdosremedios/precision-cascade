@@ -105,7 +105,7 @@ TEST_F(MatrixReadDoubleTest, ReadSquareMatrix) {
     ASSERT_EQ(test1.cols(), 3);
     for (int i=0; i<3; ++i) {
         for (int j=0; j<3; ++j) {
-            EXPECT_NEAR(test1(i, j), target1(i, j), u_dbl);
+            ASSERT_NEAR(test1(i, j), target1(i, j), u_dbl);
         }
     }
 
@@ -114,7 +114,7 @@ TEST_F(MatrixReadDoubleTest, ReadSquareMatrix) {
     ASSERT_EQ(test2.cols(), 5);
     for (int i=0; i<5; ++i) {
         for (int j=0; j<5; ++j) {
-            EXPECT_NEAR(test2(i, j), target2(i, j), u_dbl);
+            ASSERT_NEAR(test2(i, j), target2(i, j), u_dbl);
         }
     }
 
@@ -147,7 +147,7 @@ TEST_F(MatrixReadDoubleTest, ReadWideTallMatrix) {
     ASSERT_EQ(test_tall.cols(), 2);
     for (int i=0; i<4; ++i) {
         for (int j=0; j<2; ++j) {
-            EXPECT_NEAR(test_tall(i, j), target_tall(i, j), u_dbl);
+            ASSERT_NEAR(test_tall(i, j), target_tall(i, j), u_dbl);
         }
     }
     
@@ -166,7 +166,7 @@ TEST_F(MatrixReadDoubleTest, ReadPreciseMatrix) {
     ASSERT_EQ(test_precise.cols(), 2);
     for (int i=0; i<2; ++i) {
         for (int j=0; j<2; ++j) {
-            EXPECT_NEAR(test_precise(i, j), target_precise(i, j), u_dbl);
+            ASSERT_NEAR(test_precise(i, j), target_precise(i, j), u_dbl);
         }
     }
 
@@ -190,8 +190,8 @@ TEST_F(MatrixReadDoubleTest, ReadDifferentThanPreciseMatrix) {
     ASSERT_EQ(test_precise.cols(), 2);
     for (int i=0; i<2; ++i) {
         for (int j=0; j<2; ++j) {
-            EXPECT_LT(test_precise(i, j), miss_precise_up(i, j));
-            EXPECT_GT(test_precise(i, j), miss_precise_down(i, j));
+            ASSERT_LT(test_precise(i, j), miss_precise_up(i, j));
+            ASSERT_GT(test_precise(i, j), miss_precise_down(i, j));
         }
     }
 
@@ -210,7 +210,7 @@ TEST_F(MatrixReadDoubleTest, ReadPreciseMatrixDoubleLimit) {
     ASSERT_EQ(test_precise.cols(), 2);
     for (int i=0; i<2; ++i) {
         for (int j=0; j<2; ++j) {
-            EXPECT_NEAR(test_precise(i, j), target_precise(i, j), u_dbl);
+            ASSERT_NEAR(test_precise(i, j), target_precise(i, j), u_dbl);
         }
     }
 
@@ -234,8 +234,8 @@ TEST_F(MatrixReadDoubleTest, ReadDifferentThanPreciseMatrixDoubleLimit) {
     ASSERT_EQ(test_precise.cols(), 2);
     for (int i=0; i<2; ++i) {
         for (int j=0; j<2; ++j) {
-            EXPECT_LT(test_precise(i, j), miss_precise_up(i, j));
-            EXPECT_GT(test_precise(i, j), miss_precise_down(i, j));
+            ASSERT_LT(test_precise(i, j), miss_precise_up(i, j));
+            ASSERT_GT(test_precise(i, j), miss_precise_down(i, j));
         }
     }
 
@@ -264,7 +264,7 @@ TEST_F(MatrixReadSingleTest, ReadSquareMatrix) {
     ASSERT_EQ(test1.cols(), 3);
     for (int i=0; i<3; ++i) {
         for (int j=0; j<3; ++j) {
-            EXPECT_NEAR(test1(i, j), target1(i, j), u_sgl);
+            ASSERT_NEAR(test1(i, j), target1(i, j), u_sgl);
         }
     }
 
@@ -273,7 +273,7 @@ TEST_F(MatrixReadSingleTest, ReadSquareMatrix) {
     ASSERT_EQ(test2.cols(), 5);
     for (int i=0; i<5; ++i) {
         for (int j=0; j<5; ++j) {
-            EXPECT_NEAR(test2(i, j), target2(i, j), u_sgl);
+            ASSERT_NEAR(test2(i, j), target2(i, j), u_sgl);
         }
     }
 
@@ -297,7 +297,7 @@ TEST_F(MatrixReadSingleTest, ReadWideTallMatrix) {
     ASSERT_EQ(test_wide.cols(), 5);
     for (int i=0; i<2; ++i) {
         for (int j=0; j<5; ++j) {
-            EXPECT_NEAR(test_wide(i, j), target_wide(i, j), u_sgl);
+            ASSERT_NEAR(test_wide(i, j), target_wide(i, j), u_sgl);
         }
     }
 
@@ -306,7 +306,7 @@ TEST_F(MatrixReadSingleTest, ReadWideTallMatrix) {
     ASSERT_EQ(test_tall.cols(), 2);
     for (int i=0; i<4; ++i) {
         for (int j=0; j<2; ++j) {
-            EXPECT_NEAR(test_tall(i, j), target_tall(i, j), u_sgl);
+            ASSERT_NEAR(test_tall(i, j), target_tall(i, j), u_sgl);
         }
     }
     
@@ -323,7 +323,7 @@ TEST_F(MatrixReadSingleTest, ReadPreciseMatrix) {
     ASSERT_EQ(test_precise.cols(), 2);
     for (int i=0; i<2; ++i) {
         for (int j=0; j<2; ++j) {
-            EXPECT_NEAR(test_precise(i, j), target_precise(i, j), u_sgl);
+            ASSERT_NEAR(test_precise(i, j), target_precise(i, j), u_sgl);
         }
     }
 
@@ -347,8 +347,8 @@ TEST_F(MatrixReadSingleTest, ReadDifferentThanPreciseMatrix) {
     ASSERT_EQ(test_precise.cols(), 2);
     for (int i=0; i<2; ++i) {
         for (int j=0; j<2; ++j) {
-            EXPECT_LT(test_precise(i, j), miss_precise_up(i, j));
-            EXPECT_GT(test_precise(i, j), miss_precise_down(i, j));
+            ASSERT_LT(test_precise(i, j), miss_precise_up(i, j));
+            ASSERT_GT(test_precise(i, j), miss_precise_down(i, j));
         }
     }
 
@@ -380,7 +380,7 @@ TEST_F(MatrixReadHalfTest, ReadSquareMatrix) {
     ASSERT_EQ(test1.cols(), 3);
     for (int i=0; i<3; ++i) {
         for (int j=0; j<3; ++j) {
-            EXPECT_NEAR(test1(i, j), target1(i, j), u_hlf);
+            ASSERT_NEAR(test1(i, j), target1(i, j), u_hlf);
         }
     }
 
@@ -389,7 +389,7 @@ TEST_F(MatrixReadHalfTest, ReadSquareMatrix) {
     ASSERT_EQ(test2.cols(), 5);
     for (int i=0; i<5; ++i) {
         for (int j=0; j<5; ++j) {
-            EXPECT_NEAR(test2(i, j), target2(i, j), u_hlf);
+            ASSERT_NEAR(test2(i, j), target2(i, j), u_hlf);
         }
     }
 
@@ -415,7 +415,7 @@ TEST_F(MatrixReadHalfTest, ReadWideTallMatrix) {
     ASSERT_EQ(test_wide.cols(), 5);
     for (int i=0; i<2; ++i) {
         for (int j=0; j<5; ++j) {
-            EXPECT_NEAR(test_wide(i, j), target_wide(i, j), u_hlf);
+            ASSERT_NEAR(test_wide(i, j), target_wide(i, j), u_hlf);
         }
     }
 
@@ -424,7 +424,7 @@ TEST_F(MatrixReadHalfTest, ReadWideTallMatrix) {
     ASSERT_EQ(test_tall.cols(), 2);
     for (int i=0; i<4; ++i) {
         for (int j=0; j<2; ++j) {
-            EXPECT_NEAR(test_tall(i, j), target_tall(i, j), u_hlf);
+            ASSERT_NEAR(test_tall(i, j), target_tall(i, j), u_hlf);
         }
     }
     
@@ -443,7 +443,7 @@ TEST_F(MatrixReadHalfTest, ReadPreciseMatrix) {
     ASSERT_EQ(test_precise.cols(), 2);
     for (int i=0; i<2; ++i) {
         for (int j=0; j<2; ++j) {
-            EXPECT_NEAR(test_precise(i, j), target_precise(i, j), u_hlf);
+            ASSERT_NEAR(test_precise(i, j), target_precise(i, j), u_hlf);
         }
     }
 
@@ -467,8 +467,8 @@ TEST_F(MatrixReadHalfTest, ReadDifferentThanPreciseMatrix) {
     ASSERT_EQ(test_precise.cols(), 2);
     for (int i=0; i<2; ++i) {
         for (int j=0; j<2; ++j) {
-            EXPECT_LT(test_precise(i, j), miss_precise_up(i, j));
-            EXPECT_GT(test_precise(i, j), miss_precise_down(i, j));
+            ASSERT_LT(test_precise(i, j), miss_precise_up(i, j));
+            ASSERT_GT(test_precise(i, j), miss_precise_down(i, j));
         }
     }
 
