@@ -1,12 +1,14 @@
 #ifndef SOR_H
 #define SOR_H
 
-#include "LinearSolve.h"
 #include "Eigen/Dense"
+
 #include <iostream>
 
+#include "LinearSolve.h"
+
 using std::cout, std::endl;
-using Eigen::Matrix;
+using Eigen::Matrix, Eigen::Dynamic;
 
 template <typename T>
 class SORSolve: public LinearSolve<T> {
@@ -53,6 +55,9 @@ class SORSolve: public LinearSolve<T> {
                  Matrix<T, Dynamic, 1> const &arg_x_0,
                  T const &arg_w):
             w(arg_w), LinearSolve<T>::LinearSolve(arg_A, arg_b, arg_x_0) {}
+
+        // Set reset as empty function
+        void derived_reset() override {};
 
 };
 

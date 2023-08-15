@@ -1,12 +1,15 @@
 #ifndef IMPLEMENTED_PRECONDITIONERS_H
 #define IMPLEMENTED_PRECONDITIONERS_H
 
-#include "Preconditioner.h"
-#include "tools/Substitution.h"
+#include "Eigen/Dense"
 
 #include <cmath>
 #include <functional>
 
+#include "Preconditioner.h"
+#include "tools/Substitution.h"
+
+using Eigen::Matrix, Eigen::Dynamic;
 using std::abs;
 
 template <typename T>
@@ -75,6 +78,7 @@ class ILU: public Preconditioner<T> {
                 T const &entry, T const &orig_entry, int &i, int&j
             ) -> bool { return (abs(entry) <= eps); };
 
+            // Guard against removing diagonal entries to maintain non-singularity
             std::function<bool(T const &, T const &, int &, int &)> drop_if_lt_skip_diag = [eps] (
                 T const &entry, T const &orig_entry, int &i, int&j
             ) -> bool {

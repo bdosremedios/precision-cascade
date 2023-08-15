@@ -1,15 +1,17 @@
 #ifndef GMRES_H
 #define GMRES_H
 
-#include "LinearSolve.h"
-#include "preconditioners/ImplementedPreconditioners.h"
-#include "tools/Substitution.h"
 #include "Eigen/Dense"
 
 #include <iostream>
 #include <memory>
 #include <cmath>
 
+#include "tools/Substitution.h"
+#include "preconditioners/ImplementedPreconditioners.h"
+#include "LinearSolve.h"
+
+using Eigen::Matrix, Eigen::Dynamic;
 using std::cout, std::endl;
 using std::shared_ptr, std::make_shared;
 using std::sqrt;
@@ -173,7 +175,7 @@ class GMRESSolve: public LinearSolve<T> {
             right_precond_ptr(arg_right_precond_ptr),
             LinearSolve<T>::LinearSolve(arg_A, arg_b)
         {
-            constructorHelper();
+            initializeGMRES();
         }
 
         GMRESSolve(
@@ -189,10 +191,13 @@ class GMRESSolve: public LinearSolve<T> {
             right_precond_ptr(arg_right_precond_ptr),
             LinearSolve<T>::LinearSolve(arg_A, arg_b, arg_x_0)
         {
-            constructorHelper();
+            initializeGMRES();
         }
 
-        void constructorHelper() {
+        // Set derived reset to erase current krylov subspace made
+        void derived_reset() override { set_initial_space(); }
+
+        void check_compatibility() {
 
             // Assert compatibility of preconditioners with matrix
             if (!left_precond_ptr->check_compatibility_left(this->m)) {
@@ -201,6 +206,10 @@ class GMRESSolve: public LinearSolve<T> {
             if (!right_precond_ptr->check_compatibility_right(this->n)) {
                 throw runtime_error("Right preconditioner is not compatible with linear system");
             }
+        
+        }
+
+        void set_initial_space() {
 
             // Pre-allocate all possible space needed to prevent memory
             // re-allocation
@@ -208,9 +217,6 @@ class GMRESSolve: public LinearSolve<T> {
             H = Matrix<T, Dynamic, Dynamic>::Zero(m+1, m);
             Q_H = Matrix<T, Dynamic, Dynamic>::Identity(m+1, m+1);
             R_H = Matrix<T, Dynamic, Dynamic>::Zero(m+1, m);
-
-            // Specify max dimension for krylov subspace
-            max_kry_space_dim = m;
 
             // Set rho as initial residual norm
             Matrix<T, Dynamic, 1> Minv_A_x0(left_precond_ptr->action_inv_M(A*x_0));
@@ -224,6 +230,15 @@ class GMRESSolve: public LinearSolve<T> {
             if (next_q.norm() <= basis_zero_tol) {
                 this->terminated = true;
             }
+
+        }
+
+        void initializeGMRES() {
+
+            // Specify max dimension for krylov subspace
+            max_kry_space_dim = m;
+            check_compatibility();
+            set_initial_space();
 
         }
 

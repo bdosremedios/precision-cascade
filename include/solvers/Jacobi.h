@@ -1,9 +1,11 @@
 #ifndef JACOBI_H
 #define JACOBI_H
 
-#include "LinearSolve.h"
 #include "Eigen/Dense"
+
 #include <iostream>
+
+#include "LinearSolve.h"
 
 using std::cout, std::endl;
 using Eigen::Matrix;
@@ -39,6 +41,9 @@ class JacobiSolve: public LinearSolve<T> {
 
         // Inherit constructors
         using LinearSolve<T>::LinearSolve;
+
+        // Set reset as empty function
+        void derived_reset() override {};
 
 };
 

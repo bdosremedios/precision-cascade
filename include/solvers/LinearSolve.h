@@ -111,7 +111,7 @@ class LinearSolve {
         }
 
         // Reset solve to initial state
-        virtual void reset() {
+        void reset() {
 
             // Reset all variables
             initiated = false;
@@ -124,7 +124,14 @@ class LinearSolve {
             // Leave res_hist since will be reset automatically on next solve
             Matrix<T, Dynamic, Dynamic> res_hist;
 
+            // Call derived reset subroutine
+            derived_reset();
+
         }
+
+        // Set abstract function for reset of derived function ensuring reset is considered
+        // in derived implementation
+        virtual void derived_reset() = 0;
 
         // Perform linear solve with given iterate scheme
         void solve(int const &max_iter=100, double const &target_rel_res=1e-10) {
@@ -271,9 +278,8 @@ class LinearSolve {
 template <typename T>
 class LinearSolveTestingMock: public LinearSolve<T> {
 
-    void iterate() override {
-        x = soln;
-    }
+    void iterate() override { x = soln; }
+    void derived_reset() override {}
 
     public:
         Matrix<T, Dynamic, 1> soln;
