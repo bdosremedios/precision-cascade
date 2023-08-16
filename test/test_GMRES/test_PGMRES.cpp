@@ -26,9 +26,11 @@ TEST_F(PGMRESTest, TestLeftPreconditioning_RandA45) {
     Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "A_inv_45.csv"));
     Matrix<double, Dynamic, Dynamic> Ainv(read_matrix_csv<double>(solve_matrix_dir + "Ainv_inv_45.csv"));
     Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "b_inv_45.csv"));
-    GMRESSolve<double> pgmres_solve(A, b, u_dbl, std::make_shared<MatrixInverse<double>>(Ainv));
+    GMRESSolve<double> pgmres_solve(
+        A, b, u_dbl, std::make_shared<MatrixInverse<double>>(Ainv), 45, conv_tol_dbl
+    );
 
-    pgmres_solve.solve(45, conv_tol_dbl);
+    pgmres_solve.solve();
     pgmres_solve.view_relres_plot("log");
     
     EXPECT_EQ(pgmres_solve.get_iteration(), 1);
@@ -43,10 +45,11 @@ TEST_F(PGMRESTest, TestRightPreconditioning_RandA45) {
     Matrix<double, Dynamic, Dynamic> Ainv(read_matrix_csv<double>(solve_matrix_dir + "Ainv_inv_45.csv"));
     Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "b_inv_45.csv"));GMRESSolve<double> pgmres_solve(
         A, b, u_dbl,
-        std::make_shared<NoPreconditioner<double>>(), std::make_shared<MatrixInverse<double>>(Ainv)
+        std::make_shared<NoPreconditioner<double>>(), std::make_shared<MatrixInverse<double>>(Ainv),
+        45, conv_tol_dbl
     );
 
-    pgmres_solve.solve(45, conv_tol_dbl);
+    pgmres_solve.solve();
     pgmres_solve.view_relres_plot("log");
     
     EXPECT_EQ(pgmres_solve.get_iteration(), 1);
@@ -60,9 +63,11 @@ TEST_F(PGMRESTest, TestLeftPreconditioning_3eigs) {
     Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "A_25_saddle.csv"));
     Matrix<double, Dynamic, Dynamic> Ainv(read_matrix_csv<double>(solve_matrix_dir + "A_25_invprecond_saddle.csv"));
     Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "b_25_saddle.csv"));
-    GMRESSolve<double> pgmres_solve(A, b, u_dbl, std::make_shared<MatrixInverse<double>>(Ainv));
+    GMRESSolve<double> pgmres_solve(
+        A, b, u_dbl, std::make_shared<MatrixInverse<double>>(Ainv), 25, conv_tol_dbl
+    );
 
-    pgmres_solve.solve(25, conv_tol_dbl);
+    pgmres_solve.solve();
     pgmres_solve.view_relres_plot("log");
     
     EXPECT_EQ(pgmres_solve.get_iteration(), 3);
@@ -82,10 +87,11 @@ TEST_F(PGMRESTest, TestRightPreconditioning_3eigs) {
     Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "b_25_saddle.csv"));
     GMRESSolve<double> pgmres_solve(
         A, b, u_dbl,
-        std::make_shared<NoPreconditioner<double>>(), std::make_shared<MatrixInverse<double>>(Ainv)
+        std::make_shared<NoPreconditioner<double>>(), std::make_shared<MatrixInverse<double>>(Ainv),
+        25, conv_tol_dbl
     );
 
-    pgmres_solve.solve(25, conv_tol_dbl);
+    pgmres_solve.solve();
     pgmres_solve.view_relres_plot("log");
     
     EXPECT_EQ(pgmres_solve.get_iteration(), 3);

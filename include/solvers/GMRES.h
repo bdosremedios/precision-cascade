@@ -28,6 +28,7 @@ class GMRESSolve: public LinearSolve<T> {
         using LinearSolve<T>::b;
         using LinearSolve<T>::x;
         using LinearSolve<T>::x_0;
+        using LinearSolve<T>::max_outer_iter;
 
         shared_ptr<Preconditioner<U>> left_precond_ptr;
         shared_ptr<Preconditioner<U>> right_precond_ptr;
@@ -162,34 +163,109 @@ class GMRESSolve: public LinearSolve<T> {
     
     public:
 
-        // Constructors/Destructors
+        // Constructors
+
+        // Constructor without initial guess and no preconditioners
         GMRESSolve(
             Matrix<T, Dynamic, Dynamic> const &arg_A,
             Matrix<T, Dynamic, 1> const &arg_b,
             T const &arg_basis_zero_tol,
-            shared_ptr<Preconditioner<U>> const &arg_left_precond_ptr = make_shared<NoPreconditioner<T>>(),
-            shared_ptr<Preconditioner<U>> const &arg_right_precond_ptr = make_shared<NoPreconditioner<T>>()
+            int const &arg_max_outer_iter=100,
+            double const &arg_target_rel_res=1e-10
         ):
             basis_zero_tol(arg_basis_zero_tol),
-            left_precond_ptr(arg_left_precond_ptr),
-            right_precond_ptr(arg_right_precond_ptr),
-            LinearSolve<T>::LinearSolve(arg_A, arg_b)
+            left_precond_ptr(make_shared<NoPreconditioner<T>>()),
+            right_precond_ptr(make_shared<NoPreconditioner<T>>()),
+            LinearSolve<T>::LinearSolve(arg_A, arg_b, arg_max_outer_iter, arg_target_rel_res)
         {
             initializeGMRES();
         }
 
+        // Constructor with initial guess and no preconditioners
         GMRESSolve(
             Matrix<T, Dynamic, Dynamic> const &arg_A,
             Matrix<T, Dynamic, 1> const &arg_b,
             Matrix<T, Dynamic, 1> const &arg_x_0,
             T const &arg_basis_zero_tol,
-            shared_ptr<Preconditioner<U>> const &arg_left_precond_ptr = make_shared<NoPreconditioner<T>>(),
-            shared_ptr<Preconditioner<U>> const &arg_right_precond_ptr = make_shared<NoPreconditioner<T>>()
+            int const &arg_max_outer_iter=100,
+            double const &arg_target_rel_res=1e-10
+        ):
+            basis_zero_tol(arg_basis_zero_tol),
+            left_precond_ptr(make_shared<NoPreconditioner<T>>()),
+            right_precond_ptr(make_shared<NoPreconditioner<T>>()),
+            LinearSolve<T>::LinearSolve(arg_A, arg_b, arg_x_0, arg_max_outer_iter, arg_target_rel_res)
+        {
+            initializeGMRES();
+        }
+        
+        // Constructor without initial guess and left preconditioner
+        GMRESSolve(
+            Matrix<T, Dynamic, Dynamic> const &arg_A,
+            Matrix<T, Dynamic, 1> const &arg_b,
+            T const &arg_basis_zero_tol,
+            shared_ptr<Preconditioner<U>> const &arg_left_precond_ptr,
+            int const &arg_max_outer_iter=100,
+            double const &arg_target_rel_res=1e-10
+        ):
+            basis_zero_tol(arg_basis_zero_tol),
+            left_precond_ptr(arg_left_precond_ptr),
+            right_precond_ptr(make_shared<NoPreconditioner<T>>()),
+            LinearSolve<T>::LinearSolve(arg_A, arg_b, arg_max_outer_iter, arg_target_rel_res)
+        {
+            initializeGMRES();
+        }
+
+        // Constructor with initial guess and left preconditioner
+        GMRESSolve(
+            Matrix<T, Dynamic, Dynamic> const &arg_A,
+            Matrix<T, Dynamic, 1> const &arg_b,
+            Matrix<T, Dynamic, 1> const &arg_x_0,
+            T const &arg_basis_zero_tol,
+            shared_ptr<Preconditioner<U>> const &arg_left_precond_ptr,
+            int const &arg_max_outer_iter=100,
+            double const &arg_target_rel_res=1e-10
+        ):
+            basis_zero_tol(arg_basis_zero_tol),
+            left_precond_ptr(arg_left_precond_ptr),
+            right_precond_ptr(make_shared<NoPreconditioner<T>>()),
+            LinearSolve<T>::LinearSolve(arg_A, arg_b, arg_x_0, arg_max_outer_iter, arg_target_rel_res)
+        {
+            initializeGMRES();
+        }
+
+        // Constructor without initial guess and both preconditioners
+        GMRESSolve(
+            Matrix<T, Dynamic, Dynamic> const &arg_A,
+            Matrix<T, Dynamic, 1> const &arg_b,
+            T const &arg_basis_zero_tol,
+            shared_ptr<Preconditioner<U>> const &arg_left_precond_ptr,
+            shared_ptr<Preconditioner<U>> const &arg_right_precond_ptr,
+            int const &arg_max_outer_iter=100,
+            double const &arg_target_rel_res=1e-10
         ):
             basis_zero_tol(arg_basis_zero_tol),
             left_precond_ptr(arg_left_precond_ptr),
             right_precond_ptr(arg_right_precond_ptr),
-            LinearSolve<T>::LinearSolve(arg_A, arg_b, arg_x_0)
+            LinearSolve<T>::LinearSolve(arg_A, arg_b, arg_max_outer_iter, arg_target_rel_res)
+        {
+            initializeGMRES();
+        }
+
+        // Constructor with initial guess and both preconditioners
+        GMRESSolve(
+            Matrix<T, Dynamic, Dynamic> const &arg_A,
+            Matrix<T, Dynamic, 1> const &arg_b,
+            Matrix<T, Dynamic, 1> const &arg_x_0,
+            T const &arg_basis_zero_tol,
+            shared_ptr<Preconditioner<U>> const &arg_left_precond_ptr,
+            shared_ptr<Preconditioner<U>> const &arg_right_precond_ptr,
+            int const &arg_max_outer_iter=100,
+            double const &arg_target_rel_res=1e-10
+        ):
+            basis_zero_tol(arg_basis_zero_tol),
+            left_precond_ptr(arg_left_precond_ptr),
+            right_precond_ptr(arg_right_precond_ptr),
+            LinearSolve<T>::LinearSolve(arg_A, arg_b, arg_x_0, arg_max_outer_iter, arg_target_rel_res)
         {
             initializeGMRES();
         }
@@ -261,7 +337,7 @@ class GMRESSolveTestingMock: public GMRESSolve<T, U> {
         using GMRESSolve<T, U>::max_kry_space_dim;
         using GMRESSolve<T, U>::next_q;
         using GMRESSolve<T, U>::rho;
-        using GMRESSolve<T, U>::iteration;
+        using GMRESSolve<T, U>::curr_outer_iter;
 
         using GMRESSolve<T, U>::update_QR_fact;
         using GMRESSolve<T, U>::update_x_minimizing_res;

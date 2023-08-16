@@ -38,8 +38,8 @@ TEST_F(SORTest, SolveConvDiff64_Double) {
 
         cout << "Testing w=" << *w << endl;
 
-        SORSolve<double> SOR_solve_d(A, b, *w);
-        SOR_solve_d.solve(max_iter, conv_tol_dbl);
+        SORSolve<double> SOR_solve_d(A, b, *w, max_iter, conv_tol_dbl);
+        SOR_solve_d.solve();
         SOR_solve_d.view_relres_plot("log");
         
         EXPECT_TRUE(SOR_solve_d.check_converged());
@@ -58,8 +58,8 @@ TEST_F(SORTest, SolveConvDiff256_Double_LONGRUNTIME) {
 
         cout << "Testing w=" << *w << endl;
 
-        SORSolve<double> SOR_solve_d(A, b, *w);
-        SOR_solve_d.solve(max_iter, conv_tol_dbl);
+        SORSolve<double> SOR_solve_d(A, b, *w, max_iter, conv_tol_dbl);
+        SOR_solve_d.solve();
         SOR_solve_d.view_relres_plot("log");
         
         EXPECT_TRUE(SOR_solve_d.check_converged());
@@ -78,8 +78,8 @@ TEST_F(SORTest, SolveConvDiff64_Single) {
 
         cout << "Testing w=" << *w << endl;
 
-        SORSolve<float> SOR_solve_s(A, b, *w);
-        SOR_solve_s.solve(max_iter, conv_tol_sgl);
+        SORSolve<float> SOR_solve_s(A, b, *w, max_iter, conv_tol_sgl);
+        SOR_solve_s.solve();
         SOR_solve_s.view_relres_plot("log");
         
         EXPECT_TRUE(SOR_solve_s.check_converged());
@@ -98,8 +98,8 @@ TEST_F(SORTest, SolveConvDiff256_Single_LONGRUNTIME) {
 
         cout << "Testing w=" << *w << endl;
 
-        SORSolve<float> SOR_solve_s(A, b, *w);
-        SOR_solve_s.solve(max_iter, conv_tol_sgl);
+        SORSolve<float> SOR_solve_s(A, b, *w, max_iter, conv_tol_sgl);
+        SOR_solve_s.solve();
         SOR_solve_s.view_relres_plot("log");
         
         EXPECT_TRUE(SOR_solve_s.check_converged());
@@ -118,8 +118,8 @@ TEST_F(SORTest, SolveConvDiff64_SingleFailBeyondEpsilon) {
 
         cout << "Testing w=" << *w << endl;
 
-        SORSolve<float> SOR_solve_s(A, b, *w);
-        SOR_solve_s.solve(fail_iter, 0.1*u_sgl);
+        SORSolve<float> SOR_solve_s(A, b, *w, fail_iter, 0.1*u_sgl);
+        SOR_solve_s.solve();
         SOR_solve_s.view_relres_plot("log");
     
         EXPECT_FALSE(SOR_solve_s.check_converged());
@@ -138,8 +138,8 @@ TEST_F(SORTest, SolveConvDiff64_Half) {
 
         cout << "Testing w=" << *w << endl;
 
-        SORSolve<half> SOR_solve_h(A, b, static_cast<half>(*w));
-        SOR_solve_h.solve(max_iter, conv_tol_hlf);
+        SORSolve<half> SOR_solve_h(A, b, static_cast<half>(*w), max_iter, conv_tol_hlf);
+        SOR_solve_h.solve();
         SOR_solve_h.view_relres_plot("log");
         
         EXPECT_TRUE(SOR_solve_h.check_converged());
@@ -158,8 +158,8 @@ TEST_F(SORTest, SolveConvDiff256_Half_LONGRUNTIME) {
 
         cout << "Testing w=" << *w << endl;
 
-        SORSolve<half> SOR_solve_h(A, b, static_cast<half>(*w));
-        SOR_solve_h.solve(max_iter, conv_tol_hlf);
+        SORSolve<half> SOR_solve_h(A, b, static_cast<half>(*w), max_iter, conv_tol_hlf);
+        SOR_solve_h.solve();
         SOR_solve_h.view_relres_plot("log");
         
         EXPECT_TRUE(SOR_solve_h.check_converged());
@@ -178,8 +178,8 @@ TEST_F(SORTest, SolveConvDiff64_HalfFailBeyondEpsilon) {
 
         cout << "Testing w=" << *w << endl;
 
-        SORSolve<half> SOR_solve_h(A, b, static_cast<half>(*w));
-        SOR_solve_h.solve(fail_iter, 0.1*u_hlf);
+        SORSolve<half> SOR_solve_h(A, b, static_cast<half>(*w), fail_iter, 0.1*u_hlf);
+        SOR_solve_h.solve();
         SOR_solve_h.view_relres_plot("log");
     
         EXPECT_FALSE(SOR_solve_h.check_converged());

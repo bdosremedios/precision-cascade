@@ -289,7 +289,7 @@ TEST_F(GMRESComponentTest, KrylovLuckyBreakFirstIter) {
     Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "A_5_easysoln.csv"));
     Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "b_5_easysoln.csv"));
     MatrixXd soln = MatrixXd::Ones(5, 1); // Instantiate initial guess as true solution
-    GMRESSolveTestingMock<double> test_mock(A, b, soln, u_dbl);
+    GMRESSolveTestingMock<double> test_mock(A, b, soln, u_dbl, 100, conv_tol_dbl);
 
     // Attempt to update subspace and Hessenberg
     test_mock.iterate();
@@ -313,7 +313,7 @@ TEST_F(GMRESComponentTest, KrylovLuckyBreakFirstIter) {
 
     // Attempt to solve and check that iteration does not occur since
     // should be terminated already but that convergence is updated
-    test_mock.solve(100, conv_tol_dbl);
+    test_mock.solve();
     EXPECT_TRUE(test_mock.check_converged());
     EXPECT_EQ(test_mock.get_iteration(), 0);
 
@@ -352,10 +352,10 @@ TEST_F(GMRESComponentTest, KrylovLuckyBreakThroughSolve) {
     Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "b_5_easysoln.csv"));
     MatrixXd soln = MatrixXd::Zero(5, 1); // Initialize as near solution
     soln(0) = 1;
-    GMRESSolveTestingMock<double> test_mock(A, b, soln, u_dbl);
+    GMRESSolveTestingMock<double> test_mock(A, b, soln, u_dbl, 5, conv_tol_dbl);
 
     // Attempt to update and solve through solve of LinearSolve
-    test_mock.solve(5, conv_tol_dbl);
+    test_mock.solve();
     
     // Check we have terminated at second iteration and have converged
     EXPECT_TRUE(test_mock.check_converged());

@@ -1188,10 +1188,10 @@ test/CMakeFiles/test.dir/test_GMRES/test_GMRESComponents.cpp.o: ../test/test_GMR
   /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
   /usr/include/c++/11/bits/fstream.tcc \
   ../include/solvers/GMRES.h \
-  ../include/solvers/LinearSolve.h \
+  ../include/tools/Substitution.h \
   ../include/preconditioners/ImplementedPreconditioners.h \
   ../include/preconditioners/Preconditioner.h \
-  ../include/tools/Substitution.h
+  ../include/solvers/LinearSolve.h
 
 test/CMakeFiles/test.dir/test_GMRES/test_GMRESDouble.cpp.o: ../test/test_GMRES/test_GMRESDouble.cpp \
   /usr/include/stdc-predef.h \
@@ -1789,10 +1789,10 @@ test/CMakeFiles/test.dir/test_GMRES/test_GMRESDouble.cpp.o: ../test/test_GMRES/t
   /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
   /usr/include/c++/11/bits/fstream.tcc \
   ../include/solvers/GMRES.h \
-  ../include/solvers/LinearSolve.h \
+  ../include/tools/Substitution.h \
   ../include/preconditioners/ImplementedPreconditioners.h \
   ../include/preconditioners/Preconditioner.h \
-  ../include/tools/Substitution.h
+  ../include/solvers/LinearSolve.h
 
 test/CMakeFiles/test.dir/test_GMRES/test_GMRESHalf.cpp.o: ../test/test_GMRES/test_GMRESHalf.cpp \
   /usr/include/stdc-predef.h \
@@ -2390,10 +2390,10 @@ test/CMakeFiles/test.dir/test_GMRES/test_GMRESHalf.cpp.o: ../test/test_GMRES/tes
   /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
   /usr/include/c++/11/bits/fstream.tcc \
   ../include/solvers/GMRES.h \
-  ../include/solvers/LinearSolve.h \
+  ../include/tools/Substitution.h \
   ../include/preconditioners/ImplementedPreconditioners.h \
   ../include/preconditioners/Preconditioner.h \
-  ../include/tools/Substitution.h
+  ../include/solvers/LinearSolve.h
 
 test/CMakeFiles/test.dir/test_GMRES/test_GMRESSingle.cpp.o: ../test/test_GMRES/test_GMRESSingle.cpp \
   /usr/include/stdc-predef.h \
@@ -2990,10 +2990,10 @@ test/CMakeFiles/test.dir/test_GMRES/test_GMRESSingle.cpp.o: ../test/test_GMRES/t
   /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
   /usr/include/c++/11/bits/fstream.tcc \
   ../include/solvers/GMRES.h \
-  ../include/solvers/LinearSolve.h \
+  ../include/tools/Substitution.h \
   ../include/preconditioners/ImplementedPreconditioners.h \
   ../include/preconditioners/Preconditioner.h \
-  ../include/tools/Substitution.h \
+  ../include/solvers/LinearSolve.h \
   ../test/test.h
 
 test/CMakeFiles/test.dir/test_GMRES/test_PGMRES.cpp.o: ../test/test_GMRES/test_PGMRES.cpp \
@@ -3592,10 +3592,10 @@ test/CMakeFiles/test.dir/test_GMRES/test_PGMRES.cpp.o: ../test/test_GMRES/test_P
   /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
   /usr/include/c++/11/bits/fstream.tcc \
   ../include/solvers/GMRES.h \
-  ../include/solvers/LinearSolve.h \
+  ../include/tools/Substitution.h \
   ../include/preconditioners/ImplementedPreconditioners.h \
   ../include/preconditioners/Preconditioner.h \
-  ../include/tools/Substitution.h
+  ../include/solvers/LinearSolve.h
 
 test/CMakeFiles/test.dir/test_Jacobi.cpp.o: ../test/test_Jacobi.cpp \
   /usr/include/stdc-predef.h \
@@ -8398,13 +8398,13 @@ test/CMakeFiles/test.dir/test_Substitution.cpp.o: ../test/test_Substitution.cpp 
 
 ../test/test_GMRES/test_GMRESSingle.cpp:
 
-../include/tools/Substitution.h:
+../include/solvers/LinearSolve.h:
 
 ../include/preconditioners/Preconditioner.h:
 
 ../include/preconditioners/ImplementedPreconditioners.h:
 
-../include/solvers/LinearSolve.h:
+../include/tools/Substitution.h:
 
 ../include/solvers/GMRES.h:
 

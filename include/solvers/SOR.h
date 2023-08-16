@@ -45,16 +45,28 @@ class SORSolve: public LinearSolve<T> {
     public:
 
         // Constructors
-        SORSolve(Matrix<T, Dynamic, Dynamic> const &arg_A,
-                 Matrix<T, Dynamic, 1> const &arg_b,
-                 T const &arg_w):
-            w(arg_w), LinearSolve<T>::LinearSolve(arg_A, arg_b) {}
+        SORSolve(
+            Matrix<T, Dynamic, Dynamic> const &arg_A,
+            Matrix<T, Dynamic, 1> const &arg_b,
+            T const &arg_w,
+            int const &arg_max_outer_iter=100,
+            double const &arg_target_rel_res=1e-10
+        ):
+            w(arg_w),
+            LinearSolve<T>::LinearSolve(arg_A, arg_b, arg_max_outer_iter, arg_target_rel_res)
+        {}
 
-        SORSolve(Matrix<T, Dynamic, Dynamic> const &arg_A,
-                 Matrix<T, Dynamic, 1> const &arg_b, 
-                 Matrix<T, Dynamic, 1> const &arg_x_0,
-                 T const &arg_w):
-            w(arg_w), LinearSolve<T>::LinearSolve(arg_A, arg_b, arg_x_0) {}
+        SORSolve(
+            Matrix<T, Dynamic, Dynamic> const &arg_A,
+            Matrix<T, Dynamic, 1> const &arg_b, 
+            Matrix<T, Dynamic, 1> const &arg_x_0,
+            T const &arg_w,
+            int const &arg_max_outer_iter=100,
+            double const &arg_target_rel_res=1e-10
+        ):
+            w(arg_w),
+            LinearSolve<T>::LinearSolve(arg_A, arg_b, arg_x_0, arg_max_outer_iter, arg_target_rel_res)
+        {}
 
         // Set reset as empty function
         void derived_reset() override {};

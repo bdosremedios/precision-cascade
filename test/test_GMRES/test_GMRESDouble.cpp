@@ -22,9 +22,9 @@ TEST_F(GMRESDoubleTest, SolveConvDiff64) {
     
     Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_A.csv"));
     Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_b.csv"));
-    GMRESSolve<double> gmres_solve_d(A, b, u_dbl);
+    GMRESSolve<double> gmres_solve_d(A, b, u_dbl, 64, conv_tol_dbl);
 
-    gmres_solve_d.solve(64, conv_tol_dbl);
+    gmres_solve_d.solve();
     gmres_solve_d.view_relres_plot("log");
     
     EXPECT_TRUE(gmres_solve_d.check_converged());
@@ -40,9 +40,9 @@ TEST_F(GMRESDoubleTest, SolveConvDiff256) {
     
     Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_256_A.csv"));
     Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_256_b.csv"));
-    GMRESSolve<double> gmres_solve_d(A, b, u_dbl);
+    GMRESSolve<double> gmres_solve_d(A, b, u_dbl, 256, conv_tol_dbl);
 
-    gmres_solve_d.solve(256, conv_tol_dbl);
+    gmres_solve_d.solve();
     gmres_solve_d.view_relres_plot("log");
     
     EXPECT_TRUE(gmres_solve_d.check_converged());
@@ -58,9 +58,9 @@ TEST_F(GMRESDoubleTest, SolveConvDiff1024_LONGRUNTIME) {
     
     Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_1024_A.csv"));
     Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_1024_b.csv"));
-    GMRESSolve<double> gmres_solve_d(A, b, u_dbl);
+    GMRESSolve<double> gmres_solve_d(A, b, u_dbl, 1024, conv_tol_dbl);
 
-    gmres_solve_d.solve(1024, conv_tol_dbl);
+    gmres_solve_d.solve();
     gmres_solve_d.view_relres_plot("log");
     
     EXPECT_TRUE(gmres_solve_d.check_converged());
@@ -76,9 +76,9 @@ TEST_F(GMRESDoubleTest, SolveRand20) {
     
     Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "A_20_rand.csv"));
     Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "b_20_rand.csv"));
-    GMRESSolve<double> gmres_solve_d(A, b, u_dbl);
+    GMRESSolve<double> gmres_solve_d(A, b, u_dbl, 20, conv_tol_dbl);
 
-    gmres_solve_d.solve(20, conv_tol_dbl);
+    gmres_solve_d.solve();
     gmres_solve_d.view_relres_plot("log");
     
     EXPECT_TRUE(gmres_solve_d.check_converged());
@@ -94,9 +94,9 @@ TEST_F(GMRESDoubleTest, Solve3Eigs) {
     
     Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "A_25_3eigs.csv"));
     Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "b_25_3eigs.csv"));
-    GMRESSolve<double> gmres_solve_d(A, b, u_dbl);
+    GMRESSolve<double> gmres_solve_d(A, b, u_dbl, 25, conv_tol_dbl);
 
-    gmres_solve_d.solve(25, conv_tol_dbl);
+    gmres_solve_d.solve();
     gmres_solve_d.view_relres_plot("log");
     
     EXPECT_EQ(gmres_solve_d.get_iteration(), 3);
