@@ -52,8 +52,11 @@ class SORSolve: public LinearSolve<T> {
             int const &arg_max_outer_iter=100,
             double const &arg_target_rel_res=1e-10
         ):
-            w(arg_w),
-            LinearSolve<T>::LinearSolve(arg_A, arg_b, arg_max_outer_iter, arg_target_rel_res)
+            SORSolve(
+                arg_A, arg_b, this->make_guess(arg_A),
+                arg_w,
+                arg_max_outer_iter, arg_target_rel_res
+            )
         {}
 
         SORSolve(
