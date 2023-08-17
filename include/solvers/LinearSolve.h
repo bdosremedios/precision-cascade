@@ -318,10 +318,9 @@ class LinearSolveTestingMock: public LinearSolve<T> {
             int const &arg_max_outer_iter=100,
             double const &arg_target_rel_res=1e-10
         ):
-            LinearSolveTestingMock(
-                arg_A, arg_b, this->make_guess(arg_A),
-                arg_soln,
-                arg_max_outer_iter, arg_target_rel_res
+            soln(arg_soln),
+            LinearSolve<T>::LinearSolve(
+                arg_A, arg_b, arg_max_outer_iter, arg_target_rel_res
             )
         {}
 
@@ -334,8 +333,10 @@ class LinearSolveTestingMock: public LinearSolve<T> {
             double const &arg_target_rel_res=1e-10
         ):
             soln(arg_soln),
-            LinearSolve<T>::LinearSolve(arg_A, arg_b, arg_x_0, arg_max_outer_iter, arg_target_rel_res
-        ) {}
+            LinearSolve<T>::LinearSolve(
+                arg_A, arg_b, arg_x_0, arg_max_outer_iter, arg_target_rel_res
+            )
+        {}
 
 };
 
