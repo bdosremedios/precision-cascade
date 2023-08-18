@@ -27,7 +27,7 @@ class JacobiTest: public TestBase {
 };
 
 TEST_F(JacobiTest, SolveConvDiff64_Double) {
-    
+
     Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_A.csv"));
     Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_b.csv"));
 
