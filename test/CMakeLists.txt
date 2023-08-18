@@ -15,11 +15,12 @@ set(
 
 set(
     TEST_GMRES_CPPS
-    test_GMRES/test_GMRESComponents.cpp
-    test_GMRES/test_GMRESDouble.cpp
-    test_GMRES/test_GMRESSingle.cpp
-    test_GMRES/test_GMRESHalf.cpp
-    test_GMRES/test_PGMRES.cpp
+    test_GMRES/test_GMRES_components.cpp
+    test_GMRES/test_GMRES_solve_dbl.cpp
+    test_GMRES/test_GMRES_solve_sgl.cpp
+    test_GMRES/test_GMRES_solve_hlf.cpp
+    test_GMRES/test_PGMRES_components.cpp
+    test_GMRES/test_PGMRES_solve.cpp
 )
 
 set(

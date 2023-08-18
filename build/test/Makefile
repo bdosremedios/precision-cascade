@@ -199,125 +199,149 @@ test.cpp.s:
 	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test.cpp.s
 .PHONY : test.cpp.s
 
-test_GMRES/test_GMRESComponents.o: test_GMRES/test_GMRESComponents.cpp.o
-.PHONY : test_GMRES/test_GMRESComponents.o
+test_GMRES/test_GMRES_components.o: test_GMRES/test_GMRES_components.cpp.o
+.PHONY : test_GMRES/test_GMRES_components.o
 
 # target to build an object file
-test_GMRES/test_GMRESComponents.cpp.o:
-	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_GMRES/test_GMRESComponents.cpp.o
-.PHONY : test_GMRES/test_GMRESComponents.cpp.o
+test_GMRES/test_GMRES_components.cpp.o:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_GMRES/test_GMRES_components.cpp.o
+.PHONY : test_GMRES/test_GMRES_components.cpp.o
 
-test_GMRES/test_GMRESComponents.i: test_GMRES/test_GMRESComponents.cpp.i
-.PHONY : test_GMRES/test_GMRESComponents.i
+test_GMRES/test_GMRES_components.i: test_GMRES/test_GMRES_components.cpp.i
+.PHONY : test_GMRES/test_GMRES_components.i
 
 # target to preprocess a source file
-test_GMRES/test_GMRESComponents.cpp.i:
-	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_GMRES/test_GMRESComponents.cpp.i
-.PHONY : test_GMRES/test_GMRESComponents.cpp.i
+test_GMRES/test_GMRES_components.cpp.i:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_GMRES/test_GMRES_components.cpp.i
+.PHONY : test_GMRES/test_GMRES_components.cpp.i
 
-test_GMRES/test_GMRESComponents.s: test_GMRES/test_GMRESComponents.cpp.s
-.PHONY : test_GMRES/test_GMRESComponents.s
+test_GMRES/test_GMRES_components.s: test_GMRES/test_GMRES_components.cpp.s
+.PHONY : test_GMRES/test_GMRES_components.s
 
 # target to generate assembly for a file
-test_GMRES/test_GMRESComponents.cpp.s:
-	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_GMRES/test_GMRESComponents.cpp.s
-.PHONY : test_GMRES/test_GMRESComponents.cpp.s
+test_GMRES/test_GMRES_components.cpp.s:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_GMRES/test_GMRES_components.cpp.s
+.PHONY : test_GMRES/test_GMRES_components.cpp.s
 
-test_GMRES/test_GMRESDouble.o: test_GMRES/test_GMRESDouble.cpp.o
-.PHONY : test_GMRES/test_GMRESDouble.o
+test_GMRES/test_GMRES_solve_dbl.o: test_GMRES/test_GMRES_solve_dbl.cpp.o
+.PHONY : test_GMRES/test_GMRES_solve_dbl.o
 
 # target to build an object file
-test_GMRES/test_GMRESDouble.cpp.o:
-	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_GMRES/test_GMRESDouble.cpp.o
-.PHONY : test_GMRES/test_GMRESDouble.cpp.o
+test_GMRES/test_GMRES_solve_dbl.cpp.o:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_GMRES/test_GMRES_solve_dbl.cpp.o
+.PHONY : test_GMRES/test_GMRES_solve_dbl.cpp.o
 
-test_GMRES/test_GMRESDouble.i: test_GMRES/test_GMRESDouble.cpp.i
-.PHONY : test_GMRES/test_GMRESDouble.i
+test_GMRES/test_GMRES_solve_dbl.i: test_GMRES/test_GMRES_solve_dbl.cpp.i
+.PHONY : test_GMRES/test_GMRES_solve_dbl.i
 
 # target to preprocess a source file
-test_GMRES/test_GMRESDouble.cpp.i:
-	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_GMRES/test_GMRESDouble.cpp.i
-.PHONY : test_GMRES/test_GMRESDouble.cpp.i
+test_GMRES/test_GMRES_solve_dbl.cpp.i:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_GMRES/test_GMRES_solve_dbl.cpp.i
+.PHONY : test_GMRES/test_GMRES_solve_dbl.cpp.i
 
-test_GMRES/test_GMRESDouble.s: test_GMRES/test_GMRESDouble.cpp.s
-.PHONY : test_GMRES/test_GMRESDouble.s
+test_GMRES/test_GMRES_solve_dbl.s: test_GMRES/test_GMRES_solve_dbl.cpp.s
+.PHONY : test_GMRES/test_GMRES_solve_dbl.s
 
 # target to generate assembly for a file
-test_GMRES/test_GMRESDouble.cpp.s:
-	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_GMRES/test_GMRESDouble.cpp.s
-.PHONY : test_GMRES/test_GMRESDouble.cpp.s
+test_GMRES/test_GMRES_solve_dbl.cpp.s:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_GMRES/test_GMRES_solve_dbl.cpp.s
+.PHONY : test_GMRES/test_GMRES_solve_dbl.cpp.s
 
-test_GMRES/test_GMRESHalf.o: test_GMRES/test_GMRESHalf.cpp.o
-.PHONY : test_GMRES/test_GMRESHalf.o
+test_GMRES/test_GMRES_solve_hlf.o: test_GMRES/test_GMRES_solve_hlf.cpp.o
+.PHONY : test_GMRES/test_GMRES_solve_hlf.o
 
 # target to build an object file
-test_GMRES/test_GMRESHalf.cpp.o:
-	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_GMRES/test_GMRESHalf.cpp.o
-.PHONY : test_GMRES/test_GMRESHalf.cpp.o
+test_GMRES/test_GMRES_solve_hlf.cpp.o:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_GMRES/test_GMRES_solve_hlf.cpp.o
+.PHONY : test_GMRES/test_GMRES_solve_hlf.cpp.o
 
-test_GMRES/test_GMRESHalf.i: test_GMRES/test_GMRESHalf.cpp.i
-.PHONY : test_GMRES/test_GMRESHalf.i
+test_GMRES/test_GMRES_solve_hlf.i: test_GMRES/test_GMRES_solve_hlf.cpp.i
+.PHONY : test_GMRES/test_GMRES_solve_hlf.i
 
 # target to preprocess a source file
-test_GMRES/test_GMRESHalf.cpp.i:
-	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_GMRES/test_GMRESHalf.cpp.i
-.PHONY : test_GMRES/test_GMRESHalf.cpp.i
+test_GMRES/test_GMRES_solve_hlf.cpp.i:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_GMRES/test_GMRES_solve_hlf.cpp.i
+.PHONY : test_GMRES/test_GMRES_solve_hlf.cpp.i
 
-test_GMRES/test_GMRESHalf.s: test_GMRES/test_GMRESHalf.cpp.s
-.PHONY : test_GMRES/test_GMRESHalf.s
+test_GMRES/test_GMRES_solve_hlf.s: test_GMRES/test_GMRES_solve_hlf.cpp.s
+.PHONY : test_GMRES/test_GMRES_solve_hlf.s
 
 # target to generate assembly for a file
-test_GMRES/test_GMRESHalf.cpp.s:
-	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_GMRES/test_GMRESHalf.cpp.s
-.PHONY : test_GMRES/test_GMRESHalf.cpp.s
+test_GMRES/test_GMRES_solve_hlf.cpp.s:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_GMRES/test_GMRES_solve_hlf.cpp.s
+.PHONY : test_GMRES/test_GMRES_solve_hlf.cpp.s
 
-test_GMRES/test_GMRESSingle.o: test_GMRES/test_GMRESSingle.cpp.o
-.PHONY : test_GMRES/test_GMRESSingle.o
+test_GMRES/test_GMRES_solve_sgl.o: test_GMRES/test_GMRES_solve_sgl.cpp.o
+.PHONY : test_GMRES/test_GMRES_solve_sgl.o
 
 # target to build an object file
-test_GMRES/test_GMRESSingle.cpp.o:
-	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_GMRES/test_GMRESSingle.cpp.o
-.PHONY : test_GMRES/test_GMRESSingle.cpp.o
+test_GMRES/test_GMRES_solve_sgl.cpp.o:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_GMRES/test_GMRES_solve_sgl.cpp.o
+.PHONY : test_GMRES/test_GMRES_solve_sgl.cpp.o
 
-test_GMRES/test_GMRESSingle.i: test_GMRES/test_GMRESSingle.cpp.i
-.PHONY : test_GMRES/test_GMRESSingle.i
+test_GMRES/test_GMRES_solve_sgl.i: test_GMRES/test_GMRES_solve_sgl.cpp.i
+.PHONY : test_GMRES/test_GMRES_solve_sgl.i
 
 # target to preprocess a source file
-test_GMRES/test_GMRESSingle.cpp.i:
-	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_GMRES/test_GMRESSingle.cpp.i
-.PHONY : test_GMRES/test_GMRESSingle.cpp.i
+test_GMRES/test_GMRES_solve_sgl.cpp.i:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_GMRES/test_GMRES_solve_sgl.cpp.i
+.PHONY : test_GMRES/test_GMRES_solve_sgl.cpp.i
 
-test_GMRES/test_GMRESSingle.s: test_GMRES/test_GMRESSingle.cpp.s
-.PHONY : test_GMRES/test_GMRESSingle.s
+test_GMRES/test_GMRES_solve_sgl.s: test_GMRES/test_GMRES_solve_sgl.cpp.s
+.PHONY : test_GMRES/test_GMRES_solve_sgl.s
 
 # target to generate assembly for a file
-test_GMRES/test_GMRESSingle.cpp.s:
-	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_GMRES/test_GMRESSingle.cpp.s
-.PHONY : test_GMRES/test_GMRESSingle.cpp.s
+test_GMRES/test_GMRES_solve_sgl.cpp.s:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_GMRES/test_GMRES_solve_sgl.cpp.s
+.PHONY : test_GMRES/test_GMRES_solve_sgl.cpp.s
 
-test_GMRES/test_PGMRES.o: test_GMRES/test_PGMRES.cpp.o
-.PHONY : test_GMRES/test_PGMRES.o
+test_GMRES/test_PGMRES_components.o: test_GMRES/test_PGMRES_components.cpp.o
+.PHONY : test_GMRES/test_PGMRES_components.o
 
 # target to build an object file
-test_GMRES/test_PGMRES.cpp.o:
-	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_GMRES/test_PGMRES.cpp.o
-.PHONY : test_GMRES/test_PGMRES.cpp.o
+test_GMRES/test_PGMRES_components.cpp.o:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_GMRES/test_PGMRES_components.cpp.o
+.PHONY : test_GMRES/test_PGMRES_components.cpp.o
 
-test_GMRES/test_PGMRES.i: test_GMRES/test_PGMRES.cpp.i
-.PHONY : test_GMRES/test_PGMRES.i
+test_GMRES/test_PGMRES_components.i: test_GMRES/test_PGMRES_components.cpp.i
+.PHONY : test_GMRES/test_PGMRES_components.i
 
 # target to preprocess a source file
-test_GMRES/test_PGMRES.cpp.i:
-	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_GMRES/test_PGMRES.cpp.i
-.PHONY : test_GMRES/test_PGMRES.cpp.i
+test_GMRES/test_PGMRES_components.cpp.i:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_GMRES/test_PGMRES_components.cpp.i
+.PHONY : test_GMRES/test_PGMRES_components.cpp.i
 
-test_GMRES/test_PGMRES.s: test_GMRES/test_PGMRES.cpp.s
-.PHONY : test_GMRES/test_PGMRES.s
+test_GMRES/test_PGMRES_components.s: test_GMRES/test_PGMRES_components.cpp.s
+.PHONY : test_GMRES/test_PGMRES_components.s
 
 # target to generate assembly for a file
-test_GMRES/test_PGMRES.cpp.s:
-	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_GMRES/test_PGMRES.cpp.s
-.PHONY : test_GMRES/test_PGMRES.cpp.s
+test_GMRES/test_PGMRES_components.cpp.s:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_GMRES/test_PGMRES_components.cpp.s
+.PHONY : test_GMRES/test_PGMRES_components.cpp.s
+
+test_GMRES/test_PGMRES_solve.o: test_GMRES/test_PGMRES_solve.cpp.o
+.PHONY : test_GMRES/test_PGMRES_solve.o
+
+# target to build an object file
+test_GMRES/test_PGMRES_solve.cpp.o:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_GMRES/test_PGMRES_solve.cpp.o
+.PHONY : test_GMRES/test_PGMRES_solve.cpp.o
+
+test_GMRES/test_PGMRES_solve.i: test_GMRES/test_PGMRES_solve.cpp.i
+.PHONY : test_GMRES/test_PGMRES_solve.i
+
+# target to preprocess a source file
+test_GMRES/test_PGMRES_solve.cpp.i:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_GMRES/test_PGMRES_solve.cpp.i
+.PHONY : test_GMRES/test_PGMRES_solve.cpp.i
+
+test_GMRES/test_PGMRES_solve.s: test_GMRES/test_PGMRES_solve.cpp.s
+.PHONY : test_GMRES/test_PGMRES_solve.s
+
+# target to generate assembly for a file
+test_GMRES/test_PGMRES_solve.cpp.s:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_GMRES/test_PGMRES_solve.cpp.s
+.PHONY : test_GMRES/test_PGMRES_solve.cpp.s
 
 test_Jacobi.o: test_Jacobi.cpp.o
 .PHONY : test_Jacobi.o
@@ -527,21 +551,24 @@ help:
 	@echo "... test.o"
 	@echo "... test.i"
 	@echo "... test.s"
-	@echo "... test_GMRES/test_GMRESComponents.o"
-	@echo "... test_GMRES/test_GMRESComponents.i"
-	@echo "... test_GMRES/test_GMRESComponents.s"
-	@echo "... test_GMRES/test_GMRESDouble.o"
-	@echo "... test_GMRES/test_GMRESDouble.i"
-	@echo "... test_GMRES/test_GMRESDouble.s"
-	@echo "... test_GMRES/test_GMRESHalf.o"
-	@echo "... test_GMRES/test_GMRESHalf.i"
-	@echo "... test_GMRES/test_GMRESHalf.s"
-	@echo "... test_GMRES/test_GMRESSingle.o"
-	@echo "... test_GMRES/test_GMRESSingle.i"
-	@echo "... test_GMRES/test_GMRESSingle.s"
-	@echo "... test_GMRES/test_PGMRES.o"
-	@echo "... test_GMRES/test_PGMRES.i"
-	@echo "... test_GMRES/test_PGMRES.s"
+	@echo "... test_GMRES/test_GMRES_components.o"
+	@echo "... test_GMRES/test_GMRES_components.i"
+	@echo "... test_GMRES/test_GMRES_components.s"
+	@echo "... test_GMRES/test_GMRES_solve_dbl.o"
+	@echo "... test_GMRES/test_GMRES_solve_dbl.i"
+	@echo "... test_GMRES/test_GMRES_solve_dbl.s"
+	@echo "... test_GMRES/test_GMRES_solve_hlf.o"
+	@echo "... test_GMRES/test_GMRES_solve_hlf.i"
+	@echo "... test_GMRES/test_GMRES_solve_hlf.s"
+	@echo "... test_GMRES/test_GMRES_solve_sgl.o"
+	@echo "... test_GMRES/test_GMRES_solve_sgl.i"
+	@echo "... test_GMRES/test_GMRES_solve_sgl.s"
+	@echo "... test_GMRES/test_PGMRES_components.o"
+	@echo "... test_GMRES/test_PGMRES_components.i"
+	@echo "... test_GMRES/test_PGMRES_components.s"
+	@echo "... test_GMRES/test_PGMRES_solve.o"
+	@echo "... test_GMRES/test_PGMRES_solve.i"
+	@echo "... test_GMRES/test_PGMRES_solve.s"
 	@echo "... test_Jacobi.o"
 	@echo "... test_Jacobi.i"
 	@echo "... test_Jacobi.s"
