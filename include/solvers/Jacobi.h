@@ -39,10 +39,9 @@ class JacobiSolve: public LinearSolve<T> {
     
     public:
 
-        // Inherit constructors
         using LinearSolve<T>::LinearSolve;
 
-        // Set reset as empty function
+        // Set reset as empty function since no special reset needed
         void derived_reset() override {};
 
 };

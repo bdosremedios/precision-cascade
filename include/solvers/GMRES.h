@@ -39,7 +39,7 @@ class GMRESSolve: public LinearSolve<T> {
         Matrix<T, Dynamic, Dynamic> R_H;
         Matrix<T, Dynamic, 1> next_q;
 
-        int kry_space_dim = 0;
+        int kry_space_dim;
         int max_kry_space_dim;
         T basis_zero_tol;
         T rho;
@@ -283,6 +283,9 @@ class GMRESSolve: public LinearSolve<T> {
         }
 
         void set_initial_space() {
+
+            // Set initial dim as 0
+            kry_space_dim = 0;
 
             // Pre-allocate all possible space needed to prevent memory
             // re-allocation

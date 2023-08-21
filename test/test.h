@@ -32,6 +32,8 @@ class TestBase: public testing::Test {
         const string read_matrix_dir = "/home/bdosremedios/dev/gmres/test/read_matrices/";
         const string solve_matrix_dir = "/home/bdosremedios/dev/gmres/test/solve_matrices/";
 
+        const bool show_plots = false;
+
 };
 
 #endif

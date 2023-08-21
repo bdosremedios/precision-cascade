@@ -14,7 +14,7 @@ class RestartedGMRES: public LinearSolve<T> {
     
     public:
 
-        // Constructors/Destructors
+        // Constructors
         RestartedGMRES(
             Matrix<T, Dynamic, Dynamic> const &arg_A,
             Matrix<T, Dynamic, 1> const &arg_b,

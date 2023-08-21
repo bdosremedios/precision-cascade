@@ -24,7 +24,7 @@ TEST_F(GMRESDoubleSolveTest, SolveConvDiff64) {
     GMRESSolve<double> gmres_solve_d(A, b, u_dbl, n, conv_tol_dbl);
 
     gmres_solve_d.solve();
-    gmres_solve_d.view_relres_plot("log");
+    if (show_plots) { gmres_solve_d.view_relres_plot("log"); }
     
     EXPECT_TRUE(gmres_solve_d.check_converged());
     EXPECT_LE(gmres_solve_d.get_relres(), conv_tol_dbl);
@@ -43,7 +43,7 @@ TEST_F(GMRESDoubleSolveTest, SolveConvDiff256) {
     GMRESSolve<double> gmres_solve_d(A, b, u_dbl, n, conv_tol_dbl);
 
     gmres_solve_d.solve();
-    gmres_solve_d.view_relres_plot("log");
+    if (show_plots) { gmres_solve_d.view_relres_plot("log"); }
     
     EXPECT_TRUE(gmres_solve_d.check_converged());
     EXPECT_LE(gmres_solve_d.get_relres(), conv_tol_dbl);
@@ -62,7 +62,7 @@ TEST_F(GMRESDoubleSolveTest, SolveConvDiff1024_LONGRUNTIME) {
     GMRESSolve<double> gmres_solve_d(A, b, u_dbl, n, conv_tol_dbl);
 
     gmres_solve_d.solve();
-    gmres_solve_d.view_relres_plot("log");
+    if (show_plots) { gmres_solve_d.view_relres_plot("log"); }
     
     EXPECT_TRUE(gmres_solve_d.check_converged());
     EXPECT_LE(gmres_solve_d.get_relres(), conv_tol_dbl);
@@ -81,7 +81,7 @@ TEST_F(GMRESDoubleSolveTest, SolveRand20) {
     GMRESSolve<double> gmres_solve_d(A, b, u_dbl, n, conv_tol_dbl);
 
     gmres_solve_d.solve();
-    gmres_solve_d.view_relres_plot("log");
+    if (show_plots) { gmres_solve_d.view_relres_plot("log"); }
     
     EXPECT_TRUE(gmres_solve_d.check_converged());
     EXPECT_LE(gmres_solve_d.get_relres(), conv_tol_dbl);
@@ -100,7 +100,7 @@ TEST_F(GMRESDoubleSolveTest, Solve3Eigs) {
     GMRESSolve<double> gmres_solve_d(A, b, u_dbl, n, conv_tol_dbl);
 
     gmres_solve_d.solve();
-    gmres_solve_d.view_relres_plot("log");
+    if (show_plots) { gmres_solve_d.view_relres_plot("log"); }
     
     EXPECT_EQ(gmres_solve_d.get_iteration(), 3);
     EXPECT_TRUE(gmres_solve_d.check_converged());

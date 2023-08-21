@@ -190,7 +190,7 @@ TEST_F(LinearSolveTest, TestSolveAndRelres) {
     // Test start end at (b-A*x).norm() relres with right solution
     EXPECT_NEAR(test_mock.get_relres(), (b-A*x).norm()/(b-A*x_0).norm(), gamma(n, u_dbl));
 
-    test_mock.view_relres_plot();
+    if (show_plots) { test_mock.view_relres_plot(); }
 
 }
 

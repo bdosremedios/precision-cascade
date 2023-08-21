@@ -380,3 +380,78 @@ TEST_F(GMRESComponentTest, KrylovLuckyBreakThroughSolve) {
     }
     
 }
+
+TEST_F(GMRESComponentTest, Solve) {
+
+    constexpr int n(20);
+    Matrix<double, n, n> A(Matrix<double, n, n>::Random());
+    Matrix<double, n, 1> b(Matrix<double, n, 1>::Random());
+    GMRESSolve<double> gmres_solve(A, b, u_dbl, n, conv_tol_dbl);
+
+    gmres_solve.solve();
+    if (show_plots) { gmres_solve.view_relres_plot("log"); }
+    
+    EXPECT_TRUE(gmres_solve.check_converged());
+    EXPECT_LE(gmres_solve.get_relres(), conv_tol_dbl);
+
+}
+
+TEST_F(GMRESComponentTest, Reset) {
+
+    constexpr int n(20);
+    Matrix<double, n, n> A(Matrix<double, n, n>::Random());
+    Matrix<double, n, 1> b(Matrix<double, n, 1>::Random());
+    GMRESSolveTestingMock<double> test_mock(A, b, u_dbl, n, conv_tol_dbl);
+
+    test_mock.solve();
+    if (show_plots) { test_mock.view_relres_plot("log"); }
+    
+    EXPECT_TRUE(test_mock.check_converged());
+    EXPECT_GT(test_mock.get_iteration(), 0);
+    EXPECT_LE(test_mock.get_relres(), conv_tol_dbl);
+
+    test_mock.reset();
+    ASSERT_FALSE(test_mock.check_converged());
+    ASSERT_EQ(test_mock.get_iteration(), 0);
+    if (show_plots) { test_mock.view_relres_plot("log"); }
+
+    // Check that all matrices are zero again and that krylov dim is back to 0
+    EXPECT_EQ(test_mock.kry_space_dim, 0);
+
+    for (int i=0; i<n; ++i) {
+        for (int j=0; j<n; ++j) {
+            ASSERT_EQ(test_mock.Q_kry_basis(i, j), 0.);
+        }
+    }
+
+    for (int i=0; i<n+1; ++i) {
+        for (int j=0; j<n; ++j) {
+            ASSERT_EQ(test_mock.H(i, j), 0.);
+        }
+    }
+
+    for (int i=0; i<n+1; ++i) {
+        for (int j=0; j<n; ++j) {
+            if (i == j) {
+                ASSERT_EQ(test_mock.Q_H(i, j), 1.);
+            } else {
+                ASSERT_EQ(test_mock.Q_H(i, j), 0.);
+            }
+        }
+    }
+
+    for (int i=0; i<n; ++i) {
+        for (int j=0; j<n; ++j) {
+            ASSERT_EQ(test_mock.R_H(i, j), 0.);
+        }
+    }
+
+    // Test 2nd solve
+    test_mock.solve();
+    if (show_plots) { test_mock.view_relres_plot("log"); }
+    
+    EXPECT_TRUE(test_mock.check_converged());
+    EXPECT_GT(test_mock.get_iteration(), 0);
+    EXPECT_LE(test_mock.get_relres(), conv_tol_dbl);
+
+}

@@ -30,7 +30,7 @@ TEST_F(GMRESSolveHalfTest, SolveConvDiff64) {
     GMRESSolve<half> gmres_solve_h(A, b, static_cast<half>(u_hlf), n, conv_tol_hlf);
 
     gmres_solve_h.solve();
-    gmres_solve_h.view_relres_plot("log");
+    if (show_plots) { gmres_solve_h.view_relres_plot("log"); }
     
     EXPECT_TRUE(gmres_solve_h.check_converged());
     EXPECT_LE(gmres_solve_h.get_relres(), 2*conv_tol_hlf);
@@ -47,7 +47,7 @@ TEST_F(GMRESSolveHalfTest, SolveConvDiff256) {
     );
 
     gmres_solve_h.solve();
-    gmres_solve_h.view_relres_plot("log");
+    if (show_plots) { gmres_solve_h.view_relres_plot("log"); }
     
     EXPECT_TRUE(gmres_solve_h.check_converged());
     EXPECT_LE(gmres_solve_h.get_relres(), 2*large_matrix_error_mod_stag*conv_tol_hlf);
@@ -64,7 +64,7 @@ TEST_F(GMRESSolveHalfTest, SolveConvDiff1024_LONGRUNTIME) {
     );
 
     gmres_solve_h.solve();
-    gmres_solve_h.view_relres_plot("log");
+    if (show_plots) { gmres_solve_h.view_relres_plot("log"); }
     
     EXPECT_TRUE(gmres_solve_h.check_converged());
     EXPECT_LE(gmres_solve_h.get_relres(), 2*large_matrix_error_mod_stag*conv_tol_hlf);
@@ -79,7 +79,7 @@ TEST_F(GMRESSolveHalfTest, SolveRand20) {
     GMRESSolve<half> gmres_solve_h(A, b, static_cast<half>(u_hlf), n, conv_tol_hlf);
 
     gmres_solve_h.solve();
-    gmres_solve_h.view_relres_plot("log");
+    if (show_plots) { gmres_solve_h.view_relres_plot("log"); }
     
     EXPECT_TRUE(gmres_solve_h.check_converged());
     EXPECT_LE(gmres_solve_h.get_relres(), 2*conv_tol_hlf);
@@ -94,7 +94,7 @@ TEST_F(GMRESSolveHalfTest, Solve3Eigs) {
     GMRESSolve<half> gmres_solve_h(A, b, static_cast<half>(u_hlf), n, conv_tol_hlf);
 
     gmres_solve_h.solve();
-    gmres_solve_h.view_relres_plot("log");
+    if (show_plots) { gmres_solve_h.view_relres_plot("log"); }
 
     EXPECT_EQ(gmres_solve_h.get_iteration(), 3);
     EXPECT_TRUE(gmres_solve_h.check_converged());
@@ -112,7 +112,7 @@ TEST_F(GMRESSolveHalfTest, DivergeBeyondHalfCapabilities) {
     GMRESSolve<half> gmres_solve_h(A, b, static_cast<half>(u_hlf), n, conv_tol_hlf);
 
     gmres_solve_h.solve();
-    gmres_solve_h.view_relres_plot("log");
+    if (show_plots) { gmres_solve_h.view_relres_plot("log"); }
     
     EXPECT_TRUE(gmres_solve_h.check_converged());
     EXPECT_LE(gmres_solve_h.get_relres(), 2*conv_tol_hlf);
@@ -120,7 +120,7 @@ TEST_F(GMRESSolveHalfTest, DivergeBeyondHalfCapabilities) {
     // Check divergence beyond single capability of the single machine epsilon
     GMRESSolve<half> gmres_solve_h_to_fail(A, b, static_cast<half>(u_hlf), n, 0.1*u_hlf);
     gmres_solve_h_to_fail.solve();
-    gmres_solve_h_to_fail.view_relres_plot("log");
+    if (show_plots) { gmres_solve_h_to_fail.view_relres_plot("log"); }
     
     EXPECT_FALSE(gmres_solve_h_to_fail.check_converged());
     EXPECT_GT(gmres_solve_h_to_fail.get_relres(), 0.1*u_hlf);

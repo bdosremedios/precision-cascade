@@ -30,7 +30,7 @@ TEST_F(PGMRESSolveTest, TestLeftPreconditioning_RandA45) {
     );
 
     pgmres_solve.solve();
-    pgmres_solve.view_relres_plot("log");
+    if (show_plots) { pgmres_solve.view_relres_plot("log"); }
     
     EXPECT_EQ(pgmres_solve.get_iteration(), 1);
     EXPECT_TRUE(pgmres_solve.check_converged());
@@ -51,7 +51,7 @@ TEST_F(PGMRESSolveTest, TestRightPreconditioning_RandA45) {
     );
 
     pgmres_solve.solve();
-    pgmres_solve.view_relres_plot("log");
+    if (show_plots) { pgmres_solve.view_relres_plot("log"); }
     
     EXPECT_EQ(pgmres_solve.get_iteration(), 1);
     EXPECT_TRUE(pgmres_solve.check_converged());
@@ -70,7 +70,7 @@ TEST_F(PGMRESSolveTest, TestLeftPreconditioning_3eigs) {
     );
 
     pgmres_solve.solve();
-    pgmres_solve.view_relres_plot("log");
+    if (show_plots) { pgmres_solve.view_relres_plot("log"); }
     
     EXPECT_EQ(pgmres_solve.get_iteration(), 3);
     EXPECT_TRUE(pgmres_solve.check_converged());
@@ -95,7 +95,7 @@ TEST_F(PGMRESSolveTest, TestRightPreconditioning_3eigs) {
     );
 
     pgmres_solve.solve();
-    pgmres_solve.view_relres_plot("log");
+    if (show_plots) { pgmres_solve.view_relres_plot("log"); }
     
     EXPECT_EQ(pgmres_solve.get_iteration(), 3);
     EXPECT_TRUE(pgmres_solve.check_converged());
