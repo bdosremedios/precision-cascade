@@ -57,7 +57,7 @@ class LinearSolve {
         // *** PROTECTED HELPER FUNCTIONS ***
 
         // Create initial guess based on system matrix arg_A
-        Matrix<T, Dynamic, Dynamic> make_guess(Matrix<T, Dynamic, Dynamic> arg_A) {
+        Matrix<T, Dynamic, Dynamic> make_guess(Matrix<T, Dynamic, Dynamic> const &arg_A) const {
             return Matrix<T, Dynamic, Dynamic>::Ones(arg_A.cols(), 1);
         }
 
@@ -72,8 +72,7 @@ class LinearSolve {
         ): 
             LinearSolve(
                 arg_A, arg_b, make_guess(arg_A),
-                arg_max_outer_iter,
-                arg_target_rel_res
+                arg_max_outer_iter, arg_target_rel_res
             )
         {}
 
@@ -84,8 +83,7 @@ class LinearSolve {
                     double const &arg_target_rel_res=1e-10
         ): 
             A(arg_A), b(arg_b), x_0(arg_x_0),
-            max_outer_iter(arg_max_outer_iter),
-            target_rel_res(arg_target_rel_res),
+            max_outer_iter(arg_max_outer_iter), target_rel_res(arg_target_rel_res),
             m(arg_A.rows()), n(arg_A.cols())
         { constructorHelper(); }
 

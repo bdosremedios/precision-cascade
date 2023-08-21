@@ -20,6 +20,8 @@ class JacobiSolve: public LinearSolve<T> {
         using LinearSolve<T>::b;
         using LinearSolve<T>::x;
 
+        // *** PROTECTED IMPLEMENTED OVERRIDING HELPER FUNCTIONS ***
+
         void iterate() override {
 
             Matrix<T, Dynamic, 1> x_temp = x;
@@ -36,13 +38,15 @@ class JacobiSolve: public LinearSolve<T> {
             }
 
         }
+
+        void derived_reset() override {}; // Set reset as empty function
     
     public:
 
+        // *** CONSTRUCTORS ***
+
         using LinearSolve<T>::LinearSolve;
 
-        // Set reset as empty function since no special reset needed
-        void derived_reset() override {};
 
 };
 

@@ -22,6 +22,8 @@ class SORSolve: public LinearSolve<T> {
 
         T w;
 
+        // *** PROTECTED IMPLEMENTED OVERRIDING HELPER FUNCTIONS ***
+
         void iterate() override {
 
             Matrix<T, Dynamic, 1> x_k = x;
@@ -41,10 +43,13 @@ class SORSolve: public LinearSolve<T> {
             }
 
         }
+
+        void derived_reset() override {}; // Set reset as empty function
     
     public:
 
-        // Constructors
+        // *** CONSTRUCTORS ***
+
         SORSolve(
             Matrix<T, Dynamic, Dynamic> const &arg_A,
             Matrix<T, Dynamic, 1> const &arg_b,
@@ -70,9 +75,6 @@ class SORSolve: public LinearSolve<T> {
             w(arg_w),
             LinearSolve<T>::LinearSolve(arg_A, arg_b, arg_x_0, arg_max_outer_iter, arg_target_rel_res)
         {}
-
-        // Set reset as empty function
-        void derived_reset() override {};
 
 };
 

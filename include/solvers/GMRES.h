@@ -44,13 +44,71 @@ class GMRESSolve: public LinearSolve<T> {
         T basis_zero_tol;
         T rho;
 
-        int determine_max_iter(int max_iter, Matrix<T, Dynamic, Dynamic> arg_A) {
+        // *** PROTECTED INSTANTIATION HELPER FUNCTIONS ***
+
+        int determine_max_iter(int max_iter, Matrix<T, Dynamic, Dynamic> const &arg_A) const {
             if (max_iter == -1) {
                 return arg_A.rows();
             } else {
                 return max_iter;
             }
         }
+
+        void check_compatibility() const {
+
+            // Assert compatibility of preconditioners with matrix
+            if (!left_precond_ptr->check_compatibility_left(this->m)) {
+                throw runtime_error("Left preconditioner is not compatible with linear system");
+            }
+            if (!right_precond_ptr->check_compatibility_right(this->n)) {
+                throw runtime_error("Right preconditioner is not compatible with linear system");
+            }
+        
+        }
+
+        void set_initial_space() {
+
+            // Set initial dim as 0
+            kry_space_dim = 0;
+
+            // Pre-allocate all possible space needed to prevent memory
+            // re-allocation
+            Q_kry_basis = Matrix<T, Dynamic, Dynamic>::Zero(m, m);
+            H = Matrix<T, Dynamic, Dynamic>::Zero(m+1, m);
+            Q_H = Matrix<T, Dynamic, Dynamic>::Identity(m+1, m+1);
+            R_H = Matrix<T, Dynamic, Dynamic>::Zero(m+1, m);
+
+            // Set rho as initial residual norm
+            Matrix<T, Dynamic, 1> Minv_A_x0(left_precond_ptr->action_inv_M(A*x_0));
+            Matrix<T, Dynamic, 1> Minv_b(left_precond_ptr->action_inv_M(b));
+            Matrix<T, Dynamic, 1> r_0(Minv_b - Minv_A_x0);
+            rho = r_0.norm();
+
+            // Initialize next vector q as initial residual marking termination
+            // since can not build Krylov subspace on zero vector
+            next_q = r_0;
+            if (next_q.norm() <= basis_zero_tol) {
+                this->terminated = true;
+            }
+
+        }
+
+        void initializeGMRES() {
+
+            // Specify max dimension for krylov subspace
+            max_kry_space_dim = m;
+
+            // Ensure that max_outer_iter does not exceed krylov subspace
+            if (max_outer_iter > max_kry_space_dim) {
+                throw runtime_error("GMRES outer iterations exceed matrix size");
+            }
+
+            check_compatibility();
+            set_initial_space();
+
+        }
+
+        // *** PROTECTED ITERATION HELPER FUNCTIONS ***
 
         void update_subspace_k() {
 
@@ -142,6 +200,8 @@ class GMRESSolve: public LinearSolve<T> {
 
         }
 
+        // *** PROTECTED IMPLEMENTED OVERRIDING HELPER FUNCTIONS ***
+
         void check_termination() {
 
             // Check for termination condition with inability to expand subspace if
@@ -168,10 +228,13 @@ class GMRESSolve: public LinearSolve<T> {
             }
 
         }
+
+        void derived_reset() override { set_initial_space(); } // Set derived reset to erase
+                                                               // current krylov subspace made
     
     public:
 
-        // Constructors
+        // *** CONSTRUCTORS ***
 
         // Constructor without initial guess and no preconditioners
         GMRESSolve(
@@ -283,63 +346,6 @@ class GMRESSolve: public LinearSolve<T> {
                 arg_target_rel_res
             )
         { initializeGMRES(); }
-
-        // Set derived reset to erase current krylov subspace made
-        void derived_reset() override { set_initial_space(); }
-
-        void check_compatibility() {
-
-            // Assert compatibility of preconditioners with matrix
-            if (!left_precond_ptr->check_compatibility_left(this->m)) {
-                throw runtime_error("Left preconditioner is not compatible with linear system");
-            }
-            if (!right_precond_ptr->check_compatibility_right(this->n)) {
-                throw runtime_error("Right preconditioner is not compatible with linear system");
-            }
-        
-        }
-
-        void set_initial_space() {
-
-            // Set initial dim as 0
-            kry_space_dim = 0;
-
-            // Pre-allocate all possible space needed to prevent memory
-            // re-allocation
-            Q_kry_basis = Matrix<T, Dynamic, Dynamic>::Zero(m, m);
-            H = Matrix<T, Dynamic, Dynamic>::Zero(m+1, m);
-            Q_H = Matrix<T, Dynamic, Dynamic>::Identity(m+1, m+1);
-            R_H = Matrix<T, Dynamic, Dynamic>::Zero(m+1, m);
-
-            // Set rho as initial residual norm
-            Matrix<T, Dynamic, 1> Minv_A_x0(left_precond_ptr->action_inv_M(A*x_0));
-            Matrix<T, Dynamic, 1> Minv_b(left_precond_ptr->action_inv_M(b));
-            Matrix<T, Dynamic, 1> r_0(Minv_b - Minv_A_x0);
-            rho = r_0.norm();
-
-            // Initialize next vector q as initial residual marking termination
-            // since can not build Krylov subspace on zero vector
-            next_q = r_0;
-            if (next_q.norm() <= basis_zero_tol) {
-                this->terminated = true;
-            }
-
-        }
-
-        void initializeGMRES() {
-
-            // Specify max dimension for krylov subspace
-            max_kry_space_dim = m;
-
-            // Ensure that max_outer_iter does not exceed krylov subspace
-            if (max_outer_iter > max_kry_space_dim) {
-                throw runtime_error("GMRES outer iterations exceed matrix size");
-            }
-
-            check_compatibility();
-            set_initial_space();
-
-        }
 
 };
 
