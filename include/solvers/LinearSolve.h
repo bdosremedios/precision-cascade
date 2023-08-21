@@ -29,11 +29,11 @@ class LinearSolve {
         const int m; const int n;
 
         // Constant solve attributes
-        const int max_outer_iter;
         const double target_rel_res;
 
         // Mutable solve attributes
         Matrix<T, Dynamic, 1> x;
+        int max_outer_iter; // mutable to allow setting by specific solvers
         bool initiated = false;
         bool converged = false;
         bool terminated = false;
@@ -72,7 +72,8 @@ class LinearSolve {
         ): 
             LinearSolve(
                 arg_A, arg_b, make_guess(arg_A),
-                arg_max_outer_iter, arg_target_rel_res
+                arg_max_outer_iter,
+                arg_target_rel_res
             )
         {}
 
@@ -83,7 +84,8 @@ class LinearSolve {
                     double const &arg_target_rel_res=1e-10
         ): 
             A(arg_A), b(arg_b), x_0(arg_x_0),
-            max_outer_iter(arg_max_outer_iter), target_rel_res(arg_target_rel_res),
+            max_outer_iter(arg_max_outer_iter),
+            target_rel_res(arg_target_rel_res),
             m(arg_A.rows()), n(arg_A.cols())
         { constructorHelper(); }
 

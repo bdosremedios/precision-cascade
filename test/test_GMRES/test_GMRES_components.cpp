@@ -110,6 +110,36 @@ TEST_F(GMRESComponentTest, CheckConstruction64x64) {
 
 }
 
+TEST_F(GMRESComponentTest, CheckCorrectDefaultMaxIter) {
+    
+    constexpr int n(7);
+    Matrix<double, n, n> A_n(Matrix<double, n, n>::Random());
+    Matrix<double, n, 1> b_n(Matrix<double, n, 1>::Random());
+    GMRESSolveTestingMock<double> test_mock_n(A_n, b_n, u_dbl);
+    ASSERT_EQ(test_mock_n.max_outer_iter, n);
+
+    constexpr int m(53);
+    Matrix<double, m, m> A_m(Matrix<double, m, m>::Random());
+    Matrix<double, m, 1> b_m(Matrix<double, m, 1>::Random());
+    GMRESSolveTestingMock<double> test_mock_m(A_m, b_m, u_dbl);
+    ASSERT_EQ(test_mock_m.max_outer_iter, m);
+
+}
+
+TEST_F(GMRESComponentTest, CheckErrorExceedDimension) {
+    
+    constexpr int n(7);
+    Matrix<double, n, n> A_n(Matrix<double, n, n>::Random());
+    Matrix<double, n, 1> b_n(Matrix<double, n, 1>::Random());
+    try {
+        GMRESSolveTestingMock<double> test_mock_n(A_n, b_n, u_dbl, 100);
+        FAIL();
+    } catch (runtime_error e) {
+        cout << e.what() << endl;
+    }
+
+}
+
 TEST_F(GMRESComponentTest, KrylovInstantiationAndUpdates) {
     
     constexpr int n(5);
@@ -294,7 +324,7 @@ TEST_F(GMRESComponentTest, KrylovLuckyBreakFirstIter) {
     Matrix<double, n, n> A(read_matrix_csv<double>(solve_matrix_dir + "A_5_easysoln.csv"));
     Matrix<double, n, 1> b(read_matrix_csv<double>(solve_matrix_dir + "b_5_easysoln.csv"));
     Matrix<double, n, 1> soln(Matrix<double, n, 1>::Ones()); // Instantiate initial guess as true solution
-    GMRESSolveTestingMock<double> test_mock(A, b, soln, u_dbl, 100, conv_tol_dbl);
+    GMRESSolveTestingMock<double> test_mock(A, b, soln, u_dbl, n, conv_tol_dbl);
 
     // Attempt to update subspace and Hessenberg
     test_mock.iterate();
