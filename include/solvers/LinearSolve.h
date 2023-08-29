@@ -15,6 +15,10 @@ using Eigen::placeholders::all;
 using std::vector;
 using std::cout, std::endl;
 
+class GenericIterativeSolve {
+    
+}
+
 template <typename T>
 class LinearSolve {
     
