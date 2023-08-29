@@ -446,7 +446,7 @@ main/CMakeFiles/main.dir/main.cpp.o: \
  /home/bdosremedios/dev/gmres/main/../include/tools/Substitution.h \
  /home/bdosremedios/dev/gmres/main/../include/preconditioners/ImplementedPreconditioners.h \
  /home/bdosremedios/dev/gmres/main/../include/preconditioners/Preconditioner.h \
- /home/bdosremedios/dev/gmres/main/../include/solvers/LinearSolve.h \
+ /home/bdosremedios/dev/gmres/main/../include/solvers/IterativeSolve.h \
  /usr/include/c++/11/iomanip /usr/include/c++/11/locale \
  /usr/include/c++/11/bits/locale_facets_nonio.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/time_members.h \

@@ -4,13 +4,13 @@
 #include "Eigen/Dense"
 
 #include "preconditioners/ImplementedPreconditioners.h"
-#include "LinearSolve.h"
+#include "IterativeSolve.h"
 #include "GMRES.h"
 
 using Eigen::Matrix, Eigen::Dynamic;
 
 template <typename T, typename U=T>
-class FP_RSTRT_GMRESSolve: public LinearSolve<T> {
+class FP_RSTRT_GMRESSolve: public TypedIterativeSolve<T> {
 
     protected:
 
@@ -127,7 +127,7 @@ class FP_RSTRT_GMRESSolve: public LinearSolve<T> {
         //     basis_zero_tol(arg_basis_zero_tol),
         //     left_precond_ptr(arg_left_precond_ptr),
         //     right_precond_ptr(arg_right_precond_ptr),
-        //     LinearSolve<T>::LinearSolve(
+        //     TypedIterativeSolve<T>::TypedIterativeSolve(
         //         arg_A, arg_b, arg_x_0,
         //         determine_max_iter(arg_max_outer_iter, arg_A),
         //         arg_target_rel_res

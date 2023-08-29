@@ -499,7 +499,7 @@ main/CMakeFiles/main.dir/main.cpp.o
  /home/bdosremedios/dev/gmres/include/tools/Substitution.h
  /home/bdosremedios/dev/gmres/include/preconditioners/ImplementedPreconditioners.h
  /home/bdosremedios/dev/gmres/include/preconditioners/Preconditioner.h
- /home/bdosremedios/dev/gmres/include/solvers/LinearSolve.h
+ /home/bdosremedios/dev/gmres/include/solvers/IterativeSolve.h
  /usr/include/c++/11/iomanip
  /usr/include/c++/11/locale
  /usr/include/c++/11/bits/locale_facets_nonio.h

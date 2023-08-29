@@ -343,6 +343,30 @@ test_GMRES/test_PGMRES_solve.cpp.s:
 	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_GMRES/test_PGMRES_solve.cpp.s
 .PHONY : test_GMRES/test_PGMRES_solve.cpp.s
 
+test_IterativeSolve.o: test_IterativeSolve.cpp.o
+.PHONY : test_IterativeSolve.o
+
+# target to build an object file
+test_IterativeSolve.cpp.o:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_IterativeSolve.cpp.o
+.PHONY : test_IterativeSolve.cpp.o
+
+test_IterativeSolve.i: test_IterativeSolve.cpp.i
+.PHONY : test_IterativeSolve.i
+
+# target to preprocess a source file
+test_IterativeSolve.cpp.i:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_IterativeSolve.cpp.i
+.PHONY : test_IterativeSolve.cpp.i
+
+test_IterativeSolve.s: test_IterativeSolve.cpp.s
+.PHONY : test_IterativeSolve.s
+
+# target to generate assembly for a file
+test_IterativeSolve.cpp.s:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_IterativeSolve.cpp.s
+.PHONY : test_IterativeSolve.cpp.s
+
 test_Jacobi.o: test_Jacobi.cpp.o
 .PHONY : test_Jacobi.o
 
@@ -366,30 +390,6 @@ test_Jacobi.s: test_Jacobi.cpp.s
 test_Jacobi.cpp.s:
 	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_Jacobi.cpp.s
 .PHONY : test_Jacobi.cpp.s
-
-test_LinearSolve.o: test_LinearSolve.cpp.o
-.PHONY : test_LinearSolve.o
-
-# target to build an object file
-test_LinearSolve.cpp.o:
-	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_LinearSolve.cpp.o
-.PHONY : test_LinearSolve.cpp.o
-
-test_LinearSolve.i: test_LinearSolve.cpp.i
-.PHONY : test_LinearSolve.i
-
-# target to preprocess a source file
-test_LinearSolve.cpp.i:
-	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_LinearSolve.cpp.i
-.PHONY : test_LinearSolve.cpp.i
-
-test_LinearSolve.s: test_LinearSolve.cpp.s
-.PHONY : test_LinearSolve.s
-
-# target to generate assembly for a file
-test_LinearSolve.cpp.s:
-	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_LinearSolve.cpp.s
-.PHONY : test_LinearSolve.cpp.s
 
 test_MatrixReader.o: test_MatrixReader.cpp.o
 .PHONY : test_MatrixReader.o
@@ -569,12 +569,12 @@ help:
 	@echo "... test_GMRES/test_PGMRES_solve.o"
 	@echo "... test_GMRES/test_PGMRES_solve.i"
 	@echo "... test_GMRES/test_PGMRES_solve.s"
+	@echo "... test_IterativeSolve.o"
+	@echo "... test_IterativeSolve.i"
+	@echo "... test_IterativeSolve.s"
 	@echo "... test_Jacobi.o"
 	@echo "... test_Jacobi.i"
 	@echo "... test_Jacobi.s"
-	@echo "... test_LinearSolve.o"
-	@echo "... test_LinearSolve.i"
-	@echo "... test_LinearSolve.s"
 	@echo "... test_MatrixReader.o"
 	@echo "... test_MatrixReader.i"
 	@echo "... test_MatrixReader.s"

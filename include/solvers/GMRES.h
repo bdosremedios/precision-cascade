@@ -9,7 +9,7 @@
 
 #include "tools/Substitution.h"
 #include "preconditioners/ImplementedPreconditioners.h"
-#include "LinearSolve.h"
+#include "IterativeSolve.h"
 
 using Eigen::Matrix, Eigen::Dynamic;
 using std::cout, std::endl;
@@ -19,16 +19,16 @@ using std::sqrt;
 using Eigen::placeholders::all;
 
 template <typename T, typename U=T>
-class GMRESSolve: public LinearSolve<T> {
+class GMRESSolve: public TypedIterativeSolve<T> {
 
     protected:
 
-        using LinearSolve<T>::m;
-        using LinearSolve<T>::A;
-        using LinearSolve<T>::b;
-        using LinearSolve<T>::x;
-        using LinearSolve<T>::x_0;
-        using LinearSolve<T>::max_outer_iter;
+        using TypedIterativeSolve<T>::m;
+        using TypedIterativeSolve<T>::A;
+        using TypedIterativeSolve<T>::b;
+        using TypedIterativeSolve<T>::x;
+        using TypedIterativeSolve<T>::x_0;
+        using TypedIterativeSolve<T>::max_outer_iter;
 
         shared_ptr<Preconditioner<U>> left_precond_ptr;
         shared_ptr<Preconditioner<U>> right_precond_ptr;
@@ -340,7 +340,7 @@ class GMRESSolve: public LinearSolve<T> {
             basis_zero_tol(arg_basis_zero_tol),
             left_precond_ptr(arg_left_precond_ptr),
             right_precond_ptr(arg_right_precond_ptr),
-            LinearSolve<T>::LinearSolve(
+            TypedIterativeSolve<T>::TypedIterativeSolve(
                 arg_A, arg_b, arg_x_0,
                 determine_max_iter(arg_max_outer_iter, arg_A),
                 arg_target_rel_res

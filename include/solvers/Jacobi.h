@@ -5,20 +5,20 @@
 
 #include <iostream>
 
-#include "LinearSolve.h"
+#include "IterativeSolve.h"
 
 using std::cout, std::endl;
 using Eigen::Matrix;
 
 template <typename T>
-class JacobiSolve: public LinearSolve<T> {
+class JacobiSolve: public TypedIterativeSolve<T> {
 
     protected:
 
-        using LinearSolve<T>::m;
-        using LinearSolve<T>::A;
-        using LinearSolve<T>::b;
-        using LinearSolve<T>::x;
+        using TypedIterativeSolve<T>::m;
+        using TypedIterativeSolve<T>::A;
+        using TypedIterativeSolve<T>::b;
+        using TypedIterativeSolve<T>::x;
 
         // *** PROTECTED IMPLEMENTED OVERRIDING HELPER FUNCTIONS ***
 
@@ -45,7 +45,7 @@ class JacobiSolve: public LinearSolve<T> {
 
         // *** CONSTRUCTORS ***
 
-        using LinearSolve<T>::LinearSolve;
+        using TypedIterativeSolve<T>::TypedIterativeSolve;
 
 
 };

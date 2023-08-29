@@ -5,20 +5,20 @@
 
 #include <iostream>
 
-#include "LinearSolve.h"
+#include "IterativeSolve.h"
 
 using std::cout, std::endl;
 using Eigen::Matrix, Eigen::Dynamic;
 
 template <typename T>
-class SORSolve: public LinearSolve<T> {
+class SORSolve: public TypedIterativeSolve<T> {
 
     protected:
 
-        using LinearSolve<T>::m;
-        using LinearSolve<T>::A;
-        using LinearSolve<T>::b;
-        using LinearSolve<T>::x;
+        using TypedIterativeSolve<T>::m;
+        using TypedIterativeSolve<T>::A;
+        using TypedIterativeSolve<T>::b;
+        using TypedIterativeSolve<T>::x;
 
         T w;
 
@@ -73,7 +73,7 @@ class SORSolve: public LinearSolve<T> {
             double const &arg_target_rel_res=1e-10
         ):
             w(arg_w),
-            LinearSolve<T>::LinearSolve(arg_A, arg_b, arg_x_0, arg_max_outer_iter, arg_target_rel_res)
+            TypedIterativeSolve<T>::TypedIterativeSolve(arg_A, arg_b, arg_x_0, arg_max_outer_iter, arg_target_rel_res)
         {}
 
 };

@@ -530,4 +530,4 @@ test/CMakeFiles/test.dir/test_SOR/test_GaussSeidel.cpp.o: \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
  /usr/include/c++/11/bits/fstream.tcc \
  /home/bdosremedios/dev/gmres/test/../include/solvers/SOR.h \
- /home/bdosremedios/dev/gmres/test/../include/solvers/LinearSolve.h
+ /home/bdosremedios/dev/gmres/test/../include/solvers/IterativeSolve.h

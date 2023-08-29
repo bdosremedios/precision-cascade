@@ -498,7 +498,7 @@ main/CMakeFiles/main.dir/main.cpp.o: ../main/main.cpp \
   ../include/tools/Substitution.h \
   ../include/preconditioners/ImplementedPreconditioners.h \
   ../include/preconditioners/Preconditioner.h \
-  ../include/solvers/LinearSolve.h \
+  ../include/solvers/IterativeSolve.h \
   /usr/include/c++/11/iomanip \
   /usr/include/c++/11/locale \
   /usr/include/c++/11/bits/locale_facets_nonio.h \
@@ -521,6 +521,8 @@ main/CMakeFiles/main.dir/main.cpp.o: ../main/main.cpp \
 /usr/include/x86_64-linux-gnu/c++/11/bits/messages_members.h:
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/time_members.h:
+
+../include/solvers/IterativeSolve.h:
 
 ../include/tools/Substitution.h:
 
@@ -1069,8 +1071,6 @@ main/CMakeFiles/main.dir/main.cpp.o: ../main/main.cpp \
 /usr/include/x86_64-linux-gnu/gnu/stubs-64.h:
 
 /usr/include/c++/11/tr1/gamma.tcc:
-
-../include/solvers/LinearSolve.h:
 
 /usr/include/c++/11/bits/locale_classes.h:
 
