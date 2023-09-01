@@ -78,7 +78,7 @@ TEST_F(PGMRESSolveTest, TestLeftPreconditioning_3eigs) {
 
     // Check that matches MATLAB gmres solution within the difference of twice conv_tol_dbl
     Matrix<double, n, 1> x_test(read_matrix_csv<double>(solve_matrix_dir + "x_25_saddle.csv"));
-    EXPECT_LE((pgmres_solve.get_soln() - x_test).norm()/(x_test.norm()), 2*conv_tol_dbl);
+    EXPECT_LE((pgmres_solve.get_typed_soln() - x_test).norm()/(x_test.norm()), 2*conv_tol_dbl);
 
 }
 
@@ -103,6 +103,6 @@ TEST_F(PGMRESSolveTest, TestRightPreconditioning_3eigs) {
 
     // Check that matches MATLAB gmres solution within the difference of twice conv_tol_dbl
     Matrix<double, n, 1> x_test(read_matrix_csv<double>(solve_matrix_dir + "x_25_saddle.csv"));
-    EXPECT_LE((pgmres_solve.get_soln() - x_test).norm()/(x_test.norm()), 2*conv_tol_dbl);
+    EXPECT_LE((pgmres_solve.get_typed_soln() - x_test).norm()/(x_test.norm()), 2*conv_tol_dbl);
 
 }

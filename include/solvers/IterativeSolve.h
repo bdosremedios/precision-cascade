@@ -15,7 +15,7 @@ using Eigen::placeholders::all;
 using std::vector;
 using std::cout, std::endl;
 
-// Untyped interface for untyped pointer access to solvers
+// Untyped abstract interface for untyped pointer access to typed interative solver interface
 class GenericIterativeSolve {
     
     protected:
@@ -64,6 +64,12 @@ class GenericIterativeSolve {
 
         virtual ~GenericIterativeSolve() = default; // Virtual to determine destructors at runtime for correctness
                                                   // in dynamic memory usage
+
+        // *** ABSTRACT METHODS ***
+
+        // Allow calling to solve generic_soln from the generic interface using the implementation of the typed
+        // interface
+        virtual void solve() = 0;
 
 };
 
@@ -158,7 +164,7 @@ class TypedIterativeSolve: public GenericIterativeSolve {
         // *** METHODS ***
 
         // Getters
-        Matrix<T, Dynamic, 1> get_soln() const { return typed_soln; };
+        Matrix<T, Dynamic, 1> get_typed_soln() const { return typed_soln; };
 
         // Reset TypedIterativeSolve to initial state
         void reset() {
@@ -166,8 +172,9 @@ class TypedIterativeSolve: public GenericIterativeSolve {
             derived_reset();
         }
 
-        // Perform solve with TypedIterativeSolve scheme
-        void solve() {
+        // Perform solve with TypedIterativeSolve scheme updating both typed_soln and generic_soln
+        // with simple casting to generic_soln
+        void solve() override {
 
             // Mark as linear solve started
             initiated = true;

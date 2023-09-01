@@ -31,7 +31,7 @@ TEST_F(GMRESDoubleSolveTest, SolveConvDiff64) {
 
     // Check that matches MATLAB gmres solution within the difference of twice conv_tol_dbl
     Matrix<double, n, 1> x_test(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_x.csv"));
-    EXPECT_LE((gmres_solve_d.get_soln() - x_test).norm()/(x_test.norm()), 2*conv_tol_dbl);
+    EXPECT_LE((gmres_solve_d.get_typed_soln() - x_test).norm()/(x_test.norm()), 2*conv_tol_dbl);
 
 }
 
@@ -50,7 +50,7 @@ TEST_F(GMRESDoubleSolveTest, SolveConvDiff256) {
 
     // Check that matches MATLAB gmres solution within the difference of twice conv_tol_dbl
     Matrix<double, n, 1> x_test(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_256_x.csv"));
-    EXPECT_LE((gmres_solve_d.get_soln() - x_test).norm()/(x_test.norm()), 2*conv_tol_dbl);
+    EXPECT_LE((gmres_solve_d.get_typed_soln() - x_test).norm()/(x_test.norm()), 2*conv_tol_dbl);
 
 }
 
@@ -69,7 +69,7 @@ TEST_F(GMRESDoubleSolveTest, SolveConvDiff1024_LONGRUNTIME) {
 
     // Check that matches MATLAB gmres solution within the difference of twice conv_tol_dbl
     Matrix<double, n, 1> x_test(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_1024_x.csv"));
-    EXPECT_LE((gmres_solve_d.get_soln() - x_test).norm()/(x_test.norm()), 2*conv_tol_dbl);
+    EXPECT_LE((gmres_solve_d.get_typed_soln() - x_test).norm()/(x_test.norm()), 2*conv_tol_dbl);
 
 }
 
@@ -88,7 +88,7 @@ TEST_F(GMRESDoubleSolveTest, SolveRand20) {
 
     // Check that matches MATLAB gmres solution within the difference of twice conv_tol_dbl
     Matrix<double, n, 1> x_test(read_matrix_csv<double>(solve_matrix_dir + "x_20_rand.csv"));
-    EXPECT_LE((gmres_solve_d.get_soln() - x_test).norm()/(x_test.norm()), 2*conv_tol_dbl);
+    EXPECT_LE((gmres_solve_d.get_typed_soln() - x_test).norm()/(x_test.norm()), 2*conv_tol_dbl);
 
 }
 
@@ -108,6 +108,6 @@ TEST_F(GMRESDoubleSolveTest, Solve3Eigs) {
 
     // Check that matches MATLAB gmres solution within the difference of twice conv_tol_dbl
     Matrix<double, n, 1> x_test(read_matrix_csv<double>(solve_matrix_dir + "x_25_3eigs.csv"));
-    EXPECT_LE((gmres_solve_d.get_soln() - x_test).norm()/(x_test.norm()), 2*conv_tol_dbl);
+    EXPECT_LE((gmres_solve_d.get_typed_soln() - x_test).norm()/(x_test.norm()), 2*conv_tol_dbl);
 
 }
