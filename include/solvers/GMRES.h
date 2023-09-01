@@ -26,8 +26,8 @@ class GMRESSolve: public TypedIterativeSolve<T> {
         using TypedIterativeSolve<T>::m;
         using TypedIterativeSolve<T>::A;
         using TypedIterativeSolve<T>::b;
-        using TypedIterativeSolve<T>::x;
-        using TypedIterativeSolve<T>::x_0;
+        using TypedIterativeSolve<T>::typed_soln;
+        using TypedIterativeSolve<T>::init_guess;
         using TypedIterativeSolve<T>::max_outer_iter;
 
         shared_ptr<Preconditioner<U>> left_precond_ptr;
@@ -79,7 +79,7 @@ class GMRESSolve: public TypedIterativeSolve<T> {
             R_H = Matrix<T, Dynamic, Dynamic>::Zero(m+1, m);
 
             // Set rho as initial residual norm
-            Matrix<T, Dynamic, 1> Minv_A_x0(left_precond_ptr->action_inv_M(A*x_0));
+            Matrix<T, Dynamic, 1> Minv_A_x0(left_precond_ptr->action_inv_M(A*init_guess));
             Matrix<T, Dynamic, 1> Minv_b(left_precond_ptr->action_inv_M(b));
             Matrix<T, Dynamic, 1> r_0(Minv_b - Minv_A_x0);
             rho = r_0.norm();
@@ -195,8 +195,8 @@ class GMRESSolve: public TypedIterativeSolve<T> {
                 static_cast<Matrix<T, Dynamic, 1>>(rhs.block(0, 0, kry_space_dim, 1))
             );
 
-            // Update x adjusting with right preconditioning
-            x = x_0 + right_precond_ptr->action_inv_M(Q_kry_basis.block(0, 0, m, kry_space_dim)*y);
+            // Update typed_soln adjusting with right preconditioning
+            typed_soln = init_guess + right_precond_ptr->action_inv_M(Q_kry_basis.block(0, 0, m, kry_space_dim)*y);
 
         }
 
@@ -355,7 +355,7 @@ class GMRESSolveTestingMock: public GMRESSolve<T, U> {
     public:
 
         using GMRESSolve<T, U>::GMRESSolve;
-        using GMRESSolve<T, U>::x;
+        using GMRESSolve<T, U>::typed_soln;
 
         using GMRESSolve<T, U>::H;
         using GMRESSolve<T, U>::Q_kry_basis;

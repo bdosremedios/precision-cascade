@@ -18,7 +18,7 @@ class SORSolve: public TypedIterativeSolve<T> {
         using TypedIterativeSolve<T>::m;
         using TypedIterativeSolve<T>::A;
         using TypedIterativeSolve<T>::b;
-        using TypedIterativeSolve<T>::x;
+        using TypedIterativeSolve<T>::typed_soln;
 
         T w;
 
@@ -26,19 +26,19 @@ class SORSolve: public TypedIterativeSolve<T> {
 
         void iterate() override {
 
-            Matrix<T, Dynamic, 1> x_k = x;
+            Matrix<T, Dynamic, 1> prev_soln = typed_soln;
             
             for (int i=0; i<m; ++i) {
 
                 T acc = b(i);
                 for (int j=i+1; j<m; ++j) {
-                    acc -= A(i, j)*x_k(j);
+                    acc -= A(i, j)*prev_soln(j);
                 }
                 for (int j=0; j<i; ++j) {
-                    acc -= A(i, j)*x(j);
+                    acc -= A(i, j)*typed_soln(j);
                 }
 
-                x(i) = (static_cast<T>(1)-w)*x_k(i) + w*acc/(A(i, i));
+                typed_soln(i) = (static_cast<T>(1)-w)*prev_soln(i) + w*acc/(A(i, i));
 
             }
 

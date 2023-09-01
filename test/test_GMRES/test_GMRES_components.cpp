@@ -146,7 +146,7 @@ TEST_F(GMRESComponentTest, KrylovInstantiationAndUpdates) {
     Matrix<double, n, n> A(read_matrix_csv<double>(solve_matrix_dir + "A_5_toy.csv"));
     Matrix<double, n, 1> b(read_matrix_csv<double>(solve_matrix_dir + "b_5_toy.csv"));
     GMRESSolveTestingMock<double> test_mock(A, b, u_dbl);
-    test_mock.x = Matrix<double, n, 1>::Ones(); // Manually instantiate initial guess
+    test_mock.typed_soln = Matrix<double, n, 1>::Ones(); // Manually instantiate initial guess
     Matrix<double, n, 1> r_0 = b - A*Matrix<double, n, 1>::Ones();
 
     // Create matrix to store previous basis vectors to ensure no change across iterations
@@ -209,7 +209,7 @@ TEST_F(GMRESComponentTest, H_QR_Update) {
     Matrix<double, n, n> A(read_matrix_csv<double>(solve_matrix_dir + "A_5_toy.csv"));
     Matrix<double, n, 1> b(read_matrix_csv<double>(solve_matrix_dir + "b_5_toy.csv"));
     GMRESSolveTestingMock<double> test_mock(A, b, u_dbl);
-    test_mock.x(Matrix<double, n, n>::Ones()); // Manually instantiate initial guess
+    test_mock.typed_soln(Matrix<double, n, n>::Ones()); // Manually instantiate initial guess
     Matrix<double, n, 1> r_0(b - A*Matrix<double, n, 1>::Ones());
 
     // Fully create Hessenberg matrix
@@ -286,7 +286,7 @@ TEST_F(GMRESComponentTest, Update_x_Back_Substitution) {
     Matrix<double, n, 1> x_0(Matrix<double, n, 1>::Zero());
     GMRESSolveTestingMock<double> test_mock(A, b, x_0, u_dbl);
 
-    // Set test_mock krylov basis to the identity to have x be directly the solved coefficients
+    // Set test_mock krylov basis to the identity to have typed_soln be directly the solved coefficients
     // of the back substitution
     test_mock.Q_kry_basis = Matrix<double, n, n>::Identity();
 
@@ -311,7 +311,7 @@ TEST_F(GMRESComponentTest, Update_x_Back_Substitution) {
 
         // Check if coefficient solution matches to within tolerable error
         for (int i=0; i<kry_dim; ++i) {
-            ASSERT_NEAR(test_mock.x(i), test_soln(i), dbl_error_acc); //accum_error_mod*(i+1)*gamma(kry_dim, u_dbl));
+            ASSERT_NEAR(test_mock.typed_soln(i), test_soln(i), dbl_error_acc); //accum_error_mod*(i+1)*gamma(kry_dim, u_dbl));
         }
 
     }

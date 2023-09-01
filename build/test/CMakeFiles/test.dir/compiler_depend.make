@@ -1191,7 +1191,7 @@ test/CMakeFiles/test.dir/test_GMRES/test_GMRES_components.cpp.o: ../test/test_GM
   ../include/tools/Substitution.h \
   ../include/preconditioners/ImplementedPreconditioners.h \
   ../include/preconditioners/Preconditioner.h \
-  ../include/solvers/LinearSolve.h
+  ../include/solvers/IterativeSolve.h
 
 test/CMakeFiles/test.dir/test_GMRES/test_GMRES_solve_dbl.cpp.o: ../test/test_GMRES/test_GMRES_solve_dbl.cpp \
   /usr/include/stdc-predef.h \
@@ -1792,7 +1792,7 @@ test/CMakeFiles/test.dir/test_GMRES/test_GMRES_solve_dbl.cpp.o: ../test/test_GMR
   ../include/tools/Substitution.h \
   ../include/preconditioners/ImplementedPreconditioners.h \
   ../include/preconditioners/Preconditioner.h \
-  ../include/solvers/LinearSolve.h
+  ../include/solvers/IterativeSolve.h
 
 test/CMakeFiles/test.dir/test_GMRES/test_GMRES_solve_hlf.cpp.o: ../test/test_GMRES/test_GMRES_solve_hlf.cpp \
   /usr/include/stdc-predef.h \
@@ -2393,7 +2393,7 @@ test/CMakeFiles/test.dir/test_GMRES/test_GMRES_solve_hlf.cpp.o: ../test/test_GMR
   ../include/tools/Substitution.h \
   ../include/preconditioners/ImplementedPreconditioners.h \
   ../include/preconditioners/Preconditioner.h \
-  ../include/solvers/LinearSolve.h
+  ../include/solvers/IterativeSolve.h
 
 test/CMakeFiles/test.dir/test_GMRES/test_GMRES_solve_sgl.cpp.o: ../test/test_GMRES/test_GMRES_solve_sgl.cpp \
   /usr/include/stdc-predef.h \
@@ -2993,7 +2993,7 @@ test/CMakeFiles/test.dir/test_GMRES/test_GMRES_solve_sgl.cpp.o: ../test/test_GMR
   ../include/tools/Substitution.h \
   ../include/preconditioners/ImplementedPreconditioners.h \
   ../include/preconditioners/Preconditioner.h \
-  ../include/solvers/LinearSolve.h \
+  ../include/solvers/IterativeSolve.h \
   ../test/test.h
 
 test/CMakeFiles/test.dir/test_GMRES/test_PGMRES_components.cpp.o: ../test/test_GMRES/test_PGMRES_components.cpp \
@@ -3595,7 +3595,7 @@ test/CMakeFiles/test.dir/test_GMRES/test_PGMRES_components.cpp.o: ../test/test_G
   ../include/tools/Substitution.h \
   ../include/preconditioners/ImplementedPreconditioners.h \
   ../include/preconditioners/Preconditioner.h \
-  ../include/solvers/LinearSolve.h
+  ../include/solvers/IterativeSolve.h
 
 test/CMakeFiles/test.dir/test_GMRES/test_PGMRES_solve.cpp.o: ../test/test_GMRES/test_PGMRES_solve.cpp \
   /usr/include/stdc-predef.h \
@@ -4196,7 +4196,7 @@ test/CMakeFiles/test.dir/test_GMRES/test_PGMRES_solve.cpp.o: ../test/test_GMRES/
   ../include/tools/Substitution.h \
   ../include/preconditioners/ImplementedPreconditioners.h \
   ../include/preconditioners/Preconditioner.h \
-  ../include/solvers/LinearSolve.h
+  ../include/solvers/IterativeSolve.h
 
 test/CMakeFiles/test.dir/test_IterativeSolve.cpp.o: ../test/test_IterativeSolve.cpp \
   /usr/include/stdc-predef.h \
@@ -7783,7 +7783,7 @@ test/CMakeFiles/test.dir/test_SOR/test_GaussSeidel.cpp.o: ../test/test_SOR/test_
   /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
   /usr/include/c++/11/bits/fstream.tcc \
   ../include/solvers/SOR.h \
-  ../include/solvers/LinearSolve.h
+  ../include/solvers/IterativeSolve.h
 
 test/CMakeFiles/test.dir/test_SOR/test_SOR.cpp.o: ../test/test_SOR/test_SOR.cpp \
   /usr/include/stdc-predef.h \
@@ -8381,7 +8381,7 @@ test/CMakeFiles/test.dir/test_SOR/test_SOR.cpp.o: ../test/test_SOR/test_SOR.cpp 
   /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
   /usr/include/c++/11/bits/fstream.tcc \
   ../include/solvers/SOR.h \
-  ../include/solvers/LinearSolve.h
+  ../include/solvers/IterativeSolve.h
 
 test/CMakeFiles/test.dir/test_Substitution.cpp.o: ../test/test_Substitution.cpp \
   /usr/include/stdc-predef.h \
@@ -9004,8 +9004,6 @@ test/CMakeFiles/test.dir/test_Substitution.cpp.o: ../test/test_Substitution.cpp 
 ../test/test_Substitution.cpp:
 
 ../test/test_GMRES/test_GMRES_solve_hlf.cpp:
-
-../include/solvers/LinearSolve.h:
 
 ../include/preconditioners/Preconditioner.h:
 

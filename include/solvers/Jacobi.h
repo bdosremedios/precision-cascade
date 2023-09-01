@@ -18,22 +18,22 @@ class JacobiSolve: public TypedIterativeSolve<T> {
         using TypedIterativeSolve<T>::m;
         using TypedIterativeSolve<T>::A;
         using TypedIterativeSolve<T>::b;
-        using TypedIterativeSolve<T>::x;
+        using TypedIterativeSolve<T>::typed_soln;
 
         // *** PROTECTED IMPLEMENTED OVERRIDING HELPER FUNCTIONS ***
 
         void iterate() override {
 
-            Matrix<T, Dynamic, 1> x_temp = x;
+            Matrix<T, Dynamic, 1> prev_soln = typed_soln;
             
             for (int i=0; i<m; ++i) {
 
                 T acc = b(i);
                 for (int j=0; j<m; ++j) {
-                    acc -= A(i, j)*x_temp(j);
+                    acc -= A(i, j)*prev_soln(j);
                 }
 
-                x(i) = x_temp(i) + acc/(A(i, i));
+                typed_soln(i) = prev_soln(i) + acc/(A(i, i));
 
             }
 

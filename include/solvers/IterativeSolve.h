@@ -15,6 +15,7 @@ using Eigen::placeholders::all;
 using std::vector;
 using std::cout, std::endl;
 
+// Untyped interface for untyped pointer access to solvers
 class GenericIterativeSolve {
     
     protected:
@@ -26,10 +27,10 @@ class GenericIterativeSolve {
 
         // Generic Mutable Solve Attributes
         int max_outer_iter; // mutable to allow setting by specific solvers
-        bool initiated = false;
-        bool converged = false;
-        bool terminated = false;
-        int curr_outer_iter = 0;
+        bool initiated;
+        bool converged;
+        bool terminated;
+        int curr_outer_iter;
         Matrix<double, Dynamic, 1> generic_soln;
 
         // Constant solve attributes
@@ -49,6 +50,13 @@ class GenericIterativeSolve {
         // *** METHODS **
 
         // Getters
+        double get_relres() const { return res_norm_hist[curr_outer_iter]/res_norm_hist[0]; }
+        Matrix<double, Dynamic, Dynamic> get_res_hist() const { return res_hist; };
+        vector<double> get_res_norm_hist() const { return res_norm_hist; };
+        bool check_initiated() const { return initiated; };
+        bool check_converged() const { return converged; };
+        bool check_terminated() const { return terminated; };
+        int get_iteration() const { return curr_outer_iter; };
 
         // Disable copy constructor and copy assignment
         GenericIterativeSolve(GenericIterativeSolve const &) = delete;
@@ -59,8 +67,9 @@ class GenericIterativeSolve {
 
 };
 
+// Typed interface for implementation of shared but type dependent behavior
 template <typename T>
-class TypedIterativeSolve: GenericIterativeSolve {
+class TypedIterativeSolve: public GenericIterativeSolve {
     
     protected:
 
@@ -82,14 +91,14 @@ class TypedIterativeSolve: GenericIterativeSolve {
         // Typed Linear System Attributes
         const Matrix<T, Dynamic, Dynamic> A;
         const Matrix<T, Dynamic, 1> b;
-        const Matrix<T, Dynamic, 1> x_0;
+        const Matrix<T, Dynamic, 1> init_guess;
 
         // Typed Mutable solve attributes
-        Matrix<T, Dynamic, 1> x;
+        Matrix<T, Dynamic, 1> typed_soln;
 
         // *** PROTECTED ABSTRACT METHODS ***
 
-        // Virtual function that returns advances the iterate x using previous iterates and
+        // Virtual function that returns advances the iterate typed_soln using previous iterates and
         // the linear solver's linear system
         // * WILL NOT BE CALLED IF CONVERGED = true so can assume converged is not true
         virtual void iterate() = 0;
@@ -124,11 +133,11 @@ class TypedIterativeSolve: GenericIterativeSolve {
         TypedIterativeSolve(
             Matrix<T, Dynamic, Dynamic> const &arg_A,
             Matrix<T, Dynamic, 1> const &arg_b, 
-            Matrix<T, Dynamic, 1> const &arg_x_0,
+            Matrix<T, Dynamic, 1> const &arg_init_guess,
             int const &arg_max_outer_iter=100,
             double const &arg_target_rel_res=1e-10
         ): 
-            A(arg_A), b(arg_b), x_0(arg_x_0),
+            A(arg_A), b(arg_b), init_guess(arg_init_guess),
             GenericIterativeSolve(
                 arg_A.rows(), arg_A.cols(), arg_max_outer_iter, arg_target_rel_res
             )
@@ -139,7 +148,7 @@ class TypedIterativeSolve: GenericIterativeSolve {
             // Ensure compatability to matrices, not empty, and square
             if ((m < 1) || (n < 1)) { throw runtime_error("Empty Matrix A"); }
             if (m != b.rows()) { throw runtime_error("A not compatible with b for linear system"); }
-            if (n != x_0.rows()) { throw runtime_error("A not compatible with initial guess x_0"); }
+            if (n != init_guess.rows()) { throw runtime_error("A not compatible with initial guess init_guess"); }
             if (m != n) { throw runtime_error("A is not square"); }
 
             set_self_to_initial_state();
@@ -149,14 +158,7 @@ class TypedIterativeSolve: GenericIterativeSolve {
         // *** METHODS ***
 
         // Getters
-        Matrix<T, Dynamic, 1> get_soln() const { return x; };
-        double get_relres() const { return res_norm_hist[curr_outer_iter]/res_norm_hist[0]; }
-        Matrix<double, Dynamic, Dynamic> get_res_hist() const { return res_hist; };
-        vector<double> get_res_norm_hist() const { return res_norm_hist; };
-        bool check_initiated() const { return initiated; };
-        bool check_converged() const { return converged; };
-        bool check_terminated() const { return terminated; };
-        int get_iteration() const { return curr_outer_iter; };
+        Matrix<T, Dynamic, 1> get_soln() const { return typed_soln; };
 
         // Reset TypedIterativeSolve to initial state
         void reset() {
@@ -181,11 +183,11 @@ class TypedIterativeSolve: GenericIterativeSolve {
                 ++curr_outer_iter;
                 iterate();
 
-                // Cast x to generic solution double type
-                generic_soln = x.template cast<double>();
+                // Cast typed_soln to generic solution double type
+                generic_soln = typed_soln.template cast<double>();
 
                 // Update residual tracking
-                res_hist(all, curr_outer_iter) = (b - A*x).template cast<double>();
+                res_hist(all, curr_outer_iter) = (b - A*typed_soln).template cast<double>();
                 res_norm = res_hist(all, curr_outer_iter).norm();
                 res_norm_hist.push_back(static_cast<double>(res_norm));
 
@@ -266,7 +268,7 @@ class TypedIterativeSolve: GenericIterativeSolve {
                 }
             }
 
-            // Iterate over grid and mark x wherever there is a plot entry
+            // Iterate over grid and mark typed_soln wherever there is a plot entry
             cout << "Display of Relative Residual L-2 Norm: " << endl;
             if (arg == "log") {
                 cout << std::setprecision(3) << std::pow(10, max);
@@ -307,15 +309,15 @@ class TypedIterativeSolve: GenericIterativeSolve {
             curr_outer_iter = 0;
             res_norm_hist.clear();
 
-            // Set x as initial guess
-            x = x_0;
+            // Set typed_soln as initial guess
+            typed_soln = init_guess;
 
-            // Cast x to generic_soln double type and set generic_soln
-            generic_soln = x.template cast<double>();
+            // Cast typed_soln to generic_soln double type and set generic_soln
+            generic_soln = typed_soln.template cast<double>();
 
             // Reset residual history and set initial residual
             res_hist = Matrix<double, Dynamic, Dynamic>(m, max_outer_iter+1);
-            res_hist(all, 0) = (b - A*x).template cast<double>();
+            res_hist(all, 0) = (b - A*typed_soln).template cast<double>();
             res_norm_hist.push_back(static_cast<double>(res_hist(all, 0).norm()));
 
         }
@@ -335,7 +337,7 @@ class TypedIterativeSolve: GenericIterativeSolve {
 template <typename T>
 class TypedIterativeSolveTestingMock: public TypedIterativeSolve<T> {
 
-    void iterate() override { x = soln; }
+    void iterate() override { typed_soln = soln; }
     void derived_reset() override {}
 
     public:
@@ -343,10 +345,10 @@ class TypedIterativeSolveTestingMock: public TypedIterativeSolve<T> {
 
         using TypedIterativeSolve<T>::A;
         using TypedIterativeSolve<T>::b;
-        using TypedIterativeSolve<T>::x_0;
+        using TypedIterativeSolve<T>::init_guess;
         using TypedIterativeSolve<T>::m;
         using TypedIterativeSolve<T>::n;
-        using TypedIterativeSolve<T>::x;
+        using TypedIterativeSolve<T>::typed_soln;
 
         using TypedIterativeSolve<T>::initiated;
         using TypedIterativeSolve<T>::converged;
@@ -373,14 +375,14 @@ class TypedIterativeSolveTestingMock: public TypedIterativeSolve<T> {
         TypedIterativeSolveTestingMock(
             Matrix<T, Dynamic, Dynamic> const &arg_A,
             Matrix<T, Dynamic, 1> const &arg_b,
-            Matrix<T, Dynamic, 1> const &arg_x_0,
+            Matrix<T, Dynamic, 1> const &arg_init_guess,
             Matrix<T, Dynamic, 1> const &arg_soln,
             int const &arg_max_outer_iter=100,
             double const &arg_target_rel_res=1e-10
         ):
             soln(arg_soln),
             TypedIterativeSolve<T>::TypedIterativeSolve(
-                arg_A, arg_b, arg_x_0, arg_max_outer_iter, arg_target_rel_res
+                arg_A, arg_b, arg_init_guess, arg_max_outer_iter, arg_target_rel_res
             )
         {}
 
