@@ -30,8 +30,7 @@ set(
     test_GMRES/test_GMRES_solve_dbl.cpp
     test_GMRES/test_GMRES_solve_sgl.cpp
     test_GMRES/test_GMRES_solve_hlf.cpp
-    test_GMRES/test_PGMRES_components.cpp
-    test_GMRES/test_PGMRES_solve.cpp
+    test_GMRES/test_PGMRES.cpp
 )
 
 set(

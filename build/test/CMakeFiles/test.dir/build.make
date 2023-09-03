@@ -223,38 +223,24 @@ test/CMakeFiles/test.dir/test_GMRES/test_GMRES_solve_hlf.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test.dir/test_GMRES/test_GMRES_solve_hlf.cpp.s"
 	cd /home/bdosremedios/dev/gmres/build/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/bdosremedios/dev/gmres/test/test_GMRES/test_GMRES_solve_hlf.cpp -o CMakeFiles/test.dir/test_GMRES/test_GMRES_solve_hlf.cpp.s
 
-test/CMakeFiles/test.dir/test_GMRES/test_PGMRES_components.cpp.o: test/CMakeFiles/test.dir/flags.make
-test/CMakeFiles/test.dir/test_GMRES/test_PGMRES_components.cpp.o: ../test/test_GMRES/test_PGMRES_components.cpp
-test/CMakeFiles/test.dir/test_GMRES/test_PGMRES_components.cpp.o: test/CMakeFiles/test.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bdosremedios/dev/gmres/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object test/CMakeFiles/test.dir/test_GMRES/test_PGMRES_components.cpp.o"
-	cd /home/bdosremedios/dev/gmres/build/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT test/CMakeFiles/test.dir/test_GMRES/test_PGMRES_components.cpp.o -MF CMakeFiles/test.dir/test_GMRES/test_PGMRES_components.cpp.o.d -o CMakeFiles/test.dir/test_GMRES/test_PGMRES_components.cpp.o -c /home/bdosremedios/dev/gmres/test/test_GMRES/test_PGMRES_components.cpp
+test/CMakeFiles/test.dir/test_GMRES/test_PGMRES.cpp.o: test/CMakeFiles/test.dir/flags.make
+test/CMakeFiles/test.dir/test_GMRES/test_PGMRES.cpp.o: ../test/test_GMRES/test_PGMRES.cpp
+test/CMakeFiles/test.dir/test_GMRES/test_PGMRES.cpp.o: test/CMakeFiles/test.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bdosremedios/dev/gmres/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object test/CMakeFiles/test.dir/test_GMRES/test_PGMRES.cpp.o"
+	cd /home/bdosremedios/dev/gmres/build/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT test/CMakeFiles/test.dir/test_GMRES/test_PGMRES.cpp.o -MF CMakeFiles/test.dir/test_GMRES/test_PGMRES.cpp.o.d -o CMakeFiles/test.dir/test_GMRES/test_PGMRES.cpp.o -c /home/bdosremedios/dev/gmres/test/test_GMRES/test_PGMRES.cpp
 
-test/CMakeFiles/test.dir/test_GMRES/test_PGMRES_components.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test.dir/test_GMRES/test_PGMRES_components.cpp.i"
-	cd /home/bdosremedios/dev/gmres/build/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/bdosremedios/dev/gmres/test/test_GMRES/test_PGMRES_components.cpp > CMakeFiles/test.dir/test_GMRES/test_PGMRES_components.cpp.i
+test/CMakeFiles/test.dir/test_GMRES/test_PGMRES.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test.dir/test_GMRES/test_PGMRES.cpp.i"
+	cd /home/bdosremedios/dev/gmres/build/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/bdosremedios/dev/gmres/test/test_GMRES/test_PGMRES.cpp > CMakeFiles/test.dir/test_GMRES/test_PGMRES.cpp.i
 
-test/CMakeFiles/test.dir/test_GMRES/test_PGMRES_components.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test.dir/test_GMRES/test_PGMRES_components.cpp.s"
-	cd /home/bdosremedios/dev/gmres/build/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/bdosremedios/dev/gmres/test/test_GMRES/test_PGMRES_components.cpp -o CMakeFiles/test.dir/test_GMRES/test_PGMRES_components.cpp.s
-
-test/CMakeFiles/test.dir/test_GMRES/test_PGMRES_solve.cpp.o: test/CMakeFiles/test.dir/flags.make
-test/CMakeFiles/test.dir/test_GMRES/test_PGMRES_solve.cpp.o: ../test/test_GMRES/test_PGMRES_solve.cpp
-test/CMakeFiles/test.dir/test_GMRES/test_PGMRES_solve.cpp.o: test/CMakeFiles/test.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bdosremedios/dev/gmres/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object test/CMakeFiles/test.dir/test_GMRES/test_PGMRES_solve.cpp.o"
-	cd /home/bdosremedios/dev/gmres/build/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT test/CMakeFiles/test.dir/test_GMRES/test_PGMRES_solve.cpp.o -MF CMakeFiles/test.dir/test_GMRES/test_PGMRES_solve.cpp.o.d -o CMakeFiles/test.dir/test_GMRES/test_PGMRES_solve.cpp.o -c /home/bdosremedios/dev/gmres/test/test_GMRES/test_PGMRES_solve.cpp
-
-test/CMakeFiles/test.dir/test_GMRES/test_PGMRES_solve.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test.dir/test_GMRES/test_PGMRES_solve.cpp.i"
-	cd /home/bdosremedios/dev/gmres/build/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/bdosremedios/dev/gmres/test/test_GMRES/test_PGMRES_solve.cpp > CMakeFiles/test.dir/test_GMRES/test_PGMRES_solve.cpp.i
-
-test/CMakeFiles/test.dir/test_GMRES/test_PGMRES_solve.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test.dir/test_GMRES/test_PGMRES_solve.cpp.s"
-	cd /home/bdosremedios/dev/gmres/build/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/bdosremedios/dev/gmres/test/test_GMRES/test_PGMRES_solve.cpp -o CMakeFiles/test.dir/test_GMRES/test_PGMRES_solve.cpp.s
+test/CMakeFiles/test.dir/test_GMRES/test_PGMRES.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test.dir/test_GMRES/test_PGMRES.cpp.s"
+	cd /home/bdosremedios/dev/gmres/build/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/bdosremedios/dev/gmres/test/test_GMRES/test_PGMRES.cpp -o CMakeFiles/test.dir/test_GMRES/test_PGMRES.cpp.s
 
 test/CMakeFiles/test.dir/test_Preconditioner/test_Preconditioner.cpp.o: test/CMakeFiles/test.dir/flags.make
 test/CMakeFiles/test.dir/test_Preconditioner/test_Preconditioner.cpp.o: ../test/test_Preconditioner/test_Preconditioner.cpp
 test/CMakeFiles/test.dir/test_Preconditioner/test_Preconditioner.cpp.o: test/CMakeFiles/test.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bdosremedios/dev/gmres/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object test/CMakeFiles/test.dir/test_Preconditioner/test_Preconditioner.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bdosremedios/dev/gmres/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object test/CMakeFiles/test.dir/test_Preconditioner/test_Preconditioner.cpp.o"
 	cd /home/bdosremedios/dev/gmres/build/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT test/CMakeFiles/test.dir/test_Preconditioner/test_Preconditioner.cpp.o -MF CMakeFiles/test.dir/test_Preconditioner/test_Preconditioner.cpp.o.d -o CMakeFiles/test.dir/test_Preconditioner/test_Preconditioner.cpp.o -c /home/bdosremedios/dev/gmres/test/test_Preconditioner/test_Preconditioner.cpp
 
 test/CMakeFiles/test.dir/test_Preconditioner/test_Preconditioner.cpp.i: cmake_force
@@ -268,7 +254,7 @@ test/CMakeFiles/test.dir/test_Preconditioner/test_Preconditioner.cpp.s: cmake_fo
 test/CMakeFiles/test.dir/test_Preconditioner/test_ILU.cpp.o: test/CMakeFiles/test.dir/flags.make
 test/CMakeFiles/test.dir/test_Preconditioner/test_ILU.cpp.o: ../test/test_Preconditioner/test_ILU.cpp
 test/CMakeFiles/test.dir/test_Preconditioner/test_ILU.cpp.o: test/CMakeFiles/test.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bdosremedios/dev/gmres/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object test/CMakeFiles/test.dir/test_Preconditioner/test_ILU.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bdosremedios/dev/gmres/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object test/CMakeFiles/test.dir/test_Preconditioner/test_ILU.cpp.o"
 	cd /home/bdosremedios/dev/gmres/build/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT test/CMakeFiles/test.dir/test_Preconditioner/test_ILU.cpp.o -MF CMakeFiles/test.dir/test_Preconditioner/test_ILU.cpp.o.d -o CMakeFiles/test.dir/test_Preconditioner/test_ILU.cpp.o -c /home/bdosremedios/dev/gmres/test/test_Preconditioner/test_ILU.cpp
 
 test/CMakeFiles/test.dir/test_Preconditioner/test_ILU.cpp.i: cmake_force
@@ -292,8 +278,7 @@ test_OBJECTS = \
 "CMakeFiles/test.dir/test_GMRES/test_GMRES_solve_dbl.cpp.o" \
 "CMakeFiles/test.dir/test_GMRES/test_GMRES_solve_sgl.cpp.o" \
 "CMakeFiles/test.dir/test_GMRES/test_GMRES_solve_hlf.cpp.o" \
-"CMakeFiles/test.dir/test_GMRES/test_PGMRES_components.cpp.o" \
-"CMakeFiles/test.dir/test_GMRES/test_PGMRES_solve.cpp.o" \
+"CMakeFiles/test.dir/test_GMRES/test_PGMRES.cpp.o" \
 "CMakeFiles/test.dir/test_Preconditioner/test_Preconditioner.cpp.o" \
 "CMakeFiles/test.dir/test_Preconditioner/test_ILU.cpp.o"
 
@@ -311,15 +296,14 @@ test/test: test/CMakeFiles/test.dir/test_GMRES/test_GMRES_components.cpp.o
 test/test: test/CMakeFiles/test.dir/test_GMRES/test_GMRES_solve_dbl.cpp.o
 test/test: test/CMakeFiles/test.dir/test_GMRES/test_GMRES_solve_sgl.cpp.o
 test/test: test/CMakeFiles/test.dir/test_GMRES/test_GMRES_solve_hlf.cpp.o
-test/test: test/CMakeFiles/test.dir/test_GMRES/test_PGMRES_components.cpp.o
-test/test: test/CMakeFiles/test.dir/test_GMRES/test_PGMRES_solve.cpp.o
+test/test: test/CMakeFiles/test.dir/test_GMRES/test_PGMRES.cpp.o
 test/test: test/CMakeFiles/test.dir/test_Preconditioner/test_Preconditioner.cpp.o
 test/test: test/CMakeFiles/test.dir/test_Preconditioner/test_ILU.cpp.o
 test/test: test/CMakeFiles/test.dir/build.make
 test/test: lib/libgtest_main.a
 test/test: lib/libgtest.a
 test/test: test/CMakeFiles/test.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/bdosremedios/dev/gmres/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Linking CXX executable test"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/bdosremedios/dev/gmres/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Linking CXX executable test"
 	cd /home/bdosremedios/dev/gmres/build/test && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/test.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

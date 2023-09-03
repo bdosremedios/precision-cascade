@@ -2997,7 +2997,7 @@ test/CMakeFiles/test.dir/test_GMRES/test_GMRES_solve_sgl.cpp.o: ../test/test_GMR
   ../include/solvers/IterativeSolve.h \
   ../test/test.h
 
-test/CMakeFiles/test.dir/test_GMRES/test_PGMRES_components.cpp.o: ../test/test_GMRES/test_PGMRES_components.cpp \
+test/CMakeFiles/test.dir/test_GMRES/test_PGMRES.cpp.o: ../test/test_GMRES/test_PGMRES.cpp \
   /usr/include/stdc-predef.h \
   ../googletest/googletest/include/gtest/gtest.h \
   /usr/include/c++/11/cstddef \
@@ -3598,7 +3598,7 @@ test/CMakeFiles/test.dir/test_GMRES/test_PGMRES_components.cpp.o: ../test/test_G
   ../include/preconditioners/Preconditioner.h \
   ../include/solvers/IterativeSolve.h
 
-test/CMakeFiles/test.dir/test_GMRES/test_PGMRES_solve.cpp.o: ../test/test_GMRES/test_PGMRES_solve.cpp \
+test/CMakeFiles/test.dir/test_IterativeSolve/test_IterativeSolve.cpp.o: ../test/test_IterativeSolve/test_IterativeSolve.cpp \
   /usr/include/stdc-predef.h \
   ../googletest/googletest/include/gtest/gtest.h \
   /usr/include/c++/11/cstddef \
@@ -4193,11 +4193,8 @@ test/CMakeFiles/test.dir/test_GMRES/test_PGMRES_solve.cpp.o: ../test/test_GMRES/
   /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
   /usr/include/c++/11/bits/fstream.tcc \
-  ../include/solvers/GMRES.h \
-  ../include/tools/Substitution.h \
-  ../include/preconditioners/ImplementedPreconditioners.h \
-  ../include/preconditioners/Preconditioner.h \
-  ../include/solvers/IterativeSolve.h
+  ../include/solvers/IterativeSolve.h \
+  ../test/test_IterativeSolve/test_IterativeSolve.h
 
 test/CMakeFiles/test.dir/test_Jacobi.cpp.o: ../test/test_Jacobi.cpp \
   /usr/include/stdc-predef.h \
@@ -8397,9 +8394,11 @@ test/CMakeFiles/test.dir/test_Substitution.cpp.o: ../test/test_Substitution.cpp 
 
 ../test/test_Jacobi.cpp:
 
-../test/test_GMRES/test_PGMRES_solve.cpp:
+../test/test_IterativeSolve/test_IterativeSolve.h:
 
-../test/test_GMRES/test_PGMRES_components.cpp:
+../test/test_IterativeSolve/test_IterativeSolve.cpp:
+
+../test/test_GMRES/test_PGMRES.cpp:
 
 ../test/test_GMRES/test_GMRES_solve_sgl.cpp:
 

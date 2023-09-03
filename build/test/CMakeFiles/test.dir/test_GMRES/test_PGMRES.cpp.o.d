@@ -533,4 +533,4 @@ test/CMakeFiles/test.dir/test_GMRES/test_PGMRES.cpp.o: \
  /home/bdosremedios/dev/gmres/test/../include/tools/Substitution.h \
  /home/bdosremedios/dev/gmres/test/../include/preconditioners/ImplementedPreconditioners.h \
  /home/bdosremedios/dev/gmres/test/../include/preconditioners/Preconditioner.h \
- /home/bdosremedios/dev/gmres/test/../include/solvers/LinearSolve.h
+ /home/bdosremedios/dev/gmres/test/../include/solvers/IterativeSolve.h
