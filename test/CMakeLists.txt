@@ -14,6 +14,17 @@ set(
 )
 
 set(
+    TEST_ITERATIVESOLVE_CPPS
+    test_IterativeSolve/test_IterativeSolve.cpp
+)
+
+set(
+    TEST_SOR_CPPS
+    test_SOR/test_GaussSeidel.cpp
+    test_SOR/test_SOR.cpp
+)
+
+set(
     TEST_GMRES_CPPS
     test_GMRES/test_GMRES_components.cpp
     test_GMRES/test_GMRES_solve_dbl.cpp
@@ -24,16 +35,10 @@ set(
 )
 
 set(
-    TEST_SOR_CPPS
-    test_SOR/test_GaussSeidel.cpp
-    test_SOR/test_SOR.cpp
-)
-
-set(
     TEST_SUITE_CPPS
     test_MatrixReader.cpp
     ${TEST_TOOLS_CPPS}
-    test_IterativeSolve.cpp
+    ${TEST_ITERATIVESOLVE_CPPS}
     test_Jacobi.cpp
     ${TEST_SOR_CPPS}
     ${TEST_GMRES_CPPS}

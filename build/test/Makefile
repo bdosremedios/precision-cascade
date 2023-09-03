@@ -343,29 +343,29 @@ test_GMRES/test_PGMRES_solve.cpp.s:
 	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_GMRES/test_PGMRES_solve.cpp.s
 .PHONY : test_GMRES/test_PGMRES_solve.cpp.s
 
-test_IterativeSolve.o: test_IterativeSolve.cpp.o
-.PHONY : test_IterativeSolve.o
+test_IterativeSolve/test_IterativeSolve.o: test_IterativeSolve/test_IterativeSolve.cpp.o
+.PHONY : test_IterativeSolve/test_IterativeSolve.o
 
 # target to build an object file
-test_IterativeSolve.cpp.o:
-	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_IterativeSolve.cpp.o
-.PHONY : test_IterativeSolve.cpp.o
+test_IterativeSolve/test_IterativeSolve.cpp.o:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_IterativeSolve/test_IterativeSolve.cpp.o
+.PHONY : test_IterativeSolve/test_IterativeSolve.cpp.o
 
-test_IterativeSolve.i: test_IterativeSolve.cpp.i
-.PHONY : test_IterativeSolve.i
+test_IterativeSolve/test_IterativeSolve.i: test_IterativeSolve/test_IterativeSolve.cpp.i
+.PHONY : test_IterativeSolve/test_IterativeSolve.i
 
 # target to preprocess a source file
-test_IterativeSolve.cpp.i:
-	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_IterativeSolve.cpp.i
-.PHONY : test_IterativeSolve.cpp.i
+test_IterativeSolve/test_IterativeSolve.cpp.i:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_IterativeSolve/test_IterativeSolve.cpp.i
+.PHONY : test_IterativeSolve/test_IterativeSolve.cpp.i
 
-test_IterativeSolve.s: test_IterativeSolve.cpp.s
-.PHONY : test_IterativeSolve.s
+test_IterativeSolve/test_IterativeSolve.s: test_IterativeSolve/test_IterativeSolve.cpp.s
+.PHONY : test_IterativeSolve/test_IterativeSolve.s
 
 # target to generate assembly for a file
-test_IterativeSolve.cpp.s:
-	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_IterativeSolve.cpp.s
-.PHONY : test_IterativeSolve.cpp.s
+test_IterativeSolve/test_IterativeSolve.cpp.s:
+	cd /home/bdosremedios/dev/gmres/build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test.dir/build.make test/CMakeFiles/test.dir/test_IterativeSolve/test_IterativeSolve.cpp.s
+.PHONY : test_IterativeSolve/test_IterativeSolve.cpp.s
 
 test_Jacobi.o: test_Jacobi.cpp.o
 .PHONY : test_Jacobi.o
@@ -569,9 +569,9 @@ help:
 	@echo "... test_GMRES/test_PGMRES_solve.o"
 	@echo "... test_GMRES/test_PGMRES_solve.i"
 	@echo "... test_GMRES/test_PGMRES_solve.s"
-	@echo "... test_IterativeSolve.o"
-	@echo "... test_IterativeSolve.i"
-	@echo "... test_IterativeSolve.s"
+	@echo "... test_IterativeSolve/test_IterativeSolve.o"
+	@echo "... test_IterativeSolve/test_IterativeSolve.i"
+	@echo "... test_IterativeSolve/test_IterativeSolve.s"
 	@echo "... test_Jacobi.o"
 	@echo "... test_Jacobi.i"
 	@echo "... test_Jacobi.s"

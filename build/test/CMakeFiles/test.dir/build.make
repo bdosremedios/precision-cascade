@@ -111,19 +111,19 @@ test/CMakeFiles/test.dir/test_Substitution.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test.dir/test_Substitution.cpp.s"
 	cd /home/bdosremedios/dev/gmres/build/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/bdosremedios/dev/gmres/test/test_Substitution.cpp -o CMakeFiles/test.dir/test_Substitution.cpp.s
 
-test/CMakeFiles/test.dir/test_IterativeSolve.cpp.o: test/CMakeFiles/test.dir/flags.make
-test/CMakeFiles/test.dir/test_IterativeSolve.cpp.o: ../test/test_IterativeSolve.cpp
-test/CMakeFiles/test.dir/test_IterativeSolve.cpp.o: test/CMakeFiles/test.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bdosremedios/dev/gmres/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object test/CMakeFiles/test.dir/test_IterativeSolve.cpp.o"
-	cd /home/bdosremedios/dev/gmres/build/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT test/CMakeFiles/test.dir/test_IterativeSolve.cpp.o -MF CMakeFiles/test.dir/test_IterativeSolve.cpp.o.d -o CMakeFiles/test.dir/test_IterativeSolve.cpp.o -c /home/bdosremedios/dev/gmres/test/test_IterativeSolve.cpp
+test/CMakeFiles/test.dir/test_IterativeSolve/test_IterativeSolve.cpp.o: test/CMakeFiles/test.dir/flags.make
+test/CMakeFiles/test.dir/test_IterativeSolve/test_IterativeSolve.cpp.o: ../test/test_IterativeSolve/test_IterativeSolve.cpp
+test/CMakeFiles/test.dir/test_IterativeSolve/test_IterativeSolve.cpp.o: test/CMakeFiles/test.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bdosremedios/dev/gmres/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object test/CMakeFiles/test.dir/test_IterativeSolve/test_IterativeSolve.cpp.o"
+	cd /home/bdosremedios/dev/gmres/build/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT test/CMakeFiles/test.dir/test_IterativeSolve/test_IterativeSolve.cpp.o -MF CMakeFiles/test.dir/test_IterativeSolve/test_IterativeSolve.cpp.o.d -o CMakeFiles/test.dir/test_IterativeSolve/test_IterativeSolve.cpp.o -c /home/bdosremedios/dev/gmres/test/test_IterativeSolve/test_IterativeSolve.cpp
 
-test/CMakeFiles/test.dir/test_IterativeSolve.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test.dir/test_IterativeSolve.cpp.i"
-	cd /home/bdosremedios/dev/gmres/build/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/bdosremedios/dev/gmres/test/test_IterativeSolve.cpp > CMakeFiles/test.dir/test_IterativeSolve.cpp.i
+test/CMakeFiles/test.dir/test_IterativeSolve/test_IterativeSolve.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test.dir/test_IterativeSolve/test_IterativeSolve.cpp.i"
+	cd /home/bdosremedios/dev/gmres/build/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/bdosremedios/dev/gmres/test/test_IterativeSolve/test_IterativeSolve.cpp > CMakeFiles/test.dir/test_IterativeSolve/test_IterativeSolve.cpp.i
 
-test/CMakeFiles/test.dir/test_IterativeSolve.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test.dir/test_IterativeSolve.cpp.s"
-	cd /home/bdosremedios/dev/gmres/build/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/bdosremedios/dev/gmres/test/test_IterativeSolve.cpp -o CMakeFiles/test.dir/test_IterativeSolve.cpp.s
+test/CMakeFiles/test.dir/test_IterativeSolve/test_IterativeSolve.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test.dir/test_IterativeSolve/test_IterativeSolve.cpp.s"
+	cd /home/bdosremedios/dev/gmres/build/test && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/bdosremedios/dev/gmres/test/test_IterativeSolve/test_IterativeSolve.cpp -o CMakeFiles/test.dir/test_IterativeSolve/test_IterativeSolve.cpp.s
 
 test/CMakeFiles/test.dir/test_Jacobi.cpp.o: test/CMakeFiles/test.dir/flags.make
 test/CMakeFiles/test.dir/test_Jacobi.cpp.o: ../test/test_Jacobi.cpp
@@ -284,7 +284,7 @@ test_OBJECTS = \
 "CMakeFiles/test.dir/test.cpp.o" \
 "CMakeFiles/test.dir/test_MatrixReader.cpp.o" \
 "CMakeFiles/test.dir/test_Substitution.cpp.o" \
-"CMakeFiles/test.dir/test_IterativeSolve.cpp.o" \
+"CMakeFiles/test.dir/test_IterativeSolve/test_IterativeSolve.cpp.o" \
 "CMakeFiles/test.dir/test_Jacobi.cpp.o" \
 "CMakeFiles/test.dir/test_SOR/test_GaussSeidel.cpp.o" \
 "CMakeFiles/test.dir/test_SOR/test_SOR.cpp.o" \
@@ -303,7 +303,7 @@ test_EXTERNAL_OBJECTS =
 test/test: test/CMakeFiles/test.dir/test.cpp.o
 test/test: test/CMakeFiles/test.dir/test_MatrixReader.cpp.o
 test/test: test/CMakeFiles/test.dir/test_Substitution.cpp.o
-test/test: test/CMakeFiles/test.dir/test_IterativeSolve.cpp.o
+test/test: test/CMakeFiles/test.dir/test_IterativeSolve/test_IterativeSolve.cpp.o
 test/test: test/CMakeFiles/test.dir/test_Jacobi.cpp.o
 test/test: test/CMakeFiles/test.dir/test_SOR/test_GaussSeidel.cpp.o
 test/test: test/CMakeFiles/test.dir/test_SOR/test_SOR.cpp.o

@@ -5,6 +5,7 @@
 
 #include "read_matrix/MatrixReader.h"
 #include "solvers/GMRES.h"
+#include "test_GMRES.h"
 
 #include <iostream>
 
