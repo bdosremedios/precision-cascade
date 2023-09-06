@@ -7,17 +7,23 @@ template <typename T>
 class TypedIterativeSolveTestingMock: public TypedIterativeSolve<T> {
 
     void typed_iterate() override { typed_soln = soln; }
-    void derived_reset() override {}
+    void derived_typed_reset() override {}
 
     public:
 
         Matrix<T, Dynamic, 1> soln;
 
+        using TypedIterativeSolve<T>::m;
+        using TypedIterativeSolve<T>::n;
+
         using TypedIterativeSolve<T>::A;
         using TypedIterativeSolve<T>::b;
         using TypedIterativeSolve<T>::init_guess;
-        using TypedIterativeSolve<T>::m;
-        using TypedIterativeSolve<T>::n;
+        using TypedIterativeSolve<T>::generic_soln;
+    
+        using TypedIterativeSolve<T>::A_T;
+        using TypedIterativeSolve<T>::b_T;
+        using TypedIterativeSolve<T>::init_guess_T;
         using TypedIterativeSolve<T>::typed_soln;
 
         using TypedIterativeSolve<T>::initiated;

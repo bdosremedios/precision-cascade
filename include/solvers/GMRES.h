@@ -232,8 +232,8 @@ class GMRESSolve: public TypedIterativeSolve<T> {
 
         }
 
-        void derived_reset() override { set_initial_space(); } // Set derived reset to erase
-                                                               // current krylov subspace made
+        void derived_typed_reset() override { set_initial_space(); } // Set derived reset to erase
+                                                                     // current krylov subspace made
     
     public:
 

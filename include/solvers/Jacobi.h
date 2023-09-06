@@ -39,7 +39,7 @@ class JacobiSolve: public TypedIterativeSolve<T> {
 
         }
 
-        void derived_reset() override {}; // Set reset as empty function
+        void derived_typed_reset() override {}; // Set reset as empty function
     
     public:
 

@@ -97,7 +97,7 @@ class GenericIterativeSolve {
         virtual void iterate() = 0;
 
         // Perform reset specific to derived implemented class
-        virtual void non_generic_reset() = 0;
+        virtual void derived_generic_reset() = 0;
 
     public:
 
@@ -163,7 +163,7 @@ class GenericIterativeSolve {
         // Reset to initial state
         void reset() {
             set_self_to_initial_state();
-            non_generic_reset();
+            derived_generic_reset();
         }
 
         // Rudimentarily plot relative residual
@@ -283,7 +283,7 @@ class TypedIterativeSolve: public GenericIterativeSolve {
 
         // Set abstract helper function for reset of derived function ensuring reset is considered
         // in derived implementation
-        virtual void derived_reset() = 0;
+        virtual void derived_typed_reset() = 0;
 
         // *** PROTECTED METHODS ***
 
@@ -300,10 +300,10 @@ class TypedIterativeSolve: public GenericIterativeSolve {
             update_generic_soln();
         }
 
-        void non_generic_reset() override {
+        void derived_generic_reset() override {
             typed_soln = init_guess_T;
             update_generic_soln();
-            derived_reset();
+            derived_typed_reset();
         }
 
     public:
