@@ -42,6 +42,7 @@ set(
     ${TEST_SOR_CPPS}
     ${TEST_GMRES_CPPS}
     ${TEST_PRECONDITIONER_CPPS}
+    test_FP_GMRES_IR_Solve.cpp
 )
 
 add_executable(

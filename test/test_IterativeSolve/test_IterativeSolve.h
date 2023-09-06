@@ -29,8 +29,8 @@ class TypedIterativeSolveTestingMock: public TypedIterativeSolve<T> {
         using TypedIterativeSolve<T>::initiated;
         using TypedIterativeSolve<T>::converged;
         using TypedIterativeSolve<T>::terminated;
-        using TypedIterativeSolve<T>::curr_outer_iter;
-        using TypedIterativeSolve<T>::max_outer_iter;
+        using TypedIterativeSolve<T>::curr_iter;
+        using TypedIterativeSolve<T>::max_iter;
         using TypedIterativeSolve<T>::target_rel_res;
         using TypedIterativeSolve<T>::res_hist;
         using TypedIterativeSolve<T>::res_norm_hist;
@@ -39,12 +39,12 @@ class TypedIterativeSolveTestingMock: public TypedIterativeSolve<T> {
             Matrix<double, Dynamic, Dynamic> const &arg_A,
             Matrix<double, Dynamic, 1> const &arg_b,
             Matrix<T, Dynamic, 1> const &arg_soln,
-            int const &arg_max_outer_iter=100,
+            int const &arg_max_iter=100,
             double const &arg_target_rel_res=1e-10
         ):
             soln(arg_soln),
             TypedIterativeSolve<T>::TypedIterativeSolve(
-                arg_A, arg_b, arg_max_outer_iter, arg_target_rel_res
+                arg_A, arg_b, arg_max_iter, arg_target_rel_res
             )
         {}
 
@@ -53,12 +53,12 @@ class TypedIterativeSolveTestingMock: public TypedIterativeSolve<T> {
             Matrix<double, Dynamic, 1> const &arg_b,
             Matrix<double, Dynamic, 1> const &arg_init_guess,
             Matrix<T, Dynamic, 1> const &arg_soln,
-            int const &arg_max_outer_iter=100,
+            int const &arg_max_iter=100,
             double const &arg_target_rel_res=1e-10
         ):
             soln(arg_soln),
             TypedIterativeSolve<T>::TypedIterativeSolve(
-                arg_A, arg_b, arg_init_guess, arg_max_outer_iter, arg_target_rel_res
+                arg_A, arg_b, arg_init_guess, arg_max_iter, arg_target_rel_res
             )
         {}
 

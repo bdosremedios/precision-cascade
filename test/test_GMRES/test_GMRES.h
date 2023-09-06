@@ -20,8 +20,7 @@ class GMRESSolveTestingMock: public GMRESSolve<T, U> {
         using GMRESSolve<T, U>::max_kry_space_dim;
         using GMRESSolve<T, U>::next_q;
         using GMRESSolve<T, U>::rho;
-        using GMRESSolve<T, U>::curr_outer_iter;
-        using GMRESSolve<T, U>::max_outer_iter;
+        using GMRESSolve<T, U>::max_iter;
 
         using GMRESSolve<T, U>::update_QR_fact;
         using GMRESSolve<T, U>::update_x_minimizing_res;

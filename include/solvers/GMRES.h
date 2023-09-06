@@ -26,9 +26,9 @@ class GMRESSolve: public TypedIterativeSolve<T> {
         using TypedIterativeSolve<T>::m;
         using TypedIterativeSolve<T>::A_T;
         using TypedIterativeSolve<T>::b_T;
-        using TypedIterativeSolve<T>::typed_soln;
         using TypedIterativeSolve<T>::init_guess_T;
-        using TypedIterativeSolve<T>::max_outer_iter;
+        using TypedIterativeSolve<T>::typed_soln;
+        using TypedIterativeSolve<T>::max_iter;
 
         shared_ptr<Preconditioner<U>> left_precond_ptr;
         shared_ptr<Preconditioner<U>> right_precond_ptr;
@@ -44,7 +44,7 @@ class GMRESSolve: public TypedIterativeSolve<T> {
         T basis_zero_tol;
         T rho;
 
-        // *** PROTECTED INSTANTIATION HELPER FUNCTIONS ***
+        // *** PROTECTED INSTANTIATION HELPER METHODS ***
 
         int determine_max_iter(int max_iter, Matrix<double, Dynamic, Dynamic> const &arg_A) const {
             if (max_iter == -1) {
@@ -98,8 +98,8 @@ class GMRESSolve: public TypedIterativeSolve<T> {
             // Specify max dimension for krylov subspace
             max_kry_space_dim = m;
 
-            // Ensure that max_outer_iter does not exceed krylov subspace
-            if (max_outer_iter > max_kry_space_dim) {
+            // Ensure that max_iter does not exceed krylov subspace
+            if (max_iter > max_kry_space_dim) {
                 throw runtime_error("GMRES outer iterations exceed matrix size");
             }
 
@@ -108,7 +108,7 @@ class GMRESSolve: public TypedIterativeSolve<T> {
 
         }
 
-        // *** PROTECTED ITERATION HELPER FUNCTIONS ***
+        // *** PROTECTED ITERATION HELPER METHODS ***
 
         void update_subspace_k() {
 
@@ -203,8 +203,6 @@ class GMRESSolve: public TypedIterativeSolve<T> {
 
         }
 
-        // *** PROTECTED IMPLEMENTED OVERRIDING HELPER FUNCTIONS ***
-
         void check_termination() {
 
             // Check for termination condition with inability to expand subspace if
@@ -215,6 +213,8 @@ class GMRESSolve: public TypedIterativeSolve<T> {
             }
 
         }
+
+        // *** PROTECTED OVERRIDE METHODS ***
 
         void typed_iterate() override {
 
@@ -244,13 +244,13 @@ class GMRESSolve: public TypedIterativeSolve<T> {
             Matrix<double, Dynamic, Dynamic> const &arg_A,
             Matrix<double, Dynamic, 1> const &arg_b,
             double const &arg_basis_zero_tol,
-            int const &arg_max_outer_iter=-1,
+            int const &arg_max_iter=-1,
             double const &arg_target_rel_res=1e-10
         ):
             GMRESSolve(
                 arg_A, arg_b, this->make_guess(arg_A),
                 arg_basis_zero_tol,
-                determine_max_iter(arg_max_outer_iter, arg_A),
+                determine_max_iter(arg_max_iter, arg_A),
                 arg_target_rel_res
             )
         {}
@@ -259,16 +259,16 @@ class GMRESSolve: public TypedIterativeSolve<T> {
         GMRESSolve(
             Matrix<double, Dynamic, Dynamic> const &arg_A,
             Matrix<double, Dynamic, 1> const &arg_b,
-            Matrix<double, Dynamic, 1> const &arg_x_0,
+            Matrix<double, Dynamic, 1> const &arg_init_guess,
             double const &arg_basis_zero_tol,
-            int const &arg_max_outer_iter=-1,
+            int const &arg_max_iter=-1,
             double const &arg_target_rel_res=1e-10
         ):
             GMRESSolve(
-                arg_A, arg_b, arg_x_0,
+                arg_A, arg_b, arg_init_guess,
                 arg_basis_zero_tol,
                 make_shared<NoPreconditioner<T>>(),
-                determine_max_iter(arg_max_outer_iter, arg_A),
+                determine_max_iter(arg_max_iter, arg_A),
                 arg_target_rel_res
             )
         {}
@@ -279,14 +279,14 @@ class GMRESSolve: public TypedIterativeSolve<T> {
             Matrix<double, Dynamic, 1> const &arg_b,
             double const &arg_basis_zero_tol,
             shared_ptr<Preconditioner<U>> const &arg_left_precond_ptr,
-            int const &arg_max_outer_iter=-1,
+            int const &arg_max_iter=-1,
             double const &arg_target_rel_res=1e-10
         ):
             GMRESSolve(
                 arg_A, arg_b, this->make_guess(arg_A),
                 arg_basis_zero_tol,
                 arg_left_precond_ptr,
-                determine_max_iter(arg_max_outer_iter, arg_A),
+                determine_max_iter(arg_max_iter, arg_A),
                 arg_target_rel_res
             )
         {}
@@ -295,17 +295,17 @@ class GMRESSolve: public TypedIterativeSolve<T> {
         GMRESSolve(
             Matrix<double, Dynamic, Dynamic> const &arg_A,
             Matrix<double, Dynamic, 1> const &arg_b,
-            Matrix<double, Dynamic, 1> const &arg_x_0,
+            Matrix<double, Dynamic, 1> const &arg_init_guess,
             double const &arg_basis_zero_tol,
             shared_ptr<Preconditioner<U>> const &arg_left_precond_ptr,
-            int const &arg_max_outer_iter=-1,
+            int const &arg_max_iter=-1,
             double const &arg_target_rel_res=1e-10
         ):
             GMRESSolve(
-                arg_A, arg_b, arg_x_0,
+                arg_A, arg_b, arg_init_guess,
                 arg_basis_zero_tol,
                 arg_left_precond_ptr, make_shared<NoPreconditioner<T>>(),
-                determine_max_iter(arg_max_outer_iter, arg_A),
+                determine_max_iter(arg_max_iter, arg_A),
                 arg_target_rel_res
             )
         {}
@@ -317,14 +317,14 @@ class GMRESSolve: public TypedIterativeSolve<T> {
             double const &arg_basis_zero_tol,
             shared_ptr<Preconditioner<U>> const &arg_left_precond_ptr,
             shared_ptr<Preconditioner<U>> const &arg_right_precond_ptr,
-            int const &arg_max_outer_iter=-1,
+            int const &arg_max_iter=-1,
             double const &arg_target_rel_res=1e-10
         ):
             GMRESSolve(
                 arg_A, arg_b, this->make_guess(arg_A),
                 arg_basis_zero_tol,
                 arg_left_precond_ptr, arg_right_precond_ptr,
-                determine_max_iter(arg_max_outer_iter, arg_A),
+                determine_max_iter(arg_max_iter, arg_A),
                 arg_target_rel_res
             )
         {}
@@ -333,19 +333,19 @@ class GMRESSolve: public TypedIterativeSolve<T> {
         GMRESSolve(
             Matrix<double, Dynamic, Dynamic> const &arg_A,
             Matrix<double, Dynamic, 1> const &arg_b,
-            Matrix<double, Dynamic, 1> const &arg_x_0,
+            Matrix<double, Dynamic, 1> const &arg_init_guess,
             double const &arg_basis_zero_tol,
             shared_ptr<Preconditioner<U>> const &arg_left_precond_ptr,
             shared_ptr<Preconditioner<U>> const &arg_right_precond_ptr,
-            int const &arg_max_outer_iter=-1,
+            int const &arg_max_iter=-1,
             double const &arg_target_rel_res=1e-10
         ):
             basis_zero_tol(static_cast<T>(arg_basis_zero_tol)),
             left_precond_ptr(arg_left_precond_ptr),
             right_precond_ptr(arg_right_precond_ptr),
             TypedIterativeSolve<T>::TypedIterativeSolve(
-                arg_A, arg_b, arg_x_0,
-                determine_max_iter(arg_max_outer_iter, arg_A),
+                arg_A, arg_b, arg_init_guess,
+                determine_max_iter(arg_max_iter, arg_A),
                 arg_target_rel_res
             )
         { initializeGMRES(); }

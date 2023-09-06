@@ -117,13 +117,13 @@ TEST_F(GMRESComponentTest, CheckCorrectDefaultMaxIter) {
     Matrix<double, n, n> A_n(Matrix<double, n, n>::Random());
     Matrix<double, n, 1> b_n(Matrix<double, n, 1>::Random());
     GMRESSolveTestingMock<double> test_mock_n(A_n, b_n, u_dbl);
-    ASSERT_EQ(test_mock_n.max_outer_iter, n);
+    ASSERT_EQ(test_mock_n.max_iter, n);
 
     constexpr int m(53);
     Matrix<double, m, m> A_m(Matrix<double, m, m>::Random());
     Matrix<double, m, 1> b_m(Matrix<double, m, 1>::Random());
     GMRESSolveTestingMock<double> test_mock_m(A_m, b_m, u_dbl);
-    ASSERT_EQ(test_mock_m.max_outer_iter, m);
+    ASSERT_EQ(test_mock_m.max_iter, m);
 
 }
 

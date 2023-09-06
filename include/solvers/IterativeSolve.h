@@ -38,14 +38,14 @@ class GenericIterativeSolve {
             initiated = false;
             converged = false;
             terminated = false;
-            curr_outer_iter = 0;
+            curr_iter = 0;
             res_norm_hist.clear();
 
             // Reset generic solution to initial guess
             generic_soln = init_guess;
 
             // Reset residual history and set initial residual
-            res_hist = Matrix<double, Dynamic, Dynamic>(m, max_outer_iter+1);
+            res_hist = Matrix<double, Dynamic, Dynamic>(m, max_iter+1);
             res_hist(all, 0) = (b - A*generic_soln).template cast<double>();
             res_norm_hist.push_back(static_cast<double>(res_hist(all, 0).norm()));
 
@@ -62,11 +62,11 @@ class GenericIterativeSolve {
         const Matrix<double, Dynamic, 1> init_guess;
 
         // Generic Mutable Solve Attributes
-        int max_outer_iter; // mutable to allow setting by specific solvers
+        int max_iter; // mutable to allow setting by specific solvers
         bool initiated;
         bool converged;
         bool terminated;
-        int curr_outer_iter;
+        int curr_iter;
         Matrix<double, Dynamic, 1> generic_soln;
 
         // Constant solve attributes
@@ -81,11 +81,11 @@ class GenericIterativeSolve {
             Matrix<double, Dynamic, Dynamic> arg_A,
             Matrix<double, Dynamic, 1> arg_b,
             Matrix<double, Dynamic, 1> arg_init_guess,
-            int arg_max_outer_iter, double arg_target_rel_res
+            int arg_max_iter, double arg_target_rel_res
         ):
             A(arg_A), b(arg_b), init_guess(arg_init_guess),
             m(arg_A.rows()), n(arg_A.cols()),
-            max_outer_iter(arg_max_outer_iter), target_rel_res(arg_target_rel_res)
+            max_iter(arg_max_iter), target_rel_res(arg_target_rel_res)
         {
             check_compatibility();
             set_self_to_initial_state();
@@ -99,18 +99,26 @@ class GenericIterativeSolve {
         // Perform reset specific to derived implemented class
         virtual void derived_generic_reset() = 0;
 
+        // *** PROTECTED METHODS ***
+
+        // Create initial guess based on system matrix arg_A
+        Matrix<double, Dynamic, Dynamic> make_guess(Matrix<double, Dynamic, Dynamic> const &arg_A) const {
+            return Matrix<double, Dynamic, Dynamic>::Ones(arg_A.cols(), 1);
+        }
+
     public:
 
-        // *** METHODS **
+        // *** PUBLIC METHODS **
 
         // Getters
-        double get_relres() const { return res_norm_hist[curr_outer_iter]/res_norm_hist[0]; }
+        Matrix<double, Dynamic, 1> get_generic_soln() const { return generic_soln; };
+        double get_relres() const { return res_norm_hist[curr_iter]/res_norm_hist[0]; }
         Matrix<double, Dynamic, Dynamic> get_res_hist() const { return res_hist; };
         vector<double> get_res_norm_hist() const { return res_norm_hist; };
         bool check_initiated() const { return initiated; };
         bool check_converged() const { return converged; };
         bool check_terminated() const { return terminated; };
-        int get_iteration() const { return curr_outer_iter; };
+        int get_iteration() const { return curr_iter; };
 
         // Disable copy constructor and copy assignment
         GenericIterativeSolve(GenericIterativeSolve const &) = delete;
@@ -130,15 +138,15 @@ class GenericIterativeSolve {
             double res_norm = res_norm_hist[0];
             while(!terminated &&
                  (!converged &&
-                 ((curr_outer_iter < max_outer_iter) && ((res_norm/res_norm_hist[0]) > target_rel_res)))) {
+                 ((curr_iter < max_iter) && ((res_norm/res_norm_hist[0]) > target_rel_res)))) {
 
                 // Iterate solution
-                ++curr_outer_iter;
+                ++curr_iter;
                 iterate();
 
                 // Update residual tracking
-                res_hist(all, curr_outer_iter) = b - A*generic_soln;
-                res_norm = res_hist(all, curr_outer_iter).norm();
+                res_hist(all, curr_iter) = b - A*generic_soln;
+                res_norm = res_hist(all, curr_iter).norm();
                 res_norm_hist.push_back(res_norm);
 
             }
@@ -151,10 +159,10 @@ class GenericIterativeSolve {
             // if no iterations have been performed, that there is a small residual
             // relative to the RHS
             if ((res_norm/res_norm_hist[0]) <= target_rel_res) {
-                res_hist.conservativeResize(m, curr_outer_iter+1);
+                res_hist.conservativeResize(m, curr_iter+1);
                 converged = true;
-            } else if ((curr_outer_iter == 0) && ((res_norm/b.norm()) <= target_rel_res)) {
-                res_hist.conservativeResize(m, curr_outer_iter+1);
+            } else if ((curr_iter == 0) && ((res_norm/b.norm()) <= target_rel_res)) {
+                res_hist.conservativeResize(m, curr_iter+1);
                 converged = true;
             }
 
@@ -246,7 +254,7 @@ class GenericIterativeSolve {
             };
             cout << " " << string(std::max(min_length, length-4), '-') << endl;
             cout << "Iter: 1" << string(std::max(min_length, length-10), ' ')
-                 << "Iter: " << curr_outer_iter << endl;
+                 << "Iter: " << curr_iter << endl;
 
         } // end view_relres_plot
 
@@ -285,13 +293,6 @@ class TypedIterativeSolve: public GenericIterativeSolve {
         // in derived implementation
         virtual void derived_typed_reset() = 0;
 
-        // *** PROTECTED METHODS ***
-
-        // Create initial guess based on system matrix arg_A
-        Matrix<double, Dynamic, Dynamic> make_guess(Matrix<double, Dynamic, Dynamic> const &arg_A) const {
-            return Matrix<double, Dynamic, Dynamic>::Ones(arg_A.cols(), 1);
-        }
-
         // *** PROTECTED OVERRIDE METHODS ***
 
         // Perform iteration updating typed_soln and then using that to update generic_soln()
@@ -313,12 +314,12 @@ class TypedIterativeSolve: public GenericIterativeSolve {
         TypedIterativeSolve(
             Matrix<double, Dynamic, Dynamic> const &arg_A,
             Matrix<double, Dynamic, 1> const &arg_b,
-            int const &arg_max_outer_iter=100,
+            int const &arg_max_iter=100,
             double const &arg_target_rel_res=1e-10
         ): 
             TypedIterativeSolve(
                 arg_A, arg_b, make_guess(arg_A),
-                arg_max_outer_iter, arg_target_rel_res
+                arg_max_iter, arg_target_rel_res
             )
         {}
 
@@ -326,7 +327,7 @@ class TypedIterativeSolve: public GenericIterativeSolve {
             Matrix<double, Dynamic, Dynamic> const &arg_A,
             Matrix<double, Dynamic, 1> const &arg_b, 
             Matrix<double, Dynamic, 1> const &arg_init_guess,
-            int const &arg_max_outer_iter=100,
+            int const &arg_max_iter=100,
             double const &arg_target_rel_res=1e-10
         ): 
             A_T(arg_A.template cast<T>()),
@@ -334,7 +335,7 @@ class TypedIterativeSolve: public GenericIterativeSolve {
             init_guess_T(arg_init_guess.template cast<T>()),
             GenericIterativeSolve(
                 arg_A, arg_b, arg_init_guess,
-                arg_max_outer_iter, arg_target_rel_res
+                arg_max_iter, arg_target_rel_res
             )
         {
             typed_soln = init_guess_T;

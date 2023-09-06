@@ -54,13 +54,13 @@ class SORSolve: public TypedIterativeSolve<T> {
             Matrix<double, Dynamic, Dynamic> const &arg_A,
             Matrix<double, Dynamic, 1> const &arg_b,
             double const &arg_w,
-            int const &arg_max_outer_iter=100,
+            int const &arg_max_iter=100,
             double const &arg_target_rel_res=1e-10
         ):
             SORSolve(
                 arg_A, arg_b, this->make_guess(arg_A),
                 arg_w,
-                arg_max_outer_iter, arg_target_rel_res
+                arg_max_iter, arg_target_rel_res
             )
         {}
 
@@ -69,12 +69,12 @@ class SORSolve: public TypedIterativeSolve<T> {
             Matrix<double, Dynamic, 1> const &arg_b, 
             Matrix<double, Dynamic, 1> const &arg_x_0,
             double const &arg_w,
-            int const &arg_max_outer_iter=100,
+            int const &arg_max_iter=100,
             double const &arg_target_rel_res=1e-10
         ):
             w(static_cast<T>(arg_w)),
             TypedIterativeSolve<T>::TypedIterativeSolve(
-                arg_A, arg_b, arg_x_0, arg_max_outer_iter, arg_target_rel_res
+                arg_A, arg_b, arg_x_0, arg_max_iter, arg_target_rel_res
             )
         {}
 
