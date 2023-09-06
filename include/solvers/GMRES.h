@@ -24,10 +24,10 @@ class GMRESSolve: public TypedIterativeSolve<T> {
     protected:
 
         using TypedIterativeSolve<T>::m;
-        using TypedIterativeSolve<T>::A;
-        using TypedIterativeSolve<T>::b;
+        using TypedIterativeSolve<T>::A_T;
+        using TypedIterativeSolve<T>::b_T;
         using TypedIterativeSolve<T>::typed_soln;
-        using TypedIterativeSolve<T>::init_guess;
+        using TypedIterativeSolve<T>::init_guess_T;
         using TypedIterativeSolve<T>::max_outer_iter;
 
         shared_ptr<Preconditioner<U>> left_precond_ptr;
@@ -46,7 +46,7 @@ class GMRESSolve: public TypedIterativeSolve<T> {
 
         // *** PROTECTED INSTANTIATION HELPER FUNCTIONS ***
 
-        int determine_max_iter(int max_iter, Matrix<T, Dynamic, Dynamic> const &arg_A) const {
+        int determine_max_iter(int max_iter, Matrix<double, Dynamic, Dynamic> const &arg_A) const {
             if (max_iter == -1) {
                 return arg_A.rows();
             } else {
@@ -79,8 +79,8 @@ class GMRESSolve: public TypedIterativeSolve<T> {
             R_H = Matrix<T, Dynamic, Dynamic>::Zero(m+1, m);
 
             // Set rho as initial residual norm
-            Matrix<T, Dynamic, 1> Minv_A_x0((left_precond_ptr->action_inv_M(A*init_guess)).template cast<T>());
-            Matrix<T, Dynamic, 1> Minv_b((left_precond_ptr->action_inv_M(b)).template cast<T>());
+            Matrix<T, Dynamic, 1> Minv_A_x0((left_precond_ptr->action_inv_M(A_T*init_guess_T)).template cast<T>());
+            Matrix<T, Dynamic, 1> Minv_b((left_precond_ptr->action_inv_M(b_T)).template cast<T>());
             Matrix<T, Dynamic, 1> r_0(Minv_b - Minv_A_x0);
             rho = r_0.norm();
 
@@ -133,7 +133,7 @@ class GMRESSolve: public TypedIterativeSolve<T> {
             // Find next vector power of linear system
             next_q = Q_kry_basis(all, k);
             next_q = (right_precond_ptr->action_inv_M(next_q)).template cast<T>(); // Apply action of right preconditioner
-            next_q = A*next_q; // Apply matrix A
+            next_q = A_T*next_q; // Apply matrix A_T
             next_q = (left_precond_ptr->action_inv_M(next_q)).template cast<T>(); // Apply action of left preconditioner
 
             // Orthogonlize next_q to previous basis vectors and store coefficients and
@@ -197,7 +197,7 @@ class GMRESSolve: public TypedIterativeSolve<T> {
 
             // Update typed_soln adjusting with right preconditioning
             typed_soln = (
-                init_guess +
+                init_guess_T +
                 (right_precond_ptr->action_inv_M(Q_kry_basis.block(0, 0, m, kry_space_dim)*y)).template cast<T>()
             );
 
@@ -216,7 +216,7 @@ class GMRESSolve: public TypedIterativeSolve<T> {
 
         }
 
-        void iterate() override {
+        void typed_iterate() override {
 
             // Check isn't terminated and that solver isn't attempting to exceed
             // krylov subspace dimension, if is just do nothing
@@ -241,9 +241,9 @@ class GMRESSolve: public TypedIterativeSolve<T> {
 
         // Constructor without initial guess and no preconditioners
         GMRESSolve(
-            Matrix<T, Dynamic, Dynamic> const &arg_A,
-            Matrix<T, Dynamic, 1> const &arg_b,
-            T const &arg_basis_zero_tol,
+            Matrix<double, Dynamic, Dynamic> const &arg_A,
+            Matrix<double, Dynamic, 1> const &arg_b,
+            double const &arg_basis_zero_tol,
             int const &arg_max_outer_iter=-1,
             double const &arg_target_rel_res=1e-10
         ):
@@ -257,10 +257,10 @@ class GMRESSolve: public TypedIterativeSolve<T> {
 
         // Constructor with initial guess and no preconditioners
         GMRESSolve(
-            Matrix<T, Dynamic, Dynamic> const &arg_A,
-            Matrix<T, Dynamic, 1> const &arg_b,
-            Matrix<T, Dynamic, 1> const &arg_x_0,
-            T const &arg_basis_zero_tol,
+            Matrix<double, Dynamic, Dynamic> const &arg_A,
+            Matrix<double, Dynamic, 1> const &arg_b,
+            Matrix<double, Dynamic, 1> const &arg_x_0,
+            double const &arg_basis_zero_tol,
             int const &arg_max_outer_iter=-1,
             double const &arg_target_rel_res=1e-10
         ):
@@ -275,9 +275,9 @@ class GMRESSolve: public TypedIterativeSolve<T> {
         
         // Constructor without initial guess and left preconditioner
         GMRESSolve(
-            Matrix<T, Dynamic, Dynamic> const &arg_A,
-            Matrix<T, Dynamic, 1> const &arg_b,
-            T const &arg_basis_zero_tol,
+            Matrix<double, Dynamic, Dynamic> const &arg_A,
+            Matrix<double, Dynamic, 1> const &arg_b,
+            double const &arg_basis_zero_tol,
             shared_ptr<Preconditioner<U>> const &arg_left_precond_ptr,
             int const &arg_max_outer_iter=-1,
             double const &arg_target_rel_res=1e-10
@@ -293,10 +293,10 @@ class GMRESSolve: public TypedIterativeSolve<T> {
 
         // Constructor with initial guess and left preconditioner
         GMRESSolve(
-            Matrix<T, Dynamic, Dynamic> const &arg_A,
-            Matrix<T, Dynamic, 1> const &arg_b,
-            Matrix<T, Dynamic, 1> const &arg_x_0,
-            T const &arg_basis_zero_tol,
+            Matrix<double, Dynamic, Dynamic> const &arg_A,
+            Matrix<double, Dynamic, 1> const &arg_b,
+            Matrix<double, Dynamic, 1> const &arg_x_0,
+            double const &arg_basis_zero_tol,
             shared_ptr<Preconditioner<U>> const &arg_left_precond_ptr,
             int const &arg_max_outer_iter=-1,
             double const &arg_target_rel_res=1e-10
@@ -312,9 +312,9 @@ class GMRESSolve: public TypedIterativeSolve<T> {
 
         // Constructor without initial guess and both preconditioners
         GMRESSolve(
-            Matrix<T, Dynamic, Dynamic> const &arg_A,
-            Matrix<T, Dynamic, 1> const &arg_b,
-            T const &arg_basis_zero_tol,
+            Matrix<double, Dynamic, Dynamic> const &arg_A,
+            Matrix<double, Dynamic, 1> const &arg_b,
+            double const &arg_basis_zero_tol,
             shared_ptr<Preconditioner<U>> const &arg_left_precond_ptr,
             shared_ptr<Preconditioner<U>> const &arg_right_precond_ptr,
             int const &arg_max_outer_iter=-1,
@@ -331,16 +331,16 @@ class GMRESSolve: public TypedIterativeSolve<T> {
 
         // Constructor with initial guess and both preconditioners
         GMRESSolve(
-            Matrix<T, Dynamic, Dynamic> const &arg_A,
-            Matrix<T, Dynamic, 1> const &arg_b,
-            Matrix<T, Dynamic, 1> const &arg_x_0,
-            T const &arg_basis_zero_tol,
+            Matrix<double, Dynamic, Dynamic> const &arg_A,
+            Matrix<double, Dynamic, 1> const &arg_b,
+            Matrix<double, Dynamic, 1> const &arg_x_0,
+            double const &arg_basis_zero_tol,
             shared_ptr<Preconditioner<U>> const &arg_left_precond_ptr,
             shared_ptr<Preconditioner<U>> const &arg_right_precond_ptr,
             int const &arg_max_outer_iter=-1,
             double const &arg_target_rel_res=1e-10
         ):
-            basis_zero_tol(arg_basis_zero_tol),
+            basis_zero_tol(static_cast<T>(arg_basis_zero_tol)),
             left_precond_ptr(arg_left_precond_ptr),
             right_precond_ptr(arg_right_precond_ptr),
             TypedIterativeSolve<T>::TypedIterativeSolve(

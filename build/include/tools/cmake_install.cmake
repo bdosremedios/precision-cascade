@@ -1,4 +1,4 @@
-# Install script for directory: /home/bdosremedios/dev/gmres/include/tools
+# Install script for directory: /home/bdosremedios/dev/precision-cascade/include/tools
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

@@ -6,7 +6,7 @@
 template <typename T>
 class TypedIterativeSolveTestingMock: public TypedIterativeSolve<T> {
 
-    void iterate() override { typed_soln = soln; }
+    void typed_iterate() override { typed_soln = soln; }
     void derived_reset() override {}
 
     public:
@@ -30,8 +30,8 @@ class TypedIterativeSolveTestingMock: public TypedIterativeSolve<T> {
         using TypedIterativeSolve<T>::res_norm_hist;
 
         TypedIterativeSolveTestingMock(
-            Matrix<T, Dynamic, Dynamic> const &arg_A,
-            Matrix<T, Dynamic, 1> const &arg_b,
+            Matrix<double, Dynamic, Dynamic> const &arg_A,
+            Matrix<double, Dynamic, 1> const &arg_b,
             Matrix<T, Dynamic, 1> const &arg_soln,
             int const &arg_max_outer_iter=100,
             double const &arg_target_rel_res=1e-10
@@ -43,9 +43,9 @@ class TypedIterativeSolveTestingMock: public TypedIterativeSolve<T> {
         {}
 
         TypedIterativeSolveTestingMock(
-            Matrix<T, Dynamic, Dynamic> const &arg_A,
-            Matrix<T, Dynamic, 1> const &arg_b,
-            Matrix<T, Dynamic, 1> const &arg_init_guess,
+            Matrix<double, Dynamic, Dynamic> const &arg_A,
+            Matrix<double, Dynamic, 1> const &arg_b,
+            Matrix<double, Dynamic, 1> const &arg_init_guess,
             Matrix<T, Dynamic, 1> const &arg_soln,
             int const &arg_max_outer_iter=100,
             double const &arg_target_rel_res=1e-10

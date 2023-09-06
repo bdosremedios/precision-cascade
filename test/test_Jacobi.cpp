@@ -56,8 +56,8 @@ TEST_F(JacobiTest, SolveConvDiff256_Double_LONGRUNTIME) {
 
 TEST_F(JacobiTest, SolveConvDiff64_Single) {
     
-    Matrix<float, Dynamic, Dynamic> A(read_matrix_csv<float>(solve_matrix_dir + "conv_diff_64_A.csv"));
-    Matrix<float, Dynamic, 1> b(read_matrix_csv<float>(solve_matrix_dir + "conv_diff_64_b.csv"));
+    Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_A.csv"));
+    Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_b.csv"));
 
     JacobiSolve<float> jacobi_solve_s(A, b, max_iter, conv_tol_sgl);
     jacobi_solve_s.solve();
@@ -70,8 +70,8 @@ TEST_F(JacobiTest, SolveConvDiff64_Single) {
 
 TEST_F(JacobiTest, SolveConvDiff256_Single_LONGRUNTIME) {
     
-    Matrix<float, Dynamic, Dynamic> A(read_matrix_csv<float>(solve_matrix_dir + "conv_diff_256_A.csv"));
-    Matrix<float, Dynamic, 1> b(read_matrix_csv<float>(solve_matrix_dir + "conv_diff_256_b.csv"));
+    Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_256_A.csv"));
+    Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_256_b.csv"));
 
     JacobiSolve<float> jacobi_solve_s(A, b, max_iter, conv_tol_sgl);
     jacobi_solve_s.solve();
@@ -84,8 +84,8 @@ TEST_F(JacobiTest, SolveConvDiff256_Single_LONGRUNTIME) {
 
 TEST_F(JacobiTest, SolveConvDiff64_SingleFailBeyondEpsilon) {
     
-    Matrix<float, Dynamic, Dynamic> A(read_matrix_csv<float>(solve_matrix_dir + "conv_diff_64_A.csv"));
-    Matrix<float, Dynamic, 1> b(read_matrix_csv<float>(solve_matrix_dir + "conv_diff_64_b.csv"));
+    Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_A.csv"));
+    Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_b.csv"));
 
     JacobiSolve<float> jacobi_solve_s(A, b, fail_iter, 0.1*u_sgl);
     jacobi_solve_s.solve();
@@ -98,8 +98,8 @@ TEST_F(JacobiTest, SolveConvDiff64_SingleFailBeyondEpsilon) {
 
 TEST_F(JacobiTest, SolveConvDiff64_Half) {
     
-    Matrix<half, Dynamic, Dynamic> A(read_matrix_csv<half>(solve_matrix_dir + "conv_diff_64_A.csv"));
-    Matrix<half, Dynamic, 1> b(read_matrix_csv<half>(solve_matrix_dir + "conv_diff_64_b.csv"));
+    Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_A.csv"));
+    Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_b.csv"));
 
     JacobiSolve<half> jacobi_solve_h(A, b, max_iter, conv_tol_hlf);
     jacobi_solve_h.solve();
@@ -112,8 +112,8 @@ TEST_F(JacobiTest, SolveConvDiff64_Half) {
 
 TEST_F(JacobiTest, SolveConvDiff256_Half_LONGRUNTIME) {
     
-    Matrix<half, Dynamic, Dynamic> A(read_matrix_csv<half>(solve_matrix_dir + "conv_diff_256_A.csv"));
-    Matrix<half, Dynamic, 1> b(read_matrix_csv<half>(solve_matrix_dir + "conv_diff_256_b.csv"));
+    Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_256_A.csv"));
+    Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_256_b.csv"));
 
     JacobiSolve<half> jacobi_solve_h(A, b, max_iter, conv_tol_hlf);
     jacobi_solve_h.solve();
@@ -126,8 +126,8 @@ TEST_F(JacobiTest, SolveConvDiff256_Half_LONGRUNTIME) {
 
 TEST_F(JacobiTest, SolveConvDiff64_HalfFailBeyondEpsilon) {
     
-    Matrix<half, Dynamic, Dynamic> A(read_matrix_csv<half>(solve_matrix_dir + "conv_diff_64_A.csv"));
-    Matrix<half, Dynamic, 1> b(read_matrix_csv<half>(solve_matrix_dir + "conv_diff_64_b.csv"));
+    Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_A.csv"));
+    Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_b.csv"));
 
     JacobiSolve<half> jacobi_solve_h(A, b, fail_iter, 0.1*u_sgl);
     jacobi_solve_h.solve();

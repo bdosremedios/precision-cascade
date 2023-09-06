@@ -56,8 +56,8 @@ TEST_F(GaussSeidelTest, SolveConvDiff256_Double_LONGRUNTIME) {
 
 TEST_F(GaussSeidelTest, SolveConvDiff64_Single) {
     
-    Matrix<float, Dynamic, Dynamic> A(read_matrix_csv<float>(solve_matrix_dir + "conv_diff_64_A.csv"));
-    Matrix<float, Dynamic, 1> b(read_matrix_csv<float>(solve_matrix_dir + "conv_diff_64_b.csv"));
+    Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_A.csv"));
+    Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_b.csv"));
 
     SORSolve<float> SOR_solve_s(A, b, 1, max_iter, conv_tol_sgl);
     SOR_solve_s.solve();
@@ -70,8 +70,8 @@ TEST_F(GaussSeidelTest, SolveConvDiff64_Single) {
 
 TEST_F(GaussSeidelTest, SolveConvDiff256_Single_LONGRUNTIME) {
     
-    Matrix<float, Dynamic, Dynamic> A(read_matrix_csv<float>(solve_matrix_dir + "conv_diff_256_A.csv"));
-    Matrix<float, Dynamic, 1> b(read_matrix_csv<float>(solve_matrix_dir + "conv_diff_256_b.csv"));
+    Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_256_A.csv"));
+    Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_256_b.csv"));
 
     SORSolve<float> SOR_solve_s(A, b, 1, max_iter, conv_tol_sgl);
     SOR_solve_s.solve();
@@ -84,8 +84,8 @@ TEST_F(GaussSeidelTest, SolveConvDiff256_Single_LONGRUNTIME) {
 
 TEST_F(GaussSeidelTest, SolveConvDiff64_SingleFailBeyondEpsilon) {
     
-    Matrix<float, Dynamic, Dynamic> A(read_matrix_csv<float>(solve_matrix_dir + "conv_diff_64_A.csv"));
-    Matrix<float, Dynamic, 1> b(read_matrix_csv<float>(solve_matrix_dir + "conv_diff_64_b.csv"));
+    Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_A.csv"));
+    Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_b.csv"));
 
     SORSolve<float> SOR_solve_s(A, b, 1, fail_iter, 0.1*u_sgl);
     SOR_solve_s.solve();
@@ -98,10 +98,10 @@ TEST_F(GaussSeidelTest, SolveConvDiff64_SingleFailBeyondEpsilon) {
 
 TEST_F(GaussSeidelTest, SolveConvDiff64_Half) {
     
-    Matrix<half, Dynamic, Dynamic> A(read_matrix_csv<half>(solve_matrix_dir + "conv_diff_64_A.csv"));
-    Matrix<half, Dynamic, 1> b(read_matrix_csv<half>(solve_matrix_dir + "conv_diff_64_b.csv"));
+    Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_A.csv"));
+    Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_b.csv"));
 
-    SORSolve<half> SOR_solve_h(A, b, static_cast<half>(1), max_iter, conv_tol_hlf);
+    SORSolve<half> SOR_solve_h(A, b, 1, max_iter, conv_tol_hlf);
     SOR_solve_h.solve();
     if (show_plots) { SOR_solve_h.view_relres_plot("log"); }
     
@@ -112,10 +112,10 @@ TEST_F(GaussSeidelTest, SolveConvDiff64_Half) {
 
 TEST_F(GaussSeidelTest, SolveConvDiff256_Half_LONGRUNTIME) {
     
-    Matrix<half, Dynamic, Dynamic> A(read_matrix_csv<half>(solve_matrix_dir + "conv_diff_256_A.csv"));
-    Matrix<half, Dynamic, 1> b(read_matrix_csv<half>(solve_matrix_dir + "conv_diff_256_b.csv"));
+    Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_256_A.csv"));
+    Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_256_b.csv"));
 
-    SORSolve<half> SOR_solve_h(A, b, static_cast<half>(1), max_iter, conv_tol_hlf);
+    SORSolve<half> SOR_solve_h(A, b, 1, max_iter, conv_tol_hlf);
     SOR_solve_h.solve();
     if (show_plots) { SOR_solve_h.view_relres_plot("log"); }
     
@@ -126,10 +126,10 @@ TEST_F(GaussSeidelTest, SolveConvDiff256_Half_LONGRUNTIME) {
 
 TEST_F(GaussSeidelTest, SolveConvDiff64_HalfFailBeyondEpsilon) {
     
-    Matrix<half, Dynamic, Dynamic> A(read_matrix_csv<half>(solve_matrix_dir + "conv_diff_64_A.csv"));
-    Matrix<half, Dynamic, 1> b(read_matrix_csv<half>(solve_matrix_dir + "conv_diff_64_b.csv"));
+    Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_A.csv"));
+    Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_b.csv"));
 
-    SORSolve<half> SOR_solve_h(A, b, static_cast<half>(1), fail_iter, 0.1*u_hlf);
+    SORSolve<half> SOR_solve_h(A, b, 1, fail_iter, 0.1*u_hlf);
     SOR_solve_h.solve();
     if (show_plots) { SOR_solve_h.view_relres_plot("log"); }
     

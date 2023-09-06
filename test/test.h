@@ -29,10 +29,10 @@ class TestBase: public testing::Test {
         const double conv_tol_sgl = pow(10, -05);
         const double conv_tol_dbl = pow(10, -10);
 
-        const string read_matrix_dir = "/home/bdosremedios/dev/gmres/test/read_matrices/";
-        const string solve_matrix_dir = "/home/bdosremedios/dev/gmres/test/solve_matrices/";
+        const string read_matrix_dir = "/home/bdosremedios/dev/precision-cascade/test/read_matrices/";
+        const string solve_matrix_dir = "/home/bdosremedios/dev/precision-cascade/test/solve_matrices/";
 
-        const bool show_plots = false;
+        const bool show_plots = true;
 
 };
 

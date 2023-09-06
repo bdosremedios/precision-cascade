@@ -1,7 +1,7 @@
 test/CMakeFiles/test.dir/test_GMRES/test_PGMRES.cpp.o: \
- /home/bdosremedios/dev/gmres/test/test_GMRES/test_PGMRES.cpp \
+ /home/bdosremedios/dev/precision-cascade/test/test_GMRES/test_PGMRES.cpp \
  /usr/include/stdc-predef.h \
- /home/bdosremedios/dev/gmres/googletest/googletest/include/gtest/gtest.h \
+ /home/bdosremedios/dev/precision-cascade/googletest/googletest/include/gtest/gtest.h \
  /usr/include/c++/11/cstddef \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \
@@ -186,9 +186,9 @@ test/CMakeFiles/test.dir/test_GMRES/test_PGMRES.cpp.o: \
  /usr/include/c++/11/bits/stl_vector.h \
  /usr/include/c++/11/bits/stl_bvector.h \
  /usr/include/c++/11/bits/vector.tcc \
- /home/bdosremedios/dev/gmres/googletest/googletest/include/gtest/gtest-assertion-result.h \
- /home/bdosremedios/dev/gmres/googletest/googletest/include/gtest/gtest-message.h \
- /home/bdosremedios/dev/gmres/googletest/googletest/include/gtest/internal/gtest-port.h \
+ /home/bdosremedios/dev/precision-cascade/googletest/googletest/include/gtest/gtest-assertion-result.h \
+ /home/bdosremedios/dev/precision-cascade/googletest/googletest/include/gtest/gtest-message.h \
+ /home/bdosremedios/dev/precision-cascade/googletest/googletest/include/gtest/internal/gtest-port.h \
  /usr/include/c++/11/stdlib.h /usr/include/string.h \
  /usr/include/strings.h /usr/include/c++/11/iostream \
  /usr/include/x86_64-linux-gnu/sys/stat.h \
@@ -206,8 +206,8 @@ test/CMakeFiles/test.dir/test_GMRES/test_PGMRES.cpp.o: \
  /usr/include/x86_64-linux-gnu/bits/statx-generic.h \
  /usr/include/x86_64-linux-gnu/bits/types/struct_statx_timestamp.h \
  /usr/include/x86_64-linux-gnu/bits/types/struct_statx.h \
- /home/bdosremedios/dev/gmres/googletest/googletest/include/gtest/internal/custom/gtest-port.h \
- /home/bdosremedios/dev/gmres/googletest/googletest/include/gtest/internal/gtest-port-arch.h \
+ /home/bdosremedios/dev/precision-cascade/googletest/googletest/include/gtest/internal/custom/gtest-port.h \
+ /home/bdosremedios/dev/precision-cascade/googletest/googletest/include/gtest/internal/gtest-port-arch.h \
  /usr/include/unistd.h /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
  /usr/include/x86_64-linux-gnu/bits/environments.h \
  /usr/include/x86_64-linux-gnu/bits/confname.h \
@@ -222,9 +222,9 @@ test/CMakeFiles/test.dir/test_GMRES/test_PGMRES.cpp.o: \
  /usr/include/c++/11/any /usr/include/c++/11/optional \
  /usr/include/c++/11/bits/enable_special_members.h \
  /usr/include/c++/11/variant \
- /home/bdosremedios/dev/gmres/googletest/googletest/include/gtest/gtest-death-test.h \
- /home/bdosremedios/dev/gmres/googletest/googletest/include/gtest/internal/gtest-death-test-internal.h \
- /home/bdosremedios/dev/gmres/googletest/googletest/include/gtest/gtest-matchers.h \
+ /home/bdosremedios/dev/precision-cascade/googletest/googletest/include/gtest/gtest-death-test.h \
+ /home/bdosremedios/dev/precision-cascade/googletest/googletest/include/gtest/internal/gtest-death-test-internal.h \
+ /home/bdosremedios/dev/precision-cascade/googletest/googletest/include/gtest/gtest-matchers.h \
  /usr/include/c++/11/atomic /usr/include/c++/11/functional \
  /usr/include/c++/11/bits/std_function.h \
  /usr/include/c++/11/unordered_map /usr/include/c++/11/bits/hashtable.h \
@@ -234,8 +234,8 @@ test/CMakeFiles/test.dir/test_GMRES/test_PGMRES.cpp.o: \
  /usr/include/c++/11/bits/algorithmfwd.h \
  /usr/include/c++/11/bits/stl_heap.h \
  /usr/include/c++/11/bits/uniform_int_dist.h \
- /home/bdosremedios/dev/gmres/googletest/googletest/include/gtest/gtest-printers.h \
- /home/bdosremedios/dev/gmres/googletest/googletest/include/gtest/internal/gtest-internal.h \
+ /home/bdosremedios/dev/precision-cascade/googletest/googletest/include/gtest/gtest-printers.h \
+ /home/bdosremedios/dev/precision-cascade/googletest/googletest/include/gtest/internal/gtest-internal.h \
  /usr/include/x86_64-linux-gnu/sys/wait.h /usr/include/signal.h \
  /usr/include/x86_64-linux-gnu/bits/signum-generic.h \
  /usr/include/x86_64-linux-gnu/bits/signum-arch.h \
@@ -261,25 +261,25 @@ test/CMakeFiles/test.dir/test_GMRES/test_PGMRES.cpp.o: \
  /usr/lib/gcc/x86_64-linux-gnu/11/include/float.h /usr/include/c++/11/map \
  /usr/include/c++/11/bits/stl_map.h \
  /usr/include/c++/11/bits/stl_multimap.h \
- /home/bdosremedios/dev/gmres/googletest/googletest/include/gtest/internal/gtest-filepath.h \
- /home/bdosremedios/dev/gmres/googletest/googletest/include/gtest/internal/gtest-string.h \
- /home/bdosremedios/dev/gmres/googletest/googletest/include/gtest/internal/gtest-type-util.h \
+ /home/bdosremedios/dev/precision-cascade/googletest/googletest/include/gtest/internal/gtest-filepath.h \
+ /home/bdosremedios/dev/precision-cascade/googletest/googletest/include/gtest/internal/gtest-string.h \
+ /home/bdosremedios/dev/precision-cascade/googletest/googletest/include/gtest/internal/gtest-type-util.h \
  /usr/include/c++/11/cxxabi.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/cxxabi_tweaks.h \
- /home/bdosremedios/dev/gmres/googletest/googletest/include/gtest/internal/custom/gtest-printers.h \
- /home/bdosremedios/dev/gmres/googletest/googletest/include/gtest/gtest-param-test.h \
+ /home/bdosremedios/dev/precision-cascade/googletest/googletest/include/gtest/internal/custom/gtest-printers.h \
+ /home/bdosremedios/dev/precision-cascade/googletest/googletest/include/gtest/gtest-param-test.h \
  /usr/include/c++/11/iterator /usr/include/c++/11/bits/stream_iterator.h \
- /home/bdosremedios/dev/gmres/googletest/googletest/include/gtest/internal/gtest-param-util.h \
+ /home/bdosremedios/dev/precision-cascade/googletest/googletest/include/gtest/internal/gtest-param-util.h \
  /usr/include/c++/11/cassert /usr/include/assert.h \
- /home/bdosremedios/dev/gmres/googletest/googletest/include/gtest/gtest-test-part.h \
- /home/bdosremedios/dev/gmres/googletest/googletest/include/gtest/gtest-typed-test.h \
- /home/bdosremedios/dev/gmres/googletest/googletest/include/gtest/gtest_pred_impl.h \
- /home/bdosremedios/dev/gmres/googletest/googletest/include/gtest/gtest_prod.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/Dense \
- /home/bdosremedios/dev/gmres/eigen/Eigen/Core \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/util/DisableStupidWarnings.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/util/Macros.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/util/../InternalHeaderCheck.h \
+ /home/bdosremedios/dev/precision-cascade/googletest/googletest/include/gtest/gtest-test-part.h \
+ /home/bdosremedios/dev/precision-cascade/googletest/googletest/include/gtest/gtest-typed-test.h \
+ /home/bdosremedios/dev/precision-cascade/googletest/googletest/include/gtest/gtest_pred_impl.h \
+ /home/bdosremedios/dev/precision-cascade/googletest/googletest/include/gtest/gtest_prod.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/Dense \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/Core \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/util/DisableStupidWarnings.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/util/Macros.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/util/../InternalHeaderCheck.h \
  /usr/include/c++/11/cmath /usr/include/math.h \
  /usr/include/x86_64-linux-gnu/bits/math-vector.h \
  /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h \
@@ -302,13 +302,13 @@ test/CMakeFiles/test.dir/test_GMRES/test_PGMRES.cpp.o: \
  /usr/include/c++/11/tr1/poly_hermite.tcc \
  /usr/include/c++/11/tr1/poly_laguerre.tcc \
  /usr/include/c++/11/tr1/riemann_zeta.tcc \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/util/ConfigureVectorization.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/util/ConfigureVectorization.h \
  /usr/lib/gcc/x86_64-linux-gnu/11/include/mmintrin.h \
  /usr/lib/gcc/x86_64-linux-gnu/11/include/emmintrin.h \
  /usr/lib/gcc/x86_64-linux-gnu/11/include/xmmintrin.h \
  /usr/lib/gcc/x86_64-linux-gnu/11/include/mm_malloc.h \
  /usr/include/c++/11/complex \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/util/MKL_support.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/util/MKL_support.h \
  /usr/include/c++/11/cstring /usr/include/c++/11/climits \
  /usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h \
  /usr/lib/gcc/x86_64-linux-gnu/11/include/syslimits.h \
@@ -320,217 +320,217 @@ test/CMakeFiles/test.dir/test_GMRES/test_PGMRES.cpp.o: \
  /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
  /usr/include/c++/11/algorithm \
  /usr/include/c++/11/pstl/glue_algorithm_defs.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/util/Constants.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/util/Meta.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/util/Assert.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/util/ForwardDeclarations.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/util/StaticAssert.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/util/XprHelper.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/util/Memory.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/util/IntegralConstant.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/util/Serializer.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/util/SymbolicIndex.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/util/EmulateArray.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/util/MoreMeta.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/NumTraits.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/./InternalHeaderCheck.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/MathFunctions.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/GenericPacketMath.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/MathFunctionsImpl.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/arch/Default/ConjHelper.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/arch/Default/../../InternalHeaderCheck.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/arch/Default/Half.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/arch/Default/BFloat16.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/arch/Default/GenericPacketMathFunctionsFwd.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/arch/SSE/PacketMath.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/arch/SSE/../../InternalHeaderCheck.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/arch/SSE/TypeCasting.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/arch/SSE/MathFunctions.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/arch/SSE/Complex.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/arch/Default/Settings.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/arch/Default/GenericPacketMathFunctions.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/functors/TernaryFunctors.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/functors/../InternalHeaderCheck.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/functors/BinaryFunctors.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/functors/UnaryFunctors.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/functors/NullaryFunctors.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/functors/StlFunctors.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/functors/AssignmentFunctors.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/util/IndexedViewHelper.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/util/ReshapedHelper.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/ArithmeticSequence.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/IO.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/DenseCoeffsBase.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/DenseBase.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/../plugins/CommonCwiseUnaryOps.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/../plugins/BlockMethods.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/../plugins/IndexedViewMethods.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/../plugins/ReshapedMethods.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/../plugins/ReshapedMethods.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/MatrixBase.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/../plugins/CommonCwiseBinaryOps.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/../plugins/MatrixCwiseUnaryOps.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/../plugins/MatrixCwiseBinaryOps.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/EigenBase.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/Product.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/CoreEvaluators.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/AssignEvaluator.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/Assign.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/ArrayBase.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/../plugins/ArrayCwiseUnaryOps.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/../plugins/ArrayCwiseBinaryOps.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/util/BlasUtil.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/DenseStorage.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/NestByValue.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/ReturnByValue.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/NoAlias.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/PlainObjectBase.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/Matrix.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/Array.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/CwiseTernaryOp.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/CwiseBinaryOp.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/CwiseUnaryOp.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/CwiseNullaryOp.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/CwiseUnaryView.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/SelfCwiseBinaryOp.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/Dot.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/StableNorm.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/Stride.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/MapBase.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/Map.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/Ref.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/Block.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/VectorBlock.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/IndexedView.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/Reshaped.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/Transpose.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/DiagonalMatrix.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/Diagonal.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/DiagonalProduct.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/SkewSymmetricMatrix3.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/Redux.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/Visitor.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/Fuzzy.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/Swap.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/CommaInitializer.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/GeneralProduct.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/Solve.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/Inverse.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/SolverBase.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/PermutationMatrix.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/Transpositions.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/TriangularMatrix.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/SelfAdjointView.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/products/GeneralBlockPanelKernel.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/products/../InternalHeaderCheck.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/products/Parallelizer.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/ProductEvaluators.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/products/GeneralMatrixVector.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/products/GeneralMatrixMatrix.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/SolveTriangular.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/products/GeneralMatrixMatrixTriangular.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/products/SelfadjointMatrixVector.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/products/SelfadjointMatrixMatrix.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/products/SelfadjointProduct.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/products/SelfadjointRank2Update.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/products/TriangularMatrixVector.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/products/TriangularMatrixMatrix.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/products/TriangularSolverMatrix.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/products/TriangularSolverVector.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/BandMatrix.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/CoreIterators.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/ConditionEstimator.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/Select.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/VectorwiseOp.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/PartialReduxEvaluator.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/Random.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/Replicate.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/Reverse.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/ArrayWrapper.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/StlIterators.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/GlobalFunctions.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Core/util/ReenableStupidWarnings.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/LU \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/misc/Kernel.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/misc/./InternalHeaderCheck.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/misc/Image.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/LU/FullPivLU.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/LU/./InternalHeaderCheck.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/LU/PartialPivLU.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/LU/Determinant.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/LU/InverseImpl.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/LU/arch/InverseSize4.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/LU/arch/../InternalHeaderCheck.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/Cholesky \
- /home/bdosremedios/dev/gmres/eigen/Eigen/Jacobi \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Jacobi/Jacobi.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Jacobi/./InternalHeaderCheck.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Cholesky/LLT.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Cholesky/./InternalHeaderCheck.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Cholesky/LDLT.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/QR \
- /home/bdosremedios/dev/gmres/eigen/Eigen/Householder \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Householder/Householder.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Householder/./InternalHeaderCheck.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Householder/HouseholderSequence.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Householder/BlockHouseholder.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/QR/HouseholderQR.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/QR/./InternalHeaderCheck.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/QR/FullPivHouseholderQR.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/QR/ColPivHouseholderQR.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/QR/CompleteOrthogonalDecomposition.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/SVD \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/misc/RealSvd2x2.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/SVD/UpperBidiagonalization.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/SVD/./InternalHeaderCheck.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/SVD/SVDBase.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/SVD/JacobiSVD.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/SVD/BDCSVD.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/Geometry \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Geometry/OrthoMethods.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Geometry/./InternalHeaderCheck.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Geometry/EulerAngles.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Geometry/Homogeneous.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Geometry/RotationBase.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Geometry/Rotation2D.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Geometry/Quaternion.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Geometry/AngleAxis.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Geometry/Transform.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Geometry/Translation.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Geometry/Scaling.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Geometry/Hyperplane.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Geometry/ParametrizedLine.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Geometry/AlignedBox.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Geometry/Umeyama.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Geometry/arch/Geometry_SIMD.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Geometry/arch/../InternalHeaderCheck.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/Eigenvalues \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Eigenvalues/Tridiagonalization.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Eigenvalues/./InternalHeaderCheck.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Eigenvalues/RealSchur.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Eigenvalues/./HessenbergDecomposition.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Eigenvalues/././InternalHeaderCheck.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Eigenvalues/EigenSolver.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Eigenvalues/./RealSchur.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Eigenvalues/SelfAdjointEigenSolver.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Eigenvalues/./Tridiagonalization.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Eigenvalues/GeneralizedSelfAdjointEigenSolver.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Eigenvalues/HessenbergDecomposition.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Eigenvalues/ComplexSchur.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Eigenvalues/ComplexEigenSolver.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Eigenvalues/./ComplexSchur.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Eigenvalues/RealQZ.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Eigenvalues/GeneralizedEigenSolver.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Eigenvalues/./RealQZ.h \
- /home/bdosremedios/dev/gmres/eigen/Eigen/src/Eigenvalues/MatrixBaseEigenvalues.h \
- /home/bdosremedios/dev/gmres/test/test_GMRES/../test.h \
- /home/bdosremedios/dev/gmres/test/../include/read_matrix/MatrixReader.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/util/Constants.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/util/Meta.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/util/Assert.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/util/ForwardDeclarations.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/util/StaticAssert.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/util/XprHelper.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/util/Memory.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/util/IntegralConstant.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/util/Serializer.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/util/SymbolicIndex.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/util/EmulateArray.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/util/MoreMeta.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/NumTraits.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/./InternalHeaderCheck.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/MathFunctions.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/GenericPacketMath.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/MathFunctionsImpl.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/arch/Default/ConjHelper.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/arch/Default/../../InternalHeaderCheck.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/arch/Default/Half.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/arch/Default/BFloat16.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/arch/Default/GenericPacketMathFunctionsFwd.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/arch/SSE/PacketMath.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/arch/SSE/../../InternalHeaderCheck.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/arch/SSE/TypeCasting.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/arch/SSE/MathFunctions.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/arch/SSE/Complex.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/arch/Default/Settings.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/arch/Default/GenericPacketMathFunctions.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/functors/TernaryFunctors.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/functors/../InternalHeaderCheck.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/functors/BinaryFunctors.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/functors/UnaryFunctors.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/functors/NullaryFunctors.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/functors/StlFunctors.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/functors/AssignmentFunctors.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/util/IndexedViewHelper.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/util/ReshapedHelper.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/ArithmeticSequence.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/IO.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/DenseCoeffsBase.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/DenseBase.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/../plugins/CommonCwiseUnaryOps.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/../plugins/BlockMethods.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/../plugins/IndexedViewMethods.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/../plugins/ReshapedMethods.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/../plugins/ReshapedMethods.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/MatrixBase.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/../plugins/CommonCwiseBinaryOps.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/../plugins/MatrixCwiseUnaryOps.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/../plugins/MatrixCwiseBinaryOps.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/EigenBase.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/Product.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/CoreEvaluators.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/AssignEvaluator.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/Assign.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/ArrayBase.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/../plugins/ArrayCwiseUnaryOps.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/../plugins/ArrayCwiseBinaryOps.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/util/BlasUtil.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/DenseStorage.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/NestByValue.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/ReturnByValue.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/NoAlias.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/PlainObjectBase.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/Matrix.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/Array.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/CwiseTernaryOp.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/CwiseBinaryOp.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/CwiseUnaryOp.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/CwiseNullaryOp.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/CwiseUnaryView.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/SelfCwiseBinaryOp.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/Dot.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/StableNorm.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/Stride.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/MapBase.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/Map.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/Ref.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/Block.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/VectorBlock.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/IndexedView.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/Reshaped.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/Transpose.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/DiagonalMatrix.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/Diagonal.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/DiagonalProduct.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/SkewSymmetricMatrix3.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/Redux.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/Visitor.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/Fuzzy.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/Swap.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/CommaInitializer.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/GeneralProduct.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/Solve.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/Inverse.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/SolverBase.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/PermutationMatrix.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/Transpositions.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/TriangularMatrix.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/SelfAdjointView.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/products/GeneralBlockPanelKernel.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/products/../InternalHeaderCheck.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/products/Parallelizer.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/ProductEvaluators.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/products/GeneralMatrixVector.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/products/GeneralMatrixMatrix.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/SolveTriangular.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/products/GeneralMatrixMatrixTriangular.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/products/SelfadjointMatrixVector.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/products/SelfadjointMatrixMatrix.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/products/SelfadjointProduct.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/products/SelfadjointRank2Update.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/products/TriangularMatrixVector.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/products/TriangularMatrixMatrix.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/products/TriangularSolverMatrix.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/products/TriangularSolverVector.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/BandMatrix.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/CoreIterators.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/ConditionEstimator.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/Select.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/VectorwiseOp.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/PartialReduxEvaluator.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/Random.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/Replicate.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/Reverse.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/ArrayWrapper.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/StlIterators.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/GlobalFunctions.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Core/util/ReenableStupidWarnings.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/LU \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/misc/Kernel.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/misc/./InternalHeaderCheck.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/misc/Image.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/LU/FullPivLU.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/LU/./InternalHeaderCheck.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/LU/PartialPivLU.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/LU/Determinant.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/LU/InverseImpl.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/LU/arch/InverseSize4.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/LU/arch/../InternalHeaderCheck.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/Cholesky \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/Jacobi \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Jacobi/Jacobi.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Jacobi/./InternalHeaderCheck.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Cholesky/LLT.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Cholesky/./InternalHeaderCheck.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Cholesky/LDLT.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/QR \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/Householder \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Householder/Householder.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Householder/./InternalHeaderCheck.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Householder/HouseholderSequence.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Householder/BlockHouseholder.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/QR/HouseholderQR.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/QR/./InternalHeaderCheck.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/QR/FullPivHouseholderQR.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/QR/ColPivHouseholderQR.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/QR/CompleteOrthogonalDecomposition.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/SVD \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/misc/RealSvd2x2.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/SVD/UpperBidiagonalization.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/SVD/./InternalHeaderCheck.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/SVD/SVDBase.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/SVD/JacobiSVD.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/SVD/BDCSVD.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/Geometry \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Geometry/OrthoMethods.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Geometry/./InternalHeaderCheck.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Geometry/EulerAngles.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Geometry/Homogeneous.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Geometry/RotationBase.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Geometry/Rotation2D.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Geometry/Quaternion.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Geometry/AngleAxis.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Geometry/Transform.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Geometry/Translation.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Geometry/Scaling.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Geometry/Hyperplane.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Geometry/ParametrizedLine.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Geometry/AlignedBox.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Geometry/Umeyama.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Geometry/arch/Geometry_SIMD.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Geometry/arch/../InternalHeaderCheck.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/Eigenvalues \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Eigenvalues/Tridiagonalization.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Eigenvalues/./InternalHeaderCheck.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Eigenvalues/RealSchur.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Eigenvalues/./HessenbergDecomposition.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Eigenvalues/././InternalHeaderCheck.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Eigenvalues/EigenSolver.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Eigenvalues/./RealSchur.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Eigenvalues/SelfAdjointEigenSolver.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Eigenvalues/./Tridiagonalization.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Eigenvalues/GeneralizedSelfAdjointEigenSolver.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Eigenvalues/HessenbergDecomposition.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Eigenvalues/ComplexSchur.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Eigenvalues/ComplexEigenSolver.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Eigenvalues/./ComplexSchur.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Eigenvalues/RealQZ.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Eigenvalues/GeneralizedEigenSolver.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Eigenvalues/./RealQZ.h \
+ /home/bdosremedios/dev/precision-cascade/eigen/Eigen/src/Eigenvalues/MatrixBaseEigenvalues.h \
+ /home/bdosremedios/dev/precision-cascade/test/test_GMRES/../test.h \
+ /home/bdosremedios/dev/precision-cascade/test/../include/read_matrix/MatrixReader.h \
  /usr/include/c++/11/fstream \
  /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
  /usr/include/c++/11/bits/fstream.tcc \
- /home/bdosremedios/dev/gmres/test/../include/solvers/GMRES.h \
- /home/bdosremedios/dev/gmres/test/../include/tools/Substitution.h \
- /home/bdosremedios/dev/gmres/test/../include/preconditioners/ImplementedPreconditioners.h \
- /home/bdosremedios/dev/gmres/test/../include/preconditioners/Preconditioner.h \
- /home/bdosremedios/dev/gmres/test/../include/solvers/IterativeSolve.h
+ /home/bdosremedios/dev/precision-cascade/test/../include/solvers/GMRES.h \
+ /home/bdosremedios/dev/precision-cascade/test/../include/tools/Substitution.h \
+ /home/bdosremedios/dev/precision-cascade/test/../include/preconditioners/ImplementedPreconditioners.h \
+ /home/bdosremedios/dev/precision-cascade/test/../include/preconditioners/Preconditioner.h \
+ /home/bdosremedios/dev/precision-cascade/test/../include/solvers/IterativeSolve.h

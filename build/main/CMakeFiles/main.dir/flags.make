@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/bdosremedios/dev/gmres/main/../include -I/home/bdosremedios/dev/gmres/eigen
+CXX_INCLUDES = -I/home/bdosremedios/dev/precision-cascade/main/../include -I/home/bdosremedios/dev/precision-cascade/eigen
 
 CXX_FLAGS = 
 

@@ -1,4 +1,4 @@
-# Install script for directory: /home/bdosremedios/dev/gmres
+# Install script for directory: /home/bdosremedios/dev/precision-cascade
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -44,32 +44,32 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/bdosremedios/dev/gmres/build/include/cmake_install.cmake")
+  include("/home/bdosremedios/dev/precision-cascade/build/include/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/bdosremedios/dev/gmres/build/src/cmake_install.cmake")
+  include("/home/bdosremedios/dev/precision-cascade/build/src/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/bdosremedios/dev/gmres/build/eigen/cmake_install.cmake")
+  include("/home/bdosremedios/dev/precision-cascade/build/eigen/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/bdosremedios/dev/gmres/build/googletest/cmake_install.cmake")
+  include("/home/bdosremedios/dev/precision-cascade/build/googletest/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/bdosremedios/dev/gmres/build/main/cmake_install.cmake")
+  include("/home/bdosremedios/dev/precision-cascade/build/main/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/bdosremedios/dev/gmres/build/test/cmake_install.cmake")
+  include("/home/bdosremedios/dev/precision-cascade/build/test/cmake_install.cmake")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -80,5 +80,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/bdosremedios/dev/gmres/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/bdosremedios/dev/precision-cascade/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
