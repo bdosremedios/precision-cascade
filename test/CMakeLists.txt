@@ -4,45 +4,40 @@ project(gmres)
 
 set(
     TEST_TOOLS_CPPS
-    test_Substitution.cpp
+    test_tools/test_MatrixReader.cpp
+    test_tools/test_Substitution.cpp
 )
 
 set(
     TEST_PRECONDITIONER_CPPS
-    test_Preconditioner/test_Preconditioner.cpp
-    test_Preconditioner/test_ILU.cpp
+    test_preconditioners/test_Preconditioner.cpp
+    test_preconditioners/test_ILU.cpp
 )
 
 set(
-    TEST_ITERATIVESOLVE_CPPS
-    test_IterativeSolve/test_IterativeSolve.cpp
-)
+    TEST_SOLVERS
 
-set(
-    TEST_SOR_CPPS
-    test_SOR/test_GaussSeidel.cpp
-    test_SOR/test_SOR.cpp
-)
+    test_solvers/test_IterativeSolve/test_IterativeSolve.cpp
 
-set(
-    TEST_GMRES_CPPS
-    test_GMRES/test_GMRES_components.cpp
-    test_GMRES/test_GMRES_solve_dbl.cpp
-    test_GMRES/test_GMRES_solve_sgl.cpp
-    test_GMRES/test_GMRES_solve_hlf.cpp
-    test_GMRES/test_PGMRES.cpp
+    test_solvers/test_Jacobi.cpp
+    test_solvers/test_SOR/test_GaussSeidel.cpp
+    test_solvers/test_SOR/test_SOR.cpp
+
+    test_solvers/test_GMRES/test_GMRES_components.cpp
+    test_solvers/test_GMRES/test_GMRES_solve_dbl.cpp
+    test_solvers/test_GMRES/test_GMRES_solve_sgl.cpp
+    test_solvers/test_GMRES/test_GMRES_solve_hlf.cpp
+    test_solvers/test_GMRES/test_PGMRES.cpp
+
+    test_solvers/test_InnerOuterSolve.cpp
+    test_solvers/test_FP_GMRES_IR_Solve.cpp
 )
 
 set(
     TEST_SUITE_CPPS
-    test_MatrixReader.cpp
     ${TEST_TOOLS_CPPS}
-    ${TEST_ITERATIVESOLVE_CPPS}
-    test_Jacobi.cpp
-    ${TEST_SOR_CPPS}
-    ${TEST_GMRES_CPPS}
     ${TEST_PRECONDITIONER_CPPS}
-    test_FP_GMRES_IR_Solve.cpp
+    ${TEST_SOLVERS}
 )
 
 add_executable(

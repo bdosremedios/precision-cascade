@@ -1,14 +1,7 @@
 #ifndef SOR_H
 #define SOR_H
 
-#include "Eigen/Dense"
-
-#include <iostream>
-
-#include "IterativeSolve.h"
-
-using std::cout, std::endl;
-using Eigen::Matrix, Eigen::Dynamic;
+#include "../IterativeSolve.h"
 
 template <typename T>
 class SORSolve: public TypedIterativeSolve<T> {

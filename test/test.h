@@ -4,7 +4,7 @@
 #include "gtest/gtest.h"
 #include "Eigen/Dense"
 
-#include "read_matrix/MatrixReader.h"
+#include "tools/MatrixReader.h"
 
 #include <cmath>
 #include <string>

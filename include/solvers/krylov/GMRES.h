@@ -1,22 +1,7 @@
 #ifndef GMRES_H
 #define GMRES_H
 
-#include "Eigen/Dense"
-
-#include <iostream>
-#include <memory>
-#include <cmath>
-
-#include "tools/Substitution.h"
-#include "preconditioners/ImplementedPreconditioners.h"
-#include "IterativeSolve.h"
-
-using Eigen::Matrix, Eigen::Dynamic;
-using std::cout, std::endl;
-using std::shared_ptr, std::make_shared;
-using std::sqrt;
-
-using Eigen::placeholders::all;
+#include "../IterativeSolve.h"
 
 template <typename T, typename U=T>
 class GMRESSolve: public TypedIterativeSolve<T> {

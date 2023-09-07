@@ -3,6 +3,9 @@
 
 #include "Eigen/Dense"
 
+#include "tools/Substitution.h"
+#include "preconditioners/ImplementedPreconditioners.h"
+
 #include <memory>
 #include <vector>
 #include <algorithm>
@@ -14,6 +17,7 @@ using Eigen::Matrix, Eigen::Dynamic;
 using Eigen::placeholders::all;
 
 using std::vector;
+using std::sqrt;
 using std::cout, std::endl;
 using std::shared_ptr, std::make_shared;
 

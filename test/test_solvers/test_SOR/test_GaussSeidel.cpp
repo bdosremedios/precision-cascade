@@ -1,6 +1,6 @@
-#include "../test.h"
+#include "../../test.h"
 
-#include "solvers/SOR.h"
+#include "solvers/stationary/SOR.h"
 
 class GaussSeidelTest: public TestBase {
 

@@ -1,7 +1,7 @@
 #ifndef INNEROUTERSOLVE_H
 #define INNEROUTERSOLVE_H
 
-#include "IterativeSolve.h"
+#include "../IterativeSolve.h"
 
 class InnerOuterSolve: public GenericIterativeSolve {
 

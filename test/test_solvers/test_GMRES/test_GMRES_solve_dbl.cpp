@@ -1,6 +1,6 @@
-#include "../test.h"
+#include "../../test.h"
 
-#include "solvers/GMRES.h"
+#include "solvers/krylov/GMRES.h"
 
 class GMRESDoubleSolveTest: public TestBase {};
 

@@ -1,14 +1,7 @@
 #ifndef JACOBI_H
 #define JACOBI_H
 
-#include "Eigen/Dense"
-
-#include <iostream>
-
-#include "IterativeSolve.h"
-
-using std::cout, std::endl;
-using Eigen::Matrix;
+#include "../IterativeSolve.h"
 
 template <typename T>
 class JacobiSolve: public TypedIterativeSolve<T> {

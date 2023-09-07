@@ -1,6 +1,6 @@
-#include "test.h"
+#include "../test.h"
 
-#include "solvers/Jacobi.h"
+#include "solvers/stationary/Jacobi.h"
 
 class JacobiTest: public TestBase {
 
