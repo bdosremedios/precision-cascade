@@ -1,18 +1,6 @@
-#include "gtest/gtest.h"
-#include "Eigen/Dense"
-
 #include "test.h"
 
-#include "read_matrix/MatrixReader.h"
 #include "tools/Substitution.h"
-
-#include <iostream>
-
-using read_matrix::read_matrix_csv;
-
-using Eigen::Matrix, Eigen::Dynamic;
-
-using std::cout, std::endl;
 
 class SubstitutionTest: public TestBase {};
 

@@ -11,7 +11,8 @@ class IterativeRefinement: public InnerOuterSolve {
 
         void outer_iterate_complete() override {
 
-            // Add error back to generic_soln
+            // Add error back to generic_soln since that is solution of the inner_solver under
+            // iterative refinement
             generic_soln += inner_solver->get_generic_soln();
 
             // Residual is b - inner_solver residual so update through that
@@ -28,6 +29,7 @@ class IterativeRefinement: public InnerOuterSolve {
     public:
 
         // *** CONSTRUCTORS ***
+
         IterativeRefinement(
             Matrix<double, Dynamic, Dynamic> const &arg_A,
             Matrix<double, Dynamic, 1> const &arg_b, 

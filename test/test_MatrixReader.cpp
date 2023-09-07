@@ -1,21 +1,4 @@
-#include "gtest/gtest.h"
-#include "Eigen/Dense"
-
 #include "test.h"
-
-#include "read_matrix/MatrixReader.h"
-
-#include <string>
-#include <cmath>
-
-using read_matrix::read_matrix_csv;
-using Eigen::half;
-using Eigen::MatrixXd, Eigen::MatrixXf;
-
-using std::string;
-using std::cout, std::endl;
-using std::runtime_error;
-using std::pow;
 
 // General matrix read tests
 

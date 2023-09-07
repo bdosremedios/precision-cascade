@@ -1,18 +1,6 @@
-#include "gtest/gtest.h"
-#include "Eigen/Dense"
-
-#include "read_matrix/MatrixReader.h"
-#include "solvers/GMRES.h"
-
 #include "../test.h"
 
-#include <iostream>
-
-using Eigen::Matrix, Eigen::Dynamic;
-
-using read_matrix::read_matrix_csv;
-
-using std::cout, std::endl;
+#include "solvers/GMRES.h"
 
 class GMRESSingleSolveTest: public TestBase {};
 

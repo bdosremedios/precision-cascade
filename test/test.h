@@ -4,12 +4,25 @@
 #include "gtest/gtest.h"
 #include "Eigen/Dense"
 
+#include "read_matrix/MatrixReader.h"
+
 #include <cmath>
 #include <string>
+#include <memory>
+#include <iostream>
+
+using read_matrix::read_matrix_csv;
 
 using Eigen::Matrix, Eigen::Dynamic;
+using Eigen::half;
+using MatrixXh = Eigen::Matrix<Eigen::half, Dynamic, Dynamic>;
+using Eigen::MatrixXf;
+using Eigen::MatrixXd;
+
 using std::pow;
 using std::string;
+using std::shared_ptr, std::make_shared;
+using std::cout, std::endl;
 
 double gamma(int n, double u);
 

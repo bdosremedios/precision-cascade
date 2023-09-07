@@ -1,13 +1,8 @@
 #ifndef FP_GMRES_IR_SOLVE_H
 #define FP_GMRES_IR_SOLVE_H
 
-#include "preconditioners/ImplementedPreconditioners.h"
 #include "IterativeRefinement.h"
 #include "GMRES.h"
-
-#include <memory>
-
-using std::shared_ptr, std::make_shared;
 
 template <typename T, typename U=T>
 class FP_GMRES_IR_Solve: public IterativeRefinement {
@@ -26,7 +21,9 @@ class FP_GMRES_IR_Solve: public IterativeRefinement {
 
         void set_inner_solve() {
             inner_solver = make_shared<GMRESSolve<T>>(
-                A, res_hist(all, curr_iter), basis_zero_tol,
+                A, curr_res,
+                Matrix<double, Dynamic, 1>::Zero(n, 1),
+                basis_zero_tol,
                 left_precond_ptr, right_precond_ptr,
                 max_inner_iter, target_rel_res
             );
@@ -172,7 +169,7 @@ class FP_GMRES_IR_Solve: public IterativeRefinement {
                 arg_A, arg_b, arg_init_guess,
                 arg_max_inner_iter, arg_max_outer_iter, arg_target_rel_res
             )
-        {}
+        { initialize_inner_outer_solver(); }
 
 };
 

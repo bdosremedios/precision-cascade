@@ -3,6 +3,7 @@
 
 #include "Eigen/Dense"
 
+#include <memory>
 #include <vector>
 #include <algorithm>
 #include <cmath>
@@ -14,6 +15,7 @@ using Eigen::placeholders::all;
 
 using std::vector;
 using std::cout, std::endl;
+using std::shared_ptr, std::make_shared;
 
 // Untyped abstract interface for untyped pointer access to typed interative solver interface
 class GenericIterativeSolve {
@@ -46,8 +48,9 @@ class GenericIterativeSolve {
 
             // Reset residual history and set initial residual
             res_hist = Matrix<double, Dynamic, Dynamic>(m, max_iter+1);
-            res_hist(all, 0) = (b - A*generic_soln).template cast<double>();
-            res_norm_hist.push_back(static_cast<double>(res_hist(all, 0).norm()));
+            curr_res = b - A*generic_soln;
+            res_hist(all, 0) = curr_res;
+            res_norm_hist.push_back(res_hist(all, 0).norm());
 
         }
     
@@ -68,6 +71,7 @@ class GenericIterativeSolve {
         bool terminated;
         int curr_iter;
         Matrix<double, Dynamic, 1> generic_soln;
+        Matrix<double, Dynamic, 1> curr_res;
 
         // Constant solve attributes
         const double target_rel_res;
@@ -112,6 +116,7 @@ class GenericIterativeSolve {
 
         // Getters
         Matrix<double, Dynamic, 1> get_generic_soln() const { return generic_soln; };
+        Matrix<double, Dynamic, 1> get_curr_res() const { return curr_res; };
         double get_relres() const { return res_norm_hist[curr_iter]/res_norm_hist[0]; }
         Matrix<double, Dynamic, Dynamic> get_res_hist() const { return res_hist; };
         vector<double> get_res_norm_hist() const { return res_norm_hist; };
@@ -145,7 +150,8 @@ class GenericIterativeSolve {
                 iterate();
 
                 // Update residual tracking
-                res_hist(all, curr_iter) = b - A*generic_soln;
+                curr_res = b - A*generic_soln;
+                res_hist(all, curr_iter) = curr_res;
                 res_norm = res_hist(all, curr_iter).norm();
                 res_norm_hist.push_back(res_norm);
 

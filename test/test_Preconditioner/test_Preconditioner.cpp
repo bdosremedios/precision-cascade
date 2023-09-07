@@ -1,20 +1,6 @@
-#include "gtest/gtest.h"
-#include "Eigen/Dense"
-
 #include "../test.h"
 
-#include "read_matrix/MatrixReader.h"
 #include "preconditioners/ImplementedPreconditioners.h"
-
-#include <string>
-#include <iostream>
-#include <cmath>
-
-using read_matrix::read_matrix_csv;
-
-using std::string;
-using std::cout, std::endl;
-using std::pow;
 
 class PreconditionerTest: public TestBase {};
 

@@ -1,24 +1,6 @@
-#include "gtest/gtest.h"
-#include "Eigen/Dense"
-
 #include "../test.h"
 
-#include "read_matrix/MatrixReader.h"
 #include "solvers/SOR.h"
-
-#include <vector>
-#include <string>
-
-using read_matrix::read_matrix_csv;
-
-using Eigen::MatrixXd;
-using Eigen::MatrixXf;
-using Eigen::half;
-using MatrixXh = Eigen::Matrix<Eigen::half, Dynamic, Dynamic>;
-
-using std::vector;
-using std::string;
-using std::cout, std::endl;
 
 class SORTest: public TestBase {
 
