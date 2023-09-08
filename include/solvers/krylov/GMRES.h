@@ -31,14 +31,6 @@ class GMRESSolve: public TypedIterativeSolve<T> {
 
         // *** PROTECTED INSTANTIATION HELPER METHODS ***
 
-        int determine_max_iter(int max_iter, Matrix<double, Dynamic, Dynamic> const &arg_A) const {
-            if (max_iter == -1) {
-                return arg_A.rows();
-            } else {
-                return max_iter;
-            }
-        }
-
         void check_compatibility() const {
 
             // Assert compatibility of preconditioners with matrix
@@ -224,116 +216,55 @@ class GMRESSolve: public TypedIterativeSolve<T> {
 
         // *** CONSTRUCTORS ***
 
-        // Constructor without initial guess and no preconditioners
+        // No preconditioners
         GMRESSolve(
             Matrix<double, Dynamic, Dynamic> const &arg_A,
             Matrix<double, Dynamic, 1> const &arg_b,
             double const &arg_basis_zero_tol,
-            int const &arg_max_iter=-1,
-            double const &arg_target_rel_res=1e-10
+            SolveArgPkg const &arg_pkg
         ):
             GMRESSolve(
-                arg_A, arg_b, this->make_guess(arg_A),
+                arg_A, arg_b,
                 arg_basis_zero_tol,
-                determine_max_iter(arg_max_iter, arg_A),
-                arg_target_rel_res
-            )
-        {}
-
-        // Constructor with initial guess and no preconditioners
-        GMRESSolve(
-            Matrix<double, Dynamic, Dynamic> const &arg_A,
-            Matrix<double, Dynamic, 1> const &arg_b,
-            Matrix<double, Dynamic, 1> const &arg_init_guess,
-            double const &arg_basis_zero_tol,
-            int const &arg_max_iter=-1,
-            double const &arg_target_rel_res=1e-10
-        ):
-            GMRESSolve(
-                arg_A, arg_b, arg_init_guess,
-                arg_basis_zero_tol,
-                make_shared<NoPreconditioner<T>>(),
-                determine_max_iter(arg_max_iter, arg_A),
-                arg_target_rel_res
+                make_shared<Preconditioner<T>>(),
+                arg_pkg
             )
         {}
         
-        // Constructor without initial guess and left preconditioner
+        // Left preconditioner
         GMRESSolve(
             Matrix<double, Dynamic, Dynamic> const &arg_A,
             Matrix<double, Dynamic, 1> const &arg_b,
             double const &arg_basis_zero_tol,
             shared_ptr<Preconditioner<U>> const &arg_left_precond_ptr,
-            int const &arg_max_iter=-1,
-            double const &arg_target_rel_res=1e-10
+            SolveArgPkg const &arg_pkg
         ):
             GMRESSolve(
-                arg_A, arg_b, this->make_guess(arg_A),
+                arg_A, arg_b,
                 arg_basis_zero_tol,
                 arg_left_precond_ptr,
-                determine_max_iter(arg_max_iter, arg_A),
-                arg_target_rel_res
+                make_shared<Preconditioner<T>>(),
+                arg_pkg
             )
         {}
 
-        // Constructor with initial guess and left preconditioner
-        GMRESSolve(
-            Matrix<double, Dynamic, Dynamic> const &arg_A,
-            Matrix<double, Dynamic, 1> const &arg_b,
-            Matrix<double, Dynamic, 1> const &arg_init_guess,
-            double const &arg_basis_zero_tol,
-            shared_ptr<Preconditioner<U>> const &arg_left_precond_ptr,
-            int const &arg_max_iter=-1,
-            double const &arg_target_rel_res=1e-10
-        ):
-            GMRESSolve(
-                arg_A, arg_b, arg_init_guess,
-                arg_basis_zero_tol,
-                arg_left_precond_ptr, make_shared<NoPreconditioner<T>>(),
-                determine_max_iter(arg_max_iter, arg_A),
-                arg_target_rel_res
-            )
-        {}
-
-        // Constructor without initial guess and both preconditioners
+        // Both preconditioners
         GMRESSolve(
             Matrix<double, Dynamic, Dynamic> const &arg_A,
             Matrix<double, Dynamic, 1> const &arg_b,
             double const &arg_basis_zero_tol,
             shared_ptr<Preconditioner<U>> const &arg_left_precond_ptr,
             shared_ptr<Preconditioner<U>> const &arg_right_precond_ptr,
-            int const &arg_max_iter=-1,
-            double const &arg_target_rel_res=1e-10
-        ):
-            GMRESSolve(
-                arg_A, arg_b, this->make_guess(arg_A),
-                arg_basis_zero_tol,
-                arg_left_precond_ptr, arg_right_precond_ptr,
-                determine_max_iter(arg_max_iter, arg_A),
-                arg_target_rel_res
-            )
-        {}
-
-        // Constructor with initial guess and both preconditioners
-        GMRESSolve(
-            Matrix<double, Dynamic, Dynamic> const &arg_A,
-            Matrix<double, Dynamic, 1> const &arg_b,
-            Matrix<double, Dynamic, 1> const &arg_init_guess,
-            double const &arg_basis_zero_tol,
-            shared_ptr<Preconditioner<U>> const &arg_left_precond_ptr,
-            shared_ptr<Preconditioner<U>> const &arg_right_precond_ptr,
-            int const &arg_max_iter=-1,
-            double const &arg_target_rel_res=1e-10
+            SolveArgPkg const &arg_pkg
         ):
             basis_zero_tol(static_cast<T>(arg_basis_zero_tol)),
             left_precond_ptr(arg_left_precond_ptr),
             right_precond_ptr(arg_right_precond_ptr),
-            TypedIterativeSolve<T>::TypedIterativeSolve(
-                arg_A, arg_b, arg_init_guess,
-                determine_max_iter(arg_max_iter, arg_A),
-                arg_target_rel_res
-            )
-        { initializeGMRES(); }
+            TypedIterativeSolve<T>::TypedIterativeSolve(arg_A, arg_b, arg_pkg)
+        {
+            max_iter = (arg_pkg.check_default_max_iter()) ? arg_A.rows() : arg_pkg.max_iter;
+            initializeGMRES();
+        }
 
 };
 

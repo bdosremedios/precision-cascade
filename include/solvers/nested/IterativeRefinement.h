@@ -32,18 +32,10 @@ class IterativeRefinement: public InnerOuterSolve {
 
         IterativeRefinement(
             Matrix<double, Dynamic, Dynamic> const &arg_A,
-            Matrix<double, Dynamic, 1> const &arg_b, 
-            Matrix<double, Dynamic, 1> const &arg_init_guess,
-            int const &arg_max_inner_iter,
-            int const &arg_max_outer_iter,
-            double const &arg_target_rel_res
+            Matrix<double, Dynamic, 1> const &arg_b,
+            SolveArgPkg const &arg_pkg
         ):
-            InnerOuterSolve(
-                arg_A, arg_b, arg_init_guess,
-                arg_max_inner_iter,
-                arg_max_outer_iter,
-                arg_target_rel_res
-            )
+            InnerOuterSolve(arg_A, arg_b, arg_pkg)
         {}
 
 };

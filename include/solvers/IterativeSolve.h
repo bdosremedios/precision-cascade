@@ -3,6 +3,7 @@
 
 #include "Eigen/Dense"
 
+#include "tools/ArgPkg.h"
 #include "tools/Substitution.h"
 #include "preconditioners/ImplementedPreconditioners.h"
 
@@ -86,14 +87,16 @@ class GenericIterativeSolve {
 
         // *** PROTECTED CONSTRUCTORS ***
         GenericIterativeSolve(
-            Matrix<double, Dynamic, Dynamic> arg_A,
-            Matrix<double, Dynamic, 1> arg_b,
-            Matrix<double, Dynamic, 1> arg_init_guess,
-            int arg_max_iter, double arg_target_rel_res
+            Matrix<double, Dynamic, Dynamic> const &arg_A,
+            Matrix<double, Dynamic, 1> const &arg_b,
+            SolveArgPkg const &arg_pkg
         ):
-            A(arg_A), b(arg_b), init_guess(arg_init_guess),
+            A(arg_A), b(arg_b),
+            init_guess((arg_pkg.check_default_init_guess()) ? make_guess(arg_A) :
+                                                              arg_pkg.init_guess),
             m(arg_A.rows()), n(arg_A.cols()),
-            max_iter(arg_max_iter), target_rel_res(arg_target_rel_res)
+            max_iter((arg_pkg.check_default_max_iter()) ? 100 : arg_pkg.max_iter),
+            target_rel_res((arg_pkg.check_default_target_rel_res()) ? 1e-10 : arg_pkg.target_rel_res)
         {
             check_compatibility();
             set_self_to_initial_state();
@@ -110,8 +113,8 @@ class GenericIterativeSolve {
         // *** PROTECTED METHODS ***
 
         // Create initial guess based on system matrix arg_A
-        Matrix<double, Dynamic, Dynamic> make_guess(Matrix<double, Dynamic, Dynamic> const &arg_A) const {
-            return Matrix<double, Dynamic, Dynamic>::Ones(arg_A.cols(), 1);
+        Matrix<double, Dynamic, 1> make_guess(Matrix<double, Dynamic, Dynamic> const &arg_A) const {
+            return Matrix<double, Dynamic, 1>::Ones(arg_A.cols(), 1);
         }
 
     public:
@@ -324,29 +327,13 @@ class TypedIterativeSolve: public GenericIterativeSolve {
         TypedIterativeSolve(
             Matrix<double, Dynamic, Dynamic> const &arg_A,
             Matrix<double, Dynamic, 1> const &arg_b,
-            int const &arg_max_iter=100,
-            double const &arg_target_rel_res=1e-10
-        ): 
-            TypedIterativeSolve(
-                arg_A, arg_b, make_guess(arg_A),
-                arg_max_iter, arg_target_rel_res
-            )
-        {}
-
-        TypedIterativeSolve(
-            Matrix<double, Dynamic, Dynamic> const &arg_A,
-            Matrix<double, Dynamic, 1> const &arg_b, 
-            Matrix<double, Dynamic, 1> const &arg_init_guess,
-            int const &arg_max_iter=100,
-            double const &arg_target_rel_res=1e-10
+            SolveArgPkg const &arg_pkg
         ): 
             A_T(arg_A.template cast<T>()),
             b_T(arg_b.template cast<T>()),
-            init_guess_T(arg_init_guess.template cast<T>()),
-            GenericIterativeSolve(
-                arg_A, arg_b, arg_init_guess,
-                arg_max_iter, arg_target_rel_res
-            )
+            init_guess_T((arg_pkg.check_default_init_guess()) ? make_guess(arg_A).template cast<T>() :
+                                                                arg_pkg.init_guess.template cast<T>()),
+            GenericIterativeSolve(arg_A, arg_b, arg_pkg)
         {
             typed_soln = init_guess_T;
             update_generic_soln();

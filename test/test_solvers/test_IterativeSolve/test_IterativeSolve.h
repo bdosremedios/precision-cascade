@@ -39,27 +39,10 @@ class TypedIterativeSolveTestingMock: public TypedIterativeSolve<T> {
             Matrix<double, Dynamic, Dynamic> const &arg_A,
             Matrix<double, Dynamic, 1> const &arg_b,
             Matrix<T, Dynamic, 1> const &arg_soln,
-            int const &arg_max_iter=100,
-            double const &arg_target_rel_res=1e-10
+            SolveArgPkg const &arg_pkg
         ):
             soln(arg_soln),
-            TypedIterativeSolve<T>::TypedIterativeSolve(
-                arg_A, arg_b, arg_max_iter, arg_target_rel_res
-            )
-        {}
-
-        TypedIterativeSolveTestingMock(
-            Matrix<double, Dynamic, Dynamic> const &arg_A,
-            Matrix<double, Dynamic, 1> const &arg_b,
-            Matrix<double, Dynamic, 1> const &arg_init_guess,
-            Matrix<T, Dynamic, 1> const &arg_soln,
-            int const &arg_max_iter=100,
-            double const &arg_target_rel_res=1e-10
-        ):
-            soln(arg_soln),
-            TypedIterativeSolve<T>::TypedIterativeSolve(
-                arg_A, arg_b, arg_init_guess, arg_max_iter, arg_target_rel_res
-            )
+            TypedIterativeSolve<T>::TypedIterativeSolve(arg_A, arg_b, arg_pkg)
         {}
 
 };

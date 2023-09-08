@@ -5,6 +5,7 @@
 #include "Eigen/Dense"
 
 #include "tools/MatrixReader.h"
+#include "tools/ArgPkg.h"
 
 #include <cmath>
 #include <string>
@@ -44,6 +45,8 @@ class TestBase: public testing::Test {
 
         const string read_matrix_dir = "/home/bdosremedios/dev/precision-cascade/test/read_matrices/";
         const string solve_matrix_dir = "/home/bdosremedios/dev/precision-cascade/test/solve_matrices/";
+
+        SolveArgPkg default_args;
 
         const bool show_plots = false;
 

@@ -1,0 +1,23 @@
+#include "../test.h"
+
+#include "tools/ArgPkg.h"
+
+TEST(SolveArgPkgTest, TestDefaultChecks) {
+
+    SolveArgPkg args;
+
+    ASSERT_TRUE(args.check_default_max_iter());
+    ASSERT_TRUE(args.check_default_max_inner_iter());
+    ASSERT_TRUE(args.check_default_target_rel_res());
+    ASSERT_TRUE(args.check_default_init_guess());
+
+    args.max_iter = 100;
+    ASSERT_FALSE(args.check_default_max_iter());
+    args.max_inner_iter = 10;
+    ASSERT_FALSE(args.check_default_max_inner_iter());
+    args.target_rel_res = 0.000001;
+    ASSERT_FALSE(args.check_default_target_rel_res());
+    args.init_guess = Matrix<double, Dynamic, 1>::Ones(2, 1);
+    ASSERT_FALSE(args.check_default_init_guess());
+
+}

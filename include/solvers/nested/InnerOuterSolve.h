@@ -9,7 +9,7 @@ class InnerOuterSolve: public GenericIterativeSolve {
 
         // *** PROTECTED ATTRIBUTES ***
 
-        const int max_inner_iter;
+        int max_inner_iter; // mutable to allow setting by specific solvers
         vector<vector<double>> inner_res_norm_hist;
         shared_ptr<GenericIterativeSolve> inner_solver;
 
@@ -41,17 +41,12 @@ class InnerOuterSolve: public GenericIterativeSolve {
         InnerOuterSolve(
             Matrix<double, Dynamic, Dynamic> const &arg_A,
             Matrix<double, Dynamic, 1> const &arg_b, 
-            Matrix<double, Dynamic, 1> const &arg_init_guess,
-            int const &arg_max_inner_iter=10,
-            int const &arg_max_outer_iter=10,
-            double const &arg_target_rel_res=1e-10
+            SolveArgPkg const &arg_pkg
         ): 
-            max_inner_iter(arg_max_inner_iter),
-            GenericIterativeSolve(
-                arg_A, arg_b, arg_init_guess,
-                arg_max_outer_iter, arg_target_rel_res
-            )
-        {}
+            max_inner_iter((arg_pkg.check_default_max_inner_iter()) ? 10 :
+                                                                      arg_pkg.max_inner_iter),
+            GenericIterativeSolve(arg_A, arg_b, arg_pkg)
+        { max_iter = (arg_pkg.check_default_max_iter()) ? 10 : arg_pkg.max_iter; }
 
         // *** GETTERS ***
         vector<vector<double>> get_inner_res_norm_hist() const { return inner_res_norm_hist; };

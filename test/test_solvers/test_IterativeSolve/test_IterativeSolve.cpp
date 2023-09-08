@@ -11,7 +11,7 @@ TEST_F(TypedIterativeSolveTest, TestConstructorsDouble) {
     Matrix<double, Dynamic, Dynamic> A(Matrix<double, n, n>::Random());
     Matrix<double, Dynamic, 1> b(Matrix<double, n, 1>::Random());
     Matrix<double, Dynamic, 1> soln(Matrix<double, 1, 1>::Ones());
-    TypedIterativeSolveTestingMock<double> test_mock_no_guess(A, b, soln);
+    TypedIterativeSolveTestingMock<double> test_mock_no_guess(A, b, soln, default_args);
 
     EXPECT_EQ(test_mock_no_guess.m, n); EXPECT_EQ(test_mock_no_guess.n, n);
 
@@ -37,7 +37,9 @@ TEST_F(TypedIterativeSolveTest, TestConstructorsDouble) {
 
     // Test with initial guess and explicit parameters
     Matrix<double, Dynamic, 1> init_guess(Matrix<double, n, 1>::Random());
-    TypedIterativeSolveTestingMock<double> test_mock_guess(A, b, init_guess, soln, n, pow(10, -4));
+    SolveArgPkg args;
+    args.init_guess = init_guess; args.max_iter = n; args.target_rel_res = pow(10, -4);
+    TypedIterativeSolveTestingMock<double> test_mock_guess(A, b, soln, args);
 
     EXPECT_EQ(test_mock_guess.A, A); EXPECT_EQ(test_mock_guess.b, b);
     EXPECT_EQ(test_mock_guess.init_guess, init_guess);
@@ -68,7 +70,7 @@ TEST_F(TypedIterativeSolveTest, TestConstructorsSingle) {
     Matrix<double, Dynamic, Dynamic> A(Matrix<double, n, n>::Random());
     Matrix<double, Dynamic, 1> b(Matrix<double, n, 1>::Random());
     Matrix<float, Dynamic, 1> soln(Matrix<float, 1, 1>::Ones());
-    TypedIterativeSolveTestingMock<float> test_mock_no_guess(A, b, soln);
+    TypedIterativeSolveTestingMock<float> test_mock_no_guess(A, b, soln, default_args);
 
     EXPECT_EQ(test_mock_no_guess.m, n); EXPECT_EQ(test_mock_no_guess.n, n);
 
@@ -94,7 +96,9 @@ TEST_F(TypedIterativeSolveTest, TestConstructorsSingle) {
 
     // Test with initial guess and explicit parameters
     Matrix<double, Dynamic, 1> init_guess(Matrix<double, n, 1>::Random());
-    TypedIterativeSolveTestingMock<float> test_mock_guess(A, b, init_guess, soln, n, pow(10, -4));
+    SolveArgPkg args;
+    args.init_guess = init_guess; args.max_iter = n; args.target_rel_res = pow(10, -4);
+    TypedIterativeSolveTestingMock<float> test_mock_guess(A, b, soln, args);
 
     EXPECT_EQ(test_mock_guess.A, A); EXPECT_EQ(test_mock_guess.b, b);
     EXPECT_EQ(test_mock_guess.init_guess, init_guess);
@@ -125,7 +129,7 @@ TEST_F(TypedIterativeSolveTest, TestConstructorsHalf) {
     Matrix<double, Dynamic, Dynamic> A(Matrix<double, n, n>::Random());
     Matrix<double, Dynamic, 1> b(Matrix<double, n, 1>::Random());
     Matrix<half, Dynamic, 1> soln(Matrix<half, n, 1>::Ones());
-    TypedIterativeSolveTestingMock<half> test_mock_no_guess(A, b, soln);
+    TypedIterativeSolveTestingMock<half> test_mock_no_guess(A, b, soln, default_args);
 
     EXPECT_EQ(test_mock_no_guess.m, n); EXPECT_EQ(test_mock_no_guess.n, n);
 
@@ -151,7 +155,9 @@ TEST_F(TypedIterativeSolveTest, TestConstructorsHalf) {
 
     // Test with initial guess and explicit parameters
     Matrix<double, Dynamic, 1> init_guess(Matrix<double, n, 1>::Random());
-    TypedIterativeSolveTestingMock<half> test_mock_guess(A, b, init_guess, soln, n, pow(10, -4));
+    SolveArgPkg args;
+    args.init_guess = init_guess; args.max_iter = n; args.target_rel_res = pow(10, -4);
+    TypedIterativeSolveTestingMock<half> test_mock_guess(A, b, soln, args);
 
     EXPECT_EQ(test_mock_guess.A, A); EXPECT_EQ(test_mock_guess.b, b);
     EXPECT_EQ(test_mock_guess.init_guess, init_guess);
@@ -182,7 +188,7 @@ TEST_F(TypedIterativeSolveTest, TestSolveAndRelres) {
     Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_b.csv"));
     Matrix<double, Dynamic, 1> typed_soln(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_x.csv"));
     Matrix<double, Dynamic, 1> init_guess(Matrix<double, n, 1>::Ones());
-    TypedIterativeSolveTestingMock<double> test_mock(A, b, typed_soln);
+    TypedIterativeSolveTestingMock<double> test_mock(A, b, typed_soln, default_args);
 
     // Test start at 1 relres
     EXPECT_NEAR(test_mock.get_relres(), 1., gamma(n, u_dbl));
@@ -226,7 +232,7 @@ TEST_F(TypedIterativeSolveTest, TestReset) {
     Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_A.csv"));
     Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_b.csv"));
     Matrix<double, Dynamic, 1> typed_soln(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_x.csv"));
-    TypedIterativeSolveTestingMock<double> test_mock(A, b, typed_soln);
+    TypedIterativeSolveTestingMock<double> test_mock(A, b, typed_soln, default_args);
 
     // Call solve and then reset
     test_mock.solve();
@@ -256,7 +262,8 @@ TEST_F(TypedIterativeSolveTest, TestErrorEmptyMatrix) {
         TypedIterativeSolveTestingMock<double> test(
             Matrix<double, Dynamic, Dynamic>::Ones(0, 1),
             Matrix<double, Dynamic, Dynamic>::Ones(0, 1),
-            Matrix<double, Dynamic, Dynamic>::Ones(0, 1));
+            Matrix<double, Dynamic, Dynamic>::Ones(0, 1),
+            default_args);
         FAIL();
     } catch (runtime_error e) { cout << e.what() << endl; }
 
@@ -265,11 +272,12 @@ TEST_F(TypedIterativeSolveTest, TestErrorEmptyMatrix) {
 TEST_F(TypedIterativeSolveTest, TestErrorMismatchedCols) {
 
     try {
+        SolveArgPkg args; args.init_guess = Matrix<double, Dynamic, Dynamic>::Ones(5, 1);
         TypedIterativeSolveTestingMock<double> test(
             Matrix<double, Dynamic, Dynamic>::Ones(64, 64),
             Matrix<double, Dynamic, Dynamic>::Ones(64, 1),
             Matrix<double, Dynamic, Dynamic>::Ones(5, 1),
-            Matrix<double, Dynamic, Dynamic>::Ones(5, 1));
+            args);
         FAIL();
     } catch (runtime_error e) { cout << e.what() << endl; }
 
@@ -282,7 +290,7 @@ TEST_F(TypedIterativeSolveTest, TestErrorMismatchedRows) {
             Matrix<double, Dynamic, Dynamic>::Ones(64, 64),
             Matrix<double, Dynamic, Dynamic>::Ones(8, 1),
             Matrix<double, Dynamic, Dynamic>::Ones(64, 1),
-            Matrix<double, Dynamic, Dynamic>::Ones(64, 1));
+            default_args);
         FAIL();
     } catch (runtime_error e) { cout << e.what() << endl; }
 
@@ -294,7 +302,8 @@ TEST_F(TypedIterativeSolveTest, TestErrorNonSquare) {
         TypedIterativeSolveTestingMock<double> test_mock(
             Matrix<double, Dynamic, Dynamic>::Ones(43, 64),
             Matrix<double, Dynamic, Dynamic>::Ones(43, 1),
-            Matrix<double, Dynamic, Dynamic>::Ones(64, 1));
+            Matrix<double, Dynamic, Dynamic>::Ones(64, 1),
+            default_args);
         FAIL();
     } catch (runtime_error e) { cout << e.what() << endl; }
  

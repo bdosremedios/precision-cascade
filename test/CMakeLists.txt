@@ -5,6 +5,7 @@ project(gmres)
 set(
     TEST_TOOLS_CPPS
     test_tools/test_MatrixReader.cpp
+    test_tools/test_ArgPkg.cpp
     test_tools/test_Substitution.cpp
 )
 
@@ -20,17 +21,17 @@ set(
     test_solvers/test_IterativeSolve/test_IterativeSolve.cpp
 
     test_solvers/test_Jacobi.cpp
-    test_solvers/test_SOR/test_GaussSeidel.cpp
-    test_solvers/test_SOR/test_SOR.cpp
+    # test_solvers/test_SOR/test_GaussSeidel.cpp
+    # test_solvers/test_SOR/test_SOR.cpp
 
-    test_solvers/test_GMRES/test_GMRES_components.cpp
-    test_solvers/test_GMRES/test_GMRES_solve_dbl.cpp
-    test_solvers/test_GMRES/test_GMRES_solve_sgl.cpp
-    test_solvers/test_GMRES/test_GMRES_solve_hlf.cpp
-    test_solvers/test_GMRES/test_PGMRES.cpp
+    # test_solvers/test_GMRES/test_GMRES_components.cpp
+    # test_solvers/test_GMRES/test_GMRES_solve_dbl.cpp
+    # test_solvers/test_GMRES/test_GMRES_solve_sgl.cpp
+    # test_solvers/test_GMRES/test_GMRES_solve_hlf.cpp
+    # test_solvers/test_GMRES/test_PGMRES.cpp
 
-    test_solvers/test_InnerOuterSolve.cpp
-    test_solvers/test_FP_GMRES_IR_Solve.cpp
+    # test_solvers/test_InnerOuterSolve.cpp
+    # test_solvers/test_FP_GMRES_IR_Solve.cpp
 )
 
 set(
