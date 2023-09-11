@@ -2,14 +2,14 @@
 
 #include "test_GMRES.h"
 
-class GMRESComponentTest: public GMRESTest {};
+class GMRESComponentTest: public TestBase {};
 
 TEST_F(GMRESComponentTest, CheckConstruction5x5) {
     
     constexpr int n(5);
     Matrix<double, n, n> A(read_matrix_csv<double>(solve_matrix_dir + "A_5_toy.csv"));
     Matrix<double, n, 1> b(read_matrix_csv<double>(solve_matrix_dir + "b_5_toy.csv"));
-    GMRESSolveTestingMock<double> test_mock(A, b, u_dbl);
+    GMRESSolveTestingMock<double> test_mock(A, b, u_dbl, default_args);
     ASSERT_EQ(test_mock.max_kry_space_dim, n);
     ASSERT_EQ(test_mock.rho, (b - A*Matrix<double, n, 1>::Ones()).norm());
     
@@ -56,7 +56,7 @@ TEST_F(GMRESComponentTest, CheckConstruction64x64) {
     constexpr int n(64);
     Matrix<double, n, n> A(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_A.csv"));
     Matrix<double, n, 1> b(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_b.csv"));
-    GMRESSolveTestingMock<double> test_mock(A, b, u_dbl);
+    GMRESSolveTestingMock<double> test_mock(A, b, u_dbl, default_args);
     ASSERT_EQ(test_mock.max_kry_space_dim, n);
     ASSERT_EQ(test_mock.rho, (b - A*Matrix<double, n, 1>::Ones()).norm());
     
@@ -103,14 +103,22 @@ TEST_F(GMRESComponentTest, CheckCorrectDefaultMaxIter) {
     constexpr int n(7);
     Matrix<double, n, n> A_n(Matrix<double, n, n>::Random());
     Matrix<double, n, 1> b_n(Matrix<double, n, 1>::Random());
-    GMRESSolveTestingMock<double> test_mock_n(A_n, b_n, u_dbl);
+    GMRESSolveTestingMock<double> test_mock_n(A_n, b_n, u_dbl, default_args);
     ASSERT_EQ(test_mock_n.max_iter, n);
 
     constexpr int m(53);
     Matrix<double, m, m> A_m(Matrix<double, m, m>::Random());
     Matrix<double, m, 1> b_m(Matrix<double, m, 1>::Random());
-    GMRESSolveTestingMock<double> test_mock_m(A_m, b_m, u_dbl);
+    GMRESSolveTestingMock<double> test_mock_m(A_m, b_m, u_dbl, default_args);
     ASSERT_EQ(test_mock_m.max_iter, m);
+
+    constexpr int o(64);
+    constexpr int non_default_iter(10);
+    Matrix<double, o, o> A_o(Matrix<double, o, o>::Random());
+    Matrix<double, o, 1> b_o(Matrix<double, o, 1>::Random());
+    SolveArgPkg non_default_args; non_default_args.max_iter = non_default_iter;
+    GMRESSolveTestingMock<double> test_mock_o(A_o, b_o, u_dbl, non_default_args);
+    ASSERT_EQ(test_mock_o.max_iter, non_default_iter);
 
 }
 
@@ -120,7 +128,8 @@ TEST_F(GMRESComponentTest, CheckErrorExceedDimension) {
     Matrix<double, n, n> A_n(Matrix<double, n, n>::Random());
     Matrix<double, n, 1> b_n(Matrix<double, n, 1>::Random());
     try {
-        GMRESSolveTestingMock<double> test_mock_n(A_n, b_n, u_dbl, 100);
+        SolveArgPkg args; args.max_iter = 100;
+        GMRESSolveTestingMock<double> test_mock_n(A_n, b_n, u_dbl, args);
         FAIL();
     } catch (runtime_error e) {
         cout << e.what() << endl;
@@ -133,7 +142,7 @@ TEST_F(GMRESComponentTest, KrylovInstantiationAndUpdates) {
     constexpr int n(5);
     Matrix<double, n, n> A(read_matrix_csv<double>(solve_matrix_dir + "A_5_toy.csv"));
     Matrix<double, n, 1> b(read_matrix_csv<double>(solve_matrix_dir + "b_5_toy.csv"));
-    GMRESSolveTestingMock<double> test_mock(A, b, u_dbl);
+    GMRESSolveTestingMock<double> test_mock(A, b, u_dbl, default_args);
     test_mock.typed_soln = Matrix<double, n, 1>::Ones(); // Manually instantiate initial guess
     Matrix<double, n, 1> r_0 = b - A*Matrix<double, n, 1>::Ones();
 
@@ -196,7 +205,7 @@ TEST_F(GMRESComponentTest, H_QR_Update) {
     constexpr int n(5);
     Matrix<double, n, n> A(read_matrix_csv<double>(solve_matrix_dir + "A_5_toy.csv"));
     Matrix<double, n, 1> b(read_matrix_csv<double>(solve_matrix_dir + "b_5_toy.csv"));
-    GMRESSolveTestingMock<double> test_mock(A, b, u_dbl);
+    GMRESSolveTestingMock<double> test_mock(A, b, u_dbl, default_args);
     test_mock.typed_soln(Matrix<double, n, n>::Ones()); // Manually instantiate initial guess
     Matrix<double, n, 1> r_0(b - A*Matrix<double, n, 1>::Ones());
 
@@ -272,7 +281,8 @@ TEST_F(GMRESComponentTest, Update_x_Back_Substitution) {
 
     // Set initial guess to zeros such that residual is just b
     Matrix<double, n, 1> x_0(Matrix<double, n, 1>::Zero());
-    GMRESSolveTestingMock<double> test_mock(A, b, x_0, u_dbl);
+    SolveArgPkg args; args.init_guess = x_0;
+    GMRESSolveTestingMock<double> test_mock(A, b, u_dbl, args);
 
     // Set test_mock krylov basis to the identity to have typed_soln be directly the solved coefficients
     // of the back substitution
@@ -312,7 +322,8 @@ TEST_F(GMRESComponentTest, KrylovLuckyBreakFirstIter) {
     Matrix<double, n, n> A(read_matrix_csv<double>(solve_matrix_dir + "A_5_easysoln.csv"));
     Matrix<double, n, 1> b(read_matrix_csv<double>(solve_matrix_dir + "b_5_easysoln.csv"));
     Matrix<double, n, 1> soln(Matrix<double, n, 1>::Ones()); // Instantiate initial guess as true solution
-    GMRESSolveTestingMock<double> test_mock(A, b, soln, u_dbl, n, conv_tol_dbl);
+    SolveArgPkg args; args.target_rel_res = conv_tol_dbl; args.init_guess = soln;
+    GMRESSolveTestingMock<double> test_mock(A, b, u_dbl, args);
 
     // Attempt to update subspace and Hessenberg
     test_mock.iterate();
@@ -349,7 +360,8 @@ TEST_F(GMRESComponentTest, KrylovLuckyBreakLaterIter) {
     Matrix<double, n, 1> b(read_matrix_csv<double>(solve_matrix_dir + "b_5_easysoln.csv"));
     Matrix<double, n, 1> soln(Matrix<double, n, 1>::Zero()); // Initialize as near solution
     soln(0) = 1;
-    GMRESSolveTestingMock<double> test_mock(A, b, soln, u_dbl);
+    SolveArgPkg args; args.init_guess = soln;
+    GMRESSolveTestingMock<double> test_mock(A, b, u_dbl, args);
 
     // Attempt to update subspace and convergence twice
     test_mock.iterate();
@@ -377,7 +389,8 @@ TEST_F(GMRESComponentTest, KrylovLuckyBreakThroughSolve) {
     Matrix<double, n, 1> b(read_matrix_csv<double>(solve_matrix_dir + "b_5_easysoln.csv"));
     Matrix<double, n, 1> soln(Matrix<double, n, 1>::Zero()); // Initialize as near solution
     soln(0) = 1;
-    GMRESSolveTestingMock<double> test_mock(A, b, soln, u_dbl, 5, conv_tol_dbl);
+    SolveArgPkg args; args.init_guess = soln; args.target_rel_res = conv_tol_dbl;
+    GMRESSolveTestingMock<double> test_mock(A, b, u_dbl, args);
 
     // Attempt to update and solve through solve of LinearSolve
     test_mock.solve();
@@ -404,7 +417,8 @@ TEST_F(GMRESComponentTest, Solve) {
     constexpr int n(20);
     Matrix<double, n, n> A(Matrix<double, n, n>::Random());
     Matrix<double, n, 1> b(Matrix<double, n, 1>::Random());
-    GMRESSolve<double> gmres_solve(A, b, u_dbl, n, conv_tol_dbl);
+    SolveArgPkg args; args.max_iter = n; args.target_rel_res = conv_tol_dbl;
+    GMRESSolve<double> gmres_solve(A, b, u_dbl, args);
 
     gmres_solve.solve();
     if (show_plots) { gmres_solve.view_relres_plot("log"); }
@@ -419,7 +433,8 @@ TEST_F(GMRESComponentTest, Reset) {
     constexpr int n(20);
     Matrix<double, n, n> A(Matrix<double, n, n>::Random());
     Matrix<double, n, 1> b(Matrix<double, n, 1>::Random());
-    GMRESSolveTestingMock<double> test_mock(A, b, u_dbl, n, conv_tol_dbl);
+    SolveArgPkg args; args.max_iter = n; args.target_rel_res = conv_tol_dbl;
+    GMRESSolveTestingMock<double> test_mock(A, b, u_dbl, args);
 
     test_mock.solve();
     if (show_plots) { test_mock.view_relres_plot("log"); }

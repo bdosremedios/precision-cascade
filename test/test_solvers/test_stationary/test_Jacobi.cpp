@@ -11,10 +11,10 @@ class JacobiTest: public TestBase {
 
         void SetUp() {
 
-            success_args.reset();
+            success_args = SolveArgPkg();
             success_args.max_iter = 2000;
 
-            fail_args.reset();
+            fail_args = SolveArgPkg();
             fail_args.max_iter = 400;
 
         }

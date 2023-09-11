@@ -31,7 +31,7 @@ TEST(SolveArgPkgTest, TestReset) {
     args.target_rel_res = 0.000001;
     args.init_guess = Matrix<double, Dynamic, 1>::Ones(2, 1);
 
-    args.reset();
+    args = SolveArgPkg();
 
     ASSERT_TRUE(args.check_default_max_iter());
     ASSERT_TRUE(args.check_default_max_inner_iter());

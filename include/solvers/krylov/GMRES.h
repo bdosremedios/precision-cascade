@@ -226,7 +226,7 @@ class GMRESSolve: public TypedIterativeSolve<T> {
             GMRESSolve(
                 arg_A, arg_b,
                 arg_basis_zero_tol,
-                make_shared<Preconditioner<T>>(),
+                make_shared<NoPreconditioner<T>>(),
                 arg_pkg
             )
         {}
@@ -243,7 +243,7 @@ class GMRESSolve: public TypedIterativeSolve<T> {
                 arg_A, arg_b,
                 arg_basis_zero_tol,
                 arg_left_precond_ptr,
-                make_shared<Preconditioner<T>>(),
+                make_shared<NoPreconditioner<T>>(),
                 arg_pkg
             )
         {}

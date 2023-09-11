@@ -11,10 +11,10 @@ class GaussSeidelTest: public TestBase {
 
         void SetUp() {
 
-            success_args.reset();
+            success_args = SolveArgPkg();
             success_args.max_iter = 1000;
 
-            fail_args.reset();
+            fail_args = SolveArgPkg();
             fail_args.max_iter = 300;
 
         }

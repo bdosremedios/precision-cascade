@@ -7,7 +7,7 @@
 #include <functional>
 
 #include "Preconditioner.h"
-#include "tools/Substitution.h"
+#include "../tools/Substitution.h"
 
 using Eigen::Matrix, Eigen::Dynamic;
 using std::abs;

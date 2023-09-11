@@ -24,11 +24,11 @@ set(
     test_solvers/test_stationary/test_SOR/test_GaussSeidel.cpp
     test_solvers/test_stationary/test_SOR/test_SOR.cpp
 
-    # test_solvers/test_GMRES/test_GMRES_components.cpp
-    # test_solvers/test_GMRES/test_GMRES_solve_dbl.cpp
-    # test_solvers/test_GMRES/test_GMRES_solve_sgl.cpp
-    # test_solvers/test_GMRES/test_GMRES_solve_hlf.cpp
-    # test_solvers/test_GMRES/test_PGMRES.cpp
+    test_solvers/test_GMRES/test_GMRES_components.cpp
+    test_solvers/test_GMRES/test_GMRES_solve_dbl.cpp
+    test_solvers/test_GMRES/test_GMRES_solve_sgl.cpp
+    test_solvers/test_GMRES/test_GMRES_solve_hlf.cpp
+    test_solvers/test_GMRES/test_PGMRES.cpp
 
     # test_solvers/test_InnerOuterSolve.cpp
     # test_solvers/test_FP_GMRES_IR_Solve.cpp
@@ -57,4 +57,5 @@ target_link_libraries(
     test
     PRIVATE
     gtest_main eigen
+    ArgPkg
 )

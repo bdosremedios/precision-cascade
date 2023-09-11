@@ -3,7 +3,11 @@
 
 #include "Eigen/Dense"
 
+#include <stdexcept>
+
 using Eigen::Matrix;
+
+using std::runtime_error;
 
 template <typename T>
 Matrix<T, Dynamic, 1> back_substitution(

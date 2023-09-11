@@ -4,22 +4,7 @@
 #include "../../test.h"
 #include "solvers/krylov/GMRES.h"
 
-class GMRESTest: public TestBase {
-
-    public:
-
-        SolveArgPkg success_args;
-        SolveArgPkg fail_args;
-
-        void SetUp() {
-
-            success_args.reset();
-
-            fail_args.reset();
-
-        }
-
-};
+class GMRESTest: public TestBase {};
 
 template <typename T, typename U=T>
 class GMRESSolveTestingMock: public GMRESSolve<T, U> {

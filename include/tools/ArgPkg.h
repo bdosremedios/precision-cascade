@@ -1,5 +1,5 @@
-#ifndef SOLVERARGPKG
-#define SOLVERARGPKG
+#ifndef ARGPKG_H
+#define ARGPKG_H
 
 #include "Eigen/Dense"
 
@@ -52,13 +52,6 @@ class SolveArgPkg {
             init_guess(arg_init_guess)
         {};
 
-        void reset() {
-            max_iter = default_max_iter;
-            max_inner_iter = default_max_inner_iter;
-            target_rel_res = default_target_rel_res;
-            init_guess = default_init_guess;
-        }
-
 };
 
 template <typename U>
@@ -66,8 +59,8 @@ class PrecondArgPkg {
 
     public:
 
-        const shared_ptr<Preconditioner<U>> default_left_precond = make_shared<NoPreconditioner<U>>();
-        const shared_ptr<Preconditioner<U>> default_right_precond = make_shared<NoPreconditioner<U>>();
+        const static shared_ptr<Preconditioner<U>> default_left_precond;
+        const static shared_ptr<Preconditioner<U>> default_right_precond;
 
         shared_ptr<Preconditioner<U>> left_precond = default_left_precond;
         shared_ptr<Preconditioner<U>> right_precond = default_right_precond;
