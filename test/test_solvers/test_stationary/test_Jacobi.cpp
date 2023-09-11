@@ -1,4 +1,4 @@
-#include "../test.h"
+#include "../../test.h"
 
 #include "solvers/stationary/Jacobi.h"
 
@@ -8,10 +8,15 @@ class JacobiTest: public TestBase {
 
         SolveArgPkg success_args;
         SolveArgPkg fail_args;
-    
+
         void SetUp() {
+
+            success_args.reset();
             success_args.max_iter = 2000;
+
+            fail_args.reset();
             fail_args.max_iter = 400;
+
         }
 
 };

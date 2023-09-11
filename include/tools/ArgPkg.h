@@ -15,15 +15,15 @@ class SolveArgPkg {
 
     public:
 
-        const int default_max_iter = -1;
-        const int default_max_inner_iter = -1;
-        const double default_target_rel_res = -1;
-        const Matrix<double, Dynamic, 1> default_init_guess = Matrix<double, Dynamic, 1>::Zero(0, 1);
+        constexpr static int default_max_iter = -1;
+        constexpr static int default_max_inner_iter = -1;
+        constexpr static double default_target_rel_res = -1;
+        const static Matrix<double, 0, 1> default_init_guess;
 
-        int max_iter = default_max_iter;
-        int max_inner_iter = default_max_inner_iter;
-        double target_rel_res = default_target_rel_res;
-        Matrix<double, Dynamic, 1> init_guess = default_init_guess;
+        int max_iter;
+        int max_inner_iter;
+        double target_rel_res;
+        Matrix<double, Dynamic, 1> init_guess;
 
         bool check_default_max_iter() const { return max_iter == default_max_iter; }
         bool check_default_max_inner_iter() const { return max_iter == default_max_inner_iter; }
@@ -36,6 +36,27 @@ class SolveArgPkg {
             } else {
                 return init_guess == default_init_guess;
             }
+        }
+
+        // *** CONSTRUCTORS, CONSTRUCTOR OVERLOADS ***
+
+        SolveArgPkg(
+            int arg_max_iter = default_max_iter,
+            int arg_max_inner_iter = default_max_inner_iter,
+            double arg_target_rel_res = default_target_rel_res,
+            Matrix<double, Dynamic, 1> arg_init_guess = default_init_guess
+        ):
+            max_iter(arg_max_iter),
+            max_inner_iter(arg_max_inner_iter),
+            target_rel_res(arg_target_rel_res),
+            init_guess(arg_init_guess)
+        {};
+
+        void reset() {
+            max_iter = default_max_iter;
+            max_inner_iter = default_max_inner_iter;
+            target_rel_res = default_target_rel_res;
+            init_guess = default_init_guess;
         }
 
 };

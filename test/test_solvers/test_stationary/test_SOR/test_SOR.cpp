@@ -1,13 +1,25 @@
-#include "../../test.h"
+#include "../../../test.h"
 
 #include "solvers/stationary/SOR.h"
 
 class SORTest: public TestBase {
 
     public:
-        int max_iter = 1000;
-        int fail_iter = 200;
+
         vector<double> ws{1.25, 1.5, 1.75};
+
+        SolveArgPkg success_args;
+        SolveArgPkg fail_args;
+
+        void SetUp() {
+
+            success_args.reset();
+            success_args.max_iter = 1000;
+
+            fail_args.reset();
+            fail_args.max_iter = 300;
+
+        }
 
 };
 
@@ -20,7 +32,8 @@ TEST_F(SORTest, SolveConvDiff64_Double) {
 
         cout << "Testing w=" << *w << endl;
 
-        SORSolve<double> SOR_solve_d(A, b, *w, max_iter, conv_tol_dbl);
+        success_args.target_rel_res = conv_tol_dbl;
+        SORSolve<double> SOR_solve_d(A, b, *w, success_args);
         SOR_solve_d.solve();
         if (show_plots) { SOR_solve_d.view_relres_plot("log"); }
         
@@ -40,7 +53,8 @@ TEST_F(SORTest, SolveConvDiff256_Double_LONGRUNTIME) {
 
         cout << "Testing w=" << *w << endl;
 
-        SORSolve<double> SOR_solve_d(A, b, *w, max_iter, conv_tol_dbl);
+        success_args.target_rel_res = conv_tol_dbl;
+        SORSolve<double> SOR_solve_d(A, b, *w, success_args);
         SOR_solve_d.solve();
         if (show_plots) { SOR_solve_d.view_relres_plot("log"); }
         
@@ -60,7 +74,8 @@ TEST_F(SORTest, SolveConvDiff64_Single) {
 
         cout << "Testing w=" << *w << endl;
 
-        SORSolve<float> SOR_solve_s(A, b, *w, max_iter, conv_tol_sgl);
+        success_args.target_rel_res = conv_tol_sgl;
+        SORSolve<float> SOR_solve_s(A, b, *w, success_args);
         SOR_solve_s.solve();
         if (show_plots) { SOR_solve_s.view_relres_plot("log"); }
         
@@ -80,7 +95,8 @@ TEST_F(SORTest, SolveConvDiff256_Single_LONGRUNTIME) {
 
         cout << "Testing w=" << *w << endl;
 
-        SORSolve<float> SOR_solve_s(A, b, *w, max_iter, conv_tol_sgl);
+        success_args.target_rel_res = conv_tol_sgl;
+        SORSolve<float> SOR_solve_s(A, b, *w, success_args);
         SOR_solve_s.solve();
         if (show_plots) { SOR_solve_s.view_relres_plot("log"); }
         
@@ -100,7 +116,8 @@ TEST_F(SORTest, SolveConvDiff64_SingleFailBeyondEpsilon) {
 
         cout << "Testing w=" << *w << endl;
 
-        SORSolve<float> SOR_solve_s(A, b, *w, fail_iter, 0.1*u_sgl);
+        fail_args.target_rel_res = 0.1*u_sgl;
+        SORSolve<float> SOR_solve_s(A, b, *w, fail_args);
         SOR_solve_s.solve();
         if (show_plots) { SOR_solve_s.view_relres_plot("log"); }
     
@@ -120,7 +137,8 @@ TEST_F(SORTest, SolveConvDiff64_Half) {
 
         cout << "Testing w=" << *w << endl;
 
-        SORSolve<half> SOR_solve_h(A, b, *w, max_iter, conv_tol_hlf);
+        success_args.target_rel_res = conv_tol_hlf;
+        SORSolve<half> SOR_solve_h(A, b, *w, success_args);
         SOR_solve_h.solve();
         if (show_plots) { SOR_solve_h.view_relres_plot("log"); }
         
@@ -140,7 +158,8 @@ TEST_F(SORTest, SolveConvDiff256_Half_LONGRUNTIME) {
 
         cout << "Testing w=" << *w << endl;
 
-        SORSolve<half> SOR_solve_h(A, b, *w, max_iter, conv_tol_hlf);
+        success_args.target_rel_res = conv_tol_hlf;
+        SORSolve<half> SOR_solve_h(A, b, *w, success_args);
         SOR_solve_h.solve();
         if (show_plots) { SOR_solve_h.view_relres_plot("log"); }
         
@@ -159,8 +178,9 @@ TEST_F(SORTest, SolveConvDiff64_HalfFailBeyondEpsilon) {
     for (auto w = ws.cbegin(); w != ws.cend(); ++w) {
 
         cout << "Testing w=" << *w << endl;
-
-        SORSolve<half> SOR_solve_h(A, b, *w, fail_iter, 0.1*u_hlf);
+        
+        fail_args.target_rel_res = 0.1*u_hlf;
+        SORSolve<half> SOR_solve_h(A, b, *w, fail_args);
         SOR_solve_h.solve();
         if (show_plots) { SOR_solve_h.view_relres_plot("log"); }
     

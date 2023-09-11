@@ -2,7 +2,7 @@
 
 #include "test_GMRES.h"
 
-class GMRESComponentTest: public TestBase {};
+class GMRESComponentTest: public GMRESTest {};
 
 TEST_F(GMRESComponentTest, CheckConstruction5x5) {
     
