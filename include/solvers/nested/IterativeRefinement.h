@@ -25,6 +25,13 @@ class IterativeRefinement: public InnerOuterSolve {
             inner_res_norm_hist.push_back(temp);
 
         }
+
+        // *** PROTECTED METHODS ***
+
+        // Create initial guess for inner solver
+        Matrix<double, Dynamic, 1> make_inner_IR_guess(Matrix<double, Dynamic, Dynamic> const &arg_A) const {
+            return Matrix<double, Dynamic, 1>::Zero(arg_A.cols(), 1);
+        }
     
     public:
 
@@ -36,7 +43,10 @@ class IterativeRefinement: public InnerOuterSolve {
             SolveArgPkg const &arg_pkg
         ):
             InnerOuterSolve(arg_A, arg_b, arg_pkg)
-        {}
+        {
+            // Replace initial guess with IR for existing inner_solve_arg_pkg
+            inner_solve_arg_pkg.init_guess = make_inner_IR_guess(A);
+        }
 
 };
 
