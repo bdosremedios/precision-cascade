@@ -5,7 +5,8 @@ project(gmres)
 set(
     TEST_TOOLS_CPPS
     test_tools/test_MatrixReader.cpp
-    test_tools/test_ArgPkg.cpp
+    test_tools/test_SolveArgPkg.cpp
+    test_tools/test_PrecondArgPkg.cpp
     test_tools/test_Substitution.cpp
 )
 
@@ -56,6 +57,7 @@ target_include_directories(
 target_link_libraries(
     test
     PRIVATE
-    gtest_main eigen
+    gtest_main
+    eigen
     ArgPkg
 )

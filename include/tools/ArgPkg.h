@@ -38,7 +38,7 @@ class SolveArgPkg {
             }
         }
 
-        // *** CONSTRUCTORS, CONSTRUCTOR OVERLOADS ***
+        // *** CONSTRUCTORS ***
 
         SolveArgPkg(
             int arg_max_iter = default_max_iter,
@@ -59,11 +59,18 @@ class PrecondArgPkg {
 
     public:
 
-        const static shared_ptr<Preconditioner<U>> default_left_precond;
-        const static shared_ptr<Preconditioner<U>> default_right_precond;
+        shared_ptr<Preconditioner<U>> left_precond;
+        shared_ptr<Preconditioner<U>> right_precond;
 
-        shared_ptr<Preconditioner<U>> left_precond = default_left_precond;
-        shared_ptr<Preconditioner<U>> right_precond = default_right_precond;
+        // *** CONSTRUCTORS ***
+
+        PrecondArgPkg(
+            shared_ptr<Preconditioner<U>> arg_left_precond = make_shared<NoPreconditioner<U>>(),
+            shared_ptr<Preconditioner<U>> arg_right_precond = make_shared<NoPreconditioner<U>>()
+        ):
+            left_precond(arg_left_precond),
+            right_precond(arg_right_precond)
+        {};
 
 };
 

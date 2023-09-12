@@ -2,7 +2,7 @@
 
 #include "tools/ArgPkg.h"
 
-TEST(SolveArgPkgTest, TestDefaultChecks) {
+TEST(SolveArgPkgTest, TestDefaultConstructionAndChecks) {
 
     SolveArgPkg args;
 

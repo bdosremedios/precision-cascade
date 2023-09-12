@@ -21,17 +21,21 @@ TEST_F(PGMRESSolveTest, TestDefaultandNoPreconditioningMatchesIdentity) {
     Matrix<double, n, 1> b(read_matrix_csv<double>(solve_matrix_dir + "b_inv_45.csv"));
 
     GMRESSolve<double> pgmres_solve_default(A, b, u_dbl, pgmres_args);
+
     GMRESSolve<double> pgmres_solve_explicit_noprecond(
         A, b, u_dbl,
-        make_shared<NoPreconditioner<double>>(),
-        make_shared<NoPreconditioner<double>>(),
-        pgmres_args
+        pgmres_args,
+        PrecondArgPkg<double>(make_shared<NoPreconditioner<double>>(),
+                              make_shared<NoPreconditioner<double>>())
     );
+
     GMRESSolve<double> pgmres_solve_inverse_of_identity(
         A, b, u_dbl,
-        make_shared<MatrixInverse<double>>(Matrix<double, Dynamic, Dynamic>::Identity(n, n)),
-        make_shared<MatrixInverse<double>>(Matrix<double, Dynamic, Dynamic>::Identity(n, n)),
-        pgmres_args
+        pgmres_args,
+        PrecondArgPkg<double>(
+            make_shared<MatrixInverse<double>>(Matrix<double, Dynamic, Dynamic>::Identity(n, n)),
+            make_shared<MatrixInverse<double>>(Matrix<double, Dynamic, Dynamic>::Identity(n, n))
+        )
     );
 
     pgmres_solve_default.solve();
@@ -53,8 +57,10 @@ TEST_F(PGMRESSolveTest, TestLeftPreconditioning_RandA45) {
     Matrix<double, n, n> A(read_matrix_csv<double>(solve_matrix_dir + "A_inv_45.csv"));
     Matrix<double, n, n> Ainv(read_matrix_csv<double>(solve_matrix_dir + "Ainv_inv_45.csv"));
     Matrix<double, n, 1> b(read_matrix_csv<double>(solve_matrix_dir + "b_inv_45.csv"));
+
     GMRESSolve<double> pgmres_solve(
-        A, b, u_dbl, make_shared<MatrixInverse<double>>(Ainv), pgmres_args
+        A, b, u_dbl, pgmres_args,
+        PrecondArgPkg<double>(make_shared<MatrixInverse<double>>(Ainv))
     );
 
     pgmres_solve.solve();
@@ -72,11 +78,11 @@ TEST_F(PGMRESSolveTest, TestRightPreconditioning_RandA45) {
     Matrix<double, n, n> A(read_matrix_csv<double>(solve_matrix_dir + "A_inv_45.csv"));
     Matrix<double, n, n> Ainv(read_matrix_csv<double>(solve_matrix_dir + "Ainv_inv_45.csv"));
     Matrix<double, n, 1> b(read_matrix_csv<double>(solve_matrix_dir + "b_inv_45.csv"));
+
     GMRESSolve<double> pgmres_solve(
-        A, b, u_dbl,
-        make_shared<NoPreconditioner<double>>(),
-        make_shared<MatrixInverse<double>>(Ainv),
-        pgmres_args
+        A, b, u_dbl, pgmres_args,
+        PrecondArgPkg<double>(make_shared<NoPreconditioner<double>>(),
+                              make_shared<MatrixInverse<double>>(Ainv))
     );
 
     pgmres_solve.solve();
@@ -94,11 +100,11 @@ TEST_F(PGMRESSolveTest, TestSymmetricPreconditioning_RandA45) {
     Matrix<double, n, n> A(read_matrix_csv<double>(solve_matrix_dir + "A_inv_45.csv"));
     Matrix<double, n, n> Ainv(read_matrix_csv<double>(solve_matrix_dir + "Ainv_inv_45.csv"));
     Matrix<double, n, 1> b(read_matrix_csv<double>(solve_matrix_dir + "b_inv_45.csv"));
+
     GMRESSolve<double> pgmres_solve(
-        A*A, b, u_dbl,
-        make_shared<MatrixInverse<double>>(Ainv),
-        make_shared<MatrixInverse<double>>(Ainv),
-        pgmres_args
+        A*A, b, u_dbl, pgmres_args,
+        PrecondArgPkg<double>(make_shared<MatrixInverse<double>>(Ainv),
+                              make_shared<MatrixInverse<double>>(Ainv))
     );
 
     pgmres_solve.solve();
@@ -116,10 +122,10 @@ TEST_F(PGMRESSolveTest, TestLeftPreconditioning_3eigs) {
     Matrix<double, n, n> A(read_matrix_csv<double>(solve_matrix_dir + "A_25_saddle.csv"));
     Matrix<double, n, n> Ainv(read_matrix_csv<double>(solve_matrix_dir + "A_25_invprecond_saddle.csv"));
     Matrix<double, n, 1> b(read_matrix_csv<double>(solve_matrix_dir + "b_25_saddle.csv"));
+
     GMRESSolve<double> pgmres_solve(
-        A, b, u_dbl,
-        make_shared<MatrixInverse<double>>(Ainv),
-        pgmres_args
+        A, b, u_dbl, pgmres_args,
+        PrecondArgPkg<double>(make_shared<MatrixInverse<double>>(Ainv))
     );
 
     pgmres_solve.solve();
@@ -141,11 +147,11 @@ TEST_F(PGMRESSolveTest, TestRightPreconditioning_3eigs) {
     Matrix<double, n, n> A(read_matrix_csv<double>(solve_matrix_dir + "A_25_saddle.csv"));
     Matrix<double, n, n> Ainv(read_matrix_csv<double>(solve_matrix_dir + "A_25_invprecond_saddle.csv"));
     Matrix<double, n, 1> b(read_matrix_csv<double>(solve_matrix_dir + "b_25_saddle.csv"));
+
     GMRESSolve<double> pgmres_solve(
-        A, b, u_dbl,
-        make_shared<NoPreconditioner<double>>(),
-        make_shared<MatrixInverse<double>>(Ainv),
-        pgmres_args
+        A, b, u_dbl, pgmres_args,
+        PrecondArgPkg<double>(make_shared<NoPreconditioner<double>>(),
+                              make_shared<MatrixInverse<double>>(Ainv))
     );
 
     pgmres_solve.solve();

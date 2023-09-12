@@ -216,53 +216,19 @@ class GMRESSolve: public TypedIterativeSolve<T> {
 
         // *** CONSTRUCTORS ***
 
-        // No preconditioners
         GMRESSolve(
             Matrix<double, Dynamic, Dynamic> const &arg_A,
             Matrix<double, Dynamic, 1> const &arg_b,
             double const &arg_basis_zero_tol,
-            SolveArgPkg const &arg_pkg
-        ):
-            GMRESSolve(
-                arg_A, arg_b,
-                arg_basis_zero_tol,
-                make_shared<NoPreconditioner<T>>(),
-                arg_pkg
-            )
-        {}
-        
-        // Left preconditioner
-        GMRESSolve(
-            Matrix<double, Dynamic, Dynamic> const &arg_A,
-            Matrix<double, Dynamic, 1> const &arg_b,
-            double const &arg_basis_zero_tol,
-            shared_ptr<Preconditioner<U>> const &arg_left_precond_ptr,
-            SolveArgPkg const &arg_pkg
-        ):
-            GMRESSolve(
-                arg_A, arg_b,
-                arg_basis_zero_tol,
-                arg_left_precond_ptr,
-                make_shared<NoPreconditioner<T>>(),
-                arg_pkg
-            )
-        {}
-
-        // Both preconditioners
-        GMRESSolve(
-            Matrix<double, Dynamic, Dynamic> const &arg_A,
-            Matrix<double, Dynamic, 1> const &arg_b,
-            double const &arg_basis_zero_tol,
-            shared_ptr<Preconditioner<U>> const &arg_left_precond_ptr,
-            shared_ptr<Preconditioner<U>> const &arg_right_precond_ptr,
-            SolveArgPkg const &arg_pkg
+            SolveArgPkg const &solve_arg_pkg,
+            PrecondArgPkg<U> const &precond_arg_pkg = PrecondArgPkg<U>()
         ):
             basis_zero_tol(static_cast<T>(arg_basis_zero_tol)),
-            left_precond_ptr(arg_left_precond_ptr),
-            right_precond_ptr(arg_right_precond_ptr),
-            TypedIterativeSolve<T>::TypedIterativeSolve(arg_A, arg_b, arg_pkg)
+            left_precond_ptr(precond_arg_pkg.left_precond),
+            right_precond_ptr(precond_arg_pkg.right_precond),
+            TypedIterativeSolve<T>::TypedIterativeSolve(arg_A, arg_b, solve_arg_pkg)
         {
-            max_iter = (arg_pkg.check_default_max_iter()) ? arg_A.rows() : arg_pkg.max_iter;
+            max_iter = (solve_arg_pkg.check_default_max_iter()) ? arg_A.rows() : solve_arg_pkg.max_iter;
             initializeGMRES();
         }
 
