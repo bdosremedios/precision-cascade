@@ -51,8 +51,8 @@ class GenericIterativeSolve {
             // Reset generic solution to initial guess
             generic_soln = init_guess;
 
-            // Reset residual history and set initial residual
-            res_hist = Matrix<double, Dynamic, Dynamic>(m, max_iter+1);
+            // Reset residual history to just initial residual
+            res_hist = Matrix<double, Dynamic, Dynamic>(m, 1);
             curr_res = b - A*generic_soln;
             res_hist(all, 0) = curr_res;
             res_norm_hist.push_back(res_hist(all, 0).norm());
@@ -81,7 +81,7 @@ class GenericIterativeSolve {
         // Constant solve attributes
         const double target_rel_res;
 
-        // Mutable solve attributes
+        // Mutable solve attributes, single element until solve is called
         Matrix<double, Dynamic, Dynamic> res_hist;
         vector<double> res_norm_hist;
 
@@ -142,18 +142,22 @@ class GenericIterativeSolve {
         // Perform solve with iterate() scheme updating generic_soln
         void solve() {
 
-            // Mark as iterative solve started
+            // Mark as iterative solve started and expand res_hist to account for additional
+            // residual information
             initiated = true;
+            res_hist.conservativeResize(m, max_iter+1); // Move here since max_iter is mutable
+                                                        // before solve
 
             // Run while relative residual is still high, and under max iterations, and has not been
             // flagged as converged
             double res_norm = res_norm_hist[0];
-            while(!terminated &&
-                 (!converged &&
-                 ((curr_iter < max_iter) && ((res_norm/res_norm_hist[0]) > target_rel_res)))) {
+            while(//!terminated &&
+                  (!converged &&
+                  ((curr_iter < max_iter) && ((res_norm/res_norm_hist[0]) > target_rel_res)))) {
 
                 // Iterate solution
                 ++curr_iter;
+
                 iterate();
 
                 // Update residual tracking
@@ -161,6 +165,9 @@ class GenericIterativeSolve {
                 res_hist(all, curr_iter) = curr_res;
                 res_norm = res_hist(all, curr_iter).norm();
                 res_norm_hist.push_back(res_norm);
+
+                // Break early if terminated
+                if (terminated) { break; }
 
             }
 

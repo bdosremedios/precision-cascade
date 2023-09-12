@@ -222,7 +222,7 @@ TEST_F(TypedIterativeSolveTest, TestSolveAndRelres) {
     // Test start end at (b-A*typed_soln).norm() relres with right solution
     EXPECT_NEAR(test_mock.get_relres(), (b-A*typed_soln).norm()/(b-A*init_guess).norm(), gamma(n, u_dbl));
 
-    if (show_plots) { test_mock.view_relres_plot(); }
+    if (*show_plots) { test_mock.view_relres_plot(); }
 
 }
 

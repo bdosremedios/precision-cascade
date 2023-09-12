@@ -421,7 +421,7 @@ TEST_F(GMRESComponentTest, Solve) {
     GMRESSolve<double> gmres_solve(A, b, u_dbl, args);
 
     gmres_solve.solve();
-    if (show_plots) { gmres_solve.view_relres_plot("log"); }
+    if (*show_plots) { gmres_solve.view_relres_plot("log"); }
     
     EXPECT_TRUE(gmres_solve.check_converged());
     EXPECT_LE(gmres_solve.get_relres(), conv_tol_dbl);
@@ -437,7 +437,7 @@ TEST_F(GMRESComponentTest, Reset) {
     GMRESSolveTestingMock<double> test_mock(A, b, u_dbl, args);
 
     test_mock.solve();
-    if (show_plots) { test_mock.view_relres_plot("log"); }
+    if (*show_plots) { test_mock.view_relres_plot("log"); }
     
     EXPECT_TRUE(test_mock.check_converged());
     EXPECT_GT(test_mock.get_iteration(), 0);
@@ -446,7 +446,7 @@ TEST_F(GMRESComponentTest, Reset) {
     test_mock.reset();
     ASSERT_FALSE(test_mock.check_converged());
     ASSERT_EQ(test_mock.get_iteration(), 0);
-    if (show_plots) { test_mock.view_relres_plot("log"); }
+    if (*show_plots) { test_mock.view_relres_plot("log"); }
 
     // Check that all matrices are zero again and that krylov dim is back to 0
     EXPECT_EQ(test_mock.kry_space_dim, 0);
@@ -481,7 +481,7 @@ TEST_F(GMRESComponentTest, Reset) {
 
     // Test 2nd solve
     test_mock.solve();
-    if (show_plots) { test_mock.view_relres_plot("log"); }
+    if (*show_plots) { test_mock.view_relres_plot("log"); }
     
     EXPECT_TRUE(test_mock.check_converged());
     EXPECT_GT(test_mock.get_iteration(), 0);

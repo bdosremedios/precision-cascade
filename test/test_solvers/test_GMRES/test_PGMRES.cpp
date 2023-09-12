@@ -35,11 +35,11 @@ TEST_F(PGMRESSolveTest, TestDefaultandNoPreconditioningMatchesIdentity) {
     );
 
     pgmres_solve_default.solve();
-    if (show_plots) { pgmres_solve_default.view_relres_plot("log"); }
+    if (*show_plots) { pgmres_solve_default.view_relres_plot("log"); }
     pgmres_solve_explicit_noprecond.solve();
-    if (show_plots) { pgmres_solve_explicit_noprecond.view_relres_plot("log"); }
+    if (*show_plots) { pgmres_solve_explicit_noprecond.view_relres_plot("log"); }
     pgmres_solve_inverse_of_identity.solve();
-    if (show_plots) { pgmres_solve_inverse_of_identity.view_relres_plot("log"); }
+    if (*show_plots) { pgmres_solve_inverse_of_identity.view_relres_plot("log"); }
 
     EXPECT_EQ(pgmres_solve_default.get_typed_soln(), pgmres_solve_explicit_noprecond.get_typed_soln());
     EXPECT_EQ(pgmres_solve_explicit_noprecond.get_typed_soln(), pgmres_solve_inverse_of_identity.get_typed_soln());
@@ -58,7 +58,7 @@ TEST_F(PGMRESSolveTest, TestLeftPreconditioning_RandA45) {
     );
 
     pgmres_solve.solve();
-    if (show_plots) { pgmres_solve.view_relres_plot("log"); }
+    if (*show_plots) { pgmres_solve.view_relres_plot("log"); }
     
     EXPECT_EQ(pgmres_solve.get_iteration(), 1);
     EXPECT_TRUE(pgmres_solve.check_converged());
@@ -80,7 +80,7 @@ TEST_F(PGMRESSolveTest, TestRightPreconditioning_RandA45) {
     );
 
     pgmres_solve.solve();
-    if (show_plots) { pgmres_solve.view_relres_plot("log"); }
+    if (*show_plots) { pgmres_solve.view_relres_plot("log"); }
     
     EXPECT_EQ(pgmres_solve.get_iteration(), 1);
     EXPECT_TRUE(pgmres_solve.check_converged());
@@ -102,7 +102,7 @@ TEST_F(PGMRESSolveTest, TestSymmetricPreconditioning_RandA45) {
     );
 
     pgmres_solve.solve();
-    if (show_plots) { pgmres_solve.view_relres_plot("log"); }
+    if (*show_plots) { pgmres_solve.view_relres_plot("log"); }
     
     EXPECT_EQ(pgmres_solve.get_iteration(), 1);
     EXPECT_TRUE(pgmres_solve.check_converged());
@@ -123,7 +123,7 @@ TEST_F(PGMRESSolveTest, TestLeftPreconditioning_3eigs) {
     );
 
     pgmres_solve.solve();
-    if (show_plots) { pgmres_solve.view_relres_plot("log"); }
+    if (*show_plots) { pgmres_solve.view_relres_plot("log"); }
     
     EXPECT_EQ(pgmres_solve.get_iteration(), 3);
     EXPECT_TRUE(pgmres_solve.check_converged());
@@ -149,7 +149,7 @@ TEST_F(PGMRESSolveTest, TestRightPreconditioning_3eigs) {
     );
 
     pgmres_solve.solve();
-    if (show_plots) { pgmres_solve.view_relres_plot("log"); }
+    if (*show_plots) { pgmres_solve.view_relres_plot("log"); }
     
     EXPECT_EQ(pgmres_solve.get_iteration(), 3);
     EXPECT_TRUE(pgmres_solve.check_converged());

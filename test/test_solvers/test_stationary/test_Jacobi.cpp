@@ -29,7 +29,7 @@ TEST_F(JacobiTest, SolveConvDiff64_Double) {
     success_args.target_rel_res = conv_tol_dbl;
     JacobiSolve<double> jacobi_solve_d(A, b, success_args);
     jacobi_solve_d.solve();
-    if (show_plots) { jacobi_solve_d.view_relres_plot("log"); }
+    if (*show_plots) { jacobi_solve_d.view_relres_plot("log"); }
     
     EXPECT_TRUE(jacobi_solve_d.check_converged());
     EXPECT_LE(jacobi_solve_d.get_relres(), conv_tol_dbl);
@@ -44,7 +44,7 @@ TEST_F(JacobiTest, SolveConvDiff256_Double_LONGRUNTIME) {
     success_args.target_rel_res = conv_tol_dbl;
     JacobiSolve<double> jacobi_solve_d(A, b, success_args);
     jacobi_solve_d.solve();
-    if (show_plots) { jacobi_solve_d.view_relres_plot("log"); }
+    if (*show_plots) { jacobi_solve_d.view_relres_plot("log"); }
     
     EXPECT_TRUE(jacobi_solve_d.check_converged());
     EXPECT_LE(jacobi_solve_d.get_relres(), conv_tol_dbl);
@@ -59,7 +59,7 @@ TEST_F(JacobiTest, SolveConvDiff64_Single) {
     success_args.target_rel_res = conv_tol_sgl;
     JacobiSolve<float> jacobi_solve_s(A, b, success_args);
     jacobi_solve_s.solve();
-    if (show_plots) { jacobi_solve_s.view_relres_plot("log"); }
+    if (*show_plots) { jacobi_solve_s.view_relres_plot("log"); }
     
     EXPECT_TRUE(jacobi_solve_s.check_converged());
     EXPECT_LE(jacobi_solve_s.get_relres(), conv_tol_sgl);
@@ -74,7 +74,7 @@ TEST_F(JacobiTest, SolveConvDiff256_Single_LONGRUNTIME) {
     success_args.target_rel_res = conv_tol_sgl;
     JacobiSolve<float> jacobi_solve_s(A, b, success_args);
     jacobi_solve_s.solve();
-    if (show_plots) { jacobi_solve_s.view_relres_plot("log"); }
+    if (*show_plots) { jacobi_solve_s.view_relres_plot("log"); }
     
     EXPECT_TRUE(jacobi_solve_s.check_converged());
     EXPECT_LE(jacobi_solve_s.get_relres(), conv_tol_sgl);
@@ -89,7 +89,7 @@ TEST_F(JacobiTest, SolveConvDiff64_SingleFailBeyondEpsilon) {
     fail_args.target_rel_res = 0.1*u_sgl;
     JacobiSolve<float> jacobi_solve_s(A, b, fail_args);
     jacobi_solve_s.solve();
-    if (show_plots) { jacobi_solve_s.view_relres_plot("log"); }
+    if (*show_plots) { jacobi_solve_s.view_relres_plot("log"); }
     
     EXPECT_FALSE(jacobi_solve_s.check_converged());
     EXPECT_GT(jacobi_solve_s.get_relres(), 0.1*u_sgl);
@@ -104,7 +104,7 @@ TEST_F(JacobiTest, SolveConvDiff64_Half) {
     success_args.target_rel_res = conv_tol_hlf;
     JacobiSolve<half> jacobi_solve_h(A, b, success_args);
     jacobi_solve_h.solve();
-    if (show_plots) { jacobi_solve_h.view_relres_plot("log"); }
+    if (*show_plots) { jacobi_solve_h.view_relres_plot("log"); }
     
     EXPECT_TRUE(jacobi_solve_h.check_converged());
     EXPECT_LE(jacobi_solve_h.get_relres(), conv_tol_hlf);
@@ -119,7 +119,7 @@ TEST_F(JacobiTest, SolveConvDiff256_Half_LONGRUNTIME) {
     success_args.target_rel_res = conv_tol_hlf;
     JacobiSolve<half> jacobi_solve_h(A, b, success_args);
     jacobi_solve_h.solve();
-    if (show_plots) { jacobi_solve_h.view_relres_plot("log"); }
+    if (*show_plots) { jacobi_solve_h.view_relres_plot("log"); }
     
     EXPECT_TRUE(jacobi_solve_h.check_converged());
     EXPECT_LE(jacobi_solve_h.get_relres(), conv_tol_hlf);
@@ -134,7 +134,7 @@ TEST_F(JacobiTest, SolveConvDiff64_HalfFailBeyondEpsilon) {
     fail_args.target_rel_res = 0.1*u_sgl;
     JacobiSolve<half> jacobi_solve_h(A, b, fail_args);
     jacobi_solve_h.solve();
-    if (show_plots) { jacobi_solve_h.view_relres_plot("log"); }
+    if (*show_plots) { jacobi_solve_h.view_relres_plot("log"); }
     
     EXPECT_FALSE(jacobi_solve_h.check_converged());
     EXPECT_GT(jacobi_solve_h.get_relres(), 0.1*u_sgl);

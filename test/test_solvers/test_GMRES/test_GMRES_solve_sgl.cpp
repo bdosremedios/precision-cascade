@@ -20,7 +20,7 @@ TEST_F(GMRESSingleSolveTest, SolveConvDiff64) {
     GMRESSolve<float> gmres_solve_s(A, b, u_sgl, sgl_args);
 
     gmres_solve_s.solve();
-    if (show_plots) { gmres_solve_s.view_relres_plot("log"); }
+    if (*show_plots) { gmres_solve_s.view_relres_plot("log"); }
     
     EXPECT_TRUE(gmres_solve_s.check_converged());
     EXPECT_LE(gmres_solve_s.get_relres(), 2*conv_tol_sgl);
@@ -35,7 +35,7 @@ TEST_F(GMRESSingleSolveTest, SolveConvDiff256) {
     GMRESSolve<float> gmres_solve_s(A, b, u_sgl, sgl_args);
 
     gmres_solve_s.solve();
-    if (show_plots) { gmres_solve_s.view_relres_plot("log"); }
+    if (*show_plots) { gmres_solve_s.view_relres_plot("log"); }
     
     EXPECT_TRUE(gmres_solve_s.check_converged());
     EXPECT_LE(gmres_solve_s.get_relres(), 2*conv_tol_sgl);
@@ -50,7 +50,7 @@ TEST_F(GMRESSingleSolveTest, SolveConvDiff1024_LONGRUNTIME) {
     GMRESSolve<float> gmres_solve_s(A, b, u_sgl, sgl_args);
 
     gmres_solve_s.solve();
-    if (show_plots) { gmres_solve_s.view_relres_plot("log"); }
+    if (*show_plots) { gmres_solve_s.view_relres_plot("log"); }
     
     EXPECT_TRUE(gmres_solve_s.check_converged());
     EXPECT_LE(gmres_solve_s.get_relres(), 2*conv_tol_sgl);
@@ -65,7 +65,7 @@ TEST_F(GMRESSingleSolveTest, SolveRand20) {
     GMRESSolve<float> gmres_solve_s(A, b, u_sgl, sgl_args);
 
     gmres_solve_s.solve();
-    if (show_plots) { gmres_solve_s.view_relres_plot("log"); }
+    if (*show_plots) { gmres_solve_s.view_relres_plot("log"); }
     
     EXPECT_TRUE(gmres_solve_s.check_converged());
     EXPECT_LE(gmres_solve_s.get_relres(), 2*conv_tol_sgl);
@@ -80,7 +80,7 @@ TEST_F(GMRESSingleSolveTest, Solve3Eigs) {
     GMRESSolve<float> gmres_solve_s(A, b, u_sgl, sgl_args);
 
     gmres_solve_s.solve();
-    if (show_plots) { gmres_solve_s.view_relres_plot("log"); }
+    if (*show_plots) { gmres_solve_s.view_relres_plot("log"); }
     
     EXPECT_EQ(gmres_solve_s.get_iteration(), 3);
     EXPECT_TRUE(gmres_solve_s.check_converged());
@@ -98,7 +98,7 @@ TEST_F(GMRESSingleSolveTest, DivergeBeyondSingleCapabilities) {
     GMRESSolve<float> gmres_solve_s(A, b, u_sgl, sgl_args);
 
     gmres_solve_s.solve();
-    if (show_plots) { gmres_solve_s.view_relres_plot("log"); }
+    if (*show_plots) { gmres_solve_s.view_relres_plot("log"); }
     
     EXPECT_TRUE(gmres_solve_s.check_converged());
     EXPECT_LE(gmres_solve_s.get_relres(), 2*conv_tol_sgl);
@@ -107,7 +107,7 @@ TEST_F(GMRESSingleSolveTest, DivergeBeyondSingleCapabilities) {
     SolveArgPkg fail_args; fail_args.target_rel_res = 0.1*u_sgl;
     GMRESSolve<float> gmres_solve_s_to_fail(A, b, u_sgl, fail_args);
     gmres_solve_s_to_fail.solve();
-    if (show_plots) { gmres_solve_s_to_fail.view_relres_plot("log"); }
+    if (*show_plots) { gmres_solve_s_to_fail.view_relres_plot("log"); }
     
     EXPECT_FALSE(gmres_solve_s_to_fail.check_converged());
     EXPECT_GT(gmres_solve_s_to_fail.get_relres(), 0.1*u_sgl);

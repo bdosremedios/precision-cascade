@@ -48,7 +48,7 @@ class TestBase: public testing::Test {
 
         SolveArgPkg default_args;
 
-        const bool show_plots = false;
+        static bool *show_plots;
 
 };
 
