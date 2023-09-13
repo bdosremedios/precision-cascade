@@ -1,10 +1,9 @@
 #ifndef MP_GMRES_IR_SOLVE_H
 #define MP_GMRES_IR_SOLVE_H
 
-#include "IterativeRefinement.h"
-#include "../krylov/GMRES.h"
+#include "../IterativeRefinement.h"
+#include "../../krylov/GMRES.h"
 
-// template <typename T, typename U=T>
 class MP_GMRES_IR_Solve: public IterativeRefinement {
 
     private:
@@ -17,7 +16,6 @@ class MP_GMRES_IR_Solve: public IterativeRefinement {
                 A, curr_res,
                 basis_zero_tol,
                 inner_solve_arg_pkg
-                // inner_precond_arg_pkg
             );
         }
 
@@ -37,6 +35,8 @@ class MP_GMRES_IR_Solve: public IterativeRefinement {
 
         // *** PROTECTED ABSTRACT METHODS ***
 
+        // Determine which phase should be used based on current phase and
+        // current convergence progress
         virtual void determine_phase() = 0;
 
         // *** PROTECTED OVERRIDE METHODS ***

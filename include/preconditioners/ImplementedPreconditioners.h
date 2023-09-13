@@ -67,7 +67,7 @@ class ILU: public Preconditioner<T> {
                 T const &entry, T const &orig_entry, int &i, int&j
             ) -> bool { return (abs(orig_entry) <= zero_tol); };
 
-            constructionHelper(A, zero_tol, drop_if_orig_0, drop_if_orig_0);
+            constructionHelper(A, zero_tol, drop_if_orig_0, drop_if_orig_0static_cast<T>());
 
         }
 
@@ -124,9 +124,9 @@ class ILU: public Preconditioner<T> {
                                 U(i, j) = U(i, j) - coeff*U(k, j);
                             }
                         } else {
-                            L(i, k) = 0;
+                            L(i, k) = static_cast<T>(0);
                         }
-                        U(i, k) = 0;
+                        U(i, k) = static_cast<T>(0);
                     } else {
                         throw runtime_error("ILU encountered zero diagonal entry");
                     }

@@ -1,6 +1,6 @@
 #include "../../test.h"
 
-#include "solvers/nested/MP_GMRES_IR.h"
+#include "solvers/nested/GMRES_IR/MP_GMRES_IR.h"
 
 class MP_GMRES_IR_Test: public TestBase {
 

@@ -1,8 +1,8 @@
 #ifndef FP_GMRES_IR_SOLVE_H
 #define FP_GMRES_IR_SOLVE_H
 
-#include "IterativeRefinement.h"
-#include "../krylov/GMRES.h"
+#include "../IterativeRefinement.h"
+#include "../../krylov/GMRES.h"
 
 template <typename T, typename U=T>
 class FP_GMRES_IR_Solve: public IterativeRefinement {
