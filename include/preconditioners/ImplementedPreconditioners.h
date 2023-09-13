@@ -67,7 +67,7 @@ class ILU: public Preconditioner<T> {
                 T const &entry, T const &orig_entry, int &i, int&j
             ) -> bool { return (abs(orig_entry) <= zero_tol); };
 
-            constructionHelper(A, zero_tol, drop_if_orig_0, drop_if_orig_0static_cast<T>());
+            constructionHelper(A, zero_tol, drop_if_orig_0, drop_if_orig_0);
 
         }
 

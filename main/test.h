@@ -4,6 +4,6 @@
 #include "Eigen/Dense"
 #include "Eigen/SparseCore"
 
-template<typename M = Matrix>
+// template<typename M = Matrix>
 
 #endif
