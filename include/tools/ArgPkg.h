@@ -4,10 +4,11 @@
 #include "Eigen/Dense"
 
 #include "../preconditioners/ImplementedPreconditioners.h"
+#include "../types/MatrixVector.h"
 
 #include <memory>
 
-using Eigen::Matrix, Eigen::Dynamic;
+using Eigen::Matrix;
 
 using std::make_shared, std::shared_ptr;
 
@@ -23,7 +24,7 @@ class SolveArgPkg {
         int max_iter;
         int max_inner_iter;
         double target_rel_res;
-        Matrix<double, Dynamic, 1> init_guess;
+        MatrixVector<double> init_guess;
 
         bool check_default_max_iter() const { return max_iter == default_max_iter; }
         bool check_default_max_inner_iter() const { return max_iter == default_max_inner_iter; }
@@ -44,7 +45,7 @@ class SolveArgPkg {
             int arg_max_iter = default_max_iter,
             int arg_max_inner_iter = default_max_inner_iter,
             double arg_target_rel_res = default_target_rel_res,
-            Matrix<double, Dynamic, 1> arg_init_guess = default_init_guess
+            MatrixVector<double> arg_init_guess = default_init_guess
         ):
             max_iter(arg_max_iter),
             max_inner_iter(arg_max_inner_iter),

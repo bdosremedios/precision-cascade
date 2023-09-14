@@ -19,15 +19,11 @@ option(
 )
 
 if(BUILD_MAIN)
-    
     message(STATUS "Building main...")
     add_subdirectory(main)
-
 endif()
 
 if(BUILD_MAIN)
-    
     message(STATUS "Building test...")
     add_subdirectory(test)
-
 endif()

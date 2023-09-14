@@ -8,7 +8,7 @@ using Eigen::Dynamic;
 using Eigen::Index;
 
 template <typename T>
-class DenseMatrix: public Matrix<T, Dynamic, Dynamic> {
+class MatrixDense: public Matrix<T, Dynamic, Dynamic> {
     
     public:
 
