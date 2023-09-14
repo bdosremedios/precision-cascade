@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.22)
 
-project(gmres)
+project(precision-cascade)
 
 add_subdirectory(include)
 add_subdirectory(src)
