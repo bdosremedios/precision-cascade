@@ -2,13 +2,9 @@ cmake_minimum_required(VERSION 3.22)
 
 project(precision-cascade)
 
+add_subdirectory(lib)
 add_subdirectory(include)
 add_subdirectory(src)
-
-message(STATUS "Adding eigen...")
-add_subdirectory(eigen)
-message(STATUS "Adding googletest...")
-add_subdirectory(googletest)
 
 option(
     BUILD_MAIN
