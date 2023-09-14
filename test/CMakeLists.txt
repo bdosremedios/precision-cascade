@@ -48,16 +48,10 @@ add_executable(
     ${TEST_SUITE_CPPS}
 )
 
-target_include_directories(
-    test
-    PRIVATE
-    "${CMAKE_CURRENT_SOURCE_DIR}/../include"
-)
-
 target_link_libraries(
     test
     PRIVATE
     gtest_main
     eigen
-    ArgPkg
+    precision-cascade
 )

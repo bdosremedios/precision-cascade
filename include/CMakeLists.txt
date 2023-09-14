@@ -2,7 +2,8 @@ cmake_minimum_required(VERSION 3.22)
 
 project(precision-cascade)
 
-add_subdirectory(adapter)
-add_subdirectory(solvers)
-add_subdirectory(preconditioners)
-add_subdirectory(tools)
+add_library(precision-cascade INTERFACE)
+
+target_link_libraries(precision-cascade INTERFACE ArgPkg)
+
+target_include_directories(precision-cascade INTERFACE .)
