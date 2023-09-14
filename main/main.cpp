@@ -54,9 +54,9 @@ int main() {
 
     cout << jam4 << endl << endl;
     jam4.coeffRef(1, 1) = 1;
-    cout << jam4 << endl;
+    cout << jam4 << endl << endl;
 
-    // cout << jam2.coeff(6, 6) << endl;
+    cout << jam3.cast<Eigen::half>() << endl;
 
     return 0;
 

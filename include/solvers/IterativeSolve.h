@@ -2,6 +2,7 @@
 #define ITERATIVESOLVE_H
 
 #include "Eigen/Dense"
+#include "Eigen/SparseCore"
 
 #include "tools/ArgPkg.h"
 #include "tools/Substitution.h"
@@ -15,6 +16,7 @@
 #include <iomanip>
 
 using Eigen::Matrix, Eigen::Dynamic;
+using Eigen::SparseMatrix;
 using Eigen::placeholders::all;
 
 using std::vector;
@@ -22,7 +24,8 @@ using std::sqrt;
 using std::cout, std::endl;
 using std::shared_ptr, std::make_shared;
 
-// Untyped abstract interface for untyped pointer access to typed interative solver interface
+// Generic abstract interface to iterative linear solve
+// template <typename M>
 class GenericIterativeSolve {
 
     private:
@@ -98,6 +101,7 @@ class GenericIterativeSolve {
             max_iter((arg_pkg.check_default_max_iter()) ? 100 : arg_pkg.max_iter),
             target_rel_res((arg_pkg.check_default_target_rel_res()) ? 1e-10 : arg_pkg.target_rel_res)
         {
+            // static_assert(std::is_same<T, SparseMatrix>::value);
             check_compatibility();
             set_self_to_initial_state();
         }
