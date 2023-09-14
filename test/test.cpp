@@ -32,6 +32,18 @@ int main(int argc, char **argv) {
         testing::GTEST_FLAG(filter) = "-*LONGRUNTIME";
     }
 
+    // Check if should run long tests
+    bool only_new = false;
+    for (int i=0; i<argc; ++i) {
+        if ((string(argv[i]) == "--only-new") || (string(argv[i]) == "-on")) { only_new = true; }
+    }
+    if (only_new) {
+        cout << "Running only new tests..." << endl;
+        testing::GTEST_FLAG(filter) = "*NEW";
+    } else {
+        cout << "Running all tests..." << endl;
+    }
+
     // Check if should show plots
     bool show_plots = false;
     for (int i=0; i<argc; ++i) {

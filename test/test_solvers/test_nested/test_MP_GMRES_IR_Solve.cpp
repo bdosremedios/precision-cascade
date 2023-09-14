@@ -10,7 +10,7 @@ class MP_GMRES_IR_Test: public TestBase {
 
 };
 
-TEST_F(MP_GMRES_IR_Test, ConvergenceTest_ConvDiff64) {
+TEST_F(MP_GMRES_IR_Test, ConvergenceTest_ConvDiff64_NEW) {
 
     Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_A.csv"));
     Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_b.csv"));
@@ -26,7 +26,7 @@ TEST_F(MP_GMRES_IR_Test, ConvergenceTest_ConvDiff64) {
 
 }
 
-TEST_F(MP_GMRES_IR_Test, ConvergenceTest_ConvDiff256) {
+TEST_F(MP_GMRES_IR_Test, ConvergenceTest_ConvDiff256_NEW) {
 
     Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_256_A.csv"));
     Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_256_b.csv"));

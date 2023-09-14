@@ -113,29 +113,33 @@ class ILU: public Preconditioner<T> {
             for (int i=0; i<m; ++i) {
 
                 for (int k=0; k<=i-1; ++k) {
+
                     // Ensure pivot is non-zero
-                    if (abs(U(k, k)) > zero_tol) {
-                        T coeff = U(i, k)/U(k, k);
+                    if (abs(U.coeffRef(k, k)) > zero_tol) {
+        
+                        T coeff = U.coeffRef(i, k)/U.coeffRef(k, k);
                         // Apply rho dropping rule to zero-ing val, skipping subsequent
                         // calcs in row if dropped
-                        if (!drop_rule_rho(coeff, A(i, k), i, k)) {
-                            L(i, k) = coeff;
+                        if (!drop_rule_rho(coeff, A.coeffRef(i, k), i, k)) {
+                            L.coeffRef(i, k) = coeff;
                             for (int j=k+1; j<m; ++j) {
-                                U(i, j) = U(i, j) - coeff*U(k, j);
+                                U.coeffRef(i, j) = U.coeffRef(i, j) - coeff*U.coeffRef(k, j);
                             }
                         } else {
-                            L(i, k) = static_cast<T>(0);
+                            L.coeffRef(i, k) = static_cast<T>(0);
                         }
-                        U(i, k) = static_cast<T>(0);
+                        U.coeffRef(i, k) = static_cast<T>(0);
+
                     } else {
                         throw runtime_error("ILU encountered zero diagonal entry");
                     }
+
                 }
                 
                 // Iterate through the row again to ensure enforcement of 2nd drop rule
                 for (int j=0; j<m; ++j) {
-                    if (drop_rule_tau(L(i, j), A(i, j), i, j)) { L(i, j) = 0; }
-                    if (drop_rule_tau(U(i, j), A(i, j), i, j)) { U(i, j) = 0; }
+                    if (drop_rule_tau(L.coeffRef(i, j), A.coeffRef(i, j), i, j)) { L(i, j) = 0; }
+                    if (drop_rule_tau(U.coeffRef(i, j), A.coeffRef(i, j), i, j)) { U(i, j) = 0; }
                 }
 
             }
