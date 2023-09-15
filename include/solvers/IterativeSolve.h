@@ -110,10 +110,7 @@ class GenericIterativeSolve {
             max_iter((arg_pkg.check_default_max_iter()) ? 100 : arg_pkg.max_iter),
             target_rel_res((arg_pkg.check_default_target_rel_res()) ? 1e-10 : arg_pkg.target_rel_res)
         {
-            static_assert(
-                ((is_same_template<M, MatrixSparse>::value) || (is_same_template<M, MatrixDense>::value)),
-                "M argument must be type MatrixSparse or MatrixDense"
-            );
+            assert_valid_type<M>()
             check_compatibility();
             set_self_to_initial_state();
         }
@@ -168,7 +165,8 @@ class GenericIterativeSolve {
             // flagged as converged
             double res_norm = res_norm_hist[0];
             while(
-                !converged && ((curr_iter < max_iter) && ((res_norm/res_norm_hist[0]) > target_rel_res))
+                !converged &&
+                ((curr_iter < max_iter) && ((res_norm/res_norm_hist[0]) > target_rel_res))
             ) {
 
                 // Iterate solution

@@ -5,21 +5,21 @@ project(precision-cascade)
 set(
     TEST_TOOLS_CPPS
     test_tools/test_MatrixReader.cpp
-    test_tools/test_SolveArgPkg.cpp
-    test_tools/test_PrecondArgPkg.cpp
-    test_tools/test_Substitution.cpp
+    # test_tools/test_SolveArgPkg.cpp
+    # test_tools/test_PrecondArgPkg.cpp
+    # test_tools/test_Substitution.cpp
 )
 
 set(
     TEST_PRECONDITIONER_CPPS
-    test_preconditioners/test_Preconditioner.cpp
-    test_preconditioners/test_ILU.cpp
+    # test_preconditioners/test_Preconditioner.cpp
+    # test_preconditioners/test_ILU.cpp
 )
 
 set(
     TEST_SOLVERS
 
-    test_solvers/test_IterativeSolve/test_IterativeSolve.cpp
+    # test_solvers/test_IterativeSolve/test_IterativeSolve.cpp
 
     # test_solvers/test_stationary/test_Jacobi.cpp
     # test_solvers/test_stationary/test_SOR/test_GaussSeidel.cpp

@@ -4,6 +4,7 @@
 #include "gtest/gtest.h"
 #include "Eigen/Dense"
 
+#include "types/types.h"
 #include "tools/MatrixReader.h"
 #include "tools/ArgPkg.h"
 
@@ -12,9 +13,8 @@
 #include <memory>
 #include <iostream>
 
-using read_matrix::read_matrix_csv;
-
-using Eigen::Matrix, Eigen::Dynamic;
+using Eigen::Matrix;
+using Eigen::Dynamic;
 using Eigen::half;
 using MatrixXh = Eigen::Matrix<Eigen::half, Dynamic, Dynamic>;
 using Eigen::MatrixXf;

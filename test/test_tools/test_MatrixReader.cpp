@@ -2,457 +2,328 @@
 
 // General matrix read tests
 
-class MatrixReadGeneralTest: public TestBase {};
+class MatrixReadGeneralTest: public TestBase {
 
-TEST_F(MatrixReadGeneralTest, ReadEmptyMatrix) {
+    public:
 
-    string empty_file = read_matrix_dir + "empty.csv";
-    MatrixXd test_empty(read_matrix_csv<double>(empty_file));
-    ASSERT_EQ(test_empty.rows(), 0);
-    ASSERT_EQ(test_empty.cols(), 0);
+    template <template <typename> typename M>
+    void ReadEmptyMatrix() {
 
+        string empty_file = read_matrix_dir + "empty.csv";
+        M<double> test_empty(read_matrixCSV<M, double>(empty_file));
+        ASSERT_EQ(test_empty.rows(), 0);
+        ASSERT_EQ(test_empty.cols(), 0);
+
+    }
+
+    template <template <typename> typename M>
+    void ReadBadMatrices() {
+
+        // Try to load non-existent file
+        string bad_file_0 = read_matrix_dir + "thisfile";
+        try {
+            M<double> test(read_matrixCSV<M, double>(bad_file_0));
+            FAIL();
+        } catch (runtime_error e) {
+            EXPECT_EQ(
+                e.what(),
+                "Failed to read: " + bad_file_0
+            );
+        }
+
+        // Try to load file with too small row
+        string bad_file_1 = read_matrix_dir + "bad1.csv";
+        try {
+            M<double> test(read_matrixCSV<M, double>(bad_file_1));
+            FAIL();
+        } catch (runtime_error e) {
+            EXPECT_EQ(
+                e.what(),
+                "Error in: " + bad_file_1 + "\n" + "Row 3 does not meet column size of 3"
+            );
+        }
+
+        // Try to load file with too big rows
+        string bad_file_2 = read_matrix_dir + "bad2.csv";
+        try {
+            M<double> test(read_matrixCSV<M, double>(bad_file_2));
+            FAIL();
+        } catch (runtime_error e) {
+            EXPECT_EQ(
+                e.what(),
+                "Error in: " + bad_file_2 + "\n" + "Row 2 exceeds column size of 3"
+            );
+        }
+
+        // Try to load file with invalid character argument
+        string bad_file_3 = read_matrix_dir + "bad3.csv";
+        try {
+            M<double> test(read_matrixCSV<M, double>(bad_file_3));
+            FAIL();
+        } catch (runtime_error e) {
+            EXPECT_EQ(
+                e.what(),
+                "Error in: " + bad_file_3 + "\n" + "Invalid argument in file, failed to convert to numeric"
+            );
+        }
+
+    }
+
+
+
+};
+
+TEST_F(MatrixReadGeneralTest, ReadEmptyMatrix_Both) {
+    ReadEmptyMatrix<MatrixDense>();
+    ReadEmptyMatrix<MatrixSparse>();
 }
 
-TEST_F(MatrixReadGeneralTest, ReadBadFiles) {
+TEST_F(MatrixReadGeneralTest, ReadBadFiles_Both) {
+    ReadBadMatrices<MatrixDense>();
+    ReadBadMatrices<MatrixSparse>();
+}
 
-    // Try to load non-existent file
-    string bad_file_0 = read_matrix_dir + "thisfile";
-    try {
-        MatrixXd test(read_matrix_csv<double>(bad_file_0));
-        FAIL();
-    } catch (runtime_error e) {
-        EXPECT_EQ(
-            e.what(),
-            "Failed to read: " + bad_file_0
-        );
-    }
+template <typename T>
+class MatrixReadTTest: public TestBase {
 
-    // Try to load file with too small row
-    string bad_file_1 = read_matrix_dir + "bad1.csv";
-    try {
-        MatrixXd test(read_matrix_csv<double>(bad_file_1));
-        FAIL();
-    } catch (runtime_error e) {
-        EXPECT_EQ(
-            e.what(),
-            "Error in: " + bad_file_1 + "\n" + "Row 3 does not meet column size of 3"
-        );
-    }
+    public:
 
-    // Try to load file with too big rows
-    string bad_file_2 = read_matrix_dir + "bad2.csv";
-    try {
-        MatrixXd test(read_matrix_csv<double>(bad_file_2));
-        FAIL();
-    } catch (runtime_error e) {
-        EXPECT_EQ(
-            e.what(),
-            "Error in: " + bad_file_2 + "\n" + "Row 2 exceeds column size of 3"
-        );
-    }
+    template <template <typename> typename M>
+    void ReadSquareMatrix(double u) {
 
-    // Try to load file with invalid character argument
-    string bad_file_3 = read_matrix_dir + "bad3.csv";
-    try {
-        MatrixXd test(read_matrix_csv<double>(bad_file_3));
-        FAIL();
-    } catch (runtime_error e) {
-        EXPECT_EQ(
-            e.what(),
-            "Error in: " + bad_file_3 + "\n" + "Invalid argument in file, failed to convert to numeric"
-        );
-    }
+        Matrix<double, Dynamic, Dynamic> temp_target1 {
+            {1, 2, 3},
+            {4, 5, 6},
+            {7, 8, 9}
+        };
+        Matrix<T, Dynamic, Dynamic> target1 = temp_target1.template cast<T>();
+
+        Matrix<double, Dynamic, Dynamic> temp_target2 {
+            {1, 2, 3, 4, 5},
+            {6, 7, 8, 9, 10},
+            {11, 12, 13, 14, 15},
+            {16, 17, 18, 19, 20},
+            {21, 22, 23, 24, 25}
+        };
+        Matrix<T, Dynamic, Dynamic> target2 = temp_target2.template cast<T>();
     
-}
+        string square1_file = read_matrix_dir + "square1.csv";
+        string square2_file = read_matrix_dir + "square2.csv";
+        M<T> test1(read_matrixCSV<M, T>(square1_file));
+        M<T> test2(read_matrixCSV<M, T>(square2_file));
+
+        // Check that read is correct for first file
+        ASSERT_EQ(test1.rows(), 3);
+        ASSERT_EQ(test1.cols(), 3);
+        for (int i=0; i<3; ++i) {
+            for (int j=0; j<3; ++j) {
+                ASSERT_NEAR(test1.coeff(i, j), target1(i, j), u);
+            }
+        }
+
+        // Check that read is correct for second file
+        ASSERT_EQ(test2.rows(), 5);
+        ASSERT_EQ(test2.cols(), 5);
+        for (int i=0; i<5; ++i) {
+            for (int j=0; j<5; ++j) {
+                ASSERT_NEAR(test2.coeff(i, j), target2(i, j), u_dbl);
+            }
+        }
+
+    }
+
+    template <template <typename> typename M>
+    void ReadWideTallMatrix(double u) {
+
+        Matrix<double, Dynamic, Dynamic> temp_target_wide {
+            {10, 9, 8, 7, 6},
+            {5, 4, 3, 2, 1}
+        };
+        Matrix<T, Dynamic, Dynamic> target_wide = temp_target_wide.template cast<T>();
+
+        Matrix<double, Dynamic, Dynamic> temp_target_tall {
+            {1, 2},
+            {3, 4},
+            {5, 6},
+            {7, 8}
+        };
+        Matrix<T, Dynamic, Dynamic> target_tall = temp_target_tall.template cast<T>();
+
+        string wide_file = read_matrix_dir + "wide.csv";
+        string tall_file = read_matrix_dir + "tall.csv";
+
+        M<T> test_wide(read_matrixCSV<M, T>(wide_file));
+        M<T> test_tall(read_matrixCSV<M, T>(tall_file));
+
+        // Check that read is correct for first file
+        ASSERT_EQ(test_wide.rows(), 2);
+        ASSERT_EQ(test_wide.cols(), 5);
+        for (int i=0; i<2; ++i) {
+            for (int j=0; j<5; ++j) {
+                ASSERT_NEAR(test_wide.coeffRef(i, j), target_wide(i, j), u);
+            }
+        }
+
+        // Check that read is correct for second file
+        ASSERT_EQ(test_tall.rows(), 4);
+        ASSERT_EQ(test_tall.cols(), 2);
+        for (int i=0; i<4; ++i) {
+            for (int j=0; j<2; ++j) {
+                ASSERT_NEAR(test_tall.coeffRef(i, j), target_tall(i, j), u);
+            }
+        }
+
+    }
+
+    template <template <typename> typename M>
+    void ReadPrecise(
+        Matrix<T, Dynamic, Dynamic> target_precise,
+        string precise_file,
+        double u
+    ) {
+
+        M<T> test_precise(read_matrixCSV<M, T>(precise_file));
+
+        ASSERT_EQ(test_precise.rows(), 2);
+        ASSERT_EQ(test_precise.cols(), 2);
+        for (int i=0; i<2; ++i) {
+            for (int j=0; j<2; ++j) {
+                ASSERT_NEAR(test_precise.coeffRef(i, j), target_precise(i, j), u);
+            }
+        }
+
+    }
+
+    template <template <typename> typename M>
+    void ReadDifferentThanPrecise(
+        Matrix<T, Dynamic, Dynamic> target_precise,
+        string precise_file,
+        double u
+    ) {
+
+        T eps = static_cast<T>(1.5*u);
+        Matrix<T, Dynamic, Dynamic> miss_precise_up = target_precise + eps*Matrix<T, Dynamic, Dynamic>::Ones(2, 2);
+        Matrix<T, Dynamic, Dynamic> miss_precise_down = target_precise - eps*Matrix<T, Dynamic, Dynamic>::Ones(2, 2);
+
+        M<T> test_precise(read_matrixCSV<M, T>(precise_file));
+
+        ASSERT_EQ(test_precise.rows(), 2);
+        ASSERT_EQ(test_precise.cols(), 2);
+        for (int i=0; i<2; ++i) {
+            for (int j=0; j<2; ++j) {
+                ASSERT_LT(test_precise.coeffRef(i, j), miss_precise_up(i, j));
+                ASSERT_GT(test_precise.coeffRef(i, j), miss_precise_down(i, j));
+            }
+        }
+
+    }
+
+};
 
 // Double type matrix read tests
-class MatrixReadDoubleTest: public TestBase {};
+class MatrixReadDoubleTest: public MatrixReadTTest<double> {};
 
-TEST_F(MatrixReadDoubleTest, ReadSquareMatrix) {
+TEST_F(MatrixReadDoubleTest, ReadSquareMatrix_Dense) { ReadSquareMatrix<MatrixDense>(u_dbl);}
+TEST_F(MatrixReadDoubleTest, ReadSquareMatrix_Square) { ReadSquareMatrix<MatrixSparse>(u_dbl); }
 
-    MatrixXd target1 {{1, 2, 3},
-                      {4, 5, 6},
-                      {7, 8, 9}};
-    MatrixXd target2 {{1, 2, 3, 4, 5},
-                      {6, 7, 8, 9, 10},
-                      {11, 12, 13, 14, 15},
-                      {16, 17, 18, 19, 20},
-                      {21, 22, 23, 24, 25}};
-    string square1_file = read_matrix_dir + "square1.csv";
-    string square2_file = read_matrix_dir + "square2.csv";
-    MatrixXd test1(read_matrix_csv<double>(square1_file));
-    MatrixXd test2(read_matrix_csv<double>(square2_file));
+TEST_F(MatrixReadDoubleTest, ReadWideTallMatrix_Dense) { ReadWideTallMatrix<MatrixDense>(u_dbl); }
+TEST_F(MatrixReadDoubleTest, ReadWideTallMatrix_Sparse) { ReadWideTallMatrix<MatrixSparse>(u_dbl); }
 
-    // Check that read is correct for first file
-    ASSERT_EQ(test1.rows(), 3);
-    ASSERT_EQ(test1.cols(), 3);
-    for (int i=0; i<3; ++i) {
-        for (int j=0; j<3; ++j) {
-            ASSERT_NEAR(test1(i, j), target1(i, j), u_dbl);
-        }
-    }
-
-    // Check that read is correct for second file
-    ASSERT_EQ(test2.rows(), 5);
-    ASSERT_EQ(test2.cols(), 5);
-    for (int i=0; i<5; ++i) {
-        for (int j=0; j<5; ++j) {
-            ASSERT_NEAR(test2(i, j), target2(i, j), u_dbl);
-        }
-    }
-
-}
-
-TEST_F(MatrixReadDoubleTest, ReadWideTallMatrix) {
-
-    MatrixXd target_wide {{10, 9, 8, 7, 6},
-                          {5, 4, 3, 2, 1}};
-    MatrixXd target_tall {{1, 2},
-                          {3, 4},
-                          {5, 6},
-                          {7, 8}};
-    string wide_file = read_matrix_dir + "wide.csv";
-    string tall_file = read_matrix_dir + "tall.csv";
-    MatrixXd test_wide(read_matrix_csv<double>(wide_file));
-    MatrixXd test_tall(read_matrix_csv<double>(tall_file));
-
-    // Check that read is correct for first file
-    ASSERT_EQ(test_wide.rows(), 2);
-    ASSERT_EQ(test_wide.cols(), 5);
-    for (int i=0; i<2; ++i) {
-        for (int j=0; j<5; ++j) {
-            EXPECT_NEAR(test_wide(i, j), target_wide(i, j), u_dbl);
-        }
-    }
-
-    // Check that read is correct for second file
-    ASSERT_EQ(test_tall.rows(), 4);
-    ASSERT_EQ(test_tall.cols(), 2);
-    for (int i=0; i<4; ++i) {
-        for (int j=0; j<2; ++j) {
-            ASSERT_NEAR(test_tall(i, j), target_tall(i, j), u_dbl);
-        }
-    }
-    
-}
-
-TEST_F(MatrixReadDoubleTest, ReadPreciseMatrix) {
-
+TEST_F(MatrixReadDoubleTest, ReadPreciseMatrix_Both) {
     MatrixXd target_precise {
         {1.12345678901232, 1.12345678901234},
         {1.12345678901236, 1.12345678901238}
     };
     string precise_file = read_matrix_dir + "double_precise.csv";
-    MatrixXd test_precise(read_matrix_csv<double>(precise_file));
-
-    ASSERT_EQ(test_precise.rows(), 2);
-    ASSERT_EQ(test_precise.cols(), 2);
-    for (int i=0; i<2; ++i) {
-        for (int j=0; j<2; ++j) {
-            ASSERT_NEAR(test_precise(i, j), target_precise(i, j), u_dbl);
-        }
-    }
-
+    ReadPrecise<MatrixDense>(target_precise, precise_file, u_dbl);
+    ReadPrecise<MatrixSparse>(target_precise, precise_file, u_dbl);
 }
 
-TEST_F(MatrixReadDoubleTest, ReadDifferentThanPreciseMatrix) {
-
-    double eps = 1.5*pow(10, -14);
-    MatrixXd miss_precise_up {
-        {1.12345678901232+eps, 1.12345678901234+eps},
-        {1.12345678901236+eps, 1.12345678901238+eps}
-    };
-    MatrixXd miss_precise_down {
-        {1.12345678901232-eps, 1.12345678901234-eps},
-        {1.12345678901236-eps, 1.12345678901238-eps}
+TEST_F(MatrixReadDoubleTest, ReadDifferentThanPreciseMatrix_Both) {
+    MatrixXd target_precise {
+        {1.12345678901232, 1.12345678901234},
+        {1.12345678901236, 1.12345678901238}
     };
     string precise_file = read_matrix_dir + "double_precise.csv";
-    MatrixXd test_precise(read_matrix_csv<double>(precise_file));
-
-    ASSERT_EQ(test_precise.rows(), 2);
-    ASSERT_EQ(test_precise.cols(), 2);
-    for (int i=0; i<2; ++i) {
-        for (int j=0; j<2; ++j) {
-            ASSERT_LT(test_precise(i, j), miss_precise_up(i, j));
-            ASSERT_GT(test_precise(i, j), miss_precise_down(i, j));
-        }
-    }
+    ReadDifferentThanPrecise<MatrixDense>(target_precise, precise_file, u_dbl);
+    ReadDifferentThanPrecise<MatrixSparse>(target_precise, precise_file, u_dbl);
 
 }
 
-TEST_F(MatrixReadDoubleTest, ReadPreciseMatrixDoubleLimit) {
-
+TEST_F(MatrixReadDoubleTest, ReadPreciseMatrixDoubleLimit_Both) {
     MatrixXd target_precise {
         {1.1234567890123452, 1.1234567890123454},
         {1.1234567890123456, 1.1234567890123458}
     };
     string precise_file = read_matrix_dir + "double_precise_manual.csv";
-    MatrixXd test_precise(read_matrix_csv<double>(precise_file));
-
-    ASSERT_EQ(test_precise.rows(), 2);
-    ASSERT_EQ(test_precise.cols(), 2);
-    for (int i=0; i<2; ++i) {
-        for (int j=0; j<2; ++j) {
-            ASSERT_NEAR(test_precise(i, j), target_precise(i, j), u_dbl);
-        }
-    }
-
+    ReadPrecise<MatrixDense>(target_precise, precise_file, u_dbl);
+    ReadPrecise<MatrixSparse>(target_precise, precise_file, u_dbl);
 }
 
 TEST_F(MatrixReadDoubleTest, ReadDifferentThanPreciseMatrixDoubleLimit) {
-
-    double eps = 1.5*u_dbl;
-    MatrixXd miss_precise_up {
-        {1.1234567890123452+eps, 1.1234567890123454+eps},
-        {1.1234567890123456+eps, 1.1234567890123458+eps}
-    };
-    MatrixXd miss_precise_down {
-        {1.1234567890123452-eps, 1.1234567890123454-eps},
-        {1.1234567890123456-eps, 1.1234567890123458-eps}
+    MatrixXd target_precise {
+        {1.1234567890123452, 1.1234567890123454},
+        {1.1234567890123456, 1.1234567890123458}
     };
     string precise_file = read_matrix_dir + "double_precise_manual.csv";
-    MatrixXd test_precise(read_matrix_csv<double>(precise_file));
-
-    ASSERT_EQ(test_precise.rows(), 2);
-    ASSERT_EQ(test_precise.cols(), 2);
-    for (int i=0; i<2; ++i) {
-        for (int j=0; j<2; ++j) {
-            ASSERT_LT(test_precise(i, j), miss_precise_up(i, j));
-            ASSERT_GT(test_precise(i, j), miss_precise_down(i, j));
-        }
-    }
-
+    ReadDifferentThanPrecise<MatrixDense>(target_precise, precise_file, u_dbl);
+    ReadDifferentThanPrecise<MatrixSparse>(target_precise, precise_file, u_dbl);
 }
 
 // Single type matrix read tests
-class MatrixReadSingleTest: public TestBase {};
+class MatrixReadSingleTest: public MatrixReadTTest<float> {};
 
-TEST_F(MatrixReadSingleTest, ReadSquareMatrix) {
+TEST_F(MatrixReadSingleTest, ReadSquareMatrix_Dense) { ReadSquareMatrix<MatrixDense>(u_sgl);}
+TEST_F(MatrixReadSingleTest, ReadSquareMatrix_Square) { ReadSquareMatrix<MatrixSparse>(u_sgl); }
 
-    MatrixXf target1 {{1, 2, 3},
-                      {4, 5, 6},
-                      {7, 8, 9}};
-    MatrixXf target2 {{1, 2, 3, 4, 5},
-                      {6, 7, 8, 9, 10},
-                      {11, 12, 13, 14, 15},
-                      {16, 17, 18, 19, 20},
-                      {21, 22, 23, 24, 25}};
-    string square1_file = read_matrix_dir + "square1.csv";
-    string square2_file = read_matrix_dir + "square2.csv";
-    MatrixXf test1(read_matrix_csv<float>(square1_file));
-    MatrixXf test2(read_matrix_csv<float>(square2_file));
+TEST_F(MatrixReadSingleTest, ReadWideTallMatrix_Dense) { ReadWideTallMatrix<MatrixDense>(u_sgl); }
+TEST_F(MatrixReadSingleTest, ReadWideTallMatrix_Sparse) { ReadWideTallMatrix<MatrixSparse>(u_sgl); }
 
-    // Check that read is correct for first file
-    ASSERT_EQ(test1.rows(), 3);
-    ASSERT_EQ(test1.cols(), 3);
-    for (int i=0; i<3; ++i) {
-        for (int j=0; j<3; ++j) {
-            ASSERT_NEAR(test1(i, j), target1(i, j), u_sgl);
-        }
-    }
-
-    // Check that read is correct for second file
-    ASSERT_EQ(test2.rows(), 5);
-    ASSERT_EQ(test2.cols(), 5);
-    for (int i=0; i<5; ++i) {
-        for (int j=0; j<5; ++j) {
-            ASSERT_NEAR(test2(i, j), target2(i, j), u_sgl);
-        }
-    }
-
-}
-
-TEST_F(MatrixReadSingleTest, ReadWideTallMatrix) {
-
-    MatrixXf target_wide {{10, 9, 8, 7, 6},
-                          {5, 4, 3, 2, 1}};
-    MatrixXf target_tall {{1, 2},
-                          {3, 4},
-                          {5, 6},
-                          {7, 8}};
-    string wide_file = read_matrix_dir + "wide.csv";
-    string tall_file = read_matrix_dir + "tall.csv";
-    MatrixXf test_wide(read_matrix_csv<float>(wide_file));
-    MatrixXf test_tall(read_matrix_csv<float>(tall_file));
-
-    // Check that read is correct for first file
-    ASSERT_EQ(test_wide.rows(), 2);
-    ASSERT_EQ(test_wide.cols(), 5);
-    for (int i=0; i<2; ++i) {
-        for (int j=0; j<5; ++j) {
-            ASSERT_NEAR(test_wide(i, j), target_wide(i, j), u_sgl);
-        }
-    }
-
-    // Check that read is correct for second file
-    ASSERT_EQ(test_tall.rows(), 4);
-    ASSERT_EQ(test_tall.cols(), 2);
-    for (int i=0; i<4; ++i) {
-        for (int j=0; j<2; ++j) {
-            ASSERT_NEAR(test_tall(i, j), target_tall(i, j), u_sgl);
-        }
-    }
-    
-}
-
-TEST_F(MatrixReadSingleTest, ReadPreciseMatrix) {
-
-    MatrixXf target_precise {{static_cast<float>(1.12345672), static_cast<float>(1.12345674)},
-                              {static_cast<float>(1.12345676), static_cast<float>(1.12345678)}};
-    string precise_file = read_matrix_dir + "single_precise.csv";
-    MatrixXf test_precise(read_matrix_csv<float>(precise_file));
-
-    ASSERT_EQ(test_precise.rows(), 2);
-    ASSERT_EQ(test_precise.cols(), 2);
-    for (int i=0; i<2; ++i) {
-        for (int j=0; j<2; ++j) {
-            ASSERT_NEAR(test_precise(i, j), target_precise(i, j), u_sgl);
-        }
-    }
-
-}
-
-TEST_F(MatrixReadSingleTest, ReadDifferentThanPreciseMatrix) {
-    
-    float eps = static_cast<float>(1.5*u_sgl);
-    MatrixXf miss_precise_up {
-        {static_cast<float>(1.12345672)+eps, static_cast<float>(1.12345674)+eps},
-        {static_cast<float>(1.12345676)+eps, static_cast<float>(1.12345678)+eps}
-    };
-    MatrixXf miss_precise_down {
-        {static_cast<float>(1.12345672)-eps, static_cast<float>(1.12345674)-eps},
-        {static_cast<float>(1.12345676)-eps, static_cast<float>(1.12345678)-eps}
+TEST_F(MatrixReadSingleTest, ReadPreciseMatrix_Both) {
+    MatrixXf target_precise {
+        {static_cast<float>(1.12345672), static_cast<float>(1.12345674)},
+        {static_cast<float>(1.12345676), static_cast<float>(1.12345678)}
     };
     string precise_file = read_matrix_dir + "single_precise.csv";
-    MatrixXf test_precise(read_matrix_csv<float>(precise_file));
+    ReadPrecise<MatrixDense>(target_precise, precise_file, u_sgl);
+    ReadPrecise<MatrixSparse>(target_precise, precise_file, u_sgl);
+}
 
-    ASSERT_EQ(test_precise.rows(), 2);
-    ASSERT_EQ(test_precise.cols(), 2);
-    for (int i=0; i<2; ++i) {
-        for (int j=0; j<2; ++j) {
-            ASSERT_LT(test_precise(i, j), miss_precise_up(i, j));
-            ASSERT_GT(test_precise(i, j), miss_precise_down(i, j));
-        }
-    }
-
+TEST_F(MatrixReadSingleTest, ReadDifferentThanPreciseMatrix_Both) {
+    MatrixXf target_precise {
+        {static_cast<float>(1.12345672), static_cast<float>(1.12345674)},
+        {static_cast<float>(1.12345676), static_cast<float>(1.12345678)}
+    };
+    string precise_file = read_matrix_dir + "single_precise.csv";
+    ReadDifferentThanPrecise<MatrixDense>(target_precise, precise_file, u_sgl);
+    ReadDifferentThanPrecise<MatrixSparse>(target_precise, precise_file, u_sgl);
 }
 
 // Half type matrix read tests
-class MatrixReadHalfTest: public TestBase {};
+class MatrixReadHalfTest: public MatrixReadTTest<half> {};
 
-TEST_F(MatrixReadHalfTest, ReadSquareMatrix) {
+TEST_F(MatrixReadHalfTest, ReadSquareMatrix_Dense) { ReadSquareMatrix<MatrixDense>(u_hlf);}
+TEST_F(MatrixReadHalfTest, ReadSquareMatrix_Square) { ReadSquareMatrix<MatrixSparse>(u_hlf); }
 
-    Matrix<double, Dynamic, Dynamic> temp1 {{1, 2, 3},
-                                            {4, 5, 6},
-                                            {7, 8, 9}};
-    Matrix<half, Dynamic, Dynamic> target1 = temp1.cast<half>();
-    Matrix<double, Dynamic, Dynamic> temp2 {{1, 2, 3, 4, 5},
-                                            {6, 7, 8, 9, 10},
-                                            {11, 12, 13, 14, 15},
-                                            {16, 17, 18, 19, 20},
-                                            {21, 22, 23, 24, 25}};
-    Matrix<half, Dynamic, Dynamic> target2 = temp2.cast<half>();
-    string square1_file = read_matrix_dir + "square1.csv";
-    string square2_file = read_matrix_dir + "square2.csv";
-
-    Matrix<half, Dynamic, Dynamic> test1(read_matrix_csv<half>(square1_file));
-    Matrix<half, Dynamic, Dynamic> test2(read_matrix_csv<half>(square2_file));
-
-    // Check that read is correct for first file
-    ASSERT_EQ(test1.rows(), 3);
-    ASSERT_EQ(test1.cols(), 3);
-    for (int i=0; i<3; ++i) {
-        for (int j=0; j<3; ++j) {
-            ASSERT_NEAR(test1(i, j), target1(i, j), u_hlf);
-        }
-    }
-
-    // Check that read is correct for second file
-    ASSERT_EQ(test2.rows(), 5);
-    ASSERT_EQ(test2.cols(), 5);
-    for (int i=0; i<5; ++i) {
-        for (int j=0; j<5; ++j) {
-            ASSERT_NEAR(test2(i, j), target2(i, j), u_hlf);
-        }
-    }
-
-}
-
-TEST_F(MatrixReadHalfTest, ReadWideTallMatrix) {
-
-    Matrix<double, Dynamic, Dynamic> temp_wide {{10, 9, 8, 7, 6},
-                                                {5, 4, 3, 2, 1}};
-    Matrix<half, Dynamic, Dynamic> target_wide = temp_wide.cast<half>();
-    Matrix<double, Dynamic, Dynamic> temp_tall {{1, 2},
-                                                {3, 4},
-                                                {5, 6},
-                                                {7, 8}};
-    Matrix<half, Dynamic, Dynamic> target_tall = temp_tall.cast<half>();
-    string wide_file = read_matrix_dir + "wide.csv";
-    string tall_file = read_matrix_dir + "tall.csv";
-    Matrix<half, Dynamic, Dynamic> test_wide(read_matrix_csv<half>(wide_file));
-    Matrix<half, Dynamic, Dynamic> test_tall(read_matrix_csv<half>(tall_file));
-
-    // Check that read is correct for first file
-    ASSERT_EQ(test_wide.rows(), 2);
-    ASSERT_EQ(test_wide.cols(), 5);
-    for (int i=0; i<2; ++i) {
-        for (int j=0; j<5; ++j) {
-            ASSERT_NEAR(test_wide(i, j), target_wide(i, j), u_hlf);
-        }
-    }
-
-    // Check that read is correct for second file
-    ASSERT_EQ(test_tall.rows(), 4);
-    ASSERT_EQ(test_tall.cols(), 2);
-    for (int i=0; i<4; ++i) {
-        for (int j=0; j<2; ++j) {
-            ASSERT_NEAR(test_tall(i, j), target_tall(i, j), u_hlf);
-        }
-    }
-    
-}
+TEST_F(MatrixReadHalfTest, ReadWideTallMatrix_Dense) { ReadWideTallMatrix<MatrixDense>(u_hlf); }
+TEST_F(MatrixReadHalfTest, ReadWideTallMatrix_Sparse) { ReadWideTallMatrix<MatrixSparse>(u_hlf); }
 
 TEST_F(MatrixReadHalfTest, ReadPreciseMatrix) {
-
     Matrix<half, Dynamic, Dynamic> target_precise {
         {static_cast<half>(1.123), static_cast<half>(1.124)},
         {static_cast<half>(1.125), static_cast<half>(1.126)}
     };
     string precise_file = read_matrix_dir + "half_precise.csv";
-    Matrix<half, Dynamic, Dynamic> test_precise(read_matrix_csv<half>(precise_file));
-
-    ASSERT_EQ(test_precise.rows(), 2);
-    ASSERT_EQ(test_precise.cols(), 2);
-    for (int i=0; i<2; ++i) {
-        for (int j=0; j<2; ++j) {
-            ASSERT_NEAR(test_precise(i, j), target_precise(i, j), u_hlf);
-        }
-    }
-
+    ReadPrecise<MatrixDense>(target_precise, precise_file, u_hlf);
+    ReadPrecise<MatrixSparse>(target_precise, precise_file, u_hlf);
 }
 
 TEST_F(MatrixReadHalfTest, ReadDifferentThanPreciseMatrix) {
-    
-    half eps = static_cast<half>(1.5*u_hlf);
-    Matrix<half, Dynamic, Dynamic> miss_precise_up {
-        {static_cast<half>(1.123)+eps, static_cast<half>(1.124)+eps},
-        {static_cast<half>(1.125)+eps, static_cast<half>(1.126)+eps}
-    };
-    Matrix<half, Dynamic, Dynamic> miss_precise_down {
-        {static_cast<half>(1.123)-eps, static_cast<half>(1.124)-eps},
-        {static_cast<half>(1.125)-eps, static_cast<half>(1.126)-eps}
+    Matrix<half, Dynamic, Dynamic> target_precise {
+        {static_cast<half>(1.123), static_cast<half>(1.124)},
+        {static_cast<half>(1.125), static_cast<half>(1.126)}
     };
     string precise_file = read_matrix_dir + "half_precise.csv";
-    Matrix<half, Dynamic, Dynamic> test_precise(read_matrix_csv<half>(precise_file));
-
-    ASSERT_EQ(test_precise.rows(), 2);
-    ASSERT_EQ(test_precise.cols(), 2);
-    for (int i=0; i<2; ++i) {
-        for (int j=0; j<2; ++j) {
-            ASSERT_LT(test_precise(i, j), miss_precise_up(i, j));
-            ASSERT_GT(test_precise(i, j), miss_precise_down(i, j));
-        }
-    }
-
+    ReadDifferentThanPrecise<MatrixDense>(target_precise, precise_file, u_hlf);
+    ReadDifferentThanPrecise<MatrixSparse>(target_precise, precise_file, u_hlf);
 }
