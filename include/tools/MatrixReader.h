@@ -36,6 +36,8 @@ class SpecializedReturner<MatrixSparse, T> {
 template <template<typename> typename M, typename T>
 M<T> read_matrixCSV(string const &path) {
 
+    assert_valid_type<M>();
+
     // Open given file
     ifstream file_in;
     file_in.open(path);
