@@ -4,9 +4,7 @@
 #include "Eigen/Dense"
 #include "Eigen/SparseCore"
 
-#include "types/MatrixVector.h"
-#include "types/MatrixDense.h"
-#include "types/MatrixSparse.h"
+#include "types/types.h"
 #include "tools/ArgPkg.h"
 #include "tools/Substitution.h"
 #include "preconditioners/ImplementedPreconditioners.h"

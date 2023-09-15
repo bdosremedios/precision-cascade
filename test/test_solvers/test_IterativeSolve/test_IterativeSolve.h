@@ -36,7 +36,7 @@ class TypedIterativeSolveTestingMock: public TypedIterativeSolve<M, T> {
         using TypedIterativeSolve<M, T>::res_norm_hist;
 
         TypedIterativeSolveTestingMock(
-            MatrixXd const &arg_A,
+            M<double> const &arg_A,
             MatrixVector<double> const &arg_b,
             MatrixVector<T> const &arg_soln,
             SolveArgPkg const &arg_pkg

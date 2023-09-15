@@ -3,8 +3,8 @@
 
 #include "Eigen/Dense"
 
+#include "../types/types.h"
 #include "../preconditioners/ImplementedPreconditioners.h"
-#include "../types/MatrixVector.h"
 
 #include <memory>
 
