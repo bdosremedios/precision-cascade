@@ -25,6 +25,19 @@ class SpecializedReturner
 };
 
 template <typename T>
+class SpecializedReturner<MatrixVector, T>
+{
+public:
+    MatrixVector<T> return_(MatrixDense<T> mat) {
+        if (mat.cols() == 1) {
+            return mat;
+        } else {
+            throw runtime_error("Vector can only read one column csv.");
+        }
+    }
+};
+
+template <typename T>
 class SpecializedReturner<MatrixDense, T>
 {
     public: MatrixDense<T> return_(MatrixDense<T> mat) { return mat; }
@@ -40,7 +53,7 @@ template <template<typename> typename M, typename T>
 M<T> read_matrixCSV(string const &path)
 {
 
-    assert_valid_type<M>();
+    assert_valid_type_or_vec<M>();
 
     // Open given file
     ifstream file_in;

@@ -2,8 +2,8 @@
 
 // General matrix read tests
 
-class MatrixReadGeneralTest: public TestBase {
-
+class MatrixReadGeneralTest: public TestBase
+{
 public:
 
     template <template <typename> typename M>
@@ -217,6 +217,37 @@ public:
     }
 
 };
+
+// All type vector read tests
+class MatrixReadVectorTest: public TestBase
+{
+public:
+
+    template <typename T>
+    void ReadVector(double u) {
+
+        Matrix<T, Dynamic, 1> target {{1.}, {2.}, {3.}, {4.}, {5.}, {6.}};
+        string vector_file = read_matrix_dir + "vector.csv";
+        MatrixVector<T> test(read_matrixCSV<MatrixVector, T>(vector_file));
+        ASSERT_EQ(test.rows(), 6);
+        ASSERT_EQ(test.cols(), 1);
+        for (int i=0; i<6; ++i) { ASSERT_NEAR(static_cast<double>(test(i)), target(i), u); }
+
+    }
+
+};
+
+TEST_F(MatrixReadVectorTest, ReadDoubleVector) { ReadVector<double>(u_dbl); }
+TEST_F(MatrixReadVectorTest, ReadSingleVector) { ReadVector<double>(u_sgl); }
+TEST_F(MatrixReadVectorTest, ReadHalfVector) { ReadVector<double>(u_hlf); }
+
+TEST_F(MatrixReadVectorTest, FailOnMatrix) {    
+    string mat = read_matrix_dir + "square1.csv";
+    try {
+        MatrixVector<double> test(read_matrixCSV<MatrixVector, double>(mat));
+        FAIL();
+    } catch (runtime_error e) { cout << e.what() << endl; }
+}
 
 // Double type matrix read tests
 class MatrixReadDoubleTest: public MatrixReadTTest<double> {};
