@@ -2,74 +2,96 @@
 
 #include "tools/ArgPkg.h"
 
+class PrecondArgPkgTest: public TestBase {
 
-class PrecondArgPkgTest: public TestBase {};
+public:
 
-TEST_F(PrecondArgPkgTest, TestDefaultConstruction) {
+    template <template <typename> typename M>
+    void TestDefaultConstruction() {
 
-    constexpr int n(64);
+        constexpr int n(64);
 
-    PrecondArgPkg<double> args;
-    NoPreconditioner<double> no_precond;
+        PrecondArgPkg<M, double> args;
+        NoPreconditioner<M, double> no_precond;
 
-    MatrixVector<double> test_vec(MatrixVector<double>::Random(n, 1));
+        MatrixVector<double> test_vec = MatrixVector<double>::Random(n);
 
-    EXPECT_EQ(args.left_precond->action_inv_M(test_vec), no_precond.action_inv_M(test_vec));
-    EXPECT_EQ(args.right_precond->action_inv_M(test_vec), no_precond.action_inv_M(test_vec));
+        EXPECT_EQ(args.left_precond->action_inv_M(test_vec), no_precond.action_inv_M(test_vec));
+        EXPECT_EQ(args.right_precond->action_inv_M(test_vec), no_precond.action_inv_M(test_vec));
 
+    }
+
+    template <template <typename> typename M>
+    void TestLeftPreconditionerSet() {
+
+        constexpr int n(14);
+
+        M<double> A = M<double>::Random(n, n);
+        
+        NoPreconditioner<M, double> no_precond;
+        ILU<M, double> ilu(A, u_dbl);
+
+        PrecondArgPkg<M, double> args(make_shared<ILU<M, double>>(A, u_dbl));
+
+        MatrixVector<double> test_vec = MatrixVector<double>::Random(n);
+
+        EXPECT_EQ(args.left_precond->action_inv_M(test_vec), ilu.action_inv_M(test_vec));
+        EXPECT_EQ(args.right_precond->action_inv_M(test_vec), no_precond.action_inv_M(test_vec));
+
+    }
+
+    template <template <typename> typename M>
+    void TestRightPreconditionerSet() {
+
+        constexpr int n(17);
+
+        M<double> A = M<double>::Random(n, n);
+
+        NoPreconditioner<M, double> no_precond;
+        ILU<M, double> ilu(A, u_dbl);
+        
+        PrecondArgPkg<M, double> args(make_shared<NoPreconditioner<M, double>>(no_precond),
+                                      make_shared<ILU<M, double>>(A, u_dbl));
+
+        MatrixVector<double> test_vec = MatrixVector<double>::Random(n);
+
+        EXPECT_EQ(args.left_precond->action_inv_M(test_vec), no_precond.action_inv_M(test_vec));
+        EXPECT_EQ(args.right_precond->action_inv_M(test_vec), ilu.action_inv_M(test_vec));
+
+    }
+
+    template <template <typename> typename M>
+    void TestBothPreconditionerSet() {
+
+        constexpr int n(25);
+
+        M<double> A = M<double>::Random(n, n);
+
+        NoPreconditioner<M, double> no_precond;
+        ILU<M, double> ilu(A, u_dbl);
+
+        PrecondArgPkg<M, double> args(make_shared<ILU<M, double>>(A, u_dbl),
+                                      make_shared<ILU<M, double>>(A, u_dbl));
+
+        MatrixVector<double> test_vec(MatrixVector<double>::Random(n));
+
+        EXPECT_EQ(args.left_precond->action_inv_M(test_vec), ilu.action_inv_M(test_vec));
+        EXPECT_EQ(args.right_precond->action_inv_M(test_vec), ilu.action_inv_M(test_vec));
+
+    }
+
+};
+
+TEST_F(PrecondArgPkgTest, TestDefaultConstruction_Both) {
+    TestDefaultConstruction<MatrixDense>();
+    TestDefaultConstruction<MatrixSparse>();
 }
 
-TEST_F(PrecondArgPkgTest, TestLeftPreconditionerSet) {
+TEST_F(PrecondArgPkgTest, TestLeftPreconditionerSet_Dense) { TestLeftPreconditionerSet<MatrixDense>(); }
+TEST_F(PrecondArgPkgTest, TestLeftPreconditionerSet_Sparse) { TestLeftPreconditionerSet<MatrixSparse>(); }
 
-    constexpr int n(14);
+TEST_F(PrecondArgPkgTest, TestRightPreconditionerSet_Dense) { TestRightPreconditionerSet<MatrixDense>(); }
+TEST_F(PrecondArgPkgTest, TestRightPreconditionerSet_Sparse) { TestRightPreconditionerSet<MatrixSparse>(); }
 
-    Matrix<double, Dynamic, Dynamic> A = Matrix<double, Dynamic, Dynamic>::Random(n, n);
-    
-    NoPreconditioner<double> no_precond;
-    ILU<double> ilu(A, u_dbl);
-
-    PrecondArgPkg<double> args(make_shared<ILU<double>>(A, u_dbl));
-
-    MatrixVector<double> test_vec(MatrixVector<double>::Random(n, 1));
-
-    EXPECT_EQ(args.left_precond->action_inv_M(test_vec), ilu.action_inv_M(test_vec));
-    EXPECT_EQ(args.right_precond->action_inv_M(test_vec), no_precond.action_inv_M(test_vec));
-
-}
-
-TEST_F(PrecondArgPkgTest, TestRightPreconditionerSet) {
-
-    constexpr int n(17);
-
-    Matrix<double, Dynamic, Dynamic> A = Matrix<double, Dynamic, Dynamic>::Random(n, n);
-
-    NoPreconditioner<double> no_precond;
-    ILU<double> ilu(A, u_dbl);
-    
-    PrecondArgPkg<double> args(make_shared<NoPreconditioner<double>>(no_precond),
-                               make_shared<ILU<double>>(A, u_dbl));
-
-    MatrixVector<double> test_vec(MatrixVector<double>::Random(n, 1));
-
-    EXPECT_EQ(args.left_precond->action_inv_M(test_vec), no_precond.action_inv_M(test_vec));
-    EXPECT_EQ(args.right_precond->action_inv_M(test_vec), ilu.action_inv_M(test_vec));
-
-}
-TEST_F(PrecondArgPkgTest, TestBothPreconditionersSet) {
-
-    constexpr int n(25);
-
-    Matrix<double, Dynamic, Dynamic> A = Matrix<double, Dynamic, Dynamic>::Random(n, n);
-
-    NoPreconditioner<double> no_precond;
-    ILU<double> ilu(A, u_dbl);
-    
-    PrecondArgPkg<double> args(make_shared<ILU<double>>(A, u_dbl),
-                               make_shared<ILU<double>>(A, u_dbl));
-
-    MatrixVector<double> test_vec(MatrixVector<double>::Random(n, 1));
-
-    EXPECT_EQ(args.left_precond->action_inv_M(test_vec), ilu.action_inv_M(test_vec));
-    EXPECT_EQ(args.right_precond->action_inv_M(test_vec), ilu.action_inv_M(test_vec));
-
-}
+TEST_F(PrecondArgPkgTest, TestBothPreconditionerSet_Dense) { TestBothPreconditionerSet<MatrixDense>(); }
+TEST_F(PrecondArgPkgTest, TestBothPreconditionerSet_Sparse) { TestBothPreconditionerSet<MatrixSparse>(); }
