@@ -26,6 +26,14 @@ public:
         for (int i=0; i<min(m, n); ++i) { temp.coeffRef(i, i) = static_cast<T>(1); }
         return temp;
     }
+
+    static SparseMatrix<T> Ones(Index m, Index n) {
+        return Matrix<T, Dynamic, Dynamic>::Ones(m, n).sparseView();
+    }
+
+    static SparseMatrix<T> Zero(Index m, Index n) {
+        return SparseMatrix<T>(m, n);
+    }
     
     using SparseMatrix<T>::SparseMatrix;
 

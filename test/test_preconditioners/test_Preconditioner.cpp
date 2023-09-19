@@ -15,7 +15,7 @@ public:
         ASSERT_TRUE(no_precond.check_compatibility_left(1));
         ASSERT_TRUE(no_precond.check_compatibility_right(5));
 
-        MatrixVector<double> test_vec(MatrixVector<double>::Random(n));
+        MatrixVector<double> test_vec = MatrixVector<double>::Random(n);
         ASSERT_EQ(test_vec, no_precond.action_inv_M(test_vec));
     
     }
@@ -24,9 +24,9 @@ public:
     void TestMatrixInverse() {
         
         constexpr int n(45);
-        M<double> A(read_matrixCSV<M, double>(solve_matrix_dir + "A_inv_45.csv"));
-        M<double> A_inv(read_matrixCSV<M, double>(solve_matrix_dir + "Ainv_inv_45.csv"));
-        MatrixInverse<M, double> inv_precond(A_inv);
+        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir + "A_inv_45.csv");
+        M<double> A_inv = read_matrixCSV<M, double>(solve_matrix_dir + "Ainv_inv_45.csv");
+        MatrixInverse<M, double> inv_precond = A_inv;
 
         // Check compatibility of with only 45
         ASSERT_TRUE(inv_precond.check_compatibility_left(n));
@@ -36,7 +36,7 @@ public:
         ASSERT_FALSE(inv_precond.check_compatibility_left(100));
         ASSERT_FALSE(inv_precond.check_compatibility_right(100));
 
-        MatrixVector<double> orig_test_vec(MatrixVector<double>::Random(n));
+        MatrixVector<double> orig_test_vec = MatrixVector<double>::Random(n);
         MatrixVector<double> test_vec = A*orig_test_vec;
 
         test_vec = inv_precond.action_inv_M(test_vec);

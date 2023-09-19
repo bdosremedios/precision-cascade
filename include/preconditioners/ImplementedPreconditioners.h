@@ -139,8 +139,8 @@ public:
             
             // Iterate through the row again to ensure enforcement of 2nd drop rule
             for (int j=0; j<m; ++j) {
-                if (drop_rule_tau(L.coeff(i, j), A.coeff(i, j), i, j)) { L(i, j) = 0; }
-                if (drop_rule_tau(U.coeff(i, j), A.coeff(i, j), i, j)) { U(i, j) = 0; }
+                if (drop_rule_tau(L.coeff(i, j), A.coeff(i, j), i, j)) { L.coeffRef(i, j) = 0; }
+                if (drop_rule_tau(U.coeff(i, j), A.coeff(i, j), i, j)) { U.coeffRef(i, j) = 0; }
             }
 
         }
@@ -148,7 +148,7 @@ public:
     }
 
     MatrixVector<W> action_inv_M(MatrixVector<W> const &vec) const override {
-        return frwd_substitution(L, back_substitution(U, vec));
+        return frwd_substitution<M, W>(L, back_substitution<M, W>(U, vec));
     }
 
     M<W> get_L() const { return L; }

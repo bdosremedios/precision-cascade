@@ -13,7 +13,7 @@ set(
 set(
     TEST_PRECONDITIONER_CPPS
     test_preconditioners/test_Preconditioner.cpp
-    # test_preconditioners/test_ILU.cpp
+    test_preconditioners/test_ILU.cpp
 )
 
 set(
