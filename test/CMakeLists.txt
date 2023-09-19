@@ -5,7 +5,7 @@ project(precision-cascade)
 set(
     TEST_TOOLS_CPPS
     test_tools/test_MatrixReader.cpp
-    # test_tools/test_SolveArgPkg.cpp
+    test_tools/test_SolveArgPkg.cpp
     # test_tools/test_PrecondArgPkg.cpp
     # test_tools/test_Substitution.cpp
 )
