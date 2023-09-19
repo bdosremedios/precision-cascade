@@ -4,101 +4,101 @@
 #include "../IterativeRefinement.h"
 #include "../../krylov/GMRES.h"
 
-class MP_GMRES_IR_Solve: public IterativeRefinement {
+class MP_GMRES_IR_Solve: public IterativeRefinement
+{
+private:
 
-    private:
+    // *** PRIVATE HELPER METHODS ***
 
-        // *** PRIVATE HELPER METHODS ***
+    template <typename T>
+    void set_inner_solve() {
+        inner_solver = make_shared<GMRESSolve<T>>(
+            A, curr_res,
+            basis_zero_tol,
+            inner_solve_arg_pkg
+        );
+    }
 
-        template <typename T>
-        void set_inner_solve() {
-            inner_solver = make_shared<GMRESSolve<T>>(
-                A, curr_res,
-                basis_zero_tol,
-                inner_solve_arg_pkg
-            );
-        }
+protected:
 
-    protected:
+    // *** PROTECTED CONSTANTS ***
 
-        // *** PROTECTED CONSTANTS ***
+    const int HLF_PHASE = 0;
+    const int SGL_PHASE = 1;
+    const int DBL_PHASE = 2;
+    const int INIT_PHASE = HLF_PHASE;
 
-        const int HLF_PHASE = 0;
-        const int SGL_PHASE = 1;
-        const int DBL_PHASE = 2;
-        const int INIT_PHASE = HLF_PHASE;
+    // *** PROTECTED ATTRIBUTES ***
 
-        // *** PROTECTED ATTRIBUTES ***
+    double basis_zero_tol;
+    int cascade_phase;
 
-        double basis_zero_tol;
-        int cascade_phase;
+    // *** PROTECTED ABSTRACT METHODS ***
 
-        // *** PROTECTED ABSTRACT METHODS ***
+    // Determine which phase should be used based on current phase and
+    // current convergence progress
+    virtual void determine_phase() = 0;
 
-        // Determine which phase should be used based on current phase and
-        // current convergence progress
-        virtual void determine_phase() = 0;
+    // *** PROTECTED OVERRIDE METHODS ***
 
-        // *** PROTECTED OVERRIDE METHODS ***
+    // Initialize inner outer solver;
+    void initialize_inner_outer_solver() override { set_inner_solve<half>(); }
 
-        // Initialize inner outer solver;
-        void initialize_inner_outer_solver() override { set_inner_solve<half>(); }
+    // Specify inner_solver for outer_iterate_calc and setup
+    void outer_iterate_setup() override {
+        determine_phase();
+        if (cascade_phase == HLF_PHASE) { set_inner_solve<half>(); }
+        else if (cascade_phase == SGL_PHASE) { set_inner_solve<float>(); }
+        else { set_inner_solve<double>(); }
+    }
 
-        // Specify inner_solver for outer_iterate_calc and setup
-        void outer_iterate_setup() override {
-            determine_phase();
-            if (cascade_phase == HLF_PHASE) { set_inner_solve<half>(); }
-            else if (cascade_phase == SGL_PHASE) { set_inner_solve<float>(); }
-            else { set_inner_solve<double>(); }
-        }
-
-        void derived_generic_reset() override {
-            cascade_phase = INIT_PHASE;
-            initialize_inner_outer_solver();
-        }
+    void derived_generic_reset() override {
+        cascade_phase = INIT_PHASE;
+        initialize_inner_outer_solver();
+    }
     
-    public:
+public:
 
-        // *** CONSTRUCTORS ***
+    // *** CONSTRUCTORS ***
 
-        MP_GMRES_IR_Solve(
-            Matrix<double, Dynamic, Dynamic> const &arg_A,
-            Matrix<double, Dynamic, 1> const &arg_b,
-            double const &arg_basis_zero_tol,
-            SolveArgPkg const &arg_solve_arg_pkg
-        ):
-            basis_zero_tol(arg_basis_zero_tol),
-            IterativeRefinement(arg_A, arg_b, arg_solve_arg_pkg)
-        {
-            cascade_phase = INIT_PHASE;
-            initialize_inner_outer_solver();
-        }
+    MP_GMRES_IR_Solve(
+        Matrix<double, Dynamic, Dynamic> const &arg_A,
+        Matrix<double, Dynamic, 1> const &arg_b,
+        double const &arg_basis_zero_tol,
+        SolveArgPkg const &arg_solve_arg_pkg
+    ):
+        basis_zero_tol(arg_basis_zero_tol),
+        IterativeRefinement(arg_A, arg_b, arg_solve_arg_pkg)
+    {
+        cascade_phase = INIT_PHASE;
+        initialize_inner_outer_solver();
+    }
 
 };
 
-class SimpleConstantThreshold : public MP_GMRES_IR_Solve {
+class SimpleConstantThreshold : public MP_GMRES_IR_Solve
+{
+protected:
 
-    protected:
+    // *** PROTECTED CONSTANTS ***
 
-        // *** PROTECTED CONSTANTS ***
-    
-        const double tol_hlf = pow(10, -02);
-        const double tol_sgl = pow(10, -05);
-        const double tol_dbl = pow(10, -10);
+    const double tol_hlf = pow(10, -02);
+    const double tol_sgl = pow(10, -05);
+    const double tol_dbl = pow(10, -10);
 
-        // *** PROTECTED OVERRIDE METHODS ***
+    // *** PROTECTED OVERRIDE METHODS ***
 
-        void determine_phase() override {
-            if (cascade_phase == HLF_PHASE) {
-                if ((this->get_relres() <= tol_hlf)) { cascade_phase = SGL_PHASE; }
-            } else if (cascade_phase == SGL_PHASE) {
-                if ((this->get_relres() <= tol_sgl)) { cascade_phase = DBL_PHASE; }
-            } else {
-                ;
-            }
+    void determine_phase() override {
+        if (cascade_phase == HLF_PHASE) {
+            if ((this->get_relres() <= tol_hlf)) { cascade_phase = SGL_PHASE; }
+        } else if (cascade_phase == SGL_PHASE) {
+            if ((this->get_relres() <= tol_sgl)) { cascade_phase = DBL_PHASE; }
+        } else {
+            ;
         }
+    }
 
-        using MP_GMRES_IR_Solve::MP_GMRES_IR_Solve;
+    using MP_GMRES_IR_Solve::MP_GMRES_IR_Solve;
 
 };
 

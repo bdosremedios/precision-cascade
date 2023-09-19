@@ -4,7 +4,7 @@
 
 class MatrixReadGeneralTest: public TestBase {
 
-    public:
+public:
 
     template <template <typename> typename M>
     void ReadEmptyMatrix() {
@@ -69,8 +69,6 @@ class MatrixReadGeneralTest: public TestBase {
 
     }
 
-
-
 };
 
 TEST_F(MatrixReadGeneralTest, ReadEmptyMatrix_Both) {
@@ -84,9 +82,9 @@ TEST_F(MatrixReadGeneralTest, ReadBadFiles_Both) {
 }
 
 template <typename T>
-class MatrixReadTTest: public TestBase {
-
-    public:
+class MatrixReadTTest: public TestBase
+{
+public:
 
     template <template <typename> typename M>
     void ReadSquareMatrix(double u) {

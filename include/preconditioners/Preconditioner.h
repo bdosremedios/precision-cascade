@@ -7,16 +7,16 @@
 
 using Eigen::Matrix, Eigen::Dynamic;
 
-template <template <typename> typename M, typename U>
-class Preconditioner {
-
-    public:
+template <template <typename> typename M, typename W>
+class Preconditioner
+{
+public:
 
     Preconditioner() = default;
     virtual ~Preconditioner() = default;
 
     // Abstract function to apply action of inverse M on given vector
-    virtual MatrixVector<U> action_inv_M(MatrixVector<U> const &vec) const = 0;
+    virtual MatrixVector<W> action_inv_M(MatrixVector<W> const &vec) const = 0;
 
     // Abstract functions to check compatibility of preconditioner with linear system
     // on both left and right

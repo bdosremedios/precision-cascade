@@ -13,14 +13,14 @@ using Eigen::Matrix, Eigen::Dynamic;
 
 using std::abs;
 
-template <template <typename> typename M, typename T>
-class NoPreconditioner: public Preconditioner<M, T> {
+template <template <typename> typename M, typename W>
+class NoPreconditioner: public Preconditioner<M, W>
+{
+public:
 
-    public:
+    using Preconditioner<M, W>::Preconditioner;
 
-    using Preconditioner<M, T>::Preconditioner;
-
-    MatrixVector<T> action_inv_M(MatrixVector<T> const &vec) const override {
+    MatrixVector<W> action_inv_M(MatrixVector<W> const &vec) const override {
         return vec;
     }
 
@@ -29,14 +29,14 @@ class NoPreconditioner: public Preconditioner<M, T> {
 
 };
 
-template <template <typename> typename M, typename T>
-class MatrixInverse: public Preconditioner<M, T> {
+template <template <typename> typename M, typename W>
+class MatrixInverse: public Preconditioner<M, W>
+{
+public:
 
-    public:
+    M<W> inv_M;
 
-    M<T> inv_M;
-
-    MatrixInverse(M<T> const &arg_inv_M): inv_M(arg_inv_M) {}
+    MatrixInverse(M<W> const &arg_inv_M): inv_M(arg_inv_M) {}
 
     bool check_compatibility_left(int const &arg_m) const override {
         return ((inv_M.cols() == arg_m) && (inv_M.rows() == arg_m));
@@ -46,26 +46,26 @@ class MatrixInverse: public Preconditioner<M, T> {
         return ((inv_M.cols() == arg_n) && (inv_M.rows() == arg_n));
     };
 
-    MatrixVector<T> action_inv_M(MatrixVector<T> const &vec) const override {
+    MatrixVector<W> action_inv_M(MatrixVector<W> const &vec) const override {
         return inv_M*vec;
     }
 
 };
 
-template <template <typename> typename M, typename T>
-class ILU: public Preconditioner<M, T> {
+template <template <typename> typename M, typename W>
+class ILU: public Preconditioner<M, W>
+{
+public:
 
-    public:
-
-    M<T> L;
-    M<T> U;
+    M<W> L;
+    M<W> U;
     int m;
 
     // ILU(0)
-    ILU(M<T> const &A, T const &zero_tol) {
+    ILU(M<W> const &A, W const &zero_tol) {
 
-        std::function<bool(T const &, T const &, int &, int &)> drop_if_orig_0 = [zero_tol] (
-            T const &entry, T const &orig_entry, int &i, int&j
+        std::function<bool(W const &, W const &, int &, int &)> drop_if_orig_0 = [zero_tol] (
+            W const &entry, W const &orig_entry, int &i, int&j
         ) -> bool { return (abs(orig_entry) <= zero_tol); };
 
         constructionHelper(A, zero_tol, drop_if_orig_0, drop_if_orig_0);
@@ -73,15 +73,15 @@ class ILU: public Preconditioner<M, T> {
     }
 
     // ILUT(eps)
-    ILU(M<T> const &A, T const &zero_tol, T const &eps) {
+    ILU(M<W> const &A, W const &zero_tol, W const &eps) {
 
-        std::function<bool(T const &, T const &, int &, int &)> drop_if_lt = [eps] (
-            T const &entry, T const &orig_entry, int &i, int&j
+        std::function<bool(W const &, W const &, int &, int &)> drop_if_lt = [eps] (
+            W const &entry, W const &orig_entry, int &i, int&j
         ) -> bool { return (abs(entry) <= eps); };
 
         // Guard against removing diagonal entries to maintain non-singularity
-        std::function<bool(T const &, T const &, int &, int &)> drop_if_lt_skip_diag = [eps] (
-            T const &entry, T const &orig_entry, int &i, int&j
+        std::function<bool(W const &, W const &, int &, int &)> drop_if_lt_skip_diag = [eps] (
+            W const &entry, W const &orig_entry, int &i, int&j
         ) -> bool {
             if (i != j) {
                 return (abs(entry) <= eps);
@@ -95,17 +95,17 @@ class ILU: public Preconditioner<M, T> {
     }
 
     void constructionHelper(
-        M<T> const &A,
-        T const &zero_tol,
-        std::function<bool(T const &, T const &, int &, int &)> drop_rule_rho,
-        std::function<bool(T const &, T const &, int &, int &)> drop_rule_tau
+        M<W> const &A,
+        W const &zero_tol,
+        std::function<bool(W const &, W const &, int &, int &)> drop_rule_rho,
+        std::function<bool(W const &, W const &, int &, int &)> drop_rule_tau
     ) {
         
         if (A.rows() != A.cols()) { throw runtime_error("Non square matrix A"); }
 
         m = A.rows();
-        L = M<T>::Identity(m, m);
-        U = M<T>::Zero(m, m);
+        L = M<W>::Identity(m, m);
+        U = M<W>::Zero(m, m);
 
         // Set U to be A and perform ILU
         U = A;
@@ -118,7 +118,7 @@ class ILU: public Preconditioner<M, T> {
                 // Ensure pivot is non-zero
                 if (abs(U.coeffRef(k, k)) > zero_tol) {
     
-                    T coeff = U.coeff(i, k)/U.coeff(k, k);
+                    W coeff = U.coeff(i, k)/U.coeff(k, k);
                     // Apply rho dropping rule to zero-ing val, skipping subsequent
                     // calcs in row if dropped
                     if (!drop_rule_rho(coeff, A.coeff(i, k), i, k)) {
@@ -127,9 +127,9 @@ class ILU: public Preconditioner<M, T> {
                             U.coeffRef(i, j) = U.coeff(i, j) - coeff*U.coeff(k, j);
                         }
                     } else {
-                        L.coeffRef(i, k) = static_cast<T>(0);
+                        L.coeffRef(i, k) = static_cast<W>(0);
                     }
-                    U.coeffRef(i, k) = static_cast<T>(0);
+                    U.coeffRef(i, k) = static_cast<W>(0);
 
                 } else {
                     throw runtime_error("ILU encountered zero diagonal entry");
@@ -147,12 +147,12 @@ class ILU: public Preconditioner<M, T> {
 
     }
 
-    MatrixVector<T> action_inv_M(MatrixVector<T> const &vec) const override {
+    MatrixVector<W> action_inv_M(MatrixVector<W> const &vec) const override {
         return frwd_substitution(L, back_substitution(U, vec));
     }
 
-    M<T> get_L() const { return L; }
-    M<T> get_U() const { return U; }
+    M<W> get_L() const { return L; }
+    M<W> get_U() const { return U; }
 
     bool check_compatibility_left(int const &arg_m) const override { return arg_m == m; };
     bool check_compatibility_right(int const &arg_n) const override { return arg_n == m; };

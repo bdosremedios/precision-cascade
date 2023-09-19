@@ -2,9 +2,9 @@
 
 #include "preconditioners/ImplementedPreconditioners.h"
 
-class PreconditionerTest: public TestBase {
-
-    public:
+class PreconditionerTest: public TestBase
+{
+public:
 
     template<template <typename> typename M>
     void TestNoPreconditioner() {

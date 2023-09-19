@@ -19,22 +19,26 @@ using std::runtime_error;
 using std::cout, std::endl;
 
 template <template<typename> typename M, typename T>
-class SpecializedReturner {
+class SpecializedReturner
+{
     public: M<T> return_(M<T>);
 };
 
 template <typename T>
-class SpecializedReturner<MatrixDense, T> {
+class SpecializedReturner<MatrixDense, T>
+{
     public: MatrixDense<T> return_(MatrixDense<T> mat) { return mat; }
 };
 
 template <typename T>
-class SpecializedReturner<MatrixSparse, T> {
+class SpecializedReturner<MatrixSparse, T>
+{
     public: MatrixSparse<T> return_(MatrixDense<T> mat) { return mat.sparseView(); }
 };
 
 template <template<typename> typename M, typename T>
-M<T> read_matrixCSV(string const &path) {
+M<T> read_matrixCSV(string const &path)
+{
 
     assert_valid_type<M>();
 
