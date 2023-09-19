@@ -7,7 +7,7 @@ set(
     test_tools/test_MatrixReader.cpp
     test_tools/test_SolveArgPkg.cpp
     test_tools/test_PrecondArgPkg.cpp
-    # test_tools/test_Substitution.cpp
+    test_tools/test_Substitution.cpp
 )
 
 set(
