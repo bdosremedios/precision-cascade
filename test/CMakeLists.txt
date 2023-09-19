@@ -12,7 +12,7 @@ set(
 
 set(
     TEST_PRECONDITIONER_CPPS
-    # test_preconditioners/test_Preconditioner.cpp
+    test_preconditioners/test_Preconditioner.cpp
     # test_preconditioners/test_ILU.cpp
 )
 
@@ -38,7 +38,7 @@ set(
 set(
     TEST_SUITE_CPPS
     ${TEST_TOOLS_CPPS}
-    # ${TEST_PRECONDITIONER_CPPS}
+    ${TEST_PRECONDITIONER_CPPS}
     ${TEST_SOLVERS}
 )
 

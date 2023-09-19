@@ -55,23 +55,23 @@ class SolveArgPkg {
 
 };
 
-template <typename U>
+template <template <typename> typename M, typename U>
 class PrecondArgPkg {
 
     public:
 
-        shared_ptr<Preconditioner<U>> left_precond;
-        shared_ptr<Preconditioner<U>> right_precond;
+    shared_ptr<Preconditioner<M, U>> left_precond;
+    shared_ptr<Preconditioner<M, U>> right_precond;
 
-        // *** CONSTRUCTORS ***
+    // *** CONSTRUCTORS ***
 
-        PrecondArgPkg(
-            shared_ptr<Preconditioner<U>> arg_left_precond = make_shared<NoPreconditioner<U>>(),
-            shared_ptr<Preconditioner<U>> arg_right_precond = make_shared<NoPreconditioner<U>>()
-        ):
-            left_precond(arg_left_precond),
-            right_precond(arg_right_precond)
-        {};
+    PrecondArgPkg(
+        shared_ptr<Preconditioner<M, U>> arg_left_precond = make_shared<NoPreconditioner<M, U>>(),
+        shared_ptr<Preconditioner<M, U>> arg_right_precond = make_shared<NoPreconditioner<M, U>>()
+    ):
+        left_precond(arg_left_precond),
+        right_precond(arg_right_precond)
+    {};
 
 };
 
