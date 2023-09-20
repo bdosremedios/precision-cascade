@@ -8,185 +8,149 @@ public:
 
     vector<double> ws{1.25, 1.5, 1.75};
 
-    SolveArgPkg success_args;
-    SolveArgPkg fail_args;
+    template <template <typename> typename M, typename T>
+    void SolveSuccessTest(
+        const string &A_file_path,
+        const string &b_file_path,
+        const double conv_tol
+    ) {
 
-    void SetUp() {
+        M<double> A = read_matrixCSV<M, double>(A_file_path);
+        M<double> b = read_matrixCSV<M, double>(b_file_path);
 
-        success_args = SolveArgPkg();
-        success_args.max_iter = 1000;
+        SolveArgPkg args;
+        args.max_iter = 1000;
+        args.target_rel_res = conv_tol;
+    
+        for (auto w = ws.cbegin(); w != ws.cend(); ++w) {
 
-        fail_args = SolveArgPkg();
-        fail_args.max_iter = 300;
+            cout << "Testing w=" << *w << endl;
+
+            SORSolve<M, T> gauss_seidel_solve(A, b, *w, args);
+            gauss_seidel_solve.solve();
+            if (*show_plots) { gauss_seidel_solve.view_relres_plot("log"); }
+            
+            EXPECT_TRUE(gauss_seidel_solve.check_converged());
+            EXPECT_LE(gauss_seidel_solve.get_relres(), conv_tol);
+
+        }
+
+    }
+
+    template <template <typename> typename M, typename T>
+    void SolveFailTest(
+        const string &A_file_path,
+        const string &b_file_path,
+        const double fail_tol
+    ) {
+
+        M<double> A = read_matrixCSV<M, double>(A_file_path);
+        M<double> b = read_matrixCSV<M, double>(b_file_path);
+
+        SolveArgPkg args;
+        args.max_iter = 300;
+        args.target_rel_res = fail_tol;
+
+        for (auto w = ws.cbegin(); w != ws.cend(); ++w) {
+    
+            SORSolve<M, T> gauss_seidel_solve(A, b, *w, args);
+            gauss_seidel_solve.solve();
+            if (*show_plots) { gauss_seidel_solve.view_relres_plot("log"); }
+            
+            EXPECT_FALSE(gauss_seidel_solve.check_converged());
+            EXPECT_GT(gauss_seidel_solve.get_relres(), fail_tol);
+
+        }
 
     }
 
 };
 
-TEST_F(SORTest, SolveConvDiff64_Double) {
-    
-    Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_A.csv"));
-    Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_b.csv"));
 
-    for (auto w = ws.cbegin(); w != ws.cend(); ++w) {
-
-        cout << "Testing w=" << *w << endl;
-
-        success_args.target_rel_res = conv_tol_dbl;
-        SORSolve<double> SOR_solve_d(A, b, *w, success_args);
-        SOR_solve_d.solve();
-        if (*show_plots) { SOR_solve_d.view_relres_plot("log"); }
-        
-        EXPECT_TRUE(SOR_solve_d.check_converged());
-        EXPECT_LE(SOR_solve_d.get_relres(), conv_tol_dbl);
-
-    }
-
+TEST_F(SORTest, SolveConvDiff64Double_Dense) {
+    SolveSuccessTest<MatrixDense, double>(
+        solve_matrix_dir+"conv_diff_64_A.csv", solve_matrix_dir+"conv_diff_64_b.csv", conv_tol_dbl
+    );
+}
+TEST_F(SORTest, SolveConvDiff64Double_Sparse) {
+    SolveSuccessTest<MatrixSparse, double>(
+        solve_matrix_dir+"conv_diff_64_A.csv", solve_matrix_dir+"conv_diff_64_b.csv", conv_tol_dbl
+    );
 }
 
-TEST_F(SORTest, SolveConvDiff256_Double_LONGRUNTIME) {
-    
-    Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_256_A.csv"));
-    Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_256_b.csv"));
-
-    for (auto w = ws.cbegin(); w != ws.cend(); ++w) {
-
-        cout << "Testing w=" << *w << endl;
-
-        success_args.target_rel_res = conv_tol_dbl;
-        SORSolve<double> SOR_solve_d(A, b, *w, success_args);
-        SOR_solve_d.solve();
-        if (*show_plots) { SOR_solve_d.view_relres_plot("log"); }
-        
-        EXPECT_TRUE(SOR_solve_d.check_converged());
-        EXPECT_LE(SOR_solve_d.get_relres(), conv_tol_dbl);
-
-    }
-    
+TEST_F(SORTest, SolveConvDiff256Double_Dense_LONGRUNTIME) {
+    SolveSuccessTest<MatrixDense, double>(
+        solve_matrix_dir+"conv_diff_256_A.csv", solve_matrix_dir+"conv_diff_256_b.csv", conv_tol_dbl
+    );
+}
+TEST_F(SORTest, SolveConvDiff256Double_Sparse_LONGRUNTIME) {
+    SolveSuccessTest<MatrixSparse, double>(
+        solve_matrix_dir+"conv_diff_256_A.csv", solve_matrix_dir+"conv_diff_256_b.csv", conv_tol_dbl
+    );
 }
 
-TEST_F(SORTest, SolveConvDiff64_Single) {
-    
-    Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_A.csv"));
-    Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_b.csv"));
-
-    for (auto w = ws.cbegin(); w != ws.cend(); ++w) {
-
-        cout << "Testing w=" << *w << endl;
-
-        success_args.target_rel_res = conv_tol_sgl;
-        SORSolve<float> SOR_solve_s(A, b, *w, success_args);
-        SOR_solve_s.solve();
-        if (*show_plots) { SOR_solve_s.view_relres_plot("log"); }
-        
-        EXPECT_TRUE(SOR_solve_s.check_converged());
-        EXPECT_LE(SOR_solve_s.get_relres(), conv_tol_sgl);
-
-    }
-
+TEST_F(SORTest, SolveConvDiff64Single_Dense) {
+    SolveSuccessTest<MatrixDense, float>(
+        solve_matrix_dir+"conv_diff_64_A.csv", solve_matrix_dir+"conv_diff_64_b.csv", conv_tol_sgl
+    );
+}
+TEST_F(SORTest, SolveConvDiff64Single_Sparse) {
+    SolveSuccessTest<MatrixSparse, float>(
+        solve_matrix_dir+"conv_diff_64_A.csv", solve_matrix_dir+"conv_diff_64_b.csv", conv_tol_sgl
+    );
 }
 
-TEST_F(SORTest, SolveConvDiff256_Single_LONGRUNTIME) {
-    
-    Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_256_A.csv"));
-    Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_256_b.csv"));
-
-    for (auto w = ws.cbegin(); w != ws.cend(); ++w) {
-
-        cout << "Testing w=" << *w << endl;
-
-        success_args.target_rel_res = conv_tol_sgl;
-        SORSolve<float> SOR_solve_s(A, b, *w, success_args);
-        SOR_solve_s.solve();
-        if (*show_plots) { SOR_solve_s.view_relres_plot("log"); }
-        
-        EXPECT_TRUE(SOR_solve_s.check_converged());
-        EXPECT_LE(SOR_solve_s.get_relres(), conv_tol_sgl);
-
-    }
-
+TEST_F(SORTest, SolveConvDiff256Single_Dense_LONGRUNTIME) {
+    SolveSuccessTest<MatrixDense, float>(
+        solve_matrix_dir+"conv_diff_256_A.csv", solve_matrix_dir+"conv_diff_256_b.csv", conv_tol_sgl
+    );
+}
+TEST_F(SORTest, SolveConvDiff256Single_Sparse_LONGRUNTIME) {
+    SolveSuccessTest<MatrixSparse, float>(
+        solve_matrix_dir+"conv_diff_256_A.csv", solve_matrix_dir+"conv_diff_256_b.csv", conv_tol_sgl
+    );
 }
 
-TEST_F(SORTest, SolveConvDiff64_SingleFailBeyondEpsilon) {
-    
-    Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_A.csv"));
-    Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_b.csv"));
-
-    for (auto w = ws.cbegin(); w != ws.cend(); ++w) {
-
-        cout << "Testing w=" << *w << endl;
-
-        fail_args.target_rel_res = 0.1*u_sgl;
-        SORSolve<float> SOR_solve_s(A, b, *w, fail_args);
-        SOR_solve_s.solve();
-        if (*show_plots) { SOR_solve_s.view_relres_plot("log"); }
-    
-        EXPECT_FALSE(SOR_solve_s.check_converged());
-        EXPECT_GT(SOR_solve_s.get_relres(), 0.1*u_sgl);
-
-    }
-
+TEST_F(SORTest, SolveConvDiff64Single_FailBeyondCapabilities_Dense) {
+    SolveFailTest<MatrixDense, float>(
+        solve_matrix_dir+"conv_diff_64_A.csv", solve_matrix_dir+"conv_diff_64_b.csv", 0.1*u_sgl
+    );
+}
+TEST_F(SORTest, SolveConvDiff64Single_FailBeyondCapabilities_Sparse) {
+    SolveFailTest<MatrixSparse, float>(
+        solve_matrix_dir+"conv_diff_64_A.csv", solve_matrix_dir+"conv_diff_64_b.csv", 0.1*u_sgl
+    );
 }
 
-TEST_F(SORTest, SolveConvDiff64_Half) {
-    
-    Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_A.csv"));
-    Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_b.csv"));
-
-    for (auto w = ws.cbegin(); w != ws.cend(); ++w) {
-
-        cout << "Testing w=" << *w << endl;
-
-        success_args.target_rel_res = conv_tol_hlf;
-        SORSolve<half> SOR_solve_h(A, b, *w, success_args);
-        SOR_solve_h.solve();
-        if (*show_plots) { SOR_solve_h.view_relres_plot("log"); }
-        
-        EXPECT_TRUE(SOR_solve_h.check_converged());
-        EXPECT_LE(SOR_solve_h.get_relres(), conv_tol_hlf);
-
-    }
-
+TEST_F(SORTest, SolveConvDiff64Half_Dense) {
+    SolveSuccessTest<MatrixDense, half>(
+        solve_matrix_dir+"conv_diff_64_A.csv", solve_matrix_dir+"conv_diff_64_b.csv", conv_tol_hlf
+    );
+}
+TEST_F(SORTest, SolveConvDiff64Half_Sparse) {
+    SolveSuccessTest<MatrixSparse, half>(
+        solve_matrix_dir+"conv_diff_64_A.csv", solve_matrix_dir+"conv_diff_64_b.csv", conv_tol_hlf
+    );
 }
 
-TEST_F(SORTest, SolveConvDiff256_Half_LONGRUNTIME) {
-    
-    Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_256_A.csv"));
-    Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_256_b.csv"));
-
-    for (auto w = ws.cbegin(); w != ws.cend(); ++w) {
-
-        cout << "Testing w=" << *w << endl;
-
-        success_args.target_rel_res = conv_tol_hlf;
-        SORSolve<half> SOR_solve_h(A, b, *w, success_args);
-        SOR_solve_h.solve();
-        if (*show_plots) { SOR_solve_h.view_relres_plot("log"); }
-        
-        EXPECT_TRUE(SOR_solve_h.check_converged());
-        EXPECT_LE(SOR_solve_h.get_relres(), conv_tol_hlf);
-
-    }
-
+TEST_F(SORTest, SolveConvDiff256Half_Dense_LONGRUNTIME) {
+    SolveSuccessTest<MatrixDense, half>(
+        solve_matrix_dir+"conv_diff_256_A.csv", solve_matrix_dir+"conv_diff_256_b.csv", conv_tol_hlf
+    );
+}
+TEST_F(SORTest, SolveConvDiff256Half_Sparse_LONGRUNTIME) {
+    SolveSuccessTest<MatrixSparse, half>(
+        solve_matrix_dir+"conv_diff_256_A.csv", solve_matrix_dir+"conv_diff_256_b.csv", conv_tol_hlf
+    );
 }
 
-TEST_F(SORTest, SolveConvDiff64_HalfFailBeyondEpsilon) {
-    
-    Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_A.csv"));
-    Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_b.csv"));
-
-    for (auto w = ws.cbegin(); w != ws.cend(); ++w) {
-
-        cout << "Testing w=" << *w << endl;
-        
-        fail_args.target_rel_res = 0.1*u_hlf;
-        SORSolve<half> SOR_solve_h(A, b, *w, fail_args);
-        SOR_solve_h.solve();
-        if (*show_plots) { SOR_solve_h.view_relres_plot("log"); }
-    
-        EXPECT_FALSE(SOR_solve_h.check_converged());
-        EXPECT_GT(SOR_solve_h.get_relres(), 0.1*u_hlf);
-
-    }
-
+TEST_F(SORTest, SolveConvDiff64Half_FailBeyondCapabilities_Dense) {
+    SolveFailTest<MatrixDense, half>(
+        solve_matrix_dir+"conv_diff_64_A.csv", solve_matrix_dir+"conv_diff_64_b.csv", 0.1*u_hlf
+    );
+}
+TEST_F(SORTest, SolveConvDiff64Half_FailBeyondCapabilities_Sparse) {
+    SolveFailTest<MatrixSparse, half>(
+        solve_matrix_dir+"conv_diff_64_A.csv", solve_matrix_dir+"conv_diff_64_b.csv", 0.1*u_hlf
+    );
 }
