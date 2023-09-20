@@ -10,6 +10,12 @@ b_5_toy = [3;2;4;2;2];
 writematrix(A_5_toy, "solve_matrices\\A_5_toy.csv");
 writematrix(b_5_toy, "solve_matrices\\b_5_toy.csv");
 
+% Create 64x64 Toy Matrix
+A_64_toy = randi(100, 64, 64);
+b_64_toy = randi(100, 64, 1);
+writematrix(A_64_toy, "solve_matrices\\A_64_toy.csv");
+writematrix(b_64_toy, "solve_matrices\\b_64_toy.csv");
+
 % Create 5x5 Matrix with solution can be found trivially
 A_5_easysoln = [1, 0, 0, 0, 0;
                 0, 2, 0, 0, 0;

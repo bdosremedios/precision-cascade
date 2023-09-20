@@ -26,7 +26,7 @@ protected:
 
     int kry_space_dim;
     int max_kry_space_dim;
-    T basis_zero_tol;
+    double basis_zero_tol;
     T rho;
 
     // *** PROTECTED INSTANTIATION HELPER METHODS ***
@@ -50,23 +50,21 @@ protected:
 
         // Pre-allocate all possible space needed to prevent memory
         // re-allocation
-        Q_kry_basis = Matrix<T, Dynamic, Dynamic>::Zero(m, m);
-        H = Matrix<T, Dynamic, Dynamic>::Zero(m+1, m);
-        Q_H = Matrix<T, Dynamic, Dynamic>::Identity(m+1, m+1);
-        R_H = Matrix<T, Dynamic, Dynamic>::Zero(m+1, m);
+        Q_kry_basis = MatrixDense<T>::Zero(m, m);
+        H = MatrixDense<T>::Zero(m+1, m);
+        Q_H = MatrixDense<T>::Identity(m+1, m+1);
+        R_H = MatrixDense<T>::Zero(m+1, m);
 
         // Set rho as initial residual norm
-        Matrix<T, Dynamic, 1> Minv_A_x0((left_precond_ptr->action_inv_M(A_T*init_guess_T)).template cast<T>());
-        Matrix<T, Dynamic, 1> Minv_b((left_precond_ptr->action_inv_M(b_T)).template cast<T>());
-        Matrix<T, Dynamic, 1> r_0(Minv_b - Minv_A_x0);
+        MatrixVector<T> Minv_A_x0 = (left_precond_ptr->action_inv_M(A_T*init_guess_T)).template cast<T>();
+        MatrixVector<T> Minv_b = (left_precond_ptr->action_inv_M(b_T)).template cast<T>();
+        MatrixVector<T> r_0 = Minv_b - Minv_A_x0;
         rho = r_0.norm();
 
         // Initialize next vector q as initial residual marking termination
         // since can not build Krylov subspace on zero vector
         next_q = r_0;
-        if (next_q.norm() <= basis_zero_tol) {
-            this->terminated = true;
-        }
+        if (next_q.norm() <= basis_zero_tol) { this->terminated = true; }
 
     }
 
@@ -95,9 +93,9 @@ protected:
         // similarly checks the direct norm
         int k = kry_space_dim-1;
         if (kry_space_dim == 0) {
-            Q_kry_basis(all, kry_space_dim) = next_q/next_q.norm();
+            Q_kry_basis.col(kry_space_dim) = next_q/next_q.norm();
         } else {
-            Q_kry_basis(all, kry_space_dim) = next_q/H(k+1, k);
+            Q_kry_basis.col(kry_space_dim) = next_q/H.coeff(k+1, k);
         }
         ++kry_space_dim; // Update krylov dimension count
         
@@ -106,9 +104,9 @@ protected:
     void update_nextq_and_Hkplus1() {
 
         int k = kry_space_dim-1;
-        
+
         // Find next vector power of linear system
-        next_q = Q_kry_basis(all, k);
+        next_q = Q_kry_basis.col(k);
         next_q = (right_precond_ptr->action_inv_M(next_q)).template cast<T>(); // Apply action of right preconditioner
         next_q = A_T*next_q; // Apply matrix A_T
         next_q = (left_precond_ptr->action_inv_M(next_q)).template cast<T>(); // Apply action of left preconditioner
@@ -118,10 +116,10 @@ protected:
         for (int i=0; i<=k; ++i) {
             // MGS since newly orthogonalized q is used for orthogonalizing
             // each next vector
-            H(i, k) = Q_kry_basis(all, i).dot(next_q);
-            next_q -= H(i, k)*Q_kry_basis(all, i);
+            H.coeffRef(i, k) = Q_kry_basis.col(i).dot(next_q);
+            next_q -= H.coeff(i, k)*Q_kry_basis.col(i);
         }
-        H(k+1, k) = next_q.norm();
+        H.coeffRef(k+1, k) = next_q.norm();
 
     }
 
@@ -129,22 +127,22 @@ protected:
 
         // Initiate next column of QR fact as most recent of H
         int k = kry_space_dim-1;
-        R_H(all, k) = H(all, k);
+        R_H.col(k) = H.col(k);
 
         // Apply previous Given's rotations to new column
         // TODO: Can reduce run time by 2 since we know is upper triag
         R_H.block(0, k, k+1, 1) = Q_H.block(0, 0, k+1, k+1).transpose()*R_H.block(0, k, k+1, 1);
 
         // Apply the final Given's rotation manually making R_H upper triangular
-        T alpha = R_H(k, k);
-        T beta = R_H(k+1, k);
+        T alpha = R_H.coeff(k, k);
+        T beta = R_H.coeff(k+1, k);
         T r_sqr = alpha*alpha + beta*beta; // Explicit intermediate variable to ensure
-                                            // no auto casting into sqrt
+                                           // no auto casting into sqrt
         T r = sqrt(r_sqr);
         T c = alpha/r;
         T s = -beta/r;
-        R_H(k, k) = r;
-        R_H(k+1, k) = static_cast<T>(0);
+        R_H.coeffRef(k, k) = r;
+        R_H.coeffRef(k+1, k) = static_cast<T>(0);
 
         // Right multiply Q_H by transpose of new matrix to get updated Q_H
         // *will only modify last two columns so save time by just doing those 
@@ -158,18 +156,18 @@ protected:
     void update_x_minimizing_res() {
 
         // Calculate RHS to solve
-        Matrix<T, Dynamic, 1> rho_e1 = Matrix<T, Dynamic, 1>::Zero(kry_space_dim+1, 1);
+        MatrixVector<T> rho_e1 = MatrixVector<T>::Zero(kry_space_dim+1);
         rho_e1(0) = rho;
         Matrix<T, Dynamic, 1> rhs = (
             Q_H.block(0, 0, kry_space_dim+1, kry_space_dim+1).transpose()*rho_e1
         );
 
         // Use back substitution to solve
-        Matrix<T, Dynamic, 1> y = back_substitution(
-            static_cast<Matrix<T, Dynamic, Dynamic>>(R_H.block(0, 0, kry_space_dim, kry_space_dim)),
+        MatrixVector<T> y = back_substitution(
+            static_cast<MatrixDense<T>>(R_H.block(0, 0, kry_space_dim, kry_space_dim)),
             // Trim off last entry of rhs for solve since solve of least squares problem
             // does not have coefficient to deal with it
-            static_cast<Matrix<T, Dynamic, 1>>(rhs.block(0, 0, kry_space_dim, 1))
+            static_cast<MatrixVector<T>>(rhs.block(0, 0, kry_space_dim, 1))
         );
 
         // Update typed_soln adjusting with right preconditioning
@@ -185,9 +183,7 @@ protected:
         // Check for termination condition with inability to expand subspace if
         // next basis vector is was in the existing Krylov subspace to basis_zero_tol
         int k = kry_space_dim-1;
-        if (H(k+1, k) <= basis_zero_tol) {
-            this->terminated = true;
-        }
+        if (static_cast<double>(H.coeff(k+1, k)) <= basis_zero_tol) { this->terminated = true; }
 
     }
 
@@ -217,13 +213,13 @@ public:
     // *** CONSTRUCTORS ***
 
     GMRESSolve(
-        Matrix<double, Dynamic, Dynamic> const &arg_A,
-        Matrix<double, Dynamic, 1> const &arg_b,
+        M<double> const &arg_A,
+        MatrixVector<double> const &arg_b,
         double const &arg_basis_zero_tol,
         SolveArgPkg const &solve_arg_pkg,
-        PrecondArgPkg<W> const &precond_arg_pkg = PrecondArgPkg<W>()
+        PrecondArgPkg<M, W> const &precond_arg_pkg = PrecondArgPkg<M, W>()
     ):
-        basis_zero_tol(static_cast<T>(arg_basis_zero_tol)),
+        basis_zero_tol(arg_basis_zero_tol),
         left_precond_ptr(precond_arg_pkg.left_precond),
         right_precond_ptr(precond_arg_pkg.right_precond),
         TypedIterativeSolve<M, T>::TypedIterativeSolve(arg_A, arg_b, solve_arg_pkg)

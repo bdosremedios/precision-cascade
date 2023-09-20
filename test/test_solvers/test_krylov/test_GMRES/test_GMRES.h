@@ -5,28 +5,28 @@
 
 #include "solvers/krylov/GMRES.h"
 
-template <typename T, typename U=T>
-class GMRESSolveTestingMock: public GMRESSolve<T, U> {
+template <template <typename> typename M, typename T, typename W=T>
+class GMRESSolveTestingMock: public GMRESSolve<M, T, W> {
 
     public:
 
-        using GMRESSolve<T, U>::GMRESSolve;
-        using GMRESSolve<T, U>::typed_soln;
+        using GMRESSolve<M, T, W>::GMRESSolve;
+        using GMRESSolve<M, T, W>::typed_soln;
 
-        using GMRESSolve<T, U>::H;
-        using GMRESSolve<T, U>::Q_kry_basis;
-        using GMRESSolve<T, U>::Q_H;
-        using GMRESSolve<T, U>::R_H;
+        using GMRESSolve<M, T, W>::H;
+        using GMRESSolve<M, T, W>::Q_kry_basis;
+        using GMRESSolve<M, T, W>::Q_H;
+        using GMRESSolve<M, T, W>::R_H;
 
-        using GMRESSolve<T, U>::kry_space_dim;
-        using GMRESSolve<T, U>::max_kry_space_dim;
-        using GMRESSolve<T, U>::next_q;
-        using GMRESSolve<T, U>::rho;
-        using GMRESSolve<T, U>::max_iter;
+        using GMRESSolve<M, T, W>::kry_space_dim;
+        using GMRESSolve<M, T, W>::max_kry_space_dim;
+        using GMRESSolve<M, T, W>::next_q;
+        using GMRESSolve<M, T, W>::rho;
+        using GMRESSolve<M, T, W>::max_iter;
 
-        using GMRESSolve<T, U>::update_QR_fact;
-        using GMRESSolve<T, U>::update_x_minimizing_res;
-        using GMRESSolve<T, U>::iterate;
+        using GMRESSolve<M, T, W>::update_QR_fact;
+        using GMRESSolve<M, T, W>::update_x_minimizing_res;
+        using GMRESSolve<M, T, W>::iterate;
 
         void iterate_no_soln_solve() {
             this->update_subspace_k();
