@@ -2,9 +2,9 @@
 
 #include "test_IterativeSolve.h"
 
-class TypedIterativeSolveTest: public TestBase {
-
-    public:
+class TypedIterativeSolveTest: public TestBase
+{
+public:
 
     template <template<typename> typename M, typename T>
     void TestConstructors(double u) {

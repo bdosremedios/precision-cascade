@@ -2,8 +2,8 @@
 
 #include "preconditioners/ImplementedPreconditioners.h"
 
-class ILUTest: public TestBase {
-
+class ILUTest: public TestBase
+{
 public:
 
     template<template <typename> typename M>

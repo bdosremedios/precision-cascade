@@ -2,8 +2,8 @@
 
 #include "tools/ArgPkg.h"
 
-class PrecondArgPkgTest: public TestBase {
-
+class PrecondArgPkgTest: public TestBase
+{
 public:
 
     template <template <typename> typename M>

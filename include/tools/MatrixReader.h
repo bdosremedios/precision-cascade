@@ -148,7 +148,7 @@ M<T> read_matrixCSV(string const &path)
 
     } else { throw runtime_error("Failed to read: " + path); }
 
-} // end read_matrix_csv
+} // end read_matrixCSV
 
 
 #endif
