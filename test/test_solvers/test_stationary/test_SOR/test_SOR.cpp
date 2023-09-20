@@ -2,24 +2,24 @@
 
 #include "solvers/stationary/SOR.h"
 
-class SORTest: public TestBase {
+class SORTest: public TestBase
+{
+public:
 
-    public:
+    vector<double> ws{1.25, 1.5, 1.75};
 
-        vector<double> ws{1.25, 1.5, 1.75};
+    SolveArgPkg success_args;
+    SolveArgPkg fail_args;
 
-        SolveArgPkg success_args;
-        SolveArgPkg fail_args;
+    void SetUp() {
 
-        void SetUp() {
+        success_args = SolveArgPkg();
+        success_args.max_iter = 1000;
 
-            success_args = SolveArgPkg();
-            success_args.max_iter = 1000;
+        fail_args = SolveArgPkg();
+        fail_args.max_iter = 300;
 
-            fail_args = SolveArgPkg();
-            fail_args.max_iter = 300;
-
-        }
+    }
 
 };
 
