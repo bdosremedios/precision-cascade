@@ -21,7 +21,7 @@ set(
 
     test_solvers/test_IterativeSolve/test_IterativeSolve.cpp
 
-    # test_solvers/test_stationary/test_Jacobi.cpp
+    test_solvers/test_stationary/test_Jacobi.cpp
     # test_solvers/test_stationary/test_SOR/test_GaussSeidel.cpp
     # test_solvers/test_stationary/test_SOR/test_SOR.cpp
 
