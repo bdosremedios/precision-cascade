@@ -97,7 +97,7 @@ M<T> read_matrixCSV(string const &path)
                         );
                     }
                     mat.conservativeResize(n_rows, ++n_cols);
-                    mat(0, n_cols-1) = temp_number;
+                    mat.coeffRef(0, n_cols-1) = temp_number;
                 }
                 is_first_line = false;
 

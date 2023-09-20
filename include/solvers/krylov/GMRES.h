@@ -3,26 +3,26 @@
 
 #include "../IterativeSolve.h"
 
-template <typename T, typename W=T>
-class GMRESSolve: public TypedIterativeSolve<T>
+template <template <typename> typename M, typename T, typename W=T>
+class GMRESSolve: public TypedIterativeSolve<M, T>
 {
 protected:
 
-    using TypedIterativeSolve<T>::m;
-    using TypedIterativeSolve<T>::A_T;
-    using TypedIterativeSolve<T>::b_T;
-    using TypedIterativeSolve<T>::init_guess_T;
-    using TypedIterativeSolve<T>::typed_soln;
-    using TypedIterativeSolve<T>::max_iter;
+    using TypedIterativeSolve<M, T>::m;
+    using TypedIterativeSolve<M, T>::A_T;
+    using TypedIterativeSolve<M, T>::b_T;
+    using TypedIterativeSolve<M, T>::init_guess_T;
+    using TypedIterativeSolve<M, T>::typed_soln;
+    using TypedIterativeSolve<M, T>::max_iter;
 
-    shared_ptr<Preconditioner<W>> left_precond_ptr;
-    shared_ptr<Preconditioner<W>> right_precond_ptr;
+    shared_ptr<Preconditioner<M, W>> left_precond_ptr;
+    shared_ptr<Preconditioner<M, W>> right_precond_ptr;
 
-    Matrix<T, Dynamic, Dynamic> Q_kry_basis;
-    Matrix<T, Dynamic, Dynamic> H;
-    Matrix<T, Dynamic, Dynamic> Q_H;
-    Matrix<T, Dynamic, Dynamic> R_H;
-    Matrix<T, Dynamic, 1> next_q;
+    MatrixDense<T> Q_kry_basis;
+    MatrixDense<T> H;
+    MatrixDense<T> Q_H;
+    MatrixDense<T> R_H;
+    MatrixVector<T> next_q;
 
     int kry_space_dim;
     int max_kry_space_dim;
@@ -226,7 +226,7 @@ public:
         basis_zero_tol(static_cast<T>(arg_basis_zero_tol)),
         left_precond_ptr(precond_arg_pkg.left_precond),
         right_precond_ptr(precond_arg_pkg.right_precond),
-        TypedIterativeSolve<T>::TypedIterativeSolve(arg_A, arg_b, solve_arg_pkg)
+        TypedIterativeSolve<M, T>::TypedIterativeSolve(arg_A, arg_b, solve_arg_pkg)
     {
         max_iter = (solve_arg_pkg.check_default_max_iter()) ? arg_A.rows() : solve_arg_pkg.max_iter;
         initializeGMRES();

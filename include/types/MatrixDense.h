@@ -10,6 +10,10 @@ using Eigen::Index;
 template <typename T>
 class MatrixDense: public Matrix<T, Dynamic, Dynamic>
 {
+private:
+
+    using Matrix<T, Dynamic, Dynamic>::operator();
+
 public:
 
     const T& coeff(Index row, Index col) const {
