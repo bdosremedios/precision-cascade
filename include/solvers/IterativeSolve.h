@@ -17,9 +17,8 @@
 #include <iomanip>
 
 using Eigen::Matrix;
-using Eigen::MatrixXd;
-using Eigen::SparseMatrix;
 using Eigen::Dynamic;
+using Eigen::MatrixXd;
 
 using std::shared_ptr, std::make_shared;
 using std::vector;
@@ -27,17 +26,10 @@ using std::log, std::min, std::max, std::pow, std::sqrt;
 using std::setprecision;
 using std::cout, std::endl;
 
-template <template <typename...> class, template<typename...> class> 
-struct is_same_template : std::false_type{};
-
-template <template <typename...> class T>
-struct is_same_template<T,T> : std::true_type{};
-
 // Generic abstract interface to iterative linear solve
 template <template<typename> typename M>
 class GenericIterativeSolve
 {
-
 private:
 
     // *** PRIVATE HELPER METHODS ***
@@ -77,7 +69,8 @@ protected:
     // *** PROTECTED ATTRIBUTES ***
 
     // Generic Linear System Attributes
-    const int m; const int n;
+    const int m;
+    const int n;
     const M<double> A;
     const MatrixVector<double> b;
     const MatrixVector<double> init_guess;
@@ -105,13 +98,13 @@ protected:
         A(arg_A),
         b(arg_b),
         init_guess((arg_pkg.check_default_init_guess()) ? make_guess(arg_A) :
-                                                            arg_pkg.init_guess),
+                                                          arg_pkg.init_guess),
         m(arg_A.rows()),
         n(arg_A.cols()),
         max_iter((arg_pkg.check_default_max_iter()) ? 100 : arg_pkg.max_iter),
         target_rel_res((arg_pkg.check_default_target_rel_res()) ? 1e-10 : arg_pkg.target_rel_res)
     {
-        assert_valid_type<M>()
+        assert_valid_type<M>();
         check_compatibility();
         set_self_to_initial_state();
     }
@@ -159,7 +152,7 @@ public:
         // Mark as iterative solve started and expand res_hist to account for additional
         // residual information
         initiated = true;
-        res_hist.conservativeResize(m, max_iter+1); // Move here since max_iter is mutable
+        res_hist.conservativeResize(m, max_iter+1); // Set res_hist size here since max_iter is mutable
                                                     // before solve
 
         // Run while relative residual is still high, and under max iterations, and has not been
