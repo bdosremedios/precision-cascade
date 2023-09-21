@@ -2,167 +2,230 @@
 
 #include "solvers/krylov/GMRES.h"
 
-class PGMRESSolveTest: public TestBase {
-
-
-    public:
+class PGMRESSolveTest: public TestBase
+{
+public:
         
-        SolveArgPkg pgmres_args;
-    
-        void SetUp() { pgmres_args.target_rel_res = conv_tol_dbl; }
+    SolveArgPkg pgmres_args;
 
+    void SetUp() { pgmres_args.target_rel_res = conv_tol_dbl; }
+
+    template <template <typename> typename M>
+    void TestMatchIdentity() {
+    
+        constexpr int n(45);
+        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir + "A_inv_45.csv");
+        MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "b_inv_45.csv");
+
+        GMRESSolve<M, double> pgmres_solve_default(A, b, u_dbl, pgmres_args);
+
+        GMRESSolve<M, double> pgmres_solve_explicit_noprecond(
+            A, b, u_dbl,
+            pgmres_args,
+            PrecondArgPkg<M, double>(make_shared<NoPreconditioner<M, double>>(),
+                                     make_shared<NoPreconditioner<M, double>>())
+        );
+
+        GMRESSolve<M, double> pgmres_solve_inverse_of_identity(
+            A, b, u_dbl,
+            pgmres_args,
+            PrecondArgPkg<M, double>(
+                make_shared<MatrixInverse<M, double>>(M<double>::Identity(n, n)),
+                make_shared<MatrixInverse<M, double>>(M<double>::Identity(n, n))
+            )
+        );
+
+        pgmres_solve_default.solve();
+        if (*show_plots) { pgmres_solve_default.view_relres_plot("log"); }
+        pgmres_solve_explicit_noprecond.solve();
+        if (*show_plots) { pgmres_solve_explicit_noprecond.view_relres_plot("log"); }
+        pgmres_solve_inverse_of_identity.solve();
+        if (*show_plots) { pgmres_solve_inverse_of_identity.view_relres_plot("log"); }
+
+        EXPECT_EQ(pgmres_solve_default.get_typed_soln(),
+                pgmres_solve_explicit_noprecond.get_typed_soln());
+        EXPECT_EQ(pgmres_solve_explicit_noprecond.get_typed_soln(),
+                pgmres_solve_inverse_of_identity.get_typed_soln());
+        EXPECT_EQ(pgmres_solve_inverse_of_identity.get_typed_soln(),
+                pgmres_solve_default.get_typed_soln());
+
+    }
+
+    template <template <typename> typename M>
+    void TestPrecondSingleIter(
+        const M<double> &A,
+        const MatrixVector<double> &b,
+        const PrecondArgPkg<M, double> &precond_pkg
+    ) {
+
+        GMRESSolve<M, double> pgmres_solve(A, b, u_dbl, pgmres_args, precond_pkg);
+
+        pgmres_solve.solve();
+        if (*show_plots) { pgmres_solve.view_relres_plot("log"); }
+        
+        EXPECT_EQ(pgmres_solve.get_iteration(), 1);
+        EXPECT_TRUE(pgmres_solve.check_converged());
+        EXPECT_LE(pgmres_solve.get_relres(), conv_tol_dbl);
+    }
+
+    template <template <typename> typename M>
+    void TestPrecond3IterAndMatch(
+        const M<double> &A,
+        const MatrixVector<double> &b,
+        const MatrixVector<double> &x_test,
+        const PrecondArgPkg<M, double> &precond_pkg
+    ) {
+
+        GMRESSolve<M, double> pgmres_solve(A, b, u_dbl, pgmres_args, precond_pkg);
+
+        pgmres_solve.solve();
+        if (*show_plots) { pgmres_solve.view_relres_plot("log"); }
+        
+        EXPECT_EQ(pgmres_solve.get_iteration(), 3);
+        EXPECT_TRUE(pgmres_solve.check_converged());
+        EXPECT_LE(pgmres_solve.get_relres(), conv_tol_dbl);
+    
+        EXPECT_LE((pgmres_solve.get_typed_soln() - x_test).norm()/(x_test.norm()), 2*conv_tol_dbl);
+
+    }
 
 };
 
-TEST_F(PGMRESSolveTest, TestDefaultandNoPreconditioningMatchesIdentity) {
-    
+TEST_F(PGMRESSolveTest, TestDefaultandNoPreconditioningMatchesIdentity_Dense) {
+    TestMatchIdentity<MatrixDense>();
+}
+TEST_F(PGMRESSolveTest, TestDefaultandNoPreconditioningMatchesIdentity_Sparse) {
+    TestMatchIdentity<MatrixSparse>();
+}
+
+TEST_F(PGMRESSolveTest, TestLeftPreconditioning_RandA45_Dense) {
     constexpr int n(45);
-    Matrix<double, n, n> A(read_matrix_csv<double>(solve_matrix_dir + "A_inv_45.csv"));
-    Matrix<double, n, 1> b(read_matrix_csv<double>(solve_matrix_dir + "b_inv_45.csv"));
+    MatrixDense<double> A = read_matrixCSV<MatrixDense, double>(solve_matrix_dir + "A_inv_45.csv");
+    MatrixDense<double> Ainv = read_matrixCSV<MatrixDense, double>(solve_matrix_dir + "Ainv_inv_45.csv");
+    MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "b_inv_45.csv");
+    TestPrecondSingleIter<MatrixDense>(
+        A, b,
+        PrecondArgPkg<MatrixDense, double>(make_shared<MatrixInverse<MatrixDense, double>>(Ainv))
+    );
+}
+TEST_F(PGMRESSolveTest, TestLeftPreconditioning_RandA45_Sparse) {
+    constexpr int n(45);
+    MatrixSparse<double> A = read_matrixCSV<MatrixSparse, double>(solve_matrix_dir + "A_inv_45.csv");
+    MatrixSparse<double> Ainv = read_matrixCSV<MatrixSparse, double>(solve_matrix_dir + "Ainv_inv_45.csv");
+    MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "b_inv_45.csv");
+    TestPrecondSingleIter<MatrixSparse>(
+        A, b,
+        PrecondArgPkg<MatrixSparse, double>(make_shared<MatrixInverse<MatrixSparse, double>>(Ainv))
+    );
+}
 
-    GMRESSolve<double> pgmres_solve_default(A, b, u_dbl, pgmres_args);
 
-    GMRESSolve<double> pgmres_solve_explicit_noprecond(
-        A, b, u_dbl,
-        pgmres_args,
-        PrecondArgPkg<double>(make_shared<NoPreconditioner<double>>(),
-                              make_shared<NoPreconditioner<double>>())
+TEST_F(PGMRESSolveTest, TestRightPreconditioning_RandA45_Dense) {
+    constexpr int n(45);
+    MatrixDense<double> A = read_matrixCSV<MatrixDense, double>(solve_matrix_dir + "A_inv_45.csv");
+    MatrixDense<double> Ainv = read_matrixCSV<MatrixDense, double>(solve_matrix_dir + "Ainv_inv_45.csv");
+    MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "b_inv_45.csv");
+    TestPrecondSingleIter<MatrixDense>(
+        A, b,
+        PrecondArgPkg<MatrixDense, double>(make_shared<NoPreconditioner<MatrixDense, double>>(),
+                                           make_shared<MatrixInverse<MatrixDense, double>>(Ainv))
+    );
+}
+TEST_F(PGMRESSolveTest, TestRightPreconditioning_RandA45_Sparse) {
+    constexpr int n(45);
+    MatrixSparse<double> A = read_matrixCSV<MatrixSparse, double>(solve_matrix_dir + "A_inv_45.csv");
+    MatrixSparse<double> Ainv = read_matrixCSV<MatrixSparse, double>(solve_matrix_dir + "Ainv_inv_45.csv");
+    MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "b_inv_45.csv");
+    TestPrecondSingleIter<MatrixSparse>(
+        A, b,
+        PrecondArgPkg<MatrixSparse, double>(make_shared<NoPreconditioner<MatrixSparse, double>>(),
+                                            make_shared<MatrixInverse<MatrixSparse, double>>(Ainv))
+    );
+}
+
+TEST_F(PGMRESSolveTest, TestSymmeticPreconditioning_RandA45_Dense) {
+    constexpr int n(45);
+    MatrixDense<double> A = read_matrixCSV<MatrixDense, double>(solve_matrix_dir + "A_inv_45.csv");
+    MatrixDense<double> Ainv = read_matrixCSV<MatrixDense, double>(solve_matrix_dir + "Ainv_inv_45.csv");
+    MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "b_inv_45.csv");
+    TestPrecondSingleIter<MatrixDense>(
+        A*A, b,
+        PrecondArgPkg<MatrixDense, double>(make_shared<MatrixInverse<MatrixDense, double>>(Ainv),
+                                           make_shared<MatrixInverse<MatrixDense, double>>(Ainv))
+    );
+}
+TEST_F(PGMRESSolveTest, TestSymmeticPreconditioning_RandA45_Sparse) {
+    constexpr int n(45);
+    MatrixSparse<double> A = read_matrixCSV<MatrixSparse, double>(solve_matrix_dir + "A_inv_45.csv");
+    MatrixSparse<double> Ainv = read_matrixCSV<MatrixSparse, double>(solve_matrix_dir + "Ainv_inv_45.csv");
+    MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "b_inv_45.csv");
+    TestPrecondSingleIter<MatrixSparse>(
+        A*A, b,
+        PrecondArgPkg<MatrixSparse, double>(make_shared<MatrixInverse<MatrixSparse, double>>(Ainv),
+                                            make_shared<MatrixInverse<MatrixSparse, double>>(Ainv))
+    );
+}
+
+TEST_F(PGMRESSolveTest, TestLeftPreconditioning_3eigs_Dense) {
+
+    constexpr int n(25);
+    MatrixDense<double> A = read_matrixCSV<MatrixDense, double>(solve_matrix_dir + "A_25_saddle.csv");
+    MatrixDense<double> Ainv = read_matrixCSV<MatrixDense, double>(solve_matrix_dir + "A_25_invprecond_saddle.csv");
+    MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "b_25_saddle.csv");
+    MatrixVector<double> x_test = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "x_25_saddle.csv");
+
+    TestPrecond3IterAndMatch<MatrixDense>(
+        A, b, x_test,
+        PrecondArgPkg<MatrixDense, double>(make_shared<MatrixInverse<MatrixDense, double>>(Ainv))
     );
 
-    GMRESSolve<double> pgmres_solve_inverse_of_identity(
-        A, b, u_dbl,
-        pgmres_args,
-        PrecondArgPkg<double>(
-            make_shared<MatrixInverse<double>>(Matrix<double, Dynamic, Dynamic>::Identity(n, n)),
-            make_shared<MatrixInverse<double>>(Matrix<double, Dynamic, Dynamic>::Identity(n, n))
+}
+TEST_F(PGMRESSolveTest, TestLeftPreconditioning_3eigs_Sparse) {
+
+    constexpr int n(25);
+    MatrixSparse<double> A = read_matrixCSV<MatrixSparse, double>(solve_matrix_dir + "A_25_saddle.csv");
+    MatrixSparse<double> Ainv = read_matrixCSV<MatrixSparse, double>(solve_matrix_dir + "A_25_invprecond_saddle.csv");
+    MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "b_25_saddle.csv");
+    MatrixVector<double> x_test = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "x_25_saddle.csv");
+
+    TestPrecond3IterAndMatch<MatrixSparse>(
+        A, b, x_test,
+        PrecondArgPkg<MatrixSparse, double>(make_shared<MatrixInverse<MatrixSparse, double>>(Ainv))
+    );
+
+}
+
+TEST_F(PGMRESSolveTest, TestRightPreconditioning_3eigs_Dense) {
+
+    constexpr int n(25);
+    MatrixDense<double> A = read_matrixCSV<MatrixDense, double>(solve_matrix_dir + "A_25_saddle.csv");
+    MatrixDense<double> Ainv = read_matrixCSV<MatrixDense, double>(solve_matrix_dir + "A_25_invprecond_saddle.csv");
+    MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "b_25_saddle.csv");
+    MatrixVector<double> x_test = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "x_25_saddle.csv");
+
+    TestPrecond3IterAndMatch<MatrixDense>(
+        A, b, x_test,
+        PrecondArgPkg<MatrixDense, double>(
+            make_shared<NoPreconditioner<MatrixDense, double>>(),
+            make_shared<MatrixInverse<MatrixDense, double>>(Ainv)
         )
     );
 
-    pgmres_solve_default.solve();
-    if (*show_plots) { pgmres_solve_default.view_relres_plot("log"); }
-    pgmres_solve_explicit_noprecond.solve();
-    if (*show_plots) { pgmres_solve_explicit_noprecond.view_relres_plot("log"); }
-    pgmres_solve_inverse_of_identity.solve();
-    if (*show_plots) { pgmres_solve_inverse_of_identity.view_relres_plot("log"); }
-
-    EXPECT_EQ(pgmres_solve_default.get_typed_soln(), pgmres_solve_explicit_noprecond.get_typed_soln());
-    EXPECT_EQ(pgmres_solve_explicit_noprecond.get_typed_soln(), pgmres_solve_inverse_of_identity.get_typed_soln());
-    EXPECT_EQ(pgmres_solve_inverse_of_identity.get_typed_soln(), pgmres_solve_default.get_typed_soln());
-
 }
-
-TEST_F(PGMRESSolveTest, TestLeftPreconditioning_RandA45) {
-
-    constexpr int n(45);
-    Matrix<double, n, n> A(read_matrix_csv<double>(solve_matrix_dir + "A_inv_45.csv"));
-    Matrix<double, n, n> Ainv(read_matrix_csv<double>(solve_matrix_dir + "Ainv_inv_45.csv"));
-    Matrix<double, n, 1> b(read_matrix_csv<double>(solve_matrix_dir + "b_inv_45.csv"));
-
-    GMRESSolve<double> pgmres_solve(
-        A, b, u_dbl, pgmres_args,
-        PrecondArgPkg<double>(make_shared<MatrixInverse<double>>(Ainv))
-    );
-
-    pgmres_solve.solve();
-    if (*show_plots) { pgmres_solve.view_relres_plot("log"); }
-    
-    EXPECT_EQ(pgmres_solve.get_iteration(), 1);
-    EXPECT_TRUE(pgmres_solve.check_converged());
-    EXPECT_LE(pgmres_solve.get_relres(), conv_tol_dbl);
-
-}
-
-TEST_F(PGMRESSolveTest, TestRightPreconditioning_RandA45) {
-
-    constexpr int n(45);
-    Matrix<double, n, n> A(read_matrix_csv<double>(solve_matrix_dir + "A_inv_45.csv"));
-    Matrix<double, n, n> Ainv(read_matrix_csv<double>(solve_matrix_dir + "Ainv_inv_45.csv"));
-    Matrix<double, n, 1> b(read_matrix_csv<double>(solve_matrix_dir + "b_inv_45.csv"));
-
-    GMRESSolve<double> pgmres_solve(
-        A, b, u_dbl, pgmres_args,
-        PrecondArgPkg<double>(make_shared<NoPreconditioner<double>>(),
-                              make_shared<MatrixInverse<double>>(Ainv))
-    );
-
-    pgmres_solve.solve();
-    if (*show_plots) { pgmres_solve.view_relres_plot("log"); }
-    
-    EXPECT_EQ(pgmres_solve.get_iteration(), 1);
-    EXPECT_TRUE(pgmres_solve.check_converged());
-    EXPECT_LE(pgmres_solve.get_relres(), conv_tol_dbl);
-
-}
-
-TEST_F(PGMRESSolveTest, TestSymmetricPreconditioning_RandA45) {
-
-    constexpr int n(45);
-    Matrix<double, n, n> A(read_matrix_csv<double>(solve_matrix_dir + "A_inv_45.csv"));
-    Matrix<double, n, n> Ainv(read_matrix_csv<double>(solve_matrix_dir + "Ainv_inv_45.csv"));
-    Matrix<double, n, 1> b(read_matrix_csv<double>(solve_matrix_dir + "b_inv_45.csv"));
-
-    GMRESSolve<double> pgmres_solve(
-        A*A, b, u_dbl, pgmres_args,
-        PrecondArgPkg<double>(make_shared<MatrixInverse<double>>(Ainv),
-                              make_shared<MatrixInverse<double>>(Ainv))
-    );
-
-    pgmres_solve.solve();
-    if (*show_plots) { pgmres_solve.view_relres_plot("log"); }
-    
-    EXPECT_EQ(pgmres_solve.get_iteration(), 1);
-    EXPECT_TRUE(pgmres_solve.check_converged());
-    EXPECT_LE(pgmres_solve.get_relres(), conv_tol_dbl);
-
-}
-
-TEST_F(PGMRESSolveTest, TestLeftPreconditioning_3eigs) {
+TEST_F(PGMRESSolveTest, TestRightPreconditioning_3eigs_Sparse) {
 
     constexpr int n(25);
-    Matrix<double, n, n> A(read_matrix_csv<double>(solve_matrix_dir + "A_25_saddle.csv"));
-    Matrix<double, n, n> Ainv(read_matrix_csv<double>(solve_matrix_dir + "A_25_invprecond_saddle.csv"));
-    Matrix<double, n, 1> b(read_matrix_csv<double>(solve_matrix_dir + "b_25_saddle.csv"));
+    MatrixSparse<double> A = read_matrixCSV<MatrixSparse, double>(solve_matrix_dir + "A_25_saddle.csv");
+    MatrixSparse<double> Ainv = read_matrixCSV<MatrixSparse, double>(solve_matrix_dir + "A_25_invprecond_saddle.csv");
+    MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "b_25_saddle.csv");
+    MatrixVector<double> x_test = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "x_25_saddle.csv");
 
-    GMRESSolve<double> pgmres_solve(
-        A, b, u_dbl, pgmres_args,
-        PrecondArgPkg<double>(make_shared<MatrixInverse<double>>(Ainv))
+    TestPrecond3IterAndMatch<MatrixSparse>(
+        A, b, x_test,
+        PrecondArgPkg<MatrixSparse, double>(
+            make_shared<NoPreconditioner<MatrixSparse, double>>(),
+            make_shared<MatrixInverse<MatrixSparse, double>>(Ainv)
+        )
     );
-
-    pgmres_solve.solve();
-    if (*show_plots) { pgmres_solve.view_relres_plot("log"); }
-    
-    EXPECT_EQ(pgmres_solve.get_iteration(), 3);
-    EXPECT_TRUE(pgmres_solve.check_converged());
-    EXPECT_LE(pgmres_solve.get_relres(), conv_tol_dbl);
-
-    // Check that matches MATLAB gmres solution within the difference of twice conv_tol_dbl
-    Matrix<double, n, 1> x_test(read_matrix_csv<double>(solve_matrix_dir + "x_25_saddle.csv"));
-    EXPECT_LE((pgmres_solve.get_typed_soln() - x_test).norm()/(x_test.norm()), 2*conv_tol_dbl);
-
-}
-
-TEST_F(PGMRESSolveTest, TestRightPreconditioning_3eigs) {
-
-    constexpr int n(25);
-    Matrix<double, n, n> A(read_matrix_csv<double>(solve_matrix_dir + "A_25_saddle.csv"));
-    Matrix<double, n, n> Ainv(read_matrix_csv<double>(solve_matrix_dir + "A_25_invprecond_saddle.csv"));
-    Matrix<double, n, 1> b(read_matrix_csv<double>(solve_matrix_dir + "b_25_saddle.csv"));
-
-    GMRESSolve<double> pgmres_solve(
-        A, b, u_dbl, pgmres_args,
-        PrecondArgPkg<double>(make_shared<NoPreconditioner<double>>(),
-                              make_shared<MatrixInverse<double>>(Ainv))
-    );
-
-    pgmres_solve.solve();
-    if (*show_plots) { pgmres_solve.view_relres_plot("log"); }
-    
-    EXPECT_EQ(pgmres_solve.get_iteration(), 3);
-    EXPECT_TRUE(pgmres_solve.check_converged());
-    EXPECT_LE(pgmres_solve.get_relres(), conv_tol_dbl);
-
-    // Check that matches MATLAB gmres solution within the difference of twice conv_tol_dbl
-    Matrix<double, n, 1> x_test(read_matrix_csv<double>(solve_matrix_dir + "x_25_saddle.csv"));
-    EXPECT_LE((pgmres_solve.get_typed_soln() - x_test).norm()/(x_test.norm()), 2*conv_tol_dbl);
 
 }
