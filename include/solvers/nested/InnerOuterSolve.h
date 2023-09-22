@@ -3,7 +3,8 @@
 
 #include "../IterativeSolve.h"
 
-class InnerOuterSolve: public GenericIterativeSolve
+template <template <typename> typename M>
+class InnerOuterSolve: public GenericIterativeSolve<M>
 {
 protected:
 
@@ -12,7 +13,7 @@ protected:
     int max_inner_iter; // mutable to allow setting by specific solvers
     vector<vector<double>> inner_res_norm_hist;
     SolveArgPkg inner_solve_arg_pkg;
-    shared_ptr<GenericIterativeSolve> inner_solver;
+    shared_ptr<GenericIterativeSolve<M>> inner_solver;
 
     // *** PROTECTED OVERRIDE METHODS ***
 
@@ -40,21 +41,21 @@ public:
     // *** CONSTRUCTORS ***
 
     InnerOuterSolve(
-        Matrix<double, Dynamic, Dynamic> const &arg_A,
-        Matrix<double, Dynamic, 1> const &arg_b, 
+        M<double> const &arg_A,
+        MatrixVector<double> const &arg_b, 
         SolveArgPkg const &arg_pkg
     ): 
         max_inner_iter((arg_pkg.check_default_max_inner_iter()) ? 10 :
-                                                                    arg_pkg.max_inner_iter),
-        GenericIterativeSolve(arg_A, arg_b, arg_pkg)
+                                                                  arg_pkg.max_inner_iter),
+        GenericIterativeSolve<M>(arg_A, arg_b, arg_pkg)
     {
-        max_iter = (arg_pkg.check_default_max_iter()) ? 10 : arg_pkg.max_iter;
+        this->max_iter = (arg_pkg.check_default_max_iter()) ? 10 : arg_pkg.max_iter;
         // Create inner_solve_arg_pkg matching arg_pkg except with set inner iteration
         // set as inner's outer iteration
         inner_solve_arg_pkg = SolveArgPkg(max_inner_iter,
-                                            SolveArgPkg::default_max_inner_iter,
-                                            target_rel_res,
-                                            init_guess);
+                                          SolveArgPkg::default_max_inner_iter,
+                                          this->target_rel_res,
+                                          this->init_guess);
     }
 
     // *** GETTERS ***

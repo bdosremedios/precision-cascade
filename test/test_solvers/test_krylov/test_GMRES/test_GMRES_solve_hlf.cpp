@@ -2,8 +2,8 @@
 
 #include "solvers/krylov/GMRES.h"
 
-class GMRESSolveHalfTest: public TestBase {
-    
+class GMRESSolveHalfTest: public TestBase
+{
 public:
 
     double large_matrix_error_mod_stag = 4.; // Modification to account for stagnation for

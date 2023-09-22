@@ -2,110 +2,126 @@
 
 #include "solvers/nested/GMRES_IR/FP_GMRES_IR.h"
 
-class FP_GMRES_IR_Test: public TestBase {
+class FP_GMRES_IR_Test: public TestBase
+{
+public:
 
-    public:
+    SolveArgPkg dbl_GMRES_IR_args = SolveArgPkg(40, 10, conv_tol_dbl);
+    SolveArgPkg sgl_GMRES_IR_args = SolveArgPkg(40, 10, conv_tol_sgl);
+    SolveArgPkg hlf_GMRES_IR_args = SolveArgPkg(40, 10, conv_tol_hlf);
+    
+    template <template <typename> typename M, typename T>
+    void SolveTest(
+        const string &A_file_path,
+        const string &b_file_path,
+        const SolveArgPkg &args,
+        const double &u,
+        const double &conv_tol
+    ) {
 
-        SolveArgPkg dbl_GMRES_IR_args = SolveArgPkg(40, 10, conv_tol_dbl);
-        SolveArgPkg sgl_GMRES_IR_args = SolveArgPkg(40, 10, conv_tol_sgl);
-        SolveArgPkg sgl_fail_GMRES_IR_args = SolveArgPkg(40, 10, conv_tol_sgl);
-        SolveArgPkg hlf_GMRES_IR_args = SolveArgPkg(40, 10, conv_tol_hlf);
-        SolveArgPkg hlf_fail_GMRES_IR_args = SolveArgPkg(40, 10, conv_tol_hlf);
+        M<double> A = read_matrixCSV<M, double>(A_file_path);
+        MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(b_file_path);
+
+        FP_GMRES_IR_Solve<M, T> gmres_ir(A, b, u, args);
+
+        gmres_ir.solve();
+
+        if (*show_plots) { gmres_ir.view_relres_plot("log"); }
+
+        EXPECT_TRUE(gmres_ir.check_converged());
+        EXPECT_LE(gmres_ir.get_relres(), conv_tol);
+
+    }
 
 };
 
-TEST_F(FP_GMRES_IR_Test, DoubleConvergenceTest_ConvDiff64) {
-
-    Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_A.csv"));
-    Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_b.csv"));
-
-    FP_GMRES_IR_Solve<double> fp_gmres_ir_solve(A, b, u_dbl, dbl_GMRES_IR_args);
-
-    fp_gmres_ir_solve.solve();
-
-    if (*show_plots) { fp_gmres_ir_solve.view_relres_plot("log"); }
-
-    EXPECT_TRUE(fp_gmres_ir_solve.check_converged());
-    EXPECT_LE(fp_gmres_ir_solve.get_relres(), conv_tol_dbl);
-
+TEST_F(FP_GMRES_IR_Test, DoubleConvergenceTest_ConvDiff64_Dense) {
+    SolveTest<MatrixDense, double>(
+        solve_matrix_dir + "conv_diff_64_A.csv",
+        solve_matrix_dir + "conv_diff_64_b.csv",
+        dbl_GMRES_IR_args, u_dbl, conv_tol_dbl
+    );
+}
+TEST_F(FP_GMRES_IR_Test, DoubleConvergenceTest_ConvDiff64_Sparse) {
+    SolveTest<MatrixSparse, double>(
+        solve_matrix_dir + "conv_diff_64_A.csv",
+        solve_matrix_dir + "conv_diff_64_b.csv",
+        dbl_GMRES_IR_args, u_dbl, conv_tol_dbl
+    );
 }
 
-TEST_F(FP_GMRES_IR_Test, DoubleConvergenceTest_ConvDiff256) {
-
-    Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_256_A.csv"));
-    Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_256_b.csv"));
-
-    FP_GMRES_IR_Solve<double> fp_gmres_ir_solve(A, b, u_dbl, dbl_GMRES_IR_args);
-
-    fp_gmres_ir_solve.solve();
-
-    if (*show_plots) { fp_gmres_ir_solve.view_relres_plot("log"); }
-
-    EXPECT_TRUE(fp_gmres_ir_solve.check_converged());
-    EXPECT_LE(fp_gmres_ir_solve.get_relres(), conv_tol_dbl);
-
+TEST_F(FP_GMRES_IR_Test, DoubleConvergenceTest_ConvDiff256_Dense) {
+    SolveTest<MatrixDense, double>(
+        solve_matrix_dir + "conv_diff_256_A.csv",
+        solve_matrix_dir + "conv_diff_256_b.csv",
+        dbl_GMRES_IR_args, u_dbl, conv_tol_dbl
+    );
+}
+TEST_F(FP_GMRES_IR_Test, DoubleConvergenceTest_ConvDiff256_Sparse) {
+    SolveTest<MatrixSparse, double>(
+        solve_matrix_dir + "conv_diff_256_A.csv",
+        solve_matrix_dir + "conv_diff_256_b.csv",
+        dbl_GMRES_IR_args, u_dbl, conv_tol_dbl
+    );
 }
 
-TEST_F(FP_GMRES_IR_Test, SingleConvergenceTest_ConvDiff64) {
-
-    Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_A.csv"));
-    Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_b.csv"));
-
-    FP_GMRES_IR_Solve<float> fp_gmres_ir_solve(A, b, u_dbl, sgl_GMRES_IR_args);
-
-    fp_gmres_ir_solve.solve();
-
-    if (*show_plots) { fp_gmres_ir_solve.view_relres_plot("log"); }
-
-    EXPECT_TRUE(fp_gmres_ir_solve.check_converged());
-    EXPECT_LE(fp_gmres_ir_solve.get_relres(), conv_tol_sgl);
-
+TEST_F(FP_GMRES_IR_Test, SingleConvergenceTest_ConvDiff64_Dense) {
+    SolveTest<MatrixDense, float>(
+        solve_matrix_dir + "conv_diff_64_A.csv",
+        solve_matrix_dir + "conv_diff_64_b.csv",
+        sgl_GMRES_IR_args, u_sgl, conv_tol_sgl
+    );
+}
+TEST_F(FP_GMRES_IR_Test, SingleConvergenceTest_ConvDiff64_Sparse) {
+    SolveTest<MatrixSparse, float>(
+        solve_matrix_dir + "conv_diff_64_A.csv",
+        solve_matrix_dir + "conv_diff_64_b.csv",
+        sgl_GMRES_IR_args, u_sgl, conv_tol_sgl
+    );
 }
 
-TEST_F(FP_GMRES_IR_Test, SingleConvergenceTest_ConvDiff256) {
-
-    Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_256_A.csv"));
-    Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_256_b.csv"));
-
-    FP_GMRES_IR_Solve<float> fp_gmres_ir_solve(A, b, u_dbl, sgl_GMRES_IR_args);
-
-    fp_gmres_ir_solve.solve();
-
-    if (*show_plots) { fp_gmres_ir_solve.view_relres_plot("log"); }
-
-    EXPECT_TRUE(fp_gmres_ir_solve.check_converged());
-    EXPECT_LE(fp_gmres_ir_solve.get_relres(), conv_tol_sgl);
-
+TEST_F(FP_GMRES_IR_Test, SingleConvergenceTest_ConvDiff256_Dense) {
+    SolveTest<MatrixDense, float>(
+        solve_matrix_dir + "conv_diff_256_A.csv",
+        solve_matrix_dir + "conv_diff_256_b.csv",
+        sgl_GMRES_IR_args, u_sgl, conv_tol_sgl
+    );
+}
+TEST_F(FP_GMRES_IR_Test, SingleConvergenceTest_ConvDiff256_Sparse) {
+    SolveTest<MatrixSparse, float>(
+        solve_matrix_dir + "conv_diff_256_A.csv",
+        solve_matrix_dir + "conv_diff_256_b.csv",
+        sgl_GMRES_IR_args, u_sgl, conv_tol_sgl
+    );
 }
 
-TEST_F(FP_GMRES_IR_Test, HalfConvergenceTest_ConvDiff64) {
 
-    Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_A.csv"));
-    Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_64_b.csv"));
-
-    FP_GMRES_IR_Solve<half> fp_gmres_ir_solve(A, b, u_dbl, hlf_GMRES_IR_args);
-
-    fp_gmres_ir_solve.solve();
-
-    if (*show_plots) { fp_gmres_ir_solve.view_relres_plot("log"); }
-
-    EXPECT_TRUE(fp_gmres_ir_solve.check_converged());
-    EXPECT_LE(fp_gmres_ir_solve.get_relres(), conv_tol_hlf);
-
+TEST_F(FP_GMRES_IR_Test, HalfConvergenceTest_ConvDiff64_Dense) {
+    SolveTest<MatrixDense, half>(
+        solve_matrix_dir + "conv_diff_64_A.csv",
+        solve_matrix_dir + "conv_diff_64_b.csv",
+        hlf_GMRES_IR_args, u_hlf, conv_tol_hlf
+    );
+}
+TEST_F(FP_GMRES_IR_Test, HalfConvergenceTest_ConvDiff64_Sparse) {
+    SolveTest<MatrixSparse, half>(
+        solve_matrix_dir + "conv_diff_64_A.csv",
+        solve_matrix_dir + "conv_diff_64_b.csv",
+        hlf_GMRES_IR_args, u_hlf, conv_tol_hlf
+    );
 }
 
-TEST_F(FP_GMRES_IR_Test, HalfConvergenceTest_ConvDiff256) {
-
-    Matrix<double, Dynamic, Dynamic> A(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_256_A.csv"));
-    Matrix<double, Dynamic, 1> b(read_matrix_csv<double>(solve_matrix_dir + "conv_diff_256_b.csv"));
-
-    FP_GMRES_IR_Solve<half> fp_gmres_ir_solve(A, b, u_dbl, hlf_GMRES_IR_args);
-
-    fp_gmres_ir_solve.solve();
-
-    if (*show_plots) { fp_gmres_ir_solve.view_relres_plot("log"); }
-
-    EXPECT_TRUE(fp_gmres_ir_solve.check_converged());
-    EXPECT_LE(fp_gmres_ir_solve.get_relres(), conv_tol_hlf);
-
+TEST_F(FP_GMRES_IR_Test, HalfConvergenceTest_ConvDiff256_Dense) {
+    SolveTest<MatrixDense, half>(
+        solve_matrix_dir + "conv_diff_256_A.csv",
+        solve_matrix_dir + "conv_diff_256_b.csv",
+        hlf_GMRES_IR_args, u_hlf, conv_tol_hlf
+    );
+}
+TEST_F(FP_GMRES_IR_Test, HalfConvergenceTest_ConvDiff256_Sparse) {
+    SolveTest<MatrixSparse, half>(
+        solve_matrix_dir + "conv_diff_256_A.csv",
+        solve_matrix_dir + "conv_diff_256_b.csv",
+        hlf_GMRES_IR_args, u_hlf, conv_tol_hlf
+    );
 }

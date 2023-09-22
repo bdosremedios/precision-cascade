@@ -2,8 +2,8 @@
 
 #include "solvers/krylov/GMRES.h"
 
-class GMRESDoubleSolveTest: public TestBase {
-
+class GMRESDoubleSolveTest: public TestBase
+{
 public:
 
     template <template <typename> typename M>

@@ -4,7 +4,8 @@
 #include "../IterativeRefinement.h"
 #include "../../krylov/GMRES.h"
 
-class MP_GMRES_IR_Solve: public IterativeRefinement
+template <template <typename> typename M>
+class MP_GMRES_IR_Solve: public IterativeRefinement<M>
 {
 private:
 
@@ -12,10 +13,11 @@ private:
 
     template <typename T>
     void set_inner_solve() {
-        inner_solver = make_shared<GMRESSolve<T>>(
-            A, curr_res,
+        this->inner_solver = make_shared<GMRESSolve<M, T>>(
+            this->A,
+            this->curr_res,
             basis_zero_tol,
-            inner_solve_arg_pkg
+            this->inner_solve_arg_pkg
         );
     }
 
@@ -62,13 +64,13 @@ public:
     // *** CONSTRUCTORS ***
 
     MP_GMRES_IR_Solve(
-        Matrix<double, Dynamic, Dynamic> const &arg_A,
-        Matrix<double, Dynamic, 1> const &arg_b,
+        M<double> const &arg_A,
+        MatrixVector<double> const &arg_b,
         double const &arg_basis_zero_tol,
         SolveArgPkg const &arg_solve_arg_pkg
     ):
         basis_zero_tol(arg_basis_zero_tol),
-        IterativeRefinement(arg_A, arg_b, arg_solve_arg_pkg)
+        IterativeRefinement<M>(arg_A, arg_b, arg_solve_arg_pkg)
     {
         cascade_phase = INIT_PHASE;
         initialize_inner_outer_solver();
@@ -76,7 +78,8 @@ public:
 
 };
 
-class SimpleConstantThreshold : public MP_GMRES_IR_Solve
+template <template <typename> typename M>
+class SimpleConstantThreshold : public MP_GMRES_IR_Solve<M>
 {
 protected:
 
@@ -89,16 +92,16 @@ protected:
     // *** PROTECTED OVERRIDE METHODS ***
 
     void determine_phase() override {
-        if (cascade_phase == HLF_PHASE) {
-            if ((this->get_relres() <= tol_hlf)) { cascade_phase = SGL_PHASE; }
-        } else if (cascade_phase == SGL_PHASE) {
-            if ((this->get_relres() <= tol_sgl)) { cascade_phase = DBL_PHASE; }
+        if (this->cascade_phase == this->HLF_PHASE) {
+            if ((this->get_relres() <= tol_hlf)) { this->cascade_phase = this->SGL_PHASE; }
+        } else if (this->cascade_phase == this->SGL_PHASE) {
+            if ((this->get_relres() <= tol_sgl)) { this->cascade_phase = this->DBL_PHASE; }
         } else {
             ;
         }
     }
 
-    using MP_GMRES_IR_Solve::MP_GMRES_IR_Solve;
+    using MP_GMRES_IR_Solve<M>::MP_GMRES_IR_Solve;
 
 };
 

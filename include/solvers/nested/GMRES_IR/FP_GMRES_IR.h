@@ -4,27 +4,28 @@
 #include "../IterativeRefinement.h"
 #include "../../krylov/GMRES.h"
 
-template <typename T, typename W=T>
-class FP_GMRES_IR_Solve: public IterativeRefinement
+template <template <typename> typename M, typename T, typename W=T>
+class FP_GMRES_IR_Solve: public IterativeRefinement<M>
 {
 private:
 
     // *** PRIVATE HELPER METHODS ***
 
     void set_inner_solve() {
-        inner_solver = make_shared<GMRESSolve<T>>(
-            A, curr_res,
+        this->inner_solver = make_shared<GMRESSolve<M, T>>(
+            this->A,
+            this->curr_res,
             basis_zero_tol,
-            inner_solve_arg_pkg,
+            this->inner_solve_arg_pkg,
             inner_precond_arg_pkg
         );
     }
 
-    protected:
+protected:
 
     // *** PROTECTED ATTRIBUTES ***
     double basis_zero_tol;
-    PrecondArgPkg<W> inner_precond_arg_pkg;
+    PrecondArgPkg<M, W> inner_precond_arg_pkg;
 
     // *** PROTECTED OVERRIDE METHODS ***
 
@@ -41,15 +42,15 @@ private:
     // *** CONSTRUCTORS ***
 
     FP_GMRES_IR_Solve(
-        Matrix<double, Dynamic, Dynamic> const &arg_A,
-        Matrix<double, Dynamic, 1> const &arg_b,
+        M<double> const &arg_A,
+        MatrixVector<double> const &arg_b,
         double const &arg_basis_zero_tol,
         SolveArgPkg const &arg_solve_arg_pkg,
-        PrecondArgPkg<W> const &arg_inner_precond_arg_pkg = PrecondArgPkg<W>()
+        PrecondArgPkg<M, W> const &arg_inner_precond_arg_pkg = PrecondArgPkg<M, W>()
     ):
         basis_zero_tol(arg_basis_zero_tol),
         inner_precond_arg_pkg(arg_inner_precond_arg_pkg),
-        IterativeRefinement(arg_A, arg_b, arg_solve_arg_pkg)
+        IterativeRefinement<M>(arg_A, arg_b, arg_solve_arg_pkg)
     {
         initialize_inner_outer_solver();
     }
