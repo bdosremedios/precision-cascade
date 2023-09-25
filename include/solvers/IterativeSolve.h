@@ -11,6 +11,7 @@
 
 #include <memory>
 #include <vector>
+#include <string>
 #include <algorithm>
 #include <cmath>
 #include <iostream>
@@ -19,9 +20,11 @@
 using Eigen::Matrix;
 using Eigen::Dynamic;
 using Eigen::MatrixXd;
+using Eigen::half;
 
 using std::shared_ptr, std::make_shared;
 using std::vector;
+using std::string;
 using std::log, std::min, std::max, std::pow, std::sqrt;
 using std::setprecision;
 using std::cout, std::endl;

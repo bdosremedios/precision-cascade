@@ -2,7 +2,7 @@
 
 #include "solvers/nested/GMRES_IR/MP_GMRES_IR.h"
 
-class MP_GMRES_IR_Test: public TestBase
+class MP_GMRES_IR_SolveTest: public TestBase
 {
 public:
 
@@ -30,26 +30,26 @@ public:
 
 };
 
-TEST_F(MP_GMRES_IR_Test, ConvergenceTest_ConvDiff64_Dense) {
+TEST_F(MP_GMRES_IR_SolveTest, ConvergenceTest_ConvDiff64_Dense) {
     SolveTest<MatrixDense>(
         solve_matrix_dir + "conv_diff_64_A.csv",
         solve_matrix_dir + "conv_diff_64_b.csv"
     );
 }
-TEST_F(MP_GMRES_IR_Test, ConvergenceTest_ConvDiff64_Sparse) {
+TEST_F(MP_GMRES_IR_SolveTest, ConvergenceTest_ConvDiff64_Sparse) {
     SolveTest<MatrixSparse>(
         solve_matrix_dir + "conv_diff_64_A.csv",
         solve_matrix_dir + "conv_diff_64_b.csv"
     );
 }
 
-TEST_F(MP_GMRES_IR_Test, ConvergenceTest_ConvDiff256_Dense) {
+TEST_F(MP_GMRES_IR_SolveTest, ConvergenceTest_ConvDiff256_Dense) {
     SolveTest<MatrixDense>(
         solve_matrix_dir + "conv_diff_256_A.csv",
         solve_matrix_dir + "conv_diff_256_b.csv"
     );
 }
-TEST_F(MP_GMRES_IR_Test, ConvergenceTest_ConvDiff256_Sparse) {
+TEST_F(MP_GMRES_IR_SolveTest, ConvergenceTest_ConvDiff256_Sparse) {
     SolveTest<MatrixSparse>(
         solve_matrix_dir + "conv_diff_256_A.csv",
         solve_matrix_dir + "conv_diff_256_b.csv"

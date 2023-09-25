@@ -12,7 +12,7 @@ private:
     // *** PRIVATE HELPER METHODS ***
 
     template <typename T>
-    void set_inner_solve() {
+    void set_GMRES_inner_solve() {
         this->inner_solver = make_shared<GMRESSolve<M, T>>(
             this->A,
             this->curr_res,
@@ -21,14 +21,21 @@ private:
         );
     }
 
+    void choose_phase_solver() {
+        if (cascade_phase == HLF_PHASE) { set_GMRES_inner_solve<half>(); }
+        else if (cascade_phase == SGL_PHASE) { set_GMRES_inner_solve<float>(); }
+        else if (cascade_phase == DBL_PHASE) { set_GMRES_inner_solve<double>(); }
+        else { throw runtime_error("Invalid cascade_phase in MP_GMRES_IR_Solver"); }
+    }
+
 protected:
 
     // *** PROTECTED CONSTANTS ***
 
-    const int HLF_PHASE = 0;
-    const int SGL_PHASE = 1;
-    const int DBL_PHASE = 2;
-    const int INIT_PHASE = HLF_PHASE;
+    const static int HLF_PHASE;
+    const static int SGL_PHASE;
+    const static int DBL_PHASE;
+    const static int INIT_PHASE;
 
     // *** PROTECTED ATTRIBUTES ***
 
@@ -44,14 +51,12 @@ protected:
     // *** PROTECTED OVERRIDE METHODS ***
 
     // Initialize inner outer solver;
-    void initialize_inner_outer_solver() override { set_inner_solve<half>(); }
+    void initialize_inner_outer_solver() override { set_GMRES_inner_solve<half>(); }
 
     // Specify inner_solver for outer_iterate_calc and setup
     void outer_iterate_setup() override {
         determine_phase();
-        if (cascade_phase == HLF_PHASE) { set_inner_solve<half>(); }
-        else if (cascade_phase == SGL_PHASE) { set_inner_solve<float>(); }
-        else { set_inner_solve<double>(); }
+        choose_phase_solver();
     }
 
     void derived_generic_reset() override {
@@ -77,6 +82,18 @@ public:
     }
 
 };
+
+template <template <typename> typename M>
+const int MP_GMRES_IR_Solve<M>::HLF_PHASE = 0;
+
+template <template <typename> typename M>
+const int MP_GMRES_IR_Solve<M>::SGL_PHASE = 1;
+
+template <template <typename> typename M>
+const int MP_GMRES_IR_Solve<M>::DBL_PHASE = 2;
+
+template <template <typename> typename M>
+const int MP_GMRES_IR_Solve<M>::INIT_PHASE = MP_GMRES_IR_Solve<M>::HLF_PHASE;
 
 template <template <typename> typename M>
 class SimpleConstantThreshold : public MP_GMRES_IR_Solve<M>

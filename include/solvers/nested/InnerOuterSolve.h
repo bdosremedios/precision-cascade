@@ -45,8 +45,7 @@ public:
         MatrixVector<double> const &arg_b, 
         SolveArgPkg const &arg_pkg
     ): 
-        max_inner_iter((arg_pkg.check_default_max_inner_iter()) ? 10 :
-                                                                  arg_pkg.max_inner_iter),
+        max_inner_iter(arg_pkg.max_inner_iter),
         GenericIterativeSolve<M>(arg_A, arg_b, arg_pkg)
     {
         this->max_iter = (arg_pkg.check_default_max_iter()) ? 10 : arg_pkg.max_iter;
