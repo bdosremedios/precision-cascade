@@ -16,11 +16,14 @@ public:
     using MP_GMRES_IR_Solve<M>::SGL_PHASE;
     using MP_GMRES_IR_Solve<M>::DBL_PHASE;
 
+    using MP_GMRES_IR_Solve<M>::inner_solver;
+    using MP_GMRES_IR_Solve<M>::outer_iterate_setup;
+
     using MP_GMRES_IR_Solve<M>::MP_GMRES_IR_Solve;
 
-    int specified_phase;
+    int set_phase_to_use;
 
-    void determine_phase() { cascade_phase = specified_phase; }
+    void determine_phase() { cascade_phase = set_phase_to_use; }
 
 };
 
