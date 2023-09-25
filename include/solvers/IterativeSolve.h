@@ -29,8 +29,7 @@ using std::log, std::min, std::max, std::pow, std::sqrt;
 using std::setprecision;
 using std::cout, std::endl;
 
-// Generic abstract interface to iterative linear solve
-template <template<typename> typename M>
+template <template <typename> typename M>
 class GenericIterativeSolve
 {
 private:
@@ -290,7 +289,6 @@ public:
 
 };
 
-// Typed interface for implementation of shared but type dependent behavior
 template <template<typename> typename M, typename T>
 class TypedIterativeSolve: public GenericIterativeSolve<M>
 {

@@ -1,22 +1,37 @@
 #include "Eigen/Dense"
 #include "Eigen/SparseCore"
 
+#include "experimentation/SolveRecorder.h"
+#include "solvers/krylov/GMRES.h"
+#include "tools/MatrixReader.h"
 #include "tools/MatrixWriter.h"
 
-#include <filesystem>
+#include <cmath>
+#include <memory>
 #include <iostream>
 #include <string>
 
+using std::pow;
+using std::shared_ptr, std::make_shared;
+
 int main() {
 
-    string test_path = "/home/bdosre/dev/numerical_experimentation/test/test_dir_1/";
+    string dev_path = "/home/bdosre/dev/";
+    string test_path = dev_path + "numerical_experimentation/test/test_dir_1/";
 
-    std::filesystem::create_directories(test_path);
+    string f_A = dev_path + "precision-cascade/test/solve_matrices/conv_diff_256_A.csv";
+    string f_b = dev_path + "precision-cascade/test/solve_matrices/conv_diff_256_b.csv";
 
-    MatrixXd test_mat = MatrixXd::Random(6, 5);
-    write_matrixCSV(
-        test_mat, test_path + "test.csv"
+    shared_ptr<GenericIterativeSolve<MatrixDense>> solver = make_shared<GMRESSolve<MatrixDense, double>>(
+        read_matrixCSV<MatrixDense, double>(f_A),
+        read_matrixCSV<MatrixVector, double>(f_b),
+        pow(2, -52),
+        SolveArgPkg()
     );
+
+    solver->solve();
+
+    record_solve(solver, test_path);
 
     return 0;
 

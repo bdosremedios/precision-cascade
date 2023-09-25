@@ -50,8 +50,7 @@ class SpecializedReturner<MatrixSparse, T>
 };
 
 template <template<typename> typename M, typename T>
-M<T> read_matrixCSV(string const &path)
-{
+M<T> read_matrixCSV(string const &path) {
 
     assert_valid_type_or_vec<M>();
 
@@ -77,8 +76,7 @@ M<T> read_matrixCSV(string const &path)
             line.clear();
             line << line_read_temp;
 
-            // Count the first line to ensure all subsequent rows match the element
-            // count
+            // Count the first line to ensure all subsequent rows match the element count
             if (is_first_line) {
                 
                 ++n_rows;
