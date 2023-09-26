@@ -3,11 +3,15 @@
 echo 'Copying MATLAB scripts...'
 cp ~/win_dosre/dev/MATLAB/create_read_matrices.m ~/dev/precision-cascade/matlab_scripts/create_read_matrices.m
 cp ~/win_dosre/dev/MATLAB/create_solve_matrices.m ~/dev/precision-cascade/matlab_scripts/create_solve_matrices.m
+cp ~/win_dosre/dev/MATLAB/convert_mat_to_CSV.m ~/dev/precision-cascade/matlab_scripts/convert_mat_to_CSV.m
 
-echo 'Copying MATLAB generated read matrices...'
+echo 'Copying MATLAB generated testing read matrices...'
 cp ~/win_dosre/dev/MATLAB/read_matrices/* ~/dev/precision-cascade/test/read_matrices/
 
-echo 'Copying MATLAB generated solve matrices...'
+echo 'Copying MATLAB generated testing solve matrices...'
 cp ~/win_dosre/dev/MATLAB/solve_matrices/* ~/dev/precision-cascade/test/solve_matrices/
+
+echo 'Copying SuiteSparse numerical experiment matrices...'
+cp ~/win_dosre/dev/MATLAB/experiment_matrices/* ~/dev/numerical_experimentation/data/experiment_matrices/
 
 echo 'Done'

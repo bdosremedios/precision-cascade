@@ -18,12 +18,23 @@ option(
     ON
 )
 
+option(
+    BUILD_EXPERIMENTATION
+    "Whether to build test"
+    ON
+)
+
 if(BUILD_MAIN)
     message(STATUS "Building main...")
     add_subdirectory(main)
 endif()
 
-if(BUILD_MAIN)
+if(BUILD_TEST)
     message(STATUS "Building test...")
     add_subdirectory(test)
+endif()
+
+if(BUILD_EXPERIMENTATION)
+    message(STATUS "Building experimentation...")
+    add_subdirectory(experimentation)
 endif()
