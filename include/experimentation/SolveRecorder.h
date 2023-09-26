@@ -2,33 +2,70 @@
 #define SOLVERECORDER_H
 
 #include <filesystem>
+#include <fstream>
 
-#include "tools/MatrixWriter.h"
 #include "solvers/IterativeSolve.h"
 
 using std::filesystem::create_directories;
+using std::ofstream;
+
+void write_json_array_to_ofstream(
+    const MatrixXd &mat,
+    ofstream &f_out,
+    const string &padding 
+) {
+
+    f_out << "[\n";
+    for (int i=0; i<mat.rows()-1; ++i) {
+        f_out << padding << padding << "[";
+        for (int j=0; j<mat.cols()-1; ++j) { f_out << mat(i, j) << ","; }
+        f_out << mat(i, mat.cols()-1);
+        f_out << "],\n";
+    }
+    f_out << padding << padding << "[";
+    for (int j=0; j<mat.cols()-1; ++j) { f_out << mat(mat.rows()-1, j) << ","; }
+    f_out << mat(mat.rows()-1, mat.cols()-1);
+    f_out << "]\n" << padding << "]";
+
+
+} // end write_json_array_to_ofstream
 
 template <template <typename> typename M>
 void record_solve(
     const shared_ptr<GenericIterativeSolve<M>> &solver,
-    const string save_dir
+    const string save_path
 ) {
 
-    create_directories(save_dir);
+    ofstream file_out;
+    file_out.open(save_path);
+    file_out << std::scientific;
+    file_out.precision(16);
 
-    MatrixXd res_hist = solver->get_res_hist();
-    string f_res_hist_path = save_dir + "res_hist.csv";
-    write_matrixCSV(res_hist, f_res_hist_path);
+    if (file_out.is_open()) {
 
-    vector<double> res_norm_hist = solver->get_res_norm_hist();
-    string f_res_norm_hist_path = save_dir + "res_norm_hist.csv";
-    MatrixXd red_norm_hist_mat(res_norm_hist.size(), 1);
-    for (int i=0; i<res_norm_hist.size(); ++i) { red_norm_hist_mat(i) = res_norm_hist[i]; }
-    write_matrixCSV(red_norm_hist_mat, f_res_norm_hist_path);
+        file_out << "{\n\t\"solver_str\" : \"" << typeid(*solver).name() << "\",\n";
 
-    MatrixVector<double> soln = solver->get_generic_soln();
-    string f_soln_path = save_dir + "soln.csv";
-    write_matrixCSV(static_cast<MatrixXd>(soln), f_soln_path);
+        file_out << "\t\"res_hist\" : ";
+        MatrixXd res_hist = solver->get_res_hist();
+        write_json_array_to_ofstream(res_hist, file_out, "\t");
+        file_out << ",\n";
+
+        file_out << "\t\"res_norm_hist\" : ";
+        vector<double> res_norm_hist = solver->get_res_norm_hist();
+        MatrixXd res_norm_hist_mat(res_norm_hist.size(), 1);
+        for (int i=0; i<res_norm_hist.size(); ++i) { res_norm_hist_mat(i) = res_norm_hist[i]; }
+        write_json_array_to_ofstream(res_norm_hist_mat, file_out, "\t");
+        file_out << ",\n";
+
+        file_out << "\t\"soln\" : ";
+        MatrixVector<double> soln = solver->get_generic_soln();
+        write_json_array_to_ofstream(static_cast<MatrixXd>(soln), file_out, "\t");
+        file_out << "\n";
+
+        file_out << "}";
+        file_out.close();
+
+    } else { throw runtime_error("Failed to open for write: " + save_path); }
 
 }
 

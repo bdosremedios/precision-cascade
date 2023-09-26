@@ -4,7 +4,6 @@
 #include "experimentation/SolveRecorder.h"
 #include "solvers/krylov/GMRES.h"
 #include "tools/MatrixReader.h"
-#include "tools/MatrixWriter.h"
 
 #include <cmath>
 #include <memory>
@@ -17,7 +16,7 @@ using std::shared_ptr, std::make_shared;
 int main() {
 
     string dev_path = "/home/bdosre/dev/";
-    string test_path = dev_path + "numerical_experimentation/test/test_dir_1/";
+    string test_path = dev_path + "numerical_experimentation/test/test_dir_1/test.json";
 
     string f_A = dev_path + "precision-cascade/test/solve_matrices/conv_diff_256_A.csv";
     string f_b = dev_path + "precision-cascade/test/solve_matrices/conv_diff_256_b.csv";
