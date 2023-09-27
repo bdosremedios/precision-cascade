@@ -6,7 +6,8 @@
 
 #include "solvers/IterativeSolve.h"
 
-using std::filesystem::create_directories;
+namespace fs = std::filesystem;
+
 using std::ofstream;
 
 void write_json_array_to_ofstream(
@@ -33,7 +34,8 @@ void write_json_array_to_ofstream(
 template <template <typename> typename M>
 void record_solve(
     const shared_ptr<GenericIterativeSolve<M>> &solver,
-    const string save_path
+    const fs::path save_path,
+    const string ID_name
 ) {
 
     ofstream file_out;
@@ -43,7 +45,9 @@ void record_solve(
 
     if (file_out.is_open()) {
 
-        file_out << "{\n\t\"solver_str\" : \"" << typeid(*solver).name() << "\",\n";
+        file_out << "{\n\t\"solver_name\" : \"" << typeid(*solver).name() << "\",\n";
+
+        file_out << "\t\"ID\" : \"" << ID_name << "\",\n";
 
         file_out << "\t\"res_hist\" : ";
         MatrixXd res_hist = solver->get_res_hist();
@@ -65,7 +69,7 @@ void record_solve(
         file_out << "}";
         file_out.close();
 
-    } else { throw runtime_error("Failed to open for write: " + save_path); }
+    } else { throw runtime_error("Failed to open for write: " + save_path.string()); }
 
 }
 

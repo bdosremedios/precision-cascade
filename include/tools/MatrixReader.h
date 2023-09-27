@@ -5,6 +5,7 @@
 
 #include "types/types.h"
 
+#include <filesystem>
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -13,6 +14,7 @@
 using Eigen::Matrix;
 using Eigen::Dynamic;
 
+namespace fs = std::filesystem;
 using std::string, std::to_string;
 using std::ifstream, std::stringstream, std::getline;
 using std::runtime_error;
@@ -50,7 +52,7 @@ class SpecializedReturner<MatrixSparse, T>
 };
 
 template <template<typename> typename M, typename T>
-M<T> read_matrixCSV(string const &path) {
+M<T> read_matrixCSV(fs::path const &path) {
 
     assert_valid_type_or_vec<M>();
 
@@ -90,7 +92,7 @@ M<T> read_matrixCSV(string const &path) {
                         temp_number = static_cast<T>(stod(temp_str));
                     } catch (std::invalid_argument e) {
                         throw runtime_error(
-                            "Error in: " + path + "\n" +
+                            "Error in: " + path.string() + "\n" +
                             "Invalid argument in file, failed to convert to numeric"
                         );
                     }
@@ -117,14 +119,14 @@ M<T> read_matrixCSV(string const &path) {
                             temp_number = static_cast<T>(stod(temp_str));
                         } catch (std::invalid_argument e) {
                             throw runtime_error(
-                                "Error in: " + path + "\n" +
+                                "Error in: " + path.string() + "\n" +
                                 "Invalid argument in file, failed to convert to numeric"
                             );
                         }
                         mat.coeffRef(n_rows-1, curr_col_count++) = temp_number;
                     } else {
                         throw runtime_error(
-                            "Error in: " + path + "\n" +
+                            "Error in: " + path.string() + "\n" +
                             "Row " + to_string(n_rows) + " exceeds column size of " + to_string(n_cols)
                         );
                     }
@@ -133,7 +135,7 @@ M<T> read_matrixCSV(string const &path) {
                 // Check that newly added row meets the column count
                 if (curr_col_count < n_cols) {
                     throw runtime_error(
-                        "Error in: " + path + "\n" +
+                        "Error in: " + path.string() + "\n" +
                         "Row " + to_string(n_rows) + " does not meet column size of " + to_string(n_cols)
                     );
                 }
@@ -144,7 +146,7 @@ M<T> read_matrixCSV(string const &path) {
         SpecializedReturner<M, T> sr;
         return sr.return_(mat);
 
-    } else { throw runtime_error("Failed to read: " + path); }
+    } else { throw runtime_error("Failed to read: " + path.string()); }
 
 } // end read_matrixCSV
 
