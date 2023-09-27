@@ -13,12 +13,21 @@ private:
 
     template <typename T>
     void set_GMRES_inner_solve() {
-        this->inner_solver = make_shared<GMRESSolve<M, T>>(
-            this->A,
-            this->curr_res,
-            basis_zero_tol,
-            this->inner_solve_arg_pkg
-        );
+        if (std::is_same<T, half>::value) {
+            this->inner_solver = make_shared<GMRESSolve<M, T>>(
+                this->A, this->curr_res, u_hlf, this->inner_solve_arg_pkg
+            );
+        } else if (std::is_same<T, float>::value) {
+            this->inner_solver = make_shared<GMRESSolve<M, T>>(
+                this->A, this->curr_res, u_sgl, this->inner_solve_arg_pkg
+            );
+        } else if (std::is_same<T, double>::value) {
+            this->inner_solver = make_shared<GMRESSolve<M, T>>(
+                this->A, this->curr_res, u_dbl, this->inner_solve_arg_pkg
+            );
+        } else {
+            throw runtime_error("Invalid type T used in call to set_GMRES_inner_solve<T>");
+        }
     }
 
     void choose_phase_solver() {
@@ -32,14 +41,16 @@ protected:
 
     // *** PROTECTED CONSTANTS ***
 
+    const double u_hlf = pow(2, -10);
+    const double u_sgl = pow(2, -23);
+    const double u_dbl = pow(2, -52);
+
     const static int HLF_PHASE;
     const static int SGL_PHASE;
     const static int DBL_PHASE;
     const static int INIT_PHASE;
 
     // *** PROTECTED ATTRIBUTES ***
-
-    double basis_zero_tol;
     int cascade_phase;
 
     // *** PROTECTED ABSTRACT METHODS ***
@@ -71,10 +82,8 @@ public:
     MP_GMRES_IR_Solve(
         M<double> const &arg_A,
         MatrixVector<double> const &arg_b,
-        double const &arg_basis_zero_tol,
         SolveArgPkg const &arg_solve_arg_pkg
     ):
-        basis_zero_tol(arg_basis_zero_tol),
         IterativeRefinement<M>(arg_A, arg_b, arg_solve_arg_pkg)
     {
         cascade_phase = INIT_PHASE;
