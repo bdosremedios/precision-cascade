@@ -50,9 +50,10 @@ void record_solve(
         file_out << "\t\"ID\" : \"" << ID_name << "\",\n";
 
         file_out << "\t\"res_hist\" : ";
-        MatrixXd res_hist = solver->get_res_hist();
-        write_json_array_to_ofstream(res_hist, file_out, "\t");
-        file_out << ",\n";
+        // MatrixXd res_hist = solver->get_res_hist();
+        // write_json_array_to_ofstream(res_hist, file_out, "\t");
+        file_out << "[],\n";
+        // file_out << ",\n";
 
         file_out << "\t\"res_norm_hist\" : ";
         vector<double> res_norm_hist = solver->get_res_norm_hist();
