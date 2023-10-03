@@ -1,6 +1,6 @@
 #include "../test.h"
 
-#include "tools/ArgPkg.h"
+#include "tools/PrecondArgPkg.h"
 
 class PrecondArgPkgTest: public TestBase
 {

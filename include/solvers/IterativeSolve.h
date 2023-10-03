@@ -5,7 +5,7 @@
 #include "Eigen/SparseCore"
 
 #include "types/types.h"
-#include "tools/ArgPkg.h"
+#include "tools/argument_pkgs.h"
 #include "tools/Substitution.h"
 #include "preconditioners/ImplementedPreconditioners.h"
 
@@ -17,10 +17,7 @@
 #include <iostream>
 #include <iomanip>
 
-using Eigen::Matrix;
-using Eigen::Dynamic;
 using Eigen::MatrixXd;
-using Eigen::half;
 
 using std::shared_ptr, std::make_shared;
 using std::vector;
@@ -38,11 +35,13 @@ private:
 
     void check_compatibility() const {
 
-        // Ensure compatability to matrices, not empty, and square
-        if ((m < 1) || (n < 1)) { throw runtime_error("Empty Matrix A"); }
-        if (m != b.rows()) { throw runtime_error("A not compatible with b for linear system"); }
-        if (n != init_guess.rows()) { throw runtime_error("A not compatible with initial guess init_guess"); }
-        if (m != n) { throw runtime_error("A is not square"); }
+        // Ensure compatability to matrix and initial guess and squareness
+        if (lin_sys.get_n() != init_guess.rows()) {
+            throw runtime_error("A not compatible with initial guess init_guess");
+        }
+        if (lin_sys.get_m() != lin_sys.get_n()) {
+            throw runtime_error("A is not square");
+        }
 
     }
 
@@ -59,8 +58,8 @@ private:
         generic_soln = init_guess;
 
         // Reset residual history to just initial residual
-        res_hist = MatrixXd(m, 1);
-        curr_res = b - A*generic_soln;
+        res_hist = MatrixXd(lin_sys.get_m(), 1);
+        curr_res = lin_sys.get_b()-lin_sys.get_A()*generic_soln;
         res_hist.col(0) = curr_res;
         res_norm_hist.push_back(res_hist.col(0).norm());
 
@@ -70,41 +69,36 @@ protected:
 
     // *** PROTECTED ATTRIBUTES ***
 
-    // Generic Linear System Attributes
-    const int m;
-    const int n;
-    const M<double> A;
-    const MatrixVector<double> b;
+    // Generic constant Linear System Attributes
+    const GenericLinearSystem<M> lin_sys;
     const MatrixVector<double> init_guess;
-
-    // Generic Mutable Solve Attributes
-    int max_iter; // mutable to allow setting by specific solvers
-    bool initiated;
-    bool converged;
-    bool terminated;
-    int curr_iter;
-    MatrixVector<double> generic_soln;
-    MatrixVector<double> curr_res;
 
     // Constant solve attributes
     const double target_rel_res;
 
-    // Mutable solve attributes, single element until solve is called
+    // Generic Mutable Solve Attributes
+    int max_iter; // mutable to allow setting by specific solvers
+    int curr_iter;
+    bool initiated;
+    bool converged;
+    bool terminated;
+    MatrixVector<double> generic_soln;
+    MatrixVector<double> curr_res;
     MatrixXd res_hist;
     vector<double> res_norm_hist;
 
     // *** PROTECTED CONSTRUCTORS ***
     GenericIterativeSolve(
-        M<double> const &arg_A, MatrixVector<double> const &arg_b, SolveArgPkg const &arg_pkg
+        const GenericLinearSystem<M> &arg_lin_sys,
+        const SolveArgPkg &arg_pkg
     ):
-        A(arg_A),
-        b(arg_b),
-        init_guess((arg_pkg.check_default_init_guess()) ? make_guess(arg_A) :
+        lin_sys(arg_lin_sys),
+        init_guess((arg_pkg.check_default_init_guess()) ? make_guess(arg_lin_sys) :
                                                           arg_pkg.init_guess),
-        m(arg_A.rows()),
-        n(arg_A.cols()),
-        max_iter((arg_pkg.check_default_max_iter()) ? 100 : arg_pkg.max_iter),
-        target_rel_res((arg_pkg.check_default_target_rel_res()) ? 1e-10 : arg_pkg.target_rel_res)
+        max_iter((arg_pkg.check_default_max_iter()) ? 100 :
+                                                      arg_pkg.max_iter),
+        target_rel_res((arg_pkg.check_default_target_rel_res()) ? 1e-10 :
+                                                                  arg_pkg.target_rel_res)
     {
         assert_valid_type<M>();
         check_compatibility();
@@ -122,8 +116,8 @@ protected:
     // *** PROTECTED METHODS ***
 
     // Create initial guess based on system matrix arg_A
-    MatrixVector<double> make_guess(M<double> const &arg_A) const {
-        return MatrixVector<double>::Ones(arg_A.cols(), 1);
+    MatrixVector<double> make_guess(const GenericLinearSystem<M> &arg_lin_sys) const {
+        return MatrixVector<double>::Ones(arg_lin_sys.get_n());
     }
 
 public:
@@ -142,7 +136,7 @@ public:
     int get_iteration() const { return curr_iter; };
 
     // Disable copy constructor and copy assignment
-    GenericIterativeSolve(GenericIterativeSolve const &) = delete;
+    GenericIterativeSolve(const GenericIterativeSolve &) = delete;
     GenericIterativeSolve & operator=(GenericIterativeSolve &) = delete;
 
     virtual ~GenericIterativeSolve() = default; // Virtual destructor to determine destructors at runtime for
@@ -154,15 +148,14 @@ public:
         // Mark as iterative solve started and expand res_hist to account for additional
         // residual information
         initiated = true;
-        res_hist.conservativeResize(m, max_iter+1); // Set res_hist size here since max_iter is mutable
-                                                    // before solve
+        res_hist.conservativeResize(lin_sys.get_m(), max_iter+1); // Set res_hist size here since
+                                                                  // max_iter is mutable before solve
 
         // Run while relative residual is still high, and under max iterations, and has not been
         // flagged as converged
-        double res_norm = res_norm_hist[0];
         while(
             !converged &&
-            ((curr_iter < max_iter) && ((res_norm/res_norm_hist[0]) > target_rel_res))
+            ((curr_iter < max_iter) && (get_relres() > target_rel_res))
         ) {
 
             // Iterate solution
@@ -171,10 +164,9 @@ public:
             iterate();
 
             // Update residual tracking
-            curr_res = b - A*generic_soln;
+            curr_res = lin_sys.get_b()-lin_sys.get_A()*generic_soln;
             res_hist.col(curr_iter) = curr_res;
-            res_norm = res_hist.col(curr_iter).norm();
-            res_norm_hist.push_back(res_norm);
+            res_norm_hist.push_back(curr_res.norm());
 
             // Break early if terminated
             if (terminated) { break; }
@@ -188,11 +180,11 @@ public:
         // Convergence is either a small relative residual or otherwise
         // if no iterations have been performed, that there is a small residual
         // relative to the RHS
-        if ((res_norm/res_norm_hist[0]) <= target_rel_res) {
-            res_hist.conservativeResize(m, curr_iter+1);
+        if (get_relres() <= target_rel_res) {
+            res_hist.conservativeResize(lin_sys.get_m(), curr_iter+1);
             converged = true;
-        } else if ((curr_iter == 0) && ((res_norm/b.norm()) <= target_rel_res)) {
-            res_hist.conservativeResize(m, curr_iter+1);
+        } else if ((curr_iter == 0) && ((curr_res.norm()/lin_sys.get_b().norm()) <= target_rel_res)) {
+            res_hist.conservativeResize(lin_sys.get_m(), curr_iter+1);
             converged = true;
         }
 
@@ -283,13 +275,13 @@ public:
         };
         cout << " " << string(max(min_length, length-4), '-') << endl;
         cout << "Iter: 0" << string(max(min_length, length-10), ' ')
-                << "Iter: " << curr_iter << endl;
+             << "Iter: " << curr_iter << endl;
 
     } // end view_relres_plot
 
 };
 
-template <template<typename> typename M, typename T>
+template <template <typename> typename M, typename T>
 class TypedIterativeSolve: public GenericIterativeSolve<M>
 {
 private:
@@ -305,9 +297,8 @@ protected:
     // *** PROTECTED ATTRIBUTES ***
 
     // Typed Linear System Attributes
-    const M<T> A_T;
-    const MatrixVector<T> b_T;
-    const MatrixVector<T> init_guess_T;
+    const TypedLinearSystem<M, T> typed_lin_sys;
+    const MatrixVector<T> init_guess_typed;
 
     // Typed Mutable solve attributes
     MatrixVector<T> typed_soln;
@@ -330,7 +321,7 @@ protected:
     }
 
     void derived_generic_reset() override {
-        typed_soln = init_guess_T;
+        typed_soln = init_guess_typed;
         update_generic_soln();
         derived_typed_reset();
     }
@@ -340,15 +331,16 @@ public:
     // *** CONSTRUCTORS ***
 
     TypedIterativeSolve(
-        M<double> const &arg_A, MatrixVector<double> const &arg_b, SolveArgPkg const &arg_pkg
+        const TypedLinearSystem<M, T> &arg_typed_lin_sys,
+        const SolveArgPkg &arg_pkg
     ): 
-        A_T(arg_A.template cast<T>()),
-        b_T(arg_b.template cast<T>()),
-        init_guess_T((arg_pkg.check_default_init_guess()) ? this->make_guess(arg_A).template cast<T>() :
-                                                            arg_pkg.init_guess.template cast<T>()),
-        GenericIterativeSolve<M>(arg_A, arg_b, arg_pkg)
+        typed_lin_sys(arg_typed_lin_sys),
+        init_guess_typed((arg_pkg.check_default_init_guess()) ?
+            this->make_guess(arg_typed_lin_sys.get_A_typed()) :
+            arg_pkg.init_guess.template cast<T>()),
+        GenericIterativeSolve<M>(arg_typed_lin_sys, arg_pkg)
     {
-        typed_soln = init_guess_T;
+        typed_soln = init_guess_typed;
         update_generic_soln();
     }
 

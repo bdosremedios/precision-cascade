@@ -1,14 +1,11 @@
-#ifndef ARGPKG_H
-#define ARGPKG_H
+#ifndef SOLVEARGPKG_H
+#define SOLVEARGPKG_H
 
 #include "Eigen/Dense"
 
 #include "../types/types.h"
-#include "../preconditioners/ImplementedPreconditioners.h"
 
 #include <memory>
-
-using Eigen::Matrix;
 
 using std::make_shared, std::shared_ptr;
 
@@ -51,26 +48,6 @@ public:
         max_inner_iter(arg_max_inner_iter),
         target_rel_res(arg_target_rel_res),
         init_guess(arg_init_guess)
-    {};
-
-};
-
-template <template <typename> typename M, typename U>
-class PrecondArgPkg
-{
-public:
-
-    shared_ptr<Preconditioner<M, U>> left_precond;
-    shared_ptr<Preconditioner<M, U>> right_precond;
-
-    // *** CONSTRUCTORS ***
-
-    PrecondArgPkg(
-        shared_ptr<Preconditioner<M, U>> arg_left_precond = make_shared<NoPreconditioner<M, U>>(),
-        shared_ptr<Preconditioner<M, U>> arg_right_precond = make_shared<NoPreconditioner<M, U>>()
-    ):
-        left_precond(arg_left_precond),
-        right_precond(arg_right_precond)
     {};
 
 };

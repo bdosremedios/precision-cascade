@@ -1,6 +1,6 @@
 #include "../test.h"
 
-#include "tools/ArgPkg.h"
+#include "tools/SolveArgPkg.h"
 
 TEST(SolveArgPkgTest, TestDefaultConstructionAndChecks) {
 

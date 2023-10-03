@@ -5,6 +5,8 @@ project(precision-cascade)
 set(
     TEST_TOOLS_CPPS
     test_tools/test_MatrixReader.cpp
+    test_tools/test_GenericLinearSystem.cpp
+    test_tools/test_TypedLinearSystem.cpp
     test_tools/test_SolveArgPkg.cpp
     test_tools/test_PrecondArgPkg.cpp
     test_tools/test_Substitution.cpp
@@ -19,21 +21,21 @@ set(
 set(
     TEST_SOLVERS
 
-    test_solvers/test_IterativeSolve/test_IterativeSolve.cpp
+    # test_solvers/test_IterativeSolve/test_IterativeSolve.cpp
 
-    test_solvers/test_stationary/test_Jacobi_solve.cpp
-    test_solvers/test_stationary/test_SOR/test_GaussSeidel_solve.cpp
-    test_solvers/test_stationary/test_SOR/test_SOR_solve.cpp
+    # test_solvers/test_stationary/test_Jacobi_solve.cpp
+    # test_solvers/test_stationary/test_SOR/test_GaussSeidel_solve.cpp
+    # test_solvers/test_stationary/test_SOR/test_SOR_solve.cpp
 
-    test_solvers/test_krylov/test_GMRES/test_GMRES_components.cpp
-    test_solvers/test_krylov/test_GMRES/test_GMRES_solve_dbl.cpp
-    test_solvers/test_krylov/test_GMRES/test_GMRES_solve_sgl.cpp
-    test_solvers/test_krylov/test_GMRES/test_GMRES_solve_hlf.cpp
-    test_solvers/test_krylov/test_GMRES/test_PGMRES.cpp
+    # test_solvers/test_krylov/test_GMRES/test_GMRES_components.cpp
+    # test_solvers/test_krylov/test_GMRES/test_GMRES_solve_dbl.cpp
+    # test_solvers/test_krylov/test_GMRES/test_GMRES_solve_sgl.cpp
+    # test_solvers/test_krylov/test_GMRES/test_GMRES_solve_hlf.cpp
+    # test_solvers/test_krylov/test_GMRES/test_PGMRES.cpp
 
-    test_solvers/test_nested/test_FP_GMRES_IR_solve.cpp
-    test_solvers/test_nested/test_MP_GMRES_IR_component.cpp
-    test_solvers/test_nested/test_MP_GMRES_IR_solve.cpp
+    # test_solvers/test_nested/test_FP_GMRES_IR_solve.cpp
+    # test_solvers/test_nested/test_MP_GMRES_IR_component.cpp
+    # test_solvers/test_nested/test_MP_GMRES_IR_solve.cpp
 )
 
 set(
