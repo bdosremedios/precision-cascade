@@ -45,10 +45,10 @@ protected:
     const double u_sgl = pow(2, -23);
     const double u_dbl = pow(2, -52);
 
-    const static int HLF_PHASE;
-    const static int SGL_PHASE;
-    const static int DBL_PHASE;
-    const static int INIT_PHASE;
+    const static int HLF_PHASE = 0;
+    const static int SGL_PHASE = 1;
+    const static int DBL_PHASE = 2;
+    inline const static int INIT_PHASE = HLF_PHASE;
 
     // *** PROTECTED ATTRIBUTES ***
     int cascade_phase;
@@ -91,18 +91,6 @@ public:
     }
 
 };
-
-template <template <typename> typename M>
-const int MP_GMRES_IR_Solve<M>::HLF_PHASE = 0;
-
-template <template <typename> typename M>
-const int MP_GMRES_IR_Solve<M>::SGL_PHASE = 1;
-
-template <template <typename> typename M>
-const int MP_GMRES_IR_Solve<M>::DBL_PHASE = 2;
-
-template <template <typename> typename M>
-const int MP_GMRES_IR_Solve<M>::INIT_PHASE = MP_GMRES_IR_Solve<M>::HLF_PHASE;
 
 template <template <typename> typename M>
 class SimpleConstantThreshold : public MP_GMRES_IR_Solve<M>
