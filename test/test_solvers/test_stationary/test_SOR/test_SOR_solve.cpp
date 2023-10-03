@@ -17,6 +17,7 @@ public:
 
         M<double> A = read_matrixCSV<M, double>(A_file_path);
         M<double> b = read_matrixCSV<M, double>(b_file_path);
+        TypedLinearSystem<M, T> lin_sys(A, b);
 
         SolveArgPkg args;
         args.max_iter = 1000;
@@ -26,7 +27,7 @@ public:
 
             cout << "Testing w=" << *w << endl;
 
-            SORSolve<M, T> gauss_seidel_solve(A, b, *w, args);
+            SORSolve<M, T> gauss_seidel_solve(lin_sys, *w, args);
             gauss_seidel_solve.solve();
             if (*show_plots) { gauss_seidel_solve.view_relres_plot("log"); }
             
@@ -46,6 +47,7 @@ public:
 
         M<double> A = read_matrixCSV<M, double>(A_file_path);
         M<double> b = read_matrixCSV<M, double>(b_file_path);
+        TypedLinearSystem<M, T> lin_sys(A, b);
 
         SolveArgPkg args;
         args.max_iter = 300;
@@ -53,7 +55,7 @@ public:
 
         for (auto w = ws.cbegin(); w != ws.cend(); ++w) {
     
-            SORSolve<M, T> gauss_seidel_solve(A, b, *w, args);
+            SORSolve<M, T> gauss_seidel_solve(lin_sys, *w, args);
             gauss_seidel_solve.solve();
             if (*show_plots) { gauss_seidel_solve.view_relres_plot("log"); }
             
@@ -65,7 +67,6 @@ public:
     }
 
 };
-
 
 TEST_F(SORTest, SolveConvDiff64Double_Dense) {
     SolveSuccessTest<MatrixDense, double>(

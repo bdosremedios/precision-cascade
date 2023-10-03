@@ -69,14 +69,14 @@ protected:
 
     // *** PROTECTED ATTRIBUTES ***
 
-    // Generic constant Linear System Attributes
+    // Linear system attributes
     const GenericLinearSystem<M> lin_sys;
     const MatrixVector<double> init_guess;
 
     // Constant solve attributes
     const double target_rel_res;
 
-    // Generic Mutable Solve Attributes
+    // Mutable solve Attributes
     int max_iter; // mutable to allow setting by specific solvers
     int curr_iter;
     bool initiated;
@@ -296,11 +296,13 @@ protected:
 
     // *** PROTECTED ATTRIBUTES ***
 
-    // Typed Linear System Attributes
+    // Linear system attributes
     const TypedLinearSystem<M, T> typed_lin_sys;
+
+    // Constant solve attributes
     const MatrixVector<T> init_guess_typed;
 
-    // Typed Mutable solve attributes
+    // Mutable solve attributes
     MatrixVector<T> typed_soln;
 
     // *** PROTECTED ABSTRACT METHODS ***
