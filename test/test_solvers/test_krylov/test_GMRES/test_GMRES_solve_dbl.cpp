@@ -16,10 +16,11 @@ public:
 
         M<double> A = read_matrixCSV<M, double>(A_file_path);
         MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(b_file_path);
+        TypedLinearSystem<M, double> lin_sys(A, b);
 
         SolveArgPkg args;
         args.target_rel_res = conv_tol_dbl;
-        GMRESSolve<M, double> gmres_solve(A, b, u_dbl, args);
+        GMRESSolve<M, double> gmres_solve(lin_sys, u_dbl, args);
 
         gmres_solve.solve();
 

@@ -16,18 +16,19 @@ public:
         constexpr int n(45);
         M<double> A = read_matrixCSV<M, double>(solve_matrix_dir + "A_inv_45.csv");
         MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "b_inv_45.csv");
+        TypedLinearSystem<M, double> lin_sys(A, b);
 
-        GMRESSolve<M, double> pgmres_solve_default(A, b, u_dbl, pgmres_args);
+        GMRESSolve<M, double> pgmres_solve_default(lin_sys, u_dbl, pgmres_args);
 
         GMRESSolve<M, double> pgmres_solve_explicit_noprecond(
-            A, b, u_dbl,
+            lin_sys, u_dbl,
             pgmres_args,
             PrecondArgPkg<M, double>(make_shared<NoPreconditioner<M, double>>(),
                                      make_shared<NoPreconditioner<M, double>>())
         );
 
         GMRESSolve<M, double> pgmres_solve_inverse_of_identity(
-            A, b, u_dbl,
+            lin_sys, u_dbl,
             pgmres_args,
             PrecondArgPkg<M, double>(
                 make_shared<MatrixInverse<M, double>>(M<double>::Identity(n, n)),
@@ -58,7 +59,8 @@ public:
         const PrecondArgPkg<M, double> &precond_pkg
     ) {
 
-        GMRESSolve<M, double> pgmres_solve(A, b, u_dbl, pgmres_args, precond_pkg);
+        TypedLinearSystem<M, double> lin_sys(A, b);
+        GMRESSolve<M, double> pgmres_solve(lin_sys, u_dbl, pgmres_args, precond_pkg);
 
         pgmres_solve.solve();
         if (*show_plots) { pgmres_solve.view_relres_plot("log"); }
@@ -76,7 +78,8 @@ public:
         const PrecondArgPkg<M, double> &precond_pkg
     ) {
 
-        GMRESSolve<M, double> pgmres_solve(A, b, u_dbl, pgmres_args, precond_pkg);
+        TypedLinearSystem<M, double> lin_sys(A, b);
+        GMRESSolve<M, double> pgmres_solve(lin_sys, u_dbl, pgmres_args, precond_pkg);
 
         pgmres_solve.solve();
         if (*show_plots) { pgmres_solve.view_relres_plot("log"); }

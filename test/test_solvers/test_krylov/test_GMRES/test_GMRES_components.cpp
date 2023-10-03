@@ -15,7 +15,9 @@ public:
 
         M<double> A = read_matrixCSV<M, double>(A_file_path);
         MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(b_file_path);
-        GMRESSolveTestingMock<M, double> test_mock(A, b, u_dbl, default_args);
+        TypedLinearSystem<M, double> lin_sys(A, b);
+
+        GMRESSolveTestingMock<M, double> test_mock(lin_sys, u_dbl, default_args);
 
         ASSERT_EQ(test_mock.max_kry_space_dim, n);
         ASSERT_EQ(test_mock.rho, (b - A*MatrixVector<double>::Ones(n)).norm());
@@ -64,8 +66,9 @@ public:
         const int n(5);
         M<double> A = read_matrixCSV<M, double>(solve_matrix_dir + "A_5_toy.csv");
         MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "b_5_toy.csv");
+        TypedLinearSystem<M, double> lin_sys(A, b);
 
-        GMRESSolveTestingMock<M, double> test_mock(A, b, u_dbl, default_args);
+        GMRESSolveTestingMock<M, double> test_mock(lin_sys, u_dbl, default_args);
 
         test_mock.typed_soln = MatrixVector<double>::Ones(n); // Manually instantiate initial guess
         MatrixVector<double> r_0 = b - A*MatrixVector<double>::Ones(n);
@@ -128,8 +131,9 @@ public:
         const int n(5);
         M<double> A = read_matrixCSV<M, double>(solve_matrix_dir + "A_5_toy.csv");
         MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "b_5_toy.csv");
+        TypedLinearSystem<M, double> lin_sys(A, b);
 
-        GMRESSolveTestingMock<M, double> test_mock(A, b, u_dbl, default_args);
+        GMRESSolveTestingMock<M, double> test_mock(lin_sys, u_dbl, default_args);
 
         test_mock.typed_soln = MatrixVector<double>::Ones(n); // Manually instantiate initial guess
         MatrixVector<double> r_0 = b - A*MatrixVector<double>::Ones(n);
@@ -204,12 +208,14 @@ public:
         MatrixDense<double> R = read_matrixCSV<MatrixDense, double>(solve_matrix_dir + "R_8_backsub.csv");
         M<double> A = read_matrixCSV<M, double>(solve_matrix_dir + "A_7_dummy_backsub.csv");
         MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "b_7_dummy_backsub.csv");
+        TypedLinearSystem<M, double> lin_sys(A, b);
 
         // Set initial guess to zeros such that residual is just b
         MatrixVector<double> x_0 = MatrixVector<double>::Zero(n);
         SolveArgPkg args;
         args.init_guess = x_0;
-        GMRESSolveTestingMock<M, double> test_mock(A, b, u_dbl, args);
+
+        GMRESSolveTestingMock<M, double> test_mock(lin_sys, u_dbl, args);
 
         // Set test_mock krylov basis to the identity to have typed_soln be directly the solved coefficients
         // of the back substitution
@@ -249,12 +255,14 @@ public:
         const int n(5);
         M<double> A = read_matrixCSV<M, double>(solve_matrix_dir + "A_5_easysoln.csv");
         MatrixVector<double> b = read_matrixCSV<M, double>(solve_matrix_dir + "b_5_easysoln.csv");
+        TypedLinearSystem<M, double> lin_sys(A, b);
 
         MatrixVector<double> soln = MatrixVector<double>::Ones(n); // Instantiate initial guess as true solution
         SolveArgPkg args;
         args.target_rel_res = conv_tol_dbl;
         args.init_guess = soln;
-        GMRESSolveTestingMock<M, double> test_mock(A, b, u_dbl, args);
+
+        GMRESSolveTestingMock<M, double> test_mock(lin_sys, u_dbl, args);
 
         // Attempt to update subspace and Hessenberg
         test_mock.iterate();
@@ -290,12 +298,14 @@ public:
         constexpr int n(5);
         M<double> A = read_matrixCSV<M, double>(solve_matrix_dir + "A_5_easysoln.csv");
         MatrixVector<double> b = read_matrixCSV<M, double>(solve_matrix_dir + "b_5_easysoln.csv");
+        TypedLinearSystem<M, double> lin_sys(A, b);
 
         MatrixVector<double> soln = MatrixVector<double>::Zero(n); // Initialize as near solution
         soln(0) = 1;
         SolveArgPkg args;
         args.init_guess = soln;
-        GMRESSolveTestingMock<M, double> test_mock(A, b, u_dbl, args);
+
+        GMRESSolveTestingMock<M, double> test_mock(lin_sys, u_dbl, args);
 
         // Attempt to update subspace and convergence twice
         test_mock.iterate();
@@ -322,13 +332,15 @@ public:
         constexpr int n(5);
         M<double> A = read_matrixCSV<M, double>(solve_matrix_dir + "A_5_easysoln.csv");
         MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "b_5_easysoln.csv");
+        TypedLinearSystem<M, double> lin_sys(A, b);
 
         MatrixVector<double> soln = MatrixVector<double>::Zero(n); // Initialize as near solution
         soln(0) = 1;
         SolveArgPkg args;
         args.init_guess = soln;
         args.target_rel_res = conv_tol_dbl;
-        GMRESSolveTestingMock<M, double> test_mock(A, b, u_dbl, args);
+
+        GMRESSolveTestingMock<M, double> test_mock(lin_sys, u_dbl, args);
 
         // Attempt to update and solve through solve of LinearSolve
         test_mock.solve();
@@ -356,11 +368,13 @@ public:
         constexpr int n(20);
         M<double> A = M<double>::Random(n, n);
         MatrixVector<double> b = MatrixVector<double>::Random(n);
+        TypedLinearSystem<M, double> lin_sys(A, b);
 
         SolveArgPkg args;
         args.max_iter = n;
         args.target_rel_res = conv_tol_dbl;
-        GMRESSolve<M, double> gmres_solve(A, b, u_dbl, args);
+
+        GMRESSolve<M, double> gmres_solve(lin_sys, u_dbl, args);
 
         gmres_solve.solve();
         if (*show_plots) { gmres_solve.view_relres_plot("log"); }
@@ -376,11 +390,13 @@ public:
         constexpr int n(20);
         M<double> A = M<double>::Random(n, n);
         MatrixVector<double> b = MatrixVector<double>::Random(n);
+        TypedLinearSystem<M, double> lin_sys(A, b);
 
         SolveArgPkg args;
         args.max_iter = n;
         args.target_rel_res = conv_tol_dbl;
-        GMRESSolveTestingMock<M, double> test_mock(A, b, u_dbl, args);
+
+        GMRESSolveTestingMock<M, double> test_mock(lin_sys, u_dbl, args);
 
         test_mock.solve();
         if (*show_plots) { test_mock.view_relres_plot("log"); }
@@ -456,24 +472,28 @@ TEST_F(GMRESComponentTest, CheckCorrectDefaultMaxIter_Both) {
     constexpr int n(7);
     MatrixDense<double> A_n = MatrixDense<double>::Random(n, n);
     MatrixVector<double> b_n = MatrixVector<double>::Random(n);
+    TypedLinearSystem<MatrixDense, double> lin_sys_n(A_n, b_n);
     GMRESSolveTestingMock<MatrixDense, double> test_mock_n_dense(
-        A_n, b_n, u_dbl, default_args
+        lin_sys_n, u_dbl, default_args
     );
     ASSERT_EQ(test_mock_n_dense.max_iter, n);
+    TypedLinearSystem<MatrixSparse, double> lin_sys_sparse_n(A_n.sparseView(), b_n);
     GMRESSolveTestingMock<MatrixSparse, double> test_mock_n_sparse(
-        A_n.sparseView(), b_n, u_dbl, default_args
+        lin_sys_sparse_n, u_dbl, default_args
     );
     ASSERT_EQ(test_mock_n_sparse.max_iter, n);
 
     constexpr int m(53);
     MatrixDense<double> A_m = MatrixDense<double>::Random(m, m);
     MatrixVector<double> b_m = MatrixVector<double>::Random(m);
+    TypedLinearSystem<MatrixDense, double> lin_sys_m(A_m, b_m);
     GMRESSolveTestingMock<MatrixDense, double> test_mock_m_dense(
-        A_m, b_m, u_dbl, default_args
+        lin_sys_m, u_dbl, default_args
     );
     ASSERT_EQ(test_mock_m_dense.max_iter, m);
+    TypedLinearSystem<MatrixSparse, double> lin_sys_sparse_m(A_m.sparseView(), b_m);
     GMRESSolveTestingMock<MatrixSparse, double> test_mock_m_sparse(
-        A_m.sparseView(), b_m, u_dbl, default_args
+        lin_sys_sparse_m, u_dbl, default_args
     );
     ASSERT_EQ(test_mock_m_sparse.max_iter, m);
 
@@ -481,14 +501,16 @@ TEST_F(GMRESComponentTest, CheckCorrectDefaultMaxIter_Both) {
     constexpr int non_default_iter(10);
     MatrixDense<double> A_o = MatrixDense<double>::Random(o, o);
     MatrixVector<double> b_o = MatrixVector<double>::Random(o);
+    TypedLinearSystem<MatrixDense, double> lin_sys_o(A_o, b_o);
     SolveArgPkg non_default_args;
     non_default_args.max_iter = non_default_iter;
     GMRESSolveTestingMock<MatrixDense, double> test_mock_o_dense(
-        A_o, b_o, u_dbl, non_default_args
+        lin_sys_o, u_dbl, non_default_args
     );
     ASSERT_EQ(test_mock_o_dense.max_iter, non_default_iter);
+    TypedLinearSystem<MatrixSparse, double> lin_sys_sparse_o(A_o.sparseView(), b_o);
     GMRESSolveTestingMock<MatrixSparse, double> test_mock_o_sparse(
-        A_o.sparseView(), b_o, u_dbl, non_default_args
+        lin_sys_sparse_o, u_dbl, non_default_args
     );
     ASSERT_EQ(test_mock_o_sparse.max_iter, non_default_iter);
 
@@ -499,16 +521,18 @@ TEST_F(GMRESComponentTest, CheckErrorExceedDimension_Both) {
     constexpr int n(7);
     MatrixDense<double> A_n = MatrixDense<double>::Random(n, n);
     MatrixVector<double> b_n = MatrixVector<double>::Random(n);
+    TypedLinearSystem<MatrixDense, double> lin_sys_n(A_n, b_n);
+    TypedLinearSystem<MatrixSparse, double> lin_sys_sparse_n(A_n.sparseView(), b_n);
     SolveArgPkg args;
     args.max_iter = 100;
 
     try {
-        GMRESSolveTestingMock<MatrixDense, double> test_mock_n(A_n, b_n, u_dbl, args);
+        GMRESSolveTestingMock<MatrixDense, double> test_mock_n(lin_sys_n, u_dbl, args);
         FAIL();
     } catch (runtime_error e) { cout << e.what() << endl; }
 
     try {
-        GMRESSolveTestingMock<MatrixSparse, double> test_mock_n(A_n.sparseView(), b_n, u_dbl, args);
+        GMRESSolveTestingMock<MatrixSparse, double> test_mock_n(lin_sys_sparse_n, u_dbl, args);
         FAIL();
     } catch (runtime_error e) { cout << e.what() << endl; }
 

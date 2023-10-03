@@ -27,11 +27,11 @@ set(
     test_solvers/test_stationary/test_SOR/test_GaussSeidel_solve.cpp
     test_solvers/test_stationary/test_SOR/test_SOR_solve.cpp
 
-    # test_solvers/test_krylov/test_GMRES/test_GMRES_components.cpp
-    # test_solvers/test_krylov/test_GMRES/test_GMRES_solve_dbl.cpp
-    # test_solvers/test_krylov/test_GMRES/test_GMRES_solve_sgl.cpp
-    # test_solvers/test_krylov/test_GMRES/test_GMRES_solve_hlf.cpp
-    # test_solvers/test_krylov/test_GMRES/test_PGMRES.cpp
+    test_solvers/test_krylov/test_GMRES/test_GMRES_components.cpp
+    test_solvers/test_krylov/test_GMRES/test_GMRES_solve_dbl.cpp
+    test_solvers/test_krylov/test_GMRES/test_GMRES_solve_sgl.cpp
+    test_solvers/test_krylov/test_GMRES/test_GMRES_solve_hlf.cpp
+    test_solvers/test_krylov/test_GMRES/test_PGMRES.cpp
 
     # test_solvers/test_nested/test_FP_GMRES_IR_solve.cpp
     # test_solvers/test_nested/test_MP_GMRES_IR_component.cpp

@@ -15,10 +15,11 @@ public:
 
         M<double> A = read_matrixCSV<M, double>(A_file_path);
         MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(b_file_path);
+        TypedLinearSystem<M, float> lin_sys(A, b);
 
         SolveArgPkg args;
         args.target_rel_res = conv_tol_sgl;
-        GMRESSolve<M, float> gmres_solve(A, b, u_sgl, args);
+        GMRESSolve<M, float> gmres_solve(lin_sys, u_sgl, args);
 
         gmres_solve.solve();
 
@@ -36,11 +37,12 @@ public:
         constexpr int n(64);
         M<double> A = read_matrixCSV<M, double>(solve_matrix_dir + "conv_diff_64_A.csv");
         MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "conv_diff_64_b.csv");
+        TypedLinearSystem<M, float> lin_sys(A, b);
 
         // Check convergence under single capabilities
         SolveArgPkg args;
         args.target_rel_res = conv_tol_sgl;
-        GMRESSolve<M, float> gmres_solve_succeed(A, b, u_sgl, args);
+        GMRESSolve<M, float> gmres_solve_succeed(lin_sys, u_sgl, args);
 
         gmres_solve_succeed.solve();
         if (*show_plots) { gmres_solve_succeed.view_relres_plot("log"); }
@@ -51,7 +53,7 @@ public:
         // Check divergence beyond single capability of the single machine epsilon
         SolveArgPkg fail_args;
         fail_args.target_rel_res = 0.1*u_sgl;
-        GMRESSolve<M, float> gmres_solve_fail(A, b, u_sgl, fail_args);
+        GMRESSolve<M, float> gmres_solve_fail(lin_sys, u_sgl, fail_args);
 
         gmres_solve_fail.solve();
         if (*show_plots) { gmres_solve_fail.view_relres_plot("log"); }
@@ -70,6 +72,7 @@ TEST_F(GMRESSingleSolveTest, SolveConvDiff64_Dense) {
         false
     );
 }
+
 TEST_F(GMRESSingleSolveTest, SolveConvDiff64_Sparse) {
     SolveTest<MatrixSparse>(
         solve_matrix_dir + "conv_diff_64_A.csv",

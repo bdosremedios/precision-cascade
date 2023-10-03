@@ -8,10 +8,8 @@ class GMRESSolve: public TypedIterativeSolve<M, T>
 {
 protected:
 
-    using TypedIterativeSolve<M, T>::m;
-    using TypedIterativeSolve<M, T>::A_T;
-    using TypedIterativeSolve<M, T>::b_T;
-    using TypedIterativeSolve<M, T>::init_guess_T;
+    using TypedIterativeSolve<M, T>::typed_lin_sys;
+    using TypedIterativeSolve<M, T>::init_guess_typed;
     using TypedIterativeSolve<M, T>::typed_soln;
     using TypedIterativeSolve<M, T>::max_iter;
 
@@ -34,10 +32,10 @@ protected:
     void check_compatibility() const {
 
         // Assert compatibility of preconditioners with matrix
-        if (!left_precond_ptr->check_compatibility_left(this->m)) {
+        if (!left_precond_ptr->check_compatibility_left(typed_lin_sys.get_m())) {
             throw runtime_error("Left preconditioner is not compatible with linear system");
         }
-        if (!right_precond_ptr->check_compatibility_right(this->n)) {
+        if (!right_precond_ptr->check_compatibility_right(typed_lin_sys.get_n())) {
             throw runtime_error("Right preconditioner is not compatible with linear system");
         }
     
@@ -50,14 +48,18 @@ protected:
 
         // Pre-allocate all possible space needed to prevent memory
         // re-allocation
-        Q_kry_basis = MatrixDense<T>::Zero(m, m);
-        H = MatrixDense<T>::Zero(m+1, m);
-        Q_H = MatrixDense<T>::Identity(m+1, m+1);
-        R_H = MatrixDense<T>::Zero(m+1, m);
+        Q_kry_basis = MatrixDense<T>::Zero(typed_lin_sys.get_m(), typed_lin_sys.get_m());
+        H = MatrixDense<T>::Zero(typed_lin_sys.get_m()+1, typed_lin_sys.get_m());
+        Q_H = MatrixDense<T>::Identity(typed_lin_sys.get_m()+1, typed_lin_sys.get_m()+1);
+        R_H = MatrixDense<T>::Zero(typed_lin_sys.get_m()+1, typed_lin_sys.get_m());
 
         // Set rho as initial residual norm
-        MatrixVector<T> Minv_A_x0 = (left_precond_ptr->action_inv_M(A_T*init_guess_T)).template cast<T>();
-        MatrixVector<T> Minv_b = (left_precond_ptr->action_inv_M(b_T)).template cast<T>();
+        MatrixVector<T> Minv_A_x0 = (
+            (left_precond_ptr->action_inv_M(typed_lin_sys.get_A_typed()*init_guess_typed)).template cast<T>()
+        );
+        MatrixVector<T> Minv_b = (
+            (left_precond_ptr->action_inv_M(typed_lin_sys.get_b_typed())).template cast<T>()
+        );
         MatrixVector<T> r_0 = Minv_b - Minv_A_x0;
         rho = r_0.norm();
 
@@ -71,7 +73,7 @@ protected:
     void initializeGMRES() {
 
         // Specify max dimension for krylov subspace
-        max_kry_space_dim = m;
+        max_kry_space_dim = typed_lin_sys.get_m();
 
         // Ensure that max_iter does not exceed krylov subspace
         if (max_iter > max_kry_space_dim) {
@@ -108,7 +110,7 @@ protected:
         // Find next vector power of linear system
         next_q = Q_kry_basis.col(k);
         next_q = (right_precond_ptr->action_inv_M(next_q)).template cast<T>(); // Apply action of right preconditioner
-        next_q = A_T*next_q; // Apply matrix A_T
+        next_q = typed_lin_sys.get_A_typed()*next_q; // Apply typed matrix A
         next_q = (left_precond_ptr->action_inv_M(next_q)).template cast<T>(); // Apply action of left preconditioner
 
         // Orthogonlize next_q to previous basis vectors and store coefficients and
@@ -172,8 +174,10 @@ protected:
 
         // Update typed_soln adjusting with right preconditioning
         typed_soln = (
-            init_guess_T +
-            (right_precond_ptr->action_inv_M(Q_kry_basis.block(0, 0, m, kry_space_dim)*y)).template cast<T>()
+            init_guess_typed +
+            (right_precond_ptr->action_inv_M(
+                Q_kry_basis.block(0, 0, typed_lin_sys.get_m(), kry_space_dim)*y)
+            ).template cast<T>()
         );
 
     }
@@ -213,18 +217,18 @@ public:
     // *** CONSTRUCTORS ***
 
     GMRESSolve(
-        M<double> const &arg_A,
-        MatrixVector<double> const &arg_b,
-        double const &arg_basis_zero_tol,
-        SolveArgPkg const &solve_arg_pkg,
-        PrecondArgPkg<M, W> const &precond_arg_pkg = PrecondArgPkg<M, W>()
+        const TypedLinearSystem<M, T> &arg_typed_lin_sys,
+        const double &arg_basis_zero_tol,
+        const SolveArgPkg &solve_arg_pkg,
+        const PrecondArgPkg<M, W> &precond_arg_pkg = PrecondArgPkg<M, W>()
     ):
         basis_zero_tol(arg_basis_zero_tol),
         left_precond_ptr(precond_arg_pkg.left_precond),
         right_precond_ptr(precond_arg_pkg.right_precond),
-        TypedIterativeSolve<M, T>::TypedIterativeSolve(arg_A, arg_b, solve_arg_pkg)
+        TypedIterativeSolve<M, T>::TypedIterativeSolve(arg_typed_lin_sys, solve_arg_pkg)
     {
-        max_iter = (solve_arg_pkg.check_default_max_iter()) ? arg_A.rows() : solve_arg_pkg.max_iter;
+        max_iter = (solve_arg_pkg.check_default_max_iter()) ? typed_lin_sys.get_m() :
+                                                              solve_arg_pkg.max_iter;
         initializeGMRES();
     }
 
