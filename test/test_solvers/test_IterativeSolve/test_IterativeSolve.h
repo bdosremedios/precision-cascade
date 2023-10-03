@@ -18,7 +18,7 @@ class TypedIterativeSolveTestingMock: public TypedIterativeSolve<M, T> {
         using TypedIterativeSolve<M, T>::generic_soln;
     
         using TypedIterativeSolve<M, T>::typed_lin_sys;
-        using TypedIterativeSolve<M, T>::init_guess_T;
+        using TypedIterativeSolve<M, T>::init_guess_typed;
         using TypedIterativeSolve<M, T>::typed_soln;
 
         using TypedIterativeSolve<M, T>::initiated;
@@ -31,12 +31,12 @@ class TypedIterativeSolveTestingMock: public TypedIterativeSolve<M, T> {
         using TypedIterativeSolve<M, T>::res_norm_hist;
 
         TypedIterativeSolveTestingMock(
-            const LinearSystem<M> &arg_lin_sys,
+            const TypedLinearSystem<M, T> &arg_typed_lin_sys,
             const MatrixVector<T> &arg_soln_typed,
             const SolveArgPkg &arg_pkg
         ):
             soln(arg_soln_typed),
-            TypedIterativeSolve<M, T>::TypedIterativeSolve(arg_lin_sys, arg_pkg)
+            TypedIterativeSolve<M, T>::TypedIterativeSolve(arg_typed_lin_sys, arg_pkg)
         {}
 
 };
