@@ -15,12 +15,13 @@ public:
 
         M<double> A = read_matrixCSV<M, double>(A_file_path);
         M<double> b = read_matrixCSV<M, double>(b_file_path);
+        TypedLinearSystem<M, T> lin_sys(A, b);
 
         SolveArgPkg args;
         args.max_iter = 2000;
         args.target_rel_res = conv_tol;
     
-        JacobiSolve<M, T> jacobi_solve(A, b, args);
+        JacobiSolve<M, T> jacobi_solve(lin_sys, args);
         jacobi_solve.solve();
         if (*show_plots) { jacobi_solve.view_relres_plot("log"); }
         
@@ -38,12 +39,13 @@ public:
 
         M<double> A = read_matrixCSV<M, double>(A_file_path);
         M<double> b = read_matrixCSV<M, double>(b_file_path);
+        TypedLinearSystem<M, T> lin_sys(A, b);
 
         SolveArgPkg args;
         args.max_iter = 400;
         args.target_rel_res = fail_tol;
     
-        JacobiSolve<M, T> jacobi_solve(A, b, args);
+        JacobiSolve<M, T> jacobi_solve(lin_sys, args);
         jacobi_solve.solve();
         if (*show_plots) { jacobi_solve.view_relres_plot("log"); }
         

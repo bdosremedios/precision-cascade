@@ -23,9 +23,9 @@ set(
 
     test_solvers/test_IterativeSolve/test_IterativeSolve.cpp
 
-    # test_solvers/test_stationary/test_Jacobi_solve.cpp
-    # test_solvers/test_stationary/test_SOR/test_GaussSeidel_solve.cpp
-    # test_solvers/test_stationary/test_SOR/test_SOR_solve.cpp
+    test_solvers/test_stationary/test_Jacobi_solve.cpp
+    test_solvers/test_stationary/test_SOR/test_GaussSeidel_solve.cpp
+    test_solvers/test_stationary/test_SOR/test_SOR_solve.cpp
 
     # test_solvers/test_krylov/test_GMRES/test_GMRES_components.cpp
     # test_solvers/test_krylov/test_GMRES/test_GMRES_solve_dbl.cpp

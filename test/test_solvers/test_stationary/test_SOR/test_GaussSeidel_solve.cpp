@@ -15,12 +15,13 @@ public:
 
         M<double> A = read_matrixCSV<M, double>(A_file_path);
         M<double> b = read_matrixCSV<M, double>(b_file_path);
+        TypedLinearSystem<M, T> lin_sys(A, b);
 
         SolveArgPkg args;
         args.max_iter = 1000;
         args.target_rel_res = conv_tol;
     
-        SORSolve<M, T> gauss_seidel_solve(A, b, 1, args);
+        SORSolve<M, T> gauss_seidel_solve(lin_sys, 1, args);
         gauss_seidel_solve.solve();
         if (*show_plots) { gauss_seidel_solve.view_relres_plot("log"); }
         
@@ -38,12 +39,13 @@ public:
 
         M<double> A = read_matrixCSV<M, double>(A_file_path);
         M<double> b = read_matrixCSV<M, double>(b_file_path);
+        TypedLinearSystem<M, T> lin_sys(A, b);
 
         SolveArgPkg args;
         args.max_iter = 300;
         args.target_rel_res = fail_tol;
     
-        SORSolve<M, T> gauss_seidel_solve(A, b, 1, args);
+        SORSolve<M, T> gauss_seidel_solve(lin_sys, 1, args);
         gauss_seidel_solve.solve();
         if (*show_plots) { gauss_seidel_solve.view_relres_plot("log"); }
         
