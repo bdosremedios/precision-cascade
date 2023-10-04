@@ -17,7 +17,8 @@ public:
         M<double> A = read_matrixCSV<M, double>(A_file_path);
         MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(b_file_path);
 
-        SimpleConstantThreshold<M> mp_gmres_ir_solve(A, b, dbl_GMRES_IR_args);
+        GenericLinearSystem<M> lin_sys(A, b);
+        SimpleConstantThreshold<M> mp_gmres_ir_solve(lin_sys, dbl_GMRES_IR_args);
 
         mp_gmres_ir_solve.solve();
 

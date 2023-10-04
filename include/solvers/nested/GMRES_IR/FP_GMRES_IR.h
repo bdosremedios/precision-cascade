@@ -45,6 +45,8 @@ protected:
     
 public:
 
+    using IterativeRefinement<M>::lin_sys;
+
     // *** CONSTRUCTORS ***
 
     FP_GMRES_IR_Solve(
