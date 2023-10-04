@@ -87,7 +87,7 @@ public:
         b_typed = b.template cast<T>();
     }
 
-    const MatrixVector<T> &get_b() const override { return b; }
+    const MatrixVector<double> &get_b() const override { return b; }
 
     const MatrixVector<T> &get_b_typed() const override { return b_typed; }
 

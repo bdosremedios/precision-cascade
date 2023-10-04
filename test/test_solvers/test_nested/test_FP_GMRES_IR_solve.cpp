@@ -43,86 +43,86 @@ TEST_F(FP_GMRES_IR_Test, DoubleConvergenceTest_ConvDiff64_Dense) {
         dbl_GMRES_IR_args, u_dbl, conv_tol_dbl
     );
 }
-// TEST_F(FP_GMRES_IR_Test, DoubleConvergenceTest_ConvDiff64_Sparse) {
-//     SolveTest<MatrixSparse, double>(
-//         solve_matrix_dir + "conv_diff_64_A.csv",
-//         solve_matrix_dir + "conv_diff_64_b.csv",
-//         dbl_GMRES_IR_args, u_dbl, conv_tol_dbl
-//     );
-// }
+TEST_F(FP_GMRES_IR_Test, DoubleConvergenceTest_ConvDiff64_Sparse) {
+    SolveTest<MatrixSparse, double>(
+        solve_matrix_dir + "conv_diff_64_A.csv",
+        solve_matrix_dir + "conv_diff_64_b.csv",
+        dbl_GMRES_IR_args, u_dbl, conv_tol_dbl
+    );
+}
 
-// TEST_F(FP_GMRES_IR_Test, DoubleConvergenceTest_ConvDiff256_Dense) {
-//     SolveTest<MatrixDense, double>(
-//         solve_matrix_dir + "conv_diff_256_A.csv",
-//         solve_matrix_dir + "conv_diff_256_b.csv",
-//         dbl_GMRES_IR_args, u_dbl, conv_tol_dbl
-//     );
-// }
-// TEST_F(FP_GMRES_IR_Test, DoubleConvergenceTest_ConvDiff256_Sparse) {
-//     SolveTest<MatrixSparse, double>(
-//         solve_matrix_dir + "conv_diff_256_A.csv",
-//         solve_matrix_dir + "conv_diff_256_b.csv",
-//         dbl_GMRES_IR_args, u_dbl, conv_tol_dbl
-//     );
-// }
+TEST_F(FP_GMRES_IR_Test, DoubleConvergenceTest_ConvDiff256_Dense) {
+    SolveTest<MatrixDense, double>(
+        solve_matrix_dir + "conv_diff_256_A.csv",
+        solve_matrix_dir + "conv_diff_256_b.csv",
+        dbl_GMRES_IR_args, u_dbl, conv_tol_dbl
+    );
+}
+TEST_F(FP_GMRES_IR_Test, DoubleConvergenceTest_ConvDiff256_Sparse) {
+    SolveTest<MatrixSparse, double>(
+        solve_matrix_dir + "conv_diff_256_A.csv",
+        solve_matrix_dir + "conv_diff_256_b.csv",
+        dbl_GMRES_IR_args, u_dbl, conv_tol_dbl
+    );
+}
 
-// TEST_F(FP_GMRES_IR_Test, SingleConvergenceTest_ConvDiff64_Dense) {
-//     SolveTest<MatrixDense, float>(
-//         solve_matrix_dir + "conv_diff_64_A.csv",
-//         solve_matrix_dir + "conv_diff_64_b.csv",
-//         sgl_GMRES_IR_args, u_sgl, conv_tol_sgl
-//     );
-// }
-// TEST_F(FP_GMRES_IR_Test, SingleConvergenceTest_ConvDiff64_Sparse) {
-//     SolveTest<MatrixSparse, float>(
-//         solve_matrix_dir + "conv_diff_64_A.csv",
-//         solve_matrix_dir + "conv_diff_64_b.csv",
-//         sgl_GMRES_IR_args, u_sgl, conv_tol_sgl
-//     );
-// }
+TEST_F(FP_GMRES_IR_Test, SingleConvergenceTest_ConvDiff64_Dense) {
+    SolveTest<MatrixDense, float>(
+        solve_matrix_dir + "conv_diff_64_A.csv",
+        solve_matrix_dir + "conv_diff_64_b.csv",
+        sgl_GMRES_IR_args, u_sgl, conv_tol_sgl
+    );
+}
+TEST_F(FP_GMRES_IR_Test, SingleConvergenceTest_ConvDiff64_Sparse) {
+    SolveTest<MatrixSparse, float>(
+        solve_matrix_dir + "conv_diff_64_A.csv",
+        solve_matrix_dir + "conv_diff_64_b.csv",
+        sgl_GMRES_IR_args, u_sgl, conv_tol_sgl
+    );
+}
 
-// TEST_F(FP_GMRES_IR_Test, SingleConvergenceTest_ConvDiff256_Dense) {
-//     SolveTest<MatrixDense, float>(
-//         solve_matrix_dir + "conv_diff_256_A.csv",
-//         solve_matrix_dir + "conv_diff_256_b.csv",
-//         sgl_GMRES_IR_args, u_sgl, conv_tol_sgl
-//     );
-// }
-// TEST_F(FP_GMRES_IR_Test, SingleConvergenceTest_ConvDiff256_Sparse) {
-//     SolveTest<MatrixSparse, float>(
-//         solve_matrix_dir + "conv_diff_256_A.csv",
-//         solve_matrix_dir + "conv_diff_256_b.csv",
-//         sgl_GMRES_IR_args, u_sgl, conv_tol_sgl
-//     );
-// }
+TEST_F(FP_GMRES_IR_Test, SingleConvergenceTest_ConvDiff256_Dense) {
+    SolveTest<MatrixDense, float>(
+        solve_matrix_dir + "conv_diff_256_A.csv",
+        solve_matrix_dir + "conv_diff_256_b.csv",
+        sgl_GMRES_IR_args, u_sgl, conv_tol_sgl
+    );
+}
+TEST_F(FP_GMRES_IR_Test, SingleConvergenceTest_ConvDiff256_Sparse) {
+    SolveTest<MatrixSparse, float>(
+        solve_matrix_dir + "conv_diff_256_A.csv",
+        solve_matrix_dir + "conv_diff_256_b.csv",
+        sgl_GMRES_IR_args, u_sgl, conv_tol_sgl
+    );
+}
 
 
-// TEST_F(FP_GMRES_IR_Test, HalfConvergenceTest_ConvDiff64_Dense) {
-//     SolveTest<MatrixDense, half>(
-//         solve_matrix_dir + "conv_diff_64_A.csv",
-//         solve_matrix_dir + "conv_diff_64_b.csv",
-//         hlf_GMRES_IR_args, u_hlf, conv_tol_hlf
-//     );
-// }
-// TEST_F(FP_GMRES_IR_Test, HalfConvergenceTest_ConvDiff64_Sparse) {
-//     SolveTest<MatrixSparse, half>(
-//         solve_matrix_dir + "conv_diff_64_A.csv",
-//         solve_matrix_dir + "conv_diff_64_b.csv",
-//         hlf_GMRES_IR_args, u_hlf, conv_tol_hlf
-//     );
-// }
+TEST_F(FP_GMRES_IR_Test, HalfConvergenceTest_ConvDiff64_Dense) {
+    SolveTest<MatrixDense, half>(
+        solve_matrix_dir + "conv_diff_64_A.csv",
+        solve_matrix_dir + "conv_diff_64_b.csv",
+        hlf_GMRES_IR_args, u_hlf, conv_tol_hlf
+    );
+}
+TEST_F(FP_GMRES_IR_Test, HalfConvergenceTest_ConvDiff64_Sparse) {
+    SolveTest<MatrixSparse, half>(
+        solve_matrix_dir + "conv_diff_64_A.csv",
+        solve_matrix_dir + "conv_diff_64_b.csv",
+        hlf_GMRES_IR_args, u_hlf, conv_tol_hlf
+    );
+}
 
-// TEST_F(FP_GMRES_IR_Test, HalfConvergenceTest_ConvDiff256_Dense) {
-//     SolveTest<MatrixDense, half>(
-//         solve_matrix_dir + "conv_diff_256_A.csv",
-//         solve_matrix_dir + "conv_diff_256_b.csv",
-//         hlf_GMRES_IR_args, u_hlf, conv_tol_hlf
-//     );
-// }
-// TEST_F(FP_GMRES_IR_Test, HalfConvergenceTest_ConvDiff256_Sparse) {
-//     SolveTest<MatrixSparse, half>(
-//         solve_matrix_dir + "conv_diff_256_A.csv",
-//         solve_matrix_dir + "conv_diff_256_b.csv",
-//         hlf_GMRES_IR_args, u_hlf, conv_tol_hlf
-//     );
-// }
+TEST_F(FP_GMRES_IR_Test, HalfConvergenceTest_ConvDiff256_Dense) {
+    SolveTest<MatrixDense, half>(
+        solve_matrix_dir + "conv_diff_256_A.csv",
+        solve_matrix_dir + "conv_diff_256_b.csv",
+        hlf_GMRES_IR_args, u_hlf, conv_tol_hlf
+    );
+}
+TEST_F(FP_GMRES_IR_Test, HalfConvergenceTest_ConvDiff256_Sparse) {
+    SolveTest<MatrixSparse, half>(
+        solve_matrix_dir + "conv_diff_256_A.csv",
+        solve_matrix_dir + "conv_diff_256_b.csv",
+        hlf_GMRES_IR_args, u_hlf, conv_tol_hlf
+    );
+}
