@@ -48,6 +48,11 @@ public:
         this->inner_solve_arg_pkg.init_guess = make_inner_IR_guess(arg_lin_sys);
     }
 
+    // Forbid rvalue instantiation
+    IterativeRefinement(const GenericLinearSystem<M> &&, const SolveArgPkg &);
+    IterativeRefinement(const GenericLinearSystem<M> &, const SolveArgPkg &&);
+    IterativeRefinement(const GenericLinearSystem<M> &&, const SolveArgPkg &&);
+
 };
 
 #endif

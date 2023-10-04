@@ -56,6 +56,11 @@ public:
                                           this->init_guess);
     }
 
+    // Forbid rvalue instantiation
+    InnerOuterSolve(const GenericLinearSystem<M> &&, const SolveArgPkg &);
+    InnerOuterSolve(const GenericLinearSystem<M> &, const SolveArgPkg &&);
+    InnerOuterSolve(const GenericLinearSystem<M> &&, const SolveArgPkg &&);
+
     // *** GETTERS ***
     vector<vector<double>> get_inner_res_norm_hist() const { return inner_res_norm_hist; };
 

@@ -45,12 +45,17 @@ public:
 
     SORSolve(
         const TypedLinearSystem<M, T> &arg_typed_lin_sys,
-        const double &arg_w,
+        double arg_w,
         const SolveArgPkg &arg_pkg
     ):
         w(static_cast<T>(arg_w)),
         TypedIterativeSolve<M, T>::TypedIterativeSolve(arg_typed_lin_sys, arg_pkg)
     {}
+
+    // Forbid rvalue instantiation
+    SORSolve(const TypedLinearSystem<M, T> &&, double, const SolveArgPkg &) = delete;
+    SORSolve(const TypedLinearSystem<M, T> &, double, const SolveArgPkg &&) = delete;
+    SORSolve(const TypedLinearSystem<M, T> &&, double, const SolveArgPkg &&) = delete;
 
 };
 

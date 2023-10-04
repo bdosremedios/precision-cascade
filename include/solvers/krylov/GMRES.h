@@ -218,7 +218,7 @@ public:
 
     GMRESSolve(
         const TypedLinearSystem<M, T> &arg_typed_lin_sys,
-        const double &arg_basis_zero_tol,
+        double arg_basis_zero_tol,
         const SolveArgPkg &solve_arg_pkg,
         const PrecondArgPkg<M, W> &precond_arg_pkg = PrecondArgPkg<M, W>()
     ):
@@ -231,6 +231,15 @@ public:
                                                               solve_arg_pkg.max_iter;
         initializeGMRES();
     }
+
+    // Forbid rvalue instantiation
+    GMRESSolve(const TypedLinearSystem<M, T> &&, double, const SolveArgPkg &, const PrecondArgPkg<M, W> &) = delete;
+    GMRESSolve(const TypedLinearSystem<M, T> &, double, const SolveArgPkg &&, const PrecondArgPkg<M, W> &) = delete;
+    GMRESSolve(const TypedLinearSystem<M, T> &, double, const SolveArgPkg &, const PrecondArgPkg<M, W> &&) = delete;
+    GMRESSolve(const TypedLinearSystem<M, T> &&, double, const SolveArgPkg &&, const PrecondArgPkg<M, W> &) = delete;
+    GMRESSolve(const TypedLinearSystem<M, T> &, double, const SolveArgPkg &&, const PrecondArgPkg<M, W> &&) = delete;
+    GMRESSolve(const TypedLinearSystem<M, T> &&, double, const SolveArgPkg &, const PrecondArgPkg<M, W> &&) = delete;
+    GMRESSolve(const TypedLinearSystem<M, T> &&, double, const SolveArgPkg &&, const PrecondArgPkg<M, W> &&) = delete;
 
 };
 

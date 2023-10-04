@@ -20,21 +20,13 @@ public:
 
         GMRESSolve<M, double> pgmres_solve_default(lin_sys, u_dbl, pgmres_args);
 
-        GMRESSolve<M, double> pgmres_solve_explicit_noprecond(
-            lin_sys, u_dbl,
-            pgmres_args,
-            PrecondArgPkg<M, double>(make_shared<NoPreconditioner<M, double>>(),
-                                     make_shared<NoPreconditioner<M, double>>())
-        );
+        PrecondArgPkg<M, double> noprecond(make_shared<NoPreconditioner<M, double>>(),
+                                           make_shared<NoPreconditioner<M, double>>());
+        GMRESSolve<M, double> pgmres_solve_explicit_noprecond(lin_sys, u_dbl, pgmres_args, noprecond);
 
-        GMRESSolve<M, double> pgmres_solve_inverse_of_identity(
-            lin_sys, u_dbl,
-            pgmres_args,
-            PrecondArgPkg<M, double>(
-                make_shared<MatrixInverse<M, double>>(M<double>::Identity(n, n)),
-                make_shared<MatrixInverse<M, double>>(M<double>::Identity(n, n))
-            )
-        );
+        PrecondArgPkg<M, double> identity(make_shared<MatrixInverse<M, double>>(M<double>::Identity(n, n)),
+                                          make_shared<MatrixInverse<M, double>>(M<double>::Identity(n, n)));
+        GMRESSolve<M, double> pgmres_solve_inverse_of_identity(lin_sys, u_dbl, pgmres_args, identity);
 
         pgmres_solve_default.solve();
         if (*show_plots) { pgmres_solve_default.view_relres_plot("log"); }

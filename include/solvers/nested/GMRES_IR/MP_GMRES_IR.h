@@ -126,6 +126,11 @@ public:
         initialize_inner_outer_solver();
     }
 
+    // Forbid rvalue instantiation
+    MP_GMRES_IR_Solve(const GenericLinearSystem<M> &, const SolveArgPkg &&) = delete;
+    MP_GMRES_IR_Solve(const GenericLinearSystem<M> &&, const SolveArgPkg &) = delete;
+    MP_GMRES_IR_Solve(const GenericLinearSystem<M> &&, const SolveArgPkg &&) = delete;
+
 };
 
 template <template <typename> typename M>

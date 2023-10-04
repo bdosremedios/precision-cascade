@@ -65,6 +65,12 @@ public:
 
 };
 
+// TEST_F(MP_GMRES_IR_ComponentTest, asda) {
+//     MP_GMRES_IR_Solve_TestingMock<MatrixDense> dense_mock(
+//         GenericLinearSystem<MatrixDense>(MatrixDense<double>(2, 2),
+//                                                    MatrixVector<double>(2, 1)), default_args);
+// }
+
 TEST_F(MP_GMRES_IR_ComponentTest, Test_Constructor_Both) {
 
     GenericLinearSystem<MatrixDense> lin_sys_dense(MatrixDense<double>(2, 2),

@@ -104,6 +104,11 @@ protected:
         check_compatibility();
         set_self_to_initial_state();
     }
+
+    // Forbid rvalue instantiation
+    GenericIterativeSolve(const GenericLinearSystem<M> &, const SolveArgPkg &&) = delete;
+    GenericIterativeSolve(const GenericLinearSystem<M> &&, const SolveArgPkg &) = delete;
+    GenericIterativeSolve(const GenericLinearSystem<M> &&, const SolveArgPkg &&) = delete;
     
     // *** PROTECTED ABSTRACT METHODS ***
     
@@ -346,7 +351,12 @@ public:
         update_generic_soln();
     }
 
-    // *** METHODS ***
+    // Forbid rvalue instantiation
+    TypedIterativeSolve(const GenericLinearSystem<M> &, const SolveArgPkg &&) = delete;
+    TypedIterativeSolve(const GenericLinearSystem<M> &&, const SolveArgPkg &) = delete;
+    TypedIterativeSolve(const GenericLinearSystem<M> &&, const SolveArgPkg &&) = delete;
+
+    // *** PUBLIC METHODS ***
 
     // Getters
     MatrixVector<T> get_typed_soln() const { return typed_soln; };
