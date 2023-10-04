@@ -12,9 +12,9 @@ private:
     // *** PRIVATE HELPER METHODS ***
 
     void set_inner_solve() {
+        curr_typed_lin_sys.set_b(this->curr_res);
         this->inner_solver = make_shared<GMRESSolve<M, T>>(
-            this->A,
-            this->curr_res,
+            curr_typed_lin_sys,
             basis_zero_tol,
             this->inner_solve_arg_pkg,
             inner_precond_arg_pkg
@@ -24,6 +24,9 @@ private:
 protected:
 
     // *** PROTECTED ATTRIBUTES ***
+
+    const TypedLinearSystem<M, T> initial_typed_lin_sys;
+    Mutb_TypedLinearSystem<M, T> curr_typed_lin_sys;
     double basis_zero_tol;
     PrecondArgPkg<M, W> inner_precond_arg_pkg;
 
@@ -35,22 +38,25 @@ protected:
     // Specify inner_solver for outer_iterate_calc and setup
     void outer_iterate_setup() override { set_inner_solve(); }
 
-    void derived_generic_reset() override {} // Explicitly set as empty function
+    void derived_generic_reset() override { set_inner_solve(); }
     
-    public:
+public:
 
     // *** CONSTRUCTORS ***
 
     FP_GMRES_IR_Solve(
-        M<double> const &arg_A,
-        MatrixVector<double> const &arg_b,
+        const TypedLinearSystem<M, T> &arg_initial_typed_lin_sys,
         double const &arg_basis_zero_tol,
         SolveArgPkg const &arg_solve_arg_pkg,
         PrecondArgPkg<M, W> const &arg_inner_precond_arg_pkg = PrecondArgPkg<M, W>()
     ):
+        initial_typed_lin_sys(arg_initial_typed_lin_sys),
         basis_zero_tol(arg_basis_zero_tol),
         inner_precond_arg_pkg(arg_inner_precond_arg_pkg),
-        IterativeRefinement<M>(arg_A, arg_b, arg_solve_arg_pkg)
+        IterativeRefinement<M>(arg_initial_typed_lin_sys, arg_solve_arg_pkg),
+        curr_typed_lin_sys(Mutb_TypedLinearSystem<M, T>(initial_typed_lin_sys.get_A(),
+                                                        this->curr_res))
+
     {
         initialize_inner_outer_solver();
     }

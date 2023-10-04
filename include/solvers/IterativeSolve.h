@@ -70,7 +70,7 @@ protected:
     // *** PROTECTED ATTRIBUTES ***
 
     // Linear system attributes
-    const GenericLinearSystem<M> lin_sys;
+    const GenericLinearSystem<M> &lin_sys;
     const MatrixVector<double> init_guess;
 
     // Constant solve attributes
@@ -297,7 +297,7 @@ protected:
     // *** PROTECTED ATTRIBUTES ***
 
     // Linear system attributes
-    const TypedLinearSystem<M, T> typed_lin_sys;
+    const TypedLinearSystem<M, T> &typed_lin_sys;
 
     // Constant solve attributes
     const MatrixVector<T> init_guess_typed;

@@ -18,9 +18,9 @@ protected:
 
         // Residual is b - inner_solver residual so update through that
         vector<double> temp;
-        for (int i=0; i<this->inner_solver->get_iteration(); ++i) {
+        for (int i=0; i < this->inner_solver->get_iteration(); ++i) {
             temp.push_back(
-                (this->b-(this->inner_solver->get_res_hist()).col(i)).norm()
+                (this->lin_sys.get_b()-(this->inner_solver->get_res_hist()).col(i)).norm()
             );
         }
         this->inner_res_norm_hist.push_back(temp);
@@ -30,8 +30,8 @@ protected:
     // *** PROTECTED METHODS ***
 
     // Create initial guess for inner solver
-    MatrixVector<double> make_inner_IR_guess(M<double> const &arg_A) const {
-        return MatrixVector<double>::Zero(arg_A.cols());
+    MatrixVector<double> make_inner_IR_guess(GenericLinearSystem<M> const &arg_lin_sys) const {
+        return MatrixVector<double>::Zero(arg_lin_sys.get_n());
     }
 
 public:
@@ -39,14 +39,13 @@ public:
     // *** CONSTRUCTORS ***
 
     IterativeRefinement(
-        M<double> const &arg_A,
-        MatrixVector<double> const &arg_b,
-        SolveArgPkg const &arg_pkg
+        const GenericLinearSystem<M> &arg_lin_sys,
+        const SolveArgPkg &arg_pkg
     ):
-        InnerOuterSolve<M>(arg_A, arg_b, arg_pkg)
+        InnerOuterSolve<M>(arg_lin_sys, arg_pkg)
     {
-        // Replace initial guess with IR for existing inner_solve_arg_pkg
-        this->inner_solve_arg_pkg.init_guess = make_inner_IR_guess(this->A);
+        // Replace initial guess with IR guess of zeroes for existing inner_solve_arg_pkg
+        this->inner_solve_arg_pkg.init_guess = make_inner_IR_guess(arg_lin_sys);
     }
 
 };

@@ -1,36 +1,39 @@
-// #include "Eigen/Dense"
-// #include "Eigen/SparseCore"
+#include "tools/LinearSystem.h"
 
-// #include "experimentation/SolveRecorder.h"
-// #include "solvers/krylov/GMRES.h"
-// #include "tools/MatrixReader.h"
+#include <iostream>
 
-// #include <cmath>
-// #include <memory>
-// #include <iostream>
-// #include <string>
+using std::cout, std::endl;
 
-// using std::pow;
-// using std::shared_ptr, std::make_shared;
+template <template <typename> typename M>
+class TestClass
+{
+public:
+    const GenericLinearSystem<M> &genlinsys;
+    
+    TestClass(const GenericLinearSystem<M> &arg_genlinsys): 
+        genlinsys(arg_genlinsys)
+    {}
+
+};
 
 int main() {
 
-    // string dev_path = "/home/bdosre/dev/";
-    // string test_path = dev_path + "numerical_experimentation/test/test_dir_1/test.json";
+    // MatrixDense<double> A = MatrixDense<double>::Random(4, 4);
+    // MatrixVector<double> b = MatrixVector<double>::Random(4);
 
-    // string f_A = dev_path + "precision-cascade/test/solve_matrices/conv_diff_256_A.csv";
-    // string f_b = dev_path + "precision-cascade/test/solve_matrices/conv_diff_256_b.csv";
+    // TypedLinearSystem<MatrixDense, double> typlinsys(A, b);
 
-    // shared_ptr<GenericIterativeSolve<MatrixDense>> solver = make_shared<GMRESSolve<MatrixDense, double>>(
-    //     read_matrixCSV<MatrixDense, double>(f_A),
-    //     read_matrixCSV<MatrixVector, double>(f_b),
-    //     pow(2, -52),
-    //     SolveArgPkg()
-    // );
+    // cout << typlinsys.A << endl << endl;
 
-    // solver->solve();
+    // TestClass<MatrixDense> test(typlinsys);
 
-    // record_solve(solver, test_path);
+    // cout << test.genlinsys.A << endl << endl;
+
+    // typlinsys.A = MatrixDense<double>::Random(2, 2);
+
+    // cout << typlinsys.A << endl << endl;
+
+    // cout << test.genlinsys.A << endl << endl;
 
     return 0;
 

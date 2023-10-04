@@ -41,12 +41,11 @@ public:
     // *** CONSTRUCTORS ***
 
     InnerOuterSolve(
-        M<double> const &arg_A,
-        MatrixVector<double> const &arg_b, 
-        SolveArgPkg const &arg_pkg
+        const GenericLinearSystem<M> &arg_lin_sys,
+        const SolveArgPkg &arg_pkg
     ): 
         max_inner_iter(arg_pkg.max_inner_iter),
-        GenericIterativeSolve<M>(arg_A, arg_b, arg_pkg)
+        GenericIterativeSolve<M>(arg_lin_sys, arg_pkg)
     {
         this->max_iter = (arg_pkg.check_default_max_iter()) ? 10 : arg_pkg.max_iter;
         // Create inner_solve_arg_pkg matching arg_pkg except with set inner iteration

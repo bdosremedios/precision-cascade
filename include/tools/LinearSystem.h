@@ -24,13 +24,13 @@ public:
         A(arg_A),
         b(arg_b)
     {
-        if ((m < 1) || (n < 1)) { throw runtime_error("Empty Matrix A"); }
-        if (m != b.rows()) { throw runtime_error("A not compatible with b for linear system"); }
+        if ((m < 1) || (n < 1)) { throw std::runtime_error("Empty Matrix A"); }
+        if (m != b.rows()) { throw std::runtime_error("A not compatible with b for linear system"); }
     }
 
     const M<double> &get_A() const { return A; }
 
-    const MatrixVector<double> &get_b() const { return b; }
+    virtual const MatrixVector<double> &get_b() const { return b; }
 
     const int &get_m() const { return m; }
 
@@ -59,7 +59,37 @@ public:
 
     const M<T> &get_A_typed() const { return A_typed; }
 
-    const MatrixVector<T> &get_b_typed() const { return b_typed; }
+    virtual const MatrixVector<T> &get_b_typed() const { return b_typed; }
+
+};
+
+template <template <typename> typename M, typename T>
+class Mutb_TypedLinearSystem: public TypedLinearSystem<M, T>
+{
+protected:
+    
+    MatrixVector<double> b;
+    MatrixVector<T> b_typed;
+
+public:
+
+    Mutb_TypedLinearSystem(
+        M<double> arg_A,
+        MatrixVector<double> arg_b
+    ):
+        b(arg_b),
+        b_typed(arg_b.template cast<T>()),
+        TypedLinearSystem<M, T>(arg_A, arg_b)
+    {}
+
+    void set_b(MatrixVector<double> arg_b) {
+        b = arg_b;
+        b_typed = b.template cast<T>();
+    }
+
+    const MatrixVector<T> &get_b() const override { return b; }
+
+    const MatrixVector<T> &get_b_typed() const override { return b_typed; }
 
 };
 
