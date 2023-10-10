@@ -240,6 +240,73 @@ public:
 
     }
 
+    template<template <typename> typename M>
+    void TestDoubleSingleHalfCast() {
+
+        constexpr int n(8);
+        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir + "ilu_A.csv");
+        ILU<M, double> ilu0_dbl(A, u_dbl);
+
+        M<double> L_dbl = ilu0_dbl.get_L();
+        M<double> U_dbl = ilu0_dbl.get_U();
+
+        M<float> L_sgl = ilu0_dbl.template get_L_cast<float>();
+        M<float> U_sgl = ilu0_dbl.template get_U_cast<float>();
+
+        ILU<M, float> ilu0_sgl(L_sgl, U_sgl);
+
+        for (int i=0; i<n; ++i) {
+            for (int j=0; j<n; ++j) {
+                ASSERT_EQ(static_cast<float>(L_dbl.coeff(i, j)), L_sgl.coeff(i, j));
+                ASSERT_EQ(static_cast<float>(U_dbl.coeff(i, j)), U_sgl.coeff(i, j));
+                ASSERT_EQ(ilu0_sgl.get_L().coeff(i, j), L_sgl.coeff(i, j));
+                ASSERT_EQ(ilu0_sgl.get_U().coeff(i, j), U_sgl.coeff(i, j));
+            }
+        }
+
+        M<half> L_hlf = ilu0_dbl.template get_L_cast<half>();
+        M<half> U_hlf = ilu0_dbl.template get_U_cast<half>();
+
+        ILU<M, half> ilu0_hlf(L_hlf, U_hlf);
+
+        for (int i=0; i<n; ++i) {
+            for (int j=0; j<n; ++j) {
+                ASSERT_EQ(static_cast<half>(L_dbl.coeff(i, j)), L_hlf.coeff(i, j));
+                ASSERT_EQ(static_cast<half>(U_dbl.coeff(i, j)), U_hlf.coeff(i, j));
+                ASSERT_EQ(ilu0_hlf.get_L().coeff(i, j), L_hlf.coeff(i, j));
+                ASSERT_EQ(ilu0_hlf.get_U().coeff(i, j), U_hlf.coeff(i, j));
+            }
+        }
+
+    }
+
+    
+    template<template <typename> typename M>
+    void TestILUPremadeLUErrorChecks() {
+
+        try {
+            M<double> L_not_sq = M<double>::Random(8, 7);
+            M<double> U = M<double>::Random(8, 8);
+            ILU<M, double> ilu(L_not_sq, U);
+            FAIL();
+        } catch (runtime_error e) { ; }
+
+        try {
+            M<double> L = M<double>::Random(8, 8);
+            M<double> U_not_sq = M<double>::Random(6, 8);
+            ILU<M, double> ilu(L, U_not_sq);
+            FAIL();
+        } catch (runtime_error e) { ; }
+
+        try {
+            M<double> L_not_match = M<double>::Random(8, 8);
+            M<double> U_not_match = M<double>::Random(7, 7);
+            ILU<M, double> ilu(L_not_match, U_not_match);
+            FAIL();
+        } catch (runtime_error e) { ; }
+
+    }
+
 };
 
 template<template <typename> typename M, typename T>
@@ -288,3 +355,9 @@ TEST_F(ILUTest, TestILUTDropping_Sparse) { TestILUTDropping<MatrixSparse>(); }
 
 TEST_F(ILUTest, TestILUTDroppingLimits_Dense) { TestILUTDroppingLimits<MatrixDense>(); }
 TEST_F(ILUTest, TestILUTDroppingLimits_Sparse) { TestILUTDroppingLimits<MatrixSparse>(); }
+
+TEST_F(ILUTest, TestDoubleSingleHalfCast_Dense) { TestDoubleSingleHalfCast<MatrixDense>(); }
+TEST_F(ILUTest, TestDoubleSingleHalfCast_Sparse) { TestDoubleSingleHalfCast<MatrixSparse>(); }
+
+TEST_F(ILUTest, TestILUPremadeLUErrorChecks_Dense_NEW) { TestILUPremadeLUErrorChecks<MatrixDense>(); }
+TEST_F(ILUTest, TestILUPremadeLUErrorChecks_Sparse_NEW) { TestILUPremadeLUErrorChecks<MatrixSparse>(); }

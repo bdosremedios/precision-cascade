@@ -65,6 +65,11 @@ public:
 
     // ILU taking premade L and U
     ILU(M<W> arg_L, M<W> arg_U) {
+
+        if (arg_L.rows() != arg_L.cols()) { throw runtime_error("Non square matrix L"); }
+        if (arg_U.rows() != arg_U.cols()) { throw runtime_error("Non square matrix U"); }
+        if (arg_L.rows() != arg_U.rows()) { throw runtime_error("L and U mismatch"); }
+
         L = arg_L;
         U = arg_U;
     }
