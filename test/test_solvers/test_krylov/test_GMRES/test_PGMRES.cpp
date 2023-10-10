@@ -36,11 +36,11 @@ public:
         if (*show_plots) { pgmres_solve_inverse_of_identity.view_relres_plot("log"); }
 
         EXPECT_EQ(pgmres_solve_default.get_typed_soln(),
-                pgmres_solve_explicit_noprecond.get_typed_soln());
+                  pgmres_solve_explicit_noprecond.get_typed_soln());
         EXPECT_EQ(pgmres_solve_explicit_noprecond.get_typed_soln(),
-                pgmres_solve_inverse_of_identity.get_typed_soln());
+                  pgmres_solve_inverse_of_identity.get_typed_soln());
         EXPECT_EQ(pgmres_solve_inverse_of_identity.get_typed_soln(),
-                pgmres_solve_default.get_typed_soln());
+                  pgmres_solve_default.get_typed_soln());
 
     }
 

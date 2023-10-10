@@ -55,14 +55,22 @@ public:
 template <template <typename> typename M, typename W>
 class ILU: public Preconditioner<M, W>
 {
-public:
+protected:
 
     M<W> L;
     M<W> U;
     int m;
 
+public:
+
+    // ILU taking premade L and U
+    ILU(M<W> arg_L, M<W> arg_U) {
+        L = arg_L;
+        U = arg_U;
+    }
+
     // ILU(0)
-    ILU(M<W> const &A, W const &zero_tol) {
+    ILU(const M<W> &A, W zero_tol) {
 
         std::function<bool(W const &, W const &, int &, int &)> drop_if_orig_0 = [zero_tol] (
             W const &entry, W const &orig_entry, int &i, int&j
@@ -73,7 +81,7 @@ public:
     }
 
     // ILUT(eps)
-    ILU(M<W> const &A, W const &zero_tol, W const &eps) {
+    ILU(M<W> const &A, W zero_tol, W eps) {
 
         std::function<bool(W const &, W const &, int &, int &)> drop_if_lt = [eps] (
             W const &entry, W const &orig_entry, int &i, int&j
@@ -147,15 +155,21 @@ public:
 
     }
 
-    MatrixVector<W> action_inv_M(MatrixVector<W> const &vec) const override {
+    MatrixVector<W> action_inv_M(const MatrixVector<W> &vec) const override {
         return frwd_substitution<M, W>(L, back_substitution<M, W>(U, vec));
     }
 
     M<W> get_L() const { return L; }
     M<W> get_U() const { return U; }
 
-    bool check_compatibility_left(int const &arg_m) const override { return arg_m == m; };
-    bool check_compatibility_right(int const &arg_n) const override { return arg_n == m; };
+    template <typename T>
+    M<T> get_L_cast() const { return L.template cast<T>(); }
+
+    template <typename T>
+    M<T> get_U_cast() const { return U.template cast<T>(); }
+
+    bool check_compatibility_left(const int &arg_m) const override { return arg_m == m; };
+    bool check_compatibility_right( const int &arg_n) const override { return arg_n == m; };
 
 };
 
