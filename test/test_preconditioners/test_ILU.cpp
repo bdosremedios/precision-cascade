@@ -359,5 +359,5 @@ TEST_F(ILUTest, TestILUTDroppingLimits_Sparse) { TestILUTDroppingLimits<MatrixSp
 TEST_F(ILUTest, TestDoubleSingleHalfCast_Dense) { TestDoubleSingleHalfCast<MatrixDense>(); }
 TEST_F(ILUTest, TestDoubleSingleHalfCast_Sparse) { TestDoubleSingleHalfCast<MatrixSparse>(); }
 
-TEST_F(ILUTest, TestILUPremadeLUErrorChecks_Dense_NEW) { TestILUPremadeLUErrorChecks<MatrixDense>(); }
-TEST_F(ILUTest, TestILUPremadeLUErrorChecks_Sparse_NEW) { TestILUPremadeLUErrorChecks<MatrixSparse>(); }
+TEST_F(ILUTest, TestILUPremadeLUErrorChecks_Dense) { TestILUPremadeLUErrorChecks<MatrixDense>(); }
+TEST_F(ILUTest, TestILUPremadeLUErrorChecks_Sparse) { TestILUPremadeLUErrorChecks<MatrixSparse>(); }

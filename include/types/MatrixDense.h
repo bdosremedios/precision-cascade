@@ -23,6 +23,8 @@ public:
     T& coeffRef(Index row, Index col) {
         return this->operator()(row, col);
     }
+
+    void makeCompressed() { ; } // Do nothing on compression
     
     using Matrix<T, Dynamic, Dynamic>::Matrix;
 

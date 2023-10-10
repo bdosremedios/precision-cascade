@@ -2,15 +2,14 @@
 #define SUBSTITUTION_H
 
 #include "Eigen/Dense"
+#include "Eigen/Sparse"
 
-#include <stdexcept>
-
-using Eigen::Matrix;
+#include "types/types.h" 
 
 using std::runtime_error;
 
-template <template <typename> typename M, typename T>
-MatrixVector<T> back_substitution(M<T> const &UT, MatrixVector<T> const &rhs) {
+template <typename T>
+MatrixVector<T> back_substitution(MatrixDense<T> const &UT, MatrixVector<T> const &rhs) {
 
     // Check squareness and compatibility
     if (UT.rows() != UT.cols()) { throw runtime_error("Non square matrix in back substitution"); }
@@ -32,8 +31,32 @@ MatrixVector<T> back_substitution(M<T> const &UT, MatrixVector<T> const &rhs) {
 
 }
 
-template <template <typename> typename M, typename T>
-MatrixVector<T> frwd_substitution(M<T> const &LT, MatrixVector<T> const &rhs) {
+template <typename T>
+MatrixVector<T> back_substitution(MatrixSparse<T> const &UT, MatrixVector<T> const &rhs) {
+
+    // Check squareness and compatibility
+    if (UT.rows() != UT.cols()) { throw runtime_error("Non square matrix in back substitution"); }
+    if (UT.rows() != rhs.rows()) { throw runtime_error("Incompatible matrix and rhs"); }
+
+    // Assume UT is upper triangular, iterate backwards through columns through non-zero entries
+    // for backward substitution
+    MatrixVector<T> x = rhs;
+    for (int col=UT.cols()-1; col>=0; --col) {
+        typename MatrixSparse<T>::ReverseInnerIterator it(UT, col);
+        while (it.row() != it.col()) { --it; } // Ensure start at diagonal (guard against non-compressed)
+        x(col) /= it.value();
+        --it;
+        for (; it; --it) {
+            x(it.row()) -= it.value()*x(col);
+        }
+    }
+
+    return x;
+
+}
+
+template <typename T>
+MatrixVector<T> frwd_substitution(MatrixDense<T> const &LT, MatrixVector<T> const &rhs) {
 
     // Check squareness and compatibility
     if (LT.rows() != LT.cols()) { throw runtime_error("Non square matrix in forward substitution"); }
@@ -48,6 +71,30 @@ MatrixVector<T> frwd_substitution(M<T> const &LT, MatrixVector<T> const &rhs) {
                 x(i) -= LT.coeff(i, j)*x(j);
             }
             x(i) /= LT.coeff(i, i);
+        }
+    }
+
+    return x;
+
+}
+
+template <typename T>
+MatrixVector<T> frwd_substitution(MatrixSparse<T> const &LT, MatrixVector<T> const &rhs) {
+
+    // Check squareness and compatibility
+    if (LT.rows() != LT.cols()) { throw runtime_error("Non square matrix in back substitution"); }
+    if (LT.rows() != rhs.rows()) { throw runtime_error("Incompatible matrix and rhs"); }
+
+    // Assume LT is lower triangular, iterate forwards through columns through non-zero entries
+    // for forward substitution
+    MatrixVector<T> x = rhs;
+    for (int col=0; col<LT.cols(); ++col) {
+        typename MatrixSparse<T>::InnerIterator it(LT, col);
+        while (it.row() != it.col()) { ++it; } // Ensure start at diagonal (guard against non-compressed)
+        x(col) /= it.value();
+        ++it;
+        for (; it; ++it) {
+            x(it.row()) -= it.value()*x(col);
         }
     }
 

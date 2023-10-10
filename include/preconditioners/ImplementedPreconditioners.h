@@ -72,6 +72,10 @@ public:
 
         L = arg_L;
         U = arg_U;
+
+        L.makeCompressed();
+        U.makeCompressed();
+
     }
 
     // ILU(0)
@@ -158,10 +162,13 @@ public:
 
         }
 
+        L.makeCompressed();
+        U.makeCompressed();
+
     }
 
     MatrixVector<W> action_inv_M(const MatrixVector<W> &vec) const override {
-        return frwd_substitution<M, W>(L, back_substitution<M, W>(U, vec));
+        return frwd_substitution<W>(L, back_substitution<W>(U, vec));
     }
 
     M<W> get_L() const { return L; }
