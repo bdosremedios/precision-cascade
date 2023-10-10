@@ -99,6 +99,23 @@ public:
         }
 
     }
+
+    template<template <typename> typename M>
+    void TestCorrectLUApplyInverseM() {
+
+        // Test that using a completely dense matrix one just gets a LU
+        constexpr int n(8);
+        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir + "ilu_A.csv");
+        ILU<M, double> ilu(A, u_dbl);
+        
+        // Test matching ILU to MATLAB for the dense matrix
+        MatrixVector<double> test_vec = MatrixVector<double>::Random(n);
+
+        for (int i=0; i<n; ++i) {
+            ASSERT_NEAR(ilu.action_inv_M(A*test_vec).coeff(i), test_vec.coeff(i), dbl_error_acc);
+        }
+
+    }
     
     template<template <typename> typename M>
     void TestSparseILU0() {
@@ -339,6 +356,9 @@ TEST_F(ILUTest, TestZeroDiagonalEntries_Both) {
 
 TEST_F(ILUTest, TestCorrectDenseLU_Dense) { TestCorrectDenseLU<MatrixDense>(); }
 TEST_F(ILUTest, TestCorrectDenseLU_Sparse) { TestCorrectDenseLU<MatrixSparse>(); }
+
+TEST_F(ILUTest, TestCorrectLUApplyInverseM_Dense) { TestCorrectLUApplyInverseM<MatrixDense>(); }
+TEST_F(ILUTest, TestCorrectLUApplyInverseM_Sparse) { TestCorrectLUApplyInverseM<MatrixSparse>(); }
 
 TEST_F(ILUTest, TestSparseILU0_Dense) { TestSparseILU0<MatrixDense>(); }
 TEST_F(ILUTest, TestSparseILU0_Sparse) { TestSparseILU0<MatrixSparse>(); }

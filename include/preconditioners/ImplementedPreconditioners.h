@@ -168,7 +168,7 @@ public:
     }
 
     MatrixVector<W> action_inv_M(const MatrixVector<W> &vec) const override {
-        return frwd_substitution<W>(L, back_substitution<W>(U, vec));
+        return back_substitution<W>(U, frwd_substitution<W>(L, vec));
     }
 
     M<W> get_L() const { return L; }
