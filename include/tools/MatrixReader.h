@@ -31,24 +31,27 @@ class SpecializedReturner<MatrixVector, T>
 {
 public:
     MatrixVector<T> return_(MatrixDense<T> mat) {
-        if (mat.cols() == 1) {
-            return mat;
-        } else {
-            throw runtime_error("Vector can only read one column csv.");
-        }
+        if (mat.cols() == 1) { return mat; }
+        else { throw runtime_error("Vector can only read one column csv."); }
     }
 };
 
 template <typename T>
 class SpecializedReturner<MatrixDense, T>
 {
-    public: MatrixDense<T> return_(MatrixDense<T> mat) { return mat; }
+public:
+    MatrixDense<T> return_(MatrixDense<T> mat) { return mat; }
 };
 
 template <typename T>
 class SpecializedReturner<MatrixSparse, T>
 {
-    public: MatrixSparse<T> return_(MatrixDense<T> mat) { return mat.sparseView(); }
+public:
+    MatrixSparse<T> return_(MatrixDense<T> mat) {
+        MatrixSparse<T> temp(mat.sparseView());
+        temp.reduce();
+        return temp;
+    }
 };
 
 template <template<typename> typename M, typename T>
@@ -148,7 +151,7 @@ M<T> read_matrixCSV(fs::path const &path) {
 
     } else { throw runtime_error("Failed to read: " + path.string()); }
 
-} // end read_matrixCSV
+}
 
 
 #endif
