@@ -11,7 +11,7 @@ public:
 
         try {
             M<double> A = M<double>::Ones(7, 5);
-            ILU<M, double> ilu(A, u_dbl);
+            ILU<M, double> ilu(A, u_dbl, false);
             FAIL();
         } catch (runtime_error e) {
             cout << e.what() << endl;
@@ -25,7 +25,7 @@ public:
         // Test that 7x7 matrix is only compatible with 7
         constexpr int n(7);
         M<double> A = read_matrixCSV<M, double>(solve_matrix_dir + "A_7_dummy_backsub.csv");
-        ILU<M, double> ilu(A, u_dbl);
+        ILU<M, double> ilu(A, u_dbl, false);
         EXPECT_TRUE(ilu.check_compatibility_left(n));
         EXPECT_TRUE(ilu.check_compatibility_right(n));
         EXPECT_FALSE(ilu.check_compatibility_left(n-4));
@@ -43,7 +43,7 @@ public:
         try {
             M<double> A = M<double>::Identity(n, n);
             A.coeffRef(0, 0) = 0;
-            ILU<M, double> ilu(A, u_dbl);
+            ILU<M, double> ilu(A, u_dbl, false);
             FAIL();
         } catch (runtime_error e) {
             cout << e.what() << endl;
@@ -52,7 +52,7 @@ public:
         try {
             M<double> A = M<double>::Identity(n, n);
             A.coeffRef(4, 4) = 0;
-            ILU<M, double> ilu(A, u_dbl);
+            ILU<M, double> ilu(A, u_dbl, false);
             FAIL();
         } catch (runtime_error e) {
             cout << e.what() << endl;
@@ -66,7 +66,7 @@ public:
         // Test that using a completely dense matrix one just gets a LU
         constexpr int n(8);
         M<double> A = read_matrixCSV<M, double>(solve_matrix_dir + "ilu_A.csv");
-        ILU<M, double> ilu(A, u_dbl);
+        ILU<M, double> ilu(A, u_dbl, false);
         M<double> test = ilu.get_L()*ilu.get_U()-A;
 
         for (int i=0; i<n; ++i) {
@@ -99,6 +99,66 @@ public:
         }
 
     }
+    
+    template<template <typename> typename M>
+    void TestCorrectDenseLU_Pivoted() {
+
+        // Test that using a completely dense matrix one just gets a LU
+        constexpr int n(8);
+        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir + "ilu_A.csv");
+        ILU<M, double> ilu(A, u_dbl, true);
+        M<double> test = ilu.get_L()*ilu.get_U()-A*ilu.get_P();
+
+        for (int i=0; i<n; ++i) {
+            for (int j=0; j<n; ++j) {
+                ASSERT_NEAR(test.coeff(i, j), 0, dbl_error_acc);
+            }
+        }
+
+        // Test correct L and U triangularity and correct permutation matrix P
+        for (int i=0; i<n; ++i) {
+            for (int j=i+1; j<n; ++j) {
+                ASSERT_NEAR(ilu.get_L().coeff(i, j), 0, dbl_error_acc);
+            }
+        }
+        for (int i=0; i<n; ++i) {
+            for (int j=0; j<i; ++j) {
+                ASSERT_NEAR(ilu.get_U().coeff(i, j), 0, dbl_error_acc);
+            }
+        }
+        M<double> P_squared = ilu.get_P()*(ilu.get_P().transpose());
+        for (int i=0; i<n; ++i) {
+            for (int j=0; j<n; ++j) {
+                if (i == j) {
+                    ASSERT_NEAR(P_squared.coeff(i, j), 1, dbl_error_acc);
+                } else {
+                    ASSERT_NEAR(P_squared.coeff(i, j), 0, dbl_error_acc);
+                }
+            }
+        }
+
+        // Test matching ILU to MATLAB for the dense matrix
+        M<double> L = read_matrixCSV<M, double>(solve_matrix_dir + "ilu_L_pivot.csv");
+        M<double> U = read_matrixCSV<M, double>(solve_matrix_dir + "ilu_U_pivot.csv");
+        M<double> P = read_matrixCSV<M, double>(solve_matrix_dir + "ilu_P_pivot.csv");
+
+        cout << ilu.get_P() << endl << endl;
+        cout << P << endl << endl;
+
+        for (int i=0; i<n; ++i) {
+            for (int j=0; j<n; ++j) {
+                ASSERT_NEAR(ilu.get_P().coeff(i, j), P.coeff(i, j), dbl_error_acc);
+            }
+        }
+
+        for (int i=0; i<n; ++i) {
+            for (int j=0; j<n; ++j) {
+                ASSERT_NEAR(ilu.get_L().coeff(i, j), L.coeff(i, j), dbl_error_acc);
+                ASSERT_NEAR(ilu.get_U().coeff(i, j), U.coeff(i, j), dbl_error_acc);
+            }
+        }
+
+    }
 
     template<template <typename> typename M>
     void TestCorrectLUApplyInverseM() {
@@ -106,7 +166,24 @@ public:
         // Test that using a completely dense matrix one just gets a LU
         constexpr int n(8);
         M<double> A = read_matrixCSV<M, double>(solve_matrix_dir + "ilu_A.csv");
-        ILU<M, double> ilu(A, u_dbl);
+        ILU<M, double> ilu(A, u_dbl, false);
+        
+        // Test matching ILU to MATLAB for the dense matrix
+        MatrixVector<double> test_vec = MatrixVector<double>::Random(n);
+
+        for (int i=0; i<n; ++i) {
+            ASSERT_NEAR(ilu.action_inv_M(A*test_vec).coeff(i), test_vec.coeff(i), dbl_error_acc);
+        }
+
+    }
+
+    template<template <typename> typename M>
+    void TestCorrectLUApplyInverseM_Pivoted() {
+
+        // Test that using a completely dense matrix one just gets a LU
+        constexpr int n(8);
+        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir + "ilu_A.csv");
+        ILU<M, double> ilu(A, u_dbl, true);
         
         // Test matching ILU to MATLAB for the dense matrix
         MatrixVector<double> test_vec = MatrixVector<double>::Random(n);
@@ -123,7 +200,7 @@ public:
         // Test using a sparse matrix one matches the sparsity pattern for zero-fill
         constexpr int n(8);
         M<double> A = read_matrixCSV<M, double>(solve_matrix_dir + "ilu_sparse_A.csv");
-        ILU<M, double> ilu(A, u_dbl);
+        ILU<M, double> ilu(A, u_dbl, false);
 
         for (int i=0; i<n; ++i) {
             for (int j=0; j<n; ++j) {
@@ -166,8 +243,8 @@ public:
         // Test ILU(0) and ILUT(0) [No Dropping] Give the same dense decomp
         constexpr int n(8);
         M<double> A = read_matrixCSV<M, double>(solve_matrix_dir + "ilu_A.csv");
-        ILU<M, double> ilu0(A, u_dbl);
-        ILU<M, double> ilut0(A, u_dbl, 0);
+        ILU<M, double> ilu0(A, u_dbl, false);
+        ILU<M, double> ilut0(A, u_dbl, 0.);
 
         for (int i=0; i<n; ++i) {
             for (int j=0; j<n; ++j) {
@@ -262,7 +339,7 @@ public:
 
         constexpr int n(8);
         M<double> A = read_matrixCSV<M, double>(solve_matrix_dir + "ilu_A.csv");
-        ILU<M, double> ilu0_dbl(A, u_dbl);
+        ILU<M, double> ilu0_dbl(A, u_dbl, false);
 
         M<double> L_dbl = ilu0_dbl.get_L();
         M<double> U_dbl = ilu0_dbl.get_U();
@@ -357,8 +434,14 @@ TEST_F(ILUTest, TestZeroDiagonalEntries_Both) {
 TEST_F(ILUTest, TestCorrectDenseLU_Dense) { TestCorrectDenseLU<MatrixDense>(); }
 TEST_F(ILUTest, TestCorrectDenseLU_Sparse) { TestCorrectDenseLU<MatrixSparse>(); }
 
+TEST_F(ILUTest, TestCorrectDenseLU_Pivoted_Dense) { TestCorrectDenseLU_Pivoted<MatrixDense>(); }
+TEST_F(ILUTest, TestCorrectDenseLU_Pivoted_Sparse) { TestCorrectDenseLU_Pivoted<MatrixSparse>(); }
+
 TEST_F(ILUTest, TestCorrectLUApplyInverseM_Dense) { TestCorrectLUApplyInverseM<MatrixDense>(); }
 TEST_F(ILUTest, TestCorrectLUApplyInverseM_Sparse) { TestCorrectLUApplyInverseM<MatrixSparse>(); }
+
+TEST_F(ILUTest, TestCorrectLUApplyInverseM_Pivoted_Dense) { TestCorrectLUApplyInverseM_Pivoted<MatrixDense>(); }
+TEST_F(ILUTest, TestCorrectLUApplyInverseM_Pivoted_Sparse) { TestCorrectLUApplyInverseM_Pivoted<MatrixSparse>(); }
 
 TEST_F(ILUTest, TestSparseILU0_Dense) { TestSparseILU0<MatrixDense>(); }
 TEST_F(ILUTest, TestSparseILU0_Sparse) { TestSparseILU0<MatrixSparse>(); }

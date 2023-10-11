@@ -57,9 +57,10 @@ class ILU: public Preconditioner<M, W>
 {
 protected:
 
+    int m;
     M<W> L;
     M<W> U;
-    int m;
+    M<W> P;
 
 public:
 
@@ -70,8 +71,10 @@ public:
         if (arg_U.rows() != arg_U.cols()) { throw runtime_error("Non square matrix U"); }
         if (arg_L.rows() != arg_U.rows()) { throw runtime_error("L and U mismatch"); }
 
+        m = arg_L.rows();
         L = arg_L;
         U = arg_U;
+        P = M<W>::Identity(m, m);
 
         L.makeCompressed();
         U.makeCompressed();
@@ -79,13 +82,76 @@ public:
     }
 
     // ILU(0)
-    ILU(const M<W> &A, W zero_tol) {
+    ILU(const M<W> &A, W zero_tol, bool pivot) {
 
-        std::function<bool(W const &, W const &, int &, int &)> drop_if_orig_0 = [zero_tol] (
-            W const &entry, W const &orig_entry, int &i, int&j
-        ) -> bool { return (abs(orig_entry) <= zero_tol); };
+        if (A.rows() != A.cols()) { throw runtime_error("Non square matrix A"); }
 
-        constructionHelper(A, zero_tol, drop_if_orig_0, drop_if_orig_0);
+        m = A.rows();
+        L = M<W>::Identity(m, m);
+        U = A;
+        P = M<W>::Identity(m, m);
+
+        // Use IKJ variant for better predictability in execution
+        for (int i=0; i<m; ++i) {
+
+            // Eliminate
+            for (int k=0; k<i; ++k) {
+                W pivot = U.coeff(k, k);
+                if (abs(pivot) > zero_tol) {
+                    W val_to_zero = U.coeff(i, k);
+                    if (abs(val_to_zero) > zero_tol) {
+                        W l_ik = val_to_zero/pivot;
+                        L.coeffRef(i, k) = l_ik;
+                        for (int j=k+1; j<m; ++j) {
+                            if (abs(U.coeff(i, j)) > zero_tol) {
+                                U.coeffRef(i, j) -= l_ik*U.coeff(k, j);
+                            } else {
+                                U.coeffRef(i, j) = static_cast<W>(0);
+                            }
+                        }
+                    }
+                    U.coeffRef(i, k) = static_cast<W>(0);
+                } else { throw runtime_error("ILU encountered zero pivot in elimination"); }
+            }
+
+            // Pivot columns and throw error if no column entry large enough. Do after such that
+            // row elimination has already occured so that largest pivot right now can be found
+            if (pivot) {
+                int pivot = i;
+                W abs_max_val = zero_tol;
+                for (int ind=i; ind<m; ++ind) {
+                    W temp = abs(U.coeff(i, ind));
+                    if (abs(temp) > abs_max_val) {
+                        abs_max_val = temp;
+                        pivot = ind;
+                    }
+                }
+                if (abs_max_val <= zero_tol) { throw runtime_error("ILU encountered not large enough pivot error"); }
+                if (i != pivot) {
+                    M<W> U_i = U.col(i);
+                    U.col(i) = U.col(pivot);
+                    U.col(pivot) = U_i;
+
+                    M<W> P_i = P.col(i);
+                    P.col(i) = P.col(pivot);
+                    P.col(pivot) = P_i;
+                }
+            }
+    
+        }
+            
+        // Use JKI variant
+        // for (int j=0; j<m; ++j) {
+        //     for (int i=j+1; i<m; ++j) {
+        //         for (int k=0; k<j; ++k) {
+        //             temp = U.coeff(i, k)/U.coeff(k, k);
+
+        //         }
+        //     }
+        // }
+
+        L.makeCompressed();
+        U.makeCompressed();
 
     }
 
@@ -123,6 +189,7 @@ public:
         m = A.rows();
         L = M<W>::Identity(m, m);
         U = M<W>::Zero(m, m);
+        P = M<W>::Identity(m, m);
 
         // Set U to be A and perform ILU
         U = A;
@@ -168,11 +235,12 @@ public:
     }
 
     MatrixVector<W> action_inv_M(const MatrixVector<W> &vec) const override {
-        return back_substitution<W>(U, frwd_substitution<W>(L, vec));
+        return P*(back_substitution<W>(U, frwd_substitution<W>(L, vec)));
     }
 
     M<W> get_L() const { return L; }
     M<W> get_U() const { return U; }
+    M<W> get_P() const { return P; }
 
     template <typename T>
     M<T> get_L_cast() const { return L.template cast<T>(); }

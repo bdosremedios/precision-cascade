@@ -1,3 +1,4 @@
+
 % Specific function test matrices
 
 % Create 5x5 Toy Matrix
@@ -148,12 +149,19 @@ writematrix(A_inv_test, "solve_matrices\\A_inv_45.csv");
 writematrix(Ainv_inv_test, "solve_matrices\\Ainv_inv_45.csv");
 writematrix(b_inv_test, "solve_matrices\\b_inv_45.csv");
 
-% Create ILU and sparse ILU
+% Create ILU and sparse ILU and pivoted and non-pivoted version
 ilu_A = 10*randn(8, 8);
 [ilu_L, ilu_U] = ilu(sparse(ilu_A));
 writematrix(ilu_A, "solve_matrices\\ilu_A.csv");
 writematrix(full(ilu_L), "solve_matrices\\ilu_L.csv");
 writematrix(full(ilu_U), "solve_matrices\\ilu_U.csv");
+options.type = "ilutp";
+options.milu = "row";
+options.droptol = 0;
+[ilu_L_pivot, ilu_U_pivot, ilu_P_pivot] = ilu(sparse(ilu_A), options);
+writematrix(full(ilu_L_pivot), "solve_matrices\\ilu_L_pivot.csv");
+writematrix(full(ilu_U_pivot), "solve_matrices\\ilu_U_pivot.csv");
+writematrix(full(ilu_P_pivot), "solve_matrices\\ilu_P_pivot.csv");
 
 ilu_sparse_A = 8*randn(8, 8);
 ilu_sparse_A(1, 2) = 0; ilu_sparse_A(1, 3) = 0; ilu_sparse_A(1, 6) = 0; ilu_sparse_A(1, 7) = 0;
@@ -172,6 +180,11 @@ end
 writematrix(ilu_sparse_A, "solve_matrices\\ilu_sparse_A.csv");
 writematrix(full(ilu_sparse_L), "solve_matrices\\ilu_sparse_L.csv");
 writematrix(full(ilu_sparse_U), "solve_matrices\\ilu_sparse_U.csv");
+[ilu_sparse_L_pivot, ilu_sparse_U_pivot, ilu_sparse_P_pivot] = ilu(sparse(ilu_sparse_A), options);
+writematrix(full(ilu_sparse_L_pivot), "solve_matrices\\ilu_sparse_L_pivot.csv");
+writematrix(full(ilu_sparse_U_pivot), "solve_matrices\\ilu_sparse_U_pivot.csv");
+writematrix(full(ilu_sparse_P_pivot), "solve_matrices\\ilu_sparse_P_pivot.csv");
+
 % options.type="ilutp"; options.droptol=0.01;
 % [ilu_sparse_L_0_01, ilu_sparse_U_0_01, P] = ilu(sparse(ilu_sparse_A), options);
 % writematrix(full(ilu_sparse_L_0_01), "solve_matrices\\ilut_0_01_sparse_L.csv");
