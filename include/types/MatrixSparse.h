@@ -5,7 +5,6 @@
 
 #include <cmath>
 
-using Eigen::Matrix;
 using Eigen::SparseMatrix;
 using Eigen::Dynamic;
 using Eigen::Index;

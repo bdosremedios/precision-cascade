@@ -42,13 +42,17 @@ MatrixVector<T> back_substitution(MatrixSparse<T> const &UT, MatrixVector<T> con
     // for backward substitution
     MatrixVector<T> x = rhs;
     for (int col=UT.cols()-1; col>=0; --col) {
+
         typename MatrixSparse<T>::ReverseInnerIterator it(UT, col);
-        while (it.row() != it.col()) { --it; } // Ensure start at diagonal (guard against non-compressed)
+        
+        // Skip entries until reaching diagonal guarding against extra non-zeroes
+        for (; it && (it.row() != it.col()); --it) { ; }
+        if (it.row() != it.col()) { throw runtime_error ("Diagonal in MatrixSparse triangular solve could not be reached"); }
+
         x(col) /= it.value();
         --it;
-        for (; it; --it) {
-            x(it.row()) -= it.value()*x(col);
-        }
+        for (; it; --it) { x(it.row()) -= it.value()*x(col); }
+
     }
 
     return x;
@@ -89,13 +93,17 @@ MatrixVector<T> frwd_substitution(MatrixSparse<T> const &LT, MatrixVector<T> con
     // for forward substitution
     MatrixVector<T> x = rhs;
     for (int col=0; col<LT.cols(); ++col) {
+
         typename MatrixSparse<T>::InnerIterator it(LT, col);
-        while (it.row() != it.col()) { ++it; } // Ensure start at diagonal (guard against non-compressed)
+        
+        // Skip entries until reaching diagonal guarding against extra non-zeroes
+        for (; it && (it.row() != it.col()); ++it) { ; }
+        if (it.row() != it.col()) { throw runtime_error ("Diagonal in MatrixSparse triangular solve could not be reached"); }
+        
         x(col) /= it.value();
         ++it;
-        for (; it; ++it) {
-            x(it.row()) -= it.value()*x(col);
-        }
+        for (; it; ++it) { x(it.row()) -= it.value()*x(col); }
+
     }
 
     return x;
