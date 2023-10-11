@@ -24,7 +24,7 @@ public:
         return this->operator()(row, col);
     }
 
-    void makeCompressed() { ; } // Do nothing on compression
+    void reduce() { ; } // Do nothing on reduction
     
     using Matrix<T, Dynamic, Dynamic>::Matrix;
 

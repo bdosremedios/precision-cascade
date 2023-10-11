@@ -41,6 +41,8 @@ public:
         return this->isApprox(rhs);
     }
 
+    void reduce() { this->prune(static_cast<T>(0.)); }
+
 };
 
 #endif

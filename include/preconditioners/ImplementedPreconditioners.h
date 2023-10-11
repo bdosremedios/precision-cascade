@@ -55,6 +55,14 @@ public:
 template <template <typename> typename M, typename W>
 class ILU: public Preconditioner<M, W>
 {
+private:
+
+    void reduce_matrices() {
+        L.reduce();
+        U.reduce();
+        P.reduce();
+    }
+
 protected:
 
     int m;
@@ -64,20 +72,24 @@ protected:
 
 public:
 
-    // ILU taking premade L and U
-    ILU(M<W> arg_L, M<W> arg_U) {
+    // ILU constructor taking premade L and U and no permutation
+    ILU(M<W> arg_L, M<W> arg_U): ILU(arg_L, arg_U, M<W>::Identity(arg_L.rows(), arg_L.rows())) {}
+
+    // ILU constructor taking premade L, U, and P
+    ILU(M<W> arg_L, M<W> arg_U, M<W> arg_P) {
 
         if (arg_L.rows() != arg_L.cols()) { throw runtime_error("Non square matrix L"); }
         if (arg_U.rows() != arg_U.cols()) { throw runtime_error("Non square matrix U"); }
+        if (arg_P.rows() != arg_P.cols()) { throw runtime_error("Non square matrix P"); }
         if (arg_L.rows() != arg_U.rows()) { throw runtime_error("L and U mismatch"); }
+        if (arg_L.rows() != arg_P.rows()) { throw runtime_error("L and U mismatch"); }
 
         m = arg_L.rows();
         L = arg_L;
         U = arg_U;
-        P = M<W>::Identity(m, m);
+        P = arg_P;
 
-        L.makeCompressed();
-        U.makeCompressed();
+        reduce_matrices();
 
     }
 
@@ -94,7 +106,7 @@ public:
         // Use IKJ variant for better predictability in execution
         for (int i=0; i<m; ++i) {
 
-            // Eliminate
+            // Perform row elimination
             for (int k=0; k<i; ++k) {
                 W pivot = U.coeff(k, k);
                 if (abs(pivot) > zero_tol) {
@@ -139,19 +151,8 @@ public:
             }
     
         }
-            
-        // Use JKI variant
-        // for (int j=0; j<m; ++j) {
-        //     for (int i=j+1; i<m; ++j) {
-        //         for (int k=0; k<j; ++k) {
-        //             temp = U.coeff(i, k)/U.coeff(k, k);
 
-        //         }
-        //     }
-        // }
-
-        L.makeCompressed();
-        U.makeCompressed();
+        reduce_matrices();
 
     }
 
@@ -196,12 +197,10 @@ public:
 
         // Use IKJ variant for better predictability of modification
         for (int i=0; i<m; ++i) {
-
             for (int k=0; k<=i-1; ++k) {
 
                 // Ensure pivot is non-zero
                 if (abs(U.coeffRef(k, k)) > zero_tol) {
-    
                     W coeff = U.coeff(i, k)/U.coeff(k, k);
                     // Apply rho dropping rule to zero-ing val, skipping subsequent
                     // calcs in row if dropped
@@ -214,11 +213,7 @@ public:
                         L.coeffRef(i, k) = static_cast<W>(0);
                     }
                     U.coeffRef(i, k) = static_cast<W>(0);
-
-                } else {
-                    throw runtime_error("ILU encountered zero diagonal entry");
-                }
-
+                } else { throw runtime_error("ILU encountered zero diagonal entry"); }
             }
             
             // Iterate through the row again to ensure enforcement of 2nd drop rule
@@ -229,8 +224,7 @@ public:
 
         }
 
-        L.makeCompressed();
-        U.makeCompressed();
+        reduce_matrices();
 
     }
 
