@@ -1,3 +1,5 @@
 eigen
 googletest
 build
+out
+.vs
