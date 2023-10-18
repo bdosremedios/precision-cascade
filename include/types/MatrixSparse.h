@@ -16,6 +16,8 @@ class MatrixSparse: public SparseMatrix<T>
 {
 public:
     
+    using SparseMatrix<T>::SparseMatrix;
+
     static SparseMatrix<T> Random(Index m, Index n) {
         return Matrix<T, Dynamic, Dynamic>::Random(m, n).sparseView();
     }
@@ -33,8 +35,6 @@ public:
     static SparseMatrix<T> Zero(Index m, Index n) {
         return SparseMatrix<T>(m, n);
     }
-    
-    using SparseMatrix<T>::SparseMatrix;
 
     bool operator==(const MatrixSparse<T> &rhs) const {
         return this->isApprox(rhs);

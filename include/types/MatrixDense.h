@@ -15,6 +15,8 @@ private:
     using Matrix<T, Dynamic, Dynamic>::operator();
 
 public:
+    
+    using Matrix<T, Dynamic, Dynamic>::Matrix;
 
     const T& coeff(Index row, Index col) const {
         return this->operator()(row, col);
@@ -25,8 +27,6 @@ public:
     }
 
     void reduce() { ; } // Do nothing on reduction
-    
-    using Matrix<T, Dynamic, Dynamic>::Matrix;
 
 };
 

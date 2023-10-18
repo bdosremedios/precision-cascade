@@ -9,7 +9,7 @@ public:
     template <template <typename> typename M>
     void ReadEmptyMatrix() {
 
-        string empty_file = read_matrix_dir + "empty.csv";
+        fs::path empty_file = read_matrix_dir / fs::path("empty.csv");
         M<double> test_empty(read_matrixCSV<M, double>(empty_file));
         ASSERT_EQ(test_empty.rows(), 0);
         ASSERT_EQ(test_empty.cols(), 0);
@@ -20,50 +20,50 @@ public:
     void ReadBadMatrices() {
 
         // Try to load non-existent file
-        string bad_file_0 = read_matrix_dir + "thisfile";
+        fs::path bad_file_0 = read_matrix_dir / fs::path("thisfile");
         try {
             M<double> test(read_matrixCSV<M, double>(bad_file_0));
             FAIL();
         } catch (runtime_error e) {
             EXPECT_EQ(
                 e.what(),
-                "Failed to read: " + bad_file_0
+                "Failed to read: " + string(bad_file_0)
             );
         }
 
         // Try to load file with too small row
-        string bad_file_1 = read_matrix_dir + "bad1.csv";
+        fs::path bad_file_1 = read_matrix_dir / fs::path("bad1.csv");
         try {
             M<double> test(read_matrixCSV<M, double>(bad_file_1));
             FAIL();
         } catch (runtime_error e) {
             EXPECT_EQ(
                 e.what(),
-                "Error in: " + bad_file_1 + "\n" + "Row 3 does not meet column size of 3"
+                "Error in: " + string(bad_file_1) + "\n" + "Row 3 does not meet column size of 3"
             );
         }
 
         // Try to load file with too big rows
-        string bad_file_2 = read_matrix_dir + "bad2.csv";
+        fs::path bad_file_2 = read_matrix_dir / fs::path("bad2.csv");
         try {
             M<double> test(read_matrixCSV<M, double>(bad_file_2));
             FAIL();
         } catch (runtime_error e) {
             EXPECT_EQ(
                 e.what(),
-                "Error in: " + bad_file_2 + "\n" + "Row 2 exceeds column size of 3"
+                "Error in: " + string(bad_file_2) + "\n" + "Row 2 exceeds column size of 3"
             );
         }
 
         // Try to load file with invalid character argument
-        string bad_file_3 = read_matrix_dir + "bad3.csv";
+        fs::path bad_file_3 = read_matrix_dir / fs::path("bad3.csv");
         try {
             M<double> test(read_matrixCSV<M, double>(bad_file_3));
             FAIL();
         } catch (runtime_error e) {
             EXPECT_EQ(
                 e.what(),
-                "Error in: " + bad_file_3 + "\n" + "Invalid argument in file, failed to convert to numeric"
+                "Error in: " + string(bad_file_3) + "\n" + "Invalid argument in file, failed to convert to numeric"
             );
         }
 
@@ -105,8 +105,8 @@ public:
         };
         Matrix<T, Dynamic, Dynamic> target2 = temp_target2.template cast<T>();
     
-        string square1_file = read_matrix_dir + "square1.csv";
-        string square2_file = read_matrix_dir + "square2.csv";
+        fs::path square1_file = read_matrix_dir / fs::path("square1.csv");
+        fs::path square2_file = read_matrix_dir / fs::path("square2.csv");
         M<T> test1(read_matrixCSV<M, T>(square1_file));
         M<T> test2(read_matrixCSV<M, T>(square2_file));
 
@@ -147,8 +147,8 @@ public:
         };
         Matrix<T, Dynamic, Dynamic> target_tall = temp_target_tall.template cast<T>();
 
-        string wide_file = read_matrix_dir + "wide.csv";
-        string tall_file = read_matrix_dir + "tall.csv";
+        fs::path wide_file = read_matrix_dir / fs::path("wide.csv");
+        fs::path tall_file = read_matrix_dir / fs::path("tall.csv");
 
         M<T> test_wide(read_matrixCSV<M, T>(wide_file));
         M<T> test_tall(read_matrixCSV<M, T>(tall_file));
@@ -227,7 +227,7 @@ public:
     void ReadVector(double u) {
 
         Matrix<T, Dynamic, 1> target {{1.}, {2.}, {3.}, {4.}, {5.}, {6.}};
-        string vector_file = read_matrix_dir + "vector.csv";
+        fs::path vector_file = read_matrix_dir / fs::path("vector.csv");
         MatrixVector<T> test(read_matrixCSV<MatrixVector, T>(vector_file));
         ASSERT_EQ(test.rows(), 6);
         ASSERT_EQ(test.cols(), 1);
@@ -242,7 +242,7 @@ TEST_F(MatrixReadVectorTest, ReadSingleVector) { ReadVector<double>(u_sgl); }
 TEST_F(MatrixReadVectorTest, ReadHalfVector) { ReadVector<double>(u_hlf); }
 
 TEST_F(MatrixReadVectorTest, FailOnMatrix) {    
-    string mat = read_matrix_dir + "square1.csv";
+    fs::path mat = read_matrix_dir / fs::path("square1.csv");
     try {
         MatrixVector<double> test(read_matrixCSV<MatrixVector, double>(mat));
         FAIL();
@@ -263,7 +263,7 @@ TEST_F(MatrixReadDoubleTest, ReadPreciseMatrix_Both) {
         {1.12345678901232, 1.12345678901234},
         {1.12345678901236, 1.12345678901238}
     };
-    string precise_file = read_matrix_dir + "double_precise.csv";
+    fs::path precise_file = read_matrix_dir / fs::path("double_precise.csv");
     ReadPrecise<MatrixDense>(target_precise, precise_file, u_dbl);
     ReadPrecise<MatrixSparse>(target_precise, precise_file, u_dbl);
 }
@@ -273,7 +273,7 @@ TEST_F(MatrixReadDoubleTest, ReadDifferentThanPreciseMatrix_Both) {
         {1.12345678901232, 1.12345678901234},
         {1.12345678901236, 1.12345678901238}
     };
-    string precise_file = read_matrix_dir + "double_precise.csv";
+    fs::path precise_file = read_matrix_dir / fs::path("double_precise.csv");
     ReadDifferentThanPrecise<MatrixDense>(target_precise, precise_file, u_dbl);
     ReadDifferentThanPrecise<MatrixSparse>(target_precise, precise_file, u_dbl);
 
@@ -284,7 +284,7 @@ TEST_F(MatrixReadDoubleTest, ReadPreciseMatrixDoubleLimit_Both) {
         {1.1234567890123452, 1.1234567890123454},
         {1.1234567890123456, 1.1234567890123458}
     };
-    string precise_file = read_matrix_dir + "double_precise_manual.csv";
+    fs::path precise_file = read_matrix_dir / fs::path("double_precise_manual.csv");
     ReadPrecise<MatrixDense>(target_precise, precise_file, u_dbl);
     ReadPrecise<MatrixSparse>(target_precise, precise_file, u_dbl);
 }
@@ -294,7 +294,7 @@ TEST_F(MatrixReadDoubleTest, ReadDifferentThanPreciseMatrixDoubleLimit) {
         {1.1234567890123452, 1.1234567890123454},
         {1.1234567890123456, 1.1234567890123458}
     };
-    string precise_file = read_matrix_dir + "double_precise_manual.csv";
+    fs::path precise_file = read_matrix_dir / fs::path("double_precise_manual.csv");
     ReadDifferentThanPrecise<MatrixDense>(target_precise, precise_file, u_dbl);
     ReadDifferentThanPrecise<MatrixSparse>(target_precise, precise_file, u_dbl);
 }
@@ -313,7 +313,7 @@ TEST_F(MatrixReadSingleTest, ReadPreciseMatrix_Both) {
         {static_cast<float>(1.12345672), static_cast<float>(1.12345674)},
         {static_cast<float>(1.12345676), static_cast<float>(1.12345678)}
     };
-    string precise_file = read_matrix_dir + "single_precise.csv";
+    fs::path precise_file = read_matrix_dir / fs::path("single_precise.csv");
     ReadPrecise<MatrixDense>(target_precise, precise_file, u_sgl);
     ReadPrecise<MatrixSparse>(target_precise, precise_file, u_sgl);
 }
@@ -323,7 +323,7 @@ TEST_F(MatrixReadSingleTest, ReadDifferentThanPreciseMatrix_Both) {
         {static_cast<float>(1.12345672), static_cast<float>(1.12345674)},
         {static_cast<float>(1.12345676), static_cast<float>(1.12345678)}
     };
-    string precise_file = read_matrix_dir + "single_precise.csv";
+    fs::path precise_file = read_matrix_dir / fs::path("single_precise.csv");
     ReadDifferentThanPrecise<MatrixDense>(target_precise, precise_file, u_sgl);
     ReadDifferentThanPrecise<MatrixSparse>(target_precise, precise_file, u_sgl);
 }
@@ -342,7 +342,7 @@ TEST_F(MatrixReadHalfTest, ReadPreciseMatrix) {
         {static_cast<half>(1.123), static_cast<half>(1.124)},
         {static_cast<half>(1.125), static_cast<half>(1.126)}
     };
-    string precise_file = read_matrix_dir + "half_precise.csv";
+    fs::path precise_file = read_matrix_dir / fs::path("half_precise.csv");
     ReadPrecise<MatrixDense>(target_precise, precise_file, u_hlf);
     ReadPrecise<MatrixSparse>(target_precise, precise_file, u_hlf);
 }
@@ -352,7 +352,7 @@ TEST_F(MatrixReadHalfTest, ReadDifferentThanPreciseMatrix) {
         {static_cast<half>(1.123), static_cast<half>(1.124)},
         {static_cast<half>(1.125), static_cast<half>(1.126)}
     };
-    string precise_file = read_matrix_dir + "half_precise.csv";
+    fs::path precise_file = read_matrix_dir / fs::path("half_precise.csv");
     ReadDifferentThanPrecise<MatrixDense>(target_precise, precise_file, u_hlf);
     ReadDifferentThanPrecise<MatrixSparse>(target_precise, precise_file, u_hlf);
 }

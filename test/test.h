@@ -12,6 +12,7 @@
 #include <string>
 #include <memory>
 #include <iostream>
+#include <filesystem>
 
 using Eigen::Matrix;
 using Eigen::Dynamic;
@@ -20,6 +21,7 @@ using MatrixXh = Eigen::Matrix<Eigen::half, Dynamic, Dynamic>;
 using Eigen::MatrixXf;
 using Eigen::MatrixXd;
 
+namespace fs = std::filesystem;
 using std::pow;
 using std::string;
 using std::shared_ptr, std::make_shared;
@@ -43,8 +45,12 @@ public:
     const double conv_tol_sgl = pow(10, -05);
     const double conv_tol_dbl = pow(10, -10);
 
-    const string read_matrix_dir = "/home/bdosre/dev/precision-cascade/test/read_matrices/";
-    const string solve_matrix_dir = "/home/bdosre/dev/precision-cascade/test/solve_matrices/";
+    const fs::path read_matrix_dir = (
+        fs::current_path() / fs::path("..") / fs::path("test") / fs::path("read_matrices")
+    );
+    const fs::path solve_matrix_dir = (
+        fs::current_path() / fs::path("..") / fs::path("test") / fs::path("solve_matrices")
+    );
 
     SolveArgPkg default_args;
 
