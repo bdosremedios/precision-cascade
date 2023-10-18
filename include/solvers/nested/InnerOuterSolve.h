@@ -18,7 +18,7 @@ protected:
     // *** PROTECTED OVERRIDE METHODS ***
 
     void iterate() override {
-
+        
         outer_iterate_setup();
         inner_solver->solve();
         outer_iterate_complete();

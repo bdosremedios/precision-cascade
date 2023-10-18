@@ -132,7 +132,7 @@ public:
     // Getters
     MatrixVector<double> get_generic_soln() const { return generic_soln; };
     MatrixVector<double> get_curr_res() const { return curr_res; };
-    double get_relres() const { return res_norm_hist[curr_iter]/res_norm_hist[0]; }
+    double get_relres() const { return curr_res.norm()/res_norm_hist[0]; }
     MatrixXd get_res_hist() const { return res_hist; };
     vector<double> get_res_norm_hist() const { return res_norm_hist; };
     bool check_initiated() const { return initiated; };
@@ -232,7 +232,7 @@ public:
         vector<double> bucket_ends;
         double min_ = *std::min_element(plot_y.cbegin(), plot_y.cend());
         double max_ = *std::max_element(plot_y.cbegin(), plot_y.cend());
-        
+
         // Get minimal of target relres and minimum if initiated for bottom of plot
         if (initiated) {
             if (arg == "log") {
@@ -265,7 +265,7 @@ public:
         cout << " " << string(max(min_length, length-1), '-') << endl;
         for (int i=height-1; i>=0; --i) {
             for (int j=-1; j<length; ++j) {
-                if (plot_y_bucket_index[j] == i) {
+                if ((j >= 0) && (plot_y_bucket_index[j] == i)) {
                     cout << "*";
                 } else {
                     cout << " ";
@@ -282,7 +282,7 @@ public:
         cout << "Iter: 0" << string(max(min_length, length-10), ' ')
              << "Iter: " << curr_iter << endl;
 
-    } // end view_relres_plot
+    }
 
 };
 
