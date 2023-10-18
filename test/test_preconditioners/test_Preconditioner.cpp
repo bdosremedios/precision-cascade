@@ -24,8 +24,8 @@ public:
     void TestMatrixInverse() {
         
         constexpr int n(45);
-        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir + "A_inv_45.csv");
-        M<double> A_inv = read_matrixCSV<M, double>(solve_matrix_dir + "Ainv_inv_45.csv");
+        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("A_inv_45.csv"));
+        M<double> A_inv = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("Ainv_inv_45.csv"));
         MatrixInverse<M, double> inv_precond = A_inv;
 
         // Check compatibility of with only 45

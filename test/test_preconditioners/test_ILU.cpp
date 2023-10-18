@@ -24,7 +24,7 @@ public:
 
         // Test that 7x7 matrix is only compatible with 7
         constexpr int n(7);
-        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir + "A_7_dummy_backsub.csv");
+        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("A_7_dummy_backsub.csv"));
         ILU<M, double> ilu(A, u_dbl, false);
         EXPECT_TRUE(ilu.check_compatibility_left(n));
         EXPECT_TRUE(ilu.check_compatibility_right(n));
@@ -65,7 +65,7 @@ public:
 
         // Test that using a completely dense matrix one just gets a LU
         constexpr int n(8);
-        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir + "ilu_A.csv");
+        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_A.csv"));
         ILU<M, double> ilu(A, u_dbl, false);
         M<double> test = ilu.get_L()*ilu.get_U()-A;
 
@@ -88,8 +88,8 @@ public:
         }
 
         // Test matching ILU to MATLAB for the dense matrix
-        M<double> L = read_matrixCSV<M, double>(solve_matrix_dir + "ilu_L.csv");
-        M<double> U = read_matrixCSV<M, double>(solve_matrix_dir + "ilu_U.csv");
+        M<double> L = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_L.csv"));
+        M<double> U = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_U.csv"));
 
         for (int i=0; i<n; ++i) {
             for (int j=0; j<n; ++j) {
@@ -105,7 +105,7 @@ public:
 
         // Test that using a completely dense matrix one just gets a LU
         constexpr int n(8);
-        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir + "ilu_A.csv");
+        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_A.csv"));
         ILU<M, double> ilu(A, u_dbl, true);
         M<double> test = ilu.get_L()*ilu.get_U()-A*ilu.get_P();
 
@@ -138,9 +138,9 @@ public:
         }
 
         // Test matching ILU to MATLAB for the dense matrix
-        M<double> L = read_matrixCSV<M, double>(solve_matrix_dir + "ilu_L_pivot.csv");
-        M<double> U = read_matrixCSV<M, double>(solve_matrix_dir + "ilu_U_pivot.csv");
-        M<double> P = read_matrixCSV<M, double>(solve_matrix_dir + "ilu_P_pivot.csv");
+        M<double> L = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_L_pivot.csv"));
+        M<double> U = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_U_pivot.csv"));
+        M<double> P = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_P_pivot.csv"));
 
         cout << ilu.get_P() << endl << endl;
         cout << P << endl << endl;
@@ -165,7 +165,7 @@ public:
 
         // Test that using a completely dense matrix one just gets a LU
         constexpr int n(8);
-        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir + "ilu_A.csv");
+        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_A.csv"));
         ILU<M, double> ilu(A, u_dbl, false);
         
         // Test matching ILU to MATLAB for the dense matrix
@@ -182,7 +182,7 @@ public:
 
         // Test that using a completely dense matrix one just gets a LU
         constexpr int n(8);
-        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir + "ilu_A.csv");
+        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_A.csv"));
         ILU<M, double> ilu(A, u_dbl, true);
         
         // Test matching ILU to MATLAB for the dense matrix
@@ -199,7 +199,7 @@ public:
 
         // Test using a sparse matrix one matches the sparsity pattern for zero-fill
         constexpr int n(8);
-        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir + "ilu_sparse_A.csv");
+        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_sparse_A.csv"));
         ILU<M, double> ilu(A, u_dbl, false);
 
         for (int i=0; i<n; ++i) {
@@ -225,8 +225,8 @@ public:
         }
 
         // Test matching ILU to MATLAB for the sparse for zero-fill matrix
-        M<double> L = read_matrixCSV<M, double>(solve_matrix_dir + "ilu_sparse_L.csv");
-        M<double> U = read_matrixCSV<M, double>(solve_matrix_dir + "ilu_sparse_U.csv");
+        M<double> L = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_sparse_L.csv"));
+        M<double> U = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_sparse_U.csv"));
 
         for (int i=0; i<n; ++i) {
             for (int j=0; j<n; ++j) {
@@ -242,7 +242,7 @@ public:
 
         // Test ILU(0) and ILUT(0) [No Dropping] Give the same dense decomp
         constexpr int n(8);
-        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir + "ilu_A.csv");
+        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_A.csv"));
         ILU<M, double> ilu0(A, u_dbl, false);
         ILU<M, double> ilut0(A, u_dbl, 0.);
 
@@ -261,7 +261,7 @@ public:
     void TestILUTDropping() {
 
         constexpr int n(8);
-        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir + "ilu_sparse_A.csv");
+        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_sparse_A.csv"));
 
         // Check multiple rising thresholds ensuring that each ilu is closer to the matrix and that
         // all have correct form for L and U
@@ -317,7 +317,7 @@ public:
 
         // Test that max dropping just gives the diagonal since everything else gets dropped
         constexpr int n(8);
-        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir + "ilu_sparse_A.csv");
+        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_sparse_A.csv"));
         ILU<M, double> ilu_all_drop(A, u_dbl, DBL_MAX);
 
         for (int i=0; i<n; ++i) {
@@ -338,7 +338,7 @@ public:
     void TestDoubleSingleHalfCast() {
 
         constexpr int n(8);
-        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir + "ilu_A.csv");
+        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_A.csv"));
         ILU<M, double> ilu0_dbl(A, u_dbl, false);
 
         M<double> L_dbl = ilu0_dbl.get_L();
