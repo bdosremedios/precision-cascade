@@ -23,9 +23,9 @@ set(
 
     test_solvers/test_IterativeSolve/test_IterativeSolve.cpp
 
-    test_solvers/test_stationary/test_Jacobi_solve.cpp
-    test_solvers/test_stationary/test_SOR/test_GaussSeidel_solve.cpp
-    test_solvers/test_stationary/test_SOR/test_SOR_solve.cpp
+    # test_solvers/test_stationary/test_Jacobi_solve.cpp
+    # test_solvers/test_stationary/test_SOR/test_GaussSeidel_solve.cpp
+    # test_solvers/test_stationary/test_SOR/test_SOR_solve.cpp
 
     test_solvers/test_krylov/test_GMRES/test_GMRES_components.cpp
     test_solvers/test_krylov/test_GMRES/test_GMRES_solve_dbl.cpp
@@ -33,16 +33,16 @@ set(
     test_solvers/test_krylov/test_GMRES/test_GMRES_solve_hlf.cpp
     test_solvers/test_krylov/test_GMRES/test_PGMRES.cpp
 
-    test_solvers/test_nested/test_FP_GMRES_IR_solve.cpp
-    test_solvers/test_nested/test_MP_GMRES_IR_component.cpp
-    test_solvers/test_nested/test_MP_GMRES_IR_solve.cpp
+    # test_solvers/test_nested/test_FP_GMRES_IR_solve.cpp
+    # test_solvers/test_nested/test_MP_GMRES_IR_component.cpp
+    # test_solvers/test_nested/test_MP_GMRES_IR_solve.cpp
 )
 
 set(
     TEST_SUITE_CPPS
     ${TEST_TOOLS_CPPS}
     ${TEST_PRECONDITIONER_CPPS}
-    # ${TEST_SOLVERS}
+    ${TEST_SOLVERS}
 )
 
 add_executable(

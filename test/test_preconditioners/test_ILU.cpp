@@ -142,9 +142,6 @@ public:
         M<double> U = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_U_pivot.csv"));
         M<double> P = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_P_pivot.csv"));
 
-        cout << ilu.get_P() << endl << endl;
-        cout << P << endl << endl;
-
         for (int i=0; i<n; ++i) {
             for (int j=0; j<n; ++j) {
                 ASSERT_NEAR(ilu.get_P().coeff(i, j), P.coeff(i, j), dbl_error_acc);

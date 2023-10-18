@@ -71,11 +71,11 @@ public:
     void TestSolve(double u) {
 
         constexpr int n(64);
-        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir + "conv_diff_64_A.csv");
-        MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "conv_diff_64_b.csv");
+        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
+        MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
         TypedLinearSystem<M, T> typed_lin_sys(A, b);
 
-        MatrixVector<T> typed_soln = read_matrixCSV<MatrixVector, T>(solve_matrix_dir + "conv_diff_64_x.csv");
+        MatrixVector<T> typed_soln = read_matrixCSV<MatrixVector, T>(solve_matrix_dir / fs::path("conv_diff_64_x.csv"));
         MatrixVector<double> init_guess = MatrixVector<double>::Ones(n);
 
         SolveArgPkg args;
@@ -131,11 +131,11 @@ public:
     void TestReset() {
 
         constexpr int n(64);
-        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir + "conv_diff_64_A.csv");
-        MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "conv_diff_64_b.csv");
+        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
+        MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
         TypedLinearSystem<M, T> typed_lin_sys(A, b);
 
-        MatrixVector<T> typed_soln = read_matrixCSV<MatrixVector, T>(solve_matrix_dir + "conv_diff_64_x.csv");
+        MatrixVector<T> typed_soln = read_matrixCSV<MatrixVector, T>(solve_matrix_dir / fs::path("conv_diff_64_x.csv"));
 
         TypedIterativeSolveTestingMock<M, T> test_mock(typed_lin_sys, typed_soln, default_args);
 

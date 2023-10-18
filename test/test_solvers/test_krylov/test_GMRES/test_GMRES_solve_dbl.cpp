@@ -8,9 +8,9 @@ public:
 
     template <template <typename> typename M>
     void SolveTest(
-        const string &A_file_path,
-        const string &b_file_path,
-        const string &x_file_path,
+        const fs::path &A_file_path,
+        const fs::path &b_file_path,
+        const fs::path &x_file_path,
         const bool &check_3_iter
     ) {
 
@@ -41,85 +41,85 @@ public:
 
 TEST_F(GMRESDoubleSolveTest, SolveConvDiff64_Dense) {
     SolveTest<MatrixDense>(
-        solve_matrix_dir + "conv_diff_64_A.csv",
-        solve_matrix_dir + "conv_diff_64_b.csv",
-        solve_matrix_dir + "conv_diff_64_x.csv",
+        solve_matrix_dir / fs::path("conv_diff_64_A.csv"),
+        solve_matrix_dir / fs::path("conv_diff_64_b.csv"),
+        solve_matrix_dir / fs::path("conv_diff_64_x.csv"),
         false
     );
 }
 TEST_F(GMRESDoubleSolveTest, SolveConvDiff64_Sparse) {
     SolveTest<MatrixSparse>(
-        solve_matrix_dir + "conv_diff_64_A.csv",
-        solve_matrix_dir + "conv_diff_64_b.csv",
-        solve_matrix_dir + "conv_diff_64_x.csv",
+        solve_matrix_dir / fs::path("conv_diff_64_A.csv"),
+        solve_matrix_dir / fs::path("conv_diff_64_b.csv"),
+        solve_matrix_dir / fs::path("conv_diff_64_x.csv"),
         false
     );
 }
 
 TEST_F(GMRESDoubleSolveTest, SolveConvDiff256_Dense) {
     SolveTest<MatrixDense>(
-        solve_matrix_dir + "conv_diff_256_A.csv",
-        solve_matrix_dir + "conv_diff_256_b.csv",
-        solve_matrix_dir + "conv_diff_256_x.csv",
+        solve_matrix_dir / fs::path("conv_diff_256_A.csv"),
+        solve_matrix_dir / fs::path("conv_diff_256_b.csv"),
+        solve_matrix_dir / fs::path("conv_diff_256_x.csv"),
         false
     );
 }
 TEST_F(GMRESDoubleSolveTest, SolveConvDiff256_Sparse) {
     SolveTest<MatrixSparse>(
-        solve_matrix_dir + "conv_diff_256_A.csv",
-        solve_matrix_dir + "conv_diff_256_b.csv",
-        solve_matrix_dir + "conv_diff_256_x.csv",
+        solve_matrix_dir / fs::path("conv_diff_256_A.csv"),
+        solve_matrix_dir / fs::path("conv_diff_256_b.csv"),
+        solve_matrix_dir / fs::path("conv_diff_256_x.csv"),
         false
     );
 }
 
 TEST_F(GMRESDoubleSolveTest, SolveConvDiff1024_Dense_LONGRUNTIME) {
     SolveTest<MatrixDense>(
-        solve_matrix_dir + "conv_diff_1024_A.csv",
-        solve_matrix_dir + "conv_diff_1024_b.csv",
-        solve_matrix_dir + "conv_diff_1024_x.csv",
+        solve_matrix_dir / fs::path("conv_diff_1024_A.csv"),
+        solve_matrix_dir / fs::path("conv_diff_1024_b.csv"),
+        solve_matrix_dir / fs::path("conv_diff_1024_x.csv"),
         false
     );
 }
 TEST_F(GMRESDoubleSolveTest, SolveConvDiff1024_Sparse_LONGRUNTIME) {
     SolveTest<MatrixSparse>(
-        solve_matrix_dir + "conv_diff_1024_A.csv",
-        solve_matrix_dir + "conv_diff_1024_b.csv",
-        solve_matrix_dir + "conv_diff_1024_x.csv",
+        solve_matrix_dir / fs::path("conv_diff_1024_A.csv"),
+        solve_matrix_dir / fs::path("conv_diff_1024_b.csv"),
+        solve_matrix_dir / fs::path("conv_diff_1024_x.csv"),
         false
     );
 }
 
 TEST_F(GMRESDoubleSolveTest, SolveConvDiff20Rand_Dense) {
     SolveTest<MatrixDense>(
-        solve_matrix_dir + "A_20_rand.csv",
-        solve_matrix_dir + "b_20_rand.csv",
-        solve_matrix_dir + "x_20_rand.csv",
+        solve_matrix_dir / fs::path("A_20_rand.csv"),
+        solve_matrix_dir / fs::path("b_20_rand.csv"),
+        solve_matrix_dir / fs::path("x_20_rand.csv"),
         false
     );
 }
 TEST_F(GMRESDoubleSolveTest, SolveConvDiff20Rand_Sparse) {
     SolveTest<MatrixSparse>(
-        solve_matrix_dir + "A_20_rand.csv",
-        solve_matrix_dir + "b_20_rand.csv",
-        solve_matrix_dir + "x_20_rand.csv",
+        solve_matrix_dir / fs::path("A_20_rand.csv"),
+        solve_matrix_dir / fs::path("b_20_rand.csv"),
+        solve_matrix_dir / fs::path("x_20_rand.csv"),
         false
     );
 }
 
 TEST_F(GMRESDoubleSolveTest, SolveConvDiff3Eigs_Dense) {
     SolveTest<MatrixDense>(
-        solve_matrix_dir + "A_25_3eigs.csv",
-        solve_matrix_dir + "b_25_3eigs.csv",
-        solve_matrix_dir + "x_25_3eigs.csv",
+        solve_matrix_dir / fs::path("A_25_3eigs.csv"),
+        solve_matrix_dir / fs::path("b_25_3eigs.csv"),
+        solve_matrix_dir / fs::path("x_25_3eigs.csv"),
         true
     );
 }
 TEST_F(GMRESDoubleSolveTest, SolveConvDiff3Eigs_Sparse) {
     SolveTest<MatrixSparse>(
-        solve_matrix_dir + "A_25_3eigs.csv",
-        solve_matrix_dir + "b_25_3eigs.csv",
-        solve_matrix_dir + "x_25_3eigs.csv",
+        solve_matrix_dir / fs::path("A_25_3eigs.csv"),
+        solve_matrix_dir / fs::path("b_25_3eigs.csv"),
+        solve_matrix_dir / fs::path("x_25_3eigs.csv"),
         true
     );
 }

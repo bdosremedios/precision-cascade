@@ -14,8 +14,8 @@ public:
     void TestMatchIdentity() {
     
         constexpr int n(45);
-        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir + "A_inv_45.csv");
-        MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "b_inv_45.csv");
+        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("A_inv_45.csv"));
+        MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("b_inv_45.csv"));
         TypedLinearSystem<M, double> lin_sys(A, b);
 
         GMRESSolve<M, double> pgmres_solve_default(lin_sys, u_dbl, pgmres_args);
@@ -95,9 +95,9 @@ TEST_F(PGMRESSolveTest, TestDefaultandNoPreconditioningMatchesIdentity_Sparse) {
 
 TEST_F(PGMRESSolveTest, TestLeftPreconditioning_RandA45_Dense) {
     constexpr int n(45);
-    MatrixDense<double> A = read_matrixCSV<MatrixDense, double>(solve_matrix_dir + "A_inv_45.csv");
-    MatrixDense<double> Ainv = read_matrixCSV<MatrixDense, double>(solve_matrix_dir + "Ainv_inv_45.csv");
-    MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "b_inv_45.csv");
+    MatrixDense<double> A = read_matrixCSV<MatrixDense, double>(solve_matrix_dir / fs::path("A_inv_45.csv"));
+    MatrixDense<double> Ainv = read_matrixCSV<MatrixDense, double>(solve_matrix_dir / fs::path("Ainv_inv_45.csv"));
+    MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("b_inv_45.csv"));
     TestPrecondSingleIter<MatrixDense>(
         A, b,
         PrecondArgPkg<MatrixDense, double>(make_shared<MatrixInverse<MatrixDense, double>>(Ainv))
@@ -105,9 +105,9 @@ TEST_F(PGMRESSolveTest, TestLeftPreconditioning_RandA45_Dense) {
 }
 TEST_F(PGMRESSolveTest, TestLeftPreconditioning_RandA45_Sparse) {
     constexpr int n(45);
-    MatrixSparse<double> A = read_matrixCSV<MatrixSparse, double>(solve_matrix_dir + "A_inv_45.csv");
-    MatrixSparse<double> Ainv = read_matrixCSV<MatrixSparse, double>(solve_matrix_dir + "Ainv_inv_45.csv");
-    MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "b_inv_45.csv");
+    MatrixSparse<double> A = read_matrixCSV<MatrixSparse, double>(solve_matrix_dir / fs::path("A_inv_45.csv"));
+    MatrixSparse<double> Ainv = read_matrixCSV<MatrixSparse, double>(solve_matrix_dir / fs::path("Ainv_inv_45.csv"));
+    MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("b_inv_45.csv"));
     TestPrecondSingleIter<MatrixSparse>(
         A, b,
         PrecondArgPkg<MatrixSparse, double>(make_shared<MatrixInverse<MatrixSparse, double>>(Ainv))
@@ -117,9 +117,9 @@ TEST_F(PGMRESSolveTest, TestLeftPreconditioning_RandA45_Sparse) {
 
 TEST_F(PGMRESSolveTest, TestRightPreconditioning_RandA45_Dense) {
     constexpr int n(45);
-    MatrixDense<double> A = read_matrixCSV<MatrixDense, double>(solve_matrix_dir + "A_inv_45.csv");
-    MatrixDense<double> Ainv = read_matrixCSV<MatrixDense, double>(solve_matrix_dir + "Ainv_inv_45.csv");
-    MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "b_inv_45.csv");
+    MatrixDense<double> A = read_matrixCSV<MatrixDense, double>(solve_matrix_dir / fs::path("A_inv_45.csv"));
+    MatrixDense<double> Ainv = read_matrixCSV<MatrixDense, double>(solve_matrix_dir / fs::path("Ainv_inv_45.csv"));
+    MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("b_inv_45.csv"));
     TestPrecondSingleIter<MatrixDense>(
         A, b,
         PrecondArgPkg<MatrixDense, double>(make_shared<NoPreconditioner<MatrixDense, double>>(),
@@ -128,9 +128,9 @@ TEST_F(PGMRESSolveTest, TestRightPreconditioning_RandA45_Dense) {
 }
 TEST_F(PGMRESSolveTest, TestRightPreconditioning_RandA45_Sparse) {
     constexpr int n(45);
-    MatrixSparse<double> A = read_matrixCSV<MatrixSparse, double>(solve_matrix_dir + "A_inv_45.csv");
-    MatrixSparse<double> Ainv = read_matrixCSV<MatrixSparse, double>(solve_matrix_dir + "Ainv_inv_45.csv");
-    MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "b_inv_45.csv");
+    MatrixSparse<double> A = read_matrixCSV<MatrixSparse, double>(solve_matrix_dir / fs::path("A_inv_45.csv"));
+    MatrixSparse<double> Ainv = read_matrixCSV<MatrixSparse, double>(solve_matrix_dir / fs::path("Ainv_inv_45.csv"));
+    MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("b_inv_45.csv"));
     TestPrecondSingleIter<MatrixSparse>(
         A, b,
         PrecondArgPkg<MatrixSparse, double>(make_shared<NoPreconditioner<MatrixSparse, double>>(),
@@ -140,9 +140,9 @@ TEST_F(PGMRESSolveTest, TestRightPreconditioning_RandA45_Sparse) {
 
 TEST_F(PGMRESSolveTest, TestSymmeticPreconditioning_RandA45_Dense) {
     constexpr int n(45);
-    MatrixDense<double> A = read_matrixCSV<MatrixDense, double>(solve_matrix_dir + "A_inv_45.csv");
-    MatrixDense<double> Ainv = read_matrixCSV<MatrixDense, double>(solve_matrix_dir + "Ainv_inv_45.csv");
-    MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "b_inv_45.csv");
+    MatrixDense<double> A = read_matrixCSV<MatrixDense, double>(solve_matrix_dir / fs::path("A_inv_45.csv"));
+    MatrixDense<double> Ainv = read_matrixCSV<MatrixDense, double>(solve_matrix_dir / fs::path("Ainv_inv_45.csv"));
+    MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("b_inv_45.csv"));
     TestPrecondSingleIter<MatrixDense>(
         A*A, b,
         PrecondArgPkg<MatrixDense, double>(make_shared<MatrixInverse<MatrixDense, double>>(Ainv),
@@ -151,9 +151,9 @@ TEST_F(PGMRESSolveTest, TestSymmeticPreconditioning_RandA45_Dense) {
 }
 TEST_F(PGMRESSolveTest, TestSymmeticPreconditioning_RandA45_Sparse) {
     constexpr int n(45);
-    MatrixSparse<double> A = read_matrixCSV<MatrixSparse, double>(solve_matrix_dir + "A_inv_45.csv");
-    MatrixSparse<double> Ainv = read_matrixCSV<MatrixSparse, double>(solve_matrix_dir + "Ainv_inv_45.csv");
-    MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "b_inv_45.csv");
+    MatrixSparse<double> A = read_matrixCSV<MatrixSparse, double>(solve_matrix_dir / fs::path("A_inv_45.csv"));
+    MatrixSparse<double> Ainv = read_matrixCSV<MatrixSparse, double>(solve_matrix_dir / fs::path("Ainv_inv_45.csv"));
+    MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("b_inv_45.csv"));
     TestPrecondSingleIter<MatrixSparse>(
         A*A, b,
         PrecondArgPkg<MatrixSparse, double>(make_shared<MatrixInverse<MatrixSparse, double>>(Ainv),
@@ -164,10 +164,10 @@ TEST_F(PGMRESSolveTest, TestSymmeticPreconditioning_RandA45_Sparse) {
 TEST_F(PGMRESSolveTest, TestLeftPreconditioning_3eigs_Dense) {
 
     constexpr int n(25);
-    MatrixDense<double> A = read_matrixCSV<MatrixDense, double>(solve_matrix_dir + "A_25_saddle.csv");
-    MatrixDense<double> Ainv = read_matrixCSV<MatrixDense, double>(solve_matrix_dir + "A_25_invprecond_saddle.csv");
-    MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "b_25_saddle.csv");
-    MatrixVector<double> x_test = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "x_25_saddle.csv");
+    MatrixDense<double> A = read_matrixCSV<MatrixDense, double>(solve_matrix_dir / fs::path("A_25_saddle.csv"));
+    MatrixDense<double> Ainv = read_matrixCSV<MatrixDense, double>(solve_matrix_dir / fs::path("A_25_invprecond_saddle.csv"));
+    MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("b_25_saddle.csv"));
+    MatrixVector<double> x_test = read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("x_25_saddle.csv"));
 
     TestPrecond3IterAndMatch<MatrixDense>(
         A, b, x_test,
@@ -178,10 +178,10 @@ TEST_F(PGMRESSolveTest, TestLeftPreconditioning_3eigs_Dense) {
 TEST_F(PGMRESSolveTest, TestLeftPreconditioning_3eigs_Sparse) {
 
     constexpr int n(25);
-    MatrixSparse<double> A = read_matrixCSV<MatrixSparse, double>(solve_matrix_dir + "A_25_saddle.csv");
-    MatrixSparse<double> Ainv = read_matrixCSV<MatrixSparse, double>(solve_matrix_dir + "A_25_invprecond_saddle.csv");
-    MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "b_25_saddle.csv");
-    MatrixVector<double> x_test = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "x_25_saddle.csv");
+    MatrixSparse<double> A = read_matrixCSV<MatrixSparse, double>(solve_matrix_dir / fs::path("A_25_saddle.csv"));
+    MatrixSparse<double> Ainv = read_matrixCSV<MatrixSparse, double>(solve_matrix_dir / fs::path("A_25_invprecond_saddle.csv"));
+    MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("b_25_saddle.csv"));
+    MatrixVector<double> x_test = read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("x_25_saddle.csv"));
 
     TestPrecond3IterAndMatch<MatrixSparse>(
         A, b, x_test,
@@ -193,10 +193,10 @@ TEST_F(PGMRESSolveTest, TestLeftPreconditioning_3eigs_Sparse) {
 TEST_F(PGMRESSolveTest, TestRightPreconditioning_3eigs_Dense) {
 
     constexpr int n(25);
-    MatrixDense<double> A = read_matrixCSV<MatrixDense, double>(solve_matrix_dir + "A_25_saddle.csv");
-    MatrixDense<double> Ainv = read_matrixCSV<MatrixDense, double>(solve_matrix_dir + "A_25_invprecond_saddle.csv");
-    MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "b_25_saddle.csv");
-    MatrixVector<double> x_test = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "x_25_saddle.csv");
+    MatrixDense<double> A = read_matrixCSV<MatrixDense, double>(solve_matrix_dir / fs::path("A_25_saddle.csv"));
+    MatrixDense<double> Ainv = read_matrixCSV<MatrixDense, double>(solve_matrix_dir / fs::path("A_25_invprecond_saddle.csv"));
+    MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("b_25_saddle.csv"));
+    MatrixVector<double> x_test = read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("x_25_saddle.csv"));
 
     TestPrecond3IterAndMatch<MatrixDense>(
         A, b, x_test,
@@ -210,10 +210,10 @@ TEST_F(PGMRESSolveTest, TestRightPreconditioning_3eigs_Dense) {
 TEST_F(PGMRESSolveTest, TestRightPreconditioning_3eigs_Sparse) {
 
     constexpr int n(25);
-    MatrixSparse<double> A = read_matrixCSV<MatrixSparse, double>(solve_matrix_dir + "A_25_saddle.csv");
-    MatrixSparse<double> Ainv = read_matrixCSV<MatrixSparse, double>(solve_matrix_dir + "A_25_invprecond_saddle.csv");
-    MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "b_25_saddle.csv");
-    MatrixVector<double> x_test = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "x_25_saddle.csv");
+    MatrixSparse<double> A = read_matrixCSV<MatrixSparse, double>(solve_matrix_dir / fs::path("A_25_saddle.csv"));
+    MatrixSparse<double> Ainv = read_matrixCSV<MatrixSparse, double>(solve_matrix_dir / fs::path("A_25_invprecond_saddle.csv"));
+    MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("b_25_saddle.csv"));
+    MatrixVector<double> x_test = read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("x_25_saddle.csv"));
 
     TestPrecond3IterAndMatch<MatrixSparse>(
         A, b, x_test,

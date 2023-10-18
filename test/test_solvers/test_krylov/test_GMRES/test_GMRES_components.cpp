@@ -8,8 +8,8 @@ public:
 
     template <template <typename> typename M>
     void CheckConstruction(
-        const string &A_file_path,
-        const string &b_file_path,
+        const fs::path &A_file_path,
+        const fs::path &b_file_path,
         const int &n
     ) {
 
@@ -64,8 +64,8 @@ public:
     void KrylovInitAndUpdate() {
 
         const int n(5);
-        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir + "A_5_toy.csv");
-        MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "b_5_toy.csv");
+        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("A_5_toy.csv"));
+        MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("b_5_toy.csv"));
         TypedLinearSystem<M, double> lin_sys(A, b);
 
         GMRESSolveTestingMock<M, double> test_mock(lin_sys, u_dbl, default_args);
@@ -129,8 +129,8 @@ public:
     void H_QR_Update() {
 
         const int n(5);
-        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir + "A_5_toy.csv");
-        MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "b_5_toy.csv");
+        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("A_5_toy.csv"));
+        MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("b_5_toy.csv"));
         TypedLinearSystem<M, double> lin_sys(A, b);
 
         GMRESSolveTestingMock<M, double> test_mock(lin_sys, u_dbl, default_args);
@@ -204,10 +204,10 @@ public:
     void Update_x_Back_Substitution() {
 
         const int n(7);
-        MatrixDense<double> Q = read_matrixCSV<MatrixDense, double>(solve_matrix_dir + "Q_8_backsub.csv");
-        MatrixDense<double> R = read_matrixCSV<MatrixDense, double>(solve_matrix_dir + "R_8_backsub.csv");
-        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir + "A_7_dummy_backsub.csv");
-        MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "b_7_dummy_backsub.csv");
+        MatrixDense<double> Q = read_matrixCSV<MatrixDense, double>(solve_matrix_dir / fs::path("Q_8_backsub.csv"));
+        MatrixDense<double> R = read_matrixCSV<MatrixDense, double>(solve_matrix_dir / fs::path("R_8_backsub.csv"));
+        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("A_7_dummy_backsub.csv"));
+        MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("b_7_dummy_backsub.csv"));
         TypedLinearSystem<M, double> lin_sys(A, b);
 
         // Set initial guess to zeros such that residual is just b
@@ -234,7 +234,7 @@ public:
             
             // Load test solution
             MatrixVector<double> test_soln = read_matrixCSV<MatrixVector, double>(
-                solve_matrix_dir + "x_" + std::to_string(kry_dim) + "_backsub.csv"
+                solve_matrix_dir / fs::path("x_" + std::to_string(kry_dim) + "_backsub.csv")
             );
 
             // )Solve with backsubstitution
@@ -253,8 +253,8 @@ public:
     void KrylovLuckyBreakFirstIter () {
 
         const int n(5);
-        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir + "A_5_easysoln.csv");
-        MatrixVector<double> b = read_matrixCSV<M, double>(solve_matrix_dir + "b_5_easysoln.csv");
+        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("A_5_easysoln.csv"));
+        MatrixVector<double> b = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("b_5_easysoln.csv"));
         TypedLinearSystem<M, double> lin_sys(A, b);
 
         MatrixVector<double> soln = MatrixVector<double>::Ones(n); // Instantiate initial guess as true solution
@@ -296,8 +296,8 @@ public:
     void KrylovLuckyBreakLaterIter() {
 
         constexpr int n(5);
-        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir + "A_5_easysoln.csv");
-        MatrixVector<double> b = read_matrixCSV<M, double>(solve_matrix_dir + "b_5_easysoln.csv");
+        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("A_5_easysoln.csv"));
+        MatrixVector<double> b = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("b_5_easysoln.csv"));
         TypedLinearSystem<M, double> lin_sys(A, b);
 
         MatrixVector<double> soln = MatrixVector<double>::Zero(n); // Initialize as near solution
@@ -330,8 +330,8 @@ public:
     void KrylovLuckyBreakThroughSolve() {
 
         constexpr int n(5);
-        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir + "A_5_easysoln.csv");
-        MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir + "b_5_easysoln.csv");
+        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("A_5_easysoln.csv"));
+        MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("b_5_easysoln.csv"));
         TypedLinearSystem<M, double> lin_sys(A, b);
 
         MatrixVector<double> soln = MatrixVector<double>::Zero(n); // Initialize as near solution
@@ -454,17 +454,33 @@ public:
 };
 
 TEST_F(GMRESComponentTest, CheckConstruction5x5_Dense) {
-    CheckConstruction<MatrixDense>(solve_matrix_dir+"A_5_toy.csv", solve_matrix_dir+"b_5_toy.csv", 5);
+    CheckConstruction<MatrixDense>(
+        solve_matrix_dir/fs::path("A_5_toy.csv"),
+        solve_matrix_dir/fs::path("b_5_toy.csv"),
+        5
+    );
 }
 TEST_F(GMRESComponentTest, CheckConstruction5x5_Sparse) {
-    CheckConstruction<MatrixSparse>(solve_matrix_dir+"A_5_toy.csv", solve_matrix_dir+"b_5_toy.csv", 5);
+    CheckConstruction<MatrixSparse>(
+        solve_matrix_dir/fs::path("A_5_toy.csv"),
+        solve_matrix_dir/fs::path("b_5_toy.csv"),
+        5
+    );
 }
 
 TEST_F(GMRESComponentTest, CheckConstruction64x64_Dense) {
-    CheckConstruction<MatrixDense>(solve_matrix_dir+"A_64_toy.csv", solve_matrix_dir+"b_64_toy.csv", 64);
+    CheckConstruction<MatrixDense>(
+        solve_matrix_dir/fs::path("A_64_toy.csv"),
+        solve_matrix_dir/fs::path("b_64_toy.csv"),
+        64
+    );
 }
 TEST_F(GMRESComponentTest, CheckConstruction64x64_Sparse) {
-    CheckConstruction<MatrixSparse>(solve_matrix_dir+"A_64_toy.csv", solve_matrix_dir+"b_64_toy.csv", 64);
+    CheckConstruction<MatrixSparse>(
+        solve_matrix_dir/fs::path("A_64_toy.csv"),
+        solve_matrix_dir/fs::path("b_64_toy.csv"),
+        64
+    );
 }
 
 TEST_F(GMRESComponentTest, CheckCorrectDefaultMaxIter_Both) {
