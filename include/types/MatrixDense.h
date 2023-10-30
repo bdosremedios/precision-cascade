@@ -5,27 +5,39 @@
 
 using Eigen::Matrix;
 using Eigen::Dynamic;
-using Eigen::Index;
+
+#include <iostream>
+using std::cout, std::endl;
 
 template <typename T>
 class MatrixDense: public Matrix<T, Dynamic, Dynamic>
 {
 private:
 
-    using Matrix<T, Dynamic, Dynamic>::operator();
+    using Parent = Matrix<T, Dynamic, Dynamic>;
 
 public:
-    
-    using Matrix<T, Dynamic, Dynamic>::Matrix;
 
-    const T& coeff(Index row, Index col) const {
-        return this->operator()(row, col);
-    }
+    // *** Constructor ***
+    using Parent::Matrix;
 
-    T& coeffRef(Index row, Index col) {
-        return this->operator()(row, col);
-    }
+    // *** Element Access Methods ***
+    const T coeff(int row, int col) const { return Parent::operator()(row, col); }
+    T& coeffRef(int row, int col) { return Parent::operator()(row, col); }
+    auto col(int _col) { return Parent::col(_col); } // auto to use whatever representation is used
+                                                     // for block column in underlying matrix structure
 
+    // *** Dimensions Methods ***
+    int rows() const { return Parent::rows(); }
+    int cols() const { return Parent::cols(); }
+
+    // *** Creation Methods ***
+    static MatrixDense<T> Random(int m, int n) { return Parent::Random(m, n); }
+    static MatrixDense<T> Identity(int m, int n) { return Parent::Identity(m, n); }
+    static MatrixDense<T> Ones(int m, int n) { return Parent::Ones(m, n); }
+    static MatrixDense<T> Zero(int m, int n) { return Parent::Zero(m, n); }
+
+    // *** Resizing Methods ***
     void reduce() { ; } // Do nothing on reduction
 
 };

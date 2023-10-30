@@ -1,11 +1,7 @@
 #ifndef PRECONDITIONER_H
 #define PRECONDITIONER_H
 
-#include "Eigen/Dense"
-
 #include "../types/types.h"
-
-using Eigen::Matrix, Eigen::Dynamic;
 
 template <template <typename> typename M, typename W>
 class Preconditioner

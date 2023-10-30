@@ -1,15 +1,11 @@
 #ifndef IMPLEMENTED_PRECONDITIONERS_H
 #define IMPLEMENTED_PRECONDITIONERS_H
 
-#include "Eigen/Dense"
-
 #include <cmath>
 #include <functional>
 
 #include "Preconditioner.h"
 #include "../tools/Substitution.h"
-
-using Eigen::Matrix, Eigen::Dynamic;
 
 using std::abs;
 
@@ -140,11 +136,11 @@ public:
                 }
                 if (abs_max_val <= zero_tol) { throw runtime_error("ILU encountered not large enough pivot error"); }
                 if (i != pivot) {
-                    M<W> U_i = U.col(i);
+                    const M<W> U_i = U.col(i);
                     U.col(i) = U.col(pivot);
                     U.col(pivot) = U_i;
 
-                    M<W> P_i = P.col(i);
+                    const M<W> P_i = P.col(i);
                     P.col(i) = P.col(pivot);
                     P.col(pivot) = P_i;
                 }
