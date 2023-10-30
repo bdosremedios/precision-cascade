@@ -60,7 +60,6 @@ M<T> read_matrixCSV(fs::path const &path) {
     }
 
     // Read entries into matrix
-
     file_in.clear();
     file_in.seekg(0, std::ios_base::beg);
     M<T> mat = M<T>::Zero(n_rows, n_cols);
@@ -81,7 +80,7 @@ M<T> read_matrixCSV(fs::path const &path) {
                     "Invalid argument in file, failed to convert to numeric"
                 );
             }
-            mat.coeffRef(row, col) = temp_number;
+            if (temp_number != static_cast<T>(0)) { mat.coeffRef(row, col) = temp_number; }
             col++;
         }
 
@@ -89,6 +88,7 @@ M<T> read_matrixCSV(fs::path const &path) {
 
     }
 
+    mat.reduce();
     return mat;
 
 }

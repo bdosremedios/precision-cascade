@@ -28,6 +28,9 @@ public:
     static MatrixVector<T> Random(int m, int n) { check_n(n); return Parent::Random(m, 1); }
     static MatrixVector<T> Random(int m) { return Parent::Random(m, 1); }
 
+    // *** Resizing Methods ***
+    void reduce() { ; }
+
 };
 
 #endif
