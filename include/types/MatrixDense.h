@@ -40,6 +40,9 @@ public:
     // *** Resizing Methods ***
     void reduce() { ; } // Do nothing on reduction
 
+    // *** Boolean Methods ***
+    bool operator==(const MatrixDense<T> &rhs) const { return Parent::operator==(rhs); }
+
 };
 
 #endif

@@ -1,8 +1,6 @@
 #ifndef MATRIXREADER_H
 #define MATRIXREADER_H
 
-#include "Eigen/Dense"
-
 #include "types/types.h"
 
 #include <filesystem>
@@ -10,9 +8,6 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-
-using Eigen::Matrix;
-using Eigen::Dynamic;
 
 namespace fs = std::filesystem;
 using std::string, std::to_string;

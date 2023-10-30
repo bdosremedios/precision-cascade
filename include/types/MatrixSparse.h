@@ -55,9 +55,7 @@ public:
     void reduce() { Parent::prune(static_cast<T>(0)); }
 
     // *** Boolean Methods ***
-    bool operator==(const MatrixSparse<T> &rhs) const {
-        return Parent::isApprox(rhs);
-    }
+    bool operator==(const MatrixSparse<T> &rhs) const { return Parent::isApprox(rhs); }
 
 };
 
