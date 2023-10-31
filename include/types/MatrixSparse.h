@@ -57,6 +57,10 @@ public:
     // *** Boolean Methods ***
     bool operator==(const MatrixSparse<T> &rhs) const { return Parent::isApprox(rhs); }
 
+    // *** Cast Methods ***
+    template <typename Cast_T>
+    MatrixSparse<Cast_T> cast() const { return Parent::template cast<Cast_T>(); }
+
     // Forward iterator over sparse inner columns, to iterate efficienctly over non-zeros
     class InnerIterator: public Parent::InnerIterator {
 

@@ -38,10 +38,17 @@ public:
     static MatrixDense<T> Zero(int m, int n) { return Parent::Zero(m, n); }
 
     // *** Resizing Methods ***
+
+    // Resize without altering existing entries
+    void conservativeResize(int m, int n) { Parent::conservativeResize(m, n); }
     void reduce() { ; } // Do nothing on reduction
 
     // *** Boolean Methods ***
     bool operator==(const MatrixDense<T> &rhs) const { return Parent::operator==(rhs); }
+
+    // *** Cast Methods ***
+    template <typename Cast_T>
+    MatrixDense<Cast_T> cast() const { return Parent::template cast<Cast_T>(); }
 
 };
 

@@ -84,7 +84,7 @@ protected:
     bool terminated;
     MatrixVector<double> generic_soln;
     MatrixVector<double> curr_res;
-    MatrixXd res_hist;
+    MatrixDense<double> res_hist;
     vector<double> res_norm_hist;
 
     // *** PROTECTED CONSTRUCTORS ***
@@ -127,13 +127,13 @@ protected:
 
 public:
 
-    // *** PUBLIC METHODS **
+    // *** PUBLIC METHODS ***
 
     // Getters
     MatrixVector<double> get_generic_soln() const { return generic_soln; };
     MatrixVector<double> get_curr_res() const { return curr_res; };
     double get_relres() const { return curr_res.norm()/res_norm_hist[0]; }
-    MatrixXd get_res_hist() const { return res_hist; };
+    MatrixDense<double> get_res_hist() const { return res_hist; };
     vector<double> get_res_norm_hist() const { return res_norm_hist; };
     bool check_initiated() const { return initiated; };
     bool check_converged() const { return converged; };
