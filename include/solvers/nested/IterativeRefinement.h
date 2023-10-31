@@ -19,9 +19,7 @@ protected:
         // Residual is b - inner_solver residual so update through that
         vector<double> temp;
         for (int i=0; i < this->inner_solver->get_iteration(); ++i) {
-            temp.push_back(
-                (this->lin_sys.get_b()-(this->inner_solver->get_res_hist()).col(i)).norm()
-            );
+            temp.push_back((this->lin_sys.get_b()-(this->inner_solver->get_res_hist()).col(i)).norm());
         }
         this->inner_res_norm_hist.push_back(temp);
 

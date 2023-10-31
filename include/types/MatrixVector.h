@@ -1,7 +1,7 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
-#include "Eigen/Dense"
+#include <Eigen/Dense>
 
 using Eigen::Matrix;
 using Eigen::Dynamic;

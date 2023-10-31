@@ -1,5 +1,5 @@
-#include "gtest/gtest.h"
-#include "Eigen/Dense"
+#include <gtest/gtest.h>
+#include <Eigen/Dense>
 
 #include "test.h"
 
@@ -8,6 +8,7 @@
 #include <iostream>
 
 using Eigen::Matrix, Eigen::Dynamic;
+
 using std::abs;
 using std::string;
 using std::cout, std::endl;

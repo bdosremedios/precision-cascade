@@ -1,11 +1,11 @@
 #ifndef IMPLEMENTED_PRECONDITIONERS_H
 #define IMPLEMENTED_PRECONDITIONERS_H
 
-#include <cmath>
-#include <functional>
-
 #include "Preconditioner.h"
 #include "../tools/Substitution.h"
+
+#include <cmath>
+#include <functional>
 
 using std::abs;
 

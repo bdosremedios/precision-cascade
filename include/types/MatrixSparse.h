@@ -1,8 +1,10 @@
 #ifndef SPARSEMATRIX_H
 #define SPARSEMATRIX_H
 
-#include "Eigen/Dense"
-#include "Eigen/SparseCore"
+#include <Eigen/Dense>
+#include <Eigen/SparseCore>
+
+#include "MatrixVector.h"
 
 #include <cmath>
 
@@ -11,9 +13,6 @@ using Eigen::SparseMatrix;
 using Eigen::Dynamic;
 
 using std::min;
-
-#include <iostream>
-using std::cout, std::endl;
 
 template <typename T>
 class MatrixSparse: public SparseMatrix<T>

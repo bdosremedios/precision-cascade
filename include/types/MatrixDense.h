@@ -1,7 +1,7 @@
 #ifndef DENSEMATRIX_H
 #define DENSEMATRIX_H
 
-#include "Eigen/Dense"
+#include <Eigen/Dense>
 
 #include "MatrixVector.h"
 
@@ -24,7 +24,6 @@ public:
     using Parent::Matrix;
 
     // *** Element Access Methods ***
-
     const T coeff(int row, int col) const { return Parent::operator()(row, col); }
     T& coeffRef(int row, int col) { return Parent::operator()(row, col); }
 
