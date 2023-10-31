@@ -24,10 +24,13 @@ public:
     using Parent::Matrix;
 
     // *** Element Access Methods ***
+
     const T coeff(int row, int col) const { return Parent::operator()(row, col); }
     T& coeffRef(int row, int col) { return Parent::operator()(row, col); }
-    auto col(int _col) { return Parent::col(_col); } // auto to use whatever representation is used
-                                                     // for block column in underlying matrix structure
+
+    // auto to use arbitrary block representation (reqs block assignment & assignment to MatrixDense)
+    auto col(int _col) { return Parent::col(_col); } 
+    auto block(int row, int col, int m, int n) { return Parent::block(row, col, m, n); }
 
     // *** Dimensions Methods ***
     int rows() const { return Parent::rows(); }
@@ -53,8 +56,8 @@ public:
     MatrixDense<Cast_T> cast() const { return Parent::template cast<Cast_T>(); }
 
     // *** Calculation/Assignment Methods ***
-    MatrixVector<T> operator*(const MatrixVector<T> &vec) const { return Parent::operator*(vec); }
     MatrixDense<T> transpose() { return Parent::transpose(); }
+    MatrixVector<T> operator*(const MatrixVector<T> &vec) const { return Parent::operator*(vec); }
     MatrixDense<T> operator*(const MatrixDense<T> &mat) const { return Parent::operator*(mat); } // Needed for testing
 
 };

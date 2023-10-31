@@ -133,8 +133,9 @@ protected:
         R_H.col(k) = H.col(k);
 
         // Apply previous Given's rotations to new column
-        // TODO: Can reduce run time by 2 since we know is upper triag
-        R_H.block(0, k, k+1, 1) = Q_H.block(0, 0, k+1, k+1).transpose()*R_H.block(0, k, k+1, 1);
+        MatrixDense<T> Q_H_block = Q_H.block(0, 0, k+1, k+1);
+        MatrixDense<T> R_H_block = R_H.block(0, k, k+1, 1);
+        R_H.block(0, k, k+1, 1) = Q_H_block.transpose()*R_H_block;
 
         // Apply the final Given's rotation manually making R_H upper triangular
         T alpha = R_H.coeff(k, k);
@@ -147,12 +148,9 @@ protected:
         R_H.coeffRef(k, k) = r;
         R_H.coeffRef(k+1, k) = static_cast<T>(0);
 
-        // Right multiply Q_H by transpose of new matrix to get updated Q_H
-        // *will only modify last two columns so save time by just doing those 
-        Matrix<T, 2, 2> givens_trans;
-        givens_trans(0, 0) = c; givens_trans(0, 1) = s;
-        givens_trans(1, 0) = -s; givens_trans(1, 1) = c;
-        Q_H.block(0, k, k+2, 2) = Q_H.block(0, k, k+2, 2)*givens_trans;
+        MatrixVector<T> Q_H_col_k = Q_H.col(k);
+        Q_H.col(k) = c*Q_H_col_k - s*Q_H.col(k+1);
+        Q_H.col(k+1) = s*Q_H_col_k + c*Q_H.col(k+1);
 
     }
 
