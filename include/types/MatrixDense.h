@@ -3,6 +3,8 @@
 
 #include "Eigen/Dense"
 
+#include "MatrixVector.h"
+
 using Eigen::Matrix;
 using Eigen::Dynamic;
 
@@ -49,6 +51,11 @@ public:
     // *** Cast Methods ***
     template <typename Cast_T>
     MatrixDense<Cast_T> cast() const { return Parent::template cast<Cast_T>(); }
+
+    // *** Calculation/Assignment Methods ***
+    MatrixVector<T> operator*(const MatrixVector<T> &vec) const { return Parent::operator*(vec); }
+    MatrixDense<T> operator*(const MatrixDense<T> &mat) const { return Parent::operator*(mat); } // Needed for testing
+    MatrixDense<T> transpose() { return Parent::transpose(); } // Needed for testing
 
 };
 

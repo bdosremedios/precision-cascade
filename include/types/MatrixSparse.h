@@ -61,6 +61,11 @@ public:
     template <typename Cast_T>
     MatrixSparse<Cast_T> cast() const { return Parent::template cast<Cast_T>(); }
 
+    // *** Calculation/Assignment Methods ***
+    MatrixVector<T> operator*(const MatrixVector<T> &vec) const { return Parent::operator*(vec); }
+    MatrixSparse<T> operator*(const MatrixSparse<T> &mat) const { return Parent::operator*(mat); } // Needed for testing
+    MatrixSparse<T> transpose() { return Parent::transpose(); } // Needed for testing
+
     // Forward iterator over sparse inner columns, to iterate efficienctly over non-zeros
     class InnerIterator: public Parent::InnerIterator {
 

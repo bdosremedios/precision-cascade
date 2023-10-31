@@ -37,12 +37,12 @@ public:
     // *** Resizing Methods ***
     void reduce() { ; }
 
-    // *** Calculation Methods ***
-    T norm() const { return Parent::norm(); }
-
     // *** Cast Methods ***
     template <typename Cast_T>
     MatrixVector<Cast_T> cast() const { return Parent::template cast<Cast_T>(); }
+
+    // *** Calculation Methods ***
+    T norm() const { return Parent::norm(); }
 
 };
 
