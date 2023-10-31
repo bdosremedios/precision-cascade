@@ -120,7 +120,7 @@ protected:
             // each next vector
             MatrixVector<T> q_i = Q_kry_basis.col(i);
             H.coeffRef(i, k) = q_i.dot(next_q);
-            next_q -= H.coeff(i, k)*q_i;
+            next_q -= q_i*H.coeff(i, k);
         }
         H.coeffRef(k+1, k) = next_q.norm();
 
@@ -134,8 +134,8 @@ protected:
 
         // Apply previous Given's rotations to new column
         MatrixDense<T> Q_H_block = Q_H.block(0, 0, k+1, k+1);
-        MatrixDense<T> R_H_block = R_H.block(0, k, k+1, 1);
-        R_H.block(0, k, k+1, 1) = Q_H_block.transpose()*R_H_block;
+        MatrixVector<T> R_H_col = R_H.block(0, k, k+1, 1);
+        R_H.block(0, k, k+1, 1) = Q_H_block.transpose()*R_H_col;
 
         // Apply the final Given's rotation manually making R_H upper triangular
         T alpha = R_H.coeff(k, k);
@@ -149,8 +149,8 @@ protected:
         R_H.coeffRef(k+1, k) = static_cast<T>(0);
 
         MatrixVector<T> Q_H_col_k = Q_H.col(k);
-        Q_H.col(k) = c*Q_H_col_k - s*Q_H.col(k+1);
-        Q_H.col(k+1) = s*Q_H_col_k + c*Q_H.col(k+1);
+        Q_H.col(k) = Q_H_col_k*c - Q_H.col(k+1)*s;
+        Q_H.col(k+1) = Q_H_col_k*s + Q_H.col(k+1)*c;
 
     }
 
@@ -159,9 +159,8 @@ protected:
         // Calculate RHS to solve
         MatrixVector<T> rho_e1 = MatrixVector<T>::Zero(kry_space_dim+1);
         rho_e1(0) = rho;
-        Matrix<T, Dynamic, 1> rhs = (
-            Q_H.block(0, 0, kry_space_dim+1, kry_space_dim+1).transpose()*rho_e1
-        );
+        MatrixDense<T> Q_H_block = Q_H.block(0, 0, kry_space_dim+1, kry_space_dim+1);
+        MatrixVector<T> rhs = Q_H_block.transpose()*rho_e1;
 
         // Use back substitution to solve
         MatrixVector<T> y = back_substitution(
@@ -172,12 +171,9 @@ protected:
         );
 
         // Update typed_soln adjusting with right preconditioning
-        typed_soln = (
-            init_guess_typed +
-            (right_precond_ptr->action_inv_M(
-                Q_kry_basis.block(0, 0, typed_lin_sys.get_m(), kry_space_dim)*y)
-            ).template cast<T>()
-        );
+        MatrixDense<T> Q_kry_basis_block = Q_kry_basis.block(0, 0, typed_lin_sys.get_m(), kry_space_dim);
+        typed_soln = init_guess_typed +
+                     (right_precond_ptr->action_inv_M(Q_kry_basis_block*y)).template cast<T>();
 
     }
 

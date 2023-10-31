@@ -28,7 +28,7 @@ public:
     const T coeff(int row, int col) const { return Parent::operator()(row, col); }
     T& coeffRef(int row, int col) { return Parent::operator()(row, col); }
 
-    // auto to use arbitrary block representation (reqs block assignment & assignment to MatrixDense)
+    // auto to use arbitrary block representation (reqs block assignment & assignment/conversion to MatrixDense)
     auto col(int _col) { return Parent::col(_col); } 
     auto block(int row, int col, int m, int n) { return Parent::block(row, col, m, n); }
 
@@ -57,6 +57,8 @@ public:
 
     // *** Calculation/Assignment Methods ***
     MatrixDense<T> transpose() { return Parent::transpose(); }
+    MatrixDense<T> operator*(const T &scalar) const { return Parent::operator*(scalar); }
+    MatrixDense<T> operator/(const T &scalar) const { return Parent::operator/(scalar); }
     MatrixVector<T> operator*(const MatrixVector<T> &vec) const { return Parent::operator*(vec); }
     MatrixDense<T> operator*(const MatrixDense<T> &mat) const { return Parent::operator*(mat); } // Needed for testing
 

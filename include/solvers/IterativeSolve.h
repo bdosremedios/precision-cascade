@@ -1,9 +1,6 @@
 #ifndef ITERATIVESOLVE_H
 #define ITERATIVESOLVE_H
 
-#include "Eigen/Dense"
-#include "Eigen/SparseCore"
-
 #include "types/types.h"
 #include "tools/argument_pkgs.h"
 #include "tools/Substitution.h"
@@ -16,8 +13,6 @@
 #include <cmath>
 #include <iostream>
 #include <iomanip>
-
-using Eigen::MatrixXd;
 
 using std::shared_ptr, std::make_shared;
 using std::vector;

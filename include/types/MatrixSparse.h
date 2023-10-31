@@ -28,10 +28,13 @@ public:
     using Parent::SparseMatrix;
 
     // *** Element Access Methods ***
+
     const T coeff(int row, int col) const { return Parent::coeff(row, col); }
     T& coeffRef(int row, int col) { return Parent::coeffRef(row, col); }
-    auto col(int _col) { return Parent::col(_col); } // auto to use whatever representation is used
-                                                     // for block column in underlying matrix structure
+
+    // auto to use arbitrary block representation (reqs block assignment & assignment/conversion to MatrixDense)
+    auto col(int _col) { return Parent::col(_col); }
+    auto block(int row, int col, int m, int n) { return Parent::block(row, col, m, n); }
 
     // *** Dimensions Methods ***
     int rows() const { return Parent::rows(); }
@@ -63,6 +66,8 @@ public:
 
     // *** Calculation/Assignment Methods ***
     MatrixSparse<T> transpose() { return Parent::transpose(); }
+    MatrixSparse<T> operator*(const T &scalar) const { return Parent::operator*(scalar); }
+    MatrixSparse<T> operator/(const T &scalar) const { return Parent::operator/(scalar); }
     MatrixVector<T> operator*(const MatrixVector<T> &vec) const { return Parent::operator*(vec); }
     MatrixSparse<T> operator*(const MatrixSparse<T> &mat) const { return Parent::operator*(mat); } // Needed for testing
 
@@ -105,27 +110,5 @@ public:
     };
     
 };
-
-// 
-// template <typename T>
-// class MatrixSparse<T>::ReverseInnerIterator
-// {
-// public:
-
-//     using Parent::ReverseInnerIterator
-
-    
-
-// }
-// template <typename T>
-// class MatrixSparse<T>::ReverseInnerIterator {
-//     public:
-
-//         using Parent::ReverseInnerIterator;
-
-        
-
-// };
-
 
 #endif
