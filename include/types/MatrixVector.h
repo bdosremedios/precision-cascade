@@ -42,7 +42,10 @@ public:
     MatrixVector<Cast_T> cast() const { return Parent::template cast<Cast_T>(); }
 
     // *** Calculation Methods ***
+    T dot(const MatrixVector<T> &vec) const { return Parent::dot(vec); }
     T norm() const { return Parent::norm(); }
+    MatrixVector<T> operator-(const MatrixVector<T> &vec) const { return Parent::operator-(vec); }
+    MatrixVector<T> operator+(const MatrixVector<T> &vec) const { return Parent::operator+(vec); }
 
 };
 

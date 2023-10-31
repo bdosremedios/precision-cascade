@@ -118,8 +118,9 @@ protected:
         for (int i=0; i<=k; ++i) {
             // MGS since newly orthogonalized q is used for orthogonalizing
             // each next vector
-            H.coeffRef(i, k) = Q_kry_basis.col(i).dot(next_q);
-            next_q -= H.coeff(i, k)*Q_kry_basis.col(i);
+            MatrixVector<T> q_i = Q_kry_basis.col(i);
+            H.coeffRef(i, k) = q_i.dot(next_q);
+            next_q -= H.coeff(i, k)*q_i;
         }
         H.coeffRef(k+1, k) = next_q.norm();
 

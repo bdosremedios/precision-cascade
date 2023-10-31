@@ -54,8 +54,8 @@ public:
 
     // *** Calculation/Assignment Methods ***
     MatrixVector<T> operator*(const MatrixVector<T> &vec) const { return Parent::operator*(vec); }
+    MatrixDense<T> transpose() { return Parent::transpose(); }
     MatrixDense<T> operator*(const MatrixDense<T> &mat) const { return Parent::operator*(mat); } // Needed for testing
-    MatrixDense<T> transpose() { return Parent::transpose(); } // Needed for testing
 
 };
 
