@@ -1,8 +1,6 @@
 #ifndef PRECONDARGPKG_H
 #define PRECONDARGPKG_H
 
-#include "Eigen/Dense"
-
 #include "../types/types.h"
 #include "../preconditioners/ImplementedPreconditioners.h"
 

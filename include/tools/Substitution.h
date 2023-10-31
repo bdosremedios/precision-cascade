@@ -1,9 +1,6 @@
 #ifndef SUBSTITUTION_H
 #define SUBSTITUTION_H
 
-#include "Eigen/Dense"
-#include "Eigen/Sparse"
-
 #include "types/types.h" 
 
 using std::runtime_error;

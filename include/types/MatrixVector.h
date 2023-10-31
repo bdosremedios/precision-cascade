@@ -17,10 +17,16 @@ private:
 
 public:
 
+    // *** Constructor ***
     using Parent::Matrix;
     MatrixVector(int m, int n): Parent::Matrix(m, 1) { check_n(n); }
     MatrixVector(int m): Parent::Matrix(m, 1) {}
 
+    // *** Dimensions Methods ***
+    int rows() const { return Parent::rows(); }
+    int cols() const { return Parent::cols(); }
+
+    // *** Creation Methods ***
     static MatrixVector<T> Zero(int m, int n) { check_n(n); return Parent::Zero(m, 1); }
     static MatrixVector<T> Zero(int m) { return Parent::Zero(m, 1); }
     static MatrixVector<T> Ones(int m, int n) { check_n(n); return Parent::Ones(m, 1); }

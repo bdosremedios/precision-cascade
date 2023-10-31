@@ -57,6 +57,66 @@ public:
     // *** Boolean Methods ***
     bool operator==(const MatrixSparse<T> &rhs) const { return Parent::isApprox(rhs); }
 
+    // Forward iterator over sparse inner columns, to iterate efficienctly over non-zeros
+    class InnerIterator: public Parent::InnerIterator {
+
+        public:
+            
+            InnerIterator(const MatrixSparse<T> &mat, int start):
+                Parent::InnerIterator(mat, start)
+            {}
+
+            int col() { return Parent::InnerIterator::col(); }
+            int row() { return Parent::InnerIterator::row(); }
+            T value() { return Parent::InnerIterator::value(); }
+            typename Parent::InnerIterator &operator++() {
+                return Parent::InnerIterator::operator++();
+            }
+            operator bool() const { return Parent::InnerIterator::operator bool(); }
+
+    };
+
+    // Reverse iterator over sparse inner columns, to iterate efficienctly over non-zeros
+    class ReverseInnerIterator: public Parent::ReverseInnerIterator {
+
+        public:
+            
+            ReverseInnerIterator(const MatrixSparse<T> &mat, int start):
+                Parent::ReverseInnerIterator(mat, start)
+            {}
+
+            int col() { return Parent::ReverseInnerIterator::col(); }
+            int row() { return Parent::ReverseInnerIterator::row(); }
+            T value() { return Parent::ReverseInnerIterator::value(); }
+            typename Parent::ReverseInnerIterator &operator--() {
+                return Parent::ReverseInnerIterator::operator--();
+            }
+            operator bool() const { return Parent::ReverseInnerIterator::operator bool(); }
+
+    };
+    
 };
+
+// 
+// template <typename T>
+// class MatrixSparse<T>::ReverseInnerIterator
+// {
+// public:
+
+//     using Parent::ReverseInnerIterator
+
+    
+
+// }
+// template <typename T>
+// class MatrixSparse<T>::ReverseInnerIterator {
+//     public:
+
+//         using Parent::ReverseInnerIterator;
+
+        
+
+// };
+
 
 #endif

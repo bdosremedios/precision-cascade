@@ -1,8 +1,6 @@
 #ifndef SOLVEARGPKG_H
 #define SOLVEARGPKG_H
 
-#include "Eigen/Dense"
-
 #include "../types/types.h"
 
 #include <memory>
