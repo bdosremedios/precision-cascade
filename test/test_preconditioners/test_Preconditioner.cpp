@@ -42,7 +42,7 @@ public:
         test_vec = inv_precond.action_inv_M(test_vec);
 
         for (int i=0; i<n; ++i) {
-            ASSERT_NEAR(orig_test_vec[i], test_vec[i], dbl_error_acc);
+            ASSERT_NEAR(orig_test_vec(i), test_vec(i), dbl_error_acc);
         }
 
     }

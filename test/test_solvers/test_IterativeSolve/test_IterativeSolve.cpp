@@ -107,10 +107,10 @@ public:
         EXPECT_EQ(test_mock.res_hist.cols(), 2);
         EXPECT_EQ(test_mock.res_hist.rows(), n);
         EXPECT_EQ(test_mock.res_norm_hist.size(), 2);
-        EXPECT_NEAR((test_mock.res_hist.col(0)-(b-A*init_guess)).norm(),
+        EXPECT_NEAR((MatrixVector<double>(test_mock.res_hist.col(0))-(b-A*init_guess)).norm(),
                     0.,
                     gamma(n, u));
-        EXPECT_NEAR((test_mock.res_hist.col(1)-(b-A*(typed_soln.template cast<double>()))).norm(),
+        EXPECT_NEAR((MatrixVector<double>(test_mock.res_hist.col(1))-(b-A*(typed_soln.template cast<double>()))).norm(),
                     0.,
                     gamma(n, u));
         EXPECT_NEAR(test_mock.res_norm_hist[0],

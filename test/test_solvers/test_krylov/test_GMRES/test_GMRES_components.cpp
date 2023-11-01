@@ -81,10 +81,10 @@ public:
         // and that Hessenberg first vector contructs next vector with entries
         test_mock.iterate_no_soln_solve();
 
-        ASSERT_EQ(test_mock.Q_kry_basis.col(0), r_0/r_0.norm());
         MatrixVector<double> next_q = test_mock.Q_kry_basis.col(0);
+        ASSERT_EQ(next_q, r_0/r_0.norm());
         next_q = A*next_q;
-        next_q -= test_mock.H.coeff(0, 0)*test_mock.Q_kry_basis.col(0);
+        next_q -= MatrixVector<double>(test_mock.Q_kry_basis.col(0))*test_mock.H.coeff(0, 0);
         ASSERT_EQ(next_q.norm(), test_mock.H.coeff(1, 0));
         ASSERT_EQ(test_mock.next_q, next_q);
 
@@ -106,7 +106,9 @@ public:
             // Confirm that previous vectors are unchanged and are orthogonal to new one
             for (int j=0; j<k; ++j) {
                 ASSERT_EQ(test_mock.Q_kry_basis.col(j), Q_save.col(j));
-                ASSERT_NEAR(test_mock.Q_kry_basis.col(j).dot(q), 0., dbl_error_acc);
+                ASSERT_NEAR(MatrixVector<double>(test_mock.Q_kry_basis.col(j)).dot(q),
+                            0.,
+                            dbl_error_acc);
             }
 
             // Confirm that Hessenberg matrix column corresponding to new basis vector
@@ -115,7 +117,8 @@ public:
             MatrixVector<double> construct_q = test_mock.Q_kry_basis.col(k);
             construct_q = A*construct_q;
             for (int i=0; i<=k; ++i) {
-                ASSERT_EQ(test_mock.Q_kry_basis.col(i).dot(construct_q), h(i));
+                ASSERT_EQ(MatrixVector<double>(test_mock.Q_kry_basis.col(i)).dot(construct_q),
+                          h(i));
                 construct_q -= h(i)*test_mock.Q_kry_basis.col(i);
             }
             EXPECT_EQ(construct_q.norm(), h(k+1));

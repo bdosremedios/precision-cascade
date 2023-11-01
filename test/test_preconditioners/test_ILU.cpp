@@ -169,7 +169,7 @@ public:
         MatrixVector<double> test_vec = MatrixVector<double>::Random(n);
 
         for (int i=0; i<n; ++i) {
-            ASSERT_NEAR(ilu.action_inv_M(A*test_vec).coeff(i), test_vec.coeff(i), dbl_error_acc);
+            ASSERT_NEAR(ilu.action_inv_M(A*test_vec)(i), test_vec(i), dbl_error_acc);
         }
 
     }
@@ -186,7 +186,7 @@ public:
         MatrixVector<double> test_vec = MatrixVector<double>::Random(n);
 
         for (int i=0; i<n; ++i) {
-            ASSERT_NEAR(ilu.action_inv_M(A*test_vec).coeff(i), test_vec.coeff(i), dbl_error_acc);
+            ASSERT_NEAR(ilu.action_inv_M(A*test_vec)(i), test_vec(i), dbl_error_acc);
         }
 
     }

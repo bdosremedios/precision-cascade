@@ -15,7 +15,7 @@ public:
         MatrixVector<double> Ub_tri = read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("Ub_tri_90.csv"));
         MatrixVector<double> test_soln = back_substitution(U_tri, Ub_tri);
 
-        for (int i=0; i<n; ++i) { ASSERT_NEAR(test_soln[i], x_tri[i], u_dbl); }
+        for (int i=0; i<n; ++i) { ASSERT_NEAR(test_soln(i), x_tri(i), u_dbl); }
         ASSERT_NEAR((Ub_tri-U_tri*test_soln).norm(), 0, u_dbl);
 
     }
@@ -29,7 +29,7 @@ public:
         MatrixVector<double> Lb_tri = read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("Lb_tri_90.csv"));
         MatrixVector<double> test_soln = frwd_substitution(L_tri, Lb_tri);
 
-        for (int i=0; i<n; ++i) { ASSERT_NEAR(test_soln[i], x_tri[i], u_dbl); }
+        for (int i=0; i<n; ++i) { ASSERT_NEAR(test_soln(i), x_tri(i), u_dbl); }
         ASSERT_NEAR((Lb_tri-L_tri*test_soln).norm(), 0, u_dbl);
 
     }
