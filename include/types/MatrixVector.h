@@ -20,12 +20,15 @@ private:
 
 public:
 
-    // *** Constructors ***
+    // *** Constructors/Assignment/Destructor ***
     using Parent::Matrix;
+    MatrixVector(): Parent::Matrix(0, 1) {}
     MatrixVector(int m, int n): Parent::Matrix(m, 1) { check_n(n); }
     MatrixVector(int m): Parent::Matrix(m, 1) {}
-    MatrixVector(const MatrixVector &vec) = default;
+    MatrixVector(const MatrixVector<T> &vec) = default;
+    MatrixVector(const Parent &parent): Parent::Matrix(parent) { check_n(parent.cols()); }
     MatrixVector& operator=(const MatrixVector &vec) = default;
+    virtual ~MatrixVector() = default;
 
     // *** Self Cast ***
     const Parent &base() const { return *this; }
@@ -51,12 +54,21 @@ public:
     int cols() const { return Parent::cols(); }
 
     // *** Creation Methods ***
-    static MatrixVector<T> Zero(int m, int n) { check_n(n); return Parent::Zero(m, 1); }
-    static MatrixVector<T> Zero(int m) { return Parent::Zero(m, 1); }
-    static MatrixVector<T> Ones(int m, int n) { check_n(n); return Parent::Ones(m, 1); }
-    static MatrixVector<T> Ones(int m) { return Parent::Ones(m, 1); }
-    static MatrixVector<T> Random(int m, int n) { check_n(n); return Parent::Random(m, 1); }
-    static MatrixVector<T> Random(int m) { return Parent::Random(m, 1); }
+    static MatrixVector<T> Zero(int m, int n) {
+        check_n(n);
+        return typename Parent::Matrix(Parent::Zero(m, 1));
+    }
+    static MatrixVector<T> Zero(int m) { return Zero(m, 1); }
+    static MatrixVector<T> Ones(int m, int n) {
+        check_n(n);
+        return typename Parent::Matrix(Parent::Ones(m, 1));
+    }
+    static MatrixVector<T> Ones(int m) { return Ones(m, 1); }
+    static MatrixVector<T> Random(int m, int n) {
+        check_n(n);
+        return typename Parent::Matrix(Parent::Random(m, 1));
+    }
+    static MatrixVector<T> Random(int m) { return Random(m, 1); }
 
     // *** Resizing Methods ***
     void reduce() { ; }
@@ -66,15 +78,25 @@ public:
 
     // *** Cast Methods ***
     template <typename Cast_T>
-    MatrixVector<Cast_T> cast() const { return Parent::template cast<Cast_T>(); }
+    MatrixVector<Cast_T> cast() const {
+        return typename Matrix<Cast_T, Dynamic, 1>::Matrix(Parent::template cast<Cast_T>());
+    }
 
     // *** Calculation Methods ***
     T dot(const MatrixVector<T> &vec) const { return Parent::dot(vec); }
     T norm() const { return Parent::norm(); }
-    MatrixVector<T> operator*(const T &scalar) const { return Parent::operator*(scalar); }
-    MatrixVector<T> operator/(const T &scalar) const { return Parent::operator/(scalar); }
-    MatrixVector<T> operator-(const MatrixVector<T> &vec) const { return Parent::operator-(vec); }
-    MatrixVector<T> operator+(const MatrixVector<T> &vec) const { return Parent::operator+(vec); }
+    MatrixVector<T> operator*(const T &scalar) const {
+        return typename Parent::Matrix(Parent::operator*(scalar));
+    }
+    MatrixVector<T> operator/(const T &scalar) const {
+        return typename Parent::Matrix(Parent::operator/(scalar));
+    }
+    MatrixVector<T> operator-(const MatrixVector<T> &vec) const {
+        return typename Parent::Matrix(Parent::operator-(vec));
+    }
+    MatrixVector<T> operator+(const MatrixVector<T> &vec) const {
+        return typename Parent::Matrix(Parent::operator+(vec));
+    }
     MatrixVector<T> operator+=(const MatrixVector<T> &vec) { return *this = *this + vec; };
     MatrixVector<T> operator-=(const MatrixVector<T> &vec) { return *this = *this - vec; };
 };

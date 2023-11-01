@@ -16,7 +16,7 @@ public:
     ) {
 
         M<double> A = read_matrixCSV<M, double>(A_file_path);
-        M<double> b = read_matrixCSV<M, double>(b_file_path);
+        MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(b_file_path);
         TypedLinearSystem<M, T> lin_sys(A, b);
 
         SolveArgPkg args;
@@ -46,7 +46,7 @@ public:
     ) {
 
         M<double> A = read_matrixCSV<M, double>(A_file_path);
-        M<double> b = read_matrixCSV<M, double>(b_file_path);
+        MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(b_file_path);
         TypedLinearSystem<M, T> lin_sys(A, b);
 
         SolveArgPkg args;
