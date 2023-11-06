@@ -5,15 +5,12 @@
 
 #include "MatrixVector.h"
 
-using Eigen::Matrix;
-using Eigen::Dynamic;
-
 template <typename T>
-class MatrixDense: public Matrix<T, Dynamic, Dynamic>
+class MatrixDense: public Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>
 {
 private:
 
-    using Parent = Matrix<T, Dynamic, Dynamic>;
+    using Parent = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>;
 
 public:
 
@@ -25,8 +22,9 @@ public:
     T& coeffRef(int row, int col) { return Parent::operator()(row, col); }
 
     // auto to use arbitrary block representation (reqs block assignment & assignment/conversion to MatrixDense)
-    auto col(int _col) { return Parent::col(_col); } 
-    auto block(int row, int col, int m, int n) { return Parent::block(row, col, m, n); }
+    class Block; class Col;
+    Col col(int _col) { return Parent::col(_col); } //Parent::block(0, _col, rows(), 1); } 
+    Block block(int row, int col, int m, int n) { return Parent::block(row, col, m, n); }
 
     // *** Dimensions Methods ***
     int rows() const { return Parent::rows(); }
@@ -56,9 +54,31 @@ public:
     MatrixDense<T> operator*(const T &scalar) const { return Parent::operator*(scalar); }
     MatrixDense<T> operator/(const T &scalar) const { return Parent::operator/(scalar); }
     MatrixVector<T> operator*(const MatrixVector<T> &vec) const {
-        return typename Matrix<T, Dynamic, 1>::Matrix(Parent::operator*(vec.base()));
+        return typename Eigen::Matrix<T, Eigen::Dynamic, 1>::Matrix(Parent::operator*(vec.base()));
     }
     MatrixDense<T> operator*(const MatrixDense<T> &mat) const { return Parent::operator*(mat); } // Needed for testing
+
+    class Col: public Eigen::Block<Parent, Eigen::Dynamic, 1, true> {
+
+        private:
+            using ColParent = Eigen::Block<Parent, Eigen::Dynamic, 1, true>;
+
+        public:
+            Col(const ColParent &other): ColParent(other) {}
+            Col operator=(const MatrixVector<T> vec) { return ColParent::operator=(vec.base()); }
+
+    };
+
+    class Block: public Eigen::Block<Parent, Eigen::Dynamic, Eigen::Dynamic> {
+
+        private:
+            using BlockParent = Eigen::Block<Parent, Eigen::Dynamic, Eigen::Dynamic>;
+
+        public:
+            Block(const BlockParent &other): BlockParent(other) {}
+            Block operator=(const MatrixDense<T> &mat) { return BlockParent::operator=(mat); }
+
+    };
 
 };
 

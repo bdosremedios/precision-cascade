@@ -32,8 +32,9 @@ public:
     T& coeffRef(int row, int col) { return Parent::coeffRef(row, col); }
 
     // auto to use arbitrary block representation (reqs block assignment & assignment/conversion to MatrixDense)
-    auto col(int _col) { return Parent::col(_col); }
-    auto block(int row, int col, int m, int n) { return Parent::block(row, col, m, n); }
+    class Block; class Col;
+    Col col(int _col) { return Parent::col(_col); }
+    Block block(int row, int col, int m, int n) { return Parent::block(row, col, m, n); }
 
     // *** Dimensions Methods ***
     int rows() const { return Parent::rows(); }
@@ -109,6 +110,29 @@ public:
             operator bool() const { return Parent::ReverseInnerIterator::operator bool(); }
 
     };
+
+    class Col: public Eigen::Block<Parent, Eigen::Dynamic, 1, true> {
+
+        private:
+            using ColParent = Eigen::Block<Parent, Eigen::Dynamic, 1, true>;
+
+        public:
+            Col(const ColParent &other): ColParent(other) {}
+            Col operator=(const MatrixVector<T> vec) { return ColParent::operator=(vec.base().sparseView()); }
+
+    };
+
+    class Block: public Eigen::Block<Parent, Eigen::Dynamic, Eigen::Dynamic> {
+
+        private:
+            using BlockParent = Eigen::Block<Parent, Eigen::Dynamic, Eigen::Dynamic>;
+
+        public:
+            Block(const BlockParent &other): BlockParent(other) {}
+            Block operator=(const MatrixDense<T> &mat) { return BlockParent::operator=(mat); }
+
+    };
+
     
 };
 
