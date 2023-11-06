@@ -1,5 +1,5 @@
-#ifndef SPARSEMATRIX_H
-#define SPARSEMATRIX_H
+#ifndef MATRIXSPARSE_H
+#define MATRIXSPARSE_H
 
 #include <Eigen/Dense>
 #include <Eigen/SparseCore>

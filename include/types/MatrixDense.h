@@ -1,5 +1,5 @@
-#ifndef DENSEMATRIX_H
-#define DENSEMATRIX_H
+#ifndef MATRIXDENSE_H
+#define MATRIXDENSE_H
 
 #include <Eigen/Dense>
 

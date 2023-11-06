@@ -1,5 +1,5 @@
-#ifndef VECTOR_H
-#define VECTOR_H
+#ifndef MATRIXVECTOR_H
+#define MATRIXVECTOR_H
 
 #include <Eigen/Dense>
 
