@@ -6,11 +6,8 @@
 using Eigen::Matrix;
 using Eigen::Dynamic;
 
-template <typename T>
-class MatrixDense;
-
-template <typename T>
-class MatrixSparse;
+template <typename T> class MatrixDense;
+template <typename T> class MatrixSparse;
 
 template <typename T>
 class MatrixVector: private Matrix<T, Dynamic, 1>
@@ -54,11 +51,7 @@ public:
         return typename Parent::Matrix(Parent::block(start, 0, elements, 1));
     }
 
-    // *** Dimensions Methods ***
-    int rows() const { return Parent::rows(); }
-    int cols() const { return Parent::cols(); }
-
-    // *** Creation Methods ***
+    // *** Static Creation ***
     static MatrixVector<T> Zero(int m, int n) {
         check_n(n);
         return typename Parent::Matrix(Parent::Zero(m, 1));
@@ -75,19 +68,23 @@ public:
     }
     static MatrixVector<T> Random(int m) { return Random(m, 1); }
 
-    // *** Resizing Methods ***
+    // *** Properties ***
+    int rows() const { return Parent::rows(); }
+    int cols() const { return Parent::cols(); }
+
+    // *** Resizing ***
     void reduce() { ; }
 
-    // *** Boolean Methods ***
+    // *** Boolean ***
     bool operator==(const MatrixVector<T> &rhs) const { return Parent::isApprox(rhs); }
 
-    // *** Cast Methods ***
+    // *** Explicit Cast ***
     template <typename Cast_T>
     MatrixVector<Cast_T> cast() const {
         return typename Matrix<Cast_T, Dynamic, 1>::Matrix(Parent::template cast<Cast_T>());
     }
 
-    // *** Calculation Methods ***
+    // *** Arithmetic Operations ***
     T dot(const MatrixVector<T> &vec) const { return Parent::dot(vec); }
     T norm() const { return Parent::norm(); }
     MatrixVector<T> operator*(const T &scalar) const {
