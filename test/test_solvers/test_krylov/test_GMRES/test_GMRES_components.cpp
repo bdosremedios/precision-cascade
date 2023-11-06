@@ -119,7 +119,8 @@ public:
             for (int i=0; i<=k; ++i) {
                 ASSERT_EQ(MatrixVector<double>(test_mock.Q_kry_basis.col(i)).dot(construct_q),
                           h(i));
-                construct_q -= h(i)*test_mock.Q_kry_basis.col(i);
+                MatrixVector<double> q_i = test_mock.Q_kry_basis.col(i);
+                construct_q -= q_i*h(i);
             }
             EXPECT_EQ(construct_q.norm(), h(k+1));
             
@@ -259,7 +260,7 @@ public:
 
         const int n(5);
         M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("A_5_easysoln.csv"));
-        MatrixVector<double> b = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("b_5_easysoln.csv"));
+        MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("b_5_easysoln.csv"));
         TypedLinearSystem<M, double> lin_sys(A, b);
 
         MatrixVector<double> soln = MatrixVector<double>::Ones(n); // Instantiate initial guess as true solution
@@ -302,7 +303,7 @@ public:
 
         constexpr int n(5);
         M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("A_5_easysoln.csv"));
-        MatrixVector<double> b = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("b_5_easysoln.csv"));
+        MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("b_5_easysoln.csv"));
         TypedLinearSystem<M, double> lin_sys(A, b);
 
         MatrixVector<double> soln = MatrixVector<double>::Zero(n); // Initialize as near solution

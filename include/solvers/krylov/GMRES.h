@@ -95,9 +95,9 @@ protected:
         // similarly checks the direct norm
         int k = kry_space_dim-1;
         if (kry_space_dim == 0) {
-            Q_kry_basis.col(kry_space_dim) = (next_q/next_q.norm()).to_matrix_dense();
+            Q_kry_basis.col(kry_space_dim) = next_q/next_q.norm();
         } else {
-            Q_kry_basis.col(kry_space_dim) = (next_q/H.coeff(k+1, k)).to_matrix_dense();
+            Q_kry_basis.col(kry_space_dim) = next_q/H.coeff(k+1, k);
         }
         ++kry_space_dim; // Update krylov dimension count
         
@@ -134,8 +134,9 @@ protected:
 
         // Apply previous Given's rotations to new column
         MatrixDense<T> Q_H_block = Q_H.block(0, 0, k+1, k+1);
-        MatrixVector<T> R_H_col = R_H.block(0, k, k+1, 1);
-        R_H.block(0, k, k+1, 1) = (Q_H_block.transpose()*R_H_col).to_matrix_dense();
+        MatrixVector<T> R_H_col = R_H.col(k);
+        R_H_col = R_H_col.slice(0, k+1); // R_H.block(0, k, k+1, 1);
+        R_H.block(0, k, k+1, 1) = Q_H_block.transpose()*R_H_col;
 
         // Apply the final Given's rotation manually making R_H upper triangular
         T alpha = R_H.coeff(k, k);
@@ -149,8 +150,9 @@ protected:
         R_H.coeffRef(k+1, k) = static_cast<T>(0);
 
         MatrixVector<T> Q_H_col_k = Q_H.col(k);
-        Q_H.col(k) = (Q_H_col_k*c - Q_H.col(k+1)*s).to_matrix_dense();
-        Q_H.col(k+1) = (Q_H_col_k*s + Q_H.col(k+1)*c).to_matrix_dense();
+        MatrixVector<T> Q_H_col_kp1 = Q_H.col(k+1);
+        Q_H.col(k) = Q_H_col_k*c - Q_H_col_kp1*s;
+        Q_H.col(k+1) = Q_H_col_k*s + Q_H_col_kp1*c;
 
     }
 

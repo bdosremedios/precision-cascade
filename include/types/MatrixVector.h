@@ -29,17 +29,15 @@ private:
 public:
 
     // *** Constructors/Assignment/Destructor ***
-    using Parent::Matrix;
     MatrixVector(): Parent::Matrix(0, 1) {}
     MatrixVector(int m, int n): Parent::Matrix(m, 1) { check_n(n); }
     MatrixVector(int m): Parent::Matrix(m, 1) {}
     MatrixVector(const MatrixVector<T> &vec) = default;
     MatrixVector(const Parent &parent): Parent::Matrix(parent) { check_n(parent.cols()); }
+    MatrixVector(const typename MatrixDense<T>::Col &col): Parent::Matrix(col) {}
+    MatrixVector(const typename MatrixSparse<T>::Col &col): Parent::Matrix(col) {}
     MatrixVector& operator=(const MatrixVector &vec) = default;
     virtual ~MatrixVector() = default;
-
-    // *** Self Cast ***
-    MatrixDense<T> to_matrix_dense() const { return *this; }
 
     // *** Element Access ***
     const T coeff(int row, int col) const {
@@ -52,7 +50,9 @@ public:
     }
     const T operator()(int row) const { return coeff(row, 0); }
     T& operator()(int row) { return coeffRef(row, 0); }
-    MatrixVector<T> slice(int start, int elements) { return Parent::block(start, 0, elements, 1); }
+    MatrixVector<T> slice(int start, int elements) const { 
+        return typename Parent::Matrix(Parent::block(start, 0, elements, 1));
+    }
 
     // *** Dimensions Methods ***
     int rows() const { return Parent::rows(); }

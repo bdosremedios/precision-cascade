@@ -55,7 +55,7 @@ private:
         // Reset residual history to just initial residual
         res_hist = MatrixXd(lin_sys.get_m(), 1);
         curr_res = lin_sys.get_b()-lin_sys.get_A()*generic_soln;
-        res_hist.col(0) = curr_res.to_matrix_dense();
+        res_hist.col(0) = curr_res;
         res_norm_hist.push_back(res_hist.col(0).norm());
 
     }
@@ -165,7 +165,7 @@ public:
 
             // Update residual tracking
             curr_res = lin_sys.get_b()-lin_sys.get_A()*generic_soln;
-            res_hist.col(curr_iter) = curr_res.to_matrix_dense();
+            res_hist.col(curr_iter) = curr_res;
             res_norm_hist.push_back(curr_res.norm());
 
             // Break early if terminated

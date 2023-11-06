@@ -23,7 +23,7 @@ public:
 
     // auto to use arbitrary block representation (reqs block assignment & assignment/conversion to MatrixDense)
     class Block; class Col;
-    Col col(int _col) { return Parent::col(_col); } //Parent::block(0, _col, rows(), 1); } 
+    Col col(int _col) { return Parent::col(_col); } 
     Block block(int row, int col, int m, int n) { return Parent::block(row, col, m, n); }
 
     // *** Dimensions Methods ***
@@ -76,6 +76,7 @@ public:
 
         public:
             Block(const BlockParent &other): BlockParent(other) {}
+            Block operator=(const MatrixVector<T> vec) { return BlockParent::operator=(vec.base()); }
             Block operator=(const MatrixDense<T> &mat) { return BlockParent::operator=(mat); }
 
     };

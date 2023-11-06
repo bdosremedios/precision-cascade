@@ -129,6 +129,7 @@ public:
 
         public:
             Block(const BlockParent &other): BlockParent(other) {}
+            Block operator=(const MatrixVector<T> vec) { return BlockParent::operator=(vec.base()); }
             Block operator=(const MatrixDense<T> &mat) { return BlockParent::operator=(mat); }
 
     };
