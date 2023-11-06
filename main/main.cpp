@@ -1,25 +1,16 @@
-#include "tools/LinearSystem.h"
+#include <Eigen/Dense>
+
+#include "types/types.h"
 
 #include <iostream>
+#include <string>
 
 using std::cout, std::endl;
 
 int main() {
 
-    MatrixSparse<double> A = MatrixSparse<double>::Zero(4, 4);
-    A.prune(0.);
-
-    using LowerTriag = const Eigen::TriangularView<const SparseMatrix<double>, Eigen::Lower>;
-
-    LowerTriag buddy(A.triangularView<Eigen::Lower>());
-
-    // for (LowerTriag::Iterator it; it; ++it) {
-    //     cout << it << endl;
-    // }
-    // auto it = buddy.col(0)::iterator;
-
-
-
+    MatrixDense<double> A = MatrixDense<double>::Random(5, 4);
+    MatrixDense<double>::Col a_1 = A.col(1);
 
     return 0;
 

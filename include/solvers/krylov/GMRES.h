@@ -167,7 +167,7 @@ protected:
             static_cast<MatrixDense<T>>(R_H.block(0, 0, kry_space_dim, kry_space_dim)),
             // Trim off last entry of rhs for solve since solve of least squares problem
             // does not have coefficient to deal with it
-            static_cast<MatrixVector<T>>(rhs.block(0, 0, kry_space_dim, 1))
+            static_cast<MatrixVector<T>>(rhs.slice(0, kry_space_dim))
         );
 
         // Update typed_soln adjusting with right preconditioning

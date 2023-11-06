@@ -10,6 +10,9 @@ template <typename T>
 class MatrixDense;
 
 template <typename T>
+class MatrixSparse;
+
+template <typename T>
 class MatrixVector: private Matrix<T, Dynamic, 1>
 {
 private:
@@ -17,6 +20,11 @@ private:
     using Parent = Matrix<T, Dynamic, 1>;
 
     static void check_n(int n) { if (n != 1) { throw std::runtime_error("Invalid number of columns for vector."); } }
+
+    // Only allow MatrixDense and MatrixSparse to access private methods like base
+    friend MatrixDense<T>;
+    friend MatrixSparse<T>;
+    const Parent &base() const { return *this; }
 
 public:
 
@@ -31,7 +39,6 @@ public:
     virtual ~MatrixVector() = default;
 
     // *** Self Cast ***
-    const Parent &base() const { return *this; }
     MatrixDense<T> to_matrix_dense() const { return *this; }
 
     // *** Element Access ***
@@ -45,9 +52,7 @@ public:
     }
     const T operator()(int row) const { return coeff(row, 0); }
     T& operator()(int row) { return coeffRef(row, 0); }
-
-    // auto to use arbitrary block representation (reqs block assignment & assignment/conversion to MatrixDense)
-    auto block(int row, int col, int m, int n) { return Parent::block(row, col, m, n); }
+    MatrixVector<T> slice(int start, int elements) { return Parent::block(start, 0, elements, 1); }
 
     // *** Dimensions Methods ***
     int rows() const { return Parent::rows(); }
@@ -102,5 +107,6 @@ public:
 };
 
 #include "MatrixDense.h"
+#include "MatrixSparse.h"
 
 #endif

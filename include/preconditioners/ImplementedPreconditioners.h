@@ -136,11 +136,11 @@ public:
                 }
                 if (abs_max_val <= zero_tol) { throw runtime_error("ILU encountered not large enough pivot error"); }
                 if (i != pivot) {
-                    const M<W> U_i = U.col(i);
+                    const MatrixVector<W> U_i = U.col(i);
                     U.col(i) = U.col(pivot);
                     U.col(pivot) = U_i;
 
-                    const M<W> P_i = P.col(i);
+                    const MatrixVector<W> P_i = P.col(i);
                     P.col(i) = P.col(pivot);
                     P.col(pivot) = P_i;
                 }
