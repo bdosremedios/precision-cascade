@@ -25,7 +25,7 @@ private:
 
 public:
 
-    // *** Constructors/Assignment/Destructor ***
+    // *** Construction/Assignment/Destruction ***
     MatrixVector(): Parent::Matrix(0, 1) {}
     MatrixVector(int m, int n): Parent::Matrix(m, 1) { check_n(n); }
     MatrixVector(int m): Parent::Matrix(m, 1) {}
