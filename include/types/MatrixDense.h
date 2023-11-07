@@ -5,6 +5,8 @@
 
 #include "MatrixVector.h"
 
+template <typename T> class MatrixSparse;
+
 template <typename T>
 class MatrixDense: private Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>
 {
@@ -17,27 +19,30 @@ public:
     // *** Constructor ***
     using Parent::Matrix;
 
-    // *** Element Access Methods ***
+    // *** Cast ***
+    SparseMatrix<T> sparse() const { return SparseMatrix<T>(Parent::sparseView()); };
+
+    // *** Element Access ***
     const T coeff(int row, int col) const { return Parent::operator()(row, col); }
     T& coeffRef(int row, int col) { return Parent::operator()(row, col); }
 
     // auto to use arbitrary block representation (reqs block assignment & assignment/conversion to MatrixDense)
-    class Block; class Col;
+    class Block;
+    class Col;
     Col col(int _col) { return Parent::col(_col); } 
     Block block(int row, int col, int m, int n) { return Parent::block(row, col, m, n); }
 
-    // *** Dimensions Methods ***
+    // *** Dimensions ***
     int rows() const { return Parent::rows(); }
     int cols() const { return Parent::cols(); }
 
-    // *** Creation Methods ***
+    // *** Creation ***
     static MatrixDense<T> Random(int m, int n) { return Parent::Random(m, n); }
     static MatrixDense<T> Identity(int m, int n) { return Parent::Identity(m, n); }
     static MatrixDense<T> Ones(int m, int n) { return Parent::Ones(m, n); }
     static MatrixDense<T> Zero(int m, int n) { return Parent::Zero(m, n); }
 
-    // *** Resizing Methods ***
-
+    // *** Resizing ***
     // Resize without altering existing entries
     void conservativeResize(int m, int n) { Parent::conservativeResize(m, n); }
     void reduce() { ; } // Do nothing on reduction
@@ -84,5 +89,7 @@ public:
     };
 
 };
+
+#include "MatrixSparse.h"
 
 #endif

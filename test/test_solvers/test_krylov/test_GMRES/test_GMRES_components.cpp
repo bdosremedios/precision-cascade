@@ -499,7 +499,7 @@ TEST_F(GMRESComponentTest, CheckCorrectDefaultMaxIter_Both) {
         lin_sys_n, u_dbl, default_args
     );
     ASSERT_EQ(test_mock_n_dense.max_iter, n);
-    TypedLinearSystem<MatrixSparse, double> lin_sys_sparse_n(A_n.sparseView(), b_n);
+    TypedLinearSystem<MatrixSparse, double> lin_sys_sparse_n(A_n.sparse(), b_n);
     GMRESSolveTestingMock<MatrixSparse, double> test_mock_n_sparse(
         lin_sys_sparse_n, u_dbl, default_args
     );
@@ -513,7 +513,7 @@ TEST_F(GMRESComponentTest, CheckCorrectDefaultMaxIter_Both) {
         lin_sys_m, u_dbl, default_args
     );
     ASSERT_EQ(test_mock_m_dense.max_iter, m);
-    TypedLinearSystem<MatrixSparse, double> lin_sys_sparse_m(A_m.sparseView(), b_m);
+    TypedLinearSystem<MatrixSparse, double> lin_sys_sparse_m(A_m.sparse(), b_m);
     GMRESSolveTestingMock<MatrixSparse, double> test_mock_m_sparse(
         lin_sys_sparse_m, u_dbl, default_args
     );
@@ -530,7 +530,7 @@ TEST_F(GMRESComponentTest, CheckCorrectDefaultMaxIter_Both) {
         lin_sys_o, u_dbl, non_default_args
     );
     ASSERT_EQ(test_mock_o_dense.max_iter, non_default_iter);
-    TypedLinearSystem<MatrixSparse, double> lin_sys_sparse_o(A_o.sparseView(), b_o);
+    TypedLinearSystem<MatrixSparse, double> lin_sys_sparse_o(A_o.sparse(), b_o);
     GMRESSolveTestingMock<MatrixSparse, double> test_mock_o_sparse(
         lin_sys_sparse_o, u_dbl, non_default_args
     );
@@ -544,7 +544,7 @@ TEST_F(GMRESComponentTest, CheckErrorExceedDimension_Both) {
     MatrixDense<double> A_n = MatrixDense<double>::Random(n, n);
     MatrixVector<double> b_n = MatrixVector<double>::Random(n);
     TypedLinearSystem<MatrixDense, double> lin_sys_n(A_n, b_n);
-    TypedLinearSystem<MatrixSparse, double> lin_sys_sparse_n(A_n.sparseView(), b_n);
+    TypedLinearSystem<MatrixSparse, double> lin_sys_sparse_n(A_n.sparse(), b_n);
     SolveArgPkg args;
     args.max_iter = 100;
 
