@@ -71,6 +71,7 @@ public:
     void TestSolve(double u) {
 
         constexpr int n(64);
+        constexpr int max_iter(5);
         M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
         MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
         TypedLinearSystem<M, T> typed_lin_sys(A, b);
@@ -80,6 +81,7 @@ public:
 
         SolveArgPkg args;
         args.init_guess = init_guess;
+        args.max_iter = max_iter;
         args.target_rel_res = u + (b-A*typed_soln.template cast<double>()).norm()/(b-A*init_guess).norm();
 
         TypedIterativeSolveTestingMock<M, T> test_mock(typed_lin_sys, typed_soln, args);
@@ -104,7 +106,7 @@ public:
         EXPECT_EQ(test_mock.curr_iter, 1);
 
         // Check residual history and relres correctly calculates
-        EXPECT_EQ(test_mock.res_hist.cols(), 2);
+        EXPECT_EQ(test_mock.res_hist.cols(), max_iter+1);
         EXPECT_EQ(test_mock.res_hist.rows(), n);
         EXPECT_EQ(test_mock.res_norm_hist.size(), 2);
         EXPECT_NEAR((MatrixVector<double>(test_mock.res_hist.col(0))-(b-A*init_guess)).norm(),

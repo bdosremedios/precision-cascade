@@ -41,8 +41,6 @@ public:
     static MatrixDense<T> Zero(int m, int n) { return Parent::Zero(m, n); }
 
     // *** Resizing ***
-    // Resize without altering existing entries
-    void conservativeResize(int m, int n) { Parent::conservativeResize(m, n); }
     void reduce() { ; } // Do nothing on reduction
 
     // *** Boolean ***

@@ -47,17 +47,21 @@ private:
         converged = false;
         terminated = false;
         curr_iter = 0;
-        res_norm_hist.clear();
 
         // Reset generic solution to initial guess
         generic_soln = init_guess;
 
         // Reset residual history to just initial residual
-        res_hist = MatrixDense<double>(lin_sys.get_m(), 1);
-        curr_res = lin_sys.get_b()-lin_sys.get_A()*generic_soln;
+        initialize_instantiate_residual();
+
+    }
+
+    void initialize_instantiate_residual() {
+        res_norm_hist.clear();
+        res_hist = MatrixDense<double>(lin_sys.get_m(), max_iter+1);
+        curr_res = lin_sys.get_b()-lin_sys.get_A()*init_guess;
         res_hist.col(0) = curr_res;
         res_norm_hist.push_back(res_hist.col(0).norm());
-
     }
     
 protected:
@@ -115,7 +119,6 @@ protected:
 
     // *** PROTECTED METHODS ***
 
-    // Create initial guess based on system matrix arg_A
     MatrixVector<double> make_guess(const GenericLinearSystem<M> &arg_lin_sys) const {
         return MatrixVector<double>::Ones(arg_lin_sys.get_n());
     }
@@ -145,11 +148,11 @@ public:
     // Perform solve with iterate() scheme updating generic_soln
     void solve() {
 
-        // Mark as iterative solve started and expand res_hist to account for additional
-        // residual information
+        // Mark IterativeSolve as started and set residual information, throwing error
+        // if already initiated because of weirdness with residual
+        if (initiated) { throw runtime_error("Can not safely call solve without after a initiation without reset"); }
         initiated = true;
-        res_hist.conservativeResize(lin_sys.get_m(), max_iter+1); // Set res_hist size here since
-                                                                  // max_iter is mutable before solve
+        initialize_instantiate_residual(); // Set res_hist size here since max_iter is mutable before solve
 
         // Run while relative residual is still high, and under max iterations, and has not been
         // flagged as converged
@@ -181,10 +184,10 @@ public:
         // if no iterations have been performed, that there is a small residual
         // relative to the RHS
         if (get_relres() <= target_rel_res) {
-            res_hist.conservativeResize(lin_sys.get_m(), curr_iter+1);
+            // res_hist.conservativeResize(lin_sys.get_m(), curr_iter+1);
             converged = true;
         } else if ((curr_iter == 0) && ((curr_res.norm()/lin_sys.get_b().norm()) <= target_rel_res)) {
-            res_hist.conservativeResize(lin_sys.get_m(), curr_iter+1);
+            // res_hist.conservativeResize(lin_sys.get_m(), curr_iter+1);
             converged = true;
         }
 
