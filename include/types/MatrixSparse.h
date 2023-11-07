@@ -15,7 +15,7 @@ using Eigen::Dynamic;
 using std::min;
 
 template <typename T>
-class MatrixSparse: public SparseMatrix<T>
+class MatrixSparse: private SparseMatrix<T>
 {
 private:
 
@@ -27,7 +27,6 @@ public:
     using Parent::SparseMatrix;
 
     // *** Element Access Methods ***
-
     const T coeff(int row, int col) const { return Parent::coeff(row, col); }
     T& coeffRef(int row, int col) { return Parent::coeffRef(row, col); }
 
@@ -71,6 +70,8 @@ public:
     MatrixVector<T> operator*(const MatrixVector<T> &vec) const {
         return typename Matrix<T, Dynamic, 1>::Matrix(Parent::operator*(vec.base()));
     }
+    T norm() const { return Parent::norm(); } // Needed for testing
+    MatrixSparse<T> operator-(const MatrixSparse<T> &mat) const { return Parent::operator-(mat); } // Needed for testing
     MatrixSparse<T> operator*(const MatrixSparse<T> &mat) const { return Parent::operator*(mat); } // Needed for testing
 
     // Forward iterator over sparse inner columns, to iterate efficienctly over non-zeros

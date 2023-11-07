@@ -6,7 +6,7 @@
 #include "MatrixVector.h"
 
 template <typename T>
-class MatrixDense: public Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>
+class MatrixDense: private Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>
 {
 private:
 
@@ -56,6 +56,8 @@ public:
     MatrixVector<T> operator*(const MatrixVector<T> &vec) const {
         return typename Eigen::Matrix<T, Eigen::Dynamic, 1>::Matrix(Parent::operator*(vec.base()));
     }
+    T norm() const { return Parent::norm(); } // Needed for testing
+    MatrixDense<T> operator-(const MatrixDense<T> &mat) const { return Parent::operator-(mat); } // Needed for testing
     MatrixDense<T> operator*(const MatrixDense<T> &mat) const { return Parent::operator*(mat); } // Needed for testing
 
     class Col: public Eigen::Block<Parent, Eigen::Dynamic, 1, true> {
