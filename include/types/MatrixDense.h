@@ -25,8 +25,6 @@ public:
     // *** Element Access ***
     const T coeff(int row, int col) const { return Parent::operator()(row, col); }
     T& coeffRef(int row, int col) { return Parent::operator()(row, col); }
-
-    // auto to use arbitrary block representation (reqs block assignment & assignment/conversion to MatrixDense)
     class Block;
     class Col;
     Col col(int _col) { return Parent::col(_col); } 
@@ -47,14 +45,14 @@ public:
     void conservativeResize(int m, int n) { Parent::conservativeResize(m, n); }
     void reduce() { ; } // Do nothing on reduction
 
-    // *** Boolean Methods ***
+    // *** Boolean ***
     bool operator==(const MatrixDense<T> &rhs) const { return Parent::operator==(rhs); }
 
-    // *** Cast Methods ***
+    // *** Explicit Cast ***
     template <typename Cast_T>
     MatrixDense<Cast_T> cast() const { return Parent::template cast<Cast_T>(); }
 
-    // *** Calculation/Assignment Methods ***
+    // *** Arithmetic and Compound Operations ***
     MatrixDense<T> transpose() { return Parent::transpose(); }
     MatrixDense<T> operator*(const T &scalar) const { return Parent::operator*(scalar); }
     MatrixDense<T> operator/(const T &scalar) const { return Parent::operator/(scalar); }
@@ -65,6 +63,8 @@ public:
     MatrixDense<T> operator-(const MatrixDense<T> &mat) const { return Parent::operator-(mat); } // Needed for testing
     MatrixDense<T> operator*(const MatrixDense<T> &mat) const { return Parent::operator*(mat); } // Needed for testing
 
+    // Nested class representing sparse matrix column
+    // NEEDS CREATION FROM/CAST TO MatrixVector<T>
     class Col: public Eigen::Block<Parent, Eigen::Dynamic, 1, true> {
 
         private:
@@ -76,6 +76,8 @@ public:
 
     };
 
+    // Nested class representing sparse matrix block
+    // NEEDS CREATION FROM/CAST TO MatrixDense<T>
     class Block: public Eigen::Block<Parent, Eigen::Dynamic, Eigen::Dynamic> {
 
         private:

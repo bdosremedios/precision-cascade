@@ -26,20 +26,18 @@ public:
     // *** Constructor ***
     using Parent::SparseMatrix;
 
-    // *** Element Access Methods ***
+    // *** Element Access ***
     const T coeff(int row, int col) const { return Parent::coeff(row, col); }
     T& coeffRef(int row, int col) { return Parent::coeffRef(row, col); }
-
-    // auto to use arbitrary block representation (reqs block assignment & assignment/conversion to MatrixDense)
     class Block; class Col;
     Col col(int _col) { return Parent::col(_col); }
     Block block(int row, int col, int m, int n) { return Parent::block(row, col, m, n); }
 
-    // *** Dimensions Methods ***
+    // *** Dimensions ***
     int rows() const { return Parent::rows(); }
     int cols() const { return Parent::cols(); }
 
-    // *** Creation Methods ***
+    // *** Static Creation ***
     static MatrixSparse<T> Random(int m, int n) {
         return Matrix<T, Dynamic, Dynamic>::Random(m, n).sparseView();
     }
@@ -53,17 +51,17 @@ public:
     }
     static MatrixSparse<T> Zero(int m, int n) { return Parent(m, n); }
 
-    // *** Resizing Methods ***
+    // *** Resizing ***
     void reduce() { Parent::prune(static_cast<T>(0)); }
 
-    // *** Boolean Methods ***
+    // *** Boolean ***
     bool operator==(const MatrixSparse<T> &rhs) const { return Parent::isApprox(rhs); }
 
-    // *** Cast Methods ***
+    // *** Explicit Cast ***
     template <typename Cast_T>
     MatrixSparse<Cast_T> cast() const { return Parent::template cast<Cast_T>(); }
 
-    // *** Calculation/Assignment Methods ***
+    // *** Arithmetic and Compound Operations ***
     MatrixSparse<T> transpose() { return Parent::transpose(); }
     MatrixSparse<T> operator*(const T &scalar) const { return Parent::operator*(scalar); }
     MatrixSparse<T> operator/(const T &scalar) const { return Parent::operator/(scalar); }
@@ -74,7 +72,7 @@ public:
     MatrixSparse<T> operator-(const MatrixSparse<T> &mat) const { return Parent::operator-(mat); } // Needed for testing
     MatrixSparse<T> operator*(const MatrixSparse<T> &mat) const { return Parent::operator*(mat); } // Needed for testing
 
-    // Forward iterator over sparse inner columns, to iterate efficienctly over non-zeros
+    // Forward iterator over sparse inner columns skipping zeroes
     class InnerIterator: public Parent::InnerIterator {
 
         public:
@@ -93,7 +91,7 @@ public:
 
     };
 
-    // Reverse iterator over sparse inner columns, to iterate efficienctly over non-zeros
+    // Reverse iterator over sparse inner columns skipping zeroes
     class ReverseInnerIterator: public Parent::ReverseInnerIterator {
 
         public:
@@ -112,6 +110,8 @@ public:
 
     };
 
+    // Nested class representing sparse matrix column
+    // NEEDS CREATION FROM/CAST TO MatrixVector<T>
     class Col: public Eigen::Block<Parent, Eigen::Dynamic, 1, true> {
 
         private:
@@ -123,6 +123,8 @@ public:
 
     };
 
+    // Nested class representing sparse matrix block
+    // NEEDS CREATION FROM/CAST TO MatrixDense<T>
     class Block: public Eigen::Block<Parent, Eigen::Dynamic, Eigen::Dynamic> {
 
         private:

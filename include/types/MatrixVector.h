@@ -84,7 +84,7 @@ public:
         return typename Matrix<Cast_T, Dynamic, 1>::Matrix(Parent::template cast<Cast_T>());
     }
 
-    // *** Arithmetic Operations ***
+    // *** Arithmetic and Compound Operations ***
     T dot(const MatrixVector<T> &vec) const { return Parent::dot(vec); }
     T norm() const { return Parent::norm(); }
     MatrixVector<T> operator*(const T &scalar) const {
