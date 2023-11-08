@@ -6,6 +6,11 @@ class GMRESComponentTest: public TestBase
 {
 public:
 
+    void ASSERT_CHECK_EQ_VECTORS(MatrixVector<double> a, MatrixVector<double> b) {
+        ASSERT_EQ(a.rows(), b.rows());
+        for (int i=0; i<a.rows(); ++i) { ASSERT_EQ(a(i), b(i)); }
+    }
+
     template <template <typename> typename M>
     void CheckConstruction(
         const fs::path &A_file_path,
@@ -105,7 +110,7 @@ public:
 
             // Confirm that previous vectors are unchanged and are orthogonal to new one
             for (int j=0; j<k; ++j) {
-                ASSERT_EQ(test_mock.Q_kry_basis.col(j), Q_save.col(j));
+                ASSERT_CHECK_EQ_VECTORS(test_mock.Q_kry_basis.col(j), Q_save.col(j));
                 ASSERT_NEAR(MatrixVector<double>(test_mock.Q_kry_basis.col(j)).dot(q),
                             0.,
                             dbl_error_acc);
@@ -125,7 +130,9 @@ public:
             EXPECT_EQ(construct_q.norm(), h(k+1));
             
             // Confirm that previous Hessenberg columns are untouched
-            for (int j=0; j<=k; ++j) { ASSERT_EQ(test_mock.H.col(j), H_save.col(j)); }
+            for (int j=0; j<=k; ++j) {
+                ASSERT_CHECK_EQ_VECTORS(test_mock.H.col(j), H_save.col(j));
+            }
 
         }
     
@@ -164,8 +171,8 @@ public:
 
             // Check that previous columns are unchanged by new update
             for (int i=0; i<k; ++i) {
-                ASSERT_EQ(test_mock.Q_H.col(i), save_Q_H.col(i));
-                ASSERT_EQ(test_mock.R_H.col(i), save_R_H.col(i));
+                ASSERT_CHECK_EQ_VECTORS(test_mock.Q_H.col(i), save_Q_H.col(i));
+                ASSERT_CHECK_EQ_VECTORS(test_mock.R_H.col(i), save_R_H.col(i));
             }
 
             // Save second last new basis vector and new column of R
@@ -173,8 +180,8 @@ public:
             save_R_H.col(k) = test_mock.R_H.col(k);
 
             // Test that k+1 by k+1 block of Q_H is orthogonal
-            MatrixDense<double> orthog_check = (test_mock.Q_H.block(0, 0, k+2, k+2)*
-                                                test_mock.Q_H.block(0, 0, k+2, k+2).transpose());
+            MatrixDense<double> Q_H_block = test_mock.Q_H.block(0, 0, k+2, k+2);
+            MatrixDense<double> orthog_check = Q_H_block*Q_H_block.transpose();
             for (int i=0; i<k+1; ++i) {
                 for (int j=0; j<k+1; ++j) {
                     if (i == j) {
@@ -194,8 +201,8 @@ public:
 
             // Test that k+1 by k+1 block of Q_H is and k+1 by k block of R_H
             // constructs k+1 by k block of H
-            MatrixDense<double> construct_H = (test_mock.Q_H.block(0, 0, k+2, k+2)*
-                                               test_mock.R_H.block(0, 0, k+2, k+1));
+            MatrixDense<double> R_H_block = test_mock.R_H.block(0, 0, k+2, k+1);
+            MatrixDense<double> construct_H = Q_H_block*R_H_block;
             for (int i=0; i<k+1; ++i) {
                 for (int j=0; j<k; ++j) {
                     ASSERT_NEAR(construct_H.coeff(i, j), test_mock.H.coeff(i, j), u_dbl);

@@ -5,6 +5,7 @@
 #include <Eigen/SparseCore>
 
 #include "MatrixVector.h"
+#include "MatrixDense.h"
 
 #include <cmath>
 
@@ -23,8 +24,11 @@ private:
 
 public:
 
-    // *** Constructor ***
-    using Parent::SparseMatrix;
+    // *** Constructors ***
+    // using Parent::SparseMatrix;
+    MatrixSparse(): Parent::SparseMatrix(0, 0) {}
+    MatrixSparse(int m, int n): Parent::SparseMatrix(m, n) {}
+    MatrixSparse(const Parent &parent): Parent::SparseMatrix(parent) {}
 
     // *** Element Access ***
     const T coeff(int row, int col) const { return Parent::coeff(row, col); }
@@ -39,7 +43,7 @@ public:
 
     // *** Static Creation ***
     static MatrixSparse<T> Random(int m, int n) {
-        return Matrix<T, Dynamic, Dynamic>::Random(m, n).sparseView();
+        return typename Parent::SparseMatrix(Matrix<T, Dynamic, Dynamic>::Random(m, n).sparseView());
     }
     static MatrixSparse<T> Identity(int m, int n) {
         Parent temp = Parent(m, n);
@@ -47,7 +51,7 @@ public:
         return temp;
     }
     static MatrixSparse<T> Ones(int m, int n) {
-        return Matrix<T, Dynamic, Dynamic>::Ones(m, n).sparseView();
+        return typename Parent::SparseMatrix(Matrix<T, Dynamic, Dynamic>::Ones(m, n).sparseView());
     }
     static MatrixSparse<T> Zero(int m, int n) { return Parent(m, n); }
 
@@ -59,18 +63,32 @@ public:
 
     // *** Explicit Cast ***
     template <typename Cast_T>
-    MatrixSparse<Cast_T> cast() const { return Parent::template cast<Cast_T>(); }
+    MatrixSparse<Cast_T> cast() const {
+        return typename Eigen::SparseMatrix<Cast_T>::SparseMatrix(
+            Parent::template cast<Cast_T>()
+        );
+    }
 
     // *** Arithmetic and Compound Operations ***
-    MatrixSparse<T> transpose() { return Parent::transpose(); }
-    MatrixSparse<T> operator*(const T &scalar) const { return Parent::operator*(scalar); }
-    MatrixSparse<T> operator/(const T &scalar) const { return Parent::operator/(scalar); }
+    MatrixSparse<T> transpose() const {
+        return typename Parent::SparseMatrix(Parent::transpose());
+    }
+    MatrixSparse<T> operator*(const T &scalar) const {
+        return typename Parent::SparseMatrix(Parent::operator*(scalar));
+    }
+    MatrixSparse<T> operator/(const T &scalar) const {
+        return typename Parent::SparseMatrix(Parent::operator/(scalar));
+    }
     MatrixVector<T> operator*(const MatrixVector<T> &vec) const {
         return typename Matrix<T, Dynamic, 1>::Matrix(Parent::operator*(vec.base()));
     }
     T norm() const { return Parent::norm(); } // Needed for testing
-    MatrixSparse<T> operator-(const MatrixSparse<T> &mat) const { return Parent::operator-(mat); } // Needed for testing
-    MatrixSparse<T> operator*(const MatrixSparse<T> &mat) const { return Parent::operator*(mat); } // Needed for testing
+    MatrixSparse<T> operator-(const MatrixSparse<T> &mat) const { // Needed for testing
+        return typename Parent::SparseMatrix(Parent::operator-(mat));
+    }
+    MatrixSparse<T> operator*(const MatrixSparse<T> &mat) const { // Needed for testing
+        return typename Parent::SparseMatrix(Parent::operator*(mat));
+    }
 
     // Forward iterator over sparse inner columns skipping zeroes
     class InnerIterator: public Parent::InnerIterator {
@@ -112,23 +130,28 @@ public:
 
     // Nested class representing sparse matrix column
     // NEEDS CREATION FROM/CAST TO MatrixVector<T>
-    class Col: public Eigen::Block<Parent, Eigen::Dynamic, 1, true> {
+    class Col: private Eigen::Block<Parent, Eigen::Dynamic, 1, true> {
 
         private:
             using ColParent = Eigen::Block<Parent, Eigen::Dynamic, 1, true>;
+            friend MatrixVector<T>;
+            const ColParent &base() const { return *this; }
 
         public:
             Col(const ColParent &other): ColParent(other) {}
             Col operator=(const MatrixVector<T> vec) { return ColParent::operator=(vec.base().sparseView()); }
+            T norm() const { return ColParent::norm(); }
 
     };
 
     // Nested class representing sparse matrix block
     // NEEDS CREATION FROM/CAST TO MatrixDense<T>
-    class Block: public Eigen::Block<Parent, Eigen::Dynamic, Eigen::Dynamic> {
+    class Block: private Eigen::Block<Parent, Eigen::Dynamic, Eigen::Dynamic> {
 
         private:
             using BlockParent = Eigen::Block<Parent, Eigen::Dynamic, Eigen::Dynamic>;
+            friend MatrixDense<T>;
+            const BlockParent &base() const { return *this; }
 
         public:
             Block(const BlockParent &other): BlockParent(other) {}

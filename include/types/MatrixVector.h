@@ -31,8 +31,8 @@ public:
     MatrixVector(int m): Parent::Matrix(m, 1) {}
     MatrixVector(const MatrixVector<T> &vec) = default;
     MatrixVector(const Parent &parent): Parent::Matrix(parent) { check_n(parent.cols()); }
-    MatrixVector(const typename MatrixDense<T>::Col &col): Parent::Matrix(col) {}
-    MatrixVector(const typename MatrixSparse<T>::Col &col): Parent::Matrix(col) {}
+    MatrixVector(const typename MatrixDense<T>::Col &col): Parent::Matrix(col.base()) {}
+    MatrixVector(const typename MatrixSparse<T>::Col &col): Parent::Matrix(col.base()) {}
     MatrixVector& operator=(const MatrixVector &vec) = default;
     virtual ~MatrixVector() = default;
 
