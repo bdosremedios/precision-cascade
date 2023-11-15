@@ -66,31 +66,14 @@ protected:
     M<W> U;
     M<W> P;
 
-public:
+    // virtual bool drop_rule_tau(W curr_val, W zero_tol) = 0;
+    // virtual void apply_drop_rule_row(int row, W zero_tol) = 0;
 
-    // ILU constructor taking premade L and U and no permutation
-    ILU(M<W> arg_L, M<W> arg_U): ILU(arg_L, arg_U, M<W>::Identity(arg_L.rows(), arg_L.rows())) {}
-
-    // ILU constructor taking premade L, U, and P
-    ILU(M<W> arg_L, M<W> arg_U, M<W> arg_P) {
-
-        if (arg_L.rows() != arg_L.cols()) { throw runtime_error("Non square matrix L"); }
-        if (arg_U.rows() != arg_U.cols()) { throw runtime_error("Non square matrix U"); }
-        if (arg_P.rows() != arg_P.cols()) { throw runtime_error("Non square matrix P"); }
-        if (arg_L.rows() != arg_U.rows()) { throw runtime_error("L and U mismatch"); }
-        if (arg_L.rows() != arg_P.rows()) { throw runtime_error("L and U mismatch"); }
-
-        m = arg_L.rows();
-        L = arg_L;
-        U = arg_U;
-        P = arg_P;
-
-        reduce_matrices();
-
-    }
-
-    // ILU(0)
-    ILU(const M<W> &A, W zero_tol, bool pivot) {
+    void construction_helper(
+        const M<W> &A, W zero_tol, bool pivot, 
+        std::function<bool(W const &curr_val, W const &zero_tol)> drop_rule_tau,
+        std::function<void(int &row, W const &zero_tol)> apply_drop_rule_row
+    ) {
 
         if (A.rows() != A.cols()) { throw runtime_error("Non square matrix A"); }
 
@@ -111,16 +94,22 @@ public:
                         W l_ik = val_to_zero/pivot;
                         L.coeffRef(i, k) = l_ik;
                         for (int j=k+1; j<m; ++j) {
-                            if (abs(U.coeff(i, j)) > zero_tol) {
-                                U.coeffRef(i, j) -= l_ik*U.coeff(k, j);
-                            } else {
+                            if (drop_rule_tau(U.coeff(i, j), zero_tol)) {
                                 U.coeffRef(i, j) = static_cast<W>(0);
+                            } else {
+                                U.coeffRef(i, j) -= l_ik*U.coeff(k, j);
                             }
                         }
                     }
                     U.coeffRef(i, k) = static_cast<W>(0);
                 } else { throw runtime_error("ILU encountered zero pivot in elimination"); }
             }
+
+            apply_drop_rule_row(i, zero_tol);
+            // for (int j=0; j<m; ++j) {
+            //     if (drop_rule_tau(L.coeff(i, j), A.coeff(i, j), i, j)) { L.coeffRef(i, j) = 0; }
+            //     if (drop_rule_tau(U.coeff(i, j), A.coeff(i, j), i, j)) { U.coeffRef(i, j) = 0; }
+            // }
 
             // Pivot columns and throw error if no column entry large enough. Do after such that
             // row elimination has already occured so that largest pivot right now can be found
@@ -152,77 +141,113 @@ public:
 
     }
 
-    // ILUT(eps)
-    ILU(M<W> const &A, W zero_tol, W eps) {
+public:
 
-        std::function<bool(W const &, W const &, int &, int &)> drop_if_lt = [eps] (
-            W const &entry, W const &orig_entry, int &i, int&j
-        ) -> bool { return (abs(entry) <= eps); };
+    // ILU constructor taking premade L and U and no permutation
+    ILU(M<W> arg_L, M<W> arg_U): ILU(arg_L, arg_U, M<W>::Identity(arg_L.rows(), arg_L.rows())) {}
 
-        // Guard against removing diagonal entries to maintain non-singularity
-        std::function<bool(W const &, W const &, int &, int &)> drop_if_lt_skip_diag = [eps] (
-            W const &entry, W const &orig_entry, int &i, int&j
-        ) -> bool {
-            if (i != j) {
-                return (abs(entry) <= eps);
-            } else {
-                return false;
-            }
-        };
+    // ILU constructor taking premade L, U, and P
+    ILU(M<W> arg_L, M<W> arg_U, M<W> arg_P) {
 
-        constructionHelper(A, zero_tol, drop_if_lt, drop_if_lt_skip_diag);
+        if (arg_L.rows() != arg_L.cols()) { throw runtime_error("Non square matrix L"); }
+        if (arg_U.rows() != arg_U.cols()) { throw runtime_error("Non square matrix U"); }
+        if (arg_P.rows() != arg_P.cols()) { throw runtime_error("Non square matrix P"); }
+        if (arg_L.rows() != arg_U.rows()) { throw runtime_error("L and U mismatch"); }
+        if (arg_L.rows() != arg_P.rows()) { throw runtime_error("L and U mismatch"); }
 
-    }
-
-    void constructionHelper(
-        M<W> const &A,
-        W const &zero_tol,
-        std::function<bool(W const &, W const &, int &, int &)> drop_rule_rho,
-        std::function<bool(W const &, W const &, int &, int &)> drop_rule_tau
-    ) {
-        
-        if (A.rows() != A.cols()) { throw runtime_error("Non square matrix A"); }
-
-        m = A.rows();
-        L = M<W>::Identity(m, m);
-        U = M<W>::Zero(m, m);
-        P = M<W>::Identity(m, m);
-
-        // Set U to be A and perform ILU
-        U = A;
-
-        // Use IKJ variant for better predictability of modification
-        for (int i=0; i<m; ++i) {
-            for (int k=0; k<=i-1; ++k) {
-
-                // Ensure pivot is non-zero
-                if (abs(U.coeffRef(k, k)) > zero_tol) {
-                    W coeff = U.coeff(i, k)/U.coeff(k, k);
-                    // Apply rho dropping rule to zero-ing val, skipping subsequent
-                    // calcs in row if dropped
-                    if (!drop_rule_rho(coeff, A.coeff(i, k), i, k)) {
-                        L.coeffRef(i, k) = coeff;
-                        for (int j=k+1; j<m; ++j) {
-                            U.coeffRef(i, j) = U.coeff(i, j) - coeff*U.coeff(k, j);
-                        }
-                    } else {
-                        L.coeffRef(i, k) = static_cast<W>(0);
-                    }
-                    U.coeffRef(i, k) = static_cast<W>(0);
-                } else { throw runtime_error("ILU encountered zero diagonal entry"); }
-            }
-            
-            // Iterate through the row again to ensure enforcement of 2nd drop rule
-            for (int j=0; j<m; ++j) {
-                if (drop_rule_tau(L.coeff(i, j), A.coeff(i, j), i, j)) { L.coeffRef(i, j) = 0; }
-                if (drop_rule_tau(U.coeff(i, j), A.coeff(i, j), i, j)) { U.coeffRef(i, j) = 0; }
-            }
-
-        }
+        m = arg_L.rows();
+        L = arg_L;
+        U = arg_U;
+        P = arg_P;
 
         reduce_matrices();
 
     }
+
+    // ILU(0)
+    ILU(M<W> const &A, W zero_tol, bool pivot) {
+        
+        std::function<bool(W const &, W const &)> drop_rule_tau = (
+            [] (W const &curr_val, W const &_zero_tol) -> bool { return (abs(curr_val) <= _zero_tol); }
+        );
+
+        std::function<void(int &, W const &)> apply_drop_rule_row = [] (int &row, W const &zero_tol) -> void {};
+
+        construction_helper(A, zero_tol, pivot, drop_rule_tau, apply_drop_rule_row);
+
+    }
+
+    // // ILUT(eps)
+    // ILU(M<W> const &A, W zero_tol, W eps) {
+
+    //     std::function<bool(W const &, W const &, int &, int &)> drop_if_lt = [eps] (
+    //         W const &entry, W const &orig_entry, int &i, int&j
+    //     ) -> bool { return (abs(entry) <= eps); };
+
+    //     // Guard against removing diagonal entries to maintain non-singularity
+    //     std::function<bool(W const &, W const &, int &, int &)> drop_if_lt_skip_diag = [eps] (
+    //         W const &entry, W const &orig_entry, int &i, int&j
+    //     ) -> bool {
+    //         if (i != j) {
+    //             return (abs(entry) <= eps);
+    //         } else {
+    //             return false;
+    //         }
+    //     };
+
+    //     constructionHelper(A, zero_tol, drop_if_lt, drop_if_lt_skip_diag);
+
+    // }
+
+    // void constructionHelper(
+    //     M<W> const &A,
+    //     W const &zero_tol,
+    //     std::function<bool(W const &, W const &, int &, int &)> drop_rule_rho,
+    //     std::function<bool(W const &, W const &, int &, int &)> drop_rule_tau
+    // ) {
+        
+    //     if (A.rows() != A.cols()) { throw runtime_error("Non square matrix A"); }
+
+    //     m = A.rows();
+    //     L = M<W>::Identity(m, m);
+    //     U = M<W>::Zero(m, m);
+    //     P = M<W>::Identity(m, m);
+
+    //     // Set U to be A and perform ILU
+    //     U = A;
+
+    //     // Use IKJ variant for better predictability of modification
+    //     for (int i=0; i<m; ++i) {
+    //         for (int k=0; k<=i-1; ++k) {
+
+    //             // Ensure pivot is non-zero
+    //             if (abs(U.coeffRef(k, k)) > zero_tol) {
+    //                 W coeff = U.coeff(i, k)/U.coeff(k, k);
+    //                 // Apply rho dropping rule to zero-ing val, skipping subsequent
+    //                 // calcs in row if dropped
+    //                 if (!drop_rule_rho(coeff, A.coeff(i, k), i, k)) {
+    //                     L.coeffRef(i, k) = coeff;
+    //                     for (int j=k+1; j<m; ++j) {
+    //                         U.coeffRef(i, j) = U.coeff(i, j) - coeff*U.coeff(k, j);
+    //                     }
+    //                 } else {
+    //                     L.coeffRef(i, k) = static_cast<W>(0);
+    //                 }
+    //                 U.coeffRef(i, k) = static_cast<W>(0);
+    //             } else { throw runtime_error("ILU encountered zero diagonal entry"); }
+    //         }
+            
+    //         // Iterate through the row again to ensure enforcement of 2nd drop rule
+    //         for (int j=0; j<m; ++j) {
+    //             if (drop_rule_tau(L.coeff(i, j), A.coeff(i, j), i, j)) { L.coeffRef(i, j) = 0; }
+    //             if (drop_rule_tau(U.coeff(i, j), A.coeff(i, j), i, j)) { U.coeffRef(i, j) = 0; }
+    //         }
+
+    //     }
+
+    //     reduce_matrices();
+
+    // }
 
     MatrixVector<W> action_inv_M(const MatrixVector<W> &vec) const override {
         return P*(back_substitution<W>(U, frwd_substitution<W>(L, vec)));
@@ -242,5 +267,22 @@ public:
     bool check_compatibility_right( const int &arg_n) const override { return arg_n == m; };
 
 };
+
+
+// template <template <typename> typename M, typename W>
+// class ILU_0: public ILU<M, W>
+// {
+// protected:
+
+//     bool drop_rule_tau(W curr_val, W zero_tol) override { return abs(curr_val) <= zero_tol; }
+//     void apply_drop_rule_row(int row, W zero_tol) override {}
+
+// public:
+
+//     using ILU<M, W>::ILU;
+
+//     ILU_0(const M<W> &A, W zero_tol, bool pivot) { construction_helper(A, zero_tol, pivot); }
+
+// };
 
 #endif

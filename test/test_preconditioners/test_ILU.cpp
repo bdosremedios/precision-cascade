@@ -443,18 +443,18 @@ TEST_F(ILUTest, TestCorrectLUApplyInverseM_Pivoted_Sparse) { TestCorrectLUApplyI
 TEST_F(ILUTest, TestSparseILU0_Dense) { TestSparseILU0<MatrixDense>(); }
 TEST_F(ILUTest, TestSparseILU0_Sparse) { TestSparseILU0<MatrixSparse>(); }
 
-TEST_F(ILUTest, TestEquivalentILUTNoDropAndDenseILU0_Dense) {
-    TestEquivalentILUTNoDropAndDenseILU0<MatrixDense>();
-}
-TEST_F(ILUTest, TestEquivalentILUTNoDropAndDenseILU0_Sparse) {
-    TestEquivalentILUTNoDropAndDenseILU0<MatrixSparse>();
-}
+// TEST_F(ILUTest, TestEquivalentILUTNoDropAndDenseILU0_Dense) {
+//     TestEquivalentILUTNoDropAndDenseILU0<MatrixDense>();
+// }
+// TEST_F(ILUTest, TestEquivalentILUTNoDropAndDenseILU0_Sparse) {
+//     TestEquivalentILUTNoDropAndDenseILU0<MatrixSparse>();
+// }
 
-TEST_F(ILUTest, TestILUTDropping_Dense) { TestILUTDropping<MatrixDense>(); }
-TEST_F(ILUTest, TestILUTDropping_Sparse) { TestILUTDropping<MatrixSparse>(); }
+// TEST_F(ILUTest, TestILUTDropping_Dense) { TestILUTDropping<MatrixDense>(); }
+// TEST_F(ILUTest, TestILUTDropping_Sparse) { TestILUTDropping<MatrixSparse>(); }
 
-TEST_F(ILUTest, TestILUTDroppingLimits_Dense) { TestILUTDroppingLimits<MatrixDense>(); }
-TEST_F(ILUTest, TestILUTDroppingLimits_Sparse) { TestILUTDroppingLimits<MatrixSparse>(); }
+// TEST_F(ILUTest, TestILUTDroppingLimits_Dense) { TestILUTDroppingLimits<MatrixDense>(); }
+// TEST_F(ILUTest, TestILUTDroppingLimits_Sparse) { TestILUTDroppingLimits<MatrixSparse>(); }
 
 TEST_F(ILUTest, TestDoubleSingleHalfCast_Dense) { TestDoubleSingleHalfCast<MatrixDense>(); }
 TEST_F(ILUTest, TestDoubleSingleHalfCast_Sparse) { TestDoubleSingleHalfCast<MatrixSparse>(); }
