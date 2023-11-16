@@ -3,6 +3,7 @@
 
 #include "Preconditioner.h"
 #include "../tools/Substitution.h"
+#include "../tools/VectorSort.h"
 
 #include <cmath>
 #include <functional>
@@ -69,7 +70,7 @@ protected:
     void construction_helper(
         const M<W> &A, const W &zero_tol, const bool &pivot, 
         std::function<bool (const W &curr_val, const W &zero_tol)> drop_rule_tau,
-        std::function<void (int &row, const W &zero_tol)> apply_drop_rule_p
+        std::function<void (MatrixVector<W> &vec, const W &zero_tol)> apply_drop_rule_p
     ) {
 
         if (A.rows() != A.cols()) { throw runtime_error("Non square matrix A"); }
@@ -102,11 +103,15 @@ protected:
                 } else { throw runtime_error("ILU encountered zero pivot in elimination"); }
             }
 
-            apply_drop_rule_p(i, zero_tol);
-            // for (int j=0; j<m; ++j) {
-            //     if (drop_rule_tau(L.coeff(i, j), A.coeff(i, j), i, j)) { L.coeffRef(i, j) = 0; }
-            //     if (drop_rule_tau(U.coeff(i, j), A.coeff(i, j), i, j)) { U.coeffRef(i, j) = 0; }
-            // }
+            // Apply drop rule to row
+            MatrixVector<W> U_vec(U.cols());
+            MatrixVector<W> L_vec(L.cols());
+            for (int l=i+1; l<U.cols(); ++l) { U_vec(l) = U.coeff(i, l); }
+            for (int l=0; l<i; ++l) { L_vec(l) = L.coeff(i, l); }
+            apply_drop_rule_p(U_vec, zero_tol);
+            apply_drop_rule_p(L_vec, zero_tol);
+            for (int l=i+1; l<U.cols(); ++l) { U.coeffRef(i, l) = U_vec(l); }
+            for (int l=0; l<i; ++l) { L.coeffRef(i, l) = L_vec(l); }
 
             // Pivot columns and throw error if no column entry large enough. Do after such that
             // row elimination has already occured so that largest pivot right now can be found
@@ -170,7 +175,9 @@ public:
             [] (W const &curr_val, W const &_zero_tol) -> bool { return (abs(curr_val) <= _zero_tol); }
         );
 
-        std::function<void (int &, W const &)> apply_drop_rule_p = [] (int &row, W const &zero_tol) -> void {};
+        std::function<void (MatrixVector<W> &, const W &)> apply_drop_rule_p = (
+            [] (MatrixVector<W> &_1, W const &_2) -> void {}
+        );
 
         construction_helper(A, zero_tol, pivot, drop_rule_tau, apply_drop_rule_p);
 
@@ -186,7 +193,10 @@ public:
         std::function<void (MatrixVector<W> &, const W &)> apply_drop_rule_p = (
             [p] (MatrixVector<W> &vec, const W &_) -> void { 
                 if (p < vec.rows()) {
-
+                    MatrixVector<int> sorted_indices = sort_indices(vec);
+                    for (int i=vec.rows()-1; i > p-1; --i) { 
+                        vec(sorted_indices(i)) = static_cast<W>(0);
+                    }
                 };
             }
         );
@@ -194,79 +204,6 @@ public:
         construction_helper(A, zero_tol, pivot, drop_rule_tau, apply_drop_rule_p);
 
     }
-
-
-    // // ILUT(eps)
-    // ILU(M<W> const &A, W zero_tol, W eps) {
-
-    //     std::function<bool(W const &, W const &, int &, int &)> drop_if_lt = [eps] (
-    //         W const &entry, W const &orig_entry, int &i, int&j
-    //     ) -> bool { return (abs(entry) <= eps); };
-
-    //     // Guard against removing diagonal entries to maintain non-singularity
-    //     std::function<bool(W const &, W const &, int &, int &)> drop_if_lt_skip_diag = [eps] (
-    //         W const &entry, W const &orig_entry, int &i, int&j
-    //     ) -> bool {
-    //         if (i != j) {
-    //             return (abs(entry) <= eps);
-    //         } else {
-    //             return false;
-    //         }
-    //     };
-
-    //     constructionHelper(A, zero_tol, drop_if_lt, drop_if_lt_skip_diag);
-
-    // }
-
-    // void constructionHelper(
-    //     M<W> const &A,
-    //     W const &zero_tol,
-    //     std::function<bool(W const &, W const &, int &, int &)> drop_rule_rho,
-    //     std::function<bool(W const &, W const &, int &, int &)> drop_rule_tau
-    // ) {
-        
-    //     if (A.rows() != A.cols()) { throw runtime_error("Non square matrix A"); }
-
-    //     m = A.rows();
-    //     L = M<W>::Identity(m, m);
-    //     U = M<W>::Zero(m, m);
-    //     P = M<W>::Identity(m, m);
-
-    //     // Set U to be A and perform ILU
-    //     U = A;
-
-    //     // Use IKJ variant for better predictability of modification
-    //     for (int i=0; i<m; ++i) {
-    //         for (int k=0; k<=i-1; ++k) {
-
-    //             // Ensure pivot is non-zero
-    //             if (abs(U.coeffRef(k, k)) > zero_tol) {
-    //                 W coeff = U.coeff(i, k)/U.coeff(k, k);
-    //                 // Apply rho dropping rule to zero-ing val, skipping subsequent
-    //                 // calcs in row if dropped
-    //                 if (!drop_rule_rho(coeff, A.coeff(i, k), i, k)) {
-    //                     L.coeffRef(i, k) = coeff;
-    //                     for (int j=k+1; j<m; ++j) {
-    //                         U.coeffRef(i, j) = U.coeff(i, j) - coeff*U.coeff(k, j);
-    //                     }
-    //                 } else {
-    //                     L.coeffRef(i, k) = static_cast<W>(0);
-    //                 }
-    //                 U.coeffRef(i, k) = static_cast<W>(0);
-    //             } else { throw runtime_error("ILU encountered zero diagonal entry"); }
-    //         }
-            
-    //         // Iterate through the row again to ensure enforcement of 2nd drop rule
-    //         for (int j=0; j<m; ++j) {
-    //             if (drop_rule_tau(L.coeff(i, j), A.coeff(i, j), i, j)) { L.coeffRef(i, j) = 0; }
-    //             if (drop_rule_tau(U.coeff(i, j), A.coeff(i, j), i, j)) { U.coeffRef(i, j) = 0; }
-    //         }
-
-    //     }
-
-    //     reduce_matrices();
-
-    // }
 
     MatrixVector<W> action_inv_M(const MatrixVector<W> &vec) const override {
         return P*(back_substitution<W>(U, frwd_substitution<W>(L, vec)));

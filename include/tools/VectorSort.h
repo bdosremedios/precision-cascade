@@ -3,20 +3,22 @@
 
 #include "types/types.h"
 
+inline void swap(const int &i, const int &j, MatrixVector<int> &indices) {
+    
+    if (i != j) {
+        int temp = indices(i);
+        indices(i) = indices(j);
+        indices(j) = temp;
+    }
+
+}
+
 template <typename T>
 int select_median_pivot(int i, int j, int k, const MatrixVector<int> &indices, const MatrixVector<T> &vec) {
 
     if ((vec(indices(i)) > vec(indices(j))) ^ (vec(indices(i)) > vec(indices(k)))) { return i; }
     else if ((vec(indices(j)) > vec(indices(i))) ^ (vec(indices(j)) > vec(indices(k)))) { return j; }
     else { return k; }
-
-}
-
-void swap(const int &i, const int &j, MatrixVector<int> &indices) {
-
-    int temp = indices(i);
-    indices(i) = indices(j);
-    indices(j) = temp;
 
 }
 
