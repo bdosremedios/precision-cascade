@@ -2,6 +2,7 @@
 #define MATRIXVECTOR_H
 
 #include <Eigen/Dense>
+#include <iostream>
 
 using Eigen::Matrix;
 using Eigen::Dynamic;
@@ -71,6 +72,7 @@ public:
     // *** Properties ***
     int rows() const { return Parent::rows(); }
     int cols() const { return Parent::cols(); }
+    void print() const { std::cout << *this << std::endl; }
 
     // *** Resizing ***
     void reduce() { ; }

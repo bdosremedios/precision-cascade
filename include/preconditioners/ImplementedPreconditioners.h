@@ -66,13 +66,10 @@ protected:
     M<W> U;
     M<W> P;
 
-    // virtual bool drop_rule_tau(W curr_val, W zero_tol) = 0;
-    // virtual void apply_drop_rule_row(int row, W zero_tol) = 0;
-
     void construction_helper(
-        const M<W> &A, W zero_tol, bool pivot, 
-        std::function<bool(W const &curr_val, W const &zero_tol)> drop_rule_tau,
-        std::function<void(int &row, W const &zero_tol)> apply_drop_rule_row
+        const M<W> &A, const W &zero_tol, const bool &pivot, 
+        std::function<bool (const W &curr_val, const W &zero_tol)> drop_rule_tau,
+        std::function<void (int &row, const W &zero_tol)> apply_drop_rule_p
     ) {
 
         if (A.rows() != A.cols()) { throw runtime_error("Non square matrix A"); }
@@ -105,7 +102,7 @@ protected:
                 } else { throw runtime_error("ILU encountered zero pivot in elimination"); }
             }
 
-            apply_drop_rule_row(i, zero_tol);
+            apply_drop_rule_p(i, zero_tol);
             // for (int j=0; j<m; ++j) {
             //     if (drop_rule_tau(L.coeff(i, j), A.coeff(i, j), i, j)) { L.coeffRef(i, j) = 0; }
             //     if (drop_rule_tau(U.coeff(i, j), A.coeff(i, j), i, j)) { U.coeffRef(i, j) = 0; }
@@ -144,10 +141,12 @@ protected:
 public:
 
     // ILU constructor taking premade L and U and no permutation
-    ILU(M<W> arg_L, M<W> arg_U): ILU(arg_L, arg_U, M<W>::Identity(arg_L.rows(), arg_L.rows())) {}
+    ILU(const M<W> &arg_L, const M<W> &arg_U):
+        ILU(arg_L, arg_U, M<W>::Identity(arg_L.rows(), arg_L.rows()))
+    {}
 
     // ILU constructor taking premade L, U, and P
-    ILU(M<W> arg_L, M<W> arg_U, M<W> arg_P) {
+    ILU(const M<W> &arg_L, const M<W> &arg_U, const M<W> &arg_P) {
 
         if (arg_L.rows() != arg_L.cols()) { throw runtime_error("Non square matrix L"); }
         if (arg_U.rows() != arg_U.cols()) { throw runtime_error("Non square matrix U"); }
@@ -165,17 +164,37 @@ public:
     }
 
     // ILU(0)
-    ILU(M<W> const &A, W zero_tol, bool pivot) {
+    ILU(M<W> const &A, const W &zero_tol, const bool &pivot) {
         
-        std::function<bool(W const &, W const &)> drop_rule_tau = (
+        std::function<bool (W const &, W const &)> drop_rule_tau = (
             [] (W const &curr_val, W const &_zero_tol) -> bool { return (abs(curr_val) <= _zero_tol); }
         );
 
-        std::function<void(int &, W const &)> apply_drop_rule_row = [] (int &row, W const &zero_tol) -> void {};
+        std::function<void (int &, W const &)> apply_drop_rule_p = [] (int &row, W const &zero_tol) -> void {};
 
-        construction_helper(A, zero_tol, pivot, drop_rule_tau, apply_drop_rule_row);
+        construction_helper(A, zero_tol, pivot, drop_rule_tau, apply_drop_rule_p);
 
     }
+
+    // ILUT(tau, p), tau threshold to drop and p number of entries to keep
+    ILU(const M<W> &A, const W &tau, const int &p, const W &zero_tol, const bool &pivot) {
+
+        std::function<bool (const W &, const W &)> drop_rule_tau = (
+            [tau] (const W &curr_val, const W &_zero_tol) -> bool { return (abs(curr_val) <= tau); }
+        );
+
+        std::function<void (MatrixVector<W> &, const W &)> apply_drop_rule_p = (
+            [p] (MatrixVector<W> &vec, const W &_) -> void { 
+                if (p < vec.rows()) {
+
+                };
+            }
+        );
+
+        construction_helper(A, zero_tol, pivot, drop_rule_tau, apply_drop_rule_p);
+
+    }
+
 
     // // ILUT(eps)
     // ILU(M<W> const &A, W zero_tol, W eps) {
@@ -267,22 +286,5 @@ public:
     bool check_compatibility_right( const int &arg_n) const override { return arg_n == m; };
 
 };
-
-
-// template <template <typename> typename M, typename W>
-// class ILU_0: public ILU<M, W>
-// {
-// protected:
-
-//     bool drop_rule_tau(W curr_val, W zero_tol) override { return abs(curr_val) <= zero_tol; }
-//     void apply_drop_rule_row(int row, W zero_tol) override {}
-
-// public:
-
-//     using ILU<M, W>::ILU;
-
-//     ILU_0(const M<W> &A, W zero_tol, bool pivot) { construction_helper(A, zero_tol, pivot); }
-
-// };
 
 #endif
