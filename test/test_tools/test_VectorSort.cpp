@@ -115,7 +115,6 @@ public:
 
     }
 
-
 };
 
 TEST_F(VectorSortTest, TestSimpleSortHalf_EvenNum) { simple_sort_even<half>(); }
@@ -129,7 +128,6 @@ TEST_F(VectorSortTest, TestSimpleSortDouble_OddNum) { simple_sort_odd<double>();
 TEST_F(VectorSortTest, TestSimpleSortHalf_Dupes) { simple_sort_duplicates<half>(); }
 TEST_F(VectorSortTest, TestSimpleSortSingle_Dupes) { simple_sort_duplicates<float>(); }
 TEST_F(VectorSortTest, TestSimpleSortDouble_Dupes) { simple_sort_duplicates<double>(); }
-
 
 TEST_F(VectorSortTest, TestAlreadySorted) { sorted_already<double>(); }
 
