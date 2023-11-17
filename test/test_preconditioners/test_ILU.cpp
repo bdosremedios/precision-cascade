@@ -313,7 +313,7 @@ public:
     void TestILUTDroppingLimits() {
 
         // Test that max dropping just gives the diagonal since everything else gets dropped
-        constexpr int n(5);
+        constexpr int n(8);
         M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_sparse_A.csv"));
         ILU<M, double> ilu_all_drop(A, DBL_MAX, n, u_dbl, false);
 
