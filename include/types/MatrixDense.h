@@ -96,6 +96,13 @@ public:
             Col(const ColParent &other): ColParent(other) {}
             Col operator=(const MatrixVector<T> vec) { return ColParent::operator=(vec.base()); }
             T norm() const { return ColParent::norm(); }
+            int nnz() const {
+                int count = 0;
+                for (int i=0; i<this->rows(); ++i) { 
+                    if (ColParent::coeff(i) != static_cast<T>(0)) { ++count; }
+                }
+                return count;
+            }
 
     };
 

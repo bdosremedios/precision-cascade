@@ -58,7 +58,7 @@ private:
     M<W> L;
     M<W> U;
     M<W> P;
-    std::function<bool (const W &curr_val, const W &zero_tol)> drop_rule_tau;
+    std::function<bool (const W &curr_val, const int &row, const W &zero_tol)> drop_rule_tau;
     std::function<void (const int &row, const W &zero_tol)> apply_drop_rule_vec;
 
     void reduce_matrices() {
@@ -90,7 +90,7 @@ private:
 
                     for (int j=k+1; j<m; ++j) {
                         // Apply drop_rule_tau but dont remove row pivot regardless of drop_rule_tau
-                        if ((row_i != j) && drop_rule_tau(U.coeff(row_i, j), zero_tol)) {
+                        if ((row_i != j) && drop_rule_tau(U.coeff(row_i, j), row_i, zero_tol)) {
                             U.coeffRef(row_i, j) = static_cast<W>(0);
                         } else {
                             U.coeffRef(row_i, j) -= l_ik*U.coeff(k, j);
@@ -135,9 +135,7 @@ private:
 
     }
 
-    void construction_helper(
-        const M<W> &A, const W &zero_tol, const bool &pivot
-    ) {
+    void construction_helper(const M<W> &A, const W &zero_tol, const bool &pivot) {
 
         if (A.rows() != A.cols()) { throw runtime_error("Non square matrix A"); }
         instantiate_vars(A);
@@ -181,7 +179,7 @@ public:
     // ILU(0)
     ILU(M<W> const &A, const W &zero_tol, const bool &pivot) {
         
-        drop_rule_tau = [] (W const &curr_val, W const &_zero_tol) -> bool {
+        drop_rule_tau = [] (W const &curr_val, const int &, W const &_zero_tol) -> bool {
             return (abs(curr_val) <= _zero_tol);
         };
 
@@ -194,8 +192,16 @@ public:
     // ILUT(tau, p), tau threshold to drop and p number of entries to keep
     ILU(const M<W> &A, const W &tau, const int &p, const W &zero_tol, const bool &pivot) {
 
-        drop_rule_tau = [tau] (const W &curr_val, const W &_zero_tol) -> bool {
-            return (abs(curr_val) <= tau);
+        // Calculate original nnz avg row norm for threshold comparison
+        M<W> A_trans = A.transpose();
+        MatrixVector<W> A_i_mod(A.rows());
+        for (int i=0; i<A.rows(); ++i) { 
+            typename M<W>::Col a_i_row = A_trans.col(i);
+            if (a_i_row.nnz() != static_cast<W>(0)) { A_i_mod(i) = a_i_row.norm()/a_i_row.nnz(); }
+        }
+
+        drop_rule_tau = [A_i_mod, tau] (const W &curr_val, const int &row, const W &_zero_tol) -> bool {
+            return (abs(curr_val) <= tau*A_i_mod(row));
         };
 
         apply_drop_rule_vec = [this, p] (const int &row_i, const W &_zero_tol) -> void { 
@@ -207,7 +213,7 @@ public:
             // Modify U vec (skip diagonal)
             MatrixVector<W> U_vec = MatrixVector<W>::Zero(U_size);
             for (int l=0; l<U_size; ++l) { // Apply tau drop rule
-                if (!drop_rule_tau(U.coeff(row_i, l), _zero_tol)) {
+                if (!drop_rule_tau(U.coeff(row_i, l), row_i, _zero_tol)) {
                     U_vec(l) = U.coeff(row_i, l);
                 }
             }
@@ -221,7 +227,7 @@ public:
             // Modify L vec (skip diagonal)
             MatrixVector<W> L_vec = MatrixVector<W>::Zero(L_size);
             for (int l=0; l<L_size; ++l) { // Apply tau drop rule
-                if (!drop_rule_tau(L.coeff(row_i, l), _zero_tol)) {
+                if (!drop_rule_tau(L.coeff(row_i, l), row_i, _zero_tol)) {
                     L_vec(l) = L.coeff(row_i, l);
                 }
             }

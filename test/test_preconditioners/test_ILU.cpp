@@ -262,50 +262,50 @@ public:
 
         // Check multiple rising thresholds ensuring that each ilu is closer to the matrix and that
         // all have correct form for L and U
-        ILU<M, double> ilut0_001(A, 0.001, n, u_dbl, false);
-        ILU<M, double> ilut0_01(A, 0.01, n, u_dbl, false);
-        ILU<M, double> ilut0_1(A, 0.1, n, u_dbl, false);
-        ILU<M, double> ilut1_0(A, 1., n, u_dbl, false);
+        ILU<M, double> ilut1e_6(A, 1e-6, n, u_dbl, false);
+        ILU<M, double> ilut1e_3(A, 1e-3, n, u_dbl, false);
+        ILU<M, double> ilut1e_1(A, 1e-1, n, u_dbl, false);
+        ILU<M, double> ilut1e_0(A, 1., n, u_dbl, false);
 
         // Test correct L and U triangularity
         for (int i=0; i<n; ++i) {
             for (int j=i+1; j<n; ++j) {
-                ASSERT_NEAR(ilut0_001.get_L().coeff(i, j), 0, dbl_error_acc);
-                ASSERT_NEAR(ilut0_01.get_L().coeff(i, j), 0, dbl_error_acc);
-                ASSERT_NEAR(ilut0_1.get_L().coeff(i, j), 0, dbl_error_acc);
-                ASSERT_NEAR(ilut1_0.get_L().coeff(i, j), 0, dbl_error_acc);
+                ASSERT_NEAR(ilut1e_6.get_L().coeff(i, j), 0, dbl_error_acc);
+                ASSERT_NEAR(ilut1e_3.get_L().coeff(i, j), 0, dbl_error_acc);
+                ASSERT_NEAR(ilut1e_1.get_L().coeff(i, j), 0, dbl_error_acc);
+                ASSERT_NEAR(ilut1e_0.get_L().coeff(i, j), 0, dbl_error_acc);
             }
         }
         for (int i=0; i<n; ++i) {
             for (int j=0; j<i; ++j) {
-                ASSERT_NEAR(ilut0_001.get_U().coeff(i, j), 0, dbl_error_acc);
-                ASSERT_NEAR(ilut0_01.get_U().coeff(i, j), 0, dbl_error_acc);
-                ASSERT_NEAR(ilut0_1.get_U().coeff(i, j), 0, dbl_error_acc);
-                ASSERT_NEAR(ilut1_0.get_U().coeff(i, j), 0, dbl_error_acc);
+                ASSERT_NEAR(ilut1e_6.get_U().coeff(i, j), 0, dbl_error_acc);
+                ASSERT_NEAR(ilut1e_3.get_U().coeff(i, j), 0, dbl_error_acc);
+                ASSERT_NEAR(ilut1e_1.get_U().coeff(i, j), 0, dbl_error_acc);
+                ASSERT_NEAR(ilut1e_0.get_U().coeff(i, j), 0, dbl_error_acc);
             }
         }
 
         // Test that each lower threshold is better than the higher one
-        EXPECT_LE((A-ilut0_001.get_L()*ilut0_001.get_U()).norm(),
-                  (A-ilut0_01.get_L()*ilut0_01.get_U()).norm());
-        EXPECT_LE((A-ilut0_01.get_L()*ilut0_01.get_U()).norm(),
-                  (A-ilut0_1.get_L()*ilut0_1.get_U()).norm());
-        EXPECT_LE((A-ilut0_1.get_L()*ilut0_1.get_U()).norm(),
-                  (A-ilut1_0.get_L()*ilut1_0.get_U()).norm());
+        EXPECT_LE((A-ilut1e_6.get_L()*ilut1e_6.get_U()).norm(),
+                  (A-ilut1e_3.get_L()*ilut1e_3.get_U()).norm());
+        EXPECT_LE((A-ilut1e_3.get_L()*ilut1e_3.get_U()).norm(),
+                  (A-ilut1e_1.get_L()*ilut1e_1.get_U()).norm());
+        EXPECT_LE((A-ilut1e_1.get_L()*ilut1e_1.get_U()).norm(),
+                  (A-ilut1e_0.get_L()*ilut1e_0.get_U()).norm());
 
         // Test that each higher threshold has more zeros
-        EXPECT_LE(count_zeros(ilut0_001.get_L(), u_dbl),
-                  count_zeros(ilut0_01.get_L(), u_dbl));
-        EXPECT_LE(count_zeros(ilut0_01.get_L(), u_dbl),
-                  count_zeros(ilut0_1.get_L(), u_dbl));
-        EXPECT_LE(count_zeros(ilut0_1.get_L(), u_dbl),
-                  count_zeros(ilut1_0.get_L(), u_dbl));
-        EXPECT_LE(count_zeros(ilut0_001.get_U(), u_dbl),
-                  count_zeros(ilut0_01.get_U(), u_dbl));
-        EXPECT_LE(count_zeros(ilut0_01.get_U(), u_dbl),
-                  count_zeros(ilut0_1.get_U(), u_dbl));
-        EXPECT_LE(count_zeros(ilut0_1.get_U(), u_dbl),
-                  count_zeros(ilut1_0.get_U(), u_dbl));
+        EXPECT_LE(count_zeros(ilut1e_6.get_L(), u_dbl),
+                  count_zeros(ilut1e_3.get_L(), u_dbl));
+        EXPECT_LE(count_zeros(ilut1e_3.get_L(), u_dbl),
+                  count_zeros(ilut1e_1.get_L(), u_dbl));
+        EXPECT_LE(count_zeros(ilut1e_1.get_L(), u_dbl),
+                  count_zeros(ilut1e_0.get_L(), u_dbl));
+        EXPECT_LE(count_zeros(ilut1e_6.get_U(), u_dbl),
+                  count_zeros(ilut1e_3.get_U(), u_dbl));
+        EXPECT_LE(count_zeros(ilut1e_3.get_U(), u_dbl),
+                  count_zeros(ilut1e_1.get_U(), u_dbl));
+        EXPECT_LE(count_zeros(ilut1e_1.get_U(), u_dbl),
+                  count_zeros(ilut1e_0.get_U(), u_dbl));
 
     }
 
