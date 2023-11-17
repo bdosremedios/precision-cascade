@@ -7,6 +7,7 @@
 
 #include <cmath>
 #include <functional>
+#include <iostream>
 
 using std::abs;
 
@@ -70,7 +71,7 @@ protected:
     void construction_helper(
         const M<W> &A, const W &zero_tol, const bool &pivot, 
         std::function<bool (const W &curr_val, const W &zero_tol)> drop_rule_tau,
-        std::function<void (MatrixVector<W> &vec, const W &zero_tol)> apply_drop_rule_p
+        std::function<void (const int &row, const W &zero_tol)> apply_drop_rule_vec
     ) {
 
         if (A.rows() != A.cols()) { throw runtime_error("Non square matrix A"); }
@@ -92,7 +93,8 @@ protected:
                         W l_ik = val_to_zero/pivot;
                         L.coeffRef(i, k) = l_ik;
                         for (int j=k+1; j<m; ++j) {
-                            if (drop_rule_tau(U.coeff(i, j), zero_tol)) {
+                            // Apply drop_rule_tau but dont remove row pivot regardless of drop_rule_tau
+                            if ((i != j) && drop_rule_tau(U.coeff(i, j), zero_tol)) {
                                 U.coeffRef(i, j) = static_cast<W>(0);
                             } else {
                                 U.coeffRef(i, j) -= l_ik*U.coeff(k, j);
@@ -100,18 +102,9 @@ protected:
                         }
                     }
                     U.coeffRef(i, k) = static_cast<W>(0);
-                } else { throw runtime_error("ILU encountered zero pivot in elimination"); }
+                } else {
+                    throw runtime_error("ILU encountered zero pivot in elimination"); }
             }
-
-            // Apply drop rule to row
-            MatrixVector<W> U_vec(U.cols());
-            MatrixVector<W> L_vec(L.cols());
-            for (int l=i+1; l<U.cols(); ++l) { U_vec(l) = U.coeff(i, l); }
-            for (int l=0; l<i; ++l) { L_vec(l) = L.coeff(i, l); }
-            apply_drop_rule_p(U_vec, zero_tol);
-            apply_drop_rule_p(L_vec, zero_tol);
-            for (int l=i+1; l<U.cols(); ++l) { U.coeffRef(i, l) = U_vec(l); }
-            for (int l=0; l<i; ++l) { L.coeffRef(i, l) = L_vec(l); }
 
             // Pivot columns and throw error if no column entry large enough. Do after such that
             // row elimination has already occured so that largest pivot right now can be found
@@ -136,6 +129,8 @@ protected:
                     P.col(pivot) = P_i;
                 }
             }
+
+            apply_drop_rule_vec(i, zero_tol);
     
         }
 
@@ -172,14 +167,16 @@ public:
     ILU(M<W> const &A, const W &zero_tol, const bool &pivot) {
         
         std::function<bool (W const &, W const &)> drop_rule_tau = (
-            [] (W const &curr_val, W const &_zero_tol) -> bool { return (abs(curr_val) <= _zero_tol); }
+            [] (W const &curr_val, W const &_zero_tol) -> bool {
+                return (abs(curr_val) <= _zero_tol);
+            }
         );
 
-        std::function<void (MatrixVector<W> &, const W &)> apply_drop_rule_p = (
-            [] (MatrixVector<W> &_1, W const &_2) -> void {}
+        std::function<void (const int &, const W &)> apply_drop_rule_vec = (
+            [] (const int &, const W &) -> void {}
         );
 
-        construction_helper(A, zero_tol, pivot, drop_rule_tau, apply_drop_rule_p);
+        construction_helper(A, zero_tol, pivot, drop_rule_tau, apply_drop_rule_vec);
 
     }
 
@@ -187,21 +184,54 @@ public:
     ILU(const M<W> &A, const W &tau, const int &p, const W &zero_tol, const bool &pivot) {
 
         std::function<bool (const W &, const W &)> drop_rule_tau = (
-            [tau] (const W &curr_val, const W &_zero_tol) -> bool { return (abs(curr_val) <= tau); }
-        );
-
-        std::function<void (MatrixVector<W> &, const W &)> apply_drop_rule_p = (
-            [p] (MatrixVector<W> &vec, const W &_) -> void { 
-                if (p < vec.rows()) {
-                    MatrixVector<int> sorted_indices = sort_indices(vec);
-                    for (int i=vec.rows()-1; i > p-1; --i) { 
-                        vec(sorted_indices(i)) = static_cast<W>(0);
-                    }
-                };
+            [tau] (const W &curr_val, const W &_zero_tol) -> bool {
+                return (abs(curr_val) <= tau);
             }
         );
 
-        construction_helper(A, zero_tol, pivot, drop_rule_tau, apply_drop_rule_p);
+        std::function<void (const int &, const W &)> apply_drop_rule_vec = (
+            [this, p, drop_rule_tau] (const int &row_i, const W &_zero_tol) -> void { 
+
+                int row_mat = row_i+1;
+                int U_size = U.cols()-row_mat;
+                int L_size = row_mat-1;
+
+                // Modify U vec (skip diagonal)
+                MatrixVector<W> U_vec = MatrixVector<W>::Zero(U_size);
+                for (int l=0; l<U_size; ++l) { // Apply tau drop rule
+                    if (!drop_rule_tau(U.coeff(row_i, l), _zero_tol)) {
+                        U_vec(l) = U.coeff(row_i, l);
+                    }
+                }
+                if (p < U_size) { // Drop p largest elements
+                    MatrixVector<int> U_sorted_indices = sort_indices(U_vec);
+                    for (int i=0; i<U_size-p; ++i) {
+                        U_vec(U_sorted_indices(i)) = static_cast<W>(0);
+                    }
+                }
+
+                // Modify L vec (skip diagonal)
+                MatrixVector<W> L_vec = MatrixVector<W>::Zero(L_size);
+                for (int l=0; l<L_size; ++l) { // Apply tau drop rule
+                    if (!drop_rule_tau(L.coeff(row_i, l), _zero_tol)) {
+                        L_vec(l) = L.coeff(row_i, l);
+                    }
+                }
+                if (p < L_size) { // Drop p largest elements
+                    MatrixVector<int> L_sorted_indices = sort_indices(L_vec);
+                    for (int i=0; i<L_size-p; ++i) {
+                        L_vec(L_sorted_indices(i)) = static_cast<W>(0);
+                    }
+                }
+
+                for (int l=0; l<U_size; ++l) { U.coeffRef(row_i, row_i+1+l) = U_vec(l); }
+                for (int l=0; l<L_size; ++l) { L.coeffRef(row_i, l) = L_vec(l); }
+
+            }
+
+        );
+
+        construction_helper(A, zero_tol, pivot, drop_rule_tau, apply_drop_rule_vec);
 
     }
 

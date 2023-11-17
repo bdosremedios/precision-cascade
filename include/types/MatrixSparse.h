@@ -8,6 +8,7 @@
 #include "MatrixDense.h"
 
 #include <cmath>
+#include <iostream>
 
 using Eigen::Matrix;
 using Eigen::SparseMatrix;
@@ -37,9 +38,10 @@ public:
     Col col(int _col) { return Parent::col(_col); }
     Block block(int row, int col, int m, int n) { return Parent::block(row, col, m, n); }
 
-    // *** Dimensions ***
+    // *** Properties ***
     int rows() const { return Parent::rows(); }
     int cols() const { return Parent::cols(); }
+    void print() const { std::cout << *this << std::endl << std::endl; }
 
     // *** Static Creation ***
     static MatrixSparse<T> Random(int m, int n) {

@@ -72,7 +72,7 @@ public:
     // *** Properties ***
     int rows() const { return Parent::rows(); }
     int cols() const { return Parent::cols(); }
-    void print() const { std::cout << *this << std::endl; }
+    void print() const { std::cout << *this << std::endl << std::endl; }
 
     // *** Resizing ***
     void reduce() { ; }

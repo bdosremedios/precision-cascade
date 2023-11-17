@@ -5,6 +5,8 @@
 
 #include "MatrixVector.h"
 
+#include <iostream>
+
 template <typename T> class MatrixSparse;
 
 template <typename T>
@@ -35,9 +37,10 @@ public:
     Col col(int _col) { return Parent::col(_col); } 
     Block block(int row, int col, int m, int n) { return Parent::block(row, col, m, n); }
 
-    // *** Dimensions ***
+    // *** Properties ***
     int rows() const { return Parent::rows(); }
     int cols() const { return Parent::cols(); }
+    void print() const { std::cout << *this << std::endl << std::endl; }
 
     // *** Static Creation ***
     static MatrixDense<T> Random(int m, int n) { return typename Parent::Matrix(Parent::Random(m, n)); }
