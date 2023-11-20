@@ -29,6 +29,19 @@ using std::cout, std::endl;
 
 double gamma(int n, double u);
 
+template<template <typename> typename M, typename T>
+int count_zeros(M<T> A, double zero_tol) {
+
+    int count = 0;
+    for (int i=0; i<A.rows(); ++i) {
+        for (int j=0; j<A.cols(); ++j) {
+            if (abs(A.coeff(i, j)) <= zero_tol) { ++count; }
+        }
+    }
+    return count;
+
+}
+
 class TestBase: public testing::Test
 {
 public:
