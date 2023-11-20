@@ -2,7 +2,7 @@
 
 #include "solvers/krylov/GMRES.h"
 
-class PGMRESSolveTest: public TestBase
+class PGMRES_Solve_Test: public TestBase
 {
 public:
         
@@ -86,14 +86,14 @@ public:
 
 };
 
-TEST_F(PGMRESSolveTest, TestDefaultandNoPreconditioningMatchesIdentity_Dense) {
+TEST_F(PGMRES_Solve_Test, TestDefaultandNoPreconditioningMatchesIdentity_Dense) {
     TestMatchIdentity<MatrixDense>();
 }
-TEST_F(PGMRESSolveTest, TestDefaultandNoPreconditioningMatchesIdentity_Sparse) {
+TEST_F(PGMRES_Solve_Test, TestDefaultandNoPreconditioningMatchesIdentity_Sparse) {
     TestMatchIdentity<MatrixSparse>();
 }
 
-TEST_F(PGMRESSolveTest, TestLeftPreconditioning_RandA45_Dense) {
+TEST_F(PGMRES_Solve_Test, TestLeftPreconditioning_RandA45_Dense) {
     constexpr int n(45);
     MatrixDense<double> A = read_matrixCSV<MatrixDense, double>(solve_matrix_dir / fs::path("A_inv_45.csv"));
     MatrixDense<double> Ainv = read_matrixCSV<MatrixDense, double>(solve_matrix_dir / fs::path("Ainv_inv_45.csv"));
@@ -103,7 +103,7 @@ TEST_F(PGMRESSolveTest, TestLeftPreconditioning_RandA45_Dense) {
         PrecondArgPkg<MatrixDense, double>(make_shared<MatrixInverse<MatrixDense, double>>(Ainv))
     );
 }
-TEST_F(PGMRESSolveTest, TestLeftPreconditioning_RandA45_Sparse) {
+TEST_F(PGMRES_Solve_Test, TestLeftPreconditioning_RandA45_Sparse) {
     constexpr int n(45);
     MatrixSparse<double> A = read_matrixCSV<MatrixSparse, double>(solve_matrix_dir / fs::path("A_inv_45.csv"));
     MatrixSparse<double> Ainv = read_matrixCSV<MatrixSparse, double>(solve_matrix_dir / fs::path("Ainv_inv_45.csv"));
@@ -115,7 +115,7 @@ TEST_F(PGMRESSolveTest, TestLeftPreconditioning_RandA45_Sparse) {
 }
 
 
-TEST_F(PGMRESSolveTest, TestRightPreconditioning_RandA45_Dense) {
+TEST_F(PGMRES_Solve_Test, TestRightPreconditioning_RandA45_Dense) {
     constexpr int n(45);
     MatrixDense<double> A = read_matrixCSV<MatrixDense, double>(solve_matrix_dir / fs::path("A_inv_45.csv"));
     MatrixDense<double> Ainv = read_matrixCSV<MatrixDense, double>(solve_matrix_dir / fs::path("Ainv_inv_45.csv"));
@@ -126,7 +126,7 @@ TEST_F(PGMRESSolveTest, TestRightPreconditioning_RandA45_Dense) {
                                            make_shared<MatrixInverse<MatrixDense, double>>(Ainv))
     );
 }
-TEST_F(PGMRESSolveTest, TestRightPreconditioning_RandA45_Sparse) {
+TEST_F(PGMRES_Solve_Test, TestRightPreconditioning_RandA45_Sparse) {
     constexpr int n(45);
     MatrixSparse<double> A = read_matrixCSV<MatrixSparse, double>(solve_matrix_dir / fs::path("A_inv_45.csv"));
     MatrixSparse<double> Ainv = read_matrixCSV<MatrixSparse, double>(solve_matrix_dir / fs::path("Ainv_inv_45.csv"));
@@ -138,7 +138,7 @@ TEST_F(PGMRESSolveTest, TestRightPreconditioning_RandA45_Sparse) {
     );
 }
 
-TEST_F(PGMRESSolveTest, TestSymmeticPreconditioning_RandA45_Dense) {
+TEST_F(PGMRES_Solve_Test, TestSymmeticPreconditioning_RandA45_Dense) {
     constexpr int n(45);
     MatrixDense<double> A = read_matrixCSV<MatrixDense, double>(solve_matrix_dir / fs::path("A_inv_45.csv"));
     MatrixDense<double> Ainv = read_matrixCSV<MatrixDense, double>(solve_matrix_dir / fs::path("Ainv_inv_45.csv"));
@@ -149,7 +149,7 @@ TEST_F(PGMRESSolveTest, TestSymmeticPreconditioning_RandA45_Dense) {
                                            make_shared<MatrixInverse<MatrixDense, double>>(Ainv))
     );
 }
-TEST_F(PGMRESSolveTest, TestSymmeticPreconditioning_RandA45_Sparse) {
+TEST_F(PGMRES_Solve_Test, TestSymmeticPreconditioning_RandA45_Sparse) {
     constexpr int n(45);
     MatrixSparse<double> A = read_matrixCSV<MatrixSparse, double>(solve_matrix_dir / fs::path("A_inv_45.csv"));
     MatrixSparse<double> Ainv = read_matrixCSV<MatrixSparse, double>(solve_matrix_dir / fs::path("Ainv_inv_45.csv"));
@@ -161,7 +161,7 @@ TEST_F(PGMRESSolveTest, TestSymmeticPreconditioning_RandA45_Sparse) {
     );
 }
 
-TEST_F(PGMRESSolveTest, TestLeftPreconditioning_3eigs_Dense) {
+TEST_F(PGMRES_Solve_Test, TestLeftPreconditioning_3eigs_Dense) {
 
     constexpr int n(25);
     MatrixDense<double> A = read_matrixCSV<MatrixDense, double>(solve_matrix_dir / fs::path("A_25_saddle.csv"));
@@ -175,7 +175,7 @@ TEST_F(PGMRESSolveTest, TestLeftPreconditioning_3eigs_Dense) {
     );
 
 }
-TEST_F(PGMRESSolveTest, TestLeftPreconditioning_3eigs_Sparse) {
+TEST_F(PGMRES_Solve_Test, TestLeftPreconditioning_3eigs_Sparse) {
 
     constexpr int n(25);
     MatrixSparse<double> A = read_matrixCSV<MatrixSparse, double>(solve_matrix_dir / fs::path("A_25_saddle.csv"));
@@ -190,7 +190,7 @@ TEST_F(PGMRESSolveTest, TestLeftPreconditioning_3eigs_Sparse) {
 
 }
 
-TEST_F(PGMRESSolveTest, TestRightPreconditioning_3eigs_Dense) {
+TEST_F(PGMRES_Solve_Test, TestRightPreconditioning_3eigs_Dense) {
 
     constexpr int n(25);
     MatrixDense<double> A = read_matrixCSV<MatrixDense, double>(solve_matrix_dir / fs::path("A_25_saddle.csv"));
@@ -207,7 +207,7 @@ TEST_F(PGMRESSolveTest, TestRightPreconditioning_3eigs_Dense) {
     );
 
 }
-TEST_F(PGMRESSolveTest, TestRightPreconditioning_3eigs_Sparse) {
+TEST_F(PGMRES_Solve_Test, TestRightPreconditioning_3eigs_Sparse) {
 
     constexpr int n(25);
     MatrixSparse<double> A = read_matrixCSV<MatrixSparse, double>(solve_matrix_dir / fs::path("A_25_saddle.csv"));

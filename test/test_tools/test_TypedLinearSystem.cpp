@@ -1,6 +1,6 @@
 #include "../test.h"
 
-class TypedLinearSystemTest: public TestBase
+class TypedLinearSystem_Test: public TestBase
 {
 public:
 
@@ -20,11 +20,11 @@ public:
 
 };
 
-TEST_F(TypedLinearSystemTest, TestHalfConstructor_Dense) { TestTypedConstructor<MatrixDense, half>(); }
-TEST_F(TypedLinearSystemTest, TestHalfConstructor_Sparse) { TestTypedConstructor<MatrixSparse, half>(); }
+TEST_F(TypedLinearSystem_Test, TestHalfConstructor_Dense) { TestTypedConstructor<MatrixDense, half>(); }
+TEST_F(TypedLinearSystem_Test, TestHalfConstructor_Sparse) { TestTypedConstructor<MatrixSparse, half>(); }
 
-TEST_F(TypedLinearSystemTest, TestSingleConstructor_Dense) { TestTypedConstructor<MatrixDense, float>(); }
-TEST_F(TypedLinearSystemTest, TestSingleConstructor_Sparse) { TestTypedConstructor<MatrixSparse, float>(); }
+TEST_F(TypedLinearSystem_Test, TestSingleConstructor_Dense) { TestTypedConstructor<MatrixDense, float>(); }
+TEST_F(TypedLinearSystem_Test, TestSingleConstructor_Sparse) { TestTypedConstructor<MatrixSparse, float>(); }
 
-TEST_F(TypedLinearSystemTest, TestDoubleConstructor_Dense) { TestTypedConstructor<MatrixDense, double>(); }
-TEST_F(TypedLinearSystemTest, TestDoubleConstructor_Sparse) { TestTypedConstructor<MatrixSparse, double>(); }
+TEST_F(TypedLinearSystem_Test, TestDoubleConstructor_Dense) { TestTypedConstructor<MatrixDense, double>(); }
+TEST_F(TypedLinearSystem_Test, TestDoubleConstructor_Sparse) { TestTypedConstructor<MatrixSparse, double>(); }

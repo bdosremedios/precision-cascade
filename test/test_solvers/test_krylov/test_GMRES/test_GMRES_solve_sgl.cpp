@@ -2,7 +2,7 @@
 
 #include "solvers/krylov/GMRES.h"
 
-class GMRESSingleSolveTest: public TestBase
+class GMRES_Single_Solve_Test: public TestBase
 {
 public:
 
@@ -65,7 +65,7 @@ public:
 
 };
 
-TEST_F(GMRESSingleSolveTest, SolveConvDiff64_Dense) {
+TEST_F(GMRES_Single_Solve_Test, SolveConvDiff64_Dense) {
     SolveTest<MatrixDense>(
         solve_matrix_dir / fs::path("conv_diff_64_A.csv"),
         solve_matrix_dir / fs::path("conv_diff_64_b.csv"),
@@ -73,7 +73,7 @@ TEST_F(GMRESSingleSolveTest, SolveConvDiff64_Dense) {
     );
 }
 
-TEST_F(GMRESSingleSolveTest, SolveConvDiff64_Sparse) {
+TEST_F(GMRES_Single_Solve_Test, SolveConvDiff64_Sparse) {
     SolveTest<MatrixSparse>(
         solve_matrix_dir / fs::path("conv_diff_64_A.csv"),
         solve_matrix_dir / fs::path("conv_diff_64_b.csv"),
@@ -81,14 +81,14 @@ TEST_F(GMRESSingleSolveTest, SolveConvDiff64_Sparse) {
     );
 }
 
-TEST_F(GMRESSingleSolveTest, SolveConvDiff256_Dense) {
+TEST_F(GMRES_Single_Solve_Test, SolveConvDiff256_Dense) {
     SolveTest<MatrixDense>(
         solve_matrix_dir / fs::path("conv_diff_256_A.csv"),
         solve_matrix_dir / fs::path("conv_diff_256_b.csv"),
         false
     );
 }
-TEST_F(GMRESSingleSolveTest, SolveConvDiff256_Sparse) {
+TEST_F(GMRES_Single_Solve_Test, SolveConvDiff256_Sparse) {
     SolveTest<MatrixSparse>(
         solve_matrix_dir / fs::path("conv_diff_256_A.csv"),
         solve_matrix_dir / fs::path("conv_diff_256_b.csv"),
@@ -96,14 +96,14 @@ TEST_F(GMRESSingleSolveTest, SolveConvDiff256_Sparse) {
     );
 }
 
-TEST_F(GMRESSingleSolveTest, SolveConvDiff1024_Dense_LONGRUNTIME) {
+TEST_F(GMRES_Single_Solve_Test, SolveConvDiff1024_Dense_LONGRUNTIME) {
     SolveTest<MatrixDense>(
         solve_matrix_dir / fs::path("conv_diff_1024_A.csv"),
         solve_matrix_dir / fs::path("conv_diff_1024_b.csv"),
         false
     );
 }
-TEST_F(GMRESSingleSolveTest, SolveConvDiff1024_Sparse_LONGRUNTIME) {
+TEST_F(GMRES_Single_Solve_Test, SolveConvDiff1024_Sparse_LONGRUNTIME) {
     SolveTest<MatrixSparse>(
         solve_matrix_dir / fs::path("conv_diff_1024_A.csv"),
         solve_matrix_dir / fs::path("conv_diff_1024_b.csv"),
@@ -111,14 +111,14 @@ TEST_F(GMRESSingleSolveTest, SolveConvDiff1024_Sparse_LONGRUNTIME) {
     );
 }
 
-TEST_F(GMRESSingleSolveTest, SolveConvDiff20Rand_Dense) {
+TEST_F(GMRES_Single_Solve_Test, SolveConvDiff20Rand_Dense) {
     SolveTest<MatrixDense>(
         solve_matrix_dir / fs::path("A_20_rand.csv"),
         solve_matrix_dir / fs::path("b_20_rand.csv"),
         false
     );
 }
-TEST_F(GMRESSingleSolveTest, SolveConvDiff20Rand_Sparse) {
+TEST_F(GMRES_Single_Solve_Test, SolveConvDiff20Rand_Sparse) {
     SolveTest<MatrixSparse>(
         solve_matrix_dir / fs::path("A_20_rand.csv"),
         solve_matrix_dir / fs::path("b_20_rand.csv"),
@@ -126,14 +126,14 @@ TEST_F(GMRESSingleSolveTest, SolveConvDiff20Rand_Sparse) {
     );
 }
 
-TEST_F(GMRESSingleSolveTest, SolveConvDiff3Eigs_Dense) {
+TEST_F(GMRES_Single_Solve_Test, SolveConvDiff3Eigs_Dense) {
     SolveTest<MatrixDense>(
         solve_matrix_dir / fs::path("A_25_3eigs.csv"),
         solve_matrix_dir / fs::path("b_25_3eigs.csv"),
         true
     );
 }
-TEST_F(GMRESSingleSolveTest, SolveConvDiff3Eigs_Sparse) {
+TEST_F(GMRES_Single_Solve_Test, SolveConvDiff3Eigs_Sparse) {
     SolveTest<MatrixSparse>(
         solve_matrix_dir / fs::path("A_25_3eigs.csv"),
         solve_matrix_dir / fs::path("b_25_3eigs.csv"),
@@ -141,5 +141,5 @@ TEST_F(GMRESSingleSolveTest, SolveConvDiff3Eigs_Sparse) {
     );
 }
 
-TEST_F(GMRESSingleSolveTest, DivergeBeyondSingleCapabilities_Dense) { FailTest<MatrixDense>(); }
-TEST_F(GMRESSingleSolveTest, DivergeBeyondSingleCapabilities_Sparse) { FailTest<MatrixSparse>(); }
+TEST_F(GMRES_Single_Solve_Test, DivergeBeyondSingleCapabilities_Dense) { FailTest<MatrixDense>(); }
+TEST_F(GMRES_Single_Solve_Test, DivergeBeyondSingleCapabilities_Sparse) { FailTest<MatrixSparse>(); }

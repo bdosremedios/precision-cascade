@@ -1,6 +1,6 @@
 #include "../test.h"
 
-class GenericLinearSystemTest: public TestBase
+class GenericLinearSystem_Test: public TestBase
 {
 public:
 
@@ -53,11 +53,11 @@ public:
 
 };
 
-TEST_F(GenericLinearSystemTest, TestConstructor_Dense) { TestConstructor<MatrixDense>(); }
-TEST_F(GenericLinearSystemTest, TestConstructor_Sparse) { TestConstructor<MatrixSparse>(); }
+TEST_F(GenericLinearSystem_Test, TestConstructor_Dense) { TestConstructor<MatrixDense>(); }
+TEST_F(GenericLinearSystem_Test, TestConstructor_Sparse) { TestConstructor<MatrixSparse>(); }
 
-TEST_F(GenericLinearSystemTest, TestEmptyMatrix_Dense) { TestEmptyMatrix<MatrixDense>(); }
-TEST_F(GenericLinearSystemTest, TestEmptyMatrix_Sparse) { TestEmptyMatrix<MatrixSparse>(); }
+TEST_F(GenericLinearSystem_Test, TestEmptyMatrix_Dense) { TestEmptyMatrix<MatrixDense>(); }
+TEST_F(GenericLinearSystem_Test, TestEmptyMatrix_Sparse) { TestEmptyMatrix<MatrixSparse>(); }
 
-TEST_F(GenericLinearSystemTest, TestMismatchb_Dense) { TestMismatchb<MatrixDense>(); }
-TEST_F(GenericLinearSystemTest, TestMismatchb_Sparse) { TestMismatchb<MatrixSparse>(); }
+TEST_F(GenericLinearSystem_Test, TestMismatchb_Dense) { TestMismatchb<MatrixDense>(); }
+TEST_F(GenericLinearSystem_Test, TestMismatchb_Sparse) { TestMismatchb<MatrixSparse>(); }

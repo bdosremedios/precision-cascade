@@ -2,7 +2,7 @@
 
 #include "tools/VectorSort.h"
 
-class VectorSortTest: public TestBase
+class VectorSort_Test: public TestBase
 {
 public:
 
@@ -117,18 +117,18 @@ public:
 
 };
 
-TEST_F(VectorSortTest, TestSimpleSortHalf_EvenNum) { simple_sort_even<half>(); }
-TEST_F(VectorSortTest, TestSimpleSortSingle_EvenNum) { simple_sort_even<float>(); }
-TEST_F(VectorSortTest, TestSimpleSortDouble_EvenNum) { simple_sort_even<double>(); }
+TEST_F(VectorSort_Test, TestSimpleSortHalf_EvenNum) { simple_sort_even<half>(); }
+TEST_F(VectorSort_Test, TestSimpleSortSingle_EvenNum) { simple_sort_even<float>(); }
+TEST_F(VectorSort_Test, TestSimpleSortDouble_EvenNum) { simple_sort_even<double>(); }
 
-TEST_F(VectorSortTest, TestSimpleSortHalf_OddNum) { simple_sort_odd<half>(); }
-TEST_F(VectorSortTest, TestSimpleSortSingle_OddNum) { simple_sort_odd<float>(); }
-TEST_F(VectorSortTest, TestSimpleSortDouble_OddNum) { simple_sort_odd<double>(); }
+TEST_F(VectorSort_Test, TestSimpleSortHalf_OddNum) { simple_sort_odd<half>(); }
+TEST_F(VectorSort_Test, TestSimpleSortSingle_OddNum) { simple_sort_odd<float>(); }
+TEST_F(VectorSort_Test, TestSimpleSortDouble_OddNum) { simple_sort_odd<double>(); }
 
-TEST_F(VectorSortTest, TestSimpleSortHalf_Dupes) { simple_sort_duplicates<half>(); }
-TEST_F(VectorSortTest, TestSimpleSortSingle_Dupes) { simple_sort_duplicates<float>(); }
-TEST_F(VectorSortTest, TestSimpleSortDouble_Dupes) { simple_sort_duplicates<double>(); }
+TEST_F(VectorSort_Test, TestSimpleSortHalf_Dupes) { simple_sort_duplicates<half>(); }
+TEST_F(VectorSort_Test, TestSimpleSortSingle_Dupes) { simple_sort_duplicates<float>(); }
+TEST_F(VectorSort_Test, TestSimpleSortDouble_Dupes) { simple_sort_duplicates<double>(); }
 
-TEST_F(VectorSortTest, TestAlreadySorted) { sorted_already<double>(); }
+TEST_F(VectorSort_Test, TestAlreadySorted) { sorted_already<double>(); }
 
-TEST_F(VectorSortTest, TestOneElement) { one_element<double>(); }
+TEST_F(VectorSort_Test, TestOneElement) { one_element<double>(); }

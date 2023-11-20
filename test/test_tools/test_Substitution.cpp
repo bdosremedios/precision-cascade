@@ -2,7 +2,7 @@
 
 #include "tools/Substitution.h"
 
-class SubstitutionTest: public TestBase
+class Substitution_Test: public TestBase
 {
 public:
 
@@ -36,8 +36,8 @@ public:
 
 };
 
-TEST_F(SubstitutionTest, TestBackwardSubstitution_Dense) { TestBackwardSubstitution<MatrixDense>(); }
-TEST_F(SubstitutionTest, TestBackwardSubstitution_Sparse) { TestBackwardSubstitution<MatrixSparse>(); }
+TEST_F(Substitution_Test, TestBackwardSubstitution_Dense) { TestBackwardSubstitution<MatrixDense>(); }
+TEST_F(Substitution_Test, TestBackwardSubstitution_Sparse) { TestBackwardSubstitution<MatrixSparse>(); }
 
-TEST_F(SubstitutionTest, TestForwardSubstitution_Dense) { TestForwardSubstitution<MatrixDense>(); }
-TEST_F(SubstitutionTest, TestForwardSubstitution_Sparse) { TestForwardSubstitution<MatrixSparse>(); }
+TEST_F(Substitution_Test, TestForwardSubstitution_Dense) { TestForwardSubstitution<MatrixDense>(); }
+TEST_F(Substitution_Test, TestForwardSubstitution_Sparse) { TestForwardSubstitution<MatrixSparse>(); }

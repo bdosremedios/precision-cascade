@@ -2,7 +2,7 @@
 
 #include "preconditioners/ImplementedPreconditioners.h"
 
-class PreconditionerTest: public TestBase
+class Preconditioner_Test: public TestBase
 {
 public:
 
@@ -49,8 +49,8 @@ public:
 
 };
 
-TEST_F(PreconditionerTest, TestNoPreconditioner_Dense) { TestNoPreconditioner<MatrixDense>(); }
-TEST_F(PreconditionerTest, TestNoPreconditioner_Sparse) { TestNoPreconditioner<MatrixSparse>(); }
+TEST_F(Preconditioner_Test, TestNoPreconditioner_Dense) { TestNoPreconditioner<MatrixDense>(); }
+TEST_F(Preconditioner_Test, TestNoPreconditioner_Sparse) { TestNoPreconditioner<MatrixSparse>(); }
 
-TEST_F(PreconditionerTest, TestMatrixInverse_Dense) { TestMatrixInverse<MatrixDense>(); }
-TEST_F(PreconditionerTest, TestMatrixInverse_Sparse) { TestMatrixInverse<MatrixSparse>(); }
+TEST_F(Preconditioner_Test, TestMatrixInverse_Dense) { TestMatrixInverse<MatrixDense>(); }
+TEST_F(Preconditioner_Test, TestMatrixInverse_Sparse) { TestMatrixInverse<MatrixSparse>(); }

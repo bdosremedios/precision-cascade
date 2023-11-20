@@ -2,7 +2,7 @@
 
 #include "solvers/krylov/GMRES.h"
 
-class GMRESSolveHalfTest: public TestBase
+class GMRES_Solve_Half_Test: public TestBase
 {
 public:
 
@@ -69,7 +69,7 @@ public:
 
 };
 
-TEST_F(GMRESSolveHalfTest, SolveConvDiff64_Dense) {
+TEST_F(GMRES_Solve_Half_Test, SolveConvDiff64_Dense) {
     SolveTest<MatrixDense>(
         solve_matrix_dir / fs::path("conv_diff_64_A.csv"),
         solve_matrix_dir / fs::path("conv_diff_64_b.csv"),
@@ -77,7 +77,7 @@ TEST_F(GMRESSolveHalfTest, SolveConvDiff64_Dense) {
         false
     );
 }
-TEST_F(GMRESSolveHalfTest, SolveConvDiff64_Sparse) {
+TEST_F(GMRES_Solve_Half_Test, SolveConvDiff64_Sparse) {
     SolveTest<MatrixSparse>(
         solve_matrix_dir / fs::path("conv_diff_64_A.csv"),
         solve_matrix_dir / fs::path("conv_diff_64_b.csv"),
@@ -86,7 +86,7 @@ TEST_F(GMRESSolveHalfTest, SolveConvDiff64_Sparse) {
     );
 }
 
-TEST_F(GMRESSolveHalfTest, SolveConvDiff256_Dense) {
+TEST_F(GMRES_Solve_Half_Test, SolveConvDiff256_Dense) {
     SolveTest<MatrixDense>(
         solve_matrix_dir / fs::path("conv_diff_256_A.csv"),
         solve_matrix_dir / fs::path("conv_diff_256_b.csv"),
@@ -94,7 +94,7 @@ TEST_F(GMRESSolveHalfTest, SolveConvDiff256_Dense) {
         false
     );
 }
-TEST_F(GMRESSolveHalfTest, SolveConvDiff256_Sparse) {
+TEST_F(GMRES_Solve_Half_Test, SolveConvDiff256_Sparse) {
     SolveTest<MatrixSparse>(
         solve_matrix_dir / fs::path("conv_diff_256_A.csv"),
         solve_matrix_dir / fs::path("conv_diff_256_b.csv"),
@@ -103,7 +103,7 @@ TEST_F(GMRESSolveHalfTest, SolveConvDiff256_Sparse) {
     );
 }
 
-TEST_F(GMRESSolveHalfTest, SolveConvDiff1024_Dense_LONGRUNTIME) {
+TEST_F(GMRES_Solve_Half_Test, SolveConvDiff1024_Dense_LONGRUNTIME) {
     SolveTest<MatrixDense>(
         solve_matrix_dir / fs::path("conv_diff_1024_A.csv"),
         solve_matrix_dir / fs::path("conv_diff_1024_b.csv"),
@@ -111,7 +111,7 @@ TEST_F(GMRESSolveHalfTest, SolveConvDiff1024_Dense_LONGRUNTIME) {
         false
     );
 }
-TEST_F(GMRESSolveHalfTest, SolveConvDiff1024_Sparse_LONGRUNTIME) {
+TEST_F(GMRES_Solve_Half_Test, SolveConvDiff1024_Sparse_LONGRUNTIME) {
     SolveTest<MatrixSparse>(
         solve_matrix_dir / fs::path("conv_diff_1024_A.csv"),
         solve_matrix_dir / fs::path("conv_diff_1024_b.csv"),
@@ -120,7 +120,7 @@ TEST_F(GMRESSolveHalfTest, SolveConvDiff1024_Sparse_LONGRUNTIME) {
     );
 }
 
-TEST_F(GMRESSolveHalfTest, SolveConvDiff20Rand_Dense) {
+TEST_F(GMRES_Solve_Half_Test, SolveConvDiff20Rand_Dense) {
     SolveTest<MatrixDense>(
         solve_matrix_dir / fs::path("A_20_rand.csv"),
         solve_matrix_dir / fs::path("b_20_rand.csv"),
@@ -128,7 +128,7 @@ TEST_F(GMRESSolveHalfTest, SolveConvDiff20Rand_Dense) {
         false
     );
 }
-TEST_F(GMRESSolveHalfTest, SolveConvDiff20Rand_Sparse) {
+TEST_F(GMRES_Solve_Half_Test, SolveConvDiff20Rand_Sparse) {
     SolveTest<MatrixSparse>(
         solve_matrix_dir / fs::path("A_20_rand.csv"),
         solve_matrix_dir / fs::path("b_20_rand.csv"),
@@ -137,7 +137,7 @@ TEST_F(GMRESSolveHalfTest, SolveConvDiff20Rand_Sparse) {
     );
 }
 
-TEST_F(GMRESSolveHalfTest, SolveConvDiff3Eigs_Dense) {
+TEST_F(GMRES_Solve_Half_Test, SolveConvDiff3Eigs_Dense) {
     SolveTest<MatrixDense>(
         solve_matrix_dir / fs::path("A_25_3eigs.csv"),
         solve_matrix_dir / fs::path("b_25_3eigs.csv"),
@@ -145,7 +145,7 @@ TEST_F(GMRESSolveHalfTest, SolveConvDiff3Eigs_Dense) {
         true
     );
 }
-TEST_F(GMRESSolveHalfTest, SolveConvDiff3Eigs_Sparse) {
+TEST_F(GMRES_Solve_Half_Test, SolveConvDiff3Eigs_Sparse) {
     SolveTest<MatrixSparse>(
         solve_matrix_dir / fs::path("A_25_3eigs.csv"),
         solve_matrix_dir / fs::path("b_25_3eigs.csv"),
@@ -154,5 +154,5 @@ TEST_F(GMRESSolveHalfTest, SolveConvDiff3Eigs_Sparse) {
     );
 }
 
-TEST_F(GMRESSolveHalfTest, DivergeBeyondSingleCapabilities_Dense) { FailTest<MatrixDense>(); }
-TEST_F(GMRESSolveHalfTest, DivergeBeyondSingleCapabilities_Sparse) { FailTest<MatrixSparse>(); }
+TEST_F(GMRES_Solve_Half_Test, DivergeBeyondSingleCapabilities_Dense) { FailTest<MatrixDense>(); }
+TEST_F(GMRES_Solve_Half_Test, DivergeBeyondSingleCapabilities_Sparse) { FailTest<MatrixSparse>(); }

@@ -2,7 +2,7 @@
 
 #include "test_GMRES.h"
 
-class GMRESComponentTest: public TestBase
+class GMRES_Component_Test: public TestBase
 {
 public:
 
@@ -466,14 +466,14 @@ public:
 
 };
 
-TEST_F(GMRESComponentTest, CheckConstruction5x5_Dense) {
+TEST_F(GMRES_Component_Test, CheckConstruction5x5_Dense) {
     CheckConstruction<MatrixDense>(
         solve_matrix_dir/fs::path("A_5_toy.csv"),
         solve_matrix_dir/fs::path("b_5_toy.csv"),
         5
     );
 }
-TEST_F(GMRESComponentTest, CheckConstruction5x5_Sparse) {
+TEST_F(GMRES_Component_Test, CheckConstruction5x5_Sparse) {
     CheckConstruction<MatrixSparse>(
         solve_matrix_dir/fs::path("A_5_toy.csv"),
         solve_matrix_dir/fs::path("b_5_toy.csv"),
@@ -481,14 +481,14 @@ TEST_F(GMRESComponentTest, CheckConstruction5x5_Sparse) {
     );
 }
 
-TEST_F(GMRESComponentTest, CheckConstruction64x64_Dense) {
+TEST_F(GMRES_Component_Test, CheckConstruction64x64_Dense) {
     CheckConstruction<MatrixDense>(
         solve_matrix_dir/fs::path("A_64_toy.csv"),
         solve_matrix_dir/fs::path("b_64_toy.csv"),
         64
     );
 }
-TEST_F(GMRESComponentTest, CheckConstruction64x64_Sparse) {
+TEST_F(GMRES_Component_Test, CheckConstruction64x64_Sparse) {
     CheckConstruction<MatrixSparse>(
         solve_matrix_dir/fs::path("A_64_toy.csv"),
         solve_matrix_dir/fs::path("b_64_toy.csv"),
@@ -496,7 +496,7 @@ TEST_F(GMRESComponentTest, CheckConstruction64x64_Sparse) {
     );
 }
 
-TEST_F(GMRESComponentTest, CheckCorrectDefaultMaxIter_Both) {
+TEST_F(GMRES_Component_Test, CheckCorrectDefaultMaxIter_Both) {
     
     constexpr int n(7);
     MatrixDense<double> A_n = MatrixDense<double>::Random(n, n);
@@ -545,7 +545,7 @@ TEST_F(GMRESComponentTest, CheckCorrectDefaultMaxIter_Both) {
 
 }
 
-TEST_F(GMRESComponentTest, CheckErrorExceedDimension_Both) {
+TEST_F(GMRES_Component_Test, CheckErrorExceedDimension_Both) {
     
     constexpr int n(7);
     MatrixDense<double> A_n = MatrixDense<double>::Random(n, n);
@@ -567,26 +567,26 @@ TEST_F(GMRESComponentTest, CheckErrorExceedDimension_Both) {
 
 }
 
-TEST_F(GMRESComponentTest, KrylovInitAndUpdate_Dense) { KrylovInitAndUpdate<MatrixDense>(); }
-TEST_F(GMRESComponentTest, KrylovInitAndUpdate_Sparse) { KrylovInitAndUpdate<MatrixSparse>(); }
+TEST_F(GMRES_Component_Test, KrylovInitAndUpdate_Dense) { KrylovInitAndUpdate<MatrixDense>(); }
+TEST_F(GMRES_Component_Test, KrylovInitAndUpdate_Sparse) { KrylovInitAndUpdate<MatrixSparse>(); }
 
-TEST_F(GMRESComponentTest, H_QR_Update_Dense) { H_QR_Update<MatrixDense>(); }
-TEST_F(GMRESComponentTest, H_QR_Update_Sparse) { H_QR_Update<MatrixSparse>(); }
+TEST_F(GMRES_Component_Test, H_QR_Update_Dense) { H_QR_Update<MatrixDense>(); }
+TEST_F(GMRES_Component_Test, H_QR_Update_Sparse) { H_QR_Update<MatrixSparse>(); }
 
-TEST_F(GMRESComponentTest, Update_x_Back_Substitution_Dense) { Update_x_Back_Substitution<MatrixDense>(); }
-TEST_F(GMRESComponentTest, Update_x_Back_Substitution_Sparse) { Update_x_Back_Substitution<MatrixSparse>(); }
+TEST_F(GMRES_Component_Test, Update_x_Back_Substitution_Dense) { Update_x_Back_Substitution<MatrixDense>(); }
+TEST_F(GMRES_Component_Test, Update_x_Back_Substitution_Sparse) { Update_x_Back_Substitution<MatrixSparse>(); }
 
-TEST_F(GMRESComponentTest, KrylovLuckyBreakFirstIter_Dense) { KrylovLuckyBreakFirstIter<MatrixDense>(); }
-TEST_F(GMRESComponentTest, KrylovLuckyBreakFirstIter_Sparse) { KrylovLuckyBreakFirstIter<MatrixSparse>(); }
+TEST_F(GMRES_Component_Test, KrylovLuckyBreakFirstIter_Dense) { KrylovLuckyBreakFirstIter<MatrixDense>(); }
+TEST_F(GMRES_Component_Test, KrylovLuckyBreakFirstIter_Sparse) { KrylovLuckyBreakFirstIter<MatrixSparse>(); }
 
-TEST_F(GMRESComponentTest, KrylovLuckyBreakLaterIter_Dense) { KrylovLuckyBreakLaterIter<MatrixDense>(); }
-TEST_F(GMRESComponentTest, KrylovLuckyBreakLaterIter_Sparse) { KrylovLuckyBreakLaterIter<MatrixSparse>(); }
+TEST_F(GMRES_Component_Test, KrylovLuckyBreakLaterIter_Dense) { KrylovLuckyBreakLaterIter<MatrixDense>(); }
+TEST_F(GMRES_Component_Test, KrylovLuckyBreakLaterIter_Sparse) { KrylovLuckyBreakLaterIter<MatrixSparse>(); }
 
-TEST_F(GMRESComponentTest, KrylovLuckyBreakThroughSolve_Dense) { KrylovLuckyBreakThroughSolve<MatrixDense>(); }
-TEST_F(GMRESComponentTest, KrylovLuckyBreakThroughSolve_Sparse) { KrylovLuckyBreakThroughSolve<MatrixSparse>(); }
+TEST_F(GMRES_Component_Test, KrylovLuckyBreakThroughSolve_Dense) { KrylovLuckyBreakThroughSolve<MatrixDense>(); }
+TEST_F(GMRES_Component_Test, KrylovLuckyBreakThroughSolve_Sparse) { KrylovLuckyBreakThroughSolve<MatrixSparse>(); }
 
-TEST_F(GMRESComponentTest, Solve_Dense) { Solve<MatrixDense>(); }
-TEST_F(GMRESComponentTest, Solve_Sparse) { Solve<MatrixSparse>(); }
+TEST_F(GMRES_Component_Test, Solve_Dense) { Solve<MatrixDense>(); }
+TEST_F(GMRES_Component_Test, Solve_Sparse) { Solve<MatrixSparse>(); }
 
-TEST_F(GMRESComponentTest, Reset_Dense) { Reset<MatrixDense>(); }
-TEST_F(GMRESComponentTest, Reset_Sparse) { Reset<MatrixSparse>(); }
+TEST_F(GMRES_Component_Test, Reset_Dense) { Reset<MatrixDense>(); }
+TEST_F(GMRES_Component_Test, Reset_Sparse) { Reset<MatrixSparse>(); }

@@ -2,7 +2,7 @@
 
 #include "tools/PrecondArgPkg.h"
 
-class PrecondArgPkgTest: public TestBase
+class PrecondArgPkg_Test: public TestBase
 {
 public:
 
@@ -82,16 +82,16 @@ public:
 
 };
 
-TEST_F(PrecondArgPkgTest, TestDefaultConstruction_Both) {
+TEST_F(PrecondArgPkg_Test, TestDefaultConstruction_Both) {
     TestDefaultConstruction<MatrixDense>();
     TestDefaultConstruction<MatrixSparse>();
 }
 
-TEST_F(PrecondArgPkgTest, TestLeftPreconditionerSet_Dense) { TestLeftPreconditionerSet<MatrixDense>(); }
-TEST_F(PrecondArgPkgTest, TestLeftPreconditionerSet_Sparse) { TestLeftPreconditionerSet<MatrixSparse>(); }
+TEST_F(PrecondArgPkg_Test, TestLeftPreconditionerSet_Dense) { TestLeftPreconditionerSet<MatrixDense>(); }
+TEST_F(PrecondArgPkg_Test, TestLeftPreconditionerSet_Sparse) { TestLeftPreconditionerSet<MatrixSparse>(); }
 
-TEST_F(PrecondArgPkgTest, TestRightPreconditionerSet_Dense) { TestRightPreconditionerSet<MatrixDense>(); }
-TEST_F(PrecondArgPkgTest, TestRightPreconditionerSet_Sparse) { TestRightPreconditionerSet<MatrixSparse>(); }
+TEST_F(PrecondArgPkg_Test, TestRightPreconditionerSet_Dense) { TestRightPreconditionerSet<MatrixDense>(); }
+TEST_F(PrecondArgPkg_Test, TestRightPreconditionerSet_Sparse) { TestRightPreconditionerSet<MatrixSparse>(); }
 
-TEST_F(PrecondArgPkgTest, TestBothPreconditionerSet_Dense) { TestBothPreconditionerSet<MatrixDense>(); }
-TEST_F(PrecondArgPkgTest, TestBothPreconditionerSet_Sparse) { TestBothPreconditionerSet<MatrixSparse>(); }
+TEST_F(PrecondArgPkg_Test, TestBothPreconditionerSet_Dense) { TestBothPreconditionerSet<MatrixDense>(); }
+TEST_F(PrecondArgPkg_Test, TestBothPreconditionerSet_Sparse) { TestBothPreconditionerSet<MatrixSparse>(); }

@@ -2,7 +2,7 @@
 
 #include "tools/SolveArgPkg.h"
 
-TEST(SolveArgPkgTest, TestDefaultConstructionAndChecks) {
+TEST(SolveArgPkg_Test, TestDefaultConstructionAndChecks) {
 
     SolveArgPkg args;
 
@@ -22,7 +22,7 @@ TEST(SolveArgPkgTest, TestDefaultConstructionAndChecks) {
 
 }
 
-TEST(SolveArgPkgTest, TestReset) {
+TEST(SolveArgPkg_Test, TestReset) {
 
     SolveArgPkg args;
 

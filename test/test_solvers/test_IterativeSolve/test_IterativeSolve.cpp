@@ -2,7 +2,7 @@
 
 #include "test_IterativeSolve.h"
 
-class TypedIterativeSolveTest: public TestBase
+class TypedIterativeSolve_Test: public TestBase
 {
 public:
 
@@ -192,47 +192,47 @@ public:
 
 };
 
-TEST_F(TypedIterativeSolveTest, TestConstructorsDouble_Dense) {
+TEST_F(TypedIterativeSolve_Test, TestConstructorsDouble_Dense) {
     TestConstructors<MatrixDense, double>(u_dbl);
 }
-TEST_F(TypedIterativeSolveTest, TestConstructorsDouble_Sparse) {
+TEST_F(TypedIterativeSolve_Test, TestConstructorsDouble_Sparse) {
     TestConstructors<MatrixSparse, double>(u_dbl);
 }
 
-TEST_F(TypedIterativeSolveTest, TestConstructorsSingle_Dense) {
+TEST_F(TypedIterativeSolve_Test, TestConstructorsSingle_Dense) {
     TestConstructors<MatrixDense, float>(u_sgl);
 }
-TEST_F(TypedIterativeSolveTest, TestConstructorsSingle_Sparse) {
+TEST_F(TypedIterativeSolve_Test, TestConstructorsSingle_Sparse) {
     TestConstructors<MatrixSparse, float>(u_sgl);
 }
 
-TEST_F(TypedIterativeSolveTest, TestConstructorsHalf_Dense) {
+TEST_F(TypedIterativeSolve_Test, TestConstructorsHalf_Dense) {
     TestConstructors<MatrixDense, half>(u_hlf);
 }
-TEST_F(TypedIterativeSolveTest, TestConstructorsHalf_Sparse) {
+TEST_F(TypedIterativeSolve_Test, TestConstructorsHalf_Sparse) {
     TestConstructors<MatrixSparse, half>(u_hlf);
 }
 
-TEST_F(TypedIterativeSolveTest, TestSolveAndRelresDouble_Dense) { TestSolve<MatrixDense, double>(u_dbl); }
-TEST_F(TypedIterativeSolveTest, TestSolveAndRelresDouble_Sparse) { TestSolve<MatrixSparse, double>(u_dbl); }
+TEST_F(TypedIterativeSolve_Test, TestSolveAndRelresDouble_Dense) { TestSolve<MatrixDense, double>(u_dbl); }
+TEST_F(TypedIterativeSolve_Test, TestSolveAndRelresDouble_Sparse) { TestSolve<MatrixSparse, double>(u_dbl); }
 
-TEST_F(TypedIterativeSolveTest, TestSolveAndRelresSingle_Dense) { TestSolve<MatrixDense, float>(u_sgl); }
-TEST_F(TypedIterativeSolveTest, TestSolveAndRelresSingle_Sparse) { TestSolve<MatrixSparse, float>(u_sgl); }
+TEST_F(TypedIterativeSolve_Test, TestSolveAndRelresSingle_Dense) { TestSolve<MatrixDense, float>(u_sgl); }
+TEST_F(TypedIterativeSolve_Test, TestSolveAndRelresSingle_Sparse) { TestSolve<MatrixSparse, float>(u_sgl); }
 
-TEST_F(TypedIterativeSolveTest, TestSolveAndRelresHalf_Dense) { TestSolve<MatrixDense, half>(u_hlf); }
-TEST_F(TypedIterativeSolveTest, TestSolveAndRelresHalf_Sparse) { TestSolve<MatrixSparse, half>(u_hlf); }
+TEST_F(TypedIterativeSolve_Test, TestSolveAndRelresHalf_Dense) { TestSolve<MatrixDense, half>(u_hlf); }
+TEST_F(TypedIterativeSolve_Test, TestSolveAndRelresHalf_Sparse) { TestSolve<MatrixSparse, half>(u_hlf); }
 
-TEST_F(TypedIterativeSolveTest, TestResetDouble_Dense) { TestReset<MatrixDense, double>(); }
-TEST_F(TypedIterativeSolveTest, TestResetDouble_Sparse) { TestReset<MatrixSparse, double>(); }
+TEST_F(TypedIterativeSolve_Test, TestResetDouble_Dense) { TestReset<MatrixDense, double>(); }
+TEST_F(TypedIterativeSolve_Test, TestResetDouble_Sparse) { TestReset<MatrixSparse, double>(); }
 
-TEST_F(TypedIterativeSolveTest, TestResetSingle_Dense) { TestReset<MatrixDense, float>(); }
-TEST_F(TypedIterativeSolveTest, TestResetSingle_Sparse) { TestReset<MatrixSparse, float>(); }
+TEST_F(TypedIterativeSolve_Test, TestResetSingle_Dense) { TestReset<MatrixDense, float>(); }
+TEST_F(TypedIterativeSolve_Test, TestResetSingle_Sparse) { TestReset<MatrixSparse, float>(); }
 
-TEST_F(TypedIterativeSolveTest, TestResetHalf_Dense) { TestReset<MatrixDense, half>(); }
-TEST_F(TypedIterativeSolveTest, TestResetHalf_Sparse) { TestReset<MatrixSparse, half>(); }
+TEST_F(TypedIterativeSolve_Test, TestResetHalf_Dense) { TestReset<MatrixDense, half>(); }
+TEST_F(TypedIterativeSolve_Test, TestResetHalf_Sparse) { TestReset<MatrixSparse, half>(); }
 
-TEST_F(TypedIterativeSolveTest, TestErrorMismatchedCols_Dense) { TestMismatchedCols<MatrixDense>(); }
-TEST_F(TypedIterativeSolveTest, TestErrorMismatchedCols_Sparse) { TestMismatchedCols<MatrixSparse>(); }
+TEST_F(TypedIterativeSolve_Test, TestErrorMismatchedCols_Dense) { TestMismatchedCols<MatrixDense>(); }
+TEST_F(TypedIterativeSolve_Test, TestErrorMismatchedCols_Sparse) { TestMismatchedCols<MatrixSparse>(); }
 
-TEST_F(TypedIterativeSolveTest, TestErrorNonSquare_Dense) { TestErrorNonSquare<MatrixDense>(); }
-TEST_F(TypedIterativeSolveTest, TestErrorNonSquare_Sparse) { TestErrorNonSquare<MatrixSparse>(); }
+TEST_F(TypedIterativeSolve_Test, TestErrorNonSquare_Dense) { TestErrorNonSquare<MatrixDense>(); }
+TEST_F(TypedIterativeSolve_Test, TestErrorNonSquare_Sparse) { TestErrorNonSquare<MatrixSparse>(); }

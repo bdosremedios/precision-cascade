@@ -2,7 +2,7 @@
 
 // General matrix read tests
 
-class MatrixReadGeneralTest: public TestBase
+class MatrixRead_General_Test: public TestBase
 {
 public:
 
@@ -51,18 +51,18 @@ public:
 
 };
 
-TEST_F(MatrixReadGeneralTest, ReadEmptyMatrix_Both) {
+TEST_F(MatrixRead_General_Test, ReadEmptyMatrix_Both) {
     ReadEmptyMatrix<MatrixDense>();
     ReadEmptyMatrix<MatrixSparse>();
 }
 
-TEST_F(MatrixReadGeneralTest, ReadBadFiles_Both) {
+TEST_F(MatrixRead_General_Test, ReadBadFiles_Both) {
     ReadBadMatrices<MatrixDense>();
     ReadBadMatrices<MatrixSparse>();
 }
 
 template <typename T>
-class MatrixReadTTest: public TestBase
+class MatrixRead_T_Test: public TestBase
 {
 public:
 
@@ -199,7 +199,7 @@ public:
 };
 
 // All type vector read tests
-class MatrixReadVectorTest: public TestBase
+class MatrixRead_Vector_Test: public TestBase
 {
 public:
 
@@ -217,11 +217,11 @@ public:
 
 };
 
-TEST_F(MatrixReadVectorTest, ReadDoubleVector) { ReadVector<double>(u_dbl); }
-TEST_F(MatrixReadVectorTest, ReadSingleVector) { ReadVector<double>(u_sgl); }
-TEST_F(MatrixReadVectorTest, ReadHalfVector) { ReadVector<double>(u_hlf); }
+TEST_F(MatrixRead_Vector_Test, ReadDoubleVector) { ReadVector<double>(u_dbl); }
+TEST_F(MatrixRead_Vector_Test, ReadSingleVector) { ReadVector<double>(u_sgl); }
+TEST_F(MatrixRead_Vector_Test, ReadHalfVector) { ReadVector<double>(u_hlf); }
 
-TEST_F(MatrixReadVectorTest, FailOnMatrix) {    
+TEST_F(MatrixRead_Vector_Test, FailOnMatrix) {    
     fs::path mat = read_matrix_dir / fs::path("square1.csv");
     try {
         MatrixVector<double> test(read_matrixCSV<MatrixVector, double>(mat));
@@ -230,15 +230,15 @@ TEST_F(MatrixReadVectorTest, FailOnMatrix) {
 }
 
 // Double type matrix read tests
-class MatrixReadDoubleTest: public MatrixReadTTest<double> {};
+class MatrixRead_Double_Test: public MatrixRead_T_Test<double> {};
 
-TEST_F(MatrixReadDoubleTest, ReadSquareMatrix_Dense) { ReadSquareMatrix<MatrixDense>(u_dbl);}
-TEST_F(MatrixReadDoubleTest, ReadSquareMatrix_Square) { ReadSquareMatrix<MatrixSparse>(u_dbl); }
+TEST_F(MatrixRead_Double_Test, ReadSquareMatrix_Dense) { ReadSquareMatrix<MatrixDense>(u_dbl);}
+TEST_F(MatrixRead_Double_Test, ReadSquareMatrix_Square) { ReadSquareMatrix<MatrixSparse>(u_dbl); }
 
-TEST_F(MatrixReadDoubleTest, ReadWideTallMatrix_Dense) { ReadWideTallMatrix<MatrixDense>(u_dbl); }
-TEST_F(MatrixReadDoubleTest, ReadWideTallMatrix_Sparse) { ReadWideTallMatrix<MatrixSparse>(u_dbl); }
+TEST_F(MatrixRead_Double_Test, ReadWideTallMatrix_Dense) { ReadWideTallMatrix<MatrixDense>(u_dbl); }
+TEST_F(MatrixRead_Double_Test, ReadWideTallMatrix_Sparse) { ReadWideTallMatrix<MatrixSparse>(u_dbl); }
 
-TEST_F(MatrixReadDoubleTest, ReadPreciseMatrix_Both) {
+TEST_F(MatrixRead_Double_Test, ReadPreciseMatrix_Both) {
     MatrixXd target_precise {
         {1.12345678901232, 1.12345678901234},
         {1.12345678901236, 1.12345678901238}
@@ -248,7 +248,7 @@ TEST_F(MatrixReadDoubleTest, ReadPreciseMatrix_Both) {
     ReadPrecise<MatrixSparse>(target_precise, precise_file, u_dbl);
 }
 
-TEST_F(MatrixReadDoubleTest, ReadDifferentThanPreciseMatrix_Both) {
+TEST_F(MatrixRead_Double_Test, ReadDifferentThanPreciseMatrix_Both) {
     MatrixXd target_precise {
         {1.12345678901232, 1.12345678901234},
         {1.12345678901236, 1.12345678901238}
@@ -259,7 +259,7 @@ TEST_F(MatrixReadDoubleTest, ReadDifferentThanPreciseMatrix_Both) {
 
 }
 
-TEST_F(MatrixReadDoubleTest, ReadPreciseMatrixDoubleLimit_Both) {
+TEST_F(MatrixRead_Double_Test, ReadPreciseMatrixDoubleLimit_Both) {
     MatrixXd target_precise {
         {1.1234567890123452, 1.1234567890123454},
         {1.1234567890123456, 1.1234567890123458}
@@ -269,7 +269,7 @@ TEST_F(MatrixReadDoubleTest, ReadPreciseMatrixDoubleLimit_Both) {
     ReadPrecise<MatrixSparse>(target_precise, precise_file, u_dbl);
 }
 
-TEST_F(MatrixReadDoubleTest, ReadDifferentThanPreciseMatrixDoubleLimit) {
+TEST_F(MatrixRead_Double_Test, ReadDifferentThanPreciseMatrixDoubleLimit) {
     MatrixXd target_precise {
         {1.1234567890123452, 1.1234567890123454},
         {1.1234567890123456, 1.1234567890123458}
@@ -280,15 +280,15 @@ TEST_F(MatrixReadDoubleTest, ReadDifferentThanPreciseMatrixDoubleLimit) {
 }
 
 // Single type matrix read tests
-class MatrixReadSingleTest: public MatrixReadTTest<float> {};
+class MatrixRead_Single_Test: public MatrixRead_T_Test<float> {};
 
-TEST_F(MatrixReadSingleTest, ReadSquareMatrix_Dense) { ReadSquareMatrix<MatrixDense>(u_sgl);}
-TEST_F(MatrixReadSingleTest, ReadSquareMatrix_Square) { ReadSquareMatrix<MatrixSparse>(u_sgl); }
+TEST_F(MatrixRead_Single_Test, ReadSquareMatrix_Dense) { ReadSquareMatrix<MatrixDense>(u_sgl);}
+TEST_F(MatrixRead_Single_Test, ReadSquareMatrix_Square) { ReadSquareMatrix<MatrixSparse>(u_sgl); }
 
-TEST_F(MatrixReadSingleTest, ReadWideTallMatrix_Dense) { ReadWideTallMatrix<MatrixDense>(u_sgl); }
-TEST_F(MatrixReadSingleTest, ReadWideTallMatrix_Sparse) { ReadWideTallMatrix<MatrixSparse>(u_sgl); }
+TEST_F(MatrixRead_Single_Test, ReadWideTallMatrix_Dense) { ReadWideTallMatrix<MatrixDense>(u_sgl); }
+TEST_F(MatrixRead_Single_Test, ReadWideTallMatrix_Sparse) { ReadWideTallMatrix<MatrixSparse>(u_sgl); }
 
-TEST_F(MatrixReadSingleTest, ReadPreciseMatrix_Both) {
+TEST_F(MatrixRead_Single_Test, ReadPreciseMatrix_Both) {
     MatrixXf target_precise {
         {static_cast<float>(1.12345672), static_cast<float>(1.12345674)},
         {static_cast<float>(1.12345676), static_cast<float>(1.12345678)}
@@ -298,7 +298,7 @@ TEST_F(MatrixReadSingleTest, ReadPreciseMatrix_Both) {
     ReadPrecise<MatrixSparse>(target_precise, precise_file, u_sgl);
 }
 
-TEST_F(MatrixReadSingleTest, ReadDifferentThanPreciseMatrix_Both) {
+TEST_F(MatrixRead_Single_Test, ReadDifferentThanPreciseMatrix_Both) {
     MatrixXf target_precise {
         {static_cast<float>(1.12345672), static_cast<float>(1.12345674)},
         {static_cast<float>(1.12345676), static_cast<float>(1.12345678)}
@@ -309,15 +309,15 @@ TEST_F(MatrixReadSingleTest, ReadDifferentThanPreciseMatrix_Both) {
 }
 
 // Half type matrix read tests
-class MatrixReadHalfTest: public MatrixReadTTest<half> {};
+class MatrixRead_Half_Test: public MatrixRead_T_Test<half> {};
 
-TEST_F(MatrixReadHalfTest, ReadSquareMatrix_Dense) { ReadSquareMatrix<MatrixDense>(u_hlf);}
-TEST_F(MatrixReadHalfTest, ReadSquareMatrix_Square) { ReadSquareMatrix<MatrixSparse>(u_hlf); }
+TEST_F(MatrixRead_Half_Test, ReadSquareMatrix_Dense) { ReadSquareMatrix<MatrixDense>(u_hlf);}
+TEST_F(MatrixRead_Half_Test, ReadSquareMatrix_Square) { ReadSquareMatrix<MatrixSparse>(u_hlf); }
 
-TEST_F(MatrixReadHalfTest, ReadWideTallMatrix_Dense) { ReadWideTallMatrix<MatrixDense>(u_hlf); }
-TEST_F(MatrixReadHalfTest, ReadWideTallMatrix_Sparse) { ReadWideTallMatrix<MatrixSparse>(u_hlf); }
+TEST_F(MatrixRead_Half_Test, ReadWideTallMatrix_Dense) { ReadWideTallMatrix<MatrixDense>(u_hlf); }
+TEST_F(MatrixRead_Half_Test, ReadWideTallMatrix_Sparse) { ReadWideTallMatrix<MatrixSparse>(u_hlf); }
 
-TEST_F(MatrixReadHalfTest, ReadPreciseMatrix) {
+TEST_F(MatrixRead_Half_Test, ReadPreciseMatrix) {
     Matrix<half, Dynamic, Dynamic> target_precise {
         {static_cast<half>(1.123), static_cast<half>(1.124)},
         {static_cast<half>(1.125), static_cast<half>(1.126)}
@@ -327,7 +327,7 @@ TEST_F(MatrixReadHalfTest, ReadPreciseMatrix) {
     ReadPrecise<MatrixSparse>(target_precise, precise_file, u_hlf);
 }
 
-TEST_F(MatrixReadHalfTest, ReadDifferentThanPreciseMatrix) {
+TEST_F(MatrixRead_Half_Test, ReadDifferentThanPreciseMatrix) {
     Matrix<half, Dynamic, Dynamic> target_precise {
         {static_cast<half>(1.123), static_cast<half>(1.124)},
         {static_cast<half>(1.125), static_cast<half>(1.126)}
