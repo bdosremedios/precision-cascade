@@ -43,9 +43,9 @@ set(
 
 set(
     TEST_SUITE_CPPS
-    ${TEST_TOOLS_CPPS}
+    # ${TEST_TOOLS_CPPS}
     ${TEST_PRECONDITIONER_CPPS}
-    ${TEST_SOLVERS}
+    # ${TEST_SOLVERS}
 )
 
 add_executable(

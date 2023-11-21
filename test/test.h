@@ -42,6 +42,20 @@ int count_zeros(M<T> A, double zero_tol) {
 
 }
 
+template<template <typename> typename M, typename T>
+void ASSERT_MATRIX_NEAR(M<T> test, M<T> target, T tol) {
+
+    ASSERT_EQ(test.rows(), target.rows());
+    ASSERT_EQ(test.cols(), target.cols());
+
+    for (int i=0; i<target.rows(); ++i) {
+        for (int j=0; j<target.cols(); ++j) {
+            ASSERT_NEAR(test.coeff(i, j), target.coeff(i, j), tol);
+        }
+    }
+
+}
+
 class TestBase: public testing::Test
 {
 public:

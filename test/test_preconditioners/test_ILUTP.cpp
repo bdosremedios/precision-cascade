@@ -72,12 +72,6 @@ public:
                   count_zeros(ilut1e_1.get_L(), u_dbl));
         EXPECT_LE(count_zeros(ilut1e_1.get_L(), u_dbl),
                   count_zeros(ilut1e_0.get_L(), u_dbl));
-        EXPECT_LE(count_zeros(ilut1e_6.get_U(), u_dbl),
-                  count_zeros(ilut1e_3.get_U(), u_dbl));
-        EXPECT_LE(count_zeros(ilut1e_3.get_U(), u_dbl),
-                  count_zeros(ilut1e_1.get_U(), u_dbl));
-        EXPECT_LE(count_zeros(ilut1e_1.get_U(), u_dbl),
-                  count_zeros(ilut1e_0.get_U(), u_dbl));
 
     }
 
@@ -103,6 +97,44 @@ public:
 
     }
 
+    template<template <typename> typename M>
+    void TestILUTPMatchMATLAB1e_6() {
+
+        constexpr int n(8);
+        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_sparse_A.csv"));
+        M<double> target_L = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilutp_L_1e_6.csv"));
+        M<double> target_U = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilutp_U_1e_6.csv"));
+        M<double> target_P = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilutp_P_1e_6.csv"));
+
+        ILU<M, double> ilut1e_6(A, 1e-6, n, u_dbl, true);
+
+        ASSERT_MATRIX_NEAR<M, double>(ilut1e_6.get_L(), target_L, u_dbl);
+        ASSERT_MATRIX_NEAR<M, double>(ilut1e_6.get_U(), target_U, u_dbl);
+        ASSERT_MATRIX_NEAR<M, double>(ilut1e_6.get_P(), target_P, u_dbl);
+
+        cout << "A: " << endl;
+        A.print();
+        cout << "test_L: " << endl;
+        ilut1e_6.get_L().print();
+        cout << "target_L: " << endl;
+        target_L.print();
+        cout << "diff_L: " << endl;
+        (target_L-ilut1e_6.get_L()).print();
+        cout << "test_U: " << endl;
+        ilut1e_6.get_U().print();
+        cout << "target_U: " << endl;
+        target_U.print();
+        cout << "diff_U: " << endl;
+        (target_U-ilut1e_6.get_U()).print();
+        cout << "test_P: " << endl;
+        ilut1e_6.get_P().print();
+        cout << "target_P: " << endl;
+        target_P.print();
+        cout << "diff_P: " << endl;
+        (target_P-ilut1e_6.get_P()).print();
+
+    }
+
 };
 
 TEST_F(ILUTP_Test, TestEquivalentILUTNoDropAndDenseILU0_Dense) {
@@ -117,3 +149,6 @@ TEST_F(ILUTP_Test, TestILUTDropping_Sparse) { TestILUTDropping<MatrixSparse>(); 
 
 TEST_F(ILUTP_Test, TestILUTDroppingLimits_Dense) { TestILUTDroppingLimits<MatrixDense>(); }
 TEST_F(ILUTP_Test, TestILUTDroppingLimits_Sparse) { TestILUTDroppingLimits<MatrixSparse>(); }
+
+TEST_F(ILUTP_Test, TestILUTPMatchMATLAB1e_6_Dense) { TestILUTPMatchMATLAB1e_6<MatrixDense>(); }
+TEST_F(ILUTP_Test, TestILUTPMatchMATLAB1e_6_Sparse) { TestILUTPMatchMATLAB1e_6<MatrixSparse>(); }

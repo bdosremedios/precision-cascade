@@ -213,8 +213,8 @@ public:
             // Modify U vec (skip diagonal)
             MatrixVector<W> U_vec = MatrixVector<W>::Zero(U_size);
             for (int l=0; l<U_size; ++l) { // Apply tau drop rule
-                if (!drop_rule_tau(U.coeff(row_i, l), row_i, _zero_tol)) {
-                    U_vec(l) = U.coeff(row_i, l);
+                if (!drop_rule_tau(U.coeff(row_i, row_i+1+l), row_i, _zero_tol)) {
+                    U_vec(l) = U.coeff(row_i, row_i+1+l);
                 }
             }
             if (p < U_size) { // Drop p largest elements
