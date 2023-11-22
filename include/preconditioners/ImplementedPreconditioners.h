@@ -58,8 +58,8 @@ private:
     M<W> L;
     M<W> U;
     M<W> P;
-    std::function<bool (const W &curr_val, const int &row, const W &zero_tol)> drop_rule_tau;
-    std::function<void (const int &row, const W &zero_tol)> apply_drop_rule_vec;
+    std::function<bool (const W &curr_val, const int &row, const int &col, const W &zero_tol)> drop_rule_tau;
+    std::function<void (const int &col, const W &zero_tol)> apply_drop_rule_vec;
 
     void reduce_matrices() {
         L.reduce();
@@ -74,77 +74,227 @@ private:
         P = M<W>::Identity(m, m);
     }
 
-    void execute_row_elimination(const int &row_i, const W &zero_tol) {
+    // void execute_row_elimination(const int &row_i, const W &zero_tol) {
 
-        // KJ elimination of IKJ
-        for (int k=0; k<row_i; ++k) {
+    //     // Store row in vector to reduce row accesses to just 2 crosses of row
+    //     MatrixVector<W> U_row_i = MatrixVector<W>::Zero(m);
+    //     for (int j=0; j<m; ++j) { if (U.coeff(row_i, j) != 0) { U_row_i(j) = U.coeff(row_i, j); } }
 
-            W pivot = U.coeff(k, k);
-            if (abs(pivot) > zero_tol) {
+    //     // KJ elimination of IKJ
+    //     for (int k=0; k<row_i; ++k) {
 
-                W val_to_zero = U.coeff(row_i, k);
+    //         W pivot = U.coeff(k, k);
+    //         if (abs(pivot) > zero_tol) {
+
+    //             W val_to_zero = U_row_i(k);
+    //             if (abs(val_to_zero) > zero_tol) {
+
+    //                 W l_ik = val_to_zero/pivot;
+    //                 L.coeffRef(row_i, k) = l_ik;
+
+    //                 for (int j=k+1; j<m; ++j) {
+    //                     // Apply drop_rule_tau but dont remove row pivot regardless of drop_rule_tau
+    //                     if ((row_i != j) && drop_rule_tau(U.coeff(row_i, j), row_i, zero_tol)) {
+    //                         U_row_i(j) = static_cast<W>(0);
+    //                     } else {
+    //                         U_row_i(j) -= l_ik*U.coeff(k, j);
+    //                     }
+    //                 }
+
+    //             }
+
+    //             U_row_i(k) = static_cast<W>(0);
+
+    //         } else {  throw runtime_error("ILU has zero pivot in elimination"); }
+
+    //         for (int j=0; j<m; ++j) { U.coeffRef(row_i, j) = U_row_i(j); }
+
+    //     }
+
+    // }
+
+    // Left looking LU factorization for better memory access
+    void execute_leftlook_col_elimination(const int &col_j, const W &zero_tol, bool to_pivot_row) {
+
+        // Apply previous kth column's zeroing effects and apply drop_rule_tau
+        for (int k=0; k<col_j; ++k) {
+            
+            W propogating_val = U.coeff(k, col_j);
+            if ((abs(propogating_val) <= zero_tol) || (drop_rule_tau(propogating_val, k, col_j, zero_tol))) {
+                U.coeffRef(k, col_j) = static_cast<W>(0);
+            } else {
+                for (int i=k+1; i<m; ++i) {
+                    U.coeffRef(i, col_j) -= L.coeff(i, k)*propogating_val;
+                }
+            }
+
+        }
+
+        // Permute row to get largest pivot
+        if (to_pivot_row) { pivot_row(col_j); }
+
+        // Zero remainder of column below diagonal
+        W pivot = U.coeff(col_j, col_j);
+        if (abs(pivot) > zero_tol) {
+
+            for (int i=col_j+1; i<m; ++i) {
+
+                W val_to_zero = U.coeff(i, col_j);
                 if (abs(val_to_zero) > zero_tol) {
 
-                    W l_ik = val_to_zero/pivot;
-                    L.coeffRef(row_i, k) = l_ik;
-
-                    for (int j=k+1; j<m; ++j) {
-                        // Apply drop_rule_tau but dont remove row pivot regardless of drop_rule_tau
-                        if ((row_i != j) && drop_rule_tau(U.coeff(row_i, j), row_i, zero_tol)) {
-                            U.coeffRef(row_i, j) = static_cast<W>(0);
-                        } else {
-                            U.coeffRef(row_i, j) -= l_ik*U.coeff(k, j);
-                        }
+                    W l_ij = val_to_zero/pivot;
+                    if ((abs(l_ij) >= zero_tol) && !drop_rule_tau(l_ij, i, col_j, zero_tol)) {
+                        L.coeffRef(i, col_j) = l_ij;
                     }
+                    U.coeffRef(i, col_j) = static_cast<W>(0);
 
                 }
 
-                U.coeffRef(row_i, k) = static_cast<W>(0);
+            }
 
-            } else {  throw runtime_error("ILU has zero pivot in elimination"); }
+            // if (to_pivot_row) {
+            //     cout << "iter " << col_j << endl;
+            //     L.print();
+            //     U.print();
+            //     (L*U).print();
+            // }
 
+        } else {
+            throw runtime_error("ILU has zero pivot in elimination");
         }
+
+        // if (to_pivot_row) {
+        //     cout << "iter " << col_j << endl;
+        //     P.print();
+        //     L.print();
+        //     U.print();
+        //     (L*U).print();
+        // }
+
+        // // KI elimination of JKI
+        // for (int k=0; k<row_i; ++k) {
+
+        //     W pivot = U.coeff(k, k);
+        //     if (abs(pivot) > zero_tol) {
+
+        //         W val_to_zero = U_row_i(k);
+        //         if (abs(val_to_zero) > zero_tol) {
+
+        //             W l_ik = val_to_zero/pivot;
+        //             L.coeffRef(row_i, k) = l_ik;
+
+        //             for (int j=k+1; j<m; ++j) {
+        //                 // Apply drop_rule_tau but dont remove row pivot regardless of drop_rule_tau
+        //                 if ((row_i != j) && drop_rule_tau(U.coeff(row_i, j), row_i, zero_tol)) {
+        //                     U_row_i(j) = static_cast<W>(0);
+        //                 } else {
+        //                     U_row_i(j) -= l_ik*U.coeff(k, j);
+        //                 }
+        //             }
+
+        //         }
+
+        //         U_row_i(k) = static_cast<W>(0);
+
+        //     } else {  throw runtime_error("ILU has zero pivot in elimination"); }
+
+        //     for (int j=0; j<m; ++j) { U.coeffRef(row_i, j) = U_row_i(j); }
+
+        // }
 
     }
 
-    void pivot_col(const int &beg_i, const W &zero_tol) {
+    void pivot_row(const int &beg_j) {
 
-        // Pivot columns and throw error if no column entry large enough. Do after such that
-        // row elimination has already occured so that largest pivot right now can be found
-        int pivot = beg_i;
-        W abs_max_val = zero_tol;
-        for (int ind = beg_i; ind<m; ++ind) {
-            W temp = abs(U.coeff(beg_i, ind));
-            if (abs(temp) > abs_max_val) {
-                abs_max_val = temp;
-                pivot = ind;
+        // Find largest pivot
+        int pivot_i = beg_j;
+        W largest_val = abs(U.coeff(beg_j, beg_j));
+        for (int i=beg_j; i<m; ++i) {
+            W temp = abs(U.coeff(i, beg_j));
+            if (abs(temp) > largest_val) {
+                largest_val = temp;
+                pivot_i = i;
             }
         }
-        if (abs_max_val <= zero_tol) {
-            throw runtime_error("ILU encountered not large enough pivot error");
-        }
-        if (beg_i != pivot) {
-            const MatrixVector<W> U_i = U.col(beg_i);
-            U.col(beg_i) = U.col(pivot);
-            U.col(pivot) = U_i;
 
-            const MatrixVector<W> P_i = P.col(beg_i);
-            P.col(beg_i) = P.col(pivot);
-            P.col(pivot) = P_i;
+        
+        // cout << "Original Pivot column: " << beg_j << endl;
+        // cout << "Selected Pivot column: " << pivot_i << endl;
+        // U.print(); 
+        // P.print(); 
+
+        // Pivot row element by element
+        if (beg_j != pivot_i) {
+            for (int j=beg_j; j<m; ++j) {
+                W temp = U.coeff(beg_j, j);
+                U.coeffRef(beg_j, j) = U.coeff(pivot_i, j);
+                U.coeffRef(pivot_i, j) = temp;
+            }
+            for (int j=0; j<beg_j; ++j) {
+                W temp = L.coeff(beg_j, j);
+                L.coeffRef(beg_j, j) = L.coeff(pivot_i, j);
+                L.coeffRef(pivot_i, j) = temp;
+            }
+            for (int j=0; j<m; ++j) {
+                if ((P.coeff(beg_j, j) != static_cast<W>(0)) || (P.coeff(pivot_i, j) != static_cast<W>(0))) {
+                    W temp = P.coeff(beg_j, j);
+                    P.coeffRef(beg_j, j) = P.coeff(pivot_i, j);
+                    P.coeffRef(pivot_i, j) = temp;
+                }
+            }
         }
+
+        // U.print(); 
+        // P.print(); 
 
     }
+
+    // void pivot_col(const int &beg_i, const W &zero_tol) {
+
+    //     // Pivot columns and throw error if no column entry large enough. Do after such that
+    //     // row elimination has already occured so that largest pivot right now can be found
+    //     int pivot = beg_i;
+    //     W abs_max_val = zero_tol;
+    //     for (int ind = beg_i; ind<m; ++ind) {
+    //         W temp = abs(U.coeff(beg_i, ind));
+    //         if (abs(temp) > abs_max_val) {
+    //             abs_max_val = temp;
+    //             pivot = ind;
+    //         }
+    //     }
+    //     if (abs_max_val <= zero_tol) {
+    //         throw runtime_error("ILU encountered not large enough pivot error");
+    //     }
+    //     if (beg_i != pivot) {
+    //         const MatrixVector<W> U_i = U.col(beg_i);
+    //         U.col(beg_i) = U.col(pivot);
+    //         U.col(pivot) = U_i;
+
+    //         const MatrixVector<W> P_i = P.col(beg_i);
+    //         P.col(beg_i) = P.col(pivot);
+    //         P.col(pivot) = P_i;
+    //     }
+
+    // }
 
     void construction_helper(const M<W> &A, const W &zero_tol, const bool &pivot) {
 
         if (A.rows() != A.cols()) { throw runtime_error("Non square matrix A"); }
         instantiate_vars(A);
 
-        // Use IKJ variant for better predictability in execution
-        for (int i=0; i<m; ++i) {
-            execute_row_elimination(i, zero_tol);
-            if (pivot) { pivot_col(i, zero_tol); }
-            apply_drop_rule_vec(i, zero_tol);
+        // // Use IKJ variant for better predictability in execution
+        // for (int i=0; i<m; ++i) {
+        //     execute_row_elimination(i, zero_tol);
+        //     if (pivot) { pivot_col(i, zero_tol); }
+        //     apply_drop_rule_vec(i, zero_tol);
+        // }
+
+        // Use left-looking variant for efficient memory access
+        // if (pivot) { A.print();}
+        for (int j=0; j<m; ++j) {
+            execute_leftlook_col_elimination(j, zero_tol, pivot);
+            // if (pivot) { pivot_col(i, zero_tol); }
+            // apply_drop_rule_vec(i, zero_tol);
         }
 
         reduce_matrices();
@@ -179,8 +329,10 @@ public:
     // ILU(0)
     ILU(M<W> const &A, const W &zero_tol, const bool &pivot) {
         
-        drop_rule_tau = [] (W const &curr_val, const int &, W const &_zero_tol) -> bool {
-            return (abs(curr_val) <= _zero_tol);
+        drop_rule_tau = [A] (
+            W const &curr_val, const int &i, const int &j, W const &_zero_tol
+        ) -> bool {
+            return (abs(A.coeff(i, j)) <= _zero_tol);
         };
 
         apply_drop_rule_vec = [] (const int &, const W &) -> void {};
@@ -192,16 +344,15 @@ public:
     // ILUT(tau, p), tau threshold to drop and p number of entries to keep
     ILU(const M<W> &A, const W &tau, const int &p, const W &zero_tol, const bool &pivot) {
 
-        // Calculate original nnz avg row norm for threshold comparison
-        M<W> A_trans = A.transpose();
-        MatrixVector<W> A_i_mod(A.rows());
-        for (int i=0; i<A.rows(); ++i) { 
-            typename M<W>::Col a_i_row = A_trans.col(i);
-            if (a_i_row.nnz() != static_cast<W>(0)) { A_i_mod(i) = a_i_row.norm()/a_i_row.nnz(); }
-        }
+        // Calculate original nnz avg col norm for threshold comparison
+        M<W> A_copy = A;
+        MatrixVector<W> A_j_norm(A.cols());
+        for (int j=0; j<A.cols(); ++j) { A_j_norm(j) = A_copy.col(j).norm(); }
 
-        drop_rule_tau = [A_i_mod, tau] (const W &curr_val, const int &row, const W &_zero_tol) -> bool {
-            return (abs(curr_val) <= tau*A_i_mod(row));
+        drop_rule_tau = [A_j_norm, tau] (
+            const W &curr_val, const int &i, const int &col_j, const W &_zero_tol
+        ) -> bool {
+            return (abs(curr_val) <= tau*A_j_norm(col_j));
         };
 
         apply_drop_rule_vec = [this, p] (const int &row_i, const W &_zero_tol) -> void { 
@@ -213,11 +364,11 @@ public:
             // Modify U vec (skip diagonal)
             MatrixVector<W> U_vec = MatrixVector<W>::Zero(U_size);
             for (int l=0; l<U_size; ++l) { // Apply tau drop rule
-                if (!drop_rule_tau(U.coeff(row_i, row_i+1+l), row_i, _zero_tol)) {
+                if (!drop_rule_tau(U.coeff(row_i, row_i+1+l), row_i, row_i+1+l, _zero_tol)) {
                     U_vec(l) = U.coeff(row_i, row_i+1+l);
                 }
             }
-            if (p < U_size) { // Drop p largest elements
+            if (p < U_size) { // Drop all but p largest elements
                 MatrixVector<int> U_sorted_indices = sort_indices(U_vec);
                 for (int i=0; i<U_size-p; ++i) {
                     U_vec(U_sorted_indices(i)) = static_cast<W>(0);
@@ -227,11 +378,11 @@ public:
             // Modify L vec (skip diagonal)
             MatrixVector<W> L_vec = MatrixVector<W>::Zero(L_size);
             for (int l=0; l<L_size; ++l) { // Apply tau drop rule
-                if (!drop_rule_tau(L.coeff(row_i, l), row_i, _zero_tol)) {
+                if (!drop_rule_tau(L.coeff(row_i, l), row_i, l, _zero_tol)) {
                     L_vec(l) = L.coeff(row_i, l);
                 }
             }
-            if (p < L_size) { // Drop p largest elements
+            if (p < L_size) { // Drop all but p largest elements
                 MatrixVector<int> L_sorted_indices = sort_indices(L_vec);
                 for (int i=0; i<L_size-p; ++i) {
                     L_vec(L_sorted_indices(i)) = static_cast<W>(0);
@@ -248,7 +399,7 @@ public:
     }
 
     MatrixVector<W> action_inv_M(const MatrixVector<W> &vec) const override {
-        return P*(back_substitution<W>(U, frwd_substitution<W>(L, vec)));
+        return back_substitution<W>(U, frwd_substitution<W>(L, P*vec));
     }
 
     M<W> get_L() const { return L; }

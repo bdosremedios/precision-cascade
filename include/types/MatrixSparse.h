@@ -25,8 +25,9 @@ private:
 
 public:
 
+    class Block; class Col; // Forward declaration of nested classes
+
     // *** Constructors ***
-    // using Parent::SparseMatrix;
     MatrixSparse(): Parent::SparseMatrix(0, 0) {}
     MatrixSparse(int m, int n): Parent::SparseMatrix(m, n) {}
     MatrixSparse(const Parent &parent): Parent::SparseMatrix(parent) {}
@@ -34,7 +35,6 @@ public:
     // *** Element Access ***
     const T coeff(int row, int col) const { return Parent::coeff(row, col); }
     T& coeffRef(int row, int col) { return Parent::coeffRef(row, col); }
-    class Block; class Col;
     Col col(int _col) { return Parent::col(_col); }
     Block block(int row, int col, int m, int n) { return Parent::block(row, col, m, n); }
 
@@ -143,13 +143,13 @@ public:
             Col(const ColParent &other): ColParent(other) {}
             Col operator=(const MatrixVector<T> vec) { return ColParent::operator=(vec.base().sparseView()); }
             T norm() const { return ColParent::norm(); }
-            int nnz() const {
-                int count = 0;
-                for (int i=0; i<this->rows(); ++i) { 
-                    if (ColParent::coeff(i) != static_cast<T>(0)) { ++count; }
-                }
-                return count;
-            }
+            // int nnz() const {
+            //     int count = 0;
+            //     for (int i=0; i<this->rows(); ++i) { 
+            //         if (ColParent::coeff(i) != static_cast<T>(0)) { ++count; }
+            //     }
+            //     return count;
+            // }
 
     };
 

@@ -155,7 +155,7 @@ writematrix(ilu_A, "solve_matrices\\ilu_A.csv");
 writematrix(full(ilu_L), "solve_matrices\\ilu_L.csv");
 writematrix(full(ilu_U), "solve_matrices\\ilu_U.csv");
 options.type = "ilutp";
-options.milu = "row";
+options.milu = "col";
 options.droptol = 0;
 [ilu_L_pivot, ilu_U_pivot, ilu_P_pivot] = ilu(sparse(ilu_A), options);
 writematrix(full(ilu_L_pivot), "solve_matrices\\ilu_L_pivot.csv");

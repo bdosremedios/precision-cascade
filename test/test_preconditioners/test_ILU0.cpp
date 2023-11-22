@@ -53,7 +53,7 @@ public:
         constexpr int n(8);
         M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_A.csv"));
         ILU<M, double> ilu(A, u_dbl, true);
-        M<double> test = ilu.get_L()*ilu.get_U()-A*ilu.get_P();
+        M<double> test = ilu.get_L()*ilu.get_U()-ilu.get_P()*A;
 
         for (int i=0; i<n; ++i) {
             for (int j=0; j<n; ++j) {
@@ -111,12 +111,19 @@ public:
         M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_sparse_A.csv"));
         ILU<M, double> ilu(A, u_dbl, false);
 
+        // Test matching ILU to MATLAB for the sparse for zero-fill matrix
+        M<double> L = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_sparse_L.csv"));
+        M<double> U = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_sparse_U.csv"));
+
+        // A.print();
+        // ilu.get_L().print();
+        // ilu.get_U().print();
+
         for (int i=0; i<n; ++i) {
             for (int j=0; j<n; ++j) {
                 if (A.coeff(i, j) == 0.) {
                     ASSERT_EQ(ilu.get_L().coeff(i, j), 0.);
                     ASSERT_EQ(ilu.get_U().coeff(i, j), 0.);
-                    ASSERT_NEAR(ilu.get_L().coeff(i, j)*ilu.get_U().coeff(i, j), 0, dbl_error_acc);
                 }
             }
         }
@@ -132,10 +139,6 @@ public:
                 ASSERT_NEAR(ilu.get_U().coeff(i, j), 0, dbl_error_acc);
             }
         }
-
-        // Test matching ILU to MATLAB for the sparse for zero-fill matrix
-        M<double> L = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_sparse_L.csv"));
-        M<double> U = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_sparse_U.csv"));
 
         for (int i=0; i<n; ++i) {
             for (int j=0; j<n; ++j) {

@@ -21,7 +21,6 @@ public:
     class Block; class Col; // Forward declaration of nested classes
 
     // *** Constructors ***
-    // using Parent::Matrix;
     MatrixDense(): Parent::Matrix(0, 0) {}
     MatrixDense(int m, int n): Parent::Matrix(m, n) {}
     MatrixDense(const Parent &parent): Parent::Matrix(parent) {}
@@ -94,15 +93,16 @@ public:
 
         public:
             Col(const ColParent &other): ColParent(other) {}
+            Col(const Eigen::Block<const Parent, Eigen::Dynamic, 1, true> &other): ColParent(other) {}
             Col operator=(const MatrixVector<T> vec) { return ColParent::operator=(vec.base()); }
             T norm() const { return ColParent::norm(); }
-            int nnz() const {
-                int count = 0;
-                for (int i=0; i<this->rows(); ++i) { 
-                    if (ColParent::coeff(i) != static_cast<T>(0)) { ++count; }
-                }
-                return count;
-            }
+            // int nnz() const {
+            //     int count = 0;
+            //     for (int i=0; i<this->rows(); ++i) { 
+            //         if (ColParent::coeff(i) != static_cast<T>(0)) { ++count; }
+            //     }
+            //     return count;
+            // }
 
     };
 
