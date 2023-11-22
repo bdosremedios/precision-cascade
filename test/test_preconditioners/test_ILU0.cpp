@@ -114,11 +114,6 @@ public:
         // Test matching ILU to MATLAB for the sparse for zero-fill matrix
         M<double> L = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_sparse_L.csv"));
         M<double> U = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_sparse_U.csv"));
-
-        // A.print();
-        // ilu.get_L().print();
-        // ilu.get_U().print();
-
         for (int i=0; i<n; ++i) {
             for (int j=0; j<n; ++j) {
                 if (A.coeff(i, j) == 0.) {

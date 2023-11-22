@@ -74,45 +74,6 @@ private:
         P = M<W>::Identity(m, m);
     }
 
-    // void execute_row_elimination(const int &row_i, const W &zero_tol) {
-
-    //     // Store row in vector to reduce row accesses to just 2 crosses of row
-    //     MatrixVector<W> U_row_i = MatrixVector<W>::Zero(m);
-    //     for (int j=0; j<m; ++j) { if (U.coeff(row_i, j) != 0) { U_row_i(j) = U.coeff(row_i, j); } }
-
-    //     // KJ elimination of IKJ
-    //     for (int k=0; k<row_i; ++k) {
-
-    //         W pivot = U.coeff(k, k);
-    //         if (abs(pivot) > zero_tol) {
-
-    //             W val_to_zero = U_row_i(k);
-    //             if (abs(val_to_zero) > zero_tol) {
-
-    //                 W l_ik = val_to_zero/pivot;
-    //                 L.coeffRef(row_i, k) = l_ik;
-
-    //                 for (int j=k+1; j<m; ++j) {
-    //                     // Apply drop_rule_tau but dont remove row pivot regardless of drop_rule_tau
-    //                     if ((row_i != j) && drop_rule_tau(U.coeff(row_i, j), row_i, zero_tol)) {
-    //                         U_row_i(j) = static_cast<W>(0);
-    //                     } else {
-    //                         U_row_i(j) -= l_ik*U.coeff(k, j);
-    //                     }
-    //                 }
-
-    //             }
-
-    //             U_row_i(k) = static_cast<W>(0);
-
-    //         } else {  throw runtime_error("ILU has zero pivot in elimination"); }
-
-    //         for (int j=0; j<m; ++j) { U.coeffRef(row_i, j) = U_row_i(j); }
-
-    //     }
-
-    // }
-
     // Left looking LU factorization for better memory access
     void execute_leftlook_col_elimination(const int &col_j, const W &zero_tol, bool to_pivot_row) {
 
@@ -133,7 +94,7 @@ private:
         // Permute row to get largest pivot
         if (to_pivot_row) { pivot_row(col_j); }
 
-        // Zero remainder of column below diagonal
+        // Zero elements below diagonal in col_j
         W pivot = U.coeff(col_j, col_j);
         if (abs(pivot) > zero_tol) {
 
@@ -152,55 +113,7 @@ private:
 
             }
 
-            // if (to_pivot_row) {
-            //     cout << "iter " << col_j << endl;
-            //     L.print();
-            //     U.print();
-            //     (L*U).print();
-            // }
-
-        } else {
-            throw runtime_error("ILU has zero pivot in elimination");
-        }
-
-        // if (to_pivot_row) {
-        //     cout << "iter " << col_j << endl;
-        //     P.print();
-        //     L.print();
-        //     U.print();
-        //     (L*U).print();
-        // }
-
-        // // KI elimination of JKI
-        // for (int k=0; k<row_i; ++k) {
-
-        //     W pivot = U.coeff(k, k);
-        //     if (abs(pivot) > zero_tol) {
-
-        //         W val_to_zero = U_row_i(k);
-        //         if (abs(val_to_zero) > zero_tol) {
-
-        //             W l_ik = val_to_zero/pivot;
-        //             L.coeffRef(row_i, k) = l_ik;
-
-        //             for (int j=k+1; j<m; ++j) {
-        //                 // Apply drop_rule_tau but dont remove row pivot regardless of drop_rule_tau
-        //                 if ((row_i != j) && drop_rule_tau(U.coeff(row_i, j), row_i, zero_tol)) {
-        //                     U_row_i(j) = static_cast<W>(0);
-        //                 } else {
-        //                     U_row_i(j) -= l_ik*U.coeff(k, j);
-        //                 }
-        //             }
-
-        //         }
-
-        //         U_row_i(k) = static_cast<W>(0);
-
-        //     } else {  throw runtime_error("ILU has zero pivot in elimination"); }
-
-        //     for (int j=0; j<m; ++j) { U.coeffRef(row_i, j) = U_row_i(j); }
-
-        // }
+        } else { throw runtime_error("ILU has zero pivot in elimination"); }
 
     }
 
@@ -216,12 +129,6 @@ private:
                 pivot_i = i;
             }
         }
-
-        
-        // cout << "Original Pivot column: " << beg_j << endl;
-        // cout << "Selected Pivot column: " << pivot_i << endl;
-        // U.print(); 
-        // P.print(); 
 
         // Pivot row element by element
         if (beg_j != pivot_i) {
@@ -244,58 +151,15 @@ private:
             }
         }
 
-        // U.print(); 
-        // P.print(); 
-
     }
-
-    // void pivot_col(const int &beg_i, const W &zero_tol) {
-
-    //     // Pivot columns and throw error if no column entry large enough. Do after such that
-    //     // row elimination has already occured so that largest pivot right now can be found
-    //     int pivot = beg_i;
-    //     W abs_max_val = zero_tol;
-    //     for (int ind = beg_i; ind<m; ++ind) {
-    //         W temp = abs(U.coeff(beg_i, ind));
-    //         if (abs(temp) > abs_max_val) {
-    //             abs_max_val = temp;
-    //             pivot = ind;
-    //         }
-    //     }
-    //     if (abs_max_val <= zero_tol) {
-    //         throw runtime_error("ILU encountered not large enough pivot error");
-    //     }
-    //     if (beg_i != pivot) {
-    //         const MatrixVector<W> U_i = U.col(beg_i);
-    //         U.col(beg_i) = U.col(pivot);
-    //         U.col(pivot) = U_i;
-
-    //         const MatrixVector<W> P_i = P.col(beg_i);
-    //         P.col(beg_i) = P.col(pivot);
-    //         P.col(pivot) = P_i;
-    //     }
-
-    // }
 
     void construction_helper(const M<W> &A, const W &zero_tol, const bool &pivot) {
 
         if (A.rows() != A.cols()) { throw runtime_error("Non square matrix A"); }
         instantiate_vars(A);
 
-        // // Use IKJ variant for better predictability in execution
-        // for (int i=0; i<m; ++i) {
-        //     execute_row_elimination(i, zero_tol);
-        //     if (pivot) { pivot_col(i, zero_tol); }
-        //     apply_drop_rule_vec(i, zero_tol);
-        // }
-
-        // Use left-looking variant for efficient memory access
-        // if (pivot) { A.print();}
-        for (int j=0; j<m; ++j) {
-            execute_leftlook_col_elimination(j, zero_tol, pivot);
-            // if (pivot) { pivot_col(i, zero_tol); }
-            // apply_drop_rule_vec(i, zero_tol);
-        }
+        // Execute left-looking ILU
+        for (int j=0; j<m; ++j) { execute_leftlook_col_elimination(j, zero_tol, pivot); }
 
         reduce_matrices();
 
