@@ -9,20 +9,14 @@ public:
     template<template <typename> typename M>
     void TestEquivalentILUTNoDropAndDenseILU0() {
 
-        // Test ILU(0) and ILUT(0) [No Dropping] Give the same dense decomp
+        // Test ILU(0) and ILUT(0, n) [No Dropping] Give the same dense decomp
         constexpr int n(8);
         M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_A.csv"));
         ILU<M, double> ilu0(A, u_dbl, false);
         ILU<M, double> ilut0(A, 0., n, u_dbl, false);
 
-        for (int i=0; i<n; ++i) {
-            for (int j=0; j<n; ++j) {
-                if (A.coeff(i, j) == 0.) {
-                    ASSERT_EQ(ilu0.get_L().coeff(i, j), ilut0.get_L().coeff(i, j));
-                    ASSERT_EQ(ilu0.get_U().coeff(i, j), ilut0.get_U().coeff(i, j));
-                }
-            }
-        }
+        ASSERT_MATRIX_EQ(ilu0.get_L(), ilut0.get_L());
+        ASSERT_MATRIX_EQ(ilu0.get_U(), ilut0.get_U());
 
     }
 
@@ -40,25 +34,17 @@ public:
         ILU<M, double> ilut1e_1(A, 1e-1, n, u_dbl, pivot);
         ILU<M, double> ilut1e_0(A, 1e-0, n, u_dbl, pivot);
 
-        // Test correct L and U triangularity
-        for (int i=0; i<n; ++i) {
-            for (int j=i+1; j<n; ++j) {
-                ASSERT_NEAR(ilut1e_4.get_L().coeff(i, j), 0, dbl_error_acc);
-                ASSERT_NEAR(ilut1e_3.get_L().coeff(i, j), 0, dbl_error_acc);
-                ASSERT_NEAR(ilut1e_2.get_L().coeff(i, j), 0, dbl_error_acc);
-                ASSERT_NEAR(ilut1e_1.get_L().coeff(i, j), 0, dbl_error_acc);
-                ASSERT_NEAR(ilut1e_0.get_L().coeff(i, j), 0, dbl_error_acc);
-            }
-        }
-        for (int i=0; i<n; ++i) {
-            for (int j=0; j<i; ++j) {
-                ASSERT_NEAR(ilut1e_4.get_U().coeff(i, j), 0, dbl_error_acc);
-                ASSERT_NEAR(ilut1e_3.get_U().coeff(i, j), 0, dbl_error_acc);
-                ASSERT_NEAR(ilut1e_2.get_U().coeff(i, j), 0, dbl_error_acc);
-                ASSERT_NEAR(ilut1e_1.get_U().coeff(i, j), 0, dbl_error_acc);
-                ASSERT_NEAR(ilut1e_0.get_U().coeff(i, j), 0, dbl_error_acc);
-            }
-        }
+        ASSERT_MATRIX_LOWTRI(ilut1e_4.get_L(), dbl_error_acc);
+        ASSERT_MATRIX_LOWTRI(ilut1e_3.get_L(), dbl_error_acc);
+        ASSERT_MATRIX_LOWTRI(ilut1e_2.get_L(), dbl_error_acc);
+        ASSERT_MATRIX_LOWTRI(ilut1e_1.get_L(), dbl_error_acc);
+        ASSERT_MATRIX_LOWTRI(ilut1e_0.get_L(), dbl_error_acc);
+
+        ASSERT_MATRIX_UPPTRI(ilut1e_4.get_U(), dbl_error_acc);
+        ASSERT_MATRIX_UPPTRI(ilut1e_3.get_U(), dbl_error_acc);
+        ASSERT_MATRIX_UPPTRI(ilut1e_2.get_U(), dbl_error_acc);
+        ASSERT_MATRIX_UPPTRI(ilut1e_1.get_U(), dbl_error_acc);
+        ASSERT_MATRIX_UPPTRI(ilut1e_0.get_U(), dbl_error_acc);
 
         // Test that each lower threshold is better than the higher one w.r.t
         // Frobenius norm
@@ -112,16 +98,14 @@ public:
         M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_sparse_A.csv"));
         ILU<M, double> ilu_all_drop(A, DBL_MAX, n, u_dbl, pivot);
 
+        ASSERT_MATRIX_LOWTRI(ilu_all_drop.get_L(), u_dbl);
+        ASSERT_MATRIX_LOWTRI(ilu_all_drop.get_U(), u_dbl);
+        ASSERT_MATRIX_UPPTRI(ilu_all_drop.get_L(), u_dbl);
+        ASSERT_MATRIX_UPPTRI(ilu_all_drop.get_U(), u_dbl);
+
         for (int i=0; i<n; ++i) {
-            for (int j=0; j<n; ++j) {
-                if (i != j) {
-                    ASSERT_NEAR(ilu_all_drop.get_L().coeff(i, j), 0., dbl_error_acc);
-                    ASSERT_NEAR(ilu_all_drop.get_U().coeff(i, j), 0., dbl_error_acc);
-                } else {
-                    ASSERT_NEAR(ilu_all_drop.get_L().coeff(i, j), 1., dbl_error_acc);
-                    ASSERT_NEAR(ilu_all_drop.get_U().coeff(i, j), A.coeff(i, j), dbl_error_acc);
-                }
-            }
+            ASSERT_NEAR(ilu_all_drop.get_L().coeff(i, i), 1., u_dbl);
+            ASSERT_NEAR(ilu_all_drop.get_U().coeff(i, i), A.coeff(i, i), u_dbl);
         }
 
     }

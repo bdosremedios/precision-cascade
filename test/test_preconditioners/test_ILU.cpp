@@ -71,9 +71,7 @@ public:
         // Test matching ILU to MATLAB for the dense matrix
         MatrixVector<double> test_vec = MatrixVector<double>::Random(n);
 
-        for (int i=0; i<n; ++i) {
-            ASSERT_NEAR(ilu.action_inv_M(A*test_vec)(i), test_vec(i), dbl_error_acc);
-        }
+        ASSERT_VECTOR_NEAR(ilu.action_inv_M(A*test_vec), test_vec, dbl_error_acc);
 
     }
 
@@ -88,10 +86,7 @@ public:
         // Test matching ILU to MATLAB for the dense matrix
         MatrixVector<double> test_vec = MatrixVector<double>::Random(n);
 
-        for (int i=0; i<n; ++i) {
-            ASSERT_NEAR(ilu.action_inv_M(A*test_vec)(i), test_vec(i), dbl_error_acc);
-        }
-
+        ASSERT_VECTOR_NEAR(ilu.action_inv_M(A*test_vec), test_vec, dbl_error_acc);
 
     }
 
@@ -136,28 +131,20 @@ public:
 
         ILU<M, float> ilu0_sgl(L_sgl, U_sgl);
 
-        for (int i=0; i<n; ++i) {
-            for (int j=0; j<n; ++j) {
-                ASSERT_EQ(static_cast<float>(L_dbl.coeff(i, j)), L_sgl.coeff(i, j));
-                ASSERT_EQ(static_cast<float>(U_dbl.coeff(i, j)), U_sgl.coeff(i, j));
-                ASSERT_EQ(ilu0_sgl.get_L().coeff(i, j), L_sgl.coeff(i, j));
-                ASSERT_EQ(ilu0_sgl.get_U().coeff(i, j), U_sgl.coeff(i, j));
-            }
-        }
+        ASSERT_MATRIX_EQ(L_dbl.template cast<float>(), L_sgl);
+        ASSERT_MATRIX_EQ(U_dbl.template cast<float>(), U_sgl);
+        ASSERT_MATRIX_EQ(ilu0_sgl.get_L(), L_sgl);
+        ASSERT_MATRIX_EQ(ilu0_sgl.get_U(), U_sgl);
 
         M<half> L_hlf = ilu0_dbl.template get_L_cast<half>();
         M<half> U_hlf = ilu0_dbl.template get_U_cast<half>();
 
         ILU<M, half> ilu0_hlf(L_hlf, U_hlf);
 
-        for (int i=0; i<n; ++i) {
-            for (int j=0; j<n; ++j) {
-                ASSERT_EQ(static_cast<half>(L_dbl.coeff(i, j)), L_hlf.coeff(i, j));
-                ASSERT_EQ(static_cast<half>(U_dbl.coeff(i, j)), U_hlf.coeff(i, j));
-                ASSERT_EQ(ilu0_hlf.get_L().coeff(i, j), L_hlf.coeff(i, j));
-                ASSERT_EQ(ilu0_hlf.get_U().coeff(i, j), U_hlf.coeff(i, j));
-            }
-        }
+        ASSERT_MATRIX_EQ(L_dbl.template cast<half>(), L_hlf);
+        ASSERT_MATRIX_EQ(U_dbl.template cast<half>(), U_hlf);
+        ASSERT_MATRIX_EQ(ilu0_hlf.get_L(), L_hlf);
+        ASSERT_MATRIX_EQ(ilu0_hlf.get_U(), U_hlf);
 
     }
 

@@ -66,6 +66,22 @@ int count_zeros(M<T> A, double zero_tol) {
 
 }
 
+template <typename T>
+void ASSERT_VECTOR_NEAR(MatrixVector<T> test, MatrixVector<T> target, T tol) {
+
+    ASSERT_EQ(test.rows(), target.rows());
+
+    for (int i=0; i<target.rows(); ++i) {
+        ASSERT_NEAR(test(i), target(i), tol);
+    }
+
+}
+
+template <typename T>
+void ASSERT_VECTOR_EQ(MatrixVector<T> test, MatrixVector<T> target) {
+    ASSERT_VECTOR_NEAR(test, target, static_cast<T>(0));
+}
+
 template <template <typename> typename M, typename T>
 void ASSERT_MATRIX_NEAR(M<T> test, M<T> target, T tol) {
 
@@ -75,6 +91,59 @@ void ASSERT_MATRIX_NEAR(M<T> test, M<T> target, T tol) {
     for (int i=0; i<target.rows(); ++i) {
         for (int j=0; j<target.cols(); ++j) {
             ASSERT_NEAR(test.coeff(i, j), target.coeff(i, j), tol);
+        }
+    }
+
+}
+
+template <template <typename> typename M, typename T>
+void ASSERT_MATRIX_EQ(M<T> test, M<T> target) {
+    ASSERT_MATRIX_NEAR(test, target, static_cast<T>(0));
+}
+
+template <template <typename> typename M, typename T>
+void ASSERT_MATRIX_SAMESPARSITY(M<T> test, M<T> target, T zero_tol) {
+
+    ASSERT_EQ(test.rows(), target.rows());
+    ASSERT_EQ(test.cols(), target.cols());
+
+    for (int i=0; i<target.rows(); ++i) {
+        for (int j=0; j<target.cols(); ++j) {
+            if (abs(target.coeff(i, j)) <= zero_tol) {
+                ASSERT_LE(abs(test.coeff(i, j)), zero_tol);
+            }
+        }
+    }
+
+}
+
+template <template <typename> typename M, typename T>
+void ASSERT_MATRIX_ZERO(M<T> test, T tol) {
+    ASSERT_MATRIX_NEAR(test, M<T>::Zero(test.rows(), test.cols()), tol);
+}
+
+template <template <typename> typename M, typename T>
+void ASSERT_MATRIX_IDENTITY(M<T> test, T tol) {
+    ASSERT_MATRIX_NEAR(test, M<T>::Identity(test.rows(), test.cols()), tol);
+}
+
+template <template <typename> typename M, typename T>
+void ASSERT_MATRIX_LOWTRI(M<T> test, T tol) {
+
+    for (int i=0; i<test.rows(); ++i) {
+        for (int j=i+1; j<test.cols(); ++j) {
+            ASSERT_NEAR(test.coeff(i, j), static_cast<T>(0), tol);
+        }
+    }
+
+}
+
+template <template <typename> typename M, typename T>
+void ASSERT_MATRIX_UPPTRI(M<T> test, T tol) {
+
+    for (int i=0; i<test.rows(); ++i) {
+        for (int j=0; j<i; ++j) {
+            ASSERT_NEAR(test.coeff(i, j), static_cast<T>(0), tol);
         }
     }
 

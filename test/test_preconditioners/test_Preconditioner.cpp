@@ -16,7 +16,7 @@ public:
         ASSERT_TRUE(no_precond.check_compatibility_right(5));
 
         MatrixVector<double> test_vec = MatrixVector<double>::Random(n);
-        ASSERT_EQ(test_vec, no_precond.action_inv_M(test_vec));
+        ASSERT_VECTOR_EQ(no_precond.action_inv_M(test_vec), test_vec);
     
     }
 
@@ -41,9 +41,7 @@ public:
 
         test_vec = inv_precond.action_inv_M(test_vec);
 
-        for (int i=0; i<n; ++i) {
-            ASSERT_NEAR(orig_test_vec(i), test_vec(i), dbl_error_acc);
-        }
+        ASSERT_VECTOR_NEAR(orig_test_vec, test_vec, dbl_error_acc);
 
     }
 
