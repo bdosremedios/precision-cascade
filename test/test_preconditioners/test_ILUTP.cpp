@@ -27,61 +27,90 @@ public:
     }
 
     template<template <typename> typename M>
-    void TestILUTDropping() {
+    void TestILUTDropping(bool pivot) {
 
         constexpr int n(8);
         M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_sparse_A.csv"));
 
         // Check multiple rising thresholds ensuring that each ilu is closer to the matrix and that
         // all have correct form for L and U
-        ILU<M, double> ilut1e_6(A, 1e-6, n, u_dbl, false);
-        ILU<M, double> ilut1e_3(A, 1e-3, n, u_dbl, false);
-        ILU<M, double> ilut1e_1(A, 1e-1, n, u_dbl, false);
-        ILU<M, double> ilut1e_0(A, 1., n, u_dbl, false);
+        ILU<M, double> ilut1e_4(A, 1e-4, n, u_dbl, pivot);
+        ILU<M, double> ilut1e_3(A, 1e-3, n, u_dbl, pivot);
+        ILU<M, double> ilut1e_2(A, 1e-2, n, u_dbl, pivot);
+        ILU<M, double> ilut1e_1(A, 1e-1, n, u_dbl, pivot);
+        ILU<M, double> ilut1e_0(A, 1e-0, n, u_dbl, pivot);
 
         // Test correct L and U triangularity
         for (int i=0; i<n; ++i) {
             for (int j=i+1; j<n; ++j) {
-                ASSERT_NEAR(ilut1e_6.get_L().coeff(i, j), 0, dbl_error_acc);
+                ASSERT_NEAR(ilut1e_4.get_L().coeff(i, j), 0, dbl_error_acc);
                 ASSERT_NEAR(ilut1e_3.get_L().coeff(i, j), 0, dbl_error_acc);
+                ASSERT_NEAR(ilut1e_2.get_L().coeff(i, j), 0, dbl_error_acc);
                 ASSERT_NEAR(ilut1e_1.get_L().coeff(i, j), 0, dbl_error_acc);
                 ASSERT_NEAR(ilut1e_0.get_L().coeff(i, j), 0, dbl_error_acc);
             }
         }
         for (int i=0; i<n; ++i) {
             for (int j=0; j<i; ++j) {
-                ASSERT_NEAR(ilut1e_6.get_U().coeff(i, j), 0, dbl_error_acc);
+                ASSERT_NEAR(ilut1e_4.get_U().coeff(i, j), 0, dbl_error_acc);
                 ASSERT_NEAR(ilut1e_3.get_U().coeff(i, j), 0, dbl_error_acc);
+                ASSERT_NEAR(ilut1e_2.get_U().coeff(i, j), 0, dbl_error_acc);
                 ASSERT_NEAR(ilut1e_1.get_U().coeff(i, j), 0, dbl_error_acc);
                 ASSERT_NEAR(ilut1e_0.get_U().coeff(i, j), 0, dbl_error_acc);
             }
         }
 
-        // Test that each lower threshold is better than the higher one
-        EXPECT_LE((A-ilut1e_6.get_L()*ilut1e_6.get_U()).norm(),
+        // Test that each lower threshold is better than the higher one w.r.t
+        // Frobenius norm
+        EXPECT_LE((A-ilut1e_4.get_L()*ilut1e_4.get_U()).norm(),
                   (A-ilut1e_3.get_L()*ilut1e_3.get_U()).norm());
         EXPECT_LE((A-ilut1e_3.get_L()*ilut1e_3.get_U()).norm(),
+                  (A-ilut1e_2.get_L()*ilut1e_2.get_U()).norm());
+        EXPECT_LE((A-ilut1e_2.get_L()*ilut1e_2.get_U()).norm(),
                   (A-ilut1e_1.get_L()*ilut1e_1.get_U()).norm());
         EXPECT_LE((A-ilut1e_1.get_L()*ilut1e_1.get_U()).norm(),
                   (A-ilut1e_0.get_L()*ilut1e_0.get_U()).norm());
 
         // Test that each higher threshold has more zeros
-        EXPECT_LE(count_zeros(ilut1e_6.get_L(), u_dbl),
+        EXPECT_LE(count_zeros(ilut1e_4.get_U(), u_dbl),
+                  count_zeros(ilut1e_3.get_U(), u_dbl));
+        EXPECT_LE(count_zeros(ilut1e_3.get_U(), u_dbl),
+                  count_zeros(ilut1e_2.get_U(), u_dbl));
+        EXPECT_LE(count_zeros(ilut1e_2.get_U(), u_dbl),
+                  count_zeros(ilut1e_1.get_U(), u_dbl));
+        EXPECT_LE(count_zeros(ilut1e_1.get_U(), u_dbl),
+                  count_zeros(ilut1e_0.get_U(), u_dbl));
+
+        EXPECT_LE(count_zeros(ilut1e_4.get_L(), u_dbl),
                   count_zeros(ilut1e_3.get_L(), u_dbl));
         EXPECT_LE(count_zeros(ilut1e_3.get_L(), u_dbl),
+                  count_zeros(ilut1e_2.get_L(), u_dbl));
+        EXPECT_LE(count_zeros(ilut1e_2.get_L(), u_dbl),
                   count_zeros(ilut1e_1.get_L(), u_dbl));
         EXPECT_LE(count_zeros(ilut1e_1.get_L(), u_dbl),
                   count_zeros(ilut1e_0.get_L(), u_dbl));
 
+        cout << count_zeros(ilut1e_4.get_U(), u_dbl) << " "
+             << count_zeros(ilut1e_3.get_U(), u_dbl) << " "
+             << count_zeros(ilut1e_2.get_U(), u_dbl) << " "
+             << count_zeros(ilut1e_1.get_U(), u_dbl) << " "
+             << count_zeros(ilut1e_0.get_U(), u_dbl) << endl;
+
+        cout << count_zeros(ilut1e_4.get_L(), u_dbl) << " "
+             << count_zeros(ilut1e_3.get_L(), u_dbl) << " "
+             << count_zeros(ilut1e_2.get_L(), u_dbl) << " "
+             << count_zeros(ilut1e_1.get_L(), u_dbl) << " "
+             << count_zeros(ilut1e_0.get_L(), u_dbl) << endl;
+
     }
 
     template<template <typename> typename M>
-    void TestILUTDroppingLimits() {
+    void TestILUTDroppingLimits(bool pivot) {
 
         // Test that max dropping just gives the diagonal since everything else gets dropped
         constexpr int n(8);
         M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_sparse_A.csv"));
-        ILU<M, double> ilu_all_drop(A, DBL_MAX, n, u_dbl, false);
+        ILU<M, double> ilu_all_drop(A, DBL_MAX, n, u_dbl, pivot);
 
         for (int i=0; i<n; ++i) {
             for (int j=0; j<n; ++j) {
@@ -97,43 +126,47 @@ public:
 
     }
 
-    // template<template <typename> typename M>
-    // void TestILUTPMatchMATLAB1e_6() {
+    template<template <typename> typename M>
+    void TestKeepPLargest(bool pivot) {
 
-    //     constexpr int n(8);
-    //     M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_sparse_A.csv"));
-    //     M<double> target_L = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilutp_L_1e_6.csv"));
-    //     M<double> target_U = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilutp_U_1e_6.csv"));
-    //     M<double> target_P = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilutp_P_1e_6.csv"));
+        // Test that 0 dropping leads to just p largest being retained
+        constexpr int n(8);
+        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_A.csv"));
+        ILU<M, double> ilu_keep_8(A, 0., 8, u_dbl, pivot);
+        ILU<M, double> ilu_keep_7(A, 0., 7, u_dbl, pivot);
+        ILU<M, double> ilu_keep_6(A, 0., 6, u_dbl, pivot);
+        ILU<M, double> ilu_keep_5(A, 0., 5, u_dbl, pivot);
+        ILU<M, double> ilu_keep_4(A, 0., 4, u_dbl, pivot);
+        ILU<M, double> ilu_keep_3(A, 0., 3, u_dbl, pivot);
+        ILU<M, double> ilu_keep_2(A, 0., 2, u_dbl, pivot);
+        ILU<M, double> ilu_keep_1(A, 0., 1, u_dbl, pivot);
+        ILU<M, double> ilu_keep_0(A, 0., 0, u_dbl, pivot);
 
-    //     ILU<M, double> ilut1e_6(A, 1e-6, n, u_dbl, true);
+        for (int i=0; i<n; ++i) {
+            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_8.get_U().col(i)), u_dbl), 8+1);
+            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_7.get_U().col(i)), u_dbl), 7+1);
+            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_6.get_U().col(i)), u_dbl), 6+1);
+            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_5.get_U().col(i)), u_dbl), 5+1);
+            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_4.get_U().col(i)), u_dbl), 4+1);
+            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_3.get_U().col(i)), u_dbl), 3+1);
+            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_2.get_U().col(i)), u_dbl), 2+1);
+            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_1.get_U().col(i)), u_dbl), 1+1);
+            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_0.get_U().col(i)), u_dbl), 0+1);
+        }
 
-    //     ASSERT_MATRIX_NEAR<M, double>(ilut1e_6.get_L(), target_L, u_dbl);
-    //     ASSERT_MATRIX_NEAR<M, double>(ilut1e_6.get_U(), target_U, u_dbl);
-    //     ASSERT_MATRIX_NEAR<M, double>(ilut1e_6.get_P(), target_P, u_dbl);
+        for (int i=0; i<n; ++i) {
+            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_8.get_L().col(i)), u_dbl), 8+1);
+            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_7.get_L().col(i)), u_dbl), 7+1);
+            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_6.get_L().col(i)), u_dbl), 6+1);
+            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_5.get_L().col(i)), u_dbl), 5+1);
+            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_4.get_L().col(i)), u_dbl), 4+1);
+            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_3.get_L().col(i)), u_dbl), 3+1);
+            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_2.get_L().col(i)), u_dbl), 2+1);
+            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_1.get_L().col(i)), u_dbl), 1+1);
+            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_0.get_L().col(i)), u_dbl), 0+1);
+        }
 
-    //     cout << "A: " << endl;
-    //     A.print();
-    //     cout << "test_L: " << endl;
-    //     ilut1e_6.get_L().print();
-    //     cout << "target_L: " << endl;
-    //     target_L.print();
-    //     cout << "diff_L: " << endl;
-    //     (target_L-ilut1e_6.get_L()).print();
-    //     cout << "test_U: " << endl;
-    //     ilut1e_6.get_U().print();
-    //     cout << "target_U: " << endl;
-    //     target_U.print();
-    //     cout << "diff_U: " << endl;
-    //     (target_U-ilut1e_6.get_U()).print();
-    //     cout << "test_P: " << endl;
-    //     ilut1e_6.get_P().print();
-    //     cout << "target_P: " << endl;
-    //     target_P.print();
-    //     cout << "diff_P: " << endl;
-    //     (target_P-ilut1e_6.get_P()).print();
-
-    // }
+    }
 
 };
 
@@ -144,11 +177,22 @@ TEST_F(ILUTP_Test, TestEquivalentILUTNoDropAndDenseILU0_Sparse) {
     TestEquivalentILUTNoDropAndDenseILU0<MatrixSparse>();
 }
 
-TEST_F(ILUTP_Test, TestILUTDropping_Dense) { TestILUTDropping<MatrixDense>(); }
-TEST_F(ILUTP_Test, TestILUTDropping_Sparse) { TestILUTDropping<MatrixSparse>(); }
+TEST_F(ILUTP_Test, TestILUTDropping_Dense) { TestILUTDropping<MatrixDense>(false); }
+TEST_F(ILUTP_Test, TestILUTDropping_Sparse) { TestILUTDropping<MatrixSparse>(false); }
 
-TEST_F(ILUTP_Test, TestILUTDroppingLimits_Dense) { TestILUTDroppingLimits<MatrixDense>(); }
-TEST_F(ILUTP_Test, TestILUTDroppingLimits_Sparse) { TestILUTDroppingLimits<MatrixSparse>(); }
+TEST_F(ILUTP_Test, TestILUTDropping_Pivoted_Dense) { TestILUTDropping<MatrixDense>(true); }
+TEST_F(ILUTP_Test, TestILUTDropping_Pivoted_Sparse) { TestILUTDropping<MatrixSparse>(true); }
 
-// TEST_F(ILUTP_Test, TestILUTPMatchMATLAB1e_6_Dense) { TestILUTPMatchMATLAB1e_6<MatrixDense>(); }
-// TEST_F(ILUTP_Test, TestILUTPMatchMATLAB1e_6_Sparse) { TestILUTPMatchMATLAB1e_6<MatrixSparse>(); }
+TEST_F(ILUTP_Test, TestILUTDroppingLimits_Dense) { TestILUTDroppingLimits<MatrixDense>(false); }
+TEST_F(ILUTP_Test, TestILUTDroppingLimits_Sparse) { TestILUTDroppingLimits<MatrixSparse>(false); }
+
+TEST_F(ILUTP_Test, TestILUTDroppingLimits_Pivoted_Dense) { TestILUTDroppingLimits<MatrixDense>(true); }
+TEST_F(ILUTP_Test, TestILUTDroppingLimits_Pivoted_Sparse) { TestILUTDroppingLimits<MatrixSparse>(true); }
+
+TEST_F(ILUTP_Test, TestKeepPLargest_Dense) { TestKeepPLargest<MatrixDense>(false); }
+TEST_F(ILUTP_Test, TestKeepPLargest_Sparse) { TestKeepPLargest<MatrixSparse>(false); }
+
+TEST_F(ILUTP_Test, TestKeepPLargest_Pivoted_Dense) { TestKeepPLargest<MatrixDense>(true); }
+TEST_F(ILUTP_Test, TestKeepPLargest_Pivoted_Sparse) { TestKeepPLargest<MatrixSparse>(true); }
+
+

@@ -149,31 +149,34 @@ writematrix(Ainv_inv_test, "solve_matrices\\Ainv_inv_45.csv");
 writematrix(b_inv_test, "solve_matrices\\b_inv_45.csv");
 
 % Create ILU and sparse ILU and pivoted and non-pivoted version
-ilu_A = 10*randn(8, 8);
+ilu_A = randn(8, 8);
 [ilu_L, ilu_U] = ilu(sparse(ilu_A));
 writematrix(ilu_A, "solve_matrices\\ilu_A.csv");
 writematrix(full(ilu_L), "solve_matrices\\ilu_L.csv");
 writematrix(full(ilu_U), "solve_matrices\\ilu_U.csv");
 options.type = "ilutp";
-options.milu = "col";
 options.droptol = 0;
 [ilu_L_pivot, ilu_U_pivot, ilu_P_pivot] = ilu(sparse(ilu_A), options);
 writematrix(full(ilu_L_pivot), "solve_matrices\\ilu_L_pivot.csv");
 writematrix(full(ilu_U_pivot), "solve_matrices\\ilu_U_pivot.csv");
 writematrix(full(ilu_P_pivot), "solve_matrices\\ilu_P_pivot.csv");
 
-ilu_sparse_A = 8*randn(8, 8);
-ilu_sparse_A(1, 2) = 0; ilu_sparse_A(1, 3) = 0; ilu_sparse_A(1, 6) = 0; ilu_sparse_A(1, 7) = 0;
-ilu_sparse_A(2, 1) = 0; ilu_sparse_A(2, 5) = 0; ilu_sparse_A(2, 6) = 0; ilu_sparse_A(2, 8) = 0;
-ilu_sparse_A(3, 2) = 0; ilu_sparse_A(3, 4) = 0; ilu_sparse_A(3, 5) = 0; ilu_sparse_A(3, 7) = 0;
-ilu_sparse_A(4, 1) = 0; ilu_sparse_A(4, 2) = 0; ilu_sparse_A(4, 3) = 0; ilu_sparse_A(4, 5) = 0;
-ilu_sparse_A(5, 2) = 0; ilu_sparse_A(5, 3) = 0; ilu_sparse_A(5, 6) = 0; ilu_sparse_A(5, 7) = 0;
-ilu_sparse_A(6, 3) = 0; ilu_sparse_A(6, 4) = 0; ilu_sparse_A(6, 7) = 0; ilu_sparse_A(6, 8) = 0;
-ilu_sparse_A(7, 3) = 0; ilu_sparse_A(7, 5) = 0; ilu_sparse_A(7, 6) = 0; ilu_sparse_A(7, 8) = 0;
-ilu_sparse_A(8, 2) = 0; ilu_sparse_A(8, 4) = 0; ilu_sparse_A(8, 5) = 0; ilu_sparse_A(8, 6) = 0;
-for i=1:8
-    ilu_sparse_A(i, i) = ilu_sparse_A(i, i) + ilu_sparse_A(i, i)/abs(ilu_sparse_A(i, i))*16;
-    ilu_sparse_A(i, :) = i/8*ilu_sparse_A(i, :);
+ilu_sparse_A = randn(8, 8);
+for i=1:8 % Ensure sparsity
+    rand_indices = randi(8, 4, 1);
+    while(size(unique(rand_indices)) ~= 4)
+        rand_indices = randi(8, 4, 1);
+    end
+    for ind=1:4
+        j = rand_indices(ind);
+        if (i ~= j)
+            ilu_sparse_A(i, j) = 0;
+        end
+    end
+end
+for i=1:8 % Ensure diagonal dominance
+    ilu_sparse_A(i, i) = 4*(ilu_sparse_A(i, i)+sign(ilu_sparse_A(i, i))*1);
+    ilu_sparse_A(i, :) = 1/4*ilu_sparse_A(i, :);
 end
 [ilu_sparse_L, ilu_sparse_U] = ilu(sparse(ilu_sparse_A));
 writematrix(ilu_sparse_A, "solve_matrices\\ilu_sparse_A.csv");
@@ -183,20 +186,6 @@ writematrix(full(ilu_sparse_U), "solve_matrices\\ilu_sparse_U.csv");
 writematrix(full(ilu_sparse_L_pivot), "solve_matrices\\ilu_sparse_L_pivot.csv");
 writematrix(full(ilu_sparse_U_pivot), "solve_matrices\\ilu_sparse_U_pivot.csv");
 writematrix(full(ilu_sparse_P_pivot), "solve_matrices\\ilu_sparse_P_pivot.csv");
-
-options.type="ilutp"; options.droptol=1e-6;
-[ilutp_L_1e_6, ilutp_U_1e_6, ilutp_P_1e_6] = ilu(sparse(ilu_sparse_A), options);
-writematrix(full(ilutp_L_1e_6), "solve_matrices\\ilutp_L_1e_6.csv");
-writematrix(full(ilutp_U_1e_6), "solve_matrices\\ilutp_U_1e_6.csv");
-writematrix(full(ilutp_P_1e_6), "solve_matrices\\ilutp_P_1e_6.csv");
-% options.type="ilutp"; options.droptol=0.1;
-% [ilu_sparse_L_0_1, ilu_sparse_U_0_1] = ilu(sparse(ilu_sparse_A), options);
-% writematrix(full(ilu_sparse_L_0_1), "solve_matrices\\ilut_0_1_sparse_L.csv");
-% writematrix(full(ilu_sparse_U_0_1), "solve_matrices\\ilut_0_1_sparse_U.csv");
-% options.type="ilutp"; options.droptol=0.2;
-% [ilu_sparse_L_0_2, ilu_sparse_U_0_2] = ilu(sparse(ilu_sparse_A), options);
-% writematrix(full(ilu_sparse_L_0_2), "solve_matrices\\ilut_0_2_sparse_L.csv");
-% writematrix(full(ilu_sparse_U_0_2), "solve_matrices\\ilut_0_2_sparse_U.csv");
 
 function [A, b] = generate_conv_diff_rhs_sinxcosy(k, sigma, tau)
 

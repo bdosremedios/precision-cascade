@@ -7,6 +7,7 @@
 
 #include <cmath>
 #include <functional>
+#include <iostream>
 
 using std::abs;
 
@@ -104,7 +105,7 @@ private:
                 if (abs(val_to_zero) > zero_tol) {
 
                     W l_ij = val_to_zero/pivot;
-                    if ((abs(l_ij) >= zero_tol) && !drop_rule_tau(l_ij, i, col_j, zero_tol)) {
+                    if (abs(l_ij) > zero_tol) {
                         L.coeffRef(i, col_j) = l_ij;
                     }
                     U.coeffRef(i, col_j) = static_cast<W>(0);
@@ -114,6 +115,9 @@ private:
             }
 
         } else { throw runtime_error("ILU has zero pivot in elimination"); }
+
+        // Apply drop rule to column
+        apply_drop_rule_vec(col_j, zero_tol);
 
     }
 
@@ -199,7 +203,23 @@ public:
             return (abs(A.coeff(i, j)) <= _zero_tol);
         };
 
-        apply_drop_rule_vec = [] (const int &, const W &) -> void {};
+        apply_drop_rule_vec = [this] (const int &col_j, const W &_zero_tol) -> void { 
+
+            int U_size = col_j;
+            int L_size = U.rows()-(col_j+1);
+
+            for (int l=0; l<U_size; ++l) { // Apply tau drop rule
+                if (drop_rule_tau(U.coeff(l, col_j), l, col_j, _zero_tol)) {
+                    U.coeffRef(l, col_j) = static_cast<W>(0);
+                }
+            }
+            for (int l=col_j+1; l<L_size+col_j+1; ++l) { // Apply tau drop rule
+                if (drop_rule_tau(L.coeff(l, col_j), l, col_j, _zero_tol)) {
+                    L.coeffRef(l, col_j) = static_cast<W>(0);
+                }
+            }
+
+        };
 
         construction_helper(A, zero_tol, pivot);
 
@@ -208,10 +228,13 @@ public:
     // ILUT(tau, p), tau threshold to drop and p number of entries to keep
     ILU(const M<W> &A, const W &tau, const int &p, const W &zero_tol, const bool &pivot) {
 
-        // Calculate original nnz avg col norm for threshold comparison
-        M<W> A_copy = A;
+        // Calculate original A col norm for threshold comparison
         MatrixVector<W> A_j_norm(A.cols());
-        for (int j=0; j<A.cols(); ++j) { A_j_norm(j) = A_copy.col(j).norm(); }
+        for (int j=0; j<A.cols(); ++j) {
+            W norm = static_cast<W>(0);
+            for (int i=0; i<A.rows(); ++i) { norm += A.coeff(i, j)*A.coeff(i, j); }
+            A_j_norm(j) = std::sqrt(norm);
+        }
 
         drop_rule_tau = [A_j_norm, tau] (
             const W &curr_val, const int &i, const int &col_j, const W &_zero_tol
@@ -219,42 +242,43 @@ public:
             return (abs(curr_val) <= tau*A_j_norm(col_j));
         };
 
-        apply_drop_rule_vec = [this, p] (const int &row_i, const W &_zero_tol) -> void { 
+        apply_drop_rule_vec = [this, p] (const int &col_j, const W &_zero_tol) -> void { 
 
-            int row_mat = row_i+1;
-            int U_size = U.cols()-row_mat;
-            int L_size = row_mat-1;
+            int U_size = col_j;
+            int L_size = U.rows()-(col_j+1);
 
-            // Modify U vec (skip diagonal)
-            MatrixVector<W> U_vec = MatrixVector<W>::Zero(U_size);
+            // Modify col_j in U
             for (int l=0; l<U_size; ++l) { // Apply tau drop rule
-                if (!drop_rule_tau(U.coeff(row_i, row_i+1+l), row_i, row_i+1+l, _zero_tol)) {
-                    U_vec(l) = U.coeff(row_i, row_i+1+l);
+                if (drop_rule_tau(U.coeff(l, col_j), l, col_j, _zero_tol)) {
+                    U.coeffRef(l, col_j) = static_cast<W>(0);
                 }
             }
             if (p < U_size) { // Drop all but p largest elements
-                MatrixVector<int> U_sorted_indices = sort_indices(U_vec);
+                // cout << "Hit test: " << p << " " << col_j << endl;
+                // U.print();
+                MatrixVector<W> U_j(U_size);
+                for (int i=0; i<U_size; ++i) { U_j(i) = U.coeff(i, col_j); }
+                MatrixVector<int> U_sorted_indices = sort_indices(U_j);
                 for (int i=0; i<U_size-p; ++i) {
-                    U_vec(U_sorted_indices(i)) = static_cast<W>(0);
+                    U.coeffRef(U_sorted_indices(i), col_j) = static_cast<W>(0);
                 }
+                // U.print();
             }
 
-            // Modify L vec (skip diagonal)
-            MatrixVector<W> L_vec = MatrixVector<W>::Zero(L_size);
-            for (int l=0; l<L_size; ++l) { // Apply tau drop rule
-                if (!drop_rule_tau(L.coeff(row_i, l), row_i, l, _zero_tol)) {
-                    L_vec(l) = L.coeff(row_i, l);
+            // Modify col_j in L
+            for (int l=col_j+1; l<L_size+col_j+1; ++l) { // Apply tau drop rule
+                if (drop_rule_tau(L.coeff(l, col_j), l, col_j, _zero_tol)) {
+                    L.coeffRef(l, col_j) = static_cast<W>(0);
                 }
             }
             if (p < L_size) { // Drop all but p largest elements
-                MatrixVector<int> L_sorted_indices = sort_indices(L_vec);
+                MatrixVector<W> L_j(L_size);
+                for (int i=0; i<L_size; ++i) { L_j(i) = L.coeff(i+col_j+1, col_j); }
+                MatrixVector<int> L_sorted_indices = sort_indices(L_j);
                 for (int i=0; i<L_size-p; ++i) {
-                    L_vec(L_sorted_indices(i)) = static_cast<W>(0);
+                    L.coeffRef(L_sorted_indices(i)+col_j+1, col_j) = static_cast<W>(0);
                 }
             }
-
-            for (int l=0; l<U_size; ++l) { U.coeffRef(row_i, row_i+1+l) = U_vec(l); }
-            for (int l=0; l<L_size; ++l) { L.coeffRef(row_i, l) = L_vec(l); }
 
         };
 
