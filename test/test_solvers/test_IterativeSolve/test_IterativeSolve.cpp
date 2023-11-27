@@ -18,15 +18,15 @@ public:
 
         TypedIterativeSolveTestingMock<M, T> test_mock_no_guess(typed_lin_sys, soln, default_args);
 
-        EXPECT_EQ(test_mock_no_guess.init_guess,
-                  ((MatrixVector<double>::Ones(n).template cast<T>()).template cast<double>()));
-        EXPECT_EQ(test_mock_no_guess.generic_soln,
-                  ((MatrixVector<double>::Ones(n).template cast<T>()).template cast<double>()));
+        ASSERT_VECTOR_EQ(test_mock_no_guess.init_guess,
+                         ((MatrixVector<double>::Ones(n).template cast<T>()).template cast<double>()));
+        ASSERT_VECTOR_EQ(test_mock_no_guess.generic_soln,
+                         ((MatrixVector<double>::Ones(n).template cast<T>()).template cast<double>()));
 
-        EXPECT_EQ(test_mock_no_guess.init_guess_typed,
-                  (MatrixVector<double>::Ones(n).template cast<T>()));
-        EXPECT_EQ(test_mock_no_guess.typed_soln,
-                  (MatrixVector<double>::Ones(n).template cast<T>()));
+        ASSERT_VECTOR_EQ(test_mock_no_guess.init_guess_typed,
+                         (MatrixVector<double>::Ones(n).template cast<T>()));
+        ASSERT_VECTOR_EQ(test_mock_no_guess.typed_soln,
+                         (MatrixVector<double>::Ones(n).template cast<T>()));
 
         EXPECT_EQ(test_mock_no_guess.max_iter, 100);
         EXPECT_EQ(test_mock_no_guess.target_rel_res, pow(10, -10));
@@ -46,14 +46,14 @@ public:
         args.init_guess = init_guess; args.max_iter = n; args.target_rel_res = pow(10, -4);
         TypedIterativeSolveTestingMock<M, T> test_mock_guess(typed_lin_sys, soln, args);
 
-        EXPECT_EQ(test_mock_guess.init_guess, init_guess);
-        EXPECT_EQ(test_mock_guess.generic_soln,
-                  ((init_guess.template cast<T>()).template cast<double>()));
+        ASSERT_VECTOR_EQ(test_mock_guess.init_guess, init_guess);
+        ASSERT_VECTOR_EQ(test_mock_guess.generic_soln,
+                         ((init_guess.template cast<T>()).template cast<double>()));
 
-        EXPECT_EQ(test_mock_guess.init_guess_typed,
-                  (init_guess.template cast<T>()));
-        EXPECT_EQ(test_mock_guess.typed_soln,
-                  (init_guess.template cast<T>()));
+        ASSERT_VECTOR_EQ(test_mock_guess.init_guess_typed,
+                         (init_guess.template cast<T>()));
+        ASSERT_VECTOR_EQ(test_mock_guess.typed_soln,
+                         (init_guess.template cast<T>()));
 
         EXPECT_EQ(test_mock_guess.max_iter, n);
         EXPECT_EQ(test_mock_guess.target_rel_res, pow(10, -4));
@@ -92,12 +92,12 @@ public:
         // Call solve
         test_mock.solve();
 
-        // Make sure init_guess doesn't change
-        EXPECT_EQ(test_mock.init_guess, init_guess);
-        EXPECT_EQ(test_mock.init_guess_typed, init_guess.template cast<T>());
+        // Check init_guess doesn't change
+        ASSERT_VECTOR_EQ(test_mock.init_guess, init_guess);
+        ASSERT_VECTOR_EQ(test_mock.init_guess_typed, init_guess.template cast<T>());
 
-        // Affirm changed soln on iterate
-        EXPECT_EQ(test_mock.typed_soln, typed_soln);
+        // Check changed soln on iterate
+        ASSERT_VECTOR_EQ(test_mock.typed_soln, typed_soln);
 
         // Check convergence
         EXPECT_TRUE(test_mock.initiated);
@@ -145,11 +145,11 @@ public:
         test_mock.solve();
         test_mock.reset();
 
-        // Make sure init_guess doesn't change
-        EXPECT_EQ(test_mock.init_guess, (MatrixVector<double>::Ones(n)));
+        // Check init_guess doesn't change
+        ASSERT_VECTOR_EQ(test_mock.init_guess, MatrixVector<double>::Ones(n));
 
         // Check solve variables are all reset
-        EXPECT_EQ(test_mock.typed_soln, (MatrixVector<T>::Ones(n)));
+        ASSERT_VECTOR_EQ(test_mock.typed_soln, MatrixVector<T>::Ones(n));
         EXPECT_FALSE(test_mock.initiated);
         EXPECT_FALSE(test_mock.converged);
         EXPECT_FALSE(test_mock.terminated);
@@ -181,7 +181,7 @@ public:
         try {
             TypedIterativeSolveTestingMock<M, double> test_mock(
                 TypedLinearSystem<M, double>(M<double>::Ones(43, 64),
-                                            MatrixVector<double>::Ones(42)),
+                                             MatrixVector<double>::Ones(42)),
                 MatrixVector<double>::Ones(64),
                 default_args
             );

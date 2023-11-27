@@ -30,10 +30,10 @@ public:
         EXPECT_LE(gmres_solve.get_relres(), conv_tol_dbl);
         if (check_3_iter) { EXPECT_EQ(gmres_solve.get_iteration(), 3); }
 
-        // Check that matches MATLAB gmres solutionclsoe to conv_tol_dbl
+        // Check that matches MATLAB gmres solution close within conv_tol_dbl
         MatrixVector<double> x_test = read_matrixCSV<MatrixVector, double>(x_file_path);
         EXPECT_LE((gmres_solve.get_typed_soln() - x_test).norm()/(x_test.norm()),
-                  4*conv_tol_dbl);
+                  2*conv_tol_dbl);
 
     }
 

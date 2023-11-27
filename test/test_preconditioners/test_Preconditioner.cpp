@@ -28,7 +28,7 @@ public:
         M<double> A_inv = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("Ainv_inv_45.csv"));
         MatrixInverse<M, double> inv_precond = A_inv;
 
-        // Check compatibility of with only 45
+        // Check compatibility with only 45
         ASSERT_TRUE(inv_precond.check_compatibility_left(n));
         ASSERT_TRUE(inv_precond.check_compatibility_right(n));
         ASSERT_FALSE(inv_precond.check_compatibility_left(6));

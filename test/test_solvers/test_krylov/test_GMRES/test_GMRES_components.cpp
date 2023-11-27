@@ -6,11 +6,6 @@ class GMRES_Component_Test: public TestBase
 {
 public:
 
-    void ASSERT_CHECK_EQ_VECTORS(MatrixVector<double> a, MatrixVector<double> b) {
-        ASSERT_EQ(a.rows(), b.rows());
-        for (int i=0; i<a.rows(); ++i) { ASSERT_EQ(a(i), b(i)); }
-    }
-
     template <template <typename> typename M>
     void CheckConstruction(
         const fs::path &A_file_path,
@@ -29,39 +24,19 @@ public:
         
         ASSERT_EQ(test_mock.Q_kry_basis.rows(), n);
         ASSERT_EQ(test_mock.Q_kry_basis.cols(), n);
-        for (int i=0; i<n; ++i) {
-            for (int j=0; j<n; ++j) {
-                ASSERT_EQ(test_mock.Q_kry_basis.coeff(i, j), 0);
-            }
-        }
+        ASSERT_MATRIX_ZERO(test_mock.Q_kry_basis, 0.);
 
         ASSERT_EQ(test_mock.H.rows(), n+1);
         ASSERT_EQ(test_mock.H.cols(), n);
-        for (int i=0; i<n+1; ++i) {
-            for (int j=0; j<n; ++j) {
-                ASSERT_EQ(test_mock.H.coeff(i, j), 0);
-            }
-        }
+        ASSERT_MATRIX_ZERO(test_mock.H, 0.);
 
         ASSERT_EQ(test_mock.Q_H.rows(), n+1);
         ASSERT_EQ(test_mock.Q_H.cols(), n+1);
-        for (int i=0; i<n+1; ++i) {
-            for (int j=0; j<n+1; ++j) {
-                if (i == j) {
-                    ASSERT_EQ(test_mock.Q_H.coeff(i, j), 1);
-                } else {
-                    ASSERT_EQ(test_mock.Q_H.coeff(i, j), 0);
-                }
-            }
-        }
+        ASSERT_MATRIX_IDENTITY(test_mock.Q_H, 0.);
 
         ASSERT_EQ(test_mock.R_H.rows(), n+1);
         ASSERT_EQ(test_mock.R_H.cols(), n);
-        for (int i=0; i<n+1; ++i) {
-            for (int j=0; j<n; ++j) {
-                ASSERT_EQ(test_mock.R_H.coeff(i, j), 0);
-            }
-        }
+        ASSERT_MATRIX_ZERO(test_mock.R_H, 0.);
 
     }
 
@@ -91,7 +66,7 @@ public:
         next_q = A*next_q;
         next_q -= MatrixVector<double>(test_mock.Q_kry_basis.col(0))*test_mock.H.coeff(0, 0);
         ASSERT_EQ(next_q.norm(), test_mock.H.coeff(1, 0));
-        ASSERT_EQ(test_mock.next_q, next_q);
+        ASSERT_VECTOR_EQ(test_mock.next_q, next_q);
 
         // Save basis and H entries to check that they remain unchanged
         Q_save.col(0) = test_mock.Q_kry_basis.col(0);
@@ -110,7 +85,10 @@ public:
 
             // Confirm that previous vectors are unchanged and are orthogonal to new one
             for (int j=0; j<k; ++j) {
-                ASSERT_CHECK_EQ_VECTORS(test_mock.Q_kry_basis.col(j), Q_save.col(j));
+                ASSERT_VECTOR_EQ(
+                    MatrixVector<double>(test_mock.Q_kry_basis.col(j)),
+                    MatrixVector<double>(Q_save.col(j))
+                );
                 ASSERT_NEAR(MatrixVector<double>(test_mock.Q_kry_basis.col(j)).dot(q),
                             0.,
                             dbl_error_acc);
@@ -131,7 +109,10 @@ public:
             
             // Confirm that previous Hessenberg columns are untouched
             for (int j=0; j<=k; ++j) {
-                ASSERT_CHECK_EQ_VECTORS(test_mock.H.col(j), H_save.col(j));
+                ASSERT_VECTOR_EQ(
+                    MatrixVector<double>(test_mock.H.col(j)),
+                    MatrixVector<double>(H_save.col(j))
+                );
             }
 
         }
@@ -171,8 +152,14 @@ public:
 
             // Check that previous columns are unchanged by new update
             for (int i=0; i<k; ++i) {
-                ASSERT_CHECK_EQ_VECTORS(test_mock.Q_H.col(i), save_Q_H.col(i));
-                ASSERT_CHECK_EQ_VECTORS(test_mock.R_H.col(i), save_R_H.col(i));
+                ASSERT_VECTOR_EQ(
+                    MatrixVector<double>(test_mock.Q_H.col(i)),
+                    MatrixVector<double>(save_Q_H.col(i))
+                );
+                ASSERT_VECTOR_EQ(
+                    MatrixVector<double>(test_mock.R_H.col(i)),
+                    MatrixVector<double>(save_R_H.col(i))
+                );
             }
 
             // Save second last new basis vector and new column of R
@@ -182,32 +169,19 @@ public:
             // Test that k+1 by k+1 block of Q_H is orthogonal
             MatrixDense<double> Q_H_block = test_mock.Q_H.block(0, 0, k+2, k+2);
             MatrixDense<double> orthog_check = Q_H_block*Q_H_block.transpose();
-            for (int i=0; i<k+1; ++i) {
-                for (int j=0; j<k+1; ++j) {
-                    if (i == j) {
-                        ASSERT_NEAR(orthog_check.coeff(i, j), 1., u_dbl);
-                    } else {
-                        ASSERT_NEAR(orthog_check.coeff(i, j), 0., u_dbl);
-                    }
-                }
-            }
+            ASSERT_MATRIX_IDENTITY(orthog_check, u_dbl);
 
             // Test that k+1 by k block of R_H is uppertriangular
-            for (int i=0; i<k+1; ++i) {
-                for (int j=0; j<i; ++j) {
-                    ASSERT_EQ(test_mock.R_H.coeff(i, j), 0.);
-                }
-            }
+            ASSERT_MATRIX_UPPTRI(MatrixDense<double>(test_mock.R_H.block(0, 0, k+2, k+1)),
+                                 u_dbl);
 
             // Test that k+1 by k+1 block of Q_H is and k+1 by k block of R_H
             // constructs k+1 by k block of H
             MatrixDense<double> R_H_block = test_mock.R_H.block(0, 0, k+2, k+1);
             MatrixDense<double> construct_H = Q_H_block*R_H_block;
-            for (int i=0; i<k+1; ++i) {
-                for (int j=0; j<k; ++j) {
-                    ASSERT_NEAR(construct_H.coeff(i, j), test_mock.H.coeff(i, j), u_dbl);
-                }
-            }
+            ASSERT_MATRIX_NEAR(construct_H,
+                               MatrixDense<double>(test_mock.H.block(0, 0, k+2, k+1)),
+                               gamma(n, u_dbl));
 
         }
 
@@ -286,16 +260,8 @@ public:
         EXPECT_FALSE(test_mock.check_converged());
         EXPECT_TRUE(test_mock.check_terminated());
         EXPECT_EQ(test_mock.kry_space_dim, 0);
-        for (int i=0; i<n; ++i) {
-            for (int j=0; j<n; ++j) {
-                ASSERT_EQ(test_mock.Q_kry_basis.coeff(i, j), 0);
-            }
-        }
-        for (int i=0; i<n+1; ++i) {
-            for (int j=0; j<n; ++j) {
-                ASSERT_EQ(test_mock.H.coeff(i, j), 0);
-            }
-        }
+        ASSERT_MATRIX_ZERO(test_mock.Q_kry_basis, u_dbl);
+        ASSERT_MATRIX_ZERO(test_mock.H, u_dbl);
 
         // Attempt to solve and check that iteration does not occur since
         // should be terminated already but that convergence is updated
@@ -331,11 +297,7 @@ public:
         EXPECT_TRUE(test_mock.check_terminated());
         EXPECT_EQ(test_mock.kry_space_dim, 1);
         EXPECT_NEAR(test_mock.Q_kry_basis.col(0).norm(), 1, gamma(n, u_dbl));
-        for (int i=0; i<n; ++i) {
-            for (int j=1; j<n; ++j) {
-                ASSERT_EQ(test_mock.Q_kry_basis.coeff(i, j), 0);
-            }
-        }
+        ASSERT_MATRIX_ZERO(MatrixDense<double>(test_mock.Q_kry_basis.block(0, 1, n, n-1)), u_dbl);
 
     }
 
@@ -367,11 +329,7 @@ public:
         // as expected to have only a single column
         EXPECT_EQ(test_mock.kry_space_dim, 1);
         EXPECT_NEAR(test_mock.Q_kry_basis.col(0).norm(), 1, gamma(n, u_dbl));
-        for (int i=0; i<n; ++i) {
-            for (int j=1; j<n; ++j) {
-                ASSERT_EQ(test_mock.Q_kry_basis.coeff(i, j), 0);
-            }
-        }
+        ASSERT_MATRIX_ZERO(MatrixDense<double>(test_mock.Q_kry_basis.block(0, 1, n, n-1)), u_dbl);
 
     }
 
@@ -426,33 +384,10 @@ public:
         // Check that all matrices are zero again and that krylov dim is back to 0
         EXPECT_EQ(test_mock.kry_space_dim, 0);
 
-        for (int i=0; i<n; ++i) {
-            for (int j=0; j<n; ++j) {
-                ASSERT_EQ(test_mock.Q_kry_basis.coeff(i, j), 0.);
-            }
-        }
-
-        for (int i=0; i<n+1; ++i) {
-            for (int j=0; j<n; ++j) {
-                ASSERT_EQ(test_mock.H.coeff(i, j), 0.);
-            }
-        }
-
-        for (int i=0; i<n+1; ++i) {
-            for (int j=0; j<n; ++j) {
-                if (i == j) {
-                    ASSERT_EQ(test_mock.Q_H.coeff(i, j), 1.);
-                } else {
-                    ASSERT_EQ(test_mock.Q_H.coeff(i, j), 0.);
-                }
-            }
-        }
-
-        for (int i=0; i<n; ++i) {
-            for (int j=0; j<n; ++j) {
-                ASSERT_EQ(test_mock.R_H.coeff(i, j), 0.);
-            }
-        }
+        ASSERT_MATRIX_ZERO(test_mock.Q_kry_basis, u_dbl);
+        ASSERT_MATRIX_ZERO(test_mock.H, u_dbl);
+        ASSERT_MATRIX_IDENTITY(test_mock.Q_H, u_dbl);
+        ASSERT_MATRIX_ZERO(test_mock.R_H, u_dbl);
 
         // Test 2nd solve
         test_mock.solve();
