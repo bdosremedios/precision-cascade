@@ -16,8 +16,8 @@ public:
 
         MatrixVector<double> test_vec = MatrixVector<double>::Random(n);
 
-        EXPECT_EQ(args.left_precond->action_inv_M(test_vec), no_precond.action_inv_M(test_vec));
-        EXPECT_EQ(args.right_precond->action_inv_M(test_vec), no_precond.action_inv_M(test_vec));
+        ASSERT_VECTOR_EQ(args.left_precond->action_inv_M(test_vec), no_precond.action_inv_M(test_vec));
+        ASSERT_VECTOR_EQ(args.right_precond->action_inv_M(test_vec), no_precond.action_inv_M(test_vec));
 
     }
 
@@ -35,8 +35,8 @@ public:
 
         MatrixVector<double> test_vec = MatrixVector<double>::Random(n);
 
-        EXPECT_EQ(args.left_precond->action_inv_M(test_vec), ilu.action_inv_M(test_vec));
-        EXPECT_EQ(args.right_precond->action_inv_M(test_vec), no_precond.action_inv_M(test_vec));
+        ASSERT_VECTOR_EQ(args.left_precond->action_inv_M(test_vec), ilu.action_inv_M(test_vec));
+        ASSERT_VECTOR_EQ(args.right_precond->action_inv_M(test_vec), no_precond.action_inv_M(test_vec));
 
     }
 
@@ -55,8 +55,8 @@ public:
 
         MatrixVector<double> test_vec = MatrixVector<double>::Random(n);
 
-        EXPECT_EQ(args.left_precond->action_inv_M(test_vec), no_precond.action_inv_M(test_vec));
-        EXPECT_EQ(args.right_precond->action_inv_M(test_vec), ilu.action_inv_M(test_vec));
+        ASSERT_VECTOR_EQ(args.left_precond->action_inv_M(test_vec), no_precond.action_inv_M(test_vec));
+        ASSERT_VECTOR_EQ(args.right_precond->action_inv_M(test_vec), ilu.action_inv_M(test_vec));
 
     }
 
@@ -75,8 +75,8 @@ public:
 
         MatrixVector<double> test_vec(MatrixVector<double>::Random(n));
 
-        EXPECT_EQ(args.left_precond->action_inv_M(test_vec), ilu.action_inv_M(test_vec));
-        EXPECT_EQ(args.right_precond->action_inv_M(test_vec), ilu.action_inv_M(test_vec));
+        ASSERT_VECTOR_EQ(args.left_precond->action_inv_M(test_vec), ilu.action_inv_M(test_vec));
+        ASSERT_VECTOR_EQ(args.right_precond->action_inv_M(test_vec), ilu.action_inv_M(test_vec));
 
     }
 

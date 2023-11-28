@@ -13,8 +13,8 @@ public:
         MatrixVector<double> b = MatrixVector<double>::Random(m);
         TypedLinearSystem<M, T> lin_sys(A, b);
 
-        EXPECT_EQ(lin_sys.get_A(), A);
-        EXPECT_EQ(lin_sys.get_b(), b);
+        ASSERT_MATRIX_EQ(lin_sys.get_A(), A);
+        ASSERT_VECTOR_EQ(lin_sys.get_b(), b);
 
     }
 

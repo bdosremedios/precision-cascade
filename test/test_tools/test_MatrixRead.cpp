@@ -68,63 +68,44 @@ public:
     template <template <typename> typename M>
     void ReadSquareMatrix(double u) {
 
-        Matrix<double, Dynamic, Dynamic> temp_target1 {
-            {1, 2, 3},
-            {4, 5, 6},
-            {7, 8, 9}
-        };
-        Matrix<T, Dynamic, Dynamic> target1 = temp_target1.template cast<T>();
+        M<double> temp_target1(3, 3);
+        temp_target1.coeffRef(0, 0) = 1; temp_target1.coeffRef(0, 1) = 2; temp_target1.coeffRef(0, 2) = 3;
+        temp_target1.coeffRef(1, 0) = 4; temp_target1.coeffRef(1, 1) = 5; temp_target1.coeffRef(1, 2) = 6;
+        temp_target1.coeffRef(2, 0) = 7; temp_target1.coeffRef(2, 1) = 8; temp_target1.coeffRef(2, 2) = 9;
+        M<T> target1 = temp_target1.template cast<T>();
 
-        Matrix<double, Dynamic, Dynamic> temp_target2 {
-            {1, 2, 3, 4, 5},
-            {6, 7, 8, 9, 10},
-            {11, 12, 13, 14, 15},
-            {16, 17, 18, 19, 20},
-            {21, 22, 23, 24, 25}
-        };
-        Matrix<T, Dynamic, Dynamic> target2 = temp_target2.template cast<T>();
+        M<double> temp_target2(5, 5);
+        temp_target2.coeffRef(0, 0) = 1; temp_target2.coeffRef(0, 1) = 2; temp_target2.coeffRef(0, 2) = 3; temp_target2.coeffRef(0, 3) = 4; temp_target2.coeffRef(0, 4) = 5;
+        temp_target2.coeffRef(1, 0) = 6; temp_target2.coeffRef(1, 1) = 7; temp_target2.coeffRef(1, 2) = 8; temp_target2.coeffRef(1, 3) = 9; temp_target2.coeffRef(1, 4) = 10;
+        temp_target2.coeffRef(2, 0) = 11; temp_target2.coeffRef(2, 1) = 12; temp_target2.coeffRef(2, 2) = 13; temp_target2.coeffRef(2, 3) = 14; temp_target2.coeffRef(2, 4) = 15;
+        temp_target2.coeffRef(3, 0) = 16; temp_target2.coeffRef(3, 1) = 17; temp_target2.coeffRef(3, 2) = 18; temp_target2.coeffRef(3, 3) = 19; temp_target2.coeffRef(3, 4) = 20;
+        temp_target2.coeffRef(4, 0) = 21; temp_target2.coeffRef(4, 1) = 22; temp_target2.coeffRef(4, 2) = 23; temp_target2.coeffRef(4, 3) = 24; temp_target2.coeffRef(4, 4) = 25;
+        M<T> target2 = temp_target2.template cast<T>();
     
         fs::path square1_file = read_matrix_dir / fs::path("square1.csv");
         fs::path square2_file = read_matrix_dir / fs::path("square2.csv");
         M<T> test1(read_matrixCSV<M, T>(square1_file));
         M<T> test2(read_matrixCSV<M, T>(square2_file));
 
-        // Check that read is correct for first file
-        ASSERT_EQ(test1.rows(), 3);
-        ASSERT_EQ(test1.cols(), 3);
-        for (int i=0; i<3; ++i) {
-            for (int j=0; j<3; ++j) {
-                ASSERT_NEAR(test1.coeff(i, j), target1(i, j), u);
-            }
-        }
-
-        // Check that read is correct for second file
-        ASSERT_EQ(test2.rows(), 5);
-        ASSERT_EQ(test2.cols(), 5);
-        for (int i=0; i<5; ++i) {
-            for (int j=0; j<5; ++j) {
-                ASSERT_NEAR(test2.coeff(i, j), target2(i, j), u_dbl);
-            }
-        }
+        ASSERT_MATRIX_NEAR(test1, target1, static_cast<T>(u));
+        ASSERT_MATRIX_NEAR(test2, target2, static_cast<T>(u));
 
     }
 
     template <template <typename> typename M>
     void ReadWideTallMatrix(double u) {
 
-        Matrix<double, Dynamic, Dynamic> temp_target_wide {
-            {10, 9, 8, 7, 6},
-            {5, 4, 3, 2, 1}
-        };
-        Matrix<T, Dynamic, Dynamic> target_wide = temp_target_wide.template cast<T>();
+        M<double> temp_target_wide(2, 5);
+        temp_target_wide.coeffRef(0, 0) = 10; temp_target_wide.coeffRef(0, 1) = 9; temp_target_wide.coeffRef(0, 2) = 8; temp_target_wide.coeffRef(0, 3) = 7; temp_target_wide.coeffRef(0, 4) = 6;
+        temp_target_wide.coeffRef(1, 0) = 5; temp_target_wide.coeffRef(1, 1) = 4; temp_target_wide.coeffRef(1, 2) = 3; temp_target_wide.coeffRef(1, 3) = 2; temp_target_wide.coeffRef(1, 4) = 1;
+        M<T> target_wide = temp_target_wide.template cast<T>();
 
-        Matrix<double, Dynamic, Dynamic> temp_target_tall {
-            {1, 2},
-            {3, 4},
-            {5, 6},
-            {7, 8}
-        };
-        Matrix<T, Dynamic, Dynamic> target_tall = temp_target_tall.template cast<T>();
+        M<double> temp_target_tall(4, 2);
+        temp_target_tall.coeffRef(0, 0) = 1; temp_target_tall.coeffRef(0, 1) = 2;
+        temp_target_tall.coeffRef(1, 0) = 3; temp_target_tall.coeffRef(1, 1) = 4;
+        temp_target_tall.coeffRef(2, 0) = 5; temp_target_tall.coeffRef(2, 1) = 6;
+        temp_target_tall.coeffRef(3, 0) = 7; temp_target_tall.coeffRef(3, 1) = 8;
+        M<T> target_tall = temp_target_tall.template cast<T>();
 
         fs::path wide_file = read_matrix_dir / fs::path("wide.csv");
         fs::path tall_file = read_matrix_dir / fs::path("tall.csv");
@@ -132,66 +113,37 @@ public:
         M<T> test_wide(read_matrixCSV<M, T>(wide_file));
         M<T> test_tall(read_matrixCSV<M, T>(tall_file));
 
-        // Check that read is correct for first file
-        ASSERT_EQ(test_wide.rows(), 2);
-        ASSERT_EQ(test_wide.cols(), 5);
-        for (int i=0; i<2; ++i) {
-            for (int j=0; j<5; ++j) {
-                ASSERT_NEAR(test_wide.coeffRef(i, j), target_wide(i, j), u);
-            }
-        }
-
-        // Check that read is correct for second file
-        ASSERT_EQ(test_tall.rows(), 4);
-        ASSERT_EQ(test_tall.cols(), 2);
-        for (int i=0; i<4; ++i) {
-            for (int j=0; j<2; ++j) {
-                ASSERT_NEAR(test_tall.coeffRef(i, j), target_tall(i, j), u);
-            }
-        }
+        ASSERT_MATRIX_NEAR(test_wide, target_wide, static_cast<T>(u));
+        ASSERT_MATRIX_NEAR(test_tall, target_tall, static_cast<T>(u));
 
     }
 
     template <template <typename> typename M>
     void ReadPrecise(
-        Matrix<T, Dynamic, Dynamic> target_precise,
+        M<T> target_precise,
         fs::path precise_file,
         double u
     ) {
 
         M<T> test_precise(read_matrixCSV<M, T>(precise_file));
-
-        ASSERT_EQ(test_precise.rows(), 2);
-        ASSERT_EQ(test_precise.cols(), 2);
-        for (int i=0; i<2; ++i) {
-            for (int j=0; j<2; ++j) {
-                ASSERT_NEAR(test_precise.coeffRef(i, j), target_precise(i, j), u);
-            }
-        }
+        ASSERT_MATRIX_NEAR(test_precise, target_precise, static_cast<T>(u));
 
     }
 
     template <template <typename> typename M>
     void ReadDifferentThanPrecise(
-        Matrix<T, Dynamic, Dynamic> target_precise,
+        M<T> target_precise,
         fs::path precise_file,
         double u
     ) {
 
         T eps = static_cast<T>(1.5*u);
-        Matrix<T, Dynamic, Dynamic> miss_precise_up = target_precise + eps*Matrix<T, Dynamic, Dynamic>::Ones(2, 2);
-        Matrix<T, Dynamic, Dynamic> miss_precise_down = target_precise - eps*Matrix<T, Dynamic, Dynamic>::Ones(2, 2);
+        M<T> miss_precise_up = target_precise + M<T>::Ones(2, 2)*eps;
+        M<T> miss_precise_down = target_precise - M<T>::Ones(2, 2)*eps;
 
         M<T> test_precise(read_matrixCSV<M, T>(precise_file));
-
-        ASSERT_EQ(test_precise.rows(), 2);
-        ASSERT_EQ(test_precise.cols(), 2);
-        for (int i=0; i<2; ++i) {
-            for (int j=0; j<2; ++j) {
-                ASSERT_LT(test_precise.coeffRef(i, j), miss_precise_up(i, j));
-                ASSERT_GT(test_precise.coeffRef(i, j), miss_precise_down(i, j));
-            }
-        }
+        ASSERT_MATRIX_LT(test_precise, miss_precise_up);
+        ASSERT_MATRIX_GT(test_precise, miss_precise_down);
 
     }
 
@@ -205,12 +157,13 @@ public:
     template <typename T>
     void ReadVector(double u) {
 
-        Matrix<T, Dynamic, 1> target {{1.}, {2.}, {3.}, {4.}, {5.}, {6.}};
+        MatrixVector<T> target(6);
+        target(0) = 1; target(1) = 2; target(2) = 3; target(3) = 4; target(4) = 5; target(5) = 6;
+
         fs::path vector_file = read_matrix_dir / fs::path("vector.csv");
         MatrixVector<T> test(read_matrixCSV<MatrixVector, T>(vector_file));
-        ASSERT_EQ(test.rows(), 6);
-        ASSERT_EQ(test.cols(), 1);
-        for (int i=0; i<6; ++i) { ASSERT_NEAR(static_cast<double>(test(i)), target(i), u); }
+
+        ASSERT_VECTOR_NEAR(test, target, static_cast<T>(u));
 
     }
 
@@ -238,44 +191,71 @@ TEST_F(MatrixRead_Double_Test, ReadWideTallMatrix_Dense) { ReadWideTallMatrix<Ma
 TEST_F(MatrixRead_Double_Test, ReadWideTallMatrix_Sparse) { ReadWideTallMatrix<MatrixSparse>(u_dbl); }
 
 TEST_F(MatrixRead_Double_Test, ReadPreciseMatrix_Both) {
-    MatrixXd target_precise {
-        {1.12345678901232, 1.12345678901234},
-        {1.12345678901236, 1.12345678901238}
-    };
+
+    MatrixDense<double> target_precise_dense(2, 2);
+    target_precise_dense.coeffRef(0, 0) = 1.12345678901232; target_precise_dense.coeffRef(0, 1) = 1.12345678901234;
+    target_precise_dense.coeffRef(1, 0) = 1.12345678901236; target_precise_dense.coeffRef(1, 1) = 1.12345678901238;
+
+    MatrixSparse<double> target_precise_sparse(2, 2);
+    target_precise_sparse.coeffRef(0, 0) = 1.12345678901232; target_precise_sparse.coeffRef(0, 1) = 1.12345678901234;
+    target_precise_sparse.coeffRef(1, 0) = 1.12345678901236; target_precise_sparse.coeffRef(1, 1) = 1.12345678901238;
+
     fs::path precise_file = read_matrix_dir / fs::path("double_precise.csv");
-    ReadPrecise<MatrixDense>(target_precise, precise_file, u_dbl);
-    ReadPrecise<MatrixSparse>(target_precise, precise_file, u_dbl);
+
+    ReadPrecise<MatrixDense>(target_precise_dense, precise_file, u_dbl);
+    ReadPrecise<MatrixSparse>(target_precise_sparse, precise_file, u_dbl);
+
 }
 
 TEST_F(MatrixRead_Double_Test, ReadDifferentThanPreciseMatrix_Both) {
-    MatrixXd target_precise {
-        {1.12345678901232, 1.12345678901234},
-        {1.12345678901236, 1.12345678901238}
-    };
+
+    MatrixDense<double> target_precise_dense(2, 2);
+    target_precise_dense.coeffRef(0, 0) = 1.12345678901232; target_precise_dense.coeffRef(0, 1) = 1.12345678901234;
+    target_precise_dense.coeffRef(1, 0) = 1.12345678901236; target_precise_dense.coeffRef(1, 1) = 1.12345678901238;
+
+    MatrixSparse<double> target_precise_sparse(2, 2);
+    target_precise_sparse.coeffRef(0, 0) = 1.12345678901232; target_precise_sparse.coeffRef(0, 1) = 1.12345678901234;
+    target_precise_sparse.coeffRef(1, 0) = 1.12345678901236; target_precise_sparse.coeffRef(1, 1) = 1.12345678901238;
+
     fs::path precise_file = read_matrix_dir / fs::path("double_precise.csv");
-    ReadDifferentThanPrecise<MatrixDense>(target_precise, precise_file, u_dbl);
-    ReadDifferentThanPrecise<MatrixSparse>(target_precise, precise_file, u_dbl);
+
+    ReadDifferentThanPrecise<MatrixDense>(target_precise_dense, precise_file, u_dbl);
+    ReadDifferentThanPrecise<MatrixSparse>(target_precise_sparse, precise_file, u_dbl);
 
 }
 
 TEST_F(MatrixRead_Double_Test, ReadPreciseMatrixDoubleLimit_Both) {
-    MatrixXd target_precise {
-        {1.1234567890123452, 1.1234567890123454},
-        {1.1234567890123456, 1.1234567890123458}
-    };
+
+    MatrixDense<double> target_precise_dense(2, 2);
+    target_precise_dense.coeffRef(0, 0) = 1.1234567890123452; target_precise_dense.coeffRef(0, 1) = 1.1234567890123454;
+    target_precise_dense.coeffRef(1, 0) = 1.1234567890123456; target_precise_dense.coeffRef(1, 1) = 1.1234567890123458;
+
+    MatrixSparse<double> target_precise_sparse(2, 2);
+    target_precise_sparse.coeffRef(0, 0) = 1.1234567890123452; target_precise_sparse.coeffRef(0, 1) = 1.1234567890123454;
+    target_precise_sparse.coeffRef(1, 0) = 1.1234567890123456; target_precise_sparse.coeffRef(1, 1) = 1.1234567890123458;
+
     fs::path precise_file = read_matrix_dir / fs::path("double_precise_manual.csv");
-    ReadPrecise<MatrixDense>(target_precise, precise_file, u_dbl);
-    ReadPrecise<MatrixSparse>(target_precise, precise_file, u_dbl);
+
+    ReadPrecise<MatrixDense>(target_precise_dense, precise_file, u_dbl);
+    ReadPrecise<MatrixSparse>(target_precise_sparse, precise_file, u_dbl);
+
 }
 
 TEST_F(MatrixRead_Double_Test, ReadDifferentThanPreciseMatrixDoubleLimit) {
-    MatrixXd target_precise {
-        {1.1234567890123452, 1.1234567890123454},
-        {1.1234567890123456, 1.1234567890123458}
-    };
+
+    MatrixDense<double> target_precise_dense(2, 2);
+    target_precise_dense.coeffRef(0, 0) = 1.1234567890123452; target_precise_dense.coeffRef(0, 1) = 1.1234567890123454;
+    target_precise_dense.coeffRef(1, 0) = 1.1234567890123456; target_precise_dense.coeffRef(1, 1) = 1.1234567890123458;
+
+    MatrixSparse<double> target_precise_sparse(2, 2);
+    target_precise_sparse.coeffRef(0, 0) = 1.1234567890123452; target_precise_sparse.coeffRef(0, 1) = 1.1234567890123454;
+    target_precise_sparse.coeffRef(1, 0) = 1.1234567890123456; target_precise_sparse.coeffRef(1, 1) = 1.1234567890123458;
+
     fs::path precise_file = read_matrix_dir / fs::path("double_precise_manual.csv");
-    ReadDifferentThanPrecise<MatrixDense>(target_precise, precise_file, u_dbl);
-    ReadDifferentThanPrecise<MatrixSparse>(target_precise, precise_file, u_dbl);
+
+    ReadDifferentThanPrecise<MatrixDense>(target_precise_dense, precise_file, u_dbl);
+    ReadDifferentThanPrecise<MatrixSparse>(target_precise_sparse, precise_file, u_dbl);
+
 }
 
 // Single type matrix read tests
@@ -288,23 +268,36 @@ TEST_F(MatrixRead_Single_Test, ReadWideTallMatrix_Dense) { ReadWideTallMatrix<Ma
 TEST_F(MatrixRead_Single_Test, ReadWideTallMatrix_Sparse) { ReadWideTallMatrix<MatrixSparse>(u_sgl); }
 
 TEST_F(MatrixRead_Single_Test, ReadPreciseMatrix_Both) {
-    MatrixXf target_precise {
-        {static_cast<float>(1.12345672), static_cast<float>(1.12345674)},
-        {static_cast<float>(1.12345676), static_cast<float>(1.12345678)}
-    };
+
+    MatrixDense<float> target_precise_dense(2, 2);
+    target_precise_dense.coeffRef(0, 0) = static_cast<float>(1.12345672); target_precise_dense.coeffRef(0, 1) = static_cast<float>(1.12345674);
+    target_precise_dense.coeffRef(1, 0) = static_cast<float>(1.12345676); target_precise_dense.coeffRef(1, 1) = static_cast<float>(1.12345678);
+
+    MatrixSparse<float> target_precise_sparse(2, 2);
+    target_precise_sparse.coeffRef(0, 0) = static_cast<float>(1.12345672); target_precise_sparse.coeffRef(0, 1) = static_cast<float>(1.12345674);
+    target_precise_sparse.coeffRef(1, 0) = static_cast<float>(1.12345676); target_precise_sparse.coeffRef(1, 1) = static_cast<float>(1.12345678);
+
     fs::path precise_file = read_matrix_dir / fs::path("single_precise.csv");
-    ReadPrecise<MatrixDense>(target_precise, precise_file, u_sgl);
-    ReadPrecise<MatrixSparse>(target_precise, precise_file, u_sgl);
+    ReadPrecise<MatrixDense>(target_precise_dense, precise_file, u_sgl);
+    ReadPrecise<MatrixSparse>(target_precise_sparse, precise_file, u_sgl);
+
 }
 
 TEST_F(MatrixRead_Single_Test, ReadDifferentThanPreciseMatrix_Both) {
-    MatrixXf target_precise {
-        {static_cast<float>(1.12345672), static_cast<float>(1.12345674)},
-        {static_cast<float>(1.12345676), static_cast<float>(1.12345678)}
-    };
+
+    MatrixDense<float> target_precise_dense(2, 2);
+    target_precise_dense.coeffRef(0, 0) = static_cast<float>(1.12345672); target_precise_dense.coeffRef(0, 1) = static_cast<float>(1.12345674);
+    target_precise_dense.coeffRef(1, 0) = static_cast<float>(1.12345676); target_precise_dense.coeffRef(1, 1) = static_cast<float>(1.12345678);
+
+    MatrixSparse<float> target_precise_sparse(2, 2);
+    target_precise_sparse.coeffRef(0, 0) = static_cast<float>(1.12345672); target_precise_sparse.coeffRef(0, 1) = static_cast<float>(1.12345674);
+    target_precise_sparse.coeffRef(1, 0) = static_cast<float>(1.12345676); target_precise_sparse.coeffRef(1, 1) = static_cast<float>(1.12345678);
+
     fs::path precise_file = read_matrix_dir / fs::path("single_precise.csv");
-    ReadDifferentThanPrecise<MatrixDense>(target_precise, precise_file, u_sgl);
-    ReadDifferentThanPrecise<MatrixSparse>(target_precise, precise_file, u_sgl);
+
+    ReadDifferentThanPrecise<MatrixDense>(target_precise_dense, precise_file, u_sgl);
+    ReadDifferentThanPrecise<MatrixSparse>(target_precise_sparse, precise_file, u_sgl);
+
 }
 
 // Half type matrix read tests
@@ -317,21 +310,35 @@ TEST_F(MatrixRead_Half_Test, ReadWideTallMatrix_Dense) { ReadWideTallMatrix<Matr
 TEST_F(MatrixRead_Half_Test, ReadWideTallMatrix_Sparse) { ReadWideTallMatrix<MatrixSparse>(u_hlf); }
 
 TEST_F(MatrixRead_Half_Test, ReadPreciseMatrix) {
-    Matrix<half, Dynamic, Dynamic> target_precise {
-        {static_cast<half>(1.123), static_cast<half>(1.124)},
-        {static_cast<half>(1.125), static_cast<half>(1.126)}
-    };
+
+    MatrixDense<half> target_precise_dense(2, 2);
+    target_precise_dense.coeffRef(0, 0) = static_cast<half>(1.123); target_precise_dense.coeffRef(0, 1) = static_cast<half>(1.124);
+    target_precise_dense.coeffRef(1, 0) = static_cast<half>(1.125); target_precise_dense.coeffRef(1, 1) = static_cast<half>(1.126);
+
+    MatrixSparse<half> target_precise_sparse(2, 2);
+    target_precise_sparse.coeffRef(0, 0) = static_cast<half>(1.123); target_precise_sparse.coeffRef(0, 1) = static_cast<half>(1.124);
+    target_precise_sparse.coeffRef(1, 0) = static_cast<half>(1.125); target_precise_sparse.coeffRef(1, 1) = static_cast<half>(1.126);
+
     fs::path precise_file = read_matrix_dir / fs::path("half_precise.csv");
-    ReadPrecise<MatrixDense>(target_precise, precise_file, u_hlf);
-    ReadPrecise<MatrixSparse>(target_precise, precise_file, u_hlf);
+
+    ReadPrecise<MatrixDense>(target_precise_dense, precise_file, u_hlf);
+    ReadPrecise<MatrixSparse>(target_precise_sparse, precise_file, u_hlf);
+
 }
 
 TEST_F(MatrixRead_Half_Test, ReadDifferentThanPreciseMatrix) {
-    Matrix<half, Dynamic, Dynamic> target_precise {
-        {static_cast<half>(1.123), static_cast<half>(1.124)},
-        {static_cast<half>(1.125), static_cast<half>(1.126)}
-    };
+
+    MatrixDense<half> target_precise_dense(2, 2);
+    target_precise_dense.coeffRef(0, 0) = static_cast<half>(1.123); target_precise_dense.coeffRef(0, 1) = static_cast<half>(1.124);
+    target_precise_dense.coeffRef(1, 0) = static_cast<half>(1.125); target_precise_dense.coeffRef(1, 1) = static_cast<half>(1.126);
+
+    MatrixSparse<half> target_precise_sparse(2, 2);
+    target_precise_sparse.coeffRef(0, 0) = static_cast<half>(1.123); target_precise_sparse.coeffRef(0, 1) = static_cast<half>(1.124);
+    target_precise_sparse.coeffRef(1, 0) = static_cast<half>(1.125); target_precise_sparse.coeffRef(1, 1) = static_cast<half>(1.126);
+
     fs::path precise_file = read_matrix_dir / fs::path("half_precise.csv");
-    ReadDifferentThanPrecise<MatrixDense>(target_precise, precise_file, u_hlf);
-    ReadDifferentThanPrecise<MatrixSparse>(target_precise, precise_file, u_hlf);
+
+    ReadDifferentThanPrecise<MatrixDense>(target_precise_dense, precise_file, u_hlf);
+    ReadDifferentThanPrecise<MatrixSparse>(target_precise_sparse, precise_file, u_hlf);
+
 }
