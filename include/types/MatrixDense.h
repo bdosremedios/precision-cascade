@@ -23,6 +23,25 @@ public:
     // *** Constructors ***
     MatrixDense(): Parent::Matrix(0, 0) {}
     MatrixDense(int m, int n): Parent::Matrix(m, n) {}
+
+    MatrixDense(std::initializer_list<std::initializer_list<T>> li):
+        MatrixDense(
+            li.size(),
+            (li.size() == 0) ? 0 : std::cbegin(li)->size()
+        )
+    {
+        int i=0;
+        for (auto curr_row = std::cbegin(li); curr_row != std::cend(li); ++curr_row) {
+            int j=0;
+            for (auto curr_elem = std::cbegin(*curr_row); curr_elem != std::cend(*curr_row); ++curr_elem) {
+                this->coeffRef(i, j) = *curr_elem;
+                ++j;
+            }
+            if (j != cols()) { throw(std::runtime_error("Initializer list has non-consistent row size")); }
+            ++i;
+        }
+    }
+
     MatrixDense(const Parent &parent): Parent::Matrix(parent) {}
     MatrixDense(const Block &block): Parent::Matrix(block.base()) {}
     MatrixDense(const typename MatrixSparse<T>::Block &block): Parent::Matrix(block.base()) {}

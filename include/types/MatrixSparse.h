@@ -30,6 +30,26 @@ public:
     // *** Constructors ***
     MatrixSparse(): Parent::SparseMatrix(0, 0) {}
     MatrixSparse(int m, int n): Parent::SparseMatrix(m, n) {}
+
+    MatrixSparse(std::initializer_list<std::initializer_list<T>> li):
+        MatrixSparse(
+            li.size(),
+            (li.size() == 0) ? 0 : std::cbegin(li)->size()
+        )
+    {
+        int i=0;
+        for (auto curr_row = std::cbegin(li); curr_row != std::cend(li); ++curr_row) {
+            int j=0;
+            for (auto curr_elem = std::cbegin(*curr_row); curr_elem != std::cend(*curr_row); ++curr_elem) {
+                this->coeffRef(i, j) = *curr_elem;
+                ++j;
+            }
+            if (j != cols()) { throw(std::runtime_error("Initializer list has non-consistent row size")); }
+            ++i;
+        }
+        reduce();
+    }
+
     MatrixSparse(const Parent &parent): Parent::SparseMatrix(parent) {}
 
     // *** Element Access ***
