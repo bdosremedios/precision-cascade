@@ -97,6 +97,34 @@ void ASSERT_MATRIX_NEAR(M<T> test, M<T> target, T tol) {
 }
 
 template <template <typename> typename M, typename T>
+void ASSERT_MATRIX_LT(M<T> test, M<T> target) {
+
+    ASSERT_EQ(test.rows(), target.rows());
+    ASSERT_EQ(test.cols(), target.cols());
+
+    for (int i=0; i<target.rows(); ++i) {
+        for (int j=0; j<target.cols(); ++j) {
+            ASSERT_LT(test.coeff(i, j), target.coeff(i, j));
+        }
+    }
+
+}
+
+template <template <typename> typename M, typename T>
+void ASSERT_MATRIX_GT(M<T> test, M<T> target) {
+
+    ASSERT_EQ(test.rows(), target.rows());
+    ASSERT_EQ(test.cols(), target.cols());
+
+    for (int i=0; i<target.rows(); ++i) {
+        for (int j=0; j<target.cols(); ++j) {
+            ASSERT_GT(test.coeff(i, j), target.coeff(i, j));
+        }
+    }
+
+}
+
+template <template <typename> typename M, typename T>
 void ASSERT_MATRIX_EQ(M<T> test, M<T> target) {
     ASSERT_MATRIX_NEAR(test, target, static_cast<T>(0));
 }

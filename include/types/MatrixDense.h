@@ -78,12 +78,15 @@ public:
     MatrixDense<T> operator-(const MatrixDense<T> &mat) const { // Needed for testing
         return typename Parent::Matrix(Parent::operator-(mat));
     }
+    MatrixDense<T> operator+(const MatrixDense<T> &mat) const { // Needed for testing
+        return typename Parent::Matrix(Parent::operator+(mat));
+    }
     MatrixDense<T> operator*(const MatrixDense<T> &mat) const { // Needed for testing
         return typename Parent::Matrix(Parent::operator*(mat));
     }
 
     // Nested class representing sparse matrix column
-    // NEEDS CREATION FROM/CAST TO MatrixVector<T>
+    // NEEDS CREATION-FROM/CAST-TO MatrixVector<T>
     class Col: private Eigen::Block<Parent, Eigen::Dynamic, 1, true> {
 
         private:

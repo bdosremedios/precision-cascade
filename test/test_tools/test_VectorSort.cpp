@@ -23,9 +23,7 @@ public:
 
         MatrixVector<int> test = sort_indices(vec);
 
-        for (int i=0; i<n; ++i) {
-            ASSERT_EQ(target(i), test(i));
-        }
+        ASSERT_VECTOR_EQ(target, test);
 
     }
 
@@ -48,9 +46,7 @@ public:
 
         MatrixVector<int> test = sort_indices(vec);
 
-        for (int i=0; i<n; ++i) {
-            ASSERT_EQ(target(i), test(i));
-        }
+        ASSERT_VECTOR_EQ(target, test);
 
     }
 
@@ -69,6 +65,7 @@ public:
 
         MatrixVector<int> test = sort_indices(vec);
 
+        // Check that sorted element order is the same for all elements
         for (int i=0; i<n; ++i) {
             ASSERT_EQ(vec(target(i)), vec(test(i)));
         }
@@ -92,9 +89,7 @@ public:
 
         MatrixVector<int> test = sort_indices(vec);
 
-        for (int i=0; i<n; ++i) {
-            ASSERT_EQ(target(i), test(i));
-        }
+        ASSERT_VECTOR_EQ(target, test);
 
     }
 
@@ -109,9 +104,7 @@ public:
 
         MatrixVector<int> test = sort_indices(vec);
 
-        for (int i=0; i<n; ++i) {
-            ASSERT_EQ(target(i), test(i));
-        }
+        ASSERT_VECTOR_EQ(target, test);
 
     }
 
