@@ -157,8 +157,7 @@ public:
     template <typename T>
     void ReadVector(double u) {
 
-        MatrixVector<T> target(6);
-        target(0) = 1; target(1) = 2; target(2) = 3; target(3) = 4; target(4) = 5; target(5) = 6;
+        MatrixVector<T> target({1, 2, 3, 4, 5, 6});
 
         fs::path vector_file = read_matrix_dir / fs::path("vector.csv");
         MatrixVector<T> test(read_matrixCSV<MatrixVector, T>(vector_file));

@@ -23,9 +23,16 @@ public:
     }
 
     template <typename T>
-    void TestConstruction() {
+    void TestListInitialization() {
         
-        
+        MatrixVector<T> test_vec({static_cast<T>(7.), static_cast<T>(5.), static_cast<T>(3.),
+                                  static_cast<T>(1.), static_cast<T>(6.), static_cast<T>(2.)});
+        ASSERT_EQ(test_vec(0), static_cast<T>(7.));
+        ASSERT_EQ(test_vec(1), static_cast<T>(5.));
+        ASSERT_EQ(test_vec(2), static_cast<T>(3.));
+        ASSERT_EQ(test_vec(3), static_cast<T>(1.));
+        ASSERT_EQ(test_vec(4), static_cast<T>(6.));
+        ASSERT_EQ(test_vec(5), static_cast<T>(2.));
 
     }
 
@@ -52,6 +59,10 @@ public:
 TEST_F(MatrixVector_Test, TestElementAccessMethods_Hlf) { TestElementAccessMethods<half>(); }
 TEST_F(MatrixVector_Test, TestElementAccessMethods_Sgl) { TestElementAccessMethods<float>(); }
 TEST_F(MatrixVector_Test, TestElementAccessMethods_Dbl) { TestElementAccessMethods<double>(); }
+
+TEST_F(MatrixVector_Test, TestListInitialization_Hlf) { TestListInitialization<half>(); }
+TEST_F(MatrixVector_Test, TestListInitialization_Sgl) { TestListInitialization<float>(); }
+TEST_F(MatrixVector_Test, TestListInitialization_Dbl) { TestListInitialization<double>(); }
 
 TEST_F(MatrixVector_Test, TestPropertyMethods_Hlf) { TestPropertyMethods<half>(); }
 TEST_F(MatrixVector_Test, TestPropertyMethods_Sgl) { TestPropertyMethods<float>(); }

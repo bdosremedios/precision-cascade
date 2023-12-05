@@ -31,6 +31,14 @@ public:
     MatrixVector(int m, int n): Parent::Matrix(m, 1) { check_n(n); }
     MatrixVector(int m): Parent::Matrix(m, 1) {}
 
+    MatrixVector(std::initializer_list<T> li): MatrixVector(li.size()) {
+        int i=0;
+        for (auto curr = std::cbegin(li); curr != std::cend(li); ++curr) {
+            this->operator()(i) = *curr;
+            ++i;
+        }
+    }
+
     MatrixVector(const MatrixVector<T> &vec) = default;
     MatrixVector(const Parent &parent): Parent::Matrix(parent) { check_n(parent.cols()); }
     MatrixVector(const typename MatrixDense<T>::Col &col): Parent::Matrix(col.base()) {}
