@@ -26,31 +26,15 @@ private:
 
 public:
 
-    // *** Construction/Assignment/Destruction ***
+    // *** Construction ***
     MatrixVector(): Parent::Matrix(0, 1) {}
     MatrixVector(int m, int n): Parent::Matrix(m, 1) { check_n(n); }
     MatrixVector(int m): Parent::Matrix(m, 1) {}
+
     MatrixVector(const MatrixVector<T> &vec) = default;
     MatrixVector(const Parent &parent): Parent::Matrix(parent) { check_n(parent.cols()); }
     MatrixVector(const typename MatrixDense<T>::Col &col): Parent::Matrix(col.base()) {}
     MatrixVector(const typename MatrixSparse<T>::Col &col): Parent::Matrix(col.base()) {}
-    MatrixVector& operator=(const MatrixVector &vec) = default;
-    virtual ~MatrixVector() = default;
-
-    // *** Element Access ***
-    const T coeff(int row, int col) const {
-        if (col > 0) { throw std::runtime_error("Invalid column access for vector."); }
-        return Parent::operator()(row, col);
-    }
-    T& coeffRef(int row, int col) {
-        if (col > 0) { throw std::runtime_error("Invalid column access for vector."); }
-        return Parent::operator()(row, col);
-    }
-    const T operator()(int row) const { return coeff(row, 0); }
-    T& operator()(int row) { return coeffRef(row, 0); }
-    MatrixVector<T> slice(int start, int elements) const { 
-        return typename Parent::Matrix(Parent::block(start, 0, elements, 1));
-    }
 
     // *** Static Creation ***
     static MatrixVector<T> Zero(int m, int n) {
@@ -68,6 +52,25 @@ public:
         return typename Parent::Matrix(Parent::Random(m, 1));
     }
     static MatrixVector<T> Random(int m) { return Random(m, 1); }
+
+    // *** Assignment/Destruction ***
+    MatrixVector& operator=(const MatrixVector &vec) = default;
+    virtual ~MatrixVector() = default;
+
+    // *** Element Access ***
+    const T coeff(int row, int col) const {
+        if (col > 0) { throw std::runtime_error("Invalid column access for vector."); }
+        return Parent::operator()(row, col);
+    }
+    T& coeffRef(int row, int col) {
+        if (col > 0) { throw std::runtime_error("Invalid column access for vector."); }
+        return Parent::operator()(row, col);
+    }
+    const T operator()(int row) const { return coeff(row, 0); }
+    T& operator()(int row) { return coeffRef(row, 0); }
+    MatrixVector<T> slice(int start, int elements) const { 
+        return typename Parent::Matrix(Parent::block(start, 0, elements, 1));
+    }
 
     // *** Properties ***
     int rows() const { return Parent::rows(); }

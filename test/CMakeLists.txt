@@ -3,8 +3,14 @@ cmake_minimum_required(VERSION 3.22)
 project(precision-cascade)
 
 set(
+    TEST_TYPES_CPPS
+    test_types/test_MatrixVector.cpp
+    test_types/test_MatrixDense.cpp
+    test_types/test_MatrixSparse.cpp
+)
+
+set(
     TEST_TOOLS_CPPS
-    test_tools/test_MatrixRead.cpp
     test_tools/test_GenericLinearSystem.cpp
     test_tools/test_TypedLinearSystem.cpp
     test_tools/test_SolveArgPkg.cpp
@@ -43,6 +49,8 @@ set(
 
 set(
     TEST_SUITE_CPPS
+    test_tools/test_MatrixRead.cpp
+    ${TEST_TYPES_CPPS}
     ${TEST_TOOLS_CPPS}
     ${TEST_PRECONDITIONER_CPPS}
     ${TEST_SOLVERS}
