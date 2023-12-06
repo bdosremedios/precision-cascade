@@ -2,7 +2,6 @@
 
 #include "types/MatrixVector.h"
 
-
 class MatrixVector_Test: public TestBase
 {
 public:
@@ -137,7 +136,7 @@ public:
     template <typename T>
     void TestDot() {
 
-        // Test Dot
+        // Pre-calculated
         MatrixVector<T> vec_1_dot({
             static_cast<T>(-4.), static_cast<T>(3.4), static_cast<T>(0.),
             static_cast<T>(-2.1), static_cast<T>(1.8)
@@ -148,12 +147,104 @@ public:
         });
         ASSERT_NEAR(vec_1_dot.dot(vec_2_dot), static_cast<T>(11.05), static_cast<T>(11.05)*Tol<T>::gamma(5));
 
+        // Random
+        MatrixVector<T> vec_1_dot_r(MatrixVector<T>(10));
+        MatrixVector<T> vec_2_dot_r(MatrixVector<T>(10));
+        T acc = static_cast<T>(0.);
+        for (int i=0; i<10; ++i) { acc += vec_1_dot_r(i)*vec_2_dot_r(i); }
+        ASSERT_EQ(vec_1_dot_r.dot(vec_2_dot_r), acc);
+
     }
 
     template <typename T>
-    void TestNorm();
+    void TestNorm() {
 
-    void TestCast();
+        // Pre-calculated
+        MatrixVector<T> vec_norm({
+            static_cast<T>(-8.), static_cast<T>(0.8), static_cast<T>(-0.6),
+            static_cast<T>(4.), static_cast<T>(0.)
+        });
+        ASSERT_NEAR(vec_norm.norm(), static_cast<T>(9.), static_cast<T>(9.)*Tol<T>::gamma(5));
+
+        // Random
+        MatrixVector<T> vec_norm_r(MatrixVector<T>(10));
+        ASSERT_NEAR(vec_norm_r.norm(),
+                    std::sqrt(vec_norm_r.dot(vec_norm_r)),
+                    std::sqrt(vec_norm_r.dot(vec_norm_r))*Tol<T>::gamma(10));
+
+    }
+
+    template <typename T>
+    void TestScale() {
+
+        MatrixVector<T> vec({
+            static_cast<T>(-8.), static_cast<T>(0.8), static_cast<T>(-0.6),
+            static_cast<T>(4.), static_cast<T>(0.)
+        });
+        MatrixVector<T> vec_scaled_mult = vec*static_cast<T>(4);
+        for (int i=0; i<5; ++i) { ASSERT_EQ(vec_scaled_mult(i), static_cast<T>(4)*vec(i)); }
+        MatrixVector<T> vec_scaled_div = vec/static_cast<T>(10);
+        for (int i=0; i<5; ++i) { ASSERT_EQ(vec_scaled_div(i), vec(i)/static_cast<T>(10)); }
+
+    }
+
+    template <typename T>
+    void TestAddSub() {
+
+        MatrixVector<T> vec_1({
+            static_cast<T>(-42.), static_cast<T>(0.), static_cast<T>(0.6)
+        });
+        MatrixVector<T> vec_2({
+            static_cast<T>(-38.), static_cast<T>(0.5), static_cast<T>(-0.6)
+        });
+
+        MatrixVector<T> vec_add = vec_1+vec_2;
+        ASSERT_EQ(vec_add(0), static_cast<T>(-80.));
+        ASSERT_EQ(vec_add(1), static_cast<T>(0.5));
+        ASSERT_EQ(vec_add(2), static_cast<T>(0.));
+
+        MatrixVector<T> vec_sub_1 = vec_1-vec_2;
+        ASSERT_EQ(vec_sub_1(0), static_cast<T>(-4.));
+        ASSERT_EQ(vec_sub_1(1), static_cast<T>(-0.5));
+        ASSERT_EQ(vec_sub_1(2), static_cast<T>(1.2));
+
+        MatrixVector<T> vec_sub_2 = vec_2-vec_1;
+        ASSERT_EQ(vec_sub_2(0), static_cast<T>(4.));
+        ASSERT_EQ(vec_sub_2(1), static_cast<T>(0.5));
+        ASSERT_EQ(vec_sub_2(2), static_cast<T>(-1.2));
+
+        MatrixVector<T> vec_3({
+            static_cast<T>(-42.), static_cast<T>(0.), static_cast<T>(0.6)
+        });
+        vec_3 += vec_2;
+        ASSERT_VECTOR_EQ(vec_3, vec_1+vec_2);
+        vec_3 += vec_3;
+        ASSERT_VECTOR_EQ(vec_3, (vec_1+vec_2)*static_cast<T>(2.));
+
+        MatrixVector<T> vec_4({
+            static_cast<T>(-42.), static_cast<T>(0.), static_cast<T>(0.6)
+        });
+        vec_4 -= vec_2;
+        ASSERT_VECTOR_EQ(vec_4, vec_1-vec_2);
+        vec_4 -= vec_4;
+        ASSERT_VECTOR_EQ(vec_4, (vec_1+vec_2)*static_cast<T>(0.));
+
+    }
+
+    void TestCast() {
+        
+        constexpr int m(20);
+        MatrixVector<double> vec_dbl(MatrixVector<double>::Random(m));
+
+        MatrixVector<float> vec_sgl(vec_dbl.cast<float>());
+        ASSERT_EQ(vec_sgl.rows(), m);
+        for (int i=0; i<m; ++i) { ASSERT_EQ(vec_sgl(i), static_cast<float>(vec_dbl(i))); }
+
+        MatrixVector<half> vec_hlf(vec_dbl.cast<half>());
+        ASSERT_EQ(vec_hlf.rows(), m);
+        for (int i=0; i<m; ++i) { ASSERT_EQ(vec_hlf(i), static_cast<half>(vec_dbl(i))); }
+
+    }
 
 };
 
@@ -190,3 +281,8 @@ TEST_F(MatrixVector_Test, TestAssignment) {
 }
 
 TEST_F(MatrixVector_Test, TestDot) { TestDot<half>(); TestDot<float>(); TestDot<double>(); }
+TEST_F(MatrixVector_Test, TestNorm) { TestNorm<half>(); TestNorm<float>(); TestNorm<double>(); }
+TEST_F(MatrixVector_Test, TestScale) { TestScale<half>(); TestScale<float>(); TestScale<double>(); }
+TEST_F(MatrixVector_Test, TestAddSub) { TestAddSub<half>(); TestAddSub<float>(); TestAddSub<double>(); }
+
+TEST_F(MatrixVector_Test, TestCast) { TestCast(); }
