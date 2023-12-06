@@ -146,25 +146,12 @@ public:
             static_cast<T>(9.), static_cast<T>(10.), static_cast<T>(1.5),
             static_cast<T>(-4.5), static_cast<T>(2.)
         });
-        ASSERT_EQ(vec_1_dot.dot(vec_2_dot), static_cast<T>(11.05));
+        ASSERT_NEAR(vec_1_dot.dot(vec_2_dot), static_cast<T>(11.05), static_cast<T>(11.05)*Tol<T>::gamma(5));
 
     }
 
     template <typename T>
-    void TestNorm() {
-
-        // Test Dot
-        MatrixVector<T> vec_1_dot({
-            static_cast<T>(-4.), static_cast<T>(3.4), static_cast<T>(0.),
-            static_cast<T>(-2.1), static_cast<T>(1.8)
-        });
-        MatrixVector<T> vec_2_dot({
-            static_cast<T>(9.), static_cast<T>(10.), static_cast<T>(1.5),
-            static_cast<T>(-4.5), static_cast<T>(2.)
-        });
-        ASSERT_EQ(vec_1_dot.dot(vec_2_dot), static_cast<T>(11.05));
-
-    }
+    void TestNorm();
 
     void TestCast();
 

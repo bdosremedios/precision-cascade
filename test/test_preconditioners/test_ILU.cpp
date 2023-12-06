@@ -11,7 +11,7 @@ public:
 
         try {
             M<double> A = M<double>::Ones(7, 5);
-            ILU<M, double> ilu(A, u_dbl, false);
+            ILU<M, double> ilu(A, Tol<double>::roundoff(), false);
             FAIL();
         } catch (runtime_error e) {
             cout << e.what() << endl;
@@ -25,7 +25,7 @@ public:
         // Test that 7x7 matrix is only compatible with 7
         constexpr int n(7);
         M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("A_7_dummy_backsub.csv"));
-        ILU<M, double> ilu(A, u_dbl, false);
+        ILU<M, double> ilu(A, Tol<double>::roundoff(), false);
         EXPECT_TRUE(ilu.check_compatibility_left(n));
         EXPECT_TRUE(ilu.check_compatibility_right(n));
         EXPECT_FALSE(ilu.check_compatibility_left(n-4));
@@ -43,7 +43,7 @@ public:
         try {
             M<double> A = M<double>::Identity(n, n);
             A.coeffRef(0, 0) = 0;
-            ILU<M, double> ilu(A, u_dbl, false);
+            ILU<M, double> ilu(A, Tol<double>::roundoff(), false);
             FAIL();
         } catch (runtime_error e) {
             cout << e.what() << endl;
@@ -52,7 +52,7 @@ public:
         try {
             M<double> A = M<double>::Identity(n, n);
             A.coeffRef(4, 4) = 0;
-            ILU<M, double> ilu(A, u_dbl, false);
+            ILU<M, double> ilu(A, Tol<double>::roundoff(), false);
             FAIL();
         } catch (runtime_error e) {
             cout << e.what() << endl;
@@ -66,7 +66,7 @@ public:
         // Test that using a completely dense matrix one just gets a LU
         constexpr int n(8);
         M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_A.csv"));
-        ILU<M, double> ilu(A, u_dbl, false);
+        ILU<M, double> ilu(A, Tol<double>::roundoff(), false);
         
         // Test matching ILU to MATLAB for the dense matrix
         MatrixVector<double> test_vec = MatrixVector<double>::Random(n);
@@ -81,7 +81,7 @@ public:
         // Test that using a completely dense matrix one just gets a LU
         constexpr int n(8);
         M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_A.csv"));
-        ILU<M, double> ilu(A, u_dbl, true);
+        ILU<M, double> ilu(A, Tol<double>::roundoff(), true);
         
         // Test matching ILU to MATLAB for the dense matrix
         MatrixVector<double> test_vec = MatrixVector<double>::Random(n);
@@ -121,7 +121,7 @@ public:
 
         constexpr int n(8);
         M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_A.csv"));
-        ILU<M, double> ilu0_dbl(A, u_dbl, false);
+        ILU<M, double> ilu0_dbl(A, Tol<double>::roundoff(), false);
 
         M<double> L_dbl = ilu0_dbl.get_L();
         M<double> U_dbl = ilu0_dbl.get_U();

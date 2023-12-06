@@ -18,15 +18,15 @@ public:
         MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("b_inv_45.csv"));
         TypedLinearSystem<M, double> lin_sys(A, b);
 
-        GMRESSolve<M, double> pgmres_solve_default(lin_sys, u_dbl, pgmres_args);
+        GMRESSolve<M, double> pgmres_solve_default(lin_sys, Tol<double>::roundoff(), pgmres_args);
 
         PrecondArgPkg<M, double> noprecond(make_shared<NoPreconditioner<M, double>>(),
                                            make_shared<NoPreconditioner<M, double>>());
-        GMRESSolve<M, double> pgmres_solve_explicit_noprecond(lin_sys, u_dbl, pgmres_args, noprecond);
+        GMRESSolve<M, double> pgmres_solve_explicit_noprecond(lin_sys, Tol<double>::roundoff(), pgmres_args, noprecond);
 
         PrecondArgPkg<M, double> identity(make_shared<MatrixInverse<M, double>>(M<double>::Identity(n, n)),
                                           make_shared<MatrixInverse<M, double>>(M<double>::Identity(n, n)));
-        GMRESSolve<M, double> pgmres_solve_inverse_of_identity(lin_sys, u_dbl, pgmres_args, identity);
+        GMRESSolve<M, double> pgmres_solve_inverse_of_identity(lin_sys, Tol<double>::roundoff(), pgmres_args, identity);
 
         pgmres_solve_default.solve();
         if (*show_plots) { pgmres_solve_default.view_relres_plot("log"); }
@@ -52,7 +52,7 @@ public:
     ) {
 
         TypedLinearSystem<M, double> lin_sys(A, b);
-        GMRESSolve<M, double> pgmres_solve(lin_sys, u_dbl, pgmres_args, precond_pkg);
+        GMRESSolve<M, double> pgmres_solve(lin_sys, Tol<double>::roundoff(), pgmres_args, precond_pkg);
 
         pgmres_solve.solve();
         if (*show_plots) { pgmres_solve.view_relres_plot("log"); }
@@ -71,7 +71,7 @@ public:
     ) {
 
         TypedLinearSystem<M, double> lin_sys(A, b);
-        GMRESSolve<M, double> pgmres_solve(lin_sys, u_dbl, pgmres_args, precond_pkg);
+        GMRESSolve<M, double> pgmres_solve(lin_sys, Tol<double>::roundoff(), pgmres_args, precond_pkg);
 
         pgmres_solve.solve();
         if (*show_plots) { pgmres_solve.view_relres_plot("log"); }

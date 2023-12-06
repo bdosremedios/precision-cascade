@@ -29,9 +29,9 @@ public:
         M<double> A = M<double>::Random(n, n);
         
         NoPreconditioner<M, double> no_precond;
-        ILU<M, double> ilu(A, u_dbl, false);
+        ILU<M, double> ilu(A, Tol<double>::roundoff(), false);
 
-        PrecondArgPkg<M, double> args(make_shared<ILU<M, double>>(A, u_dbl, false));
+        PrecondArgPkg<M, double> args(make_shared<ILU<M, double>>(A, Tol<double>::roundoff(), false));
 
         MatrixVector<double> test_vec = MatrixVector<double>::Random(n);
 
@@ -48,10 +48,10 @@ public:
         M<double> A = M<double>::Random(n, n);
 
         NoPreconditioner<M, double> no_precond;
-        ILU<M, double> ilu(A, u_dbl, false);
+        ILU<M, double> ilu(A, Tol<double>::roundoff(), false);
         
         PrecondArgPkg<M, double> args(make_shared<NoPreconditioner<M, double>>(no_precond),
-                                      make_shared<ILU<M, double>>(A, u_dbl, false));
+                                      make_shared<ILU<M, double>>(A, Tol<double>::roundoff(), false));
 
         MatrixVector<double> test_vec = MatrixVector<double>::Random(n);
 
@@ -68,10 +68,10 @@ public:
         M<double> A = M<double>::Random(n, n);
 
         NoPreconditioner<M, double> no_precond;
-        ILU<M, double> ilu(A, u_dbl, false);
+        ILU<M, double> ilu(A, Tol<double>::roundoff(), false);
 
-        PrecondArgPkg<M, double> args(make_shared<ILU<M, double>>(A, u_dbl, false),
-                                      make_shared<ILU<M, double>>(A, u_dbl, false));
+        PrecondArgPkg<M, double> args(make_shared<ILU<M, double>>(A, Tol<double>::roundoff(), false),
+                                      make_shared<ILU<M, double>>(A, Tol<double>::roundoff(), false));
 
         MatrixVector<double> test_vec(MatrixVector<double>::Random(n));
 

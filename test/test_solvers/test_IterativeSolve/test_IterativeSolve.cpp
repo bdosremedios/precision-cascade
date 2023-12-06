@@ -7,7 +7,7 @@ class TypedIterativeSolve_Test: public TestBase
 public:
 
     template <template <typename> typename M, typename T>
-    void TestConstructors(double u) {
+    void TestConstructors() {
 
         // Test with no initial guess and default parameters
         constexpr int n(6);
@@ -38,7 +38,7 @@ public:
         EXPECT_EQ(test_mock_no_guess.res_norm_hist.size(), 1);
         EXPECT_NEAR(test_mock_no_guess.res_norm_hist[0],
                     (b-A*MatrixVector<double>::Ones(n)).norm(),
-                    gamma(n, u));
+                    Tol<T>::gamma(n));
 
         // Test with initial guess and explicit parameters
         MatrixVector<double> init_guess = MatrixVector<double>::Random(n);
@@ -63,12 +63,12 @@ public:
         EXPECT_FALSE(test_mock_guess.terminated);
         EXPECT_EQ(test_mock_guess.curr_iter, 0);
         EXPECT_EQ(test_mock_guess.res_norm_hist.size(), 1);
-        EXPECT_NEAR(test_mock_guess.res_norm_hist[0], (b - A*init_guess).norm(), gamma(n, u));
+        EXPECT_NEAR(test_mock_guess.res_norm_hist[0], (b - A*init_guess).norm(), Tol<T>::gamma(n));
 
     }
 
     template <template <typename> typename M, typename T>
-    void TestSolve(double u) {
+    void TestSolve() {
 
         constexpr int n(64);
         constexpr int max_iter(5);
@@ -82,12 +82,13 @@ public:
         SolveArgPkg args;
         args.init_guess = init_guess;
         args.max_iter = max_iter;
-        args.target_rel_res = u + (b-A*typed_soln.template cast<double>()).norm()/(b-A*init_guess).norm();
+        args.target_rel_res = Tol<T>::roundoff() +
+                              (b-A*typed_soln.template cast<double>()).norm()/(b-A*init_guess).norm();
 
         TypedIterativeSolveTestingMock<M, T> test_mock(typed_lin_sys, typed_soln, args);
 
         // Test start at 1 relres
-        EXPECT_NEAR(test_mock.get_relres(), 1., gamma(n, u));
+        EXPECT_NEAR(test_mock.get_relres(), 1., Tol<T>::gamma(n));
 
         // Call solve
         test_mock.solve();
@@ -111,19 +112,19 @@ public:
         EXPECT_EQ(test_mock.res_norm_hist.size(), 2);
         EXPECT_NEAR((MatrixVector<double>(test_mock.res_hist.col(0))-(b-A*init_guess)).norm(),
                     0.,
-                    gamma(n, u));
+                    Tol<T>::gamma(n));
         EXPECT_NEAR((MatrixVector<double>(test_mock.res_hist.col(1))-(b-A*(typed_soln.template cast<double>()))).norm(),
                     0.,
-                    gamma(n, u));
+                    Tol<T>::gamma(n));
         EXPECT_NEAR(test_mock.res_norm_hist[0],
                     (b-A*init_guess).norm(),
-                    gamma(n, u));
+                    Tol<T>::gamma(n));
         EXPECT_NEAR(test_mock.res_norm_hist[1],
                     (b-A*(typed_soln.template cast<double>())).norm(),
-                    gamma(n, u));
+                    Tol<T>::gamma(n));
         EXPECT_NEAR(test_mock.get_relres(),
                     (b-A*(typed_soln.template cast<double>())).norm()/(b-A*init_guess).norm(),
-                    gamma(n, u));
+                    Tol<T>::gamma(n));
 
         if (*show_plots) { test_mock.view_relres_plot(); }
 
@@ -193,34 +194,34 @@ public:
 };
 
 TEST_F(TypedIterativeSolve_Test, TestConstructorsDouble_Dense) {
-    TestConstructors<MatrixDense, double>(u_dbl);
+    TestConstructors<MatrixDense, double>();
 }
 TEST_F(TypedIterativeSolve_Test, TestConstructorsDouble_Sparse) {
-    TestConstructors<MatrixSparse, double>(u_dbl);
+    TestConstructors<MatrixSparse, double>();
 }
 
 TEST_F(TypedIterativeSolve_Test, TestConstructorsSingle_Dense) {
-    TestConstructors<MatrixDense, float>(u_sgl);
+    TestConstructors<MatrixDense, float>();
 }
 TEST_F(TypedIterativeSolve_Test, TestConstructorsSingle_Sparse) {
-    TestConstructors<MatrixSparse, float>(u_sgl);
+    TestConstructors<MatrixSparse, float>();
 }
 
 TEST_F(TypedIterativeSolve_Test, TestConstructorsHalf_Dense) {
-    TestConstructors<MatrixDense, half>(u_hlf);
+    TestConstructors<MatrixDense, half>();
 }
 TEST_F(TypedIterativeSolve_Test, TestConstructorsHalf_Sparse) {
-    TestConstructors<MatrixSparse, half>(u_hlf);
+    TestConstructors<MatrixSparse, half>();
 }
 
-TEST_F(TypedIterativeSolve_Test, TestSolveAndRelresDouble_Dense) { TestSolve<MatrixDense, double>(u_dbl); }
-TEST_F(TypedIterativeSolve_Test, TestSolveAndRelresDouble_Sparse) { TestSolve<MatrixSparse, double>(u_dbl); }
+TEST_F(TypedIterativeSolve_Test, TestSolveAndRelresDouble_Dense) { TestSolve<MatrixDense, double>(); }
+TEST_F(TypedIterativeSolve_Test, TestSolveAndRelresDouble_Sparse) { TestSolve<MatrixSparse, double>(); }
 
-TEST_F(TypedIterativeSolve_Test, TestSolveAndRelresSingle_Dense) { TestSolve<MatrixDense, float>(u_sgl); }
-TEST_F(TypedIterativeSolve_Test, TestSolveAndRelresSingle_Sparse) { TestSolve<MatrixSparse, float>(u_sgl); }
+TEST_F(TypedIterativeSolve_Test, TestSolveAndRelresSingle_Dense) { TestSolve<MatrixDense, float>(); }
+TEST_F(TypedIterativeSolve_Test, TestSolveAndRelresSingle_Sparse) { TestSolve<MatrixSparse, float>(); }
 
-TEST_F(TypedIterativeSolve_Test, TestSolveAndRelresHalf_Dense) { TestSolve<MatrixDense, half>(u_hlf); }
-TEST_F(TypedIterativeSolve_Test, TestSolveAndRelresHalf_Sparse) { TestSolve<MatrixSparse, half>(u_hlf); }
+TEST_F(TypedIterativeSolve_Test, TestSolveAndRelresHalf_Dense) { TestSolve<MatrixDense, half>(); }
+TEST_F(TypedIterativeSolve_Test, TestSolveAndRelresHalf_Sparse) { TestSolve<MatrixSparse, half>(); }
 
 TEST_F(TypedIterativeSolve_Test, TestResetDouble_Dense) { TestReset<MatrixDense, double>(); }
 TEST_F(TypedIterativeSolve_Test, TestResetDouble_Sparse) { TestReset<MatrixSparse, double>(); }

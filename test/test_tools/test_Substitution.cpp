@@ -16,8 +16,8 @@ public:
     
         MatrixVector<double> test_soln = back_substitution(U_tri, Ub_tri);
 
-        ASSERT_VECTOR_NEAR(test_soln, x_tri, u_dbl);
-        ASSERT_VECTOR_NEAR(Ub_tri, U_tri*test_soln, gamma(n, u_dbl));
+        ASSERT_VECTOR_NEAR(test_soln, x_tri, Tol<double>::roundoff());
+        ASSERT_VECTOR_NEAR(Ub_tri, U_tri*test_soln, Tol<double>::gamma(n));
 
     }
 
@@ -31,8 +31,8 @@ public:
     
         MatrixVector<double> test_soln = frwd_substitution(L_tri, Lb_tri);
 
-        ASSERT_VECTOR_NEAR(test_soln, x_tri, u_dbl);
-        ASSERT_VECTOR_NEAR(Lb_tri, L_tri*test_soln, gamma(n, u_dbl));
+        ASSERT_VECTOR_NEAR(test_soln, x_tri, Tol<double>::roundoff());
+        ASSERT_VECTOR_NEAR(Lb_tri, L_tri*test_soln, Tol<double>::gamma(n));
 
     }
 

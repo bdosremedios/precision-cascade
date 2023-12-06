@@ -9,25 +9,16 @@
 #include "tools/argument_pkgs.h"
 
 #include <cmath>
-#include <string>
 #include <memory>
 #include <iostream>
 #include <filesystem>
 
-using Eigen::Matrix;
-using Eigen::Dynamic;
 using Eigen::half;
-using MatrixXh = Eigen::Matrix<Eigen::half, Dynamic, Dynamic>;
-using Eigen::MatrixXf;
-using Eigen::MatrixXd;
 
 namespace fs = std::filesystem;
 using std::pow;
-using std::string;
 using std::shared_ptr, std::make_shared;
 using std::cout, std::endl;
-
-double gamma(int n, double u);
 
 template <template <typename> typename M, typename T>
 T mat_max_mag(const M<T> &A) {
@@ -177,13 +168,30 @@ void ASSERT_MATRIX_UPPTRI(M<T> test, T tol) {
 
 }
 
+template <typename T>
+class Tol
+{
+public:
+    static double roundoff() { assert(false); return -1.; }
+    static T roundoff_T() { return static_cast<T>(roundoff()); }
+    static double gamma(int n) { 
+        return static_cast<T>(n)*roundoff()/(static_cast<T>(1)-static_cast<T>(n)*roundoff());
+    }
+    static T gamma_T(int n) { return static_cast<T>(gamma(n)); }
+};
+
+template<>
+static double Tol<half>::roundoff() { return static_cast<half>(pow(2, -10)); }
+
+template<>
+static double Tol<float>::roundoff() { return static_cast<float>(pow(2, -23)); }
+
+template<>
+static double Tol<double>::roundoff() { return static_cast<double>(pow(2, -52)); }
+
 class TestBase: public testing::Test
 {
 public:
-
-    const double u_hlf = pow(2, -10);
-    const double u_sgl = pow(2, -23);
-    const double u_dbl = pow(2, -52);
 
     // Error tolerance allowed in an entry for a double precision calculation after
     // accumulation of errors where prediction of error bound is difficult

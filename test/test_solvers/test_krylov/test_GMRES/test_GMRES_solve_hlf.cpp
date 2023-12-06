@@ -23,7 +23,7 @@ public:
 
         SolveArgPkg args;
         args.target_rel_res = large_error_mod*conv_tol_hlf;
-        GMRESSolve<M, half> gmres_solve(lin_sys, u_hlf, args);
+        GMRESSolve<M, half> gmres_solve(lin_sys, Tol<half>::roundoff(), args);
 
         gmres_solve.solve();
 
@@ -46,7 +46,7 @@ public:
         // Check convergence under single capabilities
         SolveArgPkg args;
         args.target_rel_res = conv_tol_hlf;
-        GMRESSolve<M, half> gmres_solve_succeed(lin_sys, u_hlf, args);
+        GMRESSolve<M, half> gmres_solve_succeed(lin_sys, Tol<half>::roundoff(), args);
 
         gmres_solve_succeed.solve();
         if (*show_plots) { gmres_solve_succeed.view_relres_plot("log"); }
@@ -56,14 +56,14 @@ public:
 
         // Check divergence beyond single capability of the single machine epsilon
         SolveArgPkg fail_args;
-        fail_args.target_rel_res = 0.1*u_hlf;
-        GMRESSolve<M, half> gmres_solve_fail(lin_sys, u_hlf, fail_args);
+        fail_args.target_rel_res = 0.1*Tol<half>::roundoff();
+        GMRESSolve<M, half> gmres_solve_fail(lin_sys, Tol<half>::roundoff(), fail_args);
 
         gmres_solve_fail.solve();
         if (*show_plots) { gmres_solve_fail.view_relres_plot("log"); }
         
         EXPECT_FALSE(gmres_solve_fail.check_converged());
-        EXPECT_GT(gmres_solve_fail.get_relres(), 0.1*u_hlf);
+        EXPECT_GT(gmres_solve_fail.get_relres(), 0.1*Tol<half>::roundoff());
 
     }
 

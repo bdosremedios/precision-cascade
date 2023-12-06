@@ -20,7 +20,7 @@ public:
 
         SolveArgPkg args;
         args.target_rel_res = conv_tol_dbl;
-        GMRESSolve<M, double> gmres_solve(lin_sys, u_dbl, args);
+        GMRESSolve<M, double> gmres_solve(lin_sys, Tol<double>::roundoff(), args);
 
         gmres_solve.solve();
 

@@ -17,7 +17,7 @@ public:
         MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(b_file_path);
         TypedLinearSystem<M, double> lin_sys(A, b);
 
-        GMRESSolveTestingMock<M, double> test_mock(lin_sys, u_dbl, default_args);
+        GMRESSolveTestingMock<M, double> test_mock(lin_sys, Tol<double>::roundoff(), default_args);
 
         ASSERT_EQ(test_mock.max_kry_space_dim, n);
         ASSERT_EQ(test_mock.rho, (b - A*MatrixVector<double>::Ones(n)).norm());
@@ -48,7 +48,7 @@ public:
         MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("b_5_toy.csv"));
         TypedLinearSystem<M, double> lin_sys(A, b);
 
-        GMRESSolveTestingMock<M, double> test_mock(lin_sys, u_dbl, default_args);
+        GMRESSolveTestingMock<M, double> test_mock(lin_sys, Tol<double>::roundoff(), default_args);
 
         test_mock.typed_soln = MatrixVector<double>::Ones(n); // Manually instantiate initial guess
         MatrixVector<double> r_0 = b - A*MatrixVector<double>::Ones(n);
@@ -62,7 +62,7 @@ public:
         test_mock.iterate_no_soln_solve();
 
         MatrixVector<double> next_q = test_mock.Q_kry_basis.col(0);
-        ASSERT_EQ(next_q, r_0/r_0.norm());
+        ASSERT_VECTOR_EQ(next_q, r_0/r_0.norm());
         next_q = A*next_q;
         next_q -= MatrixVector<double>(test_mock.Q_kry_basis.col(0))*test_mock.H.coeff(0, 0);
         ASSERT_EQ(next_q.norm(), test_mock.H.coeff(1, 0));
@@ -127,7 +127,7 @@ public:
         MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("b_5_toy.csv"));
         TypedLinearSystem<M, double> lin_sys(A, b);
 
-        GMRESSolveTestingMock<M, double> test_mock(lin_sys, u_dbl, default_args);
+        GMRESSolveTestingMock<M, double> test_mock(lin_sys, Tol<double>::roundoff(), default_args);
 
         test_mock.typed_soln = MatrixVector<double>::Ones(n); // Manually instantiate initial guess
         MatrixVector<double> r_0 = b - A*MatrixVector<double>::Ones(n);
@@ -169,11 +169,11 @@ public:
             // Test that k+1 by k+1 block of Q_H is orthogonal
             MatrixDense<double> Q_H_block = test_mock.Q_H.block(0, 0, k+2, k+2);
             MatrixDense<double> orthog_check = Q_H_block*Q_H_block.transpose();
-            ASSERT_MATRIX_IDENTITY(orthog_check, u_dbl);
+            ASSERT_MATRIX_IDENTITY(orthog_check, Tol<double>::roundoff());
 
             // Test that k+1 by k block of R_H is uppertriangular
             ASSERT_MATRIX_UPPTRI(MatrixDense<double>(test_mock.R_H.block(0, 0, k+2, k+1)),
-                                 u_dbl);
+                                 Tol<double>::roundoff());
 
             // Test that k+1 by k+1 block of Q_H is and k+1 by k block of R_H
             // constructs k+1 by k block of H
@@ -181,7 +181,7 @@ public:
             MatrixDense<double> construct_H = Q_H_block*R_H_block;
             ASSERT_MATRIX_NEAR(construct_H,
                                MatrixDense<double>(test_mock.H.block(0, 0, k+2, k+1)),
-                               gamma(n, u_dbl));
+                               Tol<double>::gamma(n));
 
         }
 
@@ -202,7 +202,7 @@ public:
         SolveArgPkg args;
         args.init_guess = x_0;
 
-        GMRESSolveTestingMock<M, double> test_mock(lin_sys, u_dbl, args);
+        GMRESSolveTestingMock<M, double> test_mock(lin_sys, Tol<double>::roundoff(), args);
 
         // Set test_mock krylov basis to the identity to have typed_soln be directly the solved coefficients
         // of the back substitution
@@ -249,7 +249,7 @@ public:
         args.target_rel_res = conv_tol_dbl;
         args.init_guess = soln;
 
-        GMRESSolveTestingMock<M, double> test_mock(lin_sys, u_dbl, args);
+        GMRESSolveTestingMock<M, double> test_mock(lin_sys, Tol<double>::roundoff(), args);
 
         // Attempt to update subspace and Hessenberg
         test_mock.iterate();
@@ -260,8 +260,8 @@ public:
         EXPECT_FALSE(test_mock.check_converged());
         EXPECT_TRUE(test_mock.check_terminated());
         EXPECT_EQ(test_mock.kry_space_dim, 0);
-        ASSERT_MATRIX_ZERO(test_mock.Q_kry_basis, u_dbl);
-        ASSERT_MATRIX_ZERO(test_mock.H, u_dbl);
+        ASSERT_MATRIX_ZERO(test_mock.Q_kry_basis, Tol<double>::roundoff());
+        ASSERT_MATRIX_ZERO(test_mock.H, Tol<double>::roundoff());
 
         // Attempt to solve and check that iteration does not occur since
         // should be terminated already but that convergence is updated
@@ -284,7 +284,7 @@ public:
         SolveArgPkg args;
         args.init_guess = soln;
 
-        GMRESSolveTestingMock<M, double> test_mock(lin_sys, u_dbl, args);
+        GMRESSolveTestingMock<M, double> test_mock(lin_sys, Tol<double>::roundoff(), args);
 
         // Attempt to update subspace and convergence twice
         test_mock.iterate();
@@ -296,8 +296,8 @@ public:
         EXPECT_FALSE(test_mock.check_converged());
         EXPECT_TRUE(test_mock.check_terminated());
         EXPECT_EQ(test_mock.kry_space_dim, 1);
-        EXPECT_NEAR(test_mock.Q_kry_basis.col(0).norm(), 1, gamma(n, u_dbl));
-        ASSERT_MATRIX_ZERO(MatrixDense<double>(test_mock.Q_kry_basis.block(0, 1, n, n-1)), u_dbl);
+        EXPECT_NEAR(test_mock.Q_kry_basis.col(0).norm(), 1, Tol<double>::gamma(n));
+        ASSERT_MATRIX_ZERO(MatrixDense<double>(test_mock.Q_kry_basis.block(0, 1, n, n-1)), Tol<double>::roundoff());
 
     }
 
@@ -315,7 +315,7 @@ public:
         args.init_guess = soln;
         args.target_rel_res = conv_tol_dbl;
 
-        GMRESSolveTestingMock<M, double> test_mock(lin_sys, u_dbl, args);
+        GMRESSolveTestingMock<M, double> test_mock(lin_sys, Tol<double>::roundoff(), args);
 
         // Attempt to update and solve through solve of LinearSolve
         test_mock.solve();
@@ -328,8 +328,9 @@ public:
         // Check that subspace has not gone beyond 1 dimension and that krylov basis
         // as expected to have only a single column
         EXPECT_EQ(test_mock.kry_space_dim, 1);
-        EXPECT_NEAR(test_mock.Q_kry_basis.col(0).norm(), 1, gamma(n, u_dbl));
-        ASSERT_MATRIX_ZERO(MatrixDense<double>(test_mock.Q_kry_basis.block(0, 1, n, n-1)), u_dbl);
+        EXPECT_NEAR(test_mock.Q_kry_basis.col(0).norm(), 1, Tol<double>::gamma(n));
+        ASSERT_MATRIX_ZERO(MatrixDense<double>(test_mock.Q_kry_basis.block(0, 1, n, n-1)),
+                           Tol<double>::roundoff());
 
     }
 
@@ -345,7 +346,7 @@ public:
         args.max_iter = n;
         args.target_rel_res = conv_tol_dbl;
 
-        GMRESSolve<M, double> gmres_solve(lin_sys, u_dbl, args);
+        GMRESSolve<M, double> gmres_solve(lin_sys, Tol<double>::roundoff(), args);
 
         gmres_solve.solve();
         if (*show_plots) { gmres_solve.view_relres_plot("log"); }
@@ -367,7 +368,7 @@ public:
         args.max_iter = n;
         args.target_rel_res = conv_tol_dbl;
 
-        GMRESSolveTestingMock<M, double> test_mock(lin_sys, u_dbl, args);
+        GMRESSolveTestingMock<M, double> test_mock(lin_sys, Tol<double>::roundoff(), args);
 
         test_mock.solve();
         if (*show_plots) { test_mock.view_relres_plot("log"); }
@@ -384,10 +385,10 @@ public:
         // Check that all matrices are zero again and that krylov dim is back to 0
         EXPECT_EQ(test_mock.kry_space_dim, 0);
 
-        ASSERT_MATRIX_ZERO(test_mock.Q_kry_basis, u_dbl);
-        ASSERT_MATRIX_ZERO(test_mock.H, u_dbl);
-        ASSERT_MATRIX_IDENTITY(test_mock.Q_H, u_dbl);
-        ASSERT_MATRIX_ZERO(test_mock.R_H, u_dbl);
+        ASSERT_MATRIX_ZERO(test_mock.Q_kry_basis, Tol<double>::roundoff());
+        ASSERT_MATRIX_ZERO(test_mock.H, Tol<double>::roundoff());
+        ASSERT_MATRIX_IDENTITY(test_mock.Q_H, Tol<double>::roundoff());
+        ASSERT_MATRIX_ZERO(test_mock.R_H, Tol<double>::roundoff());
 
         // Test 2nd solve
         test_mock.solve();
@@ -438,12 +439,12 @@ TEST_F(GMRES_Component_Test, CheckCorrectDefaultMaxIter_Both) {
     MatrixVector<double> b_n = MatrixVector<double>::Random(n);
     TypedLinearSystem<MatrixDense, double> lin_sys_n(A_n, b_n);
     GMRESSolveTestingMock<MatrixDense, double> test_mock_n_dense(
-        lin_sys_n, u_dbl, default_args
+        lin_sys_n, Tol<double>::roundoff(), default_args
     );
     ASSERT_EQ(test_mock_n_dense.max_iter, n);
     TypedLinearSystem<MatrixSparse, double> lin_sys_sparse_n(A_n.sparse(), b_n);
     GMRESSolveTestingMock<MatrixSparse, double> test_mock_n_sparse(
-        lin_sys_sparse_n, u_dbl, default_args
+        lin_sys_sparse_n, Tol<double>::roundoff(), default_args
     );
     ASSERT_EQ(test_mock_n_sparse.max_iter, n);
 
@@ -452,12 +453,12 @@ TEST_F(GMRES_Component_Test, CheckCorrectDefaultMaxIter_Both) {
     MatrixVector<double> b_m = MatrixVector<double>::Random(m);
     TypedLinearSystem<MatrixDense, double> lin_sys_m(A_m, b_m);
     GMRESSolveTestingMock<MatrixDense, double> test_mock_m_dense(
-        lin_sys_m, u_dbl, default_args
+        lin_sys_m, Tol<double>::roundoff(), default_args
     );
     ASSERT_EQ(test_mock_m_dense.max_iter, m);
     TypedLinearSystem<MatrixSparse, double> lin_sys_sparse_m(A_m.sparse(), b_m);
     GMRESSolveTestingMock<MatrixSparse, double> test_mock_m_sparse(
-        lin_sys_sparse_m, u_dbl, default_args
+        lin_sys_sparse_m, Tol<double>::roundoff(), default_args
     );
     ASSERT_EQ(test_mock_m_sparse.max_iter, m);
 
@@ -469,12 +470,12 @@ TEST_F(GMRES_Component_Test, CheckCorrectDefaultMaxIter_Both) {
     SolveArgPkg non_default_args;
     non_default_args.max_iter = non_default_iter;
     GMRESSolveTestingMock<MatrixDense, double> test_mock_o_dense(
-        lin_sys_o, u_dbl, non_default_args
+        lin_sys_o, Tol<double>::roundoff(), non_default_args
     );
     ASSERT_EQ(test_mock_o_dense.max_iter, non_default_iter);
     TypedLinearSystem<MatrixSparse, double> lin_sys_sparse_o(A_o.sparse(), b_o);
     GMRESSolveTestingMock<MatrixSparse, double> test_mock_o_sparse(
-        lin_sys_sparse_o, u_dbl, non_default_args
+        lin_sys_sparse_o, Tol<double>::roundoff(), non_default_args
     );
     ASSERT_EQ(test_mock_o_sparse.max_iter, non_default_iter);
 
@@ -491,12 +492,12 @@ TEST_F(GMRES_Component_Test, CheckErrorExceedDimension_Both) {
     args.max_iter = 100;
 
     try {
-        GMRESSolveTestingMock<MatrixDense, double> test_mock_n(lin_sys_n, u_dbl, args);
+        GMRESSolveTestingMock<MatrixDense, double> test_mock_n(lin_sys_n, Tol<double>::roundoff(), args);
         FAIL();
     } catch (runtime_error e) { cout << e.what() << endl; }
 
     try {
-        GMRESSolveTestingMock<MatrixSparse, double> test_mock_n(lin_sys_sparse_n, u_dbl, args);
+        GMRESSolveTestingMock<MatrixSparse, double> test_mock_n(lin_sys_sparse_n, Tol<double>::roundoff(), args);
         FAIL();
     } catch (runtime_error e) { cout << e.what() << endl; }
 

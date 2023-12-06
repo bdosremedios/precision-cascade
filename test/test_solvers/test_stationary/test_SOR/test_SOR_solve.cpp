@@ -132,14 +132,14 @@ TEST_F(SOR_Test, SolveConvDiff64Single_FailBeyondCapabilities_Dense) {
     SolveFailTest<MatrixDense, float>(
         solve_matrix_dir / fs::path("conv_diff_64_A.csv"),
         solve_matrix_dir / fs::path("conv_diff_64_b.csv"),
-        0.1*u_sgl
+        0.1*Tol<float>::roundoff()
     );
 }
 TEST_F(SOR_Test, SolveConvDiff64Single_FailBeyondCapabilities_Sparse) {
     SolveFailTest<MatrixSparse, float>(
         solve_matrix_dir / fs::path("conv_diff_64_A.csv"),
         solve_matrix_dir / fs::path("conv_diff_64_b.csv"),
-        0.1*u_sgl
+        0.1*Tol<float>::roundoff()
     );
 }
 
@@ -177,13 +177,13 @@ TEST_F(SOR_Test, SolveConvDiff64Half_FailBeyondCapabilities_Dense) {
     SolveFailTest<MatrixDense, half>(
         solve_matrix_dir / fs::path("conv_diff_64_A.csv"),
         solve_matrix_dir / fs::path("conv_diff_64_b.csv"),
-        0.1*u_hlf
+        0.1*Tol<half>::roundoff()
     );
 }
 TEST_F(SOR_Test, SolveConvDiff64Half_FailBeyondCapabilities_Sparse) {
     SolveFailTest<MatrixSparse, half>(
         solve_matrix_dir / fs::path("conv_diff_64_A.csv"),
         solve_matrix_dir / fs::path("conv_diff_64_b.csv"),
-        0.1*u_hlf
+        0.1*Tol<half>::roundoff()
     );
 }

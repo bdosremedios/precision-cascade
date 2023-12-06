@@ -13,8 +13,6 @@ using std::abs;
 using std::string;
 using std::cout, std::endl;
 
-double gamma(int n, double u) { return n*u/(1-n*u); }
-
 bool *TestBase::show_plots = new bool;
 
 int main(int argc, char **argv) {
