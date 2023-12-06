@@ -61,7 +61,7 @@ public:
     }
     static MatrixVector<T> Random(int m) { return Random(m, 1); }
 
-    // *** Assignment/Destruction ***
+    // *** Copy Assignment/Destruction ***
     MatrixVector& operator=(const MatrixVector &vec) = default;
     virtual ~MatrixVector() = default;
 

@@ -41,6 +41,7 @@ public:
         for (auto curr_row = std::cbegin(li); curr_row != std::cend(li); ++curr_row) {
             int j=0;
             for (auto curr_elem = std::cbegin(*curr_row); curr_elem != std::cend(*curr_row); ++curr_elem) {
+                if (j >= cols()) { throw(std::runtime_error("Initializer list has non-consistent row size")); }
                 this->coeffRef(i, j) = *curr_elem;
                 ++j;
             }
