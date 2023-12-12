@@ -20,6 +20,9 @@ public:
     template <typename T>
     void TestStaticCreation() { TestStaticCreation_Base<MatrixSparse, T>(); }
 
+    template <typename T>
+    void TestCol() { TestCol_Base<MatrixSparse, T>(); }
+
 };
 
 TEST_F(MatrixSparse_Test, TestConstruction) {
@@ -36,14 +39,20 @@ TEST_F(MatrixSparse_Test, TestListInitialization) {
 
 TEST_F(MatrixSparse_Test, TestBadListInitialization) { TestBadListInitialization(); }
 
-// TEST_F(MatrixSparse_Test, TestCoeffAccess) {
-//     TestCoeffAccess<half>();
-//     TestCoeffAccess<float>();
-//     TestCoeffAccess<double>();
-// }
+TEST_F(MatrixSparse_Test, TestCoeffAccess) {
+    TestCoeffAccess<half>();
+    TestCoeffAccess<float>();
+    TestCoeffAccess<double>();
+}
 
 TEST_F(MatrixSparse_Test, TestStaticCreation) {
     TestStaticCreation<half>();
     TestStaticCreation<float>();
     TestStaticCreation<double>();
+}
+
+TEST_F(MatrixSparse_Test, TestCol) {
+    TestCol<half>();
+    TestCol<float>();
+    TestCol<double>();
 }

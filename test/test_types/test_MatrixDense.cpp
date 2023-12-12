@@ -20,6 +20,9 @@ public:
     template <typename T>
     void TestStaticCreation() { TestStaticCreation_Base<MatrixDense, T>(); }
 
+    template <typename T>
+    void TestCol() { TestCol_Base<MatrixDense, T>(); }
+
 };
 
 TEST_F(MatrixDense_Test, TestConstruction) {
@@ -46,4 +49,10 @@ TEST_F(MatrixDense_Test, TestStaticCreation) {
     TestStaticCreation<half>();
     TestStaticCreation<float>();
     TestStaticCreation<double>();
+}
+
+TEST_F(MatrixDense_Test, TestCol) {
+    TestCol<half>();
+    TestCol<float>();
+    TestCol<double>();
 }
