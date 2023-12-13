@@ -81,9 +81,6 @@ public:
     // *** Resizing ***
     void reduce() { Parent::prune(static_cast<T>(0)); }
 
-    // *** Boolean ***
-    bool operator==(const MatrixSparse<T> &rhs) const { return Parent::isApprox(rhs); }
-
     // *** Explicit Cast ***
     template <typename Cast_T>
     MatrixSparse<Cast_T> cast() const {

@@ -72,9 +72,6 @@ public:
     // *** Resizing ***
     void reduce() { ; } // Do nothing on reduction
 
-    // *** Boolean ***
-    bool operator==(const MatrixDense<T> &rhs) const { return Parent::operator==(rhs); }
-
     // *** Explicit Cast ***
     template <typename Cast_T>
     MatrixDense<Cast_T> cast() const {
