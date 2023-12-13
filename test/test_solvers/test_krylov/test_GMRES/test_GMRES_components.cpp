@@ -296,7 +296,7 @@ public:
         EXPECT_FALSE(test_mock.check_converged());
         EXPECT_TRUE(test_mock.check_terminated());
         EXPECT_EQ(test_mock.kry_space_dim, 1);
-        EXPECT_NEAR(test_mock.Q_kry_basis.col(0).norm(), 1, Tol<double>::gamma(n));
+        EXPECT_NEAR(MatrixVector<double>(test_mock.Q_kry_basis.col(0)).norm(), 1, Tol<double>::gamma(n));
         ASSERT_MATRIX_ZERO(MatrixDense<double>(test_mock.Q_kry_basis.block(0, 1, n, n-1)), Tol<double>::roundoff());
 
     }
@@ -328,7 +328,7 @@ public:
         // Check that subspace has not gone beyond 1 dimension and that krylov basis
         // as expected to have only a single column
         EXPECT_EQ(test_mock.kry_space_dim, 1);
-        EXPECT_NEAR(test_mock.Q_kry_basis.col(0).norm(), 1, Tol<double>::gamma(n));
+        EXPECT_NEAR(MatrixVector<double>(test_mock.Q_kry_basis.col(0)).norm(), 1, Tol<double>::gamma(n));
         ASSERT_MATRIX_ZERO(MatrixDense<double>(test_mock.Q_kry_basis.block(0, 1, n, n-1)),
                            Tol<double>::roundoff());
 

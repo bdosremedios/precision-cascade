@@ -281,10 +281,6 @@ protected:
             }
         }
 
-        // Test norm
-        MatrixVector<T> norm_vec(mat.col(1));
-        ASSERT_EQ(mat.col(1).norm(), norm_vec.norm());
-
         // Test assignment
         MatrixVector<T> assign_vec({static_cast<T>(1),
                                     static_cast<T>(1),

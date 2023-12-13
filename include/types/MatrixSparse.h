@@ -155,40 +155,36 @@ public:
     };
 
     // Nested class representing sparse matrix column
-    // NEEDS CREATION-FROM/CAST-TO MatrixVector<T>
+    // Requires: assignment from/cast to MatrixVector<T>
     class Col: private Eigen::Block<Parent, Eigen::Dynamic, 1, true>
     {
     private:
 
         using ColParent = Eigen::Block<Parent, Eigen::Dynamic, 1, true>;
         friend MatrixVector<T>;
+        friend MatrixSparse<T>;
         const ColParent &base() const { return *this; }
+        Col(const ColParent &other): ColParent(other) {}
 
     public:
 
-        Col(const ColParent &other): ColParent(other) {}
         Col operator=(const MatrixVector<T> vec) { return ColParent::operator=(vec.base().sparseView()); }
-        T norm() const { return ColParent::norm(); }
 
     };
 
     // Nested class representing sparse matrix block
-    // NEEDS CAST TO MatrixDense<T>
+    // Requires: cast to MatrixDense<T>
     class Block: private Eigen::Block<Parent, Eigen::Dynamic, Eigen::Dynamic>
     {
     private:
 
         using BlockParent = Eigen::Block<Parent, Eigen::Dynamic, Eigen::Dynamic>;
         friend MatrixDense<T>;
+        friend MatrixSparse<T>;
         const BlockParent &base() const { return *this; }
-
-    public:
-
         Block(const BlockParent &other): BlockParent(other) {}
-        Block(const MatrixDense<T> &mat): BlockParent(mat.base()) {}
 
     };
-
     
 };
 

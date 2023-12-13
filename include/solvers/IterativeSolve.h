@@ -59,9 +59,10 @@ private:
     void initialize_instantiate_residual() {
         res_norm_hist.clear();
         res_hist = MatrixDense<double>(lin_sys.get_m(), max_iter+1);
-        curr_res = lin_sys.get_b()-lin_sys.get_A()*init_guess;
-        res_hist.col(0) = curr_res;
-        res_norm_hist.push_back(res_hist.col(0).norm());
+        MatrixVector<double> res_calc(lin_sys.get_b()-lin_sys.get_A()*init_guess);
+        curr_res = res_calc;
+        res_hist.col(0) = res_calc;
+        res_norm_hist.push_back(res_calc.norm());
     }
     
 protected:
