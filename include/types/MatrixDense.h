@@ -15,6 +15,8 @@ class MatrixDense: private Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>
 private:
 
     using Parent = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>;
+    friend MatrixSparse<T>;
+    const Parent &base() const { return *this; }
 
 public:
 
@@ -123,7 +125,7 @@ public:
     };
 
     // Nested class representing sparse matrix block
-    // NEEDS CREATION FROM/CAST TO MatrixDense<T>
+    // NEEDS CREATION FROM/CAST TO MatrixDense<T> and assignment from vector
     class Block: private Eigen::Block<Parent, Eigen::Dynamic, Eigen::Dynamic> {
 
         private:
@@ -133,9 +135,9 @@ public:
 
         public:
             Block(const BlockParent &other): BlockParent(other) {}
-            Block(const MatrixDense<T> &mat): BlockParent(mat) {}
+            Block(const MatrixDense<T> &mat): BlockParent(mat.base()) {}
             Block operator=(const MatrixVector<T> vec) { return BlockParent::operator=(vec.base()); }
-            Block operator=(const MatrixDense<T> &mat) { return BlockParent::operator=(mat); }
+            Block operator=(const MatrixDense<T> &mat) { return BlockParent::operator=(mat.base()); }
 
     };
 

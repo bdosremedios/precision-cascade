@@ -171,7 +171,7 @@ public:
     };
 
     // Nested class representing sparse matrix block
-    // NEEDS CREATION FROM/CAST TO MatrixDense<T>
+    // NEEDS CAST TO MatrixDense<T>
     class Block: private Eigen::Block<Parent, Eigen::Dynamic, Eigen::Dynamic> {
 
         private:
@@ -181,8 +181,7 @@ public:
 
         public:
             Block(const BlockParent &other): BlockParent(other) {}
-            Block operator=(const MatrixVector<T> vec) { return BlockParent::operator=(vec.base()); }
-            Block operator=(const MatrixDense<T> &mat) { return BlockParent::operator=(mat); }
+            Block(const MatrixDense<T> &mat): BlockParent(mat.base()) {}
 
     };
 

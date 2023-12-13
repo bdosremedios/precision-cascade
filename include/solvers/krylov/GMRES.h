@@ -133,10 +133,9 @@ protected:
         R_H.col(k) = H.col(k);
 
         // Apply previous Given's rotations to new column
-        MatrixDense<T> Q_H_block = Q_H.block(0, 0, k+1, k+1);
-        MatrixVector<T> R_H_col = R_H.col(k);
-        R_H_col = R_H_col.slice(0, k+1); // R_H.block(0, k, k+1, 1);
-        R_H.block(0, k, k+1, 1) = Q_H_block.transpose()*R_H_col;
+        MatrixDense<T> Q_H_block(Q_H.block(0, 0, k+1, k+1));
+        MatrixVector<T> R_H_col(H.col(k));
+        R_H.block(0, k, k+1, 1) = Q_H_block.transpose()*R_H_col.slice(0, k+1);
 
         // Apply the final Given's rotation manually making R_H upper triangular
         T alpha = R_H.coeff(k, k);

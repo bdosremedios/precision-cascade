@@ -23,6 +23,9 @@ public:
     template <typename T>
     void TestCol() { TestCol_Base<MatrixSparse, T>(); }
 
+    template <typename T>
+    void TestBlock() { TestBlock_Base<MatrixSparse, T>(); }
+
 };
 
 TEST_F(MatrixSparse_Test, TestConstruction) {
@@ -55,4 +58,10 @@ TEST_F(MatrixSparse_Test, TestCol) {
     TestCol<half>();
     TestCol<float>();
     TestCol<double>();
+}
+
+TEST_F(MatrixSparse_Test, TestBlock) {
+    TestBlock<half>();
+    TestBlock<float>();
+    TestBlock<double>();
 }
