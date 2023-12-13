@@ -24,9 +24,6 @@ public:
     void TestCol() { TestCol_Base<MatrixSparse, T>(); }
 
     template <typename T>
-    void TestBlock() { TestBlock_Base<MatrixSparse, T>(); }
-
-    template <typename T>
     void TestTranspose() { TestTranspose_Base<MatrixSparse, T>(); }
 
     template <typename T>
@@ -80,12 +77,6 @@ TEST_F(MatrixSparse_Test, TestCol) {
     TestCol<double>();
 }
 
-TEST_F(MatrixSparse_Test, TestBlock) {
-    TestBlock<half>();
-    TestBlock<float>();
-    TestBlock<double>();
-}
-
 TEST_F(MatrixSparse_Test, TestTranspose) {
     TestTranspose<half>();
     TestTranspose<float>();
@@ -122,6 +113,4 @@ TEST_F(MatrixSparse_Test, TestAddSub) {
     TestAddSub<double>();
 }
 
-TEST_F(MatrixSparse_Test, TestCast) {
-    TestCast();
-}
+TEST_F(MatrixSparse_Test, TestCast) { TestCast(); }

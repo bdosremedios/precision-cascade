@@ -7,6 +7,7 @@ set(
     test_types/test_MatrixVector.cpp
     test_types/test_MatrixDense.cpp
     test_types/test_MatrixSparse.cpp
+    test_types/test_TypeConversion.cpp
 )
 
 set(

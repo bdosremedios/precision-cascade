@@ -26,8 +26,6 @@ public:
     template <typename T>
     void TestBlock() {
 
-        TestBlock_Base<MatrixDense, T>();
-
         const MatrixDense<T> const_mat ({
             {static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4), static_cast<T>(5)},
             {static_cast<T>(6), static_cast<T>(7), static_cast<T>(8), static_cast<T>(9), static_cast<T>(10)},
@@ -35,8 +33,27 @@ public:
             {static_cast<T>(16), static_cast<T>(17), static_cast<T>(18), static_cast<T>(19), static_cast<T>(20)}
         });
         MatrixDense<T> mat(const_mat);
+        
+        // Test cast/access for block 0, 0, 3, 4
+        MatrixDense<T> mat_0_0_3_4(mat.block(0, 0, 3, 4));
+        MatrixDense<T> test_0_0_3_4 ({
+            {static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4)},
+            {static_cast<T>(6), static_cast<T>(7), static_cast<T>(8), static_cast<T>(9)},
+            {static_cast<T>(11), static_cast<T>(12), static_cast<T>(13), static_cast<T>(14)}
+        });
+        ASSERT_MATRIX_EQ(mat_0_0_3_4, test_0_0_3_4);
+
+        // Test cast/access for block 1, 2, 3, 1
+        MatrixDense<T> mat_1_2_3_1(mat.block(1, 2, 3, 1));
+        MatrixDense<T> test_1_2_3_1 ({
+            {static_cast<T>(8)},
+            {static_cast<T>(13)},
+            {static_cast<T>(18)}
+        });
+        ASSERT_MATRIX_EQ(mat_1_2_3_1, test_1_2_3_1);
 
         // Test assignment from MatrixDense
+        mat = const_mat;
         MatrixDense<T> zero_2_3(MatrixDense<T>::Zero(2, 3));
         mat.block(1, 1, 2, 3) = zero_2_3;
         MatrixDense<T> test_assign_2_3 ({
@@ -159,6 +176,4 @@ TEST_F(MatrixDense_Test, TestAddSub) {
     TestAddSub<double>();
 }
 
-TEST_F(MatrixDense_Test, TestCast) {
-    TestCast();
-}
+TEST_F(MatrixDense_Test, TestCast) { TestCast(); }
