@@ -97,11 +97,11 @@ public:
         return typename Eigen::Matrix<T, Eigen::Dynamic, 1>::Matrix(Parent::operator*(vec.base()));
     }
     T norm() const { return Parent::norm(); } // Needed for testing
-    MatrixDense<T> operator-(const MatrixDense<T> &mat) const { // Needed for testing
-        return typename Parent::Matrix(Parent::operator-(mat));
-    }
     MatrixDense<T> operator+(const MatrixDense<T> &mat) const { // Needed for testing
         return typename Parent::Matrix(Parent::operator+(mat));
+    }
+    MatrixDense<T> operator-(const MatrixDense<T> &mat) const { // Needed for testing
+        return typename Parent::Matrix(Parent::operator-(mat));
     }
     MatrixDense<T> operator*(const MatrixDense<T> &mat) const { // Needed for testing
         return typename Parent::Matrix(Parent::operator*(mat));
@@ -109,35 +109,39 @@ public:
 
     // Nested class representing sparse matrix column
     // NEEDS CREATION-FROM/CAST-TO MatrixVector<T>
-    class Col: private Eigen::Block<Parent, Eigen::Dynamic, 1, true> {
+    class Col: private Eigen::Block<Parent, Eigen::Dynamic, 1, true>
+    {
+    private:
 
-        private:
-            using ColParent = Eigen::Block<Parent, Eigen::Dynamic, 1, true>;
-            friend MatrixVector<T>;
-            const ColParent &base() const { return *this; }
+        using ColParent = Eigen::Block<Parent, Eigen::Dynamic, 1, true>;
+        friend MatrixVector<T>;
+        const ColParent &base() const { return *this; }
 
-        public:
-            Col(const ColParent &other): ColParent(other) {}
-            Col(const Eigen::Block<const Parent, Eigen::Dynamic, 1, true> &other): ColParent(other) {}
-            Col operator=(const MatrixVector<T> vec) { return ColParent::operator=(vec.base()); }
-            T norm() const { return ColParent::norm(); }
+    public:
+
+        Col(const ColParent &other): ColParent(other) {}
+        Col(const Eigen::Block<const Parent, Eigen::Dynamic, 1, true> &other): ColParent(other) {}
+        Col operator=(const MatrixVector<T> vec) { return ColParent::operator=(vec.base()); }
+        T norm() const { return ColParent::norm(); }
 
     };
 
     // Nested class representing sparse matrix block
     // NEEDS CREATION FROM/CAST TO MatrixDense<T> and assignment from vector
-    class Block: private Eigen::Block<Parent, Eigen::Dynamic, Eigen::Dynamic> {
+    class Block: private Eigen::Block<Parent, Eigen::Dynamic, Eigen::Dynamic>
+    {
+    private:
 
-        private:
-            using BlockParent = Eigen::Block<Parent, Eigen::Dynamic, Eigen::Dynamic>;
-            friend MatrixDense<T>;
-            const BlockParent &base() const { return *this; }
+        using BlockParent = Eigen::Block<Parent, Eigen::Dynamic, Eigen::Dynamic>;
+        friend MatrixDense<T>;
+        const BlockParent &base() const { return *this; }
 
-        public:
-            Block(const BlockParent &other): BlockParent(other) {}
-            Block(const MatrixDense<T> &mat): BlockParent(mat.base()) {}
-            Block operator=(const MatrixVector<T> vec) { return BlockParent::operator=(vec.base()); }
-            Block operator=(const MatrixDense<T> &mat) { return BlockParent::operator=(mat.base()); }
+    public:
+
+        Block(const BlockParent &other): BlockParent(other) {}
+        Block(const MatrixDense<T> &mat): BlockParent(mat.base()) {}
+        Block operator=(const MatrixVector<T> vec) { return BlockParent::operator=(vec.base()); }
+        Block operator=(const MatrixDense<T> &mat) { return BlockParent::operator=(mat.base()); }
 
     };
 

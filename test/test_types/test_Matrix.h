@@ -332,24 +332,213 @@ protected:
     }
 
     template <template <typename> typename M, typename T>
-    void TestTranspose_Base();
+    void TestTranspose_Base() {
+
+        // Test manually
+        constexpr int m_manual(4);
+        constexpr int n_manual(3);
+        MatrixDense<T> mat ({
+            {static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4)},
+            {static_cast<T>(5), static_cast<T>(6), static_cast<T>(7), static_cast<T>(8)},
+            {static_cast<T>(9), static_cast<T>(10), static_cast<T>(11), static_cast<T>(12)}
+        });
+        ASSERT_EQ(mat.transpose().rows(), m_manual);
+        ASSERT_EQ(mat.transpose().cols(), n_manual);
+        for (int i=0; i<m_manual; ++i) {
+            for (int j=0; j<n_manual; ++j) {
+                ASSERT_EQ(mat.transpose().coeff(i, j), mat.coeff(j, i));
+            }
+        }
+        MatrixDense<T> test ({
+            {static_cast<T>(1), static_cast<T>(5), static_cast<T>(9)},
+            {static_cast<T>(2), static_cast<T>(6), static_cast<T>(10)},
+            {static_cast<T>(3), static_cast<T>(7), static_cast<T>(11)},
+            {static_cast<T>(4), static_cast<T>(8), static_cast<T>(12)}
+        });
+        ASSERT_MATRIX_EQ(mat.transpose(), test);
+
+        // Test random
+        constexpr int m_rand(12);
+        constexpr int n_rand(17);
+        MatrixDense<T> mat_rand(MatrixDense<T>::Random(m_rand, n_rand));
+        ASSERT_EQ(mat_rand.transpose().rows(), n_rand);
+        ASSERT_EQ(mat_rand.transpose().cols(), m_rand);
+        for (int i=0; i<n_rand; ++i) {
+            for (int j=0; j<m_rand; ++j) {
+                ASSERT_EQ(mat_rand.transpose().coeff(i, j), mat_rand.coeff(j, i));
+            }
+        }
+
+    }
 
     template <template <typename> typename M, typename T>
-    void TestScale_Base();
+    void TestScale_Base() {
+
+        M<T> mat ({
+            {static_cast<T>(-8), static_cast<T>(0.8), static_cast<T>(-0.6)},
+            {static_cast<T>(1), static_cast<T>(2), static_cast<T>(3)},
+            {static_cast<T>(-3), static_cast<T>(-2), static_cast<T>(-1)},
+            {static_cast<T>(10), static_cast<T>(100), static_cast<T>(1000)}
+        });
+        M<T> mat_scaled_mult = mat*static_cast<T>(4);
+        for (int i=0; i<4; ++i) {
+            for (int j=0; j<3; ++j) {
+                ASSERT_EQ(mat_scaled_mult.coeff(i, j), static_cast<T>(4)*mat.coeff(i, j));
+            }
+        }
+        M<T> mat_scaled_div = mat/static_cast<T>(10);
+        for (int i=0; i<4; ++i) {
+            for (int j=0; j<3; ++j) {
+                ASSERT_EQ(mat_scaled_div.coeff(i, j), mat.coeff(i, j)/static_cast<T>(10));
+            }
+        }
+
+    }
 
     template <template <typename> typename M, typename T>
-    void TestMatVec_Base();
+    void TestMatVec_Base() {
+
+        M<T> mat ({
+            {static_cast<T>(1), static_cast<T>(4), static_cast<T>(9)},
+            {static_cast<T>(-1), static_cast<T>(-4), static_cast<T>(-9)},
+            {static_cast<T>(-3), static_cast<T>(-2), static_cast<T>(-1)},
+            {static_cast<T>(10), static_cast<T>(100), static_cast<T>(1000)}
+        });
+        MatrixVector<T> vec({static_cast<T>(3),
+                             static_cast<T>(-4),
+                             static_cast<T>(12)});
+        MatrixVector<T> test_vec({static_cast<T>(95),
+                                  static_cast<T>(-95),
+                                  static_cast<T>(-13),
+                                  static_cast<T>(11630)});
+        ASSERT_VECTOR_EQ(mat*vec, test_vec);
+
+        MatrixVector<T> vec2({static_cast<T>(0),
+                              static_cast<T>(0),
+                              static_cast<T>(1)});
+        MatrixVector<T> test_vec2({static_cast<T>(9),
+                                   static_cast<T>(-9),
+                                   static_cast<T>(-1),
+                                   static_cast<T>(1000)});
+        ASSERT_VECTOR_EQ(mat*vec2, test_vec2);
+
+    }
 
     template <template <typename> typename M, typename T>
-    void TestMatMat_Base();
+    void TestMatMat_Base() {
+
+        M<T> mat1 ({
+            {static_cast<T>(1), static_cast<T>(4)},
+            {static_cast<T>(-1), static_cast<T>(-4)},
+            {static_cast<T>(-3), static_cast<T>(-2)},
+            {static_cast<T>(10), static_cast<T>(100)}
+        });
+        M<T> mat2 ({
+            {static_cast<T>(7), static_cast<T>(2), static_cast<T>(-3)},
+            {static_cast<T>(10), static_cast<T>(-4), static_cast<T>(-3)}
+        });
+        M<T> test_mat ({
+            {static_cast<T>(47), static_cast<T>(-14), static_cast<T>(-15)},
+            {static_cast<T>(-47), static_cast<T>(14), static_cast<T>(15)},
+            {static_cast<T>(-41), static_cast<T>(2), static_cast<T>(15)},
+            {static_cast<T>(1070), static_cast<T>(-380), static_cast<T>(-330)}
+        });
+        ASSERT_MATRIX_EQ(mat1*mat2, test_mat);
+        ASSERT_MATRIX_EQ(mat1*M<T>::Identity(2, 2), mat1);
+        ASSERT_MATRIX_EQ(mat2*M<T>::Identity(3, 3), mat2);
+
+    }
 
     template <template <typename> typename M, typename T>
-    void TestNorm_Base();
+    void TestNorm_Base() {
+
+        M<T> mat1 ({
+            {static_cast<T>(18), static_cast<T>(5)},
+            {static_cast<T>(-3), static_cast<T>(6)},
+            {static_cast<T>(9), static_cast<T>(-9)},
+            {static_cast<T>(4), static_cast<T>(-2)}
+        });
+        ASSERT_EQ(mat1.norm(), static_cast<T>(24));
+
+        M<T> mat2 ({
+            {static_cast<T>(1), static_cast<T>(-1), static_cast<T>(1)},
+            {static_cast<T>(1), static_cast<T>(1), static_cast<T>(-1)},
+            {static_cast<T>(-1), static_cast<T>(-1), static_cast<T>(-1)}
+        });
+        ASSERT_EQ(mat2.norm(), static_cast<T>(3));
+
+    }
 
     template <template <typename> typename M, typename T>
-    void TestAddSub_Base();
+    void TestAddSub_Base() {
 
-    template <template <typename> typename M, typename T>
-    void TestCast_Base();
+        M<T> mat1 ({
+            {static_cast<T>(47), static_cast<T>(-14), static_cast<T>(-15)},
+            {static_cast<T>(-47), static_cast<T>(14), static_cast<T>(15)},
+            {static_cast<T>(-41), static_cast<T>(2), static_cast<T>(15)},
+            {static_cast<T>(10), static_cast<T>(-38), static_cast<T>(-33)}
+        });
+        M<T> mat2 ({
+            {static_cast<T>(1), static_cast<T>(2), static_cast<T>(3)},
+            {static_cast<T>(-4), static_cast<T>(-5), static_cast<T>(-6)},
+            {static_cast<T>(-7), static_cast<T>(8), static_cast<T>(9)},
+            {static_cast<T>(10), static_cast<T>(-11), static_cast<T>(-12)}
+        });
+
+        M<T> test_mat_add ({
+            {static_cast<T>(48), static_cast<T>(-12), static_cast<T>(-12)},
+            {static_cast<T>(-51), static_cast<T>(9), static_cast<T>(9)},
+            {static_cast<T>(-48), static_cast<T>(10), static_cast<T>(24)},
+            {static_cast<T>(20), static_cast<T>(-49), static_cast<T>(-45)}
+        });
+        ASSERT_MATRIX_EQ(mat1+mat2, test_mat_add);
+
+        M<T> test_mat_sub_1 ({
+            {static_cast<T>(46), static_cast<T>(-16), static_cast<T>(-18)},
+            {static_cast<T>(-43), static_cast<T>(19), static_cast<T>(21)},
+            {static_cast<T>(-34), static_cast<T>(-6), static_cast<T>(6)},
+            {static_cast<T>(0), static_cast<T>(-27), static_cast<T>(-21)}
+        });
+        ASSERT_MATRIX_EQ(mat1-mat2, test_mat_sub_1);
+
+        M<T> test_mat_sub_2 ({
+            {static_cast<T>(-46), static_cast<T>(16), static_cast<T>(18)},
+            {static_cast<T>(43), static_cast<T>(-19), static_cast<T>(-21)},
+            {static_cast<T>(34), static_cast<T>(6), static_cast<T>(-6)},
+            {static_cast<T>(0), static_cast<T>(27), static_cast<T>(21)}
+        });
+        ASSERT_MATRIX_EQ(mat2-mat1, test_mat_sub_2);
+
+        ASSERT_MATRIX_EQ(mat1-mat1, M<T>::Zero(4, 3));
+        ASSERT_MATRIX_EQ(mat2-mat2, M<T>::Zero(4, 3));
+
+    }
+
+    template <template <typename> typename M>
+    void TestCast_Base() {
+        
+        constexpr int m(20);
+        constexpr int n(30);
+        M<double> mat_dbl(M<double>::Random(m, n));
+
+        M<float> mat_sgl(mat_dbl.cast<float>());
+        ASSERT_EQ(mat_sgl.rows(), m);
+        ASSERT_EQ(mat_sgl.cols(), n);
+        for (int i=0; i<m; ++i) {
+            for (int j=0; j<n; ++j) {
+                ASSERT_EQ(mat_sgl.coeff(i, j), static_cast<float>(mat_dbl.coeff(i, j)));
+            }
+        }
+
+        M<half> mat_hlf(mat_dbl.cast<half>());
+        ASSERT_EQ(mat_hlf.rows(), m);
+        ASSERT_EQ(mat_hlf.cols(), n);
+        for (int i=0; i<m; ++i) {
+            for (int j=0; j<n; ++j) {
+                ASSERT_EQ(mat_hlf.coeff(i, j), static_cast<half>(mat_dbl.coeff(i, j)));
+            }
+        }
+
+    }
 
 };

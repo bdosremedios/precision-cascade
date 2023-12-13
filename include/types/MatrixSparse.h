@@ -106,82 +106,86 @@ public:
         return typename Matrix<T, Dynamic, 1>::Matrix(Parent::operator*(vec.base()));
     }
     T norm() const { return Parent::norm(); } // Needed for testing
-    MatrixSparse<T> operator-(const MatrixSparse<T> &mat) const { // Needed for testing
-        return typename Parent::SparseMatrix(Parent::operator-(mat));
-    }
     MatrixSparse<T> operator+(const MatrixSparse<T> &mat) const { // Needed for testing
         return typename Parent::SparseMatrix(Parent::operator+(mat));
+    }
+    MatrixSparse<T> operator-(const MatrixSparse<T> &mat) const { // Needed for testing
+        return typename Parent::SparseMatrix(Parent::operator-(mat));
     }
     MatrixSparse<T> operator*(const MatrixSparse<T> &mat) const { // Needed for testing
         return typename Parent::SparseMatrix(Parent::operator*(mat));
     }
 
     // Forward iterator over sparse inner columns skipping zeroes
-    class InnerIterator: public Parent::InnerIterator {
+    class InnerIterator: public Parent::InnerIterator
+    {
+    public:
+        
+        InnerIterator(const MatrixSparse<T> &mat, int start):
+            Parent::InnerIterator(mat, start)
+        {}
 
-        public:
-            
-            InnerIterator(const MatrixSparse<T> &mat, int start):
-                Parent::InnerIterator(mat, start)
-            {}
-
-            int col() { return Parent::InnerIterator::col(); }
-            int row() { return Parent::InnerIterator::row(); }
-            T value() { return Parent::InnerIterator::value(); }
-            typename Parent::InnerIterator &operator++() {
-                return Parent::InnerIterator::operator++();
-            }
-            operator bool() const { return Parent::InnerIterator::operator bool(); }
+        int col() { return Parent::InnerIterator::col(); }
+        int row() { return Parent::InnerIterator::row(); }
+        T value() { return Parent::InnerIterator::value(); }
+        typename Parent::InnerIterator &operator++() {
+            return Parent::InnerIterator::operator++();
+        }
+        operator bool() const { return Parent::InnerIterator::operator bool(); }
 
     };
 
     // Reverse iterator over sparse inner columns skipping zeroes
-    class ReverseInnerIterator: public Parent::ReverseInnerIterator {
+    class ReverseInnerIterator: public Parent::ReverseInnerIterator
+    {
+    public:
+        
+        ReverseInnerIterator(const MatrixSparse<T> &mat, int start):
+            Parent::ReverseInnerIterator(mat, start)
+        {}
 
-        public:
-            
-            ReverseInnerIterator(const MatrixSparse<T> &mat, int start):
-                Parent::ReverseInnerIterator(mat, start)
-            {}
-
-            int col() { return Parent::ReverseInnerIterator::col(); }
-            int row() { return Parent::ReverseInnerIterator::row(); }
-            T value() { return Parent::ReverseInnerIterator::value(); }
-            typename Parent::ReverseInnerIterator &operator--() {
-                return Parent::ReverseInnerIterator::operator--();
-            }
-            operator bool() const { return Parent::ReverseInnerIterator::operator bool(); }
+        int col() { return Parent::ReverseInnerIterator::col(); }
+        int row() { return Parent::ReverseInnerIterator::row(); }
+        T value() { return Parent::ReverseInnerIterator::value(); }
+        typename Parent::ReverseInnerIterator &operator--() {
+            return Parent::ReverseInnerIterator::operator--();
+        }
+        operator bool() const { return Parent::ReverseInnerIterator::operator bool(); }
 
     };
 
     // Nested class representing sparse matrix column
     // NEEDS CREATION-FROM/CAST-TO MatrixVector<T>
-    class Col: private Eigen::Block<Parent, Eigen::Dynamic, 1, true> {
+    class Col: private Eigen::Block<Parent, Eigen::Dynamic, 1, true>
+    {
+    private:
 
-        private:
-            using ColParent = Eigen::Block<Parent, Eigen::Dynamic, 1, true>;
-            friend MatrixVector<T>;
-            const ColParent &base() const { return *this; }
+        using ColParent = Eigen::Block<Parent, Eigen::Dynamic, 1, true>;
+        friend MatrixVector<T>;
+        const ColParent &base() const { return *this; }
 
-        public:
-            Col(const ColParent &other): ColParent(other) {}
-            Col operator=(const MatrixVector<T> vec) { return ColParent::operator=(vec.base().sparseView()); }
-            T norm() const { return ColParent::norm(); }
+    public:
+
+        Col(const ColParent &other): ColParent(other) {}
+        Col operator=(const MatrixVector<T> vec) { return ColParent::operator=(vec.base().sparseView()); }
+        T norm() const { return ColParent::norm(); }
 
     };
 
     // Nested class representing sparse matrix block
     // NEEDS CAST TO MatrixDense<T>
-    class Block: private Eigen::Block<Parent, Eigen::Dynamic, Eigen::Dynamic> {
+    class Block: private Eigen::Block<Parent, Eigen::Dynamic, Eigen::Dynamic>
+    {
+    private:
 
-        private:
-            using BlockParent = Eigen::Block<Parent, Eigen::Dynamic, Eigen::Dynamic>;
-            friend MatrixDense<T>;
-            const BlockParent &base() const { return *this; }
+        using BlockParent = Eigen::Block<Parent, Eigen::Dynamic, Eigen::Dynamic>;
+        friend MatrixDense<T>;
+        const BlockParent &base() const { return *this; }
 
-        public:
-            Block(const BlockParent &other): BlockParent(other) {}
-            Block(const MatrixDense<T> &mat): BlockParent(mat.base()) {}
+    public:
+
+        Block(const BlockParent &other): BlockParent(other) {}
+        Block(const MatrixDense<T> &mat): BlockParent(mat.base()) {}
 
     };
 

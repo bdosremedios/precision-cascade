@@ -26,6 +26,26 @@ public:
     template <typename T>
     void TestBlock() { TestBlock_Base<MatrixSparse, T>(); }
 
+    template <typename T>
+    void TestTranspose() { TestTranspose_Base<MatrixSparse, T>(); }
+
+    template <typename T>
+    void TestScale() { TestScale_Base<MatrixSparse, T>(); }
+
+    template <typename T>
+    void TestMatVec() { TestMatVec_Base<MatrixSparse, T>(); }
+
+    template <typename T>
+    void TestMatMat() { TestMatMat_Base<MatrixSparse, T>(); }
+
+    template <typename T>
+    void TestNorm() { TestNorm_Base<MatrixSparse, T>(); }
+
+    template <typename T>
+    void TestAddSub() { TestAddSub_Base<MatrixSparse, T>(); }
+
+    void TestCast() { TestCast_Base<MatrixSparse>(); }
+
 };
 
 TEST_F(MatrixSparse_Test, TestConstruction) {
@@ -64,4 +84,44 @@ TEST_F(MatrixSparse_Test, TestBlock) {
     TestBlock<half>();
     TestBlock<float>();
     TestBlock<double>();
+}
+
+TEST_F(MatrixSparse_Test, TestTranspose) {
+    TestTranspose<half>();
+    TestTranspose<float>();
+    TestTranspose<double>();
+}
+
+TEST_F(MatrixSparse_Test, TestScale) {
+    TestScale<half>();
+    TestScale<float>();
+    TestScale<double>();
+}
+
+TEST_F(MatrixSparse_Test, TestMatVec) {
+    TestMatVec<half>();
+    TestMatVec<float>();
+    TestMatVec<double>();
+}
+
+TEST_F(MatrixSparse_Test, TestMatMat) {
+    TestMatMat<half>();
+    TestMatMat<float>();
+    TestMatMat<double>();
+}
+
+TEST_F(MatrixSparse_Test, TestNorm) {
+    TestNorm<half>();
+    TestNorm<float>();
+    TestNorm<double>();
+}
+
+TEST_F(MatrixSparse_Test, TestAddSub) {
+    TestAddSub<half>();
+    TestAddSub<float>();
+    TestAddSub<double>();
+}
+
+TEST_F(MatrixSparse_Test, TestCast) {
+    TestCast();
 }

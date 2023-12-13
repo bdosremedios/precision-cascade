@@ -48,21 +48,40 @@ public:
         ASSERT_MATRIX_EQ(mat, test_assign_2_3);
 
         // Test assignment from MatrixVector
-
-        // // Test assignment
-        // MatrixVector<T> assign_vec({static_cast<T>(1),
-        //                             static_cast<T>(1),
-        //                             static_cast<T>(1),
-        //                             static_cast<T>(1)});
-        // mat.col(2) = assign_vec;
-        // for (int j=0; j<2; ++j) {
-        //     for (int i=0; i<4; ++i) {
-        //         ASSERT_EQ(mat.coeff(i, j), const_mat.coeff(i, j));
-        //     }
-        // }
-        // for (int i=0; i<4; ++i) { ASSERT_EQ(mat.coeff(i, 2), static_cast<T>(1)); }
+        mat = const_mat;
+        MatrixVector<T> assign_vec({static_cast<T>(1),
+                                    static_cast<T>(1),
+                                    static_cast<T>(1)});
+        mat.block(1, 4, 3, 1) = assign_vec;
+        MatrixDense<T> test_assign_1_4 ({
+            {static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4), static_cast<T>(5)},
+            {static_cast<T>(6), static_cast<T>(7), static_cast<T>(8), static_cast<T>(9), static_cast<T>(1)},
+            {static_cast<T>(11), static_cast<T>(12), static_cast<T>(13), static_cast<T>(14), static_cast<T>(1)},
+            {static_cast<T>(16), static_cast<T>(17), static_cast<T>(18), static_cast<T>(19), static_cast<T>(1)}
+        });
+        ASSERT_MATRIX_EQ(mat, test_assign_1_4);
 
     }
+
+    template <typename T>
+    void TestTranspose() { TestTranspose_Base<MatrixDense, T>(); }
+
+    template <typename T>
+    void TestScale() { TestScale_Base<MatrixDense, T>(); }
+
+    template <typename T>
+    void TestMatVec() { TestMatVec_Base<MatrixDense, T>(); }
+
+    template <typename T>
+    void TestMatMat() { TestMatMat_Base<MatrixDense, T>(); }
+
+    template <typename T>
+    void TestNorm() { TestNorm_Base<MatrixDense, T>(); }
+
+    template <typename T>
+    void TestAddSub() { TestAddSub_Base<MatrixDense, T>(); }
+
+    void TestCast() { TestCast_Base<MatrixDense>(); }
 
 };
 
@@ -102,4 +121,44 @@ TEST_F(MatrixDense_Test, TestBlock) {
     TestBlock<half>();
     TestBlock<float>();
     TestBlock<double>();
+}
+
+TEST_F(MatrixDense_Test, TestTranspose) {
+    TestTranspose<half>();
+    TestTranspose<float>();
+    TestTranspose<double>();
+}
+
+TEST_F(MatrixDense_Test, TestScale) {
+    TestScale<half>();
+    TestScale<float>();
+    TestScale<double>();
+}
+
+TEST_F(MatrixDense_Test, TestMatVec) {
+    TestMatVec<half>();
+    TestMatVec<float>();
+    TestMatVec<double>();
+}
+
+TEST_F(MatrixDense_Test, TestMatMat) {
+    TestMatMat<half>();
+    TestMatMat<float>();
+    TestMatMat<double>();
+}
+
+TEST_F(MatrixDense_Test, TestNorm) {
+    TestNorm<half>();
+    TestNorm<float>();
+    TestNorm<double>();
+}
+
+TEST_F(MatrixDense_Test, TestAddSub) {
+    TestAddSub<half>();
+    TestAddSub<float>();
+    TestAddSub<double>();
+}
+
+TEST_F(MatrixDense_Test, TestCast) {
+    TestCast();
 }
