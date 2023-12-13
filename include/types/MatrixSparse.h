@@ -14,8 +14,6 @@ using Eigen::Matrix;
 using Eigen::SparseMatrix;
 using Eigen::Dynamic;
 
-using std::min;
-
 template <typename T>
 class MatrixSparse: private SparseMatrix<T>
 {
@@ -70,7 +68,7 @@ public:
     }
     static MatrixSparse<T> Identity(int m, int n) {
         Parent temp = Parent(m, n);
-        for (int i=0; i<min(m, n); ++i) { temp.coeffRef(i, i) = static_cast<T>(1); }
+        for (int i=0; i<std::min(m, n); ++i) { temp.coeffRef(i, i) = static_cast<T>(1); }
         return temp;
     }
     static MatrixSparse<T> Ones(int m, int n) {
