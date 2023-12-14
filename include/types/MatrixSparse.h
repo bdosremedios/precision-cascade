@@ -30,11 +30,8 @@ public:
     MatrixSparse(int m, int n): Parent::SparseMatrix(m, n) {}
 
     MatrixSparse(std::initializer_list<std::initializer_list<T>> li):
-        MatrixSparse(
-            li.size(),
-            (li.size() == 0) ? 0 : std::cbegin(li)->size()
-        )
-    {
+        MatrixSparse(li.size(), (li.size() == 0) ? 0 : std::cbegin(li)->size())
+    { 
         int i=0;
         for (auto curr_row = std::cbegin(li); curr_row != std::cend(li); ++curr_row) {
             int j=0;
@@ -46,6 +43,7 @@ public:
             if (j != cols()) { throw(std::runtime_error("Initializer list has non-consistent row size")); }
             ++i;
         }
+        if (i != rows()) { throw(std::runtime_error("Initializer list has non-consistent row size")); }
         reduce();
     }
 
@@ -60,7 +58,7 @@ public:
     // *** Properties ***
     int rows() const { return Parent::rows(); }
     int cols() const { return Parent::cols(); }
-    void print() const { std::cout << *this << std::endl << std::endl; }
+    void print() { std::cout << *this << std::endl << std::endl; }
 
     // *** Static Creation ***
     static MatrixSparse<T> Random(int m, int n) {

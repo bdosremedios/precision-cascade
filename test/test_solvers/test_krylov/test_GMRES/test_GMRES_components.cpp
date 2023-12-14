@@ -13,8 +13,8 @@ public:
         const int &n
     ) {
 
-        M<double> A = read_matrixCSV<M, double>(A_file_path);
-        MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(b_file_path);
+        M<double> A(read_matrixCSV<M, double>(A_file_path));
+        MatrixVector<double> b(read_matrixCSV<MatrixVector, double>(b_file_path));
         TypedLinearSystem<M, double> lin_sys(A, b);
 
         GMRESSolveTestingMock<M, double> test_mock(lin_sys, Tol<double>::roundoff(), default_args);
@@ -44,24 +44,24 @@ public:
     void KrylovInitAndUpdate() {
 
         const int n(5);
-        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("A_5_toy.csv"));
-        MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("b_5_toy.csv"));
+        M<double> A(read_matrixCSV<M, double>(solve_matrix_dir / fs::path("A_5_toy.csv")));
+        MatrixVector<double> b(read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("b_5_toy.csv")));
         TypedLinearSystem<M, double> lin_sys(A, b);
 
         GMRESSolveTestingMock<M, double> test_mock(lin_sys, Tol<double>::roundoff(), default_args);
 
         test_mock.typed_soln = MatrixVector<double>::Ones(n); // Manually instantiate initial guess
-        MatrixVector<double> r_0 = b - A*MatrixVector<double>::Ones(n);
+        MatrixVector<double> r_0(b - A*MatrixVector<double>::Ones(n));
 
         // Create matrix to store previous basis vectors to ensure no change across iterations
-        MatrixDense<double> Q_save = MatrixDense<double>::Zero(n, n);
-        MatrixDense<double> H_save = MatrixDense<double>::Zero(n+1, n);
+        MatrixDense<double> Q_save(MatrixDense<double>::Zero(n, n));
+        MatrixDense<double> H_save(MatrixDense<double>::Zero(n+1, n));
 
         // First update check first vector for basis is residual norm
         // and that Hessenberg first vector contructs next vector with entries
         test_mock.iterate_no_soln_solve();
 
-        MatrixVector<double> next_q = test_mock.Q_kry_basis.col(0);
+        MatrixVector<double> next_q(test_mock.Q_kry_basis.col(0));
         ASSERT_VECTOR_EQ(next_q, r_0/r_0.norm());
         next_q = A*next_q;
         next_q -= MatrixVector<double>(test_mock.Q_kry_basis.col(0))*test_mock.H.coeff(0, 0);
@@ -81,7 +81,7 @@ public:
             H_save.col(k) = test_mock.H.col(k);
 
             // Get newly generated basis vector
-            MatrixVector<double> q = test_mock.Q_kry_basis.col(k);
+            MatrixVector<double> q(test_mock.Q_kry_basis.col(k));
 
             // Confirm that previous vectors are unchanged and are orthogonal to new one
             for (int j=0; j<k; ++j) {
@@ -96,13 +96,13 @@ public:
 
             // Confirm that Hessenberg matrix column corresponding to new basis vector
             // approximately constructs the next basis vector
-            MatrixVector<double> h = test_mock.H.col(k);
-            MatrixVector<double> construct_q = test_mock.Q_kry_basis.col(k);
+            MatrixVector<double> h(test_mock.H.col(k));
+            MatrixVector<double> construct_q(test_mock.Q_kry_basis.col(k));
             construct_q = A*construct_q;
             for (int i=0; i<=k; ++i) {
                 ASSERT_EQ(MatrixVector<double>(test_mock.Q_kry_basis.col(i)).dot(construct_q),
                           h(i));
-                MatrixVector<double> q_i = test_mock.Q_kry_basis.col(i);
+                MatrixVector<double> q_i(test_mock.Q_kry_basis.col(i));
                 construct_q -= q_i*h(i);
             }
             EXPECT_EQ(construct_q.norm(), h(k+1));
@@ -123,14 +123,14 @@ public:
     void H_QR_Update() {
 
         const int n(5);
-        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("A_5_toy.csv"));
-        MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("b_5_toy.csv"));
+        M<double> A(read_matrixCSV<M, double>(solve_matrix_dir / fs::path("A_5_toy.csv")));
+        MatrixVector<double> b(read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("b_5_toy.csv")));
         TypedLinearSystem<M, double> lin_sys(A, b);
 
         GMRESSolveTestingMock<M, double> test_mock(lin_sys, Tol<double>::roundoff(), default_args);
 
         test_mock.typed_soln = MatrixVector<double>::Ones(n); // Manually instantiate initial guess
-        MatrixVector<double> r_0 = b - A*MatrixVector<double>::Ones(n);
+        MatrixVector<double> r_0(b - A*MatrixVector<double>::Ones(n));
 
         // Fully create Hessenberg matrix
         test_mock.iterate_no_soln_solve();
@@ -139,8 +139,8 @@ public:
         test_mock.iterate_no_soln_solve();
         test_mock.iterate_no_soln_solve();
 
-        MatrixDense<double> save_Q_H = MatrixDense<double>::Zero(n+1, n+1);
-        MatrixDense<double> save_R_H = MatrixDense<double>::Zero(n+1, n);
+        MatrixDense<double> save_Q_H(MatrixDense<double>::Zero(n+1, n+1));
+        MatrixDense<double> save_R_H(MatrixDense<double>::Zero(n+1, n));
 
         for (int kry_dim=1; kry_dim<=n; ++kry_dim) {
 
@@ -167,8 +167,8 @@ public:
             save_R_H.col(k) = test_mock.R_H.col(k);
 
             // Test that k+1 by k+1 block of Q_H is orthogonal
-            MatrixDense<double> Q_H_block = test_mock.Q_H.block(0, 0, k+2, k+2);
-            MatrixDense<double> orthog_check = Q_H_block*Q_H_block.transpose();
+            MatrixDense<double> Q_H_block(test_mock.Q_H.block(0, 0, k+2, k+2));
+            MatrixDense<double> orthog_check(Q_H_block*Q_H_block.transpose());
             ASSERT_MATRIX_IDENTITY(orthog_check, Tol<double>::roundoff());
 
             // Test that k+1 by k block of R_H is uppertriangular
@@ -177,8 +177,8 @@ public:
 
             // Test that k+1 by k+1 block of Q_H is and k+1 by k block of R_H
             // constructs k+1 by k block of H
-            MatrixDense<double> R_H_block = test_mock.R_H.block(0, 0, k+2, k+1);
-            MatrixDense<double> construct_H = Q_H_block*R_H_block;
+            MatrixDense<double> R_H_block(test_mock.R_H.block(0, 0, k+2, k+1));
+            MatrixDense<double> construct_H(Q_H_block*R_H_block);
             ASSERT_MATRIX_NEAR(construct_H,
                                MatrixDense<double>(test_mock.H.block(0, 0, k+2, k+1)),
                                Tol<double>::gamma(n));
@@ -191,14 +191,14 @@ public:
     void Update_x_Back_Substitution() {
 
         const int n(7);
-        MatrixDense<double> Q = read_matrixCSV<MatrixDense, double>(solve_matrix_dir / fs::path("Q_8_backsub.csv"));
-        MatrixDense<double> R = read_matrixCSV<MatrixDense, double>(solve_matrix_dir / fs::path("R_8_backsub.csv"));
+        MatrixDense<double> Q(read_matrixCSV<MatrixDense, double>(solve_matrix_dir / fs::path("Q_8_backsub.csv")));
+        MatrixDense<double> R(read_matrixCSV<MatrixDense, double>(solve_matrix_dir / fs::path("R_8_backsub.csv")));
         M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("A_7_dummy_backsub.csv"));
-        MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("b_7_dummy_backsub.csv"));
+        MatrixVector<double> b(read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("b_7_dummy_backsub.csv")));
         TypedLinearSystem<M, double> lin_sys(A, b);
 
         // Set initial guess to zeros such that residual is just b
-        MatrixVector<double> x_0 = MatrixVector<double>::Zero(n);
+        MatrixVector<double> x_0(MatrixVector<double>::Zero(n));
         SolveArgPkg args;
         args.init_guess = x_0;
 
@@ -220,8 +220,10 @@ public:
             test_mock.kry_space_dim = kry_dim;
             
             // Load test solution
-            MatrixVector<double> test_soln = read_matrixCSV<MatrixVector, double>(
-                solve_matrix_dir / fs::path("x_" + std::to_string(kry_dim) + "_backsub.csv")
+            MatrixVector<double> test_soln (
+                read_matrixCSV<MatrixVector, double>(
+                    solve_matrix_dir / fs::path("x_" + std::to_string(kry_dim) + "_backsub.csv")
+                )
             );
 
             // )Solve with backsubstitution
@@ -240,11 +242,11 @@ public:
     void KrylovLuckyBreakFirstIter () {
 
         const int n(5);
-        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("A_5_easysoln.csv"));
-        MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("b_5_easysoln.csv"));
+        M<double> A(read_matrixCSV<M, double>(solve_matrix_dir / fs::path("A_5_easysoln.csv")));
+        MatrixVector<double> b(read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("b_5_easysoln.csv")));
         TypedLinearSystem<M, double> lin_sys(A, b);
 
-        MatrixVector<double> soln = MatrixVector<double>::Ones(n); // Instantiate initial guess as true solution
+        MatrixVector<double> soln(MatrixVector<double>::Ones(n)); // Instantiate initial guess as true solution
         SolveArgPkg args;
         args.target_rel_res = conv_tol_dbl;
         args.init_guess = soln;
@@ -275,11 +277,11 @@ public:
     void KrylovLuckyBreakLaterIter() {
 
         constexpr int n(5);
-        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("A_5_easysoln.csv"));
-        MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("b_5_easysoln.csv"));
+        M<double> A(read_matrixCSV<M, double>(solve_matrix_dir / fs::path("A_5_easysoln.csv")));
+        MatrixVector<double> b(read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("b_5_easysoln.csv")));
         TypedLinearSystem<M, double> lin_sys(A, b);
 
-        MatrixVector<double> soln = MatrixVector<double>::Zero(n); // Initialize as near solution
+        MatrixVector<double> soln(MatrixVector<double>::Zero(n)); // Initialize as near solution
         soln(0) = 1;
         SolveArgPkg args;
         args.init_guess = soln;
@@ -305,11 +307,11 @@ public:
     void KrylovLuckyBreakThroughSolve() {
 
         constexpr int n(5);
-        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("A_5_easysoln.csv"));
-        MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("b_5_easysoln.csv"));
+        M<double> A(read_matrixCSV<M, double>(solve_matrix_dir / fs::path("A_5_easysoln.csv")));
+        MatrixVector<double> b(read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("b_5_easysoln.csv")));
         TypedLinearSystem<M, double> lin_sys(A, b);
 
-        MatrixVector<double> soln = MatrixVector<double>::Zero(n); // Initialize as near solution
+        MatrixVector<double> soln(MatrixVector<double>::Zero(n)); // Initialize as near solution
         soln(0) = 1;
         SolveArgPkg args;
         args.init_guess = soln;
@@ -338,8 +340,8 @@ public:
     void Solve() {
 
         constexpr int n(20);
-        M<double> A = M<double>::Random(n, n);
-        MatrixVector<double> b = MatrixVector<double>::Random(n);
+        M<double> A(M<double>::Random(n, n));
+        MatrixVector<double> b(MatrixVector<double>::Random(n));
         TypedLinearSystem<M, double> lin_sys(A, b);
 
         SolveArgPkg args;
@@ -360,8 +362,8 @@ public:
     void Reset() {
 
         constexpr int n(20);
-        M<double> A = M<double>::Random(n, n);
-        MatrixVector<double> b = MatrixVector<double>::Random(n);
+        M<double> A(M<double>::Random(n, n));
+        MatrixVector<double> b(MatrixVector<double>::Random(n));
         TypedLinearSystem<M, double> lin_sys(A, b);
 
         SolveArgPkg args;
@@ -402,41 +404,31 @@ public:
 
 };
 
-TEST_F(GMRES_Component_Test, CheckConstruction5x5_Dense) {
-    CheckConstruction<MatrixDense>(
-        solve_matrix_dir/fs::path("A_5_toy.csv"),
-        solve_matrix_dir/fs::path("b_5_toy.csv"),
-        5
-    );
-}
-TEST_F(GMRES_Component_Test, CheckConstruction5x5_Sparse) {
-    CheckConstruction<MatrixSparse>(
-        solve_matrix_dir/fs::path("A_5_toy.csv"),
-        solve_matrix_dir/fs::path("b_5_toy.csv"),
-        5
-    );
+TEST_F(GMRES_Component_Test, CheckConstruction5x5) {
+
+    fs::path A_path(solve_matrix_dir / fs::path("A_5_toy.csv"));
+    fs::path b_path(solve_matrix_dir / fs::path("b_5_toy.csv"));
+
+    CheckConstruction<MatrixDense>(A_path, b_path, 5);
+    CheckConstruction<MatrixSparse>(A_path, b_path, 5);
+
 }
 
-TEST_F(GMRES_Component_Test, CheckConstruction64x64_Dense) {
-    CheckConstruction<MatrixDense>(
-        solve_matrix_dir/fs::path("A_64_toy.csv"),
-        solve_matrix_dir/fs::path("b_64_toy.csv"),
-        64
-    );
-}
-TEST_F(GMRES_Component_Test, CheckConstruction64x64_Sparse) {
-    CheckConstruction<MatrixSparse>(
-        solve_matrix_dir/fs::path("A_64_toy.csv"),
-        solve_matrix_dir/fs::path("b_64_toy.csv"),
-        64
-    );
+TEST_F(GMRES_Component_Test, CheckConstruction64x64) {
+
+    fs::path A_path(solve_matrix_dir / fs::path("A_64_toy.csv"));
+    fs::path b_path(solve_matrix_dir / fs::path("b_64_toy.csv"));
+
+    CheckConstruction<MatrixDense>(A_path, b_path, 64);
+    CheckConstruction<MatrixSparse>(A_path, b_path, 64);
+
 }
 
-TEST_F(GMRES_Component_Test, CheckCorrectDefaultMaxIter_Both) {
+TEST_F(GMRES_Component_Test, CheckCorrectDefaultMaxIter) {
     
     constexpr int n(7);
-    MatrixDense<double> A_n = MatrixDense<double>::Random(n, n);
-    MatrixVector<double> b_n = MatrixVector<double>::Random(n);
+    MatrixDense<double> A_n(MatrixDense<double>::Random(n, n));
+    MatrixVector<double> b_n(MatrixVector<double>::Random(n));
     TypedLinearSystem<MatrixDense, double> lin_sys_n(A_n, b_n);
     GMRESSolveTestingMock<MatrixDense, double> test_mock_n_dense(
         lin_sys_n, Tol<double>::roundoff(), default_args
@@ -449,8 +441,8 @@ TEST_F(GMRES_Component_Test, CheckCorrectDefaultMaxIter_Both) {
     ASSERT_EQ(test_mock_n_sparse.max_iter, n);
 
     constexpr int m(53);
-    MatrixDense<double> A_m = MatrixDense<double>::Random(m, m);
-    MatrixVector<double> b_m = MatrixVector<double>::Random(m);
+    MatrixDense<double> A_m(MatrixDense<double>::Random(m, m));
+    MatrixVector<double> b_m(MatrixVector<double>::Random(m));
     TypedLinearSystem<MatrixDense, double> lin_sys_m(A_m, b_m);
     GMRESSolveTestingMock<MatrixDense, double> test_mock_m_dense(
         lin_sys_m, Tol<double>::roundoff(), default_args
@@ -464,8 +456,8 @@ TEST_F(GMRES_Component_Test, CheckCorrectDefaultMaxIter_Both) {
 
     constexpr int o(64);
     constexpr int non_default_iter(10);
-    MatrixDense<double> A_o = MatrixDense<double>::Random(o, o);
-    MatrixVector<double> b_o = MatrixVector<double>::Random(o);
+    MatrixDense<double> A_o(MatrixDense<double>::Random(o, o));
+    MatrixVector<double> b_o(MatrixVector<double>::Random(o));
     TypedLinearSystem<MatrixDense, double> lin_sys_o(A_o, b_o);
     SolveArgPkg non_default_args;
     non_default_args.max_iter = non_default_iter;
@@ -481,11 +473,11 @@ TEST_F(GMRES_Component_Test, CheckCorrectDefaultMaxIter_Both) {
 
 }
 
-TEST_F(GMRES_Component_Test, CheckErrorExceedDimension_Both) {
+TEST_F(GMRES_Component_Test, CheckErrorExceedDimension) {
     
     constexpr int n(7);
-    MatrixDense<double> A_n = MatrixDense<double>::Random(n, n);
-    MatrixVector<double> b_n = MatrixVector<double>::Random(n);
+    MatrixDense<double> A_n(MatrixDense<double>::Random(n, n));
+    MatrixVector<double> b_n(MatrixVector<double>::Random(n));
     TypedLinearSystem<MatrixDense, double> lin_sys_n(A_n, b_n);
     TypedLinearSystem<MatrixSparse, double> lin_sys_sparse_n(A_n.sparse(), b_n);
     SolveArgPkg args;
@@ -503,26 +495,42 @@ TEST_F(GMRES_Component_Test, CheckErrorExceedDimension_Both) {
 
 }
 
-TEST_F(GMRES_Component_Test, KrylovInitAndUpdate_Dense) { KrylovInitAndUpdate<MatrixDense>(); }
-TEST_F(GMRES_Component_Test, KrylovInitAndUpdate_Sparse) { KrylovInitAndUpdate<MatrixSparse>(); }
+TEST_F(GMRES_Component_Test, KrylovInitAndUpdate) {
+    KrylovInitAndUpdate<MatrixDense>();
+    KrylovInitAndUpdate<MatrixSparse>();
+}
 
-TEST_F(GMRES_Component_Test, H_QR_Update_Dense) { H_QR_Update<MatrixDense>(); }
-TEST_F(GMRES_Component_Test, H_QR_Update_Sparse) { H_QR_Update<MatrixSparse>(); }
+TEST_F(GMRES_Component_Test, H_QR_Update) {
+    H_QR_Update<MatrixDense>();
+    H_QR_Update<MatrixSparse>();
+}
 
-TEST_F(GMRES_Component_Test, Update_x_Back_Substitution_Dense) { Update_x_Back_Substitution<MatrixDense>(); }
-TEST_F(GMRES_Component_Test, Update_x_Back_Substitution_Sparse) { Update_x_Back_Substitution<MatrixSparse>(); }
+TEST_F(GMRES_Component_Test, Update_x_Back_Substitution) {
+    Update_x_Back_Substitution<MatrixDense>();
+    Update_x_Back_Substitution<MatrixSparse>();
+}
 
-TEST_F(GMRES_Component_Test, KrylovLuckyBreakFirstIter_Dense) { KrylovLuckyBreakFirstIter<MatrixDense>(); }
-TEST_F(GMRES_Component_Test, KrylovLuckyBreakFirstIter_Sparse) { KrylovLuckyBreakFirstIter<MatrixSparse>(); }
+TEST_F(GMRES_Component_Test, KrylovLuckyBreakFirstIter) {
+    KrylovLuckyBreakFirstIter<MatrixDense>();
+    KrylovLuckyBreakFirstIter<MatrixSparse>();
+}
 
-TEST_F(GMRES_Component_Test, KrylovLuckyBreakLaterIter_Dense) { KrylovLuckyBreakLaterIter<MatrixDense>(); }
-TEST_F(GMRES_Component_Test, KrylovLuckyBreakLaterIter_Sparse) { KrylovLuckyBreakLaterIter<MatrixSparse>(); }
+TEST_F(GMRES_Component_Test, KrylovLuckyBreakLaterIter) {
+    KrylovLuckyBreakLaterIter<MatrixDense>();
+    KrylovLuckyBreakLaterIter<MatrixSparse>();
+}
 
-TEST_F(GMRES_Component_Test, KrylovLuckyBreakThroughSolve_Dense) { KrylovLuckyBreakThroughSolve<MatrixDense>(); }
-TEST_F(GMRES_Component_Test, KrylovLuckyBreakThroughSolve_Sparse) { KrylovLuckyBreakThroughSolve<MatrixSparse>(); }
+TEST_F(GMRES_Component_Test, KrylovLuckyBreakThroughSolve) {
+    KrylovLuckyBreakThroughSolve<MatrixDense>();
+    KrylovLuckyBreakThroughSolve<MatrixSparse>();
+}
 
-TEST_F(GMRES_Component_Test, Solve_Dense) { Solve<MatrixDense>(); }
-TEST_F(GMRES_Component_Test, Solve_Sparse) { Solve<MatrixSparse>(); }
+TEST_F(GMRES_Component_Test, Solve) {
+    Solve<MatrixDense>();
+    Solve<MatrixSparse>();
+}
 
-TEST_F(GMRES_Component_Test, Reset_Dense) { Reset<MatrixDense>(); }
-TEST_F(GMRES_Component_Test, Reset_Sparse) { Reset<MatrixSparse>(); }
+TEST_F(GMRES_Component_Test, Reset) {
+    Reset<MatrixDense>();
+    Reset<MatrixSparse>();
+}

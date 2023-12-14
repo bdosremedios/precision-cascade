@@ -11,9 +11,9 @@ public:
 
         // Test with no initial guess and default parameters
         constexpr int n(6);
-        M<double> A = M<double>::Random(n, n);
-        MatrixVector<double> b = MatrixVector<double>::Random(n);
-        MatrixVector<T> soln = MatrixVector<T>::Random(1);
+        M<double> A(M<double>::Random(n, n));
+        MatrixVector<double> b(MatrixVector<double>::Random(n));
+        MatrixVector<T> soln(MatrixVector<T>::Random(1));
         TypedLinearSystem<M, T> typed_lin_sys(A, b);
 
         TypedIterativeSolveTestingMock<M, T> test_mock_no_guess(typed_lin_sys, soln, default_args);
@@ -41,7 +41,7 @@ public:
                     Tol<T>::gamma(n));
 
         // Test with initial guess and explicit parameters
-        MatrixVector<double> init_guess = MatrixVector<double>::Random(n);
+        MatrixVector<double> init_guess(MatrixVector<double>::Random(n));
         SolveArgPkg args;
         args.init_guess = init_guess; args.max_iter = n; args.target_rel_res = pow(10, -4);
         TypedIterativeSolveTestingMock<M, T> test_mock_guess(typed_lin_sys, soln, args);
@@ -72,12 +72,12 @@ public:
 
         constexpr int n(64);
         constexpr int max_iter(5);
-        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
-        MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
+        M<double> A(read_matrixCSV<M, double>(solve_matrix_dir / fs::path("conv_diff_64_A.csv")));
+        MatrixVector<double> b(read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("conv_diff_64_b.csv")));
         TypedLinearSystem<M, T> typed_lin_sys(A, b);
 
-        MatrixVector<T> typed_soln = read_matrixCSV<MatrixVector, T>(solve_matrix_dir / fs::path("conv_diff_64_x.csv"));
-        MatrixVector<double> init_guess = MatrixVector<double>::Ones(n);
+        MatrixVector<T> typed_soln(read_matrixCSV<MatrixVector, T>(solve_matrix_dir / fs::path("conv_diff_64_x.csv")));
+        MatrixVector<double> init_guess(MatrixVector<double>::Ones(n));
 
         SolveArgPkg args;
         args.init_guess = init_guess;
@@ -134,11 +134,11 @@ public:
     void TestReset() {
 
         constexpr int n(64);
-        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
-        MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
+        M<double> A(read_matrixCSV<M, double>(solve_matrix_dir / fs::path("conv_diff_64_A.csv")));
+        MatrixVector<double> b(read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("conv_diff_64_b.csv")));
         TypedLinearSystem<M, T> typed_lin_sys(A, b);
 
-        MatrixVector<T> typed_soln = read_matrixCSV<MatrixVector, T>(solve_matrix_dir / fs::path("conv_diff_64_x.csv"));
+        MatrixVector<T> typed_soln(read_matrixCSV<MatrixVector, T>(solve_matrix_dir / fs::path("conv_diff_64_x.csv")));
 
         TypedIterativeSolveTestingMock<M, T> test_mock(typed_lin_sys, typed_soln, default_args);
 
@@ -155,7 +155,7 @@ public:
         EXPECT_FALSE(test_mock.converged);
         EXPECT_FALSE(test_mock.terminated);
         EXPECT_EQ(test_mock.curr_iter, 0);
-        vector<double> init_res_norm_hist = {(b - A*MatrixVector<double>::Ones(n)).norm()};
+        vector<double> init_res_norm_hist{(b - A*MatrixVector<double>::Ones(n)).norm()};
         EXPECT_EQ(test_mock.res_norm_hist, init_res_norm_hist);
 
     }
@@ -193,47 +193,57 @@ public:
 
 };
 
-TEST_F(TypedIterativeSolve_Test, TestConstructorsDouble_Dense) {
+TEST_F(TypedIterativeSolve_Test, TestConstructorsDouble) {
     TestConstructors<MatrixDense, double>();
-}
-TEST_F(TypedIterativeSolve_Test, TestConstructorsDouble_Sparse) {
     TestConstructors<MatrixSparse, double>();
 }
 
-TEST_F(TypedIterativeSolve_Test, TestConstructorsSingle_Dense) {
+TEST_F(TypedIterativeSolve_Test, TestConstructorsSingle) {
     TestConstructors<MatrixDense, float>();
-}
-TEST_F(TypedIterativeSolve_Test, TestConstructorsSingle_Sparse) {
     TestConstructors<MatrixSparse, float>();
 }
 
-TEST_F(TypedIterativeSolve_Test, TestConstructorsHalf_Dense) {
+TEST_F(TypedIterativeSolve_Test, TestConstructorsHalf) {
     TestConstructors<MatrixDense, half>();
-}
-TEST_F(TypedIterativeSolve_Test, TestConstructorsHalf_Sparse) {
     TestConstructors<MatrixSparse, half>();
 }
 
-TEST_F(TypedIterativeSolve_Test, TestSolveAndRelresDouble_Dense) { TestSolve<MatrixDense, double>(); }
-TEST_F(TypedIterativeSolve_Test, TestSolveAndRelresDouble_Sparse) { TestSolve<MatrixSparse, double>(); }
+TEST_F(TypedIterativeSolve_Test, TestSolveAndRelresDouble) {
+    TestSolve<MatrixDense, double>();
+    TestSolve<MatrixSparse, double>();
+}
 
-TEST_F(TypedIterativeSolve_Test, TestSolveAndRelresSingle_Dense) { TestSolve<MatrixDense, float>(); }
-TEST_F(TypedIterativeSolve_Test, TestSolveAndRelresSingle_Sparse) { TestSolve<MatrixSparse, float>(); }
+TEST_F(TypedIterativeSolve_Test, TestSolveAndRelresSingle) {
+    TestSolve<MatrixDense, float>();
+    TestSolve<MatrixSparse, float>();
+}
 
-TEST_F(TypedIterativeSolve_Test, TestSolveAndRelresHalf_Dense) { TestSolve<MatrixDense, half>(); }
-TEST_F(TypedIterativeSolve_Test, TestSolveAndRelresHalf_Sparse) { TestSolve<MatrixSparse, half>(); }
+TEST_F(TypedIterativeSolve_Test, TestSolveAndRelresHalf) {
+    TestSolve<MatrixDense, half>();
+    TestSolve<MatrixSparse, half>();
+}
 
-TEST_F(TypedIterativeSolve_Test, TestResetDouble_Dense) { TestReset<MatrixDense, double>(); }
-TEST_F(TypedIterativeSolve_Test, TestResetDouble_Sparse) { TestReset<MatrixSparse, double>(); }
+TEST_F(TypedIterativeSolve_Test, TestResetDouble) {
+    TestReset<MatrixDense, double>();
+    TestReset<MatrixSparse, double>();
+}
 
-TEST_F(TypedIterativeSolve_Test, TestResetSingle_Dense) { TestReset<MatrixDense, float>(); }
-TEST_F(TypedIterativeSolve_Test, TestResetSingle_Sparse) { TestReset<MatrixSparse, float>(); }
+TEST_F(TypedIterativeSolve_Test, TestResetSingle) {
+    TestReset<MatrixDense, float>();
+    TestReset<MatrixSparse, float>();
+}
 
-TEST_F(TypedIterativeSolve_Test, TestResetHalf_Dense) { TestReset<MatrixDense, half>(); }
-TEST_F(TypedIterativeSolve_Test, TestResetHalf_Sparse) { TestReset<MatrixSparse, half>(); }
+TEST_F(TypedIterativeSolve_Test, TestResetHalf) {
+    TestReset<MatrixDense, half>();
+    TestReset<MatrixSparse, half>();
+}
 
-TEST_F(TypedIterativeSolve_Test, TestErrorMismatchedCols_Dense) { TestMismatchedCols<MatrixDense>(); }
-TEST_F(TypedIterativeSolve_Test, TestErrorMismatchedCols_Sparse) { TestMismatchedCols<MatrixSparse>(); }
+TEST_F(TypedIterativeSolve_Test, TestErrorMismatchedCols) {
+    TestMismatchedCols<MatrixDense>();
+    TestMismatchedCols<MatrixSparse>();
+}
 
-TEST_F(TypedIterativeSolve_Test, TestErrorNonSquare_Dense) { TestErrorNonSquare<MatrixDense>(); }
-TEST_F(TypedIterativeSolve_Test, TestErrorNonSquare_Sparse) { TestErrorNonSquare<MatrixSparse>(); }
+TEST_F(TypedIterativeSolve_Test, TestErrorNonSquare) {
+    TestErrorNonSquare<MatrixDense>();
+    TestErrorNonSquare<MatrixSparse>();
+}

@@ -154,29 +154,39 @@ public:
 
 };
 
-TEST_F(ILUTP_Test, TestEquivalentILUTNoDropAndDenseILU0_Dense) {
+TEST_F(ILUTP_Test, TestEquivalentILUTNoDropAndDenseILU0) {
     TestEquivalentILUTNoDropAndDenseILU0<MatrixDense>();
-}
-TEST_F(ILUTP_Test, TestEquivalentILUTNoDropAndDenseILU0_Sparse) {
     TestEquivalentILUTNoDropAndDenseILU0<MatrixSparse>();
 }
 
-TEST_F(ILUTP_Test, TestILUTDropping_Dense) { TestILUTDropping<MatrixDense>(false); }
-TEST_F(ILUTP_Test, TestILUTDropping_Sparse) { TestILUTDropping<MatrixSparse>(false); }
+TEST_F(ILUTP_Test, TestILUTDropping) {
+    TestILUTDropping<MatrixDense>(false);
+    TestILUTDropping<MatrixSparse>(false);
+}
 
-TEST_F(ILUTP_Test, TestILUTDropping_Pivoted_Dense) { TestILUTDropping<MatrixDense>(true); }
-TEST_F(ILUTP_Test, TestILUTDropping_Pivoted_Sparse) { TestILUTDropping<MatrixSparse>(true); }
+TEST_F(ILUTP_Test, TestILUTDropping_Pivoted) {
+    TestILUTDropping<MatrixDense>(true);
+    TestILUTDropping<MatrixSparse>(true);
+}
 
-TEST_F(ILUTP_Test, TestILUTDroppingLimits_Dense) { TestILUTDroppingLimits<MatrixDense>(false); }
-TEST_F(ILUTP_Test, TestILUTDroppingLimits_Sparse) { TestILUTDroppingLimits<MatrixSparse>(false); }
+TEST_F(ILUTP_Test, TestILUTDroppingLimits) {
+    TestILUTDroppingLimits<MatrixDense>(false);
+    TestILUTDroppingLimits<MatrixSparse>(false);
+}
 
-TEST_F(ILUTP_Test, TestILUTDroppingLimits_Pivoted_Dense) { TestILUTDroppingLimits<MatrixDense>(true); }
-TEST_F(ILUTP_Test, TestILUTDroppingLimits_Pivoted_Sparse) { TestILUTDroppingLimits<MatrixSparse>(true); }
+TEST_F(ILUTP_Test, TestILUTDroppingLimits_Pivoted) {
+    TestILUTDroppingLimits<MatrixDense>(true);
+    TestILUTDroppingLimits<MatrixSparse>(true);
+}
 
-TEST_F(ILUTP_Test, TestKeepPLargest_Dense) { TestKeepPLargest<MatrixDense>(false); }
-TEST_F(ILUTP_Test, TestKeepPLargest_Sparse) { TestKeepPLargest<MatrixSparse>(false); }
+TEST_F(ILUTP_Test, TestKeepPLargest) {
+    TestKeepPLargest<MatrixDense>(false);
+    TestKeepPLargest<MatrixSparse>(false);
+}
 
-TEST_F(ILUTP_Test, TestKeepPLargest_Pivoted_Dense) { TestKeepPLargest<MatrixDense>(true); }
-TEST_F(ILUTP_Test, TestKeepPLargest_Pivoted_Sparse) { TestKeepPLargest<MatrixSparse>(true); }
+TEST_F(ILUTP_Test, TestKeepPLargest_Pivoted) {
+    TestKeepPLargest<MatrixDense>(true);
+    TestKeepPLargest<MatrixSparse>(true);
+}
 
 

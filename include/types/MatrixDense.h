@@ -27,10 +27,7 @@ public:
     MatrixDense(int m, int n): Parent::Matrix(m, n) {}
 
     MatrixDense(std::initializer_list<std::initializer_list<T>> li):
-        MatrixDense(
-            li.size(),
-            (li.size() == 0) ? 0 : std::cbegin(li)->size()
-        )
+        MatrixDense(li.size(), (li.size() == 0) ? 0 : std::cbegin(li)->size())
     {
         int i=0;
         for (auto curr_row = std::cbegin(li); curr_row != std::cend(li); ++curr_row) {
@@ -43,6 +40,7 @@ public:
             if (j != cols()) { throw(std::runtime_error("Initializer list has non-consistent row size")); }
             ++i;
         }
+        if (i != rows()) { throw(std::runtime_error("Initializer list has non-consistent row size")); }
     }
 
     MatrixDense(const Parent &parent): Parent::Matrix(parent) {}
@@ -61,7 +59,7 @@ public:
     // *** Properties ***
     int rows() const { return Parent::rows(); }
     int cols() const { return Parent::cols(); }
-    void print() const { std::cout << *this << std::endl << std::endl; }
+    void print() { std::cout << *this << std::endl << std::endl; }
 
     // *** Static Creation ***
     static MatrixDense<T> Random(int m, int n) { return typename Parent::Matrix(Parent::Random(m, n)); }

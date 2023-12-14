@@ -9,8 +9,8 @@ public:
 
         constexpr int m(63);
         constexpr int n(27);
-        M<double> A = M<double>::Random(m, n);
-        MatrixVector<double> b = MatrixVector<double>::Random(m);
+        M<double> A(M<double>::Random(m, n));
+        MatrixVector<double> b(MatrixVector<double>::Random(m));
         GenericLinearSystem<M> lin_sys(A, b);
 
         EXPECT_EQ(lin_sys.get_m(), m);
@@ -25,8 +25,8 @@ public:
     void TestEmptyMatrix() {
 
         try {
-            M<double> A = M<double>::Random(0, 0);
-            MatrixVector<double> b = MatrixVector<double>::Random(0);
+            M<double> A(M<double>::Random(0, 0));
+            MatrixVector<double> b(MatrixVector<double>::Random(0));
             GenericLinearSystem<M> lin_sys(A, b);
             FAIL();
         } catch (runtime_error e) {
@@ -41,8 +41,8 @@ public:
         try {
             constexpr int m(63);
             constexpr int n(27);
-            M<double> A = M<double>::Random(m, n);
-            MatrixVector<double> b = MatrixVector<double>::Random(n-1);
+            M<double> A(M<double>::Random(m, n));
+            MatrixVector<double> b(MatrixVector<double>::Random(n-1));
             GenericLinearSystem<M> lin_sys(A, b);
             FAIL();
         } catch (runtime_error e) {
@@ -53,11 +53,17 @@ public:
 
 };
 
-TEST_F(GenericLinearSystem_Test, TestConstructor_Dense) { TestConstructor<MatrixDense>(); }
-TEST_F(GenericLinearSystem_Test, TestConstructor_Sparse) { TestConstructor<MatrixSparse>(); }
+TEST_F(GenericLinearSystem_Test, TestConstructor) {
+    TestConstructor<MatrixDense>();
+    TestConstructor<MatrixSparse>();
+}
 
-TEST_F(GenericLinearSystem_Test, TestEmptyMatrix_Dense) { TestEmptyMatrix<MatrixDense>(); }
-TEST_F(GenericLinearSystem_Test, TestEmptyMatrix_Sparse) { TestEmptyMatrix<MatrixSparse>(); }
+TEST_F(GenericLinearSystem_Test, TestEmptyMatrix) {
+    TestEmptyMatrix<MatrixDense>();
+    TestEmptyMatrix<MatrixSparse>();
+}
 
-TEST_F(GenericLinearSystem_Test, TestMismatchb_Dense) { TestMismatchb<MatrixDense>(); }
-TEST_F(GenericLinearSystem_Test, TestMismatchb_Sparse) { TestMismatchb<MatrixSparse>(); }
+TEST_F(GenericLinearSystem_Test, TestMismatchb) {
+    TestMismatchb<MatrixDense>();
+    TestMismatchb<MatrixSparse>();
+}

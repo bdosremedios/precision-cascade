@@ -14,9 +14,9 @@ public:
             static_cast<T>(2.798), static_cast<T>(1.477), static_cast<T>(7.021), static_cast<T>(5.689),
             static_cast<T>(6.185), static_cast<T>(6.315)
         });
-        MatrixVector<int> target({5, 4, 0, 2, 7, 8, 9, 6, 1, 3});
 
-        MatrixVector<int> test = sort_indices(vec);
+        MatrixVector<int> target({5, 4, 0, 2, 7, 8, 9, 6, 1, 3});
+        MatrixVector<int> test(sort_indices(vec));
 
         ASSERT_VECTOR_EQ(target, test);
 
@@ -31,9 +31,10 @@ public:
             static_cast<T>(4.139), static_cast<T>(8.946), static_cast<T>(4.861), static_cast<T>(1.678),
             static_cast<T>(9.176)
         });
-        MatrixVector<int> target({11, 8, 10, 3, 2, 4, 0, 6, 5, 1, 9, 12, 7});
 
-        MatrixVector<int> test = sort_indices(vec);
+        MatrixVector<int> target({11, 8, 10, 3, 2, 4, 0, 6, 5, 1, 9, 12, 7});
+        MatrixVector<int> test(sort_indices(vec));
+    
         ASSERT_VECTOR_EQ(target, test);
 
     }
@@ -46,9 +47,9 @@ public:
             static_cast<T>(9.433), static_cast<T>(3.950), static_cast<T>(1.776), static_cast<T>(7.016),
             static_cast<T>(1.409), static_cast<T>(1.776), static_cast<T>(7.016)
         });
-        MatrixVector<int> target({4, 2, 5, 1, 3, 6, 0});
 
-        MatrixVector<int> test = sort_indices(vec);
+        MatrixVector<int> target({4, 2, 5, 1, 3, 6, 0});
+        MatrixVector<int> test(sort_indices(vec));
 
         // Check that sorted element order is the same for all elements
         for (int i=0; i<n; ++i) { ASSERT_EQ(vec(target(i)), vec(test(i))); }
@@ -63,9 +64,9 @@ public:
             static_cast<T>(5), static_cast<T>(6), static_cast<T>(7), static_cast<T>(8),
             static_cast<T>(9), static_cast<T>(10)
         });
-        MatrixVector<int> target({0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
 
-        MatrixVector<int> test = sort_indices(vec);
+        MatrixVector<int> target({0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
+        MatrixVector<int> test(sort_indices(vec));
 
         ASSERT_VECTOR_EQ(target, test);
 
@@ -75,9 +76,9 @@ public:
     void one_element() {
 
         MatrixVector<T> vec({static_cast<T>(1)});
-        MatrixVector<int> target({0});
 
-        MatrixVector<int> test = sort_indices(vec);
+        MatrixVector<int> target({0});
+        MatrixVector<int> test(sort_indices(vec));
 
         ASSERT_VECTOR_EQ(target, test);
 

@@ -9,8 +9,8 @@ public:
 
         constexpr int m(63);
         constexpr int n(27);
-        M<double> A = M<double>::Random(m, n);
-        MatrixVector<double> b = MatrixVector<double>::Random(m);
+        M<double> A(M<double>::Random(m, n));
+        MatrixVector<double> b(MatrixVector<double>::Random(m));
         TypedLinearSystem<M, T> lin_sys(A, b);
 
         ASSERT_MATRIX_EQ(lin_sys.get_A(), A);
@@ -20,11 +20,17 @@ public:
 
 };
 
-TEST_F(TypedLinearSystem_Test, TestHalfConstructor_Dense) { TestTypedConstructor<MatrixDense, half>(); }
-TEST_F(TypedLinearSystem_Test, TestHalfConstructor_Sparse) { TestTypedConstructor<MatrixSparse, half>(); }
+TEST_F(TypedLinearSystem_Test, TestHalfConstructor) {
+    TestTypedConstructor<MatrixDense, half>();
+    TestTypedConstructor<MatrixSparse, half>();
+}
 
-TEST_F(TypedLinearSystem_Test, TestSingleConstructor_Dense) { TestTypedConstructor<MatrixDense, float>(); }
-TEST_F(TypedLinearSystem_Test, TestSingleConstructor_Sparse) { TestTypedConstructor<MatrixSparse, float>(); }
+TEST_F(TypedLinearSystem_Test, TestSingleConstructor) {
+    TestTypedConstructor<MatrixDense, float>();
+    TestTypedConstructor<MatrixSparse, float>();
+}
 
-TEST_F(TypedLinearSystem_Test, TestDoubleConstructor_Dense) { TestTypedConstructor<MatrixDense, double>(); }
-TEST_F(TypedLinearSystem_Test, TestDoubleConstructor_Sparse) { TestTypedConstructor<MatrixSparse, double>(); }
+TEST_F(TypedLinearSystem_Test, TestDoubleConstructor) {
+    TestTypedConstructor<MatrixDense, double>();
+    TestTypedConstructor<MatrixSparse, double>();
+}

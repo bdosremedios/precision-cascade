@@ -82,15 +82,15 @@ public:
         });
 
         MatrixVector<T> vec_col_0(mat.col(0));
-        MatrixVector<T> test_vec_col_0({static_cast<T>(1),
-                                        static_cast<T>(5),
-                                        static_cast<T>(9)});
+        MatrixVector<T> test_vec_col_0 ({static_cast<T>(1),
+                                         static_cast<T>(5),
+                                         static_cast<T>(9)});
         ASSERT_VECTOR_EQ(vec_col_0, test_vec_col_0);
 
         MatrixVector<T> vec_col_2(mat.col(2));
-        MatrixVector<T> test_vec_col_2({static_cast<T>(3),
-                                        static_cast<T>(7),
-                                        static_cast<T>(11)});
+        MatrixVector<T> test_vec_col_2 ({static_cast<T>(3),
+                                         static_cast<T>(7),
+                                         static_cast<T>(11)});
         ASSERT_VECTOR_EQ(vec_col_2, test_vec_col_2);
 
     }
@@ -107,10 +107,10 @@ public:
         M<T> mat(const_mat);
 
         // Test assignment
-        MatrixVector<T> assign_vec({static_cast<T>(1),
-                                    static_cast<T>(1),
-                                    static_cast<T>(1),
-                                    static_cast<T>(1)});
+        MatrixVector<T> assign_vec ({static_cast<T>(1),
+                                     static_cast<T>(1),
+                                     static_cast<T>(1),
+                                     static_cast<T>(1)});
         mat.col(2) = assign_vec;
         for (int j=0; j<2; ++j) {
             for (int i=0; i<4; ++i) {

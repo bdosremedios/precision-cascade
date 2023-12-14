@@ -47,8 +47,12 @@ public:
 
 };
 
-TEST_F(Preconditioner_Test, TestNoPreconditioner_Dense) { TestNoPreconditioner<MatrixDense>(); }
-TEST_F(Preconditioner_Test, TestNoPreconditioner_Sparse) { TestNoPreconditioner<MatrixSparse>(); }
+TEST_F(Preconditioner_Test, TestNoPreconditioner) {
+    TestNoPreconditioner<MatrixDense>();
+    TestNoPreconditioner<MatrixSparse>();
+}
 
-TEST_F(Preconditioner_Test, TestMatrixInverse_Dense) { TestMatrixInverse<MatrixDense>(); }
-TEST_F(Preconditioner_Test, TestMatrixInverse_Sparse) { TestMatrixInverse<MatrixSparse>(); }
+TEST_F(Preconditioner_Test, TestMatrixInverse) {
+    TestMatrixInverse<MatrixDense>();
+    TestMatrixInverse<MatrixSparse>();
+}

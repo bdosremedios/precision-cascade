@@ -76,8 +76,8 @@ public:
     template <typename T>
     void TestListInitialization() {
         
-        MatrixVector<T> test_vec({static_cast<T>(7.), static_cast<T>(5.), static_cast<T>(3.),
-                                  static_cast<T>(1.), static_cast<T>(6.), static_cast<T>(2.)});
+        MatrixVector<T> test_vec ({static_cast<T>(7.), static_cast<T>(5.), static_cast<T>(3.),
+                                   static_cast<T>(1.), static_cast<T>(6.), static_cast<T>(2.)});
         ASSERT_EQ(test_vec(0), static_cast<T>(7.));
         ASSERT_EQ(test_vec(1), static_cast<T>(5.));
         ASSERT_EQ(test_vec(2), static_cast<T>(3.));
@@ -137,11 +137,11 @@ public:
     void TestDot() {
 
         // Pre-calculated
-        MatrixVector<T> vec_1_dot({
+        MatrixVector<T> vec_1_dot ({
             static_cast<T>(-4.), static_cast<T>(3.4), static_cast<T>(0.),
             static_cast<T>(-2.1), static_cast<T>(1.8)
         });
-        MatrixVector<T> vec_2_dot({
+        MatrixVector<T> vec_2_dot ({
             static_cast<T>(9.), static_cast<T>(10.), static_cast<T>(1.5),
             static_cast<T>(-4.5), static_cast<T>(2.)
         });
@@ -160,7 +160,7 @@ public:
     void TestNorm() {
 
         // Pre-calculated
-        MatrixVector<T> vec_norm({
+        MatrixVector<T> vec_norm ({
             static_cast<T>(-8.), static_cast<T>(0.8), static_cast<T>(-0.6),
             static_cast<T>(4.), static_cast<T>(0.)
         });
@@ -177,7 +177,7 @@ public:
     template <typename T>
     void TestScale() {
 
-        MatrixVector<T> vec({
+        MatrixVector<T> vec ({
             static_cast<T>(-8.), static_cast<T>(0.8), static_cast<T>(-0.6),
             static_cast<T>(4.), static_cast<T>(0.)
         });
@@ -191,10 +191,10 @@ public:
     template <typename T>
     void TestAddSub() {
 
-        MatrixVector<T> vec_1({
+        MatrixVector<T> vec_1 ({
             static_cast<T>(-42.), static_cast<T>(0.), static_cast<T>(0.6)
         });
-        MatrixVector<T> vec_2({
+        MatrixVector<T> vec_2 ({
             static_cast<T>(-38.), static_cast<T>(0.5), static_cast<T>(-0.6)
         });
 
@@ -213,7 +213,7 @@ public:
         ASSERT_EQ(vec_sub_2(1), static_cast<T>(0.5));
         ASSERT_EQ(vec_sub_2(2), static_cast<T>(-1.2));
 
-        MatrixVector<T> vec_3({
+        MatrixVector<T> vec_3 ({
             static_cast<T>(-42.), static_cast<T>(0.), static_cast<T>(0.6)
         });
         vec_3 += vec_2;
@@ -221,7 +221,7 @@ public:
         vec_3 += vec_3;
         ASSERT_VECTOR_EQ(vec_3, (vec_1+vec_2)*static_cast<T>(2.));
 
-        MatrixVector<T> vec_4({
+        MatrixVector<T> vec_4 ({
             static_cast<T>(-42.), static_cast<T>(0.), static_cast<T>(0.6)
         });
         vec_4 -= vec_2;

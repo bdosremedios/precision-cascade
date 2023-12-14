@@ -150,29 +150,37 @@ public:
 
 };
 
-TEST_F(ILU_Test, TestSquareCheck_Both) {
+TEST_F(ILU_Test, TestSquareCheck) {
     TestSquareCheck<MatrixDense>();
     TestSquareCheck<MatrixSparse>();
 }
 
-TEST_F(ILU_Test, TestCompatibilityCheck_Both) {
+TEST_F(ILU_Test, TestCompatibilityCheck) {
     TestCompatibilityCheck<MatrixDense>();
     TestCompatibilityCheck<MatrixSparse>();
 }
 
-TEST_F(ILU_Test, TestZeroDiagonalEntries_Both) {
+TEST_F(ILU_Test, TestZeroDiagonalEntries) {
     TestZeroDiagonalEntries<MatrixDense>();
     TestZeroDiagonalEntries<MatrixSparse>();
 }
 
-TEST_F(ILU_Test, TestApplyInverseM_Dense) { TestApplyInverseM<MatrixDense>(); }
-TEST_F(ILU_Test, TestApplyInverseM_Sparse) { TestApplyInverseM<MatrixSparse>(); }
+TEST_F(ILU_Test, TestApplyInverseM) {
+    TestApplyInverseM<MatrixDense>();
+    TestApplyInverseM<MatrixSparse>();
+}
 
-TEST_F(ILU_Test, TestApplyInverseM_Pivoted_Dense) { TestApplyInverseM_Pivoted<MatrixDense>(); }
-TEST_F(ILU_Test, TestApplyInverseM_Pivoted_Sparse) { TestApplyInverseM_Pivoted<MatrixSparse>(); }
+TEST_F(ILU_Test, TestApplyInverseM_Pivoted) {
+    TestApplyInverseM_Pivoted<MatrixDense>();
+    TestApplyInverseM_Pivoted<MatrixSparse>();
+}
 
-TEST_F(ILU_Test, TestILUPremadeErrorChecks_Dense) { TestILUPremadeErrorChecks<MatrixDense>(); }
-TEST_F(ILU_Test, TestILUPremadeErrorChecks_Sparse) { TestILUPremadeErrorChecks<MatrixSparse>(); }
+TEST_F(ILU_Test, TestILUPremadeErrorChecks) {
+    TestILUPremadeErrorChecks<MatrixDense>();
+    TestILUPremadeErrorChecks<MatrixSparse>();
+}
 
-TEST_F(ILU_Test, TestDoubleSingleHalfCast_Dense) { TestDoubleSingleHalfCast<MatrixDense>(); }
-TEST_F(ILU_Test, TestDoubleSingleHalfCast_Sparse) { TestDoubleSingleHalfCast<MatrixSparse>(); }
+TEST_F(ILU_Test, TestDoubleSingleHalfCast) {
+    TestDoubleSingleHalfCast<MatrixDense>();
+    TestDoubleSingleHalfCast<MatrixSparse>();
+}

@@ -80,11 +80,17 @@ public:
 
 };
 
-TEST_F(ILU0_Test, TestMatchesDenseLU_Dense) { TestMatchesDenseLU<MatrixDense>(); }
-TEST_F(ILU0_Test, TestMatchesDenseLU_Sparse) { TestMatchesDenseLU<MatrixSparse>(); }
+TEST_F(ILU0_Test, TestMatchesDenseLU) {
+    TestMatchesDenseLU<MatrixDense>();
+    TestMatchesDenseLU<MatrixSparse>();
+}
 
-TEST_F(ILU0_Test, TestMatchesDenseLU_Pivoted_Dense) { TestMatchesDenseLU_Pivoted<MatrixDense>(); }
-TEST_F(ILU0_Test, TestMatchesDenseLU_Pivoted_Sparse) { TestMatchesDenseLU_Pivoted<MatrixSparse>(); }
+TEST_F(ILU0_Test, TestMatchesDenseLU_Pivoted) {
+    TestMatchesDenseLU_Pivoted<MatrixDense>();
+    TestMatchesDenseLU_Pivoted<MatrixSparse>();
+}
 
-TEST_F(ILU0_Test, TestMatchesSparseILU0_Dense) { TestMatchesSparseILU0<MatrixDense>(); }
-TEST_F(ILU0_Test, TestMatchesSparseILU0_Sparse) { TestMatchesSparseILU0<MatrixSparse>(); }
+TEST_F(ILU0_Test, TestMatchesSparseILU0) {
+    TestMatchesSparseILU0<MatrixDense>();
+    TestMatchesSparseILU0<MatrixSparse>();
+}

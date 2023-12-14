@@ -14,8 +14,8 @@ public:
     void TestMatchIdentity() {
     
         constexpr int n(45);
-        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("A_inv_45.csv"));
-        MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("b_inv_45.csv"));
+        M<double> A(read_matrixCSV<M, double>(solve_matrix_dir / fs::path("A_inv_45.csv")));
+        MatrixVector<double> b(read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("b_inv_45.csv")));
         TypedLinearSystem<M, double> lin_sys(A, b);
 
         GMRESSolve<M, double> pgmres_solve_default(lin_sys, Tol<double>::roundoff(), pgmres_args);
@@ -86,18 +86,16 @@ public:
 
 };
 
-TEST_F(PGMRES_Solve_Test, TestDefaultandNoPreconditioningMatchesIdentity_Dense) {
+TEST_F(PGMRES_Solve_Test, TestDefaultandNoPreconditioningMatchesIdentity) {
     TestMatchIdentity<MatrixDense>();
-}
-TEST_F(PGMRES_Solve_Test, TestDefaultandNoPreconditioningMatchesIdentity_Sparse) {
     TestMatchIdentity<MatrixSparse>();
 }
 
 TEST_F(PGMRES_Solve_Test, TestLeftPreconditioning_RandA45_Dense) {
     constexpr int n(45);
-    MatrixDense<double> A = read_matrixCSV<MatrixDense, double>(solve_matrix_dir / fs::path("A_inv_45.csv"));
-    MatrixDense<double> Ainv = read_matrixCSV<MatrixDense, double>(solve_matrix_dir / fs::path("Ainv_inv_45.csv"));
-    MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("b_inv_45.csv"));
+    MatrixDense<double> A(read_matrixCSV<MatrixDense, double>(solve_matrix_dir / fs::path("A_inv_45.csv")));
+    MatrixDense<double> Ainv(read_matrixCSV<MatrixDense, double>(solve_matrix_dir / fs::path("Ainv_inv_45.csv")));
+    MatrixVector<double> b(read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("b_inv_45.csv")));
     TestPrecondSingleIter<MatrixDense>(
         A, b,
         PrecondArgPkg<MatrixDense, double>(make_shared<MatrixInverse<MatrixDense, double>>(Ainv))
