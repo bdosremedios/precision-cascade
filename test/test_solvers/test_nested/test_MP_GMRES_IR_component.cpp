@@ -65,7 +65,7 @@ public:
 
 };
 
-TEST_F(MP_GMRES_IR_ComponentTest, Test_Constructor_Both) {
+TEST_F(MP_GMRES_IR_ComponentTest, Test_Constructor) {
 
     GenericLinearSystem<MatrixDense> lin_sys_dense(MatrixDense<double>(2, 2),
                                                    MatrixVector<double>(2, 1));
@@ -79,12 +79,12 @@ TEST_F(MP_GMRES_IR_ComponentTest, Test_Constructor_Both) {
 
 }
 
-TEST_F(MP_GMRES_IR_ComponentTest, Test_SetCorrectPhaseSolvers_Both) {
+TEST_F(MP_GMRES_IR_ComponentTest, Test_SetCorrectPhaseSolvers) {
     TestOuterIterateCorrectSolvers<MatrixDense>();
     TestOuterIterateCorrectSolvers<MatrixSparse>();
 }
 
-TEST_F(MP_GMRES_IR_ComponentTest, Test_Reset_Both) {
+TEST_F(MP_GMRES_IR_ComponentTest, Test_Reset) {
     TestReset<MatrixDense>();
     TestReset<MatrixSparse>();
 }

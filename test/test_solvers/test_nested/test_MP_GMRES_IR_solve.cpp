@@ -14,8 +14,8 @@ public:
         const fs::path &b_file_path
     ) {
 
-        M<double> A = read_matrixCSV<M, double>(A_file_path);
-        MatrixVector<double> b = read_matrixCSV<MatrixVector, double>(b_file_path);
+        M<double> A(read_matrixCSV<M, double>(A_file_path));
+        MatrixVector<double> b(read_matrixCSV<MatrixVector, double>(b_file_path));
 
         GenericLinearSystem<M> lin_sys(A, b);
         SimpleConstantThreshold<M> mp_gmres_ir_solve(lin_sys, dbl_GMRES_IR_args);
@@ -31,28 +31,22 @@ public:
 
 };
 
-TEST_F(MP_GMRES_IR_SolveTest, ConvergenceTest_ConvDiff64_Dense) {
-    SolveTest<MatrixDense>(
-        solve_matrix_dir / fs::path("conv_diff_64_A.csv"),
-        solve_matrix_dir / fs::path("conv_diff_64_b.csv")
-    );
-}
-TEST_F(MP_GMRES_IR_SolveTest, ConvergenceTest_ConvDiff64_Sparse) {
-    SolveTest<MatrixSparse>(
-        solve_matrix_dir / fs::path("conv_diff_64_A.csv"),
-        solve_matrix_dir / fs::path("conv_diff_64_b.csv")
-    );
+TEST_F(MP_GMRES_IR_SolveTest, ConvergenceTest_ConvDiff64) {
+
+    fs::path A_path(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
+    fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
+
+    SolveTest<MatrixDense>(A_path, b_path);
+    SolveTest<MatrixSparse>(A_path, b_path);
+
 }
 
-TEST_F(MP_GMRES_IR_SolveTest, ConvergenceTest_ConvDiff256_Dense) {
-    SolveTest<MatrixDense>(
-        solve_matrix_dir / fs::path("conv_diff_256_A.csv"),
-        solve_matrix_dir / fs::path("conv_diff_256_b.csv")
-    );
-}
-TEST_F(MP_GMRES_IR_SolveTest, ConvergenceTest_ConvDiff256_Sparse) {
-    SolveTest<MatrixSparse>(
-        solve_matrix_dir / fs::path("conv_diff_256_A.csv"),
-        solve_matrix_dir / fs::path("conv_diff_256_b.csv")
-    );
+TEST_F(MP_GMRES_IR_SolveTest, ConvergenceTest_ConvDiff256) {
+
+    fs::path A_path(solve_matrix_dir / fs::path("conv_diff_256_A.csv"));
+    fs::path b_path(solve_matrix_dir / fs::path("conv_diff_256_b.csv"));
+
+    SolveTest<MatrixDense>(A_path, b_path);
+    SolveTest<MatrixSparse>(A_path, b_path);
+
 }
