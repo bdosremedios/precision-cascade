@@ -10,7 +10,7 @@ public:
     void TestSquareCheck() {
 
         try {
-            M<double> A = M<double>::Ones(7, 5);
+            M<double> A(M<double>::Ones(7, 5));
             ILU<M, double> ilu(A, Tol<double>::roundoff(), false);
             FAIL();
         } catch (runtime_error e) {
@@ -24,7 +24,7 @@ public:
 
         // Test that 7x7 matrix is only compatible with 7
         constexpr int n(7);
-        M<double> A(7, 7);
+        M<double> A(M<double>::Identity(7, 7));
         ILU<M, double> ilu(A, Tol<double>::roundoff(), false);
         EXPECT_TRUE(ilu.check_compatibility_left(n));
         EXPECT_TRUE(ilu.check_compatibility_right(n));
@@ -41,7 +41,7 @@ public:
         constexpr int n(7);
 
         try {
-            M<double> A = M<double>::Identity(n, n);
+            M<double> A(M<double>::Identity(n, n));
             A.coeffRef(0, 0) = 0;
             ILU<M, double> ilu(A, Tol<double>::roundoff(), false);
             FAIL();
@@ -50,7 +50,7 @@ public:
         }
 
         try {
-            M<double> A = M<double>::Identity(n, n);
+            M<double> A(M<double>::Identity(n, n));
             A.coeffRef(4, 4) = 0;
             ILU<M, double> ilu(A, Tol<double>::roundoff(), false);
             FAIL();
@@ -65,7 +65,7 @@ public:
 
         // Test that using a completely dense matrix one just gets a LU
         constexpr int n(8);
-        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_A.csv"));
+        M<double> A(read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_A.csv")));
         ILU<M, double> ilu(A, Tol<double>::roundoff(), false);
         
         // Test matching ILU to MATLAB for the dense matrix
@@ -80,7 +80,7 @@ public:
 
         // Test that using a completely dense matrix one just gets a LU
         constexpr int n(8);
-        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_A.csv"));
+        M<double> A(read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_A.csv")));
         ILU<M, double> ilu(A, Tol<double>::roundoff(), true);
         
         // Test matching ILU to MATLAB for the dense matrix
@@ -94,22 +94,22 @@ public:
     void TestILUPremadeErrorChecks() {
 
         try {
-            M<double> L_not_sq = M<double>::Random(8, 7);
-            M<double> U = M<double>::Random(8, 8);
+            M<double> L_not_sq(M<double>::Random(8, 7));
+            M<double> U(M<double>::Random(8, 8));
             ILU<M, double> ilu(L_not_sq, U);
             FAIL();
         } catch (runtime_error e) { ; }
 
         try {
-            M<double> L = M<double>::Random(8, 8);
-            M<double> U_not_sq = M<double>::Random(6, 8);
+            M<double> L(M<double>::Random(8, 8));
+            M<double> U_not_sq(M<double>::Random(6, 8));
             ILU<M, double> ilu(L, U_not_sq);
             FAIL();
         } catch (runtime_error e) { ; }
 
         try {
-            M<double> L_not_match = M<double>::Random(8, 8);
-            M<double> U_not_match = M<double>::Random(7, 7);
+            M<double> L_not_match(M<double>::Random(8, 8));
+            M<double> U_not_match(M<double>::Random(7, 7));
             ILU<M, double> ilu(L_not_match, U_not_match);
             FAIL();
         } catch (runtime_error e) { ; }
@@ -120,14 +120,14 @@ public:
     void TestDoubleSingleHalfCast() {
 
         constexpr int n(8);
-        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_A.csv"));
+        M<double> A(read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_A.csv")));
         ILU<M, double> ilu0_dbl(A, Tol<double>::roundoff(), false);
 
-        M<double> L_dbl = ilu0_dbl.get_L();
-        M<double> U_dbl = ilu0_dbl.get_U();
+        M<double> L_dbl(ilu0_dbl.get_L());
+        M<double> U_dbl(ilu0_dbl.get_U());
 
-        M<float> L_sgl = ilu0_dbl.template get_L_cast<float>();
-        M<float> U_sgl = ilu0_dbl.template get_U_cast<float>();
+        M<float> L_sgl(ilu0_dbl.template get_L_cast<float>());
+        M<float> U_sgl(ilu0_dbl.template get_U_cast<float>());
 
         ILU<M, float> ilu0_sgl(L_sgl, U_sgl);
 

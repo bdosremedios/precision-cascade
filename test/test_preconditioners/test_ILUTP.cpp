@@ -11,7 +11,7 @@ public:
 
         // Test ILU(0) and ILUT(0, n) [No Dropping] Give the same dense decomp
         constexpr int n(8);
-        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_A.csv"));
+        M<double> A(read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_A.csv")));
         ILU<M, double> ilu0(A, Tol<double>::roundoff(), false);
         ILU<M, double> ilut0(A, 0., n, Tol<double>::roundoff(), false);
 
@@ -24,7 +24,7 @@ public:
     void TestILUTDropping(bool pivot) {
 
         constexpr int n(8);
-        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_sparse_A.csv"));
+        M<double> A(read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_sparse_A.csv")));
 
         // Check multiple rising thresholds ensuring that each ilu is closer to the matrix and that
         // all have correct form for L and U
@@ -95,7 +95,7 @@ public:
 
         // Test that max dropping just gives the diagonal since everything else gets dropped
         constexpr int n(8);
-        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_sparse_A.csv"));
+        M<double> A(read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_sparse_A.csv")));
         ILU<M, double> ilu_all_drop(A, DBL_MAX, n, Tol<double>::roundoff(), pivot);
 
         ASSERT_MATRIX_LOWTRI(ilu_all_drop.get_L(), Tol<double>::roundoff());
@@ -115,7 +115,7 @@ public:
 
         // Test that 0 dropping leads to just p largest being retained
         constexpr int n(8);
-        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_A.csv"));
+        M<double> A(read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_A.csv")));
         ILU<M, double> ilu_keep_8(A, 0., 8, Tol<double>::roundoff(), pivot);
         ILU<M, double> ilu_keep_7(A, 0., 7, Tol<double>::roundoff(), pivot);
         ILU<M, double> ilu_keep_6(A, 0., 6, Tol<double>::roundoff(), pivot);
