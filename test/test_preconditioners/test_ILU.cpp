@@ -24,7 +24,7 @@ public:
 
         // Test that 7x7 matrix is only compatible with 7
         constexpr int n(7);
-        M<double> A = read_matrixCSV<M, double>(solve_matrix_dir / fs::path("A_7_dummy_backsub.csv"));
+        M<double> A(7, 7);
         ILU<M, double> ilu(A, Tol<double>::roundoff(), false);
         EXPECT_TRUE(ilu.check_compatibility_left(n));
         EXPECT_TRUE(ilu.check_compatibility_right(n));
@@ -71,7 +71,7 @@ public:
         // Test matching ILU to MATLAB for the dense matrix
         MatrixVector<double> test_vec = MatrixVector<double>::Random(n);
 
-        ASSERT_VECTOR_NEAR(ilu.action_inv_M(A*test_vec), test_vec, dbl_error_acc);
+        ASSERT_VECTOR_NEAR(ilu.action_inv_M(A*test_vec), test_vec, precond_error_tol);
 
     }
 
@@ -86,7 +86,7 @@ public:
         // Test matching ILU to MATLAB for the dense matrix
         MatrixVector<double> test_vec = MatrixVector<double>::Random(n);
 
-        ASSERT_VECTOR_NEAR(ilu.action_inv_M(A*test_vec), test_vec, dbl_error_acc);
+        ASSERT_VECTOR_NEAR(ilu.action_inv_M(A*test_vec), test_vec, precond_error_tol);
 
     }
 

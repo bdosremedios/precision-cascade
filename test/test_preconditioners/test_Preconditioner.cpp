@@ -41,7 +41,7 @@ public:
 
         test_vec = inv_precond.action_inv_M(test_vec);
 
-        ASSERT_VECTOR_NEAR(orig_test_vec, test_vec, dbl_error_acc);
+        ASSERT_VECTOR_NEAR(orig_test_vec, test_vec, precond_error_tol);
 
     }
 

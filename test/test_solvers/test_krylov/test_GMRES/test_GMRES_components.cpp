@@ -91,7 +91,7 @@ public:
                 );
                 ASSERT_NEAR(MatrixVector<double>(test_mock.Q_kry_basis.col(j)).dot(q),
                             0.,
-                            dbl_error_acc);
+                            Tol<double>::gamma(n));
             }
 
             // Confirm that Hessenberg matrix column corresponding to new basis vector
@@ -226,12 +226,11 @@ public:
                 )
             );
 
-            // )Solve with backsubstitution
+            // Solve with backsubstitution
             test_mock.update_x_minimizing_res();
 
-            // Check if coefficient solution matches to within tolerable error
             for (int i=0; i<kry_dim; ++i) {
-                ASSERT_NEAR(test_mock.typed_soln(i), test_soln(i), dbl_error_acc);
+                ASSERT_NEAR(test_mock.typed_soln(i), test_soln(i), test_soln.norm()*Tol<double>::gamma(n));
             }
 
         }

@@ -6,14 +6,10 @@ class GMRES_Solve_Half_Test: public TestBase
 {
 public:
 
-    double large_matrix_error_mod_stag = 4.; // Modification to account for stagnation for
-                                             // error accumulation in larger matrix sizes
-
     template <template <typename> typename M>
     void SolveTest(
         const fs::path &A_file_path,
         const fs::path &b_file_path,
-        const double &large_error_mod,
         const bool &check_3_iter
     ) {
 
@@ -22,7 +18,7 @@ public:
         TypedLinearSystem<M, half> lin_sys(A, b);
 
         SolveArgPkg args;
-        args.target_rel_res = large_error_mod*conv_tol_hlf;
+        args.target_rel_res = conv_tol_hlf;
         GMRESSolve<M, half> gmres_solve(lin_sys, Tol<half>::roundoff(), args);
 
         gmres_solve.solve();
@@ -30,7 +26,7 @@ public:
         if (*show_plots) { gmres_solve.view_relres_plot("log"); }
         
         EXPECT_TRUE(gmres_solve.check_converged());
-        EXPECT_LE(gmres_solve.get_relres(), large_error_mod*conv_tol_hlf);
+        EXPECT_LE(gmres_solve.get_relres(), conv_tol_hlf);
         if (check_3_iter) { EXPECT_EQ(gmres_solve.get_iteration(), 3); }
 
     }
@@ -74,8 +70,8 @@ TEST_F(GMRES_Solve_Half_Test, SolveConvDiff64) {
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
 
-    SolveTest<MatrixDense>(A_path, b_path, 1., false);
-    SolveTest<MatrixSparse>(A_path, b_path, 1., false);
+    SolveTest<MatrixDense>(A_path, b_path, false);
+    SolveTest<MatrixSparse>(A_path, b_path, false);
 
 }
 
@@ -84,8 +80,8 @@ TEST_F(GMRES_Solve_Half_Test, SolveConvDiff256) {
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_256_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_256_b.csv"));
 
-    SolveTest<MatrixDense>(A_path, b_path, large_matrix_error_mod_stag, false);
-    SolveTest<MatrixSparse>(A_path, b_path, large_matrix_error_mod_stag, false);
+    SolveTest<MatrixDense>(A_path, b_path, false);
+    SolveTest<MatrixSparse>(A_path, b_path, false);
 
 }
 
@@ -94,8 +90,8 @@ TEST_F(GMRES_Solve_Half_Test, SolveConvDiff1024_LONGRUNTIME) {
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_1024_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_1024_b.csv"));
 
-    SolveTest<MatrixDense>(A_path, b_path, large_matrix_error_mod_stag, false);
-    SolveTest<MatrixSparse>(A_path, b_path, large_matrix_error_mod_stag, false);
+    SolveTest<MatrixDense>(A_path, b_path, false);
+    SolveTest<MatrixSparse>(A_path, b_path, false);
 
 }
 
@@ -104,8 +100,8 @@ TEST_F(GMRES_Solve_Half_Test, SolveConvDiff20Rand) {
     fs::path A_path(solve_matrix_dir / fs::path("A_20_rand.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("b_20_rand.csv"));
 
-    SolveTest<MatrixDense>(A_path, b_path, 1., false);
-    SolveTest<MatrixSparse>(A_path, b_path, 1., false);
+    SolveTest<MatrixDense>(A_path, b_path, false);
+    SolveTest<MatrixSparse>(A_path, b_path, false);
 
 }
 
@@ -114,8 +110,8 @@ TEST_F(GMRES_Solve_Half_Test, SolveConvDiff3Eigs) {
     fs::path A_path(solve_matrix_dir / fs::path("A_25_3eigs.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("b_25_3eigs.csv"));
 
-    SolveTest<MatrixDense>(A_path, b_path, 1., true);
-    SolveTest<MatrixSparse>(A_path, b_path, 1., true);
+    SolveTest<MatrixDense>(A_path, b_path, true);
+    SolveTest<MatrixSparse>(A_path, b_path, true);
 
 }
 

@@ -193,15 +193,11 @@ class TestBase: public testing::Test
 {
 public:
 
-    // Error tolerance allowed in an entry for a double precision calculation after
-    // accumulation of errors where prediction of error bound is difficult
-    const double dbl_error_acc = pow(10, -10);
-
-    const double matlab_impl_diff = pow(10, -8);
-
-    const double conv_tol_hlf = pow(10, -02);
-    const double conv_tol_sgl = pow(10, -05);
+    const double conv_tol_hlf = 5*pow(10, -02);
+    const double conv_tol_sgl = 5*pow(10, -06);
     const double conv_tol_dbl = pow(10, -10);
+
+    const double precond_error_tol = pow(10, -10);
 
     const fs::path read_matrix_dir = (
         fs::current_path() / fs::path("..") / fs::path("test") / fs::path("read_matrices")

@@ -5,14 +5,14 @@
 class PGMRES_Solve_Test: public TestBase
 {
 public:
-        
+
     SolveArgPkg pgmres_args;
 
     void SetUp() { pgmres_args.target_rel_res = conv_tol_dbl; }
 
     template <template <typename> typename M>
     void TestMatchIdentity() {
-    
+
         constexpr int n(45);
         M<double> A(read_matrixCSV<M, double>(solve_matrix_dir / fs::path("A_inv_45.csv")));
         MatrixVector<double> b(read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("b_inv_45.csv")));
@@ -56,7 +56,7 @@ public:
 
         pgmres_solve.solve();
         if (*show_plots) { pgmres_solve.view_relres_plot("log"); }
-        
+
         EXPECT_EQ(pgmres_solve.get_iteration(), 1);
         EXPECT_TRUE(pgmres_solve.check_converged());
         EXPECT_LE(pgmres_solve.get_relres(), conv_tol_dbl);
@@ -75,7 +75,7 @@ public:
 
         pgmres_solve.solve();
         if (*show_plots) { pgmres_solve.view_relres_plot("log"); }
-        
+
         EXPECT_EQ(pgmres_solve.get_iteration(), 3);
         EXPECT_TRUE(pgmres_solve.check_converged());
         EXPECT_LE(pgmres_solve.get_relres(), conv_tol_dbl);

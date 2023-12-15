@@ -34,17 +34,17 @@ public:
         ILU<M, double> ilut1e_1(A, 1e-1, n, Tol<double>::roundoff(), pivot);
         ILU<M, double> ilut1e_0(A, 1e-0, n, Tol<double>::roundoff(), pivot);
 
-        ASSERT_MATRIX_LOWTRI(ilut1e_4.get_L(), dbl_error_acc);
-        ASSERT_MATRIX_LOWTRI(ilut1e_3.get_L(), dbl_error_acc);
-        ASSERT_MATRIX_LOWTRI(ilut1e_2.get_L(), dbl_error_acc);
-        ASSERT_MATRIX_LOWTRI(ilut1e_1.get_L(), dbl_error_acc);
-        ASSERT_MATRIX_LOWTRI(ilut1e_0.get_L(), dbl_error_acc);
+        ASSERT_MATRIX_LOWTRI(ilut1e_4.get_L(), precond_error_tol);
+        ASSERT_MATRIX_LOWTRI(ilut1e_3.get_L(), precond_error_tol);
+        ASSERT_MATRIX_LOWTRI(ilut1e_2.get_L(), precond_error_tol);
+        ASSERT_MATRIX_LOWTRI(ilut1e_1.get_L(), precond_error_tol);
+        ASSERT_MATRIX_LOWTRI(ilut1e_0.get_L(), precond_error_tol);
 
-        ASSERT_MATRIX_UPPTRI(ilut1e_4.get_U(), dbl_error_acc);
-        ASSERT_MATRIX_UPPTRI(ilut1e_3.get_U(), dbl_error_acc);
-        ASSERT_MATRIX_UPPTRI(ilut1e_2.get_U(), dbl_error_acc);
-        ASSERT_MATRIX_UPPTRI(ilut1e_1.get_U(), dbl_error_acc);
-        ASSERT_MATRIX_UPPTRI(ilut1e_0.get_U(), dbl_error_acc);
+        ASSERT_MATRIX_UPPTRI(ilut1e_4.get_U(), precond_error_tol);
+        ASSERT_MATRIX_UPPTRI(ilut1e_3.get_U(), precond_error_tol);
+        ASSERT_MATRIX_UPPTRI(ilut1e_2.get_U(), precond_error_tol);
+        ASSERT_MATRIX_UPPTRI(ilut1e_1.get_U(), precond_error_tol);
+        ASSERT_MATRIX_UPPTRI(ilut1e_0.get_U(), precond_error_tol);
 
         // Test that each lower threshold is better than the higher one w.r.t
         // Frobenius norm
