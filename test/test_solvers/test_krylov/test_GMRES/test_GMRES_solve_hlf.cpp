@@ -18,7 +18,7 @@ public:
         TypedLinearSystem<M, half> lin_sys(A, b);
 
         SolveArgPkg args;
-        args.target_rel_res = conv_tol_hlf;
+        args.target_rel_res = Tol<half>::krylov_conv_tol();
         GMRESSolve<M, half> gmres_solve(lin_sys, Tol<half>::roundoff(), args);
 
         gmres_solve.solve();
@@ -26,7 +26,7 @@ public:
         if (*show_plots) { gmres_solve.view_relres_plot("log"); }
         
         EXPECT_TRUE(gmres_solve.check_converged());
-        EXPECT_LE(gmres_solve.get_relres(), conv_tol_hlf);
+        EXPECT_LE(gmres_solve.get_relres(), Tol<half>::krylov_conv_tol());
         if (check_3_iter) { EXPECT_EQ(gmres_solve.get_iteration(), 3); }
 
     }
@@ -41,14 +41,14 @@ public:
 
         // Check convergence under single capabilities
         SolveArgPkg args;
-        args.target_rel_res = conv_tol_hlf;
+        args.target_rel_res = Tol<half>::krylov_conv_tol();
         GMRESSolve<M, half> gmres_solve_succeed(lin_sys, Tol<half>::roundoff(), args);
 
         gmres_solve_succeed.solve();
         if (*show_plots) { gmres_solve_succeed.view_relres_plot("log"); }
         
         EXPECT_TRUE(gmres_solve_succeed.check_converged());
-        EXPECT_LE(gmres_solve_succeed.get_relres(), conv_tol_hlf);
+        EXPECT_LE(gmres_solve_succeed.get_relres(), Tol<half>::krylov_conv_tol());
 
         // Check divergence beyond single capability of the single machine epsilon
         SolveArgPkg fail_args;

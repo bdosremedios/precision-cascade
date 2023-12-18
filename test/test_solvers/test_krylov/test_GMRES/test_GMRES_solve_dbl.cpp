@@ -19,7 +19,7 @@ public:
         TypedLinearSystem<M, double> lin_sys(A, b);
 
         SolveArgPkg args;
-        args.target_rel_res = conv_tol_dbl;
+        args.target_rel_res = Tol<double>::krylov_conv_tol();
         GMRESSolve<M, double> gmres_solve(lin_sys, Tol<double>::roundoff(), args);
 
         gmres_solve.solve();
@@ -27,13 +27,13 @@ public:
         if (*show_plots) { gmres_solve.view_relres_plot("log"); }
         
         EXPECT_TRUE(gmres_solve.check_converged());
-        EXPECT_LE(gmres_solve.get_relres(), conv_tol_dbl);
+        EXPECT_LE(gmres_solve.get_relres(), Tol<double>::krylov_conv_tol());
         if (check_3_iter) { EXPECT_EQ(gmres_solve.get_iteration(), 3); }
 
         // Check that matches MATLAB gmres solution close within conv_tol_dbl
         MatrixVector<double> x_test(read_matrixCSV<MatrixVector, double>(x_file_path));
         EXPECT_LE((gmres_solve.get_typed_soln() - x_test).norm()/(x_test.norm()),
-                  2*conv_tol_dbl);
+                  2*Tol<double>::krylov_conv_tol());
 
     }
 

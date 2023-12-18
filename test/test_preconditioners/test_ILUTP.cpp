@@ -34,17 +34,17 @@ public:
         ILU<M, double> ilut1e_1(A, 1e-1, n, Tol<double>::roundoff(), pivot);
         ILU<M, double> ilut1e_0(A, 1e-0, n, Tol<double>::roundoff(), pivot);
 
-        ASSERT_MATRIX_LOWTRI(ilut1e_4.get_L(), precond_error_tol);
-        ASSERT_MATRIX_LOWTRI(ilut1e_3.get_L(), precond_error_tol);
-        ASSERT_MATRIX_LOWTRI(ilut1e_2.get_L(), precond_error_tol);
-        ASSERT_MATRIX_LOWTRI(ilut1e_1.get_L(), precond_error_tol);
-        ASSERT_MATRIX_LOWTRI(ilut1e_0.get_L(), precond_error_tol);
+        ASSERT_MATRIX_LOWTRI(ilut1e_4.get_L(), Tol<double>::dbl_ilu_elem_tol());
+        ASSERT_MATRIX_LOWTRI(ilut1e_3.get_L(), Tol<double>::dbl_ilu_elem_tol());
+        ASSERT_MATRIX_LOWTRI(ilut1e_2.get_L(), Tol<double>::dbl_ilu_elem_tol());
+        ASSERT_MATRIX_LOWTRI(ilut1e_1.get_L(), Tol<double>::dbl_ilu_elem_tol());
+        ASSERT_MATRIX_LOWTRI(ilut1e_0.get_L(), Tol<double>::dbl_ilu_elem_tol());
 
-        ASSERT_MATRIX_UPPTRI(ilut1e_4.get_U(), precond_error_tol);
-        ASSERT_MATRIX_UPPTRI(ilut1e_3.get_U(), precond_error_tol);
-        ASSERT_MATRIX_UPPTRI(ilut1e_2.get_U(), precond_error_tol);
-        ASSERT_MATRIX_UPPTRI(ilut1e_1.get_U(), precond_error_tol);
-        ASSERT_MATRIX_UPPTRI(ilut1e_0.get_U(), precond_error_tol);
+        ASSERT_MATRIX_UPPTRI(ilut1e_4.get_U(), Tol<double>::dbl_ilu_elem_tol());
+        ASSERT_MATRIX_UPPTRI(ilut1e_3.get_U(), Tol<double>::dbl_ilu_elem_tol());
+        ASSERT_MATRIX_UPPTRI(ilut1e_2.get_U(), Tol<double>::dbl_ilu_elem_tol());
+        ASSERT_MATRIX_UPPTRI(ilut1e_1.get_U(), Tol<double>::dbl_ilu_elem_tol());
+        ASSERT_MATRIX_UPPTRI(ilut1e_0.get_U(), Tol<double>::dbl_ilu_elem_tol());
 
         // Test that each lower threshold is better than the higher one w.r.t
         // Frobenius norm
@@ -127,27 +127,45 @@ public:
         ILU<M, double> ilu_keep_0(A, 0., 0, Tol<double>::roundoff(), pivot);
 
         for (int i=0; i<n; ++i) {
-            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_8.get_U().col(i)), Tol<double>::roundoff()), 8+1);
-            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_7.get_U().col(i)), Tol<double>::roundoff()), 7+1);
-            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_6.get_U().col(i)), Tol<double>::roundoff()), 6+1);
-            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_5.get_U().col(i)), Tol<double>::roundoff()), 5+1);
-            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_4.get_U().col(i)), Tol<double>::roundoff()), 4+1);
-            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_3.get_U().col(i)), Tol<double>::roundoff()), 3+1);
-            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_2.get_U().col(i)), Tol<double>::roundoff()), 2+1);
-            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_1.get_U().col(i)), Tol<double>::roundoff()), 1+1);
-            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_0.get_U().col(i)), Tol<double>::roundoff()), 0+1);
+            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_8.get_U().col(i)), Tol<double>::roundoff()),
+                      8+1);
+            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_7.get_U().col(i)), Tol<double>::roundoff()),
+                      7+1);
+            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_6.get_U().col(i)), Tol<double>::roundoff()),
+                      6+1);
+            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_5.get_U().col(i)), Tol<double>::roundoff()),
+                      5+1);
+            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_4.get_U().col(i)), Tol<double>::roundoff()),
+                      4+1);
+            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_3.get_U().col(i)), Tol<double>::roundoff()),
+                      3+1);
+            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_2.get_U().col(i)), Tol<double>::roundoff()),
+                      2+1);
+            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_1.get_U().col(i)), Tol<double>::roundoff()),
+                      1+1);
+            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_0.get_U().col(i)), Tol<double>::roundoff()),
+                      0+1);
         }
 
         for (int i=0; i<n; ++i) {
-            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_8.get_L().col(i)), Tol<double>::roundoff()), 8+1);
-            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_7.get_L().col(i)), Tol<double>::roundoff()), 7+1);
-            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_6.get_L().col(i)), Tol<double>::roundoff()), 6+1);
-            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_5.get_L().col(i)), Tol<double>::roundoff()), 5+1);
-            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_4.get_L().col(i)), Tol<double>::roundoff()), 4+1);
-            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_3.get_L().col(i)), Tol<double>::roundoff()), 3+1);
-            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_2.get_L().col(i)), Tol<double>::roundoff()), 2+1);
-            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_1.get_L().col(i)), Tol<double>::roundoff()), 1+1);
-            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_0.get_L().col(i)), Tol<double>::roundoff()), 0+1);
+            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_8.get_L().col(i)), Tol<double>::roundoff()),
+                      8+1);
+            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_7.get_L().col(i)), Tol<double>::roundoff()),
+                      7+1);
+            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_6.get_L().col(i)), Tol<double>::roundoff()),
+                      6+1);
+            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_5.get_L().col(i)), Tol<double>::roundoff()),
+                      5+1);
+            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_4.get_L().col(i)), Tol<double>::roundoff()),
+                      4+1);
+            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_3.get_L().col(i)), Tol<double>::roundoff()),
+                      3+1);
+            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_2.get_L().col(i)), Tol<double>::roundoff()),
+                      2+1);
+            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_1.get_L().col(i)), Tol<double>::roundoff()),
+                      1+1);
+            ASSERT_LE(n-count_zeros(MatrixVector<double>(ilu_keep_0.get_L().col(i)), Tol<double>::roundoff()),
+                      0+1);
         }
 
     }

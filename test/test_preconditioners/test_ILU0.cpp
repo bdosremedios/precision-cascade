@@ -15,7 +15,7 @@ public:
         ILU<M, double> ilu(A, Tol<double>::roundoff(), false);
         M<double> test(ilu.get_L()*ilu.get_U()-A);
 
-        ASSERT_MATRIX_ZERO(test, precond_error_tol);
+        ASSERT_MATRIX_ZERO(test, Tol<double>::dbl_ilu_elem_tol());
 
         ASSERT_MATRIX_LOWTRI(ilu.get_L(), Tol<double>::roundoff());
         ASSERT_MATRIX_UPPTRI(ilu.get_U(), Tol<double>::roundoff());
@@ -23,8 +23,8 @@ public:
         M<double> L(read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_L.csv")));
         M<double> U(read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_U.csv")));
 
-        ASSERT_MATRIX_NEAR(ilu.get_L(), L, precond_error_tol);
-        ASSERT_MATRIX_NEAR(ilu.get_U(), U, precond_error_tol);
+        ASSERT_MATRIX_NEAR(ilu.get_L(), L, Tol<double>::dbl_ilu_elem_tol());
+        ASSERT_MATRIX_NEAR(ilu.get_U(), U, Tol<double>::dbl_ilu_elem_tol());
 
     }
     
@@ -37,22 +37,22 @@ public:
         ILU<M, double> ilu(A, Tol<double>::roundoff(), true);
         M<double> test(ilu.get_L()*ilu.get_U()-ilu.get_P()*A);
 
-        ASSERT_MATRIX_ZERO(test, precond_error_tol);
+        ASSERT_MATRIX_ZERO(test, Tol<double>::dbl_ilu_elem_tol());
 
         ASSERT_MATRIX_LOWTRI(ilu.get_L(), Tol<double>::roundoff());
         ASSERT_MATRIX_UPPTRI(ilu.get_U(), Tol<double>::roundoff());
 
         // Test correct permutation matrix P
         M<double> P_squared(ilu.get_P()*(ilu.get_P().transpose()));
-        ASSERT_MATRIX_IDENTITY(P_squared, precond_error_tol);
+        ASSERT_MATRIX_IDENTITY(P_squared, Tol<double>::dbl_ilu_elem_tol());
 
         M<double> L(read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_L_pivot.csv")));
         M<double> U(read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_U_pivot.csv")));
         M<double> P(read_matrixCSV<M, double>(solve_matrix_dir / fs::path("ilu_P_pivot.csv")));
 
-        ASSERT_MATRIX_NEAR(ilu.get_L(), L, precond_error_tol);
-        ASSERT_MATRIX_NEAR(ilu.get_U(), U, precond_error_tol);
-        ASSERT_MATRIX_NEAR(ilu.get_P(), P, precond_error_tol);
+        ASSERT_MATRIX_NEAR(ilu.get_L(), L, Tol<double>::dbl_ilu_elem_tol());
+        ASSERT_MATRIX_NEAR(ilu.get_U(), U, Tol<double>::dbl_ilu_elem_tol());
+        ASSERT_MATRIX_NEAR(ilu.get_P(), P, Tol<double>::dbl_ilu_elem_tol());
 
     }
     
@@ -73,8 +73,8 @@ public:
         ASSERT_MATRIX_LOWTRI(ilu.get_L(), Tol<double>::roundoff());
         ASSERT_MATRIX_UPPTRI(ilu.get_U(), Tol<double>::roundoff());
 
-        ASSERT_MATRIX_NEAR(ilu.get_L(), L, precond_error_tol);
-        ASSERT_MATRIX_NEAR(ilu.get_U(), U, precond_error_tol);
+        ASSERT_MATRIX_NEAR(ilu.get_L(), L, Tol<double>::dbl_ilu_elem_tol());
+        ASSERT_MATRIX_NEAR(ilu.get_U(), U, Tol<double>::dbl_ilu_elem_tol());
 
     }
 

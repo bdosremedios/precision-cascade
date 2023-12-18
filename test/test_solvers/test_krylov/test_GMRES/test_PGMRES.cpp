@@ -8,7 +8,7 @@ public:
 
     SolveArgPkg pgmres_args;
 
-    void SetUp() { pgmres_args.target_rel_res = conv_tol_dbl; }
+    void SetUp() { pgmres_args.target_rel_res = Tol<double>::krylov_conv_tol(); }
 
     template <template <typename> typename M>
     void TestMatchIdentity() {
@@ -22,11 +22,15 @@ public:
 
         PrecondArgPkg<M, double> noprecond(make_shared<NoPreconditioner<M, double>>(),
                                            make_shared<NoPreconditioner<M, double>>());
-        GMRESSolve<M, double> pgmres_solve_explicit_noprecond(lin_sys, Tol<double>::roundoff(), pgmres_args, noprecond);
+        GMRESSolve<M, double> pgmres_solve_explicit_noprecond(
+            lin_sys, Tol<double>::roundoff(), pgmres_args, noprecond
+        );
 
         PrecondArgPkg<M, double> identity(make_shared<MatrixInverse<M, double>>(M<double>::Identity(n, n)),
                                           make_shared<MatrixInverse<M, double>>(M<double>::Identity(n, n)));
-        GMRESSolve<M, double> pgmres_solve_inverse_of_identity(lin_sys, Tol<double>::roundoff(), pgmres_args, identity);
+        GMRESSolve<M, double> pgmres_solve_inverse_of_identity(
+            lin_sys, Tol<double>::roundoff(), pgmres_args, identity
+        );
 
         pgmres_solve_default.solve();
         if (*show_plots) { pgmres_solve_default.view_relres_plot("log"); }
@@ -59,7 +63,7 @@ public:
 
         EXPECT_EQ(pgmres_solve.get_iteration(), 1);
         EXPECT_TRUE(pgmres_solve.check_converged());
-        EXPECT_LE(pgmres_solve.get_relres(), conv_tol_dbl);
+        EXPECT_LE(pgmres_solve.get_relres(), Tol<double>::krylov_conv_tol());
     }
 
     template <template <typename> typename M>
@@ -78,9 +82,10 @@ public:
 
         EXPECT_EQ(pgmres_solve.get_iteration(), 3);
         EXPECT_TRUE(pgmres_solve.check_converged());
-        EXPECT_LE(pgmres_solve.get_relres(), conv_tol_dbl);
+        EXPECT_LE(pgmres_solve.get_relres(), Tol<double>::krylov_conv_tol());
     
-        EXPECT_LE((pgmres_solve.get_typed_soln() - x_test).norm()/(x_test.norm()), 2*conv_tol_dbl);
+        EXPECT_LE((pgmres_solve.get_typed_soln() - x_test).norm()/(x_test.norm()),
+                  2*Tol<double>::krylov_conv_tol());
 
     }
 

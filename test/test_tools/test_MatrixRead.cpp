@@ -89,8 +89,8 @@ public:
         M<T> test1(read_matrixCSV<M, T>(square1_file));
         M<T> test2(read_matrixCSV<M, T>(square2_file));
 
-        ASSERT_MATRIX_NEAR(test1, target1, Tol<T>::roundoff_T());
-        ASSERT_MATRIX_NEAR(test2, target2, Tol<T>::roundoff_T());
+        ASSERT_MATRIX_NEAR(test1, target1, static_cast<T>(Tol<T>::roundoff()));
+        ASSERT_MATRIX_NEAR(test2, target2, static_cast<T>(Tol<T>::roundoff()));
 
     }
 
@@ -117,8 +117,8 @@ public:
         M<T> test_wide(read_matrixCSV<M, T>(wide_file));
         M<T> test_tall(read_matrixCSV<M, T>(tall_file));
 
-        ASSERT_MATRIX_NEAR(test_wide, target_wide, Tol<T>::roundoff_T());
-        ASSERT_MATRIX_NEAR(test_tall, target_tall, Tol<T>::roundoff_T());
+        ASSERT_MATRIX_NEAR(test_wide, target_wide, static_cast<T>(Tol<T>::roundoff()));
+        ASSERT_MATRIX_NEAR(test_tall, target_tall, static_cast<T>(Tol<T>::roundoff()));
 
     }
 
@@ -129,16 +129,16 @@ public:
     ) {
         M<T> test_precise(read_matrixCSV<M, T>(precise_file));
         M<T> target_precise(li);
-        ASSERT_MATRIX_NEAR(test_precise, target_precise, Tol<T>::roundoff_T());
+        ASSERT_MATRIX_NEAR(test_precise, target_precise, static_cast<T>(Tol<T>::roundoff()));
     }
 
-    template <template <typename> typename M, typename T>
+    template <template <typename> typename M>
     void ReadDifferentThanPrecise(
         std::initializer_list<std::initializer_list<T>> li,
         fs::path precise_file
     ) {
 
-        T eps(static_cast<T>(1.5)*Tol<T>::roundoff_T());
+        T eps(static_cast<T>(1.5)*Tol<T>::roundoff());
         M<T> target_precise(li);
         M<T> miss_precise_up(target_precise + M<T>::Ones(2, 2)*eps);
         M<T> miss_precise_down(target_precise - M<T>::Ones(2, 2)*eps);
@@ -164,7 +164,7 @@ public:
         fs::path vector_file(read_matrix_dir / fs::path("vector.csv"));
         MatrixVector<T> test(read_matrixCSV<MatrixVector, T>(vector_file));
 
-        ASSERT_VECTOR_NEAR(test, target, Tol<T>::roundoff_T());
+        ASSERT_VECTOR_NEAR(test, target, static_cast<T>(Tol<T>::roundoff()));
 
     }
 

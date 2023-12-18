@@ -6,7 +6,7 @@ class MP_GMRES_IR_SolveTest: public TestBase
 {
 public:
 
-    SolveArgPkg dbl_GMRES_IR_args = SolveArgPkg(40, 10, conv_tol_dbl);
+    SolveArgPkg dbl_GMRES_IR_args = SolveArgPkg(40, 10, Tol<double>::nested_krylov_conv_tol());
 
     template <template <typename> typename M>
     void SolveTest(
@@ -25,7 +25,7 @@ public:
         if (*show_plots) { mp_gmres_ir_solve.view_relres_plot("log"); }
 
         EXPECT_TRUE(mp_gmres_ir_solve.check_converged());
-        EXPECT_LE(mp_gmres_ir_solve.get_relres(), conv_tol_dbl);
+        EXPECT_LE(mp_gmres_ir_solve.get_relres(), Tol<double>::nested_krylov_conv_tol());
 
     }
 

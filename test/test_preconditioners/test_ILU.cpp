@@ -69,9 +69,9 @@ public:
         ILU<M, double> ilu(A, Tol<double>::roundoff(), false);
         
         // Test matching ILU to MATLAB for the dense matrix
-        MatrixVector<double> test_vec = MatrixVector<double>::Random(n);
+        MatrixVector<double> test_vec(MatrixVector<double>::Random(n));
 
-        ASSERT_VECTOR_NEAR(ilu.action_inv_M(A*test_vec), test_vec, precond_error_tol);
+        ASSERT_VECTOR_NEAR(ilu.action_inv_M(A*test_vec), test_vec, Tol<double>::dbl_ilu_elem_tol());
 
     }
 
@@ -84,9 +84,9 @@ public:
         ILU<M, double> ilu(A, Tol<double>::roundoff(), true);
         
         // Test matching ILU to MATLAB for the dense matrix
-        MatrixVector<double> test_vec = MatrixVector<double>::Random(n);
+        MatrixVector<double> test_vec(MatrixVector<double>::Random(n));
 
-        ASSERT_VECTOR_NEAR(ilu.action_inv_M(A*test_vec), test_vec, precond_error_tol);
+        ASSERT_VECTOR_NEAR(ilu.action_inv_M(A*test_vec), test_vec, Tol<double>::dbl_ilu_elem_tol());
 
     }
 
@@ -136,8 +136,8 @@ public:
         ASSERT_MATRIX_EQ(ilu0_sgl.get_L(), L_sgl);
         ASSERT_MATRIX_EQ(ilu0_sgl.get_U(), U_sgl);
 
-        M<half> L_hlf = ilu0_dbl.template get_L_cast<half>();
-        M<half> U_hlf = ilu0_dbl.template get_U_cast<half>();
+        M<half> L_hlf(ilu0_dbl.template get_L_cast<half>());
+        M<half> U_hlf(ilu0_dbl.template get_U_cast<half>());
 
         ILU<M, half> ilu0_hlf(L_hlf, U_hlf);
 

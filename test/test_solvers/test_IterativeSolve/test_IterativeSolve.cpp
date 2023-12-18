@@ -63,7 +63,9 @@ public:
         EXPECT_FALSE(test_mock_guess.terminated);
         EXPECT_EQ(test_mock_guess.curr_iter, 0);
         EXPECT_EQ(test_mock_guess.res_norm_hist.size(), 1);
-        EXPECT_NEAR(test_mock_guess.res_norm_hist[0], (b - A*init_guess).norm(), Tol<T>::gamma(n));
+        EXPECT_NEAR(test_mock_guess.res_norm_hist[0],
+                    (b - A*init_guess).norm(),
+                    Tol<T>::gamma(n));
 
     }
 

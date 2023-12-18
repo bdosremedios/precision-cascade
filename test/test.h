@@ -182,32 +182,60 @@ template <typename T>
 class Tol
 {
 public:
+
+    // Core values
     static double roundoff() { assert(false); return -1.; }
-    static T roundoff_T() { return static_cast<T>(roundoff()); }
-    static double loss_of_ortho_tol() { return std::pow(10, 2)*roundoff(); }
-    static double matlab_dbl_near() { return std::pow(10, -14); }
     static double gamma(int n) { return n*roundoff()/(1-n*roundoff()); }
-    static T gamma_T(int n) { return static_cast<T>(gamma(n)); }
+
+    // Special case values
+    static double dbl_loss_of_ortho_tol() { return std::pow(10, 2)*roundoff(); }
+    static double dbl_substitution_tol() { return std::pow(10, 2)*roundoff(); }
+    static double matlab_dbl_near() { return std::pow(10, -14); }
+
+    // Preconditioner error test tolerance
+    static double dbl_inv_elem_tol() { return std::pow(10, -12); }
+    static double dbl_ilu_elem_tol() { return std::pow(10, -12); }
+
+    // Iterative solver convergence tolerance
+    static double Tol<T>::stationary_conv_tol() { assert(false); return -1.; }
+    static double Tol<T>::krylov_conv_tol() { assert(false); return -1.; }
+    static double Tol<T>::nested_krylov_conv_tol() { assert(false); return -1.; }
+
 };
 
+// Half Constants
 template<>
-static double Tol<half>::roundoff() { return static_cast<half>(std::pow(2, -10)); }
+static double Tol<half>::roundoff() { return std::pow(2, -10); }
+template<>
+static double Tol<half>::stationary_conv_tol() { return 5*std::pow(10, -02); }
+template<>
+static double Tol<half>::krylov_conv_tol() { return 5*std::pow(10, -02); }
+template<>
+static double Tol<half>::nested_krylov_conv_tol() { return 5*std::pow(10, -02); }
 
+// Single Constants
 template<>
-static double Tol<float>::roundoff() { return static_cast<float>(std::pow(2, -23)); }
+static double Tol<float>::roundoff() { return std::pow(2, -23); }
+template<>
+static double Tol<float>::stationary_conv_tol() { return 5*std::pow(10, -06); }
+template<>
+static double Tol<float>::krylov_conv_tol() { return 5*std::pow(10, -06); }
+template<>
+static double Tol<float>::nested_krylov_conv_tol() { return 5*std::pow(10, -06); }
 
+// Double Constants
 template<>
-static double Tol<double>::roundoff() { return static_cast<double>(std::pow(2, -52)); }
+static double Tol<double>::roundoff() { return std::pow(2, -52); }
+template<>
+static double Tol<double>::stationary_conv_tol() { return std::pow(10, -10); }
+template<>
+static double Tol<double>::krylov_conv_tol() { return std::pow(10, -10); }
+template<>
+static double Tol<double>::nested_krylov_conv_tol() { return std::pow(10, -10); }
 
 class TestBase: public testing::Test
 {
 public:
-
-    const double conv_tol_hlf = 5*std::pow(10, -02);
-    const double conv_tol_sgl = 5*std::pow(10, -06);
-    const double conv_tol_dbl = std::pow(10, -10);
-
-    const double precond_error_tol = std::pow(10, -10);
 
     const fs::path read_matrix_dir = (
         fs::current_path() / fs::path("..") / fs::path("test") / fs::path("read_matrices")
@@ -217,7 +245,6 @@ public:
     );
 
     SolveArgPkg default_args;
-
     static bool *show_plots;
 
 };

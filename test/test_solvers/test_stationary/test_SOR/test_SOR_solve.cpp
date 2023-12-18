@@ -73,8 +73,8 @@ TEST_F(SOR_Test, SolveConvDiff64Double) {
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
 
-    SolveSuccessTest<MatrixDense, double>(A_path, b_path, conv_tol_dbl);
-    SolveSuccessTest<MatrixSparse, double>(A_path, b_path, conv_tol_dbl);
+    SolveSuccessTest<MatrixDense, double>(A_path, b_path, Tol<double>::stationary_conv_tol());
+    SolveSuccessTest<MatrixSparse, double>(A_path, b_path, Tol<double>::stationary_conv_tol());
 
 }
 
@@ -83,8 +83,8 @@ TEST_F(SOR_Test, SolveConvDiff256Double_LONGRUNTIME) {
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_256_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_256_b.csv"));
 
-    SolveSuccessTest<MatrixDense, double>(A_path, b_path, conv_tol_dbl);
-    SolveSuccessTest<MatrixSparse, double>(A_path, b_path, conv_tol_dbl);
+    SolveSuccessTest<MatrixDense, double>(A_path, b_path, Tol<double>::stationary_conv_tol());
+    SolveSuccessTest<MatrixSparse, double>(A_path, b_path, Tol<double>::stationary_conv_tol());
 
 }
 
@@ -93,8 +93,8 @@ TEST_F(SOR_Test, SolveConvDiff64Single) {
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
 
-    SolveSuccessTest<MatrixDense, float>(A_path, b_path, conv_tol_sgl);
-    SolveSuccessTest<MatrixSparse, float>(A_path, b_path, conv_tol_sgl);
+    SolveSuccessTest<MatrixDense, float>(A_path, b_path, Tol<float>::stationary_conv_tol());
+    SolveSuccessTest<MatrixSparse, float>(A_path, b_path, Tol<float>::stationary_conv_tol());
 
 }
 
@@ -103,8 +103,8 @@ TEST_F(SOR_Test, SolveConvDiff256Single_LONGRUNTIME) {
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_256_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_256_b.csv"));
 
-    SolveSuccessTest<MatrixDense, float>(A_path, b_path, conv_tol_sgl);
-    SolveSuccessTest<MatrixSparse, float>(A_path, b_path, conv_tol_sgl);
+    SolveSuccessTest<MatrixDense, float>(A_path, b_path, Tol<float>::stationary_conv_tol());
+    SolveSuccessTest<MatrixSparse, float>(A_path, b_path, Tol<float>::stationary_conv_tol());
 
 }
 
@@ -123,8 +123,8 @@ TEST_F(SOR_Test, SolveConvDiff64Half) {
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
 
-    SolveSuccessTest<MatrixDense, half>(A_path, b_path, conv_tol_hlf);
-    SolveSuccessTest<MatrixSparse, half>(A_path, b_path, conv_tol_hlf);
+    SolveSuccessTest<MatrixDense, half>(A_path, b_path, Tol<half>::stationary_conv_tol());
+    SolveSuccessTest<MatrixSparse, half>(A_path, b_path, Tol<half>::stationary_conv_tol());
 
 }
 
@@ -133,8 +133,8 @@ TEST_F(SOR_Test, SolveConvDiff256Half_LONGRUNTIME) {
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_256_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_256_b.csv"));
 
-    SolveSuccessTest<MatrixDense, half>(A_path, b_path, conv_tol_hlf);
-    SolveSuccessTest<MatrixSparse, half>(A_path, b_path, conv_tol_hlf);
+    SolveSuccessTest<MatrixDense, half>(A_path, b_path, Tol<half>::stationary_conv_tol());
+    SolveSuccessTest<MatrixSparse, half>(A_path, b_path, Tol<half>::stationary_conv_tol());
 
 }
 

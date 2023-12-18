@@ -6,9 +6,9 @@ class FP_GMRES_IR_Test: public TestBase
 {
 public:
 
-    const SolveArgPkg dbl_GMRES_IR_args = SolveArgPkg(40, 10, conv_tol_dbl);
-    const SolveArgPkg sgl_GMRES_IR_args = SolveArgPkg(40, 10, conv_tol_sgl);
-    const SolveArgPkg hlf_GMRES_IR_args = SolveArgPkg(40, 10, conv_tol_hlf);
+    const SolveArgPkg dbl_GMRES_IR_args = SolveArgPkg(40, 10, Tol<double>::krylov_conv_tol());
+    const SolveArgPkg sgl_GMRES_IR_args = SolveArgPkg(40, 10, Tol<float>::krylov_conv_tol());
+    const SolveArgPkg hlf_GMRES_IR_args = SolveArgPkg(40, 10, Tol<half>::krylov_conv_tol());
     
     template <template <typename> typename M, typename T>
     void SolveTest(
@@ -29,7 +29,7 @@ public:
         if (*show_plots) { gmres_ir.view_relres_plot("log"); }
 
         EXPECT_TRUE(gmres_ir.check_converged());
-        EXPECT_LE(gmres_ir.get_relres(), conv_tol);
+        EXPECT_LE(gmres_ir.get_relres(), Tol<T>::krylov_conv_tol());
 
     }
 
@@ -40,8 +40,12 @@ TEST_F(FP_GMRES_IR_Test, DoubleConvergenceTest_ConvDiff64) {
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
     
-    SolveTest<MatrixDense, double>(A_path, b_path, dbl_GMRES_IR_args, conv_tol_dbl);
-    SolveTest<MatrixSparse, double>(A_path, b_path, dbl_GMRES_IR_args, conv_tol_dbl);
+    SolveTest<MatrixDense, double>(
+        A_path, b_path, dbl_GMRES_IR_args, Tol<double>::krylov_conv_tol()
+    );
+    SolveTest<MatrixSparse, double>(
+        A_path, b_path, dbl_GMRES_IR_args, Tol<double>::krylov_conv_tol()
+    );
 
 }
 
@@ -50,8 +54,12 @@ TEST_F(FP_GMRES_IR_Test, DoubleConvergenceTest_ConvDiff256) {
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_256_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_256_b.csv"));
     
-    SolveTest<MatrixDense, double>(A_path, b_path, dbl_GMRES_IR_args, conv_tol_dbl);
-    SolveTest<MatrixSparse, double>(A_path, b_path, dbl_GMRES_IR_args, conv_tol_dbl);
+    SolveTest<MatrixDense, double>(
+        A_path, b_path, dbl_GMRES_IR_args, Tol<double>::nested_krylov_conv_tol()
+    );
+    SolveTest<MatrixSparse, double>(
+        A_path, b_path, dbl_GMRES_IR_args, Tol<double>::nested_krylov_conv_tol()
+    );
 
 }
 
@@ -60,8 +68,12 @@ TEST_F(FP_GMRES_IR_Test, SingleConvergenceTest_ConvDiff64) {
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
 
-    SolveTest<MatrixDense, float>(A_path, b_path, sgl_GMRES_IR_args, conv_tol_sgl);
-    SolveTest<MatrixSparse, float>(A_path, b_path, sgl_GMRES_IR_args, conv_tol_sgl);
+    SolveTest<MatrixDense, float>(
+        A_path, b_path, sgl_GMRES_IR_args, Tol<float>::krylov_conv_tol()
+    );
+    SolveTest<MatrixSparse, float>(
+        A_path, b_path, sgl_GMRES_IR_args, Tol<float>::krylov_conv_tol()
+    );
 
 }
 
@@ -70,8 +82,12 @@ TEST_F(FP_GMRES_IR_Test, SingleConvergenceTest_ConvDiff256) {
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_256_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_256_b.csv"));
 
-    SolveTest<MatrixDense, float>(A_path, b_path, sgl_GMRES_IR_args, conv_tol_sgl);
-    SolveTest<MatrixSparse, float>(A_path, b_path, sgl_GMRES_IR_args, conv_tol_sgl);
+    SolveTest<MatrixDense, float>(
+        A_path, b_path, sgl_GMRES_IR_args, Tol<float>::nested_krylov_conv_tol()
+    );
+    SolveTest<MatrixSparse, float>(
+        A_path, b_path, sgl_GMRES_IR_args, Tol<float>::nested_krylov_conv_tol()
+    );
 
 }
 
@@ -81,8 +97,12 @@ TEST_F(FP_GMRES_IR_Test, HalfConvergenceTest_ConvDiff64) {
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
 
-    SolveTest<MatrixDense, half>(A_path, b_path, hlf_GMRES_IR_args, conv_tol_hlf);
-    SolveTest<MatrixSparse, half>(A_path, b_path, hlf_GMRES_IR_args, conv_tol_hlf);
+    SolveTest<MatrixDense, half>(
+        A_path, b_path, hlf_GMRES_IR_args, Tol<half>::nested_krylov_conv_tol()
+    );
+    SolveTest<MatrixSparse, half>(
+        A_path, b_path, hlf_GMRES_IR_args, Tol<half>::nested_krylov_conv_tol()
+    );
 
 }
 
@@ -91,7 +111,11 @@ TEST_F(FP_GMRES_IR_Test, HalfConvergenceTest_ConvDiff256) {
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_256_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_256_b.csv"));
 
-    SolveTest<MatrixDense, half>(A_path, b_path, hlf_GMRES_IR_args, conv_tol_hlf);
-    SolveTest<MatrixSparse, half>(A_path, b_path, hlf_GMRES_IR_args, conv_tol_hlf);
+    SolveTest<MatrixDense, half>(
+        A_path, b_path, hlf_GMRES_IR_args, Tol<half>::nested_krylov_conv_tol()
+    );
+    SolveTest<MatrixSparse, half>(
+        A_path, b_path, hlf_GMRES_IR_args, Tol<half>::nested_krylov_conv_tol()
+    );
 
 }

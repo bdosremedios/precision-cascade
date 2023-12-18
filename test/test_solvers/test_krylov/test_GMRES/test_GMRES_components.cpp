@@ -89,7 +89,7 @@ public:
                 );
                 ASSERT_NEAR(MatrixVector<double>(test_mock.Q_kry_basis.col(j)).dot(q),
                             0.,
-                            Tol<double>::loss_of_ortho_tol());
+                            Tol<double>::dbl_loss_of_ortho_tol());
             }
 
             // Confirm that Hessenberg matrix column corresponding to new basis vector
@@ -100,8 +100,7 @@ public:
             for (int i=0; i<=k; ++i) {
                 ASSERT_EQ(MatrixVector<double>(test_mock.Q_kry_basis.col(i)).dot(construct_q),
                           h(i));
-                MatrixVector<double> q_i(test_mock.Q_kry_basis.col(i));
-                construct_q -= q_i*h(i);
+                construct_q -= MatrixVector<double>(test_mock.Q_kry_basis.col(i))*h(i);
             }
             EXPECT_EQ(construct_q.norm(), h(k+1));
             
@@ -167,7 +166,7 @@ public:
             // Test that k+1 by k+1 block of Q_H is orthogonal
             MatrixDense<double> Q_H_block(test_mock.Q_H.block(0, 0, k+2, k+2));
             MatrixDense<double> orthog_check(Q_H_block*Q_H_block.transpose());
-            ASSERT_MATRIX_IDENTITY(orthog_check, Tol<double>::loss_of_ortho_tol());
+            ASSERT_MATRIX_IDENTITY(orthog_check, Tol<double>::dbl_loss_of_ortho_tol());
 
             // Test that k+1 by k block of R_H is uppertriangular
             ASSERT_MATRIX_UPPTRI(MatrixDense<double>(test_mock.R_H.block(0, 0, k+2, k+1)),
@@ -233,7 +232,7 @@ public:
             for (int i=0; i<kry_dim; ++i) {
                 ASSERT_NEAR(test_mock.typed_soln(i),
                             test_soln(i), 
-                            Tol<double>::matlab_dbl_near());
+                            Tol<double>::dbl_substitution_tol());
             }
 
         }
@@ -250,7 +249,7 @@ public:
 
         MatrixVector<double> soln(MatrixVector<double>::Ones(n)); // Instantiate initial guess as true solution
         SolveArgPkg args;
-        args.target_rel_res = conv_tol_dbl;
+        args.target_rel_res = Tol<double>::krylov_conv_tol();
         args.init_guess = soln;
 
         GMRESSolveTestingMock<M, double> test_mock(lin_sys, Tol<double>::roundoff(), args);
@@ -300,8 +299,11 @@ public:
         EXPECT_FALSE(test_mock.check_converged());
         EXPECT_TRUE(test_mock.check_terminated());
         EXPECT_EQ(test_mock.kry_space_dim, 1);
-        EXPECT_NEAR(MatrixVector<double>(test_mock.Q_kry_basis.col(0)).norm(), 1, Tol<double>::gamma(n));
-        ASSERT_MATRIX_ZERO(MatrixDense<double>(test_mock.Q_kry_basis.block(0, 1, n, n-1)), Tol<double>::roundoff());
+        EXPECT_NEAR(MatrixVector<double>(test_mock.Q_kry_basis.col(0)).norm(),
+                    1,
+                    Tol<double>::gamma(n));
+        ASSERT_MATRIX_ZERO(MatrixDense<double>(test_mock.Q_kry_basis.block(0, 1, n, n-1)),
+                           Tol<double>::roundoff());
 
     }
 
@@ -317,7 +319,7 @@ public:
         soln(0) = 1;
         SolveArgPkg args;
         args.init_guess = soln;
-        args.target_rel_res = conv_tol_dbl;
+        args.target_rel_res = Tol<double>::krylov_conv_tol();
 
         GMRESSolveTestingMock<M, double> test_mock(lin_sys, Tol<double>::roundoff(), args);
 
@@ -332,7 +334,9 @@ public:
         // Check that subspace has not gone beyond 1 dimension and that krylov basis
         // as expected to have only a single column
         EXPECT_EQ(test_mock.kry_space_dim, 1);
-        EXPECT_NEAR(MatrixVector<double>(test_mock.Q_kry_basis.col(0)).norm(), 1, Tol<double>::gamma(n));
+        EXPECT_NEAR(MatrixVector<double>(test_mock.Q_kry_basis.col(0)).norm(),
+                    1,
+                    Tol<double>::gamma(n));
         ASSERT_MATRIX_ZERO(MatrixDense<double>(test_mock.Q_kry_basis.block(0, 1, n, n-1)),
                            Tol<double>::roundoff());
 
@@ -348,7 +352,7 @@ public:
 
         SolveArgPkg args;
         args.max_iter = n;
-        args.target_rel_res = conv_tol_dbl;
+        args.target_rel_res = Tol<double>::krylov_conv_tol();
 
         GMRESSolve<M, double> gmres_solve(lin_sys, Tol<double>::roundoff(), args);
 
@@ -356,7 +360,7 @@ public:
         if (*show_plots) { gmres_solve.view_relres_plot("log"); }
         
         EXPECT_TRUE(gmres_solve.check_converged());
-        EXPECT_LE(gmres_solve.get_relres(), conv_tol_dbl);
+        EXPECT_LE(gmres_solve.get_relres(), Tol<double>::krylov_conv_tol());
 
     }
 
@@ -370,7 +374,7 @@ public:
 
         SolveArgPkg args;
         args.max_iter = n;
-        args.target_rel_res = conv_tol_dbl;
+        args.target_rel_res = Tol<double>::krylov_conv_tol();
 
         GMRESSolveTestingMock<M, double> test_mock(lin_sys, Tol<double>::roundoff(), args);
 
@@ -379,7 +383,7 @@ public:
         
         EXPECT_TRUE(test_mock.check_converged());
         EXPECT_GT(test_mock.get_iteration(), 0);
-        EXPECT_LE(test_mock.get_relres(), conv_tol_dbl);
+        EXPECT_LE(test_mock.get_relres(), Tol<double>::krylov_conv_tol());
 
         test_mock.reset();
         ASSERT_FALSE(test_mock.check_converged());
@@ -400,7 +404,7 @@ public:
         
         EXPECT_TRUE(test_mock.check_converged());
         EXPECT_GT(test_mock.get_iteration(), 0);
-        EXPECT_LE(test_mock.get_relres(), conv_tol_dbl);
+        EXPECT_LE(test_mock.get_relres(), Tol<double>::krylov_conv_tol());
 
     }
 
