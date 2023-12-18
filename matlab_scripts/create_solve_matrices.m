@@ -1,20 +1,16 @@
 % Specific function test matrices
 
-% Create 5x5 Toy Matrix
-A_5_toy = [1, 2, 3, 4, 5;
-           1, 0, 0, 0, 0;
-           0, 1, 0, 0, 0;
-           0, 0, 1, 0, 0;
-           0, 0, 0, 1, 0];
+% Create 5x5 Toy Matrix (Well-conditioned A for testing but that
+% does not converge before 5 iterations)
+A_5_toy = [1, 0.1, 0.1, 0.1, 0.1;
+           0.1, 2, 0.2, 0.2, 0.2;
+           0.2, 0.2, 3, 0.3, 0.3;
+           0.3, 0.3, 0.3, 4, 0.4;
+           0.4, 0.4, 0.4, 0.4, 5];
+A_5_toy = A_5_toy/10;
 b_5_toy = [3;2;4;2;2];
 writematrix(A_5_toy, "solve_matrices\\A_5_toy.csv");
 writematrix(b_5_toy, "solve_matrices\\b_5_toy.csv");
-
-% Create 64x64 Toy Matrix
-A_64_toy = randi(100, 64, 64);
-b_64_toy = randi(100, 64, 1);
-writematrix(A_64_toy, "solve_matrices\\A_64_toy.csv");
-writematrix(b_64_toy, "solve_matrices\\b_64_toy.csv");
 
 % Create 5x5 Matrix with solution can be found trivially
 A_5_easysoln = [1, 0, 0, 0, 0;
@@ -27,8 +23,9 @@ writematrix(A_5_easysoln, "solve_matrices\\A_5_easysoln.csv");
 writematrix(b_5_easysoln, "solve_matrices\\b_5_easysoln.csv");
 
 % Create backsubstitution test with matrices to test backsub in GMRES
-% specifically
-A_7_backsub = randn(7, 7);
+% specifically (Well-conditioned A for testing)
+A_7_backsub = randn(7, 7) + 100*diag(ones(7, 1), 0);
+A_7_backsub = A_7_backsub/100;
 b_7_backsub = randn(7, 1);
 rho = norm(b_7_backsub);
 [Q_7_backsub, R_7_backsub] = qr(A_7_backsub);
@@ -61,7 +58,7 @@ writematrix(x_7, "solve_matrices\\x_7_backsub.csv");
 convergence_tolerance_double = 1e-10;
 
 % Create 64x64 convection diffusion with rhs sin(x)cos(y)
-[A_convdiff64, b_convdiff64] = generate_conv_diff_rhs_sinxcosy(3, 0.5, 0.5);
+[A_convdiff64, b_convdiff64] = generate_conv_diff_rhs_sinxcosy(8, 0.1, 0.1);
 x_convdiff64 = gmres( ...
     A_convdiff64, b_convdiff64, ...
     [], convergence_tolerance_double, 64 ...
@@ -71,7 +68,7 @@ writematrix(full(b_convdiff64), "solve_matrices\\conv_diff_64_b.csv");
 writematrix(full(x_convdiff64), "solve_matrices\\conv_diff_64_x.csv");
 
 % Create 256x256 convection diffusion with rhs sin(x)cos(y)
-[A_convdiff256, b_convdiff256] = generate_conv_diff_rhs_sinxcosy(4, 0.5, 0.5);
+[A_convdiff256, b_convdiff256] = generate_conv_diff_rhs_sinxcosy(16, 0.1, 0.1);
 x_convdiff256 = gmres( ...
     A_convdiff256, b_convdiff256, ...
     [], convergence_tolerance_double, 256 ...
@@ -81,7 +78,7 @@ writematrix(full(b_convdiff256), "solve_matrices\\conv_diff_256_b.csv");
 writematrix(full(x_convdiff256), "solve_matrices\\conv_diff_256_x.csv");
 
 % Create 1024x1024 convection diffusion with rhs sin(x)cos(y)
-[A_convdiff1024, b_convdiff1024] = generate_conv_diff_rhs_sinxcosy(5, 0.5, 0.5);
+[A_convdiff1024, b_convdiff1024] = generate_conv_diff_rhs_sinxcosy(32, 0.1, 0.1);
 x_convdiff1024 = gmres( ...
     A_convdiff1024, b_convdiff1024, [], convergence_tolerance_double, 1024 ...
 );
@@ -102,14 +99,14 @@ writematrix(b_20_rand, "solve_matrices\\b_20_rand.csv");
 writematrix(x_20_rand, "solve_matrices\\x_20_rand.csv");
 
 % Create saddle Matrix which should converge in roughly 3 steps
-A_temp = randn(20, 20);
-A_saddle = A_temp'*A_temp;
-B_saddle = randn(5, 20);
-saddle = [A_saddle, B_saddle'; B_saddle, zeros(5, 5)];
-pre_cond = [A_saddle, zeros(20, 5);
-            zeros(5, 20), B_saddle*inv(A_saddle)*B_saddle'];
+% ensure well-conditioning
+A_saddle = diag(abs(randn(10, 1)+1));
+B_saddle = randn(2, 10);
+saddle = [A_saddle, B_saddle'; B_saddle, zeros(2, 2)];
+pre_cond = [A_saddle, zeros(10, 2);
+            zeros(2, 10), B_saddle*inv(A_saddle)*B_saddle'];
 inv_pre_cond = inv(pre_cond);
-xtrue_saddle = randn(25, 1);
+xtrue_saddle = randn(12, 1);
 b_saddle = saddle*xtrue_saddle;
 A_3eigs = inv_pre_cond*saddle;
 b_3eigs = inv_pre_cond*b_saddle;
@@ -187,10 +184,9 @@ writematrix(full(ilu_sparse_L_pivot), "solve_matrices\\ilu_sparse_L_pivot.csv");
 writematrix(full(ilu_sparse_U_pivot), "solve_matrices\\ilu_sparse_U_pivot.csv");
 writematrix(full(ilu_sparse_P_pivot), "solve_matrices\\ilu_sparse_P_pivot.csv");
 
-function [A, b] = generate_conv_diff_rhs_sinxcosy(k, sigma, tau)
+function [A, b] = generate_conv_diff_rhs_sinxcosy(n, sigma, tau)
 
-    % Calc n and h
-    n = 2^k;
+    % Calc h
     h = 1/(n-1);
     
     % Form matrix of FDM on convection-diffusion equation within a sparse A

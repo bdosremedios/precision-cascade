@@ -8,13 +8,11 @@ public:
 
     template <template <typename> typename M>
     void CheckConstruction(
-        const fs::path &A_file_path,
-        const fs::path &b_file_path,
         const int &n
     ) {
 
-        M<double> A(read_matrixCSV<M, double>(A_file_path));
-        MatrixVector<double> b(read_matrixCSV<MatrixVector, double>(b_file_path));
+        M<double> A(M<double>::Random(n, n));
+        MatrixVector<double> b(MatrixVector<double>::Random(n));
         TypedLinearSystem<M, double> lin_sys(A, b);
 
         GMRESSolveTestingMock<M, double> test_mock(lin_sys, Tol<double>::roundoff(), default_args);
@@ -91,7 +89,7 @@ public:
                 );
                 ASSERT_NEAR(MatrixVector<double>(test_mock.Q_kry_basis.col(j)).dot(q),
                             0.,
-                            Tol<double>::gamma(n));
+                            Tol<double>::loss_of_ortho_tol());
             }
 
             // Confirm that Hessenberg matrix column corresponding to new basis vector
@@ -169,7 +167,7 @@ public:
             // Test that k+1 by k+1 block of Q_H is orthogonal
             MatrixDense<double> Q_H_block(test_mock.Q_H.block(0, 0, k+2, k+2));
             MatrixDense<double> orthog_check(Q_H_block*Q_H_block.transpose());
-            ASSERT_MATRIX_IDENTITY(orthog_check, Tol<double>::roundoff());
+            ASSERT_MATRIX_IDENTITY(orthog_check, Tol<double>::loss_of_ortho_tol());
 
             // Test that k+1 by k block of R_H is uppertriangular
             ASSERT_MATRIX_UPPTRI(MatrixDense<double>(test_mock.R_H.block(0, 0, k+2, k+1)),
@@ -181,7 +179,7 @@ public:
             MatrixDense<double> construct_H(Q_H_block*R_H_block);
             ASSERT_MATRIX_NEAR(construct_H,
                                MatrixDense<double>(test_mock.H.block(0, 0, k+2, k+1)),
-                               Tol<double>::gamma(n));
+                               mat_max_mag(construct_H)*Tol<double>::gamma(n));
 
         }
 
@@ -218,6 +216,9 @@ public:
 
             // Set Krylov subspace dim
             test_mock.kry_space_dim = kry_dim;
+
+            // Get relevant upper triangular system to solve
+            MatrixDense<double> R_H_block(test_mock.R_H.block(0, 0, kry_dim, kry_dim));
             
             // Load test solution
             MatrixVector<double> test_soln (
@@ -230,7 +231,9 @@ public:
             test_mock.update_x_minimizing_res();
 
             for (int i=0; i<kry_dim; ++i) {
-                ASSERT_NEAR(test_mock.typed_soln(i), test_soln(i), test_soln.norm()*Tol<double>::gamma(n));
+                ASSERT_NEAR(test_mock.typed_soln(i),
+                            test_soln(i), 
+                            Tol<double>::matlab_dbl_near());
             }
 
         }
@@ -404,23 +407,13 @@ public:
 };
 
 TEST_F(GMRES_Component_Test, CheckConstruction5x5) {
-
-    fs::path A_path(solve_matrix_dir / fs::path("A_5_toy.csv"));
-    fs::path b_path(solve_matrix_dir / fs::path("b_5_toy.csv"));
-
-    CheckConstruction<MatrixDense>(A_path, b_path, 5);
-    CheckConstruction<MatrixSparse>(A_path, b_path, 5);
-
+    CheckConstruction<MatrixDense>(5);
+    CheckConstruction<MatrixSparse>(5);
 }
 
 TEST_F(GMRES_Component_Test, CheckConstruction64x64) {
-
-    fs::path A_path(solve_matrix_dir / fs::path("A_64_toy.csv"));
-    fs::path b_path(solve_matrix_dir / fs::path("b_64_toy.csv"));
-
-    CheckConstruction<MatrixDense>(A_path, b_path, 64);
-    CheckConstruction<MatrixSparse>(A_path, b_path, 64);
-
+    CheckConstruction<MatrixDense>(64);
+    CheckConstruction<MatrixSparse>(64);
 }
 
 TEST_F(GMRES_Component_Test, CheckCorrectDefaultMaxIter) {

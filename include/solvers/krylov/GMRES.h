@@ -54,13 +54,13 @@ protected:
         R_H = MatrixDense<T>::Zero(typed_lin_sys.get_m()+1, typed_lin_sys.get_m());
 
         // Set rho as initial residual norm
-        MatrixVector<T> Minv_A_x0 = (
+        MatrixVector<T> Minv_A_x0(
             (left_precond_ptr->action_inv_M(typed_lin_sys.get_A_typed()*init_guess_typed)).template cast<T>()
         );
-        MatrixVector<T> Minv_b = (
+        MatrixVector<T> Minv_b(
             (left_precond_ptr->action_inv_M(typed_lin_sys.get_b_typed())).template cast<T>()
         );
-        MatrixVector<T> r_0 = Minv_b - Minv_A_x0;
+        MatrixVector<T> r_0(Minv_b - Minv_A_x0);
         rho = r_0.norm();
 
         // Initialize next vector q as initial residual marking termination
@@ -118,7 +118,7 @@ protected:
         for (int i=0; i<=k; ++i) {
             // MGS since newly orthogonalized q is used for orthogonalizing
             // each next vector
-            MatrixVector<T> q_i = Q_kry_basis.col(i);
+            MatrixVector<T> q_i(Q_kry_basis.col(i));
             H.coeffRef(i, k) = q_i.dot(next_q);
             next_q -= q_i*H.coeff(i, k);
         }
@@ -148,8 +148,8 @@ protected:
         R_H.coeffRef(k, k) = r;
         R_H.coeffRef(k+1, k) = static_cast<T>(0);
 
-        MatrixVector<T> Q_H_col_k = Q_H.col(k);
-        MatrixVector<T> Q_H_col_kp1 = Q_H.col(k+1);
+        MatrixVector<T> Q_H_col_k(Q_H.col(k));
+        MatrixVector<T> Q_H_col_kp1(Q_H.col(k+1));
         Q_H.col(k) = Q_H_col_k*c - Q_H_col_kp1*s;
         Q_H.col(k+1) = Q_H_col_k*s + Q_H_col_kp1*c;
 
@@ -158,21 +158,18 @@ protected:
     void update_x_minimizing_res() {
 
         // Calculate RHS to solve
-        MatrixVector<T> rho_e1 = MatrixVector<T>::Zero(kry_space_dim+1);
+        MatrixVector<T> rho_e1(MatrixVector<T>::Zero(kry_space_dim+1));
         rho_e1(0) = rho;
         MatrixDense<T> Q_H_block = Q_H.block(0, 0, kry_space_dim+1, kry_space_dim+1);
-        MatrixVector<T> rhs = Q_H_block.transpose()*rho_e1;
+        MatrixVector<T> rhs(Q_H_block.transpose()*rho_e1);
 
         // Use back substitution to solve
-        MatrixVector<T> y = back_substitution(
-            static_cast<MatrixDense<T>>(R_H.block(0, 0, kry_space_dim, kry_space_dim)),
-            // Trim off last entry of rhs for solve since solve of least squares problem
-            // does not have coefficient to deal with it
-            static_cast<MatrixVector<T>>(rhs.slice(0, kry_space_dim))
-        );
+        MatrixDense<T> R_H_block(R_H.block(0, 0, kry_space_dim, kry_space_dim));
+        MatrixVector<T> rhs_slice(rhs.slice(0, kry_space_dim));
+        MatrixVector<T> y(back_substitution(R_H_block, rhs_slice));
 
         // Update typed_soln adjusting with right preconditioning
-        MatrixDense<T> Q_kry_basis_block = Q_kry_basis.block(0, 0, typed_lin_sys.get_m(), kry_space_dim);
+        MatrixDense<T> Q_kry_basis_block(Q_kry_basis.block(0, 0, typed_lin_sys.get_m(), kry_space_dim));
         typed_soln = init_guess_typed +
                      (right_precond_ptr->action_inv_M(Q_kry_basis_block*y)).template cast<T>();
 

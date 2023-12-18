@@ -16,7 +16,6 @@
 using Eigen::half;
 
 namespace fs = std::filesystem;
-using std::pow;
 using std::shared_ptr, std::make_shared;
 using std::cout, std::endl;
 
@@ -26,8 +25,19 @@ T mat_max_mag(const M<T> &A) {
     T abs_max = static_cast<T>(0);
     for (int i=0; i<A.rows(); ++i) {
         for (int j=0; j<A.cols(); ++j) {
-            if (std::abs(A.coeff(i, j)) > abs_max) { abs_max = abs(A.coeff(i, j)); }
+            if (std::abs(A.coeff(i, j)) > abs_max) { abs_max = std::abs(A.coeff(i, j)); }
         }
+    }
+    return abs_max;
+
+}
+
+template <typename T>
+T vec_max_mag(const MatrixVector<T> &vec) {
+
+    T abs_max = static_cast<T>(0);
+    for (int i=0; i<vec.rows(); ++i) {
+            if (std::abs(vec(i)) > abs_max) { abs_max = std::abs(vec(i)); }
     }
     return abs_max;
 
@@ -174,30 +184,30 @@ class Tol
 public:
     static double roundoff() { assert(false); return -1.; }
     static T roundoff_T() { return static_cast<T>(roundoff()); }
-    static double gamma(int n) { 
-        return static_cast<T>(n)*roundoff()/(static_cast<T>(1)-static_cast<T>(n)*roundoff());
-    }
+    static double loss_of_ortho_tol() { return std::pow(10, 2)*roundoff(); }
+    static double matlab_dbl_near() { return std::pow(10, -14); }
+    static double gamma(int n) { return n*roundoff()/(1-n*roundoff()); }
     static T gamma_T(int n) { return static_cast<T>(gamma(n)); }
 };
 
 template<>
-static double Tol<half>::roundoff() { return static_cast<half>(pow(2, -10)); }
+static double Tol<half>::roundoff() { return static_cast<half>(std::pow(2, -10)); }
 
 template<>
-static double Tol<float>::roundoff() { return static_cast<float>(pow(2, -23)); }
+static double Tol<float>::roundoff() { return static_cast<float>(std::pow(2, -23)); }
 
 template<>
-static double Tol<double>::roundoff() { return static_cast<double>(pow(2, -52)); }
+static double Tol<double>::roundoff() { return static_cast<double>(std::pow(2, -52)); }
 
 class TestBase: public testing::Test
 {
 public:
 
-    const double conv_tol_hlf = 5*pow(10, -02);
-    const double conv_tol_sgl = 5*pow(10, -06);
-    const double conv_tol_dbl = pow(10, -10);
+    const double conv_tol_hlf = 5*std::pow(10, -02);
+    const double conv_tol_sgl = 5*std::pow(10, -06);
+    const double conv_tol_dbl = std::pow(10, -10);
 
-    const double precond_error_tol = pow(10, -10);
+    const double precond_error_tol = std::pow(10, -10);
 
     const fs::path read_matrix_dir = (
         fs::current_path() / fs::path("..") / fs::path("test") / fs::path("read_matrices")
