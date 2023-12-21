@@ -124,22 +124,22 @@ public:
 
     template <template <typename> typename M>
     void ReadPrecise(
-        std::initializer_list<std::initializer_list<T>> li,
-        fs::path precise_file
+        fs::path precise_file,
+        M<T> target_precise
     ) {
+
         M<T> test_precise(read_matrixCSV<M, T>(precise_file));
-        M<T> target_precise(li);
         ASSERT_MATRIX_NEAR(test_precise, target_precise, static_cast<T>(Tol<T>::roundoff()));
+
     }
 
     template <template <typename> typename M>
     void ReadDifferentThanPrecise(
-        std::initializer_list<std::initializer_list<T>> li,
-        fs::path precise_file
+        fs::path precise_file,
+        M<T> target_precise
     ) {
 
         T eps(static_cast<T>(1.5)*Tol<T>::roundoff());
-        M<T> target_precise(li);
         M<T> miss_precise_up(target_precise + M<T>::Ones(2, 2)*eps);
         M<T> miss_precise_down(target_precise - M<T>::Ones(2, 2)*eps);
 
@@ -199,13 +199,13 @@ TEST_F(MatrixRead_Double_Test, ReadPreciseMatrix) {
 
     fs::path precise_file(read_matrix_dir / fs::path("double_precise.csv"));
 
-    std::initializer_list<std::initializer_list<double>> li ({
+    MatrixDense<double> target ({
         {1.12345678901232, 1.12345678901234},
         {1.12345678901236, 1.12345678901238}
     });
 
-    ReadPrecise<MatrixDense>(li, precise_file);
-    ReadPrecise<MatrixSparse>(li, precise_file);
+    ReadPrecise<MatrixDense>(precise_file, target);
+    ReadPrecise<MatrixSparse>(precise_file, target.sparse());
 
 }
 
@@ -213,13 +213,13 @@ TEST_F(MatrixRead_Double_Test, ReadDifferentThanPreciseMatrix) {
 
     fs::path precise_file(read_matrix_dir / fs::path("double_precise.csv"));
 
-    std::initializer_list<std::initializer_list<double>> li ({
+    MatrixDense<double> target ({
         {1.12345678901232, 1.12345678901234},
         {1.12345678901236, 1.12345678901238}
     });
 
-    ReadDifferentThanPrecise<MatrixDense>(li, precise_file);
-    ReadDifferentThanPrecise<MatrixSparse>(li, precise_file);
+    ReadDifferentThanPrecise<MatrixDense>(precise_file, target);
+    ReadDifferentThanPrecise<MatrixSparse>(precise_file, target.sparse());
 
 }
 
@@ -227,13 +227,13 @@ TEST_F(MatrixRead_Double_Test, ReadPreciseMatrixDoubleLimit) {
 
     fs::path precise_file(read_matrix_dir / fs::path("double_precise_manual.csv"));
 
-    std::initializer_list<std::initializer_list<double>> li ({
+    MatrixDense<double> target ({
         {1.1234567890123452, 1.1234567890123454},
         {1.1234567890123456, 1.1234567890123458}
     });
     
-    ReadPrecise<MatrixDense>(li, precise_file);
-    ReadPrecise<MatrixSparse>(li, precise_file);
+    ReadPrecise<MatrixDense>(precise_file, target);
+    ReadPrecise<MatrixSparse>(precise_file, target.sparse());
 
 }
 
@@ -241,13 +241,13 @@ TEST_F(MatrixRead_Double_Test, ReadDifferentThanPreciseMatrixDoubleLimit) {
 
     fs::path precise_file(read_matrix_dir / fs::path("double_precise_manual.csv"));
 
-    std::initializer_list<std::initializer_list<double>> li ({
+    MatrixDense<double> target ({
         {1.1234567890123452, 1.1234567890123454},
         {1.1234567890123456, 1.1234567890123458}
     });
 
-    ReadDifferentThanPrecise<MatrixDense>(li, precise_file);
-    ReadDifferentThanPrecise<MatrixSparse>(li, precise_file);
+    ReadDifferentThanPrecise<MatrixDense>(precise_file, target);
+    ReadDifferentThanPrecise<MatrixSparse>(precise_file, target.sparse());
 
 }
 
@@ -268,13 +268,13 @@ TEST_F(MatrixRead_Single_Test, ReadPreciseMatrix) {
 
     fs::path precise_file(read_matrix_dir / fs::path("single_precise.csv"));
 
-    std::initializer_list<std::initializer_list<float>> li ({
+    MatrixDense<float> target ({
         {static_cast<float>(1.12345672), static_cast<float>(1.12345674)},
         {static_cast<float>(1.12345676), static_cast<float>(1.12345678)}
     });
 
-    ReadPrecise<MatrixDense>(li, precise_file);
-    ReadPrecise<MatrixSparse>(li, precise_file);
+    ReadPrecise<MatrixDense>(precise_file, target);
+    ReadPrecise<MatrixSparse>(precise_file, target.sparse());
 
 }
 
@@ -282,13 +282,13 @@ TEST_F(MatrixRead_Single_Test, ReadDifferentThanPreciseMatrix) {
 
     fs::path precise_file(read_matrix_dir / fs::path("single_precise.csv"));
 
-    std::initializer_list<std::initializer_list<float>> li ({
+    MatrixDense<float> target ({
         {static_cast<float>(1.12345672), static_cast<float>(1.12345674)},
         {static_cast<float>(1.12345676), static_cast<float>(1.12345678)}
     });
 
-    ReadDifferentThanPrecise<MatrixDense>(li, precise_file);
-    ReadDifferentThanPrecise<MatrixSparse>(li, precise_file);
+    ReadDifferentThanPrecise<MatrixDense>(precise_file, target);
+    ReadDifferentThanPrecise<MatrixSparse>(precise_file, target.sparse());
 
 }
 
@@ -309,13 +309,13 @@ TEST_F(MatrixRead_Half_Test, ReadPreciseMatrix) {
 
     fs::path precise_file(read_matrix_dir / fs::path("half_precise.csv"));
 
-    std::initializer_list<std::initializer_list<half>> li ({
+    MatrixDense<half> target ({
         {static_cast<half>(1.123), static_cast<half>(1.124)},
         {static_cast<half>(1.125), static_cast<half>(1.126)}
     });
 
-    ReadPrecise<MatrixDense>(li, precise_file);
-    ReadPrecise<MatrixSparse>(li, precise_file);
+    ReadPrecise<MatrixDense>(precise_file, target);
+    ReadPrecise<MatrixSparse>(precise_file, target.sparse());
 
 }
 
@@ -323,12 +323,12 @@ TEST_F(MatrixRead_Half_Test, ReadDifferentThanPreciseMatrix) {
 
     fs::path precise_file(read_matrix_dir / fs::path("half_precise.csv"));
 
-    std::initializer_list<std::initializer_list<half>> li ({
+    MatrixDense<half> target ({
         {static_cast<half>(1.123), static_cast<half>(1.124)},
         {static_cast<half>(1.125), static_cast<half>(1.126)}
     });
 
-    ReadDifferentThanPrecise<MatrixDense>(li, precise_file);
-    ReadDifferentThanPrecise<MatrixSparse>(li, precise_file);
+    ReadDifferentThanPrecise<MatrixDense>(precise_file, target);
+    ReadDifferentThanPrecise<MatrixSparse>(precise_file, target.sparse());
 
 }

@@ -167,7 +167,7 @@ public:
         ASSERT_NEAR(vec_norm.norm(), static_cast<T>(9.), static_cast<T>(9.)*Tol<T>::gamma(5));
 
         // Random
-        MatrixVector<T> vec_norm_r(MatrixVector<T>(10));
+        MatrixVector<T> vec_norm_r(MatrixVector<T>::Random(10));
         ASSERT_NEAR(vec_norm_r.norm(),
                     std::sqrt(vec_norm_r.dot(vec_norm_r)),
                     std::sqrt(vec_norm_r.dot(vec_norm_r))*Tol<T>::gamma(10));
