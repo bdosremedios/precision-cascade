@@ -1,13 +1,15 @@
 cmake_minimum_required(VERSION 3.22)
 
-project(precision-cascade)
+project(precision-cascade LANGUAGES CXX CUDA)
+
+set(CMAKE_LINKER_FLAGS, "${CMAKE_LINKER_FLAGS} /NODEFAULTLIB:LIBCMT")
 
 set(
     TEST_TYPES_CPPS
-    test_types/test_MatrixVector.cpp
-    test_types/test_MatrixDense.cpp
-    test_types/test_MatrixSparse.cpp
-    test_types/test_TypeConversion.cpp
+    test_types/test_MatrixVector.cu
+    # test_types/test_MatrixDense.cpp
+    # test_types/test_MatrixSparse.cpp
+    # test_types/test_TypeConversion.cpp
 )
 
 set(
@@ -50,16 +52,16 @@ set(
 
 set(
     TEST_SUITE_CPPS
-    test_tools/test_MatrixRead.cpp
+    test_tools/test_MatrixRead.cu
     ${TEST_TYPES_CPPS}
-    ${TEST_TOOLS_CPPS}
-    ${TEST_PRECONDITIONER_CPPS}
-    ${TEST_SOLVERS}
+    # ${TEST_TOOLS_CPPS}
+    # ${TEST_PRECONDITIONER_CPPS}
+    # ${TEST_SOLVERS}
 )
 
 add_executable(
     test
-    test.cpp
+    test.cu
     ${TEST_SUITE_CPPS}
 )
 
@@ -69,4 +71,5 @@ target_link_libraries(
     gtest_main
     eigen
     precision-cascade
+    math_functions
 )

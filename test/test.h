@@ -1,19 +1,21 @@
 #ifndef TEST_H
 #define TEST_H
 
-#include "gtest/gtest.h"
-#include "Eigen/Dense"
-
-#include "types/types.h"
-#include "tools/MatrixReader.h"
-#include "tools/argument_pkgs.h"
-
 #include <cmath>
 #include <memory>
 #include <iostream>
 #include <filesystem>
 
-using Eigen::half;
+#include "gtest/gtest.h"
+
+#include <cuda_runtime.h>
+#include <cublas_v2.h>
+#include <cuda_fp16.h>
+
+#include "types/types.h"
+#include "tools/argument_pkgs.h"
+#include "tools/math_functions.h"
+#include "tools/MatrixReader.h"
 
 namespace fs = std::filesystem;
 using std::shared_ptr, std::make_shared;
@@ -205,33 +207,33 @@ public:
 
 // Half Constants
 template<>
-static double Tol<half>::roundoff() { return std::pow(2, -10); }
+double Tol<__half>::roundoff() { return std::pow(2, -10); }
 template<>
-static double Tol<half>::stationary_conv_tol() { return 5*std::pow(10, -02); }
+double Tol<__half>::stationary_conv_tol() { return 5*std::pow(10, -02); }
 template<>
-static double Tol<half>::krylov_conv_tol() { return 5*std::pow(10, -02); }
+double Tol<__half>::krylov_conv_tol() { return 5*std::pow(10, -02); }
 template<>
-static double Tol<half>::nested_krylov_conv_tol() { return 5*std::pow(10, -02); }
+double Tol<__half>::nested_krylov_conv_tol() { return 5*std::pow(10, -02); }
 
 // Single Constants
 template<>
-static double Tol<float>::roundoff() { return std::pow(2, -23); }
+double Tol<float>::roundoff() { return std::pow(2, -23); }
 template<>
-static double Tol<float>::stationary_conv_tol() { return 5*std::pow(10, -06); }
+double Tol<float>::stationary_conv_tol() { return 5*std::pow(10, -06); }
 template<>
-static double Tol<float>::krylov_conv_tol() { return 5*std::pow(10, -06); }
+double Tol<float>::krylov_conv_tol() { return 5*std::pow(10, -06); }
 template<>
-static double Tol<float>::nested_krylov_conv_tol() { return 5*std::pow(10, -06); }
+double Tol<float>::nested_krylov_conv_tol() { return 5*std::pow(10, -06); }
 
 // Double Constants
 template<>
-static double Tol<double>::roundoff() { return std::pow(2, -52); }
+double Tol<double>::roundoff() { return std::pow(2, -52); }
 template<>
-static double Tol<double>::stationary_conv_tol() { return std::pow(10, -10); }
+double Tol<double>::stationary_conv_tol() { return std::pow(10, -10); }
 template<>
-static double Tol<double>::krylov_conv_tol() { return std::pow(10, -10); }
+double Tol<double>::krylov_conv_tol() { return std::pow(10, -10); }
 template<>
-static double Tol<double>::nested_krylov_conv_tol() { return std::pow(10, -10); }
+double Tol<double>::nested_krylov_conv_tol() { return std::pow(10, -10); }
 
 class TestBase: public testing::Test
 {

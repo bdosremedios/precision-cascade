@@ -145,7 +145,9 @@ public:
             static_cast<T>(9.), static_cast<T>(10.), static_cast<T>(1.5),
             static_cast<T>(-4.5), static_cast<T>(2.)
         });
-        ASSERT_NEAR(vec_1_dot.dot(vec_2_dot), static_cast<T>(11.05), static_cast<T>(11.05)*Tol<T>::gamma(5));
+        ASSERT_NEAR(vec_1_dot.dot(vec_2_dot),
+                    static_cast<T>(11.05),
+                    static_cast<T>(11.05)*static_cast<T>(Tol<T>::gamma(5)));
 
         // Random
         MatrixVector<T> vec_1_dot_r(MatrixVector<T>(10));
@@ -164,7 +166,9 @@ public:
             static_cast<T>(-8.), static_cast<T>(0.8), static_cast<T>(-0.6),
             static_cast<T>(4.), static_cast<T>(0.)
         });
-        ASSERT_NEAR(vec_norm.norm(), static_cast<T>(9.), static_cast<T>(9.)*Tol<T>::gamma(5));
+        ASSERT_NEAR(vec_norm.norm(),
+                    static_cast<T>(9.),
+                    static_cast<T>(9.)*static_cast<T>(Tol<T>::gamma(5)));
 
         // Random
         MatrixVector<T> vec_norm_r(MatrixVector<T>::Random(10));
@@ -240,22 +244,22 @@ public:
         ASSERT_EQ(vec_sgl.rows(), m);
         for (int i=0; i<m; ++i) { ASSERT_EQ(vec_sgl(i), static_cast<float>(vec_dbl(i))); }
 
-        MatrixVector<half> vec_hlf(vec_dbl.cast<half>());
+        MatrixVector<__half> vec_hlf(vec_dbl.cast<__half>());
         ASSERT_EQ(vec_hlf.rows(), m);
-        for (int i=0; i<m; ++i) { ASSERT_EQ(vec_hlf(i), static_cast<half>(vec_dbl(i))); }
+        for (int i=0; i<m; ++i) { ASSERT_EQ(vec_hlf(i), static_cast<__half>(vec_dbl(i))); }
 
     }
 
 };
 
 TEST_F(MatrixVector_Test, TestElementAccessMethods) {
-    TestElementAccessMethods<half>();
+    TestElementAccessMethods<__half>();
     TestElementAccessMethods<float>();
     TestElementAccessMethods<double>();
 }
 
 TEST_F(MatrixVector_Test, TestPropertyMethods) {
-    TestPropertyMethods<half>();
+    TestPropertyMethods<__half>();
     TestPropertyMethods<float>();
     TestPropertyMethods<double>();
 }
@@ -263,26 +267,26 @@ TEST_F(MatrixVector_Test, TestPropertyMethods) {
 TEST_F(MatrixVector_Test, TestConstruction) { TestConstruction(); }
 
 TEST_F(MatrixVector_Test, TestListInitialization) {
-    TestListInitialization<half>();
+    TestListInitialization<__half>();
     TestListInitialization<float>();
     TestListInitialization<double>();
 }
 
 TEST_F(MatrixVector_Test, TestStaticCreation) {
-    TestStaticCreation<half>();
+    TestStaticCreation<__half>();
     TestStaticCreation<float>();
     TestStaticCreation<double>();
 }
 
 TEST_F(MatrixVector_Test, TestAssignment) {
-    TestAssignment<half>();
+    TestAssignment<__half>();
     TestAssignment<float>();
     TestAssignment<double>();
 }
 
-TEST_F(MatrixVector_Test, TestDot) { TestDot<half>(); TestDot<float>(); TestDot<double>(); }
-TEST_F(MatrixVector_Test, TestNorm) { TestNorm<half>(); TestNorm<float>(); TestNorm<double>(); }
-TEST_F(MatrixVector_Test, TestScale) { TestScale<half>(); TestScale<float>(); TestScale<double>(); }
-TEST_F(MatrixVector_Test, TestAddSub) { TestAddSub<half>(); TestAddSub<float>(); TestAddSub<double>(); }
+TEST_F(MatrixVector_Test, TestDot) { TestDot<__half>(); TestDot<float>(); TestDot<double>(); }
+TEST_F(MatrixVector_Test, TestNorm) { TestNorm<__half>(); TestNorm<float>(); TestNorm<double>(); }
+TEST_F(MatrixVector_Test, TestScale) { TestScale<__half>(); TestScale<float>(); TestScale<double>(); }
+TEST_F(MatrixVector_Test, TestAddSub) { TestAddSub<__half>(); TestAddSub<float>(); TestAddSub<double>(); }
 
 TEST_F(MatrixVector_Test, TestCast) { TestCast(); }

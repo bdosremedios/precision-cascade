@@ -139,7 +139,7 @@ public:
         M<T> target_precise
     ) {
 
-        T eps(static_cast<T>(1.5)*Tol<T>::roundoff());
+        T eps(static_cast<T>(1.5)*static_cast<T>(Tol<T>::roundoff()));
         M<T> miss_precise_up(target_precise + M<T>::Ones(2, 2)*eps);
         M<T> miss_precise_down(target_precise - M<T>::Ones(2, 2)*eps);
 
@@ -171,8 +171,8 @@ public:
 };
 
 TEST_F(MatrixRead_Vector_Test, ReadDoubleVector) { ReadVector<double>(); }
-TEST_F(MatrixRead_Vector_Test, ReadSingleVector) { ReadVector<double>(); }
-TEST_F(MatrixRead_Vector_Test, ReadHalfVector) { ReadVector<double>(); }
+TEST_F(MatrixRead_Vector_Test, ReadSingleVector) { ReadVector<float>(); }
+TEST_F(MatrixRead_Vector_Test, ReadHalfVector) { ReadVector<__half>(); }
 
 TEST_F(MatrixRead_Vector_Test, FailOnMatrix) {    
     fs::path mat(read_matrix_dir / fs::path("square1.csv"));
@@ -293,7 +293,7 @@ TEST_F(MatrixRead_Single_Test, ReadDifferentThanPreciseMatrix) {
 }
 
 // Half type matrix read tests
-class MatrixRead_Half_Test: public MatrixRead_T_Test<half> {};
+class MatrixRead_Half_Test: public MatrixRead_T_Test<__half> {};
 
 TEST_F(MatrixRead_Half_Test, ReadSquareMatrix) {
     ReadSquareMatrix<MatrixDense>();
@@ -309,9 +309,9 @@ TEST_F(MatrixRead_Half_Test, ReadPreciseMatrix) {
 
     fs::path precise_file(read_matrix_dir / fs::path("half_precise.csv"));
 
-    MatrixDense<half> target ({
-        {static_cast<half>(1.123), static_cast<half>(1.124)},
-        {static_cast<half>(1.125), static_cast<half>(1.126)}
+    MatrixDense<__half> target ({
+        {static_cast<__half>(1.123), static_cast<__half>(1.124)},
+        {static_cast<__half>(1.125), static_cast<__half>(1.126)}
     });
 
     ReadPrecise<MatrixDense>(precise_file, target);
@@ -323,9 +323,9 @@ TEST_F(MatrixRead_Half_Test, ReadDifferentThanPreciseMatrix) {
 
     fs::path precise_file(read_matrix_dir / fs::path("half_precise.csv"));
 
-    MatrixDense<half> target ({
-        {static_cast<half>(1.123), static_cast<half>(1.124)},
-        {static_cast<half>(1.125), static_cast<half>(1.126)}
+    MatrixDense<__half> target ({
+        {static_cast<__half>(1.123), static_cast<__half>(1.124)},
+        {static_cast<__half>(1.125), static_cast<__half>(1.126)}
     });
 
     ReadDifferentThanPrecise<MatrixDense>(precise_file, target);
