@@ -18,7 +18,6 @@ bool *TestBase::show_plots = new bool;
 int main(int argc, char **argv) {
 
     testing::InitGoogleTest();
-    // testing::GTEST_FLAG(catch_exceptions) = false;
 
     // Check if should run long tests
     bool run_long_tests = false;
