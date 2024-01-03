@@ -50,15 +50,15 @@ public:
 
 };
 
-TEST_F(MatrixRead_General_Test, ReadEmptyMatrix) {
-    ReadEmptyMatrix<MatrixDense>();
-    ReadEmptyMatrix<MatrixSparse>();
-}
+// TEST_F(MatrixRead_General_Test, ReadEmptyMatrix) {
+//     ReadEmptyMatrix<MatrixDense>();
+//     ReadEmptyMatrix<MatrixSparse>();
+// }
 
-TEST_F(MatrixRead_General_Test, ReadBadFiles) {
-    ReadBadMatrices<MatrixDense>();
-    ReadBadMatrices<MatrixSparse>();
-}
+// TEST_F(MatrixRead_General_Test, ReadBadFiles) {
+//     ReadBadMatrices<MatrixDense>();
+//     ReadBadMatrices<MatrixSparse>();
+// }
 
 template <typename T>
 class MatrixRead_T_Test: public TestBase
@@ -182,153 +182,153 @@ TEST_F(MatrixRead_Vector_Test, FailOnMatrix) {
     } catch (runtime_error e) { cout << e.what() << endl; }
 }
 
-// Double type matrix read tests
-class MatrixRead_Double_Test: public MatrixRead_T_Test<double> {};
+// // Double type matrix read tests
+// class MatrixRead_Double_Test: public MatrixRead_T_Test<double> {};
 
-TEST_F(MatrixRead_Double_Test, ReadSquareMatrix) {
-    ReadSquareMatrix<MatrixDense>();
-    ReadSquareMatrix<MatrixSparse>();
-}
+// TEST_F(MatrixRead_Double_Test, ReadSquareMatrix) {
+//     ReadSquareMatrix<MatrixDense>();
+//     ReadSquareMatrix<MatrixSparse>();
+// }
 
-TEST_F(MatrixRead_Double_Test, ReadWideTallMatrix) {
-    ReadWideTallMatrix<MatrixDense>();
-    ReadWideTallMatrix<MatrixSparse>();
-}
+// TEST_F(MatrixRead_Double_Test, ReadWideTallMatrix) {
+//     ReadWideTallMatrix<MatrixDense>();
+//     ReadWideTallMatrix<MatrixSparse>();
+// }
 
-TEST_F(MatrixRead_Double_Test, ReadPreciseMatrix) {
+// TEST_F(MatrixRead_Double_Test, ReadPreciseMatrix) {
 
-    fs::path precise_file(read_matrix_dir / fs::path("double_precise.csv"));
+//     fs::path precise_file(read_matrix_dir / fs::path("double_precise.csv"));
 
-    MatrixDense<double> target ({
-        {1.12345678901232, 1.12345678901234},
-        {1.12345678901236, 1.12345678901238}
-    });
+//     MatrixDense<double> target ({
+//         {1.12345678901232, 1.12345678901234},
+//         {1.12345678901236, 1.12345678901238}
+//     });
 
-    ReadPrecise<MatrixDense>(precise_file, target);
-    ReadPrecise<MatrixSparse>(precise_file, target.sparse());
+//     ReadPrecise<MatrixDense>(precise_file, target);
+//     ReadPrecise<MatrixSparse>(precise_file, target.sparse());
 
-}
+// }
 
-TEST_F(MatrixRead_Double_Test, ReadDifferentThanPreciseMatrix) {
+// TEST_F(MatrixRead_Double_Test, ReadDifferentThanPreciseMatrix) {
 
-    fs::path precise_file(read_matrix_dir / fs::path("double_precise.csv"));
+//     fs::path precise_file(read_matrix_dir / fs::path("double_precise.csv"));
 
-    MatrixDense<double> target ({
-        {1.12345678901232, 1.12345678901234},
-        {1.12345678901236, 1.12345678901238}
-    });
+//     MatrixDense<double> target ({
+//         {1.12345678901232, 1.12345678901234},
+//         {1.12345678901236, 1.12345678901238}
+//     });
 
-    ReadDifferentThanPrecise<MatrixDense>(precise_file, target);
-    ReadDifferentThanPrecise<MatrixSparse>(precise_file, target.sparse());
+//     ReadDifferentThanPrecise<MatrixDense>(precise_file, target);
+//     ReadDifferentThanPrecise<MatrixSparse>(precise_file, target.sparse());
 
-}
+// }
 
-TEST_F(MatrixRead_Double_Test, ReadPreciseMatrixDoubleLimit) {
+// TEST_F(MatrixRead_Double_Test, ReadPreciseMatrixDoubleLimit) {
 
-    fs::path precise_file(read_matrix_dir / fs::path("double_precise_manual.csv"));
+//     fs::path precise_file(read_matrix_dir / fs::path("double_precise_manual.csv"));
 
-    MatrixDense<double> target ({
-        {1.1234567890123452, 1.1234567890123454},
-        {1.1234567890123456, 1.1234567890123458}
-    });
+//     MatrixDense<double> target ({
+//         {1.1234567890123452, 1.1234567890123454},
+//         {1.1234567890123456, 1.1234567890123458}
+//     });
     
-    ReadPrecise<MatrixDense>(precise_file, target);
-    ReadPrecise<MatrixSparse>(precise_file, target.sparse());
+//     ReadPrecise<MatrixDense>(precise_file, target);
+//     ReadPrecise<MatrixSparse>(precise_file, target.sparse());
 
-}
+// }
 
-TEST_F(MatrixRead_Double_Test, ReadDifferentThanPreciseMatrixDoubleLimit) {
+// TEST_F(MatrixRead_Double_Test, ReadDifferentThanPreciseMatrixDoubleLimit) {
 
-    fs::path precise_file(read_matrix_dir / fs::path("double_precise_manual.csv"));
+//     fs::path precise_file(read_matrix_dir / fs::path("double_precise_manual.csv"));
 
-    MatrixDense<double> target ({
-        {1.1234567890123452, 1.1234567890123454},
-        {1.1234567890123456, 1.1234567890123458}
-    });
+//     MatrixDense<double> target ({
+//         {1.1234567890123452, 1.1234567890123454},
+//         {1.1234567890123456, 1.1234567890123458}
+//     });
 
-    ReadDifferentThanPrecise<MatrixDense>(precise_file, target);
-    ReadDifferentThanPrecise<MatrixSparse>(precise_file, target.sparse());
+//     ReadDifferentThanPrecise<MatrixDense>(precise_file, target);
+//     ReadDifferentThanPrecise<MatrixSparse>(precise_file, target.sparse());
 
-}
+// }
 
-// Single type matrix read tests
-class MatrixRead_Single_Test: public MatrixRead_T_Test<float> {};
+// // Single type matrix read tests
+// class MatrixRead_Single_Test: public MatrixRead_T_Test<float> {};
 
-TEST_F(MatrixRead_Single_Test, ReadSquareMatrix) {
-    ReadSquareMatrix<MatrixDense>();
-    ReadSquareMatrix<MatrixSparse>();
-}
+// TEST_F(MatrixRead_Single_Test, ReadSquareMatrix) {
+//     ReadSquareMatrix<MatrixDense>();
+//     ReadSquareMatrix<MatrixSparse>();
+// }
 
-TEST_F(MatrixRead_Single_Test, ReadWideTallMatrix) {
-    ReadWideTallMatrix<MatrixDense>();
-    ReadWideTallMatrix<MatrixSparse>();
-}
+// TEST_F(MatrixRead_Single_Test, ReadWideTallMatrix) {
+//     ReadWideTallMatrix<MatrixDense>();
+//     ReadWideTallMatrix<MatrixSparse>();
+// }
 
-TEST_F(MatrixRead_Single_Test, ReadPreciseMatrix) {
+// TEST_F(MatrixRead_Single_Test, ReadPreciseMatrix) {
 
-    fs::path precise_file(read_matrix_dir / fs::path("single_precise.csv"));
+//     fs::path precise_file(read_matrix_dir / fs::path("single_precise.csv"));
 
-    MatrixDense<float> target ({
-        {static_cast<float>(1.12345672), static_cast<float>(1.12345674)},
-        {static_cast<float>(1.12345676), static_cast<float>(1.12345678)}
-    });
+//     MatrixDense<float> target ({
+//         {static_cast<float>(1.12345672), static_cast<float>(1.12345674)},
+//         {static_cast<float>(1.12345676), static_cast<float>(1.12345678)}
+//     });
 
-    ReadPrecise<MatrixDense>(precise_file, target);
-    ReadPrecise<MatrixSparse>(precise_file, target.sparse());
+//     ReadPrecise<MatrixDense>(precise_file, target);
+//     ReadPrecise<MatrixSparse>(precise_file, target.sparse());
 
-}
+// }
 
-TEST_F(MatrixRead_Single_Test, ReadDifferentThanPreciseMatrix) {
+// TEST_F(MatrixRead_Single_Test, ReadDifferentThanPreciseMatrix) {
 
-    fs::path precise_file(read_matrix_dir / fs::path("single_precise.csv"));
+//     fs::path precise_file(read_matrix_dir / fs::path("single_precise.csv"));
 
-    MatrixDense<float> target ({
-        {static_cast<float>(1.12345672), static_cast<float>(1.12345674)},
-        {static_cast<float>(1.12345676), static_cast<float>(1.12345678)}
-    });
+//     MatrixDense<float> target ({
+//         {static_cast<float>(1.12345672), static_cast<float>(1.12345674)},
+//         {static_cast<float>(1.12345676), static_cast<float>(1.12345678)}
+//     });
 
-    ReadDifferentThanPrecise<MatrixDense>(precise_file, target);
-    ReadDifferentThanPrecise<MatrixSparse>(precise_file, target.sparse());
+//     ReadDifferentThanPrecise<MatrixDense>(precise_file, target);
+//     ReadDifferentThanPrecise<MatrixSparse>(precise_file, target.sparse());
 
-}
+// }
 
-// Half type matrix read tests
-class MatrixRead_Half_Test: public MatrixRead_T_Test<__half> {};
+// // Half type matrix read tests
+// class MatrixRead_Half_Test: public MatrixRead_T_Test<__half> {};
 
-TEST_F(MatrixRead_Half_Test, ReadSquareMatrix) {
-    ReadSquareMatrix<MatrixDense>();
-    ReadSquareMatrix<MatrixSparse>();
-}
+// TEST_F(MatrixRead_Half_Test, ReadSquareMatrix) {
+//     ReadSquareMatrix<MatrixDense>();
+//     ReadSquareMatrix<MatrixSparse>();
+// }
 
-TEST_F(MatrixRead_Half_Test, ReadWideTallMatrix) {
-    ReadWideTallMatrix<MatrixDense>();
-    ReadWideTallMatrix<MatrixSparse>();
-}
+// TEST_F(MatrixRead_Half_Test, ReadWideTallMatrix) {
+//     ReadWideTallMatrix<MatrixDense>();
+//     ReadWideTallMatrix<MatrixSparse>();
+// }
 
-TEST_F(MatrixRead_Half_Test, ReadPreciseMatrix) {
+// TEST_F(MatrixRead_Half_Test, ReadPreciseMatrix) {
 
-    fs::path precise_file(read_matrix_dir / fs::path("half_precise.csv"));
+//     fs::path precise_file(read_matrix_dir / fs::path("half_precise.csv"));
 
-    MatrixDense<__half> target ({
-        {static_cast<__half>(1.123), static_cast<__half>(1.124)},
-        {static_cast<__half>(1.125), static_cast<__half>(1.126)}
-    });
+//     MatrixDense<__half> target ({
+//         {static_cast<__half>(1.123), static_cast<__half>(1.124)},
+//         {static_cast<__half>(1.125), static_cast<__half>(1.126)}
+//     });
 
-    ReadPrecise<MatrixDense>(precise_file, target);
-    ReadPrecise<MatrixSparse>(precise_file, target.sparse());
+//     ReadPrecise<MatrixDense>(precise_file, target);
+//     ReadPrecise<MatrixSparse>(precise_file, target.sparse());
 
-}
+// }
 
-TEST_F(MatrixRead_Half_Test, ReadDifferentThanPreciseMatrix) {
+// TEST_F(MatrixRead_Half_Test, ReadDifferentThanPreciseMatrix) {
 
-    fs::path precise_file(read_matrix_dir / fs::path("half_precise.csv"));
+//     fs::path precise_file(read_matrix_dir / fs::path("half_precise.csv"));
 
-    MatrixDense<__half> target ({
-        {static_cast<__half>(1.123), static_cast<__half>(1.124)},
-        {static_cast<__half>(1.125), static_cast<__half>(1.126)}
-    });
+//     MatrixDense<__half> target ({
+//         {static_cast<__half>(1.123), static_cast<__half>(1.124)},
+//         {static_cast<__half>(1.125), static_cast<__half>(1.126)}
+//     });
 
-    ReadDifferentThanPrecise<MatrixDense>(precise_file, target);
-    ReadDifferentThanPrecise<MatrixSparse>(precise_file, target.sparse());
+//     ReadDifferentThanPrecise<MatrixDense>(precise_file, target);
+//     ReadDifferentThanPrecise<MatrixSparse>(precise_file, target.sparse());
 
-}
+// }

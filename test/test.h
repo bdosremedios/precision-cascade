@@ -70,18 +70,18 @@ int count_zeros(M<T> A, double zero_tol) {
 }
 
 template <typename T>
-void ASSERT_VECTOR_NEAR(MatrixVector<T> test, MatrixVector<T> target, T tol) {
+void ASSERT_VECTOR_NEAR(MatrixVector<T> &test, MatrixVector<T> &target, T tol) {
 
     ASSERT_EQ(test.rows(), target.rows());
 
     for (int i=0; i<target.rows(); ++i) {
-        ASSERT_NEAR(test(i), target(i), tol);
+        ASSERT_NEAR(test.get_elem(i), target.get_elem(i), tol);
     }
 
 }
 
 template <typename T>
-void ASSERT_VECTOR_EQ(MatrixVector<T> test, MatrixVector<T> target) {
+void ASSERT_VECTOR_EQ(MatrixVector<T> &test, MatrixVector<T> &target) {
     ASSERT_VECTOR_NEAR(test, target, static_cast<T>(0));
 }
 

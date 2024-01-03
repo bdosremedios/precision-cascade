@@ -6,9 +6,9 @@
 inline void swap(const int &i, const int &j, MatrixVector<int> &indices) {
     
     if (i != j) {
-        int temp = indices(i);
-        indices(i) = indices(j);
-        indices(j) = temp;
+        int temp = indices.get_elem(i);
+        indices.set_elem(i, indices.get_elem(j));
+        indices.set_elem(j, temp);
     }
 
 }

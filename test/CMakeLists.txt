@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.22)
+cmake_minimum_required(VERSION 3.27.2)
 
 project(precision-cascade LANGUAGES CXX CUDA)
 
@@ -72,4 +72,5 @@ target_link_libraries(
     eigen
     precision-cascade
     math_functions
+    "$ENV{CUDA_PATH}/lib/x64/cublas.lib"
 )
