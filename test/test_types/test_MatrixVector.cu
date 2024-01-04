@@ -302,9 +302,9 @@ TEST_F(MatrixVector_Test, TestAssignment) {
     TestAssignment<double>();
 }
 
+// TEST_F(MatrixVector_Test, TestScale) { TestScale<__half>(); TestScale<float>(); TestScale<double>(); }
 // TEST_F(MatrixVector_Test, TestDot) { TestDot<__half>(); TestDot<float>(); TestDot<double>(); }
 // TEST_F(MatrixVector_Test, TestNorm) { TestNorm<__half>(); TestNorm<float>(); TestNorm<double>(); }
-// TEST_F(MatrixVector_Test, TestScale) { TestScale<__half>(); TestScale<float>(); TestScale<double>(); }
 // TEST_F(MatrixVector_Test, TestAddSub) { TestAddSub<__half>(); TestAddSub<float>(); TestAddSub<double>(); }
 
-// TEST_F(MatrixVector_Test, TestCast) { TestCast(); }
+TEST_F(MatrixVector_Test, TestCast) { TestCast(); }

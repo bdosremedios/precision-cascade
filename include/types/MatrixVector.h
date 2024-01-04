@@ -29,6 +29,7 @@ private:
     }
 
     // Only allow MatrixDense and MatrixSparse to access private methods like base
+    template <typename> friend class MatrixVector;
     // friend MatrixDense<T>;
     // friend MatrixSparse<T>;
     // const Parent &base() const { return *this; }
@@ -251,7 +252,19 @@ public:
     // *** Explicit Cast ***
     template <typename Cast_T>
     MatrixVector<Cast_T> cast() const {
-        return MatrixVector<Cast_T>(handle, Parent::template cast<Cast_T>());
+        
+        T *h_vec = static_cast<T *>(malloc(mem_size));
+        Cast_T *h_cast_vec = static_cast<Cast_T *>(malloc(m*sizeof(Cast_T)));
+
+        cublasGetVector(m, sizeof(T), d_vec, 1, h_vec, 1);
+        for (int i=0; i<m; ++i) { h_cast_vec[i] = static_cast<Cast_T>(h_vec[i]); }
+        MatrixVector<Cast_T> created_vec(handle, h_cast_vec, m);
+
+        free(h_vec);
+        free(h_cast_vec);
+
+        return created_vec;
+    
     }
 
     // *** Arithmetic and Compound Operations ***
