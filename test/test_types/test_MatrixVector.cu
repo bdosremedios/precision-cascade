@@ -273,17 +273,17 @@ TEST_F(MatrixVector_Test, TestPropertyMethods) {
 
 TEST_F(MatrixVector_Test, TestConstruction) { TestConstruction(); }
 
-// TEST_F(MatrixVector_Test, TestListInitialization) {
-//     TestListInitialization<__half>();
-//     TestListInitialization<float>();
-//     TestListInitialization<double>();
-// }
+TEST_F(MatrixVector_Test, TestListInitialization) {
+    TestListInitialization<__half>();
+    TestListInitialization<float>();
+    TestListInitialization<double>();
+}
 
-// TEST_F(MatrixVector_Test, TestStaticCreation) {
-//     TestStaticCreation<__half>();
-//     TestStaticCreation<float>();
-//     TestStaticCreation<double>();
-// }
+TEST_F(MatrixVector_Test, TestStaticCreation) {
+    TestStaticCreation<__half>();
+    TestStaticCreation<float>();
+    TestStaticCreation<double>();
+}
 
 // TEST_F(MatrixVector_Test, TestAssignment) {
 //     TestAssignment<__half>();

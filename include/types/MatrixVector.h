@@ -2,8 +2,12 @@
 #define MATRIXVECTOR_H
 
 #include <Eigen/Dense>
+
+#include <cstdlib>
 #include <iostream>
+#include <random>
 #include <vector>
+
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
 
@@ -20,7 +24,9 @@ private:
 
     using Parent = Matrix<T, Dynamic, 1>;
 
-    static void check_n(int n) { if (n != 1) { throw std::runtime_error("Invalid number of columns for vector."); } }
+    static void check_n(int n) {
+        if (n != 1) { throw std::runtime_error("Invalid number of columns for vector."); }
+    }
 
     // Only allow MatrixDense and MatrixSparse to access private methods like base
     friend MatrixDense<T>;
@@ -35,6 +41,13 @@ private:
         cudaMalloc(&d_vec, mem_size);
     }
 
+    MatrixVector(const T *h_vec, const int n_elem):
+        m(n_elem), mem_size(m*sizeof(T))
+    {
+        construction_helper();
+        cublasSetVector(m, sizeof(T), h_vec, 1, d_vec, 1);
+    }
+
 public:
 
     // *** Basic Constructors ***
@@ -42,43 +55,30 @@ public:
         m(0), mem_size(0)
     { construction_helper(); }
 
-    MatrixVector(int arg_m, int arg_n):
-        m(arg_m), mem_size(m*sizeof(T))
-    { 
+    MatrixVector(int arg_m, int arg_n): m(arg_m), mem_size(m*sizeof(T)) { 
         check_n(n);
         construction_helper();
     }
 
-    MatrixVector(int arg_m):
-        m(arg_m), mem_size(m*sizeof(T))
-    { construction_helper(); }
+    MatrixVector(int arg_m): m(arg_m), mem_size(m*sizeof(T)) {
+        construction_helper();
+    }
 
-    MatrixVector(std::initializer_list<T> li):
-        MatrixVector(li.size())
-    {
+    MatrixVector(std::initializer_list<T> li): MatrixVector(li.size()) {
+
         T *h_vec = static_cast<T *>(malloc(mem_size));
 
-        int i=0;
-        for (auto curr = std::cbegin(li); curr != std::cend(li); ++curr) {
-            h_vec[i] = *curr;
-            ++i;
+        struct loop_vars { int i; typename std::initializer_list<T>::const_iterator curr; };
+        for (loop_vars vars = {0, std::cbegin(li)}; vars.curr != std::cend(li); ++vars.curr, ++vars.i) {
+            h_vec[vars.i] = *vars.curr;
         }
 
         cublasSetVector(m, sizeof(T), h_vec, 1, d_vec, 1);
         free(h_vec);
+
     }
 
     // *** Conversion Constructors ***
-    MatrixVector(const std::vector<T> &vec):
-        m(vec.size()), mem_size(m*sizeof(T))
-    {
-        construction_helper();
-        T *h_vec = static_cast<T *>(malloc(mem_size));
-        for (int i=0; i<m; ++i) { h_vec[i] = vec[i]; }
-        cublasSetVector(m, sizeof(T), h_vec, 1, d_vec, 1);
-        free(h_vec);
-    }
-
     MatrixVector(const Parent &parent):
         Parent::Matrix(parent), m(parent.rows()), mem_size(m*sizeof(T))
     {
@@ -137,31 +137,54 @@ public:
     }
 
     // *** Static Creation ***
+    static MatrixVector<T> Zero(int m) {
+
+        T *h_vec = static_cast<T *>(malloc(m*sizeof(T)));
+        for (int i=0; i<m; ++i) { h_vec[i] = static_cast<T>(0); }
+        MatrixVector<T> created_vec(h_vec, m);
+        free(h_vec);
+
+        return created_vec;
+
+    }
     static MatrixVector<T> Zero(int m, int n) {
         check_n(n);
-        return typename Parent::Matrix(Parent::Zero(m, 1));
+        return Zero(m);
     }
-    static MatrixVector<T> Zero(int m) { 
 
-        std::cout << "Hit" << std::endl;
-        // construction_helper();
+    static MatrixVector<T> Ones(int m) {
 
-        // T *h_vec = static_cast<T *>(malloc(mem_size));
-        // for (int i=0; i<m; ++i) { h_vec[i] = col.coeff(i, 0); }
-        // cublasSetVector(m, sizeof(T), h_vec, 1, d_vec, 1);
-        // free(h_vec);
-        return typename Parent::Matrix(Parent::Zero(m, 1));
+        T *h_vec = static_cast<T *>(malloc(m*sizeof(T)));
+        for (int i=0; i<m; ++i) { h_vec[i] = static_cast<T>(1); }
+        MatrixVector<T> created_vec(h_vec, m);
+        free(h_vec);
+
+        return created_vec;
+
     }
     static MatrixVector<T> Ones(int m, int n) {
         check_n(n);
-        return typename Parent::Matrix(Parent::Ones(m, 1));
+        return Ones(m);
     }
-    static MatrixVector<T> Ones(int m) { return Ones(m, 1); }
+
+    static MatrixVector<T> Random(int m) {
+
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_real_distribution dist(-1., 1.);
+
+        T *h_vec = static_cast<T *>(malloc(m*sizeof(T)));
+        for (int i=0; i<m; ++i) { h_vec[i] = static_cast<T>(dist(gen)); }
+        MatrixVector<T> created_vec(h_vec, m);
+        free(h_vec);
+
+        return created_vec;
+
+    }
     static MatrixVector<T> Random(int m, int n) {
         check_n(n);
         return typename Parent::Matrix(Parent::Random(m, 1));
     }
-    static MatrixVector<T> Random(int m) { return Random(m, 1); }
 
     // *** Element Access ***
 
@@ -179,13 +202,15 @@ public:
     }
     void set_elem(int row, T val) { set_elem(row, 0, val); }
 
-    MatrixVector<T> slice(int start, int elements) const {
-        T *h_vec = static_cast<T *>(malloc(elements*sizeof(T)));
-        cublasGetVector(elements, sizeof(T), d_vec+start, 1, h_vec, 1);
-        std::vector<T> vec_temp;
-        for (int i=0; i<elements; ++i) { vec_temp.push_back(h_vec[i]); }
+    MatrixVector<T> slice(int start, int n_elem) const {
+
+        T *h_vec = static_cast<T *>(malloc(n_elem*sizeof(T)));
+        cublasGetVector(n_elem, sizeof(T), d_vec+start, 1, h_vec, 1);
+        MatrixVector<T> created_vec(h_vec, n_elem);
         free(h_vec);
-        return MatrixVector(vec_temp);
+
+        return created_vec;
+
     }
 
     // *** Properties ***
