@@ -10,17 +10,17 @@ public:
     void TestElementAccessMethods() {
         
         constexpr int n(10);
-        MatrixVector<T> test_vec_n(n);
+        MatrixVector<T> test_vec_n(*handle_ptr, n);
         for (int i=0; i<n; ++i) { test_vec_n.set_elem(i, static_cast<T>(i*i)); }
         for (int i=0; i<n; ++i) { ASSERT_EQ(test_vec_n.get_elem(i), static_cast<T>(i*i)); }
         
         constexpr int m(18);
-        MatrixVector<T> test_vec_m(m);
+        MatrixVector<T> test_vec_m(*handle_ptr, m);
         for (int i=0; i<n; ++i) { test_vec_m.set_elem(i, static_cast<T>(2*i*i-m)); }
         for (int i=0; i<n; ++i) { ASSERT_EQ(test_vec_m.get_elem(i), static_cast<T>(2*i*i-m)); }
         
         constexpr int cnt(10);
-        MatrixVector<T> test_vec_cnt(cnt);
+        MatrixVector<T> test_vec_cnt(*handle_ptr, cnt);
         for (int i=0; i<n; ++i) { test_vec_cnt.set_elem(i, static_cast<T>(1+i)); }
         for (int i=0; i<n; ++i) { ASSERT_EQ(test_vec_cnt.get_elem(i), static_cast<T>(1+i)); }
 
@@ -49,13 +49,13 @@ public:
     void TestPropertyMethods() {
         
         constexpr int m(8);
-        MatrixVector<T> test_vec_m(m);
+        MatrixVector<T> test_vec_m(*handle_ptr, m);
 
         ASSERT_EQ(test_vec_m.rows(), m);
         ASSERT_EQ(test_vec_m.cols(), 1);
         
         constexpr int n(16);
-        MatrixVector<T> test_vec_n(n);
+        MatrixVector<T> test_vec_n(*handle_ptr, n);
         for (int i=0; i<n; ++i) { test_vec_n.set_elem(i, static_cast<T>(i*i)); }
 
         ASSERT_EQ(test_vec_n.rows(), n);
@@ -65,12 +65,12 @@ public:
 
     void TestConstruction() {
 
-        MatrixVector<double> test_vec_0(0);
+        MatrixVector<double> test_vec_0(*handle_ptr, 0);
         ASSERT_EQ(test_vec_0.rows(), 0);
         ASSERT_EQ(test_vec_0.cols(), 1);
 
         constexpr int m(24);
-        MatrixVector<double> test_vec_m(m);
+        MatrixVector<double> test_vec_m(*handle_ptr, m);
         ASSERT_EQ(test_vec_m.rows(), m);
         ASSERT_EQ(test_vec_m.cols(), 1);
 
@@ -79,8 +79,11 @@ public:
     template <typename T>
     void TestListInitialization() {
         
-        MatrixVector<T> test_vec ({static_cast<T>(7.), static_cast<T>(5.), static_cast<T>(3.),
-                                   static_cast<T>(1.), static_cast<T>(6.), static_cast<T>(2.)});
+        MatrixVector<T> test_vec(
+            *handle_ptr,
+            {static_cast<T>(7.), static_cast<T>(5.), static_cast<T>(3.),
+             static_cast<T>(1.), static_cast<T>(6.), static_cast<T>(2.)}
+        );
         ASSERT_EQ(test_vec.get_elem(0), static_cast<T>(7.));
         ASSERT_EQ(test_vec.get_elem(1), static_cast<T>(5.));
         ASSERT_EQ(test_vec.get_elem(2), static_cast<T>(3.));
@@ -94,12 +97,12 @@ public:
     void TestStaticCreation() {
 
         constexpr int m_zero(15);
-        MatrixVector<T> test_zero(MatrixVector<T>::Zero(m_zero));
+        MatrixVector<T> test_zero(MatrixVector<T>::Zero(*handle_ptr, m_zero));
         ASSERT_EQ(test_zero.rows(), m_zero);
         for (int i=0; i<m_zero; ++i) { ASSERT_EQ(test_zero.get_elem(i), static_cast<T>(0.)); }
 
         constexpr int m_one(15);
-        MatrixVector<T> test_ones(MatrixVector<T>::Ones(m_one));
+        MatrixVector<T> test_ones(MatrixVector<T>::Ones(*handle_ptr, m_one));
         ASSERT_EQ(test_ones.rows(), m_one);
         for (int i=0; i<m_one; ++i) { ASSERT_EQ(test_ones.get_elem(i), static_cast<T>(1.)); }
 
@@ -108,7 +111,7 @@ public:
         // from other 5 (so only will fail if some 5 numbers in a row are exactly
         // the same))
         constexpr int m_rand(200);
-        MatrixVector<T> test_rand(MatrixVector<T>::Random(m_rand));
+        MatrixVector<T> test_rand(MatrixVector<T>::Random(*handle_ptr, m_rand));
         ASSERT_EQ(test_rand.rows(), m_rand);
         for (int i=2; i<m_one-2; ++i) {
             ASSERT_TRUE(
@@ -126,13 +129,13 @@ public:
 
         constexpr int m(23);
         constexpr int n(16);
-        MatrixVector<T> test_vec(MatrixVector<T>::Zero(m));
+        MatrixVector<T> test_vec(MatrixVector<T>::Zero(*handle_ptr, m));
         ASSERT_EQ(test_vec.rows(), m);
-        ASSERT_VECTOR_EQ(test_vec, MatrixVector<T>::Zero(m));
+        ASSERT_VECTOR_EQ(test_vec, MatrixVector<T>::Zero(*handle_ptr, m));
 
-        test_vec = MatrixVector<T>::Ones(n);
+        test_vec = MatrixVector<T>::Ones(*handle_ptr, n);
         ASSERT_EQ(test_vec.rows(), n);
-        ASSERT_VECTOR_EQ(test_vec, MatrixVector<T>::Ones(n));
+        ASSERT_VECTOR_EQ(test_vec, MatrixVector<T>::Ones(*handle_ptr, n));
 
     }
 
@@ -140,21 +143,23 @@ public:
     void TestDot() {
 
         // Pre-calculated
-        MatrixVector<T> vec_1_dot ({
-            static_cast<T>(-4.), static_cast<T>(3.4), static_cast<T>(0.),
-            static_cast<T>(-2.1), static_cast<T>(1.8)
-        });
-        MatrixVector<T> vec_2_dot ({
-            static_cast<T>(9.), static_cast<T>(10.), static_cast<T>(1.5),
-            static_cast<T>(-4.5), static_cast<T>(2.)
-        });
+        MatrixVector<T> vec_1_dot(
+            *handle_ptr,
+            {static_cast<T>(-4.), static_cast<T>(3.4), static_cast<T>(0.),
+             static_cast<T>(-2.1), static_cast<T>(1.8)}
+        );
+        MatrixVector<T> vec_2_dot(
+            *handle_ptr,
+            {static_cast<T>(9.), static_cast<T>(10.), static_cast<T>(1.5),
+             static_cast<T>(-4.5), static_cast<T>(2.)}
+        );
         ASSERT_NEAR(vec_1_dot.dot(vec_2_dot),
                     static_cast<T>(11.05),
                     static_cast<T>(11.05)*static_cast<T>(Tol<T>::gamma(5)));
 
         // Random
-        MatrixVector<T> vec_1_dot_r(MatrixVector<T>(10));
-        MatrixVector<T> vec_2_dot_r(MatrixVector<T>(10));
+        MatrixVector<T> vec_1_dot_r(MatrixVector<T>::Random(*handle_ptr, 10));
+        MatrixVector<T> vec_2_dot_r(MatrixVector<T>::Random(*handle_ptr, 10));
         T acc = static_cast<T>(0.);
         for (int i=0; i<10; ++i) { acc += vec_1_dot_r.get_elem(i)*vec_2_dot_r.get_elem(i); }
         ASSERT_EQ(vec_1_dot_r.dot(vec_2_dot_r), acc);
@@ -165,10 +170,11 @@ public:
     void TestNorm() {
 
         // Pre-calculated
-        MatrixVector<T> vec_norm ({
-            static_cast<T>(-8.), static_cast<T>(0.8), static_cast<T>(-0.6),
-            static_cast<T>(4.), static_cast<T>(0.)
-        });
+        MatrixVector<T> vec_norm(
+            *handle_ptr, 
+            {static_cast<T>(-8.), static_cast<T>(0.8), static_cast<T>(-0.6),
+             static_cast<T>(4.), static_cast<T>(0.)}
+        );
         ASSERT_NEAR(vec_norm.norm(),
                     static_cast<T>(9.),
                     static_cast<T>(9.)*static_cast<T>(Tol<T>::gamma(5)));
@@ -184,10 +190,11 @@ public:
     template <typename T>
     void TestScale() {
 
-        MatrixVector<T> vec ({
-            static_cast<T>(-8.), static_cast<T>(0.8), static_cast<T>(-0.6),
-            static_cast<T>(4.), static_cast<T>(0.)
-        });
+        MatrixVector<T> vec(
+            *handle_ptr,
+            {static_cast<T>(-8.), static_cast<T>(0.8), static_cast<T>(-0.6),
+             static_cast<T>(4.), static_cast<T>(0.)}
+        );
         MatrixVector<T> vec_scaled_mult = vec*static_cast<T>(4);
         for (int i=0; i<5; ++i) { ASSERT_EQ(vec_scaled_mult.get_elem(i),
                                             static_cast<T>(4)*vec.get_elem(i)); }
@@ -200,12 +207,14 @@ public:
     template <typename T>
     void TestAddSub() {
 
-        MatrixVector<T> vec_1 ({
-            static_cast<T>(-42.), static_cast<T>(0.), static_cast<T>(0.6)
-        });
-        MatrixVector<T> vec_2 ({
-            static_cast<T>(-38.), static_cast<T>(0.5), static_cast<T>(-0.6)
-        });
+        MatrixVector<T> vec_1(
+            *handle_ptr,
+            {static_cast<T>(-42.), static_cast<T>(0.), static_cast<T>(0.6)}
+        );
+        MatrixVector<T> vec_2(
+            *handle_ptr,
+            {static_cast<T>(-38.), static_cast<T>(0.5), static_cast<T>(-0.6)}
+        );
 
         MatrixVector<T> vec_add = vec_1+vec_2;
         ASSERT_EQ(vec_add.get_elem(0), static_cast<T>(-80.));
@@ -222,17 +231,19 @@ public:
         ASSERT_EQ(vec_sub_2.get_elem(1), static_cast<T>(0.5));
         ASSERT_EQ(vec_sub_2.get_elem(2), static_cast<T>(-1.2));
 
-        MatrixVector<T> vec_3 ({
-            static_cast<T>(-42.), static_cast<T>(0.), static_cast<T>(0.6)
-        });
+        MatrixVector<T> vec_3(
+            *handle_ptr,
+            {static_cast<T>(-42.), static_cast<T>(0.), static_cast<T>(0.6)}
+        );
         vec_3 += vec_2;
         ASSERT_VECTOR_EQ(vec_3, vec_1+vec_2);
         vec_3 += vec_3;
         ASSERT_VECTOR_EQ(vec_3, (vec_1+vec_2)*static_cast<T>(2.));
 
-        MatrixVector<T> vec_4 ({
-            static_cast<T>(-42.), static_cast<T>(0.), static_cast<T>(0.6)
-        });
+        MatrixVector<T> vec_4 (
+            *handle_ptr,
+            {static_cast<T>(-42.), static_cast<T>(0.), static_cast<T>(0.6)}
+        );
         vec_4 -= vec_2;
         ASSERT_VECTOR_EQ(vec_4, vec_1-vec_2);
         vec_4 -= vec_4;
@@ -243,7 +254,7 @@ public:
     void TestCast() {
         
         constexpr int m(20);
-        MatrixVector<double> vec_dbl(MatrixVector<double>::Random(m));
+        MatrixVector<double> vec_dbl(MatrixVector<double>::Random(*handle_ptr, m));
 
         MatrixVector<float> vec_sgl(vec_dbl.cast<float>());
         ASSERT_EQ(vec_sgl.rows(), m);
@@ -285,11 +296,11 @@ TEST_F(MatrixVector_Test, TestStaticCreation) {
     TestStaticCreation<double>();
 }
 
-// TEST_F(MatrixVector_Test, TestAssignment) {
-//     TestAssignment<__half>();
-//     TestAssignment<float>();
-//     TestAssignment<double>();
-// }
+TEST_F(MatrixVector_Test, TestAssignment) {
+    TestAssignment<__half>();
+    TestAssignment<float>();
+    TestAssignment<double>();
+}
 
 // TEST_F(MatrixVector_Test, TestDot) { TestDot<__half>(); TestDot<float>(); TestDot<double>(); }
 // TEST_F(MatrixVector_Test, TestNorm) { TestNorm<__half>(); TestNorm<float>(); TestNorm<double>(); }

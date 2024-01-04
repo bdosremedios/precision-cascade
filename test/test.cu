@@ -14,6 +14,7 @@ using std::string;
 using std::cout, std::endl;
 
 bool *TestBase::show_plots = new bool;
+cublasHandle_t *TestBase::handle_ptr = new cublasHandle_t;
 
 int main(int argc, char **argv) {
 
@@ -56,6 +57,10 @@ int main(int argc, char **argv) {
         *(TestBase::show_plots) = false;
     }
 
-    return RUN_ALL_TESTS();
+    cublasCreate(TestBase::handle_ptr);
+    int return_status = RUN_ALL_TESTS();
+    cublasDestroy(*TestBase::handle_ptr);
+
+    return return_status;
 
 }

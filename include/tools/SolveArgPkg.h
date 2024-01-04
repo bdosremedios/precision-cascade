@@ -14,7 +14,7 @@ public:
     constexpr static int default_max_iter = -1;
     constexpr static int default_max_inner_iter = -1;
     constexpr static double default_target_rel_res = -1;
-    inline const static MatrixVector<double> default_init_guess = MatrixVector<double>::Zero(0);
+    inline const static MatrixVector<double> default_init_guess = MatrixVector<double>::Zero(NULL, 0);
 
     int max_iter;
     int max_inner_iter;

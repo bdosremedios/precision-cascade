@@ -16,7 +16,7 @@ using std::runtime_error;
 using std::cout, std::endl;
 
 template <template<typename> typename M, typename T>
-M<T> read_matrixCSV(fs::path const &path) {
+M<T> read_matrixCSV(const cublasHandle_t &handle, fs::path const &path) {
 
     assert_valid_type_or_vec<M>();
 
@@ -62,7 +62,7 @@ M<T> read_matrixCSV(fs::path const &path) {
     // Read entries into matrix
     file_in.clear();
     file_in.seekg(0, std::ios_base::beg);
-    M<T> mat(M<T>::Zero(n_rows, n_cols));
+    M<T> mat(M<T>::Zero(handle, n_rows, n_cols));
     T temp_number;
     int row = 0;
 

@@ -159,10 +159,10 @@ public:
     template <typename T>
     void ReadVector() {
 
-        MatrixVector<T> target({1, 2, 3, 4, 5, 6});
+        MatrixVector<T> target(*handle_ptr, {1, 2, 3, 4, 5, 6});
 
         fs::path vector_file(read_matrix_dir / fs::path("vector.csv"));
-        MatrixVector<T> test(read_matrixCSV<MatrixVector, T>(vector_file));
+        MatrixVector<T> test(read_matrixCSV<MatrixVector, T>(*handle_ptr, vector_file));
 
         ASSERT_VECTOR_NEAR(test, target, static_cast<T>(Tol<T>::roundoff()));
 
@@ -177,7 +177,7 @@ TEST_F(MatrixRead_Vector_Test, ReadHalfVector) { ReadVector<__half>(); }
 TEST_F(MatrixRead_Vector_Test, FailOnMatrix) {    
     fs::path mat(read_matrix_dir / fs::path("square1.csv"));
     try {
-        MatrixVector<double> test(read_matrixCSV<MatrixVector, double>(mat));
+        MatrixVector<double> test(read_matrixCSV<MatrixVector, double>(*handle_ptr, mat));
         FAIL();
     } catch (runtime_error e) { cout << e.what() << endl; }
 }
