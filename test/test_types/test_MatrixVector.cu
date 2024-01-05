@@ -1,5 +1,6 @@
 #include "../test.h"
 
+#include "tools/math_functions.h"
 #include "types/MatrixVector.h"
 
 class MatrixVector_Test: public TestBase
@@ -200,7 +201,7 @@ public:
                                             static_cast<T>(4)*vec.get_elem(i)); }
         MatrixVector<T> vec_scaled_div = vec/static_cast<T>(10);
         for (int i=0; i<5; ++i) { ASSERT_EQ(vec_scaled_div.get_elem(i),
-                                            vec.get_elem(i)/static_cast<T>(10)); }
+                                            (static_cast<T>(1)/static_cast<T>(10))*vec.get_elem(i)); }
 
     }
 
@@ -302,7 +303,7 @@ TEST_F(MatrixVector_Test, TestAssignment) {
     TestAssignment<double>();
 }
 
-// TEST_F(MatrixVector_Test, TestScale) { TestScale<__half>(); TestScale<float>(); TestScale<double>(); }
+TEST_F(MatrixVector_Test, TestScale) { TestScale<__half>(); TestScale<float>(); TestScale<double>(); }
 // TEST_F(MatrixVector_Test, TestDot) { TestDot<__half>(); TestDot<float>(); TestDot<double>(); }
 // TEST_F(MatrixVector_Test, TestNorm) { TestNorm<__half>(); TestNorm<float>(); TestNorm<double>(); }
 // TEST_F(MatrixVector_Test, TestAddSub) { TestAddSub<__half>(); TestAddSub<float>(); TestAddSub<double>(); }

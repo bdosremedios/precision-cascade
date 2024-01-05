@@ -2,11 +2,12 @@ cmake_minimum_required(VERSION 3.27.2)
 
 project(precision-cascade LANGUAGES CXX CUDA)
 
-add_executable(main main.cpp)
+add_library(types_lib STATIC MatrixVector.cu)
 
 target_link_libraries(
-    main
+    types_lib
     PUBLIC
-    eigen
     precision-cascade
+    eigen
+    "$ENV{CUDA_PATH}/lib/x64/cublas.lib"
 )

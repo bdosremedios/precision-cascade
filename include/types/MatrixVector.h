@@ -87,45 +87,45 @@ public:
     }
 
     // *** Conversion Constructors ***
-    MatrixVector(const cublasHandle_t &arg_handle, const Parent &parent):
-        handle(arg_handle), Parent::Matrix(parent), m(parent.rows()), mem_size(m*sizeof(T))
-    {
+    // MatrixVector(const cublasHandle_t &arg_handle, const Parent &parent):
+    //     handle(arg_handle), Parent::Matrix(parent), m(parent.rows()), mem_size(m*sizeof(T))
+    // {
 
-        check_n(parent.cols());
-        allocate_d_vec();
+    //     check_n(parent.cols());
+    //     allocate_d_vec();
 
-        T *h_vec = static_cast<T *>(malloc(mem_size));
-        for (int i=0; i<m; ++i) { h_vec[i] = parent.coeff(i, 0); }
-        cublasSetVector(m, sizeof(T), h_vec, 1, d_vec, 1);
-        free(h_vec);
+    //     T *h_vec = static_cast<T *>(malloc(mem_size));
+    //     for (int i=0; i<m; ++i) { h_vec[i] = parent.coeff(i, 0); }
+    //     cublasSetVector(m, sizeof(T), h_vec, 1, d_vec, 1);
+    //     free(h_vec);
 
-    }
+    // }
 
-    MatrixVector(const cublasHandle_t &arg_handle, const typename MatrixDense<T>::Col &col):
-        handle(arg_handle), m(col.rows()), mem_size(m*sizeof(T))
-    {
+    // MatrixVector(const cublasHandle_t &arg_handle, const typename MatrixDense<T>::Col &col):
+    //     handle(arg_handle), m(col.rows()), mem_size(m*sizeof(T))
+    // {
 
-        allocate_d_vec();
+    //     allocate_d_vec();
 
-        T *h_vec = static_cast<T *>(malloc(mem_size));
-        for (int i=0; i<m; ++i) { h_vec[i] = col.coeff(i, 0); }
-        cublasSetVector(m, sizeof(T), h_vec, 1, d_vec, 1);
-        free(h_vec);
+    //     T *h_vec = static_cast<T *>(malloc(mem_size));
+    //     for (int i=0; i<m; ++i) { h_vec[i] = col.coeff(i, 0); }
+    //     cublasSetVector(m, sizeof(T), h_vec, 1, d_vec, 1);
+    //     free(h_vec);
 
-    }
+    // }
 
-    MatrixVector(const cublasHandle_t &arg_handle, const typename MatrixSparse<T>::Col &col):
-        handle(arg_handle), m(col.rows()), mem_size(m*sizeof(T))
-    {
+    // MatrixVector(const cublasHandle_t &arg_handle, const typename MatrixSparse<T>::Col &col):
+    //     handle(arg_handle), m(col.rows()), mem_size(m*sizeof(T))
+    // {
 
-        allocate_d_vec();
+    //     allocate_d_vec();
 
-        T *h_vec = static_cast<T *>(malloc(mem_size));
-        for (int i=0; i<m; ++i) { h_vec[i] = col.coeff(i, 0); }
-        cublasSetVector(m, sizeof(T), h_vec, 1, d_vec, 1);
-        free(h_vec);
+    //     T *h_vec = static_cast<T *>(malloc(mem_size));
+    //     for (int i=0; i<m; ++i) { h_vec[i] = col.coeff(i, 0); }
+    //     cublasSetVector(m, sizeof(T), h_vec, 1, d_vec, 1);
+    //     free(h_vec);
 
-    }
+    // }
 
     // *** Copy Constructor ***
     MatrixVector(const MatrixVector<T> &other) {
@@ -186,7 +186,7 @@ public:
 
         std::random_device rd;
         std::mt19937 gen(rd());
-        std::uniform_real_distribution dist(-1., 1.);
+        std::uniform_real_distribution<double> dist(-1., 1.);
 
         T *h_vec = static_cast<T *>(malloc(m*sizeof(T)));
         for (int i=0; i<m; ++i) { h_vec[i] = static_cast<T>(dist(gen)); }
@@ -237,7 +237,6 @@ public:
             std::cout << static_cast<double>(h_vec[i]) << std::endl;
         }
         std::cout << std::endl;
-        std::cout << Parent::rows() << " " << Parent::cols() << std::endl << std::endl;
         free(h_vec);
     }
 
@@ -270,12 +269,12 @@ public:
     // *** Arithmetic and Compound Operations ***
     T dot(const MatrixVector<T> &vec) const { return Parent::dot(vec); }
     T norm() const { return Parent::norm(); }
-    MatrixVector<T> operator*(const T &scalar) const {
-        return typename Parent::Matrix(Parent::operator*(scalar));
-    }
+
+    MatrixVector<T> operator*(const T &scalar) const;
     MatrixVector<T> operator/(const T &scalar) const {
-        return typename Parent::Matrix(Parent::operator/(scalar));
+        return operator*(static_cast<T>(1.)/scalar);
     }
+
     MatrixVector<T> operator-(const MatrixVector<T> &vec) const {
         return typename Parent::Matrix(Parent::operator-(vec));
     }

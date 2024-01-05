@@ -2,8 +2,6 @@ cmake_minimum_required(VERSION 3.27.2)
 
 project(precision-cascade LANGUAGES CXX CUDA)
 
-set(CMAKE_LINKER_FLAGS, "${CMAKE_LINKER_FLAGS} /NODEFAULTLIB:LIBCMT")
-
 set(
     TEST_TYPES_CPPS
     test_types/test_MatrixVector.cu
@@ -72,5 +70,6 @@ target_link_libraries(
     eigen
     precision-cascade
     math_functions
+    types_lib
     "$ENV{CUDA_PATH}/lib/x64/cublas.lib"
 )

@@ -48,7 +48,7 @@ public:
     MatrixDense(const typename MatrixSparse<T>::Block &block): Parent::Matrix(block.base()) {}
 
     // *** Cast ***
-    SparseMatrix<T> sparse() const { return SparseMatrix<T>(Parent::sparseView()); };
+    MatrixSparse<T> sparse() const { return MatrixSparse<T>(Parent::sparseView()); };
 
     // *** Element Access ***
     const T coeff(int row, int col) const { return Parent::operator()(row, col); }
