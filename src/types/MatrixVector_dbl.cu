@@ -1,18 +1,9 @@
 #include "types/MatrixVector.h"
+#include "tools/cublas_check.h"
 
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
 
-#include <stdexcept>
-#include <string>
-
-void check_cublas_status(cublasStatus_t status) {
-    if (status != CUBLAS_STATUS_SUCCESS) {
-        throw std::runtime_error("cublas error: " + std::to_string(status));
-    }
-}
-
-// operator*
 template<>
 MatrixVector<double> MatrixVector<double>::operator*(const double &scalar) const {
 
