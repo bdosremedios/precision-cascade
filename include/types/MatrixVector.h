@@ -274,15 +274,16 @@ public:
     MatrixVector<T> operator/(const T &scalar) const {
         return operator*(static_cast<T>(1.)/scalar);
     }
+    MatrixVector<T>& operator*=(const T &scalar);
+    MatrixVector<T>& operator/=(const T &scalar) {
+        return operator*=(static_cast<T>(1.)/scalar);
+    }
 
-    MatrixVector<T> operator-(const MatrixVector<T> &vec) const {
-        return typename Parent::Matrix(Parent::operator-(vec));
-    }
-    MatrixVector<T> operator+(const MatrixVector<T> &vec) const {
-        return typename Parent::Matrix(Parent::operator+(vec));
-    }
-    MatrixVector<T> operator+=(const MatrixVector<T> &vec) { return *this = *this + vec; };
-    MatrixVector<T> operator-=(const MatrixVector<T> &vec) { return *this = *this - vec; };
+    MatrixVector<T> operator-(const MatrixVector<T> &vec) const;
+    MatrixVector<T> operator+(const MatrixVector<T> &vec) const;
+    MatrixVector<T> operator+=(const MatrixVector<T> &vec);
+    MatrixVector<T> operator-=(const MatrixVector<T> &vec);
+
 };
 
 #include "MatrixDense.h"

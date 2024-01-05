@@ -12,13 +12,14 @@ void check_cublas_status(cublasStatus_t status) {
     }
 }
 
+// operator*
 template<>
 MatrixVector<double> MatrixVector<double>::operator*(const double &scalar) const {
 
     MatrixVector<double> c(*this);
 
     cublasStatus_t status = cublasScalEx(
-        this->handle, m, &scalar, CUDA_R_64F, c.d_vec, CUDA_R_64F, 1, CUDA_R_64F
+        handle, m, &scalar, CUDA_R_64F, c.d_vec, CUDA_R_64F, 1, CUDA_R_64F
     );
     check_cublas_status(status);
 
@@ -57,3 +58,49 @@ MatrixVector<__half> MatrixVector<__half>::operator*(const __half &scalar) const
     return c;
 
 }
+
+// operator*=
+template<>
+MatrixVector<double>& MatrixVector<double>::operator*=(const double &scalar) {
+
+    cublasStatus_t status = cublasScalEx(
+        handle, m, &scalar, CUDA_R_64F, d_vec, CUDA_R_64F, 1, CUDA_R_64F
+    );
+    check_cublas_status(status);
+
+    return *this;
+
+}
+
+template<>
+MatrixVector<float>& MatrixVector<float>::operator*=(const float &scalar) {
+
+    cublasStatus_t status = cublasScalEx(
+        handle, m, &scalar, CUDA_R_32F, d_vec, CUDA_R_32F, 1, CUDA_R_32F
+    );
+    check_cublas_status(status);
+
+    return *this;
+
+}
+
+template<>
+MatrixVector<__half>& MatrixVector<__half>::operator*=(const __half &scalar) {
+
+    float *scalar_cast = static_cast<float *>(malloc(sizeof(float)));
+    *scalar_cast = static_cast<float>(scalar);
+
+    cublasStatus_t status = cublasScalEx(
+        handle, m, scalar_cast, CUDA_R_32F, d_vec, CUDA_R_16F, 1, CUDA_R_32F
+    );
+    check_cublas_status(status);
+
+    free(scalar_cast);
+
+    return *this;
+
+}
+
+// operator-
+
+// operator-

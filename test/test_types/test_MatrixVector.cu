@@ -196,12 +196,35 @@ public:
             {static_cast<T>(-8.), static_cast<T>(0.8), static_cast<T>(-0.6),
              static_cast<T>(4.), static_cast<T>(0.)}
         );
+
         MatrixVector<T> vec_scaled_mult = vec*static_cast<T>(4);
         for (int i=0; i<5; ++i) { ASSERT_EQ(vec_scaled_mult.get_elem(i),
                                             static_cast<T>(4)*vec.get_elem(i)); }
+
         MatrixVector<T> vec_scaled_div = vec/static_cast<T>(10);
         for (int i=0; i<5; ++i) { ASSERT_EQ(vec_scaled_div.get_elem(i),
                                             (static_cast<T>(1)/static_cast<T>(10))*vec.get_elem(i)); }
+
+    }
+
+    template <typename T>
+    void TestScaleAssignment() {
+
+        MatrixVector<T> orig_vec(
+            *handle_ptr,
+            {static_cast<T>(-8.), static_cast<T>(0.8), static_cast<T>(-0.6),
+             static_cast<T>(4.), static_cast<T>(0.)}
+        );
+
+        MatrixVector<T> vec(orig_vec);
+        vec *= static_cast<T>(3);
+        for (int i=0; i<5; ++i) { ASSERT_EQ(vec.get_elem(i),
+                                            static_cast<T>(3)*orig_vec.get_elem(i)); }
+
+        vec = orig_vec;
+        vec /= static_cast<T>(5);
+        for (int i=0; i<5; ++i) { ASSERT_EQ(vec.get_elem(i),
+                                            (static_cast<T>(1)/static_cast<T>(5))*orig_vec.get_elem(i)); }
 
     }
 
@@ -303,7 +326,13 @@ TEST_F(MatrixVector_Test, TestAssignment) {
     TestAssignment<double>();
 }
 
-TEST_F(MatrixVector_Test, TestScale) { TestScale<__half>(); TestScale<float>(); TestScale<double>(); }
+TEST_F(MatrixVector_Test, TestScale) {
+    TestScale<__half>(); TestScale<float>(); TestScale<double>();
+}
+TEST_F(MatrixVector_Test, TestScaleAssign) {
+    TestScaleAssignment<__half>(); TestScaleAssignment<float>(); TestScaleAssignment<double>();
+}
+
 // TEST_F(MatrixVector_Test, TestDot) { TestDot<__half>(); TestDot<float>(); TestDot<double>(); }
 // TEST_F(MatrixVector_Test, TestNorm) { TestNorm<__half>(); TestNorm<float>(); TestNorm<double>(); }
 // TEST_F(MatrixVector_Test, TestAddSub) { TestAddSub<__half>(); TestAddSub<float>(); TestAddSub<double>(); }
