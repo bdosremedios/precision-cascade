@@ -16,8 +16,10 @@ inline void swap(const int &i, const int &j, MatrixVector<int> &indices) {
 template <typename T>
 int select_median_pivot(int i, int j, int k, const MatrixVector<int> &indices, const MatrixVector<T> &vec) {
 
-    if ((vec(indices(i)) > vec(indices(j))) ^ (vec(indices(i)) > vec(indices(k)))) { return i; }
-    else if ((vec(indices(j)) > vec(indices(i))) ^ (vec(indices(j)) > vec(indices(k)))) { return j; }
+    if ((vec.get_elem(indices.get_elem(i)) > vec.get_elem(indices.get_elem(j))) ^
+        (vec.get_elem(indices.get_elem(i)) > vec.get_elem(indices.get_elem(k)))) { return i; }
+    else if ((vec.get_elem(indices.get_elem(j)) > vec.get_elem(indices.get_elem(i))) ^
+             (vec.get_elem(indices.get_elem(j)) > vec.get_elem(indices.get_elem(k)))) { return j; }
     else { return k; }
 
 }
@@ -28,7 +30,7 @@ void quicksort(MatrixVector<int> &indices, const int &beg, const int &end, const
     if (beg < end-1) {
         
         int pivot_ind = select_median_pivot(beg, (beg + end-1)/2, end-1, indices, vec);
-        T pivot = vec(indices(pivot_ind));
+        T pivot = vec.get_elem(indices.get_elem(pivot_ind));
 
         swap(pivot_ind, end-1, indices); // Move pivot to end
         pivot_ind = end-1;
@@ -36,7 +38,7 @@ void quicksort(MatrixVector<int> &indices, const int &beg, const int &end, const
         int head = beg;
         while (head < pivot_ind) {
 
-            if (vec(indices(head)) <= pivot) {
+            if (vec.get_elem(indices.get_elem(head)) <= pivot) {
                 ++head;
             } else {
                 swap(head, pivot_ind-1, indices);
@@ -57,7 +59,7 @@ template <typename T>
 MatrixVector<int> sort_indices(const MatrixVector<T> &vec) {
 
     MatrixVector<int> indices(vec.rows());
-    for (int i=0; i<vec.rows(); ++i) { indices(i) = i; }
+    for (int i=0; i<vec.rows(); ++i) { indices.set_elem(i, i); }
 
     quicksort(indices, 0, vec.rows(), vec);
 

@@ -155,8 +155,10 @@ public:
     static MatrixVector<T> Zero(const cublasHandle_t &arg_handle, int m) {
 
         T *h_vec = static_cast<T *>(malloc(m*sizeof(T)));
+
         for (int i=0; i<m; ++i) { h_vec[i] = static_cast<T>(0); }
         MatrixVector<T> created_vec(arg_handle, h_vec, m);
+
         free(h_vec);
 
         return created_vec;
@@ -170,8 +172,10 @@ public:
     static MatrixVector<T> Ones(const cublasHandle_t &arg_handle, int m) {
 
         T *h_vec = static_cast<T *>(malloc(m*sizeof(T)));
+
         for (int i=0; i<m; ++i) { h_vec[i] = static_cast<T>(1); }
         MatrixVector<T> created_vec(arg_handle, h_vec, m);
+
         free(h_vec);
 
         return created_vec;
@@ -189,8 +193,10 @@ public:
         std::uniform_real_distribution<double> dist(-1., 1.);
 
         T *h_vec = static_cast<T *>(malloc(m*sizeof(T)));
+
         for (int i=0; i<m; ++i) { h_vec[i] = static_cast<T>(dist(gen)); }
         MatrixVector<T> created_vec(arg_handle, h_vec, m);
+
         free(h_vec);
 
         return created_vec;
@@ -219,8 +225,10 @@ public:
     MatrixVector<T> slice(int start, int m_elem) const {
 
         T *h_vec = static_cast<T *>(malloc(m_elem*sizeof(T)));
+
         cublasGetVector(m_elem, sizeof(T), d_vec+start, 1, h_vec, 1);
         MatrixVector<T> created_vec(handle, h_vec, m_elem);
+
         free(h_vec);
 
         return created_vec;
@@ -231,13 +239,17 @@ public:
     int rows() const { return m; }
     int cols() const { return 1; }
     void print() const {
+
         T *h_vec = static_cast<T *>(malloc(mem_size));
+
         cublasGetVector(m, sizeof(T), d_vec, 1, h_vec, 1);
         for (int i=0; i<m; ++i) {
             std::cout << static_cast<double>(h_vec[i]) << std::endl;
         }
         std::cout << std::endl;
+
         free(h_vec);
+
     }
 
     // *** Resizing ***
