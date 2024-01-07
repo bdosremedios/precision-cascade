@@ -17,13 +17,30 @@ public:
         
         constexpr int m(18);
         MatrixVector<T> test_vec_m(*handle_ptr, m);
-        for (int i=0; i<n; ++i) { test_vec_m.set_elem(i, static_cast<T>(2*i*i-m)); }
-        for (int i=0; i<n; ++i) { ASSERT_EQ(test_vec_m.get_elem(i), static_cast<T>(2*i*i-m)); }
+        for (int i=0; i<m; ++i) { test_vec_m.set_elem(i, static_cast<T>(2*i*i-m)); }
+        for (int i=0; i<m; ++i) { ASSERT_EQ(test_vec_m.get_elem(i), static_cast<T>(2*i*i-m)); }
         
         constexpr int cnt(10);
         MatrixVector<T> test_vec_cnt(*handle_ptr, cnt);
-        for (int i=0; i<n; ++i) { test_vec_cnt.set_elem(i, static_cast<T>(1+i)); }
-        for (int i=0; i<n; ++i) { ASSERT_EQ(test_vec_cnt.get_elem(i), static_cast<T>(1+i)); }
+        for (int i=0; i<cnt; ++i) { test_vec_cnt.set_elem(i, static_cast<T>(1+i)); }
+        for (int i=0; i<cnt; ++i) { ASSERT_EQ(test_vec_cnt.get_elem(i), static_cast<T>(1+i)); }
+
+    }
+
+    template <typename T>
+    void TestSlice() {
+
+        constexpr int n(10);
+        MatrixVector<T> test_vec_n(*handle_ptr, n);
+        for (int i=0; i<n; ++i) { test_vec_n.set_elem(i, static_cast<T>(i*i)); }
+
+        constexpr int m(18);
+        MatrixVector<T> test_vec_m(*handle_ptr, m);
+        for (int i=0; i<m; ++i) { test_vec_m.set_elem(i, static_cast<T>(2*i*i-m)); }
+
+        constexpr int cnt(10);
+        MatrixVector<T> test_vec_cnt(*handle_ptr, cnt);
+        for (int i=0; i<cnt; ++i) { test_vec_cnt.set_elem(i, static_cast<T>(1+i)); }
 
         MatrixVector<T> test_vec_cnt_2_6(test_vec_cnt.slice(2, 6));
         ASSERT_EQ(test_vec_cnt_2_6.rows(), 6);
@@ -44,6 +61,42 @@ public:
         ASSERT_EQ(test_vec_m_dupe.rows(), m);
         ASSERT_VECTOR_EQ(test_vec_m_dupe, test_vec_m);
 
+        MatrixVector<T> test_vec_slice_empty(test_vec_m.slice(0, 0));
+        ASSERT_EQ(test_vec_slice_empty.rows(), 0);
+
+        MatrixVector<T> test_vec_slice_empty_2(test_vec_n.slice(1, 0));
+        ASSERT_EQ(test_vec_slice_empty_2.rows(), 0);
+
+    }
+
+    template <typename T>
+    void TestBadSlice() {
+
+        constexpr int m(18);
+        MatrixVector<T> test_vec_m(*handle_ptr, m);
+        for (int i=0; i<m; ++i) { test_vec_m.set_elem(i, static_cast<T>(2*i*i-m)); }
+
+        try {
+            test_vec_m.slice(1, -1);
+            FAIL();
+        } catch (std::runtime_error e) {
+            std::cout << e.what() << std::endl;
+        }
+
+        try {
+            test_vec_m.slice(-1, 1);
+            FAIL();
+        } catch (std::runtime_error e) {
+            std::cout << e.what() << std::endl;
+        }
+
+        try {
+            test_vec_m.slice(m, 1);
+            FAIL();
+        } catch (std::runtime_error e) {
+            std::cout << e.what() << std::endl;
+        }
+        
     }
 
     template <typename T>
@@ -360,6 +413,14 @@ TEST_F(MatrixVector_Test, TestElementAccessMethods) {
     TestElementAccessMethods<__half>();
     TestElementAccessMethods<float>();
     TestElementAccessMethods<double>();
+}
+
+TEST_F(MatrixVector_Test, TestSlice) {
+    TestSlice<__half>(); TestSlice<float>(); TestSlice<double>();
+}
+
+TEST_F(MatrixVector_Test, TestBadSlice) {
+    TestBadSlice<__half>(); TestBadSlice<float>(); TestBadSlice<double>();
 }
 
 TEST_F(MatrixVector_Test, TestPropertyMethods) {

@@ -49,7 +49,9 @@ private:
         handle(arg_handle), m(m_elem), mem_size(m*sizeof(T))
     {
         allocate_d_vec();
-        check_cublas_status(cublasSetVector(m, sizeof(T), h_vec, 1, d_vec, 1));
+        if (m_elem > 0) {
+            check_cublas_status(cublasSetVector(m, sizeof(T), h_vec, 1, d_vec, 1));
+        }
     }
 
 public:
@@ -233,9 +235,15 @@ public:
 
     MatrixVector<T> slice(int start, int m_elem) const {
 
+        if (m_elem < 0) { throw(std::runtime_error("size of vector slice cant be negative")); }
+        if ((start < 0) || (start >= m)) { throw(std::runtime_error("invalid vector slice start")); }
+
         T *h_vec = static_cast<T *>(malloc(m_elem*sizeof(T)));
 
-        check_cublas_status(cublasGetVector(m_elem, sizeof(T), d_vec+start, 1, h_vec, 1));
+        if (m_elem > 0) {
+            check_cublas_status(cublasGetVector(m_elem, sizeof(T), d_vec+start, 1, h_vec, 1));
+        }
+
         MatrixVector<T> created_vec(handle, h_vec, m_elem);
 
         free(h_vec);
