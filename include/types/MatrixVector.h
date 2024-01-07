@@ -36,7 +36,7 @@ private:
 
     int m;
     size_t mem_size;
-    T *d_vec;
+    T *d_vec = nullptr;
     cublasHandle_t handle;
 
     void allocate_d_vec() {

@@ -7,6 +7,9 @@
 
 #include <iostream>
 
+#include <cuda_runtime.h>
+#include <cublas_v2.h>
+
 template <typename T> class MatrixSparse;
 
 template <typename T>
@@ -18,34 +21,54 @@ private:
     friend MatrixSparse<T>;
     const Parent &base() const { return *this; }
 
+    int m, n;
+    size_t mem_size;
+    T *d_mat = nullptr;
+    cublasHandle_t handle;
+
+    void allocate_d_mat() {
+        cudaMalloc(&d_mat, mem_size);
+    }
+
 public:
 
     class Block; class Col; // Forward declaration of nested classes
 
-    // *** Constructors ***
-    MatrixDense(): Parent::Matrix(0, 0) {}
-    MatrixDense(int m, int n): Parent::Matrix(m, n) {}
+    // *** Basic Constructors ***
+    MatrixDense(const cublasHandle_t &arg_handle):
+        m(0), n(0), mem_size(m*n*sizeof(T))
+    { allocate_d_mat(); }
 
-    MatrixDense(std::initializer_list<std::initializer_list<T>> li):
-        MatrixDense(li.size(), (li.size() == 0) ? 0 : std::cbegin(li)->size())
-    {
-        int i=0;
-        for (auto curr_row = std::cbegin(li); curr_row != std::cend(li); ++curr_row) {
-            int j=0;
-            for (auto curr_elem = std::cbegin(*curr_row); curr_elem != std::cend(*curr_row); ++curr_elem) {
-                if (j >= cols()) { throw(std::runtime_error("Initializer list has non-consistent row size")); }
-                this->coeffRef(i, j) = *curr_elem;
-                ++j;
-            }
-            if (j != cols()) { throw(std::runtime_error("Initializer list has non-consistent row size")); }
-            ++i;
-        }
-        if (i != rows()) { throw(std::runtime_error("Initializer list has non-consistent row size")); }
+    MatrixDense(const cublasHandle_t &arg_handle, int arg_m, int arg_n):
+        m(arg_m), n(arg_n), mem_size(m*n*sizeof(T))
+    { allocate_d_mat(); }
+
+    // MatrixDense(std::initializer_list<std::initializer_list<T>> li):
+    //     MatrixDense(li.size(), (li.size() == 0) ? 0 : std::cbegin(li)->size())
+    // {
+    //     int i=0;
+    //     for (auto curr_row = std::cbegin(li); curr_row != std::cend(li); ++curr_row) {
+    //         int j=0;
+    //         for (auto curr_elem = std::cbegin(*curr_row); curr_elem != std::cend(*curr_row); ++curr_elem) {
+    //             if (j >= cols()) { throw(std::runtime_error("Initializer list has non-consistent row size")); }
+    //             this->coeffRef(i, j) = *curr_elem;
+    //             ++j;
+    //         }
+    //         if (j != cols()) { throw(std::runtime_error("Initializer list has non-consistent row size")); }
+    //         ++i;
+    //     }
+    //     if (i != rows()) { throw(std::runtime_error("Initializer list has non-consistent row size")); }
+    // }
+
+    // MatrixDense(const Parent &parent): Parent::Matrix(parent) {}
+    // MatrixDense(const Block &block): Parent::Matrix(block.base()) {}
+    // MatrixDense(const typename MatrixSparse<T>::Block &block): Parent::Matrix(block.base()) {}
+
+    // *** Destructor ***
+    ~MatrixDense() {
+        cudaFree(d_mat);
+        d_mat = nullptr;
     }
-
-    MatrixDense(const Parent &parent): Parent::Matrix(parent) {}
-    MatrixDense(const Block &block): Parent::Matrix(block.base()) {}
-    MatrixDense(const typename MatrixSparse<T>::Block &block): Parent::Matrix(block.base()) {}
 
     // *** Cast ***
     MatrixSparse<T> sparse() const { return MatrixSparse<T>(Parent::sparseView()); };
@@ -57,8 +80,8 @@ public:
     Block block(int row, int col, int m, int n) { return Parent::block(row, col, m, n); }
 
     // *** Properties ***
-    int rows() const { return Parent::rows(); }
-    int cols() const { return Parent::cols(); }
+    int rows() const { return m; }
+    int cols() const { return n; }
     void print() { std::cout << *this << std::endl << std::endl; }
 
     // *** Static Creation ***

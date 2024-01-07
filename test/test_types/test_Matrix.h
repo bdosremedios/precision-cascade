@@ -7,21 +7,21 @@ protected:
     template <template <typename> typename M, typename T>
     void TestConstruction_Base() {
 
-        M<T> test_mat_empty;
+        M<T> test_mat_empty(*handle_ptr);
         ASSERT_EQ(test_mat_empty.rows(), 0);
         ASSERT_EQ(test_mat_empty.cols(), 0);
 
         constexpr int m(12);
-        M<T> test_mat_square(m, m);
+        M<T> test_mat_square(*handle_ptr, m, m);
         ASSERT_EQ(test_mat_square.rows(), m);
         ASSERT_EQ(test_mat_square.cols(), m);
 
         constexpr int n(33);
-        M<T> test_mat_wide(m, n);
+        M<T> test_mat_wide(*handle_ptr, m, n);
         ASSERT_EQ(test_mat_wide.rows(), m);
         ASSERT_EQ(test_mat_wide.cols(), n);
 
-        M<T> test_mat_tall(n, m);
+        M<T> test_mat_tall(*handle_ptr, n, m);
         ASSERT_EQ(test_mat_tall.rows(), n);
         ASSERT_EQ(test_mat_tall.cols(), m);
 
