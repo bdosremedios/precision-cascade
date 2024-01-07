@@ -23,7 +23,7 @@ MatrixVector<__half> MatrixVector<__half>::operator*(const __half &scalar) const
 }
 
 template<>
-MatrixVector<__half>& MatrixVector<__half>::operator*=(const __half &scalar) {
+MatrixVector<__half> & MatrixVector<__half>::operator*=(const __half &scalar) {
 
     float scalar_cast = static_cast<float>(scalar);
 
@@ -68,7 +68,7 @@ MatrixVector<__half> MatrixVector<__half>::operator-(const MatrixVector<__half> 
 }
 
 template<>
-MatrixVector<__half>& MatrixVector<__half>::operator+=(const MatrixVector<__half> &vec) {
+MatrixVector<__half> & MatrixVector<__half>::operator+=(const MatrixVector<__half> &vec) {
 
     float alpha = 1.;
 
@@ -82,7 +82,7 @@ MatrixVector<__half>& MatrixVector<__half>::operator+=(const MatrixVector<__half
 }
 
 template<>
-MatrixVector<__half>& MatrixVector<__half>::operator-=(const MatrixVector<__half> &vec) {
+MatrixVector<__half> & MatrixVector<__half>::operator-=(const MatrixVector<__half> &vec) {
 
     float alpha = -1.;
 

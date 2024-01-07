@@ -19,7 +19,7 @@ MatrixVector<double> MatrixVector<double>::operator*(const double &scalar) const
 }
 
 template<>
-MatrixVector<double>& MatrixVector<double>::operator*=(const double &scalar) {
+MatrixVector<double> & MatrixVector<double>::operator*=(const double &scalar) {
 
     cublasStatus_t status = cublasScalEx(
         handle, m, &scalar, CUDA_R_64F, d_vec, CUDA_R_64F, 1, CUDA_R_64F
@@ -61,7 +61,7 @@ MatrixVector<double> MatrixVector<double>::operator-(const MatrixVector<double> 
 }
 
 template<>
-MatrixVector<double>& MatrixVector<double>::operator+=(const MatrixVector<double> &vec) {
+MatrixVector<double> & MatrixVector<double>::operator+=(const MatrixVector<double> &vec) {
 
     double alpha = 1.;
 
@@ -75,7 +75,7 @@ MatrixVector<double>& MatrixVector<double>::operator+=(const MatrixVector<double
 }
 
 template<>
-MatrixVector<double>& MatrixVector<double>::operator-=(const MatrixVector<double> &vec) {
+MatrixVector<double> & MatrixVector<double>::operator-=(const MatrixVector<double> &vec) {
 
     double alpha = -1.;
 

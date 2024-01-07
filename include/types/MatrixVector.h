@@ -301,17 +301,16 @@ public:
         return operator*(static_cast<T>(1.)/scalar);
     }
 
-    MatrixVector<T>& operator*=(const T &scalar);
-    MatrixVector<T>& operator/=(const T &scalar) {
+    MatrixVector<T> & operator*=(const T &scalar);
+    MatrixVector<T> & operator/=(const T &scalar) {
         return operator*=(static_cast<T>(1.)/scalar);
     }
 
     MatrixVector<T> operator-(const MatrixVector<T> &vec) const;
     MatrixVector<T> operator+(const MatrixVector<T> &vec) const;
 
-    MatrixVector<T>& operator+=(const MatrixVector<T> &vec);
-    MatrixVector<T>& operator-=(const MatrixVector<T> &vec);
-
+    MatrixVector<T> & operator+=(const MatrixVector<T> &vec);
+    MatrixVector<T> & operator-=(const MatrixVector<T> &vec);
     
     T dot(const MatrixVector<T> &vec) const;
 
