@@ -6,4 +6,6 @@
 
 void check_cublas_status(cublasStatus_t status);
 
+void check_cuda_error(cudaError_t error);
+
 #endif

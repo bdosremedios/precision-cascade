@@ -6,7 +6,7 @@ set(CMAKE_EXE_LINKER_FLAGS, "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:LIBCMT /NOD
 
 set(
     TEST_TYPES_CPPS
-    # test_types/test_MatrixVector.cu
+    test_types/test_MatrixVector.cu
     test_types/test_MatrixDense.cu
     # test_types/test_MatrixSparse.cpp
     # test_types/test_TypeConversion.cpp
@@ -72,6 +72,6 @@ target_link_libraries(
     eigen
     precision-cascade
     math_functions
-    types_lib
+    types
     "$ENV{CUDA_PATH}/lib/x64/cublas.lib"
 )

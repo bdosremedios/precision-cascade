@@ -10,6 +10,8 @@
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
 
+#include "tools/cuda_check.h"
+
 template <typename T> class MatrixSparse;
 
 template <typename T>
@@ -27,7 +29,7 @@ private:
     cublasHandle_t handle;
 
     void allocate_d_mat() {
-        cudaMalloc(&d_mat, mem_size);
+        check_cuda_error(cudaMalloc(&d_mat, mem_size));
     }
 
 public:
@@ -44,9 +46,7 @@ public:
     { allocate_d_mat(); }
 
     // Row-major nested initializer list assumed for intuitive user instantiation
-    MatrixDense(
-        const cublasHandle_t &arg_handle, std::initializer_list<std::initializer_list<T>> li
-    ):
+    MatrixDense(const cublasHandle_t &arg_handle, std::initializer_list<std::initializer_list<T>> li):
         MatrixDense(arg_handle, li.size(), (li.size() == 0) ? 0 : std::cbegin(li)->size())
     {
 
@@ -87,7 +87,9 @@ public:
             throw(std::runtime_error("Initializer list has non-consistent row size"));
         }
 
-        cublasSetMatrix(m, n, sizeof(T), h_mat, m, d_mat, m);
+        if ((rows() != 0) && (cols() != 0)) {
+            check_cublas_status(cublasSetMatrix(m, n, sizeof(T), h_mat, m, d_mat, m));
+        }
 
         free(h_mat);
 
@@ -99,7 +101,7 @@ public:
 
     // *** Destructor ***
     ~MatrixDense() {
-        cudaFree(d_mat);
+        check_cuda_error(cudaFree(d_mat));
         d_mat = nullptr;
     }
 
@@ -111,14 +113,14 @@ public:
         if ((row < 0) || (row >= m)) { throw std::runtime_error("Invalid matrix row access"); }
         if ((col < 0) || (col >= n)) { throw std::runtime_error("Invalid matrix column access"); }
         T h_elem;
-        cudaMemcpy(&h_elem, d_mat+row+(col*m), sizeof(T), cudaMemcpyDeviceToHost);
+        check_cuda_error(cudaMemcpy(&h_elem, d_mat+row+(col*m), sizeof(T), cudaMemcpyDeviceToHost));
         return h_elem;
     }
 
     void set_elem(int row, int col, T val) {
         if ((row < 0) || (row >= m)) { throw std::runtime_error("Invalid matrix row access"); }
         if ((col < 0) || (col >= n)) { throw std::runtime_error("Invalid matrix column access"); }
-        cudaMemcpy(d_mat+row+(col*m), &val, sizeof(T), cudaMemcpyHostToDevice);
+        check_cuda_error(cudaMemcpy(d_mat+row+(col*m), &val, sizeof(T), cudaMemcpyHostToDevice));
     }
 
     Col col(int _col) { return Parent::col(_col); } 
@@ -132,7 +134,7 @@ public:
 
         T *h_mat = static_cast<T *>(malloc(mem_size));
 
-        cublasGetMatrix(m, n, sizeof(T), d_mat, m, h_mat, m);
+        check_cublas_status(cublasGetMatrix(m, n, sizeof(T), d_mat, m, h_mat, m));
         for (int j=0; j<n; ++j) {
             for (int i=0; i<m; ++i) {
                 std::cout << static_cast<double>(h_mat[i+j*n]) << " ";
