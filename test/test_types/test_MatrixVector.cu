@@ -141,54 +141,6 @@ public:
     }
 
     template <typename T>
-    void TestDot() {
-
-        // Pre-calculated
-        MatrixVector<T> vec_1_dot(
-            *handle_ptr,
-            {static_cast<T>(-4.), static_cast<T>(3.4), static_cast<T>(0.),
-             static_cast<T>(-2.1), static_cast<T>(1.8)}
-        );
-        MatrixVector<T> vec_2_dot(
-            *handle_ptr,
-            {static_cast<T>(9.), static_cast<T>(10.), static_cast<T>(1.5),
-             static_cast<T>(-4.5), static_cast<T>(2.)}
-        );
-        ASSERT_NEAR(vec_1_dot.dot(vec_2_dot),
-                    static_cast<T>(11.05),
-                    static_cast<T>(11.05)*static_cast<T>(Tol<T>::gamma(5)));
-
-        // Random
-        MatrixVector<T> vec_1_dot_r(MatrixVector<T>::Random(*handle_ptr, 10));
-        MatrixVector<T> vec_2_dot_r(MatrixVector<T>::Random(*handle_ptr, 10));
-        T acc = static_cast<T>(0.);
-        for (int i=0; i<10; ++i) { acc += vec_1_dot_r.get_elem(i)*vec_2_dot_r.get_elem(i); }
-        ASSERT_EQ(vec_1_dot_r.dot(vec_2_dot_r), acc);
-
-    }
-
-    template <typename T>
-    void TestNorm() {
-
-        // Pre-calculated
-        MatrixVector<T> vec_norm(
-            *handle_ptr, 
-            {static_cast<T>(-8.), static_cast<T>(0.8), static_cast<T>(-0.6),
-             static_cast<T>(4.), static_cast<T>(0.)}
-        );
-        ASSERT_NEAR(vec_norm.norm(),
-                    static_cast<T>(9.),
-                    static_cast<T>(9.)*static_cast<T>(Tol<T>::gamma(5)));
-
-        // Random
-        MatrixVector<T> vec_norm_r(MatrixVector<T>::Random(10));
-        ASSERT_NEAR(vec_norm_r.norm(),
-                    std::sqrt(vec_norm_r.dot(vec_norm_r)),
-                    std::sqrt(vec_norm_r.dot(vec_norm_r))*Tol<T>::gamma(10));
-
-    }
-
-    template <typename T>
     void TestScale() {
 
         MatrixVector<T> vec(
@@ -255,23 +207,81 @@ public:
         ASSERT_EQ(vec_sub_2.get_elem(1), static_cast<T>(0.5));
         ASSERT_EQ(vec_sub_2.get_elem(2), static_cast<T>(-1.2));
 
-        MatrixVector<T> vec_3(
+    }
+
+    template <typename T>
+    void TestAddSubAssignment() {
+
+        MatrixVector<T> vec_1(
             *handle_ptr,
             {static_cast<T>(-42.), static_cast<T>(0.), static_cast<T>(0.6)}
         );
+        MatrixVector<T> vec_2(
+            *handle_ptr,
+            {static_cast<T>(-38.), static_cast<T>(0.5), static_cast<T>(-0.6)}
+        );
+
+        MatrixVector<T> vec_3(vec_1);
         vec_3 += vec_2;
         ASSERT_VECTOR_EQ(vec_3, vec_1+vec_2);
         vec_3 += vec_3;
         ASSERT_VECTOR_EQ(vec_3, (vec_1+vec_2)*static_cast<T>(2.));
 
-        MatrixVector<T> vec_4 (
-            *handle_ptr,
-            {static_cast<T>(-42.), static_cast<T>(0.), static_cast<T>(0.6)}
-        );
+        MatrixVector<T> vec_4(vec_1);
         vec_4 -= vec_2;
         ASSERT_VECTOR_EQ(vec_4, vec_1-vec_2);
         vec_4 -= vec_4;
         ASSERT_VECTOR_EQ(vec_4, (vec_1+vec_2)*static_cast<T>(0.));
+
+    }
+
+    template <typename T>
+    void TestDot() {
+
+        // Pre-calculated
+        MatrixVector<T> vec_1_dot(
+            *handle_ptr,
+            {static_cast<T>(-4.), static_cast<T>(3.4), static_cast<T>(0.),
+             static_cast<T>(-2.1), static_cast<T>(1.8)}
+        );
+        MatrixVector<T> vec_2_dot(
+            *handle_ptr,
+            {static_cast<T>(9.), static_cast<T>(10.), static_cast<T>(1.5),
+             static_cast<T>(-4.5), static_cast<T>(2.)}
+        );
+        ASSERT_NEAR(static_cast<double>(vec_1_dot.dot(vec_2_dot)),
+                    11.05,
+                    11.05*Tol<T>::gamma(5));
+
+        // Random
+        MatrixVector<T> vec_1_dot_r(MatrixVector<T>::Random(*handle_ptr, 10));
+        MatrixVector<T> vec_2_dot_r(MatrixVector<T>::Random(*handle_ptr, 10));
+        T acc = static_cast<T>(0.);
+        for (int i=0; i<10; ++i) { acc += vec_1_dot_r.get_elem(i)*vec_2_dot_r.get_elem(i); }
+        ASSERT_NEAR(static_cast<double>(vec_1_dot_r.dot(vec_2_dot_r)),
+                    static_cast<double>(acc),
+                    2.*std::abs(static_cast<double>(static_cast<double>(acc)*Tol<T>::gamma(10))));
+
+    }
+
+    template <typename T>
+    void TestNorm() {
+
+        // Pre-calculated
+        MatrixVector<T> vec_norm(
+            *handle_ptr, 
+            {static_cast<T>(-8.), static_cast<T>(0.8), static_cast<T>(-0.6),
+             static_cast<T>(4.), static_cast<T>(0.)}
+        );
+        ASSERT_NEAR(vec_norm.norm(),
+                    static_cast<T>(9.),
+                    static_cast<T>(9.)*static_cast<T>(Tol<T>::gamma(5)));
+
+        // Random
+        MatrixVector<T> vec_norm_r(MatrixVector<T>::Random(*handle_ptr, 10));
+        ASSERT_NEAR(vec_norm_r.norm(),
+                    std::sqrt(vec_norm_r.dot(vec_norm_r)),
+                    std::sqrt(vec_norm_r.dot(vec_norm_r))*Tol<T>::gamma(10));
 
     }
 
@@ -329,12 +339,19 @@ TEST_F(MatrixVector_Test, TestAssignment) {
 TEST_F(MatrixVector_Test, TestScale) {
     TestScale<__half>(); TestScale<float>(); TestScale<double>();
 }
-TEST_F(MatrixVector_Test, TestScaleAssign) {
+TEST_F(MatrixVector_Test, TestScaleAssignment) {
     TestScaleAssignment<__half>(); TestScaleAssignment<float>(); TestScaleAssignment<double>();
 }
 
-// TEST_F(MatrixVector_Test, TestDot) { TestDot<__half>(); TestDot<float>(); TestDot<double>(); }
-// TEST_F(MatrixVector_Test, TestNorm) { TestNorm<__half>(); TestNorm<float>(); TestNorm<double>(); }
-// TEST_F(MatrixVector_Test, TestAddSub) { TestAddSub<__half>(); TestAddSub<float>(); TestAddSub<double>(); }
+TEST_F(MatrixVector_Test, TestAddSub) {
+    TestAddSub<__half>(); TestAddSub<float>(); TestAddSub<double>();
+}
+TEST_F(MatrixVector_Test, TestAddSubAssignment) {
+    TestAddSubAssignment<__half>(); TestAddSubAssignment<float>(); TestAddSubAssignment<double>();
+}
+
+TEST_F(MatrixVector_Test, TestDot) { TestDot<__half>(); TestDot<float>(); TestDot<double>(); }
+
+TEST_F(MatrixVector_Test, TestNorm) { TestNorm<__half>(); TestNorm<float>(); TestNorm<double>(); }
 
 TEST_F(MatrixVector_Test, TestCast) { TestCast(); }
