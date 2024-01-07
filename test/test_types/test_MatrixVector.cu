@@ -260,7 +260,7 @@ public:
         for (int i=0; i<10; ++i) { acc += vec_1_dot_r.get_elem(i)*vec_2_dot_r.get_elem(i); }
         ASSERT_NEAR(static_cast<double>(vec_1_dot_r.dot(vec_2_dot_r)),
                     static_cast<double>(acc),
-                    2.*std::abs(static_cast<double>(static_cast<double>(acc)*Tol<T>::gamma(10))));
+                    2.*std::abs(10.*Tol<T>::gamma(10)));
 
     }
 

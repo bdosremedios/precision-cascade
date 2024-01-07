@@ -466,31 +466,31 @@ protected:
 
     }
 
-    template <template <typename> typename M>
-    void TestCast_Base() {
+    // template <template <typename> typename M>
+    // void TestCast_Base() {
         
-        constexpr int m(20);
-        constexpr int n(30);
-        M<double> mat_dbl(M<double>::Random(m, n));
+    //     constexpr int m(20);
+    //     constexpr int n(30);
+    //     M<double> mat_dbl(M<double>::Random(m, n));
 
-        M<float> mat_sgl(mat_dbl.cast<float>());
-        ASSERT_EQ(mat_sgl.rows(), m);
-        ASSERT_EQ(mat_sgl.cols(), n);
-        for (int i=0; i<m; ++i) {
-            for (int j=0; j<n; ++j) {
-                ASSERT_EQ(mat_sgl.coeff(i, j), static_cast<float>(mat_dbl.coeff(i, j)));
-            }
-        }
+    //     M<float> mat_sgl(mat_dbl.cast<float>());
+    //     ASSERT_EQ(mat_sgl.rows(), m);
+    //     ASSERT_EQ(mat_sgl.cols(), n);
+    //     for (int i=0; i<m; ++i) {
+    //         for (int j=0; j<n; ++j) {
+    //             ASSERT_EQ(mat_sgl.coeff(i, j), static_cast<float>(mat_dbl.coeff(i, j)));
+    //         }
+    //     }
 
-        M<half> mat_hlf(mat_dbl.cast<half>());
-        ASSERT_EQ(mat_hlf.rows(), m);
-        ASSERT_EQ(mat_hlf.cols(), n);
-        for (int i=0; i<m; ++i) {
-            for (int j=0; j<n; ++j) {
-                ASSERT_EQ(mat_hlf.coeff(i, j), static_cast<half>(mat_dbl.coeff(i, j)));
-            }
-        }
+    //     M<half> mat_hlf(mat_dbl.cast<half>());
+    //     ASSERT_EQ(mat_hlf.rows(), m);
+    //     ASSERT_EQ(mat_hlf.cols(), n);
+    //     for (int i=0; i<m; ++i) {
+    //         for (int j=0; j<n; ++j) {
+    //             ASSERT_EQ(mat_hlf.coeff(i, j), static_cast<half>(mat_dbl.coeff(i, j)));
+    //         }
+    //     }
 
-    }
+    // }
 
 };

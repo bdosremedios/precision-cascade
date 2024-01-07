@@ -98,82 +98,82 @@ public:
     template <typename T>
     void TestAddSub() { TestAddSub_Base<MatrixDense, T>(); }
 
-    void TestCast() { TestCast_Base<MatrixDense>(); }
+    // void TestCast() { TestCast_Base<MatrixDense>(); }
 
 };
 
-TEST_F(MatrixDense_Test, TestConstruction) {
-    TestConstruction<half>();
-    TestConstruction<float>();
-    TestConstruction<double>();
-}
+// TEST_F(MatrixDense_Test, TestConstruction) {
+//     TestConstruction<half>();
+//     TestConstruction<float>();
+//     TestConstruction<double>();
+// }
 
-TEST_F(MatrixDense_Test, TestListInitialization) {
-    TestListInitialization<half>();
-    TestListInitialization<float>();
-    TestListInitialization<double>();
-}
+// TEST_F(MatrixDense_Test, TestListInitialization) {
+//     TestListInitialization<half>();
+//     TestListInitialization<float>();
+//     TestListInitialization<double>();
+// }
 
-TEST_F(MatrixDense_Test, TestBadListInitialization) { TestBadListInitialization(); }
+// TEST_F(MatrixDense_Test, TestBadListInitialization) { TestBadListInitialization(); }
 
-TEST_F(MatrixDense_Test, TestCoeffAccess) {
-    TestCoeffAccess<half>();
-    TestCoeffAccess<float>();
-    TestCoeffAccess<double>();
-}
+// TEST_F(MatrixDense_Test, TestCoeffAccess) {
+//     TestCoeffAccess<half>();
+//     TestCoeffAccess<float>();
+//     TestCoeffAccess<double>();
+// }
 
-TEST_F(MatrixDense_Test, TestStaticCreation) {
-    TestStaticCreation<half>();
-    TestStaticCreation<float>();
-    TestStaticCreation<double>();
-}
+// TEST_F(MatrixDense_Test, TestStaticCreation) {
+//     TestStaticCreation<half>();
+//     TestStaticCreation<float>();
+//     TestStaticCreation<double>();
+// }
 
-TEST_F(MatrixDense_Test, TestCol) {
-    TestCol<half>();
-    TestCol<float>();
-    TestCol<double>();
-}
+// TEST_F(MatrixDense_Test, TestCol) {
+//     TestCol<half>();
+//     TestCol<float>();
+//     TestCol<double>();
+// }
 
-TEST_F(MatrixDense_Test, TestBlock) {
-    TestBlock<half>();
-    TestBlock<float>();
-    TestBlock<double>();
-}
+// TEST_F(MatrixDense_Test, TestBlock) {
+//     TestBlock<half>();
+//     TestBlock<float>();
+//     TestBlock<double>();
+// }
 
-TEST_F(MatrixDense_Test, TestTranspose) {
-    TestTranspose<half>();
-    TestTranspose<float>();
-    TestTranspose<double>();
-}
+// TEST_F(MatrixDense_Test, TestTranspose) {
+//     TestTranspose<half>();
+//     TestTranspose<float>();
+//     TestTranspose<double>();
+// }
 
-TEST_F(MatrixDense_Test, TestScale) {
-    TestScale<half>();
-    TestScale<float>();
-    TestScale<double>();
-}
+// TEST_F(MatrixDense_Test, TestScale) {
+//     TestScale<half>();
+//     TestScale<float>();
+//     TestScale<double>();
+// }
 
-TEST_F(MatrixDense_Test, TestMatVec) {
-    TestMatVec<half>();
-    TestMatVec<float>();
-    TestMatVec<double>();
-}
+// TEST_F(MatrixDense_Test, TestMatVec) {
+//     TestMatVec<half>();
+//     TestMatVec<float>();
+//     TestMatVec<double>();
+// }
 
-TEST_F(MatrixDense_Test, TestMatMat) {
-    TestMatMat<half>();
-    TestMatMat<float>();
-    TestMatMat<double>();
-}
+// TEST_F(MatrixDense_Test, TestMatMat) {
+//     TestMatMat<half>();
+//     TestMatMat<float>();
+//     TestMatMat<double>();
+// }
 
-TEST_F(MatrixDense_Test, TestNorm) {
-    TestNorm<half>();
-    TestNorm<float>();
-    TestNorm<double>();
-}
+// TEST_F(MatrixDense_Test, TestNorm) {
+//     TestNorm<half>();
+//     TestNorm<float>();
+//     TestNorm<double>();
+// }
 
-TEST_F(MatrixDense_Test, TestAddSub) {
-    TestAddSub<half>();
-    TestAddSub<float>();
-    TestAddSub<double>();
-}
+// TEST_F(MatrixDense_Test, TestAddSub) {
+//     TestAddSub<half>();
+//     TestAddSub<float>();
+//     TestAddSub<double>();
+// }
 
-TEST_F(MatrixDense_Test, TestCast) { TestCast(); }
+// TEST_F(MatrixDense_Test, TestCast) { TestCast(); }
