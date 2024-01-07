@@ -302,6 +302,58 @@ public:
 
     }
 
+    template <typename T>
+    void TestBooleanEqual() {
+
+        MatrixVector<T> vec_to_compare(
+            *handle_ptr,
+            {static_cast<T>(-1.5), static_cast<T>(4), static_cast<T>(0.),
+             static_cast<T>(101), static_cast<T>(-101), static_cast<T>(7)}
+        );
+        MatrixVector<T> vec_same(
+            *handle_ptr,
+            {static_cast<T>(-1.5), static_cast<T>(4), static_cast<T>(0.),
+             static_cast<T>(101), static_cast<T>(-101), static_cast<T>(7)}
+        );
+        MatrixVector<T> vec_diffbeg(
+            *handle_ptr,
+            {static_cast<T>(1.5), static_cast<T>(4), static_cast<T>(0.),
+             static_cast<T>(101), static_cast<T>(-101), static_cast<T>(7)}
+        );
+        MatrixVector<T> vec_diffend(
+            *handle_ptr,
+            {static_cast<T>(-1.5), static_cast<T>(4), static_cast<T>(0.),
+             static_cast<T>(101), static_cast<T>(-101), static_cast<T>(70)}
+        );
+        MatrixVector<T> vec_diffmid(
+            *handle_ptr,
+            {static_cast<T>(-1.5), static_cast<T>(4), static_cast<T>(-100.),
+             static_cast<T>(101), static_cast<T>(-101), static_cast<T>(7)}
+        );
+        MatrixVector<T> vec_smaller(
+            *handle_ptr,
+            {static_cast<T>(-1.5), static_cast<T>(4), static_cast<T>(0.),
+             static_cast<T>(101)}
+        );
+        MatrixVector<T> vec_bigger(
+            *handle_ptr,
+            {static_cast<T>(-1.5), static_cast<T>(4), static_cast<T>(0.),
+             static_cast<T>(101), static_cast<T>(-101), static_cast<T>(0)}
+        );
+        MatrixVector<T> vec_empty_1(*handle_ptr, {});
+        MatrixVector<T> vec_empty_2(*handle_ptr, {});
+
+        ASSERT_TRUE(vec_to_compare == vec_to_compare);
+        ASSERT_TRUE(vec_to_compare == vec_same);
+        ASSERT_FALSE(vec_to_compare == vec_diffbeg);
+        ASSERT_FALSE(vec_to_compare == vec_diffend);
+        ASSERT_FALSE(vec_to_compare == vec_diffmid);
+        ASSERT_FALSE(vec_to_compare == vec_smaller);
+        ASSERT_FALSE(vec_to_compare == vec_bigger);
+        ASSERT_TRUE(vec_empty_1 == vec_empty_2);
+
+    }
+
 };
 
 TEST_F(MatrixVector_Test, TestElementAccessMethods) {
@@ -355,3 +407,9 @@ TEST_F(MatrixVector_Test, TestDot) { TestDot<__half>(); TestDot<float>(); TestDo
 TEST_F(MatrixVector_Test, TestNorm) { TestNorm<__half>(); TestNorm<float>(); TestNorm<double>(); }
 
 TEST_F(MatrixVector_Test, TestCast) { TestCast(); }
+
+TEST_F(MatrixVector_Test, TestBooleanEqual) {
+    TestBooleanEqual<__half>();
+    TestBooleanEqual<float>();
+    TestBooleanEqual<double>();
+}

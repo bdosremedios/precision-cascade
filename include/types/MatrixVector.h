@@ -28,7 +28,7 @@ private:
         if (n != 1) { throw std::runtime_error("Invalid number of columns for vector."); }
     }
 
-    // Only allow MatrixDense and MatrixSparse to access private methods like base
+    // Allow all similar type Matrices and different type variants of self to access private methods
     template <typename> friend class MatrixVector;
     // friend MatrixDense<T>;
     // friend MatrixSparse<T>;
@@ -241,11 +241,28 @@ public:
     }
 
     // *** Resizing ***
-    void reduce() { ; }
+    void reduce() { ; } // Leave empty MatrixVector is dense
 
     // *** Boolean ***
-    bool operator==(const MatrixVector<T> &rhs) const {
-        return Parent::isApprox(rhs);
+    bool operator==(const MatrixVector<T> &other) const {
+        
+        if (this == &other) { return true; }
+        if (m != other.m) { return false; }
+
+        T *h_vec_self = static_cast<T *>(malloc(mem_size));
+        T *h_vec_other = static_cast<T *>(malloc(mem_size));
+
+        cublasGetVector(m, sizeof(T), d_vec, 1, h_vec_self, 1);
+        cublasGetVector(m, sizeof(T), other.d_vec, 1, h_vec_other, 1);
+
+        bool is_equal = true;
+        for (int i=0; i<m; ++i) { is_equal = is_equal && (h_vec_self[i] == h_vec_other[i]); }
+
+        free(h_vec_self);
+        free(h_vec_other);
+
+        return is_equal;
+
     }
 
     // *** Explicit Cast ***
