@@ -19,7 +19,7 @@ private:
 
     using Parent = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>;
     friend MatrixSparse<T>;
-    const Parent &base() const { return *this; }
+    // const Parent &base() const { return *this; }
 
     int m, n;
     size_t mem_size;

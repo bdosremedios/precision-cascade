@@ -11,18 +11,18 @@
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
 
-using Eigen::Matrix;
-using Eigen::Dynamic;
+// using Eigen::Matrix;
+// using Eigen::Dynamic;
 
 template <typename T> class MatrixDense;
 template <typename T> class MatrixSparse;
 
 template <typename T>
-class MatrixVector: private Matrix<T, Dynamic, 1>
+class MatrixVector //: private Matrix<T, Dynamic, 1>
 {
 private:
 
-    using Parent = Matrix<T, Dynamic, 1>;
+    // using Parent = Matrix<T, Dynamic, 1>;
 
     static void check_n(int n) {
         if (n != 1) { throw std::runtime_error("Invalid number of columns for vector."); }

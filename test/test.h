@@ -13,8 +13,8 @@
 #include <cuda_fp16.h>
 
 #include "types/types.h"
-#include "tools/argument_pkgs.h"
-#include "tools/math_functions.h"
+// #include "tools/argument_pkgs.h"
+// #include "tools/math_functions.h"
 #include "tools/MatrixReader.h"
 
 namespace fs = std::filesystem;
@@ -246,7 +246,7 @@ public:
         fs::current_path() / fs::path("..") / fs::path("test") / fs::path("solve_matrices")
     );
 
-    SolveArgPkg default_args;
+    // SolveArgPkg default_args;
     static bool *show_plots;
     static cublasHandle_t *handle_ptr;
 

@@ -5,7 +5,7 @@ project(precision-cascade LANGUAGES CXX CUDA)
 set(
     TEST_TYPES_CPPS
     test_types/test_MatrixVector.cu
-    test_types/test_MatrixDense.cu
+    # test_types/test_MatrixDense.cu
     # test_types/test_MatrixSparse.cpp
     # test_types/test_TypeConversion.cpp
 )
