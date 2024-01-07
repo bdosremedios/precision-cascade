@@ -164,6 +164,7 @@ public:
         return created_vec;
 
     }
+
     static MatrixVector<T> Zero(const cublasHandle_t &arg_handle, int m, int n) {
         check_n(n);
         return Zero(arg_handle, m);
@@ -181,11 +182,13 @@ public:
         return created_vec;
 
     }
+
     static MatrixVector<T> Ones(const cublasHandle_t &arg_handle, int m, int n) {
         check_n(n);
         return Ones(arg_handle, m);
     }
 
+    // Needed for testing (don't need to optimize performance)
     static MatrixVector<T> Random(const cublasHandle_t &arg_handle, int m) {
 
         std::random_device rd;
@@ -202,6 +205,8 @@ public:
         return created_vec;
 
     }
+
+    // Needed for testing (don't need to optimize performance)
     static MatrixVector<T> Random(const cublasHandle_t &arg_handle, int m, int n) {
         check_n(n);
         return Random(arg_handle, m);
@@ -209,7 +214,8 @@ public:
 
     // *** Element Access ***
     const T get_elem(int row, int col) const {
-        if (col > 0) { throw std::runtime_error("Invalid column access for vector."); }
+        if (col != 0) { throw std::runtime_error("Invalid vector column access"); }
+        if ((row < 0) || (row >= m)) { throw std::runtime_error("Invalid vector row access"); }
         T h_elem;
         cudaMemcpy(&h_elem, d_vec+row, sizeof(T), cudaMemcpyDeviceToHost);
         return h_elem;
@@ -217,7 +223,8 @@ public:
     const T get_elem(int row) const { return get_elem(row, 0); }
 
     void set_elem(int row, int col, T val) {
-        if (col > 0) { throw std::runtime_error("Invalid column access for vector."); }
+        if (col != 0) { throw std::runtime_error("Invalid vector column access"); }
+        if ((row < 0) || (row >= m)) { throw std::runtime_error("Invalid vector row access"); }
         cudaMemcpy(d_vec+row, &val, sizeof(T), cudaMemcpyHostToDevice);
     }
     void set_elem(int row, T val) { set_elem(row, 0, val); }

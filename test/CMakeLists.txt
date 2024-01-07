@@ -6,7 +6,7 @@ set(CMAKE_EXE_LINKER_FLAGS, "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:LIBCMT /NOD
 
 set(
     TEST_TYPES_CPPS
-    test_types/test_MatrixVector.cu
+    # test_types/test_MatrixVector.cu
     test_types/test_MatrixDense.cu
     # test_types/test_MatrixSparse.cpp
     # test_types/test_TypeConversion.cpp

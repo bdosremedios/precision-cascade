@@ -9,8 +9,8 @@ public:
     template <typename T>
     void TestConstruction() { TestConstruction_Base<MatrixDense, T>(); }
 
-    // template <typename T>
-    // void TestListInitialization() { TestListInitialization_Base<MatrixDense, T>(); }
+    template <typename T>
+    void TestListInitialization() { TestListInitialization_Base<MatrixDense, T>(); }
 
     // void TestBadListInitialization() { TestBadListInitialization_Base<MatrixDense>(); }
 
@@ -108,11 +108,11 @@ TEST_F(MatrixDense_Test, TestConstruction) {
     TestConstruction<double>();
 }
 
-// TEST_F(MatrixDense_Test, TestListInitialization) {
-//     TestListInitialization<half>();
-//     TestListInitialization<float>();
-//     TestListInitialization<double>();
-// }
+TEST_F(MatrixDense_Test, TestListInitialization) {
+    TestListInitialization<half>();
+    TestListInitialization<float>();
+    TestListInitialization<double>();
+}
 
 // TEST_F(MatrixDense_Test, TestBadListInitialization) { TestBadListInitialization(); }
 

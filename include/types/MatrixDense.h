@@ -43,22 +43,49 @@ public:
         m(arg_m), n(arg_n), mem_size(m*n*sizeof(T))
     { allocate_d_mat(); }
 
-    // MatrixDense(std::initializer_list<std::initializer_list<T>> li):
-    //     MatrixDense(li.size(), (li.size() == 0) ? 0 : std::cbegin(li)->size())
-    // {
-    //     int i=0;
-    //     for (auto curr_row = std::cbegin(li); curr_row != std::cend(li); ++curr_row) {
-    //         int j=0;
-    //         for (auto curr_elem = std::cbegin(*curr_row); curr_elem != std::cend(*curr_row); ++curr_elem) {
-    //             if (j >= cols()) { throw(std::runtime_error("Initializer list has non-consistent row size")); }
-    //             this->coeffRef(i, j) = *curr_elem;
-    //             ++j;
-    //         }
-    //         if (j != cols()) { throw(std::runtime_error("Initializer list has non-consistent row size")); }
-    //         ++i;
-    //     }
-    //     if (i != rows()) { throw(std::runtime_error("Initializer list has non-consistent row size")); }
-    // }
+    // Row-major initializer list for sake of intuitive usage
+    MatrixDense(
+        const cublasHandle_t &arg_handle, std::initializer_list<std::initializer_list<T>> li
+    ):
+        MatrixDense(arg_handle, li.size(), (li.size() == 0) ? 0 : std::cbegin(li)->size())
+    {
+
+        T *h_mat = static_cast<T *>(malloc(mem_size));
+
+        int i=0;
+        for (auto curr_row = std::cbegin(li); curr_row != std::cend(li); ++curr_row) {
+
+            int j=0;
+            for (auto curr_elem = std::cbegin(*curr_row); curr_elem != std::cend(*curr_row); ++curr_elem) {
+
+                if (j >= cols()) {
+                    free(h_mat);
+                    throw(std::runtime_error("Initializer list has non-consistent row size"));
+                }
+                h_mat[i+j*m] = *curr_elem;
+                ++j;
+
+            }
+
+            if (j != cols()) {
+                free(h_mat);
+                throw(std::runtime_error("Initializer list has non-consistent row size"));
+            }
+
+            ++i;
+
+        }
+
+        if (i != rows()) {
+            free(h_mat);
+            throw(std::runtime_error("Initializer list has non-consistent row size"));
+        }
+
+        cublasSetMatrix(m, n, sizeof(T), h_mat, m, d_mat, m);
+
+        free(h_mat);
+
+    }
 
     // MatrixDense(const Parent &parent): Parent::Matrix(parent) {}
     // MatrixDense(const Block &block): Parent::Matrix(block.base()) {}
@@ -74,15 +101,43 @@ public:
     MatrixSparse<T> sparse() const { return MatrixSparse<T>(Parent::sparseView()); };
 
     // *** Element Access ***
-    const T coeff(int row, int col) const { return Parent::operator()(row, col); }
-    T& coeffRef(int row, int col) { return Parent::operator()(row, col); }
+    const T get_elem(int row, int col) const {
+        if ((row < 0) || (row >= m)) { throw std::runtime_error("Invalid matrix row access"); }
+        if ((col < 0) || (col >= n)) { throw std::runtime_error("Invalid matrix column access"); }
+        T h_elem;
+        cudaMemcpy(&h_elem, d_mat+row+(col*m), sizeof(T), cudaMemcpyDeviceToHost);
+        return h_elem;
+    }
+
+    void set_elem(int row, int col, T val) {
+        if ((row < 0) || (row >= m)) { throw std::runtime_error("Invalid matrix row access"); }
+        if ((col < 0) || (col >= n)) { throw std::runtime_error("Invalid matrix column access"); }
+        cudaMemcpy(d_mat+row+(col*m), &val, sizeof(T), cudaMemcpyHostToDevice);
+    }
+
     Col col(int _col) { return Parent::col(_col); } 
     Block block(int row, int col, int m, int n) { return Parent::block(row, col, m, n); }
 
     // *** Properties ***
     int rows() const { return m; }
     int cols() const { return n; }
-    void print() { std::cout << *this << std::endl << std::endl; }
+
+    void print() {
+
+        T *h_mat = static_cast<T *>(malloc(mem_size));
+
+        cublasGetMatrix(m, n, sizeof(T), d_mat, m, h_mat, m);
+        for (int j=0; j<n; ++j) {
+            for (int i=0; i<m; ++i) {
+                std::cout << static_cast<double>(h_mat[i+j*n]) << " ";
+            }
+            std::cout << std::endl;
+        }
+        std::cout << std::endl;
+
+        free(h_mat);
+    
+    }
 
     // *** Static Creation ***
     static MatrixDense<T> Random(int m, int n) { return typename Parent::Matrix(Parent::Random(m, n)); }
