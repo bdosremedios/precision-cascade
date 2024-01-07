@@ -9,9 +9,9 @@ add_library(
     types_lib
     STATIC
     tools/cublas_check.cu
-    types/MatrixVector_hlf.cu
-    types/MatrixVector_sgl.cu
-    types/MatrixVector_dbl.cu
+    types/MatrixVector/MatrixVector_hlf.cu
+    types/MatrixVector/MatrixVector_sgl.cu
+    types/MatrixVector/MatrixVector_dbl.cu
 )
 
 target_link_libraries(
