@@ -43,40 +43,46 @@ public:
         m(arg_m), n(arg_n), mem_size(m*n*sizeof(T))
     { allocate_d_mat(); }
 
-    // Row-major initializer list for sake of intuitive usage
+    // Row-major nested initializer list assumed for intuitive user instantiation
     MatrixDense(
         const cublasHandle_t &arg_handle, std::initializer_list<std::initializer_list<T>> li
     ):
         MatrixDense(arg_handle, li.size(), (li.size() == 0) ? 0 : std::cbegin(li)->size())
     {
 
+        struct outer_vars {
+            int i;
+            typename std::initializer_list<std::initializer_list<T>>::const_iterator curr_row;
+        };
+        struct inner_vars {
+            int j;
+            typename std::initializer_list<T>::const_iterator curr_elem;
+        };
+
         T *h_mat = static_cast<T *>(malloc(mem_size));
 
-        int i=0;
-        for (auto curr_row = std::cbegin(li); curr_row != std::cend(li); ++curr_row) {
+        outer_vars outer = {0, std::cbegin(li)};
+        for (; outer.curr_row != std::cend(li); ++outer.curr_row, ++outer.i) {
 
-            int j=0;
-            for (auto curr_elem = std::cbegin(*curr_row); curr_elem != std::cend(*curr_row); ++curr_elem) {
+            inner_vars inner = {0, std::cbegin(*outer.curr_row)};
+            for (; inner.curr_elem != std::cend(*outer.curr_row); ++inner.curr_elem, ++inner.j) {
 
-                if (j >= cols()) {
+                if (inner.j >= cols()) {
                     free(h_mat);
                     throw(std::runtime_error("Initializer list has non-consistent row size"));
                 }
-                h_mat[i+j*m] = *curr_elem;
-                ++j;
+                h_mat[outer.i+inner.j*m] = *inner.curr_elem;
 
             }
 
-            if (j != cols()) {
+            if (inner.j != cols()) {
                 free(h_mat);
                 throw(std::runtime_error("Initializer list has non-consistent row size"));
             }
 
-            ++i;
-
         }
 
-        if (i != rows()) {
+        if (outer.i != rows()) {
             free(h_mat);
             throw(std::runtime_error("Initializer list has non-consistent row size"));
         }
