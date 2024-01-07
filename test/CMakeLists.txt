@@ -2,10 +2,12 @@ cmake_minimum_required(VERSION 3.27.2)
 
 project(precision-cascade LANGUAGES CXX CUDA)
 
+set(CMAKE_EXE_LINKER_FLAGS, "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:LIBCMT /NODEFAULTLIB:MSVCRT")
+
 set(
     TEST_TYPES_CPPS
     test_types/test_MatrixVector.cu
-    # test_types/test_MatrixDense.cu
+    test_types/test_MatrixDense.cu
     # test_types/test_MatrixSparse.cpp
     # test_types/test_TypeConversion.cpp
 )
