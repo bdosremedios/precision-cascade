@@ -28,78 +28,6 @@ protected:
     }
 
     template <template <typename> typename M, typename T>
-    void TestCoeffAccess_Base() {
-        
-        constexpr int m(24);
-        constexpr int n(12);
-        M<T> test_mat(m, n);
-
-        T elem = static_cast<T>(1);
-        for (int i=0; i<m; ++i) {
-            for (int j=0; j<n; ++j) {
-                test_mat.coeffRef(i, j) = elem;
-                elem += static_cast<T>(1);
-            }
-        }
-
-        T test_elem = static_cast<T>(1);
-        for (int i=0; i<m; ++i) {
-            for (int j=0; j<n; ++j) {
-                ASSERT_EQ(test_mat.coeff(i, j), test_elem);
-                test_elem += static_cast<T>(1);
-            }
-        }
-
-        // Set index 0 row as all -1
-        for (int j=0; j<n; ++j) { test_mat.coeffRef(0, j) = static_cast<T>(-1.); }
-        test_elem = static_cast<T>(1);
-        for (int i=0; i<m; ++i) {
-            for (int j=0; j<n; ++j) {
-                if (i == 0) { ASSERT_EQ(test_mat.coeff(i, j), static_cast<T>(-1.)); }
-                else { ASSERT_EQ(test_mat.coeff(i, j), test_elem); }
-                test_elem += static_cast<T>(1);
-            }
-        }
-
-        // Set index 4 row as decreasing by -1 from -1
-        T row_5_elem = static_cast<T>(-1.);
-        for (int j=0; j<n; ++j) { test_mat.coeffRef(4, j) = row_5_elem; row_5_elem += static_cast<T>(-1.);}
-        test_elem = static_cast<T>(1);
-        T row_5_test_elem = static_cast<T>(-1.);
-        for (int i=0; i<m; ++i) {
-            for (int j=0; j<n; ++j) {
-                if (i == 0) { ASSERT_EQ(test_mat.coeff(i, j), static_cast<T>(-1.)); }
-                else if (i == 4) { ASSERT_EQ(test_mat.coeff(i, j), row_5_test_elem);
-                                   row_5_test_elem += static_cast<T>(-1.);}
-                else { ASSERT_EQ(test_mat.coeff(i, j), test_elem); }
-                test_elem += static_cast<T>(1);
-            }
-        }
-
-        // Set index 2 col as incresing by 1 from -5
-        T coL_3_elem = static_cast<T>(-5.);
-        for (int i=0; i<m; ++i) { test_mat.coeffRef(i, 2) = coL_3_elem; coL_3_elem += static_cast<T>(1.);}
-        test_elem = static_cast<T>(1);
-        row_5_test_elem = static_cast<T>(-1.);
-        T coL_3_test_elem = static_cast<T>(-5.);
-        for (int i=0; i<m; ++i) {
-            for (int j=0; j<n; ++j) {
-                if (j == 2) { ASSERT_EQ(test_mat.coeff(i, j), coL_3_test_elem); coL_3_test_elem += static_cast<T>(1.);}
-                else if (i == 0) { ASSERT_EQ(test_mat.coeff(i, j), static_cast<T>(-1.)); }
-                else if (i == 4) { ASSERT_EQ(test_mat.coeff(i, j), row_5_test_elem);
-                                   row_5_test_elem += static_cast<T>(-1.);
-                                   if (j == 1) { row_5_test_elem += static_cast<T>(-1.); } }
-                else { ASSERT_EQ(test_mat.coeff(i, j), test_elem); }
-                test_elem += static_cast<T>(1);
-            }
-        }
-
-    }
-
-    template <template <typename> typename M, typename T>
-    void TestPropertyAccess_Base();
-
-    template <template <typename> typename M, typename T>
     void TestListInitialization_Base() {
 
         M<T> test_mat_0_0 (*handle_ptr, {});
@@ -208,6 +136,116 @@ protected:
         } catch (std::runtime_error e) {
             std::cout << e.what() << std::endl;
         }
+
+    }
+
+    template <template <typename> typename M, typename T>
+    void TestCoeffAccess_Base() {
+        
+        constexpr int m(24);
+        constexpr int n(12);
+        M<T> test_mat(*handle_ptr, m, n);
+
+        T elem = static_cast<T>(1);
+        for (int i=0; i<m; ++i) {
+            for (int j=0; j<n; ++j) {
+                test_mat.set_elem(i, j, elem);
+                elem += static_cast<T>(1);
+            }
+        }
+
+        T test_elem = static_cast<T>(1);
+        for (int i=0; i<m; ++i) {
+            for (int j=0; j<n; ++j) {
+                ASSERT_EQ(test_mat.get_elem(i, j), test_elem);
+                test_elem += static_cast<T>(1);
+            }
+        }
+
+        // Set index 0 row as all -1
+        for (int j=0; j<n; ++j) { test_mat.set_elem(0, j, static_cast<T>(-1.)); }
+
+        // Test matches modified matrix
+        test_elem = static_cast<T>(1);
+        for (int i=0; i<m; ++i) {
+            for (int j=0; j<n; ++j) {
+                if (i == 0) { ASSERT_EQ(test_mat.get_elem(i, j), static_cast<T>(-1.)); }
+                else { ASSERT_EQ(test_mat.get_elem(i, j), test_elem); }
+                test_elem += static_cast<T>(1);
+            }
+        }
+
+        // Set index 4 row as decreasing by -1 from -1
+        T row_5_elem = static_cast<T>(-1.);
+        for (int j=0; j<n; ++j) {
+            test_mat.set_elem(4, j, row_5_elem);
+            row_5_elem += static_cast<T>(-1.);
+        }
+
+        // Test matches modified matrix
+        test_elem = static_cast<T>(1);
+        T row_5_test_elem = static_cast<T>(-1.);
+        for (int i=0; i<m; ++i) {
+            for (int j=0; j<n; ++j) {
+                if (i == 0) { ASSERT_EQ(test_mat.get_elem(i, j), static_cast<T>(-1.)); }
+                else if (i == 4) { ASSERT_EQ(test_mat.get_elem(i, j), row_5_test_elem);
+                                   row_5_test_elem += static_cast<T>(-1.);}
+                else { ASSERT_EQ(test_mat.get_elem(i, j), test_elem); }
+                test_elem += static_cast<T>(1);
+            }
+        }
+
+        // Set index 2 col as incresing by 1 from -5
+        T coL_3_elem = static_cast<T>(-5.);
+        for (int i=0; i<m; ++i) {
+            test_mat.set_elem(i, 2, coL_3_elem);
+            coL_3_elem += static_cast<T>(1.);
+        }
+
+        // Test matches modified matrix
+        test_elem = static_cast<T>(1);
+        row_5_test_elem = static_cast<T>(-1.);
+        T coL_3_test_elem = static_cast<T>(-5.);
+        for (int i=0; i<m; ++i) {
+            for (int j=0; j<n; ++j) {
+                if (j == 2) {
+                    ASSERT_EQ(test_mat.get_elem(i, j), coL_3_test_elem);
+                    coL_3_test_elem += static_cast<T>(1.);
+                } else if (i == 0) {
+                    ASSERT_EQ(test_mat.get_elem(i, j), static_cast<T>(-1.));
+                } else if (i == 4) {
+                    ASSERT_EQ(test_mat.get_elem(i, j), row_5_test_elem);
+                    row_5_test_elem += static_cast<T>(-1.);
+                    if (j == 1) { row_5_test_elem += static_cast<T>(-1.); }
+                } else {
+                    ASSERT_EQ(test_mat.get_elem(i, j), test_elem);
+                }
+                test_elem += static_cast<T>(1);
+            }
+        }
+
+    }
+
+    template <template <typename> typename M, typename T>
+    void TestPropertyAccess_Base() {
+
+        constexpr int m_1(62);
+        constexpr int n_1(3);
+        M<T> mat_1(*handle_ptr, m_1, n_1);
+        ASSERT_EQ(mat_1.rows(), m_1);
+        ASSERT_EQ(mat_1.cols(), n_1);
+
+        constexpr int m_2(15);
+        constexpr int n_2(90);
+        M<T> mat_2(*handle_ptr, m_2, n_2);
+        ASSERT_EQ(mat_2.rows(), m_2);
+        ASSERT_EQ(mat_2.cols(), n_2);
+
+        constexpr int m_3(20);
+        constexpr int n_3(20);
+        M<T> mat_3(*handle_ptr, m_3, n_3);
+        ASSERT_EQ(mat_3.rows(), m_3);
+        ASSERT_EQ(mat_3.cols(), n_3);
 
     }
 

@@ -14,8 +14,11 @@ public:
 
     void TestBadListInitialization() { TestBadListInitialization_Base<MatrixDense>(); }
 
-    // template <typename T>
-    // void TestCoeffAccess() { TestCoeffAccess_Base<MatrixDense, T>(); }
+    template <typename T>
+    void TestCoeffAccess() { TestCoeffAccess_Base<MatrixDense, T>(); }
+
+    template <typename T>
+    void TestPropertyAccess() { TestPropertyAccess_Base<MatrixDense, T>(); }
 
     // template <typename T>
     // void TestStaticCreation() { TestStaticCreation_Base<MatrixDense, T>(); }
@@ -116,11 +119,17 @@ TEST_F(MatrixDense_Test, TestListInitialization) {
 
 TEST_F(MatrixDense_Test, TestBadListInitialization) { TestBadListInitialization(); }
 
-// TEST_F(MatrixDense_Test, TestCoeffAccess) {
-//     TestCoeffAccess<half>();
-//     TestCoeffAccess<float>();
-//     TestCoeffAccess<double>();
-// }
+TEST_F(MatrixDense_Test, TestCoeffAccess) {
+    TestCoeffAccess<half>();
+    TestCoeffAccess<float>();
+    TestCoeffAccess<double>();
+}
+
+TEST_F(MatrixDense_Test, TestPropertyAccess) {
+    TestPropertyAccess<half>();
+    TestPropertyAccess<float>();
+    TestPropertyAccess<double>();
+}
 
 // TEST_F(MatrixDense_Test, TestStaticCreation) {
 //     TestStaticCreation<half>();

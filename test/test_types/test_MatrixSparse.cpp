@@ -18,6 +18,9 @@ public:
     void TestCoeffAccess() { TestCoeffAccess_Base<MatrixSparse, T>(); }
 
     template <typename T>
+    void TestPropertyAccess() { TestPropertyAccess_Base<MatrixSparse, T>(); }
+
+    template <typename T>
     void TestStaticCreation() { TestStaticCreation_Base<MatrixSparse, T>(); }
 
     template <typename T>
@@ -63,6 +66,12 @@ TEST_F(MatrixSparse_Test, TestCoeffAccess) {
     TestCoeffAccess<half>();
     TestCoeffAccess<float>();
     TestCoeffAccess<double>();
+}
+
+TEST_F(MatrixDense_Test, TestPropertyAccess) {
+    TestPropertyAccess<half>();
+    TestPropertyAccess<float>();
+    TestPropertyAccess<double>();
 }
 
 TEST_F(MatrixSparse_Test, TestStaticCreation) {
