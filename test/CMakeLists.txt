@@ -9,7 +9,7 @@ set(
     test_types/test_MatrixVector.cu
     test_types/test_MatrixDense.cu
     # test_types/test_MatrixSparse.cpp
-    # test_types/test_TypeConversion.cpp
+    test_types/test_TypeConversion.cu
 )
 
 set(

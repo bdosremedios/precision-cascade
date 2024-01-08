@@ -398,19 +398,20 @@ protected:
     template <template <typename> typename M, typename T>
     void TestCol_Base() {
 
-        const M<T> const_mat ({
-            {static_cast<T>(1), static_cast<T>(2), static_cast<T>(3)},
-            {static_cast<T>(4), static_cast<T>(5), static_cast<T>(6)},
-            {static_cast<T>(7), static_cast<T>(8), static_cast<T>(9)},
-            {static_cast<T>(10), static_cast<T>(11), static_cast<T>(12)}
-        });
+        const M<T> const_mat(
+            *handle_ptr, 
+            {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3)},
+             {static_cast<T>(4), static_cast<T>(5), static_cast<T>(6)},
+             {static_cast<T>(7), static_cast<T>(8), static_cast<T>(9)},
+             {static_cast<T>(10), static_cast<T>(11), static_cast<T>(12)}}
+        );
         M<T> mat(const_mat);
 
-        // Test access
+        // Test Col access
         for (int j=0; j<3; ++j) {
-            MatrixVector<T> vec(mat.col(j));
+            typename M<T>::Col col(mat.col(j));
             for (int i=0; i<4; ++i) {
-                ASSERT_EQ(vec(i), const_mat.coeff(i, j));
+                ASSERT_EQ(col.get_elem(i), const_mat.get_elem(i, j));
             }
         }
 

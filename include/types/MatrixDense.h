@@ -20,7 +20,7 @@ class MatrixDense: private Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>
 private:
 
     using Parent = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>;
-    friend MatrixSparse<T>;
+    // friend MatrixSparse<T>;
     // const Parent &base() const { return *this; }
 
     cublasHandle_t handle;
@@ -157,7 +157,8 @@ public:
         check_cuda_error(cudaMemcpy(d_mat+row+(col*m), &val, sizeof(T), cudaMemcpyHostToDevice));
     }
 
-    Col col(int _col) { return Parent::col(_col); } 
+    Col col(int arg_j) { return Col(this, arg_j); }
+ 
     Block block(int row, int col, int m, int n) { return Parent::block(row, col, m, n); }
 
     // *** Properties ***
@@ -293,23 +294,63 @@ public:
         return typename Parent::Matrix(Parent::operator*(mat));
     }
 
-    // Nested class representing sparse matrix column
+    // Nested lightweight wrapper class representing matrix column and assignment/elem access
     // Requires: assignment from/cast to MatrixVector<T>
-    class Col: private Eigen::Block<Parent, Eigen::Dynamic, 1, true>
+    class Col //: private Eigen::Block<Parent, Eigen::Dynamic, 1, true>
     {
     private:
 
-        using ColParent = Eigen::Block<Parent, Eigen::Dynamic, 1, true>;
-        using ConstColParent = Eigen::Block<const Parent, Eigen::Dynamic, 1, true>;
-        friend MatrixVector<T>;
         friend MatrixDense<T>;
-        const ColParent &base() const { return *this; }
-        Col(const ColParent &other): ColParent(other) {}
-        Col(const ConstColParent &other): ColParent(other) {}
+
+        // using ColParent = Eigen::Block<Parent, Eigen::Dynamic, 1, true>;
+        // using ConstColParent = Eigen::Block<const Parent, Eigen::Dynamic, 1, true>;
+        // friend MatrixVector<T>;
+        // const ColParent &base() const { return *this; }
+        // Col(const ColParent &other): ColParent(other) {}
+        // Col(const ConstColParent &other): ColParent(other) {}
+
+        const int col_j;
+        const MatrixDense<T> *associated_mat_ptr;
+
+        Col(const MatrixDense<T> *arg_associated_mat_ptr, int arg_col_j):
+            associated_mat_ptr(arg_associated_mat_ptr), col_j(arg_col_j)
+        {}
 
     public:
 
-        Col operator=(const MatrixVector<T> vec) { return ColParent::operator=(vec.base()); }
+        Col(const MatrixDense<T>::Col &other): Col(other.associated_mat_ptr, other.col_j) {}
+
+        T get_elem(int arg_i) { return associated_mat_ptr->get_elem(arg_i, col_j); }
+
+        void assign_from_vec(const MatrixVector<T> &vec) const {
+
+            check_cuda_error(
+                cudaMemcpy(
+                    associated_mat_ptr->d_mat + col_j*associated_mat_ptr->m,
+                    vec.d_vec,
+                    associated_mat_ptr->m*sizeof(T),
+                    cudaMemcpyDeviceToDevice
+                )
+            );
+
+        }
+
+        MatrixVector<T> copy_to_vec() const {
+
+            MatrixVector<T> created_vec(associated_mat_ptr->handle, associated_mat_ptr->m);
+
+            check_cuda_error(
+                cudaMemcpy(
+                    created_vec.d_vec,
+                    associated_mat_ptr->d_mat + col_j*associated_mat_ptr->m,
+                    associated_mat_ptr->m*sizeof(T),
+                    cudaMemcpyDeviceToDevice
+                )
+            );
+
+            return created_vec;
+
+        }
 
     };
 

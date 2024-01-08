@@ -32,7 +32,7 @@ private:
 
     // Allow all similar type Matrices and different type variants of self to access private methods
     template <typename> friend class MatrixVector;
-    // friend MatrixDense<T>;
+    friend MatrixDense<T>;
     // friend MatrixSparse<T>;
     // const Parent &base() const { return *this; }
 

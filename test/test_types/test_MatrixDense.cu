@@ -29,8 +29,8 @@ public:
     template <typename T>
     void TestStaticCreation() { TestStaticCreation_Base<MatrixDense, T>(); }
 
-    // template <typename T>
-    // void TestCol() { TestCol_Base<MatrixDense, T>(); }
+    template <typename T>
+    void TestCol() { TestCol_Base<MatrixDense, T>(); }
 
     // template <typename T>
     // void TestBlock() {
@@ -155,11 +155,11 @@ TEST_F(MatrixDense_Test, TestStaticCreation) {
     TestStaticCreation<double>();
 }
 
-// TEST_F(MatrixDense_Test, TestCol) {
-//     TestCol<half>();
-//     TestCol<float>();
-//     TestCol<double>();
-// }
+TEST_F(MatrixDense_Test, TestCol) {
+    TestCol<half>();
+    TestCol<float>();
+    TestCol<double>();
+}
 
 // TEST_F(MatrixDense_Test, TestBlock) {
 //     TestBlock<half>();
