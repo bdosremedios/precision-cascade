@@ -150,6 +150,74 @@ public:
     }
 
     template <typename T>
+    void TestCopyAssignment() {
+
+        MatrixVector<T> test_vec_empty(*handle_ptr, {});
+        MatrixVector<T> test_vec_4(
+            *handle_ptr,
+            {static_cast<T>(-3.), static_cast<T>(0.), static_cast<T>(1.), static_cast<T>(10.)}
+        );
+        MatrixVector<T> test_vec_5(
+            *handle_ptr,
+            {static_cast<T>(-3.), static_cast<T>(0.), static_cast<T>(1.),
+             static_cast<T>(10.), static_cast<T>(0.)}
+        );
+        MatrixVector<T> test_vec_6(
+            *handle_ptr,
+            {static_cast<T>(12.), static_cast<T>(12.), static_cast<T>(14.),
+             static_cast<T>(14.), static_cast<T>(12.), static_cast<T>(12.)}
+        );
+
+        // Copy to empty
+        test_vec_empty = test_vec_6;
+        ASSERT_EQ(test_vec_empty.rows(), 6);
+        ASSERT_VECTOR_EQ(test_vec_empty, test_vec_6);
+
+        // Copy to populated
+        test_vec_4 = test_vec_6;
+        ASSERT_EQ(test_vec_4.rows(), 6);
+        ASSERT_VECTOR_EQ(test_vec_4, test_vec_6);
+
+        // Reassignment
+        test_vec_4 = test_vec_5;
+        ASSERT_EQ(test_vec_4.rows(), 5);
+        ASSERT_VECTOR_EQ(test_vec_4, test_vec_5);
+
+        // Transitive assignment
+        test_vec_empty = test_vec_4;
+        ASSERT_EQ(test_vec_empty.rows(), 5);
+        ASSERT_VECTOR_EQ(test_vec_empty, test_vec_5);
+
+        // Self-assignment
+        test_vec_6 = test_vec_6;
+        ASSERT_EQ(test_vec_6.rows(), 6);
+        ASSERT_EQ(test_vec_6.get_elem(0), static_cast<T>(12.));
+        ASSERT_EQ(test_vec_6.get_elem(1), static_cast<T>(12.));
+        ASSERT_EQ(test_vec_6.get_elem(2), static_cast<T>(14.));
+        ASSERT_EQ(test_vec_6.get_elem(3), static_cast<T>(14.));
+        ASSERT_EQ(test_vec_6.get_elem(4), static_cast<T>(12.));
+        ASSERT_EQ(test_vec_6.get_elem(5), static_cast<T>(12.));
+
+    }
+
+    template <typename T>
+    void TestCopyConstruction() {
+
+        MatrixVector<T> test_vec_4(
+            *handle_ptr,
+            {static_cast<T>(-3.), static_cast<T>(0.), static_cast<T>(1.), static_cast<T>(10.)}
+        );
+
+        MatrixVector<T> test_vec_copied(test_vec_4);
+        ASSERT_EQ(test_vec_copied.rows(), 4);
+        ASSERT_EQ(test_vec_copied.get_elem(0), static_cast<T>(-3.));
+        ASSERT_EQ(test_vec_copied.get_elem(1), static_cast<T>(0.));
+        ASSERT_EQ(test_vec_copied.get_elem(2), static_cast<T>(1.));
+        ASSERT_EQ(test_vec_copied.get_elem(3), static_cast<T>(10.));
+
+    }
+
+    template <typename T>
     void TestStaticCreation() {
 
         constexpr int m_zero(15);
@@ -437,6 +505,18 @@ TEST_F(MatrixVector_Test, TestListInitialization) {
     TestListInitialization<__half>();
     TestListInitialization<float>();
     TestListInitialization<double>();
+}
+
+TEST_F(MatrixVector_Test, TestCopyConstruction) {
+    TestCopyConstruction<__half>();
+    TestCopyConstruction<float>();
+    TestCopyConstruction<double>();
+}
+
+TEST_F(MatrixVector_Test, TestCopyAssignment) {
+    TestCopyAssignment<__half>();
+    TestCopyAssignment<float>();
+    TestCopyAssignment<double>();
 }
 
 TEST_F(MatrixVector_Test, TestStaticCreation) {
