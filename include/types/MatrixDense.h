@@ -23,10 +23,10 @@ private:
     friend MatrixSparse<T>;
     // const Parent &base() const { return *this; }
 
+    cublasHandle_t handle;
     int m, n;
     size_t mem_size;
     T *d_mat = nullptr;
-    cublasHandle_t handle;
 
     void allocate_d_mat() {
         check_cuda_error(cudaMalloc(&d_mat, mem_size));
@@ -103,6 +103,32 @@ public:
     ~MatrixDense() {
         check_cuda_error(cudaFree(d_mat));
         d_mat = nullptr;
+    }
+
+    // *** Copy-Assignment ***
+    MatrixDense<T> & operator=(const MatrixDense &other) {
+
+        if (this != &other) {
+
+            check_cuda_error(cudaFree(d_mat));
+            
+            handle = other.handle;
+            m = other.m;
+            n = other.n;
+            mem_size = other.mem_size;
+
+            allocate_d_mat();
+            check_cuda_error(cudaMemcpy(d_mat, other.d_mat, mem_size, cudaMemcpyDeviceToDevice));
+
+        }
+
+        return *this;
+
+    }
+
+    // *** Copy-Constructor ***
+    MatrixDense(const MatrixDense<T> &other) {
+        *this = other;
     }
 
     // *** Cast ***

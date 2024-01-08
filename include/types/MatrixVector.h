@@ -36,10 +36,10 @@ private:
     // friend MatrixSparse<T>;
     // const Parent &base() const { return *this; }
 
+    cublasHandle_t handle;
     int m;
     size_t mem_size;
     T *d_vec = nullptr;
-    cublasHandle_t handle;
 
     void allocate_d_vec() {
         check_cuda_error(cudaMalloc(&d_vec, mem_size));
@@ -133,11 +133,6 @@ public:
 
     // }
 
-    // *** Copy Constructor ***
-    MatrixVector(const MatrixVector<T> &other) {
-        *this = other;
-    }
-
     // *** Destructor ***
     virtual ~MatrixVector() {
         check_cuda_error(cudaFree(d_vec));
@@ -145,16 +140,28 @@ public:
     }
 
     // *** Copy-Assignment ***
-    MatrixVector& operator=(const MatrixVector &other) {
+    MatrixVector<T> & operator=(const MatrixVector<T> &other) {
+
         if (this != &other) {
+
+            check_cuda_error(cudaFree(d_vec));
+
             handle = other.handle;
             m = other.m;
             mem_size = other.mem_size;
-            check_cuda_error(cudaFree(d_vec));
-            check_cuda_error(cudaMalloc(&d_vec, mem_size));
+
+            allocate_d_vec();
             check_cuda_error(cudaMemcpy(d_vec, other.d_vec, mem_size, cudaMemcpyDeviceToDevice));
+
         }
+
         return *this;
+
+    }
+
+    // *** Copy Constructor ***
+    MatrixVector(const MatrixVector<T> &other) {
+        *this = other;
     }
 
     // *** Static Creation ***

@@ -7,6 +7,12 @@ class MatrixDense_Test: public Matrix_Test
 public:
 
     template <typename T>
+    void TestCoeffAccess() { TestCoeffAccess_Base<MatrixDense, T>(); }
+
+    template <typename T>
+    void TestPropertyAccess() { TestPropertyAccess_Base<MatrixDense, T>(); }
+
+    template <typename T>
     void TestConstruction() { TestConstruction_Base<MatrixDense, T>(); }
 
     template <typename T>
@@ -15,10 +21,10 @@ public:
     void TestBadListInitialization() { TestBadListInitialization_Base<MatrixDense>(); }
 
     template <typename T>
-    void TestCoeffAccess() { TestCoeffAccess_Base<MatrixDense, T>(); }
+    void TestCopyAssignment() { TestCopyAssignment_Base<MatrixDense, T>(); }
 
     template <typename T>
-    void TestPropertyAccess() { TestPropertyAccess_Base<MatrixDense, T>(); }
+    void TestCopyConstructor() { TestCopyConstructor_Base<MatrixDense, T>(); }
 
     // template <typename T>
     // void TestStaticCreation() { TestStaticCreation_Base<MatrixDense, T>(); }
@@ -105,6 +111,18 @@ public:
 
 };
 
+TEST_F(MatrixDense_Test, TestCoeffAccess) {
+    TestCoeffAccess<half>();
+    TestCoeffAccess<float>();
+    TestCoeffAccess<double>();
+}
+
+TEST_F(MatrixDense_Test, TestPropertyAccess) {
+    TestPropertyAccess<half>();
+    TestPropertyAccess<float>();
+    TestPropertyAccess<double>();
+}
+
 TEST_F(MatrixDense_Test, TestConstruction) {
     TestConstruction<half>();
     TestConstruction<float>();
@@ -119,16 +137,16 @@ TEST_F(MatrixDense_Test, TestListInitialization) {
 
 TEST_F(MatrixDense_Test, TestBadListInitialization) { TestBadListInitialization(); }
 
-TEST_F(MatrixDense_Test, TestCoeffAccess) {
-    TestCoeffAccess<half>();
-    TestCoeffAccess<float>();
-    TestCoeffAccess<double>();
+TEST_F(MatrixDense_Test, TestCopyAssignment) {
+    TestCopyAssignment<half>();
+    TestCopyAssignment<float>();
+    TestCopyAssignment<double>();
 }
 
-TEST_F(MatrixDense_Test, TestPropertyAccess) {
-    TestPropertyAccess<half>();
-    TestPropertyAccess<float>();
-    TestPropertyAccess<double>();
+TEST_F(MatrixDense_Test, TestCopyConstructor) {
+    TestCopyConstructor<half>();
+    TestCopyConstructor<float>();
+    TestCopyConstructor<double>();
 }
 
 // TEST_F(MatrixDense_Test, TestStaticCreation) {

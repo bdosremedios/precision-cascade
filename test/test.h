@@ -93,7 +93,7 @@ void ASSERT_MATRIX_NEAR(M<T> test, M<T> target, T tol) {
 
     for (int i=0; i<target.rows(); ++i) {
         for (int j=0; j<target.cols(); ++j) {
-            ASSERT_NEAR(test.coeff(i, j), target.coeff(i, j), tol);
+            ASSERT_NEAR(test.get_elem(i, j), target.get_elem(i, j), tol);
         }
     }
 
@@ -140,8 +140,8 @@ void ASSERT_MATRIX_SAMESPARSITY(M<T> test, M<T> target, T zero_tol) {
 
     for (int i=0; i<target.rows(); ++i) {
         for (int j=0; j<target.cols(); ++j) {
-            if (abs(target.coeff(i, j)) <= zero_tol) {
-                ASSERT_LE(abs(test.coeff(i, j)), zero_tol);
+            if (abs(target.get_elem(i, j)) <= zero_tol) {
+                ASSERT_LE(abs(test.get_elem(i, j)), zero_tol);
             }
         }
     }
@@ -163,7 +163,7 @@ void ASSERT_MATRIX_LOWTRI(M<T> test, T tol) {
 
     for (int i=0; i<test.rows(); ++i) {
         for (int j=i+1; j<test.cols(); ++j) {
-            ASSERT_NEAR(test.coeff(i, j), static_cast<T>(0), tol);
+            ASSERT_NEAR(test.get_elem(i, j), static_cast<T>(0), tol);
         }
     }
 
@@ -174,7 +174,7 @@ void ASSERT_MATRIX_UPPTRI(M<T> test, T tol) {
 
     for (int i=0; i<test.rows(); ++i) {
         for (int j=0; j<i; ++j) {
-            ASSERT_NEAR(test.coeff(i, j), static_cast<T>(0), tol);
+            ASSERT_NEAR(test.get_elem(i, j), static_cast<T>(0), tol);
         }
     }
 

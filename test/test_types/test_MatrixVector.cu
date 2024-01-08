@@ -170,22 +170,22 @@ public:
 
         // Copy to empty
         test_vec_empty = test_vec_6;
-        ASSERT_EQ(test_vec_empty.rows(), 6);
+        ASSERT_EQ(test_vec_empty.rows(), test_vec_6.rows());
         ASSERT_VECTOR_EQ(test_vec_empty, test_vec_6);
 
         // Copy to populated
         test_vec_4 = test_vec_6;
-        ASSERT_EQ(test_vec_4.rows(), 6);
+        ASSERT_EQ(test_vec_4.rows(), test_vec_6.rows());
         ASSERT_VECTOR_EQ(test_vec_4, test_vec_6);
 
         // Reassignment
         test_vec_4 = test_vec_5;
-        ASSERT_EQ(test_vec_4.rows(), 5);
+        ASSERT_EQ(test_vec_4.rows(), test_vec_5.rows());
         ASSERT_VECTOR_EQ(test_vec_4, test_vec_5);
 
         // Transitive assignment
         test_vec_empty = test_vec_4;
-        ASSERT_EQ(test_vec_empty.rows(), 5);
+        ASSERT_EQ(test_vec_empty.rows(), test_vec_5.rows());
         ASSERT_VECTOR_EQ(test_vec_empty, test_vec_5);
 
         // Self-assignment
@@ -245,21 +245,6 @@ public:
                  (test_rand.get_elem(i) != test_rand.get_elem(i+2)))
             );
         }
-
-    }
-
-    template <typename T>
-    void TestAssignment() {
-
-        constexpr int m(23);
-        constexpr int n(16);
-        MatrixVector<T> test_vec(MatrixVector<T>::Zero(*handle_ptr, m));
-        ASSERT_EQ(test_vec.rows(), m);
-        ASSERT_VECTOR_EQ(test_vec, MatrixVector<T>::Zero(*handle_ptr, m));
-
-        test_vec = MatrixVector<T>::Ones(*handle_ptr, n);
-        ASSERT_EQ(test_vec.rows(), n);
-        ASSERT_VECTOR_EQ(test_vec, MatrixVector<T>::Ones(*handle_ptr, n));
 
     }
 
@@ -507,28 +492,23 @@ TEST_F(MatrixVector_Test, TestListInitialization) {
     TestListInitialization<double>();
 }
 
-TEST_F(MatrixVector_Test, TestCopyConstruction) {
-    TestCopyConstruction<__half>();
-    TestCopyConstruction<float>();
-    TestCopyConstruction<double>();
-}
-
 TEST_F(MatrixVector_Test, TestCopyAssignment) {
     TestCopyAssignment<__half>();
     TestCopyAssignment<float>();
     TestCopyAssignment<double>();
 }
 
+TEST_F(MatrixVector_Test, TestCopyConstruction) {
+    TestCopyConstruction<__half>();
+    TestCopyConstruction<float>();
+    TestCopyConstruction<double>();
+}
+
+
 TEST_F(MatrixVector_Test, TestStaticCreation) {
     TestStaticCreation<__half>();
     TestStaticCreation<float>();
     TestStaticCreation<double>();
-}
-
-TEST_F(MatrixVector_Test, TestAssignment) {
-    TestAssignment<__half>();
-    TestAssignment<float>();
-    TestAssignment<double>();
 }
 
 TEST_F(MatrixVector_Test, TestScale) {
