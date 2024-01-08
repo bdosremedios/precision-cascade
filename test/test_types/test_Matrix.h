@@ -342,35 +342,35 @@ protected:
 
         constexpr int m_zero(15);
         constexpr int n_zero(17);
-        M<T> test_zero(M<T>::Zero(m_zero, n_zero));
+        M<T> test_zero(M<T>::Zero(*handle_ptr, m_zero, n_zero));
         ASSERT_EQ(test_zero.rows(), m_zero);
         ASSERT_EQ(test_zero.cols(), n_zero);
         for (int i=0; i<m_zero; ++i) {
             for (int j=0; j<n_zero; ++j) {
-                ASSERT_EQ(test_zero.coeff(i, j), static_cast<T>(0.));
+                ASSERT_EQ(test_zero.get_elem(i, j), static_cast<T>(0.));
             }
         }
 
         constexpr int m_one(32);
         constexpr int n_one(13);
-        M<T> test_ones(M<T>::Ones(m_one, n_one));
+        M<T> test_ones(M<T>::Ones(*handle_ptr, m_one, n_one));
         ASSERT_EQ(test_ones.rows(), m_one);
         ASSERT_EQ(test_ones.cols(), n_one);
         for (int i=0; i<m_one; ++i) {
             for (int j=0; j<n_one; ++j) {
-                ASSERT_EQ(test_ones.coeff(i, j), static_cast<T>(1.));
+                ASSERT_EQ(test_ones.get_elem(i, j), static_cast<T>(1.));
             }
         }
 
         constexpr int m_identity(40);
         constexpr int n_identity(20);
-        M<T> test_identity(M<T>::Identity(m_identity, n_identity));
+        M<T> test_identity(M<T>::Identity(*handle_ptr, m_identity, n_identity));
         ASSERT_EQ(test_identity.rows(), m_identity);
         ASSERT_EQ(test_identity.cols(), n_identity);
         for (int i=0; i<m_identity; ++i) {
             for (int j=0; j<n_identity; ++j) {
-                if (i == j) { ASSERT_EQ(test_identity.coeff(i, j), static_cast<T>(1.)); }
-                else { ASSERT_EQ(test_identity.coeff(i, j), static_cast<T>(0.)); }
+                if (i == j) { ASSERT_EQ(test_identity.get_elem(i, j), static_cast<T>(1.)); }
+                else { ASSERT_EQ(test_identity.get_elem(i, j), static_cast<T>(0.)); }
             }
         }
 
@@ -379,16 +379,16 @@ protected:
         // from 5 adjacent above and below)
         constexpr int m_rand(40);
         constexpr int n_rand(40);
-        M<T> test_rand(M<T>::Random(m_rand, n_rand));
+        M<T> test_rand(M<T>::Random(*handle_ptr, m_rand, n_rand));
         ASSERT_EQ(test_rand.rows(), m_rand);
         ASSERT_EQ(test_rand.cols(), n_rand);
         for (int i=1; i<m_rand-1; ++i) {
             for (int j=1; j<n_rand-1; ++j) {
                 ASSERT_TRUE(
-                    ((test_rand.coeff(i, j) != test_rand.coeff(i-1, j)) ||
-                     (test_rand.coeff(i, j) != test_rand.coeff(i+1, j)) ||
-                     (test_rand.coeff(i, j) != test_rand.coeff(i, j-1)) ||
-                     (test_rand.coeff(i, j) != test_rand.coeff(i, j+1)))
+                    ((test_rand.get_elem(i, j) != test_rand.get_elem(i-1, j)) ||
+                     (test_rand.get_elem(i, j) != test_rand.get_elem(i+1, j)) ||
+                     (test_rand.get_elem(i, j) != test_rand.get_elem(i, j-1)) ||
+                     (test_rand.get_elem(i, j) != test_rand.get_elem(i, j+1)))
                 );
             }
         }

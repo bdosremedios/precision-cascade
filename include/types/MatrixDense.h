@@ -32,6 +32,14 @@ private:
         check_cuda_error(cudaMalloc(&d_mat, mem_size));
     }
 
+    MatrixDense(const cublasHandle_t &arg_handle, T *h_mat, int m_elem, int n_elem):
+        MatrixDense(arg_handle, m_elem, n_elem)
+    {
+        if ((m > 0) && (n > 0)) {
+            check_cublas_status(cublasSetMatrix(m, n, sizeof(T), h_mat, m, d_mat, m));
+        }
+    }
+
 public:
 
     class Block; class Col; // Forward declaration of nested classes
@@ -67,7 +75,7 @@ public:
             inner_vars inner = {0, std::cbegin(*outer.curr_row)};
             for (; inner.curr_elem != std::cend(*outer.curr_row); ++inner.curr_elem, ++inner.j) {
 
-                if (inner.j >= cols()) {
+                if (inner.j >= n) {
                     free(h_mat);
                     throw(std::runtime_error("Initializer list has non-consistent row size"));
                 }
@@ -75,19 +83,19 @@ public:
 
             }
 
-            if (inner.j != cols()) {
+            if (inner.j != n) {
                 free(h_mat);
                 throw(std::runtime_error("Initializer list has non-consistent row size"));
             }
 
         }
 
-        if (outer.i != rows()) {
+        if (outer.i != m) {
             free(h_mat);
             throw(std::runtime_error("Initializer list has non-consistent row size"));
         }
 
-        if ((rows() != 0) && (cols() != 0)) {
+        if ((m != 0) && (n != 0)) {
             check_cublas_status(cublasSetMatrix(m, n, sizeof(T), h_mat, m, d_mat, m));
         }
 
@@ -174,10 +182,81 @@ public:
     }
 
     // *** Static Creation ***
-    static MatrixDense<T> Random(int m, int n) { return typename Parent::Matrix(Parent::Random(m, n)); }
-    static MatrixDense<T> Identity(int m, int n) { return typename Parent::Matrix(Parent::Identity(m, n)); }
-    static MatrixDense<T> Ones(int m, int n) { return typename Parent::Matrix(Parent::Ones(m, n)); }
-    static MatrixDense<T> Zero(int m, int n) { return typename Parent::Matrix(Parent::Zero(m, n)); }
+    static MatrixDense<T> Zero(const cublasHandle_t &arg_handle, int arg_m, int arg_n) {
+
+        T *h_mat = static_cast<T *>(malloc(arg_m*arg_n*sizeof(T)));
+        
+        for (int j=0; j<arg_n; ++j) {
+            for (int i=0; i<arg_m; ++i) {
+                h_mat[i+j*arg_m] = static_cast<T>(0); 
+            }
+        }
+        MatrixDense<T> created_mat(arg_handle, h_mat, arg_m, arg_n);
+
+        free(h_mat);
+
+        return created_mat;
+
+    }
+
+    static MatrixDense<T> Ones(const cublasHandle_t &arg_handle, int arg_m, int arg_n) {
+
+        T *h_mat = static_cast<T *>(malloc(arg_m*arg_n*sizeof(T)));
+        
+        for (int j=0; j<arg_n; ++j) {
+            for (int i=0; i<arg_m; ++i) {
+                h_mat[i+j*arg_m] = static_cast<T>(1); 
+            }
+        }
+        MatrixDense<T> created_mat(arg_handle, h_mat, arg_m, arg_n);
+
+        free(h_mat);
+
+        return created_mat;
+    
+    }
+
+    static MatrixDense<T> Identity(const cublasHandle_t &arg_handle, int arg_m, int arg_n) {
+
+        T *h_mat = static_cast<T *>(malloc(arg_m*arg_n*sizeof(T)));
+        
+        for (int j=0; j<arg_n; ++j) {
+            for (int i=0; i<arg_m; ++i) {
+                if (i == j) {
+                    h_mat[i+j*arg_m] = static_cast<T>(1);
+                } else {
+                    h_mat[i+j*arg_m] = static_cast<T>(0);
+                }
+            }
+        }
+        MatrixDense<T> created_mat(arg_handle, h_mat, arg_m, arg_n);
+
+        free(h_mat);
+
+        return created_mat;
+
+    }
+
+    static MatrixDense<T> Random(const cublasHandle_t &arg_handle, int arg_m, int arg_n) {
+
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_real_distribution<double> dist(-1., 1.);
+
+        T *h_mat = static_cast<T *>(malloc(arg_m*arg_n*sizeof(T)));
+        
+        for (int j=0; j<arg_n; ++j) {
+            for (int i=0; i<arg_m; ++i) {
+                h_mat[i+j*arg_m] = static_cast<T>(dist(gen)); 
+            }
+        }
+        MatrixDense<T> created_mat(arg_handle, h_mat, arg_m, arg_n);
+
+        free(h_mat);
+
+        return created_mat;
+    
+    }
 
     // *** Resizing ***
     void reduce() { ; } // Do nothing on reduction

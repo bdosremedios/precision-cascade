@@ -26,8 +26,8 @@ public:
     template <typename T>
     void TestCopyConstructor() { TestCopyConstructor_Base<MatrixDense, T>(); }
 
-    // template <typename T>
-    // void TestStaticCreation() { TestStaticCreation_Base<MatrixDense, T>(); }
+    template <typename T>
+    void TestStaticCreation() { TestStaticCreation_Base<MatrixDense, T>(); }
 
     // template <typename T>
     // void TestCol() { TestCol_Base<MatrixDense, T>(); }
@@ -149,11 +149,11 @@ TEST_F(MatrixDense_Test, TestCopyConstructor) {
     TestCopyConstructor<double>();
 }
 
-// TEST_F(MatrixDense_Test, TestStaticCreation) {
-//     TestStaticCreation<half>();
-//     TestStaticCreation<float>();
-//     TestStaticCreation<double>();
-// }
+TEST_F(MatrixDense_Test, TestStaticCreation) {
+    TestStaticCreation<half>();
+    TestStaticCreation<float>();
+    TestStaticCreation<double>();
+}
 
 // TEST_F(MatrixDense_Test, TestCol) {
 //     TestCol<half>();

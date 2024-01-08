@@ -46,9 +46,8 @@ private:
     }
 
     MatrixVector(const cublasHandle_t &arg_handle, const T *h_vec, const int m_elem):
-        handle(arg_handle), m(m_elem), mem_size(m*sizeof(T))
+        MatrixVector(arg_handle, m_elem)
     {
-        allocate_d_vec();
         if (m_elem > 0) {
             check_cublas_status(cublasSetVector(m, sizeof(T), h_vec, 1, d_vec, 1));
         }
@@ -165,30 +164,12 @@ public:
     }
 
     // *** Static Creation ***
-    static MatrixVector<T> Zero(const cublasHandle_t &arg_handle, int m) {
+    static MatrixVector<T> Zero(const cublasHandle_t &arg_handle, int arg_m) {
 
-        T *h_vec = static_cast<T *>(malloc(m*sizeof(T)));
+        T *h_vec = static_cast<T *>(malloc(arg_m*sizeof(T)));
 
-        for (int i=0; i<m; ++i) { h_vec[i] = static_cast<T>(0); }
-        MatrixVector<T> created_vec(arg_handle, h_vec, m);
-
-        free(h_vec);
-
-        return created_vec;
-
-    }
-
-    static MatrixVector<T> Zero(const cublasHandle_t &arg_handle, int m, int n) {
-        check_n(n);
-        return Zero(arg_handle, m);
-    }
-
-    static MatrixVector<T> Ones(const cublasHandle_t &arg_handle, int m) {
-
-        T *h_vec = static_cast<T *>(malloc(m*sizeof(T)));
-
-        for (int i=0; i<m; ++i) { h_vec[i] = static_cast<T>(1); }
-        MatrixVector<T> created_vec(arg_handle, h_vec, m);
+        for (int i=0; i<arg_m; ++i) { h_vec[i] = static_cast<T>(0); }
+        MatrixVector<T> created_vec(arg_handle, h_vec, arg_m);
 
         free(h_vec);
 
@@ -196,22 +177,40 @@ public:
 
     }
 
-    static MatrixVector<T> Ones(const cublasHandle_t &arg_handle, int m, int n) {
-        check_n(n);
-        return Ones(arg_handle, m);
+    static MatrixVector<T> Zero(const cublasHandle_t &arg_handle, int arg_m, int arg_n) {
+        check_n(arg_n);
+        return Zero(arg_handle, arg_m);
+    }
+
+    static MatrixVector<T> Ones(const cublasHandle_t &arg_handle, int arg_m) {
+
+        T *h_vec = static_cast<T *>(malloc(arg_m*sizeof(T)));
+
+        for (int i=0; i<arg_m; ++i) { h_vec[i] = static_cast<T>(1); }
+        MatrixVector<T> created_vec(arg_handle, h_vec, arg_m);
+
+        free(h_vec);
+
+        return created_vec;
+
+    }
+
+    static MatrixVector<T> Ones(const cublasHandle_t &arg_handle, int arg_m, int arg_n) {
+        check_n(arg_n);
+        return Ones(arg_handle, arg_m);
     }
 
     // Needed for testing (don't need to optimize performance)
-    static MatrixVector<T> Random(const cublasHandle_t &arg_handle, int m) {
+    static MatrixVector<T> Random(const cublasHandle_t &arg_handle, int arg_m) {
 
         std::random_device rd;
         std::mt19937 gen(rd());
         std::uniform_real_distribution<double> dist(-1., 1.);
 
-        T *h_vec = static_cast<T *>(malloc(m*sizeof(T)));
+        T *h_vec = static_cast<T *>(malloc(arg_m*sizeof(T)));
 
-        for (int i=0; i<m; ++i) { h_vec[i] = static_cast<T>(dist(gen)); }
-        MatrixVector<T> created_vec(arg_handle, h_vec, m);
+        for (int i=0; i<arg_m; ++i) { h_vec[i] = static_cast<T>(dist(gen)); }
+        MatrixVector<T> created_vec(arg_handle, h_vec, arg_m);
 
         free(h_vec);
 
@@ -220,9 +219,9 @@ public:
     }
 
     // Needed for testing (don't need to optimize performance)
-    static MatrixVector<T> Random(const cublasHandle_t &arg_handle, int m, int n) {
-        check_n(n);
-        return Random(arg_handle, m);
+    static MatrixVector<T> Random(const cublasHandle_t &arg_handle, int arg_m, int arg_n) {
+        check_n(arg_n);
+        return Random(arg_handle, arg_m);
     }
 
     // *** Element Access ***
