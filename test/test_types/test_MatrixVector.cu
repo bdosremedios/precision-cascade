@@ -133,17 +133,19 @@ public:
     template <typename T>
     void TestListInitialization() {
         
-        MatrixVector<T> test_vec(
+        MatrixVector<T> test_vec_6(
             *handle_ptr,
             {static_cast<T>(7.), static_cast<T>(5.), static_cast<T>(3.),
              static_cast<T>(1.), static_cast<T>(6.), static_cast<T>(2.)}
         );
-        ASSERT_EQ(test_vec.get_elem(0), static_cast<T>(7.));
-        ASSERT_EQ(test_vec.get_elem(1), static_cast<T>(5.));
-        ASSERT_EQ(test_vec.get_elem(2), static_cast<T>(3.));
-        ASSERT_EQ(test_vec.get_elem(3), static_cast<T>(1.));
-        ASSERT_EQ(test_vec.get_elem(4), static_cast<T>(6.));
-        ASSERT_EQ(test_vec.get_elem(5), static_cast<T>(2.));
+        ASSERT_EQ(test_vec_6.get_elem(0), static_cast<T>(7.));
+        ASSERT_EQ(test_vec_6.get_elem(1), static_cast<T>(5.));
+        ASSERT_EQ(test_vec_6.get_elem(2), static_cast<T>(3.));
+        ASSERT_EQ(test_vec_6.get_elem(3), static_cast<T>(1.));
+        ASSERT_EQ(test_vec_6.get_elem(4), static_cast<T>(6.));
+        ASSERT_EQ(test_vec_6.get_elem(5), static_cast<T>(2.));
+
+        MatrixVector<T> test_vec_empty(*handle_ptr, {});
 
     }
 

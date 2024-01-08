@@ -84,8 +84,10 @@ public:
         for (loop_vars vars = {0, std::cbegin(li)}; vars.curr != std::cend(li); ++vars.curr, ++vars.i) {
             h_vec[vars.i] = *vars.curr;
         }
+        if (m > 0) {
+            check_cublas_status(cublasSetVector(m, sizeof(T), h_vec, 1, d_vec, 1));
+        }
 
-        check_cublas_status(cublasSetVector(m, sizeof(T), h_vec, 1, d_vec, 1));
         free(h_vec);
 
     }

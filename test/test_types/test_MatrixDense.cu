@@ -12,7 +12,7 @@ public:
     template <typename T>
     void TestListInitialization() { TestListInitialization_Base<MatrixDense, T>(); }
 
-    // void TestBadListInitialization() { TestBadListInitialization_Base<MatrixDense>(); }
+    void TestBadListInitialization() { TestBadListInitialization_Base<MatrixDense>(); }
 
     // template <typename T>
     // void TestCoeffAccess() { TestCoeffAccess_Base<MatrixDense, T>(); }
@@ -114,7 +114,7 @@ TEST_F(MatrixDense_Test, TestListInitialization) {
     TestListInitialization<double>();
 }
 
-// TEST_F(MatrixDense_Test, TestBadListInitialization) { TestBadListInitialization(); }
+TEST_F(MatrixDense_Test, TestBadListInitialization) { TestBadListInitialization(); }
 
 // TEST_F(MatrixDense_Test, TestCoeffAccess) {
 //     TestCoeffAccess<half>();

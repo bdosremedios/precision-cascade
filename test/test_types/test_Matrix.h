@@ -166,40 +166,44 @@ protected:
     void TestBadListInitialization_Base() {
 
         try {
-            M<double> mat ({
-                {1, 2, 3, 4},
-                {1, 2, 3}
-            });
+            M<double> mat(
+                *handle_ptr,
+                {{1, 2, 3, 4},
+                 {1, 2, 3}}
+            );
             FAIL();
         } catch (std::runtime_error e) {
             std::cout << e.what() << std::endl;
         }
 
         try {
-            M<double> mat ({
-                {1, 2},
-                {1, 2, 3}
-            });
+            M<double> mat(
+                *handle_ptr,
+                {{1, 2},
+                 {1, 2, 3}}
+            );
             FAIL();
         } catch (std::runtime_error e) {
             std::cout << e.what() << std::endl;
         }
 
         try {
-            M<double> mat ({
-                {1, 2},
-                {}
-            });
+            M<double> mat(
+                *handle_ptr,
+                {{1, 2},
+                 {}}
+            );
             FAIL();
         } catch (std::runtime_error e) {
             std::cout << e.what() << std::endl;
         }
 
         try {
-            M<double> mat ({
-                {},
-                {1, 2, 3}
-            });
+            M<double> mat(
+                *handle_ptr,
+                {{},
+                 {1, 2, 3}}
+            );
             FAIL();
         } catch (std::runtime_error e) {
             std::cout << e.what() << std::endl;
