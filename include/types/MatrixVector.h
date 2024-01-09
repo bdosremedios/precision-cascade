@@ -279,7 +279,7 @@ public:
     }
 
     // *** Resizing ***
-    void reduce() { ; } // Leave empty MatrixVector is dense
+    void reduce() { ; } // Do nothing since MatrixVector is dense
 
     // *** Boolean ***
     bool operator==(const MatrixVector<T> &other) const {
