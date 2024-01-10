@@ -190,8 +190,8 @@ public:
         T *h_mat = static_cast<T *>(malloc(mem_size));
 
         check_cublas_status(cublasGetMatrix(m_rows, n_cols, sizeof(T), d_mat, m_rows, h_mat, m_rows));
-        for (int j=0; j<n_cols; ++j) {
-            for (int i=0; i<m_rows; ++i) {
+        for (int i=0; i<m_rows; ++i) {
+            for (int j=0; j<n_cols; ++j) {
                 std::cout << static_cast<double>(h_mat[i+j*m_rows]) << " ";
             }
             std::cout << std::endl;
@@ -440,12 +440,70 @@ public:
             )
         {}
 
-        void set_from_vec(const MatrixVector<T> &vec) const {}
+        void set_from_vec(const MatrixVector<T> &vec) const {
 
-        void set_from_mat(const MatrixDense<T> &mat) const {}
+            if (n_cols != 1) {
+                throw std::runtime_error("MatrixDense::Block invalid for set_from_vec must be 1 column");
+            }
+            if (m_rows != vec.rows()) {
+                throw std::runtime_error("MatrixDense::Block invalid vector for set_from_vec");
+            }
+
+            check_cuda_error(
+                cudaMemcpy(
+                    (associated_mat_ptr->d_mat +
+                     row_idx_start +
+                     (col_idx_start*associated_mat_ptr->m_rows)),
+                    vec.d_vec,
+                    m_rows*sizeof(T),
+                    cudaMemcpyDeviceToDevice
+                )
+            );
+
+        }
+
+        void set_from_mat(const MatrixDense<T> &mat) const {
+
+            if ((m_rows != mat.rows()) || (n_cols != mat.cols())) {
+                throw std::runtime_error("MatrixDense::Block invalid matrix for set_from_mat");
+            }
+
+            // Copy column by column 1D slices relevant to matrix
+            for (int j=0; j<n_cols; ++j) {
+                check_cuda_error(
+                    cudaMemcpy(
+                        (associated_mat_ptr->d_mat +
+                         row_idx_start +
+                         ((col_idx_start+j)*associated_mat_ptr->m_rows)),
+                        mat.d_mat + j*m_rows,
+                        m_rows*sizeof(T),
+                        cudaMemcpyDeviceToDevice
+                    )
+                );
+            }
+
+        }
 
         MatrixDense<T> copy_to_mat() const {
-            return MatrixDense<T>(nullptr);
+
+            MatrixDense<T> created_mat(associated_mat_ptr->handle, m_rows, n_cols);
+
+            // Copy column by column 1D slices relevant to matrix
+            for (int j=0; j<n_cols; ++j) {
+                check_cuda_error(
+                    cudaMemcpy(
+                        created_mat.d_mat + j*m_rows,
+                        (associated_mat_ptr->d_mat +
+                         row_idx_start +
+                         ((col_idx_start+j)*associated_mat_ptr->m_rows)),
+                        m_rows*sizeof(T),
+                        cudaMemcpyDeviceToDevice
+                    )
+                );
+            }
+
+            return created_mat;
+
         }
 
         T get_elem(int row, int col) {

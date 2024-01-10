@@ -1,7 +1,7 @@
 #ifndef MATRIXVECTOR_H
 #define MATRIXVECTOR_H
 
-#include <Eigen/Dense>
+// #include <Eigen/Dense>
 
 #include <iostream>
 #include <stdexcept>
@@ -34,6 +34,7 @@ private:
     // Allow all similar type Matrices and different type variants of self to access private methods
     template <typename> friend class MatrixVector;
     friend MatrixDense<T>;
+    friend MatrixDense<T>::Block;
     // friend MatrixSparse<T>;
     // const Parent &base() const { return *this; }
 
