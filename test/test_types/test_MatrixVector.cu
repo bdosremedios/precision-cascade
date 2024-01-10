@@ -8,7 +8,7 @@ class MatrixVector_Test: public TestBase
 public:
 
     template <typename T>
-    void TestElementAccessMethods() {
+    void TestElementAccess() {
         
         constexpr int n(10);
         MatrixVector<T> test_vec_n(*handle_ptr, n);
@@ -24,6 +24,38 @@ public:
         MatrixVector<T> test_vec_cnt(*handle_ptr, cnt);
         for (int i=0; i<cnt; ++i) { test_vec_cnt.set_elem(i, static_cast<T>(1+i)); }
         for (int i=0; i<cnt; ++i) { ASSERT_EQ(test_vec_cnt.get_elem(i), static_cast<T>(1+i)); }
+
+    }
+
+    void TestBadElementAccess() {
+
+        const int m(27);
+        MatrixVector<double> vec(*handle_ptr, m);
+
+        try {
+            vec.get_elem(-1);
+            FAIL();
+        } catch (std::runtime_error e) {
+            std::cout << e.what() << std::endl;
+        }
+        try {
+            vec.get_elem(m);
+            FAIL();
+        } catch (std::runtime_error e) {
+            std::cout << e.what() << std::endl;
+        }
+        try {
+            vec.set_elem(-1, 0);
+            FAIL();
+        } catch (std::runtime_error e) {
+            std::cout << e.what() << std::endl;
+        }
+        try {
+            vec.set_elem(m, 0);
+            FAIL();
+        } catch (std::runtime_error e) {
+            std::cout << e.what() << std::endl;
+        }
 
     }
 
@@ -393,6 +425,81 @@ public:
 
     }
 
+    template <typename T>
+    void TestBadVecVecOps() {
+
+        const int m(7);
+        MatrixVector<T> vec(MatrixVector<T>::Random(*handle_ptr, m));
+        MatrixVector<T> vec_too_small(MatrixVector<T>::Random(*handle_ptr, m-3));
+        MatrixVector<T> vec_too_large(MatrixVector<T>::Random(*handle_ptr, m+2));
+
+        try {
+            vec + vec_too_small;
+            FAIL();
+        } catch (std::runtime_error e) {
+            std::cout << e.what() << std::endl;
+        }
+        try {
+            vec + vec_too_large;
+            FAIL();
+        } catch (std::runtime_error e) {
+            std::cout << e.what() << std::endl;
+        }
+
+        try {
+            vec - vec_too_small;
+            FAIL();
+        } catch (std::runtime_error e) {
+            std::cout << e.what() << std::endl;
+        }
+        try {
+            vec - vec_too_large;
+            FAIL();
+        } catch (std::runtime_error e) {
+            std::cout << e.what() << std::endl;
+        }
+
+        try {
+            vec += vec_too_small;
+            FAIL();
+        } catch (std::runtime_error e) {
+            std::cout << e.what() << std::endl;
+        }
+        try {
+            vec += vec_too_large;
+            FAIL();
+        } catch (std::runtime_error e) {
+            std::cout << e.what() << std::endl;
+        }
+
+        try {
+            vec -= vec_too_small;
+            FAIL();
+        } catch (std::runtime_error e) {
+            std::cout << e.what() << std::endl;
+        }
+        try {
+            vec -= vec_too_large;
+            FAIL();
+        } catch (std::runtime_error e) {
+            std::cout << e.what() << std::endl;
+        }
+
+        try {
+            vec.dot(vec_too_small);
+            FAIL();
+        } catch (std::runtime_error e) {
+            std::cout << e.what() << std::endl;
+        }
+        try {
+            vec.dot(vec_too_large);
+            FAIL();
+        } catch (std::runtime_error e) {
+            std::cout << e.what() << std::endl;
+        }
+
+    }
+
     void TestCast() {
         
         constexpr int m(20);
@@ -464,11 +571,13 @@ public:
 
 };
 
-TEST_F(MatrixVector_Test, TestElementAccessMethods) {
-    TestElementAccessMethods<__half>();
-    TestElementAccessMethods<float>();
-    TestElementAccessMethods<double>();
+TEST_F(MatrixVector_Test, TestElementAccess) {
+    TestElementAccess<__half>();
+    TestElementAccess<float>();
+    TestElementAccess<double>();
 }
+
+TEST_F(MatrixVector_Test, TestBadElementAccess) { TestBadElementAccess(); }
 
 TEST_F(MatrixVector_Test, TestSlice) {
     TestSlice<__half>(); TestSlice<float>(); TestSlice<double>();
@@ -530,6 +639,12 @@ TEST_F(MatrixVector_Test, TestDot) { TestDot<__half>(); TestDot<float>(); TestDo
 TEST_F(MatrixVector_Test, TestNorm) { TestNorm<__half>(); TestNorm<float>(); TestNorm<double>(); }
 
 TEST_F(MatrixVector_Test, TestCast) { TestCast(); }
+
+TEST_F(MatrixVector_Test, TestBadVecVecOps) {
+    TestBadVecVecOps<__half>();
+    TestBadVecVecOps<float>();
+    TestBadVecVecOps<double>();
+}
 
 TEST_F(MatrixVector_Test, TestBooleanEqual) {
     TestBooleanEqual<__half>();

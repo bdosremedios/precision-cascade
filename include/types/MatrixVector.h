@@ -3,10 +3,11 @@
 
 #include <Eigen/Dense>
 
-#include <cstdlib>
 #include <iostream>
+#include <stdexcept>
+#include <cstdlib>
 #include <random>
-#include <vector>
+#include <initializer_list>
 
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
@@ -27,7 +28,7 @@ private:
     // using Parent = Matrix<T, Dynamic, 1>;
 
     static void check_n(int n) {
-        if (n != 1) { throw std::runtime_error("Invalid number of columns for vector."); }
+        if (n != 1) { throw std::runtime_error("MatrixVector: invalid number of columns for vector"); }
     }
 
     // Allow all similar type Matrices and different type variants of self to access private methods
@@ -37,7 +38,7 @@ private:
     // const Parent &base() const { return *this; }
 
     cublasHandle_t handle;
-    int m;
+    int m_rows;
     size_t mem_size;
     T *d_vec = nullptr;
 
@@ -45,11 +46,17 @@ private:
         check_cuda_error(cudaMalloc(&d_vec, mem_size));
     }
 
+    void check_vecvec_op_compatibility(const MatrixVector<T> &other) const {
+        if (m_rows != other.m_rows) {
+            throw std::runtime_error("MatrixVector: incompatible vector sizes for vec-vec operation");
+        }
+    }
+
     MatrixVector(const cublasHandle_t &arg_handle, const T *h_vec, const int m_elem):
         MatrixVector(arg_handle, m_elem)
     {
         if (m_elem > 0) {
-            check_cublas_status(cublasSetVector(m, sizeof(T), h_vec, 1, d_vec, 1));
+            check_cublas_status(cublasSetVector(m_rows, sizeof(T), h_vec, 1, d_vec, 1));
         }
     }
 
@@ -57,18 +64,18 @@ public:
 
     // *** Basic Constructors ***
     MatrixVector(const cublasHandle_t &arg_handle):
-        handle(arg_handle), m(0), mem_size(0)
+        handle(arg_handle), m_rows(0), mem_size(0)
     { allocate_d_vec(); }
 
     MatrixVector(const cublasHandle_t &arg_handle, int arg_m, int arg_n):
-        handle(arg_handle), m(arg_m), mem_size(m*sizeof(T))
+        handle(arg_handle), m_rows(arg_m), mem_size(m_rows*sizeof(T))
     { 
         check_n(n);
         allocate_d_vec();
     }
 
     MatrixVector(const cublasHandle_t &arg_handle, int arg_m):
-        handle(arg_handle), m(arg_m), mem_size(m*sizeof(T))
+        handle(arg_handle), m_rows(arg_m), mem_size(m_rows*sizeof(T))
     {
         allocate_d_vec();
     }
@@ -83,8 +90,8 @@ public:
         for (loop_vars vars = {0, std::cbegin(li)}; vars.curr != std::cend(li); ++vars.curr, ++vars.i) {
             h_vec[vars.i] = *vars.curr;
         }
-        if (m > 0) {
-            check_cublas_status(cublasSetVector(m, sizeof(T), h_vec, 1, d_vec, 1));
+        if (m_rows > 0) {
+            check_cublas_status(cublasSetVector(m_rows, sizeof(T), h_vec, 1, d_vec, 1));
         }
 
         free(h_vec);
@@ -146,7 +153,7 @@ public:
             check_cuda_error(cudaFree(d_vec));
 
             handle = other.handle;
-            m = other.m;
+            m_rows = other.m_rows;
             mem_size = other.mem_size;
 
             allocate_d_vec();
@@ -226,8 +233,12 @@ public:
 
     // *** Element Access ***
     const T get_elem(int row, int col) const {
-        if (col != 0) { throw std::runtime_error("Invalid vector column access"); }
-        if ((row < 0) || (row >= m)) { throw std::runtime_error("Invalid vector row access"); }
+        if (col != 0) {
+            throw std::runtime_error("MatrixVector: invalid vector col access in get_elem");
+        }
+        if ((row < 0) || (row >= m_rows)) {
+            throw std::runtime_error("MatrixVector: invalid vector row access in get_elem");
+        }
         T h_elem;
         check_cuda_error(cudaMemcpy(&h_elem, d_vec+row, sizeof(T), cudaMemcpyDeviceToHost));
         return h_elem;
@@ -235,16 +246,24 @@ public:
     const T get_elem(int row) const { return get_elem(row, 0); }
 
     void set_elem(int row, int col, T val) {
-        if (col != 0) { throw std::runtime_error("Invalid vector column access"); }
-        if ((row < 0) || (row >= m)) { throw std::runtime_error("Invalid vector row access"); }
+        if (col != 0) {
+            throw std::runtime_error("MatrixVector: invalid vector col access in set_elem");
+        }
+        if ((row < 0) || (row >= m_rows)) {
+            throw std::runtime_error("MatrixVector: invalid vector row access in set_elem");
+        }
         check_cuda_error(cudaMemcpy(d_vec+row, &val, sizeof(T), cudaMemcpyHostToDevice));
     }
     void set_elem(int row, T val) { set_elem(row, 0, val); }
 
     MatrixVector<T> slice(int start, int m_elem) const {
 
-        if (m_elem < 0) { throw(std::runtime_error("size of vector slice cant be negative")); }
-        if ((start < 0) || (start >= m)) { throw(std::runtime_error("invalid vector slice start")); }
+        if (m_elem < 0) {
+            throw(std::runtime_error("MatrixVector: slice size cant be negative"));
+        }
+        if ((start < 0) || (start >= m_rows)) {
+            throw(std::runtime_error("MatrixVector: invalid slice start"));
+        }
 
         T *h_vec = static_cast<T *>(malloc(m_elem*sizeof(T)));
 
@@ -261,15 +280,15 @@ public:
     }
 
     // *** Properties ***
-    int rows() const { return m; }
+    int rows() const { return m_rows; }
     int cols() const { return 1; }
 
     void print() const {
 
         T *h_vec = static_cast<T *>(malloc(mem_size));
 
-        check_cublas_status(cublasGetVector(m, sizeof(T), d_vec, 1, h_vec, 1));
-        for (int i=0; i<m; ++i) {
+        check_cublas_status(cublasGetVector(m_rows, sizeof(T), d_vec, 1, h_vec, 1));
+        for (int i=0; i<m_rows; ++i) {
             std::cout << static_cast<double>(h_vec[i]) << std::endl;
         }
         std::cout << std::endl;
@@ -285,16 +304,16 @@ public:
     bool operator==(const MatrixVector<T> &other) const {
         
         if (this == &other) { return true; }
-        if (m != other.m) { return false; }
+        if (m_rows != other.m_rows) { return false; }
 
         T *h_vec_self = static_cast<T *>(malloc(mem_size));
         T *h_vec_other = static_cast<T *>(malloc(mem_size));
 
-        check_cublas_status(cublasGetVector(m, sizeof(T), d_vec, 1, h_vec_self, 1));
-        check_cublas_status(cublasGetVector(m, sizeof(T), other.d_vec, 1, h_vec_other, 1));
+        check_cublas_status(cublasGetVector(m_rows, sizeof(T), d_vec, 1, h_vec_self, 1));
+        check_cublas_status(cublasGetVector(m_rows, sizeof(T), other.d_vec, 1, h_vec_other, 1));
 
         bool is_equal = true;
-        for (int i=0; i<m; ++i) { is_equal = is_equal && (h_vec_self[i] == h_vec_other[i]); }
+        for (int i=0; i<m_rows; ++i) { is_equal = is_equal && (h_vec_self[i] == h_vec_other[i]); }
 
         free(h_vec_self);
         free(h_vec_other);
@@ -308,11 +327,11 @@ public:
     MatrixVector<Cast_T> cast() const {
         
         T *h_vec = static_cast<T *>(malloc(mem_size));
-        Cast_T *h_cast_vec = static_cast<Cast_T *>(malloc(m*sizeof(Cast_T)));
+        Cast_T *h_cast_vec = static_cast<Cast_T *>(malloc(m_rows*sizeof(Cast_T)));
 
-        check_cublas_status(cublasGetVector(m, sizeof(T), d_vec, 1, h_vec, 1));
-        for (int i=0; i<m; ++i) { h_cast_vec[i] = static_cast<Cast_T>(h_vec[i]); }
-        MatrixVector<Cast_T> created_vec(handle, h_cast_vec, m);
+        check_cublas_status(cublasGetVector(m_rows, sizeof(T), d_vec, 1, h_vec, 1));
+        for (int i=0; i<m_rows; ++i) { h_cast_vec[i] = static_cast<Cast_T>(h_vec[i]); }
+        MatrixVector<Cast_T> created_vec(handle, h_cast_vec, m_rows);
 
         free(h_vec);
         free(h_cast_vec);
@@ -332,8 +351,8 @@ public:
         return operator*=(static_cast<T>(1.)/scalar);
     }
 
-    MatrixVector<T> operator-(const MatrixVector<T> &vec) const;
     MatrixVector<T> operator+(const MatrixVector<T> &vec) const;
+    MatrixVector<T> operator-(const MatrixVector<T> &vec) const;
 
     MatrixVector<T> & operator+=(const MatrixVector<T> &vec);
     MatrixVector<T> & operator-=(const MatrixVector<T> &vec);

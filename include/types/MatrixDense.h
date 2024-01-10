@@ -3,14 +3,18 @@
 
 #include <Eigen/Dense>
 
-#include "MatrixVector.h"
-
 #include <iostream>
+#include <stdexcept>
+#include <cstdlib>
+#include <random>
+#include <initializer_list>
 
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
 
 #include "tools/cuda_check.h"
+
+#include "MatrixVector.h"
 
 template <typename T> class MatrixSparse;
 
@@ -24,7 +28,7 @@ private:
     // const Parent &base() const { return *this; }
 
     cublasHandle_t handle;
-    int m, n;
+    int m_rows, n_cols;
     size_t mem_size;
     T *d_mat = nullptr;
 
@@ -35,8 +39,8 @@ private:
     MatrixDense(const cublasHandle_t &arg_handle, T *h_mat, int m_elem, int n_elem):
         MatrixDense(arg_handle, m_elem, n_elem)
     {
-        if ((m > 0) && (n > 0)) {
-            check_cublas_status(cublasSetMatrix(m, n, sizeof(T), h_mat, m, d_mat, m));
+        if ((m_rows > 0) && (n_cols > 0)) {
+            check_cublas_status(cublasSetMatrix(m_rows, n_cols, sizeof(T), h_mat, m_rows, d_mat, m_rows));
         }
     }
 
@@ -46,11 +50,11 @@ public:
 
     // *** Basic Constructors ***
     MatrixDense(const cublasHandle_t &arg_handle):
-        m(0), n(0), mem_size(m*n*sizeof(T))
+        m_rows(0), n_cols(0), mem_size(m_rows*n_cols*sizeof(T))
     { allocate_d_mat(); }
 
     MatrixDense(const cublasHandle_t &arg_handle, int arg_m, int arg_n):
-        m(arg_m), n(arg_n), mem_size(m*n*sizeof(T))
+        m_rows(arg_m), n_cols(arg_n), mem_size(m_rows*n_cols*sizeof(T))
     { allocate_d_mat(); }
 
     // Row-major nested initializer list assumed for intuitive user instantiation
@@ -72,31 +76,20 @@ public:
         outer_vars outer = {0, std::cbegin(li)};
         for (; outer.curr_row != std::cend(li); ++outer.curr_row, ++outer.i) {
 
+            if (outer.curr_row->size() != n_cols) {
+                free(h_mat);
+                throw(std::runtime_error("MatrixDense: initializer list has non-consistent row size"));
+            }
+
             inner_vars inner = {0, std::cbegin(*outer.curr_row)};
             for (; inner.curr_elem != std::cend(*outer.curr_row); ++inner.curr_elem, ++inner.j) {
-
-                if (inner.j >= n) {
-                    free(h_mat);
-                    throw(std::runtime_error("Initializer list has non-consistent row size"));
-                }
-                h_mat[outer.i+inner.j*m] = *inner.curr_elem;
-
-            }
-
-            if (inner.j != n) {
-                free(h_mat);
-                throw(std::runtime_error("Initializer list has non-consistent row size"));
+                h_mat[outer.i+inner.j*m_rows] = *inner.curr_elem;
             }
 
         }
 
-        if (outer.i != m) {
-            free(h_mat);
-            throw(std::runtime_error("Initializer list has non-consistent row size"));
-        }
-
-        if ((m != 0) && (n != 0)) {
-            check_cublas_status(cublasSetMatrix(m, n, sizeof(T), h_mat, m, d_mat, m));
+        if ((m_rows != 0) && (n_cols != 0)) {
+            check_cublas_status(cublasSetMatrix(m_rows, n_cols, sizeof(T), h_mat, m_rows, d_mat, m_rows));
         }
 
         free(h_mat);
@@ -121,8 +114,8 @@ public:
             check_cuda_error(cudaFree(d_mat));
             
             handle = other.handle;
-            m = other.m;
-            n = other.n;
+            m_rows = other.m_rows;
+            n_cols = other.n_cols;
             mem_size = other.mem_size;
 
             allocate_d_mat();
@@ -144,35 +137,62 @@ public:
 
     // *** Element Access ***
     const T get_elem(int row, int col) const {
-        if ((row < 0) || (row >= m)) { throw std::runtime_error("Invalid matrix row access"); }
-        if ((col < 0) || (col >= n)) { throw std::runtime_error("Invalid matrix column access"); }
+        if ((row < 0) || (row >= m_rows)) {
+            throw std::runtime_error("MatrixDense: invalid row access in get_elem");
+        }
+        if ((col < 0) || (col >= n_cols)) {
+            throw std::runtime_error("MatrixDense: invalid col access in get_elem");
+        }
         T h_elem;
-        check_cuda_error(cudaMemcpy(&h_elem, d_mat+row+(col*m), sizeof(T), cudaMemcpyDeviceToHost));
+        check_cuda_error(cudaMemcpy(&h_elem, d_mat+row+(col*m_rows), sizeof(T), cudaMemcpyDeviceToHost));
         return h_elem;
     }
 
     void set_elem(int row, int col, T val) {
-        if ((row < 0) || (row >= m)) { throw std::runtime_error("Invalid matrix row access"); }
-        if ((col < 0) || (col >= n)) { throw std::runtime_error("Invalid matrix column access"); }
-        check_cuda_error(cudaMemcpy(d_mat+row+(col*m), &val, sizeof(T), cudaMemcpyHostToDevice));
+        if ((row < 0) || (row >= m_rows)) {
+            throw std::runtime_error("MatrixDense: invalid row access in set_elem");
+        }
+        if ((col < 0) || (col >= n_cols)) {
+            throw std::runtime_error("MatrixDense: invalid col access in set_elem");
+        }
+        check_cuda_error(cudaMemcpy(d_mat+row+(col*m_rows), &val, sizeof(T), cudaMemcpyHostToDevice));
     }
 
-    Col col(int arg_j) { return Col(this, arg_j); }
+    Col get_col(int col) {
+        if ((col < 0) || (col >= n_cols)) {
+            throw std::runtime_error("MatrixDense: invalid col access in col");
+        }
+        return Col(this, col);
+    }
  
-    Block block(int row, int col, int m, int n) { return Block(this, row, col, m, n); }
+    Block get_block(int start_row, int start_col, int block_rows, int block_cols) {
+        if ((start_row < 0) || (start_row >= m_rows)) {
+            throw std::runtime_error("MatrixDense: invalid starting row in block");
+        }
+        if ((start_col < 0) || (start_col >= n_cols)) {
+            throw std::runtime_error("MatrixDense: invalid starting col in block");
+        }
+        if ((block_rows < 0) || (start_row+block_rows > m_rows)) {
+            throw std::runtime_error("MatrixDense: invalid number of rows in block");
+        }
+        if ((block_cols < 0) || (start_col+block_cols > n_cols)) {
+            throw std::runtime_error("MatrixDense: invalid number of cols in block");
+        }
+        return Block(this, start_row, start_col, block_rows, block_cols);
+    }
 
     // *** Properties ***
-    int rows() const { return m; }
-    int cols() const { return n; }
+    int rows() const { return m_rows; }
+    int cols() const { return n_cols; }
 
     void print() {
 
         T *h_mat = static_cast<T *>(malloc(mem_size));
 
-        check_cublas_status(cublasGetMatrix(m, n, sizeof(T), d_mat, m, h_mat, m));
-        for (int j=0; j<n; ++j) {
-            for (int i=0; i<m; ++i) {
-                std::cout << static_cast<double>(h_mat[i+j*n]) << " ";
+        check_cublas_status(cublasGetMatrix(m_rows, n_cols, sizeof(T), d_mat, m_rows, h_mat, m_rows));
+        for (int j=0; j<n_cols; ++j) {
+            for (int i=0; i<m_rows; ++i) {
+                std::cout << static_cast<double>(h_mat[i+j*m_rows]) << " ";
             }
             std::cout << std::endl;
         }
@@ -238,6 +258,7 @@ public:
 
     }
 
+    // Needed for testing (don't need to optimize performance)
     static MatrixDense<T> Random(const cublasHandle_t &arg_handle, int arg_m, int arg_n) {
 
         std::random_device rd;
@@ -274,23 +295,32 @@ public:
     MatrixDense<T> transpose() const {
         return typename Parent::Matrix(Parent::transpose());
     }
+
     MatrixDense<T> operator*(const T &scalar) const {
         return typename Parent::Matrix(Parent::operator*(scalar));
     }
     MatrixDense<T> operator/(const T &scalar) const {
         return typename Parent::Matrix(Parent::operator/(scalar));
     }
+
     MatrixVector<T> operator*(const MatrixVector<T> &vec) const {
         return typename Eigen::Matrix<T, Eigen::Dynamic, 1>::Matrix(Parent::operator*(vec.base()));
     }
-    T norm() const { return Parent::norm(); } // Needed for testing
-    MatrixDense<T> operator+(const MatrixDense<T> &mat) const { // Needed for testing
+    
+    // Needed for testing (don't need to optimize performance)
+    T norm() const { return Parent::norm(); }
+    
+    // Needed for testing (don't need to optimize performance)
+    MatrixDense<T> operator+(const MatrixDense<T> &mat) const {
         return typename Parent::Matrix(Parent::operator+(mat));
     }
-    MatrixDense<T> operator-(const MatrixDense<T> &mat) const { // Needed for testing
+    // Needed for testing (don't need to optimize performance)
+    MatrixDense<T> operator-(const MatrixDense<T> &mat) const {
         return typename Parent::Matrix(Parent::operator-(mat));
     }
-    MatrixDense<T> operator*(const MatrixDense<T> &mat) const { // Needed for testing
+    
+    // Needed for testing (don't need to optimize performance)
+    MatrixDense<T> operator*(const MatrixDense<T> &mat) const {
         return typename Parent::Matrix(Parent::operator*(mat));
     }
 
@@ -309,29 +339,41 @@ public:
 
         friend MatrixDense<T>;
 
-        const int m;
-        const int col_j;
+        const int m_rows;
+        const int col_idx;
         const MatrixDense<T> *associated_mat_ptr;
 
-        Col(const MatrixDense<T> *arg_associated_mat_ptr, int arg_col_j):
-            associated_mat_ptr(arg_associated_mat_ptr), col_j(arg_col_j), m(arg_associated_mat_ptr->m)
+        Col(const MatrixDense<T> *arg_associated_mat_ptr, int arg_col_idx):
+            associated_mat_ptr(arg_associated_mat_ptr),
+            col_idx(arg_col_idx),
+            m_rows(arg_associated_mat_ptr->m_rows)
         {}
 
     public:
 
-        Col(const MatrixDense<T>::Col &other): Col(other.associated_mat_ptr, other.col_j) {}
+        Col(const MatrixDense<T>::Col &other): Col(other.associated_mat_ptr, other.col_idx) {}
 
-        T get_elem(int arg_i) { return associated_mat_ptr->get_elem(arg_i, col_j); }
+        T get_elem(int arg_row) {
+
+            if ((arg_row < 0) || (arg_row >= m_rows)) {
+                throw std::runtime_error("MatrixDense::Col: invalid row access in get_elem");
+            }
+
+            return associated_mat_ptr->get_elem(arg_row, col_idx);
+            
+        }
 
         void set_from_vec(const MatrixVector<T> &vec) const {
 
-            if (vec.rows() != m) { throw std::runtime_error("Invalid vector for assignment"); }
+            if (vec.rows() != m_rows) {
+                throw std::runtime_error("MatrixDense::Col: invalid vector for set_from_vec");
+            }
 
             check_cuda_error(
                 cudaMemcpy(
-                    associated_mat_ptr->d_mat + col_j*m,
+                    associated_mat_ptr->d_mat + col_idx*m_rows,
                     vec.d_vec,
-                    m*sizeof(T),
+                    m_rows*sizeof(T),
                     cudaMemcpyDeviceToDevice
                 )
             );
@@ -340,13 +382,13 @@ public:
 
         MatrixVector<T> copy_to_vec() const {
 
-            MatrixVector<T> created_vec(associated_mat_ptr->handle, associated_mat_ptr->m);
+            MatrixVector<T> created_vec(associated_mat_ptr->handle, associated_mat_ptr->m_rows);
 
             check_cuda_error(
                 cudaMemcpy(
                     created_vec.d_vec,
-                    associated_mat_ptr->d_mat + col_j*m,
-                    m*sizeof(T),
+                    associated_mat_ptr->d_mat + col_idx*m_rows,
+                    m_rows*sizeof(T),
                     cudaMemcpyDeviceToDevice
                 )
             );
@@ -369,19 +411,19 @@ public:
         // Block(const BlockParent &other): BlockParent(other) {}
 
         friend MatrixDense<T>;
-        const int row_i_start;
-        const int col_j_start;
+        const int row_idx_start;
+        const int col_idx_start;
         const int m_rows;
         const int n_cols;
         const MatrixDense<T> *associated_mat_ptr;
 
         Block(
             const MatrixDense<T> *arg_associated_mat_ptr,
-            int arg_row_i_start, int arg_col_j_start,
+            int arg_row_idx_start, int arg_col_idx_start,
             int arg_m_rows, int arg_n_cols
         ):
             associated_mat_ptr(arg_associated_mat_ptr),
-            row_i_start(arg_row_i_start), col_j_start(arg_col_j_start),
+            row_idx_start(arg_row_idx_start), col_idx_start(arg_col_idx_start),
             m_rows(arg_m_rows), n_cols(arg_n_cols)
         {}
 
@@ -393,18 +435,31 @@ public:
         Block(const MatrixDense<T>::Block &other):
             Block(
                 other.associated_mat_ptr,
-                other.row_i_start, other.col_j_start,
+                other.row_idx_start, other.col_idx_start,
                 other.m_rows, other.n_cols
             )
         {}
 
-        void set_from_vec(const MatrixVector<T> &vec) const;
+        void set_from_vec(const MatrixVector<T> &vec) const {}
 
-        void set_from_mat(const MatrixDense<T> &mat) const;
+        void set_from_mat(const MatrixDense<T> &mat) const {}
 
-        MatrixDense<T> copy_to_mat() const;
+        MatrixDense<T> copy_to_mat() const {
+            return MatrixDense<T>(nullptr);
+        }
 
-        T get_elem(int arg_i, int arg_j) { return associated_mat_ptr->get_elem(arg_i, arg_j); }
+        T get_elem(int row, int col) {
+
+            if ((row < 0) || (row >= m_rows)) {
+                throw std::runtime_error("MatrixDense::Block: invalid row access in get_elem");
+            }
+            if ((col < 0) || (col >= n_cols)) {
+                throw std::runtime_error("MatrixDense::Block: invalid col access in get_elem");
+            }
+
+            return associated_mat_ptr->get_elem(row_idx_start+row, col_idx_start+col);
+
+        }
 
     };
 

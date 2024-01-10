@@ -25,7 +25,7 @@ M<T> read_matrixCSV(const cublasHandle_t &handle, fs::path const &path) {
     file_in.open(path);
 
     // Ensure success
-    if (!file_in.is_open()) { throw runtime_error("Failed to read: " + path.string()); }
+    if (!file_in.is_open()) { throw runtime_error("read_matrixCSV: failed to read: " + path.string()); }
     
     int n_rows = 0;
     int n_cols = 0;
@@ -51,8 +51,8 @@ M<T> read_matrixCSV(const cublasHandle_t &handle, fs::path const &path) {
             while (getline(line_stream, temp_str, ',')) { ++col_count; }
             if (col_count != n_cols) {
                 throw runtime_error(
-                    "Error in: " + path.string() + "\n" +
-                    "Row " + to_string(n_rows) + " does not meet column size of " + to_string(n_cols)
+                    "read_matrixCSV: error in: " + path.string() + "\n" +
+                    "row " + to_string(n_rows) + " does not meet column size of " + to_string(n_cols)
                 );
             }
         }
@@ -76,7 +76,7 @@ M<T> read_matrixCSV(const cublasHandle_t &handle, fs::path const &path) {
             try { temp_number = static_cast<T>(stod(temp_str)); }
             catch (std::invalid_argument e) {
                 throw runtime_error(
-                    "Error in: " + path.string() + "\n" +
+                    "read_matrixCSV: error in: " + path.string() + "\n" +
                     "Invalid argument in file, failed to convert to numeric"
                 );
             }

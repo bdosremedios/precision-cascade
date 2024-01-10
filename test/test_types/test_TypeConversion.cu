@@ -82,14 +82,14 @@ public:
              {static_cast<T>(9), static_cast<T>(10), static_cast<T>(11), static_cast<T>(12)}}
         );
 
-        MatrixVector<T> vec_col_0(mat.col(0).copy_to_vec());
+        MatrixVector<T> vec_col_0(mat.get_col(0).copy_to_vec());
         MatrixVector<T> test_vec_col_0(
             *handle_ptr,
             {static_cast<T>(1), static_cast<T>(5), static_cast<T>(9)}
         );
         ASSERT_VECTOR_EQ(vec_col_0, test_vec_col_0);
 
-        MatrixVector<T> vec_col_2(mat.col(2).copy_to_vec());
+        MatrixVector<T> vec_col_2(mat.get_col(2).copy_to_vec());
         MatrixVector<T> test_vec_col_2(
             *handle_ptr,
             {static_cast<T>(3), static_cast<T>(7), static_cast<T>(11)}
@@ -115,7 +115,7 @@ public:
             *handle_ptr,
             {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)}
         );
-        mat.col(2).set_from_vec(assign_vec);
+        mat.get_col(2).set_from_vec(assign_vec);
         for (int j=0; j<2; ++j) {
             for (int i=0; i<4; ++i) {
                 ASSERT_EQ(mat.get_elem(i, j), const_mat.get_elem(i, j));
@@ -142,13 +142,13 @@ public:
             {1, 1, 1}
         );
         try {
-            mat.col(0).set_from_vec(vec_too_small);
+            mat.get_col(0).set_from_vec(vec_too_small);
             FAIL();
         } catch (std::runtime_error e) {
             std::cout << e.what() << std::endl;
         }
         try {
-            mat.col(1).set_from_vec(vec_too_small);
+            mat.get_col(1).set_from_vec(vec_too_small);
             FAIL();
         } catch (std::runtime_error e) {
             std::cout << e.what() << std::endl;
@@ -159,13 +159,13 @@ public:
             {1, 1, 1, 1, 1, 1}
         );
         try {
-            mat.col(0).set_from_vec(vec_too_large);
+            mat.get_col(0).set_from_vec(vec_too_large);
             FAIL();
         } catch (std::runtime_error e) {
             std::cout << e.what() << std::endl;
         }
         try {
-            mat.col(1).set_from_vec(vec_too_large);
+            mat.get_col(1).set_from_vec(vec_too_large);
             FAIL();
         } catch (std::runtime_error e) {
             std::cout << e.what() << std::endl;

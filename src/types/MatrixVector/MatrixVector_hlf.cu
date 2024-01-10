@@ -12,7 +12,7 @@ MatrixVector<__half> MatrixVector<__half>::operator*(const __half &scalar) const
 
     check_cublas_status(
         cublasScalEx(
-            handle, m, scalar_cast, CUDA_R_32F, c.d_vec, CUDA_R_16F, 1, CUDA_R_32F
+            handle, m_rows, scalar_cast, CUDA_R_32F, c.d_vec, CUDA_R_16F, 1, CUDA_R_32F
         )
     );
 
@@ -29,7 +29,7 @@ MatrixVector<__half> & MatrixVector<__half>::operator*=(const __half &scalar) {
 
     check_cublas_status(
         cublasScalEx(
-            handle, m, &scalar_cast, CUDA_R_32F, d_vec, CUDA_R_16F, 1, CUDA_R_32F
+            handle, m_rows, &scalar_cast, CUDA_R_32F, d_vec, CUDA_R_16F, 1, CUDA_R_32F
         )
     );
 
@@ -41,12 +41,14 @@ MatrixVector<__half> & MatrixVector<__half>::operator*=(const __half &scalar) {
 template<>
 MatrixVector<__half> MatrixVector<__half>::operator+(const MatrixVector<__half> &vec) const {
 
+    check_vecvec_op_compatibility(vec);
+
     MatrixVector<__half> c(*this);
     float alpha = 1.;
 
     check_cublas_status(
         cublasAxpyEx(
-            handle, m, &alpha, CUDA_R_32F, vec.d_vec, CUDA_R_16F, 1, c.d_vec, CUDA_R_16F, 1, CUDA_R_32F
+            handle, m_rows, &alpha, CUDA_R_32F, vec.d_vec, CUDA_R_16F, 1, c.d_vec, CUDA_R_16F, 1, CUDA_R_32F
         )
     );
 
@@ -57,12 +59,14 @@ MatrixVector<__half> MatrixVector<__half>::operator+(const MatrixVector<__half> 
 template<>
 MatrixVector<__half> MatrixVector<__half>::operator-(const MatrixVector<__half> &vec) const {
 
+    check_vecvec_op_compatibility(vec);
+
     MatrixVector<__half> c(*this);
     float alpha = -1.;
 
     check_cublas_status(
         cublasAxpyEx(
-            handle, m, &alpha, CUDA_R_32F, vec.d_vec, CUDA_R_16F, 1, c.d_vec, CUDA_R_16F, 1, CUDA_R_32F
+            handle, m_rows, &alpha, CUDA_R_32F, vec.d_vec, CUDA_R_16F, 1, c.d_vec, CUDA_R_16F, 1, CUDA_R_32F
         )
     );
 
@@ -73,11 +77,13 @@ MatrixVector<__half> MatrixVector<__half>::operator-(const MatrixVector<__half> 
 template<>
 MatrixVector<__half> & MatrixVector<__half>::operator+=(const MatrixVector<__half> &vec) {
 
+    check_vecvec_op_compatibility(vec);
+
     float alpha = 1.;
 
     check_cublas_status(
         cublasAxpyEx(
-            handle, m, &alpha, CUDA_R_32F, vec.d_vec, CUDA_R_16F, 1, d_vec, CUDA_R_16F, 1, CUDA_R_32F
+            handle, m_rows, &alpha, CUDA_R_32F, vec.d_vec, CUDA_R_16F, 1, d_vec, CUDA_R_16F, 1, CUDA_R_32F
         )
     );
 
@@ -88,11 +94,13 @@ MatrixVector<__half> & MatrixVector<__half>::operator+=(const MatrixVector<__hal
 template<>
 MatrixVector<__half> & MatrixVector<__half>::operator-=(const MatrixVector<__half> &vec) {
 
+    check_vecvec_op_compatibility(vec);
+
     float alpha = -1.;
 
     check_cublas_status(
         cublasAxpyEx(
-            handle, m, &alpha, CUDA_R_32F, vec.d_vec, CUDA_R_16F, 1, d_vec, CUDA_R_16F, 1, CUDA_R_32F
+            handle, m_rows, &alpha, CUDA_R_32F, vec.d_vec, CUDA_R_16F, 1, d_vec, CUDA_R_16F, 1, CUDA_R_32F
         )
     );
 
@@ -102,12 +110,14 @@ MatrixVector<__half> & MatrixVector<__half>::operator-=(const MatrixVector<__hal
 
 template<>
 __half MatrixVector<__half>::dot(const MatrixVector<__half> &vec) const {
+
+    check_vecvec_op_compatibility(vec);
     
     __half result;
 
     check_cublas_status(
         cublasDotEx(
-            handle, m, d_vec, CUDA_R_16F, 1, vec.d_vec, CUDA_R_16F, 1, &result, CUDA_R_16F, CUDA_R_32F
+            handle, m_rows, d_vec, CUDA_R_16F, 1, vec.d_vec, CUDA_R_16F, 1, &result, CUDA_R_16F, CUDA_R_32F
         )
     );
 
@@ -122,7 +132,7 @@ __half MatrixVector<__half>::norm() const {
 
     check_cublas_status(
         cublasNrm2Ex(
-            handle, m, d_vec, CUDA_R_16F, 1, &result, CUDA_R_16F, CUDA_R_32F
+            handle, m_rows, d_vec, CUDA_R_16F, 1, &result, CUDA_R_16F, CUDA_R_32F
         )
     );
 

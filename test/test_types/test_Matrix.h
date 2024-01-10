@@ -91,6 +91,65 @@ protected:
 
     }
 
+    template <template <typename> typename M>
+    void TestBadCoeffAccess_Base() {
+        
+        constexpr int m(24);
+        constexpr int n(12);
+        M<double> test_mat(M<double>::Random(*handle_ptr, m, n));
+
+        try {
+            test_mat.get_elem(0, -1);
+            FAIL();
+        } catch (std::runtime_error e) {
+            std::cout << e.what() << std::endl;
+        }
+        try {
+            test_mat.get_elem(0, n);
+            FAIL();
+        } catch (std::runtime_error e) {
+            std::cout << e.what() << std::endl;
+        }
+        try {
+            test_mat.get_elem(-1, 0);
+            FAIL();
+        } catch (std::runtime_error e) {
+            std::cout << e.what() << std::endl;
+        }
+        try {
+            test_mat.get_elem(m, 0);
+            FAIL();
+        } catch (std::runtime_error e) {
+            std::cout << e.what() << std::endl;
+        }
+
+        try {
+            test_mat.set_elem(0, -1, 0);
+            FAIL();
+        } catch (std::runtime_error e) {
+            std::cout << e.what() << std::endl;
+        }
+        try {
+            test_mat.set_elem(0, n, 0);
+            FAIL();
+        } catch (std::runtime_error e) {
+            std::cout << e.what() << std::endl;
+        }
+        try {
+            test_mat.set_elem(-1, 0, 0);
+            FAIL();
+        } catch (std::runtime_error e) {
+            std::cout << e.what() << std::endl;
+        }
+        try {
+            test_mat.set_elem(m, 0, 0);
+            FAIL();
+        } catch (std::runtime_error e) {
+            std::cout << e.what() << std::endl;
+        }
+
+    }
+
     template <template <typename> typename M, typename T>
     void TestPropertyAccess_Base() {
 
@@ -409,10 +468,54 @@ protected:
 
         // Test Col access
         for (int j=0; j<3; ++j) {
-            typename M<T>::Col col(mat.col(j));
+            typename M<T>::Col col(mat.get_col(j));
             for (int i=0; i<4; ++i) {
                 ASSERT_EQ(col.get_elem(i), const_mat.get_elem(i, j));
             }
+        }
+
+    }
+
+    template <template <typename> typename M>
+    void TestBadCol_Base() {
+
+        const int m(4);
+        const int n(3);
+        const M<double> const_mat(
+            *handle_ptr, 
+            {{1, 2, 3},
+             {4, 5, 6},
+             {7, 8, 9},
+             {10, 11, 12}}
+        );
+        M<double> mat(const_mat);
+
+        // Test trying to get bad col
+        try {
+            mat.get_col(-1);
+            FAIL();
+        } catch (std::runtime_error e) {
+            std::cout << e.what() << std::endl;
+        }
+        try {
+            mat.get_col(n);
+            FAIL();
+        } catch (std::runtime_error e) {
+            std::cout << e.what() << std::endl;
+        }
+
+        // Test trying to get bad access in valid col
+        try {
+            mat.get_col(0).get_elem(-1);
+            FAIL();
+        } catch (std::runtime_error e) {
+            std::cout << e.what() << std::endl;
+        }
+        try {
+            mat.get_col(0).get_elem(m);
+            FAIL();
+        } catch (std::runtime_error e) {
+            std::cout << e.what() << std::endl;
         }
 
     }

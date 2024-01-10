@@ -23,28 +23,36 @@ public:
         try {
             M<double> test(read_matrixCSV<M, double>(*handle_ptr, bad_file_0));
             FAIL();
-        } catch (runtime_error e) { ; }
+        } catch (runtime_error e) {
+            std::cout << e.what() << std::endl;
+        }
 
         // Try to load file with too small row
         fs::path bad_file_1(read_matrix_dir / fs::path("bad1.csv"));
         try {
             M<double> test(read_matrixCSV<M, double>(*handle_ptr, bad_file_1));
             FAIL();
-        } catch (runtime_error e) { ;  }
+        } catch (runtime_error e) {
+            std::cout << e.what() << std::endl;
+        }
 
         // Try to load file with too big row
         fs::path bad_file_2(read_matrix_dir / fs::path("bad2.csv"));
         try {
             M<double> test(read_matrixCSV<M, double>(*handle_ptr, bad_file_2));
             FAIL();
-        } catch (runtime_error e) { ; }
+        } catch (runtime_error e) {
+            std::cout << e.what() << std::endl;
+        }
 
         // Try to load file with invalid character argument
         fs::path bad_file_3(read_matrix_dir / fs::path("bad3.csv"));
         try {
             M<double> test(read_matrixCSV<M, double>(*handle_ptr, bad_file_3));
             FAIL();
-        } catch (runtime_error e) { ; }
+        } catch (runtime_error e) {
+            std::cout << e.what() << std::endl;
+        }
 
     }
 
@@ -179,7 +187,9 @@ TEST_F(MatrixRead_Vector_Test, FailOnMatrix) {
     try {
         MatrixVector<double> test(read_matrixCSV<MatrixVector, double>(*handle_ptr, mat));
         FAIL();
-    } catch (runtime_error e) { cout << e.what() << endl; }
+    } catch (runtime_error e) {
+        std::cout << e.what() << std::endl;
+    }
 }
 
 // Double type matrix read tests
