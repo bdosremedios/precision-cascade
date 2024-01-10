@@ -1,5 +1,7 @@
 #include "../test.h"
 
+#include "tools/MatrixReader.h"
+
 // General matrix read tests
 class MatrixRead_General_Test: public TestBase
 {

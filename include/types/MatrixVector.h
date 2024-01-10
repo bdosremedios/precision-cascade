@@ -258,8 +258,8 @@ public:
 
     MatrixVector<T> slice(int start, int m_elem) const {
 
-        if (m_elem < 0) {
-            throw(std::runtime_error("MatrixVector: slice size cant be negative"));
+        if ((m_elem < 0) || ((start+m_elem) > m_rows)) {
+            throw(std::runtime_error("MatrixVector: slice size invalid"));
         }
         if ((start < 0) || (start >= m_rows)) {
             throw(std::runtime_error("MatrixVector: invalid slice start"));

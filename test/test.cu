@@ -1,11 +1,20 @@
 #include <gtest/gtest.h>
 #include <Eigen/Dense>
 
-#include "test.h"
-
 #include <cmath>
 #include <string>
 #include <iostream>
+
+#include <cuda_runtime.h>
+#include <cublas_v2.h>
+#include <cuda_fp16.h>
+
+#include "test.h"
+
+#include "types/types.h"
+// #include "tools/argument_pkgs.h"
+// #include "tools/math_functions.h"
+#include "tools/MatrixReader.h"
 
 using Eigen::Matrix, Eigen::Dynamic;
 

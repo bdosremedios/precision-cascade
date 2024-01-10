@@ -1,6 +1,5 @@
 #include "../test.h"
 
-#include "tools/math_functions.h"
 #include "types/MatrixVector.h"
 
 class MatrixVector_Test: public TestBase
@@ -31,31 +30,11 @@ public:
 
         const int m(27);
         MatrixVector<double> vec(*handle_ptr, m);
-
-        try {
-            vec.get_elem(-1);
-            FAIL();
-        } catch (std::runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
-        try {
-            vec.get_elem(m);
-            FAIL();
-        } catch (std::runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
-        try {
-            vec.set_elem(-1, 0);
-            FAIL();
-        } catch (std::runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
-        try {
-            vec.set_elem(m, 0);
-            FAIL();
-        } catch (std::runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
+        
+        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() { vec.get_elem(-1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() { vec.get_elem(m); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { vec.set_elem(-1, 0.); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { vec.set_elem(m, 0.); });
 
     }
 
@@ -108,26 +87,10 @@ public:
         MatrixVector<T> test_vec_m(*handle_ptr, m);
         for (int i=0; i<m; ++i) { test_vec_m.set_elem(i, static_cast<T>(2*i*i-m)); }
 
-        try {
-            test_vec_m.slice(1, -1);
-            FAIL();
-        } catch (std::runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
-
-        try {
-            test_vec_m.slice(-1, 1);
-            FAIL();
-        } catch (std::runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
-
-        try {
-            test_vec_m.slice(m, 1);
-            FAIL();
-        } catch (std::runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
+        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() { test_vec_m.slice(1, -1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() { test_vec_m.slice(-1, 1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() { test_vec_m.slice(m, 1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() { test_vec_m.slice(0, m+1); });
         
     }
 
@@ -433,70 +396,20 @@ public:
         MatrixVector<T> vec_too_small(MatrixVector<T>::Random(*handle_ptr, m-3));
         MatrixVector<T> vec_too_large(MatrixVector<T>::Random(*handle_ptr, m+2));
 
-        try {
-            vec + vec_too_small;
-            FAIL();
-        } catch (std::runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
-        try {
-            vec + vec_too_large;
-            FAIL();
-        } catch (std::runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
+        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() { vec + vec_too_small; });
+        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() { vec + vec_too_large; });
 
-        try {
-            vec - vec_too_small;
-            FAIL();
-        } catch (std::runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
-        try {
-            vec - vec_too_large;
-            FAIL();
-        } catch (std::runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
+        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() { vec - vec_too_small; });
+        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() { vec - vec_too_large; });
 
-        try {
-            vec += vec_too_small;
-            FAIL();
-        } catch (std::runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
-        try {
-            vec += vec_too_large;
-            FAIL();
-        } catch (std::runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
+        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { vec += vec_too_small; });
+        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { vec += vec_too_large; });
 
-        try {
-            vec -= vec_too_small;
-            FAIL();
-        } catch (std::runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
-        try {
-            vec -= vec_too_large;
-            FAIL();
-        } catch (std::runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
+        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { vec -= vec_too_small; });
+        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { vec -= vec_too_large; });
 
-        try {
-            vec.dot(vec_too_small);
-            FAIL();
-        } catch (std::runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
-        try {
-            vec.dot(vec_too_large);
-            FAIL();
-        } catch (std::runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
+        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() { vec.dot(vec_too_small); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() { vec.dot(vec_too_large); });
 
     }
 

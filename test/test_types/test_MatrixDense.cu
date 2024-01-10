@@ -147,108 +147,28 @@ public:
         MatrixDense<double> mat(const_mat);
 
         // Test invalid starts
-        try {
-            mat.get_block(-1, 0, 1, 1);
-            FAIL();
-        } catch (std::runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
-        try {
-            mat.get_block(m, 0, 1, 1);
-            FAIL();
-        } catch (std::runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
-        try {
-            mat.get_block(0, -1, 1, 1);
-            FAIL();
-        } catch (std::runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
-        try {
-            mat.get_block(0, n, 1, 1);
-            FAIL();
-        } catch (std::runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
+        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { mat.get_block(-1, 0, 1, 1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { mat.get_block(m, 0, 1, 1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { mat.get_block(0, -1, 1, 1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { mat.get_block(0, n, 1, 1); });
 
         // Test invalid sizes from 0
-        try {
-            mat.get_block(0, 0, -1, 1);
-            FAIL();
-        } catch (std::runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
-        try {
-            mat.get_block(0, 0, 1, -1);
-            FAIL();
-        } catch (std::runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
-        try {
-            mat.get_block(0, 0, m+1, 1);
-            FAIL();
-        } catch (std::runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
-        try {
-            mat.get_block(0, 0, 1, n+1);
-            FAIL();
-        } catch (std::runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
+        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { mat.get_block(0, 0, -1, 1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { mat.get_block(0, 0, 1, -1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { mat.get_block(0, 0, m+1, 1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { mat.get_block(0, 0, 1, n+1); });
 
         // Test invalid sizes from not initial index
-        try {
-            mat.get_block(1, 2, -1, 1);
-            FAIL();
-        } catch (std::runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
-        try {
-            mat.get_block(1, 2, 1, -1);
-            FAIL();
-        } catch (std::runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
-        try {
-            mat.get_block(1, 2, m, 1);
-            FAIL();
-        } catch (std::runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
-        try {
-            mat.get_block(1, 2, 1, n-1);
-            FAIL();
-        } catch (std::runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
+        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { mat.get_block(1, 2, -1, 1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { mat.get_block(1, 2, 1, -1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { mat.get_block(1, 2, m, 1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { mat.get_block(1, 2, 1, n-1); });
 
         // Test invalid access to valid block
-        try {
-            mat.get_block(1, 2, 2, 2).get_elem(-1, 0);
-            FAIL();
-        } catch (std::runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
-        try {
-            mat.get_block(1, 2, 2, 2).get_elem(0, -1);
-            FAIL();
-        } catch (std::runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
-        try {
-            mat.get_block(1, 2, 2, 2).get_elem(2, 0);
-            FAIL();
-        } catch (std::runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
-        try {
-            mat.get_block(1, 2, 2, 2).get_elem(0, 2);
-            FAIL();
-        } catch (std::runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
+        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { mat.get_block(1, 2, 2, 2).get_elem(-1, 0); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { mat.get_block(1, 2, 2, 2).get_elem(0, -1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { mat.get_block(1, 2, 2, 2).get_elem(2, 0); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { mat.get_block(1, 2, 2, 2).get_elem(0, 2); });
 
     }
 
