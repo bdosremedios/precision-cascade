@@ -15,4 +15,33 @@ MatrixDense<float> MatrixDense<float>::operator*(const float &scalar) const {
     );
 
     return c;
+
+}
+
+template <>
+MatrixVector<float> MatrixDense<float>::transpose_prod(const MatrixVector<float> &vec) const {
+
+    if (vec.rows() != m_rows) { throw std::runtime_error("MatrixDense: invalid vec in transpose_prod"); }
+
+    MatrixVector<float> c(handle, n_cols);
+
+    float alpha = static_cast<float>(1.);
+    float beta = static_cast<float>(0.);
+
+    check_cublas_status(
+        cublasGemmEx(
+            handle, CUBLAS_OP_T, CUBLAS_OP_N,
+            n_cols, 1, m_rows,
+            &alpha,
+            d_mat, CUDA_R_32F, m_rows,
+            vec.d_vec, CUDA_R_32F, m_rows,
+            &beta,
+            c.d_vec, CUDA_R_32F, n_cols,
+            CUBLAS_COMPUTE_32F,
+            CUBLAS_GEMM_DEFAULT
+        )
+    );
+
+    return c;
+
 }

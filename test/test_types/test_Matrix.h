@@ -469,7 +469,7 @@ protected:
              {static_cast<T>(5), static_cast<T>(6), static_cast<T>(7), static_cast<T>(8)},
              {static_cast<T>(9), static_cast<T>(1), static_cast<T>(2), static_cast<T>(3)}}
         );
-        ASSERT_VECTOR_EQ(
+        ASSERT_VECTOR_NEAR(
             mat.transpose_prod(
                 MatrixVector<T>(
                     *handle_ptr,
@@ -479,9 +479,10 @@ protected:
             MatrixVector<T>(
                 *handle_ptr,
                 {static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4)}
-            )
+            ),
+            static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
         );
-        ASSERT_VECTOR_EQ(
+        ASSERT_VECTOR_NEAR(
             mat.transpose_prod(
                 MatrixVector<T>(
                     *handle_ptr,
@@ -491,9 +492,10 @@ protected:
             MatrixVector<T>(
                 *handle_ptr,
                 {static_cast<T>(5), static_cast<T>(6), static_cast<T>(7), static_cast<T>(8)}
-            )
+            ),
+            static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
         );
-        ASSERT_VECTOR_EQ(
+        ASSERT_VECTOR_NEAR(
             mat.transpose_prod(
                 MatrixVector<T>(
                     *handle_ptr,
@@ -503,9 +505,10 @@ protected:
             MatrixVector<T>(
                 *handle_ptr,
                 {static_cast<T>(9), static_cast<T>(1), static_cast<T>(2), static_cast<T>(3)}
-            )
+            ),
+            static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
         );
-        ASSERT_VECTOR_EQ(
+        ASSERT_VECTOR_NEAR(
             mat.transpose_prod(
                 MatrixVector<T>(
                     *handle_ptr,
@@ -515,14 +518,15 @@ protected:
             MatrixVector<T>(
                 *handle_ptr,
                 {static_cast<T>(1.59), static_cast<T>(2.61), static_cast<T>(3.72), static_cast<T>(4.83)}
-            )
+            ),
+            static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
         );
 
         // Test random
         const int m_rand(3);
         const int n_rand(2);
         MatrixDense<T> rand_mat(MatrixDense<T>::Random(*handle_ptr, m_rand, n_rand));
-        ASSERT_VECTOR_EQ(
+        ASSERT_VECTOR_NEAR(
             rand_mat.transpose_prod(
                 MatrixVector<T>(
                     *handle_ptr,
@@ -532,12 +536,11 @@ protected:
             MatrixVector<T>(
                 *handle_ptr,
                 {rand_mat.get_elem(0, 0),
-                 rand_mat.get_elem(0, 1),
-                 rand_mat.get_elem(0, 2),
-                 rand_mat.get_elem(0, 3)}
-            )
+                 rand_mat.get_elem(0, 1)}
+            ),
+            static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
         );
-        ASSERT_VECTOR_EQ(
+        ASSERT_VECTOR_NEAR(
             rand_mat.transpose_prod(
                 MatrixVector<T>(
                     *handle_ptr,
@@ -547,12 +550,11 @@ protected:
             MatrixVector<T>(
                 *handle_ptr,
                 {rand_mat.get_elem(1, 0),
-                 rand_mat.get_elem(1, 1),
-                 rand_mat.get_elem(1, 2),
-                 rand_mat.get_elem(1, 3)}
-            )
+                 rand_mat.get_elem(1, 1)}
+            ),
+            static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
         );
-        ASSERT_VECTOR_EQ(
+        ASSERT_VECTOR_NEAR(
             rand_mat.transpose_prod(
                 MatrixVector<T>(
                     *handle_ptr,
@@ -562,12 +564,11 @@ protected:
             MatrixVector<T>(
                 *handle_ptr,
                 {rand_mat.get_elem(2, 0),
-                 rand_mat.get_elem(2, 1),
-                 rand_mat.get_elem(2, 2),
-                 rand_mat.get_elem(2, 3)}
-            )
+                 rand_mat.get_elem(2, 1)}
+            ),
+            static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
         );
-        ASSERT_VECTOR_EQ(
+        ASSERT_VECTOR_NEAR(
             rand_mat.transpose_prod(
                 MatrixVector<T>(
                     *handle_ptr,
@@ -577,18 +578,13 @@ protected:
             MatrixVector<T>(
                 *handle_ptr,
                 {(static_cast<T>(1)*rand_mat.get_elem(0, 0) +
-                  static_cast<T>(0.1)*rand_mat.get_elem(0, 1) +
-                  static_cast<T>(0.01)*rand_mat.get_elem(0, 2)),
-                 (static_cast<T>(1)*rand_mat.get_elem(1, 0) +
+                  static_cast<T>(0.1)*rand_mat.get_elem(1, 0) +
+                  static_cast<T>(0.01)*rand_mat.get_elem(2, 0)),
+                 (static_cast<T>(1)*rand_mat.get_elem(0, 1) +
                   static_cast<T>(0.1)*rand_mat.get_elem(1, 1) +
-                  static_cast<T>(0.01)*rand_mat.get_elem(1, 2)),
-                 (static_cast<T>(1)*rand_mat.get_elem(2, 0) +
-                  static_cast<T>(0.1)*rand_mat.get_elem(2, 1) +
-                  static_cast<T>(0.01)*rand_mat.get_elem(2, 2)),
-                 (static_cast<T>(1)*rand_mat.get_elem(3, 0) +
-                  static_cast<T>(0.1)*rand_mat.get_elem(3, 1) +
-                  static_cast<T>(0.01)*rand_mat.get_elem(3, 2))}
-            )
+                  static_cast<T>(0.01)*rand_mat.get_elem(2, 1))}
+            ),
+            static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
         );
 
     }

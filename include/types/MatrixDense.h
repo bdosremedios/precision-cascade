@@ -302,9 +302,7 @@ public:
         return typename Eigen::Matrix<T, Eigen::Dynamic, 1>::Matrix(Parent::operator*(vec.base()));
     }
 
-    MatrixVector<T> transpose_prod(const MatrixVector<T> &vec) const {
-        return vec;
-    }
+    MatrixVector<T> transpose_prod(const MatrixVector<T> &vec) const;
 
     // Needed for testing (don't need to optimize performance)
     MatrixDense<T> transpose() const {
