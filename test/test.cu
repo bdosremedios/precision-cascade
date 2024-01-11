@@ -18,12 +18,9 @@
 
 using Eigen::Matrix, Eigen::Dynamic;
 
-using std::abs;
-using std::string;
-using std::cout, std::endl;
-
 bool *TestBase::show_plots = new bool;
 cublasHandle_t *TestBase::handle_ptr = new cublasHandle_t;
+bool *TestBase::print_errors = new bool;
 
 int main(int argc, char **argv) {
 
@@ -66,9 +63,27 @@ int main(int argc, char **argv) {
         *(TestBase::show_plots) = false;
     }
 
+    // Check if should print errors
+    bool print_errors = false;
+    for (int i=0; i<argc; ++i) {
+        if ((string(argv[i]) == "--print_errors") || (string(argv[i]) == "-pe")) { print_errors = true; }
+    }
+    if (print_errors) {
+        cout << "Printing expected errors..." << endl;
+        *(TestBase::print_errors) = true;
+    } else {
+        cout << "Not printing expected errors..." << endl;
+        *(TestBase::print_errors) = false;
+    }
+
     cublasCreate(TestBase::handle_ptr);
     int return_status = RUN_ALL_TESTS();
     cublasDestroy(*TestBase::handle_ptr);
+
+    // Free dynamically allocated test variables
+    free(TestBase::show_plots);
+    free(TestBase::handle_ptr);
+    free(TestBase::print_errors);
 
     return return_status;
 

@@ -141,35 +141,27 @@ public:
             *handle_ptr,
             {1, 1, 1}
         );
-        try {
-            mat.get_col(0).set_from_vec(vec_too_small);
-            FAIL();
-        } catch (std::runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
-        try {
-            mat.get_col(1).set_from_vec(vec_too_small);
-            FAIL();
-        } catch (std::runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            [=]() mutable { mat.get_col(0).set_from_vec(vec_too_small); }
+        );
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            [=]() mutable { mat.get_col(1).set_from_vec(vec_too_small); }
+        );
 
         MatrixVector<double> vec_too_large(
             *handle_ptr,
             {1, 1, 1, 1, 1, 1}
         );
-        try {
-            mat.get_col(0).set_from_vec(vec_too_large);
-            FAIL();
-        } catch (std::runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
-        try {
-            mat.get_col(1).set_from_vec(vec_too_large);
-            FAIL();
-        } catch (std::runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            [=]() mutable { mat.get_col(0).set_from_vec(vec_too_large);}
+        );
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            [=]() mutable { mat.get_col(1).set_from_vec(vec_too_large); }
+        );
 
     }
 

@@ -98,15 +98,15 @@ protected:
         constexpr int n(12);
         M<double> test_mat(M<double>::Random(*handle_ptr, m, n));
 
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() { test_mat.get_elem(0, -1); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() { test_mat.get_elem(0, n); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() { test_mat.get_elem(-1, 0); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() { test_mat.get_elem(m, 0); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { test_mat.get_elem(0, -1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { test_mat.get_elem(0, n); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { test_mat.get_elem(-1, 0); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { test_mat.get_elem(m, 0); });
 
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { test_mat.set_elem(0, -1, 0.); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { test_mat.set_elem(0, n, 0.); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { test_mat.set_elem(-1, 0, 0.); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { test_mat.set_elem(m, 0, 0.); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { test_mat.set_elem(0, -1, 0.); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { test_mat.set_elem(0, n, 0.); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { test_mat.set_elem(-1, 0, 0.); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { test_mat.set_elem(m, 0, 0.); });
 
     }
 
@@ -222,26 +222,22 @@ protected:
     template <template <typename> typename M>
     void TestBadListInitialization_Base() {
 
-        CHECK_FUNC_HAS_RUNTIME_ERROR([]() {
-            M<double> mat(*handle_ptr,
-                          {{1, 2, 3, 4},
-                           {1, 2, 3}});
-        });
-        CHECK_FUNC_HAS_RUNTIME_ERROR([]() {
-            M<double> mat(*handle_ptr,
-                          {{1, 2},
-                           {1, 2, 3}});
-        });
-        CHECK_FUNC_HAS_RUNTIME_ERROR([]() {
-            M<double> mat(*handle_ptr,
-                          {{1, 2},
-                           {}});
-        });
-        CHECK_FUNC_HAS_RUNTIME_ERROR([]() {
-            M<double> mat(*handle_ptr,
-                          {{},
-                           {1, 2, 3}});
-        });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            []() { M<double> mat(*handle_ptr, {{1, 2, 3, 4}, {1, 2, 3}}); }
+        );
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            []() { M<double> mat(*handle_ptr, {{1, 2}, {1, 2, 3}}); }
+        );
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            []() { M<double> mat(*handle_ptr, {{1, 2}, {}}); }
+        );
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            []() { M<double> mat(*handle_ptr, {{}, {1, 2, 3}}); }
+        );
 
     }
 
@@ -427,12 +423,12 @@ protected:
         );
 
         // Test bad col
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { mat.get_col(-1); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { mat.get_col(n); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { mat.get_col(-1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { mat.get_col(n); });
 
         // Test bad access in valid col
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { mat.get_col(0).get_elem(-1); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { mat.get_col(0).get_elem(m); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { mat.get_col(0).get_elem(-1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { mat.get_col(0).get_elem(m); });
 
     }
 

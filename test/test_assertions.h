@@ -7,12 +7,16 @@
 
 #include "types/types.h"
 
-inline void CHECK_FUNC_HAS_RUNTIME_ERROR(std::function<void()> func) {
+static bool *print_errors;
+
+inline void CHECK_FUNC_HAS_RUNTIME_ERROR(bool *to_print, std::function<void()> func) {
     try {
         func();
         FAIL();
     } catch (std::runtime_error e) {
-        std::cout << e.what() << std::endl;
+        if (*to_print) {
+            std::cout << e.what() << std::endl;
+        }
     }
 }
 

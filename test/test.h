@@ -29,6 +29,7 @@ public:
     // SolveArgPkg default_args;
     static bool *show_plots;
     static cublasHandle_t *handle_ptr;
+    static bool *print_errors;
 
 };
 

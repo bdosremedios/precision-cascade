@@ -31,10 +31,10 @@ public:
         const int m(27);
         MatrixVector<double> vec(*handle_ptr, m);
         
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() { vec.get_elem(-1); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() { vec.get_elem(m); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { vec.set_elem(-1, 0.); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { vec.set_elem(m, 0.); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { vec.get_elem(-1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { vec.get_elem(m); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { vec.set_elem(-1, 0.); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { vec.set_elem(m, 0.); });
 
     }
 
@@ -87,10 +87,10 @@ public:
         MatrixVector<T> test_vec_m(*handle_ptr, m);
         for (int i=0; i<m; ++i) { test_vec_m.set_elem(i, static_cast<T>(2*i*i-m)); }
 
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() { test_vec_m.slice(1, -1); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() { test_vec_m.slice(-1, 1); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() { test_vec_m.slice(m, 1); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() { test_vec_m.slice(0, m+1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { test_vec_m.slice(1, -1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { test_vec_m.slice(-1, 1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { test_vec_m.slice(m, 1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { test_vec_m.slice(0, m+1); });
         
     }
 
@@ -396,20 +396,20 @@ public:
         MatrixVector<T> vec_too_small(MatrixVector<T>::Random(*handle_ptr, m-3));
         MatrixVector<T> vec_too_large(MatrixVector<T>::Random(*handle_ptr, m+2));
 
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() { vec + vec_too_small; });
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() { vec + vec_too_large; });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { vec + vec_too_small; });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { vec + vec_too_large; });
 
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() { vec - vec_too_small; });
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() { vec - vec_too_large; });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { vec - vec_too_small; });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { vec - vec_too_large; });
 
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { vec += vec_too_small; });
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { vec += vec_too_large; });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { vec += vec_too_small; });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { vec += vec_too_large; });
 
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { vec -= vec_too_small; });
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { vec -= vec_too_large; });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { vec -= vec_too_small; });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { vec -= vec_too_large; });
 
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() { vec.dot(vec_too_small); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() { vec.dot(vec_too_large); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { vec.dot(vec_too_small); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { vec.dot(vec_too_large); });
 
     }
 

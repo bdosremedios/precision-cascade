@@ -22,39 +22,32 @@ public:
 
         // Try to load non-existent file
         fs::path bad_file_0(read_matrix_dir / fs::path("thisfile"));
-        try {
-            M<double> test(read_matrixCSV<M, double>(*handle_ptr, bad_file_0));
-            FAIL();
-        } catch (runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            [=]() { M<double> test(read_matrixCSV<M, double>(*handle_ptr, bad_file_0)); }
+        );
 
         // Try to load file with too small row
         fs::path bad_file_1(read_matrix_dir / fs::path("bad1.csv"));
-        try {
-            M<double> test(read_matrixCSV<M, double>(*handle_ptr, bad_file_1));
-            FAIL();
-        } catch (runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            [=]() { M<double> test(read_matrixCSV<M, double>(*handle_ptr, bad_file_1)); }
+        );
 
         // Try to load file with too big row
         fs::path bad_file_2(read_matrix_dir / fs::path("bad2.csv"));
-        try {
-            M<double> test(read_matrixCSV<M, double>(*handle_ptr, bad_file_2));
-            FAIL();
-        } catch (runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            [=]() { M<double> test(read_matrixCSV<M, double>(*handle_ptr, bad_file_2)); }
+        );
 
         // Try to load file with invalid character argument
         fs::path bad_file_3(read_matrix_dir / fs::path("bad3.csv"));
-        try {
-            M<double> test(read_matrixCSV<M, double>(*handle_ptr, bad_file_3));
-            FAIL();
-        } catch (runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            [=]() { M<double> test(read_matrixCSV<M, double>(*handle_ptr, bad_file_3)); }
+        );
+
 
     }
 
@@ -186,12 +179,10 @@ TEST_F(MatrixRead_Vector_Test, ReadHalfVector) { ReadVector<__half>(); }
 
 TEST_F(MatrixRead_Vector_Test, FailOnMatrix) {    
     fs::path mat(read_matrix_dir / fs::path("square1.csv"));
-    try {
-        MatrixVector<double> test(read_matrixCSV<MatrixVector, double>(*handle_ptr, mat));
-        FAIL();
-    } catch (runtime_error e) {
-        std::cout << e.what() << std::endl;
-    }
+    CHECK_FUNC_HAS_RUNTIME_ERROR(
+        print_errors,
+        [=]() { MatrixVector<double> test(read_matrixCSV<MatrixVector, double>(*handle_ptr, mat)); }
+    );
 }
 
 // Double type matrix read tests

@@ -147,28 +147,28 @@ public:
         MatrixDense<double> mat(const_mat);
 
         // Test invalid starts
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { mat.get_block(-1, 0, 1, 1); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { mat.get_block(m, 0, 1, 1); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { mat.get_block(0, -1, 1, 1); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { mat.get_block(0, n, 1, 1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { mat.get_block(-1, 0, 1, 1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { mat.get_block(m, 0, 1, 1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { mat.get_block(0, -1, 1, 1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { mat.get_block(0, n, 1, 1); });
 
         // Test invalid sizes from 0
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { mat.get_block(0, 0, -1, 1); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { mat.get_block(0, 0, 1, -1); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { mat.get_block(0, 0, m+1, 1); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { mat.get_block(0, 0, 1, n+1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { mat.get_block(0, 0, -1, 1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { mat.get_block(0, 0, 1, -1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { mat.get_block(0, 0, m+1, 1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { mat.get_block(0, 0, 1, n+1); });
 
         // Test invalid sizes from not initial index
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { mat.get_block(1, 2, -1, 1); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { mat.get_block(1, 2, 1, -1); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { mat.get_block(1, 2, m, 1); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { mat.get_block(1, 2, 1, n-1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { mat.get_block(1, 2, -1, 1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { mat.get_block(1, 2, 1, -1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { mat.get_block(1, 2, m, 1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { mat.get_block(1, 2, 1, n-1); });
 
         // Test invalid access to valid block
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { mat.get_block(1, 2, 2, 2).get_elem(-1, 0); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { mat.get_block(1, 2, 2, 2).get_elem(0, -1); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { mat.get_block(1, 2, 2, 2).get_elem(2, 0); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR([=]() mutable { mat.get_block(1, 2, 2, 2).get_elem(0, 2); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { mat.get_block(1, 2, 2, 2).get_elem(-1, 0); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { mat.get_block(1, 2, 2, 2).get_elem(0, -1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { mat.get_block(1, 2, 2, 2).get_elem(2, 0); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { mat.get_block(1, 2, 2, 2).get_elem(0, 2); });
 
     }
 
