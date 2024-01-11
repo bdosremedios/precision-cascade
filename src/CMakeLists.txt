@@ -14,6 +14,9 @@ add_library(
     types/MatrixVector/MatrixVector_hlf.cu
     types/MatrixVector/MatrixVector_sgl.cu
     types/MatrixVector/MatrixVector_dbl.cu
+    types/MatrixDense/MatrixDense_hlf.cu
+    types/MatrixDense/MatrixDense_sgl.cu
+    types/MatrixDense/MatrixDense_dbl.cu
 )
 
 target_link_libraries(

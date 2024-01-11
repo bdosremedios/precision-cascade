@@ -50,11 +50,11 @@ public:
 
     // *** Basic Constructors ***
     MatrixDense(const cublasHandle_t &arg_handle):
-        m_rows(0), n_cols(0), mem_size(m_rows*n_cols*sizeof(T))
+        handle(arg_handle), m_rows(0), n_cols(0), mem_size(m_rows*n_cols*sizeof(T))
     { allocate_d_mat(); }
 
     MatrixDense(const cublasHandle_t &arg_handle, int arg_m, int arg_n):
-        m_rows(arg_m), n_cols(arg_n), mem_size(m_rows*n_cols*sizeof(T))
+        handle(arg_handle), m_rows(arg_m), n_cols(arg_n), mem_size(m_rows*n_cols*sizeof(T))
     { allocate_d_mat(); }
 
     // Row-major nested initializer list assumed for intuitive user instantiation
@@ -185,7 +185,7 @@ public:
     int rows() const { return m_rows; }
     int cols() const { return n_cols; }
 
-    void print() {
+    void print() const {
 
         T *h_mat = static_cast<T *>(malloc(mem_size));
 
@@ -292,21 +292,25 @@ public:
     }
 
     // *** Arithmetic and Compound Operations ***
-    MatrixDense<T> transpose() const {
-        return typename Parent::Matrix(Parent::transpose());
-    }
 
-    MatrixDense<T> operator*(const T &scalar) const {
-        return typename Parent::Matrix(Parent::operator*(scalar));
-    }
+    MatrixDense<T> operator*(const T &scalar) const;
     MatrixDense<T> operator/(const T &scalar) const {
-        return typename Parent::Matrix(Parent::operator/(scalar));
+        return operator*(static_cast<T>(1)/scalar);
     }
 
     MatrixVector<T> operator*(const MatrixVector<T> &vec) const {
         return typename Eigen::Matrix<T, Eigen::Dynamic, 1>::Matrix(Parent::operator*(vec.base()));
     }
-    
+
+    MatrixVector<T> transpose_prod(const MatrixVector<T> &vec) const {
+        return vec;
+    }
+
+    // Needed for testing (don't need to optimize performance)
+    MatrixDense<T> transpose() const {
+        return typename Parent::Matrix(Parent::transpose());
+    }
+
     // Needed for testing (don't need to optimize performance)
     T norm() const { return Parent::norm(); }
     

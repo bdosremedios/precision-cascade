@@ -135,7 +135,7 @@ protected:
         // Apply previous Given's rotations to new column
         MatrixDense<T> Q_H_block(Q_H.block(0, 0, k+1, k+1));
         MatrixVector<T> R_H_col(H.col(k));
-        R_H.block(0, k, k+1, 1) = Q_H_block.transpose()*R_H_col.slice(0, k+1);
+        R_H.block(0, k, k+1, 1) = Q_H_block.transpose_prod(R_H_col.slice(0, k+1));
 
         // Apply the final Given's rotation manually making R_H upper triangular
         T alpha = R_H.coeff(k, k);
@@ -161,7 +161,7 @@ protected:
         MatrixVector<T> rho_e1(MatrixVector<T>::Zero(kry_space_dim+1));
         rho_e1(0) = rho;
         MatrixDense<T> Q_H_block = Q_H.block(0, 0, kry_space_dim+1, kry_space_dim+1);
-        MatrixVector<T> rhs(Q_H_block.transpose()*rho_e1);
+        MatrixVector<T> rhs(Q_H_block.transpose_prod(rho_e1));
 
         // Use back substitution to solve
         MatrixDense<T> R_H_block(R_H.block(0, 0, kry_space_dim, kry_space_dim));

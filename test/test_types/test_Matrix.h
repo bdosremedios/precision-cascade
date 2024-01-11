@@ -437,6 +437,167 @@ protected:
     }
 
     template <template <typename> typename M, typename T>
+    void TestScale_Base() {
+
+        M<T> mat(
+            *handle_ptr,
+            {{static_cast<T>(-8), static_cast<T>(0.8), static_cast<T>(-0.6)},
+             {static_cast<T>(1), static_cast<T>(2), static_cast<T>(3)},
+             {static_cast<T>(-3), static_cast<T>(-2), static_cast<T>(-1)},
+             {static_cast<T>(10), static_cast<T>(100), static_cast<T>(1000)}}
+        );
+        M<T> mat_scaled_mult(mat*static_cast<T>(4));
+        for (int i=0; i<4; ++i) {
+            for (int j=0; j<3; ++j) {
+                ASSERT_EQ(mat_scaled_mult.get_elem(i, j),
+                          static_cast<T>(4)*mat.get_elem(i, j));
+            }
+        }
+        M<T> mat_scaled_div(mat/static_cast<T>(10));
+        for (int i=0; i<4; ++i) {
+            for (int j=0; j<3; ++j) {
+                ASSERT_EQ(mat_scaled_div.get_elem(i, j),
+                          (static_cast<T>(1)/static_cast<T>(10))*mat.get_elem(i, j));
+            }
+        }
+
+    }
+
+    template <template <typename> typename M, typename T>
+    void TestTransposeProduct_Base() {
+
+        // Test manually
+        MatrixDense<T> mat(
+            *handle_ptr,
+            {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4)},
+             {static_cast<T>(5), static_cast<T>(6), static_cast<T>(7), static_cast<T>(8)},
+             {static_cast<T>(9), static_cast<T>(1), static_cast<T>(2), static_cast<T>(3)}}
+        );
+        ASSERT_VECTOR_EQ(
+            mat.transpose_prod(
+                MatrixVector<T>(
+                    *handle_ptr,
+                    {static_cast<T>(1), static_cast<T>(0), static_cast<T>(0)}
+                )
+            ),
+            MatrixVector<T>(
+                *handle_ptr,
+                {static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4)}
+            )
+        );
+        ASSERT_VECTOR_EQ(
+            mat.transpose_prod(
+                MatrixVector<T>(
+                    *handle_ptr,
+                    {static_cast<T>(0), static_cast<T>(1), static_cast<T>(0)}
+                )
+            ),
+            MatrixVector<T>(
+                *handle_ptr,
+                {static_cast<T>(5), static_cast<T>(6), static_cast<T>(7), static_cast<T>(8)}
+            )
+        );
+        ASSERT_VECTOR_EQ(
+            mat.transpose_prod(
+                MatrixVector<T>(
+                    *handle_ptr,
+                    {static_cast<T>(0), static_cast<T>(0), static_cast<T>(1)}
+                )
+            ),
+            MatrixVector<T>(
+                *handle_ptr,
+                {static_cast<T>(9), static_cast<T>(1), static_cast<T>(2), static_cast<T>(3)}
+            )
+        );
+        ASSERT_VECTOR_EQ(
+            mat.transpose_prod(
+                MatrixVector<T>(
+                    *handle_ptr,
+                    {static_cast<T>(1), static_cast<T>(0.1), static_cast<T>(0.01)}
+                )
+            ),
+            MatrixVector<T>(
+                *handle_ptr,
+                {static_cast<T>(1.59), static_cast<T>(2.61), static_cast<T>(3.72), static_cast<T>(4.83)}
+            )
+        );
+
+        // Test random
+        const int m_rand(3);
+        const int n_rand(2);
+        MatrixDense<T> rand_mat(MatrixDense<T>::Random(*handle_ptr, m_rand, n_rand));
+        ASSERT_VECTOR_EQ(
+            rand_mat.transpose_prod(
+                MatrixVector<T>(
+                    *handle_ptr,
+                    {static_cast<T>(1), static_cast<T>(0), static_cast<T>(0)}
+                )
+            ),
+            MatrixVector<T>(
+                *handle_ptr,
+                {rand_mat.get_elem(0, 0),
+                 rand_mat.get_elem(0, 1),
+                 rand_mat.get_elem(0, 2),
+                 rand_mat.get_elem(0, 3)}
+            )
+        );
+        ASSERT_VECTOR_EQ(
+            rand_mat.transpose_prod(
+                MatrixVector<T>(
+                    *handle_ptr,
+                    {static_cast<T>(0), static_cast<T>(1), static_cast<T>(0)}
+                )
+            ),
+            MatrixVector<T>(
+                *handle_ptr,
+                {rand_mat.get_elem(1, 0),
+                 rand_mat.get_elem(1, 1),
+                 rand_mat.get_elem(1, 2),
+                 rand_mat.get_elem(1, 3)}
+            )
+        );
+        ASSERT_VECTOR_EQ(
+            rand_mat.transpose_prod(
+                MatrixVector<T>(
+                    *handle_ptr,
+                    {static_cast<T>(0), static_cast<T>(0), static_cast<T>(1)}
+                )
+            ),
+            MatrixVector<T>(
+                *handle_ptr,
+                {rand_mat.get_elem(2, 0),
+                 rand_mat.get_elem(2, 1),
+                 rand_mat.get_elem(2, 2),
+                 rand_mat.get_elem(2, 3)}
+            )
+        );
+        ASSERT_VECTOR_EQ(
+            rand_mat.transpose_prod(
+                MatrixVector<T>(
+                    *handle_ptr,
+                    {static_cast<T>(1), static_cast<T>(0.1), static_cast<T>(0.01)}
+                )
+            ),
+            MatrixVector<T>(
+                *handle_ptr,
+                {(static_cast<T>(1)*rand_mat.get_elem(0, 0) +
+                  static_cast<T>(0.1)*rand_mat.get_elem(0, 1) +
+                  static_cast<T>(0.01)*rand_mat.get_elem(0, 2)),
+                 (static_cast<T>(1)*rand_mat.get_elem(1, 0) +
+                  static_cast<T>(0.1)*rand_mat.get_elem(1, 1) +
+                  static_cast<T>(0.01)*rand_mat.get_elem(1, 2)),
+                 (static_cast<T>(1)*rand_mat.get_elem(2, 0) +
+                  static_cast<T>(0.1)*rand_mat.get_elem(2, 1) +
+                  static_cast<T>(0.01)*rand_mat.get_elem(2, 2)),
+                 (static_cast<T>(1)*rand_mat.get_elem(3, 0) +
+                  static_cast<T>(0.1)*rand_mat.get_elem(3, 1) +
+                  static_cast<T>(0.01)*rand_mat.get_elem(3, 2))}
+            )
+        );
+
+    }
+
+    template <template <typename> typename M, typename T>
     void TestTranspose_Base() {
 
         // Test manually
@@ -471,30 +632,6 @@ protected:
         for (int i=0; i<n_rand; ++i) {
             for (int j=0; j<m_rand; ++j) {
                 ASSERT_EQ(mat_rand.transpose().coeff(i, j), mat_rand.coeff(j, i));
-            }
-        }
-
-    }
-
-    template <template <typename> typename M, typename T>
-    void TestScale_Base() {
-
-        M<T> mat ({
-            {static_cast<T>(-8), static_cast<T>(0.8), static_cast<T>(-0.6)},
-            {static_cast<T>(1), static_cast<T>(2), static_cast<T>(3)},
-            {static_cast<T>(-3), static_cast<T>(-2), static_cast<T>(-1)},
-            {static_cast<T>(10), static_cast<T>(100), static_cast<T>(1000)}
-        });
-        M<T> mat_scaled_mult = mat*static_cast<T>(4);
-        for (int i=0; i<4; ++i) {
-            for (int j=0; j<3; ++j) {
-                ASSERT_EQ(mat_scaled_mult.coeff(i, j), static_cast<T>(4)*mat.coeff(i, j));
-            }
-        }
-        M<T> mat_scaled_div = mat/static_cast<T>(10);
-        for (int i=0; i<4; ++i) {
-            for (int j=0; j<3; ++j) {
-                ASSERT_EQ(mat_scaled_div.coeff(i, j), mat.coeff(i, j)/static_cast<T>(10));
             }
         }
 
