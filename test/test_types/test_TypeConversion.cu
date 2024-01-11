@@ -45,10 +45,14 @@ public:
     void TestSparseBlockToDense() {
 
         MatrixSparse<T> const_mat ({
-            {static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4), static_cast<T>(5)},
-            {static_cast<T>(6), static_cast<T>(7), static_cast<T>(8), static_cast<T>(9), static_cast<T>(10)},
-            {static_cast<T>(11), static_cast<T>(12), static_cast<T>(13), static_cast<T>(14), static_cast<T>(15)},
-            {static_cast<T>(16), static_cast<T>(17), static_cast<T>(18), static_cast<T>(19), static_cast<T>(20)}
+            {static_cast<T>(1), static_cast<T>(2), static_cast<T>(3),
+             static_cast<T>(4), static_cast<T>(5)},
+            {static_cast<T>(6), static_cast<T>(7), static_cast<T>(8),
+             static_cast<T>(9), static_cast<T>(10)},
+            {static_cast<T>(11), static_cast<T>(12), static_cast<T>(13),
+             static_cast<T>(14), static_cast<T>(15)},
+            {static_cast<T>(16), static_cast<T>(17), static_cast<T>(18),
+             static_cast<T>(19), static_cast<T>(20)}
         });
         MatrixSparse<T> mat(const_mat);
         

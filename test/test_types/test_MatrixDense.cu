@@ -165,10 +165,22 @@ public:
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { mat.get_block(1, 2, 1, n-1); });
 
         // Test invalid access to valid block
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { mat.get_block(1, 2, 2, 2).get_elem(-1, 0); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { mat.get_block(1, 2, 2, 2).get_elem(0, -1); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { mat.get_block(1, 2, 2, 2).get_elem(2, 0); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { mat.get_block(1, 2, 2, 2).get_elem(0, 2); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            [=]() mutable { mat.get_block(1, 2, 2, 2).get_elem(-1, 0); }
+        );
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            [=]() mutable { mat.get_block(1, 2, 2, 2).get_elem(0, -1); }
+        );
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            [=]() mutable { mat.get_block(1, 2, 2, 2).get_elem(2, 0); }
+        );
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            [=]() mutable { mat.get_block(1, 2, 2, 2).get_elem(0, 2); }
+        );
 
     }
 
@@ -260,8 +272,8 @@ TEST_F(MatrixDense_Test, TestBlock) {
 TEST_F(MatrixDense_Test, TestBadBlock) { TestBadBlock(); }
 
 TEST_F(MatrixDense_Test, TestScale) {
-    // TestScale<half>();
-    // TestScale<float>();
+    TestScale<half>();
+    TestScale<float>();
     TestScale<double>();
 }
 
