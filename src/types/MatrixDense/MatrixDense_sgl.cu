@@ -77,3 +77,35 @@ MatrixVector<float> MatrixDense<float>::transpose_prod(const MatrixVector<float>
     return c;
 
 }
+
+template <>
+MatrixDense<float> MatrixDense<float>::operator*(const MatrixDense<float> &mat) const {
+
+    if (mat.rows() != n_cols) {
+        throw std::runtime_error(
+            "MatrixDense: invalid mat in matrix-matrix prod (operator*(const MatrixDense<float> &mat))"
+        );
+    }
+
+    MatrixDense<float> c(MatrixDense<float>::Zero(handle, m_rows, mat.cols()));
+
+    float alpha = 1.;
+    float beta = 0.;
+
+    check_cublas_status(
+        cublasGemmEx(
+            handle, CUBLAS_OP_N, CUBLAS_OP_N,
+            m_rows, mat.cols(), n_cols,
+            &alpha,
+            d_mat, CUDA_R_32F, m_rows,
+            mat.d_mat, CUDA_R_32F, n_cols,
+            &beta,
+            c.d_mat, CUDA_R_32F, m_rows,
+            CUBLAS_COMPUTE_32F,
+            CUBLAS_GEMM_DEFAULT
+        )
+    );
+
+    return c;
+
+}

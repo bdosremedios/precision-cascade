@@ -833,45 +833,64 @@ protected:
     template <template <typename> typename M, typename T>
     void TestMatMat_Base() {
 
-        M<T> mat1 ({
-            {static_cast<T>(1), static_cast<T>(4)},
-            {static_cast<T>(-1), static_cast<T>(-4)},
-            {static_cast<T>(-3), static_cast<T>(-2)},
-            {static_cast<T>(10), static_cast<T>(100)}
-        });
-        M<T> mat2 ({
-            {static_cast<T>(7), static_cast<T>(2), static_cast<T>(-3)},
-            {static_cast<T>(10), static_cast<T>(-4), static_cast<T>(-3)}
-        });
-        M<T> test_mat ({
-            {static_cast<T>(47), static_cast<T>(-14), static_cast<T>(-15)},
-            {static_cast<T>(-47), static_cast<T>(14), static_cast<T>(15)},
-            {static_cast<T>(-41), static_cast<T>(2), static_cast<T>(15)},
-            {static_cast<T>(1070), static_cast<T>(-380), static_cast<T>(-330)}
-        });
+        M<T> mat1(
+            *handle_ptr,
+            {{static_cast<T>(1), static_cast<T>(4)},
+             {static_cast<T>(-1), static_cast<T>(-4)},
+             {static_cast<T>(-3), static_cast<T>(-2)},
+             {static_cast<T>(10), static_cast<T>(100)}}
+        );
+        M<T> mat2(
+            *handle_ptr,
+            {{static_cast<T>(7), static_cast<T>(2), static_cast<T>(-3)},
+             {static_cast<T>(10), static_cast<T>(-4), static_cast<T>(-3)}}
+        );
+        M<T> test_mat(
+            *handle_ptr,
+            {{static_cast<T>(47), static_cast<T>(-14), static_cast<T>(-15)},
+             {static_cast<T>(-47), static_cast<T>(14), static_cast<T>(15)},
+             {static_cast<T>(-41), static_cast<T>(2), static_cast<T>(15)},
+             {static_cast<T>(1070), static_cast<T>(-380), static_cast<T>(-330)}}
+        );
         ASSERT_MATRIX_EQ(mat1*mat2, test_mat);
-        ASSERT_MATRIX_EQ(mat1*M<T>::Identity(2, 2), mat1);
-        ASSERT_MATRIX_EQ(mat2*M<T>::Identity(3, 3), mat2);
+        ASSERT_MATRIX_EQ(mat1*M<T>::Identity(*handle_ptr, 2, 2), mat1);
+        ASSERT_MATRIX_EQ(mat2*M<T>::Identity(*handle_ptr, 3, 3), mat2);
 
     }
 
-    template <template <typename> typename M, typename T>
-    void TestNorm_Base() {
+    template <template <typename> typename M>
+    void TestBadMatMat_Base() {
 
-        M<T> mat1 ({
-            {static_cast<T>(18), static_cast<T>(5)},
-            {static_cast<T>(-3), static_cast<T>(6)},
-            {static_cast<T>(9), static_cast<T>(-9)},
-            {static_cast<T>(4), static_cast<T>(-2)}
-        });
-        ASSERT_EQ(mat1.norm(), static_cast<T>(24));
+        M<double> mat(
+            *handle_ptr,
+            {{1, 4},
+             {-1, -4},
+             {-3, -2},
+             {10, 100}}
+        );
 
-        M<T> mat2 ({
-            {static_cast<T>(1), static_cast<T>(-1), static_cast<T>(1)},
-            {static_cast<T>(1), static_cast<T>(1), static_cast<T>(-1)},
-            {static_cast<T>(-1), static_cast<T>(-1), static_cast<T>(-1)}
-        });
-        ASSERT_EQ(mat2.norm(), static_cast<T>(3));
+        M<double> mat_too_small(
+            *handle_ptr,
+            {{1, 1}}
+        );
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { mat*mat_too_small; });
+
+        M<double> mat_too_big(
+            *handle_ptr,
+            {{1, 1},
+             {1, 1},
+             {1, 1}}
+        );
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { mat*mat_too_big; });
+
+        M<double> mat_matches_other_dim(
+            *handle_ptr,
+            {{1, 1, 1, 1},
+             {1, 1, 1, 1},
+             {1, 1, 1, 1},
+             {1, 1, 1, 1}}
+        );
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { mat*mat_matches_other_dim; });
 
     }
 
@@ -917,6 +936,26 @@ protected:
 
         ASSERT_MATRIX_EQ(mat1-mat1, M<T>::Zero(4, 3));
         ASSERT_MATRIX_EQ(mat2-mat2, M<T>::Zero(4, 3));
+
+    }
+
+    template <template <typename> typename M, typename T>
+    void TestNorm_Base() {
+
+        M<T> mat1 ({
+            {static_cast<T>(18), static_cast<T>(5)},
+            {static_cast<T>(-3), static_cast<T>(6)},
+            {static_cast<T>(9), static_cast<T>(-9)},
+            {static_cast<T>(4), static_cast<T>(-2)}
+        });
+        ASSERT_EQ(mat1.norm(), static_cast<T>(24));
+
+        M<T> mat2 ({
+            {static_cast<T>(1), static_cast<T>(-1), static_cast<T>(1)},
+            {static_cast<T>(1), static_cast<T>(1), static_cast<T>(-1)},
+            {static_cast<T>(-1), static_cast<T>(-1), static_cast<T>(-1)}
+        });
+        ASSERT_EQ(mat2.norm(), static_cast<T>(3));
 
     }
 

@@ -323,23 +323,22 @@ public:
         return created_mat;
 
     }
-
+    
     // Needed for testing (don't need to optimize performance)
-    T norm() const { return Parent::norm(); }
+    MatrixDense<T> operator*(const MatrixDense<T> &mat) const;
 
     // Needed for testing (don't need to optimize performance)
     MatrixDense<T> operator+(const MatrixDense<T> &mat) const {
         return typename Parent::Matrix(Parent::operator+(mat));
     }
+
     // Needed for testing (don't need to optimize performance)
     MatrixDense<T> operator-(const MatrixDense<T> &mat) const {
         return typename Parent::Matrix(Parent::operator-(mat));
     }
-    
+
     // Needed for testing (don't need to optimize performance)
-    MatrixDense<T> operator*(const MatrixDense<T> &mat) const {
-        return typename Parent::Matrix(Parent::operator*(mat));
-    }
+    T norm() const { return Parent::norm(); }
 
     // Nested lightweight wrapper class representing matrix column and assignment/elem access
     // Requires: modification by/cast to MatrixVector<T>

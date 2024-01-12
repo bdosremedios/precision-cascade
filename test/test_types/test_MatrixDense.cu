@@ -200,14 +200,16 @@ public:
     template <typename T>
     void TestTranspose() { TestTranspose_Base<MatrixDense, T>(); }
 
-    // template <typename T>
-    // void TestMatMat() { TestMatMat_Base<MatrixDense, T>(); }
+    template <typename T>
+    void TestMatMat() { TestMatMat_Base<MatrixDense, T>(); }
 
-    // template <typename T>
-    // void TestNorm() { TestNorm_Base<MatrixDense, T>(); }
+    void TestBadMatMat() { TestBadMatMat_Base<MatrixDense>(); }
 
     // template <typename T>
     // void TestAddSub() { TestAddSub_Base<MatrixDense, T>(); }
+
+    // template <typename T>
+    // void TestNorm() { TestNorm_Base<MatrixDense, T>(); }
 
     // void TestCast() { TestCast_Base<MatrixDense>(); }
 
@@ -303,11 +305,13 @@ TEST_F(MatrixDense_Test, TestTranspose) {
     TestTranspose<double>();
 }
 
-// TEST_F(MatrixDense_Test, TestMatMat) {
-//     TestMatMat<half>();
-//     TestMatMat<float>();
-//     TestMatMat<double>();
-// }
+TEST_F(MatrixDense_Test, TestMatMat) {
+    TestMatMat<half>();
+    TestMatMat<float>();
+    TestMatMat<double>();
+}
+
+TEST_F(MatrixDense_Test, TestBadMatMat) { TestBadMatMat(); }
 
 // TEST_F(MatrixDense_Test, TestNorm) {
 //     TestNorm<half>();

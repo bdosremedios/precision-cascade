@@ -78,3 +78,36 @@ MatrixVector<__half> MatrixDense<__half>::transpose_prod(const MatrixVector<__ha
     return c;
 
 }
+
+
+template <>
+MatrixDense<__half> MatrixDense<__half>::operator*(const MatrixDense<__half> &mat) const {
+
+    if (mat.rows() != n_cols) {
+        throw std::runtime_error(
+            "MatrixDense: invalid mat in matrix-matrix prod (operator*(const MatrixDense<__half> &mat))"
+        );
+    }
+
+    MatrixDense<__half> c(MatrixDense<__half>::Zero(handle, m_rows, mat.cols()));
+
+    __half alpha = 1.;
+    __half beta = 0.;
+
+    check_cublas_status(
+        cublasGemmEx(
+            handle, CUBLAS_OP_N, CUBLAS_OP_N,
+            m_rows, mat.cols(), n_cols,
+            &alpha,
+            d_mat, CUDA_R_16F, m_rows,
+            mat.d_mat, CUDA_R_16F, n_cols,
+            &beta,
+            c.d_mat, CUDA_R_16F, m_rows,
+            CUBLAS_COMPUTE_16F,
+            CUBLAS_GEMM_DEFAULT
+        )
+    );
+
+    return c;
+
+}
