@@ -214,8 +214,8 @@ public:
     template <typename T>
     void TestBadAddSub() { TestBadAddSub_Base<MatrixDense, T>(); }
 
-    // template <typename T>
-    // void TestNorm() { TestNorm_Base<MatrixDense, T>(); }
+    template <typename T>
+    void TestNorm() { TestNorm_Base<MatrixDense, T>(); }
 
     // void TestCast() { TestCast_Base<MatrixDense>(); }
 
@@ -343,10 +343,10 @@ TEST_F(MatrixDense_Test, TestBadAddSub) {
     TestBadAddSub<double>();
 }
 
-// TEST_F(MatrixDense_Test, TestNorm) {
-//     TestNorm<half>();
-//     TestNorm<float>();
-//     TestNorm<double>();
-// }
+TEST_F(MatrixDense_Test, TestNorm) {
+    TestNorm<half>();
+    TestNorm<float>();
+    TestNorm<double>();
+}
 
 // TEST_F(MatrixDense_Test, TestCast) { TestCast(); }

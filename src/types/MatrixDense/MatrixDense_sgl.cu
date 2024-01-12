@@ -163,3 +163,21 @@ MatrixDense<float> MatrixDense<float>::operator-(const MatrixDense<float> &mat) 
     return c;
 
 }
+
+template<>
+float MatrixDense<float>::norm() const {
+
+    float result;
+
+    check_cublas_status(
+        cublasNrm2Ex(
+            handle, m_rows*n_cols,
+            d_mat, CUDA_R_32F, 1,
+            &result, CUDA_R_32F,
+            CUDA_R_32F
+        )
+    );
+
+    return result;
+
+}

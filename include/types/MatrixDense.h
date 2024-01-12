@@ -334,7 +334,7 @@ public:
     MatrixDense<T> operator-(const MatrixDense<T> &mat) const;
 
     // Needed for testing (don't need to optimize performance)
-    T norm() const { return Parent::norm(); }
+    T norm() const;
 
     // Nested lightweight wrapper class representing matrix column and assignment/elem access
     // Requires: modification by/cast to MatrixVector<T>

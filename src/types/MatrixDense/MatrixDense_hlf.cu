@@ -165,3 +165,21 @@ MatrixDense<__half> MatrixDense<__half>::operator-(const MatrixDense<__half> &ma
     return c;
 
 }
+
+template<>
+__half MatrixDense<__half>::norm() const {
+
+    __half result;
+
+    check_cublas_status(
+        cublasNrm2Ex(
+            handle, m_rows*n_cols,
+            d_mat, CUDA_R_16F, 1,
+            &result, CUDA_R_16F,
+            CUDA_R_32F
+        )
+    );
+
+    return result;
+
+}

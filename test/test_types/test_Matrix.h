@@ -1019,19 +1019,21 @@ protected:
     template <template <typename> typename M, typename T>
     void TestNorm_Base() {
 
-        M<T> mat1 ({
-            {static_cast<T>(18), static_cast<T>(5)},
-            {static_cast<T>(-3), static_cast<T>(6)},
-            {static_cast<T>(9), static_cast<T>(-9)},
-            {static_cast<T>(4), static_cast<T>(-2)}
-        });
+        M<T> mat1(
+            *handle_ptr,
+            {{static_cast<T>(18), static_cast<T>(5)},
+             {static_cast<T>(-3), static_cast<T>(6)},
+             {static_cast<T>(9), static_cast<T>(-9)},
+             {static_cast<T>(4), static_cast<T>(-2)}}
+        );
         ASSERT_EQ(mat1.norm(), static_cast<T>(24));
 
-        M<T> mat2 ({
-            {static_cast<T>(1), static_cast<T>(-1), static_cast<T>(1)},
-            {static_cast<T>(1), static_cast<T>(1), static_cast<T>(-1)},
-            {static_cast<T>(-1), static_cast<T>(-1), static_cast<T>(-1)}
-        });
+        M<T> mat2(
+            *handle_ptr,
+            {{static_cast<T>(1), static_cast<T>(-1), static_cast<T>(1)},
+             {static_cast<T>(1), static_cast<T>(1), static_cast<T>(-1)},
+             {static_cast<T>(-1), static_cast<T>(-1), static_cast<T>(-1)}}
+        );
         ASSERT_EQ(mat2.norm(), static_cast<T>(3));
 
     }
