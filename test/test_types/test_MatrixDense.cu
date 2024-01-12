@@ -217,7 +217,7 @@ public:
     template <typename T>
     void TestNorm() { TestNorm_Base<MatrixDense, T>(); }
 
-    // void TestCast() { TestCast_Base<MatrixDense>(); }
+    void TestCast() { TestCast_Base<MatrixDense>(); }
 
 };
 
@@ -349,4 +349,4 @@ TEST_F(MatrixDense_Test, TestNorm) {
     TestNorm<double>();
 }
 
-// TEST_F(MatrixDense_Test, TestCast) { TestCast(); }
+TEST_F(MatrixDense_Test, TestCast) { TestCast(); }

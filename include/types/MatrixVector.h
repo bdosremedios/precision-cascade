@@ -288,7 +288,10 @@ public:
 
         T *h_vec = static_cast<T *>(malloc(mem_size));
 
-        check_cublas_status(cublasGetVector(m_rows, sizeof(T), d_vec, 1, h_vec, 1));
+        if (m_rows > 0) {
+            check_cublas_status(cublasGetVector(m_rows, sizeof(T), d_vec, 1, h_vec, 1));
+        }
+
         for (int i=0; i<m_rows; ++i) {
             std::cout << static_cast<double>(h_vec[i]) << std::endl;
         }
@@ -310,8 +313,10 @@ public:
         T *h_vec_self = static_cast<T *>(malloc(mem_size));
         T *h_vec_other = static_cast<T *>(malloc(mem_size));
 
-        check_cublas_status(cublasGetVector(m_rows, sizeof(T), d_vec, 1, h_vec_self, 1));
-        check_cublas_status(cublasGetVector(m_rows, sizeof(T), other.d_vec, 1, h_vec_other, 1));
+        if (m_rows > 0) {
+            check_cublas_status(cublasGetVector(m_rows, sizeof(T), d_vec, 1, h_vec_self, 1));
+            check_cublas_status(cublasGetVector(m_rows, sizeof(T), other.d_vec, 1, h_vec_other, 1));
+        }
 
         bool is_equal = true;
         for (int i=0; i<m_rows; ++i) { is_equal = is_equal && (h_vec_self[i] == h_vec_other[i]); }
@@ -330,7 +335,10 @@ public:
         T *h_vec = static_cast<T *>(malloc(mem_size));
         Cast_T *h_cast_vec = static_cast<Cast_T *>(malloc(m_rows*sizeof(Cast_T)));
 
-        check_cublas_status(cublasGetVector(m_rows, sizeof(T), d_vec, 1, h_vec, 1));
+        if (m_rows > 0) {
+            check_cublas_status(cublasGetVector(m_rows, sizeof(T), d_vec, 1, h_vec, 1));
+        }
+
         for (int i=0; i<m_rows; ++i) { h_cast_vec[i] = static_cast<Cast_T>(h_vec[i]); }
         MatrixVector<Cast_T> created_vec(handle, h_cast_vec, m_rows);
 

@@ -24,6 +24,7 @@ class MatrixDense: private Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>
 private:
 
     using Parent = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>;
+    template <typename> friend class MatrixDense;
     // friend MatrixSparse<T>;
     // const Parent &base() const { return *this; }
 
@@ -189,7 +190,10 @@ public:
 
         T *h_mat = static_cast<T *>(malloc(mem_size));
 
-        check_cublas_status(cublasGetMatrix(m_rows, n_cols, sizeof(T), d_mat, m_rows, h_mat, m_rows));
+        if ((m_rows > 0) && (n_cols > 0)) {
+            check_cublas_status(cublasGetMatrix(m_rows, n_cols, sizeof(T), d_mat, m_rows, h_mat, m_rows));
+        }
+
         for (int i=0; i<m_rows; ++i) {
             for (int j=0; j<n_cols; ++j) {
                 std::cout << static_cast<double>(h_mat[i+j*m_rows]) << " ";
@@ -286,9 +290,27 @@ public:
     // *** Explicit Cast ***
     template <typename Cast_T>
     MatrixDense<Cast_T> cast() const {
-        return typename Eigen::Matrix<Cast_T, Eigen::Dynamic, Eigen::Dynamic>::Matrix(
-            Parent::template cast<Cast_T>()
-        );
+
+        T *h_mat = static_cast<T *>(malloc(m_rows*n_cols*sizeof(T)));
+        Cast_T *h_mat_casted = static_cast<Cast_T *>(malloc(m_rows*n_cols*sizeof(Cast_T)));
+        
+        if ((m_rows > 0) && (n_cols > 0)) {
+            check_cublas_status(cublasGetMatrix(m_rows, n_cols, sizeof(T), d_mat, m_rows, h_mat, m_rows));
+        }
+
+        for (int j=0; j<n_cols; ++j) {
+            for (int i=0; i<m_rows; ++i) {
+                h_mat_casted[i+j*m_rows] = static_cast<Cast_T>(h_mat[i+j*m_rows]);
+            }
+        }
+
+        MatrixDense<Cast_T> created_mat(handle, h_mat_casted, m_rows, n_cols);
+
+        free(h_mat);
+        free(h_mat_casted);
+
+        return created_mat;
+
     }
 
     // *** Arithmetic and Compound Operations ***
@@ -307,7 +329,9 @@ public:
         T *h_mat = static_cast<T *>(malloc(m_rows*n_cols*sizeof(T)));
         T *h_mat_trans = static_cast<T *>(malloc(n_cols*m_rows*sizeof(T)));
 
-        check_cublas_status(cublasGetMatrix(m_rows, n_cols, sizeof(T), d_mat, m_rows, h_mat, m_rows));
+        if ((m_rows > 0) && (n_cols > 0)) {
+            check_cublas_status(cublasGetMatrix(m_rows, n_cols, sizeof(T), d_mat, m_rows, h_mat, m_rows));
+        }
 
         for (int i=0; i<m_rows; ++i) {
             for (int j=0; j<n_cols; ++j) {
