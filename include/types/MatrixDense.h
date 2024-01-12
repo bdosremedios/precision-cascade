@@ -292,15 +292,12 @@ public:
     }
 
     // *** Arithmetic and Compound Operations ***
-
     MatrixDense<T> operator*(const T &scalar) const;
     MatrixDense<T> operator/(const T &scalar) const {
         return operator*(static_cast<T>(1)/scalar);
     }
 
-    MatrixVector<T> operator*(const MatrixVector<T> &vec) const {
-        return typename Eigen::Matrix<T, Eigen::Dynamic, 1>::Matrix(Parent::operator*(vec.base()));
-    }
+    MatrixVector<T> operator*(const MatrixVector<T> &vec) const;
 
     MatrixVector<T> transpose_prod(const MatrixVector<T> &vec) const;
 
@@ -329,7 +326,7 @@ public:
 
     // Needed for testing (don't need to optimize performance)
     T norm() const { return Parent::norm(); }
-    
+
     // Needed for testing (don't need to optimize performance)
     MatrixDense<T> operator+(const MatrixDense<T> &mat) const {
         return typename Parent::Matrix(Parent::operator+(mat));

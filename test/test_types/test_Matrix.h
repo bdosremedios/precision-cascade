@@ -460,10 +460,177 @@ protected:
     }
 
     template <template <typename> typename M, typename T>
-    void TestTransposeProduct_Base() {
+    void TestMatVec_Base() {
 
         // Test manually
-        MatrixDense<T> mat(
+        M<T> mat(
+            *handle_ptr,
+            {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3)},
+             {static_cast<T>(4), static_cast<T>(5), static_cast<T>(6)},
+             {static_cast<T>(7), static_cast<T>(8), static_cast<T>(9)},
+             {static_cast<T>(3), static_cast<T>(2), static_cast<T>(1)}}
+        );
+        ASSERT_VECTOR_NEAR(
+            mat*MatrixVector<T>(
+                *handle_ptr,
+                {static_cast<T>(1), static_cast<T>(0), static_cast<T>(0)}
+            ),
+            MatrixVector<T>(
+                *handle_ptr,
+                {static_cast<T>(1), static_cast<T>(4), static_cast<T>(7), static_cast<T>(3)}
+            ),
+            static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
+        );
+        ASSERT_VECTOR_NEAR(
+            mat*MatrixVector<T>(
+                *handle_ptr,
+                {static_cast<T>(0), static_cast<T>(1), static_cast<T>(0)}
+            ),
+            MatrixVector<T>(
+                *handle_ptr,
+                {static_cast<T>(1), static_cast<T>(5), static_cast<T>(8), static_cast<T>(2)}
+            ),
+            static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
+        );
+        ASSERT_VECTOR_NEAR(
+            mat*MatrixVector<T>(
+                *handle_ptr,
+                {static_cast<T>(0), static_cast<T>(0), static_cast<T>(1)}
+            ),
+            MatrixVector<T>(
+                *handle_ptr,
+                {static_cast<T>(2), static_cast<T>(6), static_cast<T>(9), static_cast<T>(1)}
+            ),
+            static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
+        );
+        ASSERT_VECTOR_NEAR(
+            mat*MatrixVector<T>(
+                *handle_ptr,
+                {static_cast<T>(1), static_cast<T>(0.1), static_cast<T>(0.01)}
+            ),
+            MatrixVector<T>(
+                *handle_ptr,
+                {static_cast<T>(1.23), static_cast<T>(4.56), static_cast<T>(7.89), static_cast<T>(3.21)}
+            ),
+            static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
+        );
+
+        // Test random
+        const int m_rand(3);
+        const int n_rand(4);
+        M<T> rand_mat(M<T>::Random(*handle_ptr, m_rand, n_rand));
+        ASSERT_VECTOR_NEAR(
+            rand_mat*MatrixVector<T>(
+                *handle_ptr,
+                {static_cast<T>(1), static_cast<T>(0), static_cast<T>(0), static_cast<T>(0)}
+            ),
+            MatrixVector<T>(
+                *handle_ptr,
+                {rand_mat.get_elem(0, 0),
+                 rand_mat.get_elem(1, 0),
+                 rand_mat.get_elem(2, 0)}
+            ),
+            static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
+        );
+        ASSERT_VECTOR_NEAR(
+            rand_mat*MatrixVector<T>(
+                *handle_ptr,
+                {static_cast<T>(0), static_cast<T>(1), static_cast<T>(0), static_cast<T>(0)}
+            ),
+            MatrixVector<T>(
+                *handle_ptr,
+                {rand_mat.get_elem(0, 1),
+                 rand_mat.get_elem(1, 1),
+                 rand_mat.get_elem(2, 1)}
+            ),
+            static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
+        );
+        ASSERT_VECTOR_NEAR(
+            rand_mat*MatrixVector<T>(
+                *handle_ptr,
+                {static_cast<T>(0), static_cast<T>(0), static_cast<T>(1), static_cast<T>(0)}
+            ),
+            MatrixVector<T>(
+                *handle_ptr,
+                {rand_mat.get_elem(0, 2),
+                 rand_mat.get_elem(1, 2),
+                 rand_mat.get_elem(2, 2)}
+            ),
+            static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
+        );
+        ASSERT_VECTOR_NEAR(
+            rand_mat*MatrixVector<T>(
+                *handle_ptr,
+                {static_cast<T>(0), static_cast<T>(0), static_cast<T>(0), static_cast<T>(1)}
+            ),
+            MatrixVector<T>(
+                *handle_ptr,
+                {rand_mat.get_elem(0, 3),
+                 rand_mat.get_elem(1, 3),
+                 rand_mat.get_elem(2, 3)}
+            ),
+            static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
+        );
+        ASSERT_VECTOR_NEAR(
+            rand_mat*MatrixVector<T>(
+                *handle_ptr,
+                {static_cast<T>(1), static_cast<T>(0.1), static_cast<T>(0.01), static_cast<T>(0.001)}
+            ),
+            MatrixVector<T>(
+                *handle_ptr,
+                {(static_cast<T>(1)*rand_mat.get_elem(0, 0) +
+                  static_cast<T>(0.1)*rand_mat.get_elem(0, 1) +
+                  static_cast<T>(0.01)*rand_mat.get_elem(0, 2) +
+                  static_cast<T>(0.01)*rand_mat.get_elem(0, 3)),
+                 (static_cast<T>(1)*rand_mat.get_elem(1, 0) +
+                  static_cast<T>(0.1)*rand_mat.get_elem(1, 1) +
+                  static_cast<T>(0.01)*rand_mat.get_elem(1, 2)+
+                  static_cast<T>(0.01)*rand_mat.get_elem(1, 3)),
+                 (static_cast<T>(1)*rand_mat.get_elem(2, 0) +
+                  static_cast<T>(0.1)*rand_mat.get_elem(2, 1) +
+                  static_cast<T>(0.01)*rand_mat.get_elem(2, 2)+
+                  static_cast<T>(0.01)*rand_mat.get_elem(2, 3))}
+            ),
+            static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
+        );
+
+    }
+
+    template <template <typename> typename M>
+    void TestBadMatVec_Base() {
+
+        M<double> mat(
+            *handle_ptr,
+            {{1, 2, 3, 4},
+             {5, 6, 7, 8},
+             {9, 10, 11, 12}}
+        );
+
+        MatrixVector<double> vec_too_small(*handle_ptr, {1, 1});
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            [=]() { mat.transpose_prod(vec_too_small); }
+        );
+
+        MatrixVector<double> vec_too_large(*handle_ptr, {1, 1, 1, 1, 1});
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            [=]() { mat.transpose_prod(vec_too_large); }
+        );
+
+        MatrixVector<double> vec_matches_wrong_dimension(*handle_ptr, {1, 1, 1});
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            [=]() { mat.transpose_prod(vec_matches_wrong_dimension); }
+        );
+
+    }
+
+    template <template <typename> typename M, typename T>
+    void TestTransposeMatVec_Base() {
+
+        // Test manually
+        M<T> mat(
             *handle_ptr,
             {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4)},
              {static_cast<T>(5), static_cast<T>(6), static_cast<T>(7), static_cast<T>(8)},
@@ -525,7 +692,7 @@ protected:
         // Test random
         const int m_rand(3);
         const int n_rand(2);
-        MatrixDense<T> rand_mat(MatrixDense<T>::Random(*handle_ptr, m_rand, n_rand));
+        M<T> rand_mat(M<T>::Random(*handle_ptr, m_rand, n_rand));
         ASSERT_VECTOR_NEAR(
             rand_mat.transpose_prod(
                 MatrixVector<T>(
@@ -589,19 +756,49 @@ protected:
 
     }
 
+    template <template <typename> typename M>
+    void TestBadTransposeMatVec_Base() {
+
+        M<double> mat(
+            *handle_ptr,
+            {{1, 2, 3, 4},
+             {5, 6, 7, 8},
+             {9, 10, 11, 12}}
+        );
+
+        MatrixVector<double> vec_too_small(*handle_ptr, {1, 1});
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            [=]() { mat.transpose_prod(vec_too_small); }
+        );
+
+        MatrixVector<double> vec_too_large(*handle_ptr, {1, 1, 1, 1, 1});
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            [=]() { mat.transpose_prod(vec_too_large); }
+        );
+
+        MatrixVector<double> vec_matches_wrong_dimension(*handle_ptr, {1, 1, 1, 1});
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            [=]() { mat.transpose_prod(vec_matches_wrong_dimension); }
+        );
+
+    }
+
     template <template <typename> typename M, typename T>
     void TestTranspose_Base() {
 
         // Test manually
         constexpr int m_manual(4);
         constexpr int n_manual(3);
-        MatrixDense<T> mat(
+        M<T> mat(
             *handle_ptr,
             {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4)},
              {static_cast<T>(5), static_cast<T>(6), static_cast<T>(7), static_cast<T>(8)},
              {static_cast<T>(9), static_cast<T>(10), static_cast<T>(11), static_cast<T>(12)}}
         );
-        MatrixDense<T> mat_transposed(mat.transpose());
+        M<T> mat_transposed(mat.transpose());
         ASSERT_EQ(mat_transposed.rows(), m_manual);
         ASSERT_EQ(mat_transposed.cols(), n_manual);
         for (int i=0; i<m_manual; ++i) {
@@ -609,7 +806,7 @@ protected:
                 ASSERT_EQ(mat_transposed.get_elem(i, j), mat.get_elem(j, i));
             }
         }
-        MatrixDense<T> test(
+        M<T> test(
             *handle_ptr, 
             {{static_cast<T>(1), static_cast<T>(5), static_cast<T>(9)},
              {static_cast<T>(2), static_cast<T>(6), static_cast<T>(10)},
@@ -621,8 +818,8 @@ protected:
         // Test random
         constexpr int m_rand(12);
         constexpr int n_rand(17);
-        MatrixDense<T> mat_rand(MatrixDense<T>::Random(*handle_ptr, m_rand, n_rand));
-        MatrixDense<T> mat_rand_transposed(mat_rand.transpose());
+        M<T> mat_rand(M<T>::Random(*handle_ptr, m_rand, n_rand));
+        M<T> mat_rand_transposed(mat_rand.transpose());
         ASSERT_EQ(mat_rand_transposed.rows(), n_rand);
         ASSERT_EQ(mat_rand_transposed.cols(), m_rand);
         for (int i=0; i<n_rand; ++i) {
@@ -630,35 +827,6 @@ protected:
                 ASSERT_EQ(mat_rand_transposed.get_elem(i, j), mat_rand.get_elem(j, i));
             }
         }
-
-    }
-
-    template <template <typename> typename M, typename T>
-    void TestMatVec_Base() {
-
-        M<T> mat ({
-            {static_cast<T>(1), static_cast<T>(4), static_cast<T>(9)},
-            {static_cast<T>(-1), static_cast<T>(-4), static_cast<T>(-9)},
-            {static_cast<T>(-3), static_cast<T>(-2), static_cast<T>(-1)},
-            {static_cast<T>(10), static_cast<T>(100), static_cast<T>(1000)}
-        });
-        MatrixVector<T> vec({static_cast<T>(3),
-                             static_cast<T>(-4),
-                             static_cast<T>(12)});
-        MatrixVector<T> test_vec({static_cast<T>(95),
-                                  static_cast<T>(-95),
-                                  static_cast<T>(-13),
-                                  static_cast<T>(11630)});
-        ASSERT_VECTOR_EQ(mat*vec, test_vec);
-
-        MatrixVector<T> vec2({static_cast<T>(0),
-                              static_cast<T>(0),
-                              static_cast<T>(1)});
-        MatrixVector<T> test_vec2({static_cast<T>(9),
-                                   static_cast<T>(-9),
-                                   static_cast<T>(-1),
-                                   static_cast<T>(1000)});
-        ASSERT_VECTOR_EQ(mat*vec2, test_vec2);
 
     }
 
