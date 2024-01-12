@@ -109,3 +109,57 @@ MatrixDense<float> MatrixDense<float>::operator*(const MatrixDense<float> &mat) 
     return c;
 
 }
+
+template <>
+MatrixDense<float> MatrixDense<float>::operator+(const MatrixDense<float> &mat) const {
+
+    if ((mat.rows() != m_rows) || (mat.cols() != n_cols)) {
+        throw std::runtime_error(
+            "MatrixDense: invalid mat in matrix add (operator+(const MatrixDense<float> &mat))"
+        );
+    }
+
+    MatrixDense<float> c(*this);
+
+    float alpha = 1.;
+
+    check_cublas_status(
+        cublasAxpyEx(
+            handle, m_rows*n_cols,
+            &alpha, CUDA_R_32F,
+            mat.d_mat, CUDA_R_32F, 1,
+            c.d_mat, CUDA_R_32F, 1,
+            CUDA_R_32F
+        )
+    );
+
+    return c;
+
+}
+
+template <>
+MatrixDense<float> MatrixDense<float>::operator-(const MatrixDense<float> &mat) const {
+
+    if ((mat.rows() != m_rows) || (mat.cols() != n_cols)) {
+        throw std::runtime_error(
+            "MatrixDense: invalid mat in matrix subtract (operator-(const MatrixDense<float> &mat))"
+        );
+    }
+
+    MatrixDense<float> c(*this);
+
+    float alpha = -1.;
+
+    check_cublas_status(
+        cublasAxpyEx(
+            handle, m_rows*n_cols,
+            &alpha, CUDA_R_32F,
+            mat.d_mat, CUDA_R_32F, 1,
+            c.d_mat, CUDA_R_32F, 1,
+            CUDA_R_32F
+        )
+    );
+
+    return c;
+
+}

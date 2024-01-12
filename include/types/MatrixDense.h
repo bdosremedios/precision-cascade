@@ -328,14 +328,10 @@ public:
     MatrixDense<T> operator*(const MatrixDense<T> &mat) const;
 
     // Needed for testing (don't need to optimize performance)
-    MatrixDense<T> operator+(const MatrixDense<T> &mat) const {
-        return typename Parent::Matrix(Parent::operator+(mat));
-    }
+    MatrixDense<T> operator+(const MatrixDense<T> &mat) const;
 
     // Needed for testing (don't need to optimize performance)
-    MatrixDense<T> operator-(const MatrixDense<T> &mat) const {
-        return typename Parent::Matrix(Parent::operator-(mat));
-    }
+    MatrixDense<T> operator-(const MatrixDense<T> &mat) const;
 
     // Needed for testing (don't need to optimize performance)
     T norm() const { return Parent::norm(); }

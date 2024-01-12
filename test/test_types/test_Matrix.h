@@ -897,45 +897,104 @@ protected:
     template <template <typename> typename M, typename T>
     void TestAddSub_Base() {
 
-        M<T> mat1 ({
-            {static_cast<T>(47), static_cast<T>(-14), static_cast<T>(-15)},
-            {static_cast<T>(-47), static_cast<T>(14), static_cast<T>(15)},
-            {static_cast<T>(-41), static_cast<T>(2), static_cast<T>(15)},
-            {static_cast<T>(10), static_cast<T>(-38), static_cast<T>(-33)}
-        });
-        M<T> mat2 ({
-            {static_cast<T>(1), static_cast<T>(2), static_cast<T>(3)},
-            {static_cast<T>(-4), static_cast<T>(-5), static_cast<T>(-6)},
-            {static_cast<T>(-7), static_cast<T>(8), static_cast<T>(9)},
-            {static_cast<T>(10), static_cast<T>(-11), static_cast<T>(-12)}
-        });
+        M<T> mat1(
+            *handle_ptr,
+            {{static_cast<T>(47), static_cast<T>(-14), static_cast<T>(-15)},
+             {static_cast<T>(-47), static_cast<T>(14), static_cast<T>(15)},
+             {static_cast<T>(-41), static_cast<T>(2), static_cast<T>(15)},
+             {static_cast<T>(10), static_cast<T>(-38), static_cast<T>(-33)}}
+        );
 
-        M<T> test_mat_add ({
-            {static_cast<T>(48), static_cast<T>(-12), static_cast<T>(-12)},
-            {static_cast<T>(-51), static_cast<T>(9), static_cast<T>(9)},
-            {static_cast<T>(-48), static_cast<T>(10), static_cast<T>(24)},
-            {static_cast<T>(20), static_cast<T>(-49), static_cast<T>(-45)}
-        });
+        M<T> mat2(
+            *handle_ptr,
+            {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3)},
+             {static_cast<T>(-4), static_cast<T>(-5), static_cast<T>(-6)},
+             {static_cast<T>(-7), static_cast<T>(8), static_cast<T>(9)},
+             {static_cast<T>(10), static_cast<T>(-11), static_cast<T>(-12)}}
+        );
+
+        M<T> test_mat_add(
+            *handle_ptr,
+            {{static_cast<T>(48), static_cast<T>(-12), static_cast<T>(-12)},
+             {static_cast<T>(-51), static_cast<T>(9), static_cast<T>(9)},
+             {static_cast<T>(-48), static_cast<T>(10), static_cast<T>(24)},
+             {static_cast<T>(20), static_cast<T>(-49), static_cast<T>(-45)}}
+        );
         ASSERT_MATRIX_EQ(mat1+mat2, test_mat_add);
 
-        M<T> test_mat_sub_1 ({
-            {static_cast<T>(46), static_cast<T>(-16), static_cast<T>(-18)},
-            {static_cast<T>(-43), static_cast<T>(19), static_cast<T>(21)},
-            {static_cast<T>(-34), static_cast<T>(-6), static_cast<T>(6)},
-            {static_cast<T>(0), static_cast<T>(-27), static_cast<T>(-21)}
-        });
+        M<T> test_mat_sub_1(
+            *handle_ptr,
+            {{static_cast<T>(46), static_cast<T>(-16), static_cast<T>(-18)},
+             {static_cast<T>(-43), static_cast<T>(19), static_cast<T>(21)},
+             {static_cast<T>(-34), static_cast<T>(-6), static_cast<T>(6)},
+             {static_cast<T>(0), static_cast<T>(-27), static_cast<T>(-21)}}
+        );
         ASSERT_MATRIX_EQ(mat1-mat2, test_mat_sub_1);
 
-        M<T> test_mat_sub_2 ({
-            {static_cast<T>(-46), static_cast<T>(16), static_cast<T>(18)},
-            {static_cast<T>(43), static_cast<T>(-19), static_cast<T>(-21)},
-            {static_cast<T>(34), static_cast<T>(6), static_cast<T>(-6)},
-            {static_cast<T>(0), static_cast<T>(27), static_cast<T>(21)}
-        });
+        M<T> test_mat_sub_2(
+            *handle_ptr,
+            {{static_cast<T>(-46), static_cast<T>(16), static_cast<T>(18)},
+             {static_cast<T>(43), static_cast<T>(-19), static_cast<T>(-21)},
+             {static_cast<T>(34), static_cast<T>(6), static_cast<T>(-6)},
+             {static_cast<T>(0), static_cast<T>(27), static_cast<T>(21)}}
+        );
         ASSERT_MATRIX_EQ(mat2-mat1, test_mat_sub_2);
 
-        ASSERT_MATRIX_EQ(mat1-mat1, M<T>::Zero(4, 3));
-        ASSERT_MATRIX_EQ(mat2-mat2, M<T>::Zero(4, 3));
+        ASSERT_MATRIX_EQ(mat1-mat1, M<T>::Zero(*handle_ptr, 4, 3));
+        ASSERT_MATRIX_EQ(mat2-mat2, M<T>::Zero(*handle_ptr, 4, 3));
+
+    }
+
+    template <template <typename> typename M>
+    void TestBadAddSub_Base() {
+
+        M<double> mat(
+            *handle_ptr,
+            {{47, -14, -15},
+             {-47, 14, 15},
+             {-41, 2, 15},
+             {10, -38, -33}}
+        );
+
+        M<double> mat_too_few_cols(
+            *handle_ptr,
+            {{1, 1},
+             {1, 1},
+             {1, 1},
+             {1, 1}}
+        );
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { mat+mat_too_few_cols; });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { mat-mat_too_few_cols; });
+
+        M<double> mat_too_many_cols(
+            *handle_ptr,
+            {{1, 1, 1, 1},
+             {1, 1, 1, 1},
+             {1, 1, 1, 1},
+             {1, 1, 1, 1}}
+        );
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { mat+mat_too_many_cols; });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { mat-mat_too_many_cols; });
+
+        M<double> mat_too_few_rows(
+            *handle_ptr,
+            {{1, 1, 1},
+             {1, 1, 1},
+             {1, 1, 1}}
+        );
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { mat+mat_too_few_rows; });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { mat-mat_too_few_rows; });
+
+        M<double> mat_too_many_rows(
+            *handle_ptr,
+            {{1, 1, 1},
+             {1, 1, 1},
+             {1, 1, 1},
+             {1, 1, 1},
+             {1, 1, 1}}
+        );
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { mat+mat_too_many_rows; });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { mat-mat_too_many_rows; });
 
     }
 
