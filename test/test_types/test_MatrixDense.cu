@@ -71,7 +71,7 @@ public:
         ASSERT_EQ(blk_2_1_2_3.get_elem(1, 0), static_cast<T>(17));
         ASSERT_EQ(blk_2_1_2_3.get_elem(1, 1), static_cast<T>(18));
         ASSERT_EQ(blk_2_1_2_3.get_elem(1, 2), static_cast<T>(19));
-        
+
         // Test MatrixDense cast/access for block 0, 0, 3, 4
         MatrixDense<T> mat_0_0_3_4(mat.get_block(0, 0, 3, 4).copy_to_mat());
         MatrixDense<T> test_0_0_3_4(
@@ -190,8 +190,8 @@ public:
     template <typename T>
     void TestTransposeProduct() { TestTransposeProduct_Base<MatrixDense, T>(); }
 
-    // template <typename T>
-    // void TestTranspose() { TestTranspose_Base<MatrixDense, T>(); }
+    template <typename T>
+    void TestTranspose() { TestTranspose_Base<MatrixDense, T>(); }
 
     // template <typename T>
     // void TestMatVec() { TestMatVec_Base<MatrixDense, T>(); }
@@ -283,11 +283,11 @@ TEST_F(MatrixDense_Test, TestTransposeProduct) {
     TestTransposeProduct<double>();
 }
 
-// TEST_F(MatrixDense_Test, TestTranspose) {
-//     TestTranspose<half>();
-//     TestTranspose<float>();
-//     TestTranspose<double>();
-// }
+TEST_F(MatrixDense_Test, TestTranspose) {
+    TestTranspose<half>();
+    TestTranspose<float>();
+    TestTranspose<double>();
+}
 
 // TEST_F(MatrixDense_Test, TestMatVec) {
 //     TestMatVec<half>();

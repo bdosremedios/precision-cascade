@@ -306,7 +306,25 @@ public:
 
     // Needed for testing (don't need to optimize performance)
     MatrixDense<T> transpose() const {
-        return typename Parent::Matrix(Parent::transpose());
+
+        T *h_mat = static_cast<T *>(malloc(m_rows*n_cols*sizeof(T)));
+        T *h_mat_trans = static_cast<T *>(malloc(n_cols*m_rows*sizeof(T)));
+
+        check_cublas_status(cublasGetMatrix(m_rows, n_cols, sizeof(T), d_mat, m_rows, h_mat, m_rows));
+
+        for (int i=0; i<m_rows; ++i) {
+            for (int j=0; j<n_cols; ++j) {
+                h_mat_trans[j+i*n_cols] = h_mat[i+j*m_rows];
+            }
+        }
+
+        MatrixDense<T> created_mat(handle, h_mat_trans, n_cols, m_rows);
+
+        free(h_mat);
+        free(h_mat_trans);
+
+        return created_mat;
+
     }
 
     // Needed for testing (don't need to optimize performance)

@@ -595,35 +595,39 @@ protected:
         // Test manually
         constexpr int m_manual(4);
         constexpr int n_manual(3);
-        MatrixDense<T> mat ({
-            {static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4)},
-            {static_cast<T>(5), static_cast<T>(6), static_cast<T>(7), static_cast<T>(8)},
-            {static_cast<T>(9), static_cast<T>(10), static_cast<T>(11), static_cast<T>(12)}
-        });
-        ASSERT_EQ(mat.transpose().rows(), m_manual);
-        ASSERT_EQ(mat.transpose().cols(), n_manual);
+        MatrixDense<T> mat(
+            *handle_ptr,
+            {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4)},
+             {static_cast<T>(5), static_cast<T>(6), static_cast<T>(7), static_cast<T>(8)},
+             {static_cast<T>(9), static_cast<T>(10), static_cast<T>(11), static_cast<T>(12)}}
+        );
+        MatrixDense<T> mat_transposed(mat.transpose());
+        ASSERT_EQ(mat_transposed.rows(), m_manual);
+        ASSERT_EQ(mat_transposed.cols(), n_manual);
         for (int i=0; i<m_manual; ++i) {
             for (int j=0; j<n_manual; ++j) {
-                ASSERT_EQ(mat.transpose().coeff(i, j), mat.coeff(j, i));
+                ASSERT_EQ(mat_transposed.get_elem(i, j), mat.get_elem(j, i));
             }
         }
-        MatrixDense<T> test ({
-            {static_cast<T>(1), static_cast<T>(5), static_cast<T>(9)},
-            {static_cast<T>(2), static_cast<T>(6), static_cast<T>(10)},
-            {static_cast<T>(3), static_cast<T>(7), static_cast<T>(11)},
-            {static_cast<T>(4), static_cast<T>(8), static_cast<T>(12)}
-        });
-        ASSERT_MATRIX_EQ(mat.transpose(), test);
+        MatrixDense<T> test(
+            *handle_ptr, 
+            {{static_cast<T>(1), static_cast<T>(5), static_cast<T>(9)},
+             {static_cast<T>(2), static_cast<T>(6), static_cast<T>(10)},
+             {static_cast<T>(3), static_cast<T>(7), static_cast<T>(11)},
+             {static_cast<T>(4), static_cast<T>(8), static_cast<T>(12)}}
+        );
+        ASSERT_MATRIX_EQ(mat_transposed, test);
 
         // Test random
         constexpr int m_rand(12);
         constexpr int n_rand(17);
-        MatrixDense<T> mat_rand(MatrixDense<T>::Random(m_rand, n_rand));
-        ASSERT_EQ(mat_rand.transpose().rows(), n_rand);
-        ASSERT_EQ(mat_rand.transpose().cols(), m_rand);
+        MatrixDense<T> mat_rand(MatrixDense<T>::Random(*handle_ptr, m_rand, n_rand));
+        MatrixDense<T> mat_rand_transposed(mat_rand.transpose());
+        ASSERT_EQ(mat_rand_transposed.rows(), n_rand);
+        ASSERT_EQ(mat_rand_transposed.cols(), m_rand);
         for (int i=0; i<n_rand; ++i) {
             for (int j=0; j<m_rand; ++j) {
-                ASSERT_EQ(mat_rand.transpose().coeff(i, j), mat_rand.coeff(j, i));
+                ASSERT_EQ(mat_rand_transposed.get_elem(i, j), mat_rand.get_elem(j, i));
             }
         }
 
