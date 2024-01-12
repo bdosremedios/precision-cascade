@@ -1,7 +1,7 @@
 #ifndef MATRIXDENSE_H
 #define MATRIXDENSE_H
 
-#include <Eigen/Dense>
+// #include <Eigen/Dense>
 
 #include <iostream>
 #include <stdexcept>
@@ -19,11 +19,11 @@
 template <typename T> class MatrixSparse;
 
 template <typename T>
-class MatrixDense: private Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>
+class MatrixDense //: private Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>
 {
 private:
 
-    using Parent = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>;
+    // using Parent = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>;
     template <typename> friend class MatrixDense;
     // friend MatrixSparse<T>;
     // const Parent &base() const { return *this; }
@@ -132,9 +132,6 @@ public:
     MatrixDense(const MatrixDense<T> &other) {
         *this = other;
     }
-
-    // *** Cast ***
-    MatrixSparse<T> sparse() const { return MatrixSparse<T>(Parent::sparseView()); };
 
     // *** Element Access ***
     const T get_elem(int row, int col) const {
@@ -288,6 +285,8 @@ public:
     void reduce() { ; } // Do nothing on reduction
 
     // *** Explicit Cast ***
+    // MatrixSparse<T> sparse() const { return MatrixSparse<T>(Parent::sparseView()); };
+
     template <typename Cast_T>
     MatrixDense<Cast_T> cast() const {
 
