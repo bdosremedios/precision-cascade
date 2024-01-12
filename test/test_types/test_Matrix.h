@@ -488,7 +488,7 @@ protected:
             ),
             MatrixVector<T>(
                 *handle_ptr,
-                {static_cast<T>(1), static_cast<T>(5), static_cast<T>(8), static_cast<T>(2)}
+                {static_cast<T>(2), static_cast<T>(5), static_cast<T>(8), static_cast<T>(2)}
             ),
             static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
         );
@@ -499,7 +499,7 @@ protected:
             ),
             MatrixVector<T>(
                 *handle_ptr,
-                {static_cast<T>(2), static_cast<T>(6), static_cast<T>(9), static_cast<T>(1)}
+                {static_cast<T>(3), static_cast<T>(6), static_cast<T>(9), static_cast<T>(1)}
             ),
             static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
         );
@@ -581,15 +581,15 @@ protected:
                 {(static_cast<T>(1)*rand_mat.get_elem(0, 0) +
                   static_cast<T>(0.1)*rand_mat.get_elem(0, 1) +
                   static_cast<T>(0.01)*rand_mat.get_elem(0, 2) +
-                  static_cast<T>(0.01)*rand_mat.get_elem(0, 3)),
+                  static_cast<T>(0.001)*rand_mat.get_elem(0, 3)),
                  (static_cast<T>(1)*rand_mat.get_elem(1, 0) +
                   static_cast<T>(0.1)*rand_mat.get_elem(1, 1) +
                   static_cast<T>(0.01)*rand_mat.get_elem(1, 2)+
-                  static_cast<T>(0.01)*rand_mat.get_elem(1, 3)),
+                  static_cast<T>(0.001)*rand_mat.get_elem(1, 3)),
                  (static_cast<T>(1)*rand_mat.get_elem(2, 0) +
                   static_cast<T>(0.1)*rand_mat.get_elem(2, 1) +
                   static_cast<T>(0.01)*rand_mat.get_elem(2, 2)+
-                  static_cast<T>(0.01)*rand_mat.get_elem(2, 3))}
+                  static_cast<T>(0.001)*rand_mat.get_elem(2, 3))}
             ),
             static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
         );
@@ -609,19 +609,19 @@ protected:
         MatrixVector<double> vec_too_small(*handle_ptr, {1, 1});
         CHECK_FUNC_HAS_RUNTIME_ERROR(
             print_errors,
-            [=]() { mat.transpose_prod(vec_too_small); }
+            [=]() { mat*vec_too_small; }
         );
 
         MatrixVector<double> vec_too_large(*handle_ptr, {1, 1, 1, 1, 1});
         CHECK_FUNC_HAS_RUNTIME_ERROR(
             print_errors,
-            [=]() { mat.transpose_prod(vec_too_large); }
+            [=]() { mat*vec_too_large; }
         );
 
         MatrixVector<double> vec_matches_wrong_dimension(*handle_ptr, {1, 1, 1});
         CHECK_FUNC_HAS_RUNTIME_ERROR(
             print_errors,
-            [=]() { mat.transpose_prod(vec_matches_wrong_dimension); }
+            [=]() { mat*vec_matches_wrong_dimension; }
         );
 
     }
