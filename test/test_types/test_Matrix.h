@@ -596,29 +596,38 @@ protected:
 
     }
 
-    template <template <typename> typename M>
+    template <template <typename> typename M, typename T>
     void TestBadMatVec_Base() {
 
-        M<double> mat(
+        M<T> mat(
             *handle_ptr,
-            {{1, 2, 3, 4},
-             {5, 6, 7, 8},
-             {9, 10, 11, 12}}
+            {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4)},
+             {static_cast<T>(5), static_cast<T>(6), static_cast<T>(7), static_cast<T>(8)},
+             {static_cast<T>(9), static_cast<T>(10), static_cast<T>(11), static_cast<T>(12)}}
         );
 
-        MatrixVector<double> vec_too_small(*handle_ptr, {1, 1});
+        MatrixVector<T> vec_too_small(
+            *handle_ptr,
+            {static_cast<T>(1), static_cast<T>(1)}
+        );
         CHECK_FUNC_HAS_RUNTIME_ERROR(
             print_errors,
             [=]() { mat*vec_too_small; }
         );
 
-        MatrixVector<double> vec_too_large(*handle_ptr, {1, 1, 1, 1, 1});
+        MatrixVector<T> vec_too_large(
+            *handle_ptr, 
+            {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)}
+        );
         CHECK_FUNC_HAS_RUNTIME_ERROR(
             print_errors,
             [=]() { mat*vec_too_large; }
         );
 
-        MatrixVector<double> vec_matches_wrong_dimension(*handle_ptr, {1, 1, 1});
+        MatrixVector<T> vec_matches_wrong_dimension(
+            *handle_ptr,
+            {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)}
+        );
         CHECK_FUNC_HAS_RUNTIME_ERROR(
             print_errors,
             [=]() { mat*vec_matches_wrong_dimension; }
@@ -756,29 +765,38 @@ protected:
 
     }
 
-    template <template <typename> typename M>
+    template <template <typename> typename M, typename T>
     void TestBadTransposeMatVec_Base() {
 
-        M<double> mat(
+        M<T> mat(
             *handle_ptr,
-            {{1, 2, 3, 4},
-             {5, 6, 7, 8},
-             {9, 10, 11, 12}}
+            {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4)},
+             {static_cast<T>(5), static_cast<T>(6), static_cast<T>(7), static_cast<T>(8)},
+             {static_cast<T>(9), static_cast<T>(10), static_cast<T>(11), static_cast<T>(12)}}
         );
 
-        MatrixVector<double> vec_too_small(*handle_ptr, {1, 1});
+        MatrixVector<T> vec_too_small(
+            *handle_ptr,
+            {static_cast<T>(1), static_cast<T>(1)}
+        );
         CHECK_FUNC_HAS_RUNTIME_ERROR(
             print_errors,
             [=]() { mat.transpose_prod(vec_too_small); }
         );
 
-        MatrixVector<double> vec_too_large(*handle_ptr, {1, 1, 1, 1, 1});
+        MatrixVector<T> vec_too_large(
+            *handle_ptr,
+            {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)}
+        );
         CHECK_FUNC_HAS_RUNTIME_ERROR(
             print_errors,
             [=]() { mat.transpose_prod(vec_too_large); }
         );
 
-        MatrixVector<double> vec_matches_wrong_dimension(*handle_ptr, {1, 1, 1, 1});
+        MatrixVector<T> vec_matches_wrong_dimension(
+            *handle_ptr,
+            {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)}
+        );
         CHECK_FUNC_HAS_RUNTIME_ERROR(
             print_errors,
             [=]() { mat.transpose_prod(vec_matches_wrong_dimension); }
@@ -858,37 +876,37 @@ protected:
 
     }
 
-    template <template <typename> typename M>
+    template <template <typename> typename M, typename T>
     void TestBadMatMat_Base() {
 
-        M<double> mat(
+        M<T> mat(
             *handle_ptr,
-            {{1, 4},
-             {-1, -4},
-             {-3, -2},
-             {10, 100}}
+            {{static_cast<T>(1), static_cast<T>(4)},
+             {static_cast<T>(-1), static_cast<T>(-4)},
+             {static_cast<T>(-3), static_cast<T>(-2)},
+             {static_cast<T>(10), static_cast<T>(100)}}
         );
 
-        M<double> mat_too_small(
+        M<T> mat_too_small(
             *handle_ptr,
-            {{1, 1}}
+            {{static_cast<T>(1), static_cast<T>(1)}}
         );
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { mat*mat_too_small; });
 
-        M<double> mat_too_big(
+        M<T> mat_too_big(
             *handle_ptr,
-            {{1, 1},
-             {1, 1},
-             {1, 1}}
+            {{static_cast<T>(1), static_cast<T>(1)},
+             {static_cast<T>(1), static_cast<T>(1)},
+             {static_cast<T>(1), static_cast<T>(1)}}
         );
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { mat*mat_too_big; });
 
-        M<double> mat_matches_other_dim(
+        M<T> mat_matches_other_dim(
             *handle_ptr,
-            {{1, 1, 1, 1},
-             {1, 1, 1, 1},
-             {1, 1, 1, 1},
-             {1, 1, 1, 1}}
+            {{static_cast<T>(1), static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)},
+             {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)},
+             {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)},
+             {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)}}
         );
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { mat*mat_matches_other_dim; });
 
@@ -945,53 +963,53 @@ protected:
 
     }
 
-    template <template <typename> typename M>
+    template <template <typename> typename M, typename T>
     void TestBadAddSub_Base() {
 
-        M<double> mat(
+        M<T> mat(
             *handle_ptr,
-            {{47, -14, -15},
-             {-47, 14, 15},
-             {-41, 2, 15},
-             {10, -38, -33}}
+            {{static_cast<T>(47), static_cast<T>(-14), static_cast<T>(-15)},
+             {static_cast<T>(-47), static_cast<T>(14), static_cast<T>(15)},
+             {static_cast<T>(-41), static_cast<T>(2), static_cast<T>(15)},
+             {static_cast<T>(10), static_cast<T>(-38), static_cast<T>(-33)}}
         );
 
-        M<double> mat_too_few_cols(
+        M<T> mat_too_few_cols(
             *handle_ptr,
-            {{1, 1},
-             {1, 1},
-             {1, 1},
-             {1, 1}}
+            {{static_cast<T>(1), static_cast<T>(1)},
+             {static_cast<T>(1), static_cast<T>(1)},
+             {static_cast<T>(1), static_cast<T>(1)},
+             {static_cast<T>(1), static_cast<T>(1)}}
         );
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { mat+mat_too_few_cols; });
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { mat-mat_too_few_cols; });
 
-        M<double> mat_too_many_cols(
+        M<T> mat_too_many_cols(
             *handle_ptr,
-            {{1, 1, 1, 1},
-             {1, 1, 1, 1},
-             {1, 1, 1, 1},
-             {1, 1, 1, 1}}
+            {{static_cast<T>(1), static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)},
+             {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)},
+             {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)},
+             {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)}}
         );
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { mat+mat_too_many_cols; });
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { mat-mat_too_many_cols; });
 
-        M<double> mat_too_few_rows(
+        M<T> mat_too_few_rows(
             *handle_ptr,
-            {{1, 1, 1},
-             {1, 1, 1},
-             {1, 1, 1}}
+            {{static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)},
+             {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)},
+             {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)}}
         );
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { mat+mat_too_few_rows; });
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { mat-mat_too_few_rows; });
 
-        M<double> mat_too_many_rows(
+        M<T> mat_too_many_rows(
             *handle_ptr,
-            {{1, 1, 1},
-             {1, 1, 1},
-             {1, 1, 1},
-             {1, 1, 1},
-             {1, 1, 1}}
+            {{static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)},
+             {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)},
+             {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)},
+             {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)},
+             {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)}}
         );
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { mat+mat_too_many_rows; });
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { mat-mat_too_many_rows; });

@@ -190,12 +190,14 @@ public:
     template <typename T>
     void TestMatVec() { TestMatVec_Base<MatrixDense, T>(); }
 
-    void TestBadMatVec() { TestBadMatVec_Base<MatrixDense>(); }
+    template <typename T>
+    void TestBadMatVec() { TestBadMatVec_Base<MatrixDense, T>(); }
 
     template <typename T>
     void TestTransposeMatVec() { TestTransposeMatVec_Base<MatrixDense, T>(); }
 
-    void TestBadTransposeMatVec() { TestBadTransposeMatVec_Base<MatrixDense>(); }
+    template <typename T>
+    void TestBadTransposeMatVec() { TestBadTransposeMatVec_Base<MatrixDense, T>(); }
 
     template <typename T>
     void TestTranspose() { TestTranspose_Base<MatrixDense, T>(); }
@@ -203,12 +205,14 @@ public:
     template <typename T>
     void TestMatMat() { TestMatMat_Base<MatrixDense, T>(); }
 
-    void TestBadMatMat() { TestBadMatMat_Base<MatrixDense>(); }
+    template <typename T>
+    void TestBadMatMat() { TestBadMatMat_Base<MatrixDense, T>(); }
 
     template <typename T>
     void TestAddSub() { TestAddSub_Base<MatrixDense, T>(); }
 
-    void TestBadAddSub() { TestBadAddSub_Base<MatrixDense>(); }
+    template <typename T>
+    void TestBadAddSub() { TestBadAddSub_Base<MatrixDense, T>(); }
 
     // template <typename T>
     // void TestNorm() { TestNorm_Base<MatrixDense, T>(); }
@@ -291,7 +295,11 @@ TEST_F(MatrixDense_Test, TestMatVec) {
     TestMatVec<double>();
 }
 
-TEST_F(MatrixDense_Test, TestBadMatVec) { TestBadMatVec(); }
+TEST_F(MatrixDense_Test, TestBadMatVec) {
+    TestBadMatVec<half>();
+    TestBadMatVec<float>();
+    TestBadMatVec<double>();
+}
 
 TEST_F(MatrixDense_Test, TestTransposeMatVec) {
     TestTransposeMatVec<half>();
@@ -299,7 +307,11 @@ TEST_F(MatrixDense_Test, TestTransposeMatVec) {
     TestTransposeMatVec<double>();
 }
 
-TEST_F(MatrixDense_Test, TestBadTransposeMatVec) { TestBadTransposeMatVec(); }
+TEST_F(MatrixDense_Test, TestBadTransposeMatVec) {
+    TestBadTransposeMatVec<half>();
+    TestBadTransposeMatVec<float>();
+    TestBadTransposeMatVec<double>();
+}
 
 TEST_F(MatrixDense_Test, TestTranspose) {
     TestTranspose<half>();
@@ -313,7 +325,11 @@ TEST_F(MatrixDense_Test, TestMatMat) {
     TestMatMat<double>();
 }
 
-TEST_F(MatrixDense_Test, TestBadMatMat) { TestBadMatMat(); }
+TEST_F(MatrixDense_Test, TestBadMatMat) {
+    TestBadMatMat<half>();
+    TestBadMatMat<float>();
+    TestBadMatMat<double>();
+}
 
 TEST_F(MatrixDense_Test, TestAddSub) {
     TestAddSub<half>();
@@ -321,7 +337,11 @@ TEST_F(MatrixDense_Test, TestAddSub) {
     TestAddSub<double>();
 }
 
-TEST_F(MatrixDense_Test, TestBadAddSub) { TestBadAddSub(); }
+TEST_F(MatrixDense_Test, TestBadAddSub) {
+    TestBadAddSub<half>();
+    TestBadAddSub<float>();
+    TestBadAddSub<double>();
+}
 
 // TEST_F(MatrixDense_Test, TestNorm) {
 //     TestNorm<half>();
