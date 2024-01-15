@@ -19,7 +19,7 @@ set(
     test_tools/test_SolveArgPkg.cpp
     # test_tools/test_PrecondArgPkg.cpp
     test_tools/test_substitution.cpp
-    # test_tools/test_vectorSort.cpp
+    test_tools/test_vector_sort.cpp
 )
 
 set(

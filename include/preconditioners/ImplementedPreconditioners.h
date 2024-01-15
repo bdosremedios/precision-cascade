@@ -254,15 +254,12 @@ public:
                 }
             }
             if (p < U_size) { // Drop all but p largest elements
-                // cout << "Hit test: " << p << " " << col_j << endl;
-                // U.print();
                 MatrixVector<W> U_j(U_size);
                 for (int i=0; i<U_size; ++i) { U_j(i) = U.coeff(i, col_j); }
                 MatrixVector<int> U_sorted_indices = sort_indices(U_j);
                 for (int i=0; i<U_size-p; ++i) {
                     U.coeffRef(U_sorted_indices(i), col_j) = static_cast<W>(0);
                 }
-                // U.print();
             }
 
             // Modify col_j in L

@@ -5,7 +5,6 @@ project(precision-cascade LANGUAGES CXX CUDA)
 set(CMAKE_EXE_LINKER_FLAGS, "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:LIBCMT")
 
 add_subdirectory(tools)
-add_subdirectory(types)
 
 add_library(
     types

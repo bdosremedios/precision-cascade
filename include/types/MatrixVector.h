@@ -6,6 +6,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <cstdlib>
+#include <vector>
 #include <random>
 #include <initializer_list>
 
@@ -13,12 +14,14 @@
 #include <cublas_v2.h>
 
 #include "tools/cuda_check.h"
+#include "tools/vector_sort.h"
 
 // using Eigen::Matrix;
 // using Eigen::Dynamic;
 
 template <typename T> class MatrixDense;
 template <typename T> class MatrixSparse;
+// template <> class MatrixDense<int>;
 
 template <typename T>
 class MatrixVector //: private Matrix<T, Dynamic, 1>
@@ -369,6 +372,27 @@ public:
     T dot(const MatrixVector<T> &vec) const;
 
     T norm() const;
+
+    // *** Algorithms ***
+    std::vector<int> sort_indices() const {
+        
+        int *h_indices = static_cast<int *>(malloc(m_rows*sizeof(int)));
+        T *h_vec = static_cast<T *>(malloc(m_rows*sizeof(T)));
+
+        for (int i=0; i<m_rows; ++i) { h_indices[i] = i; }
+        cublasGetVector(m_rows, sizeof(T), d_vec, 1, h_vec, 1);
+
+        vector_sort::quicksort(h_indices, h_vec, 0, m_rows);
+
+        std::vector<int> indices_vec(m_rows);
+        for (int i=0; i<m_rows; ++i) { indices_vec[i] = h_indices[i]; }
+
+        free(h_indices);
+        free(h_vec);
+
+        return indices_vec;
+
+    }
 
 };
 
