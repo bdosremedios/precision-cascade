@@ -15,11 +15,11 @@ set(
 set(
     TEST_TOOLS_CPPS
     test_tools/test_GenericLinearSystem.cpp
-    test_tools/test_TypedLinearSystem.cpp
-    test_tools/test_SolveArgPkg.cpp
-    test_tools/test_PrecondArgPkg.cpp
-    test_tools/test_Substitution.cpp
-    test_tools/test_VectorSort.cpp
+    # test_tools/test_TypedLinearSystem.cpp
+    # test_tools/test_SolveArgPkg.cpp
+    # test_tools/test_PrecondArgPkg.cpp
+    # test_tools/test_Substitution.cpp
+    # test_tools/test_VectorSort.cpp
 )
 
 set(
@@ -54,7 +54,7 @@ set(
     TEST_SUITE_CPPS
     test_tools/test_MatrixRead.cu
     ${TEST_TYPES_CPPS}
-    # ${TEST_TOOLS_CPPS}
+    ${TEST_TOOLS_CPPS}
     # ${TEST_PRECONDITIONER_CPPS}
     # ${TEST_SOLVERS}
 )

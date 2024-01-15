@@ -1,5 +1,7 @@
 #include "../test.h"
 
+#include "tools/LinearSystem.h"
+
 class GenericLinearSystem_Test: public TestBase
 {
 public:
@@ -9,8 +11,8 @@ public:
 
         constexpr int m(63);
         constexpr int n(27);
-        M<double> A(M<double>::Random(m, n));
-        MatrixVector<double> b(MatrixVector<double>::Random(m));
+        M<double> A(M<double>::Random(*handle_ptr, m, n));
+        MatrixVector<double> b(MatrixVector<double>::Random(*handle_ptr, m));
         GenericLinearSystem<M> lin_sys(A, b);
 
         EXPECT_EQ(lin_sys.get_m(), m);
@@ -25,12 +27,12 @@ public:
     void TestEmptyMatrix() {
 
         try {
-            M<double> A(M<double>::Random(0, 0));
-            MatrixVector<double> b(MatrixVector<double>::Random(0));
+            M<double> A(M<double>::Random(*handle_ptr, 0, 0));
+            MatrixVector<double> b(MatrixVector<double>::Random(*handle_ptr, 0));
             GenericLinearSystem<M> lin_sys(A, b);
             FAIL();
-        } catch (runtime_error e) {
-            cout << e.what() << endl;
+        } catch (std::runtime_error e) {
+            std::cout << e.what() << std::endl;
         }
 
     }
@@ -41,12 +43,12 @@ public:
         try {
             constexpr int m(63);
             constexpr int n(27);
-            M<double> A(M<double>::Random(m, n));
-            MatrixVector<double> b(MatrixVector<double>::Random(n-1));
+            M<double> A(M<double>::Random(*handle_ptr, m, n));
+            MatrixVector<double> b(MatrixVector<double>::Random(*handle_ptr, n-1));
             GenericLinearSystem<M> lin_sys(A, b);
             FAIL();
-        } catch (runtime_error e) {
-            cout << e.what() << endl;
+        } catch (std::runtime_error e) {
+            std::cout << e.what() << std::endl;
         }
 
     }
@@ -55,15 +57,15 @@ public:
 
 TEST_F(GenericLinearSystem_Test, TestConstructor) {
     TestConstructor<MatrixDense>();
-    TestConstructor<MatrixSparse>();
+    // TestConstructor<MatrixSparse>();
 }
 
 TEST_F(GenericLinearSystem_Test, TestEmptyMatrix) {
     TestEmptyMatrix<MatrixDense>();
-    TestEmptyMatrix<MatrixSparse>();
+    // TestEmptyMatrix<MatrixSparse>();
 }
 
 TEST_F(GenericLinearSystem_Test, TestMismatchb) {
     TestMismatchb<MatrixDense>();
-    TestMismatchb<MatrixSparse>();
+    // TestMismatchb<MatrixSparse>();
 }

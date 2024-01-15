@@ -40,7 +40,7 @@ _ASSERT_VECTOR_NEAR( \
 
 template <typename T>
 void _ASSERT_VECTOR_NEAR(
-    MatrixVector<T> &test, MatrixVector<T> &target, T tol,
+    const MatrixVector<T> &test, const MatrixVector<T> &target, T tol,
     const char* file, int line, std::string message
 ) {
 
@@ -61,7 +61,7 @@ _ASSERT_VECTOR_EQ( \
 
 template <typename T>
 void _ASSERT_VECTOR_EQ(
-    MatrixVector<T> &test, MatrixVector<T> &target,
+    const MatrixVector<T> &test, const MatrixVector<T> &target,
     const char* file, int line, std::string message
 ) {
     _ASSERT_VECTOR_NEAR(test, target, static_cast<T>(0), file, line, message);
@@ -73,7 +73,7 @@ _ASSERT_MATRIX_NEAR( \
 )
 template <template <typename> typename M, typename T>
 void _ASSERT_MATRIX_NEAR(
-    M<T> test, M<T> target, T tol,
+    const M<T> &test, const M<T> &target, T tol,
     const char* file, int line, std::string message
 ) {
 
@@ -96,7 +96,7 @@ _ASSERT_MATRIX_LT( \
 )
 template <template <typename> typename M, typename T>
 void _ASSERT_MATRIX_LT(
-    M<T> test, M<T> target,
+    const M<T> &test, const M<T> &target,
     const char* file, int line, std::string message
 ) {
 
@@ -119,7 +119,7 @@ _ASSERT_MATRIX_GT( \
 )
 template <template <typename> typename M, typename T>
 void _ASSERT_MATRIX_GT(
-    M<T> test, M<T> target,
+    const M<T> &test, const M<T> &target,
     const char* file, int line, std::string message
 ) {
 
@@ -142,7 +142,7 @@ _ASSERT_MATRIX_EQ( \
 )
 template <template <typename> typename M, typename T>
 void _ASSERT_MATRIX_EQ(
-    M<T> test, M<T> target,
+    const M<T> &test, const M<T> &target,
     const char* file, int line, std::string message
 ) {
     _ASSERT_MATRIX_NEAR(test, target, static_cast<T>(0), file, line, message);
@@ -154,7 +154,7 @@ _ASSERT_MATRIX_SAMESPARSITY( \
 )
 template <template <typename> typename M, typename T>
 void _ASSERT_MATRIX_SAMESPARSITY(
-    M<T> test, M<T> target, T zero_tol,
+    const M<T> &test, const M<T> &target, T zero_tol,
     const char* file, int line, std::string message
 ) {
 
@@ -175,11 +175,11 @@ void _ASSERT_MATRIX_SAMESPARSITY(
 
 #define ASSERT_MATRIX_ZERO(test, tol) \
 _ASSERT_MATRIX_ZERO( \
-    test, tol, __FILE__, __LINE__, "AssertionError for ASSERT_MATRIX_ZERO" \
+    test, tol, __FILE__, __LINE__, "AssertionError for ASSERT_MATRIX_ZEROconst " \
 )
 template <template <typename> typename M, typename T>
 void _ASSERT_MATRIX_ZERO(
-    M<T> test, T tol,
+    const M<T> &test, T tol,
     const char* file, int line, std::string message
 ) {
     _ASSERT_MATRIX_NEAR(
@@ -193,7 +193,7 @@ _ASSERT_MATRIX_IDENTITY( \
 )
 template <template <typename> typename M, typename T>
 void _ASSERT_MATRIX_IDENTITY(
-    M<T> test, T tol,
+    const M<T> &test, T tol,
     const char* file, int line, std::string message
 ) {
     _ASSERT_MATRIX_NEAR(
@@ -207,7 +207,7 @@ _ASSERT_MATRIX_LOWTRI( \
 )
 template <template <typename> typename M, typename T>
 void _ASSERT_MATRIX_LOWTRI(
-    M<T> test, T tol,
+    const M<T> &test, T tol,
     const char* file, int line, std::string message
 ) {
 
@@ -227,7 +227,7 @@ _ASSERT_MATRIX_UPPTRI( \
 )
 template <template <typename> typename M, typename T>
 void _ASSERT_MATRIX_UPPTRI(
-    M<T> test, T tol,
+    const M<T> &test, T tol,
     const char* file, int line, std::string message
 ) {
 
