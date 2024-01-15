@@ -1054,12 +1054,12 @@ protected:
             }
         }
 
-        M<half> mat_hlf(mat_dbl.template cast<half>());
+        M<__half> mat_hlf(mat_dbl.template cast<__half>());
         ASSERT_EQ(mat_hlf.rows(), m);
         ASSERT_EQ(mat_hlf.cols(), n);
         for (int i=0; i<m; ++i) {
             for (int j=0; j<n; ++j) {
-                ASSERT_EQ(mat_hlf.get_elem(i, j), static_cast<half>(mat_dbl.get_elem(i, j)));
+                ASSERT_EQ(mat_hlf.get_elem(i, j), static_cast<__half>(mat_dbl.get_elem(i, j)));
             }
         }
 
