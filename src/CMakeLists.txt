@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.27.2)
 
 project(precision-cascade LANGUAGES CXX CUDA)
 
-set(CMAKE_EXE_LINKER_FLAGS, "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:LIBCMT /NODEFAULTLIB:MSVCRT")
+set(CMAKE_EXE_LINKER_FLAGS, "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:LIBCMT")
 
 add_subdirectory(tools)
 add_subdirectory(types)
@@ -23,6 +23,6 @@ target_link_libraries(
     types
     PUBLIC
     precision-cascade
-    eigen
+    # eigen
     "$ENV{CUDA_PATH}/lib/x64/cublas.lib"
 )

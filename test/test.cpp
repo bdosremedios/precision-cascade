@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <Eigen/Dense>
+// #include <Eigen/Dense>
 
 #include <cmath>
 #include <string>
@@ -16,7 +16,7 @@
 // #include "tools/math_functions.h"
 #include "tools/MatrixReader.h"
 
-using Eigen::Matrix, Eigen::Dynamic;
+// using Eigen::Matrix, Eigen::Dynamic;
 
 bool *TestBase::show_plots = new bool;
 cublasHandle_t *TestBase::handle_ptr = new cublasHandle_t;
