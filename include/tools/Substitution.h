@@ -64,16 +64,26 @@ MatrixVector<T> frwd_substitution(MatrixDense<T> const &LT, MatrixVector<T> cons
 
     // Assume LT is lower triangular
     MatrixVector<T> x(rhs);
-    for (int i=0; i<LT.rows(); ++i) {
-        if (LT.get_elem(i, i) != 0) {
-            for (int j=0; j<i; ++j) {
-                x.set_elem(i, x.get_elem(i)-LT.get_elem(i, j)*x.get_elem(j));
-            }
-            x.set_elem(i, x.get_elem(i)/LT.get_elem(i, i));
+    for (int j=LT.cols()-1; j>=0; --j) {
+        T diag_coeff = LT.get_elem(j, j);
+        if (diag_coeff != static_cast<T>(0)) {
+            x.set_elem(j, x.get_elem(j)/diag_coeff);
+            LT.col(j).copy_to_vec();
         } else {
-            x.set_elem(i, static_cast<T>(0));
+            throw std::runtime_error("frwd_substitution: zero encountered in diagonal");
         }
     }
+    // for (int i=0; i<LT.rows(); ++i) {
+    //     if (LT.get_elem(i, i) != 0) {
+    //         x.set_elem(i, x.get_elem(i)-LT.get_elem(i, j)*x.get_elem(j));
+    //         for (int j=0; j<i; ++j) {
+    //             x.set_elem(i, x.get_elem(i)-LT.get_elem(i, j)*x.get_elem(j));
+    //         }
+    //         x.set_elem(i, x.get_elem(i)/LT.get_elem(i, i));
+    //     } else {
+    //         x.set_elem(i, static_cast<T>(0));
+    //     }
+    // }
 
     return x;
 

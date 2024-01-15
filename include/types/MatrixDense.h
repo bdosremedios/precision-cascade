@@ -284,7 +284,76 @@ public:
     // *** Resizing ***
     void reduce() { ; } // Do nothing on reduction
 
-    // *** Explicit Cast ***
+    // *** Substitution *** (correct triangularity assumed)
+    MatrixVector<T> back_sub(const MatrixVector<T> &rhs) const {
+
+        if (m_rows != n_cols) {
+            throw std::runtime_error("MatrixDense::back_sub: non-square matrix");
+        }
+        if (m_rows != rhs.rows()) {
+            throw std::runtime_error("MatrixDense::back_sub: incompatible matrix and rhs");
+        }
+
+        T *h_rhs = static_cast<T *>(malloc(m_rows*sizeof(T)));
+        T *h_UT = static_cast<T *>(malloc(m_rows*n_cols*sizeof(T)));
+        check_cublas_status(cublasGetVector(m_rows, sizeof(T), rhs.d_vec, 1, h_rhs, 1));
+        check_cublas_status(cublasGetMatrix(m_rows, n_cols, sizeof(T), d_mat, m_rows, h_UT, m_rows));
+
+        for (int col=n_cols-1; col>=0; --col) {
+            if (h_UT[col+m_rows*col] != static_cast<T>(0)) {
+                h_rhs[col] /= h_UT[col+m_rows*col];
+                for (int row=col-1; row>=0; --row) {
+                    h_rhs[row] -= h_UT[row+m_rows*col]*h_rhs[col];
+                }
+            } else {
+                throw std::runtime_error("MatrixDense::back_sub: zero diagonal entry encountered in matrix");
+            }
+        }
+
+        MatrixVector<T> created_vec(handle, h_rhs, m_rows);
+
+        free(h_rhs);
+        free(h_UT);
+
+        return created_vec;
+
+    }
+
+    MatrixVector<T> frwd_sub(const MatrixVector<T> &rhs) const {
+
+        if (m_rows != n_cols) {
+            throw std::runtime_error("MatrixDense::frwd_sub: non-square matrix");
+        }
+        if (m_rows != rhs.rows()) {
+            throw std::runtime_error("MatrixDense::frwd_sub: incompatible matrix and rhs");
+        }
+
+        T *h_rhs = static_cast<T *>(malloc(m_rows*sizeof(T)));
+        T *h_LT = static_cast<T *>(malloc(m_rows*n_cols*sizeof(T)));
+        check_cublas_status(cublasGetVector(m_rows, sizeof(T), rhs.d_vec, 1, h_rhs, 1));
+        check_cublas_status(cublasGetMatrix(m_rows, n_cols, sizeof(T), d_mat, m_rows, h_LT, m_rows));
+
+        for (int col=0; col<n_cols; ++col) {
+            if (h_LT[col+m_rows*col] != static_cast<T>(0)) {
+                h_rhs[col] /= h_LT[col+m_rows*col];
+                for (int row=col+1; row<m_rows; ++row) {
+                    h_rhs[row] -= h_LT[row+m_rows*col]*h_rhs[col];
+                }
+            } else {
+                throw std::runtime_error("MatrixDense::frwd_sub: zero diagonal entry encountered in matrix");
+            }
+        }
+
+        MatrixVector<T> created_vec(handle, h_rhs, m_rows);
+
+        free(h_rhs);
+        free(h_LT);
+
+        return created_vec;
+
+    }
+
+    // *** Cast ***
     // MatrixSparse<T> sparse() const { return MatrixSparse<T>(Parent::sparseView()); };
 
     template <typename Cast_T>

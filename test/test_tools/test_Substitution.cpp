@@ -20,7 +20,7 @@ public:
             read_matrixCSV<MatrixVector, double>(*handle_ptr, solve_matrix_dir / fs::path("Ub_tri_90.csv"))
         );
     
-        MatrixVector<double> test_soln(back_substitution(U_tri, Ub_tri));
+        MatrixVector<double> test_soln(U_tri.back_sub(Ub_tri));
 
         ASSERT_VECTOR_NEAR(test_soln, x_tri, Tol<double>::dbl_substitution_tol());
 
@@ -40,7 +40,7 @@ public:
             read_matrixCSV<MatrixVector, double>(*handle_ptr, solve_matrix_dir / fs::path("Lb_tri_90.csv"))
         );
     
-        MatrixVector<double> test_soln(frwd_substitution(L_tri, Lb_tri));
+        MatrixVector<double> test_soln(L_tri.frwd_sub(Lb_tri));
 
         ASSERT_VECTOR_NEAR(test_soln, x_tri, Tol<double>::dbl_substitution_tol());
 
@@ -55,5 +55,5 @@ TEST_F(Substitution_Test, TestBackwardSubstitution) {
 
 TEST_F(Substitution_Test, TestForwardSubstitution) {
     TestForwardSubstitution<MatrixDense>();
-    // TestForwardSubstitution<MatrixSparse>();
+//     // TestForwardSubstitution<MatrixSparse>();
 }
