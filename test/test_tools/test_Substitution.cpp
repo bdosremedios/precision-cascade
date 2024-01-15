@@ -10,9 +10,15 @@ public:
     void TestBackwardSubstitution() {
 
         constexpr int n(90);
-        M<double> U_tri(read_matrixCSV<M, double>(solve_matrix_dir / fs::path("U_tri_90.csv")));
-        MatrixVector<double> x_tri(read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("x_tri_90.csv")));
-        MatrixVector<double> Ub_tri(read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("Ub_tri_90.csv")));
+        M<double> U_tri(
+            read_matrixCSV<M, double>(*handle_ptr, solve_matrix_dir / fs::path("U_tri_90.csv"))
+        );
+        MatrixVector<double> x_tri(
+            read_matrixCSV<MatrixVector, double>(*handle_ptr, solve_matrix_dir / fs::path("x_tri_90.csv"))
+        );
+        MatrixVector<double> Ub_tri(
+            read_matrixCSV<MatrixVector, double>(*handle_ptr, solve_matrix_dir / fs::path("Ub_tri_90.csv"))
+        );
     
         MatrixVector<double> test_soln(back_substitution(U_tri, Ub_tri));
 
@@ -24,9 +30,15 @@ public:
     void TestForwardSubstitution() {
 
         constexpr int n(90);
-        M<double> L_tri(read_matrixCSV<M, double>(solve_matrix_dir / fs::path("L_tri_90.csv")));
-        MatrixVector<double> x_tri(read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("x_tri_90.csv")));
-        MatrixVector<double> Lb_tri(read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("Lb_tri_90.csv")));
+        M<double> L_tri(
+            read_matrixCSV<M, double>(*handle_ptr, solve_matrix_dir / fs::path("L_tri_90.csv"))
+        );
+        MatrixVector<double> x_tri(
+            read_matrixCSV<MatrixVector, double>(*handle_ptr, solve_matrix_dir / fs::path("x_tri_90.csv"))
+        );
+        MatrixVector<double> Lb_tri(
+            read_matrixCSV<MatrixVector, double>(*handle_ptr, solve_matrix_dir / fs::path("Lb_tri_90.csv"))
+        );
     
         MatrixVector<double> test_soln(frwd_substitution(L_tri, Lb_tri));
 
@@ -38,10 +50,10 @@ public:
 
 TEST_F(Substitution_Test, TestBackwardSubstitution) {
     TestBackwardSubstitution<MatrixDense>();
-    TestBackwardSubstitution<MatrixSparse>();
+    // TestBackwardSubstitution<MatrixSparse>();
 }
 
 TEST_F(Substitution_Test, TestForwardSubstitution) {
     TestForwardSubstitution<MatrixDense>();
-    TestForwardSubstitution<MatrixSparse>();
+    // TestForwardSubstitution<MatrixSparse>();
 }

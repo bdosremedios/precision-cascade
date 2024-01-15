@@ -9,6 +9,7 @@
 #include "gtest/gtest.h"
 
 #include "types/types.h"
+#include "tools/MatrixReader.h"
 
 #include "test_assertions.h"
 #include "test_tools.h"

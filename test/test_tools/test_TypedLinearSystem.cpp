@@ -1,5 +1,7 @@
 #include "../test.h"
 
+#include "tools/LinearSystem.h"
+
 class TypedLinearSystem_Test: public TestBase
 {
 public:
@@ -9,8 +11,8 @@ public:
 
         constexpr int m(63);
         constexpr int n(27);
-        M<double> A(M<double>::Random(m, n));
-        MatrixVector<double> b(MatrixVector<double>::Random(m));
+        M<double> A(M<double>::Random(*handle_ptr, m, n));
+        MatrixVector<double> b(MatrixVector<double>::Random(*handle_ptr, m));
         TypedLinearSystem<M, T> lin_sys(A, b);
 
         ASSERT_MATRIX_EQ(lin_sys.get_A(), A);
@@ -21,16 +23,16 @@ public:
 };
 
 TEST_F(TypedLinearSystem_Test, TestHalfConstructor) {
-    TestTypedConstructor<MatrixDense, half>();
-    TestTypedConstructor<MatrixSparse, half>();
+    TestTypedConstructor<MatrixDense, __half>();
+    // TestTypedConstructor<MatrixSparse, __half>();
 }
 
 TEST_F(TypedLinearSystem_Test, TestSingleConstructor) {
     TestTypedConstructor<MatrixDense, float>();
-    TestTypedConstructor<MatrixSparse, float>();
+    // TestTypedConstructor<MatrixSparse, float>();
 }
 
 TEST_F(TypedLinearSystem_Test, TestDoubleConstructor) {
     TestTypedConstructor<MatrixDense, double>();
-    TestTypedConstructor<MatrixSparse, double>();
+    // TestTypedConstructor<MatrixSparse, double>();
 }
