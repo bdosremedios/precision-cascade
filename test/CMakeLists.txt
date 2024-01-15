@@ -18,8 +18,8 @@ set(
     test_tools/test_TypedLinearSystem.cpp
     test_tools/test_SolveArgPkg.cpp
     # test_tools/test_PrecondArgPkg.cpp
-    test_tools/test_Substitution.cpp
-    # test_tools/test_VectorSort.cpp
+    test_tools/test_substitution.cpp
+    # test_tools/test_vectorSort.cpp
 )
 
 set(

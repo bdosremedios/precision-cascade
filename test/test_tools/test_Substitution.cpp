@@ -1,7 +1,5 @@
 #include "../test.h"
 
-#include "tools/Substitution.h"
-
 class Substitution_Test: public TestBase
 {
 public:
