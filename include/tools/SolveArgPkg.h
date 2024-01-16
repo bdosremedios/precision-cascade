@@ -3,10 +3,6 @@
 
 #include "../types/types.h"
 
-#include <memory>
-
-using std::make_shared, std::shared_ptr;
-
 class SolveArgPkg
 {
 public:

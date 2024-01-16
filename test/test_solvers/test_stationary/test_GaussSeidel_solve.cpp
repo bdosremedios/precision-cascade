@@ -1,4 +1,4 @@
-#include "../../../test.h"
+#include "../../test.h"
 
 #include "solvers/stationary/SOR.h"
 
