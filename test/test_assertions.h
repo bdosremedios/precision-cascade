@@ -183,7 +183,7 @@ void _ASSERT_MATRIX_ZERO(
     const char* file, int line, std::string message
 ) {
     _ASSERT_MATRIX_NEAR(
-        test, M<T>::Zero(test.rows(), test.cols()), tol, file, line, message
+        test, M<T>::Zero(test.get_handle(), test.rows(), test.cols()), tol, file, line, message
     );
 }
 
@@ -197,7 +197,7 @@ void _ASSERT_MATRIX_IDENTITY(
     const char* file, int line, std::string message
 ) {
     _ASSERT_MATRIX_NEAR(
-        test, M<T>::Identity(test.rows(), test.cols()), tol, file, line, message
+        test, M<T>::Identity(test.get_handle(), test.rows(), test.cols()), tol, file, line, message
     );
 }
 

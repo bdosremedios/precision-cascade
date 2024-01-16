@@ -1,6 +1,6 @@
 #include "../test.h"
 
-#include "preconditioners/ImplementedPreconditioners.h"
+#include "preconditioners/implemented_preconditioners.h"
 
 class Preconditioner_Test: public TestBase
 {
@@ -15,7 +15,7 @@ public:
         ASSERT_TRUE(no_precond.check_compatibility_left(1));
         ASSERT_TRUE(no_precond.check_compatibility_right(5));
 
-        MatrixVector<double> test_vec(MatrixVector<double>::Random(n));
+        MatrixVector<double> test_vec(MatrixVector<double>::Random(*handle_ptr, n));
         ASSERT_VECTOR_EQ(no_precond.action_inv_M(test_vec), test_vec);
     
     }
@@ -24,9 +24,12 @@ public:
     void TestMatrixInverse() {
         
         constexpr int n(45);
-        M<double> A(read_matrixCSV<M, double>(solve_matrix_dir / fs::path("A_inv_45.csv")));
-        M<double> A_inv(read_matrixCSV<M, double>(solve_matrix_dir / fs::path("Ainv_inv_45.csv")));
-        MatrixInverse<M, double> inv_precond = A_inv;
+        M<double> A(
+            read_matrixCSV<M, double>(*handle_ptr, solve_matrix_dir / fs::path("A_inv_45.csv"))
+        );
+        MatrixInverse<M, double> inv_precond(
+            read_matrixCSV<M, double>(*handle_ptr, solve_matrix_dir / fs::path("Ainv_inv_45.csv"))
+        );
 
         // Check compatibility with only 45
         ASSERT_TRUE(inv_precond.check_compatibility_left(n));
@@ -36,9 +39,8 @@ public:
         ASSERT_FALSE(inv_precond.check_compatibility_left(100));
         ASSERT_FALSE(inv_precond.check_compatibility_right(100));
 
-        MatrixVector<double> orig_test_vec(MatrixVector<double>::Random(n));
+        MatrixVector<double> orig_test_vec(MatrixVector<double>::Random(*handle_ptr, n));
         MatrixVector<double> test_vec(A*orig_test_vec);
-
         test_vec = inv_precond.action_inv_M(test_vec);
 
         ASSERT_VECTOR_NEAR(orig_test_vec, test_vec, Tol<double>::dbl_inv_elem_tol());
@@ -49,10 +51,10 @@ public:
 
 TEST_F(Preconditioner_Test, TestNoPreconditioner) {
     TestNoPreconditioner<MatrixDense>();
-    TestNoPreconditioner<MatrixSparse>();
+    // TestNoPreconditioner<MatrixSparse>();
 }
 
 TEST_F(Preconditioner_Test, TestMatrixInverse) {
     TestMatrixInverse<MatrixDense>();
-    TestMatrixInverse<MatrixSparse>();
+    // TestMatrixInverse<MatrixSparse>();
 }

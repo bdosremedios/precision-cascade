@@ -56,14 +56,6 @@ private:
         }
     }
 
-    MatrixVector(const cublasHandle_t &arg_handle, const T *h_vec, const int m_elem):
-        MatrixVector(arg_handle, m_elem)
-    {
-        if (m_elem > 0) {
-            check_cublas_status(cublasSetVector(m_rows, sizeof(T), h_vec, 1, d_vec, 1));
-        }
-    }
-
 public:
 
     // *** Basic Constructors ***
@@ -100,6 +92,15 @@ public:
 
         free(h_vec);
 
+    }
+
+    // Does not handle freeing of h_vec
+    MatrixVector(const cublasHandle_t &arg_handle, const T *h_vec, const int m_elem):
+        MatrixVector(arg_handle, m_elem)
+    {
+        if (m_elem > 0) {
+            check_cublas_status(cublasSetVector(m_rows, sizeof(T), h_vec, 1, d_vec, 1));
+        }
     }
 
     // *** Conversion Constructors ***
@@ -286,6 +287,7 @@ public:
     // *** Properties ***
     int rows() const { return m_rows; }
     int cols() const { return 1; }
+    cublasHandle_t get_handle() const { return handle; }
 
     void print() const {
 

@@ -37,14 +37,6 @@ private:
         check_cuda_error(cudaMalloc(&d_mat, mem_size));
     }
 
-    MatrixDense(const cublasHandle_t &arg_handle, T *h_mat, int m_elem, int n_elem):
-        MatrixDense(arg_handle, m_elem, n_elem)
-    {
-        if ((m_rows > 0) && (n_cols > 0)) {
-            check_cublas_status(cublasSetMatrix(m_rows, n_cols, sizeof(T), h_mat, m_rows, d_mat, m_rows));
-        }
-    }
-
 public:
 
     class Block; class Col; // Forward declaration of nested classes
@@ -95,6 +87,15 @@ public:
 
         free(h_mat);
 
+    }
+
+    // Does not handle freeing of h_mat
+    MatrixDense(const cublasHandle_t &arg_handle, T *h_mat, int m_elem, int n_elem):
+        MatrixDense(arg_handle, m_elem, n_elem)
+    {
+        if ((m_rows > 0) && (n_cols > 0)) {
+            check_cublas_status(cublasSetMatrix(m_rows, n_cols, sizeof(T), h_mat, m_rows, d_mat, m_rows));
+        }
     }
 
     // MatrixDense(const Parent &parent): Parent::Matrix(parent) {}
@@ -182,6 +183,7 @@ public:
     // *** Properties ***
     int rows() const { return m_rows; }
     int cols() const { return n_cols; }
+    cublasHandle_t get_handle() const { return handle; }
 
     void print() const {
 

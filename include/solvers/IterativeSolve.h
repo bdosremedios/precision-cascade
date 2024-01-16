@@ -3,7 +3,6 @@
 
 #include "types/types.h"
 #include "tools/argument_pkgs.h"
-#include "tools/Substitution.h"
 #include "preconditioners/ImplementedPreconditioners.h"
 
 #include <memory>
