@@ -1,11 +1,12 @@
 #include "../test.h"
 
+template <template <typename> typename M>
 class Matrix_Test: public TestBase
 {
 protected:
 
-    template <template <typename> typename M, typename T>
-    void TestCoeffAccess_Base() {
+    template <typename T>
+    void TestCoeffAccess() {
         
         constexpr int m(24);
         constexpr int n(12);
@@ -91,8 +92,7 @@ protected:
 
     }
 
-    template <template <typename> typename M>
-    void TestBadCoeffAccess_Base() {
+    void TestBadCoeffAccess() {
         
         constexpr int m(24);
         constexpr int n(12);
@@ -110,8 +110,8 @@ protected:
 
     }
 
-    template <template <typename> typename M, typename T>
-    void TestPropertyAccess_Base() {
+    template <typename T>
+    void TestPropertyAccess() {
 
         constexpr int m_1(62);
         constexpr int n_1(3);
@@ -133,8 +133,8 @@ protected:
 
     }
 
-    template <template <typename> typename M, typename T>
-    void TestConstruction_Base() {
+    template <typename T>
+    void TestConstruction() {
 
         M<T> test_mat_empty(*handle_ptr);
         ASSERT_EQ(test_mat_empty.rows(), 0);
@@ -156,8 +156,8 @@ protected:
 
     }
 
-    template <template <typename> typename M, typename T>
-    void TestListInitialization_Base() {
+    template <typename T>
+    void TestListInitialization() {
 
         M<T> test_mat_0_0 (*handle_ptr, {});
         ASSERT_EQ(test_mat_0_0.rows(), 0);
@@ -219,8 +219,7 @@ protected:
 
     }
 
-    template <template <typename> typename M>
-    void TestBadListInitialization_Base() {
+    void TestBadListInitialization() {
 
         CHECK_FUNC_HAS_RUNTIME_ERROR(
             print_errors,
@@ -241,8 +240,8 @@ protected:
 
     }
 
-    template <template <typename> typename M, typename T>
-    void TestCopyAssignment_Base() {
+    template <typename T>
+    void TestCopyAssignment() {
 
         M<T> test_mat_empty(*handle_ptr, {{}});
         M<T> test_mat_2_2(
@@ -306,8 +305,8 @@ protected:
 
     }
 
-    template <template <typename> typename M, typename T>
-    void TestCopyConstructor_Base() {
+    template <typename T>
+    void TestCopyConstructor() {
 
         M<T> test_mat_2_4(
             *handle_ptr,
@@ -329,8 +328,8 @@ protected:
 
     }
 
-    template <template <typename> typename M, typename T>
-    void TestStaticCreation_Base() {
+    template <typename T>
+    void TestStaticCreation() {
 
         constexpr int m_zero(15);
         constexpr int n_zero(17);
@@ -387,8 +386,8 @@ protected:
 
     }
 
-    template <template <typename> typename M, typename T>
-    void TestCol_Base() {
+    template <typename T>
+    void TestCol() {
 
         const M<T> const_mat(
             *handle_ptr, 
@@ -409,8 +408,7 @@ protected:
 
     }
 
-    template <template <typename> typename M>
-    void TestBadCol_Base() {
+    void TestBadCol() {
 
         const int m(4);
         const int n(3);
@@ -432,8 +430,8 @@ protected:
 
     }
 
-    template <template <typename> typename M, typename T>
-    void TestScale_Base() {
+    template <typename T>
+    void TestScale() {
 
         M<T> mat(
             *handle_ptr,
@@ -459,8 +457,8 @@ protected:
 
     }
 
-    template <template <typename> typename M, typename T>
-    void TestMatVec_Base() {
+    template <typename T>
+    void TestMatVec() {
 
         // Test manually
         M<T> mat(
@@ -596,8 +594,8 @@ protected:
 
     }
 
-    template <template <typename> typename M, typename T>
-    void TestBadMatVec_Base() {
+    template <typename T>
+    void TestBadMatVec() {
 
         M<T> mat(
             *handle_ptr,
@@ -635,8 +633,8 @@ protected:
 
     }
 
-    template <template <typename> typename M, typename T>
-    void TestTransposeMatVec_Base() {
+    template <typename T>
+    void TestTransposeMatVec() {
 
         // Test manually
         M<T> mat(
@@ -765,8 +763,8 @@ protected:
 
     }
 
-    template <template <typename> typename M, typename T>
-    void TestBadTransposeMatVec_Base() {
+    template <typename T>
+    void TestBadTransposeMatVec() {
 
         M<T> mat(
             *handle_ptr,
@@ -804,8 +802,8 @@ protected:
 
     }
 
-    template <template <typename> typename M, typename T>
-    void TestTranspose_Base() {
+    template <typename T>
+    void TestTranspose() {
 
         // Test manually
         constexpr int m_manual(4);
@@ -848,8 +846,8 @@ protected:
 
     }
 
-    template <template <typename> typename M, typename T>
-    void TestMatMat_Base() {
+    template <typename T>
+    void TestMatMat() {
 
         M<T> mat1(
             *handle_ptr,
@@ -876,8 +874,8 @@ protected:
 
     }
 
-    template <template <typename> typename M, typename T>
-    void TestBadMatMat_Base() {
+    template <typename T>
+    void TestBadMatMat() {
 
         M<T> mat(
             *handle_ptr,
@@ -912,8 +910,8 @@ protected:
 
     }
 
-    template <template <typename> typename M, typename T>
-    void TestAddSub_Base() {
+    template <typename T>
+    void TestAddSub() {
 
         M<T> mat1(
             *handle_ptr,
@@ -963,8 +961,8 @@ protected:
 
     }
 
-    template <template <typename> typename M, typename T>
-    void TestBadAddSub_Base() {
+    template <typename T>
+    void TestBadAddSub() {
 
         M<T> mat(
             *handle_ptr,
@@ -1016,8 +1014,8 @@ protected:
 
     }
 
-    template <template <typename> typename M, typename T>
-    void TestNorm_Base() {
+    template <typename T>
+    void TestNorm() {
 
         M<T> mat1(
             *handle_ptr,
@@ -1038,8 +1036,7 @@ protected:
 
     }
 
-    template <template <typename> typename M>
-    void TestCast_Base() {
+    void TestCast() {
         
         constexpr int m(20);
         constexpr int n(30);

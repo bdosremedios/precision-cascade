@@ -2,39 +2,9 @@
 
 #include "types/MatrixDense.h"
 
-class MatrixDense_Test: public Matrix_Test
+class MatrixDense_Test: public Matrix_Test<MatrixDense>
 {
 public:
-
-    template <typename T>
-    void TestCoeffAccess() { TestCoeffAccess_Base<MatrixDense, T>(); }
-
-    void TestBadCoeffAccess() { TestBadCoeffAccess_Base<MatrixDense>(); }
-
-    template <typename T>
-    void TestPropertyAccess() { TestPropertyAccess_Base<MatrixDense, T>(); }
-
-    template <typename T>
-    void TestConstruction() { TestConstruction_Base<MatrixDense, T>(); }
-
-    template <typename T>
-    void TestListInitialization() { TestListInitialization_Base<MatrixDense, T>(); }
-
-    void TestBadListInitialization() { TestBadListInitialization_Base<MatrixDense>(); }
-
-    template <typename T>
-    void TestCopyAssignment() { TestCopyAssignment_Base<MatrixDense, T>(); }
-
-    template <typename T>
-    void TestCopyConstructor() { TestCopyConstructor_Base<MatrixDense, T>(); }
-
-    template <typename T>
-    void TestStaticCreation() { TestStaticCreation_Base<MatrixDense, T>(); }
-
-    template <typename T>
-    void TestCol() { TestCol_Base<MatrixDense, T>(); }
-
-    void TestBadCol() { TestBadCol_Base<MatrixDense>(); }
 
     template <typename T>
     void TestBlock() {
@@ -183,41 +153,6 @@ public:
         );
 
     }
-
-    template <typename T>
-    void TestScale() { TestScale_Base<MatrixDense, T>(); }
-
-    template <typename T>
-    void TestMatVec() { TestMatVec_Base<MatrixDense, T>(); }
-
-    template <typename T>
-    void TestBadMatVec() { TestBadMatVec_Base<MatrixDense, T>(); }
-
-    template <typename T>
-    void TestTransposeMatVec() { TestTransposeMatVec_Base<MatrixDense, T>(); }
-
-    template <typename T>
-    void TestBadTransposeMatVec() { TestBadTransposeMatVec_Base<MatrixDense, T>(); }
-
-    template <typename T>
-    void TestTranspose() { TestTranspose_Base<MatrixDense, T>(); }
-
-    template <typename T>
-    void TestMatMat() { TestMatMat_Base<MatrixDense, T>(); }
-
-    template <typename T>
-    void TestBadMatMat() { TestBadMatMat_Base<MatrixDense, T>(); }
-
-    template <typename T>
-    void TestAddSub() { TestAddSub_Base<MatrixDense, T>(); }
-
-    template <typename T>
-    void TestBadAddSub() { TestBadAddSub_Base<MatrixDense, T>(); }
-
-    template <typename T>
-    void TestNorm() { TestNorm_Base<MatrixDense, T>(); }
-
-    void TestCast() { TestCast_Base<MatrixDense>(); }
 
 };
 
