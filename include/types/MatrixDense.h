@@ -1,8 +1,6 @@
 #ifndef MATRIXDENSE_H
 #define MATRIXDENSE_H
 
-// #include <Eigen/Dense>
-
 #include <iostream>
 #include <stdexcept>
 #include <cstdlib>
@@ -19,14 +17,12 @@
 template <typename T> class MatrixSparse;
 
 template <typename T>
-class MatrixDense //: private Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>
+class MatrixDense
 {
 private:
 
-    // using Parent = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>;
     template <typename> friend class MatrixDense;
     // friend MatrixSparse<T>;
-    // const Parent &base() const { return *this; }
 
     cublasHandle_t handle;
     int m_rows, n_cols;
@@ -89,7 +85,7 @@ public:
 
     }
 
-    // Does not handle freeing of h_mat
+    // *** Dynamic Memory *** (assumes outer code handles dynamic memory properly)
     MatrixDense(const cublasHandle_t &arg_handle, T *h_mat, int m_elem, int n_elem):
         MatrixDense(arg_handle, m_elem, n_elem)
     {
@@ -98,8 +94,18 @@ public:
         }
     }
 
-    // MatrixDense(const Parent &parent): Parent::Matrix(parent) {}
-    // MatrixDense(const Block &block): Parent::Matrix(block.base()) {}
+    void copy_data_to_ptr(T *h_mat, int m_elem, int n_elem) {
+        if (m_elem != m_rows) {
+            std::runtime_error("MatrixDense: invalid m_elem dim for copy_data_to_ptr");
+        }
+        if (n_elem != n_cols) {
+            std::runtime_error("MatrixDense: invalid n_elem dim for copy_data_to_ptr");
+        }
+        if ((m_rows > 0) && (n_cols > 0)) {
+            check_cublas_status(cublasGetMatrix(m_rows, n_cols, sizeof(T), d_mat, m_rows, h_mat, m_rows));
+        }
+    }
+
     // MatrixDense(const typename MatrixSparse<T>::Block &block): Parent::Matrix(block.base()) {}
 
     // *** Destructor ***
@@ -432,16 +438,9 @@ public:
 
     // Nested lightweight wrapper class representing matrix column and assignment/elem access
     // Requires: modification by/cast to MatrixVector<T>
-    class Col //: private Eigen::Block<Parent, Eigen::Dynamic, 1, true>
+    class Col
     {
     private:
-
-        // using ColParent = Eigen::Block<Parent, Eigen::Dynamic, 1, true>;
-        // using ConstColParent = Eigen::Block<const Parent, Eigen::Dynamic, 1, true>;
-        // friend MatrixVector<T>;
-        // const ColParent &base() const { return *this; }
-        // Col(const ColParent &other): ColParent(other) {}
-        // Col(const ConstColParent &other): ColParent(other) {}
 
         friend MatrixDense<T>;
 
@@ -507,14 +506,9 @@ public:
 
     // Nested lightweight wrapper class representing matrix block and assignment/elem access
     // Requires: modification by/cast to MatrixDense<T> and modification by MatrixVector
-    class Block //: private Eigen::Block<Parent, Eigen::Dynamic, Eigen::Dynamic>
+    class Block
     {
     private:
-
-        // using BlockParent = Eigen::Block<Parent, Eigen::Dynamic, Eigen::Dynamic>;
-        // friend MatrixDense<T>;
-        // const BlockParent &base() const { return *this; }
-        // Block(const BlockParent &other): BlockParent(other) {}
 
         friend MatrixDense<T>;
         const int row_idx_start;
@@ -534,9 +528,6 @@ public:
         {}
 
     public:
-
-        // Block operator=(const MatrixVector<T> vec) { return BlockParent::operator=(vec.base()); }
-        // Block operator=(const MatrixDense<T> &mat) { return BlockParent::operator=(mat.base()); }
 
         Block(const MatrixDense<T>::Block &other):
             Block(

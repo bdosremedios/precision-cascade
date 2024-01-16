@@ -188,6 +188,12 @@ TEST_F(MatrixDense_Test, TestDynamicMemConstruction) {
     TestDynamicMemConstruction<double>();
 }
 
+TEST_F(MatrixDense_Test, TestDynamicMemCopyToPtr) {
+    TestDynamicMemCopyToPtr<half>();
+    TestDynamicMemCopyToPtr<float>();
+    TestDynamicMemCopyToPtr<double>();
+}
+
 TEST_F(MatrixDense_Test, TestBadListInitialization) { TestBadListInitialization(); }
 
 TEST_F(MatrixDense_Test, TestCopyAssignment) {

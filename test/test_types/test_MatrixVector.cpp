@@ -181,6 +181,43 @@ public:
     }
 
     template <typename T>
+    void TestDynamicMemCopyToPtr() {
+    
+        const int m_manual(3);
+
+        MatrixVector<T> vec_manual(
+            *handle_ptr,
+            {static_cast<T>(-5), static_cast<T>(100), static_cast<T>(-20)}
+        );
+
+        T *h_vec_manual = static_cast<T *>(malloc(m_manual*sizeof(T)));
+        vec_manual.copy_data_to_ptr(h_vec_manual, m_manual);
+
+        ASSERT_EQ(h_vec_manual[0], static_cast<T>(-5));
+        ASSERT_EQ(h_vec_manual[1], static_cast<T>(100));
+        ASSERT_EQ(h_vec_manual[2], static_cast<T>(-20));
+
+        free(h_vec_manual);
+    
+        const int m_rand(7);
+
+        MatrixVector<T> vec_rand(
+            *handle_ptr,
+            {static_cast<T>(rand()), static_cast<T>(rand()), static_cast<T>(rand()),
+             static_cast<T>(rand()), static_cast<T>(rand()), static_cast<T>(rand()),
+             static_cast<T>(rand())}
+        );
+
+        T *h_vec_rand = static_cast<T *>(malloc(m_rand*sizeof(T)));
+        vec_rand.copy_data_to_ptr(h_vec_rand, m_rand);
+
+        for (int i=0; i<m_rand; ++i) { ASSERT_EQ(h_vec_rand[i], vec_rand.get_elem(i)); }
+
+        free(h_vec_rand);
+
+    }
+
+    template <typename T>
     void TestCopyAssignment() {
 
         MatrixVector<T> test_vec_empty(*handle_ptr, {});
@@ -554,6 +591,12 @@ TEST_F(MatrixVector_Test, TestDynamicMemConstruction) {
     TestDynamicMemConstruction<__half>();
     TestDynamicMemConstruction<float>();
     TestDynamicMemConstruction<double>();
+}
+
+TEST_F(MatrixVector_Test, TestDynamicMemCopyToPtr) {
+    TestDynamicMemCopyToPtr<__half>();
+    TestDynamicMemCopyToPtr<float>();
+    TestDynamicMemCopyToPtr<double>();
 }
 
 TEST_F(MatrixVector_Test, TestCopyAssignment) {

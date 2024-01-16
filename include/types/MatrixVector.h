@@ -1,8 +1,6 @@
 #ifndef MATRIXVECTOR_H
 #define MATRIXVECTOR_H
 
-// #include <Eigen/Dense>
-
 #include <iostream>
 #include <stdexcept>
 #include <cstdlib>
@@ -16,19 +14,14 @@
 #include "tools/cuda_check.h"
 #include "tools/vector_sort.h"
 
-// using Eigen::Matrix;
-// using Eigen::Dynamic;
-
 template <typename T> class MatrixDense;
 template <typename T> class MatrixSparse;
-// template <> class MatrixDense<int>;
 
 template <typename T>
-class MatrixVector //: private Matrix<T, Dynamic, 1>
+class MatrixVector
 {
 private:
 
-    // using Parent = Matrix<T, Dynamic, 1>;
 
     static void check_n(int n) {
         if (n != 1) { throw std::runtime_error("MatrixVector: invalid number of columns for vector"); }
@@ -39,7 +32,6 @@ private:
     friend MatrixDense<T>;
     friend MatrixDense<T>::Block;
     // friend MatrixSparse<T>;
-    // const Parent &base() const { return *this; }
 
     cublasHandle_t handle;
     int m_rows;
@@ -94,7 +86,7 @@ public:
 
     }
 
-    // Does not handle freeing of h_vec
+    // *** Dynamic Memory *** (assumes outer code handles dynamic memory properly)
     MatrixVector(const cublasHandle_t &arg_handle, const T *h_vec, const int m_elem):
         MatrixVector(arg_handle, m_elem)
     {
@@ -103,34 +95,16 @@ public:
         }
     }
 
+    void copy_data_to_ptr(T *h_vec, int m_elem) {
+        if (m_elem != m_rows) {
+            std::runtime_error("MatrixVector: invalid m_elem dim for copy_data_to_ptr");
+        }
+        if (m_rows > 0) {
+            check_cublas_status(cublasGetVector(m_rows, sizeof(T), d_vec, 1, h_vec, 1));
+        }
+    }
+
     // *** Conversion Constructors ***
-    // MatrixVector(const cublasHandle_t &arg_handle, const Parent &parent):
-    //     handle(arg_handle), Parent::Matrix(parent), m(parent.rows()), mem_size(m*sizeof(T))
-    // {
-
-    //     check_n(parent.cols());
-    //     allocate_d_vec();
-
-    //     T *h_vec = static_cast<T *>(malloc(mem_size));
-    //     for (int i=0; i<m; ++i) { h_vec[i] = parent.coeff(i, 0); }
-    //     cublasSetVector(m, sizeof(T), h_vec, 1, d_vec, 1);
-    //     free(h_vec);
-
-    // }
-
-    // MatrixVector(const cublasHandle_t &arg_handle, const typename MatrixDense<T>::Col &col):
-    //     handle(arg_handle), m(col.rows()), mem_size(m*sizeof(T))
-    // {
-
-    //     allocate_d_vec();
-
-    //     T *h_vec = static_cast<T *>(malloc(mem_size));
-    //     for (int i=0; i<m; ++i) { h_vec[i] = col.coeff(i, 0); }
-    //     cublasSetVector(m, sizeof(T), h_vec, 1, d_vec, 1);
-    //     free(h_vec);
-
-    // }
-
     // MatrixVector(const cublasHandle_t &arg_handle, const typename MatrixSparse<T>::Col &col):
     //     handle(arg_handle), m(col.rows()), mem_size(m*sizeof(T))
     // {
