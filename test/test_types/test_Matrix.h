@@ -340,6 +340,33 @@ protected:
 
     }
 
+    void TestBadDynamicMemCopyToPtr() {
+
+        const int m_rand(4);
+        const int n_rand(5);
+        M<double> mat_rand(*handle_ptr, m_rand, n_rand);
+        double *h_mat_rand = static_cast<double *>(malloc(m_rand*n_rand*sizeof(double)));
+        
+        auto try_row_too_small = [=]() { mat_rand.copy_data_to_ptr(h_mat_rand, m_rand-2, n_rand); };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_row_too_small);
+
+        auto try_row_too_large = [=]() { mat_rand.copy_data_to_ptr(h_mat_rand, m_rand+2, n_rand); };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_row_too_large);
+
+        auto try_col_too_small = [=]() { mat_rand.copy_data_to_ptr(h_mat_rand, m_rand, n_rand-2); };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_col_too_small);
+
+        auto try_col_too_large = [=]() { mat_rand.copy_data_to_ptr(h_mat_rand, m_rand, n_rand+2); };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_col_too_large);
+
+        auto try_match_wrong_dim_row = [=]() { mat_rand.copy_data_to_ptr(h_mat_rand, n_rand, n_rand); };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_match_wrong_dim_row);
+
+        auto try_match_wrong_dim_col = [=]() { mat_rand.copy_data_to_ptr(h_mat_rand, m_rand, m_rand); };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_match_wrong_dim_col);
+
+    }
+
     template <typename T>
     void TestCopyAssignment() {
 

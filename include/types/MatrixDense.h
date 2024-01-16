@@ -94,12 +94,12 @@ public:
         }
     }
 
-    void copy_data_to_ptr(T *h_mat, int m_elem, int n_elem) {
+    void copy_data_to_ptr(T *h_mat, int m_elem, int n_elem) const {
         if (m_elem != m_rows) {
-            std::runtime_error("MatrixDense: invalid m_elem dim for copy_data_to_ptr");
+            throw std::runtime_error("MatrixDense: invalid m_elem dim for copy_data_to_ptr");
         }
         if (n_elem != n_cols) {
-            std::runtime_error("MatrixDense: invalid n_elem dim for copy_data_to_ptr");
+            throw std::runtime_error("MatrixDense: invalid n_elem dim for copy_data_to_ptr");
         }
         if ((m_rows > 0) && (n_cols > 0)) {
             check_cublas_status(cublasGetMatrix(m_rows, n_cols, sizeof(T), d_mat, m_rows, h_mat, m_rows));

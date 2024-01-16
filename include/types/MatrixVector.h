@@ -95,9 +95,9 @@ public:
         }
     }
 
-    void copy_data_to_ptr(T *h_vec, int m_elem) {
+    void copy_data_to_ptr(T *h_vec, int m_elem) const {
         if (m_elem != m_rows) {
-            std::runtime_error("MatrixVector: invalid m_elem dim for copy_data_to_ptr");
+            throw std::runtime_error("MatrixVector: invalid m_elem dim for copy_data_to_ptr");
         }
         if (m_rows > 0) {
             check_cublas_status(cublasGetVector(m_rows, sizeof(T), d_vec, 1, h_vec, 1));

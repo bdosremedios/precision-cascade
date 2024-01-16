@@ -217,6 +217,20 @@ public:
 
     }
 
+    void TestBadDynamicMemCopyToPtr() {
+
+        const int m_rand(10);
+        MatrixVector<double> vec_rand(*handle_ptr, m_rand);
+        double *h_vec_rand = static_cast<double *>(malloc(m_rand*sizeof(double)));
+        
+        auto try_row_too_small = [=]() { vec_rand.copy_data_to_ptr(h_vec_rand, m_rand-2); };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_row_too_small);
+
+        auto try_row_too_large = [=]() { vec_rand.copy_data_to_ptr(h_vec_rand, m_rand+2); };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_row_too_large);
+
+    }
+
     template <typename T>
     void TestCopyAssignment() {
 
@@ -598,6 +612,8 @@ TEST_F(MatrixVector_Test, TestDynamicMemCopyToPtr) {
     TestDynamicMemCopyToPtr<float>();
     TestDynamicMemCopyToPtr<double>();
 }
+
+TEST_F(MatrixVector_Test, TestBadDynamicMemCopyToPtr) { TestBadDynamicMemCopyToPtr(); }
 
 TEST_F(MatrixVector_Test, TestCopyAssignment) {
     TestCopyAssignment<__half>();
