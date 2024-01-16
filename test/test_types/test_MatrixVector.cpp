@@ -145,6 +145,42 @@ public:
     }
 
     template <typename T>
+    void TestDynamicMemConstruction() {
+    
+        const int m_manual(3);
+        T *h_vec_manual = static_cast<T *>(malloc(m_manual*sizeof(T)));
+        h_vec_manual[0] = static_cast<T>(-5);
+        h_vec_manual[1] = static_cast<T>(100);
+        h_vec_manual[2] = static_cast<T>(-20);
+
+        MatrixVector<T> test_vec_manual(*handle_ptr, h_vec_manual, m_manual);
+
+        MatrixVector<T> target_vec_manual(
+            *handle_ptr,
+            {static_cast<T>(-5), static_cast<T>(100), static_cast<T>(-20)}
+        );
+
+        ASSERT_MATRIX_EQ(test_vec_manual, target_vec_manual);
+
+        free(h_vec_manual);
+    
+        const int m_rand(7);
+        T *h_vec_rand = static_cast<T *>(malloc(m_rand*sizeof(T)));
+        for (int i=0; i<m_rand; ++i) { h_vec_rand[i] = rand(); }
+
+        MatrixVector<T> test_vec_rand(*handle_ptr, h_vec_rand, m_rand);
+
+        ASSERT_EQ(test_vec_rand.rows(), m_rand);
+        ASSERT_EQ(test_vec_rand.cols(), 1);
+        for (int i=0; i<m_rand; ++i) {
+            ASSERT_EQ(test_vec_rand.get_elem(i), h_vec_rand[i]);
+        }
+
+        free(h_vec_rand);
+
+    }
+
+    template <typename T>
     void TestCopyAssignment() {
 
         MatrixVector<T> test_vec_empty(*handle_ptr, {});
@@ -512,6 +548,12 @@ TEST_F(MatrixVector_Test, TestListInitialization) {
     TestListInitialization<__half>();
     TestListInitialization<float>();
     TestListInitialization<double>();
+}
+
+TEST_F(MatrixVector_Test, TestDynamicMemConstruction) {
+    TestDynamicMemConstruction<__half>();
+    TestDynamicMemConstruction<float>();
+    TestDynamicMemConstruction<double>();
 }
 
 TEST_F(MatrixVector_Test, TestCopyAssignment) {
