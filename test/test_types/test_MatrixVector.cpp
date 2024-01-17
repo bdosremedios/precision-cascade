@@ -759,18 +759,32 @@ public:
 
 };
 
-TEST_F(MatrixVector_Sort_Test, TestSimpleSortHalf_EvenNum) { simple_sort_even<__half>(); }
-TEST_F(MatrixVector_Sort_Test, TestSimpleSortSingle_EvenNum) { simple_sort_even<float>(); }
-TEST_F(MatrixVector_Sort_Test, TestSimpleSortDouble_EvenNum) { simple_sort_even<double>(); }
+TEST_F(MatrixVector_Sort_Test, TestSimpleSort_EvenNum) { 
+    simple_sort_even<__half>();
+    simple_sort_even<float>();
+    simple_sort_even<double>();
+}
 
-TEST_F(MatrixVector_Sort_Test, TestSimpleSortHalf_OddNum) { simple_sort_odd<__half>(); }
-TEST_F(MatrixVector_Sort_Test, TestSimpleSortSingle_OddNum) { simple_sort_odd<float>(); }
-TEST_F(MatrixVector_Sort_Test, TestSimpleSortDouble_OddNum) { simple_sort_odd<double>(); }
+TEST_F(MatrixVector_Sort_Test, TestSimpleSort_OddNum) {
+    simple_sort_odd<__half>();
+    simple_sort_odd<float>();
+    simple_sort_odd<double>();
+}
 
-TEST_F(MatrixVector_Sort_Test, TestSimpleSortHalf_Dupes) { simple_sort_duplicates<__half>(); }
-TEST_F(MatrixVector_Sort_Test, TestSimpleSortSingle_Dupes) { simple_sort_duplicates<float>(); }
-TEST_F(MatrixVector_Sort_Test, TestSimpleSortDouble_Dupes) { simple_sort_duplicates<double>(); }
+TEST_F(MatrixVector_Sort_Test, TestSimpleSort_Dupes) {
+    simple_sort_duplicates<__half>();
+    simple_sort_duplicates<float>();
+    simple_sort_duplicates<double>();
+}
 
-TEST_F(MatrixVector_Sort_Test, TestAlreadySorted) { sorted_already<double>(); }
+TEST_F(MatrixVector_Sort_Test, TestAlreadySorted) {
+    sorted_already<__half>();
+    sorted_already<float>();
+    sorted_already<double>();
+}
 
-TEST_F(MatrixVector_Sort_Test, TestOneElement) { one_element<double>(); }
+TEST_F(MatrixVector_Sort_Test, TestOneElement) {
+    one_element<__half>();
+    one_element<float>();
+    one_element<double>();
+}
