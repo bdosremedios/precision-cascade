@@ -29,11 +29,8 @@ public:
     }
 
     const M<double> &get_A() const { return A; }
-
     virtual const MatrixVector<double> &get_b() const { return b; }
-
     const int &get_m() const { return m; }
-
     const int &get_n() const { return n; }
 
 };

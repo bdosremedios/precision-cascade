@@ -281,9 +281,11 @@ public:
         const SolveArgPkg &arg_pkg
     ): 
         typed_lin_sys(arg_typed_lin_sys),
-        init_guess_typed((arg_pkg.check_default_init_guess()) ?
-            this->make_guess(arg_typed_lin_sys).template cast<T>() :
-            arg_pkg.init_guess.template cast<T>()),
+        init_guess_typed(
+            (arg_pkg.check_default_init_guess()) ? 
+                this->make_guess(arg_typed_lin_sys).template cast<T>() :
+                arg_pkg.init_guess.template cast<T>()
+        ),
         GenericIterativeSolve<M>(arg_typed_lin_sys, arg_pkg)
     {
         typed_soln = init_guess_typed;
