@@ -51,22 +51,15 @@ private:
 public:
 
     // *** Basic Constructors ***
-    MatrixVector(const cublasHandle_t &arg_handle):
-        handle(arg_handle), m_rows(0), mem_size(0)
-    { allocate_d_vec(); }
-
     MatrixVector(const cublasHandle_t &arg_handle, int arg_m, int arg_n):
         handle(arg_handle), m_rows(arg_m), mem_size(m_rows*sizeof(T))
     { 
-        check_n(n);
+        check_n(arg_n);
         allocate_d_vec();
     }
 
-    MatrixVector(const cublasHandle_t &arg_handle, int arg_m):
-        handle(arg_handle), m_rows(arg_m), mem_size(m_rows*sizeof(T))
-    {
-        allocate_d_vec();
-    }
+    MatrixVector(const cublasHandle_t &arg_handle, int arg_m): MatrixVector(arg_handle, arg_m, 1) {}
+    MatrixVector(const cublasHandle_t &arg_handle):  MatrixVector(arg_handle, 0) {}
 
     MatrixVector(const cublasHandle_t &arg_handle, std::initializer_list<T> li):
         MatrixVector(arg_handle, li.size())
@@ -121,7 +114,6 @@ public:
     // *** Destructor ***
     virtual ~MatrixVector() {
         check_cuda_error(cudaFree(d_vec));
-        d_vec = nullptr;
     }
 
     // *** Copy-Assignment ***

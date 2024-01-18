@@ -38,13 +38,11 @@ public:
     class Block; class Col; // Forward declaration of nested classes
 
     // *** Basic Constructors ***
-    MatrixDense(const cublasHandle_t &arg_handle):
-        handle(arg_handle), m_rows(0), n_cols(0), mem_size(m_rows*n_cols*sizeof(T))
-    { allocate_d_mat(); }
-
     MatrixDense(const cublasHandle_t &arg_handle, int arg_m, int arg_n):
         handle(arg_handle), m_rows(arg_m), n_cols(arg_n), mem_size(m_rows*n_cols*sizeof(T))
     { allocate_d_mat(); }
+
+    MatrixDense(const cublasHandle_t &arg_handle): MatrixDense(arg_handle, 0, 0) {}
 
     // Row-major nested initializer list assumed for intuitive user instantiation
     MatrixDense(const cublasHandle_t &arg_handle, std::initializer_list<std::initializer_list<T>> li):

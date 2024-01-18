@@ -16,11 +16,11 @@ protected:
     shared_ptr<Preconditioner<M, W>> left_precond_ptr;
     shared_ptr<Preconditioner<M, W>> right_precond_ptr;
 
-    MatrixDense<T> Q_kry_basis;
-    MatrixDense<T> H;
-    MatrixDense<T> Q_H;
-    MatrixDense<T> R_H;
-    MatrixVector<T> next_q;
+    MatrixDense<T> Q_kry_basis = MatrixDense<T>(NULL);
+    MatrixDense<T> H = MatrixDense<T>(NULL);
+    MatrixDense<T> Q_H = MatrixDense<T>(NULL);
+    MatrixDense<T> R_H = MatrixDense<T>(NULL);
+    MatrixVector<T> next_q = MatrixVector<T>(NULL);
 
     int kry_space_dim;
     int max_kry_space_dim;
