@@ -1,5 +1,5 @@
-#ifndef MATRIX_INVERSE_H
-#define MATRIX_INVERSE_H
+#ifndef MATRIX_INVERSE_PRECONDITIONER_H
+#define MATRIX_INVERSE_PRECONDITIONER_H
 
 #include "Preconditioner.h"
 
