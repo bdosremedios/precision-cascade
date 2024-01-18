@@ -33,9 +33,9 @@ set(
 
     test_solvers/test_IterativeSolve/test_IterativeSolve.cpp
 
-    test_solvers/test_stationary/test_Jacobi_solve.cpp
-#     test_solvers/test_stationary/test_GaussSeidel_solve.cpp
-#     test_solvers/test_stationary/test_SOR_solve.cpp
+    test_solvers/test_stationary/test_JacobiSolve.cpp
+    test_solvers/test_stationary/test_GaussSeidelSolve.cpp
+    test_solvers/test_stationary/test_SORSolve.cpp
 
 #     test_solvers/test_GMRES/test_GMRES_components.cpp
 #     test_solvers/test_GMRES/test_GMRES_solve_dbl.cpp
