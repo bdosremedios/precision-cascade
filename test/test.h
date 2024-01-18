@@ -10,6 +10,7 @@
 
 #include "types/types.h"
 #include "tools/MatrixReader.h"
+#include "tools/SolveArgPkg.h"
 
 #include "test_assertions.h"
 #include "test_tools.h"
@@ -27,7 +28,7 @@ public:
         fs::current_path() / fs::path("..") / fs::path("test") / fs::path("solve_matrices")
     );
 
-    // SolveArgPkg default_args;
+    SolveArgPkg default_args;
     static bool *show_plots;
     static cublasHandle_t *handle_ptr;
     static bool *print_errors;

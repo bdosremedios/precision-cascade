@@ -3,7 +3,7 @@
 
 #include "types/types.h"
 #include "tools/argument_pkgs.h"
-#include "preconditioners/ImplementedPreconditioners.h"
+#include "preconditioners/implemented_preconditioners.h"
 
 #include <memory>
 #include <vector>
@@ -12,13 +12,6 @@
 #include <cmath>
 #include <iostream>
 #include <iomanip>
-
-using std::shared_ptr, std::make_shared;
-using std::vector;
-using std::string;
-using std::log, std::min, std::max, std::pow, std::sqrt;
-using std::setprecision;
-using std::cout, std::endl;
 
 template <template <typename> typename M>
 class GenericIterativeSolve
@@ -31,10 +24,10 @@ private:
 
         // Ensure compatability to matrix and initial guess and squareness
         if (lin_sys.get_n() != init_guess.rows()) {
-            throw runtime_error("A not compatible with initial guess init_guess");
+            throw std::runtime_error("A not compatible with initial guess init_guess");
         }
         if (lin_sys.get_m() != lin_sys.get_n()) {
-            throw runtime_error("A is not square");
+            throw std::runtime_error("A is not square");
         }
 
     }
@@ -57,10 +50,10 @@ private:
 
     void initialize_instantiate_residual() {
         res_norm_hist.clear();
-        res_hist = MatrixDense<double>(lin_sys.get_m(), max_iter+1);
+        res_hist = MatrixDense<double>(lin_sys.get_A().get_handle(), lin_sys.get_m(), max_iter+1);
         MatrixVector<double> res_calc(lin_sys.get_b()-lin_sys.get_A()*init_guess);
         curr_res = res_calc;
-        res_hist.col(0) = res_calc;
+        res_hist.get_col(0).set_from_vec(res_calc);
         res_norm_hist.push_back(res_calc.norm());
     }
     
@@ -81,10 +74,10 @@ protected:
     bool initiated;
     bool converged;
     bool terminated;
-    MatrixVector<double> generic_soln;
-    MatrixVector<double> curr_res;
-    MatrixDense<double> res_hist;
-    vector<double> res_norm_hist;
+    MatrixVector<double> generic_soln = MatrixVector<double>(NULL);
+    MatrixVector<double> curr_res = MatrixVector<double>(NULL);
+    MatrixDense<double> res_hist = MatrixDense<double>(NULL);
+    std::vector<double> res_norm_hist;
 
     // *** PROTECTED CONSTRUCTORS ***
     GenericIterativeSolve(
@@ -120,7 +113,7 @@ protected:
     // *** PROTECTED METHODS ***
 
     MatrixVector<double> make_guess(const GenericLinearSystem<M> &arg_lin_sys) const {
-        return MatrixVector<double>::Ones(arg_lin_sys.get_n());
+        return MatrixVector<double>::Ones(arg_lin_sys.get_A().get_handle(), arg_lin_sys.get_n());
     }
 
 public:
@@ -132,7 +125,7 @@ public:
     MatrixVector<double> get_curr_res() const { return curr_res; };
     double get_relres() const { return curr_res.norm()/res_norm_hist[0]; }
     MatrixDense<double> get_res_hist() const { return res_hist; };
-    vector<double> get_res_norm_hist() const { return res_norm_hist; };
+    std::vector<double> get_res_norm_hist() const { return res_norm_hist; };
     bool check_initiated() const { return initiated; };
     bool check_converged() const { return converged; };
     bool check_terminated() const { return terminated; };
@@ -150,16 +143,15 @@ public:
 
         // Mark IterativeSolve as started and set residual information, throwing error
         // if already initiated because of weirdness with residual
-        if (initiated) { throw runtime_error("Can not safely call solve without after a initiation without reset"); }
+        if (initiated) {
+            throw std::runtime_error("Can not safely call solve without after a initiation without reset");
+        }
         initiated = true;
         initialize_instantiate_residual(); // Set res_hist size here since max_iter is mutable before solve
 
         // Run while relative residual is still high, and under max iterations, and has not been
         // flagged as converged
-        while(
-            !converged &&
-            ((curr_iter < max_iter) && (get_relres() > target_rel_res))
-        ) {
+        while(!converged && ((curr_iter < max_iter) && (get_relres() > target_rel_res))) {
 
             // Iterate solution
             ++curr_iter;
@@ -168,7 +160,7 @@ public:
 
             // Update residual tracking
             curr_res = lin_sys.get_b()-lin_sys.get_A()*generic_soln;
-            res_hist.col(curr_iter) = curr_res;
+            res_hist.get_col(curr_iter).set_from_vec(curr_res);
             res_norm_hist.push_back(curr_res.norm());
 
             // Break early if terminated
@@ -200,11 +192,11 @@ public:
     }
 
     // Rudimentarily plot relative residual
-    void view_relres_plot(string const &arg="normal") const {
+    void view_relres_plot(std::string const &arg="normal") const {
 
         // Get max max_length entries to plot
         const int max_length(70);
-        vector<double> plot_y;
+        std::vector<double> plot_y;
         if (res_norm_hist.size() > max_length) {
             double h = (res_norm_hist.size()-1.0)/(max_length-1.0);
             for (int i=0; i<max_length; ++i) {
@@ -226,17 +218,17 @@ public:
 
         // Find which in height buckets each plot point should be in
         const int height(12);
-        vector<double> plot_y_bucket_index;
-        vector<double> bucket_ends;
+        std::vector<double> plot_y_bucket_index;
+        std::vector<double> bucket_ends;
         double min_ = *std::min_element(plot_y.cbegin(), plot_y.cend());
         double max_ = *std::max_element(plot_y.cbegin(), plot_y.cend());
 
         // Get minimal of target relres and minimum if initiated for bottom of plot
         if (initiated) {
             if (arg == "log") {
-                min_ = min(min_, log(target_rel_res)/log(10));
+                min_ = std::min(min_, log(target_rel_res)/log(10));
             } else {
-                min_ = min(min_, target_rel_res);
+                min_ = std::min(min_, target_rel_res);
             }
         }
 
@@ -254,31 +246,31 @@ public:
 
         // Iterate over grid and mark typed_soln wherever there is a plot entry
         const int min_length(3);
-        cout << "Display of Relative Residual L-2 Norm: " << endl;
+        std::cout << "Display of Relative Residual L-2 Norm: " << std::endl;
         if (arg == "log") {
-            cout << setprecision(3) << pow(10, max_);
+            std::cout << std::setprecision(3) << std::pow(10, max_);
         } else {
-            cout << setprecision(3) << max_;
+            std::cout << std::setprecision(3) << max_;
         };
-        cout << " " << string(max(min_length, length-1), '-') << endl;
+        std::cout << " " << std::string(std::max(min_length, length-1), '-') << std::endl;
         for (int i=height-1; i>=0; --i) {
             for (int j=-1; j<length; ++j) {
                 if ((j >= 0) && (plot_y_bucket_index[j] == i)) {
-                    cout << "*";
+                    std::cout << "*";
                 } else {
-                    cout << " ";
+                    std::cout << " ";
                 }
             }
-            cout << endl;
+            std::cout << std::endl;
         }
         if (arg == "log") {
-            cout << setprecision(3) << pow(10, min_);
+            std::cout << std::setprecision(3) << std::pow(10, min_);
         } else {
-            cout << setprecision(3) << min_;
+            std::cout << std::setprecision(3) << min_;
         };
-        cout << " " << string(max(min_length, length-4), '-') << endl;
-        cout << "Iter: 0" << string(max(min_length, length-10), ' ')
-             << "Iter: " << curr_iter << endl;
+        std::cout << " " << std::string(std::max(min_length, length-4), '-') << std::endl;
+        std::cout << "Iter: 0" << std::string(std::max(min_length, length-10), ' ')
+                  << "Iter: " << curr_iter << std::endl;
 
     }
 
@@ -306,7 +298,7 @@ protected:
     const MatrixVector<T> init_guess_typed;
 
     // Mutable solve attributes
-    MatrixVector<T> typed_soln;
+    MatrixVector<T> typed_soln = MatrixVector<T>(NULL);
 
     // *** PROTECTED ABSTRACT METHODS ***
     
