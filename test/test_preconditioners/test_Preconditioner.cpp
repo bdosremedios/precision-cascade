@@ -21,13 +21,13 @@ public:
     }
 
     template<template <typename> typename M>
-    void TestMatrixInverse() {
+    void TestMatrixInversePreconditioner() {
         
         constexpr int n(45);
         M<double> A(
             read_matrixCSV<M, double>(*handle_ptr, solve_matrix_dir / fs::path("A_inv_45.csv"))
         );
-        MatrixInverse<M, double> inv_precond(
+        MatrixInversePreconditioner<M, double> inv_precond(
             read_matrixCSV<M, double>(*handle_ptr, solve_matrix_dir / fs::path("Ainv_inv_45.csv"))
         );
 
@@ -54,7 +54,7 @@ TEST_F(Preconditioner_Test, TestNoPreconditioner) {
     // TestNoPreconditioner<MatrixSparse>();
 }
 
-TEST_F(Preconditioner_Test, TestMatrixInverse) {
-    TestMatrixInverse<MatrixDense>();
+TEST_F(Preconditioner_Test, TestMatrixInversePreconditioner) {
+    TestMatrixInversePreconditioner<MatrixDense>();
     // TestMatrixInverse<MatrixSparse>();
 }

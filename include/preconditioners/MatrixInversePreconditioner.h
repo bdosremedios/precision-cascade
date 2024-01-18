@@ -4,13 +4,13 @@
 #include "Preconditioner.h"
 
 template <template <typename> typename M, typename W>
-class MatrixInverse: public Preconditioner<M, W>
+class MatrixInversePreconditioner: public Preconditioner<M, W>
 {
 public:
 
     M<W> inv_M;
 
-    MatrixInverse(M<W> const &arg_inv_M): inv_M(arg_inv_M) {}
+    MatrixInversePreconditioner(M<W> const &arg_inv_M): inv_M(arg_inv_M) {}
 
     bool check_compatibility_left(int const &arg_m) const override {
         return ((inv_M.cols() == arg_m) && (inv_M.rows() == arg_m));

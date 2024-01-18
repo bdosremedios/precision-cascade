@@ -14,8 +14,8 @@ public:
         M<double> A(
             read_matrixCSV<M, double>(*handle_ptr, solve_matrix_dir / fs::path("ilu_A.csv"))
         );
-        ILU<M, double> ilu0(A, Tol<double>::roundoff(), false);
-        ILU<M, double> ilut0(A, 0., n, Tol<double>::roundoff(), false);
+        ILUPreconditioner<M, double> ilu0(A, Tol<double>::roundoff(), false);
+        ILUPreconditioner<M, double> ilut0(A, 0., n, Tol<double>::roundoff(), false);
 
         ASSERT_MATRIX_EQ(ilu0.get_L(), ilut0.get_L());
         ASSERT_MATRIX_EQ(ilu0.get_U(), ilut0.get_U());
@@ -32,11 +32,11 @@ public:
 
         // Check multiple rising thresholds ensuring that each ilu is closer to the matrix and that
         // all have correct form for L and U
-        ILU<M, double> ilut1e_4(A, 1e-4, n, Tol<double>::roundoff(), pivot);
-        ILU<M, double> ilut1e_3(A, 1e-3, n, Tol<double>::roundoff(), pivot);
-        ILU<M, double> ilut1e_2(A, 1e-2, n, Tol<double>::roundoff(), pivot);
-        ILU<M, double> ilut1e_1(A, 1e-1, n, Tol<double>::roundoff(), pivot);
-        ILU<M, double> ilut1e_0(A, 1e-0, n, Tol<double>::roundoff(), pivot);
+        ILUPreconditioner<M, double> ilut1e_4(A, 1e-4, n, Tol<double>::roundoff(), pivot);
+        ILUPreconditioner<M, double> ilut1e_3(A, 1e-3, n, Tol<double>::roundoff(), pivot);
+        ILUPreconditioner<M, double> ilut1e_2(A, 1e-2, n, Tol<double>::roundoff(), pivot);
+        ILUPreconditioner<M, double> ilut1e_1(A, 1e-1, n, Tol<double>::roundoff(), pivot);
+        ILUPreconditioner<M, double> ilut1e_0(A, 1e-0, n, Tol<double>::roundoff(), pivot);
 
         ASSERT_MATRIX_LOWTRI(ilut1e_4.get_L(), Tol<double>::dbl_ilu_elem_tol());
         ASSERT_MATRIX_LOWTRI(ilut1e_3.get_L(), Tol<double>::dbl_ilu_elem_tol());
@@ -102,7 +102,7 @@ public:
         M<double> A(
             read_matrixCSV<M, double>(*handle_ptr, solve_matrix_dir / fs::path("ilu_sparse_A.csv"))
         );
-        ILU<M, double> ilu_all_drop(A, DBL_MAX, n, Tol<double>::roundoff(), pivot);
+        ILUPreconditioner<M, double> ilu_all_drop(A, DBL_MAX, n, Tol<double>::roundoff(), pivot);
 
         ASSERT_MATRIX_LOWTRI(ilu_all_drop.get_L(), Tol<double>::roundoff());
         ASSERT_MATRIX_LOWTRI(ilu_all_drop.get_U(), Tol<double>::roundoff());
@@ -124,15 +124,15 @@ public:
         M<double> A(
             read_matrixCSV<M, double>(*handle_ptr, solve_matrix_dir / fs::path("ilu_A.csv"))
         );
-        ILU<M, double> ilu_keep_8(A, 0., 8, Tol<double>::roundoff(), pivot);
-        ILU<M, double> ilu_keep_7(A, 0., 7, Tol<double>::roundoff(), pivot);
-        ILU<M, double> ilu_keep_6(A, 0., 6, Tol<double>::roundoff(), pivot);
-        ILU<M, double> ilu_keep_5(A, 0., 5, Tol<double>::roundoff(), pivot);
-        ILU<M, double> ilu_keep_4(A, 0., 4, Tol<double>::roundoff(), pivot);
-        ILU<M, double> ilu_keep_3(A, 0., 3, Tol<double>::roundoff(), pivot);
-        ILU<M, double> ilu_keep_2(A, 0., 2, Tol<double>::roundoff(), pivot);
-        ILU<M, double> ilu_keep_1(A, 0., 1, Tol<double>::roundoff(), pivot);
-        ILU<M, double> ilu_keep_0(A, 0., 0, Tol<double>::roundoff(), pivot);
+        ILUPreconditioner<M, double> ilu_keep_8(A, 0., 8, Tol<double>::roundoff(), pivot);
+        ILUPreconditioner<M, double> ilu_keep_7(A, 0., 7, Tol<double>::roundoff(), pivot);
+        ILUPreconditioner<M, double> ilu_keep_6(A, 0., 6, Tol<double>::roundoff(), pivot);
+        ILUPreconditioner<M, double> ilu_keep_5(A, 0., 5, Tol<double>::roundoff(), pivot);
+        ILUPreconditioner<M, double> ilu_keep_4(A, 0., 4, Tol<double>::roundoff(), pivot);
+        ILUPreconditioner<M, double> ilu_keep_3(A, 0., 3, Tol<double>::roundoff(), pivot);
+        ILUPreconditioner<M, double> ilu_keep_2(A, 0., 2, Tol<double>::roundoff(), pivot);
+        ILUPreconditioner<M, double> ilu_keep_1(A, 0., 1, Tol<double>::roundoff(), pivot);
+        ILUPreconditioner<M, double> ilu_keep_0(A, 0., 0, Tol<double>::roundoff(), pivot);
 
         for (int i=0; i<n; ++i) {
             ASSERT_LE(
