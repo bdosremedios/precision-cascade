@@ -1,12 +1,12 @@
-#include "types/MatrixVector.h"
+#include "types/Vector.h"
 
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
 
 template<>
-MatrixVector<double> MatrixVector<double>::operator*(const double &scalar) const {
+Vector<double> Vector<double>::operator*(const double &scalar) const {
 
-    MatrixVector<double> c(*this);
+    Vector<double> c(*this);
 
     check_cublas_status(
         cublasScalEx(
@@ -19,7 +19,7 @@ MatrixVector<double> MatrixVector<double>::operator*(const double &scalar) const
 }
 
 template<>
-MatrixVector<double> & MatrixVector<double>::operator*=(const double &scalar) {
+Vector<double> & Vector<double>::operator*=(const double &scalar) {
 
     check_cublas_status(
         cublasScalEx(
@@ -32,11 +32,11 @@ MatrixVector<double> & MatrixVector<double>::operator*=(const double &scalar) {
 }
 
 template<>
-MatrixVector<double> MatrixVector<double>::operator+(const MatrixVector<double> &vec) const {
+Vector<double> Vector<double>::operator+(const Vector<double> &vec) const {
 
     check_vecvec_op_compatibility(vec);
 
-    MatrixVector<double> c(*this);
+    Vector<double> c(*this);
     double alpha = 1.;
 
     check_cublas_status(
@@ -50,11 +50,11 @@ MatrixVector<double> MatrixVector<double>::operator+(const MatrixVector<double> 
 }
 
 template<>
-MatrixVector<double> MatrixVector<double>::operator-(const MatrixVector<double> &vec) const {
+Vector<double> Vector<double>::operator-(const Vector<double> &vec) const {
 
     check_vecvec_op_compatibility(vec);
 
-    MatrixVector<double> c(*this);
+    Vector<double> c(*this);
     double alpha = -1.;
 
     check_cublas_status(
@@ -68,7 +68,7 @@ MatrixVector<double> MatrixVector<double>::operator-(const MatrixVector<double> 
 }
 
 template<>
-MatrixVector<double> & MatrixVector<double>::operator+=(const MatrixVector<double> &vec) {
+Vector<double> & Vector<double>::operator+=(const Vector<double> &vec) {
 
     check_vecvec_op_compatibility(vec);
 
@@ -85,7 +85,7 @@ MatrixVector<double> & MatrixVector<double>::operator+=(const MatrixVector<doubl
 }
 
 template<>
-MatrixVector<double> & MatrixVector<double>::operator-=(const MatrixVector<double> &vec) {
+Vector<double> & Vector<double>::operator-=(const Vector<double> &vec) {
 
     check_vecvec_op_compatibility(vec);
 
@@ -102,7 +102,7 @@ MatrixVector<double> & MatrixVector<double>::operator-=(const MatrixVector<doubl
 }
 
 template<>
-double MatrixVector<double>::dot(const MatrixVector<double> &vec) const {
+double Vector<double>::dot(const Vector<double> &vec) const {
 
     check_vecvec_op_compatibility(vec);
     
@@ -119,7 +119,7 @@ double MatrixVector<double>::dot(const MatrixVector<double> &vec) const {
 }
 
 template<>
-double MatrixVector<double>::norm() const {
+double Vector<double>::norm() const {
 
     double result;
 

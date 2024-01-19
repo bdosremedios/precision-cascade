@@ -103,7 +103,7 @@ protected:
     void initializeGMRES() {
         max_kry_space_dim = typed_lin_sys.get_m();
         if (max_iter > max_kry_space_dim) {
-            throw std::runtime_error("GMRES outer iterations exceed matrix size");
+            throw std::runtime_error("GMRESSolve: GMRES max_iter exceeds matrix size");
         }
         check_compatibility();
         set_initial_space();
@@ -127,15 +127,7 @@ protected:
 
         int k = kry_space_dim-1;
 
-        // Find next vector power of linear system
         next_q = apply_precond_A(Q_kry_basis.get_col(k).copy_to_vec());
-        // next_q = ( // Apply action of right preconditioner
-        //     (right_precond_ptr->action_inv_M(next_q.template cast<W>())).template cast<T>()
-        // );
-        // next_q = typed_lin_sys.get_A_typed()*next_q; // Apply typed matrix A
-        // next_q = ( // Apply action of left preconditioner
-        //     (left_precond_ptr->action_inv_M(next_q.template cast<W>())).template cast<T>()
-        // );
 
         // Orthogonlize next_q to previous basis vectors and store coefficients/normalization in H
         T *h_vec = static_cast<T *>(malloc((typed_lin_sys.get_m()+1)*sizeof(T)));
@@ -163,9 +155,10 @@ protected:
         R_H.get_col(k).set_from_vec(H.get_col(k).copy_to_vec());
 
         // Apply previous Given's rotations to new column
-        MatrixDense<T> Q_H_block(Q_H.get_block(0, 0, k+1, k+1).copy_to_mat());
         R_H.get_block(0, k, k+1, 1).set_from_vec(
-            Q_H_block.transpose_prod(H.get_col(k).copy_to_vec().slice(0, k+1))
+            Q_H.get_block(0, 0, k+1, k+1).copy_to_mat().transpose_prod(
+                H.get_col(k).copy_to_vec().slice(0, k+1)
+            )
         );
 
         // Apply the final Given's rotation manually making R_H upper triangular
@@ -216,17 +209,12 @@ protected:
     }
 
     void check_termination() {
-
-        // Check for termination condition with inability to expand subspace if
-        // next basis vector is was in the existing Krylov subspace to basis_zero_tol
         int k = kry_space_dim-1;
         if (static_cast<double>(H.get_elem(k+1, k)) <= basis_zero_tol) { this->terminated = true; }
-
     }
 
     void typed_iterate() override {
-        // Check isn't terminated and that solver isn't attempting to exceed
-        // krylov subspace dimension, if is just do nothing
+        // Check isn't terminated and if exceeding max krylov dim, if is just do nothing
         if (!this->terminated) {
             if (kry_space_dim < max_kry_space_dim) {
                 update_subspace_k();
@@ -237,8 +225,7 @@ protected:
             }
         }
     }
-    void derived_typed_reset() override { set_initial_space(); } // Set derived reset to erase
-                                                                 // current krylov subspace made
+    void derived_typed_reset() override { set_initial_space(); } // Erase current krylov subspace
 
 public:
 

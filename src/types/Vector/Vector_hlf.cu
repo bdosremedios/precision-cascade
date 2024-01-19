@@ -1,12 +1,12 @@
-#include "types/MatrixVector.h"
+#include "types/Vector.h"
 
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
 
 template<>
-MatrixVector<__half> MatrixVector<__half>::operator*(const __half &scalar) const {
+Vector<__half> Vector<__half>::operator*(const __half &scalar) const {
 
-    MatrixVector<__half> c(*this);
+    Vector<__half> c(*this);
     float *scalar_cast = static_cast<float *>(malloc(sizeof(float)));
     *scalar_cast = static_cast<float>(scalar);
 
@@ -23,7 +23,7 @@ MatrixVector<__half> MatrixVector<__half>::operator*(const __half &scalar) const
 }
 
 template<>
-MatrixVector<__half> & MatrixVector<__half>::operator*=(const __half &scalar) {
+Vector<__half> & Vector<__half>::operator*=(const __half &scalar) {
 
     float scalar_cast = static_cast<float>(scalar);
 
@@ -39,11 +39,11 @@ MatrixVector<__half> & MatrixVector<__half>::operator*=(const __half &scalar) {
 }
 
 template<>
-MatrixVector<__half> MatrixVector<__half>::operator+(const MatrixVector<__half> &vec) const {
+Vector<__half> Vector<__half>::operator+(const Vector<__half> &vec) const {
 
     check_vecvec_op_compatibility(vec);
 
-    MatrixVector<__half> c(*this);
+    Vector<__half> c(*this);
     float alpha = 1.;
 
     check_cublas_status(
@@ -57,11 +57,11 @@ MatrixVector<__half> MatrixVector<__half>::operator+(const MatrixVector<__half> 
 }
 
 template<>
-MatrixVector<__half> MatrixVector<__half>::operator-(const MatrixVector<__half> &vec) const {
+Vector<__half> Vector<__half>::operator-(const Vector<__half> &vec) const {
 
     check_vecvec_op_compatibility(vec);
 
-    MatrixVector<__half> c(*this);
+    Vector<__half> c(*this);
     float alpha = -1.;
 
     check_cublas_status(
@@ -75,7 +75,7 @@ MatrixVector<__half> MatrixVector<__half>::operator-(const MatrixVector<__half> 
 }
 
 template<>
-MatrixVector<__half> & MatrixVector<__half>::operator+=(const MatrixVector<__half> &vec) {
+Vector<__half> & Vector<__half>::operator+=(const Vector<__half> &vec) {
 
     check_vecvec_op_compatibility(vec);
 
@@ -92,7 +92,7 @@ MatrixVector<__half> & MatrixVector<__half>::operator+=(const MatrixVector<__hal
 }
 
 template<>
-MatrixVector<__half> & MatrixVector<__half>::operator-=(const MatrixVector<__half> &vec) {
+Vector<__half> & Vector<__half>::operator-=(const Vector<__half> &vec) {
 
     check_vecvec_op_compatibility(vec);
 
@@ -109,7 +109,7 @@ MatrixVector<__half> & MatrixVector<__half>::operator-=(const MatrixVector<__hal
 }
 
 template<>
-__half MatrixVector<__half>::dot(const MatrixVector<__half> &vec) const {
+__half Vector<__half>::dot(const Vector<__half> &vec) const {
 
     check_vecvec_op_compatibility(vec);
     
@@ -126,7 +126,7 @@ __half MatrixVector<__half>::dot(const MatrixVector<__half> &vec) const {
 }
 
 template<>
-__half MatrixVector<__half>::norm() const {
+__half Vector<__half>::norm() const {
 
     __half result;
 

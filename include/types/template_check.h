@@ -3,7 +3,7 @@
 
 #include "MatrixDense.h"
 #include "MatrixSparse.h"
-#include "MatrixVector.h"
+#include "Vector.h"
 
 // https://stackoverflow.com/questions/38630445/stdis-same-equivalent-for-unspecialised-template-types
 template <template <typename> typename, template<typename...> typename> 
@@ -25,8 +25,8 @@ void assert_valid_type_or_vec() {
     static_assert(
         ((is_same_template<M, MatrixSparse>::value) ||
          (is_same_template<M, MatrixDense>::value) ||
-         (is_same_template<M, MatrixVector>::value)),
-        "M argument must be type MatrixSparse or MatrixDense or MatrixVector"
+         (is_same_template<M, Vector>::value)),
+        "M argument must be type MatrixSparse or MatrixDense or Vector"
     );
 }
 

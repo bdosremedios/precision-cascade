@@ -19,15 +19,15 @@ MatrixDense<float> MatrixDense<float>::operator*(const float &scalar) const {
 }
 
 template <>
-MatrixVector<float> MatrixDense<float>::operator*(const MatrixVector<float> &vec) const {
+Vector<float> MatrixDense<float>::operator*(const Vector<float> &vec) const {
 
     if (vec.rows() != n_cols) {
         throw std::runtime_error(
-            "MatrixDense: invalid vec in matrix-vector prod (operator*(const MatrixVector<float> &vec))"
+            "MatrixDense: invalid vec in matrix-vector prod (operator*(const Vector<float> &vec))"
         );
     }
 
-    MatrixVector<float> c(MatrixVector<float>::Zero(handle, m_rows));
+    Vector<float> c(Vector<float>::Zero(handle, m_rows));
 
     float alpha = 1.;
     float beta = 0.;
@@ -51,11 +51,11 @@ MatrixVector<float> MatrixDense<float>::operator*(const MatrixVector<float> &vec
 }
 
 template <>
-MatrixVector<float> MatrixDense<float>::transpose_prod(const MatrixVector<float> &vec) const {
+Vector<float> MatrixDense<float>::transpose_prod(const Vector<float> &vec) const {
 
     if (vec.rows() != m_rows) { throw std::runtime_error("MatrixDense: invalid vec in transpose_prod"); }
 
-    MatrixVector<float> c(handle, n_cols);
+    Vector<float> c(handle, n_cols);
 
     float alpha = static_cast<float>(1.);
     float beta = static_cast<float>(0.);

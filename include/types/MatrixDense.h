@@ -12,7 +12,7 @@
 
 #include "tools/cuda_check.h"
 
-#include "MatrixVector.h"
+#include "Vector.h"
 
 template <typename T> class MatrixSparse;
 
@@ -161,14 +161,14 @@ public:
         check_cuda_error(cudaMemcpy(d_mat+row+(col*m_rows), &val, sizeof(T), cudaMemcpyHostToDevice));
     }
 
-    Col get_col(int col) {
+    Col get_col(int col) const {
         if ((col < 0) || (col >= n_cols)) {
             throw std::runtime_error("MatrixDense: invalid col access in col");
         }
         return Col(this, col);
     }
  
-    Block get_block(int start_row, int start_col, int block_rows, int block_cols) {
+    Block get_block(int start_row, int start_col, int block_rows, int block_cols) const {
         if ((start_row < 0) || (start_row >= m_rows)) {
             throw std::runtime_error("MatrixDense: invalid starting row in block");
         }
@@ -291,71 +291,55 @@ public:
     void reduce() { ; } // Do nothing on reduction
 
     // *** Substitution *** (correct triangularity assumed)
-    MatrixVector<T> back_sub(const MatrixVector<T> &rhs) const {
+    Vector<T> back_sub(const Vector<T> &arg_rhs) const {
 
         if (m_rows != n_cols) {
             throw std::runtime_error("MatrixDense::back_sub: non-square matrix");
         }
-        if (m_rows != rhs.rows()) {
+        if (m_rows != arg_rhs.rows()) {
             throw std::runtime_error("MatrixDense::back_sub: incompatible matrix and rhs");
         }
 
-        T *h_rhs = static_cast<T *>(malloc(m_rows*sizeof(T)));
-        T *h_UT = static_cast<T *>(malloc(m_rows*n_cols*sizeof(T)));
-        check_cublas_status(cublasGetVector(m_rows, sizeof(T), rhs.d_vec, 1, h_rhs, 1));
-        check_cublas_status(cublasGetMatrix(m_rows, n_cols, sizeof(T), d_mat, m_rows, h_UT, m_rows));
+        Vector<T> rhs(arg_rhs);
 
         for (int col=n_cols-1; col>=0; --col) {
-            if (h_UT[col+m_rows*col] != static_cast<T>(0)) {
-                h_rhs[col] /= h_UT[col+m_rows*col];
-                for (int row=col-1; row>=0; --row) {
-                    h_rhs[row] -= h_UT[row+m_rows*col]*h_rhs[col];
-                }
+            T pivot = get_elem(col, col);
+            if (pivot != static_cast<T>(0)) {
+                T curr_solved_val = rhs.get_elem(col)/pivot;
+                rhs -= get_col(col).copy_to_vec()*curr_solved_val;
+                rhs.set_elem(col, curr_solved_val);
             } else {
                 throw std::runtime_error("MatrixDense::back_sub: zero diagonal entry encountered in matrix");
             }
         }
 
-        MatrixVector<T> created_vec(handle, h_rhs, m_rows);
-
-        free(h_rhs);
-        free(h_UT);
-
-        return created_vec;
+        return rhs;
 
     }
 
-    MatrixVector<T> frwd_sub(const MatrixVector<T> &rhs) const {
+    Vector<T> frwd_sub(const Vector<T> &arg_rhs) const {
 
         if (m_rows != n_cols) {
             throw std::runtime_error("MatrixDense::frwd_sub: non-square matrix");
         }
-        if (m_rows != rhs.rows()) {
+        if (m_rows != arg_rhs.rows()) {
             throw std::runtime_error("MatrixDense::frwd_sub: incompatible matrix and rhs");
         }
 
-        T *h_rhs = static_cast<T *>(malloc(m_rows*sizeof(T)));
-        T *h_LT = static_cast<T *>(malloc(m_rows*n_cols*sizeof(T)));
-        check_cublas_status(cublasGetVector(m_rows, sizeof(T), rhs.d_vec, 1, h_rhs, 1));
-        check_cublas_status(cublasGetMatrix(m_rows, n_cols, sizeof(T), d_mat, m_rows, h_LT, m_rows));
+        Vector<T> rhs(arg_rhs);
 
         for (int col=0; col<n_cols; ++col) {
-            if (h_LT[col+m_rows*col] != static_cast<T>(0)) {
-                h_rhs[col] /= h_LT[col+m_rows*col];
-                for (int row=col+1; row<m_rows; ++row) {
-                    h_rhs[row] -= h_LT[row+m_rows*col]*h_rhs[col];
-                }
+            T pivot = get_elem(col, col);
+            if (pivot != static_cast<T>(0)) {
+                T curr_solved_val = rhs.get_elem(col)/pivot;
+                rhs -= get_col(col).copy_to_vec()*curr_solved_val;
+                rhs.set_elem(col, curr_solved_val);
             } else {
                 throw std::runtime_error("MatrixDense::frwd_sub: zero diagonal entry encountered in matrix");
             }
         }
 
-        MatrixVector<T> created_vec(handle, h_rhs, m_rows);
-
-        free(h_rhs);
-        free(h_LT);
-
-        return created_vec;
+        return rhs;
 
     }
 
@@ -396,9 +380,9 @@ public:
         return operator*(static_cast<T>(1)/scalar);
     }
 
-    MatrixVector<T> operator*(const MatrixVector<T> &vec) const;
+    Vector<T> operator*(const Vector<T> &vec) const;
 
-    MatrixVector<T> transpose_prod(const MatrixVector<T> &vec) const;
+    Vector<T> transpose_prod(const Vector<T> &vec) const;
 
     // Needed for testing (don't need to optimize performance)
     MatrixDense<T> transpose() const {
@@ -438,7 +422,7 @@ public:
     T norm() const;
 
     // Nested lightweight wrapper class representing matrix column and assignment/elem access
-    // Requires: modification by/cast to MatrixVector<T>
+    // Requires: modification by/cast to Vector<T>
     class Col
     {
     private:
@@ -469,7 +453,7 @@ public:
             
         }
 
-        void set_from_vec(const MatrixVector<T> &vec) const {
+        void set_from_vec(const Vector<T> &vec) const {
 
             if (vec.rows() != m_rows) {
                 throw std::runtime_error("MatrixDense::Col: invalid vector for set_from_vec");
@@ -486,9 +470,9 @@ public:
 
         }
 
-        MatrixVector<T> copy_to_vec() const {
+        Vector<T> copy_to_vec() const {
 
-            MatrixVector<T> created_vec(associated_mat_ptr->handle, associated_mat_ptr->m_rows);
+            Vector<T> created_vec(associated_mat_ptr->handle, associated_mat_ptr->m_rows);
 
             check_cuda_error(
                 cudaMemcpy(
@@ -506,7 +490,7 @@ public:
     };
 
     // Nested lightweight wrapper class representing matrix block and assignment/elem access
-    // Requires: modification by/cast to MatrixDense<T> and modification by MatrixVector
+    // Requires: modification by/cast to MatrixDense<T> and modification by Vector
     class Block
     {
     private:
@@ -538,7 +522,7 @@ public:
             )
         {}
 
-        void set_from_vec(const MatrixVector<T> &vec) const {
+        void set_from_vec(const Vector<T> &vec) const {
 
             if (n_cols != 1) {
                 throw std::runtime_error("MatrixDense::Block invalid for set_from_vec must be 1 column");

@@ -18,15 +18,15 @@ MatrixDense<double> MatrixDense<double>::operator*(const double &scalar) const {
 }
 
 template <>
-MatrixVector<double> MatrixDense<double>::operator*(const MatrixVector<double> &vec) const {
+Vector<double> MatrixDense<double>::operator*(const Vector<double> &vec) const {
 
     if (vec.rows() != n_cols) {
         throw std::runtime_error(
-            "MatrixDense: invalid vec in matrix-vector prod (operator*(const MatrixVector<double> &vec))"
+            "MatrixDense: invalid vec in matrix-vector prod (operator*(const Vector<double> &vec))"
         );
     }
 
-    MatrixVector<double> c(MatrixVector<double>::Zero(handle, m_rows));
+    Vector<double> c(Vector<double>::Zero(handle, m_rows));
 
     double alpha = 1.;
     double beta = 0.;
@@ -50,11 +50,11 @@ MatrixVector<double> MatrixDense<double>::operator*(const MatrixVector<double> &
 }
 
 template <>
-MatrixVector<double> MatrixDense<double>::transpose_prod(const MatrixVector<double> &vec) const {
+Vector<double> MatrixDense<double>::transpose_prod(const Vector<double> &vec) const {
 
     if (vec.rows() != m_rows) { throw std::runtime_error("MatrixDense: invalid vec in transpose_prod"); }
 
-    MatrixVector<double> c(MatrixVector<double>::Zero(handle, n_cols));
+    Vector<double> c(Vector<double>::Zero(handle, n_cols));
 
     double alpha = 1.;
     double beta = 0.;

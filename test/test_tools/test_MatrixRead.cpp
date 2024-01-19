@@ -162,10 +162,10 @@ public:
     template <typename T>
     void ReadVector() {
 
-        MatrixVector<T> target(*handle_ptr, {1, 2, 3, 4, 5, 6});
+        Vector<T> target(*handle_ptr, {1, 2, 3, 4, 5, 6});
 
         fs::path vector_file(read_matrix_dir / fs::path("vector.csv"));
-        MatrixVector<T> test(read_matrixCSV<MatrixVector, T>(*handle_ptr, vector_file));
+        Vector<T> test(read_matrixCSV<Vector, T>(*handle_ptr, vector_file));
 
         ASSERT_VECTOR_NEAR(test, target, static_cast<T>(Tol<T>::roundoff()));
 
@@ -181,7 +181,7 @@ TEST_F(MatrixRead_Vector_Test, FailOnMatrix) {
     fs::path mat(read_matrix_dir / fs::path("square1.csv"));
     CHECK_FUNC_HAS_RUNTIME_ERROR(
         print_errors,
-        [=]() { MatrixVector<double> test(read_matrixCSV<MatrixVector, double>(*handle_ptr, mat)); }
+        [=]() { Vector<double> test(read_matrixCSV<Vector, double>(*handle_ptr, mat)); }
     );
 }
 

@@ -40,7 +40,7 @@ _ASSERT_VECTOR_NEAR( \
 
 template <typename T>
 void _ASSERT_VECTOR_NEAR(
-    const MatrixVector<T> &test, const MatrixVector<T> &target, T tol,
+    const Vector<T> &test, const Vector<T> &target, T tol,
     const char* file, int line, std::string message
 ) {
 
@@ -61,7 +61,7 @@ _ASSERT_VECTOR_EQ( \
 
 template <typename T>
 void _ASSERT_VECTOR_EQ(
-    const MatrixVector<T> &test, const MatrixVector<T> &target,
+    const Vector<T> &test, const Vector<T> &target,
     const char* file, int line, std::string message
 ) {
     _ASSERT_VECTOR_NEAR(test, target, static_cast<T>(0), file, line, message);

@@ -596,44 +596,44 @@ protected:
              {static_cast<T>(3), static_cast<T>(2), static_cast<T>(1)}}
         );
         ASSERT_VECTOR_NEAR(
-            mat*MatrixVector<T>(
+            mat*Vector<T>(
                 *handle_ptr,
                 {static_cast<T>(1), static_cast<T>(0), static_cast<T>(0)}
             ),
-            MatrixVector<T>(
+            Vector<T>(
                 *handle_ptr,
                 {static_cast<T>(1), static_cast<T>(4), static_cast<T>(7), static_cast<T>(3)}
             ),
             static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
         );
         ASSERT_VECTOR_NEAR(
-            mat*MatrixVector<T>(
+            mat*Vector<T>(
                 *handle_ptr,
                 {static_cast<T>(0), static_cast<T>(1), static_cast<T>(0)}
             ),
-            MatrixVector<T>(
+            Vector<T>(
                 *handle_ptr,
                 {static_cast<T>(2), static_cast<T>(5), static_cast<T>(8), static_cast<T>(2)}
             ),
             static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
         );
         ASSERT_VECTOR_NEAR(
-            mat*MatrixVector<T>(
+            mat*Vector<T>(
                 *handle_ptr,
                 {static_cast<T>(0), static_cast<T>(0), static_cast<T>(1)}
             ),
-            MatrixVector<T>(
+            Vector<T>(
                 *handle_ptr,
                 {static_cast<T>(3), static_cast<T>(6), static_cast<T>(9), static_cast<T>(1)}
             ),
             static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
         );
         ASSERT_VECTOR_NEAR(
-            mat*MatrixVector<T>(
+            mat*Vector<T>(
                 *handle_ptr,
                 {static_cast<T>(1), static_cast<T>(0.1), static_cast<T>(0.01)}
             ),
-            MatrixVector<T>(
+            Vector<T>(
                 *handle_ptr,
                 {static_cast<T>(1.23), static_cast<T>(4.56), static_cast<T>(7.89), static_cast<T>(3.21)}
             ),
@@ -645,11 +645,11 @@ protected:
         const int n_rand(4);
         M<T> rand_mat(M<T>::Random(*handle_ptr, m_rand, n_rand));
         ASSERT_VECTOR_NEAR(
-            rand_mat*MatrixVector<T>(
+            rand_mat*Vector<T>(
                 *handle_ptr,
                 {static_cast<T>(1), static_cast<T>(0), static_cast<T>(0), static_cast<T>(0)}
             ),
-            MatrixVector<T>(
+            Vector<T>(
                 *handle_ptr,
                 {rand_mat.get_elem(0, 0),
                  rand_mat.get_elem(1, 0),
@@ -658,11 +658,11 @@ protected:
             static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
         );
         ASSERT_VECTOR_NEAR(
-            rand_mat*MatrixVector<T>(
+            rand_mat*Vector<T>(
                 *handle_ptr,
                 {static_cast<T>(0), static_cast<T>(1), static_cast<T>(0), static_cast<T>(0)}
             ),
-            MatrixVector<T>(
+            Vector<T>(
                 *handle_ptr,
                 {rand_mat.get_elem(0, 1),
                  rand_mat.get_elem(1, 1),
@@ -671,11 +671,11 @@ protected:
             static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
         );
         ASSERT_VECTOR_NEAR(
-            rand_mat*MatrixVector<T>(
+            rand_mat*Vector<T>(
                 *handle_ptr,
                 {static_cast<T>(0), static_cast<T>(0), static_cast<T>(1), static_cast<T>(0)}
             ),
-            MatrixVector<T>(
+            Vector<T>(
                 *handle_ptr,
                 {rand_mat.get_elem(0, 2),
                  rand_mat.get_elem(1, 2),
@@ -684,11 +684,11 @@ protected:
             static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
         );
         ASSERT_VECTOR_NEAR(
-            rand_mat*MatrixVector<T>(
+            rand_mat*Vector<T>(
                 *handle_ptr,
                 {static_cast<T>(0), static_cast<T>(0), static_cast<T>(0), static_cast<T>(1)}
             ),
-            MatrixVector<T>(
+            Vector<T>(
                 *handle_ptr,
                 {rand_mat.get_elem(0, 3),
                  rand_mat.get_elem(1, 3),
@@ -697,11 +697,11 @@ protected:
             static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
         );
         ASSERT_VECTOR_NEAR(
-            rand_mat*MatrixVector<T>(
+            rand_mat*Vector<T>(
                 *handle_ptr,
                 {static_cast<T>(1), static_cast<T>(0.1), static_cast<T>(0.01), static_cast<T>(0.001)}
             ),
-            MatrixVector<T>(
+            Vector<T>(
                 *handle_ptr,
                 {(static_cast<T>(1)*rand_mat.get_elem(0, 0) +
                   static_cast<T>(0.1)*rand_mat.get_elem(0, 1) +
@@ -731,7 +731,7 @@ protected:
              {static_cast<T>(9), static_cast<T>(10), static_cast<T>(11), static_cast<T>(12)}}
         );
 
-        MatrixVector<T> vec_too_small(
+        Vector<T> vec_too_small(
             *handle_ptr,
             {static_cast<T>(1), static_cast<T>(1)}
         );
@@ -740,7 +740,7 @@ protected:
             [=]() { mat*vec_too_small; }
         );
 
-        MatrixVector<T> vec_too_large(
+        Vector<T> vec_too_large(
             *handle_ptr, 
             {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)}
         );
@@ -749,7 +749,7 @@ protected:
             [=]() { mat*vec_too_large; }
         );
 
-        MatrixVector<T> vec_matches_wrong_dimension(
+        Vector<T> vec_matches_wrong_dimension(
             *handle_ptr,
             {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)}
         );
@@ -772,12 +772,12 @@ protected:
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod(
-                MatrixVector<T>(
+                Vector<T>(
                     *handle_ptr,
                     {static_cast<T>(1), static_cast<T>(0), static_cast<T>(0)}
                 )
             ),
-            MatrixVector<T>(
+            Vector<T>(
                 *handle_ptr,
                 {static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4)}
             ),
@@ -785,12 +785,12 @@ protected:
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod(
-                MatrixVector<T>(
+                Vector<T>(
                     *handle_ptr,
                     {static_cast<T>(0), static_cast<T>(1), static_cast<T>(0)}
                 )
             ),
-            MatrixVector<T>(
+            Vector<T>(
                 *handle_ptr,
                 {static_cast<T>(5), static_cast<T>(6), static_cast<T>(7), static_cast<T>(8)}
             ),
@@ -798,12 +798,12 @@ protected:
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod(
-                MatrixVector<T>(
+                Vector<T>(
                     *handle_ptr,
                     {static_cast<T>(0), static_cast<T>(0), static_cast<T>(1)}
                 )
             ),
-            MatrixVector<T>(
+            Vector<T>(
                 *handle_ptr,
                 {static_cast<T>(9), static_cast<T>(1), static_cast<T>(2), static_cast<T>(3)}
             ),
@@ -811,12 +811,12 @@ protected:
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod(
-                MatrixVector<T>(
+                Vector<T>(
                     *handle_ptr,
                     {static_cast<T>(1), static_cast<T>(0.1), static_cast<T>(0.01)}
                 )
             ),
-            MatrixVector<T>(
+            Vector<T>(
                 *handle_ptr,
                 {static_cast<T>(1.59), static_cast<T>(2.61), static_cast<T>(3.72), static_cast<T>(4.83)}
             ),
@@ -829,12 +829,12 @@ protected:
         M<T> rand_mat(M<T>::Random(*handle_ptr, m_rand, n_rand));
         ASSERT_VECTOR_NEAR(
             rand_mat.transpose_prod(
-                MatrixVector<T>(
+                Vector<T>(
                     *handle_ptr,
                     {static_cast<T>(1), static_cast<T>(0), static_cast<T>(0)}
                 )
             ),
-            MatrixVector<T>(
+            Vector<T>(
                 *handle_ptr,
                 {rand_mat.get_elem(0, 0),
                  rand_mat.get_elem(0, 1)}
@@ -843,12 +843,12 @@ protected:
         );
         ASSERT_VECTOR_NEAR(
             rand_mat.transpose_prod(
-                MatrixVector<T>(
+                Vector<T>(
                     *handle_ptr,
                     {static_cast<T>(0), static_cast<T>(1), static_cast<T>(0)}
                 )
             ),
-            MatrixVector<T>(
+            Vector<T>(
                 *handle_ptr,
                 {rand_mat.get_elem(1, 0),
                  rand_mat.get_elem(1, 1)}
@@ -857,12 +857,12 @@ protected:
         );
         ASSERT_VECTOR_NEAR(
             rand_mat.transpose_prod(
-                MatrixVector<T>(
+                Vector<T>(
                     *handle_ptr,
                     {static_cast<T>(0), static_cast<T>(0), static_cast<T>(1)}
                 )
             ),
-            MatrixVector<T>(
+            Vector<T>(
                 *handle_ptr,
                 {rand_mat.get_elem(2, 0),
                  rand_mat.get_elem(2, 1)}
@@ -871,12 +871,12 @@ protected:
         );
         ASSERT_VECTOR_NEAR(
             rand_mat.transpose_prod(
-                MatrixVector<T>(
+                Vector<T>(
                     *handle_ptr,
                     {static_cast<T>(1), static_cast<T>(0.1), static_cast<T>(0.01)}
                 )
             ),
-            MatrixVector<T>(
+            Vector<T>(
                 *handle_ptr,
                 {(static_cast<T>(1)*rand_mat.get_elem(0, 0) +
                   static_cast<T>(0.1)*rand_mat.get_elem(1, 0) +
@@ -900,7 +900,7 @@ protected:
              {static_cast<T>(9), static_cast<T>(10), static_cast<T>(11), static_cast<T>(12)}}
         );
 
-        MatrixVector<T> vec_too_small(
+        Vector<T> vec_too_small(
             *handle_ptr,
             {static_cast<T>(1), static_cast<T>(1)}
         );
@@ -909,7 +909,7 @@ protected:
             [=]() { mat.transpose_prod(vec_too_small); }
         );
 
-        MatrixVector<T> vec_too_large(
+        Vector<T> vec_too_large(
             *handle_ptr,
             {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)}
         );
@@ -918,7 +918,7 @@ protected:
             [=]() { mat.transpose_prod(vec_too_large); }
         );
 
-        MatrixVector<T> vec_matches_wrong_dimension(
+        Vector<T> vec_matches_wrong_dimension(
             *handle_ptr,
             {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)}
         );
@@ -1202,14 +1202,14 @@ public:
         M<double> U_tri(
             read_matrixCSV<M, double>(*handle_ptr, solve_matrix_dir / fs::path("U_tri_90.csv"))
         );
-        MatrixVector<double> x_tri(
-            read_matrixCSV<MatrixVector, double>(*handle_ptr, solve_matrix_dir / fs::path("x_tri_90.csv"))
+        Vector<double> x_tri(
+            read_matrixCSV<Vector, double>(*handle_ptr, solve_matrix_dir / fs::path("x_tri_90.csv"))
         );
-        MatrixVector<double> Ub_tri(
-            read_matrixCSV<MatrixVector, double>(*handle_ptr, solve_matrix_dir / fs::path("Ub_tri_90.csv"))
+        Vector<double> Ub_tri(
+            read_matrixCSV<Vector, double>(*handle_ptr, solve_matrix_dir / fs::path("Ub_tri_90.csv"))
         );
     
-        MatrixVector<double> test_soln(U_tri.back_sub(Ub_tri));
+        Vector<double> test_soln(U_tri.back_sub(Ub_tri));
 
         ASSERT_VECTOR_NEAR(test_soln, x_tri, Tol<double>::dbl_substitution_tol());
 
@@ -1221,14 +1221,14 @@ public:
         M<double> L_tri(
             read_matrixCSV<M, double>(*handle_ptr, solve_matrix_dir / fs::path("L_tri_90.csv"))
         );
-        MatrixVector<double> x_tri(
-            read_matrixCSV<MatrixVector, double>(*handle_ptr, solve_matrix_dir / fs::path("x_tri_90.csv"))
+        Vector<double> x_tri(
+            read_matrixCSV<Vector, double>(*handle_ptr, solve_matrix_dir / fs::path("x_tri_90.csv"))
         );
-        MatrixVector<double> Lb_tri(
-            read_matrixCSV<MatrixVector, double>(*handle_ptr, solve_matrix_dir / fs::path("Lb_tri_90.csv"))
+        Vector<double> Lb_tri(
+            read_matrixCSV<Vector, double>(*handle_ptr, solve_matrix_dir / fs::path("Lb_tri_90.csv"))
         );
     
-        MatrixVector<double> test_soln(L_tri.frwd_sub(Lb_tri));
+        Vector<double> test_soln(L_tri.frwd_sub(Lb_tri));
 
         ASSERT_VECTOR_NEAR(test_soln, x_tri, Tol<double>::dbl_substitution_tol());
 

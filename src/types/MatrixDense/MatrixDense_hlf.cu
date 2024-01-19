@@ -20,15 +20,15 @@ MatrixDense<__half> MatrixDense<__half>::operator*(const __half &scalar) const {
 }
 
 template <>
-MatrixVector<__half> MatrixDense<__half>::operator*(const MatrixVector<__half> &vec) const {
+Vector<__half> MatrixDense<__half>::operator*(const Vector<__half> &vec) const {
 
     if (vec.rows() != n_cols) {
         throw std::runtime_error(
-            "MatrixDense: invalid vec in matrix-vector prod (operator*(const MatrixVector<__half> &vec))"
+            "MatrixDense: invalid vec in matrix-vector prod (operator*(const Vector<__half> &vec))"
         );
     }
 
-    MatrixVector<__half> c(MatrixVector<__half>::Zero(handle, m_rows));
+    Vector<__half> c(Vector<__half>::Zero(handle, m_rows));
 
     __half alpha = 1.;
     __half beta = 0.;
@@ -52,11 +52,11 @@ MatrixVector<__half> MatrixDense<__half>::operator*(const MatrixVector<__half> &
 }
 
 template <>
-MatrixVector<__half> MatrixDense<__half>::transpose_prod(const MatrixVector<__half> &vec) const {
+Vector<__half> MatrixDense<__half>::transpose_prod(const Vector<__half> &vec) const {
 
     if (vec.rows() != m_rows) { throw std::runtime_error("MatrixDense: invalid vec in transpose_prod"); }
 
-    MatrixVector<__half> c(handle, n_cols);
+    Vector<__half> c(handle, n_cols);
 
     __half alpha = static_cast<__half>(1.);
     __half beta = static_cast<__half>(0.);

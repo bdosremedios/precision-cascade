@@ -10,9 +10,9 @@ add_library(
     types
     STATIC
     tools/cuda_check.cu
-    types/MatrixVector/MatrixVector_hlf.cu
-    types/MatrixVector/MatrixVector_sgl.cu
-    types/MatrixVector/MatrixVector_dbl.cu
+    types/Vector/Vector_hlf.cu
+    types/Vector/Vector_sgl.cu
+    types/Vector/Vector_dbl.cu
     types/MatrixDense/MatrixDense_hlf.cu
     types/MatrixDense/MatrixDense_sgl.cu
     types/MatrixDense/MatrixDense_dbl.cu
@@ -22,6 +22,5 @@ target_link_libraries(
     types
     PUBLIC
     precision-cascade
-    # eigen
     "$ENV{CUDA_PATH}/lib/x64/cublas.lib"
 )

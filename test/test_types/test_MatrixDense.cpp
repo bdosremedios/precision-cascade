@@ -79,9 +79,9 @@ public:
         );
         ASSERT_MATRIX_EQ(mat, test_assign_2_3);
 
-        // Test assignment from MatrixVector
+        // Test assignment from Vector
         mat = const_mat;
-        MatrixVector<T> assign_vec(
+        Vector<T> assign_vec(
             *handle_ptr,
             {static_cast<T>(1),
              static_cast<T>(1),

@@ -1,12 +1,12 @@
-#include "types/MatrixVector.h"
+#include "types/Vector.h"
 
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
 
 template<>
-MatrixVector<float> MatrixVector<float>::operator*(const float &scalar) const {
+Vector<float> Vector<float>::operator*(const float &scalar) const {
 
-    MatrixVector<float> c(*this);
+    Vector<float> c(*this);
 
     check_cublas_status(
         cublasScalEx(
@@ -19,7 +19,7 @@ MatrixVector<float> MatrixVector<float>::operator*(const float &scalar) const {
 }
 
 template<>
-MatrixVector<float> & MatrixVector<float>::operator*=(const float &scalar) {
+Vector<float> & Vector<float>::operator*=(const float &scalar) {
 
     check_cublas_status(
         cublasScalEx(
@@ -32,11 +32,11 @@ MatrixVector<float> & MatrixVector<float>::operator*=(const float &scalar) {
 }
 
 template<>
-MatrixVector<float> MatrixVector<float>::operator+(const MatrixVector<float> &vec) const {
+Vector<float> Vector<float>::operator+(const Vector<float> &vec) const {
 
     check_vecvec_op_compatibility(vec);
 
-    MatrixVector<float> c(*this);
+    Vector<float> c(*this);
     float alpha = 1.;
 
     check_cublas_status(
@@ -50,11 +50,11 @@ MatrixVector<float> MatrixVector<float>::operator+(const MatrixVector<float> &ve
 }
 
 template<>
-MatrixVector<float> MatrixVector<float>::operator-(const MatrixVector<float> &vec) const {
+Vector<float> Vector<float>::operator-(const Vector<float> &vec) const {
 
     check_vecvec_op_compatibility(vec);
 
-    MatrixVector<float> c(*this);
+    Vector<float> c(*this);
     float alpha = -1.;
 
     check_cublas_status(
@@ -68,7 +68,7 @@ MatrixVector<float> MatrixVector<float>::operator-(const MatrixVector<float> &ve
 }
 
 template<>
-MatrixVector<float> & MatrixVector<float>::operator+=(const MatrixVector<float> &vec) {
+Vector<float> & Vector<float>::operator+=(const Vector<float> &vec) {
 
     check_vecvec_op_compatibility(vec);
 
@@ -85,7 +85,7 @@ MatrixVector<float> & MatrixVector<float>::operator+=(const MatrixVector<float> 
 }
 
 template<>
-MatrixVector<float> & MatrixVector<float>::operator-=(const MatrixVector<float> &vec) {
+Vector<float> & Vector<float>::operator-=(const Vector<float> &vec) {
 
     check_vecvec_op_compatibility(vec);
 
@@ -102,7 +102,7 @@ MatrixVector<float> & MatrixVector<float>::operator-=(const MatrixVector<float> 
 }
 
 template<>
-float MatrixVector<float>::dot(const MatrixVector<float> &vec) const {
+float Vector<float>::dot(const Vector<float> &vec) const {
 
     check_vecvec_op_compatibility(vec);
     
@@ -119,7 +119,7 @@ float MatrixVector<float>::dot(const MatrixVector<float> &vec) const {
 }
 
 template<>
-float MatrixVector<float>::norm() const {
+float Vector<float>::norm() const {
 
     float result;
 
