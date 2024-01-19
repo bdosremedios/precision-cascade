@@ -1,8 +1,8 @@
 #include "../../test.h"
 
-#include "solvers/GMRES/GMRES.h"
+#include "solvers/GMRES/GMRESSolve.h"
 
-class GMRES_Solve_Double_Test: public TestBase
+class GMRESSolve_Solve_DBL_Test: public TestBase
 {
 public:
 
@@ -41,7 +41,7 @@ public:
 
 };
 
-TEST_F(GMRES_Solve_Double_Test, SolveConvDiff64) {
+TEST_F(GMRESSolve_Solve_DBL_Test, SolveConvDiff64) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
@@ -52,7 +52,7 @@ TEST_F(GMRES_Solve_Double_Test, SolveConvDiff64) {
 
 }
 
-TEST_F(GMRES_Solve_Double_Test, SolveConvDiff256) {
+TEST_F(GMRESSolve_Solve_DBL_Test, SolveConvDiff256) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_256_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_256_b.csv"));
@@ -63,7 +63,7 @@ TEST_F(GMRES_Solve_Double_Test, SolveConvDiff256) {
 
 }
 
-TEST_F(GMRES_Solve_Double_Test, SolveConvDiff1024_LONGRUNTIME) {
+TEST_F(GMRESSolve_Solve_DBL_Test, SolveConvDiff1024_LONGRUNTIME) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_1024_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_1024_b.csv"));
@@ -74,7 +74,7 @@ TEST_F(GMRES_Solve_Double_Test, SolveConvDiff1024_LONGRUNTIME) {
 
 }
 
-TEST_F(GMRES_Solve_Double_Test, SolveConvDiff20Rand) {
+TEST_F(GMRESSolve_Solve_DBL_Test, SolveConvDiff20Rand) {
 
     fs::path A_path(solve_matrix_dir / fs::path("A_20_rand.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("b_20_rand.csv"));
@@ -85,7 +85,7 @@ TEST_F(GMRES_Solve_Double_Test, SolveConvDiff20Rand) {
 
 }
 
-TEST_F(GMRES_Solve_Double_Test, SolveConvDiff3Eigs) {
+TEST_F(GMRESSolve_Solve_DBL_Test, SolveConvDiff3Eigs) {
 
     fs::path A_path(solve_matrix_dir / fs::path("A_25_3eigs.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("b_25_3eigs.csv"));

@@ -1,5 +1,5 @@
-#ifndef GMRES_H
-#define GMRES_H
+#ifndef GMRES_SOLVE_H
+#define GMRES_SOLVE_H
 
 #include "../IterativeSolve.h"
 

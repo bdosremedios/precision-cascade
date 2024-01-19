@@ -3,7 +3,7 @@
 
 #include "../../test.h"
 
-#include "solvers/GMRES/GMRES.h"
+#include "solvers/GMRES/GMRESSolve.h"
 
 template <template <typename> typename M, typename T, typename W=T>
 class GMRESSolveTestingMock: public GMRESSolve<M, T, W> {
