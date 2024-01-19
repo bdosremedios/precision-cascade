@@ -1,5 +1,5 @@
-#ifndef MATRIXDENSE_H
-#define MATRIXDENSE_H
+#ifndef MATRIX_DENSE_H
+#define MATRIX_DENSE_H
 
 #include <iostream>
 #include <stdexcept>
@@ -386,6 +386,9 @@ public:
         return created_mat;
 
     }
+
+    template<>
+    MatrixDense<T> cast() const { return *this; } // Do nothing for same cast type
 
     // *** Arithmetic and Compound Operations ***
     MatrixDense<T> operator*(const T &scalar) const;

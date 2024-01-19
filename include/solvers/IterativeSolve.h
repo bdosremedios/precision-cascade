@@ -1,5 +1,5 @@
-#ifndef ITERATIVESOLVE_H
-#define ITERATIVESOLVE_H
+#ifndef ITERATIVE_SOLVE_H
+#define ITERATIVE_SOLVE_H
 
 #include "types/types.h"
 #include "tools/argument_pkgs.h"

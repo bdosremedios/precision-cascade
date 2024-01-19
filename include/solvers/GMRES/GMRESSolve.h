@@ -30,12 +30,37 @@ protected:
     void check_compatibility() const {
 
         if (!left_precond_ptr->check_compatibility_left(typed_lin_sys.get_m())) {
-            throw std::runtime_error("Left preconditioner is not compatible with linear system");
+            throw std::runtime_error("GMRESSolve: Left preconditioner not compatible");
         }
         if (!right_precond_ptr->check_compatibility_right(typed_lin_sys.get_n())) {
-            throw std::runtime_error("Right preconditioner is not compatible with linear system");
+            throw std::runtime_error("GMRESSolve: Right preconditioner not compatible");
         }
     
+    }
+
+    MatrixVector<T> apply_precond_A(const MatrixVector<T> &vec) {
+        return(
+            left_precond_ptr->action_inv_M(
+                (typed_lin_sys.get_A_typed()*
+                    (right_precond_ptr->action_inv_M(
+                        vec.template cast<W>()
+                        )
+                    ).template cast<T>()
+                ).template cast<W>()
+            ).template cast<T>()
+        );
+    }
+
+    MatrixVector<T> get_precond_b() {
+        return(
+            left_precond_ptr->action_inv_M(
+                typed_lin_sys.get_b_typed().template cast<W>()
+            ).template cast<T>()
+        );
+    }
+
+    MatrixVector<T> calc_precond_residual(const MatrixVector<T> &vec) {
+        return get_precond_b() - apply_precond_A(vec);
     }
 
     void set_initial_space() {
@@ -66,13 +91,7 @@ protected:
         );
 
         // Set rho as initial residual norm
-        MatrixVector<T> Minv_A_x0(
-            (left_precond_ptr->action_inv_M(typed_lin_sys.get_A_typed()*init_guess_typed)).template cast<T>()
-        );
-        MatrixVector<T> Minv_b(
-            (left_precond_ptr->action_inv_M(typed_lin_sys.get_b_typed())).template cast<T>()
-        );
-        MatrixVector<T> r_0(Minv_b - Minv_A_x0);
+        MatrixVector<T> r_0(calc_precond_residual(init_guess_typed));
         rho = r_0.norm();
 
         // Initialize next vector q as initial residual and mark as terminated if lucky break
@@ -109,10 +128,14 @@ protected:
         int k = kry_space_dim-1;
 
         // Find next vector power of linear system
-        next_q = Q_kry_basis.get_col(k).copy_to_vec();
-        next_q = (right_precond_ptr->action_inv_M(next_q)).template cast<T>(); // Apply action of right preconditioner
-        next_q = typed_lin_sys.get_A_typed()*next_q; // Apply typed matrix A
-        next_q = (left_precond_ptr->action_inv_M(next_q)).template cast<T>(); // Apply action of left preconditioner
+        next_q = apply_precond_A(Q_kry_basis.get_col(k).copy_to_vec());
+        // next_q = ( // Apply action of right preconditioner
+        //     (right_precond_ptr->action_inv_M(next_q.template cast<W>())).template cast<T>()
+        // );
+        // next_q = typed_lin_sys.get_A_typed()*next_q; // Apply typed matrix A
+        // next_q = ( // Apply action of left preconditioner
+        //     (left_precond_ptr->action_inv_M(next_q.template cast<W>())).template cast<T>()
+        // );
 
         // Orthogonlize next_q to previous basis vectors and store coefficients/normalization in H
         T *h_vec = static_cast<T *>(malloc((typed_lin_sys.get_m()+1)*sizeof(T)));
@@ -122,17 +145,12 @@ protected:
             MatrixVector<T> q_i(Q_kry_basis.get_col(i).copy_to_vec());
             h_vec[i] = q_i.dot(next_q);
             next_q -= q_i*h_vec[i];
-            // H.coeffRef(i, k) = q_i.dot(next_q);
-            // next_q -= q_i*H.coeff(i, k);
         }
         h_vec[k+1] = next_q.norm();
-        for (int i=k+2; i<(typed_lin_sys.get_m()+1); ++i) {
-            h_vec[i] = static_cast<T>(0);
-        }
+        for (int i=k+2; i<(typed_lin_sys.get_m()+1); ++i) { h_vec[i] = static_cast<T>(0); }
         H.get_col(k).set_from_vec(
             MatrixVector<T>(typed_lin_sys.get_A().get_handle(), h_vec, typed_lin_sys.get_m()+1)
         );
-        // H.coeffRef(k+1, k) = next_q.norm();
 
         free(h_vec);
 
@@ -191,7 +209,9 @@ protected:
             Q_kry_basis.get_block(0, 0, typed_lin_sys.get_m(), kry_space_dim).copy_to_mat()
         );
         typed_soln = init_guess_typed +
-                     (right_precond_ptr->action_inv_M(Q_kry_basis_block*y)).template cast<T>();
+                     right_precond_ptr->action_inv_M(
+                        (Q_kry_basis_block*y).template cast<W>()
+                     ).template cast<T>();
 
     }
 

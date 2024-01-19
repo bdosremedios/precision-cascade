@@ -1,5 +1,5 @@
-#ifndef MATRIXVECTOR_H
-#define MATRIXVECTOR_H
+#ifndef MATRIX_VECTOR_H
+#define MATRIX_VECTOR_H
 
 #include <iostream>
 #include <stdexcept>
@@ -319,6 +319,9 @@ public:
         return created_vec;
     
     }
+
+    template<>
+    MatrixVector<T> cast() const { return *this; } // Do nothing for same cast type
 
     // *** Arithmetic and Compound Operations ***
     MatrixVector<T> operator*(const T &scalar) const;

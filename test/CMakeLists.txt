@@ -63,7 +63,7 @@ set(
 set(
     TEST_SUITE_CPPS
     # test_tools/test_MatrixRead.cpp
-    # ${TEST_TYPES_CPPS}
+    ${TEST_TYPES_CPPS}
     # ${TEST_TOOLS_CPPS}
     # ${TEST_PRECONDITIONER_CPPS}
     ${TEST_SOLVERS}

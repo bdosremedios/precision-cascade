@@ -1,5 +1,5 @@
-#ifndef TEMPLATECHECK_H
-#define TEMPLATECHECK_H
+#ifndef TEMPLATE_CHECK_H
+#define TEMPLATE_CHECK_H
 
 #include "MatrixDense.h"
 #include "MatrixSparse.h"
