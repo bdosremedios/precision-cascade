@@ -18,7 +18,6 @@ protected:
     void typed_iterate() override {
         typed_soln += D_inv*(typed_lin_sys.get_b_typed()-typed_lin_sys.get_A_typed()*typed_soln);
     }
-
     void derived_typed_reset() override {}; // Set reset as empty function
 
 public:

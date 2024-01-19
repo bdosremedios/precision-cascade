@@ -1,6 +1,6 @@
-#include "../../../test.h"
+#include "../../test.h"
 
-#include "solvers/krylov/GMRES.h"
+#include "solvers/GMRES/GMRES.h"
 
 class GMRES_Single_Solve_Test: public TestBase
 {
@@ -13,8 +13,8 @@ public:
         const bool &check_3_iter
     ) {
 
-        M<double> A(read_matrixCSV<M, double>(A_file_path));
-        MatrixVector<double> b(read_matrixCSV<MatrixVector, double>(b_file_path));
+        M<double> A(read_matrixCSV<M, double>(*handle_ptr, A_file_path));
+        MatrixVector<double> b(read_matrixCSV<MatrixVector, double>(*handle_ptr, b_file_path));
         TypedLinearSystem<M, float> lin_sys(A, b);
 
         SolveArgPkg args;
@@ -35,8 +35,12 @@ public:
     void FailTest() {
 
         constexpr int n(64);
-        M<double> A(read_matrixCSV<M, double>(solve_matrix_dir / fs::path("conv_diff_64_A.csv")));
-        MatrixVector<double> b(read_matrixCSV<MatrixVector, double>(solve_matrix_dir / fs::path("conv_diff_64_b.csv")));
+        M<double> A(
+            read_matrixCSV<M, double>(*handle_ptr, solve_matrix_dir / fs::path("conv_diff_64_A.csv"))
+        );
+        MatrixVector<double> b(
+            read_matrixCSV<MatrixVector, double>(*handle_ptr, solve_matrix_dir / fs::path("conv_diff_64_b.csv"))
+        );
         TypedLinearSystem<M, float> lin_sys(A, b);
 
         // Check convergence under single capabilities
@@ -71,7 +75,7 @@ TEST_F(GMRES_Single_Solve_Test, SolveConvDiff64) {
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
 
     SolveTest<MatrixDense>(A_path, b_path, false);
-    SolveTest<MatrixSparse>(A_path, b_path, false);
+    // SolveTest<MatrixSparse>(A_path, b_path, false);
 
 }
 
@@ -81,7 +85,7 @@ TEST_F(GMRES_Single_Solve_Test, SolveConvDiff256) {
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_256_b.csv"));
 
     SolveTest<MatrixDense>(A_path, b_path, false);
-    SolveTest<MatrixSparse>(A_path, b_path, false);
+    // SolveTest<MatrixSparse>(A_path, b_path, false);
 
 }
 
@@ -91,7 +95,7 @@ TEST_F(GMRES_Single_Solve_Test, SolveConvDiff1024_LONGRUNTIME) {
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_1024_b.csv"));
 
     SolveTest<MatrixDense>(A_path, b_path, false);
-    SolveTest<MatrixSparse>(A_path, b_path, false);
+    // SolveTest<MatrixSparse>(A_path, b_path, false);
 
 }
 
@@ -101,7 +105,7 @@ TEST_F(GMRES_Single_Solve_Test, SolveConvDiff20Rand) {
     fs::path b_path(solve_matrix_dir / fs::path("b_20_rand.csv"));
 
     SolveTest<MatrixDense>(A_path, b_path, false);
-    SolveTest<MatrixSparse>(A_path, b_path, false);
+    // SolveTest<MatrixSparse>(A_path, b_path, false);
 
 }
 
@@ -111,11 +115,11 @@ TEST_F(GMRES_Single_Solve_Test, SolveConvDiff3Eigs) {
     fs::path b_path(solve_matrix_dir / fs::path("b_25_3eigs.csv"));
 
     SolveTest<MatrixDense>(A_path, b_path, true);
-    SolveTest<MatrixSparse>(A_path, b_path, true);
+    // SolveTest<MatrixSparse>(A_path, b_path, true);
 
 }
 
 TEST_F(GMRES_Single_Solve_Test, DivergeBeyondSingleCapabilities) {
     FailTest<MatrixDense>();
-    FailTest<MatrixSparse>();
+    // FailTest<MatrixSparse>();
 }

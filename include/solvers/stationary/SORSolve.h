@@ -18,7 +18,6 @@ protected:
     void typed_iterate() override {
         typed_soln = D_wL.frwd_sub(typed_lin_sys.get_b_typed()-L_wL_U*typed_soln);
     }
-
     void derived_typed_reset() override {}; // Set reset as empty function
 
 public:

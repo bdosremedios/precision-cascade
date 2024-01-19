@@ -1,9 +1,9 @@
 #ifndef TEST_GMRES_H
 #define TEST_GMRES_H
 
-#include "../../../test.h"
+#include "../../test.h"
 
-#include "solvers/krylov/GMRES.h"
+#include "solvers/GMRES/GMRES.h"
 
 template <template <typename> typename M, typename T, typename W=T>
 class GMRESSolveTestingMock: public GMRESSolve<M, T, W> {

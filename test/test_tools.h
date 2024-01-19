@@ -3,18 +3,18 @@
 
 #include "types/types.h"
 
-// template <template <typename> typename M, typename T>
-// T mat_max_mag(const M<T> &A) {
+template <template <typename> typename M, typename T>
+T mat_max_mag(const M<T> &A) {
 
-//     T abs_max = static_cast<T>(0);
-//     for (int i=0; i<A.rows(); ++i) {
-//         for (int j=0; j<A.cols(); ++j) {
-//             if (std::abs(A.coeff(i, j)) > abs_max) { abs_max = std::abs(A.coeff(i, j)); }
-//         }
-//     }
-//     return abs_max;
+    T abs_max = static_cast<T>(0);
+    for (int i=0; i<A.rows(); ++i) {
+        for (int j=0; j<A.cols(); ++j) {
+            if (std::abs(A.get_elem(i, j)) > abs_max) { abs_max = std::abs(A.get_elem(i, j)); }
+        }
+    }
+    return abs_max;
 
-// }
+}
 
 // template <typename T>
 // T vec_max_mag(const MatrixVector<T> &vec) {
