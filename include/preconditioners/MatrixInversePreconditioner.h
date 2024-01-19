@@ -20,7 +20,7 @@ public:
         return ((inv_M.cols() == arg_n) && (inv_M.rows() == arg_n));
     };
 
-    MatrixVector<W> action_inv_M(MatrixVector<W> const &vec) const override {
+    Vector<W> action_inv_M(Vector<W> const &vec) const override {
         return inv_M*vec;
     }
 

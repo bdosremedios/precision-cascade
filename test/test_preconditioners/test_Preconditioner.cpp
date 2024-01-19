@@ -15,7 +15,7 @@ public:
         ASSERT_TRUE(no_precond.check_compatibility_left(1));
         ASSERT_TRUE(no_precond.check_compatibility_right(5));
 
-        MatrixVector<double> test_vec(MatrixVector<double>::Random(*handle_ptr, n));
+        Vector<double> test_vec(Vector<double>::Random(*handle_ptr, n));
         ASSERT_VECTOR_EQ(no_precond.action_inv_M(test_vec), test_vec);
     
     }
@@ -39,8 +39,8 @@ public:
         ASSERT_FALSE(inv_precond.check_compatibility_left(100));
         ASSERT_FALSE(inv_precond.check_compatibility_right(100));
 
-        MatrixVector<double> orig_test_vec(MatrixVector<double>::Random(*handle_ptr, n));
-        MatrixVector<double> test_vec(A*orig_test_vec);
+        Vector<double> orig_test_vec(Vector<double>::Random(*handle_ptr, n));
+        Vector<double> test_vec(A*orig_test_vec);
         test_vec = inv_precond.action_inv_M(test_vec);
 
         ASSERT_VECTOR_NEAR(orig_test_vec, test_vec, Tol<double>::dbl_inv_elem_tol());

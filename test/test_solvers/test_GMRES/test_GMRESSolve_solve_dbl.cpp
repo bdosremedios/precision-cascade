@@ -15,7 +15,7 @@ public:
     ) {
 
         M<double> A(read_matrixCSV<M, double>(*handle_ptr, A_file_path));
-        MatrixVector<double> b(read_matrixCSV<MatrixVector, double>(*handle_ptr, b_file_path));
+        Vector<double> b(read_matrixCSV<Vector, double>(*handle_ptr, b_file_path));
         TypedLinearSystem<M, double> lin_sys(A, b);
 
         SolveArgPkg args;
@@ -31,7 +31,7 @@ public:
         if (check_3_iter) { EXPECT_EQ(gmres_solve.get_iteration(), 3); }
 
         // Check that matches MATLAB gmres solution close within conv_tol_dbl
-        MatrixVector<double> x_test(read_matrixCSV<MatrixVector, double>(*handle_ptr, x_file_path));
+        Vector<double> x_test(read_matrixCSV<Vector, double>(*handle_ptr, x_file_path));
         EXPECT_LE(
             (gmres_solve.get_typed_soln() - x_test).norm()/(x_test.norm()),
             2*Tol<double>::krylov_conv_tol()

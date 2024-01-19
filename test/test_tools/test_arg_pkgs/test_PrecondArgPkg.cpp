@@ -1,6 +1,6 @@
-#include "../test.h"
+#include "../../test.h"
 
-#include "tools/PrecondArgPkg.h"
+#include "tools/arg_pkgs/PrecondArgPkg.h"
 
 class PrecondArgPkg_Test: public TestBase
 {
@@ -14,7 +14,7 @@ public:
         PrecondArgPkg<M, double> args;
         NoPreconditioner<M, double> no_precond;
 
-        MatrixVector<double> test_vec(MatrixVector<double>::Random(*handle_ptr, n));
+        Vector<double> test_vec(Vector<double>::Random(*handle_ptr, n));
 
         ASSERT_VECTOR_EQ(args.left_precond->action_inv_M(test_vec), no_precond.action_inv_M(test_vec));
         ASSERT_VECTOR_EQ(args.right_precond->action_inv_M(test_vec), no_precond.action_inv_M(test_vec));
@@ -35,7 +35,7 @@ public:
             std::make_shared<ILU<M, double>>(A, Tol<double>::roundoff(), false)
         );
 
-        MatrixVector<double> test_vec(MatrixVector<double>::Random(*handle_ptr, n));
+        Vector<double> test_vec(Vector<double>::Random(*handle_ptr, n));
 
         ASSERT_VECTOR_EQ(args.left_precond->action_inv_M(test_vec), ilu.action_inv_M(test_vec));
         ASSERT_VECTOR_EQ(args.right_precond->action_inv_M(test_vec), no_precond.action_inv_M(test_vec));
@@ -57,7 +57,7 @@ public:
             std::make_shared<ILU<M, double>>(A, Tol<double>::roundoff(), false)
         );
 
-        MatrixVector<double> test_vec(MatrixVector<double>::Random(*handle_ptr, n));
+        Vector<double> test_vec(Vector<double>::Random(*handle_ptr, n));
 
         ASSERT_VECTOR_EQ(args.left_precond->action_inv_M(test_vec), no_precond.action_inv_M(test_vec));
         ASSERT_VECTOR_EQ(args.right_precond->action_inv_M(test_vec), ilu.action_inv_M(test_vec));
@@ -79,7 +79,7 @@ public:
             std::make_shared<ILU<M, double>>(A, Tol<double>::roundoff(), false)
         );
 
-        MatrixVector<double> test_vec(MatrixVector<double>::Random(*handle_ptr, n));
+        Vector<double> test_vec(Vector<double>::Random(*handle_ptr, n));
 
         ASSERT_VECTOR_EQ(args.left_precond->action_inv_M(test_vec), ilu.action_inv_M(test_vec));
         ASSERT_VECTOR_EQ(args.right_precond->action_inv_M(test_vec), ilu.action_inv_M(test_vec));

@@ -1,5 +1,5 @@
-#ifndef MATRIXREADER_H
-#define MATRIXREADER_H
+#ifndef MATRIX_READER_H
+#define MATRIX_READER_H
 
 #include "types/types.h"
 

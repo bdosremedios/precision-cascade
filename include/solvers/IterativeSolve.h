@@ -2,7 +2,7 @@
 #define ITERATIVE_SOLVE_H
 
 #include "types/types.h"
-#include "tools/argument_pkgs.h"
+#include "tools/arg_pkgs/argument_pkgs.h"
 #include "preconditioners/implemented_preconditioners.h"
 
 #include <vector>
@@ -43,7 +43,7 @@ private:
 
         res_norm_hist.clear();
         res_hist = MatrixDense<double>(lin_sys.get_A().get_handle(), lin_sys.get_m(), max_iter+1);
-        MatrixVector<double> res_calc(lin_sys.get_b()-lin_sys.get_A()*init_guess);
+        Vector<double> res_calc(lin_sys.get_b()-lin_sys.get_A()*init_guess);
         curr_res = res_calc;
         res_hist.get_col(0).set_from_vec(res_calc);
         res_norm_hist.push_back(res_calc.norm());
@@ -54,7 +54,7 @@ protected:
 
     // *** Linear system attributes ***
     const GenericLinearSystem<M> &lin_sys;
-    const MatrixVector<double> init_guess;
+    const Vector<double> init_guess;
 
     // *** Constant solve attributes ***
     const double target_rel_res;
@@ -65,8 +65,8 @@ protected:
     bool initiated;
     bool converged;
     bool terminated;
-    MatrixVector<double> generic_soln = MatrixVector<double>(NULL);
-    MatrixVector<double> curr_res = MatrixVector<double>(NULL);
+    Vector<double> generic_soln = Vector<double>(NULL);
+    Vector<double> curr_res = Vector<double>(NULL);
     MatrixDense<double> res_hist = MatrixDense<double>(NULL);
     std::vector<double> res_norm_hist;
 
@@ -89,8 +89,8 @@ protected:
     virtual void iterate() = 0;
     virtual void derived_generic_reset() = 0;
 
-    static MatrixVector<double> make_guess(const GenericLinearSystem<M> &arg_lin_sys) {
-        return MatrixVector<double>::Ones(arg_lin_sys.get_A().get_handle(), arg_lin_sys.get_n());
+    static Vector<double> make_guess(const GenericLinearSystem<M> &arg_lin_sys) {
+        return Vector<double>::Ones(arg_lin_sys.get_A().get_handle(), arg_lin_sys.get_n());
     }
 
     // Forbid rvalue instantiation
@@ -107,8 +107,8 @@ protected:
 public:
 
     // *** Getters ***
-    MatrixVector<double> get_generic_soln() const { return generic_soln; };
-    MatrixVector<double> get_curr_res() const { return curr_res; };
+    Vector<double> get_generic_soln() const { return generic_soln; };
+    Vector<double> get_curr_res() const { return curr_res; };
     double get_relres() const { return curr_res.norm()/res_norm_hist[0]; }
     MatrixDense<double> get_res_hist() const { return res_hist; };
     std::vector<double> get_res_norm_hist() const { return res_norm_hist; };
@@ -252,10 +252,10 @@ protected:
     const TypedLinearSystem<M, T> &typed_lin_sys;
 
     // *** Constant solve attributes ***
-    const MatrixVector<T> init_guess_typed;
+    const Vector<T> init_guess_typed;
 
     // *** Mutable solve attributes ***
-    MatrixVector<T> typed_soln = MatrixVector<T>(NULL);
+    Vector<T> typed_soln = Vector<T>(NULL);
 
     // *** Abstract methods ***
     virtual void typed_iterate() = 0;
@@ -298,7 +298,7 @@ public:
     TypedIterativeSolve(const GenericLinearSystem<M> &&, const SolveArgPkg &&) = delete;
 
     // *** Getters ***
-    MatrixVector<T> get_typed_soln() const { return typed_soln; };
+    Vector<T> get_typed_soln() const { return typed_soln; };
 
 };
 

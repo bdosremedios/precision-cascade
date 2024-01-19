@@ -1,6 +1,6 @@
-#include "../test.h"
+#include "../../test.h"
 
-#include "tools/LinearSystem.h"
+#include "tools/arg_pkgs/LinearSystem.h"
 
 class TypedLinearSystem_Test: public TestBase
 {
@@ -12,7 +12,7 @@ public:
         constexpr int m(63);
         constexpr int n(27);
         M<double> A(M<double>::Random(*handle_ptr, m, n));
-        MatrixVector<double> b(MatrixVector<double>::Random(*handle_ptr, m));
+        Vector<double> b(Vector<double>::Random(*handle_ptr, m));
         TypedLinearSystem<M, T> lin_sys(A, b);
 
         ASSERT_MATRIX_EQ(lin_sys.get_A(), A);

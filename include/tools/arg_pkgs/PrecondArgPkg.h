@@ -1,8 +1,8 @@
 #ifndef PRECONDARGPKG_H
 #define PRECONDARGPKG_H
 
-#include "../types/types.h"
-#include "../preconditioners/implemented_preconditioners.h"
+#include "../../types/types.h"
+#include "../../preconditioners/implemented_preconditioners.h"
 
 #include <memory>
 

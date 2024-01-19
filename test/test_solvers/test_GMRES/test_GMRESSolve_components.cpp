@@ -12,13 +12,13 @@ public:
     ) {
 
         M<double> A(M<double>::Random(*handle_ptr, n, n));
-        MatrixVector<double> b(MatrixVector<double>::Random(*handle_ptr, n));
+        Vector<double> b(Vector<double>::Random(*handle_ptr, n));
         TypedLinearSystem<M, double> lin_sys(A, b);
 
         GMRESSolveTestingMock<M, double> test_mock(lin_sys, Tol<double>::roundoff(), default_args);
 
         ASSERT_EQ(test_mock.max_kry_space_dim, n);
-        ASSERT_EQ(test_mock.rho, (b - A*MatrixVector<double>::Ones(*handle_ptr, n)).norm());
+        ASSERT_EQ(test_mock.rho, (b - A*Vector<double>::Ones(*handle_ptr, n)).norm());
         
         ASSERT_EQ(test_mock.Q_kry_basis.rows(), n);
         ASSERT_EQ(test_mock.Q_kry_basis.cols(), n);
@@ -45,16 +45,16 @@ public:
         M<double> A(
             read_matrixCSV<M, double>(*handle_ptr, solve_matrix_dir / fs::path("A_5_toy.csv"))
         );
-        MatrixVector<double> b(
-            read_matrixCSV<MatrixVector, double>(*handle_ptr, solve_matrix_dir / fs::path("b_5_toy.csv"))
+        Vector<double> b(
+            read_matrixCSV<Vector, double>(*handle_ptr, solve_matrix_dir / fs::path("b_5_toy.csv"))
         );
         TypedLinearSystem<M, double> lin_sys(A, b);
 
         GMRESSolveTestingMock<M, double> test_mock(lin_sys, Tol<double>::roundoff(), default_args);
 
         // Manually instantiate initial guess
-        test_mock.typed_soln = MatrixVector<double>::Ones(*handle_ptr, n);
-        MatrixVector<double> r_0(b - A*MatrixVector<double>::Ones(*handle_ptr, n));
+        test_mock.typed_soln = Vector<double>::Ones(*handle_ptr, n);
+        Vector<double> r_0(b - A*Vector<double>::Ones(*handle_ptr, n));
 
         // Create matrix to store previous basis vectors to ensure no change across iterations
         MatrixDense<double> Q_save(MatrixDense<double>::Zero(*handle_ptr, n, n));
@@ -64,7 +64,7 @@ public:
         // and that Hessenberg first vector contructs next vector with entries
         test_mock.iterate_no_soln_solve();
 
-        MatrixVector<double> next_q(test_mock.Q_kry_basis.get_col(0).copy_to_vec());
+        Vector<double> next_q(test_mock.Q_kry_basis.get_col(0).copy_to_vec());
         ASSERT_VECTOR_EQ(next_q, r_0/r_0.norm());
         next_q = A*next_q;
         next_q -= test_mock.Q_kry_basis.get_col(0).copy_to_vec()*test_mock.H.get_elem(0, 0);
@@ -84,7 +84,7 @@ public:
             H_save.get_col(k).set_from_vec(test_mock.H.get_col(k).copy_to_vec());
 
             // Get newly generated basis vector
-            MatrixVector<double> q(test_mock.Q_kry_basis.get_col(k).copy_to_vec());
+            Vector<double> q(test_mock.Q_kry_basis.get_col(k).copy_to_vec());
 
             // Confirm that previous vectors are unchanged and are orthogonal to new one
             for (int j=0; j<k; ++j) {
@@ -101,8 +101,8 @@ public:
 
             // Confirm that Hessenberg matrix column corresponding to new basis vector
             // approximately constructs the next basis vector
-            MatrixVector<double> h(test_mock.H.get_col(k).copy_to_vec());
-            MatrixVector<double> construct_q(test_mock.Q_kry_basis.get_col(k).copy_to_vec());
+            Vector<double> h(test_mock.H.get_col(k).copy_to_vec());
+            Vector<double> construct_q(test_mock.Q_kry_basis.get_col(k).copy_to_vec());
             construct_q = A*construct_q;
             for (int i=0; i<=k; ++i) {
                 ASSERT_EQ(
@@ -132,16 +132,16 @@ public:
         M<double> A(
             read_matrixCSV<M, double>(*handle_ptr, solve_matrix_dir / fs::path("A_5_toy.csv"))
         );
-        MatrixVector<double> b(
-            read_matrixCSV<MatrixVector, double>(*handle_ptr, solve_matrix_dir / fs::path("b_5_toy.csv"))
+        Vector<double> b(
+            read_matrixCSV<Vector, double>(*handle_ptr, solve_matrix_dir / fs::path("b_5_toy.csv"))
         );
         TypedLinearSystem<M, double> lin_sys(A, b);
 
         GMRESSolveTestingMock<M, double> test_mock(lin_sys, Tol<double>::roundoff(), default_args);
 
         // Manually instantiate initial guess
-        test_mock.typed_soln = MatrixVector<double>::Ones(*handle_ptr, n);
-        MatrixVector<double> r_0(b - A*MatrixVector<double>::Ones(*handle_ptr, n));
+        test_mock.typed_soln = Vector<double>::Ones(*handle_ptr, n);
+        Vector<double> r_0(b - A*Vector<double>::Ones(*handle_ptr, n));
 
         // Fully create Hessenberg matrix
         test_mock.iterate_no_soln_solve();
@@ -218,13 +218,13 @@ public:
         M<double> A(
             read_matrixCSV<M, double>(*handle_ptr, solve_matrix_dir / fs::path("A_7_dummy_backsub.csv"))
         );
-        MatrixVector<double> b(
-            read_matrixCSV<MatrixVector, double>(*handle_ptr, solve_matrix_dir / fs::path("b_7_dummy_backsub.csv"))
+        Vector<double> b(
+            read_matrixCSV<Vector, double>(*handle_ptr, solve_matrix_dir / fs::path("b_7_dummy_backsub.csv"))
         );
         TypedLinearSystem<M, double> lin_sys(A, b);
 
         // Set initial guess to zeros such that residual is just b
-        MatrixVector<double> x_0(MatrixVector<double>::Zero(*handle_ptr, n));
+        Vector<double> x_0(Vector<double>::Zero(*handle_ptr, n));
         SolveArgPkg args;
         args.init_guess = x_0;
 
@@ -251,8 +251,8 @@ public:
             );
             
             // Load test solution
-            MatrixVector<double> test_soln(
-                read_matrixCSV<MatrixVector, double>(
+            Vector<double> test_soln(
+                read_matrixCSV<Vector, double>(
                     *handle_ptr, solve_matrix_dir / fs::path("x_" + std::to_string(kry_dim) + "_backsub.csv")
                 )
             );
@@ -279,13 +279,13 @@ public:
         M<double> A(
             read_matrixCSV<M, double>(*handle_ptr, solve_matrix_dir / fs::path("A_5_easysoln.csv"))
         );
-        MatrixVector<double> b(
-            read_matrixCSV<MatrixVector, double>(*handle_ptr, solve_matrix_dir / fs::path("b_5_easysoln.csv"))
+        Vector<double> b(
+            read_matrixCSV<Vector, double>(*handle_ptr, solve_matrix_dir / fs::path("b_5_easysoln.csv"))
         );
         TypedLinearSystem<M, double> lin_sys(A, b);
 
         // Instantiate initial guess as true solution
-        MatrixVector<double> soln(MatrixVector<double>::Ones(*handle_ptr, n));
+        Vector<double> soln(Vector<double>::Ones(*handle_ptr, n));
         SolveArgPkg args;
         args.target_rel_res = Tol<double>::krylov_conv_tol();
         args.init_guess = soln;
@@ -319,13 +319,13 @@ public:
         M<double> A(
             read_matrixCSV<M, double>(*handle_ptr, solve_matrix_dir / fs::path("A_5_easysoln.csv"))
         );
-        MatrixVector<double> b(
-            read_matrixCSV<MatrixVector, double>(*handle_ptr, solve_matrix_dir / fs::path("b_5_easysoln.csv"))
+        Vector<double> b(
+            read_matrixCSV<Vector, double>(*handle_ptr, solve_matrix_dir / fs::path("b_5_easysoln.csv"))
         );
         TypedLinearSystem<M, double> lin_sys(A, b);
 
         // Instantiate initial guess as true solution
-        MatrixVector<double> soln(MatrixVector<double>::Zero(*handle_ptr, n));
+        Vector<double> soln(Vector<double>::Zero(*handle_ptr, n));
         soln.set_elem(0, 1.);
         SolveArgPkg args;
         args.init_guess = soln;
@@ -361,13 +361,13 @@ public:
         M<double> A(
             read_matrixCSV<M, double>(*handle_ptr, solve_matrix_dir / fs::path("A_5_easysoln.csv"))
         );
-        MatrixVector<double> b(
-            read_matrixCSV<MatrixVector, double>(*handle_ptr, solve_matrix_dir / fs::path("b_5_easysoln.csv"))
+        Vector<double> b(
+            read_matrixCSV<Vector, double>(*handle_ptr, solve_matrix_dir / fs::path("b_5_easysoln.csv"))
         );
         TypedLinearSystem<M, double> lin_sys(A, b);
 
         // Instantiate initial guess as true solution
-        MatrixVector<double> soln(MatrixVector<double>::Zero(*handle_ptr, n));
+        Vector<double> soln(Vector<double>::Zero(*handle_ptr, n));
         soln.set_elem(0, 1.);
         SolveArgPkg args;
         args.init_guess = soln;
@@ -403,7 +403,7 @@ public:
 
         constexpr int n(20);
         M<double> A(M<double>::Random(*handle_ptr, n, n));
-        MatrixVector<double> b(MatrixVector<double>::Random(*handle_ptr, n));
+        Vector<double> b(Vector<double>::Random(*handle_ptr, n));
         TypedLinearSystem<M, double> lin_sys(A, b);
 
         SolveArgPkg args;
@@ -425,7 +425,7 @@ public:
 
         constexpr int n(20);
         M<double> A(M<double>::Random(*handle_ptr, n, n));
-        MatrixVector<double> b(MatrixVector<double>::Random(*handle_ptr, n));
+        Vector<double> b(Vector<double>::Random(*handle_ptr, n));
         TypedLinearSystem<M, double> lin_sys(A, b);
 
         SolveArgPkg args;
@@ -480,7 +480,7 @@ TEST_F(GMRESSolve_Component_Test, CheckCorrectDefaultMaxIter) {
     
     constexpr int n(7);
     MatrixDense<double> A_n(MatrixDense<double>::Random(*handle_ptr, n, n));
-    MatrixVector<double> b_n(MatrixVector<double>::Random(*handle_ptr, n));
+    Vector<double> b_n(Vector<double>::Random(*handle_ptr, n));
     TypedLinearSystem<MatrixDense, double> lin_sys_n(A_n, b_n);
     GMRESSolveTestingMock<MatrixDense, double> test_mock_n_dense(
         lin_sys_n, Tol<double>::roundoff(), default_args
@@ -494,7 +494,7 @@ TEST_F(GMRESSolve_Component_Test, CheckCorrectDefaultMaxIter) {
 
     constexpr int m(53);
     MatrixDense<double> A_m(MatrixDense<double>::Random(*handle_ptr, m, m));
-    MatrixVector<double> b_m(MatrixVector<double>::Random(*handle_ptr, m));
+    Vector<double> b_m(Vector<double>::Random(*handle_ptr, m));
     TypedLinearSystem<MatrixDense, double> lin_sys_m(A_m, b_m);
     GMRESSolveTestingMock<MatrixDense, double> test_mock_m_dense(
         lin_sys_m, Tol<double>::roundoff(), default_args
@@ -509,7 +509,7 @@ TEST_F(GMRESSolve_Component_Test, CheckCorrectDefaultMaxIter) {
     constexpr int o(64);
     constexpr int non_default_iter(10);
     MatrixDense<double> A_o(MatrixDense<double>::Random(*handle_ptr, o, o));
-    MatrixVector<double> b_o(MatrixVector<double>::Random(*handle_ptr, o));
+    Vector<double> b_o(Vector<double>::Random(*handle_ptr, o));
     TypedLinearSystem<MatrixDense, double> lin_sys_o(A_o, b_o);
     SolveArgPkg non_default_args;
     non_default_args.max_iter = non_default_iter;
@@ -529,7 +529,7 @@ TEST_F(GMRESSolve_Component_Test, CheckErrorExceedDimension) {
     
     constexpr int n(7);
     MatrixDense<double> A_n(MatrixDense<double>::Random(*handle_ptr, n, n));
-    MatrixVector<double> b_n(MatrixVector<double>::Random(*handle_ptr, n));
+    Vector<double> b_n(Vector<double>::Random(*handle_ptr, n));
     SolveArgPkg args;
     args.max_iter = 100;
 

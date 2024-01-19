@@ -14,10 +14,10 @@ set(
 
 set(
     TEST_TOOLS_CPPS
-    test_tools/test_GenericLinearSystem.cpp
-    test_tools/test_TypedLinearSystem.cpp
-    test_tools/test_SolveArgPkg.cpp
-    test_tools/test_PrecondArgPkg.cpp
+    test_tools/test_arg_pkgs/test_GenericLinearSystem.cpp
+    test_tools/test_arg_pkgs/test_TypedLinearSystem.cpp
+    test_tools/test_arg_pkgs/test_SolveArgPkg.cpp
+    test_tools/test_arg_pkgs/test_PrecondArgPkg.cpp
 )
 
 set(
@@ -62,11 +62,11 @@ set(
 
 set(
     TEST_SUITE_CPPS
-    test_tools/test_MatrixRead.cpp
+    test_tools/test_read_matrix.cpp
     ${TEST_TYPES_CPPS}
-    # ${TEST_TOOLS_CPPS}
-    # ${TEST_PRECONDITIONER_CPPS}
-    # ${TEST_SOLVERS}
+    ${TEST_TOOLS_CPPS}
+    ${TEST_PRECONDITIONER_CPPS}
+    ${TEST_SOLVERS}
 )
 
 add_executable(

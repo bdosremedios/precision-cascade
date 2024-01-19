@@ -10,7 +10,7 @@ public:
 
     using Preconditioner<M, W>::Preconditioner;
 
-    MatrixVector<W> action_inv_M(MatrixVector<W> const &vec) const override {
+    Vector<W> action_inv_M(Vector<W> const &vec) const override {
         return vec;
     }
 

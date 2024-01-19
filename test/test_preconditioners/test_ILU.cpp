@@ -62,7 +62,7 @@ public:
         ILUPreconditioner<M, double> ilu(A, Tol<double>::roundoff(), false); // Make dense LU
 
         // Test matching ILU to MATLAB for the dense matrix
-        MatrixVector<double> test_vec(MatrixVector<double>::Random(*handle_ptr, n));
+        Vector<double> test_vec(Vector<double>::Random(*handle_ptr, n));
 
         ASSERT_VECTOR_NEAR(ilu.action_inv_M(A*test_vec), test_vec, Tol<double>::dbl_ilu_elem_tol());
 
@@ -77,7 +77,7 @@ public:
         ILUPreconditioner<M, double> ilu(A, Tol<double>::roundoff(), true);
         
         // Test matching ILU to MATLAB for the dense matrix
-        MatrixVector<double> test_vec(MatrixVector<double>::Random(*handle_ptr, n));
+        Vector<double> test_vec(Vector<double>::Random(*handle_ptr, n));
 
         ASSERT_VECTOR_NEAR(ilu.action_inv_M(A*test_vec), test_vec, Tol<double>::dbl_ilu_elem_tol());
 

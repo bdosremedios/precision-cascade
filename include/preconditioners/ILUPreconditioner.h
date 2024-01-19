@@ -105,7 +105,7 @@ public:
     {
 
         // Calculate original A col norm for threshold comparison
-        MatrixVector<W> A_col_norms(A.get_handle(), A.cols());
+        Vector<W> A_col_norms(A.get_handle(), A.cols());
         for (int j=0; j<A.cols(); ++j) {
             A_col_norms.set_elem(j, A.get_col(j).copy_to_vec().norm());
         }
@@ -130,7 +130,7 @@ public:
                 }
             }
             if (p < U_size) { // Drop all but p largest elements
-                MatrixVector<W> U_col(A.get_handle(), U_mat+col*m, U_size);
+                Vector<W> U_col(A.get_handle(), U_mat+col*m, U_size);
                 std::vector<int> U_sorted_indices = U_col.sort_indices();
                 for (int i=0; i<U_size-p; ++i) {
                     U_mat[U_sorted_indices[i]+col*m] = static_cast<W>(0);
@@ -144,7 +144,7 @@ public:
                 }
             }
             if (p < L_size) { // Drop all but p largest elements
-                MatrixVector<W> L_col(A.get_handle(), L_mat+col+1+col*m, L_size);
+                Vector<W> L_col(A.get_handle(), L_mat+col+1+col*m, L_size);
                 std::vector<int> L_sorted_indices = L_col.sort_indices();
                 for (int i=0; i<L_size-p; ++i) {
                     L_mat[L_sorted_indices[i]+col+1+col*m] = static_cast<W>(0);
@@ -157,7 +157,7 @@ public:
 
     }
 
-    MatrixVector<W> action_inv_M(const MatrixVector<W> &vec) const override {
+    Vector<W> action_inv_M(const Vector<W> &vec) const override {
         return U.back_sub(L.frwd_sub(P*vec));
     }
 

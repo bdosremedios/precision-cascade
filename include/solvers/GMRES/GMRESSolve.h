@@ -20,7 +20,7 @@ protected:
     MatrixDense<T> H = MatrixDense<T>(NULL);
     MatrixDense<T> Q_H = MatrixDense<T>(NULL);
     MatrixDense<T> R_H = MatrixDense<T>(NULL);
-    MatrixVector<T> next_q = MatrixVector<T>(NULL);
+    Vector<T> next_q = Vector<T>(NULL);
 
     int kry_space_dim;
     int max_kry_space_dim;
@@ -38,7 +38,7 @@ protected:
     
     }
 
-    MatrixVector<T> apply_precond_A(const MatrixVector<T> &vec) {
+    Vector<T> apply_precond_A(const Vector<T> &vec) {
         return(
             left_precond_ptr->action_inv_M(
                 (typed_lin_sys.get_A_typed()*
@@ -51,7 +51,7 @@ protected:
         );
     }
 
-    MatrixVector<T> get_precond_b() {
+    Vector<T> get_precond_b() {
         return(
             left_precond_ptr->action_inv_M(
                 typed_lin_sys.get_b_typed().template cast<W>()
@@ -59,7 +59,7 @@ protected:
         );
     }
 
-    MatrixVector<T> calc_precond_residual(const MatrixVector<T> &vec) {
+    Vector<T> calc_precond_residual(const Vector<T> &vec) {
         return get_precond_b() - apply_precond_A(vec);
     }
 
@@ -91,7 +91,7 @@ protected:
         );
 
         // Set rho as initial residual norm
-        MatrixVector<T> r_0(calc_precond_residual(init_guess_typed));
+        Vector<T> r_0(calc_precond_residual(init_guess_typed));
         rho = r_0.norm();
 
         // Initialize next vector q as initial residual and mark as terminated if lucky break
@@ -134,14 +134,14 @@ protected:
 
         for (int i=0; i<=k; ++i) {
             // MGS from newly orthog q used for orthogonalizing next vectors
-            MatrixVector<T> q_i(Q_kry_basis.get_col(i).copy_to_vec());
+            Vector<T> q_i(Q_kry_basis.get_col(i).copy_to_vec());
             h_vec[i] = q_i.dot(next_q);
             next_q -= q_i*h_vec[i];
         }
         h_vec[k+1] = next_q.norm();
         for (int i=k+2; i<(typed_lin_sys.get_m()+1); ++i) { h_vec[i] = static_cast<T>(0); }
         H.get_col(k).set_from_vec(
-            MatrixVector<T>(typed_lin_sys.get_A().get_handle(), h_vec, typed_lin_sys.get_m()+1)
+            Vector<T>(typed_lin_sys.get_A().get_handle(), h_vec, typed_lin_sys.get_m()+1)
         );
 
         free(h_vec);
@@ -172,8 +172,8 @@ protected:
         R_H.set_elem(k, k, r);
         R_H.set_elem(k+1, k, static_cast<T>(0));
 
-        MatrixVector<T> Q_H_col_k(Q_H.get_col(k).copy_to_vec());
-        MatrixVector<T> Q_H_col_kp1(Q_H.get_col(k+1).copy_to_vec());
+        Vector<T> Q_H_col_k(Q_H.get_col(k).copy_to_vec());
+        Vector<T> Q_H_col_kp1(Q_H.get_col(k+1).copy_to_vec());
         Q_H.get_col(k).set_from_vec(Q_H_col_k*c - Q_H_col_kp1*s);
         Q_H.get_col(k+1).set_from_vec(Q_H_col_k*s + Q_H_col_kp1*c);
 
@@ -182,16 +182,16 @@ protected:
     void update_x_minimizing_res() {
 
         // Calculate RHS to solve
-        MatrixVector<T> rho_e1(
-            MatrixVector<T>::Zero(typed_lin_sys.get_A_typed().get_handle(), kry_space_dim+1)
+        Vector<T> rho_e1(
+            Vector<T>::Zero(typed_lin_sys.get_A_typed().get_handle(), kry_space_dim+1)
         );
         rho_e1.set_elem(0, rho);
-        MatrixVector<T> rhs(
+        Vector<T> rhs(
             Q_H.get_block(0, 0, kry_space_dim+1, kry_space_dim+1).copy_to_mat().transpose_prod(rho_e1)
         );
 
         // Use back substitution to solve
-        MatrixVector<T> y(
+        Vector<T> y(
             R_H.get_block(0, 0, kry_space_dim, kry_space_dim).copy_to_mat().back_sub(
                 rhs.slice(0, kry_space_dim)
             )

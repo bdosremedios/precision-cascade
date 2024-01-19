@@ -1,7 +1,7 @@
 #ifndef LINEARSYSTEM_H
 #define LINEARSYSTEM_H
 
-#include "types/types.h"
+#include "../../types/types.h"
 
 template <template <typename> typename M>
 class GenericLinearSystem
@@ -11,13 +11,13 @@ protected:
     const int m;
     const int n;
     const M<double> A;
-    const MatrixVector<double> b;
+    const Vector<double> b;
 
 public:
 
     GenericLinearSystem(
         M<double> arg_A,
-        MatrixVector<double> arg_b
+        Vector<double> arg_b
     ):
         m(arg_A.rows()),
         n(arg_A.cols()),
@@ -29,7 +29,7 @@ public:
     }
 
     const M<double> &get_A() const { return A; }
-    virtual const MatrixVector<double> &get_b() const { return b; }
+    virtual const Vector<double> &get_b() const { return b; }
     const int &get_m() const { return m; }
     const int &get_n() const { return n; }
 
@@ -41,13 +41,13 @@ class TypedLinearSystem: public GenericLinearSystem<M>
 protected:
 
     const M<T> A_typed;
-    const MatrixVector<T> b_typed;
+    const Vector<T> b_typed;
 
 public:
 
     TypedLinearSystem(
         M<double> arg_A,
-        MatrixVector<double> arg_b
+        Vector<double> arg_b
     ):
         A_typed(arg_A.template cast<T>()),
         b_typed(arg_b.template cast<T>()),
@@ -56,7 +56,7 @@ public:
 
     const M<T> &get_A_typed() const { return A_typed; }
 
-    virtual const MatrixVector<T> &get_b_typed() const { return b_typed; }
+    virtual const Vector<T> &get_b_typed() const { return b_typed; }
 
 };
 
@@ -65,28 +65,28 @@ class Mutb_TypedLinearSystem: public TypedLinearSystem<M, T>
 {
 protected:
     
-    MatrixVector<double> b;
-    MatrixVector<T> b_typed;
+    Vector<double> b;
+    Vector<T> b_typed;
 
 public:
 
     Mutb_TypedLinearSystem(
         M<double> arg_A,
-        MatrixVector<double> arg_b
+        Vector<double> arg_b
     ):
         b(arg_b),
         b_typed(arg_b.template cast<T>()),
         TypedLinearSystem<M, T>(arg_A, arg_b)
     {}
 
-    void set_b(MatrixVector<double> arg_b) {
+    void set_b(Vector<double> arg_b) {
         b = arg_b;
         b_typed = b.template cast<T>();
     }
 
-    const MatrixVector<double> &get_b() const override { return b; }
+    const Vector<double> &get_b() const override { return b; }
 
-    const MatrixVector<T> &get_b_typed() const override { return b_typed; }
+    const Vector<T> &get_b_typed() const override { return b_typed; }
 
 };
 
