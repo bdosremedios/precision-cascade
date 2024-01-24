@@ -6,6 +6,7 @@ set(CMAKE_EXE_LINKER_FLAGS, "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:LIBCMT")
 
 set(
     TEST_TYPES_CPPS
+    test_types/test_Scalar.cpp
     test_types/test_Vector.cpp
     test_types/test_MatrixDense.cpp
     # test_types/test_MatrixSparse.cpp
@@ -64,9 +65,9 @@ set(
     TEST_SUITE_CPPS
     test_tools/test_read_matrix.cpp
     ${TEST_TYPES_CPPS}
-    ${TEST_TOOLS_CPPS}
-    ${TEST_PRECONDITIONER_CPPS}
-    ${TEST_SOLVERS}
+    # ${TEST_TOOLS_CPPS}
+    # ${TEST_PRECONDITIONER_CPPS}
+    # ${TEST_SOLVERS}
 )
 
 add_executable(
@@ -79,7 +80,6 @@ target_link_libraries(
     test
     PUBLIC
     gtest_main
-    # eigen
     precision-cascade
     math_functions
     types

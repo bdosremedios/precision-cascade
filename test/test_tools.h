@@ -1,6 +1,8 @@
 #ifndef TEST_TOOLS_H
 #define TEST_TOOLS_H
 
+#include <cmath>
+
 #include "types/types.h"
 
 template <template <typename> typename M, typename T>
@@ -16,16 +18,10 @@ T mat_max_mag(const M<T> &A) {
 
 }
 
-// template <typename T>
-// T vec_max_mag(const MatrixVector<T> &vec) {
-
-//     T abs_max = static_cast<T>(0);
-//     for (int i=0; i<vec.rows(); ++i) {
-//             if (std::abs(vec(i)) > abs_max) { abs_max = std::abs(vec(i)); }
-//     }
-//     return abs_max;
-
-// }
+template <typename T>
+T min_1_mag(const T &val) {
+    return static_cast<T>(std::max(std::abs(static_cast<double>(val)), 1.));
+}
 
 // template <typename T>
 // int count_zeros(MatrixVector<T> vec, double zero_tol) {
@@ -58,6 +54,7 @@ public:
 
     // Core values
     static double roundoff() { assert(false); return -1.; }
+    static T roundoff_T() { return static_cast<T>(roundoff()); }
     static double gamma(int n) { return n*roundoff()/(1-n*roundoff()); }
 
     // Special case values

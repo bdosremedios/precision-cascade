@@ -627,7 +627,6 @@ TEST_F(Vector_Test, TestCopyConstruction) {
     TestCopyConstruction<double>();
 }
 
-
 TEST_F(Vector_Test, TestStaticCreation) {
     TestStaticCreation<__half>();
     TestStaticCreation<float>();

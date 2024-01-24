@@ -37,7 +37,7 @@ public:
 
     class Block; class Col; // Forward declaration of nested classes
 
-    // *** Basic Constructors ***
+    // *** Constructors ***
     MatrixDense(const cublasHandle_t &arg_handle, int arg_m, int arg_n):
         handle(arg_handle), m_rows(arg_m), n_cols(arg_n), mem_size(m_rows*n_cols*sizeof(T))
     { allocate_d_mat(); }
@@ -107,10 +107,7 @@ public:
     // MatrixDense(const typename MatrixSparse<T>::Block &block): Parent::Matrix(block.base()) {}
 
     // *** Destructor ***
-    ~MatrixDense() {
-        check_cuda_error(cudaFree(d_mat));
-        d_mat = nullptr;
-    }
+    ~MatrixDense() { check_cuda_error(cudaFree(d_mat)); }
 
     // *** Copy-Assignment ***
     MatrixDense<T> & operator=(const MatrixDense &other) {

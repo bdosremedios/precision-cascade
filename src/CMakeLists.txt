@@ -10,6 +10,9 @@ add_library(
     types
     STATIC
     tools/cuda_check.cu
+    types/Scalar/Scalar_hlf.cu
+    types/Scalar/Scalar_sgl.cu
+    types/Scalar/Scalar_dbl.cu
     types/Vector/Vector_hlf.cu
     types/Vector/Vector_sgl.cu
     types/Vector/Vector_dbl.cu

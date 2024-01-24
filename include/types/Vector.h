@@ -22,7 +22,6 @@ class Vector
 {
 private:
 
-
     static void check_n(int n) {
         if (n != 1) { throw std::runtime_error("Vector: invalid number of columns for vector"); }
     }
@@ -50,7 +49,7 @@ private:
 
 public:
 
-    // *** Basic Constructors ***
+    // *** Constructors ***
     Vector(const cublasHandle_t &arg_handle, int arg_m, int arg_n):
         handle(arg_handle), m_rows(arg_m), mem_size(m_rows*sizeof(T))
     { 
@@ -59,12 +58,11 @@ public:
     }
 
     Vector(const cublasHandle_t &arg_handle, int arg_m): Vector(arg_handle, arg_m, 1) {}
-    Vector(const cublasHandle_t &arg_handle):  Vector(arg_handle, 0) {}
+    Vector(const cublasHandle_t &arg_handle): Vector(arg_handle, 0) {}
 
     Vector(const cublasHandle_t &arg_handle, std::initializer_list<T> li):
         Vector(arg_handle, li.size())
     {
-
         T *h_vec = static_cast<T *>(malloc(mem_size));
 
         struct loop_vars { int i; typename std::initializer_list<T>::const_iterator curr; };
@@ -76,7 +74,6 @@ public:
         }
 
         free(h_vec);
-
     }
 
     // *** Dynamic Memory *** (assumes outer code handles dynamic memory properly)
@@ -111,12 +108,8 @@ public:
 
     // }
 
-    // *** Destructor ***
-    virtual ~Vector() {
-        check_cuda_error(cudaFree(d_vec));
-    }
-
-    // *** Copy-Assignment ***
+    // *** Destructor/Copy Constructor/Assignment Constructor ***
+    virtual ~Vector() { check_cuda_error(cudaFree(d_vec)); }
     Vector<T> & operator=(const Vector<T> &other) {
 
         if (this != &other) {
@@ -135,8 +128,6 @@ public:
         return *this;
 
     }
-
-    // *** Copy Constructor ***
     Vector(const Vector<T> &other) {
         *this = other;
     }
@@ -215,7 +206,6 @@ public:
         return h_elem;
     }
     const T get_elem(int row) const { return get_elem(row, 0); }
-
     void set_elem(int row, int col, T val) {
         if (col != 0) {
             throw std::runtime_error("Vector: invalid vector col access in set_elem");
@@ -226,7 +216,6 @@ public:
         check_cuda_error(cudaMemcpy(d_vec+row, &val, sizeof(T), cudaMemcpyHostToDevice));
     }
     void set_elem(int row, T val) { set_elem(row, 0, val); }
-
     Vector<T> slice(int start, int m_elem) const {
 
         if ((m_elem < 0) || ((start+m_elem) > m_rows)) {
@@ -323,7 +312,7 @@ public:
     template<>
     Vector<T> cast() const { return *this; } // Do nothing for same cast type
 
-    // *** Arithmetic and Compound Operations ***
+    // *** Arithmetic/Compound Operations ***
     Vector<T> operator*(const T &scalar) const;
     Vector<T> operator/(const T &scalar) const {
         return operator*(static_cast<T>(1.)/scalar);
