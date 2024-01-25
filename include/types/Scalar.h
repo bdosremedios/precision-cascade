@@ -3,6 +3,7 @@
 
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
+#include <iostream>
 
 #include "tools/cuda_check.h"
 
@@ -29,7 +30,7 @@ public:
         return *this;
     }
 
-    // *** Getters/Setters ***
+    // *** Access ***
     void set_scalar(const T &val) {
         check_cuda_error(cudaMemcpy(d_scalar, &val, sizeof(T), cudaMemcpyHostToDevice));
     }
@@ -38,6 +39,11 @@ public:
         check_cuda_error(cudaMemcpy(&h_scalar, d_scalar, sizeof(T), cudaMemcpyDeviceToHost));
         return h_scalar;
     }
+    void print() { std::cout << static_cast<double>(get_scalar()) << std::endl; }
+
+    // *** Cast ***
+    template <typename Cast_T>
+    Scalar<Cast_T> cast();
 
     // *** Arithmetic/Compound Operations ***
     Scalar<T> operator+(const Scalar& other) const;
@@ -52,7 +58,10 @@ public:
     void operator*=(const Scalar& other);
     void operator/=(const Scalar& other);
 
-    Scalar<T> & in_place_sqrt();
+    Scalar<T> & abs();
+    Scalar<T> & sqrt();
+
+    bool operator==(const Scalar& other) const;
 
 };
 
