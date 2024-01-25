@@ -52,7 +52,7 @@ public:
     void operator*=(const Scalar& other);
     void operator/=(const Scalar& other);
 
-    void in_place_sqrt();
+    Scalar<T> & in_place_sqrt();
 
 };
 

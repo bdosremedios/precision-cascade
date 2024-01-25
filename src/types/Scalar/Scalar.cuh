@@ -7,6 +7,42 @@
 #include "types/Scalar.h"
 
 template <typename T>
+__global__ void scalar_add(T *scalar_1, T *scalar_2, T *result) {
+    int tid = (blockIdx.x * blockDim.x) + threadIdx.x;
+    result[tid] = scalar_1[tid]+scalar_2[tid];
+}
+
+template <typename T>
+Scalar<T> Scalar<T>::operator+(const Scalar<T> &other) const {
+    Scalar<T> result;
+    scalar_add<<<1, 1>>>(d_scalar, other.d_scalar, result.d_scalar);
+    return result;
+}
+
+template <typename T>
+void Scalar<T>::operator+=(const Scalar<T> &other) {
+    scalar_add<<<1, 1>>>(d_scalar, other.d_scalar, d_scalar);
+}
+
+template <typename T>
+__global__ void scalar_minus(T *scalar_1, T *scalar_2, T *result) {
+    int tid = (blockIdx.x * blockDim.x) + threadIdx.x;
+    result[tid] = scalar_1[tid]-scalar_2[tid];
+}
+
+template <typename T>
+Scalar<T> Scalar<T>::operator-(const Scalar<T> &other) const {
+    Scalar<T> result;
+    scalar_minus<<<1, 1>>>(d_scalar, other.d_scalar, result.d_scalar);
+    return result;
+}
+
+template <typename T>
+void Scalar<T>::operator-=(const Scalar<T> &other) {
+    scalar_minus<<<1, 1>>>(d_scalar, other.d_scalar, d_scalar);
+}
+
+template <typename T>
 __global__ void scalar_mult(T *scalar_1, T *scalar_2, T *result) {
     int tid = (blockIdx.x * blockDim.x) + threadIdx.x;
     result[tid] = scalar_1[tid]*scalar_2[tid];

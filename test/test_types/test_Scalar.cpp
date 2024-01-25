@@ -64,6 +64,151 @@ public:
     }
 
     template <typename T>
+    void TestAddSub() {
+
+        Scalar<T> scalar_1(static_cast<T>(3.2));
+        Scalar<T> scalar_2(static_cast<T>(5.));
+        Scalar<T> scalar_3(static_cast<T>(-4.));
+
+        ASSERT_NEAR(
+            (scalar_1+scalar_2).get_scalar(),
+            static_cast<T>(8.2),
+            min_1_mag(static_cast<T>(8.2))*Tol<T>::roundoff_T()
+        );
+        ASSERT_NEAR(
+            (scalar_1+scalar_3).get_scalar(),
+            static_cast<T>(-0.8),
+            min_1_mag(static_cast<T>(-0.8))*Tol<T>::roundoff_T()
+        );
+        ASSERT_NEAR(
+            (scalar_2+scalar_3).get_scalar(),
+            static_cast<T>(1.),
+            min_1_mag(static_cast<T>(1.))*Tol<T>::roundoff_T()
+        );
+        ASSERT_NEAR(
+            (scalar_1+scalar_1).get_scalar(),
+            static_cast<T>(6.4),
+            min_1_mag(static_cast<T>(6.4))*Tol<T>::roundoff_T()
+        );
+        
+        ASSERT_NEAR(
+            (scalar_2+scalar_1).get_scalar(),
+            static_cast<T>(8.2),
+            min_1_mag(static_cast<T>(8.2))*Tol<T>::roundoff_T()
+        );
+        ASSERT_NEAR(
+            (scalar_3+scalar_1).get_scalar(),
+            static_cast<T>(-0.8),
+            min_1_mag(static_cast<T>(-0.8))*Tol<T>::roundoff_T()
+        );
+        ASSERT_NEAR(
+            (scalar_3+scalar_2).get_scalar(),
+            static_cast<T>(1.),
+            min_1_mag(static_cast<T>(1.))*Tol<T>::roundoff_T()
+        );
+
+        ASSERT_NEAR(
+            (scalar_1-scalar_2).get_scalar(),
+            static_cast<T>(-1.8),
+            min_1_mag(static_cast<T>(-1.8))*Tol<T>::roundoff_T()
+        );
+        ASSERT_NEAR(
+            (scalar_1-scalar_3).get_scalar(),
+            static_cast<T>(7.2),
+            min_1_mag(static_cast<T>(7.2))*Tol<T>::roundoff_T()
+        );
+        ASSERT_NEAR(
+            (scalar_2-scalar_3).get_scalar(),
+            static_cast<T>(9.),
+            min_1_mag(static_cast<T>(9.))*Tol<T>::roundoff_T()
+        );
+        ASSERT_NEAR(
+            (scalar_1-scalar_1).get_scalar(),
+            static_cast<T>(0.),
+            min_1_mag(static_cast<T>(0.))*Tol<T>::roundoff_T()
+        );
+        
+        ASSERT_NEAR(
+            (scalar_2-scalar_1).get_scalar(),
+            static_cast<T>(1.8),
+            min_1_mag(static_cast<T>(1.8))*Tol<T>::roundoff_T()
+        );
+        ASSERT_NEAR(
+            (scalar_3-scalar_1).get_scalar(),
+            static_cast<T>(-7.2),
+            min_1_mag(static_cast<T>(-7.2))*Tol<T>::roundoff_T()
+        );
+        ASSERT_NEAR(
+            (scalar_3-scalar_2).get_scalar(),
+            static_cast<T>(-9.),
+            min_1_mag(static_cast<T>(-9.))*Tol<T>::roundoff_T()
+        );
+
+    }
+    
+    template <typename T>
+    void TestAddSubAssignment() {
+
+        Scalar<T> scalar_1(static_cast<T>(3.2));
+        Scalar<T> scalar_2(static_cast<T>(5.));
+        Scalar<T> scalar_3(static_cast<T>(-4.));
+
+        scalar_2 += scalar_1;
+        ASSERT_NEAR(
+            scalar_2.get_scalar(),
+            static_cast<T>(8.2),
+            min_1_mag(static_cast<T>(8.2))*Tol<T>::roundoff_T()
+        );
+        scalar_3 += scalar_1;
+        ASSERT_NEAR(
+            scalar_3.get_scalar(),
+            static_cast<T>(-0.8),
+            min_1_mag(static_cast<T>(-0.8))*Tol<T>::roundoff_T()
+        );
+        scalar_3 += scalar_1;
+        ASSERT_NEAR(
+            scalar_3.get_scalar(),
+            static_cast<T>(2.4),
+            min_1_mag(static_cast<T>(2.4))*Tol<T>::roundoff_T()
+        );
+        scalar_1 += scalar_1;
+        ASSERT_NEAR(
+            scalar_1.get_scalar(),
+            static_cast<T>(6.4),
+            min_1_mag(static_cast<T>(6.4))*Tol<T>::roundoff_T()
+        );
+
+        scalar_1.set_scalar(static_cast<T>(3.2));
+        scalar_2.set_scalar(static_cast<T>(5.));
+        scalar_3.set_scalar(static_cast<T>(-4.));
+        scalar_2 -= scalar_1;
+        ASSERT_NEAR(
+            scalar_2.get_scalar(),
+            static_cast<T>(1.8),
+            min_1_mag(static_cast<T>(1.8))*Tol<T>::roundoff_T()
+        );
+        scalar_3 -= scalar_1;
+        ASSERT_NEAR(
+            scalar_3.get_scalar(),
+            static_cast<T>(-7.2),
+            min_1_mag(static_cast<T>(-7.2))*Tol<T>::roundoff_T()
+        );
+        scalar_3 -= scalar_1;
+        ASSERT_NEAR(
+            scalar_3.get_scalar(),
+            static_cast<T>(-10.4),
+            min_1_mag(static_cast<T>(-10.4))*Tol<T>::roundoff_T()
+        );
+        scalar_1 -= scalar_1;
+        ASSERT_NEAR(
+            scalar_1.get_scalar(),
+            static_cast<T>(0.),
+            min_1_mag(static_cast<T>(0.))*Tol<T>::roundoff_T()
+        );
+
+    }
+
+    template <typename T>
     void TestMultDiv() {
 
         Scalar<T> scalar_1(static_cast<T>(-3.));
@@ -204,35 +349,6 @@ public:
         );
 
     }
-
-//     template <typename T>
-//     void TestAddSub() {
-
-//         Vector<T> vec_1(
-//             *handle_ptr,
-//             {static_cast<T>(-42.), static_cast<T>(0.), static_cast<T>(0.6)}
-//         );
-//         Vector<T> vec_2(
-//             *handle_ptr,
-//             {static_cast<T>(-38.), static_cast<T>(0.5), static_cast<T>(-0.6)}
-//         );
-
-//         Vector<T> vec_add = vec_1+vec_2;
-//         ASSERT_EQ(vec_add.get_elem(0), static_cast<T>(-80.));
-//         ASSERT_EQ(vec_add.get_elem(1), static_cast<T>(0.5));
-//         ASSERT_EQ(vec_add.get_elem(2), static_cast<T>(0.));
-
-//         Vector<T> vec_sub_1 = vec_1-vec_2;
-//         ASSERT_EQ(vec_sub_1.get_elem(0), static_cast<T>(-4.));
-//         ASSERT_EQ(vec_sub_1.get_elem(1), static_cast<T>(-0.5));
-//         ASSERT_EQ(vec_sub_1.get_elem(2), static_cast<T>(1.2));
-
-//         Vector<T> vec_sub_2 = vec_2-vec_1;
-//         ASSERT_EQ(vec_sub_2.get_elem(0), static_cast<T>(4.));
-//         ASSERT_EQ(vec_sub_2.get_elem(1), static_cast<T>(0.5));
-//         ASSERT_EQ(vec_sub_2.get_elem(2), static_cast<T>(-1.2));
-
-//     }
 
 //     template <typename T>
 //     void TestAddSubAssignment() {
@@ -430,6 +546,18 @@ TEST_F(Scalar_Test, TestCopyConstruction) {
     TestCopyConstruction<double>();
 }
 
+TEST_F(Scalar_Test, TestAddSub) {
+    TestAddSub<__half>();
+    TestAddSub<float>();
+    TestAddSub<double>();
+}
+
+TEST_F(Scalar_Test, TestAddSubAssignment) {
+    TestAddSubAssignment<__half>();
+    TestAddSubAssignment<float>();
+    TestAddSubAssignment<double>();
+}
+
 TEST_F(Scalar_Test, TestMultDiv) {
     TestMultDiv<__half>();
     TestMultDiv<float>();
@@ -441,10 +569,6 @@ TEST_F(Scalar_Test, TestMultDivAssignment) {
     TestMultDivAssignment<float>();
     TestMultDivAssignment<double>();
 }
-
-// TEST_F(Vector_Test, TestAddSub) {
-//     TestAddSub<__half>(); TestAddSub<float>(); TestAddSub<double>();
-// }
 // TEST_F(Vector_Test, TestAddSubAssignment) {
 //     TestAddSubAssignment<__half>(); TestAddSubAssignment<float>(); TestAddSubAssignment<double>();
 // }
