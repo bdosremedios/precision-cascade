@@ -11,7 +11,7 @@ class TypedIterativeSolveTestingMock: public TypedIterativeSolve<M, T> {
 
     public:
 
-        MatrixVector<T> soln;
+        Vector<T> soln;
 
         using TypedIterativeSolve<M, T>::lin_sys;
         using TypedIterativeSolve<M, T>::init_guess;
@@ -32,7 +32,7 @@ class TypedIterativeSolveTestingMock: public TypedIterativeSolve<M, T> {
 
         TypedIterativeSolveTestingMock(
             const TypedLinearSystem<M, T> &arg_typed_lin_sys,
-            const MatrixVector<T> &arg_soln_typed,
+            const Vector<T> &arg_soln_typed,
             const SolveArgPkg &arg_pkg
         ):
             soln(arg_soln_typed),

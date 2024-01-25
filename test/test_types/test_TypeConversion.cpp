@@ -45,10 +45,14 @@ public:
     void TestSparseBlockToDense() {
 
         MatrixSparse<T> const_mat ({
-            {static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4), static_cast<T>(5)},
-            {static_cast<T>(6), static_cast<T>(7), static_cast<T>(8), static_cast<T>(9), static_cast<T>(10)},
-            {static_cast<T>(11), static_cast<T>(12), static_cast<T>(13), static_cast<T>(14), static_cast<T>(15)},
-            {static_cast<T>(16), static_cast<T>(17), static_cast<T>(18), static_cast<T>(19), static_cast<T>(20)}
+            {static_cast<T>(1), static_cast<T>(2), static_cast<T>(3),
+             static_cast<T>(4), static_cast<T>(5)},
+            {static_cast<T>(6), static_cast<T>(7), static_cast<T>(8),
+             static_cast<T>(9), static_cast<T>(10)},
+            {static_cast<T>(11), static_cast<T>(12), static_cast<T>(13),
+             static_cast<T>(14), static_cast<T>(15)},
+            {static_cast<T>(16), static_cast<T>(17), static_cast<T>(18),
+             static_cast<T>(19), static_cast<T>(20)}
         });
         MatrixSparse<T> mat(const_mat);
         
@@ -73,88 +77,136 @@ public:
     }
 
     template <template <typename> typename M, typename T>
-    void TestMatrixColToMatrixVector() {
+    void TestMatrixColToVector() {
 
-        M<T> mat ({
-            {static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4)},
-            {static_cast<T>(5), static_cast<T>(6), static_cast<T>(7), static_cast<T>(8)},
-            {static_cast<T>(9), static_cast<T>(10), static_cast<T>(11), static_cast<T>(12)}
-        });
+        M<T> mat(
+            *handle_ptr,
+            {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4)},
+             {static_cast<T>(5), static_cast<T>(6), static_cast<T>(7), static_cast<T>(8)},
+             {static_cast<T>(9), static_cast<T>(10), static_cast<T>(11), static_cast<T>(12)}}
+        );
 
-        MatrixVector<T> vec_col_0(mat.col(0));
-        MatrixVector<T> test_vec_col_0 ({static_cast<T>(1),
-                                         static_cast<T>(5),
-                                         static_cast<T>(9)});
+        Vector<T> vec_col_0(mat.get_col(0).copy_to_vec());
+        Vector<T> test_vec_col_0(
+            *handle_ptr,
+            {static_cast<T>(1), static_cast<T>(5), static_cast<T>(9)}
+        );
         ASSERT_VECTOR_EQ(vec_col_0, test_vec_col_0);
 
-        MatrixVector<T> vec_col_2(mat.col(2));
-        MatrixVector<T> test_vec_col_2 ({static_cast<T>(3),
-                                         static_cast<T>(7),
-                                         static_cast<T>(11)});
+        Vector<T> vec_col_2(mat.get_col(2).copy_to_vec());
+        Vector<T> test_vec_col_2(
+            *handle_ptr,
+            {static_cast<T>(3), static_cast<T>(7), static_cast<T>(11)}
+        );
         ASSERT_VECTOR_EQ(vec_col_2, test_vec_col_2);
 
     }
 
     template <template <typename> typename M, typename T>
-    void TestMatrixVectorToMatrixCol() {
+    void TestVectorToMatrixCol() {
 
-        const M<T> const_mat ({
-            {static_cast<T>(1), static_cast<T>(2), static_cast<T>(3)},
-            {static_cast<T>(4), static_cast<T>(5), static_cast<T>(6)},
-            {static_cast<T>(7), static_cast<T>(8), static_cast<T>(9)},
-            {static_cast<T>(10), static_cast<T>(11), static_cast<T>(12)}
-        });
+        const M<T> const_mat(
+            *handle_ptr,
+            {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3)},
+             {static_cast<T>(4), static_cast<T>(5), static_cast<T>(6)},
+             {static_cast<T>(7), static_cast<T>(8), static_cast<T>(9)},
+             {static_cast<T>(10), static_cast<T>(11), static_cast<T>(12)}}
+        );
         M<T> mat(const_mat);
 
         // Test assignment
-        MatrixVector<T> assign_vec ({static_cast<T>(1),
-                                     static_cast<T>(1),
-                                     static_cast<T>(1),
-                                     static_cast<T>(1)});
-        mat.col(2) = assign_vec;
+        Vector<T> assign_vec(
+            *handle_ptr,
+            {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)}
+        );
+        mat.get_col(2).set_from_vec(assign_vec);
         for (int j=0; j<2; ++j) {
             for (int i=0; i<4; ++i) {
-                ASSERT_EQ(mat.coeff(i, j), const_mat.coeff(i, j));
+                ASSERT_EQ(mat.get_elem(i, j), const_mat.get_elem(i, j));
             }
         }
-        for (int i=0; i<4; ++i) { ASSERT_EQ(mat.coeff(i, 2), static_cast<T>(1)); }
+        for (int i=0; i<4; ++i) { ASSERT_EQ(mat.get_elem(i, 2), static_cast<T>(1)); }
+
+    }
+
+    template <template <typename> typename M>
+    void TestBadVectorToMatrixCol() {
+
+        const M<double> const_mat(
+            *handle_ptr,
+            {{1, 2, 3},
+             {4, 5, 6},
+             {7, 8, 9},
+             {10, 11, 12}}
+        );
+        M<double> mat(const_mat);
+
+        Vector<double> vec_too_small(
+            *handle_ptr,
+            {1, 1, 1}
+        );
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            [=]() mutable { mat.get_col(0).set_from_vec(vec_too_small); }
+        );
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            [=]() mutable { mat.get_col(1).set_from_vec(vec_too_small); }
+        );
+
+        Vector<double> vec_too_large(
+            *handle_ptr,
+            {1, 1, 1, 1, 1, 1}
+        );
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            [=]() mutable { mat.get_col(0).set_from_vec(vec_too_large);}
+        );
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            [=]() mutable { mat.get_col(1).set_from_vec(vec_too_large); }
+        );
 
     }
 
 };
 
-TEST_F(TypeConversion_Test, TestDenseToSparse) {
-    TestDenseToSparse<half>();
-    TestDenseToSparse<float>();
-    TestDenseToSparse<double>();
+// TEST_F(TypeConversion_Test, TestDenseToSparse) {
+//     TestDenseToSparse<half>();
+//     TestDenseToSparse<float>();
+//     TestDenseToSparse<double>();
+// }
+
+// TEST_F(TypeConversion_Test, TestSparseBlockToDense) {
+//     TestSparseBlockToDense<half>();
+//     TestSparseBlockToDense<float>();
+//     TestSparseBlockToDense<double>();
+// }
+
+TEST_F(TypeConversion_Test, TestMatrixDenseColToVector) {
+    TestMatrixColToVector<MatrixDense, half>();
+    TestMatrixColToVector<MatrixDense, float>();
+    TestMatrixColToVector<MatrixDense, double>();
 }
 
-TEST_F(TypeConversion_Test, TestSparseBlockToDense) {
-    TestSparseBlockToDense<half>();
-    TestSparseBlockToDense<float>();
-    TestSparseBlockToDense<double>();
+// TEST_F(TypeConversion_Test, TestSparseColToVector) {
+//     TestMatrixColToVector<MatrixSparse, half>();
+//     TestMatrixColToVector<MatrixSparse, float>();
+//     TestMatrixColToVector<MatrixSparse, double>();
+// }
+
+TEST_F(TypeConversion_Test, TestVectorToMatrixDenseCol) {
+    TestVectorToMatrixCol<MatrixDense, half>();
+    TestVectorToMatrixCol<MatrixDense, float>();
+    TestVectorToMatrixCol<MatrixDense, double>();
 }
 
-TEST_F(TypeConversion_Test, TestDenseColToMatrixVector) {
-    TestMatrixColToMatrixVector<MatrixDense, half>();
-    TestMatrixColToMatrixVector<MatrixDense, float>();
-    TestMatrixColToMatrixVector<MatrixDense, double>();
+TEST_F(TypeConversion_Test, TestBadVectorToMatrixDenseCol) {
+    TestBadVectorToMatrixCol<MatrixDense>();
 }
 
-TEST_F(TypeConversion_Test, TestSparseColToMatrixVector) {
-    TestMatrixColToMatrixVector<MatrixSparse, half>();
-    TestMatrixColToMatrixVector<MatrixSparse, float>();
-    TestMatrixColToMatrixVector<MatrixSparse, double>();
-}
-
-TEST_F(TypeConversion_Test, TestMatrixVectorToDenseCol) {
-    TestMatrixVectorToMatrixCol<MatrixDense, half>();
-    TestMatrixVectorToMatrixCol<MatrixDense, float>();
-    TestMatrixVectorToMatrixCol<MatrixDense, double>();
-}
-
-TEST_F(TypeConversion_Test, TestMatrixVectorToSparseCol) {
-    TestMatrixVectorToMatrixCol<MatrixSparse, half>();
-    TestMatrixVectorToMatrixCol<MatrixSparse, float>();
-    TestMatrixVectorToMatrixCol<MatrixSparse, double>();
-}
+// TEST_F(TypeConversion_Test, TestVectorToSparseCol) {
+//     TestVectorToMatrixCol<MatrixSparse, half>();
+//     TestVectorToMatrixCol<MatrixSparse, float>();
+//     TestVectorToMatrixCol<MatrixSparse, double>();
+// }

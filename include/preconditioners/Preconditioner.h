@@ -12,7 +12,7 @@ public:
     virtual ~Preconditioner() = default;
 
     // Abstract function to apply action of inverse M on given vector
-    virtual MatrixVector<W> action_inv_M(MatrixVector<W> const &vec) const = 0;
+    virtual Vector<W> action_inv_M(Vector<W> const &vec) const = 0;
 
     // Abstract functions to check compatibility of preconditioner with linear system
     // on both left and right

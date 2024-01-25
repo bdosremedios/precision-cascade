@@ -7,6 +7,12 @@ class MatrixSparse_Test: public Matrix_Test
 public:
 
     template <typename T>
+    void TestCoeffAccess() { TestCoeffAccess_Base<MatrixSparse, T>(); }
+
+    template <typename T>
+    void TestPropertyAccess() { TestPropertyAccess_Base<MatrixSparse, T>(); }
+
+    template <typename T>
     void TestConstruction() { TestConstruction_Base<MatrixSparse, T>(); }
 
     template <typename T>
@@ -15,7 +21,10 @@ public:
     void TestBadListInitialization() { TestBadListInitialization_Base<MatrixSparse>(); }
 
     template <typename T>
-    void TestCoeffAccess() { TestCoeffAccess_Base<MatrixSparse, T>(); }
+    void TestCopyAssignment() { TestCopyAssignment_Base<MatrixSparse, T>(); }
+
+    template <typename T>
+    void TestCopyConstructor() { TestCopyConstructor_Base<MatrixSparse, T>(); }
 
     template <typename T>
     void TestStaticCreation() { TestStaticCreation_Base<MatrixSparse, T>(); }
@@ -45,6 +54,18 @@ public:
 
 };
 
+TEST_F(MatrixSparse_Test, TestCoeffAccess) {
+    TestCoeffAccess<half>();
+    TestCoeffAccess<float>();
+    TestCoeffAccess<double>();
+}
+
+TEST_F(MatrixDense_Test, TestPropertyAccess) {
+    TestPropertyAccess<half>();
+    TestPropertyAccess<float>();
+    TestPropertyAccess<double>();
+}
+
 TEST_F(MatrixSparse_Test, TestConstruction) {
     TestConstruction<half>();
     TestConstruction<float>();
@@ -58,12 +79,6 @@ TEST_F(MatrixSparse_Test, TestListInitialization) {
 }
 
 TEST_F(MatrixSparse_Test, TestBadListInitialization) { TestBadListInitialization(); }
-
-TEST_F(MatrixSparse_Test, TestCoeffAccess) {
-    TestCoeffAccess<half>();
-    TestCoeffAccess<float>();
-    TestCoeffAccess<double>();
-}
 
 TEST_F(MatrixSparse_Test, TestStaticCreation) {
     TestStaticCreation<half>();
