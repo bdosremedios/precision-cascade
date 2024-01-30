@@ -3,7 +3,6 @@
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
 
-template<>
 MatrixDense<__half> MatrixDense<__half>::operator*(const __half &scalar) const {
 
     MatrixDense<__half> c(*this);
@@ -19,7 +18,6 @@ MatrixDense<__half> MatrixDense<__half>::operator*(const __half &scalar) const {
     return c;
 }
 
-template <>
 Vector<__half> MatrixDense<__half>::operator*(const Vector<__half> &vec) const {
 
     if (vec.rows() != n_cols) {
@@ -51,7 +49,6 @@ Vector<__half> MatrixDense<__half>::operator*(const Vector<__half> &vec) const {
 
 }
 
-template <>
 Vector<__half> MatrixDense<__half>::transpose_prod(const Vector<__half> &vec) const {
 
     if (vec.rows() != m_rows) { throw std::runtime_error("MatrixDense: invalid vec in transpose_prod"); }
@@ -79,8 +76,6 @@ Vector<__half> MatrixDense<__half>::transpose_prod(const Vector<__half> &vec) co
 
 }
 
-
-template <>
 MatrixDense<__half> MatrixDense<__half>::operator*(const MatrixDense<__half> &mat) const {
 
     if (mat.rows() != n_cols) {
@@ -112,7 +107,6 @@ MatrixDense<__half> MatrixDense<__half>::operator*(const MatrixDense<__half> &ma
 
 }
 
-template <>
 MatrixDense<__half> MatrixDense<__half>::operator+(const MatrixDense<__half> &mat) const {
 
     if ((mat.rows() != m_rows) || (mat.cols() != n_cols)) {
@@ -139,7 +133,6 @@ MatrixDense<__half> MatrixDense<__half>::operator+(const MatrixDense<__half> &ma
 
 }
 
-template <>
 MatrixDense<__half> MatrixDense<__half>::operator-(const MatrixDense<__half> &mat) const {
 
     if ((mat.rows() != m_rows) || (mat.cols() != n_cols)) {
@@ -166,7 +159,6 @@ MatrixDense<__half> MatrixDense<__half>::operator-(const MatrixDense<__half> &ma
 
 }
 
-template<>
 __half MatrixDense<__half>::norm() const {
 
     __half result;
@@ -181,5 +173,52 @@ __half MatrixDense<__half>::norm() const {
     );
 
     return result;
+
+}
+
+namespace matdense_hlf_kern
+{
+    __global__ void cast_to_float(__half *mat_src, float *mat_dest, int m) {
+        int tid = (blockIdx.x * blockDim.x) + threadIdx.x;
+        if (tid < m) {
+            mat_dest[tid] = __half2float(mat_src[tid]);
+        }
+    }
+
+    __global__ void cast_to_double(__half *mat_src, double *mat_dest, int m) {
+        int tid = (blockIdx.x * blockDim.x) + threadIdx.x;
+        if (tid < m) {
+            mat_dest[tid] = static_cast<double>(mat_src[tid]);
+        }
+    }
+}
+
+MatrixDense<__half> MatrixDense<__half>::to_half() const { return MatrixDense<__half>(*this); }
+
+MatrixDense<float> MatrixDense<__half>::to_float() const {
+    
+    MatrixDense<float> created_mat(handle, m_rows, n_cols);
+
+    double NUM_THREADS = 1024; // threads per thread block just 1 warp
+    double NUM_BLOCKS = static_cast<double>(
+        std::ceil(static_cast<double>(m_rows*n_cols)/static_cast<double>(NUM_THREADS))
+    );
+    matdense_hlf_kern::cast_to_float<<<NUM_THREADS, NUM_BLOCKS>>>(d_mat, created_mat.d_mat, m_rows*n_cols);
+
+    return created_mat;
+
+}
+
+MatrixDense<double> MatrixDense<__half>::to_double() const {
+    
+    MatrixDense<double> created_mat(handle, m_rows, n_cols);
+
+    double NUM_THREADS = 1024; // threads per thread block just 1 warp
+    double NUM_BLOCKS = static_cast<double>(
+        std::ceil(static_cast<double>(m_rows*n_cols)/static_cast<double>(NUM_THREADS))
+    );
+    matdense_hlf_kern::cast_to_double<<<NUM_THREADS, NUM_BLOCKS>>>(d_mat, created_mat.d_mat, m_rows*n_cols);
+
+    return created_mat;
 
 }

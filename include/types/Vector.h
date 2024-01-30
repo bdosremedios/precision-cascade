@@ -29,7 +29,7 @@ private:
     // Allow all similar type Matrices and different type variants of self to access private methods
     template <typename> friend class Vector;
     friend MatrixDense<T>;
-    friend MatrixDense<T>::Block;
+    // friend MatrixDense<T>::Block;
     // friend MatrixSparse<T>;
 
     cublasHandle_t handle;
@@ -287,29 +287,16 @@ public:
 
     }
 
-    // *** Explicit Cast ***
+    // *** Cast ***
     template <typename Cast_T>
-    Vector<Cast_T> cast() const {
-        
-        T *h_vec = static_cast<T *>(malloc(mem_size));
-        Cast_T *h_cast_vec = static_cast<Cast_T *>(malloc(m_rows*sizeof(Cast_T)));
+    Vector<Cast_T> cast() const { throw std::runtime_error("Vector: invalid cast conversion"); }
 
-        if (m_rows > 0) {
-            check_cublas_status(cublasGetVector(m_rows, sizeof(T), d_vec, 1, h_vec, 1));
-        }
-
-        for (int i=0; i<m_rows; ++i) { h_cast_vec[i] = static_cast<Cast_T>(h_vec[i]); }
-        Vector<Cast_T> created_vec(handle, h_cast_vec, m_rows);
-
-        free(h_vec);
-        free(h_cast_vec);
-
-        return created_vec;
-    
-    }
-
-    template<>
-    Vector<T> cast() const { return *this; } // Do nothing for same cast type
+    Vector<__half> to_half() const;
+    template <> Vector<__half> cast<__half>() const { return to_half(); }
+    Vector<float> to_float() const;
+    template <> Vector<float> cast<float>() const { return to_float(); }
+    Vector<double> to_double() const;
+    template <> Vector<double> cast<double>() const { return to_double(); }
 
     // *** Arithmetic/Compound Operations ***
     Vector<T> operator*(const T &scalar) const;

@@ -503,17 +503,92 @@ public:
     void TestCast() {
         
         constexpr int m(20);
+
         Vector<double> vec_dbl(Vector<double>::Random(*handle_ptr, m));
 
-        Vector<float> vec_sgl(vec_dbl.cast<float>());
-        ASSERT_EQ(vec_sgl.rows(), m);
-        for (int i=0; i<m; ++i) { ASSERT_EQ(vec_sgl.get_elem(i),
-                                            static_cast<float>(vec_dbl.get_elem(i))); }
+        Vector<double> dbl_to_dbl(vec_dbl.cast<double>());
+        ASSERT_VECTOR_EQ(dbl_to_dbl, vec_dbl);
+        Vector<__half> dbl_to_hlf(vec_dbl.cast<__half>());
+        ASSERT_EQ(dbl_to_hlf.rows(), m);
+        for (int i=0; i<m; ++i) {
+            ASSERT_NEAR(
+                dbl_to_hlf.get_elem(i),
+                static_cast<__half>(vec_dbl.get_elem(i)),
+                min_1_mag(static_cast<__half>(vec_dbl.get_elem(i)))*
+                    Tol<__half>::roundoff_T()
+            );
+        }
+        Vector<float> dbl_to_sgl(vec_dbl.cast<float>());
+        ASSERT_EQ(dbl_to_sgl.rows(), m);
+        for (int i=0; i<m; ++i) {
+            ASSERT_NEAR(
+                dbl_to_sgl.get_elem(i),
+                static_cast<float>(vec_dbl.get_elem(i)),
+                min_1_mag(static_cast<float>(vec_dbl.get_elem(i)))*
+                    Tol<float>::roundoff_T()
+            );
+        }
 
-        Vector<__half> vec_hlf(vec_dbl.cast<__half>());
-        ASSERT_EQ(vec_hlf.rows(), m);
-        for (int i=0; i<m; ++i) { ASSERT_EQ(vec_hlf.get_elem(i),
-                                            static_cast<__half>(vec_dbl.get_elem(i))); }
+        Vector<float> vec_sgl(Vector<float>::Random(*handle_ptr, m));
+
+        Vector<float> sgl_to_sgl(vec_sgl.cast<float>());
+        ASSERT_VECTOR_EQ(sgl_to_sgl, vec_sgl);
+        Vector<__half> sgl_to_hlf(vec_sgl.cast<__half>());
+        ASSERT_EQ(sgl_to_hlf.rows(), m);
+        for (int i=0; i<m; ++i) {
+            ASSERT_NEAR(
+                sgl_to_hlf.get_elem(i),
+                static_cast<__half>(vec_sgl.get_elem(i)),
+                min_1_mag(static_cast<__half>(vec_sgl.get_elem(i)))*
+                    Tol<__half>::roundoff_T()
+            );
+        }
+        Vector<double> sgl_to_dbl(vec_sgl.cast<double>());
+        ASSERT_EQ(sgl_to_dbl.rows(), m);
+        for (int i=0; i<m; ++i) {
+            ASSERT_NEAR(
+                sgl_to_dbl.get_elem(i),
+                static_cast<double>(vec_sgl.get_elem(i)),
+                min_1_mag(static_cast<double>(vec_sgl.get_elem(i)))*
+                    static_cast<double>(Tol<float>::roundoff_T())
+            );
+        }
+
+        Vector<__half> vec_hlf(Vector<__half>::Random(*handle_ptr, m));
+
+        Vector<__half> hlf_to_hlf(vec_hlf.cast<__half>());
+        ASSERT_VECTOR_EQ(hlf_to_hlf, vec_hlf);
+        Vector<float> hlf_to_sgl(vec_hlf.cast<float>());
+        ASSERT_EQ(hlf_to_sgl.rows(), m);
+        for (int i=0; i<m; ++i) {
+            ASSERT_NEAR(
+                hlf_to_sgl.get_elem(i),
+                static_cast<float>(vec_hlf.get_elem(i)),
+                min_1_mag(static_cast<float>(vec_hlf.get_elem(i)))*
+                    static_cast<float>(Tol<__half>::roundoff_T())
+            );
+        }
+        Vector<double> hlf_to_dbl(vec_hlf.cast<double>());
+        ASSERT_EQ(hlf_to_dbl.rows(), m);
+        for (int i=0; i<m; ++i) {
+            ASSERT_NEAR(
+                hlf_to_dbl.get_elem(i),
+                static_cast<double>(vec_hlf.get_elem(i)),
+                min_1_mag(static_cast<double>(vec_hlf.get_elem(i)))*
+                    static_cast<double>(Tol<__half>::roundoff_T())
+            );
+        }
+
+    }
+
+    void TestBadCast() {
+
+        auto try_bad_cast = []() {
+            const int m(20);
+            Vector<double> vec_dbl(Vector<double>::Random(*handle_ptr, m));
+            vec_dbl.cast<int>();
+        };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_bad_cast);
 
     }
 
@@ -652,6 +727,8 @@ TEST_F(Vector_Test, TestDot) { TestDot<__half>(); TestDot<float>(); TestDot<doub
 TEST_F(Vector_Test, TestNorm) { TestNorm<__half>(); TestNorm<float>(); TestNorm<double>(); }
 
 TEST_F(Vector_Test, TestCast) { TestCast(); }
+
+TEST_F(Vector_Test, TestBadCast) { TestBadCast(); }
 
 TEST_F(Vector_Test, TestBadVecVecOps) {
     TestBadVecVecOps<__half>();

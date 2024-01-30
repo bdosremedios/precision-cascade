@@ -341,35 +341,15 @@ public:
     }
 
     // *** Cast ***
-    // MatrixSparse<T> sparse() const { return MatrixSparse<T>(Parent::sparseView()); };
-
     template <typename Cast_T>
-    MatrixDense<Cast_T> cast() const {
+    MatrixDense<Cast_T> cast() const { throw std::runtime_error("MatrixDense: invalid cast conversion"); }
 
-        T *h_mat = static_cast<T *>(malloc(m_rows*n_cols*sizeof(T)));
-        Cast_T *h_mat_casted = static_cast<Cast_T *>(malloc(m_rows*n_cols*sizeof(Cast_T)));
-        
-        if ((m_rows > 0) && (n_cols > 0)) {
-            check_cublas_status(cublasGetMatrix(m_rows, n_cols, sizeof(T), d_mat, m_rows, h_mat, m_rows));
-        }
-
-        for (int j=0; j<n_cols; ++j) {
-            for (int i=0; i<m_rows; ++i) {
-                h_mat_casted[i+j*m_rows] = static_cast<Cast_T>(h_mat[i+j*m_rows]);
-            }
-        }
-
-        MatrixDense<Cast_T> created_mat(handle, h_mat_casted, m_rows, n_cols);
-
-        free(h_mat);
-        free(h_mat_casted);
-
-        return created_mat;
-
-    }
-
-    template<>
-    MatrixDense<T> cast() const { return *this; } // Do nothing for same cast type
+    MatrixDense<__half> to_half() const;
+    template <> MatrixDense<__half> cast<__half>() const { return to_half(); }
+    MatrixDense<float> to_float() const;
+    template <> MatrixDense<float> cast<float>() const { return to_float(); }
+    MatrixDense<double> to_double() const;
+    template <> MatrixDense<double> cast<double>() const { return to_double(); }
 
     // *** Arithmetic and Compound Operations ***
     MatrixDense<T> operator*(const T &scalar) const;

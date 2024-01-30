@@ -1167,25 +1167,117 @@ protected:
         
         constexpr int m(20);
         constexpr int n(30);
+
         M<double> mat_dbl(M<double>::Random(*handle_ptr, m, n));
 
-        M<float> mat_sgl(mat_dbl.template cast<float>());
-        ASSERT_EQ(mat_sgl.rows(), m);
-        ASSERT_EQ(mat_sgl.cols(), n);
+        M<double> dbl_to_dbl(mat_dbl.template cast<double>());
+        ASSERT_MATRIX_EQ(dbl_to_dbl, mat_dbl);
+
+        M<float> dbl_to_sgl(mat_dbl.template cast<float>());
+        ASSERT_EQ(dbl_to_sgl.rows(), m);
+        ASSERT_EQ(dbl_to_sgl.cols(), n);
         for (int i=0; i<m; ++i) {
             for (int j=0; j<n; ++j) {
-                ASSERT_EQ(mat_sgl.get_elem(i, j), static_cast<float>(mat_dbl.get_elem(i, j)));
+                ASSERT_NEAR(
+                    dbl_to_sgl.get_elem(i, j),
+                    static_cast<float>(mat_dbl.get_elem(i, j)),
+                    min_1_mag(static_cast<float>(mat_dbl.get_elem(i, j)))*
+                        Tol<float>::roundoff_T()
+                );
             }
         }
 
-        M<__half> mat_hlf(mat_dbl.template cast<__half>());
-        ASSERT_EQ(mat_hlf.rows(), m);
-        ASSERT_EQ(mat_hlf.cols(), n);
+        M<__half> dbl_to_hlf(mat_dbl.template cast<__half>());
+        ASSERT_EQ(dbl_to_hlf.rows(), m);
+        ASSERT_EQ(dbl_to_hlf.cols(), n);
         for (int i=0; i<m; ++i) {
             for (int j=0; j<n; ++j) {
-                ASSERT_EQ(mat_hlf.get_elem(i, j), static_cast<__half>(mat_dbl.get_elem(i, j)));
+                ASSERT_NEAR(
+                    dbl_to_hlf.get_elem(i, j),
+                    static_cast<__half>(mat_dbl.get_elem(i, j)),
+                    min_1_mag(static_cast<__half>(mat_dbl.get_elem(i, j)))*
+                        Tol<__half>::roundoff_T()
+                );
             }
         }
+
+        M<float> mat_sgl(M<float>::Random(*handle_ptr, m, n));
+
+        M<float> sgl_to_sgl(mat_sgl.template cast<float>());
+        ASSERT_MATRIX_EQ(sgl_to_sgl, mat_sgl);
+    
+        M<double> sgl_to_dbl(mat_sgl.template cast<double>());
+        ASSERT_EQ(sgl_to_dbl.rows(), m);
+        ASSERT_EQ(sgl_to_dbl.cols(), n);
+        for (int i=0; i<m; ++i) {
+            for (int j=0; j<n; ++j) {
+                ASSERT_NEAR(
+                    sgl_to_dbl.get_elem(i, j),
+                    static_cast<double>(mat_sgl.get_elem(i, j)),
+                    min_1_mag(static_cast<double>(mat_sgl.get_elem(i, j)))*
+                        static_cast<double>(Tol<float>::roundoff_T())
+                );
+            }
+        }
+
+        M<__half> sgl_to_hlf(mat_sgl.template cast<__half>());
+        ASSERT_EQ(sgl_to_hlf.rows(), m);
+        ASSERT_EQ(sgl_to_hlf.cols(), n);
+        for (int i=0; i<m; ++i) {
+            for (int j=0; j<n; ++j) {
+                ASSERT_NEAR(
+                    sgl_to_hlf.get_elem(i, j),
+                    static_cast<__half>(mat_sgl.get_elem(i, j)),
+                    min_1_mag(static_cast<__half>(mat_sgl.get_elem(i, j)))*
+                        Tol<__half>::roundoff_T()
+                );
+            }
+        }
+
+        M<__half> mat_hlf(M<__half>::Random(*handle_ptr, m, n));
+
+        M<__half> hlf_to_hlf(mat_hlf.template cast<__half>());
+        ASSERT_MATRIX_EQ(hlf_to_hlf, mat_hlf);
+
+        M<float> hlf_to_sgl(mat_hlf.template cast<float>());
+        ASSERT_EQ(hlf_to_sgl.rows(), m);
+        ASSERT_EQ(hlf_to_sgl.cols(), n);
+        for (int i=0; i<m; ++i) {
+            for (int j=0; j<n; ++j) {
+                ASSERT_NEAR(
+                    hlf_to_sgl.get_elem(i, j),
+                    static_cast<float>(mat_hlf.get_elem(i, j)),
+                    min_1_mag(static_cast<double>(mat_hlf.get_elem(i, j)))*
+                        static_cast<float>(Tol<__half>::roundoff_T())
+                );
+            }
+        }
+
+        M<double> hlf_to_dbl(mat_hlf.template cast<double>());
+        ASSERT_EQ(hlf_to_dbl.rows(), m);
+        ASSERT_EQ(hlf_to_dbl.cols(), n);
+        for (int i=0; i<m; ++i) {
+            for (int j=0; j<n; ++j) {
+                ASSERT_NEAR(
+                    hlf_to_dbl.get_elem(i, j),
+                    static_cast<double>(mat_hlf.get_elem(i, j)),
+                    min_1_mag(static_cast<double>(mat_hlf.get_elem(i, j)))*
+                        static_cast<double>(Tol<__half>::roundoff_T())
+                );
+            }
+        }
+
+    }
+
+    void TestBadCast() {
+
+        auto try_bad_cast = []() {
+            const int m(20);
+            const int n(30);
+            M<double> mat(*handle_ptr, m, n);
+            mat.template cast<int>();
+        };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_bad_cast);
 
     }
 

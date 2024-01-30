@@ -38,26 +38,29 @@ Scalar<float> & Scalar<float>::sqrt() {
     return *this;
 }
 
-__global__ void cast_to_half(float *scalar_src, __half *scalar_dest) {
-    int tid = (blockIdx.x * blockDim.x) + threadIdx.x;
-    scalar_dest[tid] = __float2half(scalar_src[tid]);
+namespace scal_sgl_kern
+{
+    __global__ void cast_to_half(float *scalar_src, __half *scalar_dest) {
+        int tid = (blockIdx.x * blockDim.x) + threadIdx.x;
+        scalar_dest[tid] = __float2half(scalar_src[tid]);
+    }
+
+    __global__ void cast_to_double(float *scalar_src, double *scalar_dest) {
+        int tid = (blockIdx.x * blockDim.x) + threadIdx.x;
+        scalar_dest[tid] = static_cast<double>(scalar_src[tid]);
+    }
 }
 
 Scalar<__half> Scalar<float>::to_half() const {
     Scalar<__half> created_scalar;
-    cast_to_half<<<1, 1>>>(d_scalar, created_scalar.d_scalar);
+    scal_sgl_kern::cast_to_half<<<1, 1>>>(d_scalar, created_scalar.d_scalar);
     return created_scalar;
 }
 
 Scalar<float> Scalar<float>::to_float() const { return Scalar<float>(*this); }
 
-__global__ void cast_to_double(float *scalar_src, double *scalar_dest) {
-    int tid = (blockIdx.x * blockDim.x) + threadIdx.x;
-    scalar_dest[tid] = static_cast<double>(scalar_src[tid]);
-}
-
 Scalar<double> Scalar<float>::to_double() const{
     Scalar<double> created_scalar;
-    cast_to_double<<<1, 1>>>(d_scalar, created_scalar.d_scalar);
+    scal_sgl_kern::cast_to_double<<<1, 1>>>(d_scalar, created_scalar.d_scalar);
     return created_scalar;
 }

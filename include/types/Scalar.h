@@ -45,7 +45,7 @@ public:
 
     // *** Cast ***
     template <typename Cast_T>
-    Scalar<Cast_T> cast() const { throw std::runtime_error("Scalar: "); }
+    Scalar<Cast_T> cast() const { throw std::runtime_error("Scalar: invalid cast conversion"); }
 
     Scalar<__half> to_half() const;
     template <> Scalar<__half> cast<__half>() const { return to_half(); }
