@@ -406,74 +406,68 @@ public:
 
     }
 
-//     void TestCast() {
-        
-//         constexpr int m(20);
-//         Vector<double> vec_dbl(Vector<double>::Random(*handle_ptr, m));
+    void TestCast() {
 
-//         Vector<float> vec_sgl(vec_dbl.cast<float>());
-//         ASSERT_EQ(vec_sgl.rows(), m);
-//         for (int i=0; i<m; ++i) { ASSERT_EQ(vec_sgl.get_elem(i),
-//                                             static_cast<float>(vec_dbl.get_elem(i))); }
+        Scalar<__half> scalar_half(static_cast<__half>(3.2));
+        Scalar<__half> half_to_half(scalar_half.cast<__half>());
+        Scalar<float> half_to_float(scalar_half.cast<float>());
+        Scalar<double> half_to_double(scalar_half.cast<double>());
 
-//         Vector<__half> vec_hlf(vec_dbl.cast<__half>());
-//         ASSERT_EQ(vec_hlf.rows(), m);
-//         for (int i=0; i<m; ++i) { ASSERT_EQ(vec_hlf.get_elem(i),
-//                                             static_cast<__half>(vec_dbl.get_elem(i))); }
+        ASSERT_EQ(scalar_half, half_to_half);
+        ASSERT_NEAR(
+            half_to_float.get_scalar(),
+            static_cast<float>(3.2),
+            min_1_mag(static_cast<float>(3.2))*static_cast<float>(Tol<half>::roundoff_T())
+        );
+        ASSERT_NEAR(
+            half_to_double.get_scalar(),
+            static_cast<double>(3.2),
+            min_1_mag(static_cast<double>(3.2))*static_cast<double>(Tol<half>::roundoff_T())
+        );
 
-//     }
+        Scalar<float> scalar_float(static_cast<float>(-40.6));
+        Scalar<__half> float_to_half(scalar_float.cast<__half>());
+        Scalar<float> float_to_float(scalar_float.cast<float>());
+        Scalar<double> float_to_double(scalar_float.cast<double>());
 
-//     template <typename T>
-//     void TestBooleanEqual() {
+        ASSERT_EQ(scalar_float, float_to_float);
+        ASSERT_NEAR(
+            float_to_half.get_scalar(),
+            static_cast<__half>(-40.6),
+            min_1_mag(static_cast<__half>(-40.6))*Tol<__half>::roundoff_T()
+        );
+        ASSERT_NEAR(
+            float_to_double.get_scalar(),
+            static_cast<double>(-40.6),
+            min_1_mag(static_cast<double>(-40.6))*static_cast<double>(Tol<float>::roundoff_T())
+        );
 
-//         Vector<T> vec_to_compare(
-//             *handle_ptr,
-//             {static_cast<T>(-1.5), static_cast<T>(4), static_cast<T>(0.),
-//              static_cast<T>(101), static_cast<T>(-101), static_cast<T>(7)}
-//         );
-//         Vector<T> vec_same(
-//             *handle_ptr,
-//             {static_cast<T>(-1.5), static_cast<T>(4), static_cast<T>(0.),
-//              static_cast<T>(101), static_cast<T>(-101), static_cast<T>(7)}
-//         );
-//         Vector<T> vec_diffbeg(
-//             *handle_ptr,
-//             {static_cast<T>(1.5), static_cast<T>(4), static_cast<T>(0.),
-//              static_cast<T>(101), static_cast<T>(-101), static_cast<T>(7)}
-//         );
-//         Vector<T> vec_diffend(
-//             *handle_ptr,
-//             {static_cast<T>(-1.5), static_cast<T>(4), static_cast<T>(0.),
-//              static_cast<T>(101), static_cast<T>(-101), static_cast<T>(70)}
-//         );
-//         Vector<T> vec_diffmid(
-//             *handle_ptr,
-//             {static_cast<T>(-1.5), static_cast<T>(4), static_cast<T>(-100.),
-//              static_cast<T>(101), static_cast<T>(-101), static_cast<T>(7)}
-//         );
-//         Vector<T> vec_smaller(
-//             *handle_ptr,
-//             {static_cast<T>(-1.5), static_cast<T>(4), static_cast<T>(0.),
-//              static_cast<T>(101)}
-//         );
-//         Vector<T> vec_bigger(
-//             *handle_ptr,
-//             {static_cast<T>(-1.5), static_cast<T>(4), static_cast<T>(0.),
-//              static_cast<T>(101), static_cast<T>(-101), static_cast<T>(0)}
-//         );
-//         Vector<T> vec_empty_1(*handle_ptr, {});
-//         Vector<T> vec_empty_2(*handle_ptr, {});
+        Scalar<double> scalar_double(static_cast<double>(2.6));
+        Scalar<__half> double_to_half(scalar_double.cast<__half>());
+        Scalar<float> double_to_float(scalar_double.cast<float>());
+        Scalar<double> double_to_double(scalar_double.cast<double>());
 
-//         ASSERT_TRUE(vec_to_compare == vec_to_compare);
-//         ASSERT_TRUE(vec_to_compare == vec_same);
-//         ASSERT_FALSE(vec_to_compare == vec_diffbeg);
-//         ASSERT_FALSE(vec_to_compare == vec_diffend);
-//         ASSERT_FALSE(vec_to_compare == vec_diffmid);
-//         ASSERT_FALSE(vec_to_compare == vec_smaller);
-//         ASSERT_FALSE(vec_to_compare == vec_bigger);
-//         ASSERT_TRUE(vec_empty_1 == vec_empty_2);
+        ASSERT_EQ(scalar_double, double_to_double);
+        ASSERT_NEAR(
+            double_to_half.get_scalar(),
+            static_cast<__half>(2.6),
+            min_1_mag(static_cast<__half>(2.6))*Tol<__half>::roundoff_T()
+        );
+        ASSERT_NEAR(
+            double_to_float.get_scalar(),
+            static_cast<float>(2.6),
+            min_1_mag(static_cast<float>(2.6))*Tol<float>::roundoff_T()
+        );
 
-//     }
+    }
+
+    void TestBadCast() {
+        auto try_cast_invalid = []() {
+            Scalar<double> scalar(static_cast<double>(2.6));
+            scalar.cast<int>();
+        };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_cast_invalid);
+    }
 
 };
 
@@ -543,16 +537,6 @@ TEST_F(Scalar_Test, TestSqrt) {
     TestSqrt<double>();
 }
 
-// TEST_F(Vector_Test, TestCast) { TestCast(); }
+TEST_F(Scalar_Test, TestCast) { TestCast(); }
 
-// TEST_F(Vector_Test, TestBadVecVecOps) {
-//     TestBadVecVecOps<__half>();
-//     TestBadVecVecOps<float>();
-//     TestBadVecVecOps<double>();
-// }
-
-// TEST_F(Vector_Test, TestBooleanEqual) {
-//     TestBooleanEqual<__half>();
-//     TestBooleanEqual<float>();
-//     TestBooleanEqual<double>();
-// }
+TEST_F(Scalar_Test, TestBadCast) { TestBadCast(); }

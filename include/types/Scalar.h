@@ -3,6 +3,7 @@
 
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
+#include <cuda_fp16.h>
 #include <iostream>
 
 #include "tools/cuda_check.h"
@@ -12,6 +13,7 @@ class Scalar
 {
 private:
 
+    template <typename> friend class Scalar;
     T *d_scalar = nullptr;
 
 public:
@@ -43,7 +45,14 @@ public:
 
     // *** Cast ***
     template <typename Cast_T>
-    Scalar<Cast_T> cast();
+    Scalar<Cast_T> cast() const { throw std::runtime_error("Scalar: "); }
+
+    Scalar<__half> to_half() const;
+    template <> Scalar<__half> cast<__half>() const { return to_half(); }
+    Scalar<float> to_float() const;
+    template <> Scalar<float> cast<float>() const { return to_float(); }
+    Scalar<double> to_double() const;
+    template <> Scalar<double> cast<double>() const { return to_double(); }
 
     // *** Arithmetic/Compound Operations ***
     Scalar<T> operator+(const Scalar& other) const;

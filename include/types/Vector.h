@@ -243,7 +243,6 @@ public:
     int rows() const { return m_rows; }
     int cols() const { return 1; }
     cublasHandle_t get_handle() const { return handle; }
-
     void print() const {
 
         T *h_vec = static_cast<T *>(malloc(mem_size));
