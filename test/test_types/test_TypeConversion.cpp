@@ -12,11 +12,11 @@ public:
         // Test manual
         constexpr int m_manual(3);
         constexpr int n_manual(4);
-        MatrixDense<T> dense_manual ({
-            {static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4)},
-            {static_cast<T>(5), static_cast<T>(6), static_cast<T>(7), static_cast<T>(8)},
-            {static_cast<T>(9), static_cast<T>(10), static_cast<T>(11), static_cast<T>(12)}
-        });
+        MatrixDense<T> dense_manual(
+            {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4)},
+             {static_cast<T>(5), static_cast<T>(6), static_cast<T>(7), static_cast<T>(8)},
+             {static_cast<T>(9), static_cast<T>(10), static_cast<T>(11), static_cast<T>(12)}}
+        );
         MatrixSparse<T> sparse_manual(dense_manual.sparse());
         ASSERT_EQ(sparse_manual.rows(), m_manual);
         ASSERT_EQ(sparse_manual.cols(), n_manual);
@@ -44,34 +44,34 @@ public:
     template <typename T>
     void TestSparseBlockToDense() {
 
-        MatrixSparse<T> const_mat ({
-            {static_cast<T>(1), static_cast<T>(2), static_cast<T>(3),
-             static_cast<T>(4), static_cast<T>(5)},
-            {static_cast<T>(6), static_cast<T>(7), static_cast<T>(8),
-             static_cast<T>(9), static_cast<T>(10)},
-            {static_cast<T>(11), static_cast<T>(12), static_cast<T>(13),
-             static_cast<T>(14), static_cast<T>(15)},
-            {static_cast<T>(16), static_cast<T>(17), static_cast<T>(18),
-             static_cast<T>(19), static_cast<T>(20)}
-        });
+        MatrixSparse<T> const_mat(
+            {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3),
+              static_cast<T>(4), static_cast<T>(5)},
+             {static_cast<T>(6), static_cast<T>(7), static_cast<T>(8),
+              static_cast<T>(9), static_cast<T>(10)},
+             {static_cast<T>(11), static_cast<T>(12), static_cast<T>(13),
+              static_cast<T>(14), static_cast<T>(15)},
+             {static_cast<T>(16), static_cast<T>(17), static_cast<T>(18),
+              static_cast<T>(19), static_cast<T>(20)}}
+        );
         MatrixSparse<T> mat(const_mat);
         
         // Test cast/access for block 0, 0, 3, 4
         MatrixDense<T> mat_0_0_3_4(mat.block(0, 0, 3, 4));
-        MatrixDense<T> test_0_0_3_4 ({
-            {static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4)},
-            {static_cast<T>(6), static_cast<T>(7), static_cast<T>(8), static_cast<T>(9)},
-            {static_cast<T>(11), static_cast<T>(12), static_cast<T>(13), static_cast<T>(14)}
-        });
+        MatrixDense<T> test_0_0_3_4(
+            {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4)},
+             {static_cast<T>(6), static_cast<T>(7), static_cast<T>(8), static_cast<T>(9)},
+             {static_cast<T>(11), static_cast<T>(12), static_cast<T>(13), static_cast<T>(14)}}
+        );
         ASSERT_MATRIX_EQ(mat_0_0_3_4, test_0_0_3_4);
 
         // Test cast/access for block 1, 2, 3, 1
         MatrixDense<T> mat_1_2_3_1(mat.block(1, 2, 3, 1));
-        MatrixDense<T> test_1_2_3_1 ({
-            {static_cast<T>(8)},
-            {static_cast<T>(13)},
-            {static_cast<T>(18)}
-        });
+        MatrixDense<T> test_1_2_3_1(
+            {{static_cast<T>(8)},
+             {static_cast<T>(13)},
+             {static_cast<T>(18)}}
+        );
         ASSERT_MATRIX_EQ(mat_1_2_3_1, test_1_2_3_1);
 
     }

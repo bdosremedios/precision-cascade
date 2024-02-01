@@ -14,6 +14,8 @@
 #include "tools/cuda_check.h"
 #include "tools/vector_sort.h"
 
+#include "Scalar.h"
+
 template <typename T> class MatrixDense;
 template <typename T> class MatrixSparse;
 
@@ -194,28 +196,28 @@ public:
     }
 
     // *** Element Access ***
-    const T get_elem(int row, int col) const {
+    const Scalar<T> get_elem(int row, int col) const {
         if (col != 0) {
             throw std::runtime_error("Vector: invalid vector col access in get_elem");
         }
         if ((row < 0) || (row >= m_rows)) {
             throw std::runtime_error("Vector: invalid vector row access in get_elem");
         }
-        T h_elem;
-        check_cuda_error(cudaMemcpy(&h_elem, d_vec+row, sizeof(T), cudaMemcpyDeviceToHost));
-        return h_elem;
+        Scalar<T> elem;
+        check_cuda_error(cudaMemcpy(elem.d_scalar, d_vec+row, sizeof(T), cudaMemcpyDeviceToHost));
+        return elem;
     }
-    const T get_elem(int row) const { return get_elem(row, 0); }
-    void set_elem(int row, int col, T val) {
+    const Scalar<T> get_elem(int row) const { return get_elem(row, 0); }
+    void set_elem(int row, int col, Scalar<T> val) {
         if (col != 0) {
             throw std::runtime_error("Vector: invalid vector col access in set_elem");
         }
         if ((row < 0) || (row >= m_rows)) {
             throw std::runtime_error("Vector: invalid vector row access in set_elem");
         }
-        check_cuda_error(cudaMemcpy(d_vec+row, &val, sizeof(T), cudaMemcpyHostToDevice));
+        check_cuda_error(cudaMemcpy(d_vec+row, val.d_scalar, sizeof(T), cudaMemcpyHostToDevice));
     }
-    void set_elem(int row, T val) { set_elem(row, 0, val); }
+    void set_elem(int row, Scalar<T> val) { set_elem(row, 0, val); }
     Vector<T> slice(int start, int m_elem) const {
 
         if ((m_elem < 0) || ((start+m_elem) > m_rows)) {
@@ -299,14 +301,16 @@ public:
     template <> Vector<double> cast<double>() const { return to_double(); }
 
     // *** Arithmetic/Compound Operations ***
-    Vector<T> operator*(const T &scalar) const;
-    Vector<T> operator/(const T &scalar) const {
-        return operator*(static_cast<T>(1.)/scalar);
+    Vector<T> operator*(const Scalar<T> &scalar) const;
+    Vector<T> operator/(const Scalar<T> &scalar) const {
+        Scalar<T> temp(scalar);
+        return operator*(temp.reciprocol());
     }
 
-    Vector<T> & operator*=(const T &scalar);
-    Vector<T> & operator/=(const T &scalar) {
-        return operator*=(static_cast<T>(1.)/scalar);
+    Vector<T> & operator*=(const Scalar<T> &scalar);
+    Vector<T> & operator/=(const Scalar<T> &scalar) {
+        Scalar<T> temp(scalar);
+        return operator*=(temp.reciprocol());
     }
 
     Vector<T> operator+(const Vector<T> &vec) const;
@@ -315,9 +319,9 @@ public:
     Vector<T> & operator+=(const Vector<T> &vec);
     Vector<T> & operator-=(const Vector<T> &vec);
     
-    T dot(const Vector<T> &vec) const;
+    Scalar<T> dot(const Vector<T> &vec) const;
 
-    T norm() const;
+    Scalar<T> norm() const;
 
     // *** Algorithms ***
     std::vector<int> sort_indices() const {

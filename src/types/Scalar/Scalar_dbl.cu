@@ -3,6 +3,7 @@
 
 #include <cuda_runtime.h>
 #include <cuda_fp16.h>
+#include <math_constants.h>
 
 template Scalar<double> Scalar<double>::operator+(const Scalar<double> &other) const;
 template Scalar<double> Scalar<double>::operator-(const Scalar<double> &other) const;
@@ -35,6 +36,16 @@ __global__ void scalar_sqrt(double *scalar) {
 
 Scalar<double> & Scalar<double>::sqrt() {
     scalar_sqrt<<<1, 1>>>(d_scalar);
+    return *this;
+}
+
+__global__ void scalar_recip(double *scalar) {
+    int tid = (blockIdx.x * blockDim.x) + threadIdx.x;
+    scalar[tid] = CUDART_ONE/(scalar[tid]);
+}
+
+Scalar<double> & Scalar<double>::reciprocol() {
+    scalar_recip<<<1, 1>>>(d_scalar);
     return *this;
 }
 

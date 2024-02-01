@@ -406,6 +406,23 @@ public:
 
     }
 
+    template <typename T>
+    void TestReciprocol() {
+
+        Scalar<T> scalar_1(static_cast<T>(9.));
+        Scalar<T> scalar_2(static_cast<T>(0.64));
+        Scalar<T> scalar_3(static_cast<T>(100.));
+
+        ASSERT_NEAR(scalar_1.reciprocol().get_scalar(), static_cast<T>(1./9.), Tol<T>::roundoff_T());
+        ASSERT_NEAR(scalar_2.reciprocol().get_scalar(), static_cast<T>(1./.64), Tol<T>::roundoff_T());
+        ASSERT_NEAR(scalar_3.reciprocol().get_scalar(), static_cast<T>(1./100.), Tol<T>::roundoff_T());
+
+        ASSERT_NEAR(scalar_1.get_scalar(), static_cast<T>(1./9.), Tol<T>::roundoff_T());
+        ASSERT_NEAR(scalar_2.get_scalar(), static_cast<T>(1./.64), Tol<T>::roundoff_T());
+        ASSERT_NEAR(scalar_3.get_scalar(), static_cast<T>(1./100.), Tol<T>::roundoff_T());
+
+    }
+
     void TestCast() {
 
         Scalar<__half> scalar_half(static_cast<__half>(3.2));
@@ -535,6 +552,12 @@ TEST_F(Scalar_Test, TestSqrt) {
     TestSqrt<__half>();
     TestSqrt<float>();
     TestSqrt<double>();
+}
+
+TEST_F(Scalar_Test, TestReciprocol) {
+    TestReciprocol<__half>();
+    TestReciprocol<float>();
+    TestReciprocol<double>();
 }
 
 TEST_F(Scalar_Test, TestCast) { TestCast(); }

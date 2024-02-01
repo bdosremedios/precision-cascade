@@ -81,6 +81,7 @@ int main(int argc, char **argv) {
     }
 
     cublasCreate(TestBase::handle_ptr);
+    cublasSetPointerMode(*TestBase::handle_ptr, CUBLAS_POINTER_MODE_DEVICE);
     int return_status = RUN_ALL_TESTS();
     cublasDestroy(*TestBase::handle_ptr);
 

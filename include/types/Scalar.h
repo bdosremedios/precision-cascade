@@ -9,11 +9,16 @@
 #include "tools/cuda_check.h"
 
 template <typename T>
+class Vector;
+
+template <typename T>
 class Scalar
 {
 private:
 
     template <typename> friend class Scalar;
+    template <typename> friend class Vector;
+
     T *d_scalar = nullptr;
 
 public:
@@ -69,9 +74,12 @@ public:
 
     Scalar<T> & abs();
     Scalar<T> & sqrt();
+    Scalar<T> & reciprocol();
 
     bool operator==(const Scalar& other) const;
 
 };
+
+#include "Vector.h"
 
 #endif

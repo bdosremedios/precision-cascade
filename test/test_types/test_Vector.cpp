@@ -211,7 +211,7 @@ public:
         T *h_vec_rand = static_cast<T *>(malloc(m_rand*sizeof(T)));
         vec_rand.copy_data_to_ptr(h_vec_rand, m_rand);
 
-        for (int i=0; i<m_rand; ++i) { ASSERT_EQ(h_vec_rand[i], vec_rand.get_elem(i)); }
+        for (int i=0; i<m_rand; ++i) { ASSERT_EQ(h_vec_rand[i], vec_rand.get_elem(i).get_scalar()); }
 
         free(h_vec_rand);
 
@@ -321,10 +321,10 @@ public:
         ASSERT_EQ(test_rand.rows(), m_rand);
         for (int i=2; i<m_one-2; ++i) {
             ASSERT_TRUE(
-                ((test_rand.get_elem(i) != test_rand.get_elem(i-2)) ||
-                 (test_rand.get_elem(i) != test_rand.get_elem(i-1)) ||
-                 (test_rand.get_elem(i) != test_rand.get_elem(i+1)) ||
-                 (test_rand.get_elem(i) != test_rand.get_elem(i+2)))
+                ((test_rand.get_elem(i).get_scalar() != test_rand.get_elem(i-2).get_scalar()) ||
+                 (test_rand.get_elem(i).get_scalar() != test_rand.get_elem(i-1).get_scalar()) ||
+                 (test_rand.get_elem(i).get_scalar() != test_rand.get_elem(i+1).get_scalar()) ||
+                 (test_rand.get_elem(i).get_scalar() != test_rand.get_elem(i+2).get_scalar()))
             );
         }
 
@@ -339,13 +339,17 @@ public:
              static_cast<T>(4.), static_cast<T>(0.)}
         );
 
-        Vector<T> vec_scaled_mult = vec*static_cast<T>(4);
-        for (int i=0; i<5; ++i) { ASSERT_EQ(vec_scaled_mult.get_elem(i),
-                                            static_cast<T>(4)*vec.get_elem(i)); }
+        Vector<T> vec_scaled_mult = vec*Scalar<T>(static_cast<T>(4));
+        for (int i=0; i<5; ++i) {
+            ASSERT_EQ(vec_scaled_mult.get_elem(i).get_scalar(),
+                      static_cast<T>(4)*vec.get_elem(i).get_scalar());
+        }
 
-        Vector<T> vec_scaled_div = vec/static_cast<T>(10);
-        for (int i=0; i<5; ++i) { ASSERT_EQ(vec_scaled_div.get_elem(i),
-                                            (static_cast<T>(1)/static_cast<T>(10))*vec.get_elem(i)); }
+        Vector<T> vec_scaled_div = vec/Scalar<T>(static_cast<T>(10));
+        for (int i=0; i<5; ++i) {
+            ASSERT_EQ(vec_scaled_div.get_elem(i).get_scalar(),
+            (static_cast<T>(1)/static_cast<T>(10))*vec.get_elem(i).get_scalar());
+        }
 
     }
 
@@ -359,14 +363,14 @@ public:
         );
 
         Vector<T> vec(orig_vec);
-        vec *= static_cast<T>(3);
-        for (int i=0; i<5; ++i) { ASSERT_EQ(vec.get_elem(i),
-                                            static_cast<T>(3)*orig_vec.get_elem(i)); }
+        vec *= Scalar<T>(static_cast<T>(3));
+        for (int i=0; i<5; ++i) { ASSERT_EQ(vec.get_elem(i).get_scalar(),
+                                            static_cast<T>(3)*orig_vec.get_elem(i).get_scalar()); }
 
         vec = orig_vec;
-        vec /= static_cast<T>(5);
-        for (int i=0; i<5; ++i) { ASSERT_EQ(vec.get_elem(i),
-                                            (static_cast<T>(1)/static_cast<T>(5))*orig_vec.get_elem(i)); }
+        vec /= Scalar<T>(static_cast<T>(5));
+        for (int i=0; i<5; ++i) { ASSERT_EQ(vec.get_elem(i).get_scalar(),
+                                            (static_cast<T>(1)/static_cast<T>(5))*orig_vec.get_elem(i).get_scalar()); }
 
     }
 
@@ -439,7 +443,7 @@ public:
             {static_cast<T>(9.), static_cast<T>(10.), static_cast<T>(1.5),
              static_cast<T>(-4.5), static_cast<T>(2.)}
         );
-        ASSERT_NEAR(static_cast<double>(vec_1_dot.dot(vec_2_dot)),
+        ASSERT_NEAR(static_cast<double>(vec_1_dot.dot(vec_2_dot).get_scalar()),
                     11.05,
                     11.05*Tol<T>::gamma(5));
 
@@ -447,8 +451,10 @@ public:
         Vector<T> vec_1_dot_r(Vector<T>::Random(*handle_ptr, 10));
         Vector<T> vec_2_dot_r(Vector<T>::Random(*handle_ptr, 10));
         T acc = static_cast<T>(0.);
-        for (int i=0; i<10; ++i) { acc += vec_1_dot_r.get_elem(i)*vec_2_dot_r.get_elem(i); }
-        ASSERT_NEAR(static_cast<double>(vec_1_dot_r.dot(vec_2_dot_r)),
+        for (int i=0; i<10; ++i) {
+            acc += vec_1_dot_r.get_elem(i).get_scalar()*vec_2_dot_r.get_elem(i).get_scalar();
+        }
+        ASSERT_NEAR(static_cast<double>(vec_1_dot_r.dot(vec_2_dot_r).get_scalar()),
                     static_cast<double>(acc),
                     2.*std::abs(10.*Tol<T>::gamma(10)));
 
@@ -463,15 +469,15 @@ public:
             {static_cast<T>(-8.), static_cast<T>(0.8), static_cast<T>(-0.6),
              static_cast<T>(4.), static_cast<T>(0.)}
         );
-        ASSERT_NEAR(vec_norm.norm(),
+        ASSERT_NEAR(vec_norm.norm().get_scalar(),
                     static_cast<T>(9.),
                     static_cast<T>(9.)*static_cast<T>(Tol<T>::gamma(5)));
 
         // Random
         Vector<T> vec_norm_r(Vector<T>::Random(*handle_ptr, 10));
-        ASSERT_NEAR(vec_norm_r.norm(),
-                    std::sqrt(vec_norm_r.dot(vec_norm_r)),
-                    std::sqrt(vec_norm_r.dot(vec_norm_r))*Tol<T>::gamma(10));
+        ASSERT_NEAR(vec_norm_r.norm().get_scalar(),
+                    std::sqrt(vec_norm_r.dot(vec_norm_r).get_scalar()),
+                    std::sqrt(vec_norm_r.dot(vec_norm_r).get_scalar())*Tol<T>::gamma(10));
 
     }
 
@@ -512,9 +518,9 @@ public:
         ASSERT_EQ(dbl_to_hlf.rows(), m);
         for (int i=0; i<m; ++i) {
             ASSERT_NEAR(
-                dbl_to_hlf.get_elem(i),
-                static_cast<__half>(vec_dbl.get_elem(i)),
-                min_1_mag(static_cast<__half>(vec_dbl.get_elem(i)))*
+                dbl_to_hlf.get_elem(i).get_scalar(),
+                static_cast<__half>(vec_dbl.get_elem(i).get_scalar()),
+                min_1_mag(static_cast<__half>(vec_dbl.get_elem(i).get_scalar()))*
                     Tol<__half>::roundoff_T()
             );
         }
@@ -522,9 +528,9 @@ public:
         ASSERT_EQ(dbl_to_sgl.rows(), m);
         for (int i=0; i<m; ++i) {
             ASSERT_NEAR(
-                dbl_to_sgl.get_elem(i),
-                static_cast<float>(vec_dbl.get_elem(i)),
-                min_1_mag(static_cast<float>(vec_dbl.get_elem(i)))*
+                dbl_to_sgl.get_elem(i).get_scalar(),
+                static_cast<float>(vec_dbl.get_elem(i).get_scalar()),
+                min_1_mag(static_cast<float>(vec_dbl.get_elem(i).get_scalar()))*
                     Tol<float>::roundoff_T()
             );
         }
@@ -537,9 +543,9 @@ public:
         ASSERT_EQ(sgl_to_hlf.rows(), m);
         for (int i=0; i<m; ++i) {
             ASSERT_NEAR(
-                sgl_to_hlf.get_elem(i),
-                static_cast<__half>(vec_sgl.get_elem(i)),
-                min_1_mag(static_cast<__half>(vec_sgl.get_elem(i)))*
+                sgl_to_hlf.get_elem(i).get_scalar(),
+                static_cast<__half>(vec_sgl.get_elem(i).get_scalar()),
+                min_1_mag(static_cast<__half>(vec_sgl.get_elem(i).get_scalar()))*
                     Tol<__half>::roundoff_T()
             );
         }
@@ -547,9 +553,9 @@ public:
         ASSERT_EQ(sgl_to_dbl.rows(), m);
         for (int i=0; i<m; ++i) {
             ASSERT_NEAR(
-                sgl_to_dbl.get_elem(i),
-                static_cast<double>(vec_sgl.get_elem(i)),
-                min_1_mag(static_cast<double>(vec_sgl.get_elem(i)))*
+                sgl_to_dbl.get_elem(i).get_scalar(),
+                static_cast<double>(vec_sgl.get_elem(i).get_scalar()),
+                min_1_mag(static_cast<double>(vec_sgl.get_elem(i).get_scalar()))*
                     static_cast<double>(Tol<float>::roundoff_T())
             );
         }
@@ -562,20 +568,18 @@ public:
         ASSERT_EQ(hlf_to_sgl.rows(), m);
         for (int i=0; i<m; ++i) {
             ASSERT_NEAR(
-                hlf_to_sgl.get_elem(i),
-                static_cast<float>(vec_hlf.get_elem(i)),
-                min_1_mag(static_cast<float>(vec_hlf.get_elem(i)))*
-                    static_cast<float>(Tol<__half>::roundoff_T())
+                hlf_to_sgl.get_elem(i).get_scalar(),
+                static_cast<float>(vec_hlf.get_elem(i).get_scalar()),
+                min_1_mag(static_cast<float>(vec_hlf.get_elem(i).get_scalar()))*static_cast<float>(Tol<__half>::roundoff_T())
             );
         }
         Vector<double> hlf_to_dbl(vec_hlf.cast<double>());
         ASSERT_EQ(hlf_to_dbl.rows(), m);
         for (int i=0; i<m; ++i) {
             ASSERT_NEAR(
-                hlf_to_dbl.get_elem(i),
-                static_cast<double>(vec_hlf.get_elem(i)),
-                min_1_mag(static_cast<double>(vec_hlf.get_elem(i)))*
-                    static_cast<double>(Tol<__half>::roundoff_T())
+                hlf_to_dbl.get_elem(i).get_scalar(),
+                static_cast<double>(vec_hlf.get_elem(i).get_scalar()),
+                min_1_mag(static_cast<double>(vec_hlf.get_elem(i).get_scalar()))*static_cast<double>(Tol<__half>::roundoff_T())
             );
         }
 
@@ -709,7 +713,9 @@ TEST_F(Vector_Test, TestStaticCreation) {
 }
 
 TEST_F(Vector_Test, TestScale) {
-    TestScale<__half>(); TestScale<float>(); TestScale<double>();
+    TestScale<__half>();
+    TestScale<float>();
+    TestScale<double>();
 }
 TEST_F(Vector_Test, TestScaleAssignment) {
     TestScaleAssignment<__half>(); TestScaleAssignment<float>(); TestScaleAssignment<double>();

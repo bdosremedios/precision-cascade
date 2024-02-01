@@ -49,7 +49,7 @@ void _ASSERT_VECTOR_NEAR(
     ASSERT_EQ(test.rows(), target.rows());
 
     for (int i=0; i<target.rows(); ++i) {
-        ASSERT_NEAR(test.get_elem(i), target.get_elem(i), tol);
+        ASSERT_NEAR(test.get_elem(i).get_scalar(), target.get_elem(i).get_scalar(), tol);
     }
 
 }
@@ -84,7 +84,7 @@ void _ASSERT_MATRIX_NEAR(
 
     for (int i=0; i<target.rows(); ++i) {
         for (int j=0; j<target.cols(); ++j) {
-            ASSERT_NEAR(test.get_elem(i, j), target.get_elem(i, j), tol);
+            ASSERT_NEAR(test.get_elem(i, j).get_scalar(), target.get_elem(i, j).get_scalar(), tol);
         }
     }
 

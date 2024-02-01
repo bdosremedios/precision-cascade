@@ -38,6 +38,16 @@ Scalar<__half> & Scalar<__half>::sqrt() {
     return *this;
 }
 
+__global__ void scalar_recip(__half *scalar) {
+    int tid = (blockIdx.x * blockDim.x) + threadIdx.x;
+    scalar[tid] = CUDART_ONE_FP16/(scalar[tid]);
+}
+
+Scalar<__half> & Scalar<__half>::reciprocol() {
+    scalar_recip<<<1, 1>>>(d_scalar);
+    return *this;
+}
+
 namespace scal_hlf_kern
 {
     __global__ void cast_to_float(__half *scalar_src, float *scalar_dest) {
