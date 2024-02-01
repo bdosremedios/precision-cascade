@@ -30,17 +30,14 @@ Vector<float> MatrixDense<float>::operator*(const Vector<float> &vec) const {
 
     Vector<float> c(Vector<float>::Zero(handle, m_rows));
 
-    Scalar<float> alpha(1.);
-    Scalar<float> beta(0.);
-
     check_cublas_status(
         cublasGemmEx(
             handle, CUBLAS_OP_N, CUBLAS_OP_N,
             m_rows, 1, n_cols,
-            alpha.d_scalar,
+            SCALAR_ONE_F.d_scalar,
             d_mat, CUDA_R_32F, m_rows,
             vec.d_vec, CUDA_R_32F, n_cols,
-            beta.d_scalar,
+            SCALAR_ZERO_F.d_scalar,
             c.d_vec, CUDA_R_32F, m_rows,
             CUBLAS_COMPUTE_32F,
             CUBLAS_GEMM_DEFAULT
@@ -57,17 +54,14 @@ Vector<float> MatrixDense<float>::transpose_prod(const Vector<float> &vec) const
 
     Vector<float> c(handle, n_cols);
 
-    Scalar<float> alpha(1.);
-    Scalar<float> beta(0.);
-
     check_cublas_status(
         cublasGemmEx(
             handle, CUBLAS_OP_T, CUBLAS_OP_N,
             n_cols, 1, m_rows,
-            alpha.d_scalar,
+            SCALAR_ONE_F.d_scalar,
             d_mat, CUDA_R_32F, m_rows,
             vec.d_vec, CUDA_R_32F, m_rows,
-            beta.d_scalar,
+            SCALAR_ZERO_F.d_scalar,
             c.d_vec, CUDA_R_32F, n_cols,
             CUBLAS_COMPUTE_32F,
             CUBLAS_GEMM_DEFAULT
@@ -88,17 +82,14 @@ MatrixDense<float> MatrixDense<float>::operator*(const MatrixDense<float> &mat) 
 
     MatrixDense<float> c(MatrixDense<float>::Zero(handle, m_rows, mat.cols()));
 
-    Scalar<float> alpha(1.);
-    Scalar<float> beta(0.);
-
     check_cublas_status(
         cublasGemmEx(
             handle, CUBLAS_OP_N, CUBLAS_OP_N,
             m_rows, mat.cols(), n_cols,
-            alpha.d_scalar,
+            SCALAR_ONE_F.d_scalar,
             d_mat, CUDA_R_32F, m_rows,
             mat.d_mat, CUDA_R_32F, n_cols,
-            beta.d_scalar,
+            SCALAR_ZERO_F.d_scalar,
             c.d_mat, CUDA_R_32F, m_rows,
             CUBLAS_COMPUTE_32F,
             CUBLAS_GEMM_DEFAULT
@@ -119,12 +110,10 @@ MatrixDense<float> MatrixDense<float>::operator+(const MatrixDense<float> &mat) 
 
     MatrixDense<float> c(*this);
 
-    Scalar<float> alpha(1.);
-
     check_cublas_status(
         cublasAxpyEx(
             handle, m_rows*n_cols,
-            alpha.d_scalar, CUDA_R_32F,
+            SCALAR_ONE_F.d_scalar, CUDA_R_32F,
             mat.d_mat, CUDA_R_32F, 1,
             c.d_mat, CUDA_R_32F, 1,
             CUDA_R_32F
@@ -145,12 +134,10 @@ MatrixDense<float> MatrixDense<float>::operator-(const MatrixDense<float> &mat) 
 
     MatrixDense<float> c(*this);
 
-    Scalar<float> alpha(-1.);
-
     check_cublas_status(
         cublasAxpyEx(
             handle, m_rows*n_cols,
-            alpha.d_scalar, CUDA_R_32F,
+            SCALAR_MINUS_ONE_F.d_scalar, CUDA_R_32F,
             mat.d_mat, CUDA_R_32F, 1,
             c.d_mat, CUDA_R_32F, 1,
             CUDA_R_32F

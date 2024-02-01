@@ -42,12 +42,11 @@ Vector<double> Vector<double>::operator+(const Vector<double> &vec) const {
     check_vecvec_op_compatibility(vec);
 
     Vector<double> c(*this);
-    Scalar<double> alpha(1.);
 
     check_cublas_status(
         cublasAxpyEx(
             handle, m_rows,
-            alpha.d_scalar, CUDA_R_64F,
+            SCALAR_ONE_D.d_scalar, CUDA_R_64F,
             vec.d_vec, CUDA_R_64F, 1,
             c.d_vec, CUDA_R_64F, 1,
             CUDA_R_64F
@@ -63,12 +62,11 @@ Vector<double> Vector<double>::operator-(const Vector<double> &vec) const {
     check_vecvec_op_compatibility(vec);
 
     Vector<double> c(*this);
-    Scalar<double> alpha(-1.);
 
     check_cublas_status(
         cublasAxpyEx(
             handle, m_rows,
-            alpha.d_scalar, CUDA_R_64F,
+            SCALAR_MINUS_ONE_D.d_scalar, CUDA_R_64F,
             vec.d_vec, CUDA_R_64F, 1,
             c.d_vec, CUDA_R_64F, 1,
             CUDA_R_64F
@@ -83,12 +81,10 @@ Vector<double> & Vector<double>::operator+=(const Vector<double> &vec) {
 
     check_vecvec_op_compatibility(vec);
 
-    Scalar<double> alpha(1.);
-
     check_cublas_status(
         cublasAxpyEx(
             handle, m_rows,
-            alpha.d_scalar, CUDA_R_64F,
+            SCALAR_ONE_D.d_scalar, CUDA_R_64F,
             vec.d_vec, CUDA_R_64F, 1,
             d_vec, CUDA_R_64F, 1,
             CUDA_R_64F
@@ -103,12 +99,10 @@ Vector<double> & Vector<double>::operator-=(const Vector<double> &vec) {
 
     check_vecvec_op_compatibility(vec);
 
-    Scalar<double> alpha(-1.);
-
     check_cublas_status(
         cublasAxpyEx(
             handle, m_rows,
-            alpha.d_scalar, CUDA_R_64F,
+            SCALAR_MINUS_ONE_D.d_scalar, CUDA_R_64F,
             vec.d_vec, CUDA_R_64F, 1,
             d_vec, CUDA_R_64F, 1,
             CUDA_R_64F
@@ -145,7 +139,10 @@ Scalar<double> Vector<double>::norm() const {
 
     check_cublas_status(
         cublasNrm2Ex(
-            handle, m_rows, d_vec, CUDA_R_64F, 1, result.d_scalar, CUDA_R_64F, CUDA_R_64F
+            handle, m_rows,
+            d_vec, CUDA_R_64F, 1,
+            result.d_scalar, CUDA_R_64F,
+            CUDA_R_64F
         )
     );
 

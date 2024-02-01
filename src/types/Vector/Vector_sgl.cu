@@ -9,7 +9,10 @@ Vector<float> Vector<float>::operator*(const Scalar<float> &scalar) const {
 
     check_cublas_status(
         cublasScalEx(
-            handle, m_rows, scalar.d_scalar, CUDA_R_32F, c.d_vec, CUDA_R_32F, 1, CUDA_R_32F
+            handle, m_rows,
+            scalar.d_scalar, CUDA_R_32F,
+            c.d_vec, CUDA_R_32F, 1,
+            CUDA_R_32F
         )
     );
 
@@ -21,7 +24,10 @@ Vector<float> & Vector<float>::operator*=(const Scalar<float> &scalar) {
 
     check_cublas_status(
         cublasScalEx(
-            handle, m_rows, scalar.d_scalar, CUDA_R_32F, d_vec, CUDA_R_32F, 1, CUDA_R_32F
+            handle, m_rows,
+            scalar.d_scalar, CUDA_R_32F,
+            d_vec, CUDA_R_32F, 1,
+            CUDA_R_32F
         )
     );
 
@@ -34,12 +40,11 @@ Vector<float> Vector<float>::operator+(const Vector<float> &vec) const {
     check_vecvec_op_compatibility(vec);
 
     Vector<float> c(*this);
-    Scalar<float> alpha(1.);
 
     check_cublas_status(
         cublasAxpyEx(
             handle, m_rows,
-            alpha.d_scalar, CUDA_R_32F,
+            SCALAR_ONE_F.d_scalar, CUDA_R_32F,
             vec.d_vec, CUDA_R_32F, 1,
             c.d_vec, CUDA_R_32F, 1,
             CUDA_R_32F
@@ -55,12 +60,11 @@ Vector<float> Vector<float>::operator-(const Vector<float> &vec) const {
     check_vecvec_op_compatibility(vec);
 
     Vector<float> c(*this);
-    Scalar<float> alpha(-1.);
 
     check_cublas_status(
         cublasAxpyEx(
             handle, m_rows,
-            alpha.d_scalar, CUDA_R_32F,
+            SCALAR_MINUS_ONE_F.d_scalar, CUDA_R_32F,
             vec.d_vec, CUDA_R_32F, 1,
             c.d_vec, CUDA_R_32F, 1,
             CUDA_R_32F
@@ -75,12 +79,10 @@ Vector<float> & Vector<float>::operator+=(const Vector<float> &vec) {
 
     check_vecvec_op_compatibility(vec);
 
-    Scalar<float> alpha(1.);
-
     check_cublas_status(
         cublasAxpyEx(
             handle, m_rows,
-            alpha.d_scalar, CUDA_R_32F,
+            SCALAR_ONE_F.d_scalar, CUDA_R_32F,
             vec.d_vec, CUDA_R_32F, 1,
             d_vec, CUDA_R_32F, 1,
             CUDA_R_32F
@@ -95,12 +97,10 @@ Vector<float> & Vector<float>::operator-=(const Vector<float> &vec) {
 
     check_vecvec_op_compatibility(vec);
 
-    Scalar<float> alpha(-1.);
-
     check_cublas_status(
         cublasAxpyEx(
             handle, m_rows,
-            alpha.d_scalar, CUDA_R_32F,
+            SCALAR_MINUS_ONE_F.d_scalar, CUDA_R_32F,
             vec.d_vec, CUDA_R_32F, 1,
             d_vec, CUDA_R_32F, 1,
             CUDA_R_32F
@@ -137,7 +137,10 @@ Scalar<float> Vector<float>::norm() const {
 
     check_cublas_status(
         cublasNrm2Ex(
-            handle, m_rows, d_vec, CUDA_R_32F, 1, result.d_scalar, CUDA_R_32F, CUDA_R_32F
+            handle, m_rows,
+            d_vec, CUDA_R_32F, 1,
+            result.d_scalar, CUDA_R_32F,
+            CUDA_R_32F
         )
     );
 

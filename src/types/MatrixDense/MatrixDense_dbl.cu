@@ -29,17 +29,14 @@ Vector<double> MatrixDense<double>::operator*(const Vector<double> &vec) const {
 
     Vector<double> c(Vector<double>::Zero(handle, m_rows));
 
-    Scalar<double> alpha(1.);
-    Scalar<double> beta(0.);
-
     check_cublas_status(
         cublasGemmEx(
             handle, CUBLAS_OP_N, CUBLAS_OP_N,
             m_rows, 1, n_cols,
-            alpha.d_scalar,
+            SCALAR_ONE_D.d_scalar,
             d_mat, CUDA_R_64F, m_rows,
             vec.d_vec, CUDA_R_64F, n_cols,
-            beta.d_scalar,
+            SCALAR_ZERO_D.d_scalar,
             c.d_vec, CUDA_R_64F, m_rows,
             CUBLAS_COMPUTE_64F,
             CUBLAS_GEMM_DEFAULT
@@ -56,17 +53,14 @@ Vector<double> MatrixDense<double>::transpose_prod(const Vector<double> &vec) co
 
     Vector<double> c(Vector<double>::Zero(handle, n_cols));
 
-    Scalar<double> alpha(1.);
-    Scalar<double> beta(0.);
-
     check_cublas_status(
         cublasGemmEx(
             handle, CUBLAS_OP_T, CUBLAS_OP_N,
             n_cols, 1, m_rows,
-            alpha.d_scalar,
+            SCALAR_ONE_D.d_scalar,
             d_mat, CUDA_R_64F, m_rows,
             vec.d_vec, CUDA_R_64F, m_rows,
-            beta.d_scalar,
+            SCALAR_ZERO_D.d_scalar,
             c.d_vec, CUDA_R_64F, n_cols,
             CUBLAS_COMPUTE_64F,
             CUBLAS_GEMM_DEFAULT
@@ -87,17 +81,14 @@ MatrixDense<double> MatrixDense<double>::operator*(const MatrixDense<double> &ma
 
     MatrixDense<double> c(MatrixDense<double>::Zero(handle, m_rows, mat.cols()));
 
-    Scalar<double> alpha(1.);
-    Scalar<double> beta(0.);
-
     check_cublas_status(
         cublasGemmEx(
             handle, CUBLAS_OP_N, CUBLAS_OP_N,
             m_rows, mat.cols(), n_cols,
-            alpha.d_scalar,
+            SCALAR_ONE_D.d_scalar,
             d_mat, CUDA_R_64F, m_rows,
             mat.d_mat, CUDA_R_64F, n_cols,
-            beta.d_scalar,
+            SCALAR_ZERO_D.d_scalar,
             c.d_mat, CUDA_R_64F, m_rows,
             CUBLAS_COMPUTE_64F,
             CUBLAS_GEMM_DEFAULT
@@ -118,12 +109,10 @@ MatrixDense<double> MatrixDense<double>::operator+(const MatrixDense<double> &ma
 
     MatrixDense<double> c(*this);
 
-    Scalar<double> alpha(1.);
-
     check_cublas_status(
         cublasAxpyEx(
             handle, m_rows*n_cols,
-            alpha.d_scalar, CUDA_R_64F,
+            SCALAR_ONE_D.d_scalar, CUDA_R_64F,
             mat.d_mat, CUDA_R_64F, 1,
             c.d_mat, CUDA_R_64F, 1,
             CUDA_R_64F
@@ -144,12 +133,10 @@ MatrixDense<double> MatrixDense<double>::operator-(const MatrixDense<double> &ma
 
     MatrixDense<double> c(*this);
 
-    Scalar<double> alpha(-1.);
-
     check_cublas_status(
         cublasAxpyEx(
             handle, m_rows*n_cols,
-            alpha.d_scalar, CUDA_R_64F,
+            SCALAR_MINUS_ONE_D.d_scalar, CUDA_R_64F,
             mat.d_mat, CUDA_R_64F, 1,
             c.d_mat, CUDA_R_64F, 1,
             CUDA_R_64F

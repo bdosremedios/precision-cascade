@@ -81,6 +81,18 @@ public:
 
 };
 
+static inline Scalar<__half> SCALAR_ONE_H(1.); 
+static inline Scalar<float> SCALAR_ONE_F(1.); 
+static inline Scalar<double> SCALAR_ONE_D(1.);
+
+static inline Scalar<__half> SCALAR_ZERO_H(0.); 
+static inline Scalar<float> SCALAR_ZERO_F(0.); 
+static inline Scalar<double> SCALAR_ZERO_D(0.);
+
+static inline Scalar<__half> SCALAR_MINUS_ONE_H(-1.); 
+static inline Scalar<float> SCALAR_MINUS_ONE_F(-1.); 
+static inline Scalar<double> SCALAR_MINUS_ONE_D(-1.); 
+
 #include "Vector.h"
 #include "MatrixDense.h"
 
