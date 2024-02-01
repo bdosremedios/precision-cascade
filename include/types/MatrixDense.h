@@ -13,6 +13,7 @@
 #include "tools/cuda_check.h"
 
 #include "Vector.h"
+#include "Scalar.h"
 
 template <typename T> class MatrixSparse;
 
@@ -136,26 +137,26 @@ public:
     }
 
     // *** Element Access ***
-    const T get_elem(int row, int col) const {
+    const Scalar<T> get_elem(int row, int col) const {
         if ((row < 0) || (row >= m_rows)) {
             throw std::runtime_error("MatrixDense: invalid row access in get_elem");
         }
         if ((col < 0) || (col >= n_cols)) {
             throw std::runtime_error("MatrixDense: invalid col access in get_elem");
         }
-        T h_elem;
-        check_cuda_error(cudaMemcpy(&h_elem, d_mat+row+(col*m_rows), sizeof(T), cudaMemcpyDeviceToHost));
-        return h_elem;
+        Scalar<T> elem;
+        check_cuda_error(cudaMemcpy(elem.d_scalar, d_mat+row+(col*m_rows), sizeof(T), cudaMemcpyDeviceToHost));
+        return elem;
     }
 
-    void set_elem(int row, int col, T val) {
+    void set_elem(int row, int col, Scalar<T> val) {
         if ((row < 0) || (row >= m_rows)) {
             throw std::runtime_error("MatrixDense: invalid row access in set_elem");
         }
         if ((col < 0) || (col >= n_cols)) {
             throw std::runtime_error("MatrixDense: invalid col access in set_elem");
         }
-        check_cuda_error(cudaMemcpy(d_mat+row+(col*m_rows), &val, sizeof(T), cudaMemcpyHostToDevice));
+        check_cuda_error(cudaMemcpy(d_mat+row+(col*m_rows), val.d_scalar, sizeof(T), cudaMemcpyHostToDevice));
     }
 
     Col get_col(int col) const {
@@ -299,14 +300,18 @@ public:
 
         Vector<T> rhs(arg_rhs);
 
+        Scalar<T> pivot;
+        Scalar<T> curr_solved_val;
         for (int col=n_cols-1; col>=0; --col) {
-            T pivot = get_elem(col, col);
-            if (pivot != static_cast<T>(0)) {
-                T curr_solved_val = rhs.get_elem(col)/pivot;
+            pivot = get_elem(col, col);
+            if (pivot.get_scalar() != static_cast<T>(0)) {
+                curr_solved_val = rhs.get_elem(col)/pivot;
                 rhs -= get_col(col).copy_to_vec()*curr_solved_val;
                 rhs.set_elem(col, curr_solved_val);
             } else {
-                throw std::runtime_error("MatrixDense::back_sub: zero diagonal entry encountered in matrix");
+                throw std::runtime_error(
+                    "MatrixDense::back_sub: zero diagonal entry encountered in matrix"
+                );
             }
         }
 
@@ -325,14 +330,18 @@ public:
 
         Vector<T> rhs(arg_rhs);
 
+        Scalar<T> pivot;
+        Scalar<T> curr_solved_val;
         for (int col=0; col<n_cols; ++col) {
-            T pivot = get_elem(col, col);
-            if (pivot != static_cast<T>(0)) {
-                T curr_solved_val = rhs.get_elem(col)/pivot;
+            pivot = get_elem(col, col);
+            if (pivot.get_scalar() != static_cast<T>(0)) {
+                curr_solved_val = rhs.get_elem(col)/pivot;
                 rhs -= get_col(col).copy_to_vec()*curr_solved_val;
                 rhs.set_elem(col, curr_solved_val);
             } else {
-                throw std::runtime_error("MatrixDense::frwd_sub: zero diagonal entry encountered in matrix");
+                throw std::runtime_error(
+                    "MatrixDense::frwd_sub: zero diagonal entry encountered in matrix"
+                );
             }
         }
 
@@ -352,9 +361,10 @@ public:
     template <> MatrixDense<double> cast<double>() const { return to_double(); }
 
     // *** Arithmetic and Compound Operations ***
-    MatrixDense<T> operator*(const T &scalar) const;
-    MatrixDense<T> operator/(const T &scalar) const {
-        return operator*(static_cast<T>(1)/scalar);
+    MatrixDense<T> operator*(const Scalar<T> &scalar) const;
+    MatrixDense<T> operator/(const Scalar<T> &scalar) const {
+        Scalar<T> temp(scalar);
+        return operator*(temp.reciprocol());
     }
 
     Vector<T> operator*(const Vector<T> &vec) const;
@@ -396,7 +406,7 @@ public:
     MatrixDense<T> operator-(const MatrixDense<T> &mat) const;
 
     // Needed for testing (don't need to optimize performance)
-    T norm() const;
+    Scalar<T> norm() const;
 
     // Nested lightweight wrapper class representing matrix column and assignment/elem access
     // Requires: modification by/cast to Vector<T>
@@ -420,14 +430,14 @@ public:
 
         Col(const MatrixDense<T>::Col &other): Col(other.associated_mat_ptr, other.col_idx) {}
 
-        T get_elem(int arg_row) {
+        Scalar<T> get_elem(int arg_row) {
 
             if ((arg_row < 0) || (arg_row >= m_rows)) {
                 throw std::runtime_error("MatrixDense::Col: invalid row access in get_elem");
             }
 
             return associated_mat_ptr->get_elem(arg_row, col_idx);
-            
+
         }
 
         void set_from_vec(const Vector<T> &vec) const {
@@ -565,7 +575,7 @@ public:
 
         }
 
-        T get_elem(int row, int col) {
+        Scalar<T> get_elem(int row, int col) {
 
             if ((row < 0) || (row >= m_rows)) {
                 throw std::runtime_error("MatrixDense::Block: invalid row access in get_elem");

@@ -8,8 +8,8 @@
 
 #include "tools/cuda_check.h"
 
-template <typename T>
-class Vector;
+template <typename T> class Vector;
+template <typename T> class MatrixDense;
 
 template <typename T>
 class Scalar
@@ -18,6 +18,7 @@ private:
 
     template <typename> friend class Scalar;
     template <typename> friend class Vector;
+    template <typename> friend class MatrixDense;
 
     T *d_scalar = nullptr;
 
@@ -81,5 +82,6 @@ public:
 };
 
 #include "Vector.h"
+#include "MatrixDense.h"
 
 #endif

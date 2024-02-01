@@ -24,23 +24,23 @@ public:
 
         // Test copy constructor and access for block 0, 0, 4, 2
         typename MatrixDense<T>::Block blk_0_0_4_2(mat.get_block(0, 0, 4, 2));
-        ASSERT_EQ(blk_0_0_4_2.get_elem(0, 0), static_cast<T>(1));
-        ASSERT_EQ(blk_0_0_4_2.get_elem(1, 0), static_cast<T>(6));
-        ASSERT_EQ(blk_0_0_4_2.get_elem(2, 0), static_cast<T>(11));
-        ASSERT_EQ(blk_0_0_4_2.get_elem(3, 0), static_cast<T>(16));
-        ASSERT_EQ(blk_0_0_4_2.get_elem(0, 1), static_cast<T>(2));
-        ASSERT_EQ(blk_0_0_4_2.get_elem(1, 1), static_cast<T>(7));
-        ASSERT_EQ(blk_0_0_4_2.get_elem(2, 1), static_cast<T>(12));
-        ASSERT_EQ(blk_0_0_4_2.get_elem(3, 1), static_cast<T>(17));
+        ASSERT_EQ(blk_0_0_4_2.get_elem(0, 0).get_scalar(), static_cast<T>(1));
+        ASSERT_EQ(blk_0_0_4_2.get_elem(1, 0).get_scalar(), static_cast<T>(6));
+        ASSERT_EQ(blk_0_0_4_2.get_elem(2, 0).get_scalar(), static_cast<T>(11));
+        ASSERT_EQ(blk_0_0_4_2.get_elem(3, 0).get_scalar(), static_cast<T>(16));
+        ASSERT_EQ(blk_0_0_4_2.get_elem(0, 1).get_scalar(), static_cast<T>(2));
+        ASSERT_EQ(blk_0_0_4_2.get_elem(1, 1).get_scalar(), static_cast<T>(7));
+        ASSERT_EQ(blk_0_0_4_2.get_elem(2, 1).get_scalar(), static_cast<T>(12));
+        ASSERT_EQ(blk_0_0_4_2.get_elem(3, 1).get_scalar(), static_cast<T>(17));
 
         // Test copy constructor and access for block 2, 1, 2, 3
         typename MatrixDense<T>::Block blk_2_1_2_3(mat.get_block(2, 1, 2, 3));
-        ASSERT_EQ(blk_2_1_2_3.get_elem(0, 0), static_cast<T>(12));
-        ASSERT_EQ(blk_2_1_2_3.get_elem(0, 1), static_cast<T>(13));
-        ASSERT_EQ(blk_2_1_2_3.get_elem(0, 2), static_cast<T>(14));
-        ASSERT_EQ(blk_2_1_2_3.get_elem(1, 0), static_cast<T>(17));
-        ASSERT_EQ(blk_2_1_2_3.get_elem(1, 1), static_cast<T>(18));
-        ASSERT_EQ(blk_2_1_2_3.get_elem(1, 2), static_cast<T>(19));
+        ASSERT_EQ(blk_2_1_2_3.get_elem(0, 0).get_scalar(), static_cast<T>(12));
+        ASSERT_EQ(blk_2_1_2_3.get_elem(0, 1).get_scalar(), static_cast<T>(13));
+        ASSERT_EQ(blk_2_1_2_3.get_elem(0, 2).get_scalar(), static_cast<T>(14));
+        ASSERT_EQ(blk_2_1_2_3.get_elem(1, 0).get_scalar(), static_cast<T>(17));
+        ASSERT_EQ(blk_2_1_2_3.get_elem(1, 1).get_scalar(), static_cast<T>(18));
+        ASSERT_EQ(blk_2_1_2_3.get_elem(1, 2).get_scalar(), static_cast<T>(19));
 
         // Test MatrixDense cast/access for block 0, 0, 3, 4
         MatrixDense<T> mat_0_0_3_4(mat.get_block(0, 0, 3, 4).copy_to_mat());

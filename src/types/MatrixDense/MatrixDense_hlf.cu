@@ -3,15 +3,18 @@
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
 
-MatrixDense<__half> MatrixDense<__half>::operator*(const __half &scalar) const {
+MatrixDense<__half> MatrixDense<__half>::operator*(const Scalar<__half> &scalar) const {
 
     MatrixDense<__half> c(*this);
 
-    float scalar_cast = static_cast<float>(scalar);
+    Scalar<float> temp_cast(scalar.cast<float>());
 
     check_cublas_status(
         cublasScalEx(
-            handle, m_rows*n_cols, &scalar_cast, CUDA_R_32F, c.d_mat, CUDA_R_16F, 1, CUDA_R_32F
+            handle, m_rows*n_cols,
+            temp_cast.d_scalar, CUDA_R_32F,
+            c.d_mat, CUDA_R_16F, 1,
+            CUDA_R_32F
         )
     );
 
@@ -28,17 +31,17 @@ Vector<__half> MatrixDense<__half>::operator*(const Vector<__half> &vec) const {
 
     Vector<__half> c(Vector<__half>::Zero(handle, m_rows));
 
-    __half alpha = 1.;
-    __half beta = 0.;
+    Scalar<__half> alpha(static_cast<__half>(1.));
+    Scalar<__half> beta(static_cast<__half>(0.));
 
     check_cublas_status(
         cublasGemmEx(
             handle, CUBLAS_OP_N, CUBLAS_OP_N,
             m_rows, 1, n_cols,
-            &alpha,
+            alpha.d_scalar,
             d_mat, CUDA_R_16F, m_rows,
             vec.d_vec, CUDA_R_16F, n_cols,
-            &beta,
+            beta.d_scalar,
             c.d_vec, CUDA_R_16F, m_rows,
             CUBLAS_COMPUTE_16F,
             CUBLAS_GEMM_DEFAULT
@@ -55,17 +58,17 @@ Vector<__half> MatrixDense<__half>::transpose_prod(const Vector<__half> &vec) co
 
     Vector<__half> c(handle, n_cols);
 
-    __half alpha = static_cast<__half>(1.);
-    __half beta = static_cast<__half>(0.);
+    Scalar<__half> alpha(static_cast<__half>(1.));
+    Scalar<__half> beta(static_cast<__half>(0.));
 
     check_cublas_status(
         cublasGemmEx(
             handle, CUBLAS_OP_T, CUBLAS_OP_N,
             n_cols, 1, m_rows,
-            &alpha,
+            alpha.d_scalar,
             d_mat, CUDA_R_16F, m_rows,
             vec.d_vec, CUDA_R_16F, m_rows,
-            &beta,
+            beta.d_scalar,
             c.d_vec, CUDA_R_16F, n_cols,
             CUBLAS_COMPUTE_16F,
             CUBLAS_GEMM_DEFAULT
@@ -86,17 +89,17 @@ MatrixDense<__half> MatrixDense<__half>::operator*(const MatrixDense<__half> &ma
 
     MatrixDense<__half> c(MatrixDense<__half>::Zero(handle, m_rows, mat.cols()));
 
-    __half alpha = 1.;
-    __half beta = 0.;
+    Scalar<__half> alpha(static_cast<__half>(1.));
+    Scalar<__half> beta(static_cast<__half>(0.));
 
     check_cublas_status(
         cublasGemmEx(
             handle, CUBLAS_OP_N, CUBLAS_OP_N,
             m_rows, mat.cols(), n_cols,
-            &alpha,
+            alpha.d_scalar,
             d_mat, CUDA_R_16F, m_rows,
             mat.d_mat, CUDA_R_16F, n_cols,
-            &beta,
+            beta.d_scalar,
             c.d_mat, CUDA_R_16F, m_rows,
             CUBLAS_COMPUTE_16F,
             CUBLAS_GEMM_DEFAULT
@@ -117,12 +120,12 @@ MatrixDense<__half> MatrixDense<__half>::operator+(const MatrixDense<__half> &ma
 
     MatrixDense<__half> c(*this);
 
-    float alpha = static_cast<float>(1.);
+    Scalar<float> alpha(static_cast<__half>(1.));
 
     check_cublas_status(
         cublasAxpyEx(
             handle, m_rows*n_cols,
-            &alpha, CUDA_R_32F,
+            alpha.d_scalar, CUDA_R_32F,
             mat.d_mat, CUDA_R_16F, 1,
             c.d_mat, CUDA_R_16F, 1,
             CUDA_R_32F
@@ -143,12 +146,12 @@ MatrixDense<__half> MatrixDense<__half>::operator-(const MatrixDense<__half> &ma
 
     MatrixDense<__half> c(*this);
 
-    float alpha = static_cast<float>(-1.);
+    Scalar<float> alpha(static_cast<__half>(-1.));
 
     check_cublas_status(
         cublasAxpyEx(
             handle, m_rows*n_cols,
-            &alpha, CUDA_R_32F,
+            alpha.d_scalar, CUDA_R_32F,
             mat.d_mat, CUDA_R_16F, 1,
             c.d_mat, CUDA_R_16F, 1,
             CUDA_R_32F
@@ -159,15 +162,15 @@ MatrixDense<__half> MatrixDense<__half>::operator-(const MatrixDense<__half> &ma
 
 }
 
-__half MatrixDense<__half>::norm() const {
+Scalar<__half> MatrixDense<__half>::norm() const {
 
-    __half result;
+    Scalar<__half> result;
 
     check_cublas_status(
         cublasNrm2Ex(
             handle, m_rows*n_cols,
             d_mat, CUDA_R_16F, 1,
-            &result, CUDA_R_16F,
+            result.d_scalar, CUDA_R_16F,
             CUDA_R_32F
         )
     );

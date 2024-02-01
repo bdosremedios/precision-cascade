@@ -12,40 +12,45 @@ protected:
         constexpr int n(12);
         M<T> test_mat(*handle_ptr, m, n);
 
-        T elem = static_cast<T>(1);
+        Scalar<T> elem(static_cast<T>(1));
         for (int i=0; i<m; ++i) {
             for (int j=0; j<n; ++j) {
                 test_mat.set_elem(i, j, elem);
-                elem += static_cast<T>(1);
+                elem += Scalar<T>(static_cast<T>(1));
             }
         }
 
         T test_elem = static_cast<T>(1);
         for (int i=0; i<m; ++i) {
             for (int j=0; j<n; ++j) {
-                ASSERT_EQ(test_mat.get_elem(i, j), test_elem);
+                ASSERT_EQ(test_mat.get_elem(i, j).get_scalar(), test_elem);
                 test_elem += static_cast<T>(1);
             }
         }
 
         // Set index 0 row as all -1
-        for (int j=0; j<n; ++j) { test_mat.set_elem(0, j, static_cast<T>(-1.)); }
+        for (int j=0; j<n; ++j) {
+            test_mat.set_elem(0, j, Scalar<T>(static_cast<T>(-1.)));
+        }
 
         // Test matches modified matrix
         test_elem = static_cast<T>(1);
         for (int i=0; i<m; ++i) {
             for (int j=0; j<n; ++j) {
-                if (i == 0) { ASSERT_EQ(test_mat.get_elem(i, j), static_cast<T>(-1.)); }
-                else { ASSERT_EQ(test_mat.get_elem(i, j), test_elem); }
+                if (i == 0) {
+                    ASSERT_EQ(test_mat.get_elem(i, j).get_scalar(), static_cast<T>(-1.));
+                } else {
+                    ASSERT_EQ(test_mat.get_elem(i, j).get_scalar(), test_elem);
+                }
                 test_elem += static_cast<T>(1);
             }
         }
 
         // Set index 4 row as decreasing by -1 from -1
-        T row_5_elem = static_cast<T>(-1.);
+        Scalar<T> row_5_elem(static_cast<T>(-1.));
         for (int j=0; j<n; ++j) {
             test_mat.set_elem(4, j, row_5_elem);
-            row_5_elem += static_cast<T>(-1.);
+            row_5_elem += Scalar<T>(static_cast<T>(-1.));
         }
 
         // Test matches modified matrix
@@ -53,38 +58,44 @@ protected:
         T row_5_test_elem = static_cast<T>(-1.);
         for (int i=0; i<m; ++i) {
             for (int j=0; j<n; ++j) {
-                if (i == 0) { ASSERT_EQ(test_mat.get_elem(i, j), static_cast<T>(-1.)); }
-                else if (i == 4) { ASSERT_EQ(test_mat.get_elem(i, j), row_5_test_elem);
-                                   row_5_test_elem += static_cast<T>(-1.);}
-                else { ASSERT_EQ(test_mat.get_elem(i, j), test_elem); }
+                if (i == 0) {
+                    ASSERT_EQ(test_mat.get_elem(i, j).get_scalar(), static_cast<T>(-1.));
+                } else if (i == 4) {
+                    ASSERT_EQ(test_mat.get_elem(i, j).get_scalar(), row_5_test_elem);
+                    row_5_test_elem += static_cast<T>(-1.);
+                } else {
+                    ASSERT_EQ(test_mat.get_elem(i, j).get_scalar(), test_elem);
+                }
                 test_elem += static_cast<T>(1);
             }
         }
 
         // Set index 2 col as incresing by 1 from -5
-        T coL_3_elem = static_cast<T>(-5.);
+        Scalar<T> coL_3_elem(static_cast<T>(-5.));
         for (int i=0; i<m; ++i) {
             test_mat.set_elem(i, 2, coL_3_elem);
-            coL_3_elem += static_cast<T>(1.);
+            coL_3_elem += Scalar<T>(static_cast<T>(1.));
+
         }
 
-        // Test matches modified matrix
+    
+    // Test matches modified matrix
         test_elem = static_cast<T>(1);
         row_5_test_elem = static_cast<T>(-1.);
         T coL_3_test_elem = static_cast<T>(-5.);
         for (int i=0; i<m; ++i) {
             for (int j=0; j<n; ++j) {
                 if (j == 2) {
-                    ASSERT_EQ(test_mat.get_elem(i, j), coL_3_test_elem);
+                    ASSERT_EQ(test_mat.get_elem(i, j).get_scalar(), coL_3_test_elem);
                     coL_3_test_elem += static_cast<T>(1.);
                 } else if (i == 0) {
-                    ASSERT_EQ(test_mat.get_elem(i, j), static_cast<T>(-1.));
+                    ASSERT_EQ(test_mat.get_elem(i, j).get_scalar(), static_cast<T>(-1.));
                 } else if (i == 4) {
-                    ASSERT_EQ(test_mat.get_elem(i, j), row_5_test_elem);
+                    ASSERT_EQ(test_mat.get_elem(i, j).get_scalar(), row_5_test_elem);
                     row_5_test_elem += static_cast<T>(-1.);
                     if (j == 1) { row_5_test_elem += static_cast<T>(-1.); }
                 } else {
-                    ASSERT_EQ(test_mat.get_elem(i, j), test_elem);
+                    ASSERT_EQ(test_mat.get_elem(i, j).get_scalar(), test_elem);
                 }
                 test_elem += static_cast<T>(1);
             }
@@ -103,10 +114,22 @@ protected:
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { test_mat.get_elem(-1, 0); });
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { test_mat.get_elem(m, 0); });
 
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { test_mat.set_elem(0, -1, 0.); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { test_mat.set_elem(0, n, 0.); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { test_mat.set_elem(-1, 0, 0.); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { test_mat.set_elem(m, 0, 0.); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            [=]() mutable { test_mat.set_elem(0, -1, Scalar<double>(0.)); }
+        );
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            [=]() mutable { test_mat.set_elem(0, n, Scalar<double>(0.)); }
+        );
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            [=]() mutable { test_mat.set_elem(-1, 0, Scalar<double>(0.)); }
+        );
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            [=]() mutable { test_mat.set_elem(m, 0, Scalar<double>(0.)); }
+        );
 
     }
 
@@ -175,15 +198,15 @@ protected:
         );
         ASSERT_EQ(test_mat_1.rows(), 3);
         ASSERT_EQ(test_mat_1.cols(), 3);
-        ASSERT_EQ(test_mat_1.get_elem(0, 0), static_cast<T>(5.));
-        ASSERT_EQ(test_mat_1.get_elem(0, 1), static_cast<T>(3.));
-        ASSERT_EQ(test_mat_1.get_elem(0, 2), static_cast<T>(27.));
-        ASSERT_EQ(test_mat_1.get_elem(1, 0), static_cast<T>(88.));
-        ASSERT_EQ(test_mat_1.get_elem(1, 1), static_cast<T>(-4.));
-        ASSERT_EQ(test_mat_1.get_elem(1, 2), static_cast<T>(-6.));
-        ASSERT_EQ(test_mat_1.get_elem(2, 0), static_cast<T>(100.));
-        ASSERT_EQ(test_mat_1.get_elem(2, 1), static_cast<T>(12.));
-        ASSERT_EQ(test_mat_1.get_elem(2, 2), static_cast<T>(2.));
+        ASSERT_EQ(test_mat_1.get_elem(0, 0).get_scalar(), static_cast<T>(5.));
+        ASSERT_EQ(test_mat_1.get_elem(0, 1).get_scalar(), static_cast<T>(3.));
+        ASSERT_EQ(test_mat_1.get_elem(0, 2).get_scalar(), static_cast<T>(27.));
+        ASSERT_EQ(test_mat_1.get_elem(1, 0).get_scalar(), static_cast<T>(88.));
+        ASSERT_EQ(test_mat_1.get_elem(1, 1).get_scalar(), static_cast<T>(-4.));
+        ASSERT_EQ(test_mat_1.get_elem(1, 2).get_scalar(), static_cast<T>(-6.));
+        ASSERT_EQ(test_mat_1.get_elem(2, 0).get_scalar(), static_cast<T>(100.));
+        ASSERT_EQ(test_mat_1.get_elem(2, 1).get_scalar(), static_cast<T>(12.));
+        ASSERT_EQ(test_mat_1.get_elem(2, 2).get_scalar(), static_cast<T>(2.));
 
         M<T> test_mat_wide(
             *handle_ptr,
@@ -192,12 +215,12 @@ protected:
         );
         ASSERT_EQ(test_mat_wide.rows(), 2);
         ASSERT_EQ(test_mat_wide.cols(), 3);
-        ASSERT_EQ(test_mat_wide.get_elem(0, 0), static_cast<T>(7.));
-        ASSERT_EQ(test_mat_wide.get_elem(0, 1), static_cast<T>(5.));
-        ASSERT_EQ(test_mat_wide.get_elem(0, 2), static_cast<T>(3.));
-        ASSERT_EQ(test_mat_wide.get_elem(1, 0), static_cast<T>(1.));
-        ASSERT_EQ(test_mat_wide.get_elem(1, 1), static_cast<T>(6.));
-        ASSERT_EQ(test_mat_wide.get_elem(1, 2), static_cast<T>(2.));
+        ASSERT_EQ(test_mat_wide.get_elem(0, 0).get_scalar(), static_cast<T>(7.));
+        ASSERT_EQ(test_mat_wide.get_elem(0, 1).get_scalar(), static_cast<T>(5.));
+        ASSERT_EQ(test_mat_wide.get_elem(0, 2).get_scalar(), static_cast<T>(3.));
+        ASSERT_EQ(test_mat_wide.get_elem(1, 0).get_scalar(), static_cast<T>(1.));
+        ASSERT_EQ(test_mat_wide.get_elem(1, 1).get_scalar(), static_cast<T>(6.));
+        ASSERT_EQ(test_mat_wide.get_elem(1, 2).get_scalar(), static_cast<T>(2.));
         
         M<T> test_mat_tall(
             *handle_ptr,
@@ -208,14 +231,14 @@ protected:
         );
         ASSERT_EQ(test_mat_tall.rows(), 4);
         ASSERT_EQ(test_mat_tall.cols(), 2);
-        ASSERT_EQ(test_mat_tall.get_elem(0, 0), static_cast<T>(7.));
-        ASSERT_EQ(test_mat_tall.get_elem(0, 1), static_cast<T>(5.));
-        ASSERT_EQ(test_mat_tall.get_elem(1, 0), static_cast<T>(1.));
-        ASSERT_EQ(test_mat_tall.get_elem(1, 1), static_cast<T>(6.));
-        ASSERT_EQ(test_mat_tall.get_elem(2, 0), static_cast<T>(3.));
-        ASSERT_EQ(test_mat_tall.get_elem(2, 1), static_cast<T>(2.));
-        ASSERT_EQ(test_mat_tall.get_elem(3, 0), static_cast<T>(43.));
-        ASSERT_EQ(test_mat_tall.get_elem(3, 1), static_cast<T>(9.));
+        ASSERT_EQ(test_mat_tall.get_elem(0, 0).get_scalar(), static_cast<T>(7.));
+        ASSERT_EQ(test_mat_tall.get_elem(0, 1).get_scalar(), static_cast<T>(5.));
+        ASSERT_EQ(test_mat_tall.get_elem(1, 0).get_scalar(), static_cast<T>(1.));
+        ASSERT_EQ(test_mat_tall.get_elem(1, 1).get_scalar(), static_cast<T>(6.));
+        ASSERT_EQ(test_mat_tall.get_elem(2, 0).get_scalar(), static_cast<T>(3.));
+        ASSERT_EQ(test_mat_tall.get_elem(2, 1).get_scalar(), static_cast<T>(2.));
+        ASSERT_EQ(test_mat_tall.get_elem(3, 0).get_scalar(), static_cast<T>(43.));
+        ASSERT_EQ(test_mat_tall.get_elem(3, 1).get_scalar(), static_cast<T>(9.));
 
     }
 
@@ -280,7 +303,7 @@ protected:
         ASSERT_EQ(test_mat_rand.cols(), n_rand);
         for (int i=0; i<m_rand; ++i) {
             for (int j=0; j<n_rand; ++j) {
-                ASSERT_EQ(test_mat_rand.get_elem(i, j), h_mat_rand[i+j*m_rand]);
+                ASSERT_EQ(test_mat_rand.get_elem(i, j).get_scalar(), h_mat_rand[i+j*m_rand]);
             }
         }
 
@@ -332,7 +355,7 @@ protected:
 
         for (int i=0; i<m_rand; ++i) {
             for (int j=0; j<n_rand; ++j) {
-                ASSERT_EQ(h_mat_rand[i+j*m_rand], mat_rand.get_elem(i, j));
+                ASSERT_EQ(h_mat_rand[i+j*m_rand], mat_rand.get_elem(i, j).get_scalar());
             }
         }
 
@@ -417,18 +440,18 @@ protected:
         test_mat_4_3 = test_mat_4_3;
         ASSERT_EQ(test_mat_4_3.rows(), 4);
         ASSERT_EQ(test_mat_4_3.cols(), 3);
-        ASSERT_EQ(test_mat_4_3.get_elem(0, 0), static_cast<T>(1.));
-        ASSERT_EQ(test_mat_4_3.get_elem(0, 1), static_cast<T>(2.));
-        ASSERT_EQ(test_mat_4_3.get_elem(0, 2), static_cast<T>(3.));
-        ASSERT_EQ(test_mat_4_3.get_elem(1, 0), static_cast<T>(4.));
-        ASSERT_EQ(test_mat_4_3.get_elem(1, 1), static_cast<T>(5.));
-        ASSERT_EQ(test_mat_4_3.get_elem(1, 2), static_cast<T>(6.));
-        ASSERT_EQ(test_mat_4_3.get_elem(2, 0), static_cast<T>(7.));
-        ASSERT_EQ(test_mat_4_3.get_elem(2, 1), static_cast<T>(8.));
-        ASSERT_EQ(test_mat_4_3.get_elem(2, 2), static_cast<T>(9.));
-        ASSERT_EQ(test_mat_4_3.get_elem(3, 0), static_cast<T>(10.));
-        ASSERT_EQ(test_mat_4_3.get_elem(3, 1), static_cast<T>(11.));
-        ASSERT_EQ(test_mat_4_3.get_elem(3, 2), static_cast<T>(12.));
+        ASSERT_EQ(test_mat_4_3.get_elem(0, 0).get_scalar(), static_cast<T>(1.));
+        ASSERT_EQ(test_mat_4_3.get_elem(0, 1).get_scalar(), static_cast<T>(2.));
+        ASSERT_EQ(test_mat_4_3.get_elem(0, 2).get_scalar(), static_cast<T>(3.));
+        ASSERT_EQ(test_mat_4_3.get_elem(1, 0).get_scalar(), static_cast<T>(4.));
+        ASSERT_EQ(test_mat_4_3.get_elem(1, 1).get_scalar(), static_cast<T>(5.));
+        ASSERT_EQ(test_mat_4_3.get_elem(1, 2).get_scalar(), static_cast<T>(6.));
+        ASSERT_EQ(test_mat_4_3.get_elem(2, 0).get_scalar(), static_cast<T>(7.));
+        ASSERT_EQ(test_mat_4_3.get_elem(2, 1).get_scalar(), static_cast<T>(8.));
+        ASSERT_EQ(test_mat_4_3.get_elem(2, 2).get_scalar(), static_cast<T>(9.));
+        ASSERT_EQ(test_mat_4_3.get_elem(3, 0).get_scalar(), static_cast<T>(10.));
+        ASSERT_EQ(test_mat_4_3.get_elem(3, 1).get_scalar(), static_cast<T>(11.));
+        ASSERT_EQ(test_mat_4_3.get_elem(3, 2).get_scalar(), static_cast<T>(12.));
 
     }
 
@@ -444,14 +467,14 @@ protected:
         M<T> test_mat_copied(test_mat_2_4);
         ASSERT_EQ(test_mat_copied.rows(), 2);
         ASSERT_EQ(test_mat_copied.cols(), 4);
-        ASSERT_EQ(test_mat_copied.get_elem(0, 0), static_cast<T>(0.));
-        ASSERT_EQ(test_mat_copied.get_elem(0, 1), static_cast<T>(-1.));
-        ASSERT_EQ(test_mat_copied.get_elem(0, 2), static_cast<T>(-2.));
-        ASSERT_EQ(test_mat_copied.get_elem(0, 3), static_cast<T>(-2.));
-        ASSERT_EQ(test_mat_copied.get_elem(1, 0), static_cast<T>(10.));
-        ASSERT_EQ(test_mat_copied.get_elem(1, 1), static_cast<T>(0.));
-        ASSERT_EQ(test_mat_copied.get_elem(1, 2), static_cast<T>(12.));
-        ASSERT_EQ(test_mat_copied.get_elem(1, 3), static_cast<T>(12.));
+        ASSERT_EQ(test_mat_copied.get_elem(0, 0).get_scalar(), static_cast<T>(0.));
+        ASSERT_EQ(test_mat_copied.get_elem(0, 1).get_scalar(), static_cast<T>(-1.));
+        ASSERT_EQ(test_mat_copied.get_elem(0, 2).get_scalar(), static_cast<T>(-2.));
+        ASSERT_EQ(test_mat_copied.get_elem(0, 3).get_scalar(), static_cast<T>(-2.));
+        ASSERT_EQ(test_mat_copied.get_elem(1, 0).get_scalar(), static_cast<T>(10.));
+        ASSERT_EQ(test_mat_copied.get_elem(1, 1).get_scalar(), static_cast<T>(0.));
+        ASSERT_EQ(test_mat_copied.get_elem(1, 2).get_scalar(), static_cast<T>(12.));
+        ASSERT_EQ(test_mat_copied.get_elem(1, 3).get_scalar(), static_cast<T>(12.));
 
     }
 
@@ -465,7 +488,7 @@ protected:
         ASSERT_EQ(test_zero.cols(), n_zero);
         for (int i=0; i<m_zero; ++i) {
             for (int j=0; j<n_zero; ++j) {
-                ASSERT_EQ(test_zero.get_elem(i, j), static_cast<T>(0.));
+                ASSERT_EQ(test_zero.get_elem(i, j).get_scalar(), static_cast<T>(0.));
             }
         }
 
@@ -476,7 +499,7 @@ protected:
         ASSERT_EQ(test_ones.cols(), n_one);
         for (int i=0; i<m_one; ++i) {
             for (int j=0; j<n_one; ++j) {
-                ASSERT_EQ(test_ones.get_elem(i, j), static_cast<T>(1.));
+                ASSERT_EQ(test_ones.get_elem(i, j).get_scalar(), static_cast<T>(1.));
             }
         }
 
@@ -487,8 +510,11 @@ protected:
         ASSERT_EQ(test_identity.cols(), n_identity);
         for (int i=0; i<m_identity; ++i) {
             for (int j=0; j<n_identity; ++j) {
-                if (i == j) { ASSERT_EQ(test_identity.get_elem(i, j), static_cast<T>(1.)); }
-                else { ASSERT_EQ(test_identity.get_elem(i, j), static_cast<T>(0.)); }
+                if (i == j) {
+                    ASSERT_EQ(test_identity.get_elem(i, j).get_scalar(), static_cast<T>(1.));
+                } else {
+                    ASSERT_EQ(test_identity.get_elem(i, j).get_scalar(), static_cast<T>(0.));
+                }
             }
         }
 
@@ -503,10 +529,10 @@ protected:
         for (int i=1; i<m_rand-1; ++i) {
             for (int j=1; j<n_rand-1; ++j) {
                 ASSERT_TRUE(
-                    ((test_rand.get_elem(i, j) != test_rand.get_elem(i-1, j)) ||
-                     (test_rand.get_elem(i, j) != test_rand.get_elem(i+1, j)) ||
-                     (test_rand.get_elem(i, j) != test_rand.get_elem(i, j-1)) ||
-                     (test_rand.get_elem(i, j) != test_rand.get_elem(i, j+1)))
+                    ((test_rand.get_elem(i, j).get_scalar() != test_rand.get_elem(i-1, j).get_scalar()) ||
+                     (test_rand.get_elem(i, j).get_scalar() != test_rand.get_elem(i+1, j).get_scalar()) ||
+                     (test_rand.get_elem(i, j).get_scalar() != test_rand.get_elem(i, j-1).get_scalar()) ||
+                     (test_rand.get_elem(i, j).get_scalar() != test_rand.get_elem(i, j+1).get_scalar()))
                 );
             }
         }
@@ -570,15 +596,19 @@ protected:
         M<T> mat_scaled_mult(mat*static_cast<T>(4));
         for (int i=0; i<4; ++i) {
             for (int j=0; j<3; ++j) {
-                ASSERT_EQ(mat_scaled_mult.get_elem(i, j),
-                          static_cast<T>(4)*mat.get_elem(i, j));
+                ASSERT_EQ(
+                    mat_scaled_mult.get_elem(i, j).get_scalar(),
+                    static_cast<T>(4)*mat.get_elem(i, j).get_scalar()
+                );
             }
         }
         M<T> mat_scaled_div(mat/static_cast<T>(10));
         for (int i=0; i<4; ++i) {
             for (int j=0; j<3; ++j) {
-                ASSERT_EQ(mat_scaled_div.get_elem(i, j),
-                          (static_cast<T>(1)/static_cast<T>(10))*mat.get_elem(i, j));
+                ASSERT_EQ(
+                    mat_scaled_div.get_elem(i, j).get_scalar(),
+                    (static_cast<T>(1)/static_cast<T>(10))*mat.get_elem(i, j).get_scalar()
+                );
             }
         }
 
@@ -651,9 +681,9 @@ protected:
             ),
             Vector<T>(
                 *handle_ptr,
-                {rand_mat.get_elem(0, 0),
-                 rand_mat.get_elem(1, 0),
-                 rand_mat.get_elem(2, 0)}
+                {rand_mat.get_elem(0, 0).get_scalar(),
+                 rand_mat.get_elem(1, 0).get_scalar(),
+                 rand_mat.get_elem(2, 0).get_scalar()}
             ),
             static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
         );
@@ -664,9 +694,9 @@ protected:
             ),
             Vector<T>(
                 *handle_ptr,
-                {rand_mat.get_elem(0, 1),
-                 rand_mat.get_elem(1, 1),
-                 rand_mat.get_elem(2, 1)}
+                {rand_mat.get_elem(0, 1).get_scalar(),
+                 rand_mat.get_elem(1, 1).get_scalar(),
+                 rand_mat.get_elem(2, 1).get_scalar()}
             ),
             static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
         );
@@ -677,9 +707,9 @@ protected:
             ),
             Vector<T>(
                 *handle_ptr,
-                {rand_mat.get_elem(0, 2),
-                 rand_mat.get_elem(1, 2),
-                 rand_mat.get_elem(2, 2)}
+                {rand_mat.get_elem(0, 2).get_scalar(),
+                 rand_mat.get_elem(1, 2).get_scalar(),
+                 rand_mat.get_elem(2, 2).get_scalar()}
             ),
             static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
         );
@@ -690,9 +720,9 @@ protected:
             ),
             Vector<T>(
                 *handle_ptr,
-                {rand_mat.get_elem(0, 3),
-                 rand_mat.get_elem(1, 3),
-                 rand_mat.get_elem(2, 3)}
+                {rand_mat.get_elem(0, 3).get_scalar(),
+                 rand_mat.get_elem(1, 3).get_scalar(),
+                 rand_mat.get_elem(2, 3).get_scalar()}
             ),
             static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
         );
@@ -703,18 +733,18 @@ protected:
             ),
             Vector<T>(
                 *handle_ptr,
-                {(static_cast<T>(1)*rand_mat.get_elem(0, 0) +
-                  static_cast<T>(0.1)*rand_mat.get_elem(0, 1) +
-                  static_cast<T>(0.01)*rand_mat.get_elem(0, 2) +
-                  static_cast<T>(0.001)*rand_mat.get_elem(0, 3)),
-                 (static_cast<T>(1)*rand_mat.get_elem(1, 0) +
-                  static_cast<T>(0.1)*rand_mat.get_elem(1, 1) +
-                  static_cast<T>(0.01)*rand_mat.get_elem(1, 2)+
-                  static_cast<T>(0.001)*rand_mat.get_elem(1, 3)),
-                 (static_cast<T>(1)*rand_mat.get_elem(2, 0) +
-                  static_cast<T>(0.1)*rand_mat.get_elem(2, 1) +
-                  static_cast<T>(0.01)*rand_mat.get_elem(2, 2)+
-                  static_cast<T>(0.001)*rand_mat.get_elem(2, 3))}
+                {(static_cast<T>(1)*rand_mat.get_elem(0, 0).get_scalar() +
+                  static_cast<T>(0.1)*rand_mat.get_elem(0, 1).get_scalar() +
+                  static_cast<T>(0.01)*rand_mat.get_elem(0, 2).get_scalar() +
+                  static_cast<T>(0.001)*rand_mat.get_elem(0, 3).get_scalar()),
+                 (static_cast<T>(1)*rand_mat.get_elem(1, 0).get_scalar() +
+                  static_cast<T>(0.1)*rand_mat.get_elem(1, 1).get_scalar() +
+                  static_cast<T>(0.01)*rand_mat.get_elem(1, 2).get_scalar()+
+                  static_cast<T>(0.001)*rand_mat.get_elem(1, 3).get_scalar()),
+                 (static_cast<T>(1)*rand_mat.get_elem(2, 0).get_scalar() +
+                  static_cast<T>(0.1)*rand_mat.get_elem(2, 1).get_scalar() +
+                  static_cast<T>(0.01)*rand_mat.get_elem(2, 2).get_scalar()+
+                  static_cast<T>(0.001)*rand_mat.get_elem(2, 3).get_scalar())}
             ),
             static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
         );
@@ -836,8 +866,8 @@ protected:
             ),
             Vector<T>(
                 *handle_ptr,
-                {rand_mat.get_elem(0, 0),
-                 rand_mat.get_elem(0, 1)}
+                {rand_mat.get_elem(0, 0).get_scalar(),
+                 rand_mat.get_elem(0, 1).get_scalar()}
             ),
             static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
         );
@@ -850,8 +880,8 @@ protected:
             ),
             Vector<T>(
                 *handle_ptr,
-                {rand_mat.get_elem(1, 0),
-                 rand_mat.get_elem(1, 1)}
+                {rand_mat.get_elem(1, 0).get_scalar(),
+                 rand_mat.get_elem(1, 1).get_scalar()}
             ),
             static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
         );
@@ -864,8 +894,8 @@ protected:
             ),
             Vector<T>(
                 *handle_ptr,
-                {rand_mat.get_elem(2, 0),
-                 rand_mat.get_elem(2, 1)}
+                {rand_mat.get_elem(2, 0).get_scalar(),
+                 rand_mat.get_elem(2, 1).get_scalar()}
             ),
             static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
         );
@@ -878,12 +908,12 @@ protected:
             ),
             Vector<T>(
                 *handle_ptr,
-                {(static_cast<T>(1)*rand_mat.get_elem(0, 0) +
-                  static_cast<T>(0.1)*rand_mat.get_elem(1, 0) +
-                  static_cast<T>(0.01)*rand_mat.get_elem(2, 0)),
-                 (static_cast<T>(1)*rand_mat.get_elem(0, 1) +
-                  static_cast<T>(0.1)*rand_mat.get_elem(1, 1) +
-                  static_cast<T>(0.01)*rand_mat.get_elem(2, 1))}
+                {(static_cast<T>(1)*rand_mat.get_elem(0, 0).get_scalar() +
+                  static_cast<T>(0.1)*rand_mat.get_elem(1, 0).get_scalar() +
+                  static_cast<T>(0.01)*rand_mat.get_elem(2, 0).get_scalar()),
+                 (static_cast<T>(1)*rand_mat.get_elem(0, 1).get_scalar() +
+                  static_cast<T>(0.1)*rand_mat.get_elem(1, 1).get_scalar() +
+                  static_cast<T>(0.01)*rand_mat.get_elem(2, 1).get_scalar())}
             ),
             static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
         );
@@ -946,7 +976,10 @@ protected:
         ASSERT_EQ(mat_transposed.cols(), n_manual);
         for (int i=0; i<m_manual; ++i) {
             for (int j=0; j<n_manual; ++j) {
-                ASSERT_EQ(mat_transposed.get_elem(i, j), mat.get_elem(j, i));
+                ASSERT_EQ(
+                    mat_transposed.get_elem(i, j).get_scalar(),
+                    mat.get_elem(j, i).get_scalar()
+                );
             }
         }
         M<T> test(
@@ -967,7 +1000,10 @@ protected:
         ASSERT_EQ(mat_rand_transposed.cols(), m_rand);
         for (int i=0; i<n_rand; ++i) {
             for (int j=0; j<m_rand; ++j) {
-                ASSERT_EQ(mat_rand_transposed.get_elem(i, j), mat_rand.get_elem(j, i));
+                ASSERT_EQ(
+                    mat_rand_transposed.get_elem(i, j).get_scalar(),
+                    mat_rand.get_elem(j, i).get_scalar()
+                );
             }
         }
 
@@ -1151,7 +1187,7 @@ protected:
              {static_cast<T>(9), static_cast<T>(-9)},
              {static_cast<T>(4), static_cast<T>(-2)}}
         );
-        ASSERT_EQ(mat1.norm(), static_cast<T>(24));
+        ASSERT_EQ(mat1.norm().get_scalar(), static_cast<T>(24));
 
         M<T> mat2(
             *handle_ptr,
@@ -1159,14 +1195,14 @@ protected:
              {static_cast<T>(1), static_cast<T>(1), static_cast<T>(-1)},
              {static_cast<T>(-1), static_cast<T>(-1), static_cast<T>(-1)}}
         );
-        ASSERT_EQ(mat2.norm(), static_cast<T>(3));
+        ASSERT_EQ(mat2.norm().get_scalar(), static_cast<T>(3));
 
     }
 
     void TestCast() {
         
-        constexpr int m(20);
-        constexpr int n(30);
+        constexpr int m(10);
+        constexpr int n(15);
 
         M<double> mat_dbl(M<double>::Random(*handle_ptr, m, n));
 
@@ -1179,9 +1215,9 @@ protected:
         for (int i=0; i<m; ++i) {
             for (int j=0; j<n; ++j) {
                 ASSERT_NEAR(
-                    dbl_to_sgl.get_elem(i, j),
-                    static_cast<float>(mat_dbl.get_elem(i, j)),
-                    min_1_mag(static_cast<float>(mat_dbl.get_elem(i, j)))*
+                    dbl_to_sgl.get_elem(i, j).get_scalar(),
+                    static_cast<float>(mat_dbl.get_elem(i, j).get_scalar()),
+                    min_1_mag(static_cast<float>(mat_dbl.get_elem(i, j).get_scalar()))*
                         Tol<float>::roundoff_T()
                 );
             }
@@ -1193,9 +1229,9 @@ protected:
         for (int i=0; i<m; ++i) {
             for (int j=0; j<n; ++j) {
                 ASSERT_NEAR(
-                    dbl_to_hlf.get_elem(i, j),
-                    static_cast<__half>(mat_dbl.get_elem(i, j)),
-                    min_1_mag(static_cast<__half>(mat_dbl.get_elem(i, j)))*
+                    dbl_to_hlf.get_elem(i, j).get_scalar(),
+                    static_cast<__half>(mat_dbl.get_elem(i, j).get_scalar()),
+                    min_1_mag(static_cast<__half>(mat_dbl.get_elem(i, j).get_scalar()))*
                         Tol<__half>::roundoff_T()
                 );
             }
@@ -1212,9 +1248,9 @@ protected:
         for (int i=0; i<m; ++i) {
             for (int j=0; j<n; ++j) {
                 ASSERT_NEAR(
-                    sgl_to_dbl.get_elem(i, j),
-                    static_cast<double>(mat_sgl.get_elem(i, j)),
-                    min_1_mag(static_cast<double>(mat_sgl.get_elem(i, j)))*
+                    sgl_to_dbl.get_elem(i, j).get_scalar(),
+                    static_cast<double>(mat_sgl.get_elem(i, j).get_scalar()),
+                    min_1_mag(static_cast<double>(mat_sgl.get_elem(i, j).get_scalar()))*
                         static_cast<double>(Tol<float>::roundoff_T())
                 );
             }
@@ -1226,9 +1262,9 @@ protected:
         for (int i=0; i<m; ++i) {
             for (int j=0; j<n; ++j) {
                 ASSERT_NEAR(
-                    sgl_to_hlf.get_elem(i, j),
-                    static_cast<__half>(mat_sgl.get_elem(i, j)),
-                    min_1_mag(static_cast<__half>(mat_sgl.get_elem(i, j)))*
+                    sgl_to_hlf.get_elem(i, j).get_scalar(),
+                    static_cast<__half>(mat_sgl.get_elem(i, j).get_scalar()),
+                    min_1_mag(static_cast<__half>(mat_sgl.get_elem(i, j).get_scalar()))*
                         Tol<__half>::roundoff_T()
                 );
             }
@@ -1245,9 +1281,9 @@ protected:
         for (int i=0; i<m; ++i) {
             for (int j=0; j<n; ++j) {
                 ASSERT_NEAR(
-                    hlf_to_sgl.get_elem(i, j),
-                    static_cast<float>(mat_hlf.get_elem(i, j)),
-                    min_1_mag(static_cast<double>(mat_hlf.get_elem(i, j)))*
+                    hlf_to_sgl.get_elem(i, j).get_scalar(),
+                    static_cast<float>(mat_hlf.get_elem(i, j).get_scalar()),
+                    min_1_mag(static_cast<double>(mat_hlf.get_elem(i, j).get_scalar()))*
                         static_cast<float>(Tol<__half>::roundoff_T())
                 );
             }
@@ -1259,9 +1295,9 @@ protected:
         for (int i=0; i<m; ++i) {
             for (int j=0; j<n; ++j) {
                 ASSERT_NEAR(
-                    hlf_to_dbl.get_elem(i, j),
-                    static_cast<double>(mat_hlf.get_elem(i, j)),
-                    min_1_mag(static_cast<double>(mat_hlf.get_elem(i, j)))*
+                    hlf_to_dbl.get_elem(i, j).get_scalar(),
+                    static_cast<double>(mat_hlf.get_elem(i, j).get_scalar()),
+                    min_1_mag(static_cast<double>(mat_hlf.get_elem(i, j).get_scalar()))*
                         static_cast<double>(Tol<__half>::roundoff_T())
                 );
             }

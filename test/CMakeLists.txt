@@ -8,9 +8,9 @@ set(
     TEST_TYPES_CPPS
     test_types/test_Scalar.cpp
     test_types/test_Vector.cpp
-    # test_types/test_MatrixDense.cpp
+    test_types/test_MatrixDense.cpp
     # test_types/test_MatrixSparse.cpp
-    # test_types/test_TypeConversion.cpp
+    test_types/test_TypeConversion.cpp
 )
 
 set(
