@@ -81,7 +81,5 @@ target_link_libraries(
     PUBLIC
     gtest_main
     precision-cascade
-    math_functions
-    types
     "$ENV{CUDA_PATH}/lib/x64/cublas.lib"
 )
