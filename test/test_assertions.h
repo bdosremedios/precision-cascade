@@ -107,7 +107,7 @@ void _ASSERT_MATRIX_LT(
 
     for (int i=0; i<target.rows(); ++i) {
         for (int j=0; j<target.cols(); ++j) {
-            ASSERT_LT(test.get_elem(i, j), target.get_elem(i, j));
+            ASSERT_LT(test.get_elem(i, j).get_scalar(), target.get_elem(i, j).get_scalar());
         }
     }
 
@@ -130,7 +130,7 @@ void _ASSERT_MATRIX_GT(
 
     for (int i=0; i<target.rows(); ++i) {
         for (int j=0; j<target.cols(); ++j) {
-            ASSERT_GT(test.get_elem(i, j), target.get_elem(i, j));
+            ASSERT_GT(test.get_elem(i, j).get_scalar(), target.get_elem(i, j).get_scalar());
         }
     }
 
@@ -165,8 +165,8 @@ void _ASSERT_MATRIX_SAMESPARSITY(
 
     for (int i=0; i<target.rows(); ++i) {
         for (int j=0; j<target.cols(); ++j) {
-            if (abs(target.get_elem(i, j)) <= zero_tol) {
-                ASSERT_LE(abs(test.get_elem(i, j)), zero_tol);
+            if (std::abs(target.get_elem(i, j).get_scalar()) <= zero_tol) {
+                ASSERT_LE(std::abs(test.get_elem(i, j).get_scalar()), zero_tol);
             }
         }
     }
@@ -215,7 +215,7 @@ void _ASSERT_MATRIX_LOWTRI(
 
     for (int i=0; i<test.rows(); ++i) {
         for (int j=i+1; j<test.cols(); ++j) {
-            ASSERT_NEAR(test.get_elem(i, j), static_cast<T>(0), tol);
+            ASSERT_NEAR(test.get_elem(i, j).get_scalar(), static_cast<T>(0), tol);
         }
     }
 
@@ -235,7 +235,7 @@ void _ASSERT_MATRIX_UPPTRI(
 
     for (int i=0; i<test.rows(); ++i) {
         for (int j=0; j<i; ++j) {
-            ASSERT_NEAR(test.get_elem(i, j), static_cast<T>(0), tol);
+            ASSERT_NEAR(test.get_elem(i, j).get_scalar(), static_cast<T>(0), tol);
         }
     }
 

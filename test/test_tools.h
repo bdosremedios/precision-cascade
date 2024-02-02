@@ -40,7 +40,7 @@ int count_zeros(M<T> A, double zero_tol) {
     int count = 0;
     for (int i=0; i<A.rows(); ++i) {
         for (int j=0; j<A.cols(); ++j) {
-            if (abs(A.get_elem(i, j)) <= zero_tol) { ++count; }
+            if (abs(A.get_elem(i, j).get_scalar()) <= zero_tol) { ++count; }
         }
     }
     return count;

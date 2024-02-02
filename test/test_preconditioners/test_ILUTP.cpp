@@ -52,14 +52,14 @@ public:
 
         // Test that each lower threshold is better than the higher one w.r.t
         // Frobenius norm
-        EXPECT_LE((A-ilut1e_4.get_L()*ilut1e_4.get_U()).norm(),
-                  (A-ilut1e_3.get_L()*ilut1e_3.get_U()).norm());
-        EXPECT_LE((A-ilut1e_3.get_L()*ilut1e_3.get_U()).norm(),
-                  (A-ilut1e_2.get_L()*ilut1e_2.get_U()).norm());
-        EXPECT_LE((A-ilut1e_2.get_L()*ilut1e_2.get_U()).norm(),
-                  (A-ilut1e_1.get_L()*ilut1e_1.get_U()).norm());
-        EXPECT_LE((A-ilut1e_1.get_L()*ilut1e_1.get_U()).norm(),
-                  (A-ilut1e_0.get_L()*ilut1e_0.get_U()).norm());
+        EXPECT_LE((A-ilut1e_4.get_L()*ilut1e_4.get_U()).norm().get_scalar(),
+                  (A-ilut1e_3.get_L()*ilut1e_3.get_U()).norm().get_scalar());
+        EXPECT_LE((A-ilut1e_3.get_L()*ilut1e_3.get_U()).norm().get_scalar(),
+                  (A-ilut1e_2.get_L()*ilut1e_2.get_U()).norm().get_scalar());
+        EXPECT_LE((A-ilut1e_2.get_L()*ilut1e_2.get_U()).norm().get_scalar(),
+                  (A-ilut1e_1.get_L()*ilut1e_1.get_U()).norm().get_scalar());
+        EXPECT_LE((A-ilut1e_1.get_L()*ilut1e_1.get_U()).norm().get_scalar(),
+                  (A-ilut1e_0.get_L()*ilut1e_0.get_U()).norm().get_scalar());
 
         // Test that each higher threshold has more zeros
         EXPECT_LE(count_zeros(ilut1e_4.get_U(), Tol<double>::roundoff()),
@@ -110,8 +110,16 @@ public:
         ASSERT_MATRIX_UPPTRI(ilu_all_drop.get_U(), Tol<double>::roundoff());
 
         for (int i=0; i<n; ++i) {
-            ASSERT_NEAR(ilu_all_drop.get_L().get_elem(i, i), 1., Tol<double>::roundoff());
-            ASSERT_NEAR(ilu_all_drop.get_U().get_elem(i, i), A.get_elem(i, i), Tol<double>::roundoff());
+            ASSERT_NEAR(
+                ilu_all_drop.get_L().get_elem(i, i).get_scalar(),
+                1.,
+                Tol<double>::roundoff()
+            );
+            ASSERT_NEAR(
+                ilu_all_drop.get_U().get_elem(i, i).get_scalar(),
+                A.get_elem(i, i).get_scalar(),
+                Tol<double>::roundoff()
+            );
         }
 
     }

@@ -87,6 +87,15 @@ public:
         }
     }
 
+    Vector(const cublasHandle_t &arg_handle, const T *h_vec, const int m_elem, const int n_elem):
+        Vector(arg_handle, m_elem)
+    {
+        check_n(n_elem);
+        if (m_elem > 0) {
+            check_cublas_status(cublasSetVector(m_rows, sizeof(T), h_vec, 1, d_vec, 1));
+        }
+    }
+
     void copy_data_to_ptr(T *h_vec, int m_elem) const {
         if (m_elem != m_rows) {
             throw std::runtime_error("Vector: invalid m_elem dim for copy_data_to_ptr");

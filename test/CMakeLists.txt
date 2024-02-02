@@ -63,10 +63,10 @@ set(
 
 set(
     TEST_SUITE_CPPS
-    # test_tools/test_read_matrix.cpp
+    test_tools/test_read_matrix.cpp
     ${TEST_TYPES_CPPS}
-    # ${TEST_TOOLS_CPPS}
-    # ${TEST_PRECONDITIONER_CPPS}
+    ${TEST_TOOLS_CPPS}
+    ${TEST_PRECONDITIONER_CPPS}
     # ${TEST_SOLVERS}
 )
 

@@ -72,7 +72,7 @@ public:
         drop_rule_tau = [A] (
             const W &curr_val, const int &i, const int &j, W const &_zero_tol
         ) -> bool {
-            return (std::abs(A.get_elem(i, j)) <= _zero_tol);
+            return (std::abs(A.get_elem(i, j).get_scalar()) <= _zero_tol);
         };
 
         apply_drop_rule_col = [this] (
@@ -113,7 +113,7 @@ public:
         drop_rule_tau = [A_col_norms, tau] (
             const W &curr_val, const int &row, const int &col, const W &_zero_tol
         ) -> bool {
-            return (std::abs(curr_val) <= tau*A_col_norms.get_elem(col));
+            return (std::abs(curr_val) <= tau*A_col_norms.get_elem(col).get_scalar());
         };
 
         apply_drop_rule_col = [this, p, &A] (

@@ -29,15 +29,15 @@ public:
         M<double> A(M<double>::Random(*handle_ptr, n, n));
         
         NoPreconditioner<M, double> no_precond;
-        ILU<M, double> ilu(A, Tol<double>::roundoff(), false);
+        ILUPreconditioner<M, double> ilu_precond(A, Tol<double>::roundoff(), false);
 
         PrecondArgPkg<M, double> args(
-            std::make_shared<ILU<M, double>>(A, Tol<double>::roundoff(), false)
+            std::make_shared<ILUPreconditioner<M, double>>(A, Tol<double>::roundoff(), false)
         );
 
         Vector<double> test_vec(Vector<double>::Random(*handle_ptr, n));
 
-        ASSERT_VECTOR_EQ(args.left_precond->action_inv_M(test_vec), ilu.action_inv_M(test_vec));
+        ASSERT_VECTOR_EQ(args.left_precond->action_inv_M(test_vec), ilu_precond.action_inv_M(test_vec));
         ASSERT_VECTOR_EQ(args.right_precond->action_inv_M(test_vec), no_precond.action_inv_M(test_vec));
 
     }
@@ -50,17 +50,17 @@ public:
         M<double> A(M<double>::Random(*handle_ptr, n, n));
 
         NoPreconditioner<M, double> no_precond;
-        ILU<M, double> ilu(A, Tol<double>::roundoff(), false);
+        ILUPreconditioner<M, double> ilu_precond(A, Tol<double>::roundoff(), false);
         
         PrecondArgPkg<M, double> args(
             std::make_shared<NoPreconditioner<M, double>>(no_precond),
-            std::make_shared<ILU<M, double>>(A, Tol<double>::roundoff(), false)
+            std::make_shared<ILUPreconditioner<M, double>>(A, Tol<double>::roundoff(), false)
         );
 
         Vector<double> test_vec(Vector<double>::Random(*handle_ptr, n));
 
         ASSERT_VECTOR_EQ(args.left_precond->action_inv_M(test_vec), no_precond.action_inv_M(test_vec));
-        ASSERT_VECTOR_EQ(args.right_precond->action_inv_M(test_vec), ilu.action_inv_M(test_vec));
+        ASSERT_VECTOR_EQ(args.right_precond->action_inv_M(test_vec), ilu_precond.action_inv_M(test_vec));
 
     }
 
@@ -72,17 +72,17 @@ public:
         M<double> A(M<double>::Random(*handle_ptr, n, n));
 
         NoPreconditioner<M, double> no_precond;
-        ILU<M, double> ilu(A, Tol<double>::roundoff(), false);
+        ILUPreconditioner<M, double> ilu_precond(A, Tol<double>::roundoff(), false);
 
         PrecondArgPkg<M, double> args(
-            std::make_shared<ILU<M, double>>(A, Tol<double>::roundoff(), false),
-            std::make_shared<ILU<M, double>>(A, Tol<double>::roundoff(), false)
+            std::make_shared<ILUPreconditioner<M, double>>(A, Tol<double>::roundoff(), false),
+            std::make_shared<ILUPreconditioner<M, double>>(A, Tol<double>::roundoff(), false)
         );
 
         Vector<double> test_vec(Vector<double>::Random(*handle_ptr, n));
 
-        ASSERT_VECTOR_EQ(args.left_precond->action_inv_M(test_vec), ilu.action_inv_M(test_vec));
-        ASSERT_VECTOR_EQ(args.right_precond->action_inv_M(test_vec), ilu.action_inv_M(test_vec));
+        ASSERT_VECTOR_EQ(args.left_precond->action_inv_M(test_vec), ilu_precond.action_inv_M(test_vec));
+        ASSERT_VECTOR_EQ(args.right_precond->action_inv_M(test_vec), ilu_precond.action_inv_M(test_vec));
 
     }
 
@@ -93,17 +93,17 @@ TEST_F(PrecondArgPkg_Test, TestDefaultConstruction) {
     // TestDefaultConstruction<MatrixSparse>();
 }
 
-// TEST_F(PrecondArgPkg_Test, TestLeftPreconditionerSet) {
-//     TestLeftPreconditionerSet<MatrixDense>();
+TEST_F(PrecondArgPkg_Test, TestLeftPreconditionerSet) {
+    TestLeftPreconditionerSet<MatrixDense>();
 //     // TestLeftPreconditionerSet<MatrixSparse>();
-// }
+}
 
-// TEST_F(PrecondArgPkg_Test, TestRightPreconditionerSet) {
-//     TestRightPreconditionerSet<MatrixDense>();
+TEST_F(PrecondArgPkg_Test, TestRightPreconditionerSet) {
+    TestRightPreconditionerSet<MatrixDense>();
 //     // TestRightPreconditionerSet<MatrixSparse>();
-// }
+}
 
-// TEST_F(PrecondArgPkg_Test, TestBothPreconditionerSet) {
-//     TestBothPreconditionerSet<MatrixDense>();
+TEST_F(PrecondArgPkg_Test, TestBothPreconditionerSet) {
+    TestBothPreconditionerSet<MatrixDense>();
 //     // TestBothPreconditionerSet<MatrixSparse>();
-// }
+}
