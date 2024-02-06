@@ -6,14 +6,16 @@
 template <template <typename> typename M, typename T>
 class SORSolve: public TypedIterativeSolve<M, T>
 {
-protected:
-
-    using TypedIterativeSolve<M, T>::typed_lin_sys;
-    using TypedIterativeSolve<M, T>::typed_soln;
+private:
 
     T w;
     M<T> D_wL = M<T>(NULL);
     M<T> L_wL_U = M<T>(NULL);
+
+protected:
+
+    using TypedIterativeSolve<M, T>::typed_lin_sys;
+    using TypedIterativeSolve<M, T>::typed_soln;
 
     void typed_iterate() override {
         typed_soln = D_wL.frwd_sub(typed_lin_sys.get_b_typed()-L_wL_U*typed_soln);

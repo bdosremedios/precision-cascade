@@ -43,10 +43,19 @@ private:
 
         res_norm_hist.clear();
         res_hist = MatrixDense<double>(lin_sys.get_A().get_handle(), lin_sys.get_m(), max_iter+1);
-        Vector<double> res_calc(lin_sys.get_b()-lin_sys.get_A()*init_guess);
-        curr_res = res_calc;
-        res_hist.get_col(0).set_from_vec(res_calc);
-        res_norm_hist.push_back(res_calc.norm());
+        curr_res = lin_sys.get_b()-lin_sys.get_A()*init_guess;
+        res_hist.get_col(0).set_from_vec(curr_res);
+        curr_res_norm = curr_res.norm().get_scalar();
+        res_norm_hist.push_back(curr_res_norm);
+
+    }
+
+    void update_residual() {
+
+        curr_res = lin_sys.get_b()-lin_sys.get_A()*generic_soln;
+        res_hist.get_col(curr_iter).set_from_vec(curr_res);
+        curr_res_norm = curr_res.norm().get_scalar();
+        res_norm_hist.push_back(curr_res_norm);
 
     }
     
@@ -67,6 +76,7 @@ protected:
     bool terminated;
     Vector<double> generic_soln = Vector<double>(NULL);
     Vector<double> curr_res = Vector<double>(NULL);
+    double curr_res_norm;
     MatrixDense<double> res_hist = MatrixDense<double>(NULL);
     std::vector<double> res_norm_hist;
 
@@ -76,9 +86,15 @@ protected:
         const SolveArgPkg &arg_pkg
     ):
         lin_sys(arg_lin_sys),
-        init_guess((arg_pkg.check_default_init_guess()) ? make_guess(arg_lin_sys) : arg_pkg.init_guess),
-        max_iter((arg_pkg.check_default_max_iter()) ? 100 : arg_pkg.max_iter),
-        target_rel_res((arg_pkg.check_default_target_rel_res()) ? 1e-10 : arg_pkg.target_rel_res)
+        init_guess(
+            arg_pkg.check_default_init_guess() ? make_guess(arg_lin_sys) : arg_pkg.init_guess
+        ),
+        max_iter(
+            arg_pkg.check_default_max_iter() ? 100 : arg_pkg.max_iter
+        ),
+        target_rel_res(
+            arg_pkg.check_default_target_rel_res() ? 1e-10 : arg_pkg.target_rel_res
+        )
     {
         assert_valid_type<M>();
         check_compatibility();
@@ -109,7 +125,7 @@ public:
     // *** Getters ***
     Vector<double> get_generic_soln() const { return generic_soln; };
     Vector<double> get_curr_res() const { return curr_res; };
-    double get_relres() const { return curr_res.norm()/res_norm_hist[0]; }
+    double get_relres() const { return curr_res_norm/res_norm_hist[0]; }
     MatrixDense<double> get_res_hist() const { return res_hist; };
     std::vector<double> get_res_norm_hist() const { return res_norm_hist; };
     bool check_initiated() const { return initiated; };
@@ -127,22 +143,16 @@ public:
         initialize_instantiate_residual(); // Set res_hist size here since max_iter is mutable before solve
 
         while (!converged && ((curr_iter < max_iter) && (get_relres() > target_rel_res))) {
-
             ++curr_iter;
             iterate();
-
-            curr_res = lin_sys.get_b()-lin_sys.get_A()*generic_soln;
-            res_hist.get_col(curr_iter).set_from_vec(curr_res);
-            res_norm_hist.push_back(curr_res.norm());
-
+            update_residual();
             if (terminated) { break; }
-
         }
 
         terminated = true;
         converged = (
             (get_relres() <= target_rel_res) ||
-            (curr_iter == 0) && ((curr_res.norm()/lin_sys.get_b().norm()) <= target_rel_res)
+            (curr_iter == 0) && ((curr_res.norm()/lin_sys.get_b().norm()).get_scalar() <= target_rel_res)
         );
 
     }

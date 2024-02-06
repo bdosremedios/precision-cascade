@@ -46,7 +46,7 @@ public:
         EXPECT_EQ(test_mock_no_guess.res_norm_hist.size(), 1);
         EXPECT_NEAR(
             test_mock_no_guess.res_norm_hist[0],
-            (b-A*test_mock_no_guess.init_guess).norm(),
+            (b-A*test_mock_no_guess.init_guess).norm().get_scalar(),
             Tol<T>::gamma(n)
         );
 
@@ -78,7 +78,7 @@ public:
         EXPECT_EQ(test_mock_guess.res_norm_hist.size(), 1);
         EXPECT_NEAR(
             test_mock_guess.res_norm_hist[0],
-            (b - A*init_guess).norm(),
+            (b - A*init_guess).norm().get_scalar(),
             Tol<T>::gamma(n)
         );
 
@@ -106,7 +106,7 @@ public:
         args.max_iter = max_iter;
         args.target_rel_res = (
             Tol<T>::roundoff() +
-            (b-A*typed_soln.template cast<double>()).norm()/(b-A*init_guess).norm()
+            ((b-A*typed_soln.template cast<double>()).norm()/(b-A*init_guess).norm()).get_scalar()
         );
 
         TypedIterativeSolveTestingMock<M, T> test_mock(typed_lin_sys, typed_soln, args);
@@ -144,17 +144,17 @@ public:
         );
         EXPECT_NEAR(
             test_mock.res_norm_hist[0],
-            (b-A*init_guess).norm(),
+            (b-A*init_guess).norm().get_scalar(),
             Tol<T>::gamma(n)
         );
         EXPECT_NEAR(
             test_mock.res_norm_hist[1],
-            (b-A*(typed_soln.template cast<double>())).norm(),
+            (b-A*(typed_soln.template cast<double>())).norm().get_scalar(),
             Tol<T>::gamma(n)
         );
         EXPECT_NEAR(
             test_mock.get_relres(),
-            (b-A*(typed_soln.template cast<double>())).norm()/(b-A*init_guess).norm(),
+            ((b-A*(typed_soln.template cast<double>())).norm()/(b-A*init_guess).norm()).get_scalar(),
             Tol<T>::gamma(n)
         );
 
@@ -192,7 +192,7 @@ public:
         EXPECT_FALSE(test_mock.converged);
         EXPECT_FALSE(test_mock.terminated);
         EXPECT_EQ(test_mock.curr_iter, 0);
-        std::vector<double> init_res_norm_hist{(b - A*test_mock.init_guess).norm()};
+        std::vector<double> init_res_norm_hist{(b - A*test_mock.init_guess).norm().get_scalar()};
         EXPECT_EQ(test_mock.res_norm_hist, init_res_norm_hist);
 
     }

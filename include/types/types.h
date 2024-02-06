@@ -1,4 +1,5 @@
 #include "template_check.h"
+#include "Scalar.h"
 #include "Vector.h"
 #include "MatrixDense.h"
 #include "MatrixSparse.h"

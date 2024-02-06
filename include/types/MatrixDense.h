@@ -304,15 +304,15 @@ public:
         Scalar<T> curr_solved_val;
         for (int col=n_cols-1; col>=0; --col) {
             pivot = get_elem(col, col);
-            if (pivot.get_scalar() != static_cast<T>(0)) {
-                curr_solved_val = rhs.get_elem(col)/pivot;
-                rhs -= get_col(col).copy_to_vec()*curr_solved_val;
-                rhs.set_elem(col, curr_solved_val);
-            } else {
-                throw std::runtime_error(
-                    "MatrixDense::back_sub: zero diagonal entry encountered in matrix"
-                );
-            }
+            // if (pivot.get_scalar() != static_cast<T>(0)) {
+            curr_solved_val = rhs.get_elem(col)/pivot;
+            rhs -= get_col(col).copy_to_vec()*curr_solved_val;
+            rhs.set_elem(col, curr_solved_val);
+            // } else {
+            //     throw std::runtime_error(
+            //         "MatrixDense::back_sub: zero diagonal entry encountered in matrix"
+            //     );
+            // }
         }
 
         return rhs;
@@ -334,15 +334,15 @@ public:
         Scalar<T> curr_solved_val;
         for (int col=0; col<n_cols; ++col) {
             pivot = get_elem(col, col);
-            if (pivot.get_scalar() != static_cast<T>(0)) {
-                curr_solved_val = rhs.get_elem(col)/pivot;
-                rhs -= get_col(col).copy_to_vec()*curr_solved_val;
-                rhs.set_elem(col, curr_solved_val);
-            } else {
-                throw std::runtime_error(
-                    "MatrixDense::frwd_sub: zero diagonal entry encountered in matrix"
-                );
-            }
+            // if (pivot.get_scalar() != SCALAR_ZERO) {
+            curr_solved_val = rhs.get_elem(col)/pivot;
+            rhs -= get_col(col).copy_to_vec()*curr_solved_val;
+            rhs.set_elem(col, curr_solved_val);
+            // } else {
+            //     throw std::runtime_error(
+            //         "MatrixDense::frwd_sub: zero diagonal entry encountered in matrix"
+            //     );
+            // }
         }
 
         return rhs;
