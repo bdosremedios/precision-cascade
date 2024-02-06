@@ -10,5 +10,4 @@ target_link_libraries(
     main
     PUBLIC
     precision-cascade
-    types
 )

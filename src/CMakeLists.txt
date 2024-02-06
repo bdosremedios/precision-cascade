@@ -5,7 +5,7 @@ project(precision-cascade LANGUAGES CXX CUDA)
 set(CMAKE_EXE_LINKER_FLAGS, "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:LIBCMT")
 
 add_library(
-    types
+    precision-cascade
     STATIC
     tools/cuda_check.cu
     types/Scalar/Scalar_hlf.cu
@@ -19,14 +19,9 @@ add_library(
     types/MatrixDense/MatrixDense_dbl.cu
 )
 
-target_include_directories(
-    types
-    PUBLIC
-    "../include/types"
-)
-
 target_link_libraries(
-    types
+    precision-cascade
     PUBLIC
+    precision-cascade-headers
     "$ENV{CUDA_PATH}/lib/x64/cublas.lib"
 )

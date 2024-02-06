@@ -34,6 +34,10 @@ private:
         check_cuda_error(cudaMalloc(&d_mat, mem_size));
     }
 
+    MatrixDense<__half> to_half() const;
+    MatrixDense<float> to_float() const;
+    MatrixDense<double> to_double() const;
+
 public:
 
     class Block; class Col; // Forward declaration of nested classes
@@ -353,11 +357,8 @@ public:
     template <typename Cast_T>
     MatrixDense<Cast_T> cast() const { throw std::runtime_error("MatrixDense: invalid cast conversion"); }
 
-    MatrixDense<__half> to_half() const;
     template <> MatrixDense<__half> cast<__half>() const { return to_half(); }
-    MatrixDense<float> to_float() const;
     template <> MatrixDense<float> cast<float>() const { return to_float(); }
-    MatrixDense<double> to_double() const;
     template <> MatrixDense<double> cast<double>() const { return to_double(); }
 
     // *** Arithmetic and Compound Operations ***
