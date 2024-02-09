@@ -1324,41 +1324,43 @@ class Matrix_Substitution_Test: public TestBase
 {
 public:
 
+    template <typename T>
     void TestBackwardSubstitution() {
 
         constexpr int n(90);
-        M<double> U_tri(
-            read_matrixCSV<M, double>(*handle_ptr, solve_matrix_dir / fs::path("U_tri_90.csv"))
+        M<T> U_tri(
+            read_matrixCSV<M, T>(*handle_ptr, solve_matrix_dir / fs::path("U_tri_90.csv"))
         );
-        Vector<double> x_tri(
-            read_matrixCSV<Vector, double>(*handle_ptr, solve_matrix_dir / fs::path("x_tri_90.csv"))
+        Vector<T> x_tri(
+            read_matrixCSV<Vector, T>(*handle_ptr, solve_matrix_dir / fs::path("x_tri_90.csv"))
         );
-        Vector<double> Ub_tri(
-            read_matrixCSV<Vector, double>(*handle_ptr, solve_matrix_dir / fs::path("Ub_tri_90.csv"))
+        Vector<T> Ub_tri(
+            read_matrixCSV<Vector, T>(*handle_ptr, solve_matrix_dir / fs::path("Ub_tri_90.csv"))
         );
     
-        Vector<double> test_soln(U_tri.back_sub(Ub_tri));
+        Vector<T> test_soln(U_tri.back_sub(Ub_tri));
 
-        ASSERT_VECTOR_NEAR(test_soln, x_tri, Tol<double>::dbl_substitution_tol());
+        ASSERT_VECTOR_NEAR(test_soln, x_tri, Tol<T>::substitution_tol_T(90));
 
     }
 
+    template <typename T>
     void TestForwardSubstitution() {
 
         constexpr int n(90);
-        M<double> L_tri(
-            read_matrixCSV<M, double>(*handle_ptr, solve_matrix_dir / fs::path("L_tri_90.csv"))
+        M<T> L_tri(
+            read_matrixCSV<M, T>(*handle_ptr, solve_matrix_dir / fs::path("L_tri_90.csv"))
         );
-        Vector<double> x_tri(
-            read_matrixCSV<Vector, double>(*handle_ptr, solve_matrix_dir / fs::path("x_tri_90.csv"))
+        Vector<T> x_tri(
+            read_matrixCSV<Vector, T>(*handle_ptr, solve_matrix_dir / fs::path("x_tri_90.csv"))
         );
-        Vector<double> Lb_tri(
-            read_matrixCSV<Vector, double>(*handle_ptr, solve_matrix_dir / fs::path("Lb_tri_90.csv"))
+        Vector<T> Lb_tri(
+            read_matrixCSV<Vector, T>(*handle_ptr, solve_matrix_dir / fs::path("Lb_tri_90.csv"))
         );
     
-        Vector<double> test_soln(L_tri.frwd_sub(Lb_tri));
+        Vector<T> test_soln(L_tri.frwd_sub(Lb_tri));
 
-        ASSERT_VECTOR_NEAR(test_soln, x_tri, Tol<double>::dbl_substitution_tol());
+        ASSERT_VECTOR_NEAR(test_soln, x_tri, Tol<T>::substitution_tol_T(90));
 
     }
 

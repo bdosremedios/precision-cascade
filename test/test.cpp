@@ -12,7 +12,6 @@
 
 #include "types/types.h"
 // #include "tools/argument_pkgs.h"
-// #include "tools/math_functions.h"
 
 bool *TestBase::show_plots = new bool;
 cublasHandle_t *TestBase::handle_ptr = new cublasHandle_t;

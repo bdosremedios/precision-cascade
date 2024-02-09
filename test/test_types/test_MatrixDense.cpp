@@ -305,9 +305,13 @@ TEST_F(MatrixDense_Test, TestBadCast) { TestBadCast(); }
 class MatrixDense_Substitution_Test: public Matrix_Substitution_Test<MatrixDense> {};
 
 TEST_F(MatrixDense_Substitution_Test, TestBackwardSubstitution) {
-    TestBackwardSubstitution();
+    TestBackwardSubstitution<__half>();
+    TestBackwardSubstitution<float>();
+    TestBackwardSubstitution<double>();
 }
 
 TEST_F(MatrixDense_Substitution_Test, TestForwardSubstitution) {
-    TestForwardSubstitution();
+    TestForwardSubstitution<__half>();
+    TestForwardSubstitution<float>();
+    TestForwardSubstitution<double>();
 }

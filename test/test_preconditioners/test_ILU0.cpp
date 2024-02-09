@@ -29,8 +29,16 @@ public:
             read_matrixCSV<M, double>(*handle_ptr, solve_matrix_dir / fs::path("ilu_U.csv"))
         );
 
-        ASSERT_MATRIX_NEAR(ilu_precond.get_L(), L, Tol<double>::dbl_ilu_elem_tol());
-        ASSERT_MATRIX_NEAR(ilu_precond.get_U(), U, Tol<double>::dbl_ilu_elem_tol());
+        ASSERT_MATRIX_NEAR(
+            ilu_precond.get_L(),
+            L,
+            mat_max_mag(L)*Tol<double>::dbl_ilu_elem_tol()
+        );
+        ASSERT_MATRIX_NEAR(
+            ilu_precond.get_U(),
+            U,
+            mat_max_mag(U)*Tol<double>::dbl_ilu_elem_tol()
+        );
 
     }
     

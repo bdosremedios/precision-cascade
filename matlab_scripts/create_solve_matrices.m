@@ -77,6 +77,7 @@ writematrix(full(A_convdiff256), "solve_matrices\\conv_diff_256_A.csv");
 writematrix(full(b_convdiff256), "solve_matrices\\conv_diff_256_b.csv");
 writematrix(full(x_convdiff256), "solve_matrices\\conv_diff_256_x.csv");
 
+
 % Create 1024x1024 convection diffusion with rhs sin(x)cos(y)
 [A_convdiff1024, b_convdiff1024] = generate_conv_diff_rhs_sinxcosy(32, 0.1, 0.1);
 x_convdiff1024 = gmres( ...
@@ -125,9 +126,10 @@ writematrix(x_saddle, "solve_matrices\\x_25_saddle.csv");
 writematrix(inv_pre_cond, "solve_matrices\\A_25_invprecond_saddle.csv");
 
 % Create lower/upper triangular to check substitution solve
-A_2_temp = randi(100, 90, 90);
+A_2_temp = 2*(rand(90, 90)-0.5);
+A_2_temp = A_2_temp + 10*diag(diag(A_2_temp)./abs(diag(A_2_temp)));
 U_tri_90 = triu(A_2_temp);
-x_90 = randi(100, 90, 1);
+x_90 = 2*(randi(2, 90, 1)-1.5);
 Ub_90 = U_tri_90*x_90;
 writematrix(U_tri_90, "solve_matrices\\U_tri_90.csv");
 writematrix(x_90, "solve_matrices\\x_tri_90.csv");

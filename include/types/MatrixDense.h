@@ -292,67 +292,6 @@ public:
     // *** Resizing ***
     void reduce() { ; } // Do nothing on reduction
 
-    // *** Substitution *** (correct triangularity assumed)
-    Vector<T> back_sub(const Vector<T> &arg_rhs) const {
-
-        if (m_rows != n_cols) {
-            throw std::runtime_error("MatrixDense::back_sub: non-square matrix");
-        }
-        if (m_rows != arg_rhs.rows()) {
-            throw std::runtime_error("MatrixDense::back_sub: incompatible matrix and rhs");
-        }
-
-        Vector<T> rhs(arg_rhs);
-
-        Scalar<T> pivot;
-        Scalar<T> curr_solved_val;
-        for (int col=n_cols-1; col>=0; --col) {
-            pivot = get_elem(col, col);
-            // if (pivot.get_scalar() != static_cast<T>(0)) {
-            curr_solved_val = rhs.get_elem(col)/pivot;
-            rhs -= get_col(col).copy_to_vec()*curr_solved_val;
-            rhs.set_elem(col, curr_solved_val);
-            // } else {
-            //     throw std::runtime_error(
-            //         "MatrixDense::back_sub: zero diagonal entry encountered in matrix"
-            //     );
-            // }
-        }
-
-        return rhs;
-
-    }
-
-    Vector<T> frwd_sub(const Vector<T> &arg_rhs) const {
-
-        if (m_rows != n_cols) {
-            throw std::runtime_error("MatrixDense::frwd_sub: non-square matrix");
-        }
-        if (m_rows != arg_rhs.rows()) {
-            throw std::runtime_error("MatrixDense::frwd_sub: incompatible matrix and rhs");
-        }
-
-        Vector<T> rhs(arg_rhs);
-
-        Scalar<T> pivot;
-        Scalar<T> curr_solved_val;
-        for (int col=0; col<n_cols; ++col) {
-            pivot = get_elem(col, col);
-            // if (pivot.get_scalar() != SCALAR_ZERO) {
-            curr_solved_val = rhs.get_elem(col)/pivot;
-            rhs -= get_col(col).copy_to_vec()*curr_solved_val;
-            rhs.set_elem(col, curr_solved_val);
-            // } else {
-            //     throw std::runtime_error(
-            //         "MatrixDense::frwd_sub: zero diagonal entry encountered in matrix"
-            //     );
-            // }
-        }
-
-        return rhs;
-
-    }
-
     // *** Cast ***
     template <typename Cast_T>
     MatrixDense<Cast_T> cast() const { throw std::runtime_error("MatrixDense: invalid cast conversion"); }
@@ -408,6 +347,69 @@ public:
 
     // Needed for testing (don't need to optimize performance)
     Scalar<T> norm() const;
+
+    // *** Substitution *** (correct triangularity assumed)
+    Vector<T> back_sub(const Vector<T> &arg_rhs) const;
+    Vector<T> frwd_sub(const Vector<T> &arg_rhs) const;
+    // {
+
+    //     if (m_rows != n_cols) {
+    //         throw std::runtime_error("MatrixDense::back_sub: non-square matrix");
+    //     }
+    //     if (m_rows != arg_rhs.rows()) {
+    //         throw std::runtime_error("MatrixDense::back_sub: incompatible matrix and rhs");
+    //     }
+
+    //     Vector<T> rhs(arg_rhs);
+
+    //     Scalar<T> pivot;
+    //     Scalar<T> curr_solved_val;
+    //     for (int col=n_cols-1; col>=0; --col) {
+    //         pivot = get_elem(col, col);
+    //         // if (pivot.get_scalar() != static_cast<T>(0)) {
+    //         curr_solved_val = rhs.get_elem(col)/pivot;
+    //         rhs -= get_col(col).copy_to_vec()*curr_solved_val;
+    //         rhs.set_elem(col, curr_solved_val);
+    //         // } else {
+    //         //     throw std::runtime_error(
+    //         //         "MatrixDense::back_sub: zero diagonal entry encountered in matrix"
+    //         //     );
+    //         // }
+    //     }
+
+    //     return rhs;
+
+    // }
+
+    // Vector<T> frwd_sub(const Vector<T> &arg_rhs) const {
+
+    //     if (m_rows != n_cols) {
+    //         throw std::runtime_error("MatrixDense::frwd_sub: non-square matrix");
+    //     }
+    //     if (m_rows != arg_rhs.rows()) {
+    //         throw std::runtime_error("MatrixDense::frwd_sub: incompatible matrix and rhs");
+    //     }
+
+    //     Vector<T> rhs(arg_rhs);
+
+    //     Scalar<T> pivot;
+    //     Scalar<T> curr_solved_val;
+    //     for (int col=0; col<n_cols; ++col) {
+    //         pivot = get_elem(col, col);
+    //         // if (pivot.get_scalar() != SCALAR_ZERO) {
+    //         curr_solved_val = rhs.get_elem(col)/pivot;
+    //         rhs -= get_col(col).copy_to_vec()*curr_solved_val;
+    //         rhs.set_elem(col, curr_solved_val);
+    //         // } else {
+    //         //     throw std::runtime_error(
+    //         //         "MatrixDense::frwd_sub: zero diagonal entry encountered in matrix"
+    //         //     );
+    //         // }
+    //     }
+
+    //     return rhs;
+
+    // }
 
     // Nested lightweight wrapper class representing matrix column and assignment/elem access
     // Requires: modification by/cast to Vector<T>

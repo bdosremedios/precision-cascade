@@ -166,6 +166,12 @@ Scalar<double> MatrixDense<double>::norm() const {
 
 namespace matdense_dbl_kern
 {
+    __global__ void solve_pivot_and_find_alpha(double *rhs, double *diag, double *alpha) {
+        int tid = (blockIdx.x * blockDim.x) + threadIdx.x;
+        rhs[tid] = rhs[tid]/diag[tid];
+        alpha[tid] = -rhs[tid];
+    }
+
     __global__ void cast_to_half(double *mat_src, half *mat_dest, int m) {
         int tid = (blockIdx.x * blockDim.x) + threadIdx.x;
         if (tid < m) {
@@ -179,6 +185,92 @@ namespace matdense_dbl_kern
             mat_dest[tid] = __double2float_rn(mat_src[tid]);
         }
     }
+}
+
+Vector<double> MatrixDense<double>::back_sub(const Vector<double> &arg_rhs) const {
+
+    if (m_rows != n_cols) {
+        throw std::runtime_error("MatrixDense::back_sub: non-square matrix");
+    }
+    if (m_rows != arg_rhs.rows()) {
+        throw std::runtime_error("MatrixDense::back_sub: incompatible matrix and rhs");
+    }
+
+    Vector<double> soln(arg_rhs);
+
+    double *d_scale_val;
+    check_cuda_error(cudaMalloc(&d_scale_val, sizeof(double)));
+
+    for (int col=n_cols-1; col>=0; --col) {
+
+        matdense_dbl_kern::solve_pivot_and_find_alpha<<<1, 1>>>(
+            soln.d_vec+col, d_mat+(col+col*m_rows), d_scale_val
+        );
+        // std::cout << (col*m_rows) << std::endl;
+        // double *h_a = static_cast<double *>(malloc(sizeof(double)));
+        // double *h_b = static_cast<double *>(malloc(sizeof(double)));
+        // double *h_c = static_cast<double *>(malloc(sizeof(double))); 
+        // cudaMemcpy(h_a, d_scale_val, sizeof(double), cudaMemcpyDeviceToHost);
+        // cudaMemcpy(h_b, soln.d_vec, sizeof(double), cudaMemcpyDeviceToHost);
+        // cudaMemcpy(h_c, d_mat+(col*m_rows), sizeof(double), cudaMemcpyDeviceToHost);
+        // std::cout << *h_a << " " << *h_b << " " << *h_c << " " << std::endl; 
+        if (col > 0) {
+            check_cublas_status(
+                cublasAxpyEx(
+                    handle, col,
+                    d_scale_val, CUDA_R_64F,
+                    d_mat+(col*m_rows), CUDA_R_64F, 1,
+                    soln.d_vec, CUDA_R_64F, 1,
+                    CUDA_R_64F
+                )
+            );
+        }
+
+    }
+
+    check_cuda_error(cudaFree(d_scale_val));
+
+    return soln;
+
+}
+
+Vector<double> MatrixDense<double>::frwd_sub(const Vector<double> &arg_rhs) const {
+
+    if (m_rows != n_cols) {
+        throw std::runtime_error("MatrixDense::frwd_sub: non-square matrix");
+    }
+    if (m_rows != arg_rhs.rows()) {
+        throw std::runtime_error("MatrixDense::frwd_sub: incompatible matrix and rhs");
+    }
+
+    Vector<double> soln(arg_rhs);
+
+    double *d_scale_val;
+    check_cuda_error(cudaMalloc(&d_scale_val, sizeof(double)));
+
+    for (int col=0; col<n_cols; ++col) {
+
+        matdense_dbl_kern::solve_pivot_and_find_alpha<<<1, 1>>>(
+            soln.d_vec+col, d_mat+(col*m_rows+col), d_scale_val
+        );
+        if (col < m_rows-1) {
+            check_cublas_status(
+                cublasAxpyEx(
+                    handle, m_rows-1-col,
+                    d_scale_val, CUDA_R_64F,
+                    d_mat+(col*m_rows+(col+1)), CUDA_R_64F, 1,
+                    soln.d_vec+(col+1), CUDA_R_64F, 1,
+                    CUDA_R_64F
+                )
+            );
+        }
+
+    }
+
+    check_cuda_error(cudaFree(d_scale_val));
+
+    return soln;
+
 }
 
 MatrixDense<__half> MatrixDense<double>::to_half() const {

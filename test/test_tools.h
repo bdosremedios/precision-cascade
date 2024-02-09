@@ -11,7 +11,9 @@ T mat_max_mag(const M<T> &A) {
     T abs_max = static_cast<T>(0);
     for (int i=0; i<A.rows(); ++i) {
         for (int j=0; j<A.cols(); ++j) {
-            if (std::abs(A.get_elem(i, j)) > abs_max) { abs_max = std::abs(A.get_elem(i, j)); }
+            if (std::abs(A.get_elem(i, j).get_scalar()) > abs_max) {
+                abs_max = std::abs(A.get_elem(i, j).get_scalar());
+            }
         }
     }
     return abs_max;
@@ -22,17 +24,6 @@ template <typename T>
 T min_1_mag(const T &val) {
     return static_cast<T>(std::max(std::abs(static_cast<double>(val)), 1.));
 }
-
-// template <typename T>
-// int count_zeros(MatrixVector<T> vec, double zero_tol) {
-
-//     int count = 0;
-//     for (int i=0; i<vec.rows(); ++i) {
-//         if (abs(vec(i)) <= zero_tol) { ++count; }
-//     }
-//     return count;
-
-// }
 
 template <template <typename> typename M, typename T>
 int count_zeros(M<T> A, double zero_tol) {
@@ -58,8 +49,9 @@ public:
     static double gamma(int n) { return n*roundoff()/(1-n*roundoff()); }
 
     // Special case values
-    static double dbl_loss_of_ortho_tol() { return std::pow(10, 2)*roundoff(); }
-    static double dbl_substitution_tol() { return std::pow(10, 2)*roundoff(); }
+    static double substitution_tol(int n) { return gamma(n); }
+    static T substitution_tol_T(int n) { return static_cast<T>(substitution_tol(n)); }
+    static double dbl_loss_of_ortho_tol() { return std::pow(n, 3)*roundoff(); }
     static double matlab_dbl_near() { return std::pow(10, -14); }
 
     // Preconditioner error test tolerance
