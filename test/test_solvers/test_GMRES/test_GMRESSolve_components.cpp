@@ -39,7 +39,9 @@ public:
     template <template <typename> typename M>
     void KrylovInitAndUpdate() {
 
+        const double approx_cond_A_upbound(5.5);
         const int n(5);
+
         M<double> A(
             read_matrixCSV<M, double>(*handle_ptr, solve_matrix_dir / fs::path("A_5_toy.csv"))
         );
@@ -63,11 +65,23 @@ public:
         test_mock.iterate_no_soln_solve();
 
         Vector<double> next_q(test_mock.Q_kry_basis.get_col(0).copy_to_vec());
-        ASSERT_VECTOR_EQ(next_q, r_0/r_0.norm());
+        ASSERT_VECTOR_NEAR(
+            next_q,
+            r_0/r_0.norm(),
+            Tol<double>::roundoff()
+        );
         next_q = A*next_q;
         next_q -= test_mock.Q_kry_basis.get_col(0).copy_to_vec()*test_mock.H.get_elem(0, 0);
-        ASSERT_EQ(next_q.norm(), test_mock.H.get_elem(1, 0));
-        ASSERT_VECTOR_EQ(test_mock.next_q, next_q);
+        ASSERT_NEAR(
+            next_q.norm().get_scalar(),
+            test_mock.H.get_elem(1, 0).get_scalar(),
+            Tol<double>::roundoff()
+        );
+        ASSERT_VECTOR_NEAR(
+            test_mock.next_q,
+            next_q,
+            Tol<double>::roundoff()
+        );
 
         // Save basis and H entries to check that they remain unchanged
         Q_save.get_col(0).set_from_vec(test_mock.Q_kry_basis.get_col(0).copy_to_vec());
@@ -93,7 +107,7 @@ public:
                 ASSERT_NEAR(
                     test_mock.Q_kry_basis.get_col(j).copy_to_vec().dot(q).get_scalar(),
                     0.,
-                    Tol<double>::dbl_loss_of_ortho_tol(k)
+                    Tol<double>::loss_of_ortho_tol(approx_cond_A_upbound, k)
                 );
             }
 
@@ -131,7 +145,9 @@ public:
     template <template <typename> typename M>
     void H_QR_Update() {
 
+        const double approx_cond_A_upbound(5.5);
         const int n(5);
+
         M<double> A(
             read_matrixCSV<M, double>(*handle_ptr, solve_matrix_dir / fs::path("A_5_toy.csv"))
         );
@@ -185,7 +201,7 @@ public:
             MatrixDense<double> orthog_check(Q_H_block*Q_H_block.transpose());
             ASSERT_MATRIX_IDENTITY(
                 orthog_check,
-                Tol<double>::dbl_loss_of_ortho_tol(k+2)
+                Tol<double>::loss_of_ortho_tol(approx_cond_A_upbound, k+2)
             );
 
             // Test that k+1 by k block of R_H is uppertriangular
@@ -211,7 +227,9 @@ public:
     template <template <typename> typename M>
     void Update_x_Back_Substitution() {
 
+        const double approx_R_cond_number_upbound(1.1);
         const int n(7);
+
         MatrixDense<double> Q(
             read_matrixCSV<MatrixDense, double>(*handle_ptr, solve_matrix_dir / fs::path("Q_8_backsub.csv"))
         );
@@ -267,7 +285,7 @@ public:
                 ASSERT_NEAR(
                     test_mock.typed_soln.get_elem(i).get_scalar(),
                     test_soln.get_elem(i).get_scalar(), 
-                    Tol<double>::substitution_tol(kry_dim)
+                    2*mat_max_mag(test_soln)*Tol<double>::substitution_tol(approx_R_cond_number_upbound, n)
                 );
             }
 

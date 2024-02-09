@@ -43,15 +43,25 @@ class Tol
 {
 public:
 
-    // Core values
+    // Basic error tolerance
     static double roundoff() { assert(false); return -1.; }
     static T roundoff_T() { return static_cast<T>(roundoff()); }
-    static double gamma(int n) { return n*roundoff()/(1-n*roundoff()); }
+    static double gamma(int n) { return n*roundoff()/(1-n*roundoff()); }  // 2002 Higham Ch.3
+
+    // Algorithm accumulation error tolerance
+    static double substitution_tol(double cond, int n) {
+        return cond*gamma(n)/(1-cond*gamma(n)); // 2002 Higham Ch.8
+    }
+    static T substitution_tol_T(double cond, int n) {
+        return static_cast<T>(substitution_tol(cond, n));
+    }
+    static double loss_of_ortho_tol(double cond, int n) { // 1967 Giraud
+        double scale_c_on_n = 1.74*std::sqrt(static_cast<double>(n))*(static_cast<double>(n)+1);
+        return scale_c_on_n*cond*roundoff();
+    }
+    static T loss_of_ortho_tol_T(int n) { return static_cast<T>(loss_of_ortho_tol(n)); }
 
     // Special case values
-    static double substitution_tol(int n) { return gamma(n); }
-    static T substitution_tol_T(int n) { return static_cast<T>(substitution_tol(n)); }
-    static double dbl_loss_of_ortho_tol(int n) { return gamma(n); }
     static double matlab_dbl_near() { return std::pow(10, -14); }
 
     // Preconditioner error test tolerance

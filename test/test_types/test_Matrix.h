@@ -1327,7 +1327,9 @@ public:
     template <typename T>
     void TestBackwardSubstitution() {
 
+        const double approx_U_tri_cond_number_upbound(2.5);
         constexpr int n(90);
+
         M<T> U_tri(
             read_matrixCSV<M, T>(*handle_ptr, solve_matrix_dir / fs::path("U_tri_90.csv"))
         );
@@ -1340,14 +1342,20 @@ public:
     
         Vector<T> test_soln(U_tri.back_sub(Ub_tri));
 
-        ASSERT_VECTOR_NEAR(test_soln, x_tri, Tol<T>::substitution_tol_T(90));
+        ASSERT_VECTOR_NEAR(
+            test_soln,
+            x_tri,
+            Tol<T>::substitution_tol_T(approx_U_tri_cond_number_upbound, 90)
+        );
 
     }
 
     template <typename T>
     void TestForwardSubstitution() {
 
-        constexpr int n(90);
+        const double approx_L_tri_cond_number_upbound(2.5);
+        const int n(90);
+
         M<T> L_tri(
             read_matrixCSV<M, T>(*handle_ptr, solve_matrix_dir / fs::path("L_tri_90.csv"))
         );
@@ -1360,7 +1368,11 @@ public:
     
         Vector<T> test_soln(L_tri.frwd_sub(Lb_tri));
 
-        ASSERT_VECTOR_NEAR(test_soln, x_tri, Tol<T>::substitution_tol_T(90));
+        ASSERT_VECTOR_NEAR(
+            test_soln,
+            x_tri,
+            Tol<T>::substitution_tol_T(approx_L_tri_cond_number_upbound, 90)
+        );
 
     }
 
