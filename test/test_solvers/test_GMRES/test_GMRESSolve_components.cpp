@@ -7,9 +7,7 @@ class GMRESSolve_Component_Test: public TestBase
 public:
 
     template <template <typename> typename M>
-    void CheckConstruction(
-        const int &n
-    ) {
+    void CheckConstruction(const int &n) {
 
         M<double> A(M<double>::Random(*handle_ptr, n, n));
         Vector<double> b(Vector<double>::Random(*handle_ptr, n));
@@ -93,9 +91,9 @@ public:
                     Q_save.get_col(j).copy_to_vec()
                 );
                 ASSERT_NEAR(
-                    test_mock.Q_kry_basis.get_col(j).copy_to_vec().dot(q),
+                    test_mock.Q_kry_basis.get_col(j).copy_to_vec().dot(q).get_scalar(),
                     0.,
-                    Tol<double>::dbl_loss_of_ortho_tol()
+                    Tol<double>::dbl_loss_of_ortho_tol(k)
                 );
             }
 
@@ -105,13 +103,18 @@ public:
             Vector<double> construct_q(test_mock.Q_kry_basis.get_col(k).copy_to_vec());
             construct_q = A*construct_q;
             for (int i=0; i<=k; ++i) {
-                ASSERT_EQ(
-                    test_mock.Q_kry_basis.get_col(i).copy_to_vec().dot(construct_q),
-                    h.get_elem(i)
+                ASSERT_NEAR(
+                    test_mock.Q_kry_basis.get_col(i).copy_to_vec().dot(construct_q).get_scalar(),
+                    h.get_elem(i).get_scalar(),
+                    Tol<double>::roundoff()
                 );
                 construct_q -= test_mock.Q_kry_basis.get_col(i).copy_to_vec()*h.get_elem(i);
             }
-            EXPECT_EQ(construct_q.norm(), h.get_elem(k+1));
+            ASSERT_NEAR(
+                construct_q.norm().get_scalar(),
+                h.get_elem(k+1).get_scalar(),
+                Tol<double>::roundoff()
+            );
             
             // Confirm that previous Hessenberg columns are untouched
             for (int j=0; j<=k; ++j) {
@@ -182,7 +185,7 @@ public:
             MatrixDense<double> orthog_check(Q_H_block*Q_H_block.transpose());
             ASSERT_MATRIX_IDENTITY(
                 orthog_check,
-                Tol<double>::dbl_loss_of_ortho_tol()
+                Tol<double>::dbl_loss_of_ortho_tol(k+2)
             );
 
             // Test that k+1 by k block of R_H is uppertriangular
@@ -262,9 +265,9 @@ public:
 
             for (int i=0; i<kry_dim; ++i) {
                 ASSERT_NEAR(
-                    test_mock.typed_soln.get_elem(i),
-                    test_soln.get_elem(i), 
-                    Tol<double>::dbl_substitution_tol()
+                    test_mock.typed_soln.get_elem(i).get_scalar(),
+                    test_soln.get_elem(i).get_scalar(), 
+                    Tol<double>::substitution_tol(kry_dim)
                 );
             }
 
@@ -326,7 +329,7 @@ public:
 
         // Instantiate initial guess as true solution
         Vector<double> soln(Vector<double>::Zero(*handle_ptr, n));
-        soln.set_elem(0, 1.);
+        soln.set_elem(0, SCALAR_ONE_D);
         SolveArgPkg args;
         args.init_guess = soln;
 
@@ -343,7 +346,7 @@ public:
         EXPECT_TRUE(test_mock.check_terminated());
         EXPECT_EQ(test_mock.kry_space_dim, 1);
         EXPECT_NEAR(
-            test_mock.Q_kry_basis.get_col(0).copy_to_vec().norm(),
+            test_mock.Q_kry_basis.get_col(0).copy_to_vec().norm().get_scalar(),
             1,
             Tol<double>::gamma(n)
         );
@@ -368,7 +371,7 @@ public:
 
         // Instantiate initial guess as true solution
         Vector<double> soln(Vector<double>::Zero(*handle_ptr, n));
-        soln.set_elem(0, 1.);
+        soln.set_elem(0, SCALAR_ONE_D);
         SolveArgPkg args;
         args.init_guess = soln;
         args.target_rel_res = Tol<double>::krylov_conv_tol();
@@ -387,7 +390,7 @@ public:
         // as expected to have only a single column
         EXPECT_EQ(test_mock.kry_space_dim, 1);
         EXPECT_NEAR(
-            test_mock.Q_kry_basis.get_col(0).copy_to_vec().norm(),
+            test_mock.Q_kry_basis.get_col(0).copy_to_vec().norm().get_scalar(),
             1,
             Tol<double>::gamma(n)
         );

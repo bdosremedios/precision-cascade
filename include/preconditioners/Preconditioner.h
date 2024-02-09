@@ -14,6 +14,9 @@ public:
     // Abstract function to apply action of inverse M on given vector
     virtual Vector<W> action_inv_M(Vector<W> const &vec) const = 0;
 
+    template <typename T>
+    Vector<T> casted_action_inv_M(Vector<W> const &vec) { return action_inv_M(vec).template cast<T>(); }
+
     // Abstract functions to check compatibility of preconditioner with linear system
     // on both left and right
     virtual bool check_compatibility_left(int const &m) const = 0;

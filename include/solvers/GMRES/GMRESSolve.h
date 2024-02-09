@@ -25,37 +25,34 @@ protected:
     int kry_space_dim;
     int max_kry_space_dim;
     double basis_zero_tol;
-    T rho;
+    Scalar<T> rho;
 
     void check_compatibility() const {
-
         if (!left_precond_ptr->check_compatibility_left(typed_lin_sys.get_m())) {
             throw std::runtime_error("GMRESSolve: Left preconditioner not compatible");
         }
         if (!right_precond_ptr->check_compatibility_right(typed_lin_sys.get_n())) {
             throw std::runtime_error("GMRESSolve: Right preconditioner not compatible");
         }
-    
     }
 
     Vector<T> apply_precond_A(const Vector<T> &vec) {
         return(
-            left_precond_ptr->action_inv_M(
+            left_precond_ptr->template casted_action_inv_M<T>(
                 (typed_lin_sys.get_A_typed()*
-                    (right_precond_ptr->action_inv_M(
+                    right_precond_ptr->template casted_action_inv_M<T>(
                         vec.template cast<W>()
-                        )
-                    ).template cast<T>()
+                    )
                 ).template cast<W>()
-            ).template cast<T>()
+            )
         );
     }
 
     Vector<T> get_precond_b() {
         return(
-            left_precond_ptr->action_inv_M(
+            left_precond_ptr->casted_action_inv_M<T>(
                 typed_lin_sys.get_b_typed().template cast<W>()
-            ).template cast<T>()
+            )
         );
     }
 
@@ -96,7 +93,9 @@ protected:
 
         // Initialize next vector q as initial residual and mark as terminated if lucky break
         next_q = r_0;
-        if (static_cast<double>(next_q.norm()) <= basis_zero_tol) { this->terminated = true; }
+        if (static_cast<double>(next_q.norm().get_scalar()) <= basis_zero_tol) {
+            this->terminated = true;
+        }
 
     }
 
@@ -130,21 +129,16 @@ protected:
         next_q = apply_precond_A(Q_kry_basis.get_col(k).copy_to_vec());
 
         // Orthogonlize next_q to previous basis vectors and store coefficients/normalization in H
-        T *h_vec = static_cast<T *>(malloc((typed_lin_sys.get_m()+1)*sizeof(T)));
+        Vector<T> H_k(Vector<T>::Zero(typed_lin_sys.get_b().get_handle(), typed_lin_sys.get_m()+1));
 
         for (int i=0; i<=k; ++i) {
             // MGS from newly orthog q used for orthogonalizing next vectors
             Vector<T> q_i(Q_kry_basis.get_col(i).copy_to_vec());
-            h_vec[i] = q_i.dot(next_q);
-            next_q -= q_i*h_vec[i];
+            H_k.set_elem(i, q_i.dot(next_q));
+            next_q -= q_i*H_k.get_elem(i);
         }
-        h_vec[k+1] = next_q.norm();
-        for (int i=k+2; i<(typed_lin_sys.get_m()+1); ++i) { h_vec[i] = static_cast<T>(0); }
-        H.get_col(k).set_from_vec(
-            Vector<T>(typed_lin_sys.get_A().get_handle(), h_vec, typed_lin_sys.get_m()+1)
-        );
-
-        free(h_vec);
+        H_k.set_elem(k+1, next_q.norm());
+        H.get_col(k).set_from_vec(H_k);
 
     }
 
@@ -162,20 +156,19 @@ protected:
         );
 
         // Apply the final Given's rotation manually making R_H upper triangular
-        T alpha = R_H.get_elem(k, k);
-        T beta = R_H.get_elem(k+1, k);
-        T r_sqr = alpha*alpha + beta*beta; // Explicit intermediate variable to ensure
-                                           // no auto casting into sqrt
-        T r = std::sqrt(r_sqr);
-        T c = alpha/r;
-        T s = -beta/r;
+        Scalar<T> alpha = R_H.get_elem(k, k);
+        Scalar<T> beta = R_H.get_elem(k+1, k);
+        Scalar<T> r = alpha*alpha + beta*beta;
+        r.sqrt();
+        Scalar<T> c = alpha/r;
+        Scalar<T> minus_s = beta/r;
         R_H.set_elem(k, k, r);
-        R_H.set_elem(k+1, k, static_cast<T>(0));
+        R_H.set_elem(k+1, k, SCALAR_ZERO<T>::get());
 
         Vector<T> Q_H_col_k(Q_H.get_col(k).copy_to_vec());
         Vector<T> Q_H_col_kp1(Q_H.get_col(k+1).copy_to_vec());
-        Q_H.get_col(k).set_from_vec(Q_H_col_k*c - Q_H_col_kp1*s);
-        Q_H.get_col(k+1).set_from_vec(Q_H_col_k*s + Q_H_col_kp1*c);
+        Q_H.get_col(k).set_from_vec(Q_H_col_k*c + Q_H_col_kp1*minus_s);
+        Q_H.get_col(k+1).set_from_vec(Q_H_col_kp1*c - Q_H_col_k*minus_s);
 
     }
 
@@ -210,7 +203,9 @@ protected:
 
     void check_termination() {
         int k = kry_space_dim-1;
-        if (static_cast<double>(H.get_elem(k+1, k)) <= basis_zero_tol) { this->terminated = true; }
+        if (static_cast<double>(H.get_elem(k+1, k).get_scalar()) <= basis_zero_tol) {
+            this->terminated = true;
+        }
     }
 
     void typed_iterate() override {

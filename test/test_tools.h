@@ -51,11 +51,11 @@ public:
     // Special case values
     static double substitution_tol(int n) { return gamma(n); }
     static T substitution_tol_T(int n) { return static_cast<T>(substitution_tol(n)); }
-    static double dbl_loss_of_ortho_tol() { return std::pow(n, 3)*roundoff(); }
+    static double dbl_loss_of_ortho_tol(int n) { return gamma(n); }
     static double matlab_dbl_near() { return std::pow(10, -14); }
 
     // Preconditioner error test tolerance
-    static double dbl_inv_elem_tol() { return std::pow(10, -12); }
+    static T inv_elem_tol() { return static_cast<T>(std::pow(10, 3)*roundoff()); }
     static double dbl_ilu_elem_tol() { return std::pow(10, -12); }
 
     // Iterative solver convergence tolerance

@@ -33,7 +33,7 @@ public:
         // Check that matches MATLAB gmres solution close within conv_tol_dbl
         Vector<double> x_test(read_matrixCSV<Vector, double>(*handle_ptr, x_file_path));
         EXPECT_LE(
-            (gmres_solve.get_typed_soln() - x_test).norm()/(x_test.norm()),
+            ((gmres_solve.get_typed_soln() - x_test).norm()/(x_test.norm())).get_scalar(),
             2*Tol<double>::krylov_conv_tol()
         );
 
