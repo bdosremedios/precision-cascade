@@ -100,12 +100,15 @@ public:
     }
 
     void copy_data_to_ptr(T *h_vec, int m_elem) const {
+
         if (m_elem != m_rows) {
             throw std::runtime_error("Vector: invalid m_elem dim for copy_data_to_ptr");
         }
+
         if (m_rows > 0) {
             check_cublas_status(cublasGetVector(m_rows, sizeof(T), d_vec, 1, h_vec, 1));
         }
+
     }
 
     // *** Conversion Constructors ***
@@ -125,7 +128,7 @@ public:
     // *** Destructor ***
     virtual ~Vector() { check_cuda_error(cudaFree(d_vec)); }
 
-    // *** Copy-Assignment ***
+    // *** Copy Assignment ***
     Vector<T> & operator=(const Vector<T> &other) {
 
         if (this != &other) {
@@ -147,9 +150,7 @@ public:
     }
     
     // *** Copy Constructor ***
-    Vector(const Vector<T> &other) {
-        *this = other;
-    }
+    Vector(const Vector<T> &other) { *this = other; }
 
     // *** Static Creation ***
     static Vector<T> Zero(const cublasHandle_t &arg_handle, int arg_m) {
@@ -214,27 +215,37 @@ public:
 
     // *** Element Access ***
     const Scalar<T> get_elem(int row, int col) const {
+
         if (col != 0) {
             throw std::runtime_error("Vector: invalid vector col access in get_elem");
         }
         if ((row < 0) || (row >= m_rows)) {
             throw std::runtime_error("Vector: invalid vector row access in get_elem");
         }
+
         Scalar<T> elem;
         check_cuda_error(cudaMemcpy(elem.d_scalar, d_vec+row, sizeof(T), cudaMemcpyDeviceToHost));
         return elem;
+
     }
+
     const Scalar<T> get_elem(int row) const { return get_elem(row, 0); }
+
     void set_elem(int row, int col, Scalar<T> val) {
+
         if (col != 0) {
             throw std::runtime_error("Vector: invalid vector col access in set_elem");
         }
         if ((row < 0) || (row >= m_rows)) {
             throw std::runtime_error("Vector: invalid vector row access in set_elem");
         }
+
         check_cuda_error(cudaMemcpy(d_vec+row, val.d_scalar, sizeof(T), cudaMemcpyHostToDevice));
+
     }
+
     void set_elem(int row, Scalar<T> val) { set_elem(row, 0, val); }
+
     Vector<T> slice(int start, int m_elem) const {
 
         if ((m_elem < 0) || ((start+m_elem) > m_rows)) {

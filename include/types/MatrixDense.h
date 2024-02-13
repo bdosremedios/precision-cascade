@@ -101,15 +101,18 @@ public:
     }
 
     void copy_data_to_ptr(T *h_mat, int m_elem, int n_elem) const {
+
         if (m_elem != m_rows) {
             throw std::runtime_error("MatrixDense: invalid m_elem dim for copy_data_to_ptr");
         }
         if (n_elem != n_cols) {
             throw std::runtime_error("MatrixDense: invalid n_elem dim for copy_data_to_ptr");
         }
+
         if ((m_rows > 0) && (n_cols > 0)) {
             check_cublas_status(cublasGetMatrix(m_rows, n_cols, sizeof(T), d_mat, m_rows, h_mat, m_rows));
         }
+
     }
 
     // MatrixDense(const typename MatrixSparse<T>::Block &block): Parent::Matrix(block.base()) {}
@@ -117,7 +120,7 @@ public:
     // *** Destructor ***
     ~MatrixDense() { check_cuda_error(cudaFree(d_mat)); }
 
-    // *** Copy-Assignment ***
+    // *** Copy Assignment ***
     MatrixDense<T> & operator=(const MatrixDense &other) {
 
         if (this != &other) {
@@ -139,42 +142,50 @@ public:
 
     }
 
-    // *** Copy-Constructor ***
-    MatrixDense(const MatrixDense<T> &other) {
-        *this = other;
-    }
+    // *** Copy Constructor ***
+    MatrixDense(const MatrixDense<T> &other) { *this = other; }
 
     // *** Element Access ***
     const Scalar<T> get_elem(int row, int col) const {
+
         if ((row < 0) || (row >= m_rows)) {
             throw std::runtime_error("MatrixDense: invalid row access in get_elem");
         }
         if ((col < 0) || (col >= n_cols)) {
             throw std::runtime_error("MatrixDense: invalid col access in get_elem");
         }
+
         Scalar<T> elem;
         check_cuda_error(cudaMemcpy(elem.d_scalar, d_mat+row+(col*m_rows), sizeof(T), cudaMemcpyDeviceToHost));
         return elem;
+
     }
 
     void set_elem(int row, int col, Scalar<T> val) {
+
         if ((row < 0) || (row >= m_rows)) {
             throw std::runtime_error("MatrixDense: invalid row access in set_elem");
         }
         if ((col < 0) || (col >= n_cols)) {
             throw std::runtime_error("MatrixDense: invalid col access in set_elem");
         }
+
         check_cuda_error(cudaMemcpy(d_mat+row+(col*m_rows), val.d_scalar, sizeof(T), cudaMemcpyHostToDevice));
+
     }
 
     Col get_col(int col) const {
+
         if ((col < 0) || (col >= n_cols)) {
             throw std::runtime_error("MatrixDense: invalid col access in col");
         }
+
         return Col(this, col);
+
     }
  
     Block get_block(int start_row, int start_col, int block_rows, int block_cols) const {
+
         if ((start_row < 0) || (start_row >= m_rows)) {
             throw std::runtime_error("MatrixDense: invalid starting row in block");
         }
@@ -187,7 +198,9 @@ public:
         if ((block_cols < 0) || (start_col+block_cols > n_cols)) {
             throw std::runtime_error("MatrixDense: invalid number of cols in block");
         }
+
         return Block(this, start_row, start_col, block_rows, block_cols);
+
     }
 
     // *** Properties ***
@@ -355,65 +368,6 @@ public:
     // *** Substitution *** (correct triangularity assumed)
     Vector<T> back_sub(const Vector<T> &arg_rhs) const;
     Vector<T> frwd_sub(const Vector<T> &arg_rhs) const;
-    // {
-
-    //     if (m_rows != n_cols) {
-    //         throw std::runtime_error("MatrixDense::back_sub: non-square matrix");
-    //     }
-    //     if (m_rows != arg_rhs.rows()) {
-    //         throw std::runtime_error("MatrixDense::back_sub: incompatible matrix and rhs");
-    //     }
-
-    //     Vector<T> rhs(arg_rhs);
-
-    //     Scalar<T> pivot;
-    //     Scalar<T> curr_solved_val;
-    //     for (int col=n_cols-1; col>=0; --col) {
-    //         pivot = get_elem(col, col);
-    //         // if (pivot.get_scalar() != static_cast<T>(0)) {
-    //         curr_solved_val = rhs.get_elem(col)/pivot;
-    //         rhs -= get_col(col).copy_to_vec()*curr_solved_val;
-    //         rhs.set_elem(col, curr_solved_val);
-    //         // } else {
-    //         //     throw std::runtime_error(
-    //         //         "MatrixDense::back_sub: zero diagonal entry encountered in matrix"
-    //         //     );
-    //         // }
-    //     }
-
-    //     return rhs;
-
-    // }
-
-    // Vector<T> frwd_sub(const Vector<T> &arg_rhs) const {
-
-    //     if (m_rows != n_cols) {
-    //         throw std::runtime_error("MatrixDense::frwd_sub: non-square matrix");
-    //     }
-    //     if (m_rows != arg_rhs.rows()) {
-    //         throw std::runtime_error("MatrixDense::frwd_sub: incompatible matrix and rhs");
-    //     }
-
-    //     Vector<T> rhs(arg_rhs);
-
-    //     Scalar<T> pivot;
-    //     Scalar<T> curr_solved_val;
-    //     for (int col=0; col<n_cols; ++col) {
-    //         pivot = get_elem(col, col);
-    //         // if (pivot.get_scalar() != SCALAR_ZERO) {
-    //         curr_solved_val = rhs.get_elem(col)/pivot;
-    //         rhs -= get_col(col).copy_to_vec()*curr_solved_val;
-    //         rhs.set_elem(col, curr_solved_val);
-    //         // } else {
-    //         //     throw std::runtime_error(
-    //         //         "MatrixDense::frwd_sub: zero diagonal entry encountered in matrix"
-    //         //     );
-    //         // }
-    //     }
-
-    //     return rhs;
-
-    // }
 
     // Nested lightweight wrapper class representing matrix column and assignment/elem access
     // Requires: modification by/cast to Vector<T>
