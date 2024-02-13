@@ -35,12 +35,15 @@ private:
     // friend MatrixSparse<T>;
 
     cublasHandle_t handle;
-    int m_rows;
-    size_t mem_size;
+    int m_rows = 0;
     T *d_vec = nullptr;
 
+    size_t mem_size() const {
+        return m_rows*sizeof(T);
+    }
+
     void allocate_d_vec() {
-        check_cuda_error(cudaMalloc(&d_vec, mem_size));
+        check_cuda_error(cudaMalloc(&d_vec, mem_size()));
     }
 
     void check_vecvec_op_compatibility(const Vector<T> &other) const {
@@ -53,7 +56,7 @@ public:
 
     // *** Constructors ***
     Vector(const cublasHandle_t &arg_handle, int arg_m, int arg_n):
-        handle(arg_handle), m_rows(arg_m), mem_size(m_rows*sizeof(T))
+        handle(arg_handle), m_rows(arg_m)
     { 
         check_n(arg_n);
         allocate_d_vec();
@@ -65,7 +68,7 @@ public:
     Vector(const cublasHandle_t &arg_handle, std::initializer_list<T> li):
         Vector(arg_handle, li.size())
     {
-        T *h_vec = static_cast<T *>(malloc(mem_size));
+        T *h_vec = static_cast<T *>(malloc(mem_size()));
 
         struct loop_vars { int i; typename std::initializer_list<T>::const_iterator curr; };
         for (loop_vars vars = {0, std::cbegin(li)}; vars.curr != std::cend(li); ++vars.curr, ++vars.i) {
@@ -119,26 +122,31 @@ public:
 
     // }
 
-    // *** Destructor/Copy Constructor/Assignment Constructor ***
+    // *** Destructor ***
     virtual ~Vector() { check_cuda_error(cudaFree(d_vec)); }
+
+    // *** Copy-Assignment ***
     Vector<T> & operator=(const Vector<T> &other) {
 
         if (this != &other) {
 
-            check_cuda_error(cudaFree(d_vec));
-
             handle = other.handle;
-            m_rows = other.m_rows;
-            mem_size = other.mem_size;
 
-            allocate_d_vec();
-            check_cuda_error(cudaMemcpy(d_vec, other.d_vec, mem_size, cudaMemcpyDeviceToDevice));
+            if (m_rows != other.m_rows) {
+                check_cuda_error(cudaFree(d_vec));
+                m_rows = other.m_rows;
+                allocate_d_vec();
+            }
+
+            check_cuda_error(cudaMemcpy(d_vec, other.d_vec, mem_size(), cudaMemcpyDeviceToDevice));
 
         }
 
         return *this;
 
     }
+    
+    // *** Copy Constructor ***
     Vector(const Vector<T> &other) {
         *this = other;
     }
@@ -256,7 +264,7 @@ public:
     cublasHandle_t get_handle() const { return handle; }
     void print() const {
 
-        T *h_vec = static_cast<T *>(malloc(mem_size));
+        T *h_vec = static_cast<T *>(malloc(mem_size()));
 
         if (m_rows > 0) {
             check_cublas_status(cublasGetVector(m_rows, sizeof(T), d_vec, 1, h_vec, 1));
@@ -280,8 +288,8 @@ public:
         if (this == &other) { return true; }
         if (m_rows != other.m_rows) { return false; }
 
-        T *h_vec_self = static_cast<T *>(malloc(mem_size));
-        T *h_vec_other = static_cast<T *>(malloc(mem_size));
+        T *h_vec_self = static_cast<T *>(malloc(mem_size()));
+        T *h_vec_other = static_cast<T *>(malloc(mem_size()));
 
         if (m_rows > 0) {
             check_cublas_status(cublasGetVector(m_rows, sizeof(T), d_vec, 1, h_vec_self, 1));

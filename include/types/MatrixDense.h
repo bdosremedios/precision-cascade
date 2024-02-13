@@ -26,12 +26,15 @@ private:
     // friend MatrixSparse<T>;
 
     cublasHandle_t handle;
-    int m_rows, n_cols;
-    size_t mem_size;
+    int m_rows = 0, n_cols = 0;
     T *d_mat = nullptr;
 
+    size_t mem_size() const {
+        return m_rows*n_cols*sizeof(T);
+    }
+
     void allocate_d_mat() {
-        check_cuda_error(cudaMalloc(&d_mat, mem_size));
+        check_cuda_error(cudaMalloc(&d_mat, mem_size()));
     }
 
     MatrixDense<__half> to_half() const;
@@ -44,7 +47,7 @@ public:
 
     // *** Constructors ***
     MatrixDense(const cublasHandle_t &arg_handle, int arg_m, int arg_n):
-        handle(arg_handle), m_rows(arg_m), n_cols(arg_n), mem_size(m_rows*n_cols*sizeof(T))
+        handle(arg_handle), m_rows(arg_m), n_cols(arg_n)
     { allocate_d_mat(); }
 
     MatrixDense(const cublasHandle_t &arg_handle): MatrixDense(arg_handle, 0, 0) {}
@@ -63,7 +66,7 @@ public:
             typename std::initializer_list<T>::const_iterator curr_elem;
         };
 
-        T *h_mat = static_cast<T *>(malloc(mem_size));
+        T *h_mat = static_cast<T *>(malloc(mem_size()));
 
         outer_vars outer = {0, std::cbegin(li)};
         for (; outer.curr_row != std::cend(li); ++outer.curr_row, ++outer.i) {
@@ -119,15 +122,16 @@ public:
 
         if (this != &other) {
 
-            check_cuda_error(cudaFree(d_mat));
-            
             handle = other.handle;
-            m_rows = other.m_rows;
-            n_cols = other.n_cols;
-            mem_size = other.mem_size;
 
-            allocate_d_mat();
-            check_cuda_error(cudaMemcpy(d_mat, other.d_mat, mem_size, cudaMemcpyDeviceToDevice));
+            if ((m_rows != other.m_rows) || (n_cols != other.n_cols)) {
+                check_cuda_error(cudaFree(d_mat));
+                m_rows = other.m_rows;
+                n_cols = other.n_cols;
+                allocate_d_mat();
+            }
+
+            check_cuda_error(cudaMemcpy(d_mat, other.d_mat, mem_size(), cudaMemcpyDeviceToDevice));
 
         }
 
@@ -193,7 +197,7 @@ public:
 
     void print() const {
 
-        T *h_mat = static_cast<T *>(malloc(mem_size));
+        T *h_mat = static_cast<T *>(malloc(mem_size()));
 
         if ((m_rows > 0) && (n_cols > 0)) {
             check_cublas_status(cublasGetMatrix(m_rows, n_cols, sizeof(T), d_mat, m_rows, h_mat, m_rows));
