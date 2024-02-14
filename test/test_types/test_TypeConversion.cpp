@@ -100,6 +100,12 @@ public:
         );
         ASSERT_VECTOR_EQ(vec_col_2, test_vec_col_2);
 
+        Vector<T> vec_col_0_direct(mat.get_col(0));
+        ASSERT_VECTOR_EQ(vec_col_0_direct, test_vec_col_0);
+
+        Vector<T> vec_col_2_direct(mat.get_col(2));
+        ASSERT_VECTOR_EQ(vec_col_2_direct, test_vec_col_2);
+
     }
 
     template <template <typename> typename M, typename T>

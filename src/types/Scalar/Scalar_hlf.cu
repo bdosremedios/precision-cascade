@@ -1,8 +1,8 @@
-#include "types/Scalar.h"
-#include "./Scalar.cuh"
-
 #include <cuda_runtime.h>
 #include <cuda_fp16.h>
+
+#include "types/Scalar.h"
+#include "./Scalar.cuh"
 
 template Scalar<__half> Scalar<__half>::operator+(const Scalar<__half> &other) const;
 template Scalar<__half> Scalar<__half>::operator-(const Scalar<__half> &other) const;

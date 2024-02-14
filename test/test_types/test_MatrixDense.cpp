@@ -62,6 +62,16 @@ public:
         );
         ASSERT_MATRIX_EQ(mat_1_2_3_1, test_1_2_3_1);
 
+        // Test MatrixDense cast/access for block 0, 0, 3, 4
+        MatrixDense<T> mat_0_0_3_4_direct(mat.get_block(0, 0, 3, 4));
+        test_0_0_3_4.print();
+        mat_0_0_3_4_direct.print();
+        ASSERT_MATRIX_EQ(mat_0_0_3_4_direct, test_0_0_3_4);
+
+        // Test MatrixDense cast/access for block 1, 2, 3, 1
+        MatrixDense<T> mat_1_2_3_1_direct(mat.get_block(1, 2, 3, 1));
+        ASSERT_MATRIX_EQ(mat_1_2_3_1_direct, test_1_2_3_1);
+
         // Test assignment from MatrixDense
         mat = const_mat;
         MatrixDense<T> zero_2_3(MatrixDense<T>::Zero(*handle_ptr, 2, 3));

@@ -1,7 +1,7 @@
-#include "types/MatrixDense.h"
-
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
+
+#include "types/MatrixDense.h"
 
 MatrixDense<double> MatrixDense<double>::operator*(const Scalar<double> &scalar) const {
 

@@ -15,9 +15,7 @@
 #include "tools/vector_sort.h"
 
 #include "Scalar.h"
-
-template <typename T> class MatrixDense;
-template <typename T> class MatrixSparse;
+#include "MatrixDense.h"
 
 template <typename T>
 class Vector
@@ -112,6 +110,19 @@ public:
     }
 
     // *** Conversion Constructors ***
+    Vector(const typename MatrixDense<T>::Col &col):
+        Vector(col.associated_mat_ptr->handle, col.m_rows)
+    {
+        check_cuda_error(
+            cudaMemcpy(
+                d_vec,
+                col.associated_mat_ptr->d_mat + col.col_idx*col.m_rows,
+                mem_size(),
+                cudaMemcpyDeviceToDevice
+            )
+        );
+    }
+
     // Vector(const cublasHandle_t &arg_handle, const typename MatrixSparse<T>::Col &col):
     //     handle(arg_handle), m(col.rows()), mem_size(m*sizeof(T))
     // {
@@ -374,7 +385,6 @@ public:
 
 };
 
-#include "MatrixDense.h"
 #include "MatrixSparse.h"
 
 #endif

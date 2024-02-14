@@ -12,9 +12,8 @@
 
 #include "tools/cuda_check.h"
 
-#include "Vector.h"
-#include "Scalar.h"
-
+template <typename T> class Scalar;
+template <typename T> class Vector;
 template <typename T> class MatrixSparse;
 
 template <typename T>
@@ -23,6 +22,7 @@ class MatrixDense
 private:
 
     template <typename> friend class MatrixDense;
+    friend class Vector<T>;
     // friend MatrixSparse<T>;
 
     cublasHandle_t handle;
@@ -116,6 +116,25 @@ public:
     }
 
     // MatrixDense(const typename MatrixSparse<T>::Block &block): Parent::Matrix(block.base()) {}
+
+    // *** Conversion Constructor ***
+    MatrixDense(const MatrixDense<T>::Block &block):
+        MatrixDense(block.associated_mat_ptr->handle, block.m_rows, block.n_cols)
+    {
+        // Copy column by column 1D slices relevant to matrix
+        for (int j=0; j<block.n_cols; ++j) {
+            check_cuda_error(
+                cudaMemcpy(
+                    d_mat + j*block.m_rows,
+                    (block.associated_mat_ptr->d_mat +
+                        block.row_idx_start +
+                        (block.col_idx_start+j)*block.associated_mat_ptr->m_rows),
+                    block.m_rows*sizeof(T),
+                    cudaMemcpyDeviceToDevice
+                )
+            );
+        }
+    }
 
     // *** Destructor ***
     ~MatrixDense() { check_cuda_error(cudaFree(d_mat)); }
@@ -376,6 +395,7 @@ public:
     private:
 
         friend MatrixDense<T>;
+        friend Vector<T>;
 
         const int m_rows;
         const int col_idx;
@@ -553,6 +573,8 @@ public:
 
 };
 
+#include "Scalar.h"
+#include "Vector.h"
 #include "MatrixSparse.h"
 
 #endif

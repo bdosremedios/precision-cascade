@@ -1,9 +1,9 @@
-#include "types/Scalar.h"
-#include "Scalar.cuh"
-
 #include <cuda_runtime.h>
 #include <cuda_fp16.h>
 #include <math_constants.h>
+
+#include "types/Scalar.h"
+#include "Scalar.cuh"
 
 template Scalar<double> Scalar<double>::operator+(const Scalar<double> &other) const;
 template Scalar<double> Scalar<double>::operator-(const Scalar<double> &other) const;

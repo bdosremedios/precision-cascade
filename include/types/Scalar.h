@@ -123,7 +123,7 @@ Scalar<float> SCALAR_MINUS_ONE<float>::get() { return SCALAR_MINUS_ONE_F; }
 template<>
 Scalar<double> SCALAR_MINUS_ONE<double>::get() { return SCALAR_MINUS_ONE_D; }
 
-#include "Vector.h"
 #include "MatrixDense.h"
+#include "Vector.h"
 
 #endif
