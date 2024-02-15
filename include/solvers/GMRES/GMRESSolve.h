@@ -36,15 +36,15 @@ protected:
         }
     }
 
+    Vector<T> apply_left_precond_A(const Vector<T> &vec) {
+        return left_precond_ptr->template casted_action_inv_M<T>(
+            (typed_lin_sys.get_A_typed()*vec).template cast<W>()
+        );
+    }
+
     Vector<T> apply_precond_A(const Vector<T> &vec) {
-        return(
-            left_precond_ptr->template casted_action_inv_M<T>(
-                (typed_lin_sys.get_A_typed()*
-                    right_precond_ptr->template casted_action_inv_M<T>(
-                        vec.template cast<W>()
-                    )
-                ).template cast<W>()
-            )
+        return apply_left_precond_A(
+            right_precond_ptr->template casted_action_inv_M<T>(vec.template cast<W>())
         );
     }
 
@@ -56,8 +56,8 @@ protected:
         );
     }
 
-    Vector<T> calc_precond_residual(const Vector<T> &vec) {
-        return get_precond_b() - apply_precond_A(vec);
+    Vector<T> calc_precond_residual(const Vector<T> &soln) {
+        return(get_precond_b() - apply_left_precond_A(soln));
     }
 
     void set_initial_space() {
@@ -195,9 +195,9 @@ protected:
             Q_kry_basis.get_block(0, 0, typed_lin_sys.get_m(), kry_space_dim).copy_to_mat()
         );
         typed_soln = init_guess_typed +
-                     right_precond_ptr->action_inv_M(
+                     right_precond_ptr->casted_action_inv_M<T>(
                         (Q_kry_basis_block*y).template cast<W>()
-                     ).template cast<T>();
+                     );
 
     }
 

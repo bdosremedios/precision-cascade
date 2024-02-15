@@ -42,15 +42,15 @@ set(
     test_solvers/test_GMRES/test_GMRESSolve_solve_dbl.cpp
     test_solvers/test_GMRES/test_GMRESSolve_solve_sgl.cpp
     test_solvers/test_GMRES/test_GMRESSolve_solve_hlf.cpp
-#     test_solvers/test_GMRES/test_PGMRES.cpp
+    test_solvers/test_GMRES/test_PGMRES.cpp
 )
 
 
 set(
     TEST_NESTED_SOLVERS
-    #     test_solvers/test_nested/test_FP_GMRES_IR_solve.cpp
-    #     test_solvers/test_nested/test_MP_GMRES_IR_component.cpp
-    #     test_solvers/test_nested/test_MP_GMRES_IR_solve.cpp
+        # test_solvers/test_nested/test_FP_GMRES_IR_solve.cpp
+        # test_solvers/test_nested/test_MP_GMRES_IR_component.cpp
+        # test_solvers/test_nested/test_MP_GMRES_IR_solve.cpp
 )
 
 set(
