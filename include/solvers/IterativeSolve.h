@@ -101,7 +101,7 @@ protected:
         set_self_to_initial_state();
     }
     
-    // *** Abstract methods ***
+    // *** Abstract virtual methods ***
     virtual void iterate() = 0;
     virtual void derived_generic_reset() = 0;
 
