@@ -126,14 +126,14 @@ protected:
 
         int k = kry_space_dim-1;
 
-        next_q = apply_precond_A(Q_kry_basis.get_col(k).copy_to_vec());
+        next_q = apply_precond_A(Q_kry_basis.get_col(k));
 
         // Orthogonlize next_q to previous basis vectors and store coefficients/normalization in H
         Vector<T> H_k(Vector<T>::Zero(typed_lin_sys.get_b().get_handle(), typed_lin_sys.get_m()+1));
 
         for (int i=0; i<=k; ++i) {
             // MGS from newly orthog q used for orthogonalizing next vectors
-            Vector<T> q_i(Q_kry_basis.get_col(i).copy_to_vec());
+            Vector<T> q_i(Q_kry_basis.get_col(i));
             H_k.set_elem(i, q_i.dot(next_q));
             next_q -= q_i*H_k.get_elem(i);
         }
@@ -146,7 +146,7 @@ protected:
 
         // Initiate next column of QR fact as most recent of H
         int k = kry_space_dim-1;
-        R_H.get_col(k).set_from_vec(H.get_col(k).copy_to_vec());
+        R_H.get_col(k).set_from_vec(H.get_col(k));
 
         // Apply previous Given's rotations to new column
         R_H.get_block(0, k, k+1, 1).set_from_vec(
@@ -165,8 +165,8 @@ protected:
         R_H.set_elem(k, k, r);
         R_H.set_elem(k+1, k, SCALAR_ZERO<T>::get());
 
-        Vector<T> Q_H_col_k(Q_H.get_col(k).copy_to_vec());
-        Vector<T> Q_H_col_kp1(Q_H.get_col(k+1).copy_to_vec());
+        Vector<T> Q_H_col_k(Q_H.get_col(k));
+        Vector<T> Q_H_col_kp1(Q_H.get_col(k+1));
         Q_H.get_col(k).set_from_vec(Q_H_col_k*c + Q_H_col_kp1*minus_s);
         Q_H.get_col(k+1).set_from_vec(Q_H_col_kp1*c - Q_H_col_k*minus_s);
 

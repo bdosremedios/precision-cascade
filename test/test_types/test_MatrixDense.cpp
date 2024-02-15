@@ -43,7 +43,7 @@ public:
         ASSERT_EQ(blk_2_1_2_3.get_elem(1, 2).get_scalar(), static_cast<T>(19));
 
         // Test MatrixDense cast/access for block 0, 0, 3, 4
-        MatrixDense<T> mat_0_0_3_4(mat.get_block(0, 0, 3, 4).copy_to_mat());
+        MatrixDense<T> mat_0_0_3_4(mat.get_block(0, 0, 3, 4));
         MatrixDense<T> test_0_0_3_4(
             *handle_ptr,
             {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4)},
@@ -53,7 +53,7 @@ public:
         ASSERT_MATRIX_EQ(mat_0_0_3_4, test_0_0_3_4);
 
         // Test MatrixDense cast/access for block 1, 2, 3, 1
-        MatrixDense<T> mat_1_2_3_1(mat.get_block(1, 2, 3, 1).copy_to_mat());
+        MatrixDense<T> mat_1_2_3_1(mat.get_block(1, 2, 3, 1));
         MatrixDense<T> test_1_2_3_1(
             *handle_ptr,
             {{static_cast<T>(8)},
@@ -64,8 +64,6 @@ public:
 
         // Test MatrixDense cast/access for block 0, 0, 3, 4
         MatrixDense<T> mat_0_0_3_4_direct(mat.get_block(0, 0, 3, 4));
-        test_0_0_3_4.print();
-        mat_0_0_3_4_direct.print();
         ASSERT_MATRIX_EQ(mat_0_0_3_4_direct, test_0_0_3_4);
 
         // Test MatrixDense cast/access for block 1, 2, 3, 1

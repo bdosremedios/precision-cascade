@@ -64,7 +64,7 @@ public:
         // and that Hessenberg first vector contructs next vector with entries
         test_mock.iterate_no_soln_solve();
 
-        Vector<double> next_q(test_mock.Q_kry_basis.get_col(0).copy_to_vec());
+        Vector<double> next_q(test_mock.Q_kry_basis.get_col(0));
         ASSERT_VECTOR_NEAR(
             next_q,
             r_0/r_0.norm(),
@@ -84,19 +84,19 @@ public:
         );
 
         // Save basis and H entries to check that they remain unchanged
-        Q_save.get_col(0).set_from_vec(test_mock.Q_kry_basis.get_col(0).copy_to_vec());
-        H_save.get_col(0).set_from_vec(test_mock.H.get_col(0).copy_to_vec());
+        Q_save.get_col(0).set_from_vec(test_mock.Q_kry_basis.get_col(0));
+        H_save.get_col(0).set_from_vec(test_mock.H.get_col(0));
 
         // Subsequent updates
         for (int k=1; k<n; ++k) {
 
             // Iterate Krylov subspace and Hessenberg
             test_mock.iterate_no_soln_solve();
-            Q_save.get_col(k).set_from_vec(test_mock.Q_kry_basis.get_col(k).copy_to_vec());
-            H_save.get_col(k).set_from_vec(test_mock.H.get_col(k).copy_to_vec());
+            Q_save.get_col(k).set_from_vec(test_mock.Q_kry_basis.get_col(k));
+            H_save.get_col(k).set_from_vec(test_mock.H.get_col(k));
 
             // Get newly generated basis vector
-            Vector<double> q(test_mock.Q_kry_basis.get_col(k).copy_to_vec());
+            Vector<double> q(test_mock.Q_kry_basis.get_col(k));
 
             // Confirm that previous vectors are unchanged and are orthogonal to new one
             for (int j=0; j<k; ++j) {
@@ -113,8 +113,8 @@ public:
 
             // Confirm that Hessenberg matrix column corresponding to new basis vector
             // approximately constructs the next basis vector
-            Vector<double> h(test_mock.H.get_col(k).copy_to_vec());
-            Vector<double> construct_q(test_mock.Q_kry_basis.get_col(k).copy_to_vec());
+            Vector<double> h(test_mock.H.get_col(k));
+            Vector<double> construct_q(test_mock.Q_kry_basis.get_col(k));
             construct_q = A*construct_q;
             for (int i=0; i<=k; ++i) {
                 ASSERT_NEAR(
@@ -193,11 +193,11 @@ public:
             }
 
             // Save second last new basis vector and new column of R
-            save_Q_H.get_col(k).set_from_vec(test_mock.Q_H.get_col(k).copy_to_vec());
-            save_R_H.get_col(k).set_from_vec(test_mock.R_H.get_col(k).copy_to_vec());
+            save_Q_H.get_col(k).set_from_vec(test_mock.Q_H.get_col(k));
+            save_R_H.get_col(k).set_from_vec(test_mock.R_H.get_col(k));
 
             // Test that k+1 by k+1 block of Q_H is orthogonal
-            MatrixDense<double> Q_H_block(test_mock.Q_H.get_block(0, 0, k+2, k+2).copy_to_mat());
+            MatrixDense<double> Q_H_block(test_mock.Q_H.get_block(0, 0, k+2, k+2));
             MatrixDense<double> orthog_check(Q_H_block*Q_H_block.transpose());
             ASSERT_MATRIX_IDENTITY(
                 orthog_check,
@@ -212,7 +212,7 @@ public:
 
             // Test that k+1 by k+1 block of Q_H is and k+1 by k block of R_H
             // constructs k+1 by k block of H
-            MatrixDense<double> R_H_block(test_mock.R_H.get_block(0, 0, k+2, k+1).copy_to_mat());
+            MatrixDense<double> R_H_block(test_mock.R_H.get_block(0, 0, k+2, k+1));
             MatrixDense<double> construct_H(Q_H_block*R_H_block);
             ASSERT_MATRIX_NEAR(
                 construct_H,

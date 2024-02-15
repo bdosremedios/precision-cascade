@@ -86,14 +86,14 @@ public:
              {static_cast<T>(9), static_cast<T>(10), static_cast<T>(11), static_cast<T>(12)}}
         );
 
-        Vector<T> vec_col_0(mat.get_col(0).copy_to_vec());
+        Vector<T> vec_col_0(mat.get_col(0));
         Vector<T> test_vec_col_0(
             *handle_ptr,
             {static_cast<T>(1), static_cast<T>(5), static_cast<T>(9)}
         );
         ASSERT_VECTOR_EQ(vec_col_0, test_vec_col_0);
 
-        Vector<T> vec_col_2(mat.get_col(2).copy_to_vec());
+        Vector<T> vec_col_2(mat.get_col(2));
         Vector<T> test_vec_col_2(
             *handle_ptr,
             {static_cast<T>(3), static_cast<T>(7), static_cast<T>(11)}
