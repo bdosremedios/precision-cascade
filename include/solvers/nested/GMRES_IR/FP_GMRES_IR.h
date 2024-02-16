@@ -2,20 +2,18 @@
 #define FP_GMRES_IR_SOLVE_H
 
 #include "../IterativeRefinement.h"
-#include "../../krylov/GMRES.h"
+#include "../../GMRES/GMRESSolve.h"
 
 template <template <typename> typename M, typename T, typename W=T>
 class FP_GMRES_IR_Solve: public IterativeRefinement<M>
 {
 private:
 
-    // *** PRIVATE HELPER METHODS ***
-
     void set_inner_solve() {
 
         IR_inner_typed_lin_sys.set_b(this->curr_res);
 
-        this->inner_solver = make_shared<GMRESSolve<M, T>>(
+        this->inner_solver = std::make_shared<GMRESSolve<M, T>>(
             IR_inner_typed_lin_sys,
             basis_zero_tol,
             this->inner_solve_arg_pkg,

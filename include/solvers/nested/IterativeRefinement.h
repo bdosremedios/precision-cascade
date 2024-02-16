@@ -17,9 +17,11 @@ protected:
         this->generic_soln += this->inner_solver->get_generic_soln();
 
         // Residual is b - inner_solver residual so update through that
-        vector<double> temp;
+        std::vector<double> temp;
         for (int i=0; i < this->inner_solver->get_iteration(); ++i) {
-            temp.push_back((this->lin_sys.get_b()-(this->inner_solver->get_res_hist()).col(i)).norm());
+            temp.push_back(
+                (this->lin_sys.get_b()-(this->inner_solver->get_res_hist()).get_col(i)).norm().get_scalar()
+            );
         }
         this->inner_res_norm_hist.push_back(temp);
 
@@ -28,8 +30,8 @@ protected:
     // *** PROTECTED METHODS ***
 
     // Create initial guess for inner solver
-    MatrixVector<double> make_inner_IR_guess(GenericLinearSystem<M> const &arg_lin_sys) const {
-        return MatrixVector<double>::Zero(arg_lin_sys.get_n());
+    Vector<double> make_inner_IR_guess(GenericLinearSystem<M> const &arg_lin_sys) const {
+        return Vector<double>::Zero(arg_lin_sys.get_b().get_handle(), arg_lin_sys.get_n());
     }
 
 public:
