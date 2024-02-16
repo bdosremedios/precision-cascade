@@ -15,6 +15,7 @@ protected:
     using TypedIterativeSolve<M, T>::typed_lin_sys;
     using TypedIterativeSolve<M, T>::typed_soln;
 
+    // *** Helper Methods ***
     void typed_iterate() override {
         typed_soln += D_inv*(typed_lin_sys.get_b_typed()-typed_lin_sys.get_A_typed()*typed_soln);
     }

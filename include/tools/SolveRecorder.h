@@ -29,7 +29,7 @@ void write_json_array_to_ofstream(
     f_out << "]\n" << padding << "]";
 
 
-} // end write_json_array_to_ofstream
+}
 
 template <template <typename> typename M>
 void record_solve(

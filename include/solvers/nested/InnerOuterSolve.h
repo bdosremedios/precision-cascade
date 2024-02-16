@@ -8,14 +8,10 @@ class InnerOuterSolve: public GenericIterativeSolve<M>
 {
 protected:
 
-    // *** PROTECTED ATTRIBUTES ***
-
     int max_inner_iter; // mutable to allow setting by specific solvers
     std::vector<std::vector<double>> inner_res_norm_hist;
     SolveArgPkg inner_solve_arg_pkg;
     std::shared_ptr<GenericIterativeSolve<M>> inner_solver;
-
-    // *** PROTECTED OVERRIDE METHODS ***
 
     void iterate() override {
         
@@ -25,7 +21,7 @@ protected:
 
     };
 
-    // *** PROTECTED ABSTRACT METHODS ***
+    // *** Virtual Abstract Methods ***
 
     // Initialize inner outer solver;
     virtual void initialize_inner_outer_solver() = 0;
@@ -38,7 +34,7 @@ protected:
 
 public:
 
-    // *** CONSTRUCTORS ***
+    // *** Constructors ***
 
     InnerOuterSolve(
         const GenericLinearSystem<M> &arg_lin_sys,
@@ -63,7 +59,6 @@ public:
     InnerOuterSolve(const GenericLinearSystem<M> &, const SolveArgPkg &&);
     InnerOuterSolve(const GenericLinearSystem<M> &&, const SolveArgPkg &&);
 
-    // *** GETTERS ***
     std::vector<std::vector<double>> get_inner_res_norm_hist() const { return inner_res_norm_hist; };
 
 };

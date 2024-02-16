@@ -28,15 +28,19 @@ public:
     Scalar() { check_cuda_error(cudaMalloc(&d_scalar, sizeof(T))); }
     Scalar(const T &val): Scalar() { set_scalar(val); }
 
-    // *** Destructor/Copy-Constructor/Assignment-Constructor ***
+    // *** Destructor ***
     virtual ~Scalar() { check_cuda_error(cudaFree(d_scalar)); }
-    Scalar(const Scalar &other): Scalar() { *this = other; }
+
+    // *** Copy Assignment ***
     Scalar<T> & operator=(const Scalar<T> &other) {
         if (this != &other) {
             check_cuda_error(cudaMemcpy(d_scalar, other.d_scalar, sizeof(T), cudaMemcpyDeviceToDevice));
         }
         return *this;
     }
+
+    // *** Copy Constructor ***
+    Scalar(const Scalar &other): Scalar() { *this = other; }
 
     // *** Access ***
     void set_scalar(const T &val) {
@@ -60,7 +64,7 @@ public:
     Scalar<double> to_double() const;
     template <> Scalar<double> cast<double>() const { return to_double(); }
 
-    // *** Arithmetic/Compound Operations ***
+    // *** Operations ***
     Scalar<T> operator+(const Scalar& other) const;
     Scalar<T> operator-(const Scalar& other) const;
 

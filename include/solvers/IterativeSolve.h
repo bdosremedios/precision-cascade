@@ -258,18 +258,18 @@ private:
     
 protected:
 
-    // *** Linear system attributes ***
+    // *** Const attributes ***
     const TypedLinearSystem<M, T> &typed_lin_sys;
-
-    // *** Constant solve attributes ***
     const Vector<T> init_guess_typed;
 
     // *** Mutable solve attributes ***
     Vector<T> typed_soln = Vector<T>(NULL);
 
-    // *** Abstract methods ***
+    // *** Virtual abstract methods ***
     virtual void typed_iterate() = 0;
     virtual void derived_typed_reset() = 0;
+
+    // *** Helper Methods ***
 
     // Perform iteration updating typed_soln and then using that to update generic_soln()
     void iterate() override {

@@ -8,6 +8,7 @@ class NoPreconditioner: public Preconditioner<M, W>
 {
 public:
 
+    // *** Constructors ***
     using Preconditioner<M, W>::Preconditioner;
 
     Vector<W> action_inv_M(Vector<W> const &vec) const override {

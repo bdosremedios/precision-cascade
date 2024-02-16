@@ -24,29 +24,23 @@ private:
 
 protected:
 
-    // *** PROTECTED CONST ATTRIBUTES ***
-
+    // *** Const Attributes ***
     const double basis_zero_tol;
     const PrecondArgPkg<M, W> inner_precond_arg_pkg;
 
-    // *** PROTECTED MUTABLE ATTRIBUTES ***
-
+    // *** Mutable Attributes ***
     Mutb_TypedLinearSystem<M, T> IR_inner_typed_lin_sys;
 
-    // *** PROTECTED OVERRIDE METHODS ***
-
+    // *** Virtual Abstract Methods ***
     void initialize_inner_outer_solver() override { set_inner_solve(); }
-
     void outer_iterate_setup() override { set_inner_solve(); }
-
     void derived_generic_reset() override { set_inner_solve(); }
     
 public:
 
     using IterativeRefinement<M>::lin_sys;
 
-    // *** CONSTRUCTORS ***
-
+    // *** Constructors ***
     FP_GMRES_IR_Solve(
         const TypedLinearSystem<M, T> &arg_outer_typed_lin_sys,
         double arg_basis_zero_tol,

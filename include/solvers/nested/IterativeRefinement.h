@@ -8,8 +8,7 @@ class IterativeRefinement: public InnerOuterSolve<M>
 {
 protected:
 
-    // *** PROTECTED OVERRIDE METHODS ***
-
+    // *** Concrete Methods ***
     void outer_iterate_complete() override {
 
         // Add error back to generic_soln since that is solution of the inner_solver under
@@ -27,8 +26,6 @@ protected:
 
     }
 
-    // *** PROTECTED METHODS ***
-
     // Create initial guess for inner solver
     Vector<double> make_inner_IR_guess(GenericLinearSystem<M> const &arg_lin_sys) const {
         return Vector<double>::Zero(arg_lin_sys.get_b().get_handle(), arg_lin_sys.get_n());
@@ -36,8 +33,7 @@ protected:
 
 public:
 
-    // *** CONSTRUCTORS ***
-
+    // *** Constructors ***
     IterativeRefinement(
         const GenericLinearSystem<M> &arg_lin_sys,
         const SolveArgPkg &arg_pkg

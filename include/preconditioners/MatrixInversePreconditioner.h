@@ -10,6 +10,7 @@ public:
 
     M<W> inv_M;
 
+    // *** Constructors ***
     MatrixInversePreconditioner(M<W> const &arg_inv_M): inv_M(arg_inv_M) {}
 
     bool check_compatibility_left(int const &arg_m) const override {

@@ -35,6 +35,8 @@ private:
 
 public:
 
+    // *** Constructors ***
+    
     // ILU constructor taking premade L and U and no permutation
     ILUPreconditioner(const M<W> &arg_L, const M<W> &arg_U):
         ILUPreconditioner(
