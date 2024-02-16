@@ -1,12 +1,12 @@
 #ifndef ILU_PRECONDITIONER_H
 #define ILU_PRECONDITIONER_H
 
-#include "Preconditioner.h"
-#include "tools/ILU.h"
-
 #include <cmath>
 #include <vector>
 #include <functional>
+
+#include "Preconditioner.h"
+#include "tools/ILU.h"
 
 template <template <typename> typename M, typename W>
 class ILUPreconditioner: public Preconditioner<M, W>

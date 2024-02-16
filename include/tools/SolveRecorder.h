@@ -1,10 +1,10 @@
 #ifndef SOLVERECORDER_H
 #define SOLVERECORDER_H
 
-#include "solvers/IterativeSolve.h"
-
 #include <filesystem>
 #include <fstream>
+
+#include "solvers/IterativeSolve.h"
 
 namespace fs = std::filesystem;
 
