@@ -47,7 +47,7 @@ public:
         }
 
         D_wL = M<T>(
-            arg_typed_lin_sys.get_A_typed().get_handle(),
+            arg_typed_lin_sys.get_handle(),
             h_D_wL,
             typed_lin_sys.get_m(),
             typed_lin_sys.get_n()

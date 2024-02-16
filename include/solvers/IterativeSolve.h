@@ -42,7 +42,7 @@ private:
     void initialize_instantiate_residual() {
 
         res_norm_hist.clear();
-        res_hist = MatrixDense<double>(lin_sys.get_A().get_handle(), lin_sys.get_m(), max_iter+1);
+        res_hist = MatrixDense<double>(lin_sys.get_handle(), lin_sys.get_m(), max_iter+1);
         curr_res = lin_sys.get_b()-lin_sys.get_A()*init_guess;
         res_hist.get_col(0).set_from_vec(curr_res);
         curr_res_norm = curr_res.norm().get_scalar();
@@ -106,7 +106,7 @@ protected:
     virtual void derived_generic_reset() = 0;
 
     static Vector<double> make_guess(const GenericLinearSystem<M> &arg_lin_sys) {
-        return Vector<double>::Ones(arg_lin_sys.get_A().get_handle(), arg_lin_sys.get_n());
+        return Vector<double>::Ones(arg_lin_sys.get_handle(), arg_lin_sys.get_n());
     }
 
     // Forbid rvalue instantiation

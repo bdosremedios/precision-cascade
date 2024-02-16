@@ -1,10 +1,11 @@
 #ifndef SCALAR_H
 #define SCALAR_H
 
+#include <iostream>
+
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
 #include <cuda_fp16.h>
-#include <iostream>
 
 #include "tools/cuda_check.h"
 

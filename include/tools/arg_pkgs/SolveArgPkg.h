@@ -17,6 +17,7 @@ public:
     double target_rel_res;
     Vector<double> init_guess;
 
+    // *** Argument Checkers ***
     bool check_default_max_iter() const { return max_iter == default_max_iter; }
     bool check_default_max_inner_iter() const { return max_iter == default_max_inner_iter; }
     bool check_default_target_rel_res() const { return target_rel_res == default_target_rel_res; }
@@ -30,8 +31,7 @@ public:
         }
     }
 
-    // *** CONSTRUCTORS ***
-
+    // *** Constructors ***
     SolveArgPkg(
         int arg_max_iter = default_max_iter,
         int arg_max_inner_iter = default_max_inner_iter,

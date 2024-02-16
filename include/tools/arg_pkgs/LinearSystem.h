@@ -1,6 +1,8 @@
 #ifndef LINEARSYSTEM_H
 #define LINEARSYSTEM_H
 
+#include <cublas_v2.h>
+
 #include "../../types/types.h"
 
 template <template <typename> typename M>
@@ -10,41 +12,51 @@ protected:
 
     const int m;
     const int n;
+    const cublasHandle_t handle;
     const M<double> A;
     const Vector<double> b;
 
 public:
 
+    // *** Constructors ***
     GenericLinearSystem(
         M<double> arg_A,
         Vector<double> arg_b
     ):
         m(arg_A.rows()),
         n(arg_A.cols()),
+        handle(arg_A.get_handle()),
         A(arg_A),
         b(arg_b)
     {
-        if ((m < 1) || (n < 1)) { throw std::runtime_error("Empty Matrix A"); }
-        if (m != b.rows()) { throw std::runtime_error("A not compatible with b for linear system"); }
+        if ((m < 1) || (n < 1)) {
+            throw std::runtime_error("GenericLinearSystem: Empty Matrix A");
+        }
+        if (m != b.rows()) {
+            throw std::runtime_error("GenericLinearSystem: A not compatible with b for linear system");
+        }
     }
 
+    // *** Getters ***
     const M<double> &get_A() const { return A; }
     virtual const Vector<double> &get_b() const { return b; }
     const int &get_m() const { return m; }
     const int &get_n() const { return n; }
+    const cublasHandle_t &get_handle() const { return handle; }
 
 };
 
 template <template <typename> typename M, typename T>
 class TypedLinearSystem: public GenericLinearSystem<M>
 {
-protected:
+private:
 
     const M<T> A_typed;
     const Vector<T> b_typed;
 
 public:
 
+    // *** Constructors ***
     TypedLinearSystem(
         M<double> arg_A,
         Vector<double> arg_b
@@ -54,8 +66,8 @@ public:
         GenericLinearSystem<M>(arg_A, arg_b)
     {}
 
+    // *** Getters ***
     const M<T> &get_A_typed() const { return A_typed; }
-
     virtual const Vector<T> &get_b_typed() const { return b_typed; }
 
 };
@@ -63,13 +75,14 @@ public:
 template <template <typename> typename M, typename T>
 class Mutb_TypedLinearSystem: public TypedLinearSystem<M, T>
 {
-protected:
+private:
     
     Vector<double> b;
     Vector<T> b_typed;
 
 public:
 
+    // *** Constructors ***
     Mutb_TypedLinearSystem(
         M<double> arg_A,
         Vector<double> arg_b
@@ -79,14 +92,15 @@ public:
         TypedLinearSystem<M, T>(arg_A, arg_b)
     {}
 
+    // *** Getters ***
+    const Vector<double> &get_b() const override { return b; }
+    const Vector<T> &get_b_typed() const override { return b_typed; }
+
+    // *** Setters ***
     void set_b(Vector<double> arg_b) {
         b = arg_b;
         b_typed = b.template cast<T>();
     }
-
-    const Vector<double> &get_b() const override { return b; }
-
-    const Vector<T> &get_b_typed() const override { return b_typed; }
 
 };
 

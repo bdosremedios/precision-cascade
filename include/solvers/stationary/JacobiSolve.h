@@ -41,7 +41,7 @@ public:
         }
 
         D_inv = M<T>(
-            arg_typed_lin_sys.get_A_typed().get_handle(),
+            arg_typed_lin_sys.get_handle(),
             h_mat,
             typed_lin_sys.get_m(),
             typed_lin_sys.get_n()

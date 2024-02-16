@@ -14,8 +14,7 @@ public:
     std::shared_ptr<Preconditioner<M, U>> left_precond;
     std::shared_ptr<Preconditioner<M, U>> right_precond;
 
-    // *** CONSTRUCTORS ***
-
+    // *** Constructors ***
     PrecondArgPkg(
         std::shared_ptr<Preconditioner<M, U>> arg_left_precond = std::make_shared<NoPreconditioner<M, U>>(),
         std::shared_ptr<Preconditioner<M, U>> arg_right_precond = std::make_shared<NoPreconditioner<M, U>>()

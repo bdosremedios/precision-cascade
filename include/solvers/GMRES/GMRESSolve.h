@@ -67,22 +67,22 @@ protected:
         // Pre-allocate all possible space needed to prevent memory
         // re-allocation
         Q_kry_basis = MatrixDense<T>::Zero(
-            typed_lin_sys.get_A_typed().get_handle(),
+            typed_lin_sys.get_handle(),
             typed_lin_sys.get_m(),
             typed_lin_sys.get_m()
         );
         H = MatrixDense<T>::Zero(
-            typed_lin_sys.get_A_typed().get_handle(),
+            typed_lin_sys.get_handle(),
             typed_lin_sys.get_m()+1,
             typed_lin_sys.get_m()
         );
         Q_H = MatrixDense<T>::Identity(
-            typed_lin_sys.get_A_typed().get_handle(),
+            typed_lin_sys.get_handle(),
             typed_lin_sys.get_m()+1,
             typed_lin_sys.get_m()+1
         );
         R_H = MatrixDense<T>::Zero(
-            typed_lin_sys.get_A_typed().get_handle(),
+            typed_lin_sys.get_handle(),
             typed_lin_sys.get_m()+1,
             typed_lin_sys.get_m()
         );
@@ -129,7 +129,7 @@ protected:
         next_q = apply_precond_A(Q_kry_basis.get_col(k));
 
         // Orthogonlize next_q to previous basis vectors and store coefficients/normalization in H
-        Vector<T> H_k(Vector<T>::Zero(typed_lin_sys.get_b().get_handle(), typed_lin_sys.get_m()+1));
+        Vector<T> H_k(Vector<T>::Zero(typed_lin_sys.get_handle(), typed_lin_sys.get_m()+1));
 
         for (int i=0; i<=k; ++i) {
             // MGS from newly orthog q used for orthogonalizing next vectors
@@ -174,9 +174,9 @@ protected:
 
     void update_x_minimizing_res() {
 
-        // Calculate RHS to solve
+        // Calculate rhs to solve
         Vector<T> rho_e1(
-            Vector<T>::Zero(typed_lin_sys.get_A_typed().get_handle(), kry_space_dim+1)
+            Vector<T>::Zero(typed_lin_sys.get_handle(), kry_space_dim+1)
         );
         rho_e1.set_elem(0, rho);
         Vector<T> rhs(
