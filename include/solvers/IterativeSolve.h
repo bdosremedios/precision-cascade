@@ -61,15 +61,13 @@ private:
     
 protected:
 
-    // *** Linear system attributes ***
+    // *** Const Attributes ***
     const GenericLinearSystem<M> &lin_sys;
     const Vector<double> init_guess;
-
-    // *** Constant solve attributes ***
     const double target_rel_res;
 
-    // *** Mutable solve attributes ***
-    int max_iter; // mutable to allow setting by specific solvers
+    // *** Mutable Attributes ***
+    int max_iter; // mutable to allow setting by derived solvers
     int curr_iter;
     bool initiated;
     bool converged;
@@ -101,7 +99,7 @@ protected:
         set_self_to_initial_state();
     }
     
-    // *** Abstract virtual methods ***
+    // *** Abstract Virtual Methods ***
     virtual void iterate() = 0;
     virtual void derived_generic_reset() = 0;
 
@@ -258,14 +256,14 @@ private:
     
 protected:
 
-    // *** Const attributes ***
+    // *** Const Attributes ***
     const TypedLinearSystem<M, T> &typed_lin_sys;
     const Vector<T> init_guess_typed;
 
-    // *** Mutable solve attributes ***
+    // *** Mutable Attributes ***
     Vector<T> typed_soln = Vector<T>(NULL);
 
-    // *** Virtual abstract methods ***
+    // *** Virtual Abstract Methods ***
     virtual void typed_iterate() = 0;
     virtual void derived_typed_reset() = 0;
 

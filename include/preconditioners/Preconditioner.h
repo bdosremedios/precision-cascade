@@ -12,7 +12,7 @@ public:
     Preconditioner() = default;
     virtual ~Preconditioner() = default;
 
-    // *** Virtual abstract methods *** 
+    // *** Virtual Abstract Methods *** 
     virtual Vector<W> action_inv_M(Vector<W> const &vec) const = 0;
     virtual bool check_compatibility_left(int const &m) const = 0;
     virtual bool check_compatibility_right(int const &n) const = 0;

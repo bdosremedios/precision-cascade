@@ -8,7 +8,7 @@ class InnerOuterSolve: public GenericIterativeSolve<M>
 {
 protected:
 
-    int max_inner_iter; // mutable to allow setting by specific solvers
+    int max_inner_iter; // mutable to allow setting by derived solvers
     std::vector<std::vector<double>> inner_res_norm_hist;
     SolveArgPkg inner_solve_arg_pkg;
     std::shared_ptr<GenericIterativeSolve<M>> inner_solver;

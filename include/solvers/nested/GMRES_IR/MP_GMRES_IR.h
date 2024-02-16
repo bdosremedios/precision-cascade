@@ -1,29 +1,28 @@
 #ifndef MP_GMRES_IR_SOLVE_H
 #define MP_GMRES_IR_SOLVE_H
 
+#include <cuda_fp16.h>
+
 #include "../IterativeRefinement.h"
-#include "../../krylov/GMRES.h"
+#include "../../GMRES/GMRESSolve.h"
 
 template <template <typename> typename M>
 class MP_GMRES_IR_Solve: public IterativeRefinement<M>
 {
 private:
 
-    // *** PRIVATE CONST ATTRIBUTES ***
-
-    Mutb_TypedLinearSystem<M, half> IR_inner_lin_sys_hlf;
+    Mutb_TypedLinearSystem<M, __half> IR_inner_lin_sys_hlf;
     Mutb_TypedLinearSystem<M, float> IR_inner_lin_sys_sgl;
     Mutb_TypedLinearSystem<M, double> IR_inner_lin_sys_dbl;
 
-    // *** PRIVATE HELPER METHODS ***
-
+    // *** Helper Methods ***
     template <typename T>
     void setup_inner_solve() {
 
-        if (std::is_same<T, half>::value) {
+        if (std::is_same<T, __half>::value) {
 
             IR_inner_lin_sys_hlf.set_b(this->curr_res);
-            this->inner_solver = make_shared<GMRESSolve<M, half>>(
+            this->inner_solver = std::make_shared<GMRESSolve<M, __half>>(
                 IR_inner_lin_sys_hlf,
                 u_hlf,
                 this->inner_solve_arg_pkg
@@ -32,7 +31,7 @@ private:
         } else if (std::is_same<T, float>::value) {
 
             IR_inner_lin_sys_sgl.set_b(this->curr_res);
-            this->inner_solver = make_shared<GMRESSolve<M, float>>(
+            this->inner_solver = std::make_shared<GMRESSolve<M, float>>(
                 IR_inner_lin_sys_sgl,
                 u_sgl,
                 this->inner_solve_arg_pkg
@@ -41,13 +40,19 @@ private:
         } else if (std::is_same<T, double>::value) {
 
             IR_inner_lin_sys_dbl.set_b(this->curr_res);
-            this->inner_solver = make_shared<GMRESSolve<M, double>>(
+            this->inner_solver = std::make_shared<GMRESSolve<M, double>>(
                 IR_inner_lin_sys_dbl,
                 u_dbl,
                 this->inner_solve_arg_pkg
             );
 
-        } else { throw runtime_error("Invalid type T used in call to setup_inner_solve<T>"); }
+        } else {
+
+            throw std::runtime_error(
+                "MP_GMRES_IR_Solve: Invalid type T used in call to setup_inner_solve<T>"
+            );
+
+        }
 
     }
 
@@ -55,7 +60,7 @@ private:
 
         if (cascade_phase == HLF_PHASE) {
 
-            setup_inner_solve<half>();
+            setup_inner_solve<__half>();
     
         } else if (cascade_phase == SGL_PHASE) {
 
@@ -65,14 +70,19 @@ private:
             
             setup_inner_solve<double>();
             
-        } else { throw runtime_error("Invalid cascade_phase in MP_GMRES_IR_Solver"); }
+        } else {
+
+            throw std::runtime_error(
+                "MP_GMRES_IR_Solve: Invalid cascade_phase in MP_GMRES_IR_Solver"
+            );
+
+        }
 
     }
 
 protected:
 
-    // *** PROTECTED CONSTANTS ***
-
+    // *** Constants ***
     const double u_hlf = pow(2, -10);
     const double u_sgl = pow(2, -23);
     const double u_dbl = pow(2, -52);
@@ -82,20 +92,20 @@ protected:
     const static int DBL_PHASE = 2;
     inline const static int INIT_PHASE = HLF_PHASE;
 
-    // *** PROTECTED ATTRIBUTES ***
+    // *** Attributes ***
     int cascade_phase;
 
-    // *** PROTECTED ABSTRACT METHODS ***
+    // *** Virtual Abstract Methods ***
 
     // Determine which phase should be used based on current phase and
     // current convergence progress
     virtual void determine_phase() = 0;
 
-    // *** PROTECTED OVERRIDE METHODS ***
+    // *** Concrete Override Methods ***
 
-    // Initialize inner outer solver;
+    // Initialize inner outer solver in __half phase
     void initialize_inner_outer_solver() override {
-        setup_inner_solve<half>();
+        setup_inner_solve<__half>();
     }
 
     // Specify inner_solver for outer_iterate_calc and setup
@@ -111,8 +121,7 @@ protected:
     
 public:
 
-    // *** CONSTRUCTORS ***
-
+    // *** Constructors ***
     MP_GMRES_IR_Solve(
         const GenericLinearSystem<M> &arg_lin_sys,
         const SolveArgPkg &arg_solve_arg_pkg
@@ -138,14 +147,12 @@ class SimpleConstantThreshold : public MP_GMRES_IR_Solve<M>
 {
 protected:
 
-    // *** PROTECTED CONSTANTS ***
-
+    // *** Constants ***
     const double tol_hlf = pow(10, -02);
     const double tol_sgl = pow(10, -05);
     const double tol_dbl = pow(10, -10);
 
-    // *** PROTECTED OVERRIDE METHODS ***
-
+    // *** Concrete Override Methods ***
     void determine_phase() override {
         if (this->cascade_phase == this->HLF_PHASE) {
             if ((this->get_relres() <= tol_hlf)) { this->cascade_phase = this->SGL_PHASE; }

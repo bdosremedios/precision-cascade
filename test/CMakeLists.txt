@@ -49,8 +49,8 @@ set(
 set(
     TEST_NESTED_SOLVERS
         test_solvers/test_nested/test_FP_GMRES_IR_solve.cpp
-        # test_solvers/test_nested/test_MP_GMRES_IR_component.cpp
-        # test_solvers/test_nested/test_MP_GMRES_IR_solve.cpp
+        test_solvers/test_nested/test_MP_GMRES_IR_component.cpp
+        test_solvers/test_nested/test_MP_GMRES_IR_solve.cpp
 )
 
 set(

@@ -17,7 +17,7 @@ public:
     double target_rel_res;
     Vector<double> init_guess;
 
-    // *** Argument Checkers ***
+    // *** Checkers ***
     bool check_default_max_iter() const { return max_iter == default_max_iter; }
     bool check_default_max_inner_iter() const { return max_iter == default_max_inner_iter; }
     bool check_default_target_rel_res() const { return target_rel_res == default_target_rel_res; }
