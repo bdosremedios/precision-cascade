@@ -264,6 +264,37 @@ protected:
     }
 
     template <typename T>
+    void TestNonZeros() {
+
+        M<T> test_non_zeros_some(
+            *handle_ptr,
+            {{static_cast<T>(1), static_cast<T>(0), static_cast<T>(3), static_cast<T>(0)},
+             {static_cast<T>(0), static_cast<T>(7), static_cast<T>(0), static_cast<T>(9)},
+             {static_cast<T>(11), static_cast<T>(12), static_cast<T>(13), static_cast<T>(14)},
+             {static_cast<T>(16), static_cast<T>(0), static_cast<T>(18), static_cast<T>(0)}}
+        );
+        ASSERT_EQ(test_non_zeros_some.non_zeros(), 10);
+
+        M<T> test_non_zeros_all(
+            *handle_ptr,
+            {{static_cast<T>(0), static_cast<T>(0), static_cast<T>(0)},
+             {static_cast<T>(0), static_cast<T>(0), static_cast<T>(0)},
+             {static_cast<T>(0), static_cast<T>(0), static_cast<T>(0)},
+             {static_cast<T>(0), static_cast<T>(0), static_cast<T>(0)}}
+        );
+        ASSERT_EQ(test_non_zeros_all.non_zeros(), 0);
+
+        M<T> test_non_zeros_none(
+            *handle_ptr,
+            {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4), static_cast<T>(5)},
+             {static_cast<T>(6), static_cast<T>(7), static_cast<T>(8), static_cast<T>(9), static_cast<T>(10)},
+             {static_cast<T>(11), static_cast<T>(12), static_cast<T>(13), static_cast<T>(14), static_cast<T>(15)}}
+        );
+        ASSERT_EQ(test_non_zeros_none.non_zeros(), 15);
+
+    }
+
+    template <typename T>
     void TestDynamicMemConstruction() {
     
         const int m_manual(2);

@@ -1,24 +1,24 @@
-// #include <filesystem>
-// #include <memory>
-// #include <iostream>
-// #include <cmath>
-// #include <string>
+#include <filesystem>
+#include <memory>
+#include <cmath>
+#include <string>
+#include <iostream>
+#include <sstream>
+
+#include <cuda_runtime.h>
+#include <cublas_v2.h>
 
 // #include "solvers/nested/GMRES_IR/MP_GMRES_IR.h"
 // #include "solvers/nested/GMRES_IR/FP_GMRES_IR.h"
 
 // #include "types/types.h"
-// #include "tools/tools.h"
+#include "tools/tools.h"
 
-// namespace fs = std::filesystem;
-// using std::shared_ptr, std::make_shared;
-// using std::cout, std::endl;
-// using std::pow;
-// using std::string;
+namespace fs = std::filesystem;
 
-// const double u_hlf = pow(2, -10);
-// const double u_sgl = pow(2, -23);
-// const double u_dbl = pow(2, -52);
+const double u_hlf = std::pow(2, -10);
+const double u_sgl = std::pow(2, -23);
+const double u_dbl = std::pow(2, -52);
 
 // string get_file_name(fs::path file_path) {
 
@@ -35,18 +35,53 @@
 //     shared_ptr<GenericIterativeSolve<M>> solver,
 //     string ID
 // ) {
-//     cout << "Name: " << ID << " | ";
-//     cout << "Converged: " << solver->check_converged() << " | ";
-//     cout << "Iter: " << solver->get_iteration() << " | ";
-//     cout << "Relres: " << solver->get_relres() << endl;
+//     std::cout << "Name: " << ID << " | ";
+//     std::cout << "Converged: " << solver->check_converged() << " | ";
+//     std::cout << "Iter: " << solver->get_iteration() << " | ";
+//     std::cout << "Relres: " << solver->get_relres() << std::endl;
 // }
 
-// int main() {
+int main() {
 
-//     cout << "*** STARTING NUMERICAL EXPERIMENTATION ***" << endl;
+    std::cout << "*** Start Numerical Experimentation: experiment.cpp ***\n" << std::endl;
 
-//     fs::path load_dir("/home/bdosre/dev/numerical_experimentation/data/experiment_matrices");
-//     fs::path save_dir("/home/bdosre/dev/numerical_experimentation/data/0_2_50");
+    fs::path input_dir_path("C:\\Users\\dosre\\dev\\numerical_experimentation\\input");
+    std::cout << "Input directory: " << input_dir_path << std::endl;
+
+    fs::path output_dir_path("C:\\Users\\dosre\\dev\\numerical_experimentation\\output");
+    std::cout << "Output directory: " << output_dir_path << std::endl;
+
+    std::ifstream csv_load_order;
+    fs::path csv_load_order_path(input_dir_path / fs::path("csv_load_order.txt"));
+    csv_load_order.open(csv_load_order_path);
+    std::cout << "csv load order file: " << csv_load_order_path << std::endl << std::endl;
+
+    if (!csv_load_order.is_open()) {
+        throw std::runtime_error("csv_load_order did not load correctly");
+    }
+
+    fs::path matrix_path(input_dir_path / fs::path("experiment_matrices"));
+
+    cublasHandle_t handle;
+    cublasCreate(&handle);
+
+    std::string temp_str;
+    std::getline(csv_load_order, temp_str);
+
+    std::cout << "Loading: " << matrix_path / fs::path(temp_str) << std::endl;
+    MatrixDense<double> A(
+        read_matrixCSV<MatrixDense, double>(
+            handle,
+            matrix_path / fs::path(temp_str)
+        )
+    );
+    A.view_properties();
+
+    SolveArgPkg args;
+    args.init_guess = Vector<double>::Zero(handle, A.cols());
+    args.max_iter = 200;
+    args.max_inner_iter = static_cast<int>(100);
+    args.target_rel_res = pow(10, -10);
 
 //     fs::directory_iterator iter(load_dir);
 //     fs::directory_iterator curr = fs::begin(iter);
@@ -57,7 +92,7 @@
 //         A_dense = 1/(A_dense.maxCoeff())*A_dense;
 //         MatrixSparse<double> A = A_dense.sparseView();
 
-//         cout << "Testing: " << *curr << " of size " << A.rows() << "x" << A.cols() << endl;
+//         std::cout << "Testing: " << *curr << " of size " << A.rows() << "x" << A.cols() << std::endl;
 
 //         SolveArgPkg args;
 //         args.init_guess = MatrixVector<double>::Zero(A.cols());
@@ -110,8 +145,8 @@
 
 //     }
 
-//     cout << "*** FINISH NUMERICAL EXPERIMENTATION ***" << endl;
+    std::cout << "\n*** Finish Numerical Experimentation ***" << std::endl;
     
-//     return 0;
+    return 0;
 
-// }
+}

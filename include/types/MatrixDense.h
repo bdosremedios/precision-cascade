@@ -225,6 +225,28 @@ public:
     // *** Properties ***
     int rows() const { return m_rows; }
     int cols() const { return n_cols; }
+    int non_zeros() const { 
+
+        T *h_mat = static_cast<T *>(malloc(mem_size()));
+
+        if ((m_rows > 0) && (n_cols > 0)) {
+            check_cublas_status(cublasGetMatrix(m_rows, n_cols, sizeof(T), d_mat, m_rows, h_mat, m_rows));
+        }
+        
+        int count = 0;
+        for (int i=0; i<m_rows; ++i) {
+            for (int j=0; j<n_cols; ++j) {
+                if (static_cast<double>(h_mat[i+j*m_rows]) != static_cast<double>(0.)) {
+                    count++;
+                }
+            }
+        }
+
+        free(h_mat);
+
+        return count;
+    
+    }
     cublasHandle_t get_handle() const { return handle; }
 
     void print() const {
@@ -245,6 +267,17 @@ public:
 
         free(h_mat);
     
+    }
+    void view_properties() const {
+        int non_zeros_count = non_zeros();
+        std::cout << "Rows: " << rows() <<
+                     " | Cols: " << cols() <<
+                     " | Non-zeroes: " << non_zeros_count;
+        std::cout.precision(3);
+        std::cout << " | Fill ratio: " <<
+                     static_cast<double>(non_zeros_count)/static_cast<double>(rows()*cols()) <<
+                     std::endl;
+        std::cout.precision(6);
     }
 
     // *** Static Creation ***

@@ -192,6 +192,12 @@ TEST_F(MatrixDense_Test, TestListInitialization) {
 
 TEST_F(MatrixDense_Test, TestBadListInitialization) { TestBadListInitialization(); }
 
+TEST_F(MatrixDense_Test, TestNonZeros) {
+    TestNonZeros<half>();
+    TestNonZeros<float>();
+    TestNonZeros<double>();
+}
+
 TEST_F(MatrixDense_Test, TestDynamicMemConstruction) {
     TestDynamicMemConstruction<half>();
     TestDynamicMemConstruction<float>();
