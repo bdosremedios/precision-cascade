@@ -268,6 +268,7 @@ public:
         free(h_mat);
     
     }
+
     void view_properties() const {
         int non_zeros_count = non_zeros();
         std::cout << "Rows: " << rows() <<
@@ -374,6 +375,36 @@ public:
     MatrixDense<T> operator/(const Scalar<T> &scalar) const {
         Scalar<T> temp(scalar);
         return operator*(temp.reciprocol());
+    }
+    MatrixDense<T> & operator*=(const Scalar<T> &scalar);
+    MatrixDense<T> & operator/=(const Scalar<T> &scalar) {
+        Scalar<T> temp(scalar);
+        return operator*=(temp.reciprocol());
+    }
+
+    Scalar<T> max_mag_elem() const;
+
+    void self_scale_magnitude() {
+        
+        T *h_mat = static_cast<T *>(malloc(mem_size()));
+
+        if ((m_rows > 0) && (n_cols > 0)) {
+            check_cublas_status(cublasGetMatrix(m_rows, n_cols, sizeof(T), d_mat, m_rows, h_mat, m_rows));
+        }
+        
+        T max_mag = 0.;
+        for (int i=0; i<m_rows; ++i) {
+            for (int j=0; j<n_cols; ++j) {
+                if (std::abs(static_cast<double>(h_mat[i+j*m_rows])) > max_mag) {
+                    max_mag = std::abs(static_cast<double>(h_mat[i+j*m_rows]));
+                }
+            }
+        }
+
+        free(h_mat);
+
+        *this = *this/Scalar<T>(max_mag);
+
     }
 
     Vector<T> operator*(const Vector<T> &vec) const;

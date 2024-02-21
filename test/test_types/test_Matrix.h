@@ -624,7 +624,7 @@ protected:
              {static_cast<T>(-3), static_cast<T>(-2), static_cast<T>(-1)},
              {static_cast<T>(10), static_cast<T>(100), static_cast<T>(1000)}}
         );
-        M<T> mat_scaled_mult(mat*static_cast<T>(4));
+        M<T> mat_scaled_mult(mat*Scalar<T>(static_cast<T>(4)));
         for (int i=0; i<4; ++i) {
             for (int j=0; j<3; ++j) {
                 ASSERT_EQ(
@@ -633,11 +633,44 @@ protected:
                 );
             }
         }
-        M<T> mat_scaled_div(mat/static_cast<T>(10));
+        M<T> mat_scaled_div(mat/Scalar<T>(static_cast<T>(10)));
         for (int i=0; i<4; ++i) {
             for (int j=0; j<3; ++j) {
                 ASSERT_EQ(
                     mat_scaled_div.get_elem(i, j).get_scalar(),
+                    (static_cast<T>(1)/static_cast<T>(10))*mat.get_elem(i, j).get_scalar()
+                );
+            }
+        }
+
+    }
+
+    template <typename T>
+    void TestScaleAssignment() {
+
+        M<T> mat(
+            *handle_ptr,
+            {{static_cast<T>(-8), static_cast<T>(0.8), static_cast<T>(-0.6)},
+             {static_cast<T>(1), static_cast<T>(2), static_cast<T>(3)},
+             {static_cast<T>(-3), static_cast<T>(-2), static_cast<T>(-1)},
+             {static_cast<T>(10), static_cast<T>(100), static_cast<T>(1000)}}
+        );
+        M<T> temp_mat_1(mat);
+        M<T> temp_mat_2(mat);
+        temp_mat_1 *= Scalar<T>(static_cast<T>(4));
+        for (int i=0; i<4; ++i) {
+            for (int j=0; j<3; ++j) {
+                ASSERT_EQ(
+                    temp_mat_1.get_elem(i, j).get_scalar(),
+                    static_cast<T>(4)*mat.get_elem(i, j).get_scalar()
+                );
+            }
+        }
+        temp_mat_2 /= Scalar<T>(static_cast<T>(10));
+        for (int i=0; i<4; ++i) {
+            for (int j=0; j<3; ++j) {
+                ASSERT_EQ(
+                    temp_mat_2.get_elem(i, j).get_scalar(),
                     (static_cast<T>(1)/static_cast<T>(10))*mat.get_elem(i, j).get_scalar()
                 );
             }

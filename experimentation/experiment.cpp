@@ -76,6 +76,7 @@ int main() {
             matrix_path / fs::path(temp_str)
         )
     );
+    A.self_scale_magnitude();
     A.view_properties();
 
     Vector<double> true_x(Vector<double>::Random(handle, A.cols()));
@@ -84,7 +85,7 @@ int main() {
     SolveArgPkg solve_args;
     solve_args.init_guess = Vector<double>::Zero(handle, A.cols());
     solve_args.max_iter = 200;
-    solve_args.max_inner_iter = 100;
+    solve_args.max_inner_iter = 50;
     solve_args.target_rel_res = std::pow(10, -10);
 
     TypedLinearSystem<MatrixDense, double> lin_sys_dbl(A, b);

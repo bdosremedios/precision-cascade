@@ -20,6 +20,22 @@ MatrixDense<float> MatrixDense<float>::operator*(const Scalar<float> &scalar) co
 
 }
 
+MatrixDense<float> & MatrixDense<float>::operator*=(const Scalar<float> &scalar) {
+
+    check_cublas_status(
+        cublasScalEx(
+            handle, m_rows*n_cols,
+            scalar.d_scalar, CUDA_R_32F,
+            d_mat, CUDA_R_32F, 1,
+            CUDA_R_32F
+        )
+    );
+
+    return *this;
+
+}
+
+
 Vector<float> MatrixDense<float>::operator*(const Vector<float> &vec) const {
 
     if (vec.rows() != n_cols) {

@@ -17,6 +17,22 @@ MatrixDense<double> MatrixDense<double>::operator*(const Scalar<double> &scalar)
     );
 
     return c;
+
+}
+
+MatrixDense<double> & MatrixDense<double>::operator*=(const Scalar<double> &scalar) {
+
+    check_cublas_status(
+        cublasScalEx(
+            handle, m_rows*n_cols,
+            scalar.d_scalar, CUDA_R_64F,
+            d_mat, CUDA_R_64F, 1,
+            CUDA_R_64F
+        )
+    );
+
+    return *this;
+
 }
 
 Vector<double> MatrixDense<double>::operator*(const Vector<double> &vec) const {

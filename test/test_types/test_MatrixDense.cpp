@@ -252,6 +252,12 @@ TEST_F(MatrixDense_Test, TestScale) {
     TestScale<double>();
 }
 
+TEST_F(MatrixDense_Test, TestScaleAssignment) {
+    TestScaleAssignment<half>();
+    TestScaleAssignment<float>();
+    TestScaleAssignment<double>();
+}
+
 TEST_F(MatrixDense_Test, TestMatVec) {
     TestMatVec<half>();
     TestMatVec<float>();

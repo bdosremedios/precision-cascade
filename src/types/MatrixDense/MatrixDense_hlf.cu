@@ -19,6 +19,24 @@ MatrixDense<__half> MatrixDense<__half>::operator*(const Scalar<__half> &scalar)
     );
 
     return c;
+
+}
+
+MatrixDense<__half> & MatrixDense<__half>::operator*=(const Scalar<__half> &scalar) {
+
+    Scalar<float> temp_cast(scalar.cast<float>());
+
+    check_cublas_status(
+        cublasScalEx(
+            handle, m_rows*n_cols,
+            temp_cast.d_scalar, CUDA_R_32F,
+            d_mat, CUDA_R_16F, 1,
+            CUDA_R_32F
+        )
+    );
+
+    return *this;
+
 }
 
 Vector<__half> MatrixDense<__half>::operator*(const Vector<__half> &vec) const {
