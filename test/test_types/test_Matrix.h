@@ -679,6 +679,80 @@ protected:
     }
 
     template <typename T>
+    void TestMaxMagElem() {
+
+        M<T> mat_all_diff(
+            *handle_ptr,
+            {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3)},
+             {static_cast<T>(4), static_cast<T>(5), static_cast<T>(6)},
+             {static_cast<T>(7), static_cast<T>(8), static_cast<T>(9)},
+             {static_cast<T>(3), static_cast<T>(2), static_cast<T>(1)}}
+        );
+        ASSERT_EQ(mat_all_diff.get_max_mag_elem().get_scalar(), static_cast<T>(9));
+
+        M<T> mat_all_same(
+            *handle_ptr,
+            {{static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)},
+             {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)}}
+        );
+        ASSERT_EQ(mat_all_same.get_max_mag_elem().get_scalar(), static_cast<T>(1));
+
+        M<T> mat_pos_neg(
+            *handle_ptr,
+            {{static_cast<T>(-1), static_cast<T>(-9), static_cast<T>(8)},
+             {static_cast<T>(1), static_cast<T>(-14), static_cast<T>(10)}}
+        );
+        ASSERT_EQ(mat_pos_neg.get_max_mag_elem().get_scalar(), static_cast<T>(14));
+
+    }
+
+    template <typename T>
+    void TestNormalizeMagnitude() {
+
+        M<T> mat_has_zeros(
+            *handle_ptr,
+            {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3)},
+             {static_cast<T>(4), static_cast<T>(0), static_cast<T>(6)},
+             {static_cast<T>(7), static_cast<T>(8), static_cast<T>(9)},
+             {static_cast<T>(3), static_cast<T>(0), static_cast<T>(1)}}
+        );
+        M<T> temp_mat_has_zeros(mat_has_zeros);
+        temp_mat_has_zeros.normalize_magnitude();
+        ASSERT_MATRIX_NEAR(
+            temp_mat_has_zeros,
+            mat_has_zeros/Scalar<T>(static_cast<T>(9)),
+            Tol<T>::roundoff_T()
+        );
+
+        M<T> mat_all_same(
+            *handle_ptr,
+            {{static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)},
+             {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)}}
+        );
+        M<T> temp_mat_all_same(mat_all_same);
+        temp_mat_all_same.normalize_magnitude();
+        ASSERT_MATRIX_NEAR(
+            temp_mat_all_same,
+            mat_all_same,
+            Tol<T>::roundoff_T()
+        );
+
+        M<T> mat_pos_neg(
+            *handle_ptr,
+            {{static_cast<T>(-1), static_cast<T>(-9), static_cast<T>(8)},
+             {static_cast<T>(1), static_cast<T>(-14), static_cast<T>(10)}}
+        );
+        M<T> temp_mat_pos_neg(mat_pos_neg);
+        temp_mat_pos_neg.normalize_magnitude();
+        ASSERT_MATRIX_NEAR(
+            temp_mat_pos_neg,
+            mat_pos_neg/Scalar<T>(static_cast<T>(14)),
+            Tol<T>::roundoff_T()
+        );
+
+    }
+
+    template <typename T>
     void TestMatVec() {
 
         // Test manually

@@ -382,30 +382,28 @@ public:
         return operator*=(temp.reciprocol());
     }
 
-    Scalar<T> max_mag_elem() const;
-
-    void self_scale_magnitude() {
+    Scalar<T> get_max_mag_elem() const {
         
         T *h_mat = static_cast<T *>(malloc(mem_size()));
+        copy_data_to_ptr(h_mat, rows(), cols());
 
-        if ((m_rows > 0) && (n_cols > 0)) {
-            check_cublas_status(cublasGetMatrix(m_rows, n_cols, sizeof(T), d_mat, m_rows, h_mat, m_rows));
-        }
-        
         T max_mag = 0.;
         for (int i=0; i<m_rows; ++i) {
             for (int j=0; j<n_cols; ++j) {
-                if (std::abs(static_cast<double>(h_mat[i+j*m_rows])) > max_mag) {
-                    max_mag = std::abs(static_cast<double>(h_mat[i+j*m_rows]));
+                T temp = static_cast<T>(std::abs(static_cast<double>(h_mat[i+j*m_rows])));
+                if (temp > max_mag) {
+                    max_mag = temp;
                 }
             }
         }
 
         free(h_mat);
 
-        *this = *this/Scalar<T>(max_mag);
+        return Scalar<T>(max_mag);
 
     }
+
+    void normalize_magnitude() { *this /= get_max_mag_elem(); }
 
     Vector<T> operator*(const Vector<T> &vec) const;
 

@@ -165,7 +165,7 @@ public:
 };
 
 TEST_F(MatrixDense_Test, TestCoeffAccess) {
-    TestCoeffAccess<half>();
+    TestCoeffAccess<__half>();
     TestCoeffAccess<float>();
     TestCoeffAccess<double>();
 }
@@ -173,19 +173,19 @@ TEST_F(MatrixDense_Test, TestCoeffAccess) {
 TEST_F(MatrixDense_Test, TestBadCoeffAccess) { TestBadCoeffAccess(); }
 
 TEST_F(MatrixDense_Test, TestPropertyAccess) {
-    TestPropertyAccess<half>();
+    TestPropertyAccess<__half>();
     TestPropertyAccess<float>();
     TestPropertyAccess<double>();
 }
 
 TEST_F(MatrixDense_Test, TestConstruction) {
-    TestConstruction<half>();
+    TestConstruction<__half>();
     TestConstruction<float>();
     TestConstruction<double>();
 }
 
 TEST_F(MatrixDense_Test, TestListInitialization) {
-    TestListInitialization<half>();
+    TestListInitialization<__half>();
     TestListInitialization<float>();
     TestListInitialization<double>();
 }
@@ -193,19 +193,19 @@ TEST_F(MatrixDense_Test, TestListInitialization) {
 TEST_F(MatrixDense_Test, TestBadListInitialization) { TestBadListInitialization(); }
 
 TEST_F(MatrixDense_Test, TestNonZeros) {
-    TestNonZeros<half>();
+    TestNonZeros<__half>();
     TestNonZeros<float>();
     TestNonZeros<double>();
 }
 
 TEST_F(MatrixDense_Test, TestDynamicMemConstruction) {
-    TestDynamicMemConstruction<half>();
+    TestDynamicMemConstruction<__half>();
     TestDynamicMemConstruction<float>();
     TestDynamicMemConstruction<double>();
 }
 
 TEST_F(MatrixDense_Test, TestDynamicMemCopyToPtr) {
-    TestDynamicMemCopyToPtr<half>();
+    TestDynamicMemCopyToPtr<__half>();
     TestDynamicMemCopyToPtr<float>();
     TestDynamicMemCopyToPtr<double>();
 }
@@ -213,25 +213,25 @@ TEST_F(MatrixDense_Test, TestDynamicMemCopyToPtr) {
 TEST_F(MatrixDense_Test, TestBadDynamicMemCopyToPtr) { TestBadDynamicMemCopyToPtr(); }
 
 TEST_F(MatrixDense_Test, TestCopyAssignment) {
-    TestCopyAssignment<half>();
+    TestCopyAssignment<__half>();
     TestCopyAssignment<float>();
     TestCopyAssignment<double>();
 }
 
 TEST_F(MatrixDense_Test, TestCopyConstructor) {
-    TestCopyConstructor<half>();
+    TestCopyConstructor<__half>();
     TestCopyConstructor<float>();
     TestCopyConstructor<double>();
 }
 
 TEST_F(MatrixDense_Test, TestStaticCreation) {
-    TestStaticCreation<half>();
+    TestStaticCreation<__half>();
     TestStaticCreation<float>();
     TestStaticCreation<double>();
 }
 
 TEST_F(MatrixDense_Test, TestCol) {
-    TestCol<half>();
+    TestCol<__half>();
     TestCol<float>();
     TestCol<double>();
 }
@@ -239,7 +239,7 @@ TEST_F(MatrixDense_Test, TestCol) {
 TEST_F(MatrixDense_Test, TestBadCol) { TestBadCol(); }
 
 TEST_F(MatrixDense_Test, TestBlock) {
-    TestBlock<half>();
+    TestBlock<__half>();
     TestBlock<float>();
     TestBlock<double>();
 }
@@ -247,73 +247,85 @@ TEST_F(MatrixDense_Test, TestBlock) {
 TEST_F(MatrixDense_Test, TestBadBlock) { TestBadBlock(); }
 
 TEST_F(MatrixDense_Test, TestScale) {
-    TestScale<half>();
+    TestScale<__half>();
     TestScale<float>();
     TestScale<double>();
 }
 
 TEST_F(MatrixDense_Test, TestScaleAssignment) {
-    TestScaleAssignment<half>();
+    TestScaleAssignment<__half>();
     TestScaleAssignment<float>();
     TestScaleAssignment<double>();
 }
 
+TEST_F(MatrixDense_Test, TestMaxMagElem) {
+    TestMaxMagElem<__half>();
+    TestMaxMagElem<float>();
+    TestMaxMagElem<double>();
+}
+
+TEST_F(MatrixDense_Test, TestNormalizeMagnitude) {
+    TestNormalizeMagnitude<__half>();
+    TestNormalizeMagnitude<float>();
+    TestNormalizeMagnitude<double>();
+}
+
 TEST_F(MatrixDense_Test, TestMatVec) {
-    TestMatVec<half>();
+    TestMatVec<__half>();
     TestMatVec<float>();
     TestMatVec<double>();
 }
 
 TEST_F(MatrixDense_Test, TestBadMatVec) {
-    TestBadMatVec<half>();
+    TestBadMatVec<__half>();
     TestBadMatVec<float>();
     TestBadMatVec<double>();
 }
 
 TEST_F(MatrixDense_Test, TestTransposeMatVec) {
-    TestTransposeMatVec<half>();
+    TestTransposeMatVec<__half>();
     TestTransposeMatVec<float>();
     TestTransposeMatVec<double>();
 }
 
 TEST_F(MatrixDense_Test, TestBadTransposeMatVec) {
-    TestBadTransposeMatVec<half>();
+    TestBadTransposeMatVec<__half>();
     TestBadTransposeMatVec<float>();
     TestBadTransposeMatVec<double>();
 }
 
 TEST_F(MatrixDense_Test, TestTranspose) {
-    TestTranspose<half>();
+    TestTranspose<__half>();
     TestTranspose<float>();
     TestTranspose<double>();
 }
 
 TEST_F(MatrixDense_Test, TestMatMat) {
-    TestMatMat<half>();
+    TestMatMat<__half>();
     TestMatMat<float>();
     TestMatMat<double>();
 }
 
 TEST_F(MatrixDense_Test, TestBadMatMat) {
-    TestBadMatMat<half>();
+    TestBadMatMat<__half>();
     TestBadMatMat<float>();
     TestBadMatMat<double>();
 }
 
 TEST_F(MatrixDense_Test, TestAddSub) {
-    TestAddSub<half>();
+    TestAddSub<__half>();
     TestAddSub<float>();
     TestAddSub<double>();
 }
 
 TEST_F(MatrixDense_Test, TestBadAddSub) {
-    TestBadAddSub<half>();
+    TestBadAddSub<__half>();
     TestBadAddSub<float>();
     TestBadAddSub<double>();
 }
 
 TEST_F(MatrixDense_Test, TestNorm) {
-    TestNorm<half>();
+    TestNorm<__half>();
     TestNorm<float>();
     TestNorm<double>();
 }

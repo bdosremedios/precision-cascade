@@ -76,7 +76,7 @@ int main() {
             matrix_path / fs::path(temp_str)
         )
     );
-    A.self_scale_magnitude();
+    A.get_max_mag_elem();
     A.view_properties();
 
     Vector<double> true_x(Vector<double>::Random(handle, A.cols()));

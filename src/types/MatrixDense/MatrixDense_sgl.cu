@@ -35,7 +35,6 @@ MatrixDense<float> & MatrixDense<float>::operator*=(const Scalar<float> &scalar)
 
 }
 
-
 Vector<float> MatrixDense<float>::operator*(const Vector<float> &vec) const {
 
     if (vec.rows() != n_cols) {
