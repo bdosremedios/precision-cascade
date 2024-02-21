@@ -8,14 +8,14 @@
 template Scalar<float> Scalar<float>::operator+(const Scalar<float> &other) const;
 template Scalar<float> Scalar<float>::operator-(const Scalar<float> &other) const;
 
-template void Scalar<float>::operator+=(const Scalar<float> &);
-template void Scalar<float>::operator-=(const Scalar<float> &);
+template Scalar<float> & Scalar<float>::operator+=(const Scalar<float> &);
+template Scalar<float> & Scalar<float>::operator-=(const Scalar<float> &);
 
 template Scalar<float> Scalar<float>::operator*(const Scalar<float> &) const;
 template Scalar<float> Scalar<float>::operator/(const Scalar<float> &) const;
 
-template void Scalar<float>::operator*=(const Scalar<float> &);
-template void Scalar<float>::operator/=(const Scalar<float> &);
+template Scalar<float> & Scalar<float>::operator*=(const Scalar<float> &);
+template Scalar<float> & Scalar<float>::operator/=(const Scalar<float> &);
 
 template bool Scalar<float>::operator==(const Scalar<float> &) const;
 

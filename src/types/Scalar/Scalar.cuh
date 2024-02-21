@@ -20,8 +20,9 @@ Scalar<T> Scalar<T>::operator+(const Scalar<T> &other) const {
 }
 
 template <typename T>
-void Scalar<T>::operator+=(const Scalar<T> &other) {
+Scalar<T> & Scalar<T>::operator+=(const Scalar<T> &other) {
     scalar_add<<<1, 1>>>(d_scalar, other.d_scalar, d_scalar);
+    return *this;
 }
 
 template <typename T>
@@ -38,8 +39,9 @@ Scalar<T> Scalar<T>::operator-(const Scalar<T> &other) const {
 }
 
 template <typename T>
-void Scalar<T>::operator-=(const Scalar<T> &other) {
+Scalar<T> & Scalar<T>::operator-=(const Scalar<T> &other) {
     scalar_minus<<<1, 1>>>(d_scalar, other.d_scalar, d_scalar);
+    return *this;
 }
 
 template <typename T>
@@ -56,8 +58,9 @@ Scalar<T> Scalar<T>::operator*(const Scalar<T> &other) const {
 }
 
 template <typename T>
-void Scalar<T>::operator*=(const Scalar<T> &other) {
+Scalar<T> & Scalar<T>::operator*=(const Scalar<T> &other) {
     scalar_mult<<<1, 1>>>(d_scalar, other.d_scalar, d_scalar);
+    return *this;
 }
 
 template <typename T>
@@ -74,8 +77,9 @@ Scalar<T> Scalar<T>::operator/(const Scalar<T> &other) const {
 }
 
 template <typename T>
-void Scalar<T>::operator/=(const Scalar<T> &other) {
+Scalar<T> & Scalar<T>::operator/=(const Scalar<T> &other) {
     scalar_div<<<1, 1>>>(d_scalar, other.d_scalar, d_scalar);
+    return *this;
 }
 
 template <typename T>

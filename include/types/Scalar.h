@@ -69,14 +69,14 @@ public:
     Scalar<T> operator+(const Scalar& other) const;
     Scalar<T> operator-(const Scalar& other) const;
 
-    void operator+=(const Scalar& other);
-    void operator-=(const Scalar& other);
+    Scalar<T> & operator+=(const Scalar& other);
+    Scalar<T> & operator-=(const Scalar& other);
 
     Scalar<T> operator*(const Scalar& other) const;
     Scalar<T> operator/(const Scalar& other) const;
 
-    void operator*=(const Scalar& other);
-    void operator/=(const Scalar& other);
+    Scalar<T> & operator*=(const Scalar& other);
+    Scalar<T> & operator/=(const Scalar& other);
 
     Scalar<T> & abs();
     Scalar<T> & sqrt();
