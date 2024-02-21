@@ -276,9 +276,11 @@ public:
                      " | Non-zeroes: " << non_zeros_count;
         std::cout.precision(3);
         std::cout << " | Fill ratio: " <<
-                     static_cast<double>(non_zeros_count)/static_cast<double>(rows()*cols()) <<
-                     std::endl;
+                     static_cast<double>(non_zeros_count)/static_cast<double>(rows()*cols());
         std::cout.precision(6);
+        std::cout << " | Max magnitude: " <<
+                     get_max_mag_elem().get_scalar() <<
+                     std::endl;
     }
 
     // *** Static Creation ***
