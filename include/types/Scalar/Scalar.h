@@ -9,6 +9,8 @@
 
 #include "tools/cuda_check.h"
 
+#include "Scalar_kernels.cuh"
+
 template <typename T> class Vector;
 template <typename T> class MatrixDense;
 
@@ -91,44 +93,44 @@ static inline Scalar<float> SCALAR_ONE_F(static_cast<float>(1.));
 static inline Scalar<double> SCALAR_ONE_D(static_cast<double>(1.));
 
 template <typename T>
-class SCALAR_ONE { public: static Scalar<T> get() { assert(false); return Scalar<T>(); } };
-
-template<>
-Scalar<__half> SCALAR_ONE<__half>::get() { return SCALAR_ONE_H; }
-template<>
-Scalar<float> SCALAR_ONE<float>::get() { return SCALAR_ONE_F; }
-template<>
-Scalar<double> SCALAR_ONE<double>::get() { return SCALAR_ONE_D; }
+class SCALAR_ONE
+{ 
+public:
+    static Scalar<T> get() {
+        throw std::runtime_error("SCALAR_ONE: get reached unimplemented default implementation");
+        return Scalar<T>();
+    }
+};
 
 static inline Scalar<__half> SCALAR_ZERO_H(static_cast<__half>(0.)); 
 static inline Scalar<float> SCALAR_ZERO_F(static_cast<float>(0.)); 
 static inline Scalar<double> SCALAR_ZERO_D(static_cast<double>(0.));
 
 template <typename T>
-class SCALAR_ZERO { public: static Scalar<T> get() { assert(false); return Scalar<T>(); } };
-
-template<>
-Scalar<__half> SCALAR_ZERO<__half>::get() { return SCALAR_ZERO_H; }
-template<>
-Scalar<float> SCALAR_ZERO<float>::get() { return SCALAR_ZERO_F; }
-template<>
-Scalar<double> SCALAR_ZERO<double>::get() { return SCALAR_ZERO_D; }
+class SCALAR_ZERO
+{
+public:
+    static Scalar<T> get() { 
+        throw std::runtime_error("SCALAR_ZERO: get reached unimplemented default implementation");
+        return Scalar<T>();
+    }
+};
 
 static inline Scalar<__half> SCALAR_MINUS_ONE_H(static_cast<__half>(-1.)); 
 static inline Scalar<float> SCALAR_MINUS_ONE_F(static_cast<float>(-1.)); 
 static inline Scalar<double> SCALAR_MINUS_ONE_D(static_cast<double>(-1.));
 
 template <typename T>
-class SCALAR_MINUS_ONE { public: static Scalar<T> get() { assert(false); return Scalar<T>(); } };
+class SCALAR_MINUS_ONE
+{
+public:
+    static Scalar<T> get() { 
+        throw std::runtime_error("SCALAR_MINUS_ONE: get reached unimplemented default implementation");
+        return Scalar<T>();
+    }
+};
 
-template<>
-Scalar<__half> SCALAR_MINUS_ONE<__half>::get() { return SCALAR_MINUS_ONE_H; }
-template<>
-Scalar<float> SCALAR_MINUS_ONE<float>::get() { return SCALAR_MINUS_ONE_F; }
-template<>
-Scalar<double> SCALAR_MINUS_ONE<double>::get() { return SCALAR_MINUS_ONE_D; }
-
-#include "MatrixDense.h"
-#include "Vector.h"
+#include "types/MatrixDense/MatrixDense.h"
+#include "types/Vector/Vector.h"
 
 #endif

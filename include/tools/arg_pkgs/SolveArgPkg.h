@@ -44,6 +44,17 @@ public:
         init_guess(arg_init_guess)
     {};
 
+    void print_info() {
+        std::cout << "Max iter: " << max_iter <<
+                     " | Max inner iter: " << max_inner_iter <<
+                     std::scientific;
+        std::cout.precision(3);
+        std::cout << " | Target rel-res: " << target_rel_res <<
+                     std::defaultfloat <<
+                     std::endl;
+        std::cout.precision(6);
+    }
+
 };
 
 #endif

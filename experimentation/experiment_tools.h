@@ -2,6 +2,8 @@
 #define EXPERIMENT_TOOLS_H
 
 #include <chrono>
+#include <string>
+#include <format>
 #include <iostream>
 
 #include "solvers/IterativeSolve.h"
@@ -43,6 +45,16 @@ public:
 
     Experiment_Data(const Experiment_Data &other) = default;
     Experiment_Data & operator=(const Experiment_Data &other) = default;
+
+    std::string get_info_string() const {
+        return std::format(
+            "Elapsed time (ms): {} | {}",
+            clock.get_elapsed_time_ms(),
+            solver_ptr->get_info_string()
+        );
+        // std::cout << "Elapsed time (ms): " << clock.get_elapsed_time_ms() << " | ";
+        // solver_ptr->get_info_string();
+    }
 
 };
 

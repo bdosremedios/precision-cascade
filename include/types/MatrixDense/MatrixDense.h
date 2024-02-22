@@ -269,7 +269,7 @@ public:
     
     }
 
-    void view_properties() const {
+    void print_info() const {
         int non_zeros_count = non_zeros();
         std::cout << "Rows: " << rows() <<
                      " | Cols: " << cols() <<
@@ -637,8 +637,8 @@ public:
 
 };
 
-#include "Scalar.h"
-#include "Vector.h"
-#include "MatrixSparse.h"
+#include "types/Scalar/Scalar.h"
+#include "types/Vector/Vector.h"
+#include "types/MatrixSparse/MatrixSparse.h"
 
 #endif

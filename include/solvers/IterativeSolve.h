@@ -2,9 +2,11 @@
 #define ITERATIVE_SOLVE_H
 
 #include <vector>
-#include <string>
 #include <algorithm>
 #include <cmath>
+
+#include <string>
+#include <format>
 #include <iostream>
 #include <iomanip>
 
@@ -158,6 +160,37 @@ public:
     void reset() {
         set_self_to_initial_state();
         derived_generic_reset();
+    }
+
+    std::string get_info_string() {
+        return std::format(
+            "Initiated: {} | Converged {} | Current iter: {} | Current rel-res: {}",
+            initiated,
+            converged,
+            curr_iter,
+            get_relres()
+        );
+            // std::cout << "Initiated: " << initiated <<
+            //             " | Converged: " << converged <<
+            //             " | Current iter: " << curr_iter <<
+            //             std::scientific;
+            // std::cout.precision(3);
+            // std::cout << " | Current rel-res: " << get_relres() <<
+            //             std::defaultfloat <<
+            //             std::endl;
+            // std::cout.precision(6);
+    }
+
+    void print_info() {
+        std::cout << "Initiated: " << initiated <<
+                     " | Converged: " << converged <<
+                     " | Current iter: " << curr_iter <<
+                     std::scientific;
+        std::cout.precision(3);
+        std::cout << " | Current rel-res: " << get_relres() <<
+                     std::defaultfloat <<
+                     std::endl;
+        std::cout.precision(6);
     }
 
     // Rudimentarily plot relative residual

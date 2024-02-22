@@ -385,6 +385,6 @@ public:
 
 };
 
-#include "MatrixSparse.h"
+#include "types/MatrixSparse/MatrixSparse.h"
 
 #endif

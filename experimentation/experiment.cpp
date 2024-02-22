@@ -197,17 +197,17 @@ int main() {
         )
     );
     A.normalize_magnitude();
-    A.view_properties();
+    A.print_info();
 
     Vector<double> true_x(Vector<double>::Random(handle, A.cols()));
     Vector<double> b(A*true_x);
 
     SolveArgPkg solve_args;
     solve_args.init_guess = Vector<double>::Zero(handle, A.cols());
-    // solve_args.max_iter = 200;
-    // solve_args.max_inner_iter = 50;
-    solve_args.max_iter = 10;
-    solve_args.max_inner_iter = 10;
+    solve_args.max_iter = 200;
+    solve_args.max_inner_iter = 50;
+    // solve_args.max_iter = 10;
+    // solve_args.max_inner_iter = 10;
     solve_args.target_rel_res = std::pow(10, -10);
 
     TypedLinearSystem<MatrixDense, double> lin_sys_dbl(A, b);
@@ -216,92 +216,37 @@ int main() {
 
     bool show_plots = false;
 
-    std::cout << "Starting FPGMRES64" << std::endl;
+    std::cout << "\nStarting FPGMRES64" << std::endl;
+    solve_args.print_info();
     Experiment_Data<MatrixDense> fpgmres64_data = run_solve_experiment<MatrixDense>(
         std::make_shared<FP_GMRES_IR_Solve<MatrixDense, double>>(lin_sys_dbl, u_dbl, solve_args),
         show_plots
     );
+    std::cout << fpgmres64_data.get_info_string() << std::endl;
 
-    std::cout << "Starting FPGMRES32" << std::endl;
+    std::cout << "\nStarting FPGMRES32" << std::endl;
+    solve_args.print_info();
     Experiment_Data<MatrixDense> fpgmres32_data = run_solve_experiment<MatrixDense>(
         std::make_shared<FP_GMRES_IR_Solve<MatrixDense, float>>(lin_sys_sgl, u_sgl, solve_args),
         show_plots
     );
+    std::cout << fpgmres32_data.get_info_string() << std::endl;
 
-    std::cout << "Starting FPGMRES16" << std::endl;
+    std::cout << "\nStarting FPGMRES16" << std::endl;
+    solve_args.print_info();
     Experiment_Data<MatrixDense> fpgmres16_data = run_solve_experiment<MatrixDense>(
         std::make_shared<FP_GMRES_IR_Solve<MatrixDense, __half>>(lin_sys_hlf, u_hlf, solve_args),
         show_plots
     );
+    std::cout << fpgmres16_data.get_info_string() << std::endl;
 
-    std::cout << "Starting MPGMRES" << std::endl;
+    std::cout << "\nStarting MPGMRES" << std::endl;
+    solve_args.print_info();
     Experiment_Data<MatrixDense> mpgmres_data = run_solve_experiment<MatrixDense>(
         std::make_shared<SimpleConstantThreshold<MatrixDense>>(lin_sys_dbl, solve_args),
         show_plots
     );
-
-
-//     fs::directory_iterator iter(load_dir);
-//     fs::directory_iterator curr = fs::begin(iter);
-
-//     for (fs::directory_iterator curr = fs::begin(iter); curr != fs::end(iter); ++curr) {
-
-//         MatrixDense<double> A_dense = read_matrixCSV<MatrixDense, double>(*curr);
-//         A_dense = 1/(A_dense.maxCoeff())*A_dense;
-//         MatrixSparse<double> A = A_dense.sparseView();
-
-//         std::cout << "Testing: " << *curr << " of size " << A.rows() << "x" << A.cols() << std::endl;
-
-//         SolveArgPkg solve_args;
-//         solve_args.init_guess = MatrixVector<double>::Zero(A.cols());
-//         solve_args.max_iter = 50;
-//         solve_args.max_inner_iter = static_cast<int>(0.2*A.rows());
-//         solve_args.target_rel_res = pow(10, -10);
-
-//         for (int i=1; i<=3; ++i) {
-
-//             string ID_prefix = get_file_name(*curr) + "_" + to_string(i);
-//             MatrixVector<double> b = A*MatrixVector<double>::Random(A.cols());
-
-//             shared_ptr<GenericIterativeSolve<MatrixSparse>> fpgmres_hlf = (
-//                 make_shared<FP_GMRES_IR_Solve<MatrixSparse, half>>(A, b, u_hlf, solve_args)
-//             );
-//             fpgmres_hlf->solve();
-//             record_solve(fpgmres_hlf,
-//                          save_dir / fs::path(ID_prefix+"_fphlf.json"),
-//                          ID_prefix+"_fphlf");
-//             print_solver_info(fpgmres_hlf, ID_prefix+"_fphlf");
-
-//             shared_ptr<GenericIterativeSolve<MatrixSparse>> fpgmres_sgl = (
-//                 make_shared<FP_GMRES_IR_Solve<MatrixSparse, float>>(A, b, u_sgl, solve_args)
-//             );
-//             fpgmres_sgl->solve();
-//             record_solve(fpgmres_sgl,
-//                          save_dir / fs::path(ID_prefix+"_fpsgl.json"),
-//                          ID_prefix+"_fpsgl");
-//             print_solver_info(fpgmres_sgl, ID_prefix+"_fpsgl");
-
-//             shared_ptr<GenericIterativeSolve<MatrixSparse>> fpgmres_dbl = (
-//                 make_shared<FP_GMRES_IR_Solve<MatrixSparse, double>>(A, b, u_dbl, solve_args)
-//             );
-//             fpgmres_dbl->solve();
-//             record_solve(fpgmres_dbl,
-//                          save_dir / fs::path(ID_prefix+"_fpdbl.json"),
-//                          ID_prefix+"_fpdbl");
-//             print_solver_info(fpgmres_dbl, ID_prefix+"_fpdbl");
-
-//             shared_ptr<GenericIterativeSolve<MatrixSparse>> mpgmres = (
-//                 make_shared<SimpleConstantThreshold<MatrixSparse>>(A, b, solve_args)
-//             );
-//             mpgmres->solve();
-//             record_solve(mpgmres,
-//                          save_dir / fs::path(ID_prefix+"_mp.json"),
-//                          ID_prefix+"_mp");
-//             print_solver_info(mpgmres, ID_prefix+"_mp");
-
-//         }
-
-//     }
+    std::cout << mpgmres_data.get_info_string() << std::endl;
 
     std::cout << "\n*** Finish Numerical Experimentation ***" << std::endl;
     

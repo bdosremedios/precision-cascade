@@ -4,7 +4,7 @@
 #include <cuda_runtime.h>
 
 #include "tools/cuda_check.h"
-#include "types/Scalar.h"
+#include "Scalar.h"
 
 template <typename T>
 __global__ void scalar_add(T *scalar_1, T *scalar_2, T *result) {
