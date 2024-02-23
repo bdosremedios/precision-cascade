@@ -1,5 +1,5 @@
-#ifndef TEST_TOOLS_H
-#define TEST_TOOLS_H
+#ifndef TEST_TOOLKIT_H
+#define TEST_TOOLKIT_H
 
 #include <cmath>
 

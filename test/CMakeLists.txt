@@ -78,12 +78,12 @@ set(
 
 
 add_library(
-    test_tools
-    test_tools.cpp
+    test_toolkit
+    test_toolkit.cpp
 )
 
 target_link_libraries(
-    test_tools
+    test_toolkit
     PUBLIC
     precision-cascade
 )
@@ -99,7 +99,7 @@ set_property(TARGET test PROPERTY CUDA_ARCHITECTURES 80)
 target_link_libraries(
     test
     PUBLIC
-    test_tools
+    test_toolkit
     gtest_main
     precision-cascade
     "$ENV{CUDA_PATH}/lib/x64/cublas.lib"
