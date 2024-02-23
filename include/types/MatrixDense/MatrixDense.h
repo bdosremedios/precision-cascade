@@ -1,11 +1,14 @@
 #ifndef MATRIX_DENSE_H
 #define MATRIX_DENSE_H
 
-#include <iostream>
 #include <stdexcept>
 #include <cstdlib>
 #include <random>
 #include <initializer_list>
+
+#include <string>
+#include <format>
+#include <iostream>
 
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
@@ -273,18 +276,16 @@ public:
     
     }
 
-    void print_info() const {
+    std::string get_info_string() const {
         int non_zeros_count = non_zeros();
-        std::cout << "Rows: " << rows() <<
-                     " | Cols: " << cols() <<
-                     " | Non-zeroes: " << non_zeros_count;
-        std::cout.precision(3);
-        std::cout << " | Fill ratio: " <<
-                     static_cast<double>(non_zeros_count)/static_cast<double>(rows()*cols());
-        std::cout.precision(6);
-        std::cout << " | Max magnitude: " <<
-                     get_max_mag_elem().get_scalar() <<
-                     std::endl;
+        return std::format(
+            "Rows: {} | Cols: {} | Non-zeroes: {} | Fill ratio: {:.3g} | Max magnitude: {:.3g}",
+            rows(),
+            cols(),
+            non_zeros_count,
+            static_cast<double>(non_zeros_count)/static_cast<double>(rows()*cols()),
+            get_max_mag_elem().get_scalar()
+        );
     }
 
     // *** Static Creation ***

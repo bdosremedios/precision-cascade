@@ -164,33 +164,12 @@ public:
 
     std::string get_info_string() {
         return std::format(
-            "Initiated: {} | Converged {} | Current iter: {} | Current rel-res: {}",
+            "Initiated: {} | Converged: {} | Current iter: {} | Current rel-res: {:.3g}",
             initiated,
             converged,
             curr_iter,
             get_relres()
         );
-            // std::cout << "Initiated: " << initiated <<
-            //             " | Converged: " << converged <<
-            //             " | Current iter: " << curr_iter <<
-            //             std::scientific;
-            // std::cout.precision(3);
-            // std::cout << " | Current rel-res: " << get_relres() <<
-            //             std::defaultfloat <<
-            //             std::endl;
-            // std::cout.precision(6);
-    }
-
-    void print_info() {
-        std::cout << "Initiated: " << initiated <<
-                     " | Converged: " << converged <<
-                     " | Current iter: " << curr_iter <<
-                     std::scientific;
-        std::cout.precision(3);
-        std::cout << " | Current rel-res: " << get_relres() <<
-                     std::defaultfloat <<
-                     std::endl;
-        std::cout.precision(6);
     }
 
     // Rudimentarily plot relative residual

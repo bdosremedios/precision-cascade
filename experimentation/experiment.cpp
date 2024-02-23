@@ -155,7 +155,7 @@ void record_solve(
 
     } else {
 
-        throw runtime_error("Failed to open for write: " + save_path.string());
+        throw std::runtime_error("Failed to open for write: " + save_path.string());
 
     }
 
@@ -197,7 +197,7 @@ int main() {
         )
     );
     A.normalize_magnitude();
-    A.print_info();
+    std::cout << A.get_info_string() << std::endl;
 
     Vector<double> true_x(Vector<double>::Random(handle, A.cols()));
     Vector<double> b(A*true_x);
@@ -217,7 +217,7 @@ int main() {
     bool show_plots = false;
 
     std::cout << "\nStarting FPGMRES64" << std::endl;
-    solve_args.print_info();
+    std::cout << solve_args.get_info_string() << std::endl;
     Experiment_Data<MatrixDense> fpgmres64_data = run_solve_experiment<MatrixDense>(
         std::make_shared<FP_GMRES_IR_Solve<MatrixDense, double>>(lin_sys_dbl, u_dbl, solve_args),
         show_plots
@@ -225,7 +225,7 @@ int main() {
     std::cout << fpgmres64_data.get_info_string() << std::endl;
 
     std::cout << "\nStarting FPGMRES32" << std::endl;
-    solve_args.print_info();
+    std::cout << solve_args.get_info_string() << std::endl;
     Experiment_Data<MatrixDense> fpgmres32_data = run_solve_experiment<MatrixDense>(
         std::make_shared<FP_GMRES_IR_Solve<MatrixDense, float>>(lin_sys_sgl, u_sgl, solve_args),
         show_plots
@@ -233,7 +233,7 @@ int main() {
     std::cout << fpgmres32_data.get_info_string() << std::endl;
 
     std::cout << "\nStarting FPGMRES16" << std::endl;
-    solve_args.print_info();
+    std::cout << solve_args.get_info_string() << std::endl;
     Experiment_Data<MatrixDense> fpgmres16_data = run_solve_experiment<MatrixDense>(
         std::make_shared<FP_GMRES_IR_Solve<MatrixDense, __half>>(lin_sys_hlf, u_hlf, solve_args),
         show_plots
@@ -241,7 +241,7 @@ int main() {
     std::cout << fpgmres16_data.get_info_string() << std::endl;
 
     std::cout << "\nStarting MPGMRES" << std::endl;
-    solve_args.print_info();
+    std::cout << solve_args.get_info_string() << std::endl;
     Experiment_Data<MatrixDense> mpgmres_data = run_solve_experiment<MatrixDense>(
         std::make_shared<SimpleConstantThreshold<MatrixDense>>(lin_sys_dbl, solve_args),
         show_plots

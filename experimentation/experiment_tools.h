@@ -22,9 +22,9 @@ public:
     
     void stop_clock_experiment();
 
-    int get_elapsed_time_ms();
+    int get_elapsed_time_ms() const;
 
-    void print_elapsed_time();
+    std::string get_info_string() const;
 
 };
 
@@ -48,12 +48,10 @@ public:
 
     std::string get_info_string() const {
         return std::format(
-            "Elapsed time (ms): {} | {}",
-            clock.get_elapsed_time_ms(),
+            "{} | {}",
+            clock.get_info_string(),
             solver_ptr->get_info_string()
         );
-        // std::cout << "Elapsed time (ms): " << clock.get_elapsed_time_ms() << " | ";
-        // solver_ptr->get_info_string();
     }
 
 };

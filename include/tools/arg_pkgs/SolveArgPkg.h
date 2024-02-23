@@ -1,6 +1,9 @@
 #ifndef SOLVEARGPKG_H
 #define SOLVEARGPKG_H
 
+#include <string>
+#include <format>
+
 #include "../../types/types.h"
 
 class SolveArgPkg
@@ -44,15 +47,13 @@ public:
         init_guess(arg_init_guess)
     {};
 
-    void print_info() {
-        std::cout << "Max iter: " << max_iter <<
-                     " | Max inner iter: " << max_inner_iter <<
-                     std::scientific;
-        std::cout.precision(3);
-        std::cout << " | Target rel-res: " << target_rel_res <<
-                     std::defaultfloat <<
-                     std::endl;
-        std::cout.precision(6);
+    std::string get_info_string() const {
+        return std::format(
+            "Max iter: {} | Max inner iter: {} | Target rel-res: {}",
+            max_iter,
+            max_inner_iter,
+            target_rel_res
+        );
     }
 
 };

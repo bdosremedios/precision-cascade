@@ -19,10 +19,10 @@ void Experiment_Clock::stop_clock_experiment() {
     }
 }
 
-int Experiment_Clock::get_elapsed_time_ms() {
+int Experiment_Clock::get_elapsed_time_ms() const {
     return time_ms.count();
 }
 
-void Experiment_Clock::print_elapsed_time() {
-    std::cout << "Elapsed time: " << get_elapsed_time_ms() << " ms" << std::endl;
+std::string Experiment_Clock::get_info_string() const {
+    return std::format("Elapsed time (ms): {}", get_elapsed_time_ms());
 }
