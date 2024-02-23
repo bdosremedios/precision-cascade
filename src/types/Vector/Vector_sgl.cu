@@ -1,7 +1,7 @@
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
 
-#include "types/Vector.h"
+#include "types/Vector/Vector.h"
 
 Vector<float> Vector<float>::operator*(const Scalar<float> &scalar) const {
 

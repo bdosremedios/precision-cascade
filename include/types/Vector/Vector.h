@@ -14,8 +14,8 @@
 #include "tools/cuda_check.h"
 #include "tools/vector_sort.h"
 
-#include "Scalar.h"
-#include "MatrixDense.h"
+#include "types/Scalar/Scalar.h"
+#include "types/MatrixDense/MatrixDense.h"
 
 template <typename T>
 class Vector

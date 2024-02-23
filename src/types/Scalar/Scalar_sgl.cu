@@ -2,7 +2,7 @@
 #include <cuda_fp16.h>
 
 #include "types/Scalar/Scalar.h"
-#include "types/Scalar/Scalar.cuh"
+#include "types/Scalar/Scalar_template_subroutines.cuh"
 
 template Scalar<float> Scalar<float>::operator+(const Scalar<float> &other) const;
 template Scalar<float> Scalar<float>::operator-(const Scalar<float> &other) const;

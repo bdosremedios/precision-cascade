@@ -3,7 +3,7 @@
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
 
-#include "types/Vector.h"
+#include "types/Vector/Vector.h"
 
 Vector<double> Vector<double>::operator*(const Scalar<double> &scalar) const {
 

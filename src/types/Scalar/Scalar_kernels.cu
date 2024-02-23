@@ -1,8 +1,8 @@
-#include "Scalar_kernels.cuh"
-
 #include <cuda_runtime.h>
 #include <cuda_fp16.h>
 #include <math_constants.h>
+
+#include "types/Scalar/Scalar_kernels.cuh"
 
 // *** Scalar double kernel implementation *** 
 
