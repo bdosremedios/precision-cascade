@@ -20,12 +20,16 @@ add_library(
     types/Vector/Vector_kernels.cu
     types/MatrixDense/MatrixDense_kernels.cu
 )
+
+target_link_options(precision-cascade-gpu_kernels PUBLIC "/NODEFAULTLIB:LIBCMT")
+
 target_link_libraries(
     precision-cascade-gpu_kernels
     PUBLIC
     precision-cascade-headers
     "$ENV{CUDA_PATH}/lib/x64/cublas.lib"
 )
+
 set_property(TARGET precision-cascade-gpu_kernels PROPERTY CUDA_ARCHITECTURES 80)
 
 add_library(
@@ -33,11 +37,15 @@ add_library(
     STATIC
     types/Scalar/Scalar_constants.cpp
 )
+
+target_link_options(precision-cascade-constants PUBLIC "/NODEFAULTLIB:LIBCMT")
+
 target_link_libraries(
     precision-cascade-constants
     PUBLIC
     precision-cascade-headers
 )
+
 set_property(TARGET precision-cascade-constants PROPERTY CUDA_ARCHITECTURES 80)
 
 add_library(
@@ -54,6 +62,9 @@ add_library(
     types/MatrixDense/MatrixDense_sgl.cu
     types/MatrixDense/MatrixDense_dbl.cu
 )
+
+target_link_options(precision-cascade PUBLIC "/NODEFAULTLIB:LIBCMT")
+
 target_link_libraries(
     precision-cascade
     PUBLIC
@@ -62,4 +73,5 @@ target_link_libraries(
     precision-cascade-constants
     "$ENV{CUDA_PATH}/lib/x64/cublas.lib"
 )
+
 set_property(TARGET precision-cascade PROPERTY CUDA_ARCHITECTURES 80)

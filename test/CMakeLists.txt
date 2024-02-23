@@ -2,14 +2,6 @@ cmake_minimum_required(VERSION 3.28)
 
 project(precision-cascade LANGUAGES CXX CUDA)
 
-set(CMAKE_EXE_LINKER_FLAGS, "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:LIBCMT")
-
-set (CMAKE_CXX_STANDARD 20)
-set (CMAKE_CXX_STANDARD_REQUIRED ON)
-
-set (CMAKE_CUDA_STANDARD 20)
-set (CMAKE_CUDA_STANDARD_REQUIRED ON)
-
 set(
     TEST_TYPES_CPPS
     test_types/test_Scalar.cpp
@@ -51,7 +43,6 @@ set(
     test_solvers/test_GMRES/test_PGMRES.cpp
 )
 
-
 set(
     TEST_NESTED_SOLVERS
         test_solvers/test_nested/test_FP_GMRES_IR_solve.cpp
@@ -76,7 +67,6 @@ set(
     ${TEST_SOLVERS}
 )
 
-
 add_library(
     test_toolkit
     test_toolkit.cpp
@@ -93,8 +83,6 @@ add_executable(
     test.cpp
     ${TEST_SUITE_CPPS}
 )
-
-set_property(TARGET test PROPERTY CUDA_ARCHITECTURES 80)
 
 target_link_libraries(
     test
