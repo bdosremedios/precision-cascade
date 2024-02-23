@@ -44,7 +44,7 @@ class Tol
 public:
 
     // Basic error tolerance
-    static double roundoff() { assert(false); return -1.; }
+    static double roundoff();
     static T roundoff_T() { return static_cast<T>(roundoff()); }
     static double gamma(int n) { return n*roundoff()/(1-n*roundoff()); }  // 2002 Higham Ch.3
 
@@ -69,40 +69,10 @@ public:
     static double dbl_ilu_elem_tol() { return std::pow(10, -12); }
 
     // Iterative solver convergence tolerance
-    static double Tol<T>::stationary_conv_tol() { assert(false); return -1.; }
-    static double Tol<T>::krylov_conv_tol() { assert(false); return -1.; }
-    static double Tol<T>::nested_krylov_conv_tol() { assert(false); return -1.; }
+    static double stationary_conv_tol();
+    static double krylov_conv_tol();
+    static double nested_krylov_conv_tol();
 
 };
-
-// Half Constants
-template<>
-double Tol<__half>::roundoff() { return std::pow(2, -10); }
-template<>
-double Tol<__half>::stationary_conv_tol() { return 5*std::pow(10, -02); }
-template<>
-double Tol<__half>::krylov_conv_tol() { return 5*std::pow(10, -02); }
-template<>
-double Tol<__half>::nested_krylov_conv_tol() { return 5*std::pow(10, -02); }
-
-// Single Constants
-template<>
-double Tol<float>::roundoff() { return std::pow(2, -23); }
-template<>
-double Tol<float>::stationary_conv_tol() { return 5*std::pow(10, -06); }
-template<>
-double Tol<float>::krylov_conv_tol() { return 5*std::pow(10, -06); }
-template<>
-double Tol<float>::nested_krylov_conv_tol() { return 5*std::pow(10, -06); }
-
-// Double Constants
-template<>
-double Tol<double>::roundoff() { return std::pow(2, -52); }
-template<>
-double Tol<double>::stationary_conv_tol() { return std::pow(10, -10); }
-template<>
-double Tol<double>::krylov_conv_tol() { return std::pow(10, -10); }
-template<>
-double Tol<double>::nested_krylov_conv_tol() { return std::pow(10, -10); }
 
 #endif

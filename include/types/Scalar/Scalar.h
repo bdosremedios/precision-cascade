@@ -9,7 +9,7 @@
 
 #include "tools/cuda_check.h"
 
-#include "Scalar_kernels.cuh"
+#include "Scalar_gpu_kernels.cuh"
 
 template <typename T> class Vector;
 template <typename T> class MatrixDense;
@@ -96,10 +96,7 @@ template <typename T>
 class SCALAR_ONE
 { 
 public:
-    static Scalar<T> get() {
-        throw std::runtime_error("SCALAR_ONE: get reached unimplemented default implementation");
-        return Scalar<T>();
-    }
+    static Scalar<T> get();
 };
 
 static inline Scalar<__half> SCALAR_ZERO_H(static_cast<__half>(0.)); 
@@ -110,10 +107,7 @@ template <typename T>
 class SCALAR_ZERO
 {
 public:
-    static Scalar<T> get() { 
-        throw std::runtime_error("SCALAR_ZERO: get reached unimplemented default implementation");
-        return Scalar<T>();
-    }
+    static Scalar<T> get();
 };
 
 static inline Scalar<__half> SCALAR_MINUS_ONE_H(static_cast<__half>(-1.)); 
@@ -124,13 +118,7 @@ template <typename T>
 class SCALAR_MINUS_ONE
 {
 public:
-    static Scalar<T> get() { 
-        throw std::runtime_error("SCALAR_MINUS_ONE: get reached unimplemented default implementation");
-        return Scalar<T>();
-    }
+    static Scalar<T> get();
 };
-
-#include "types/MatrixDense/MatrixDense.h"
-#include "types/Vector/Vector.h"
 
 #endif

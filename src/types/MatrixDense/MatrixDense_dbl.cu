@@ -1,7 +1,7 @@
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
 
-#include "types/MatrixDense.h"
+#include "types/MatrixDense/MatrixDense.h"
 
 MatrixDense<double> MatrixDense<double>::operator*(const Scalar<double> &scalar) const {
 
@@ -180,29 +180,6 @@ Scalar<double> MatrixDense<double>::norm() const {
 
 }
 
-namespace matdense_dbl_kern
-{
-    __global__ void solve_pivot_and_find_alpha(double *rhs, double *diag, double *alpha) {
-        int tid = (blockIdx.x * blockDim.x) + threadIdx.x;
-        rhs[tid] = rhs[tid]/diag[tid];
-        alpha[tid] = -rhs[tid];
-    }
-
-    __global__ void cast_to_half(double *mat_src, half *mat_dest, int m) {
-        int tid = (blockIdx.x * blockDim.x) + threadIdx.x;
-        if (tid < m) {
-            mat_dest[tid] = __double2half(mat_src[tid]);
-        }
-    }
-
-    __global__ void cast_to_float(double *mat_src, float *mat_dest, int m) {
-        int tid = (blockIdx.x * blockDim.x) + threadIdx.x;
-        if (tid < m) {
-            mat_dest[tid] = __double2float_rn(mat_src[tid]);
-        }
-    }
-}
-
 Vector<double> MatrixDense<double>::back_sub(const Vector<double> &arg_rhs) const {
 
     if (m_rows != n_cols) {
@@ -219,17 +196,9 @@ Vector<double> MatrixDense<double>::back_sub(const Vector<double> &arg_rhs) cons
 
     for (int col=n_cols-1; col>=0; --col) {
 
-        matdense_dbl_kern::solve_pivot_and_find_alpha<<<1, 1>>>(
+        matrixdense_dbl_kernels::solve_pivot_and_find_alpha<<<1, 1>>>(
             soln.d_vec+col, d_mat+(col+col*m_rows), d_scale_val
         );
-        // std::cout << (col*m_rows) << std::endl;
-        // double *h_a = static_cast<double *>(malloc(sizeof(double)));
-        // double *h_b = static_cast<double *>(malloc(sizeof(double)));
-        // double *h_c = static_cast<double *>(malloc(sizeof(double))); 
-        // cudaMemcpy(h_a, d_scale_val, sizeof(double), cudaMemcpyDeviceToHost);
-        // cudaMemcpy(h_b, soln.d_vec, sizeof(double), cudaMemcpyDeviceToHost);
-        // cudaMemcpy(h_c, d_mat+(col*m_rows), sizeof(double), cudaMemcpyDeviceToHost);
-        // std::cout << *h_a << " " << *h_b << " " << *h_c << " " << std::endl; 
         if (col > 0) {
             check_cublas_status(
                 cublasAxpyEx(
@@ -266,7 +235,7 @@ Vector<double> MatrixDense<double>::frwd_sub(const Vector<double> &arg_rhs) cons
 
     for (int col=0; col<n_cols; ++col) {
 
-        matdense_dbl_kern::solve_pivot_and_find_alpha<<<1, 1>>>(
+        matrixdense_dbl_kernels::solve_pivot_and_find_alpha<<<1, 1>>>(
             soln.d_vec+col, d_mat+(col*m_rows+col), d_scale_val
         );
         if (col < m_rows-1) {
@@ -297,7 +266,9 @@ MatrixDense<__half> MatrixDense<double>::to_half() const {
     double NUM_BLOCKS = static_cast<double>(
         std::ceil(static_cast<double>(m_rows*n_cols)/static_cast<double>(NUM_THREADS))
     );
-    matdense_dbl_kern::cast_to_half<<<NUM_THREADS, NUM_BLOCKS>>>(d_mat, created_mat.d_mat, m_rows*n_cols);
+    matrixdense_dbl_kernels::cast_to_half<<<NUM_THREADS, NUM_BLOCKS>>>(
+        d_mat, created_mat.d_mat, m_rows*n_cols
+    );
 
     return created_mat;
 
@@ -311,7 +282,9 @@ MatrixDense<float> MatrixDense<double>::to_float() const {
     double NUM_BLOCKS = static_cast<double>(
         std::ceil(static_cast<double>(m_rows*n_cols)/static_cast<double>(NUM_THREADS))
     );
-    matdense_dbl_kern::cast_to_float<<<NUM_THREADS, NUM_BLOCKS>>>(d_mat, created_mat.d_mat, m_rows*n_cols);
+    matrixdense_dbl_kernels::cast_to_float<<<NUM_THREADS, NUM_BLOCKS>>>(
+        d_mat, created_mat.d_mat, m_rows*n_cols
+    );
 
     return created_mat;
 

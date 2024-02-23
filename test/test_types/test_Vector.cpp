@@ -1,6 +1,6 @@
 #include "../test.h"
 
-#include "types/Vector.h"
+#include "types/Vector/Vector.h"
 
 class Vector_Test: public TestBase
 {

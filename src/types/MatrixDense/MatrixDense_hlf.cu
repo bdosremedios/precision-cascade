@@ -1,7 +1,7 @@
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
 
-#include "types/MatrixDense.h"
+#include "types/MatrixDense/MatrixDense.h"
 
 MatrixDense<__half> MatrixDense<__half>::operator*(const Scalar<__half> &scalar) const {
 
@@ -184,29 +184,6 @@ Scalar<__half> MatrixDense<__half>::norm() const {
 
 }
 
-namespace matdense_hlf_kern
-{    
-    __global__ void solve_pivot_and_find_alpha(__half *rhs, __half *diag, float *alpha) {
-        int tid = (blockIdx.x * blockDim.x) + threadIdx.x;
-        rhs[tid] = rhs[tid]/diag[tid];
-        alpha[tid] = __half2float(-rhs[tid]);
-    }
-
-    __global__ void cast_to_float(__half *mat_src, float *mat_dest, int m) {
-        int tid = (blockIdx.x * blockDim.x) + threadIdx.x;
-        if (tid < m) {
-            mat_dest[tid] = __half2float(mat_src[tid]);
-        }
-    }
-
-    __global__ void cast_to_double(__half *mat_src, double *mat_dest, int m) {
-        int tid = (blockIdx.x * blockDim.x) + threadIdx.x;
-        if (tid < m) {
-            mat_dest[tid] = static_cast<double>(mat_src[tid]);
-        }
-    }
-}
-
 Vector<__half> MatrixDense<__half>::back_sub(const Vector<__half> &arg_rhs) const {
 
     if (m_rows != n_cols) {
@@ -223,7 +200,7 @@ Vector<__half> MatrixDense<__half>::back_sub(const Vector<__half> &arg_rhs) cons
 
     for (int col=n_cols-1; col>=0; --col) {
 
-        matdense_hlf_kern::solve_pivot_and_find_alpha<<<1, 1>>>(
+        matrixdense_hlf_kernels::solve_pivot_and_find_alpha<<<1, 1>>>(
             soln.d_vec+col, d_mat+(col*m_rows+col), d_scale_val
         );
         if (col > 0) {
@@ -262,7 +239,7 @@ Vector<__half> MatrixDense<__half>::frwd_sub(const Vector<__half> &arg_rhs) cons
 
     for (int col=0; col<n_cols; ++col) {
 
-        matdense_hlf_kern::solve_pivot_and_find_alpha<<<1, 1>>>(
+        matrixdense_hlf_kernels::solve_pivot_and_find_alpha<<<1, 1>>>(
             soln.d_vec+col, d_mat+(col*m_rows+col), d_scale_val
         );
         if (col < m_rows-1) {
@@ -295,7 +272,9 @@ MatrixDense<float> MatrixDense<__half>::to_float() const {
     double NUM_BLOCKS = static_cast<double>(
         std::ceil(static_cast<double>(m_rows*n_cols)/static_cast<double>(NUM_THREADS))
     );
-    matdense_hlf_kern::cast_to_float<<<NUM_THREADS, NUM_BLOCKS>>>(d_mat, created_mat.d_mat, m_rows*n_cols);
+    matrixdense_hlf_kernels::cast_to_float<<<NUM_THREADS, NUM_BLOCKS>>>(
+        d_mat, created_mat.d_mat, m_rows*n_cols
+    );
 
     return created_mat;
 
@@ -309,7 +288,9 @@ MatrixDense<double> MatrixDense<__half>::to_double() const {
     double NUM_BLOCKS = static_cast<double>(
         std::ceil(static_cast<double>(m_rows*n_cols)/static_cast<double>(NUM_THREADS))
     );
-    matdense_hlf_kern::cast_to_double<<<NUM_THREADS, NUM_BLOCKS>>>(d_mat, created_mat.d_mat, m_rows*n_cols);
+    matrixdense_hlf_kernels::cast_to_double<<<NUM_THREADS, NUM_BLOCKS>>>(
+        d_mat, created_mat.d_mat, m_rows*n_cols
+    );
 
     return created_mat;
 

@@ -1,6 +1,6 @@
 #include "test_Matrix.h"
 
-#include "types/MatrixDense.h"
+#include "types/MatrixDense/MatrixDense.h"
 
 class MatrixDense_Test: public Matrix_Test<MatrixDense>
 {

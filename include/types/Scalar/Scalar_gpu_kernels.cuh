@@ -1,5 +1,5 @@
-#ifndef SCALAR_KERNELS_CUH
-#define SCALAR_KERNELS_CUH
+#ifndef SCALAR_GPU_KERNELS_CUH
+#define SCALAR_GPU_KERNELS_CUH
 
 #include <cuda_runtime.h>
 #include <cuda_fp16.h>

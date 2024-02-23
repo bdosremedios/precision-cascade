@@ -14,6 +14,8 @@
 #include "tools/cuda_check.h"
 #include "tools/vector_sort.h"
 
+#include "Vector_gpu_kernels.cuh"
+
 #include "types/Scalar/Scalar.h"
 #include "types/MatrixDense/MatrixDense.h"
 

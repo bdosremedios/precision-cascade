@@ -17,6 +17,8 @@ add_library(
     precision-cascade-gpu_kernels
     STATIC
     types/Scalar/Scalar_kernels.cu
+    types/Vector/Vector_kernels.cu
+    types/MatrixDense/MatrixDense_kernels.cu
 )
 target_link_libraries(
     precision-cascade-gpu_kernels
@@ -48,14 +50,16 @@ add_library(
     types/Vector/Vector_hlf.cu
     types/Vector/Vector_sgl.cu
     types/Vector/Vector_dbl.cu
-    # types/MatrixDense/MatrixDense_hlf.cu
-    # types/MatrixDense/MatrixDense_sgl.cu
-    # types/MatrixDense/MatrixDense_dbl.cu
+    types/MatrixDense/MatrixDense_hlf.cu
+    types/MatrixDense/MatrixDense_sgl.cu
+    types/MatrixDense/MatrixDense_dbl.cu
 )
 target_link_libraries(
     precision-cascade
     PUBLIC
     precision-cascade-headers
+    precision-cascade-gpu_kernels
+    precision-cascade-constants
     "$ENV{CUDA_PATH}/lib/x64/cublas.lib"
 )
 set_property(TARGET precision-cascade PROPERTY CUDA_ARCHITECTURES 80)

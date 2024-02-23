@@ -1,6 +1,6 @@
 #include "../test.h"
 
-#include "types/Scalar.h"
+#include "types/Scalar/Scalar.h"
 
 class Scalar_Test: public TestBase
 {

@@ -150,23 +150,6 @@ Scalar<double> Vector<double>::norm() const {
 
 }
 
-namespace vec_dbl_kern
-{
-    __global__ void cast_to_half(double *vec_src, half *vec_dest, int m) {
-        int tid = (blockIdx.x * blockDim.x) + threadIdx.x;
-        if (tid < m) {
-            vec_dest[tid] = __double2half(vec_src[tid]);
-        }
-    }
-
-    __global__ void cast_to_float(double *vec_src, float *vec_dest, int m) {
-        int tid = (blockIdx.x * blockDim.x) + threadIdx.x;
-        if (tid < m) {
-            vec_dest[tid] = __double2float_rn(vec_src[tid]);
-        }
-    }
-}
-
 Vector<__half> Vector<double>::to_half() const {
 
     Vector<__half> created_vec(handle, m_rows);
@@ -175,7 +158,7 @@ Vector<__half> Vector<double>::to_half() const {
     double NUM_BLOCKS = static_cast<double>(
         std::ceil(static_cast<double>(m_rows)/static_cast<double>(NUM_THREADS))
     );
-    vec_dbl_kern::cast_to_half<<<NUM_THREADS, NUM_BLOCKS>>>(d_vec, created_vec.d_vec, m_rows);
+    vector_dbl_kernels::cast_to_half<<<NUM_THREADS, NUM_BLOCKS>>>(d_vec, created_vec.d_vec, m_rows);
 
     return created_vec;
 
@@ -189,7 +172,7 @@ Vector<float> Vector<double>::to_float() const {
     double NUM_BLOCKS = static_cast<double>(
         std::ceil(static_cast<double>(m_rows)/static_cast<double>(NUM_THREADS))
     );
-    vec_dbl_kern::cast_to_float<<<NUM_THREADS, NUM_BLOCKS>>>(d_vec, created_vec.d_vec, m_rows);
+    vector_dbl_kernels::cast_to_float<<<NUM_THREADS, NUM_BLOCKS>>>(d_vec, created_vec.d_vec, m_rows);
 
     return created_vec;
 

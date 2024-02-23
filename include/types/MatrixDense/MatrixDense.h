@@ -12,6 +12,10 @@
 
 #include "tools/cuda_check.h"
 
+#include "MatrixDense_gpu_kernels.cuh"
+
+#include "types/Scalar/Scalar.h"
+
 template <typename T> class Scalar;
 template <typename T> class Vector;
 template <typename T> class MatrixSparse;
@@ -637,7 +641,6 @@ public:
 
 };
 
-#include "types/Scalar/Scalar.h"
 #include "types/Vector/Vector.h"
 #include "types/MatrixSparse/MatrixSparse.h"
 
