@@ -4,7 +4,11 @@
 #include <chrono>
 #include <string>
 #include <format>
+#include <filesystem>
 #include <iostream>
+#include <fstream>
+
+namespace fs = std::filesystem;
 
 #include "solvers/IterativeSolve.h"
 
@@ -55,5 +59,40 @@ public:
     }
 
 };
+
+template <template <typename> typename M>
+void record_experimental_data_json(
+    const Experiment_Data<M> &data,
+    const std::string ID,
+    const fs::path save_dir
+) {
+
+    fs::path save_path(save_dir / fs::path(ID + ".json"));
+    std::cout << std::format("Saving Experimental Data to: {}", save_path.string()) << std::endl;
+    
+    std::ofstream file_out;
+    file_out.open(save_path, std::ofstream::out);
+
+    if (file_out.is_open()) {
+
+        file_out << std::scientific;
+        file_out.precision(16);
+
+        file_out << "{\n";
+
+        file_out << std::format("\t\"id\" : {},\n", ID);
+        file_out << std::format("\t\"solver_class\" : {}\n", typeid(*(data.solver_ptr)).name());
+
+        file_out << "}";
+
+        file_out.close();
+
+    } else {
+        throw std::runtime_error(
+            "record_experimental_data_json: Failed to open for write: " + save_path.string()
+        );
+    }
+
+}
 
 #endif

@@ -109,58 +109,6 @@ void write_vec_to_json_array_in_ofstream(
 
 }
 
-template <template <typename> typename M>
-void record_solve(
-    const std::shared_ptr<GenericIterativeSolve<M>> &solver,
-    const fs::path save_path,
-    const std::string ID_name
-) {
-
-    std::ofstream file_out;
-    file_out.open(save_path);
-    file_out << std::scientific;
-    file_out.precision(16);
-
-    if (file_out.is_open()) {
-
-        file_out << "{\n\t\"solver_name\" : \"" << typeid(*solver).name() << "\",\n";
-
-        file_out << "\t\"ID\" : \"" << ID_name << "\",\n";
-
-        // file_out << "\t\"res_hist\" : ";
-        // // MatrixXd res_hist = solver->get_res_hist();
-        // // write_matrix_to_json_array_in_ofstream(res_hist, file_out, "\t");
-        // file_out << "[],\n";
-        // // file_out << ",\n";
-
-        file_out << "\t\"res_norm_hist\" : ";
-        std::vector<double> res_norm_hist_vec = solver->get_res_norm_hist();
-        Vector<double> res_norm_hist_mat(
-            solver->get_generic_soln().get_handle(),
-            res_norm_hist_vec.size()
-        );
-        for (int i=0; i<res_norm_hist_vec.size(); ++i) {
-            res_norm_hist_mat.set_elem(i, Scalar<double>(res_norm_hist_vec[i]));
-        }
-        write_json_array_to_ofstream(res_norm_hist_mat, file_out, "\t");
-        file_out << ",\n";
-
-        file_out << "\t\"soln\" : ";
-        Vector<double> soln(solver->get_generic_soln());
-        write_json_array_to_ofstream(soln, file_out, "\t");
-        file_out << "\n";
-
-        file_out << "}";
-        file_out.close();
-
-    } else {
-
-        throw std::runtime_error("Failed to open for write: " + save_path.string());
-
-    }
-
-}
-
 int main() {
 
     std::cout << "*** Start Numerical Experimentation: experiment.cpp ***\n" << std::endl;
@@ -204,10 +152,10 @@ int main() {
 
     SolveArgPkg solve_args;
     solve_args.init_guess = Vector<double>::Zero(handle, A.cols());
-    solve_args.max_iter = 200;
-    solve_args.max_inner_iter = 50;
-    // solve_args.max_iter = 10;
-    // solve_args.max_inner_iter = 10;
+    // solve_args.max_iter = 200;
+    // solve_args.max_inner_iter = 50;
+    solve_args.max_iter = 10;
+    solve_args.max_inner_iter = 10;
     solve_args.target_rel_res = std::pow(10, -10);
 
     TypedLinearSystem<MatrixDense, double> lin_sys_dbl(A, b);
@@ -223,6 +171,7 @@ int main() {
         show_plots
     );
     std::cout << fpgmres64_data.get_info_string() << std::endl;
+    record_experimental_data_json(fpgmres64_data, "FPGMRES64", output_dir_path);
 
     std::cout << "\nStarting FPGMRES32" << std::endl;
     std::cout << solve_args.get_info_string() << std::endl;
@@ -231,6 +180,7 @@ int main() {
         show_plots
     );
     std::cout << fpgmres32_data.get_info_string() << std::endl;
+    record_experimental_data_json(fpgmres32_data, "FPGMRES32", output_dir_path);
 
     std::cout << "\nStarting FPGMRES16" << std::endl;
     std::cout << solve_args.get_info_string() << std::endl;
@@ -239,6 +189,7 @@ int main() {
         show_plots
     );
     std::cout << fpgmres16_data.get_info_string() << std::endl;
+    record_experimental_data_json(fpgmres16_data, "FPGMRES16", output_dir_path);
 
     std::cout << "\nStarting MPGMRES" << std::endl;
     std::cout << solve_args.get_info_string() << std::endl;
@@ -247,6 +198,7 @@ int main() {
         show_plots
     );
     std::cout << mpgmres_data.get_info_string() << std::endl;
+    record_experimental_data_json(mpgmres_data, "MPGMRES", output_dir_path);
 
     std::cout << "\n*** Finish Numerical Experimentation ***" << std::endl;
     
