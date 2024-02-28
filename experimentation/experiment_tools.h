@@ -60,6 +60,8 @@ public:
 
 };
 
+std::string vector_to_jsonarray_str(std::vector<double> vec, int padding_level);
+
 template <template <typename> typename M>
 void record_experimental_data_json(
     const Experiment_Data<M> &data,
@@ -80,8 +82,14 @@ void record_experimental_data_json(
 
         file_out << "{\n";
 
-        file_out << std::format("\t\"id\" : {},\n", ID);
-        file_out << std::format("\t\"solver_class\" : {}\n", typeid(*(data.solver_ptr)).name());
+        file_out << std::format("\t\"id\" : \"{}\",\n", ID);
+        file_out << std::format("\t\"solver_class\" : \"{}\",\n", typeid(*(data.solver_ptr)).name());
+        file_out << std::format("\t\"initiated\" : \"{}\",\n", data.solver_ptr->check_initiated());
+        file_out << std::format("\t\"converged\" : \"{}\",\n", data.solver_ptr->check_converged());
+        file_out << std::format("\t\"terminated\" : \"{}\",\n", data.solver_ptr->check_terminated());
+        file_out << std::format("\t\"res_norm_hist\" : {}\n",
+            vector_to_jsonarray_str(data.solver_ptr->get_res_norm_hist(), 0)
+        );
 
         file_out << "}";
 
