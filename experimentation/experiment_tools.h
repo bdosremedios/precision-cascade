@@ -89,6 +89,8 @@ void record_experimental_data_json(
         file_out << std::format("\t\"initiated\" : \"{}\",\n", data.solver_ptr->check_initiated());
         file_out << std::format("\t\"converged\" : \"{}\",\n", data.solver_ptr->check_converged());
         file_out << std::format("\t\"terminated\" : \"{}\",\n", data.solver_ptr->check_terminated());
+        file_out << std::format("\t\"iteration\" : \"{}\",\n", data.solver_ptr->get_iteration());
+        file_out << std::format("\t\"elapsed_time_ms\" : {},\n", data.clock.get_elapsed_time_ms());
         file_out << std::format("\t\"res_norm_hist\" : {},\n",
             vector_to_jsonarray_str(data.solver_ptr->get_res_norm_hist(), 0)
         );
