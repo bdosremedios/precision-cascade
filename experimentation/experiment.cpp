@@ -26,27 +26,6 @@ const double u_hlf = std::pow(2, -10);
 const double u_sgl = std::pow(2, -23);
 const double u_dbl = std::pow(2, -52);
 
-// string get_file_name(fs::path file_path) {
-
-//     string temp = file_path.string();
-//     temp = temp.substr(temp.find_last_of("//")+1);
-//     temp = temp.substr(0, temp.find_last_of("."));
-
-//     return temp;
-
-// }
-
-// template <template <typename> typename M>
-// void print_solver_info(
-//     shared_ptr<GenericIterativeSolve<M>> solver,
-//     string ID
-// ) {
-//     std::cout << "Name: " << ID << " | ";
-//     std::cout << "Converged: " << solver->check_converged() << " | ";
-//     std::cout << "Iter: " << solver->get_iteration() << " | ";
-//     std::cout << "Relres: " << solver->get_relres() << std::endl;
-// }
-
 template <template <typename> typename M>
 Experiment_Data<M> run_solve_experiment(
     std::shared_ptr<GenericIterativeSolve<M>> arg_solver_ptr,
@@ -152,10 +131,10 @@ int main() {
 
     SolveArgPkg solve_args;
     solve_args.init_guess = Vector<double>::Zero(handle, A.cols());
-    // solve_args.max_iter = 200;
-    // solve_args.max_inner_iter = 50;
-    solve_args.max_iter = 10;
-    solve_args.max_inner_iter = 10;
+    solve_args.max_iter = 200;
+    solve_args.max_inner_iter = 50;
+    // solve_args.max_iter = 10;
+    // solve_args.max_inner_iter = 10;
     solve_args.target_rel_res = std::pow(10, -10);
 
     TypedLinearSystem<MatrixDense, double> lin_sys_dbl(A, b);
