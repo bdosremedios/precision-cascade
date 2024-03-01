@@ -67,6 +67,36 @@ std::string vector_to_jsonarray_str(std::vector<double> vec, int padding_level);
 std::string matrix_to_jsonarray_str(MatrixDense<double> mat, int padding_level);
 
 template <template <typename> typename M>
+void record_basic_solver_data(
+    std::ofstream &file_out,
+    const std::string ID,
+    const std::shared_ptr<GenericIterativeSolve<M>> &solver_ptr,
+    const Experiment_Clock &clock
+) {
+    file_out << std::format("\t\"id\" : \"{}\",\n", ID);
+    file_out << std::format("\t\"solver_class\" : \"{}\",\n", typeid(*solver_ptr).name());
+    file_out << std::format("\t\"initiated\" : \"{}\",\n", solver_ptr->check_initiated());
+    file_out << std::format("\t\"converged\" : \"{}\",\n", solver_ptr->check_converged());
+    file_out << std::format("\t\"terminated\" : \"{}\",\n", solver_ptr->check_terminated());
+    file_out << std::format("\t\"iteration\" : {},\n", solver_ptr->get_iteration());
+    file_out << std::format("\t\"elapsed_time_ms\" : {},\n", clock.get_elapsed_time_ms());
+}
+
+template <template <typename> typename M>
+void record_residual_solver_data(
+    std::ofstream &file_out,
+    const std::shared_ptr<GenericIterativeSolve<M>> &solver_ptr,
+    const int padding
+) {
+    file_out << std::format("\t\"res_norm_hist\" : {},\n",
+        vector_to_jsonarray_str(solver_ptr->get_res_norm_hist(), padding)
+    );
+    file_out << std::format("\t\"res_hist\" : {}\n",
+        matrix_to_jsonarray_str(solver_ptr->get_res_hist(), padding+1)
+    );
+}
+
+template <template <typename> typename M>
 void record_experimental_data_json(
     const Experiment_Data<GenericIterativeSolve, M> &data,
     const std::string ID,
@@ -86,19 +116,8 @@ void record_experimental_data_json(
 
         file_out << "{\n";
 
-        file_out << std::format("\t\"id\" : \"{}\",\n", ID);
-        file_out << std::format("\t\"solver_class\" : \"{}\",\n", typeid(*(data.solver_ptr)).name());
-        file_out << std::format("\t\"initiated\" : \"{}\",\n", data.solver_ptr->check_initiated());
-        file_out << std::format("\t\"converged\" : \"{}\",\n", data.solver_ptr->check_converged());
-        file_out << std::format("\t\"terminated\" : \"{}\",\n", data.solver_ptr->check_terminated());
-        file_out << std::format("\t\"iteration\" : \"{}\",\n", data.solver_ptr->get_iteration());
-        file_out << std::format("\t\"elapsed_time_ms\" : {},\n", data.clock.get_elapsed_time_ms());
-        file_out << std::format("\t\"res_norm_hist\" : {},\n",
-            vector_to_jsonarray_str(data.solver_ptr->get_res_norm_hist(), 0)
-        );
-        file_out << std::format("\t\"res_hist\" : {}\n",
-            matrix_to_jsonarray_str(data.solver_ptr->get_res_hist(), 1)
-        );
+        record_basic_solver_data<M>(file_out, ID, data.solver_ptr, data.clock);
+        record_residual_solver_data<M>(file_out, data.solver_ptr, 0);
 
         file_out << "}";
 
@@ -132,21 +151,14 @@ void record_MPGMRES_experimental_data_json(
 
         file_out << "{\n";
 
-        file_out << std::format("\t\"id\" : \"{}\",\n", ID);
-        file_out << std::format("\t\"solver_class\" : \"{}\",\n", typeid(*(data.solver_ptr)).name());
-        file_out << std::format("\t\"initiated\" : \"{}\",\n", data.solver_ptr->check_initiated());
-        file_out << std::format("\t\"converged\" : \"{}\",\n", data.solver_ptr->check_converged());
-        file_out << std::format("\t\"terminated\" : \"{}\",\n", data.solver_ptr->check_terminated());
-        file_out << std::format("\t\"iteration\" : \"{}\",\n", data.solver_ptr->get_iteration());
-        file_out << std::format("\t\"hlf_sgl_cascade_change\" : \"{}\",\n", data.solver_ptr->get_hlf_sgl_cascade_change());
-        file_out << std::format("\t\"sgl_dbl_cascade_change\" : \"{}\",\n", data.solver_ptr->get_sgl_dbl_cascade_change());
-        file_out << std::format("\t\"elapsed_time_ms\" : {},\n", data.clock.get_elapsed_time_ms());
-        file_out << std::format("\t\"res_norm_hist\" : {},\n",
-            vector_to_jsonarray_str(data.solver_ptr->get_res_norm_hist(), 0)
+        record_basic_solver_data<M>(file_out, ID, data.solver_ptr, data.clock);
+        file_out << std::format(
+            "\t\"hlf_sgl_cascade_change\" : \"{}\",\n", data.solver_ptr->get_hlf_sgl_cascade_change()
         );
-        file_out << std::format("\t\"res_hist\" : {}\n",
-            matrix_to_jsonarray_str(data.solver_ptr->get_res_hist(), 1)
+        file_out << std::format(
+            "\t\"sgl_dbl_cascade_change\" : \"{}\",\n", data.solver_ptr->get_sgl_dbl_cascade_change()
         );
+        record_residual_solver_data<M>(file_out, data.solver_ptr, 0);
 
         file_out << "}";
 
