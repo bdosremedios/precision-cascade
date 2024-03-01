@@ -94,12 +94,14 @@ protected:
 
     // *** Attributes ***
     int cascade_phase;
+    int hlf_sgl_cascade_change = -1;
+    int sgl_dbl_cascade_change = -1;
 
     // *** Virtual Abstract Methods ***
 
     // Determine which phase should be used based on current phase and
     // current convergence progress
-    virtual void determine_phase() = 0;
+    virtual int determine_next_phase() = 0;
 
     // *** Concrete Override Methods ***
 
@@ -110,7 +112,14 @@ protected:
 
     // Specify inner_solver for outer_iterate_calc and setup
     void outer_iterate_setup() override {
-        determine_phase();
+        int next_phase = determine_next_phase();
+        if ((cascade_phase == HLF_PHASE) && (next_phase == SGL_PHASE)) {
+            hlf_sgl_cascade_change = this->get_iteration();
+        }
+        if ((cascade_phase == SGL_PHASE) && (next_phase == DBL_PHASE)) {
+            sgl_dbl_cascade_change = this->get_iteration();
+        }
+        cascade_phase = next_phase;
         choose_phase_solver();
     }
 
@@ -140,6 +149,14 @@ public:
     MP_GMRES_IR_Solve(const GenericLinearSystem<M> &&, const SolveArgPkg &) = delete;
     MP_GMRES_IR_Solve(const GenericLinearSystem<M> &&, const SolveArgPkg &&) = delete;
 
+    int get_hlf_sgl_cascade_change() const {
+        return hlf_sgl_cascade_change;
+    }
+
+    int get_sgl_dbl_cascade_change() const {
+        return sgl_dbl_cascade_change;
+    }
+
 };
 
 template <template <typename> typename M>
@@ -153,13 +170,21 @@ protected:
     const double tol_dbl = pow(10, -10);
 
     // *** Concrete Override Methods ***
-    void determine_phase() override {
+    int determine_next_phase() override {
         if (this->cascade_phase == this->HLF_PHASE) {
-            if ((this->get_relres() <= tol_hlf)) { this->cascade_phase = this->SGL_PHASE; }
+            if ((this->get_relres() <= tol_hlf)) {
+                return this->SGL_PHASE;
+            } else {
+                return this->cascade_phase;
+            }
         } else if (this->cascade_phase == this->SGL_PHASE) {
-            if ((this->get_relres() <= tol_sgl)) { this->cascade_phase = this->DBL_PHASE; }
+            if ((this->get_relres() <= tol_sgl)) {
+                return this->DBL_PHASE;
+            } else {
+                return this->cascade_phase;
+            }
         } else {
-            ;
+            return this->DBL_PHASE;
         }
     }
 

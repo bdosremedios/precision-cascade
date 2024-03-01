@@ -26,9 +26,9 @@ const double u_hlf = std::pow(2, -10);
 const double u_sgl = std::pow(2, -23);
 const double u_dbl = std::pow(2, -52);
 
-template <template <typename> typename M>
-Experiment_Data<M> run_solve_experiment(
-    std::shared_ptr<GenericIterativeSolve<M>> arg_solver_ptr,
+template <template <template <typename> typename> typename Solver, template <typename> typename M>
+Experiment_Data<Solver, M> run_solve_experiment(
+    std::shared_ptr<Solver<M>> arg_solver_ptr,
     bool show_plots
 ) {
 
@@ -38,53 +38,7 @@ Experiment_Data<M> run_solve_experiment(
     if (show_plots) { arg_solver_ptr->view_relres_plot("log"); }
     exp_clock.stop_clock_experiment();
 
-    return Experiment_Data<M>(exp_clock, arg_solver_ptr);
-
-}
-
-void write_mat_to_json_array_in_ofstream(
-    const MatrixDense<double> &mat,
-    std::ofstream &f_out,
-    const std::string &padding 
-) {
-
-    double *h_mat = static_cast<double *>(malloc(mat.rows()*mat.cols()*sizeof(double)));
-
-    mat.copy_data_to_ptr(h_mat, mat.rows(), mat.cols());
-
-    f_out << "[\n";
-    for (int i=0; i<mat.rows()-1; ++i) {
-        f_out << padding << padding << "[";
-        for (int j=0; j<mat.cols()-1; ++j) { f_out << h_mat[i+j*mat.rows()] << ","; }
-        f_out << h_mat[i+(mat.cols()-1)*mat.rows()];
-        f_out << "],\n";
-    }
-    f_out << padding << padding << "[";
-    for (int j=0; j<mat.cols()-1; ++j) { f_out << h_mat[mat.rows()-1+j*mat.rows()] << ","; }
-    f_out << h_mat[mat.rows()-1+(mat.cols()-1)*mat.rows()];
-    f_out << "]\n" << padding << "]";
-
-    free(h_mat);
-
-}
-
-void write_vec_to_json_array_in_ofstream(
-    const Vector<double> &vec,
-    std::ofstream &f_out,
-    const std::string &padding 
-) {
-
-    double *h_vec = static_cast<double *>(malloc(vec.rows()*sizeof(double)));
-
-    vec.copy_data_to_ptr(h_vec, vec.rows());
-
-    f_out << "[\n";
-    for (int i=0; i<vec.rows()-1; ++i) {
-        f_out << padding << padding << "[" << h_vec[i] << "],\n";
-    }
-    f_out << padding << "]";
-
-    free(h_vec);
+    return Experiment_Data<Solver, M>(exp_clock, arg_solver_ptr);
 
 }
 
@@ -145,7 +99,7 @@ int main() {
 
     std::cout << "\nStarting FPGMRES64" << std::endl;
     std::cout << solve_args.get_info_string() << std::endl;
-    Experiment_Data<MatrixDense> fpgmres64_data = run_solve_experiment<MatrixDense>(
+    Experiment_Data<GenericIterativeSolve, MatrixDense> fpgmres64_data = run_solve_experiment<GenericIterativeSolve, MatrixDense>(
         std::make_shared<FP_GMRES_IR_Solve<MatrixDense, double>>(lin_sys_dbl, u_dbl, solve_args),
         show_plots
     );
@@ -154,7 +108,7 @@ int main() {
 
     std::cout << "\nStarting FPGMRES32" << std::endl;
     std::cout << solve_args.get_info_string() << std::endl;
-    Experiment_Data<MatrixDense> fpgmres32_data = run_solve_experiment<MatrixDense>(
+    Experiment_Data<GenericIterativeSolve, MatrixDense> fpgmres32_data = run_solve_experiment<GenericIterativeSolve, MatrixDense>(
         std::make_shared<FP_GMRES_IR_Solve<MatrixDense, float>>(lin_sys_sgl, u_sgl, solve_args),
         show_plots
     );
@@ -163,7 +117,7 @@ int main() {
 
     std::cout << "\nStarting FPGMRES16" << std::endl;
     std::cout << solve_args.get_info_string() << std::endl;
-    Experiment_Data<MatrixDense> fpgmres16_data = run_solve_experiment<MatrixDense>(
+    Experiment_Data<GenericIterativeSolve, MatrixDense> fpgmres16_data = run_solve_experiment<GenericIterativeSolve, MatrixDense>(
         std::make_shared<FP_GMRES_IR_Solve<MatrixDense, __half>>(lin_sys_hlf, u_hlf, solve_args),
         show_plots
     );
@@ -172,12 +126,12 @@ int main() {
 
     std::cout << "\nStarting MPGMRES" << std::endl;
     std::cout << solve_args.get_info_string() << std::endl;
-    Experiment_Data<MatrixDense> mpgmres_data = run_solve_experiment<MatrixDense>(
+    Experiment_Data<MP_GMRES_IR_Solve, MatrixDense> mpgmres_data = run_solve_experiment<MP_GMRES_IR_Solve, MatrixDense>(
         std::make_shared<SimpleConstantThreshold<MatrixDense>>(lin_sys_dbl, solve_args),
         show_plots
     );
     std::cout << mpgmres_data.get_info_string() << std::endl;
-    record_experimental_data_json(mpgmres_data, "MPGMRES", output_dir_path);
+    record_MPGMRES_experimental_data_json(mpgmres_data, "MPGMRES", output_dir_path);
 
     std::cout << "\n*** Finish Numerical Experimentation ***" << std::endl;
     

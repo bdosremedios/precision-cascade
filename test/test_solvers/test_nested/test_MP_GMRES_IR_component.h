@@ -23,7 +23,7 @@ public:
 
     int set_phase_to_use;
 
-    void determine_phase() { cascade_phase = set_phase_to_use; }
+    int determine_next_phase() override { return set_phase_to_use; }
 
 };
 
