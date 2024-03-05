@@ -9,21 +9,29 @@
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
 
-#include "experiment_run_subroutines.h"
+#include "experiment_read.h"
+#include "experiment_run.h"
 
 namespace fs = std::filesystem;
 
 int main() {
 
+    fs::path data_dir_path("C:\\Users\\dosre\\dev\\numerical_experimentation\\data");
+    std::cout << "Data directory for experiment matrices: " << data_dir_path << std::endl;
+
     fs::path input_dir_path("C:\\Users\\dosre\\dev\\numerical_experimentation\\input");
-    std::cout << "Input directory for experiment specs: " << input_dir_path << std::endl;
+    std::cout << "Input directory for experiment specifications: " << input_dir_path << std::endl;
 
     fs::path output_dir_path("C:\\Users\\dosre\\dev\\numerical_experimentation\\output");
-    std::cout << "Output directory for experiment data: " << output_dir_path << std::endl << std::endl;
+    std::cout << "Output directory for experiment data: " << output_dir_path << std::endl;
 
     fs::directory_iterator dir_iter = fs::directory_iterator(input_dir_path);
     for (auto curr = begin(dir_iter); curr != end(dir_iter); ++curr) {
-        std::cout << curr->path() << std::endl;
+        try {
+            Experiment_Specification loaded_exp_spec = parse_experiment_spec(curr->path());
+        } catch (std::runtime_error e) {
+            std::cout << e.what() << std::endl;
+        }
     }
     // std::cout << "*** Start Numerical Experimentation: experiment.cpp ***\n" << std::endl;
 

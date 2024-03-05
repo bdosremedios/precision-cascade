@@ -1,5 +1,5 @@
-#ifndef EXPERIMENT_TOOLS_H
-#define EXPERIMENT_TOOLS_H
+#ifndef EXPERIMENT_RECORD_H
+#define EXPERIMENT_RECORD_H
 
 #include <chrono>
 #include <string>

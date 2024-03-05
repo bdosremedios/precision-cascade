@@ -1,5 +1,5 @@
-#ifndef RUN_EXPERIMENT_H
-#define RUN_EXPERIMENT_H
+#ifndef EXPERIMENT_RUN_H
+#define EXPERIMENT_RUN_H
 
 #include <filesystem>
 #include <format>
