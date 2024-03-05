@@ -178,7 +178,6 @@ Experiment_Specification parse_experiment_spec(fs::path exp_spec_path) {
     std::string exp_spec_id = exp_spec_path.stem().string();
     Experiment_Specification exp_spec = Experiment_Specification(exp_spec_id);
 
-    std::cout << std::format("\nParsing experiment specification: {}", exp_spec_id) << std::endl;
     json exp_spec_json;
     try {
         exp_spec_json = json::parse(exp_spec_stream);

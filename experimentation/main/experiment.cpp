@@ -28,6 +28,7 @@ int main() {
     fs::directory_iterator dir_iter = fs::directory_iterator(input_dir_path);
     for (auto curr = begin(dir_iter); curr != end(dir_iter); ++curr) {
         try {
+            std::cout << "Parsing experiment specification: {}" << curr->path().string() << std::endl;
             Experiment_Specification loaded_exp_spec = parse_experiment_spec(curr->path());
         } catch (std::runtime_error e) {
             std::cout << e.what() << std::endl;
@@ -66,6 +67,6 @@ int main() {
 
     // std::cout << "\n*** Finish Numerical Experimentation ***" << std::endl;
     
-    // return 0;
+    return 0;
 
 }

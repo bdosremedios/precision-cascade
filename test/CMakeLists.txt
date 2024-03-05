@@ -92,3 +92,14 @@ target_link_libraries(
     precision-cascade
     "$ENV{CUDA_PATH}/lib/x64/cublas.lib"
 )
+
+add_library(
+    test_headers
+    INTERFACE
+)
+
+target_include_directories(
+    test_headers
+    INTERFACE
+    .
+)

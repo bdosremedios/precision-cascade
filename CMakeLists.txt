@@ -14,12 +14,6 @@ add_subdirectory(include)
 add_subdirectory(src)
 
 option(
-    BUILD_MAIN
-    "Whether to build main"
-    ON
-)
-
-option(
     BUILD_TEST
     "Whether to build test"
     ON
@@ -30,11 +24,6 @@ option(
     "Whether to build experiment"
     ON
 )
-
-if(BUILD_MAIN)
-    message(STATUS "Building main...")
-    add_subdirectory(main)
-endif()
 
 if(BUILD_TEST)
     message(STATUS "Building test...")
