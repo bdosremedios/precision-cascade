@@ -27,7 +27,7 @@ option(
 
 option(
     BUILD_EXPERIMENTATION
-    "Whether to build test"
+    "Whether to build experiment"
     ON
 )
 
@@ -42,6 +42,6 @@ if(BUILD_TEST)
 endif()
 
 if(BUILD_EXPERIMENTATION)
-    message(STATUS "Building experimentation...")
+    message(STATUS "Building experiment...")
     add_subdirectory(experimentation)
 endif()

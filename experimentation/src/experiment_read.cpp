@@ -46,7 +46,7 @@ int extract_integer(json::iterator member) {
     } else {
         throw std::runtime_error(
             std::format(
-                "extract_solve_group: extract_integer invalid key \"{}\" value",
+                "extract_solve_group: extract_integer invalid value for key \"{}\"",
                 member.key()
             )
         );
@@ -59,7 +59,7 @@ std::string extract_matrix_type(json::iterator member) {
     } else {
         throw std::runtime_error(
             std::format(
-                "extract_solve_group: extract_matrix_type invalid key \"{}\" value",
+                "extract_solve_group: extract_matrix_type invalid value for key \"{}\"",
                 member.key()
             )
         );
@@ -72,7 +72,7 @@ double extract_double(json::iterator member) {
     } else {
         throw std::runtime_error(
             std::format(
-                "extract_solve_group: extract_double invalid key \"{}\" value",
+                "extract_solve_group: extract_double invalid value for key \"{}\"",
                 member.key()
             )
         );
@@ -98,7 +98,7 @@ std::vector<std::string> extract_string_vector(json::iterator member) {
     } else {
         throw std::runtime_error(
             std::format(
-                "extract_solve_group: extract_string_vector invalid key \"{}\" value",
+                "extract_solve_group: extract_string_vector invalid value for key \"{}\"",
                 member.key()
             )
         );
