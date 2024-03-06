@@ -5,6 +5,7 @@ project(precision-cascade LANGUAGES CXX CUDA)
 set(
     TEST_SUITES
     test_read.cpp
+    test_run_record.cpp
 )
 
 add_executable(

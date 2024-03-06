@@ -80,7 +80,7 @@ void run_FP64_MP_solves(
         show_plots
     );
     std::cout << fpgmres64_data.get_info_string() << std::endl;
-    record_experimental_data_json(fpgmres64_data, fpgmres64_id, output_dir);
+    record_FPGMRES_experimental_data_json(fpgmres64_data, fpgmres64_id, output_dir);
 
     std::string mpgmres_id = std::format("{}_MPGMRES_{}", matrix_file_name, iteration);
     std::cout << std::format("\nStarting {}", mpgmres_id) << std::endl;
@@ -138,7 +138,7 @@ void run_all_solves(
         show_plots
     );
     std::cout << fpgmres64_data.get_info_string() << std::endl;
-    record_experimental_data_json(fpgmres64_data, fpgmres64_id, output_dir);
+    record_FPGMRES_experimental_data_json(fpgmres64_data, fpgmres64_id, output_dir);
 
     std::string fpgmres32_id = std::format("{}_FPGMRES32_{}", matrix_file_name, iteration);
     std::cout << std::format("\nStarting {}", fpgmres32_id) << std::endl;
@@ -148,7 +148,7 @@ void run_all_solves(
         show_plots
     );
     std::cout << fpgmres32_data.get_info_string() << std::endl;
-    record_experimental_data_json(fpgmres32_data, fpgmres32_id, output_dir);
+    record_FPGMRES_experimental_data_json(fpgmres32_data, fpgmres32_id, output_dir);
 
     std::string fpgmres16_id = std::format("{}_FPGMRES16_{}", matrix_file_name, iteration);
     std::cout << std::format("\nStarting {}", fpgmres16_id) << std::endl;
@@ -158,7 +158,7 @@ void run_all_solves(
         show_plots
     );
     std::cout << fpgmres16_data.get_info_string() << std::endl;
-    record_experimental_data_json(fpgmres16_data, fpgmres16_id, output_dir);
+    record_FPGMRES_experimental_data_json(fpgmres16_data, fpgmres16_id, output_dir);
 
     std::string mpgmres_id = std::format("{}_MPGMRES_{}", matrix_file_name, iteration);
     std::cout << std::format("\nStarting {}", mpgmres_id) << std::endl;

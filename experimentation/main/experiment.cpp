@@ -24,16 +24,23 @@ int main() {
 
     fs::path output_dir_path("C:\\Users\\dosre\\dev\\numerical_experimentation\\output");
     std::cout << "Output directory for experiment data: " << output_dir_path << std::endl;
+    std::cout << std::endl;
 
     fs::directory_iterator dir_iter = fs::directory_iterator(input_dir_path);
+
+    // Validate experimental specs to ensure they can be loaded before testing
     for (auto curr = begin(dir_iter); curr != end(dir_iter); ++curr) {
         try {
-            std::cout << "Parsing experiment specification: {}" << curr->path().string() << std::endl;
+            std::cout << "Validating experiment specification: " << curr->path().string() << std::endl;
             Experiment_Specification loaded_exp_spec = parse_experiment_spec(curr->path());
+
         } catch (std::runtime_error e) {
             std::cout << e.what() << std::endl;
         }
     }
+
+    // Execute experiment accoridng to experimental specs
+
     // std::cout << "*** Start Numerical Experimentation: experiment.cpp ***\n" << std::endl;
 
     // fs::path input_dir_path("C:\\Users\\dosre\\dev\\numerical_experimentation\\input\\experiment_matrices");

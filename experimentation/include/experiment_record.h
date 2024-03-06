@@ -4,9 +4,11 @@
 #include <chrono>
 #include <string>
 #include <format>
-#include <filesystem>
+
 #include <iostream>
+#include <iomanip>
 #include <fstream>
+#include <filesystem>
 
 namespace fs = std::filesystem;
 
@@ -97,7 +99,7 @@ void record_residual_solver_data(
 }
 
 template <template <typename> typename M>
-void record_experimental_data_json(
+void record_FPGMRES_experimental_data_json(
     const Experiment_Data<GenericIterativeSolve, M> &data,
     const std::string ID,
     const fs::path save_dir
@@ -110,9 +112,6 @@ void record_experimental_data_json(
     file_out.open(save_path, std::ofstream::out);
 
     if (file_out.is_open()) {
-
-        file_out << std::scientific;
-        file_out.precision(16);
 
         file_out << "{\n";
 
@@ -145,9 +144,6 @@ void record_MPGMRES_experimental_data_json(
     file_out.open(save_path, std::ofstream::out);
 
     if (file_out.is_open()) {
-
-        file_out << std::scientific;
-        file_out.precision(16);
 
         file_out << "{\n";
 
