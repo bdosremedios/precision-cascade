@@ -16,17 +16,21 @@ public:
     
     const std::string id;
     const int experiment_iterations;
+    const std::string solver_suite_type;
     const std::string matrix_type;
     const SolveArgPkg solver_args;
+    const std::string preconditioning;
     const std::vector<std::string> matrices_to_test;
 
     Solve_Group(
         std::string arg_id,
+        std::string arg_solver_suite_type,
         std::string arg_matrix_type,
         int arg_experiment_iterations,
         int arg_solver_max_outer_iterations,
         int arg_solver_max_inner_iterations,
         double arg_solver_target_relres,
+        std::string preconditioning,
         std::vector<std::string> arg_matrices_to_test
     );
 
@@ -46,11 +50,10 @@ public:
 };
 
 int extract_integer(json::iterator member);
-
+std::string extract_solver_suite_type(json::iterator member);
 std::string extract_matrix_type(json::iterator member);
-
+std::string extract_preconditioning(json::iterator member);
 double extract_double(json::iterator member);
-
 std::vector<std::string> extract_string_vector(json::iterator member);
 
 Solve_Group extract_solve_group(std::string id, json cand_obj);

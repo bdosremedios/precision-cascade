@@ -43,58 +43,34 @@ int main(int argc, char *argv[]) {
     experiment_logger.info(std::format("Found {} experimental spec files", candidate_exp_specs.size()));
 
     // Validate found experimental specs
-    int count_val_success = 0;
-    int count_val_fail = 0;
+    std::vector<Experiment_Specification> valid_exp_specs;
     experiment_logger.info("Validating experimental spec files");
     for (fs::path cand_exp_spec_path : candidate_exp_specs) {
         try {
             experiment_logger.info("Validating: " + cand_exp_spec_path.filename().string());
             Experiment_Specification loaded_exp_spec = parse_experiment_spec(cand_exp_spec_path);
-            ++count_val_success;
+            valid_exp_specs.push_back(loaded_exp_spec);
         } catch (std::runtime_error e) {
             experiment_logger.warn("Failed validation for: " + cand_exp_spec_path.filename().string());
             experiment_logger.warn("Skipping: " + cand_exp_spec_path.filename().string());
-            ++count_val_fail;
         }
     }
     experiment_logger.info(
-        std::format("Completed validation: {} passed | {} fail", count_val_success, count_val_fail)
+        std::format(
+            "Completed validation: {} passed | {} fail",
+            valid_exp_specs.size(),
+            candidate_exp_specs.size()-valid_exp_specs.size()
+        )
     );
 
 
     // Execute valid experimental specs
+    for (Experiment_Specification exp_spec : valid_exp_specs) {
+        experiment_logger.info(exp_spec.id);
 
+    }
 
-    // fs::path input_dir_path("C:\\Users\\dosre\\dev\\numerical_experimentation\\input\\experiment_matrices");
-    // std::cout << "Input directory: " << input_dir_path << std::endl;
-
-    // fs::path output_dir_path("C:\\Users\\dosre\\dev\\numerical_experimentation\\output");
-    // std::cout << "Output directory: " << output_dir_path << std::endl;
-
-    // std::ifstream csv_load_order;
-    // fs::path csv_load_order_path(input_dir_path / fs::path("csv_load_order.txt"));
-    // csv_load_order.open(csv_load_order_path);
-    // std::cout << "csv load order file: " << csv_load_order_path << std::endl << std::endl;
-
-    // if (!csv_load_order.is_open()) {
-    //     throw std::runtime_error("csv_load_order did not load correctly");
-    // }
-
-    // cublasHandle_t handle;
-    // cublasCreate(&handle);
-    // cublasSetPointerMode(handle, CUBLAS_POINTER_MODE_DEVICE);
-
-    // std::string temp_str;
-    // std::getline(csv_load_order, temp_str);
-
-    // bool show_plots = false;
-
-    // run_all_solves<MatrixDense>(
-    //     handle, input_dir_path, temp_str, output_dir_path, 10, 5, //200, 20,
-    //     std::pow(10., -10.), show_plots
-    // );
-
-    // std::cout << "\n*** Finish Numerical Experimentation ***" << std::endl;
+    experiment_logger.info("Finish numerical experiment");
     
     return 0;
 

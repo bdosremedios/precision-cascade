@@ -1,10 +1,12 @@
 {
     "a": {
         "experiment_iterations": 3,
+        "solver_suite_type": "all",
         "matrix_type": "dense",
         "solver_max_outer_iterations": 10,
         "solver_max_inner_iterations": 3,
         "solver_target_relres": 1e-10,
+        "preconditioning": "none",
         "matrices_to_test": [
             "494_bus",
             "662_bus",
@@ -13,20 +15,24 @@
     },
     "b": {
         "experiment_iterations": 1,
+        "solver_suite_type": "all",
         "matrix_type": "sparse",
         "solver_max_outer_iterations": 4,
         "solver_max_inner_iterations": 4,
         "solver_target_relres": 3.5,
+        "preconditioning": "ilu",
         "matrices_to_test": [
             "494_bus"
         ]
     },
     "c": {
         "experiment_iterations": 3,
+        "solver_suite_type": "FP64_MP",
         "matrix_type": "dense",
         "solver_max_outer_iterations": 10,
         "solver_max_inner_iterations": 3,
         "solver_target_relres": 1e-10,
+        "preconditioning": "none",
         "matrices_to_test": [
             "662_bus",
             "685_bus"

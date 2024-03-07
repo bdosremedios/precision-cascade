@@ -15,10 +15,10 @@
     },
     "solve_group_2": {
         "experiment_iterations": 1,
-        "solver_suite_type": "all",
+        "solver_suite_type": "aaaaa",
         "matrix_type": "dense",
         "solver_max_outer_iterations": 4,
-        "solver_max_outer_iterations": 4,
+        "solver_max_inner_iterations": 4,
         "solver_target_relres": 5e-10,
         "preconditioning": "none",
         "matrices_to_test": [
@@ -31,7 +31,7 @@
         "matrix_type": "dense",
         "solver_max_outer_iterations": 4,
         "solver_max_inner_iterations": 10,
-        "solver_target_relres": 5e-10,
+        "solver_target_relres": "asd",
         "preconditioning": "none",
         "matrices_to_test": [
             "685_bus"

@@ -14,10 +14,12 @@ TEST_F(TestRead, TestCorrectSingleEntryJson) {
     ASSERT_EQ(test_spec.solve_groups.size(), 1);
     ASSERT_EQ(test_spec.solve_groups[0].id, "solve_group_1");
     ASSERT_EQ(test_spec.solve_groups[0].experiment_iterations, 3);
+    ASSERT_EQ(test_spec.solve_groups[0].solver_suite_type, "all");
     ASSERT_EQ(test_spec.solve_groups[0].matrix_type, "dense");
     ASSERT_EQ(test_spec.solve_groups[0].solver_args.max_iter, 10);
     ASSERT_EQ(test_spec.solve_groups[0].solver_args.max_inner_iter, 3);
     ASSERT_EQ(test_spec.solve_groups[0].solver_args.target_rel_res, 1e-10);
+    ASSERT_EQ(test_spec.solve_groups[0].preconditioning, "none");
     ASSERT_EQ(test_spec.solve_groups[0].matrices_to_test.size(), 3);
     ASSERT_EQ(test_spec.solve_groups[0].matrices_to_test[0], "494_bus");
     ASSERT_EQ(test_spec.solve_groups[0].matrices_to_test[1], "662_bus");
@@ -36,10 +38,12 @@ TEST_F(TestRead, TestCorrectMultipleEntryJson) {
 
     ASSERT_EQ(test_spec.solve_groups[0].id, "a");
     ASSERT_EQ(test_spec.solve_groups[0].experiment_iterations, 3);
+    ASSERT_EQ(test_spec.solve_groups[0].solver_suite_type, "all");
     ASSERT_EQ(test_spec.solve_groups[0].matrix_type, "dense");
     ASSERT_EQ(test_spec.solve_groups[0].solver_args.max_iter, 10);
     ASSERT_EQ(test_spec.solve_groups[0].solver_args.max_inner_iter, 3);
     ASSERT_EQ(test_spec.solve_groups[0].solver_args.target_rel_res, 1e-10);
+    ASSERT_EQ(test_spec.solve_groups[0].preconditioning, "none");
     ASSERT_EQ(test_spec.solve_groups[0].matrices_to_test.size(), 3);
     ASSERT_EQ(test_spec.solve_groups[0].matrices_to_test[0], "494_bus");
     ASSERT_EQ(test_spec.solve_groups[0].matrices_to_test[1], "662_bus");
@@ -47,19 +51,23 @@ TEST_F(TestRead, TestCorrectMultipleEntryJson) {
 
     ASSERT_EQ(test_spec.solve_groups[1].id, "b");
     ASSERT_EQ(test_spec.solve_groups[1].experiment_iterations, 1);
+    ASSERT_EQ(test_spec.solve_groups[1].solver_suite_type, "all");
     ASSERT_EQ(test_spec.solve_groups[1].matrix_type, "sparse");
     ASSERT_EQ(test_spec.solve_groups[1].solver_args.max_iter, 4);
     ASSERT_EQ(test_spec.solve_groups[1].solver_args.max_inner_iter, 4);
     ASSERT_EQ(test_spec.solve_groups[1].solver_args.target_rel_res, 3.5);
+    ASSERT_EQ(test_spec.solve_groups[1].preconditioning, "ilu");
     ASSERT_EQ(test_spec.solve_groups[1].matrices_to_test.size(), 1);
     ASSERT_EQ(test_spec.solve_groups[1].matrices_to_test[0], "494_bus");
 
     ASSERT_EQ(test_spec.solve_groups[2].id, "c");
     ASSERT_EQ(test_spec.solve_groups[2].experiment_iterations, 3);
+    ASSERT_EQ(test_spec.solve_groups[2].solver_suite_type, "FP64_MP");
     ASSERT_EQ(test_spec.solve_groups[2].matrix_type, "dense");
     ASSERT_EQ(test_spec.solve_groups[2].solver_args.max_iter, 10);
     ASSERT_EQ(test_spec.solve_groups[2].solver_args.max_inner_iter, 3);
     ASSERT_EQ(test_spec.solve_groups[2].solver_args.target_rel_res, 1e-10);
+    ASSERT_EQ(test_spec.solve_groups[2].preconditioning, "none");
     ASSERT_EQ(test_spec.solve_groups[2].matrices_to_test.size(), 2);
     ASSERT_EQ(test_spec.solve_groups[2].matrices_to_test[0], "662_bus");
     ASSERT_EQ(test_spec.solve_groups[2].matrices_to_test[1], "685_bus");
@@ -136,7 +144,7 @@ TEST_F(TestRead, TestBadJsonSolveGroupMemberValues) {
         print_errors,
         [=] () -> void {
             parse_experiment_spec(
-                test_json_dir / fs::path("bad_solve_group_arg_int.json")
+                test_json_dir / fs::path("bad_solve_group_arg_bad_int.json")
             );
         }
     );
@@ -145,7 +153,7 @@ TEST_F(TestRead, TestBadJsonSolveGroupMemberValues) {
         print_errors,
         [=] () -> void {
             parse_experiment_spec(
-                test_json_dir / fs::path("bad_solve_group_arg_double.json")
+                test_json_dir / fs::path("bad_solve_group_arg_bad_double.json")
             );
         }
     );
@@ -154,7 +162,7 @@ TEST_F(TestRead, TestBadJsonSolveGroupMemberValues) {
         print_errors,
         [=] () -> void {
             parse_experiment_spec(
-                test_json_dir / fs::path("bad_solve_group_matrix_type.json")
+                test_json_dir / fs::path("bad_solve_group_arg_bad_solver_suite_type.json")
             );
         }
     );
@@ -163,7 +171,7 @@ TEST_F(TestRead, TestBadJsonSolveGroupMemberValues) {
         print_errors,
         [=] () -> void {
             parse_experiment_spec(
-                test_json_dir / fs::path("bad_solve_group_matrix_type_wrong_str.json")
+                test_json_dir / fs::path("bad_solve_group_arg_bad_solver_suite_type_wrong_str.json")
             );
         }
     );
@@ -172,7 +180,7 @@ TEST_F(TestRead, TestBadJsonSolveGroupMemberValues) {
         print_errors,
         [=] () -> void {
             parse_experiment_spec(
-                test_json_dir / fs::path("bad_solve_group_matrices_empty.json")
+                test_json_dir / fs::path("bad_solve_group_arg_bad_matrix_type.json")
             );
         }
     );
@@ -181,7 +189,43 @@ TEST_F(TestRead, TestBadJsonSolveGroupMemberValues) {
         print_errors,
         [=] () -> void {
             parse_experiment_spec(
-                test_json_dir / fs::path("bad_solve_group_matrices_mem_type.json")
+                test_json_dir / fs::path("bad_solve_group_arg_bad_matrix_type_wrong_str.json")
+            );
+        }
+    );
+
+    CHECK_FUNC_HAS_RUNTIME_ERROR(
+        print_errors,
+        [=] () -> void {
+            parse_experiment_spec(
+                test_json_dir / fs::path("bad_solve_group_arg_bad_preconditioning.json")
+            );
+        }
+    );
+
+    CHECK_FUNC_HAS_RUNTIME_ERROR(
+        print_errors,
+        [=] () -> void {
+            parse_experiment_spec(
+                test_json_dir / fs::path("bad_solve_group_arg_bad_preconditioning_wrong_str.json")
+            );
+        }
+    );
+
+    CHECK_FUNC_HAS_RUNTIME_ERROR(
+        print_errors,
+        [=] () -> void {
+            parse_experiment_spec(
+                test_json_dir / fs::path("bad_solve_group_arg_bad_matrices_empty.json")
+            );
+        }
+    );
+
+    CHECK_FUNC_HAS_RUNTIME_ERROR(
+        print_errors,
+        [=] () -> void {
+            parse_experiment_spec(
+                test_json_dir / fs::path("bad_solve_group_arg_bad_matrices_mem_type.json")
             );
         }
     );

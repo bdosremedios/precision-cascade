@@ -14,14 +14,17 @@ using json = nlohmann::json;
 
 Solve_Group::Solve_Group(
     std::string arg_id,
+    std::string arg_solver_suite_type,
     std::string arg_matrix_type,
     int arg_experiment_iterations,
     int arg_solver_max_outer_iterations,
     int arg_solver_max_inner_iterations,
     double arg_solver_target_relres,
+    std::string arg_preconditioning,
     std::vector<std::string> arg_matrices_to_test
 ): 
     id(arg_id),
+    solver_suite_type(arg_solver_suite_type),
     matrix_type(arg_matrix_type),
     experiment_iterations(arg_experiment_iterations),
     solver_args(
@@ -29,6 +32,7 @@ Solve_Group::Solve_Group(
         arg_solver_max_inner_iterations,
         arg_solver_target_relres
     ),
+    preconditioning(arg_preconditioning),
     matrices_to_test(arg_matrices_to_test)
 {}
 
@@ -53,6 +57,19 @@ int extract_integer(json::iterator member) {
     }
 }
 
+std::string extract_solver_suite_type(json::iterator member) {
+    if ((member->is_string()) && ((*member == "all") || (*member == "FP64_MP"))) {
+        return *member;
+    } else {
+        throw std::runtime_error(
+            std::format(
+                "extract_solve_group: extract_solver_suite_type invalid value for key \"{}\"",
+                member.key()
+            )
+        );
+    }
+}
+
 std::string extract_matrix_type(json::iterator member) {
     if ((member->is_string()) && ((*member == "dense") || (*member == "sparse"))) {
         return *member;
@@ -60,6 +77,19 @@ std::string extract_matrix_type(json::iterator member) {
         throw std::runtime_error(
             std::format(
                 "extract_solve_group: extract_matrix_type invalid value for key \"{}\"",
+                member.key()
+            )
+        );
+    }
+}
+
+std::string extract_preconditioning(json::iterator member) {
+    if ((member->is_string()) && ((*member == "none") || (*member == "ilu"))) {
+        return *member;
+    } else {
+        throw std::runtime_error(
+            std::format(
+                "extract_solve_group: extract_preconditioning invalid value for key \"{}\"",
                 member.key()
             )
         );
@@ -109,15 +139,19 @@ Solve_Group extract_solve_group(std::string id, json cand_obj) {
 
     int member_count = 0;
     int experiment_iterations = -1;
+    std::string solver_suite_type = "";
     std::string matrix_type = "";
     int solver_max_outer_iterations = -1;
     int solver_max_inner_iterations = -1;
     double solver_target_relres = -1.;
+    std::string preconditioning = "";
     std::vector<std::string> matrices_to_test;
-    for (json::iterator it = cand_obj.begin(); (it != cand_obj.end()) && (member_count < 6); ++it) {
+    for (json::iterator it = cand_obj.begin(); (it != cand_obj.end()) && (member_count < 8); ++it) {
 
         if (it.key() == "experiment_iterations") {
             experiment_iterations = extract_integer(it);
+        } else if (it.key() == "solver_suite_type") {
+            solver_suite_type = extract_solver_suite_type(it);
         } else if (it.key() == "matrix_type") {
             matrix_type = extract_matrix_type(it);
         } else if (it.key() == "solver_max_outer_iterations") {
@@ -126,6 +160,8 @@ Solve_Group extract_solve_group(std::string id, json cand_obj) {
             solver_max_inner_iterations = extract_integer(it);
         } else if (it.key() == "solver_target_relres") {
             solver_target_relres = extract_double(it);
+        } else if (it.key() == "preconditioning") {
+            preconditioning = extract_preconditioning(it);
         } else if (it.key() == "matrices_to_test") {
             matrices_to_test = extract_string_vector(it);
         } else {
@@ -142,12 +178,14 @@ Solve_Group extract_solve_group(std::string id, json cand_obj) {
     }
 
     if (
-        (member_count != 6) ||
+        (member_count != 8) ||
         (experiment_iterations == -1) ||
+        (solver_suite_type == "") ||
         (matrix_type == "") ||
         (solver_max_outer_iterations == -1) ||
         (solver_max_inner_iterations == -1) ||
         (solver_target_relres == -1.) ||
+        (preconditioning == "") ||
         (matrices_to_test.size() == 0)
     ) {
         throw std::runtime_error(
@@ -157,11 +195,13 @@ Solve_Group extract_solve_group(std::string id, json cand_obj) {
 
     return Solve_Group(
         id,
+        solver_suite_type,
         matrix_type,
         experiment_iterations,
         solver_max_outer_iterations,
         solver_max_inner_iterations,
         solver_target_relres,
+        preconditioning,
         matrices_to_test
     );
 
