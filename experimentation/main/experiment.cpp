@@ -15,34 +15,55 @@
 
 namespace fs = std::filesystem;
 
-int main() {
+int main(int argc, char *argv[]) {
 
     fs::path data_dir_path("C:\\Users\\dosre\\dev\\numerical_experimentation\\data");
-    std::cout << "Data directory for experiment matrices: " << data_dir_path << std::endl;
-
     fs::path input_dir_path("C:\\Users\\dosre\\dev\\numerical_experimentation\\input");
-    std::cout << "Input directory for experiment specifications: " << input_dir_path << std::endl;
-
     fs::path output_dir_path("C:\\Users\\dosre\\dev\\numerical_experimentation\\output");
-    std::cout << "Output directory for experiment data: " << output_dir_path << std::endl;
-    std::cout << std::endl;
+
+    Experiment_Log experiment_logger(
+        "experiment", output_dir_path / fs::path("experiment.log"), true
+    );
+
+    experiment_logger.info(std::format("Start numerical experiment: {}", argv[0]));
+    experiment_logger.info("Data directory for experiment matrices: " + data_dir_path.string());
+    experiment_logger.info("Input directory for experiment specifications: " + input_dir_path.string());
+    experiment_logger.info("Output directory for experiment data: " + output_dir_path.string());
 
     fs::directory_iterator dir_iter = fs::directory_iterator(input_dir_path);
 
-    // Validate experimental specs to ensure they can be loaded before testing
+    // Find candidate experimental spec files in input directory (all jsons)
+    std::vector<fs::path> candidate_exp_specs;
+    experiment_logger.info(std::format("Searching {} for experimental spec files", input_dir_path.string()));
     for (auto curr = begin(dir_iter); curr != end(dir_iter); ++curr) {
-        try {
-            std::cout << "Validating experiment specification: " << curr->path().string() << std::endl;
-            Experiment_Specification loaded_exp_spec = parse_experiment_spec(curr->path());
-
-        } catch (std::runtime_error e) {
-            std::cout << e.what() << std::endl;
+        if (curr->path().extension() == ".json") {
+            candidate_exp_specs.push_back(curr->path());
         }
     }
+    experiment_logger.info(std::format("Found {} experimental spec files", candidate_exp_specs.size()));
 
-    // Execute each experimental spec
+    // Validate found experimental specs
+    int count_val_success = 0;
+    int count_val_fail = 0;
+    experiment_logger.info("Validating experimental spec files");
+    for (fs::path cand_exp_spec_path : candidate_exp_specs) {
+        try {
+            experiment_logger.info("Validating: " + cand_exp_spec_path.filename().string());
+            Experiment_Specification loaded_exp_spec = parse_experiment_spec(cand_exp_spec_path);
+            ++count_val_success;
+        } catch (std::runtime_error e) {
+            experiment_logger.warn("Failed validation for: " + cand_exp_spec_path.filename().string());
+            experiment_logger.warn("Skipping: " + cand_exp_spec_path.filename().string());
+            ++count_val_fail;
+        }
+    }
+    experiment_logger.info(
+        std::format("Completed validation: {} passed | {} fail", count_val_success, count_val_fail)
+    );
 
-    // std::cout << "*** Start Numerical Experimentation: experiment.cpp ***\n" << std::endl;
+
+    // Execute valid experimental specs
+
 
     // fs::path input_dir_path("C:\\Users\\dosre\\dev\\numerical_experimentation\\input\\experiment_matrices");
     // std::cout << "Input directory: " << input_dir_path << std::endl;
