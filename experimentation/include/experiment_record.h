@@ -35,7 +35,6 @@ public:
 
 };
 
-
 template <template <template <typename> typename> typename Solver, template <typename> typename M>
 struct Experiment_Data
 {

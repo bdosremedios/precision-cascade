@@ -30,3 +30,21 @@ target_include_directories(
     PUBLIC
     ../include
 )
+
+add_compile_definitions(_SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING=1)
+
+add_library(experiment_log experiment_log.cpp)
+
+target_link_libraries(
+    experiment_log
+    PUBLIC
+    spdlog
+)
+
+message(${CMAKE_SOURCE_DIR})
+
+target_include_directories(
+    experiment_log
+    PUBLIC
+    ../include
+)

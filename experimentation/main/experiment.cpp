@@ -11,6 +11,7 @@
 
 #include "experiment_read.h"
 #include "experiment_run.h"
+#include "experiment_log.h"
 
 namespace fs = std::filesystem;
 
@@ -39,7 +40,7 @@ int main() {
         }
     }
 
-    // Execute experiment accoridng to experimental specs
+    // Execute each experimental spec
 
     // std::cout << "*** Start Numerical Experimentation: experiment.cpp ***\n" << std::endl;
 

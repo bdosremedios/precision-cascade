@@ -1,6 +1,4 @@
 eigen
-json
-googletest
 build
 out
 .vs
