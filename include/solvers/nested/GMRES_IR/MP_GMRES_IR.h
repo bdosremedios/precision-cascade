@@ -192,4 +192,38 @@ protected:
 
 };
 
+template <template <typename> typename M>
+class RestartCount: public MP_GMRES_IR_Solve<M>
+{
+protected:
+
+    // *** Constants ***
+    int hlf_iters = 4; // Set time spent in half iteration to min number of iter needed
+                       // to save cost of cast as long as were guranteed 1 MV product
+    int sgl_iters = 2; // Set time spend in single iteration to min number of iter needed
+                       // to save cost of cast as long as were guranteed 1 MV product
+
+    // *** Concrete Override Methods ***
+    int determine_next_phase() override {
+        if (this->cascade_phase == this->HLF_PHASE) {
+            if (this->get_iteration() > hlf_iters) {
+                return this->SGL_PHASE;
+            } else {
+                return this->cascade_phase;
+            }
+        } else if (this->cascade_phase == this->SGL_PHASE) {
+            if (this->get_iteration() > hlf_iters+sgl_iters) {
+                return this->DBL_PHASE;
+            } else {
+                return this->cascade_phase;
+            }
+        } else {
+            return this->DBL_PHASE;
+        }
+    }
+
+    using MP_GMRES_IR_Solve<M>::MP_GMRES_IR_Solve;
+
+};
+
 #endif

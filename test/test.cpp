@@ -21,6 +21,24 @@ int main(int argc, char **argv) {
 
     testing::InitGoogleTest();
 
+    std::string filter_include = "";
+    std::string filter_exclude = "";
+
+    // Check if should onlu run MPGMRES tests
+    bool only_mp_gmres = false;
+    for (int i=0; i<argc; ++i) {
+        if ((std::string(argv[i]) == "--only_mpgmres") || (std::string(argv[i]) == "-om")) {
+            only_mp_gmres = true;
+        }
+    }
+    if (only_mp_gmres) {
+        std::cout << "Running only MP_GMRES_IR_Solve related tests..." << std::endl;
+        if (filter_include != "") { filter_include += ":"; }
+        filter_include += "*MP_GMRES_IR*";
+    } else {
+        std::cout << "Running all tests..." << std::endl;
+    }
+
     // Check if should run long tests
     bool run_long_tests = false;
     for (int i=0; i<argc; ++i) {
@@ -32,21 +50,14 @@ int main(int argc, char **argv) {
         std::cout << "Running long tests..." << std::endl;
     } else {
         std::cout << "Skipping long tests..." << std::endl;
-        testing::GTEST_FLAG(filter) = "-*LONGRUNTIME";
+        if (filter_exclude != "") { filter_exclude += ":"; }
+        filter_exclude += "*LONGRUNTIME";
     }
 
-    // Check if should run long tests
-    bool only_new = false;
-    for (int i=0; i<argc; ++i) {
-        if ((std::string(argv[i]) == "--only_new") || (std::string(argv[i]) == "-on")) {
-            only_new = true;
-        }
-    }
-    if (only_new) {
-        std::cout << "Running only new tests..." << std::endl;
-        testing::GTEST_FLAG(filter) = "*NEW";
+    if (filter_include == "") {
+        testing::GTEST_FLAG(filter) = std::format("*:-{}", filter_exclude);
     } else {
-        std::cout << "Running all tests..." << std::endl;
+        testing::GTEST_FLAG(filter) = std::format("{}:-{}", filter_include, filter_exclude);
     }
 
     // Check if should show plots
