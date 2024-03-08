@@ -68,7 +68,7 @@ int main(int argc, char *argv[]) {
     // Run valid experimental specs
     for (Experiment_Specification exp_spec : valid_exp_specs) {
         experiment_logger.info(exp_spec.id);
-        run_experimental_spec(exp_spec, output_dir_path);
+        run_experimental_spec(exp_spec, output_dir_path, experiment_logger);
     }
 
     experiment_logger.info("Finish numerical experiment");

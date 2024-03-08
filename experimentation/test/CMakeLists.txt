@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.28)
 
 project(precision-cascade LANGUAGES CXX CUDA)
 
+add_compile_definitions(_SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING=1)
+
 set(
     TEST_SUITES
     test_read.cpp
@@ -17,9 +19,8 @@ add_executable(
 target_link_libraries(
     test_experiment
     PUBLIC
-    experiment_read
-    experiment_record
-    precision-cascade
     test_headers
+    experiment_lib
+    precision-cascade
     gtest_main
 )

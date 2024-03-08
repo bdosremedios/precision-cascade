@@ -10,6 +10,7 @@
 
 #include "experiment_read.h"
 #include "experiment_record.h"
+#include "experiment_log.h"
 
 #include "solvers/IterativeSolve.h"
 #include "solvers/nested/GMRES_IR/MP_GMRES_IR.h"
@@ -173,8 +174,33 @@ void run_all_solves(
 
 }
 
-void run_solve_group() { return; }
+void run_solve_group(
+    Solve_Group solve_group, fs::path output_dir, Experiment_Log experiment_logger
+) {
 
-void run_experimental_spec(Experiment_Specification exp_spec, fs::path output_dir) { return; }
+    return;
+}
+
+void run_experimental_spec(
+    Experiment_Specification exp_spec, fs::path output_dir, Experiment_Log experiment_logger
+) {
+
+    fs::path exp_spec_dir = output_dir / fs::path(exp_spec.id);
+    if (!fs::exists(exp_spec_dir)) {
+        experiment_logger.info("Creating experiment spec directory: "+exp_spec_dir.string());
+        fs::create_directory(exp_spec_dir);
+    } else {
+        experiment_logger.info("Clearing experiment spec directory: "+exp_spec_dir.string());
+        for (auto member : fs::directory_iterator(exp_spec_dir)) {
+            fs::remove_all(member);
+        }
+    }
+
+    experiment_logger.info("Running experiment spec: "+exp_spec.id);
+    for (Solve_Group solve_group : exp_spec.solve_groups) {
+        run_solve_group(solve_group, exp_spec_dir, experiment_logger);
+    }
+
+}
 
 #endif
