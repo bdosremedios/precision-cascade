@@ -10,58 +10,12 @@
 #include <fstream>
 #include <filesystem>
 
-namespace fs = std::filesystem;
-
 #include "solvers/IterativeSolve.h"
 #include "solvers/nested/GMRES_IR/MP_GMRES_IR.h"
 
-class Experiment_Clock 
-{
-public:
+#include "experiment_tools.h"
 
-    std::chrono::steady_clock clock;
-    std::chrono::time_point<std::chrono::steady_clock> start;
-    std::chrono::time_point<std::chrono::steady_clock> stop;
-    std::chrono::milliseconds time_ms;
-    bool clock_ticking = false;
-
-    void start_clock_experiment();
-    
-    void stop_clock_experiment();
-
-    int get_elapsed_time_ms() const;
-
-    std::string get_info_string() const;
-
-};
-
-template <template <template <typename> typename> typename Solver, template <typename> typename M>
-struct Experiment_Data
-{
-public:
-    
-    Experiment_Clock clock;
-    std::shared_ptr<Solver<M>> solver_ptr;
-
-    Experiment_Data(
-        Experiment_Clock arg_clock,
-        std::shared_ptr<Solver<M>> arg_solver_ptr
-    ):
-        clock(arg_clock), solver_ptr(arg_solver_ptr) 
-    {}
-
-    Experiment_Data(const Experiment_Data &other) = default;
-    Experiment_Data & operator=(const Experiment_Data &other) = default;
-
-    std::string get_info_string() const {
-        return std::format(
-            "{} | {}",
-            clock.get_info_string(),
-            solver_ptr->get_info_string()
-        );
-    }
-
-};
+namespace fs = std::filesystem;
 
 std::string vector_to_jsonarray_str(std::vector<double> vec, int padding_level);
 

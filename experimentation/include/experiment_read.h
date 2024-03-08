@@ -3,51 +3,17 @@
 
 #include <nlohmann/json.hpp>
 
-#include <filesystem>
+#include "experiment_tools.h"
 
-#include "tools/arg_pkgs/SolveArgPkg.h"
+#include <filesystem>
+#include <fstream>
+
+#include <format>
+#include <string>
+#include <vector>
 
 namespace fs = std::filesystem;
 using json = nlohmann::json;
-
-struct Solve_Group
-{
-public:
-    
-    const std::string id;
-    const int experiment_iterations;
-    const std::string solver_suite_type;
-    const std::string matrix_type;
-    const SolveArgPkg solver_args;
-    const std::string preconditioning;
-    const std::vector<std::string> matrices_to_test;
-
-    Solve_Group(
-        std::string arg_id,
-        std::string arg_solver_suite_type,
-        std::string arg_matrix_type,
-        int arg_experiment_iterations,
-        int arg_solver_max_outer_iterations,
-        int arg_solver_max_inner_iterations,
-        double arg_solver_target_relres,
-        std::string preconditioning,
-        std::vector<std::string> arg_matrices_to_test
-    );
-
-};
-
-struct Experiment_Specification
-{
-public:
-    
-    const std::string id;
-    std::vector<Solve_Group> solve_groups;
-
-    Experiment_Specification(std::string arg_id);
-
-    void add_solve_group(Solve_Group solve_group);
-
-};
 
 int extract_integer(json::iterator member);
 std::string extract_solver_suite_type(json::iterator member);

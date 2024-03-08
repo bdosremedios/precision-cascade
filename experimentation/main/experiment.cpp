@@ -9,6 +9,7 @@
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
 
+#include "experiment_tools.h"
 #include "experiment_read.h"
 #include "experiment_run.h"
 #include "experiment_log.h"
@@ -64,10 +65,10 @@ int main(int argc, char *argv[]) {
     );
 
 
-    // Execute valid experimental specs
+    // Run valid experimental specs
     for (Experiment_Specification exp_spec : valid_exp_specs) {
         experiment_logger.info(exp_spec.id);
-
+        run_experimental_spec(exp_spec, output_dir_path);
     }
 
     experiment_logger.info("Finish numerical experiment");

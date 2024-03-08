@@ -8,6 +8,7 @@
 #include "types/types.h"
 #include "tools/read_matrix.h"
 
+#include "experiment_read.h"
 #include "experiment_record.h"
 
 #include "solvers/IterativeSolve.h"
@@ -171,5 +172,9 @@ void run_all_solves(
     record_MPGMRES_experimental_data_json(mpgmres_data, mpgmres_id, output_dir);
 
 }
+
+void run_solve_group() { return; }
+
+void run_experimental_spec(Experiment_Specification exp_spec, fs::path output_dir) { return; }
 
 #endif

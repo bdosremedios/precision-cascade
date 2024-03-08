@@ -2,13 +2,28 @@ cmake_minimum_required(VERSION 3.28)
 
 project(precision-cascade LANGUAGES CUDA CXX)
 
+add_library(experiment_tools experiment_tools.cpp)
+
+target_link_libraries(
+    experiment_tools
+    PUBLIC
+    precision-cascade
+)
+
+target_include_directories(
+    experiment_tools
+    PUBLIC
+    ../include
+)
+
 add_library(experiment_read experiment_read.cpp)
 
 target_link_libraries(
     experiment_read
     PUBLIC
-    precision-cascade
     nlohmann_json::nlohmann_json
+    precision-cascade
+    experiment_tools
 )
 
 target_include_directories(
@@ -23,6 +38,7 @@ target_link_libraries(
     experiment_record
     PUBLIC
     precision-cascade
+    experiment_tools
 )
 
 target_include_directories(
@@ -40,8 +56,6 @@ target_link_libraries(
     PUBLIC
     spdlog
 )
-
-message(${CMAKE_SOURCE_DIR})
 
 target_include_directories(
     experiment_log

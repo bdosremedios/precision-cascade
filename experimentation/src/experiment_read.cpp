@@ -1,49 +1,5 @@
 #include "experiment_read.h"
 
-#include <nlohmann/json.hpp>
-
-#include <filesystem>
-#include <fstream>
-
-#include <string>
-#include <tuple>
-#include <vector>
-
-namespace fs = std::filesystem;
-using json = nlohmann::json;
-
-Solve_Group::Solve_Group(
-    std::string arg_id,
-    std::string arg_solver_suite_type,
-    std::string arg_matrix_type,
-    int arg_experiment_iterations,
-    int arg_solver_max_outer_iterations,
-    int arg_solver_max_inner_iterations,
-    double arg_solver_target_relres,
-    std::string arg_preconditioning,
-    std::vector<std::string> arg_matrices_to_test
-): 
-    id(arg_id),
-    solver_suite_type(arg_solver_suite_type),
-    matrix_type(arg_matrix_type),
-    experiment_iterations(arg_experiment_iterations),
-    solver_args(
-        arg_solver_max_outer_iterations,
-        arg_solver_max_inner_iterations,
-        arg_solver_target_relres
-    ),
-    preconditioning(arg_preconditioning),
-    matrices_to_test(arg_matrices_to_test)
-{}
-
-Experiment_Specification::Experiment_Specification(std::string arg_id):
-    id(arg_id)
-{}
-
-void Experiment_Specification::add_solve_group(Solve_Group solve_group) {
-    solve_groups.push_back(solve_group);
-}
-
 int extract_integer(json::iterator member) {
     if (member->is_number_integer()) {
         return *member;
@@ -242,7 +198,7 @@ Experiment_Specification parse_experiment_spec(fs::path exp_spec_path) {
 
             throw std::runtime_error(
                 std::format(
-                    "parse_experiment_spec: solve group with id \"{}\" is not json_object",
+                    "parse_experiment_spec: solve group with id \"{}\" is not a json object",
                     iter.key()
                 )
             );
