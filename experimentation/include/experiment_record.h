@@ -13,6 +13,7 @@
 #include "solvers/IterativeSolve.h"
 #include "solvers/nested/GMRES_IR/MP_GMRES_IR.h"
 
+#include "experiment_log.h"
 #include "experiment_tools.h"
 
 namespace fs = std::filesystem;
@@ -55,11 +56,12 @@ template <template <typename> typename M>
 void record_FPGMRES_experimental_data_json(
     const Experiment_Data<GenericIterativeSolve, M> &data,
     const std::string ID,
-    const fs::path save_dir
+    const fs::path save_dir,
+    Experiment_Log logger
 ) {
 
     fs::path save_path(save_dir / fs::path(ID + ".json"));
-    std::cout << std::format("Saving Experimental Data to: {}", save_path.string()) << std::endl;
+    logger.info(std::format("Save data to: {}", save_path.string()));
     
     std::ofstream file_out;
     file_out.open(save_path, std::ofstream::out);
@@ -87,11 +89,12 @@ template <template <typename> typename M>
 void record_MPGMRES_experimental_data_json(
     const Experiment_Data<MP_GMRES_IR_Solve, M> &data,
     const std::string ID,
-    const fs::path save_dir
+    const fs::path save_dir,
+    Experiment_Log logger
 ) {
 
     fs::path save_path(save_dir / fs::path(ID + ".json"));
-    std::cout << std::format("Saving Experimental Data to: {}", save_path.string()) << std::endl;
+    logger.info(std::format("Save data to: {}", save_path.string()));
     
     std::ofstream file_out;
     file_out.open(save_path, std::ofstream::out);

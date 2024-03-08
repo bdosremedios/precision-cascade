@@ -25,6 +25,7 @@ public:
 
     std::shared_ptr<spdlog::logger> logger;
 
+    Experiment_Log();
     Experiment_Log(std::string logger_name, fs::path log_file, bool print_to_stdout);
 
     void info(std::string s);

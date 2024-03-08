@@ -30,6 +30,7 @@ public:
     MatrixDense<double> A = MatrixDense<double>(NULL);
     Vector<double> b = Vector<double>(NULL);
     const double u_dbl = std::pow(2, -52);
+    Experiment_Log logger;
 
     TestRecord() {
         handle_ptr = new cublasHandle_t;
@@ -37,6 +38,7 @@ public:
         cublasSetPointerMode(*handle_ptr, CUBLAS_POINTER_MODE_DEVICE);
         A = MatrixDense<double>::Random(*handle_ptr, 16, 16);
         b = A*Vector<double>::Random(*handle_ptr, 16);
+        logger = Experiment_Log();
     }
 
     ~TestRecord() {
@@ -62,11 +64,11 @@ TEST_F(TestRecord, TestRunAndOutputJsonFPGMRES) {
     solve_ptr = std::make_shared<FP_GMRES_IR_Solve<MatrixDense, double>>(lin_sys, u_dbl, solve_args);
 
     Experiment_Data<GenericIterativeSolve, MatrixDense> data(
-        run_solve_experiment<GenericIterativeSolve, MatrixDense>(solve_ptr, false)
+        execute_solve<GenericIterativeSolve, MatrixDense>(solve_ptr, false)
     );
 
     std::string id = "FPGMRESTestRecord";
-    record_FPGMRES_experimental_data_json(data, id, test_json_dir);
+    record_FPGMRES_experimental_data_json(data, id, test_json_dir, logger);
 
     fs::path file_path = test_json_dir / fs::path(id + ".json");
     std::ifstream file_in(file_path);
@@ -99,11 +101,11 @@ TEST_F(TestRecord, TestRunAndOutputJsonMPGMRES) {
     solve_ptr = std::make_shared<SimpleConstantThreshold<MatrixDense>>(lin_sys, solve_args);
 
     Experiment_Data<MP_GMRES_IR_Solve, MatrixDense> data(
-        run_solve_experiment<MP_GMRES_IR_Solve, MatrixDense>(solve_ptr, false)
+        execute_solve<MP_GMRES_IR_Solve, MatrixDense>(solve_ptr, false)
     );
 
     std::string id = "MPGMRESTestRecord";
-    record_MPGMRES_experimental_data_json(data, id, test_json_dir);
+    record_MPGMRES_experimental_data_json(data, id, test_json_dir, logger);
 
     fs::path file_path = test_json_dir / fs::path(id + ".json");
     std::ifstream file_in(file_path);

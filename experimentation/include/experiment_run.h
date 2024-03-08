@@ -4,13 +4,17 @@
 #include <filesystem>
 #include <format>
 #include <string>
+#include <utility>
+
+#include <cuda_runtime.h>
+#include <cublas_v2.h>
 
 #include "types/types.h"
 #include "tools/read_matrix.h"
 
+#include "experiment_log.h"
 #include "experiment_read.h"
 #include "experiment_record.h"
-#include "experiment_log.h"
 
 #include "solvers/IterativeSolve.h"
 #include "solvers/nested/GMRES_IR/MP_GMRES_IR.h"
@@ -22,8 +26,36 @@ static const double u_hlf = std::pow(2, -10);
 static const double u_sgl = std::pow(2, -23);
 static const double u_dbl = std::pow(2, -52);
 
+template <template <typename> typename M>
+using LinSysSolnPair = std::pair<TypedLinearSystem<M, double>, Vector<double>>;
+
+template <template <typename> typename M>
+LinSysSolnPair<M> load_linear_problem(
+    cublasHandle_t handle,
+    fs::path input_dir,
+    std::string matrix_name,
+    Experiment_Log logger
+) {
+
+    fs::path matrix_path = input_dir / fs::path(matrix_name+".csv");
+
+    logger.info(std::format("Loading: {}", matrix_path.string()));
+
+    M<double> A(read_matrixCSV<M, double>(handle, matrix_path));
+    A.normalize_magnitude();
+    logger.info(std::format("Matrix info: {}", A.get_info_string()));
+
+    Vector<double> true_x(Vector<double>::Random(handle, A.cols()));
+    Vector<double> b(A*true_x);
+
+    return LinSysSolnPair(TypedLinearSystem<M, double>(A, b), true_x);
+
+}
+
+void create_or_clear_directory(fs::path dir, Experiment_Log logger);
+
 template <template <template <typename> typename> typename Solver, template <typename> typename M>
-Experiment_Data<Solver, M> run_solve_experiment(
+Experiment_Data<Solver, M> execute_solve(
     std::shared_ptr<Solver<M>> arg_solver_ptr,
     bool show_plots
 ) {
@@ -38,169 +70,132 @@ Experiment_Data<Solver, M> run_solve_experiment(
 
 }
 
-template <template <typename> typename M>
-void run_FP64_MP_solves(
-    const cublasHandle_t handle,
-    const fs::path input_dir,
-    const std::string matrix_file_name,
-    const fs::path output_dir,
-    const int max_iter,
-    const int max_inner_iter,
-    const double target_rel_res,
-    const bool show_plots,
-    const int iteration = 0
+template <template <template <typename> typename> typename Solver, template <typename> typename M>
+void run_record_FPGMRES_solve(
+    std::shared_ptr<Solver<M>> arg_solver_ptr,
+    std::string matrix_name,
+    std::string solve_name,
+    int exp_iter,
+    fs::path output_dir,
+    bool show_plots,
+    Experiment_Log logger
 ) {
-
-    fs::path matrix_path = input_dir / fs::path(matrix_file_name+".csv");
-
-    std::cout << std::format("Loading: {}", matrix_path.string()) << std::endl;
-
-    M<double> A(read_matrixCSV<M, double>(handle, matrix_path));
-    A.normalize_magnitude();
-    std::cout << A.get_info_string() << std::endl;
-
-    Vector<double> true_x(Vector<double>::Random(handle, A.cols()));
-
-    Vector<double> b(A*true_x);
-    std::cout << b.get_info_string() << std::endl;
-
-    SolveArgPkg solve_args;
-    solve_args.init_guess = Vector<double>::Zero(handle, A.cols());
-    solve_args.max_iter = max_iter;
-    solve_args.max_inner_iter = max_inner_iter;
-    solve_args.target_rel_res = target_rel_res;
-
-    TypedLinearSystem<M, double> lin_sys_dbl(A, b);
-    TypedLinearSystem<M, float> lin_sys_sgl(A, b);
-    TypedLinearSystem<M, __half> lin_sys_hlf(A, b);
-
-    std::string fpgmres64_id = std::format("{}_FPGMRES64_{}", matrix_file_name, iteration);
-    std::cout << std::format("\nStarting {}", fpgmres64_id) << std::endl;
-    std::cout << solve_args.get_info_string() << std::endl;
-    Experiment_Data<GenericIterativeSolve, M> fpgmres64_data = run_solve_experiment<GenericIterativeSolve, M>(
-        std::make_shared<FP_GMRES_IR_Solve<M, double>>(lin_sys_dbl, u_dbl, solve_args),
+    std::string solve_experiment_id = std::format("{}_{}_{}", matrix_name, solve_name, exp_iter);
+    logger.info(std::format("Running solve experiment: {}", solve_experiment_id));
+    Experiment_Data<GenericIterativeSolve, M> data = execute_solve<GenericIterativeSolve, M>(
+        arg_solver_ptr,
         show_plots
     );
-    std::cout << fpgmres64_data.get_info_string() << std::endl;
-    record_FPGMRES_experimental_data_json(fpgmres64_data, fpgmres64_id, output_dir);
-
-    std::string mpgmres_id = std::format("{}_MPGMRES_{}", matrix_file_name, iteration);
-    std::cout << std::format("\nStarting {}", mpgmres_id) << std::endl;
-    std::cout << solve_args.get_info_string() << std::endl;
-    Experiment_Data<MP_GMRES_IR_Solve, M> mpgmres_data = run_solve_experiment<MP_GMRES_IR_Solve, M>(
-        std::make_shared<SimpleConstantThreshold<M>>(lin_sys_dbl, solve_args),
-        show_plots
-    );
-    std::cout << mpgmres_data.get_info_string() << std::endl;
-    record_MPGMRES_experimental_data_json(mpgmres_data, mpgmres_id, output_dir);
-
+    logger.info(data.get_info_string());
+    record_FPGMRES_experimental_data_json(data, solve_experiment_id, output_dir, logger);
 }
 
 template <template <typename> typename M>
-void run_all_solves(
-    const cublasHandle_t handle,
-    const fs::path input_dir,
-    const std::string matrix_file_name,
-    const fs::path output_dir,
-    const int max_iter,
-    const int max_inner_iter,
-    const double target_rel_res,
-    const bool show_plots,
-    const int iteration = 0
+void run_record_MPGMRES_solve(
+    std::shared_ptr<MP_GMRES_IR_Solve<M>> arg_solver_ptr,
+    std::string matrix_name,
+    std::string solve_name,
+    int exp_iter,
+    fs::path output_dir,
+    bool show_plots,
+    Experiment_Log logger
 ) {
-
-    fs::path matrix_path = input_dir / fs::path(matrix_file_name+".csv");
-
-    std::cout << std::format("Loading: {}", matrix_path.string()) << std::endl;
-
-    M<double> A(read_matrixCSV<M, double>(handle, matrix_path));
-    A.normalize_magnitude();
-    std::cout << A.get_info_string() << std::endl;
-
-    Vector<double> true_x(Vector<double>::Random(handle, A.cols()));
-
-    Vector<double> b(A*true_x);
-    std::cout << b.get_info_string() << std::endl;
-
-    SolveArgPkg solve_args;
-    solve_args.init_guess = Vector<double>::Zero(handle, A.cols());
-    solve_args.max_iter = max_iter;
-    solve_args.max_inner_iter = max_inner_iter;
-    solve_args.target_rel_res = target_rel_res;
-
-    TypedLinearSystem<M, double> lin_sys_dbl(A, b);
-    TypedLinearSystem<M, float> lin_sys_sgl(A, b);
-    TypedLinearSystem<M, __half> lin_sys_hlf(A, b);
-
-    std::string fpgmres64_id = std::format("{}_FPGMRES64_{}", matrix_file_name, iteration);
-    std::cout << std::format("\nStarting {}", fpgmres64_id) << std::endl;
-    std::cout << solve_args.get_info_string() << std::endl;
-    Experiment_Data<GenericIterativeSolve, M> fpgmres64_data = run_solve_experiment<GenericIterativeSolve, M>(
-        std::make_shared<FP_GMRES_IR_Solve<M, double>>(lin_sys_dbl, u_dbl, solve_args),
+    std::string solve_experiment_id = std::format("{}_{}_{}", matrix_name, solve_name, exp_iter);
+    logger.info(std::format("Running solve experiment: {}", solve_experiment_id));
+    Experiment_Data<MP_GMRES_IR_Solve, M> data = execute_solve<MP_GMRES_IR_Solve, M>(
+        arg_solver_ptr,
         show_plots
     );
-    std::cout << fpgmres64_data.get_info_string() << std::endl;
-    record_FPGMRES_experimental_data_json(fpgmres64_data, fpgmres64_id, output_dir);
-
-    std::string fpgmres32_id = std::format("{}_FPGMRES32_{}", matrix_file_name, iteration);
-    std::cout << std::format("\nStarting {}", fpgmres32_id) << std::endl;
-    std::cout << solve_args.get_info_string() << std::endl;
-    Experiment_Data<GenericIterativeSolve, M> fpgmres32_data = run_solve_experiment<GenericIterativeSolve, M>(
-        std::make_shared<FP_GMRES_IR_Solve<M, float>>(lin_sys_sgl, u_sgl, solve_args),
-        show_plots
-    );
-    std::cout << fpgmres32_data.get_info_string() << std::endl;
-    record_FPGMRES_experimental_data_json(fpgmres32_data, fpgmres32_id, output_dir);
-
-    std::string fpgmres16_id = std::format("{}_FPGMRES16_{}", matrix_file_name, iteration);
-    std::cout << std::format("\nStarting {}", fpgmres16_id) << std::endl;
-    std::cout << solve_args.get_info_string() << std::endl;
-    Experiment_Data<GenericIterativeSolve, M> fpgmres16_data = run_solve_experiment<GenericIterativeSolve, M>(
-        std::make_shared<FP_GMRES_IR_Solve<M, __half>>(lin_sys_hlf, u_hlf, solve_args),
-        show_plots
-    );
-    std::cout << fpgmres16_data.get_info_string() << std::endl;
-    record_FPGMRES_experimental_data_json(fpgmres16_data, fpgmres16_id, output_dir);
-
-    std::string mpgmres_id = std::format("{}_MPGMRES_{}", matrix_file_name, iteration);
-    std::cout << std::format("\nStarting {}", mpgmres_id) << std::endl;
-    std::cout << solve_args.get_info_string() << std::endl;
-    Experiment_Data<MP_GMRES_IR_Solve, M> mpgmres_data = run_solve_experiment<MP_GMRES_IR_Solve, M>(
-        std::make_shared<SimpleConstantThreshold<M>>(lin_sys_dbl, solve_args),
-        show_plots
-    );
-    std::cout << mpgmres_data.get_info_string() << std::endl;
-    record_MPGMRES_experimental_data_json(mpgmres_data, mpgmres_id, output_dir);
-
+    logger.info(data.get_info_string());
+    record_MPGMRES_experimental_data_json(data, solve_experiment_id, output_dir, logger);
 }
 
+template <template <typename> typename M>
 void run_solve_group(
-    Solve_Group solve_group, fs::path output_dir, Experiment_Log experiment_logger
+    cublasHandle_t handle,
+    Solve_Group solve_group,
+    fs::path data_dir,
+    fs::path output_dir,
+    Experiment_Log outer_logger
 ) {
 
-    return;
-}
+    outer_logger.info("Running solve group: "+solve_group.id);
 
-void run_experimental_spec(
-    Experiment_Specification exp_spec, fs::path output_dir, Experiment_Log experiment_logger
-) {
+    fs::path solve_group_dir = output_dir / fs::path(solve_group.id);
+    create_or_clear_directory(solve_group_dir, outer_logger);
 
-    fs::path exp_spec_dir = output_dir / fs::path(exp_spec.id);
-    if (!fs::exists(exp_spec_dir)) {
-        experiment_logger.info("Creating experiment spec directory: "+exp_spec_dir.string());
-        fs::create_directory(exp_spec_dir);
-    } else {
-        experiment_logger.info("Clearing experiment spec directory: "+exp_spec_dir.string());
-        for (auto member : fs::directory_iterator(exp_spec_dir)) {
-            fs::remove_all(member);
+    Experiment_Log logger(
+        solve_group.id + "_logger", solve_group_dir / fs::path(solve_group.id + ".log"), false
+    );
+    logger.info(std::format("Solve info: {}", solve_group.solver_args.get_info_string()));
+
+    bool show_plots = false;
+
+    for (std::string matrix_name : solve_group.matrices_to_test) {
+        for (int exp_iter = 0; exp_iter < solve_group.experiment_iterations; ++exp_iter) {
+
+            LinSysSolnPair<M> lin_sys_pair = load_linear_problem<M>(handle, data_dir, matrix_name, logger);
+            TypedLinearSystem<M, double> lin_sys_dbl(lin_sys_pair.first);
+
+            if (solve_group.solver_suite_type == "all") {
+
+                TypedLinearSystem<M, __half> lin_sys_hlf(lin_sys_dbl.get_A(), lin_sys_dbl.get_b());
+
+                run_record_FPGMRES_solve<GenericIterativeSolve, M>(
+                    std::make_shared<FP_GMRES_IR_Solve<M, __half>>(
+                        lin_sys_hlf, u_hlf, solve_group.solver_args
+                    ),
+                    matrix_name, "FPGMRES16", exp_iter,
+                    solve_group_dir,
+                    false, logger
+                );
+
+                TypedLinearSystem<M, float> lin_sys_sgl(lin_sys_dbl.get_A(), lin_sys_dbl.get_b());
+
+                run_record_FPGMRES_solve<GenericIterativeSolve, M>(
+                    std::make_shared<FP_GMRES_IR_Solve<M, float>>(
+                        lin_sys_sgl, u_sgl, solve_group.solver_args
+                    ),
+                    matrix_name, "FPGMRES32", exp_iter,
+                    solve_group_dir,
+                    false, logger
+                );
+
+            }
+
+            if ((solve_group.solver_suite_type == "all") || (solve_group.solver_suite_type == "FP64_MP")) {
+
+                run_record_FPGMRES_solve<GenericIterativeSolve, M>(
+                    std::make_shared<FP_GMRES_IR_Solve<M, double>>(
+                        lin_sys_dbl, u_dbl, solve_group.solver_args
+                    ),
+                    matrix_name, "FPGMRES64", exp_iter,
+                    solve_group_dir,
+                    false, logger
+                );
+
+                run_record_MPGMRES_solve<M>(
+                    std::make_shared<SimpleConstantThreshold<M>>(
+                        lin_sys_dbl, solve_group.solver_args
+                    ),
+                    matrix_name, "MPGMRES", exp_iter,
+                    solve_group_dir,
+                    false, logger
+                );
+
+            }
+
         }
     }
 
-    experiment_logger.info("Running experiment spec: "+exp_spec.id);
-    for (Solve_Group solve_group : exp_spec.solve_groups) {
-        run_solve_group(solve_group, exp_spec_dir, experiment_logger);
-    }
-
 }
+
+void run_experimental_spec(
+    cublasHandle_t handle,
+    Experiment_Specification exp_spec,
+    fs::path data_dir,
+    fs::path output_dir,
+    Experiment_Log logger
+);
 
 #endif
