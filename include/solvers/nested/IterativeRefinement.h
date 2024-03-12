@@ -28,7 +28,7 @@ protected:
 
     // Create initial guess for inner solver
     Vector<double> make_inner_IR_guess(GenericLinearSystem<M> const &arg_lin_sys) const {
-        return Vector<double>::Zero(arg_lin_sys.get_handle(), arg_lin_sys.get_n());
+        return Vector<double>::Zero(arg_lin_sys.get_cu_handles(), arg_lin_sys.get_n());
     }
 
 public:

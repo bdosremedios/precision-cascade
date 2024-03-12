@@ -14,8 +14,8 @@ public:
         const fs::path &b_file_path
     ) {
 
-        M<double> A(read_matrixCSV<M, double>(*handle_ptr, A_file_path));
-        Vector<double> b(read_matrixCSV<Vector, double>(*handle_ptr, b_file_path));
+        M<double> A(read_matrixCSV<M, double>(TestBase::bundle, A_file_path));
+        Vector<double> b(read_matrixCSV<Vector, double>(TestBase::bundle, b_file_path));
 
         GenericLinearSystem<M> lin_sys(A, b);
         MP_GMRES_Impl<M> mp_gmres_ir_solve(lin_sys, dbl_GMRES_IR_args);
@@ -57,6 +57,36 @@ TEST_F(MP_GMRES_IR_SolveTest, SimpleConstantThreshold_ConvDiff1024_LONGRUNTIME) 
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_1024_b.csv"));
 
     SolveTest<SimpleConstantThreshold, MatrixDense>(A_path, b_path);
+    // SolveTest<MatrixSparse>(A_path, b_path);
+
+}
+
+TEST_F(MP_GMRES_IR_SolveTest, RestartCount_ConvDiff64) {
+
+    fs::path A_path(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
+    fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
+
+    SolveTest<RestartCount, MatrixDense>(A_path, b_path);
+    // SolveTest<MatrixSparse>(A_path, b_path);
+
+}
+
+TEST_F(MP_GMRES_IR_SolveTest, RestartCount_ConvDiff256) {
+
+    fs::path A_path(solve_matrix_dir / fs::path("conv_diff_256_A.csv"));
+    fs::path b_path(solve_matrix_dir / fs::path("conv_diff_256_b.csv"));
+
+    SolveTest<RestartCount, MatrixDense>(A_path, b_path);
+    // SolveTest<MatrixSparse>(A_path, b_path);
+
+}
+
+TEST_F(MP_GMRES_IR_SolveTest, RestartCount_ConvDiff1024_LONGRUNTIME) {
+
+    fs::path A_path(solve_matrix_dir / fs::path("conv_diff_1024_A.csv"));
+    fs::path b_path(solve_matrix_dir / fs::path("conv_diff_1024_b.csv"));
+
+    SolveTest<RestartCount, MatrixDense>(A_path, b_path);
     // SolveTest<MatrixSparse>(A_path, b_path);
 
 }

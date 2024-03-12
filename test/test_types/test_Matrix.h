@@ -10,7 +10,7 @@ protected:
         
         constexpr int m(24);
         constexpr int n(12);
-        M<T> test_mat(*handle_ptr, m, n);
+        M<T> test_mat(TestBase::bundle, m, n);
 
         Scalar<T> elem(static_cast<T>(1));
         for (int i=0; i<m; ++i) {
@@ -107,7 +107,7 @@ protected:
         
         constexpr int m(24);
         constexpr int n(12);
-        M<double> test_mat(M<double>::Random(*handle_ptr, m, n));
+        M<double> test_mat(M<double>::Random(TestBase::bundle, m, n));
 
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { test_mat.get_elem(0, -1); });
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { test_mat.get_elem(0, n); });
@@ -138,19 +138,19 @@ protected:
 
         constexpr int m_1(62);
         constexpr int n_1(3);
-        M<T> mat_1(*handle_ptr, m_1, n_1);
+        M<T> mat_1(TestBase::bundle, m_1, n_1);
         ASSERT_EQ(mat_1.rows(), m_1);
         ASSERT_EQ(mat_1.cols(), n_1);
 
         constexpr int m_2(15);
         constexpr int n_2(90);
-        M<T> mat_2(*handle_ptr, m_2, n_2);
+        M<T> mat_2(TestBase::bundle, m_2, n_2);
         ASSERT_EQ(mat_2.rows(), m_2);
         ASSERT_EQ(mat_2.cols(), n_2);
 
         constexpr int m_3(20);
         constexpr int n_3(20);
-        M<T> mat_3(*handle_ptr, m_3, n_3);
+        M<T> mat_3(TestBase::bundle, m_3, n_3);
         ASSERT_EQ(mat_3.rows(), m_3);
         ASSERT_EQ(mat_3.cols(), n_3);
 
@@ -159,21 +159,21 @@ protected:
     template <typename T>
     void TestConstruction() {
 
-        M<T> test_mat_empty(*handle_ptr);
+        M<T> test_mat_empty(TestBase::bundle);
         ASSERT_EQ(test_mat_empty.rows(), 0);
         ASSERT_EQ(test_mat_empty.cols(), 0);
 
         constexpr int m(12);
-        M<T> test_mat_square(*handle_ptr, m, m);
+        M<T> test_mat_square(TestBase::bundle, m, m);
         ASSERT_EQ(test_mat_square.rows(), m);
         ASSERT_EQ(test_mat_square.cols(), m);
 
         constexpr int n(33);
-        M<T> test_mat_wide(*handle_ptr, m, n);
+        M<T> test_mat_wide(TestBase::bundle, m, n);
         ASSERT_EQ(test_mat_wide.rows(), m);
         ASSERT_EQ(test_mat_wide.cols(), n);
 
-        M<T> test_mat_tall(*handle_ptr, n, m);
+        M<T> test_mat_tall(TestBase::bundle, n, m);
         ASSERT_EQ(test_mat_tall.rows(), n);
         ASSERT_EQ(test_mat_tall.cols(), m);
 
@@ -182,16 +182,16 @@ protected:
     template <typename T>
     void TestListInitialization() {
 
-        M<T> test_mat_0_0 (*handle_ptr, {});
+        M<T> test_mat_0_0 (TestBase::bundle, {});
         ASSERT_EQ(test_mat_0_0.rows(), 0);
         ASSERT_EQ(test_mat_0_0.cols(), 0);
 
-        M<T> test_mat_0_1 (*handle_ptr, {{}});
+        M<T> test_mat_0_1 (TestBase::bundle, {{}});
         ASSERT_EQ(test_mat_0_1.rows(), 1);
         ASSERT_EQ(test_mat_0_1.cols(), 0);
 
         M<T> test_mat_1(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(5.), static_cast<T>(3.), static_cast<T>(27.)},
              {static_cast<T>(88.), static_cast<T>(-4.), static_cast<T>(-6.)},
              {static_cast<T>(100.), static_cast<T>(12.), static_cast<T>(2.)}}
@@ -209,7 +209,7 @@ protected:
         ASSERT_EQ(test_mat_1.get_elem(2, 2).get_scalar(), static_cast<T>(2.));
 
         M<T> test_mat_wide(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(7.), static_cast<T>(5.), static_cast<T>(3.)},
              {static_cast<T>(1.), static_cast<T>(6.), static_cast<T>(2.)}}
         );
@@ -223,7 +223,7 @@ protected:
         ASSERT_EQ(test_mat_wide.get_elem(1, 2).get_scalar(), static_cast<T>(2.));
         
         M<T> test_mat_tall(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(7.), static_cast<T>(5.)},
              {static_cast<T>(1.), static_cast<T>(6.)},
              {static_cast<T>(3.), static_cast<T>(2.)},
@@ -246,19 +246,19 @@ protected:
 
         CHECK_FUNC_HAS_RUNTIME_ERROR(
             print_errors,
-            []() { M<double> mat(*handle_ptr, {{1, 2, 3, 4}, {1, 2, 3}}); }
+            []() { M<double> mat(TestBase::bundle, {{1, 2, 3, 4}, {1, 2, 3}}); }
         );
         CHECK_FUNC_HAS_RUNTIME_ERROR(
             print_errors,
-            []() { M<double> mat(*handle_ptr, {{1, 2}, {1, 2, 3}}); }
+            []() { M<double> mat(TestBase::bundle, {{1, 2}, {1, 2, 3}}); }
         );
         CHECK_FUNC_HAS_RUNTIME_ERROR(
             print_errors,
-            []() { M<double> mat(*handle_ptr, {{1, 2}, {}}); }
+            []() { M<double> mat(TestBase::bundle, {{1, 2}, {}}); }
         );
         CHECK_FUNC_HAS_RUNTIME_ERROR(
             print_errors,
-            []() { M<double> mat(*handle_ptr, {{}, {1, 2, 3}}); }
+            []() { M<double> mat(TestBase::bundle, {{}, {1, 2, 3}}); }
         );
 
     }
@@ -267,7 +267,7 @@ protected:
     void TestNonZeros() {
 
         M<T> test_non_zeros_some(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(1), static_cast<T>(0), static_cast<T>(3), static_cast<T>(0)},
              {static_cast<T>(0), static_cast<T>(7), static_cast<T>(0), static_cast<T>(9)},
              {static_cast<T>(11), static_cast<T>(12), static_cast<T>(13), static_cast<T>(14)},
@@ -276,7 +276,7 @@ protected:
         ASSERT_EQ(test_non_zeros_some.non_zeros(), 10);
 
         M<T> test_non_zeros_all(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(0), static_cast<T>(0), static_cast<T>(0)},
              {static_cast<T>(0), static_cast<T>(0), static_cast<T>(0)},
              {static_cast<T>(0), static_cast<T>(0), static_cast<T>(0)},
@@ -285,7 +285,7 @@ protected:
         ASSERT_EQ(test_non_zeros_all.non_zeros(), 0);
 
         M<T> test_non_zeros_none(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4), static_cast<T>(5)},
              {static_cast<T>(6), static_cast<T>(7), static_cast<T>(8), static_cast<T>(9), static_cast<T>(10)},
              {static_cast<T>(11), static_cast<T>(12), static_cast<T>(13), static_cast<T>(14), static_cast<T>(15)}}
@@ -307,10 +307,10 @@ protected:
         h_mat_manual[0+2*m_manual] = static_cast<T>(-20);
         h_mat_manual[1+2*m_manual] = static_cast<T>(3);
 
-        M<T> test_mat_manual(*handle_ptr, h_mat_manual, m_manual, n_manual);
+        M<T> test_mat_manual(TestBase::bundle, h_mat_manual, m_manual, n_manual);
 
         M<T> target_mat_manual(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(-5), static_cast<T>(100), static_cast<T>(-20)},
              {static_cast<T>(3), static_cast<T>(3.5), static_cast<T>(3)}}
         );
@@ -328,7 +328,7 @@ protected:
             }
         }
 
-        M<T> test_mat_rand(*handle_ptr, h_mat_rand, m_rand, n_rand);
+        M<T> test_mat_rand(TestBase::bundle, h_mat_rand, m_rand, n_rand);
 
         ASSERT_EQ(test_mat_rand.rows(), m_rand);
         ASSERT_EQ(test_mat_rand.cols(), n_rand);
@@ -349,7 +349,7 @@ protected:
         const int n_manual(3);
 
         M<T> mat_manual(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(-5), static_cast<T>(100), static_cast<T>(-20)},
              {static_cast<T>(3), static_cast<T>(3.5), static_cast<T>(3)}}
         );
@@ -370,7 +370,7 @@ protected:
         const int n_rand(5);
 
         M<T> mat_rand(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(rand()), static_cast<T>(rand()), static_cast<T>(rand()),
               static_cast<T>(rand()), static_cast<T>(rand())},
              {static_cast<T>(rand()), static_cast<T>(rand()), static_cast<T>(rand()),
@@ -398,7 +398,7 @@ protected:
 
         const int m_rand(4);
         const int n_rand(5);
-        M<double> mat_rand(*handle_ptr, m_rand, n_rand);
+        M<double> mat_rand(TestBase::bundle, m_rand, n_rand);
         double *h_mat_rand = static_cast<double *>(malloc(m_rand*n_rand*sizeof(double)));
         
         auto try_row_too_small = [=]() { mat_rand.copy_data_to_ptr(h_mat_rand, m_rand-2, n_rand); };
@@ -424,19 +424,19 @@ protected:
     template <typename T>
     void TestCopyAssignment() {
 
-        M<T> test_mat_empty(*handle_ptr, {{}});
+        M<T> test_mat_empty(TestBase::bundle, {{}});
         M<T> test_mat_2_2(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(-3.), static_cast<T>(0.)},
              {static_cast<T>(1.), static_cast<T>(10.)}}
         );
         M<T> test_mat_2_4(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(0.), static_cast<T>(-1.), static_cast<T>(-2.), static_cast<T>(-2.)},
              {static_cast<T>(10.), static_cast<T>(0.), static_cast<T>(12.), static_cast<T>(12.)}}
         );
         M<T> test_mat_4_3(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(1.), static_cast<T>(2.), static_cast<T>(3.)},
              {static_cast<T>(4.), static_cast<T>(5.), static_cast<T>(6.)},
              {static_cast<T>(7.), static_cast<T>(8.), static_cast<T>(9.)},
@@ -490,7 +490,7 @@ protected:
     void TestCopyConstructor() {
 
         M<T> test_mat_2_4(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(0.), static_cast<T>(-1.), static_cast<T>(-2.), static_cast<T>(-2.)},
              {static_cast<T>(10.), static_cast<T>(0.), static_cast<T>(12.), static_cast<T>(12.)}}
         );
@@ -514,7 +514,7 @@ protected:
 
         constexpr int m_zero(15);
         constexpr int n_zero(17);
-        M<T> test_zero(M<T>::Zero(*handle_ptr, m_zero, n_zero));
+        M<T> test_zero(M<T>::Zero(TestBase::bundle, m_zero, n_zero));
         ASSERT_EQ(test_zero.rows(), m_zero);
         ASSERT_EQ(test_zero.cols(), n_zero);
         for (int i=0; i<m_zero; ++i) {
@@ -525,7 +525,7 @@ protected:
 
         constexpr int m_one(32);
         constexpr int n_one(13);
-        M<T> test_ones(M<T>::Ones(*handle_ptr, m_one, n_one));
+        M<T> test_ones(M<T>::Ones(TestBase::bundle, m_one, n_one));
         ASSERT_EQ(test_ones.rows(), m_one);
         ASSERT_EQ(test_ones.cols(), n_one);
         for (int i=0; i<m_one; ++i) {
@@ -536,7 +536,7 @@ protected:
 
         constexpr int m_identity(40);
         constexpr int n_identity(20);
-        M<T> test_identity(M<T>::Identity(*handle_ptr, m_identity, n_identity));
+        M<T> test_identity(M<T>::Identity(TestBase::bundle, m_identity, n_identity));
         ASSERT_EQ(test_identity.rows(), m_identity);
         ASSERT_EQ(test_identity.cols(), n_identity);
         for (int i=0; i<m_identity; ++i) {
@@ -554,7 +554,7 @@ protected:
         // from 5 adjacent above and below)
         constexpr int m_rand(40);
         constexpr int n_rand(40);
-        M<T> test_rand(M<T>::Random(*handle_ptr, m_rand, n_rand));
+        M<T> test_rand(M<T>::Random(TestBase::bundle, m_rand, n_rand));
         ASSERT_EQ(test_rand.rows(), m_rand);
         ASSERT_EQ(test_rand.cols(), n_rand);
         for (int i=1; i<m_rand-1; ++i) {
@@ -574,7 +574,7 @@ protected:
     void TestCol() {
 
         const M<T> const_mat(
-            *handle_ptr, 
+            TestBase::bundle, 
             {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3)},
              {static_cast<T>(4), static_cast<T>(5), static_cast<T>(6)},
              {static_cast<T>(7), static_cast<T>(8), static_cast<T>(9)},
@@ -597,7 +597,7 @@ protected:
         const int m(4);
         const int n(3);
         M<double> mat(
-            *handle_ptr, 
+            TestBase::bundle, 
             {{1, 2, 3},
              {4, 5, 6},
              {7, 8, 9},
@@ -618,7 +618,7 @@ protected:
     void TestScale() {
 
         M<T> mat(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(-8), static_cast<T>(0.8), static_cast<T>(-0.6)},
              {static_cast<T>(1), static_cast<T>(2), static_cast<T>(3)},
              {static_cast<T>(-3), static_cast<T>(-2), static_cast<T>(-1)},
@@ -649,7 +649,7 @@ protected:
     void TestScaleAssignment() {
 
         M<T> mat(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(-8), static_cast<T>(0.8), static_cast<T>(-0.6)},
              {static_cast<T>(1), static_cast<T>(2), static_cast<T>(3)},
              {static_cast<T>(-3), static_cast<T>(-2), static_cast<T>(-1)},
@@ -682,7 +682,7 @@ protected:
     void TestMaxMagElem() {
 
         M<T> mat_all_diff(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3)},
              {static_cast<T>(4), static_cast<T>(5), static_cast<T>(6)},
              {static_cast<T>(7), static_cast<T>(8), static_cast<T>(9)},
@@ -691,14 +691,14 @@ protected:
         ASSERT_EQ(mat_all_diff.get_max_mag_elem().get_scalar(), static_cast<T>(9));
 
         M<T> mat_all_same(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)},
              {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)}}
         );
         ASSERT_EQ(mat_all_same.get_max_mag_elem().get_scalar(), static_cast<T>(1));
 
         M<T> mat_pos_neg(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(-1), static_cast<T>(-9), static_cast<T>(8)},
              {static_cast<T>(1), static_cast<T>(-14), static_cast<T>(10)}}
         );
@@ -710,7 +710,7 @@ protected:
     void TestNormalizeMagnitude() {
 
         M<T> mat_has_zeros(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3)},
              {static_cast<T>(4), static_cast<T>(0), static_cast<T>(6)},
              {static_cast<T>(7), static_cast<T>(8), static_cast<T>(9)},
@@ -725,7 +725,7 @@ protected:
         );
 
         M<T> mat_all_same(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)},
              {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)}}
         );
@@ -738,7 +738,7 @@ protected:
         );
 
         M<T> mat_pos_neg(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(-1), static_cast<T>(-9), static_cast<T>(8)},
              {static_cast<T>(1), static_cast<T>(-14), static_cast<T>(10)}}
         );
@@ -757,7 +757,7 @@ protected:
 
         // Test manually
         M<T> mat(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3)},
              {static_cast<T>(4), static_cast<T>(5), static_cast<T>(6)},
              {static_cast<T>(7), static_cast<T>(8), static_cast<T>(9)},
@@ -765,44 +765,44 @@ protected:
         );
         ASSERT_VECTOR_NEAR(
             mat*Vector<T>(
-                *handle_ptr,
+                TestBase::bundle,
                 {static_cast<T>(1), static_cast<T>(0), static_cast<T>(0)}
             ),
             Vector<T>(
-                *handle_ptr,
+                TestBase::bundle,
                 {static_cast<T>(1), static_cast<T>(4), static_cast<T>(7), static_cast<T>(3)}
             ),
             static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
         );
         ASSERT_VECTOR_NEAR(
             mat*Vector<T>(
-                *handle_ptr,
+                TestBase::bundle,
                 {static_cast<T>(0), static_cast<T>(1), static_cast<T>(0)}
             ),
             Vector<T>(
-                *handle_ptr,
+                TestBase::bundle,
                 {static_cast<T>(2), static_cast<T>(5), static_cast<T>(8), static_cast<T>(2)}
             ),
             static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
         );
         ASSERT_VECTOR_NEAR(
             mat*Vector<T>(
-                *handle_ptr,
+                TestBase::bundle,
                 {static_cast<T>(0), static_cast<T>(0), static_cast<T>(1)}
             ),
             Vector<T>(
-                *handle_ptr,
+                TestBase::bundle,
                 {static_cast<T>(3), static_cast<T>(6), static_cast<T>(9), static_cast<T>(1)}
             ),
             static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
         );
         ASSERT_VECTOR_NEAR(
             mat*Vector<T>(
-                *handle_ptr,
+                TestBase::bundle,
                 {static_cast<T>(1), static_cast<T>(0.1), static_cast<T>(0.01)}
             ),
             Vector<T>(
-                *handle_ptr,
+                TestBase::bundle,
                 {static_cast<T>(1.23), static_cast<T>(4.56), static_cast<T>(7.89), static_cast<T>(3.21)}
             ),
             static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
@@ -811,14 +811,14 @@ protected:
         // Test random
         const int m_rand(3);
         const int n_rand(4);
-        M<T> rand_mat(M<T>::Random(*handle_ptr, m_rand, n_rand));
+        M<T> rand_mat(M<T>::Random(TestBase::bundle, m_rand, n_rand));
         ASSERT_VECTOR_NEAR(
             rand_mat*Vector<T>(
-                *handle_ptr,
+                TestBase::bundle,
                 {static_cast<T>(1), static_cast<T>(0), static_cast<T>(0), static_cast<T>(0)}
             ),
             Vector<T>(
-                *handle_ptr,
+                TestBase::bundle,
                 {rand_mat.get_elem(0, 0).get_scalar(),
                  rand_mat.get_elem(1, 0).get_scalar(),
                  rand_mat.get_elem(2, 0).get_scalar()}
@@ -827,11 +827,11 @@ protected:
         );
         ASSERT_VECTOR_NEAR(
             rand_mat*Vector<T>(
-                *handle_ptr,
+                TestBase::bundle,
                 {static_cast<T>(0), static_cast<T>(1), static_cast<T>(0), static_cast<T>(0)}
             ),
             Vector<T>(
-                *handle_ptr,
+                TestBase::bundle,
                 {rand_mat.get_elem(0, 1).get_scalar(),
                  rand_mat.get_elem(1, 1).get_scalar(),
                  rand_mat.get_elem(2, 1).get_scalar()}
@@ -840,11 +840,11 @@ protected:
         );
         ASSERT_VECTOR_NEAR(
             rand_mat*Vector<T>(
-                *handle_ptr,
+                TestBase::bundle,
                 {static_cast<T>(0), static_cast<T>(0), static_cast<T>(1), static_cast<T>(0)}
             ),
             Vector<T>(
-                *handle_ptr,
+                TestBase::bundle,
                 {rand_mat.get_elem(0, 2).get_scalar(),
                  rand_mat.get_elem(1, 2).get_scalar(),
                  rand_mat.get_elem(2, 2).get_scalar()}
@@ -853,11 +853,11 @@ protected:
         );
         ASSERT_VECTOR_NEAR(
             rand_mat*Vector<T>(
-                *handle_ptr,
+                TestBase::bundle,
                 {static_cast<T>(0), static_cast<T>(0), static_cast<T>(0), static_cast<T>(1)}
             ),
             Vector<T>(
-                *handle_ptr,
+                TestBase::bundle,
                 {rand_mat.get_elem(0, 3).get_scalar(),
                  rand_mat.get_elem(1, 3).get_scalar(),
                  rand_mat.get_elem(2, 3).get_scalar()}
@@ -866,11 +866,11 @@ protected:
         );
         ASSERT_VECTOR_NEAR(
             rand_mat*Vector<T>(
-                *handle_ptr,
+                TestBase::bundle,
                 {static_cast<T>(1), static_cast<T>(0.1), static_cast<T>(0.01), static_cast<T>(0.001)}
             ),
             Vector<T>(
-                *handle_ptr,
+                TestBase::bundle,
                 {(static_cast<T>(1)*rand_mat.get_elem(0, 0).get_scalar() +
                   static_cast<T>(0.1)*rand_mat.get_elem(0, 1).get_scalar() +
                   static_cast<T>(0.01)*rand_mat.get_elem(0, 2).get_scalar() +
@@ -893,14 +893,14 @@ protected:
     void TestBadMatVec() {
 
         M<T> mat(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4)},
              {static_cast<T>(5), static_cast<T>(6), static_cast<T>(7), static_cast<T>(8)},
              {static_cast<T>(9), static_cast<T>(10), static_cast<T>(11), static_cast<T>(12)}}
         );
 
         Vector<T> vec_too_small(
-            *handle_ptr,
+            TestBase::bundle,
             {static_cast<T>(1), static_cast<T>(1)}
         );
         CHECK_FUNC_HAS_RUNTIME_ERROR(
@@ -909,7 +909,7 @@ protected:
         );
 
         Vector<T> vec_too_large(
-            *handle_ptr, 
+            TestBase::bundle, 
             {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)}
         );
         CHECK_FUNC_HAS_RUNTIME_ERROR(
@@ -918,7 +918,7 @@ protected:
         );
 
         Vector<T> vec_matches_wrong_dimension(
-            *handle_ptr,
+            TestBase::bundle,
             {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)}
         );
         CHECK_FUNC_HAS_RUNTIME_ERROR(
@@ -933,7 +933,7 @@ protected:
 
         // Test manually
         M<T> mat(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4)},
              {static_cast<T>(5), static_cast<T>(6), static_cast<T>(7), static_cast<T>(8)},
              {static_cast<T>(9), static_cast<T>(1), static_cast<T>(2), static_cast<T>(3)}}
@@ -941,12 +941,12 @@ protected:
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod(
                 Vector<T>(
-                    *handle_ptr,
+                    TestBase::bundle,
                     {static_cast<T>(1), static_cast<T>(0), static_cast<T>(0)}
                 )
             ),
             Vector<T>(
-                *handle_ptr,
+                TestBase::bundle,
                 {static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4)}
             ),
             static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
@@ -954,12 +954,12 @@ protected:
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod(
                 Vector<T>(
-                    *handle_ptr,
+                    TestBase::bundle,
                     {static_cast<T>(0), static_cast<T>(1), static_cast<T>(0)}
                 )
             ),
             Vector<T>(
-                *handle_ptr,
+                TestBase::bundle,
                 {static_cast<T>(5), static_cast<T>(6), static_cast<T>(7), static_cast<T>(8)}
             ),
             static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
@@ -967,12 +967,12 @@ protected:
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod(
                 Vector<T>(
-                    *handle_ptr,
+                    TestBase::bundle,
                     {static_cast<T>(0), static_cast<T>(0), static_cast<T>(1)}
                 )
             ),
             Vector<T>(
-                *handle_ptr,
+                TestBase::bundle,
                 {static_cast<T>(9), static_cast<T>(1), static_cast<T>(2), static_cast<T>(3)}
             ),
             static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
@@ -980,12 +980,12 @@ protected:
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod(
                 Vector<T>(
-                    *handle_ptr,
+                    TestBase::bundle,
                     {static_cast<T>(1), static_cast<T>(0.1), static_cast<T>(0.01)}
                 )
             ),
             Vector<T>(
-                *handle_ptr,
+                TestBase::bundle,
                 {static_cast<T>(1.59), static_cast<T>(2.61), static_cast<T>(3.72), static_cast<T>(4.83)}
             ),
             static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
@@ -994,16 +994,16 @@ protected:
         // Test random
         const int m_rand(3);
         const int n_rand(2);
-        M<T> rand_mat(M<T>::Random(*handle_ptr, m_rand, n_rand));
+        M<T> rand_mat(M<T>::Random(TestBase::bundle, m_rand, n_rand));
         ASSERT_VECTOR_NEAR(
             rand_mat.transpose_prod(
                 Vector<T>(
-                    *handle_ptr,
+                    TestBase::bundle,
                     {static_cast<T>(1), static_cast<T>(0), static_cast<T>(0)}
                 )
             ),
             Vector<T>(
-                *handle_ptr,
+                TestBase::bundle,
                 {rand_mat.get_elem(0, 0).get_scalar(),
                  rand_mat.get_elem(0, 1).get_scalar()}
             ),
@@ -1012,12 +1012,12 @@ protected:
         ASSERT_VECTOR_NEAR(
             rand_mat.transpose_prod(
                 Vector<T>(
-                    *handle_ptr,
+                    TestBase::bundle,
                     {static_cast<T>(0), static_cast<T>(1), static_cast<T>(0)}
                 )
             ),
             Vector<T>(
-                *handle_ptr,
+                TestBase::bundle,
                 {rand_mat.get_elem(1, 0).get_scalar(),
                  rand_mat.get_elem(1, 1).get_scalar()}
             ),
@@ -1026,12 +1026,12 @@ protected:
         ASSERT_VECTOR_NEAR(
             rand_mat.transpose_prod(
                 Vector<T>(
-                    *handle_ptr,
+                    TestBase::bundle,
                     {static_cast<T>(0), static_cast<T>(0), static_cast<T>(1)}
                 )
             ),
             Vector<T>(
-                *handle_ptr,
+                TestBase::bundle,
                 {rand_mat.get_elem(2, 0).get_scalar(),
                  rand_mat.get_elem(2, 1).get_scalar()}
             ),
@@ -1040,12 +1040,12 @@ protected:
         ASSERT_VECTOR_NEAR(
             rand_mat.transpose_prod(
                 Vector<T>(
-                    *handle_ptr,
+                    TestBase::bundle,
                     {static_cast<T>(1), static_cast<T>(0.1), static_cast<T>(0.01)}
                 )
             ),
             Vector<T>(
-                *handle_ptr,
+                TestBase::bundle,
                 {(static_cast<T>(1)*rand_mat.get_elem(0, 0).get_scalar() +
                   static_cast<T>(0.1)*rand_mat.get_elem(1, 0).get_scalar() +
                   static_cast<T>(0.01)*rand_mat.get_elem(2, 0).get_scalar()),
@@ -1062,14 +1062,14 @@ protected:
     void TestBadTransposeMatVec() {
 
         M<T> mat(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4)},
              {static_cast<T>(5), static_cast<T>(6), static_cast<T>(7), static_cast<T>(8)},
              {static_cast<T>(9), static_cast<T>(10), static_cast<T>(11), static_cast<T>(12)}}
         );
 
         Vector<T> vec_too_small(
-            *handle_ptr,
+            TestBase::bundle,
             {static_cast<T>(1), static_cast<T>(1)}
         );
         CHECK_FUNC_HAS_RUNTIME_ERROR(
@@ -1078,7 +1078,7 @@ protected:
         );
 
         Vector<T> vec_too_large(
-            *handle_ptr,
+            TestBase::bundle,
             {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)}
         );
         CHECK_FUNC_HAS_RUNTIME_ERROR(
@@ -1087,7 +1087,7 @@ protected:
         );
 
         Vector<T> vec_matches_wrong_dimension(
-            *handle_ptr,
+            TestBase::bundle,
             {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)}
         );
         CHECK_FUNC_HAS_RUNTIME_ERROR(
@@ -1104,7 +1104,7 @@ protected:
         constexpr int m_manual(4);
         constexpr int n_manual(3);
         M<T> mat(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4)},
              {static_cast<T>(5), static_cast<T>(6), static_cast<T>(7), static_cast<T>(8)},
              {static_cast<T>(9), static_cast<T>(10), static_cast<T>(11), static_cast<T>(12)}}
@@ -1121,7 +1121,7 @@ protected:
             }
         }
         M<T> test(
-            *handle_ptr, 
+            TestBase::bundle, 
             {{static_cast<T>(1), static_cast<T>(5), static_cast<T>(9)},
              {static_cast<T>(2), static_cast<T>(6), static_cast<T>(10)},
              {static_cast<T>(3), static_cast<T>(7), static_cast<T>(11)},
@@ -1132,7 +1132,7 @@ protected:
         // Test random
         constexpr int m_rand(12);
         constexpr int n_rand(17);
-        M<T> mat_rand(M<T>::Random(*handle_ptr, m_rand, n_rand));
+        M<T> mat_rand(M<T>::Random(TestBase::bundle, m_rand, n_rand));
         M<T> mat_rand_transposed(mat_rand.transpose());
         ASSERT_EQ(mat_rand_transposed.rows(), n_rand);
         ASSERT_EQ(mat_rand_transposed.cols(), m_rand);
@@ -1151,27 +1151,27 @@ protected:
     void TestMatMat() {
 
         M<T> mat1(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(1), static_cast<T>(4)},
              {static_cast<T>(-1), static_cast<T>(-4)},
              {static_cast<T>(-3), static_cast<T>(-2)},
              {static_cast<T>(10), static_cast<T>(100)}}
         );
         M<T> mat2(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(7), static_cast<T>(2), static_cast<T>(-3)},
              {static_cast<T>(10), static_cast<T>(-4), static_cast<T>(-3)}}
         );
         M<T> test_mat(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(47), static_cast<T>(-14), static_cast<T>(-15)},
              {static_cast<T>(-47), static_cast<T>(14), static_cast<T>(15)},
              {static_cast<T>(-41), static_cast<T>(2), static_cast<T>(15)},
              {static_cast<T>(1070), static_cast<T>(-380), static_cast<T>(-330)}}
         );
         ASSERT_MATRIX_EQ(mat1*mat2, test_mat);
-        ASSERT_MATRIX_EQ(mat1*M<T>::Identity(*handle_ptr, 2, 2), mat1);
-        ASSERT_MATRIX_EQ(mat2*M<T>::Identity(*handle_ptr, 3, 3), mat2);
+        ASSERT_MATRIX_EQ(mat1*M<T>::Identity(TestBase::bundle, 2, 2), mat1);
+        ASSERT_MATRIX_EQ(mat2*M<T>::Identity(TestBase::bundle, 3, 3), mat2);
 
     }
 
@@ -1179,7 +1179,7 @@ protected:
     void TestBadMatMat() {
 
         M<T> mat(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(1), static_cast<T>(4)},
              {static_cast<T>(-1), static_cast<T>(-4)},
              {static_cast<T>(-3), static_cast<T>(-2)},
@@ -1187,13 +1187,13 @@ protected:
         );
 
         M<T> mat_too_small(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(1), static_cast<T>(1)}}
         );
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { mat*mat_too_small; });
 
         M<T> mat_too_big(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(1), static_cast<T>(1)},
              {static_cast<T>(1), static_cast<T>(1)},
              {static_cast<T>(1), static_cast<T>(1)}}
@@ -1201,7 +1201,7 @@ protected:
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { mat*mat_too_big; });
 
         M<T> mat_matches_other_dim(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(1), static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)},
              {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)},
              {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)},
@@ -1215,7 +1215,7 @@ protected:
     void TestAddSub() {
 
         M<T> mat1(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(47), static_cast<T>(-14), static_cast<T>(-15)},
              {static_cast<T>(-47), static_cast<T>(14), static_cast<T>(15)},
              {static_cast<T>(-41), static_cast<T>(2), static_cast<T>(15)},
@@ -1223,7 +1223,7 @@ protected:
         );
 
         M<T> mat2(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3)},
              {static_cast<T>(-4), static_cast<T>(-5), static_cast<T>(-6)},
              {static_cast<T>(-7), static_cast<T>(8), static_cast<T>(9)},
@@ -1231,7 +1231,7 @@ protected:
         );
 
         M<T> test_mat_add(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(48), static_cast<T>(-12), static_cast<T>(-12)},
              {static_cast<T>(-51), static_cast<T>(9), static_cast<T>(9)},
              {static_cast<T>(-48), static_cast<T>(10), static_cast<T>(24)},
@@ -1240,7 +1240,7 @@ protected:
         ASSERT_MATRIX_EQ(mat1+mat2, test_mat_add);
 
         M<T> test_mat_sub_1(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(46), static_cast<T>(-16), static_cast<T>(-18)},
              {static_cast<T>(-43), static_cast<T>(19), static_cast<T>(21)},
              {static_cast<T>(-34), static_cast<T>(-6), static_cast<T>(6)},
@@ -1249,7 +1249,7 @@ protected:
         ASSERT_MATRIX_EQ(mat1-mat2, test_mat_sub_1);
 
         M<T> test_mat_sub_2(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(-46), static_cast<T>(16), static_cast<T>(18)},
              {static_cast<T>(43), static_cast<T>(-19), static_cast<T>(-21)},
              {static_cast<T>(34), static_cast<T>(6), static_cast<T>(-6)},
@@ -1257,8 +1257,8 @@ protected:
         );
         ASSERT_MATRIX_EQ(mat2-mat1, test_mat_sub_2);
 
-        ASSERT_MATRIX_EQ(mat1-mat1, M<T>::Zero(*handle_ptr, 4, 3));
-        ASSERT_MATRIX_EQ(mat2-mat2, M<T>::Zero(*handle_ptr, 4, 3));
+        ASSERT_MATRIX_EQ(mat1-mat1, M<T>::Zero(TestBase::bundle, 4, 3));
+        ASSERT_MATRIX_EQ(mat2-mat2, M<T>::Zero(TestBase::bundle, 4, 3));
 
     }
 
@@ -1266,7 +1266,7 @@ protected:
     void TestBadAddSub() {
 
         M<T> mat(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(47), static_cast<T>(-14), static_cast<T>(-15)},
              {static_cast<T>(-47), static_cast<T>(14), static_cast<T>(15)},
              {static_cast<T>(-41), static_cast<T>(2), static_cast<T>(15)},
@@ -1274,7 +1274,7 @@ protected:
         );
 
         M<T> mat_too_few_cols(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(1), static_cast<T>(1)},
              {static_cast<T>(1), static_cast<T>(1)},
              {static_cast<T>(1), static_cast<T>(1)},
@@ -1284,7 +1284,7 @@ protected:
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { mat-mat_too_few_cols; });
 
         M<T> mat_too_many_cols(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(1), static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)},
              {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)},
              {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)},
@@ -1294,7 +1294,7 @@ protected:
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { mat-mat_too_many_cols; });
 
         M<T> mat_too_few_rows(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)},
              {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)},
              {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)}}
@@ -1303,7 +1303,7 @@ protected:
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { mat-mat_too_few_rows; });
 
         M<T> mat_too_many_rows(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)},
              {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)},
              {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)},
@@ -1319,7 +1319,7 @@ protected:
     void TestNorm() {
 
         M<T> mat1(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(18), static_cast<T>(5)},
              {static_cast<T>(-3), static_cast<T>(6)},
              {static_cast<T>(9), static_cast<T>(-9)},
@@ -1328,7 +1328,7 @@ protected:
         ASSERT_EQ(mat1.norm().get_scalar(), static_cast<T>(24));
 
         M<T> mat2(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(1), static_cast<T>(-1), static_cast<T>(1)},
              {static_cast<T>(1), static_cast<T>(1), static_cast<T>(-1)},
              {static_cast<T>(-1), static_cast<T>(-1), static_cast<T>(-1)}}
@@ -1342,7 +1342,7 @@ protected:
         constexpr int m(10);
         constexpr int n(15);
 
-        M<double> mat_dbl(M<double>::Random(*handle_ptr, m, n));
+        M<double> mat_dbl(M<double>::Random(TestBase::bundle, m, n));
 
         M<double> dbl_to_dbl(mat_dbl.template cast<double>());
         ASSERT_MATRIX_EQ(dbl_to_dbl, mat_dbl);
@@ -1375,7 +1375,7 @@ protected:
             }
         }
 
-        M<float> mat_sgl(M<float>::Random(*handle_ptr, m, n));
+        M<float> mat_sgl(M<float>::Random(TestBase::bundle, m, n));
 
         M<float> sgl_to_sgl(mat_sgl.template cast<float>());
         ASSERT_MATRIX_EQ(sgl_to_sgl, mat_sgl);
@@ -1408,7 +1408,7 @@ protected:
             }
         }
 
-        M<__half> mat_hlf(M<__half>::Random(*handle_ptr, m, n));
+        M<__half> mat_hlf(M<__half>::Random(TestBase::bundle, m, n));
 
         M<__half> hlf_to_hlf(mat_hlf.template cast<__half>());
         ASSERT_MATRIX_EQ(hlf_to_hlf, mat_hlf);
@@ -1448,7 +1448,7 @@ protected:
         auto try_bad_cast = []() {
             const int m(20);
             const int n(30);
-            M<double> mat(*handle_ptr, m, n);
+            M<double> mat(TestBase::bundle, m, n);
             mat.template cast<int>();
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_bad_cast);
@@ -1469,13 +1469,13 @@ public:
         constexpr int n(90);
 
         M<T> U_tri(
-            read_matrixCSV<M, T>(*handle_ptr, solve_matrix_dir / fs::path("U_tri_90.csv"))
+            read_matrixCSV<M, T>(TestBase::bundle, solve_matrix_dir / fs::path("U_tri_90.csv"))
         );
         Vector<T> x_tri(
-            read_matrixCSV<Vector, T>(*handle_ptr, solve_matrix_dir / fs::path("x_tri_90.csv"))
+            read_matrixCSV<Vector, T>(TestBase::bundle, solve_matrix_dir / fs::path("x_tri_90.csv"))
         );
         Vector<T> Ub_tri(
-            read_matrixCSV<Vector, T>(*handle_ptr, solve_matrix_dir / fs::path("Ub_tri_90.csv"))
+            read_matrixCSV<Vector, T>(TestBase::bundle, solve_matrix_dir / fs::path("Ub_tri_90.csv"))
         );
     
         Vector<T> test_soln(U_tri.back_sub(Ub_tri));
@@ -1495,13 +1495,13 @@ public:
         const int n(90);
 
         M<T> L_tri(
-            read_matrixCSV<M, T>(*handle_ptr, solve_matrix_dir / fs::path("L_tri_90.csv"))
+            read_matrixCSV<M, T>(TestBase::bundle, solve_matrix_dir / fs::path("L_tri_90.csv"))
         );
         Vector<T> x_tri(
-            read_matrixCSV<Vector, T>(*handle_ptr, solve_matrix_dir / fs::path("x_tri_90.csv"))
+            read_matrixCSV<Vector, T>(TestBase::bundle, solve_matrix_dir / fs::path("x_tri_90.csv"))
         );
         Vector<T> Lb_tri(
-            read_matrixCSV<Vector, T>(*handle_ptr, solve_matrix_dir / fs::path("Lb_tri_90.csv"))
+            read_matrixCSV<Vector, T>(TestBase::bundle, solve_matrix_dir / fs::path("Lb_tri_90.csv"))
         );
     
         Vector<T> test_soln(L_tri.frwd_sub(Lb_tri));

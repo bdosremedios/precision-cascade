@@ -9,7 +9,8 @@ Vector<float> Vector<float>::operator*(const Scalar<float> &scalar) const {
 
     check_cublas_status(
         cublasScalEx(
-            handle, m_rows,
+            cu_handles.get_cublas_handle(),
+            m_rows,
             scalar.d_scalar, CUDA_R_32F,
             c.d_vec, CUDA_R_32F, 1,
             CUDA_R_32F
@@ -24,7 +25,8 @@ Vector<float> & Vector<float>::operator*=(const Scalar<float> &scalar) {
 
     check_cublas_status(
         cublasScalEx(
-            handle, m_rows,
+            cu_handles.get_cublas_handle(),
+            m_rows,
             scalar.d_scalar, CUDA_R_32F,
             d_vec, CUDA_R_32F, 1,
             CUDA_R_32F
@@ -43,7 +45,8 @@ Vector<float> Vector<float>::operator+(const Vector<float> &vec) const {
 
     check_cublas_status(
         cublasAxpyEx(
-            handle, m_rows,
+            cu_handles.get_cublas_handle(),
+            m_rows,
             SCALAR_ONE_F.d_scalar, CUDA_R_32F,
             vec.d_vec, CUDA_R_32F, 1,
             c.d_vec, CUDA_R_32F, 1,
@@ -63,7 +66,8 @@ Vector<float> Vector<float>::operator-(const Vector<float> &vec) const {
 
     check_cublas_status(
         cublasAxpyEx(
-            handle, m_rows,
+            cu_handles.get_cublas_handle(),
+            m_rows,
             SCALAR_MINUS_ONE_F.d_scalar, CUDA_R_32F,
             vec.d_vec, CUDA_R_32F, 1,
             c.d_vec, CUDA_R_32F, 1,
@@ -81,7 +85,8 @@ Vector<float> & Vector<float>::operator+=(const Vector<float> &vec) {
 
     check_cublas_status(
         cublasAxpyEx(
-            handle, m_rows,
+            cu_handles.get_cublas_handle(),
+            m_rows,
             SCALAR_ONE_F.d_scalar, CUDA_R_32F,
             vec.d_vec, CUDA_R_32F, 1,
             d_vec, CUDA_R_32F, 1,
@@ -99,7 +104,8 @@ Vector<float> & Vector<float>::operator-=(const Vector<float> &vec) {
 
     check_cublas_status(
         cublasAxpyEx(
-            handle, m_rows,
+            cu_handles.get_cublas_handle(),
+            m_rows,
             SCALAR_MINUS_ONE_F.d_scalar, CUDA_R_32F,
             vec.d_vec, CUDA_R_32F, 1,
             d_vec, CUDA_R_32F, 1,
@@ -119,7 +125,8 @@ Scalar<float> Vector<float>::dot(const Vector<float> &vec) const {
 
     check_cublas_status(
         cublasDotEx(
-            handle, m_rows,
+            cu_handles.get_cublas_handle(),
+            m_rows,
             d_vec, CUDA_R_32F, 1,
             vec.d_vec, CUDA_R_32F, 1,
             result.d_scalar, CUDA_R_32F,
@@ -137,7 +144,8 @@ Scalar<float> Vector<float>::norm() const {
 
     check_cublas_status(
         cublasNrm2Ex(
-            handle, m_rows,
+            cu_handles.get_cublas_handle(),
+            m_rows,
             d_vec, CUDA_R_32F, 1,
             result.d_scalar, CUDA_R_32F,
             CUDA_R_32F
@@ -150,7 +158,7 @@ Scalar<float> Vector<float>::norm() const {
 
 Vector<__half> Vector<float>::to_half() const {
     
-    Vector<__half> created_vec(handle, m_rows);
+    Vector<__half> created_vec(cu_handles, m_rows);
 
     double NUM_THREADS = 1024; // threads per thread block just 1 warp
     double NUM_BLOCKS = static_cast<double>(
@@ -166,7 +174,7 @@ Vector<float> Vector<float>::to_float() const { return Vector<float>(*this); }
 
 Vector<double> Vector<float>::to_double() const {
     
-    Vector<double> created_vec(handle, m_rows);
+    Vector<double> created_vec(cu_handles, m_rows);
 
     double NUM_THREADS = 1024; // threads per thread block just 1 warp
     double NUM_BLOCKS = static_cast<double>(

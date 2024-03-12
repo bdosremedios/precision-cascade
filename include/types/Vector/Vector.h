@@ -12,6 +12,7 @@
 #include <cublas_v2.h>
 
 #include "tools/cuda_check.h"
+#include "tools/cuHandleBundle.h"
 #include "tools/vector_sort.h"
 
 #include "Vector_gpu_kernels.cuh"
@@ -34,7 +35,7 @@ private:
     // friend MatrixDense<T>::Block;
     // friend MatrixSparse<T>;
 
-    cublasHandle_t handle;
+    cuHandleBundle cu_handles;
     int m_rows = 0;
     T *d_vec = nullptr;
 
@@ -55,18 +56,18 @@ private:
 public:
 
     // *** Constructors ***
-    Vector(const cublasHandle_t &arg_handle, int arg_m, int arg_n):
-        handle(arg_handle), m_rows(arg_m)
+    Vector(const cuHandleBundle &arg_cu_handles, int arg_m, int arg_n):
+        cu_handles(arg_cu_handles), m_rows(arg_m)
     { 
         check_n(arg_n);
         allocate_d_vec();
     }
 
-    Vector(const cublasHandle_t &arg_handle, int arg_m): Vector(arg_handle, arg_m, 1) {}
-    Vector(const cublasHandle_t &arg_handle): Vector(arg_handle, 0) {}
+    Vector(const cuHandleBundle &arg_cu_handles, int arg_m): Vector(arg_cu_handles, arg_m, 1) {}
+    Vector(const cuHandleBundle &arg_cu_handles): Vector(arg_cu_handles, 0) {}
 
-    Vector(const cublasHandle_t &arg_handle, std::initializer_list<T> li):
-        Vector(arg_handle, li.size())
+    Vector(const cuHandleBundle &arg_cu_handles, std::initializer_list<T> li):
+        Vector(arg_cu_handles, li.size())
     {
         T *h_vec = static_cast<T *>(malloc(mem_size()));
 
@@ -82,16 +83,16 @@ public:
     }
 
     // *** Dynamic Memory *** (assumes outer code handles dynamic memory properly)
-    Vector(const cublasHandle_t &arg_handle, const T *h_vec, const int m_elem):
-        Vector(arg_handle, m_elem)
+    Vector(const cuHandleBundle &arg_cu_handles, const T *h_vec, const int m_elem):
+        Vector(arg_cu_handles, m_elem)
     {
         if (m_elem > 0) {
             check_cublas_status(cublasSetVector(m_rows, sizeof(T), h_vec, 1, d_vec, 1));
         }
     }
 
-    Vector(const cublasHandle_t &arg_handle, const T *h_vec, const int m_elem, const int n_elem):
-        Vector(arg_handle, m_elem)
+    Vector(const cuHandleBundle &arg_cu_handles, const T *h_vec, const int m_elem, const int n_elem):
+        Vector(arg_cu_handles, m_elem)
     {
         check_n(n_elem);
         if (m_elem > 0) {
@@ -113,7 +114,7 @@ public:
 
     // *** Conversion Constructors ***
     Vector(const typename MatrixDense<T>::Col &col):
-        Vector(col.associated_mat_ptr->handle, col.m_rows)
+        Vector(col.associated_mat_ptr->get_cu_handles(), col.m_rows)
     {
         check_cuda_error(
             cudaMemcpy(
@@ -146,7 +147,7 @@ public:
 
         if (this != &other) {
 
-            handle = other.handle;
+            cu_handles = other.cu_handles;
 
             if (m_rows != other.m_rows) {
                 check_cuda_error(cudaFree(d_vec));
@@ -166,12 +167,12 @@ public:
     Vector(const Vector<T> &other) { *this = other; }
 
     // *** Static Creation ***
-    static Vector<T> Zero(const cublasHandle_t &arg_handle, int arg_m) {
+    static Vector<T> Zero(const cuHandleBundle &arg_cu_handles, int arg_m) {
 
         T *h_vec = static_cast<T *>(malloc(arg_m*sizeof(T)));
 
         for (int i=0; i<arg_m; ++i) { h_vec[i] = static_cast<T>(0); }
-        Vector<T> created_vec(arg_handle, h_vec, arg_m);
+        Vector<T> created_vec(arg_cu_handles, h_vec, arg_m);
 
         free(h_vec);
 
@@ -179,17 +180,17 @@ public:
 
     }
 
-    static Vector<T> Zero(const cublasHandle_t &arg_handle, int arg_m, int arg_n) {
+    static Vector<T> Zero(const cuHandleBundle &arg_cu_handles, int arg_m, int arg_n) {
         check_n(arg_n);
-        return Zero(arg_handle, arg_m);
+        return Zero(arg_cu_handles, arg_m);
     }
 
-    static Vector<T> Ones(const cublasHandle_t &arg_handle, int arg_m) {
+    static Vector<T> Ones(const cuHandleBundle &arg_cu_handles, int arg_m) {
 
         T *h_vec = static_cast<T *>(malloc(arg_m*sizeof(T)));
 
         for (int i=0; i<arg_m; ++i) { h_vec[i] = static_cast<T>(1); }
-        Vector<T> created_vec(arg_handle, h_vec, arg_m);
+        Vector<T> created_vec(arg_cu_handles, h_vec, arg_m);
 
         free(h_vec);
 
@@ -197,13 +198,13 @@ public:
 
     }
 
-    static Vector<T> Ones(const cublasHandle_t &arg_handle, int arg_m, int arg_n) {
+    static Vector<T> Ones(const cuHandleBundle &arg_cu_handles, int arg_m, int arg_n) {
         check_n(arg_n);
-        return Ones(arg_handle, arg_m);
+        return Ones(arg_cu_handles, arg_m);
     }
 
     // Needed for testing (don't need to optimize performance)
-    static Vector<T> Random(const cublasHandle_t &arg_handle, int arg_m) {
+    static Vector<T> Random(const cuHandleBundle &arg_cu_handles, int arg_m) {
 
         std::random_device rd;
         std::mt19937 gen(rd());
@@ -212,7 +213,7 @@ public:
         T *h_vec = static_cast<T *>(malloc(arg_m*sizeof(T)));
 
         for (int i=0; i<arg_m; ++i) { h_vec[i] = static_cast<T>(dist(gen)); }
-        Vector<T> created_vec(arg_handle, h_vec, arg_m);
+        Vector<T> created_vec(arg_cu_handles, h_vec, arg_m);
 
         free(h_vec);
 
@@ -221,9 +222,9 @@ public:
     }
 
     // Needed for testing (don't need to optimize performance)
-    static Vector<T> Random(const cublasHandle_t &arg_handle, int arg_m, int arg_n) {
+    static Vector<T> Random(const cuHandleBundle &arg_cu_handles, int arg_m, int arg_n) {
         check_n(arg_n);
-        return Random(arg_handle, arg_m);
+        return Random(arg_cu_handles, arg_m);
     }
 
     // *** Element Access ***
@@ -274,7 +275,7 @@ public:
             check_cublas_status(cublasGetVector(m_elem, sizeof(T), d_vec+start, 1, h_vec, 1));
         }
 
-        Vector<T> created_vec(handle, h_vec, m_elem);
+        Vector<T> created_vec(cu_handles, h_vec, m_elem);
 
         free(h_vec);
 
@@ -285,7 +286,7 @@ public:
     // *** Properties ***
     int rows() const { return m_rows; }
     int cols() const { return 1; }
-    cublasHandle_t get_handle() const { return handle; }
+    cuHandleBundle get_cu_handles() const { return cu_handles; }
     void print() const {
 
         T *h_vec = static_cast<T *>(malloc(mem_size()));

@@ -11,7 +11,8 @@ MatrixDense<__half> MatrixDense<__half>::operator*(const Scalar<__half> &scalar)
 
     check_cublas_status(
         cublasScalEx(
-            handle, m_rows*n_cols,
+            cu_handles.get_cublas_handle(),
+            m_rows*n_cols,
             temp_cast.d_scalar, CUDA_R_32F,
             c.d_mat, CUDA_R_16F, 1,
             CUDA_R_32F
@@ -28,7 +29,8 @@ MatrixDense<__half> & MatrixDense<__half>::operator*=(const Scalar<__half> &scal
 
     check_cublas_status(
         cublasScalEx(
-            handle, m_rows*n_cols,
+            cu_handles.get_cublas_handle(),
+            m_rows*n_cols,
             temp_cast.d_scalar, CUDA_R_32F,
             d_mat, CUDA_R_16F, 1,
             CUDA_R_32F
@@ -47,11 +49,12 @@ Vector<__half> MatrixDense<__half>::operator*(const Vector<__half> &vec) const {
         );
     }
 
-    Vector<__half> c(Vector<__half>::Zero(handle, m_rows));
+    Vector<__half> c(Vector<__half>::Zero(cu_handles, m_rows));
 
     check_cublas_status(
         cublasGemmEx(
-            handle, CUBLAS_OP_N, CUBLAS_OP_N,
+            cu_handles.get_cublas_handle(),
+            CUBLAS_OP_N, CUBLAS_OP_N,
             m_rows, 1, n_cols,
             SCALAR_ONE_H.d_scalar,
             d_mat, CUDA_R_16F, m_rows,
@@ -71,11 +74,12 @@ Vector<__half> MatrixDense<__half>::transpose_prod(const Vector<__half> &vec) co
 
     if (vec.rows() != m_rows) { throw std::runtime_error("MatrixDense: invalid vec in transpose_prod"); }
 
-    Vector<__half> c(handle, n_cols);
+    Vector<__half> c(cu_handles, n_cols);
 
     check_cublas_status(
         cublasGemmEx(
-            handle, CUBLAS_OP_T, CUBLAS_OP_N,
+            cu_handles.get_cublas_handle(),
+            CUBLAS_OP_T, CUBLAS_OP_N,
             n_cols, 1, m_rows,
             SCALAR_ONE_H.d_scalar,
             d_mat, CUDA_R_16F, m_rows,
@@ -99,11 +103,12 @@ MatrixDense<__half> MatrixDense<__half>::operator*(const MatrixDense<__half> &ma
         );
     }
 
-    MatrixDense<__half> c(MatrixDense<__half>::Zero(handle, m_rows, mat.cols()));
+    MatrixDense<__half> c(MatrixDense<__half>::Zero(cu_handles, m_rows, mat.cols()));
 
     check_cublas_status(
         cublasGemmEx(
-            handle, CUBLAS_OP_N, CUBLAS_OP_N,
+            cu_handles.get_cublas_handle(),
+            CUBLAS_OP_N, CUBLAS_OP_N,
             m_rows, mat.cols(), n_cols,
             SCALAR_ONE_H.d_scalar,
             d_mat, CUDA_R_16F, m_rows,
@@ -131,7 +136,8 @@ MatrixDense<__half> MatrixDense<__half>::operator+(const MatrixDense<__half> &ma
 
     check_cublas_status(
         cublasAxpyEx(
-            handle, m_rows*n_cols,
+            cu_handles.get_cublas_handle(),
+            m_rows*n_cols,
             SCALAR_ONE_F.d_scalar, CUDA_R_32F,
             mat.d_mat, CUDA_R_16F, 1,
             c.d_mat, CUDA_R_16F, 1,
@@ -155,7 +161,8 @@ MatrixDense<__half> MatrixDense<__half>::operator-(const MatrixDense<__half> &ma
 
     check_cublas_status(
         cublasAxpyEx(
-            handle, m_rows*n_cols,
+            cu_handles.get_cublas_handle(),
+            m_rows*n_cols,
             SCALAR_MINUS_ONE_F.d_scalar, CUDA_R_32F,
             mat.d_mat, CUDA_R_16F, 1,
             c.d_mat, CUDA_R_16F, 1,
@@ -173,7 +180,8 @@ Scalar<__half> MatrixDense<__half>::norm() const {
 
     check_cublas_status(
         cublasNrm2Ex(
-            handle, m_rows*n_cols,
+            cu_handles.get_cublas_handle(),
+            m_rows*n_cols,
             d_mat, CUDA_R_16F, 1,
             result.d_scalar, CUDA_R_16F,
             CUDA_R_32F
@@ -206,7 +214,8 @@ Vector<__half> MatrixDense<__half>::back_sub(const Vector<__half> &arg_rhs) cons
         if (col > 0) {
             check_cublas_status(
                 cublasAxpyEx(
-                    handle, col,
+                    cu_handles.get_cublas_handle(),
+                    col,
                     d_scale_val, CUDA_R_32F,
                     d_mat+(col*m_rows), CUDA_R_16F, 1,
                     soln.d_vec, CUDA_R_16F, 1,
@@ -245,7 +254,8 @@ Vector<__half> MatrixDense<__half>::frwd_sub(const Vector<__half> &arg_rhs) cons
         if (col < m_rows-1) {
             check_cublas_status(
                 cublasAxpyEx(
-                    handle, m_rows-1-col,
+                    cu_handles.get_cublas_handle(),
+                    m_rows-1-col,
                     d_scale_val, CUDA_R_32F,
                     d_mat+(col*m_rows+(col+1)), CUDA_R_16F, 1,
                     soln.d_vec+(col+1), CUDA_R_16F, 1,
@@ -266,7 +276,7 @@ MatrixDense<__half> MatrixDense<__half>::to_half() const { return MatrixDense<__
 
 MatrixDense<float> MatrixDense<__half>::to_float() const {
     
-    MatrixDense<float> created_mat(handle, m_rows, n_cols);
+    MatrixDense<float> created_mat(cu_handles, m_rows, n_cols);
 
     double NUM_THREADS = 1024; // threads per thread block just 1 warp
     double NUM_BLOCKS = static_cast<double>(
@@ -282,7 +292,7 @@ MatrixDense<float> MatrixDense<__half>::to_float() const {
 
 MatrixDense<double> MatrixDense<__half>::to_double() const {
     
-    MatrixDense<double> created_mat(handle, m_rows, n_cols);
+    MatrixDense<double> created_mat(cu_handles, m_rows, n_cols);
 
     double NUM_THREADS = 1024; // threads per thread block just 1 warp
     double NUM_BLOCKS = static_cast<double>(

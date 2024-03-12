@@ -11,8 +11,8 @@ public:
 
         constexpr int m(63);
         constexpr int n(27);
-        M<double> A(M<double>::Random(*handle_ptr, m, n));
-        Vector<double> b(Vector<double>::Random(*handle_ptr, m));
+        M<double> A(M<double>::Random(TestBase::bundle, m, n));
+        Vector<double> b(Vector<double>::Random(TestBase::bundle, m));
         TypedLinearSystem<M, T> lin_sys(A, b);
 
         ASSERT_MATRIX_EQ(lin_sys.get_A(), A);

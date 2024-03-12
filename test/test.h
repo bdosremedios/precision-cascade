@@ -8,7 +8,9 @@
 
 #include "gtest/gtest.h"
 
+#include "tools/cuHandleBundle.h"
 #include "types/types.h"
+
 #include "tools/read_matrix.h"
 #include "tools/arg_pkgs/SolveArgPkg.h"
 
@@ -30,8 +32,8 @@ public:
 
     SolveArgPkg default_args;
     static bool *show_plots;
-    static cublasHandle_t *handle_ptr;
     static bool *print_errors;
+    static cuHandleBundle bundle;
 
 };
 

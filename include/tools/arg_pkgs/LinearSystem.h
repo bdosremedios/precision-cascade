@@ -1,9 +1,9 @@
 #ifndef LINEARSYSTEM_H
 #define LINEARSYSTEM_H
 
-#include <cublas_v2.h>
+#include "tools/cuHandleBundle.h"
 
-#include "../../types/types.h"
+#include "types/types.h"
 
 template <template <typename> typename M>
 class GenericLinearSystem
@@ -12,7 +12,7 @@ protected:
 
     const int m;
     const int n;
-    const cublasHandle_t handle;
+    const cuHandleBundle cu_handles;
     const M<double> A;
     const Vector<double> b;
 
@@ -25,7 +25,7 @@ public:
     ):
         m(arg_A.rows()),
         n(arg_A.cols()),
-        handle(arg_A.get_handle()),
+        cu_handles(arg_A.get_cu_handles()),
         A(arg_A),
         b(arg_b)
     {
@@ -42,7 +42,7 @@ public:
     virtual const Vector<double> &get_b() const { return b; }
     const int &get_m() const { return m; }
     const int &get_n() const { return n; }
-    const cublasHandle_t &get_handle() const { return handle; }
+    const cuHandleBundle &get_cu_handles() const { return cu_handles; }
 
 };
 

@@ -15,10 +15,10 @@ public:
 
         constexpr int n(45);
         M<double> A(
-            read_matrixCSV<M, double>(*handle_ptr, solve_matrix_dir / fs::path("A_inv_45.csv"))
+            read_matrixCSV<M, double>(TestBase::bundle, solve_matrix_dir / fs::path("A_inv_45.csv"))
         );
         Vector<double> b(
-            read_matrixCSV<Vector, double>(*handle_ptr, solve_matrix_dir / fs::path("b_inv_45.csv"))
+            read_matrixCSV<Vector, double>(TestBase::bundle, solve_matrix_dir / fs::path("b_inv_45.csv"))
         );
         TypedLinearSystem<M, double> lin_sys(A, b);
 
@@ -33,8 +33,8 @@ public:
         );
 
         PrecondArgPkg<M, double> identity(
-            std::make_shared<MatrixInversePreconditioner<M, double>>(M<double>::Identity(*handle_ptr, n, n)),
-            std::make_shared<MatrixInversePreconditioner<M, double>>(M<double>::Identity(*handle_ptr, n, n))
+            std::make_shared<MatrixInversePreconditioner<M, double>>(M<double>::Identity(TestBase::bundle, n, n)),
+            std::make_shared<MatrixInversePreconditioner<M, double>>(M<double>::Identity(TestBase::bundle, n, n))
         );
         GMRESSolve<M, double> pgmres_solve_inverse_of_identity(
             lin_sys, Tol<double>::roundoff(), pgmres_args, identity
@@ -108,9 +108,9 @@ public:
     template <template <typename> typename M>
     void TestLeftPreconditioning(fs::path A_path, fs::path Ainv_path, fs::path b_path) {
 
-        M<double> A(read_matrixCSV<M, double>(*handle_ptr, A_path));
-        M<double> Ainv(read_matrixCSV<M, double>(*handle_ptr, Ainv_path));
-        Vector<double> b(read_matrixCSV<Vector, double>(*handle_ptr, b_path));
+        M<double> A(read_matrixCSV<M, double>(TestBase::bundle, A_path));
+        M<double> Ainv(read_matrixCSV<M, double>(TestBase::bundle, Ainv_path));
+        Vector<double> b(read_matrixCSV<Vector, double>(TestBase::bundle, b_path));
 
         TestPrecondSingleIter<M>(
             A, b,
@@ -122,9 +122,9 @@ public:
     template <template <typename> typename M>
     void TestRightPreconditioning(fs::path A_path, fs::path Ainv_path, fs::path b_path) {
 
-        M<double> A(read_matrixCSV<M, double>(*handle_ptr, A_path));
-        M<double> Ainv(read_matrixCSV<M, double>(*handle_ptr, Ainv_path));
-        Vector<double> b(read_matrixCSV<Vector, double>(*handle_ptr, b_path));
+        M<double> A(read_matrixCSV<M, double>(TestBase::bundle, A_path));
+        M<double> Ainv(read_matrixCSV<M, double>(TestBase::bundle, Ainv_path));
+        Vector<double> b(read_matrixCSV<Vector, double>(TestBase::bundle, b_path));
 
         TestPrecondSingleIter<M>(
             A, b,
@@ -137,9 +137,9 @@ public:
     template <template <typename> typename M>
     void TestSymmetricPreconditioning(fs::path A_path, fs::path Ainv_path, fs::path b_path) {
 
-        M<double> A(read_matrixCSV<M, double>(*handle_ptr, A_path));
-        M<double> Ainv(read_matrixCSV<M, double>(*handle_ptr, Ainv_path));
-        Vector<double> b(read_matrixCSV<Vector, double>(*handle_ptr, b_path));
+        M<double> A(read_matrixCSV<M, double>(TestBase::bundle, A_path));
+        M<double> Ainv(read_matrixCSV<M, double>(TestBase::bundle, Ainv_path));
+        Vector<double> b(read_matrixCSV<Vector, double>(TestBase::bundle, b_path));
 
         TestPrecondSingleIter<M>(
             A*A, b,
@@ -154,10 +154,10 @@ public:
         fs::path A_path, fs::path Ainv_path, fs::path b_path, fs::path xtest_path
     ) {
 
-        M<double> A(read_matrixCSV<M, double>(*handle_ptr, A_path));
-        M<double> Ainv(read_matrixCSV<M, double>(*handle_ptr, Ainv_path));
-        Vector<double> b(read_matrixCSV<Vector, double>(*handle_ptr, b_path));
-        Vector<double> xtest(read_matrixCSV<Vector, double>(*handle_ptr, xtest_path));
+        M<double> A(read_matrixCSV<M, double>(TestBase::bundle, A_path));
+        M<double> Ainv(read_matrixCSV<M, double>(TestBase::bundle, Ainv_path));
+        Vector<double> b(read_matrixCSV<Vector, double>(TestBase::bundle, b_path));
+        Vector<double> xtest(read_matrixCSV<Vector, double>(TestBase::bundle, xtest_path));
 
         TestPrecond3IterAndMatch<M>(
             A, b, xtest,
@@ -171,10 +171,10 @@ public:
         fs::path A_path, fs::path Ainv_path, fs::path b_path, fs::path xtest_path
     ) {
 
-        M<double> A(read_matrixCSV<M, double>(*handle_ptr, A_path));
-        M<double> Ainv(read_matrixCSV<M, double>(*handle_ptr, Ainv_path));
-        Vector<double> b(read_matrixCSV<Vector, double>(*handle_ptr, b_path));
-        Vector<double> xtest(read_matrixCSV<Vector, double>(*handle_ptr, xtest_path));
+        M<double> A(read_matrixCSV<M, double>(TestBase::bundle, A_path));
+        M<double> Ainv(read_matrixCSV<M, double>(TestBase::bundle, Ainv_path));
+        Vector<double> b(read_matrixCSV<Vector, double>(TestBase::bundle, b_path));
+        Vector<double> xtest(read_matrixCSV<Vector, double>(TestBase::bundle, xtest_path));
 
         TestPrecond3IterAndMatch<M>(
             A, b, xtest,
@@ -189,10 +189,10 @@ public:
         fs::path A_path, fs::path Ainv_path, fs::path b_path, fs::path xtest_path
     ) {
 
-        M<double> A(read_matrixCSV<M, double>(*handle_ptr, A_path));
-        M<double> Ainv(read_matrixCSV<M, double>(*handle_ptr, Ainv_path));
-        Vector<double> b(read_matrixCSV<Vector, double>(*handle_ptr, b_path));
-        Vector<double> xtest(read_matrixCSV<Vector, double>(*handle_ptr, xtest_path));
+        M<double> A(read_matrixCSV<M, double>(TestBase::bundle, A_path));
+        M<double> Ainv(read_matrixCSV<M, double>(TestBase::bundle, Ainv_path));
+        Vector<double> b(read_matrixCSV<Vector, double>(TestBase::bundle, b_path));
+        Vector<double> xtest(read_matrixCSV<Vector, double>(TestBase::bundle, xtest_path));
 
         TestPrecond3IterAndMatch<M>(
             A*A, b, xtest,

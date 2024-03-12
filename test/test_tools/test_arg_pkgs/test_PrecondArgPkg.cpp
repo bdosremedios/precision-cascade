@@ -14,7 +14,7 @@ public:
         PrecondArgPkg<M, double> args;
         NoPreconditioner<M, double> no_precond;
 
-        Vector<double> test_vec(Vector<double>::Random(*handle_ptr, n));
+        Vector<double> test_vec(Vector<double>::Random(TestBase::bundle, n));
 
         ASSERT_VECTOR_EQ(args.left_precond->action_inv_M(test_vec), no_precond.action_inv_M(test_vec));
         ASSERT_VECTOR_EQ(args.right_precond->action_inv_M(test_vec), no_precond.action_inv_M(test_vec));
@@ -26,7 +26,7 @@ public:
 
         constexpr int n(14);
 
-        M<double> A(M<double>::Random(*handle_ptr, n, n));
+        M<double> A(M<double>::Random(TestBase::bundle, n, n));
         
         NoPreconditioner<M, double> no_precond;
         ILUPreconditioner<M, double> ilu_precond(A, Tol<double>::roundoff(), false);
@@ -35,7 +35,7 @@ public:
             std::make_shared<ILUPreconditioner<M, double>>(A, Tol<double>::roundoff(), false)
         );
 
-        Vector<double> test_vec(Vector<double>::Random(*handle_ptr, n));
+        Vector<double> test_vec(Vector<double>::Random(TestBase::bundle, n));
 
         ASSERT_VECTOR_EQ(args.left_precond->action_inv_M(test_vec), ilu_precond.action_inv_M(test_vec));
         ASSERT_VECTOR_EQ(args.right_precond->action_inv_M(test_vec), no_precond.action_inv_M(test_vec));
@@ -47,7 +47,7 @@ public:
 
         constexpr int n(17);
 
-        M<double> A(M<double>::Random(*handle_ptr, n, n));
+        M<double> A(M<double>::Random(TestBase::bundle, n, n));
 
         NoPreconditioner<M, double> no_precond;
         ILUPreconditioner<M, double> ilu_precond(A, Tol<double>::roundoff(), false);
@@ -57,7 +57,7 @@ public:
             std::make_shared<ILUPreconditioner<M, double>>(A, Tol<double>::roundoff(), false)
         );
 
-        Vector<double> test_vec(Vector<double>::Random(*handle_ptr, n));
+        Vector<double> test_vec(Vector<double>::Random(TestBase::bundle, n));
 
         ASSERT_VECTOR_EQ(args.left_precond->action_inv_M(test_vec), no_precond.action_inv_M(test_vec));
         ASSERT_VECTOR_EQ(args.right_precond->action_inv_M(test_vec), ilu_precond.action_inv_M(test_vec));
@@ -69,7 +69,7 @@ public:
 
         constexpr int n(25);
 
-        M<double> A(M<double>::Random(*handle_ptr, n, n));
+        M<double> A(M<double>::Random(TestBase::bundle, n, n));
 
         NoPreconditioner<M, double> no_precond;
         ILUPreconditioner<M, double> ilu_precond(A, Tol<double>::roundoff(), false);
@@ -79,7 +79,7 @@ public:
             std::make_shared<ILUPreconditioner<M, double>>(A, Tol<double>::roundoff(), false)
         );
 
-        Vector<double> test_vec(Vector<double>::Random(*handle_ptr, n));
+        Vector<double> test_vec(Vector<double>::Random(TestBase::bundle, n));
 
         ASSERT_VECTOR_EQ(args.left_precond->action_inv_M(test_vec), ilu_precond.action_inv_M(test_vec));
         ASSERT_VECTOR_EQ(args.right_precond->action_inv_M(test_vec), ilu_precond.action_inv_M(test_vec));

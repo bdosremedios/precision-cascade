@@ -52,6 +52,7 @@ add_library(
     precision-cascade
     STATIC
     tools/cuda_check.cu
+    tools/cuHandleBundle.cu
     types/Scalar/Scalar_hlf.cu
     types/Scalar/Scalar_sgl.cu
     types/Scalar/Scalar_dbl.cu

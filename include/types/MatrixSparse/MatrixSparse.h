@@ -1,8 +1,5 @@
-// #ifndef MATRIXSPARSE_H
-// #define MATRIXSPARSE_H
-
-// #include <Eigen/Dense>
-// #include <Eigen/SparseCore>
+#ifndef MATRIXSPARSE_H
+#define MATRIXSPARSE_H
 
 // #include "MatrixVector.h"
 // #include "MatrixDense.h"
@@ -10,28 +7,22 @@
 // #include <cmath>
 // #include <iostream>
 
-// using Eigen::Matrix;
-// using Eigen::SparseMatrix;
-// using Eigen::Dynamic;
+template <typename T>
+class MatrixSparse
+{
+private:
 
-// template <typename T>
-// class MatrixSparse: private SparseMatrix<T>
-// {
-// private:
-
-//     using Parent = SparseMatrix<T>;
-
-//     cublasHandle_t cublas_handle;
-//     cusparseHandle_t cusparse_handle;
-//     int m_rows, n_cols;
+    cublasHandle_t cublas_handle;
+    cusparseHandle_t cusparse_handle;
+    int m_rows, n_cols;
 //     int nnz;
 //     T *d_col_offsets;
 //     T *d_row_indices;
 //     T *d_values;
 
-// public:
+public:
 
-//     class Block; class Col; // Forward declaration of nested classes
+    class Block; class Col; // Forward declaration of nested classes
 
 //     // *** Constructors ***
 //     MatrixSparse(): Parent::SparseMatrix(0, 0) {}
@@ -244,4 +235,6 @@
 
 //     return x;
 
-// }
+};
+
+#endif

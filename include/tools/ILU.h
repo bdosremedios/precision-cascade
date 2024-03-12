@@ -133,8 +133,8 @@ void dynamic_construct_leftlook_square_ILU(
     W *P_mat = static_cast<W *>(malloc(m_dim*m_dim*sizeof(W)));
 
     U = A;
-    L = M<W>::Identity(A.get_handle(), m_dim, m_dim);
-    P = M<W>::Identity(A.get_handle(), m_dim, m_dim);
+    L = M<W>::Identity(A.get_cu_handles(), m_dim, m_dim);
+    P = M<W>::Identity(A.get_cu_handles(), m_dim, m_dim);
 
     U.copy_data_to_ptr(U_mat, m_dim, m_dim);
     L.copy_data_to_ptr(L_mat, m_dim, m_dim);
@@ -151,9 +151,9 @@ void dynamic_construct_leftlook_square_ILU(
         );
     }
 
-    U = M<W>(A.get_handle(), U_mat, m_dim, m_dim);
-    L = M<W>(A.get_handle(), L_mat, m_dim, m_dim);
-    P = M<W>(A.get_handle(), P_mat, m_dim, m_dim);
+    U = M<W>(A.get_cu_handles(), U_mat, m_dim, m_dim);
+    L = M<W>(A.get_cu_handles(), L_mat, m_dim, m_dim);
+    P = M<W>(A.get_cu_handles(), P_mat, m_dim, m_dim);
 
     free(U_mat);
     free(L_mat);

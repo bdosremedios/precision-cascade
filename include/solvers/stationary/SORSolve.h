@@ -9,7 +9,7 @@ class SORSolve: public TypedIterativeSolve<M, T>
 private:
 
     Scalar<T> w;
-    M<T> D_wL = M<T>(NULL);
+    M<T> D_wL = M<T>(cuHandleBundle());
 
 protected:
 
@@ -47,7 +47,7 @@ public:
         }
 
         D_wL = M<T>(
-            arg_typed_lin_sys.get_handle(),
+            arg_typed_lin_sys.get_cu_handles(),
             h_D_wL,
             typed_lin_sys.get_m(),
             typed_lin_sys.get_n()

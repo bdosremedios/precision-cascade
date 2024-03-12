@@ -18,8 +18,8 @@ public:
         const double &conv_tol
     ) {
 
-        M<double> A(read_matrixCSV<M, double>(*handle_ptr, A_file_path));
-        Vector<double> b(read_matrixCSV<Vector, double>(*handle_ptr, b_file_path));
+        M<double> A(read_matrixCSV<M, double>(TestBase::bundle, A_file_path));
+        Vector<double> b(read_matrixCSV<Vector, double>(TestBase::bundle, b_file_path));
         TypedLinearSystem<M, T> lin_sys(A, b);
 
         FP_GMRES_IR_Solve<M, T> gmres_ir(lin_sys, Tol<T>::roundoff(), args);

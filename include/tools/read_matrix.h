@@ -7,12 +7,13 @@
 #include <sstream>
 #include <string>
 
+#include "tools/cuHandleBundle.h"
 #include "types/types.h"
 
 namespace fs = std::filesystem;
 
 template <template<typename> typename M, typename T>
-M<T> read_matrixCSV(const cublasHandle_t &handle, fs::path const &path) {
+M<T> read_matrixCSV(const cuHandleBundle &cu_handles, fs::path const &path) {
 
     assert_valid_type_or_vec<M>();
 
@@ -88,7 +89,7 @@ M<T> read_matrixCSV(const cublasHandle_t &handle, fs::path const &path) {
 
     }
 
-    M<T> mat(handle, h_mat, m_rows, n_cols);
+    M<T> mat(cu_handles, h_mat, m_rows, n_cols);
     mat.reduce();
 
     free(h_mat);

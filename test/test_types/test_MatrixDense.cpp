@@ -10,7 +10,7 @@ public:
     void TestBlock() {
 
         const MatrixDense<T> const_mat (
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3),
               static_cast<T>(4), static_cast<T>(5)},
              {static_cast<T>(6), static_cast<T>(7), static_cast<T>(8),
@@ -45,7 +45,7 @@ public:
         // Test MatrixDense cast/access for block 0, 0, 3, 4
         MatrixDense<T> mat_0_0_3_4(mat.get_block(0, 0, 3, 4));
         MatrixDense<T> test_0_0_3_4(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4)},
              {static_cast<T>(6), static_cast<T>(7), static_cast<T>(8), static_cast<T>(9)},
              {static_cast<T>(11), static_cast<T>(12), static_cast<T>(13), static_cast<T>(14)}}
@@ -55,7 +55,7 @@ public:
         // Test MatrixDense cast/access for block 1, 2, 3, 1
         MatrixDense<T> mat_1_2_3_1(mat.get_block(1, 2, 3, 1));
         MatrixDense<T> test_1_2_3_1(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(8)},
              {static_cast<T>(13)},
              {static_cast<T>(18)}}
@@ -72,10 +72,10 @@ public:
 
         // Test assignment from MatrixDense
         mat = const_mat;
-        MatrixDense<T> zero_2_3(MatrixDense<T>::Zero(*handle_ptr, 2, 3));
+        MatrixDense<T> zero_2_3(MatrixDense<T>::Zero(TestBase::bundle, 2, 3));
         mat.get_block(1, 1, 2, 3).set_from_mat(zero_2_3);
         MatrixDense<T> test_assign_2_3(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3),
               static_cast<T>(4), static_cast<T>(5)},
              {static_cast<T>(6), static_cast<T>(0), static_cast<T>(0),
@@ -90,14 +90,14 @@ public:
         // Test assignment from Vector
         mat = const_mat;
         Vector<T> assign_vec(
-            *handle_ptr,
+            TestBase::bundle,
             {static_cast<T>(1),
              static_cast<T>(1),
              static_cast<T>(1)}
         );
         mat.get_block(1, 4, 3, 1).set_from_vec(assign_vec);
         MatrixDense<T> test_assign_1_4(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3),
               static_cast<T>(4), static_cast<T>(5)},
              {static_cast<T>(6), static_cast<T>(7), static_cast<T>(8),
@@ -116,7 +116,7 @@ public:
         const int m(4);
         const int n(5);
         const MatrixDense<double> const_mat (
-            *handle_ptr,
+            TestBase::bundle,
             {{1, 2, 3, 4, 5},
              {6, 7, 8, 9, 10},
              {11, 12, 13, 14, 15},

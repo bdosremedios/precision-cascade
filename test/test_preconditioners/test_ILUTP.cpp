@@ -12,7 +12,7 @@ public:
         // Test ILU(0) and ILUT(0, n) [No Dropping] Give the same dense decomp
         constexpr int n(8);
         M<double> A(
-            read_matrixCSV<M, double>(*handle_ptr, solve_matrix_dir / fs::path("ilu_A.csv"))
+            read_matrixCSV<M, double>(TestBase::bundle, solve_matrix_dir / fs::path("ilu_A.csv"))
         );
         ILUPreconditioner<M, double> ilu0(A, Tol<double>::roundoff(), false);
         ILUPreconditioner<M, double> ilut0(A, 0., n, Tol<double>::roundoff(), false);
@@ -27,7 +27,7 @@ public:
 
         constexpr int n(8);
         M<double> A(
-            read_matrixCSV<M, double>(*handle_ptr, solve_matrix_dir / fs::path("ilu_sparse_A.csv"))
+            read_matrixCSV<M, double>(TestBase::bundle, solve_matrix_dir / fs::path("ilu_sparse_A.csv"))
         );
 
         // Check multiple rising thresholds ensuring that each ilu is closer to the matrix and that
@@ -100,7 +100,7 @@ public:
         // Test that max dropping just gives the diagonal since everything else gets dropped
         constexpr int n(8);
         M<double> A(
-            read_matrixCSV<M, double>(*handle_ptr, solve_matrix_dir / fs::path("ilu_sparse_A.csv"))
+            read_matrixCSV<M, double>(TestBase::bundle, solve_matrix_dir / fs::path("ilu_sparse_A.csv"))
         );
         ILUPreconditioner<M, double> ilu_all_drop(A, DBL_MAX, n, Tol<double>::roundoff(), pivot);
 
@@ -130,7 +130,7 @@ public:
         // Test that 0 dropping leads to just p largest being retained
         constexpr int n(8);
         M<double> A(
-            read_matrixCSV<M, double>(*handle_ptr, solve_matrix_dir / fs::path("ilu_A.csv"))
+            read_matrixCSV<M, double>(TestBase::bundle, solve_matrix_dir / fs::path("ilu_A.csv"))
         );
         ILUPreconditioner<M, double> ilu_keep_8(A, 0., 8, Tol<double>::roundoff(), pivot);
         ILUPreconditioner<M, double> ilu_keep_7(A, 0., 7, Tol<double>::roundoff(), pivot);

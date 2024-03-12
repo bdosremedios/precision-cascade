@@ -14,8 +14,8 @@
 #include "tools/arg_pkgs/argument_pkgs.h"
 
 bool *TestBase::show_plots = new bool;
-cublasHandle_t *TestBase::handle_ptr = new cublasHandle_t;
 bool *TestBase::print_errors = new bool;
+cuHandleBundle TestBase::bundle;
 
 int main(int argc, char **argv) {
 
@@ -90,14 +90,12 @@ int main(int argc, char **argv) {
         *(TestBase::print_errors) = false;
     }
 
-    cublasCreate(TestBase::handle_ptr);
-    cublasSetPointerMode(*TestBase::handle_ptr, CUBLAS_POINTER_MODE_DEVICE);
+    TestBase::bundle.create();
     int return_status = RUN_ALL_TESTS();
-    cublasDestroy(*TestBase::handle_ptr);
+    TestBase::bundle.destroy();
 
     // Free dynamically allocated test variables
     free(TestBase::show_plots);
-    free(TestBase::handle_ptr);
     free(TestBase::print_errors);
 
     return return_status;

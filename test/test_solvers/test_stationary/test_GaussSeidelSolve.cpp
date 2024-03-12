@@ -13,8 +13,8 @@ public:
         const double conv_tol
     ) {
 
-        M<double> A(read_matrixCSV<M, double>(*handle_ptr, A_file_path));
-        Vector<double> b(read_matrixCSV<Vector, double>(*handle_ptr, b_file_path));
+        M<double> A(read_matrixCSV<M, double>(TestBase::bundle, A_file_path));
+        Vector<double> b(read_matrixCSV<Vector, double>(TestBase::bundle, b_file_path));
         TypedLinearSystem<M, T> lin_sys(A, b);
 
         SolveArgPkg args;
@@ -37,8 +37,8 @@ public:
         const double fail_tol
     ) {
 
-        M<double> A(read_matrixCSV<M, double>(*handle_ptr, A_file_path));
-        Vector<double> b(read_matrixCSV<Vector, double>(*handle_ptr, b_file_path));
+        M<double> A(read_matrixCSV<M, double>(TestBase::bundle, A_file_path));
+        Vector<double> b(read_matrixCSV<Vector, double>(TestBase::bundle, b_file_path));
         TypedLinearSystem<M, T> lin_sys(A, b);
 
         SolveArgPkg args;

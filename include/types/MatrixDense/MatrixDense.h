@@ -14,6 +14,7 @@
 #include <cublas_v2.h>
 
 #include "tools/cuda_check.h"
+#include "tools/CuHandleBundle.h"
 
 #include "MatrixDense_gpu_kernels.cuh"
 
@@ -32,7 +33,7 @@ private:
     friend class Vector<T>;
     // friend MatrixSparse<T>;
 
-    cublasHandle_t handle;
+    cuHandleBundle cu_handles;
     int m_rows = 0, n_cols = 0;
     T *d_mat = nullptr;
 
@@ -53,15 +54,28 @@ public:
     class Block; class Col; // Forward declaration of nested classes
 
     // *** Constructors ***
-    MatrixDense(const cublasHandle_t &arg_handle, int arg_m, int arg_n):
-        handle(arg_handle), m_rows(arg_m), n_cols(arg_n)
+    MatrixDense(
+        const cuHandleBundle &arg_cu_handles,
+        int arg_m,
+        int arg_n
+    ):
+        cu_handles(arg_cu_handles),
+        m_rows(arg_m),
+        n_cols(arg_n)
     { allocate_d_mat(); }
 
-    MatrixDense(const cublasHandle_t &arg_handle): MatrixDense(arg_handle, 0, 0) {}
+    MatrixDense(const cuHandleBundle &arg_cu_handles): MatrixDense(arg_cu_handles, 0, 0) {}
 
     // Row-major nested initializer list assumed for intuitive user instantiation
-    MatrixDense(const cublasHandle_t &arg_handle, std::initializer_list<std::initializer_list<T>> li):
-        MatrixDense(arg_handle, li.size(), (li.size() == 0) ? 0 : std::cbegin(li)->size())
+    MatrixDense(
+        const cuHandleBundle &arg_cu_handles,
+        std::initializer_list<std::initializer_list<T>> li
+    ):
+        MatrixDense(
+            arg_cu_handles,
+            li.size(),
+            (li.size() == 0) ? 0 : std::cbegin(li)->size()
+        )
     {
 
         struct outer_vars {
@@ -99,8 +113,17 @@ public:
     }
 
     // *** Dynamic Memory *** (assumes outer code handles dynamic memory properly)
-    MatrixDense(const cublasHandle_t &arg_handle, T *h_mat, int m_elem, int n_elem):
-        MatrixDense(arg_handle, m_elem, n_elem)
+    MatrixDense(
+        const cuHandleBundle &arg_cu_handles,
+        T *h_mat,
+        int m_elem,
+        int n_elem
+    ):
+        MatrixDense(
+            arg_cu_handles,
+            m_elem,
+            n_elem
+        )
     {
         if ((m_rows > 0) && (n_cols > 0)) {
             check_cublas_status(cublasSetMatrix(m_rows, n_cols, sizeof(T), h_mat, m_rows, d_mat, m_rows));
@@ -126,7 +149,11 @@ public:
 
     // *** Conversion Constructor ***
     MatrixDense(const MatrixDense<T>::Block &block):
-        MatrixDense(block.associated_mat_ptr->handle, block.m_rows, block.n_cols)
+        MatrixDense(
+            block.associated_mat_ptr->cu_handles,
+            block.m_rows,
+            block.n_cols
+        )
     {
         // Copy column by column 1D slices relevant to matrix
         for (int j=0; j<block.n_cols; ++j) {
@@ -151,7 +178,7 @@ public:
 
         if (this != &other) {
 
-            handle = other.handle;
+            cu_handles = other.cu_handles;
 
             if ((m_rows != other.m_rows) || (n_cols != other.n_cols)) {
                 check_cuda_error(cudaFree(d_mat));
@@ -230,6 +257,7 @@ public:
     }
 
     // *** Properties ***
+    cuHandleBundle get_cu_handles() const { return cu_handles; }
     int rows() const { return m_rows; }
     int cols() const { return n_cols; }
     int non_zeros() const { 
@@ -254,7 +282,6 @@ public:
         return count;
     
     }
-    cublasHandle_t get_handle() const { return handle; }
 
     void print() const {
 
@@ -289,7 +316,7 @@ public:
     }
 
     // *** Static Creation ***
-    static MatrixDense<T> Zero(const cublasHandle_t &arg_handle, int arg_m, int arg_n) {
+    static MatrixDense<T> Zero(const cuHandleBundle &arg_cu_handles, int arg_m, int arg_n) {
 
         T *h_mat = static_cast<T *>(malloc(arg_m*arg_n*sizeof(T)));
         
@@ -298,7 +325,7 @@ public:
                 h_mat[i+j*arg_m] = static_cast<T>(0); 
             }
         }
-        MatrixDense<T> created_mat(arg_handle, h_mat, arg_m, arg_n);
+        MatrixDense<T> created_mat(arg_cu_handles, h_mat, arg_m, arg_n);
 
         free(h_mat);
 
@@ -306,7 +333,7 @@ public:
 
     }
 
-    static MatrixDense<T> Ones(const cublasHandle_t &arg_handle, int arg_m, int arg_n) {
+    static MatrixDense<T> Ones(const cuHandleBundle &arg_cu_handles, int arg_m, int arg_n) {
 
         T *h_mat = static_cast<T *>(malloc(arg_m*arg_n*sizeof(T)));
         
@@ -315,7 +342,7 @@ public:
                 h_mat[i+j*arg_m] = static_cast<T>(1); 
             }
         }
-        MatrixDense<T> created_mat(arg_handle, h_mat, arg_m, arg_n);
+        MatrixDense<T> created_mat(arg_cu_handles, h_mat, arg_m, arg_n);
 
         free(h_mat);
 
@@ -323,7 +350,7 @@ public:
     
     }
 
-    static MatrixDense<T> Identity(const cublasHandle_t &arg_handle, int arg_m, int arg_n) {
+    static MatrixDense<T> Identity(const cuHandleBundle &arg_cu_handles, int arg_m, int arg_n) {
 
         T *h_mat = static_cast<T *>(malloc(arg_m*arg_n*sizeof(T)));
         
@@ -336,7 +363,7 @@ public:
                 }
             }
         }
-        MatrixDense<T> created_mat(arg_handle, h_mat, arg_m, arg_n);
+        MatrixDense<T> created_mat(arg_cu_handles, h_mat, arg_m, arg_n);
 
         free(h_mat);
 
@@ -345,7 +372,7 @@ public:
     }
 
     // Needed for testing (don't need to optimize performance)
-    static MatrixDense<T> Random(const cublasHandle_t &arg_handle, int arg_m, int arg_n) {
+    static MatrixDense<T> Random(const cuHandleBundle &arg_cu_handles, int arg_m, int arg_n) {
 
         std::random_device rd;
         std::mt19937 gen(rd());
@@ -358,7 +385,7 @@ public:
                 h_mat[i+j*arg_m] = static_cast<T>(dist(gen)); 
             }
         }
-        MatrixDense<T> created_mat(arg_handle, h_mat, arg_m, arg_n);
+        MatrixDense<T> created_mat(arg_cu_handles, h_mat, arg_m, arg_n);
 
         free(h_mat);
 
@@ -431,8 +458,8 @@ public:
                 h_mat_trans[j+i*n_cols] = h_mat[i+j*m_rows];
             }
         }
-
-        MatrixDense<T> created_mat(handle, h_mat_trans, n_cols, m_rows);
+        
+        MatrixDense<T> created_mat(cu_handles, h_mat_trans, n_cols, m_rows);
 
         free(h_mat);
         free(h_mat_trans);
@@ -509,7 +536,7 @@ public:
 
         Vector<T> copy_to_vec() const {
 
-            Vector<T> created_vec(associated_mat_ptr->handle, associated_mat_ptr->m_rows);
+            Vector<T> created_vec(associated_mat_ptr->get_cu_handles(), associated_mat_ptr->m_rows);
 
             check_cuda_error(
                 cudaMemcpy(
@@ -605,7 +632,7 @@ public:
 
         MatrixDense<T> copy_to_mat() const {
 
-            MatrixDense<T> created_mat(associated_mat_ptr->handle, m_rows, n_cols);
+            MatrixDense<T> created_mat(associated_mat_ptr->cu_handles, m_rows, n_cols);
 
             // Copy column by column 1D slices relevant to matrix
             for (int j=0; j<n_cols; ++j) {

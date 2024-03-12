@@ -11,29 +11,29 @@ public:
 
         // Test with no initial guess and default parameters
         constexpr int n(6);
-        M<double> A(M<double>::Random(*handle_ptr, n, n));
-        Vector<double> b(Vector<double>::Random(*handle_ptr, n));
-        Vector<T> soln(Vector<T>::Random(*handle_ptr, 1));
+        M<double> A(M<double>::Random(TestBase::bundle, n, n));
+        Vector<double> b(Vector<double>::Random(TestBase::bundle, n));
+        Vector<T> soln(Vector<T>::Random(TestBase::bundle, 1));
         TypedLinearSystem<M, T> typed_lin_sys(A, b);
 
         TypedIterativeSolveTestingMock<M, T> test_mock_no_guess(typed_lin_sys, soln, default_args);
 
         ASSERT_VECTOR_EQ(
             test_mock_no_guess.init_guess,
-            Vector<double>::Ones(*handle_ptr, n)
+            Vector<double>::Ones(TestBase::bundle, n)
         );
         ASSERT_VECTOR_EQ(
             test_mock_no_guess.get_generic_soln(),
-            Vector<double>::Ones(*handle_ptr, n)
+            Vector<double>::Ones(TestBase::bundle, n)
         );
 
         ASSERT_VECTOR_EQ(
             test_mock_no_guess.init_guess_typed,
-            Vector<double>::Ones(*handle_ptr, n).template cast<T>()
+            Vector<double>::Ones(TestBase::bundle, n).template cast<T>()
         );
         ASSERT_VECTOR_EQ(
             test_mock_no_guess.typed_soln,
-            Vector<double>::Ones(*handle_ptr, n).template cast<T>()
+            Vector<double>::Ones(TestBase::bundle, n).template cast<T>()
         );
 
         EXPECT_EQ(test_mock_no_guess.max_iter, 100);
@@ -51,7 +51,7 @@ public:
         );
 
         // Test with initial guess and explicit parameters
-        Vector<double> init_guess(Vector<double>::Random(*handle_ptr, n));
+        Vector<double> init_guess(Vector<double>::Random(TestBase::bundle, n));
         SolveArgPkg args;
         args.init_guess = init_guess;
         args.max_iter = n;
@@ -90,18 +90,18 @@ public:
         constexpr int n(64);
         constexpr int max_iter(5);
         M<double> A(
-            read_matrixCSV<M, double>(*handle_ptr, solve_matrix_dir / fs::path("conv_diff_64_A.csv"))
+            read_matrixCSV<M, double>(TestBase::bundle, solve_matrix_dir / fs::path("conv_diff_64_A.csv"))
         );
         Vector<double> b(
-            read_matrixCSV<Vector, double>(*handle_ptr, solve_matrix_dir / fs::path("conv_diff_64_b.csv"))
+            read_matrixCSV<Vector, double>(TestBase::bundle, solve_matrix_dir / fs::path("conv_diff_64_b.csv"))
         );
         TypedLinearSystem<M, T> typed_lin_sys(A, b);
 
         SolveArgPkg args;
         Vector<T> typed_soln(
-            read_matrixCSV<Vector, T>(*handle_ptr, solve_matrix_dir / fs::path("conv_diff_64_x.csv"))
+            read_matrixCSV<Vector, T>(TestBase::bundle, solve_matrix_dir / fs::path("conv_diff_64_x.csv"))
         );
-        Vector<double> init_guess(Vector<double>::Ones(*handle_ptr, n));
+        Vector<double> init_guess(Vector<double>::Ones(TestBase::bundle, n));
         args.init_guess = init_guess;
         args.max_iter = max_iter;
         args.target_rel_res = (
@@ -167,14 +167,14 @@ public:
 
         constexpr int n(64);
         M<double> A(
-            read_matrixCSV<M, double>(*handle_ptr, solve_matrix_dir / fs::path("conv_diff_64_A.csv"))
+            read_matrixCSV<M, double>(TestBase::bundle, solve_matrix_dir / fs::path("conv_diff_64_A.csv"))
         );
         Vector<double> b(
-            read_matrixCSV<Vector, double>(*handle_ptr, solve_matrix_dir / fs::path("conv_diff_64_b.csv"))
+            read_matrixCSV<Vector, double>(TestBase::bundle, solve_matrix_dir / fs::path("conv_diff_64_b.csv"))
         );
         TypedLinearSystem<M, T> typed_lin_sys(A, b);
         Vector<T> typed_soln(
-            read_matrixCSV<Vector, T>(*handle_ptr, solve_matrix_dir / fs::path("conv_diff_64_x.csv"))
+            read_matrixCSV<Vector, T>(TestBase::bundle, solve_matrix_dir / fs::path("conv_diff_64_x.csv"))
         );
 
         TypedIterativeSolveTestingMock<M, T> test_mock(typed_lin_sys, typed_soln, default_args);
@@ -184,10 +184,10 @@ public:
         test_mock.reset();
 
         // Check init_guess doesn't change
-        ASSERT_VECTOR_EQ(test_mock.init_guess, Vector<double>::Ones(*handle_ptr, n));
+        ASSERT_VECTOR_EQ(test_mock.init_guess, Vector<double>::Ones(TestBase::bundle, n));
 
         // Check solve variables are all reset
-        ASSERT_VECTOR_EQ(test_mock.typed_soln, Vector<T>::Ones(*handle_ptr, n));
+        ASSERT_VECTOR_EQ(test_mock.typed_soln, Vector<T>::Ones(TestBase::bundle, n));
         EXPECT_FALSE(test_mock.initiated);
         EXPECT_FALSE(test_mock.converged);
         EXPECT_FALSE(test_mock.terminated);
@@ -202,13 +202,13 @@ public:
 
         auto try_create_solve_mismatched_cols = []() {
             SolveArgPkg args;
-            args.init_guess = Vector<double>::Ones(*handle_ptr, 5, 1);
+            args.init_guess = Vector<double>::Ones(TestBase::bundle, 5, 1);
             TypedIterativeSolveTestingMock<M, double> test(
                 TypedLinearSystem<M, double>(
-                    M<double>::Ones(*handle_ptr, 64, 64),
-                    Vector<double>::Ones(*handle_ptr, 64)
+                    M<double>::Ones(TestBase::bundle, 64, 64),
+                    Vector<double>::Ones(TestBase::bundle, 64)
                 ),
-                Vector<double>::Ones(*handle_ptr, 5),
+                Vector<double>::Ones(TestBase::bundle, 5),
                 args
             );
         };
@@ -223,10 +223,10 @@ public:
         auto try_create_solve_non_square = [=]() {
             TypedIterativeSolveTestingMock<M, double> test_mock(
                 TypedLinearSystem<M, double>(
-                    M<double>::Ones(*handle_ptr, 43, 64),
-                    Vector<double>::Ones(*handle_ptr, 42)
+                    M<double>::Ones(TestBase::bundle, 43, 64),
+                    Vector<double>::Ones(TestBase::bundle, 42)
                 ),
-                Vector<double>::Ones(*handle_ptr, 64),
+                Vector<double>::Ones(TestBase::bundle, 64),
                 default_args
             );
         };

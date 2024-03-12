@@ -80,7 +80,7 @@ public:
     void TestMatrixColToVector() {
 
         M<T> mat(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4)},
              {static_cast<T>(5), static_cast<T>(6), static_cast<T>(7), static_cast<T>(8)},
              {static_cast<T>(9), static_cast<T>(10), static_cast<T>(11), static_cast<T>(12)}}
@@ -88,14 +88,14 @@ public:
 
         Vector<T> vec_col_0(mat.get_col(0));
         Vector<T> test_vec_col_0(
-            *handle_ptr,
+            TestBase::bundle,
             {static_cast<T>(1), static_cast<T>(5), static_cast<T>(9)}
         );
         ASSERT_VECTOR_EQ(vec_col_0, test_vec_col_0);
 
         Vector<T> vec_col_2(mat.get_col(2));
         Vector<T> test_vec_col_2(
-            *handle_ptr,
+            TestBase::bundle,
             {static_cast<T>(3), static_cast<T>(7), static_cast<T>(11)}
         );
         ASSERT_VECTOR_EQ(vec_col_2, test_vec_col_2);
@@ -112,7 +112,7 @@ public:
     void TestVectorToMatrixCol() {
 
         const M<T> const_mat(
-            *handle_ptr,
+            TestBase::bundle,
             {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3)},
              {static_cast<T>(4), static_cast<T>(5), static_cast<T>(6)},
              {static_cast<T>(7), static_cast<T>(8), static_cast<T>(9)},
@@ -122,7 +122,7 @@ public:
 
         // Test assignment
         Vector<T> assign_vec(
-            *handle_ptr,
+            TestBase::bundle,
             {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)}
         );
         mat.get_col(2).set_from_vec(assign_vec);
@@ -141,7 +141,7 @@ public:
     void TestBadVectorToMatrixCol() {
 
         const M<double> const_mat(
-            *handle_ptr,
+            TestBase::bundle,
             {{1, 2, 3},
              {4, 5, 6},
              {7, 8, 9},
@@ -150,7 +150,7 @@ public:
         M<double> mat(const_mat);
 
         Vector<double> vec_too_small(
-            *handle_ptr,
+            TestBase::bundle,
             {1, 1, 1}
         );
         CHECK_FUNC_HAS_RUNTIME_ERROR(
@@ -163,7 +163,7 @@ public:
         );
 
         Vector<double> vec_too_large(
-            *handle_ptr,
+            TestBase::bundle,
             {1, 1, 1, 1, 1, 1}
         );
         CHECK_FUNC_HAS_RUNTIME_ERROR(

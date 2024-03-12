@@ -13,8 +13,8 @@ public:
         const bool &check_3_iter
     ) {
 
-        M<double> A(read_matrixCSV<M, double>(*handle_ptr, A_file_path));
-        Vector<double> b(read_matrixCSV<Vector, double>(*handle_ptr, b_file_path));
+        M<double> A(read_matrixCSV<M, double>(TestBase::bundle, A_file_path));
+        Vector<double> b(read_matrixCSV<Vector, double>(TestBase::bundle, b_file_path));
         TypedLinearSystem<M, float> lin_sys(A, b);
 
         SolveArgPkg args;
@@ -36,10 +36,10 @@ public:
 
         constexpr int n(64);
         M<double> A(
-            read_matrixCSV<M, double>(*handle_ptr, solve_matrix_dir / fs::path("conv_diff_64_A.csv"))
+            read_matrixCSV<M, double>(TestBase::bundle, solve_matrix_dir / fs::path("conv_diff_64_A.csv"))
         );
         Vector<double> b(
-            read_matrixCSV<Vector, double>(*handle_ptr, solve_matrix_dir / fs::path("conv_diff_64_b.csv"))
+            read_matrixCSV<Vector, double>(TestBase::bundle, solve_matrix_dir / fs::path("conv_diff_64_b.csv"))
         );
         TypedLinearSystem<M, float> lin_sys(A, b);
 

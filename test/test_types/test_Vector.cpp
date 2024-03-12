@@ -10,17 +10,17 @@ public:
     void TestElementAccess() {
         
         constexpr int n(10);
-        Vector<T> test_vec_n(*handle_ptr, n);
+        Vector<T> test_vec_n(TestBase::bundle, n);
         for (int i=0; i<n; ++i) { test_vec_n.set_elem(i, static_cast<T>(i*i)); }
         for (int i=0; i<n; ++i) { ASSERT_EQ(test_vec_n.get_elem(i), static_cast<T>(i*i)); }
         
         constexpr int m(18);
-        Vector<T> test_vec_m(*handle_ptr, m);
+        Vector<T> test_vec_m(TestBase::bundle, m);
         for (int i=0; i<m; ++i) { test_vec_m.set_elem(i, static_cast<T>(2*i*i-m)); }
         for (int i=0; i<m; ++i) { ASSERT_EQ(test_vec_m.get_elem(i), static_cast<T>(2*i*i-m)); }
         
         constexpr int cnt(10);
-        Vector<T> test_vec_cnt(*handle_ptr, cnt);
+        Vector<T> test_vec_cnt(TestBase::bundle, cnt);
         for (int i=0; i<cnt; ++i) { test_vec_cnt.set_elem(i, static_cast<T>(1+i)); }
         for (int i=0; i<cnt; ++i) { ASSERT_EQ(test_vec_cnt.get_elem(i), static_cast<T>(1+i)); }
 
@@ -29,7 +29,7 @@ public:
     void TestBadElementAccess() {
 
         const int m(27);
-        Vector<double> vec(*handle_ptr, m);
+        Vector<double> vec(TestBase::bundle, m);
         
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { vec.get_elem(-1); });
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { vec.get_elem(m); });
@@ -42,15 +42,15 @@ public:
     void TestSlice() {
 
         constexpr int n(10);
-        Vector<T> test_vec_n(*handle_ptr, n);
+        Vector<T> test_vec_n(TestBase::bundle, n);
         for (int i=0; i<n; ++i) { test_vec_n.set_elem(i, static_cast<T>(i*i)); }
 
         constexpr int m(18);
-        Vector<T> test_vec_m(*handle_ptr, m);
+        Vector<T> test_vec_m(TestBase::bundle, m);
         for (int i=0; i<m; ++i) { test_vec_m.set_elem(i, static_cast<T>(2*i*i-m)); }
 
         constexpr int cnt(10);
-        Vector<T> test_vec_cnt(*handle_ptr, cnt);
+        Vector<T> test_vec_cnt(TestBase::bundle, cnt);
         for (int i=0; i<cnt; ++i) { test_vec_cnt.set_elem(i, static_cast<T>(1+i)); }
 
         Vector<T> test_vec_cnt_2_6(test_vec_cnt.slice(2, 6));
@@ -84,7 +84,7 @@ public:
     void TestBadSlice() {
 
         constexpr int m(18);
-        Vector<T> test_vec_m(*handle_ptr, m);
+        Vector<T> test_vec_m(TestBase::bundle, m);
         for (int i=0; i<m; ++i) { test_vec_m.set_elem(i, static_cast<T>(2*i*i-m)); }
 
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { test_vec_m.slice(1, -1); });
@@ -98,13 +98,13 @@ public:
     void TestPropertyMethods() {
         
         constexpr int m(8);
-        Vector<T> test_vec_m(*handle_ptr, m);
+        Vector<T> test_vec_m(TestBase::bundle, m);
 
         ASSERT_EQ(test_vec_m.rows(), m);
         ASSERT_EQ(test_vec_m.cols(), 1);
         
         constexpr int n(16);
-        Vector<T> test_vec_n(*handle_ptr, n);
+        Vector<T> test_vec_n(TestBase::bundle, n);
         for (int i=0; i<n; ++i) { test_vec_n.set_elem(i, static_cast<T>(i*i)); }
 
         ASSERT_EQ(test_vec_n.rows(), n);
@@ -114,12 +114,12 @@ public:
 
     void TestConstruction() {
 
-        Vector<double> test_vec_0(*handle_ptr, 0);
+        Vector<double> test_vec_0(TestBase::bundle, 0);
         ASSERT_EQ(test_vec_0.rows(), 0);
         ASSERT_EQ(test_vec_0.cols(), 1);
 
         constexpr int m(24);
-        Vector<double> test_vec_m(*handle_ptr, m);
+        Vector<double> test_vec_m(TestBase::bundle, m);
         ASSERT_EQ(test_vec_m.rows(), m);
         ASSERT_EQ(test_vec_m.cols(), 1);
 
@@ -129,7 +129,7 @@ public:
     void TestListInitialization() {
         
         Vector<T> test_vec_6(
-            *handle_ptr,
+            TestBase::bundle,
             {static_cast<T>(7.), static_cast<T>(5.), static_cast<T>(3.),
              static_cast<T>(1.), static_cast<T>(6.), static_cast<T>(2.)}
         );
@@ -140,7 +140,7 @@ public:
         ASSERT_EQ(test_vec_6.get_elem(4), static_cast<T>(6.));
         ASSERT_EQ(test_vec_6.get_elem(5), static_cast<T>(2.));
 
-        Vector<T> test_vec_empty(*handle_ptr, {});
+        Vector<T> test_vec_empty(TestBase::bundle, {});
 
     }
 
@@ -153,10 +153,10 @@ public:
         h_vec_manual[1] = static_cast<T>(100);
         h_vec_manual[2] = static_cast<T>(-20);
 
-        Vector<T> test_vec_manual(*handle_ptr, h_vec_manual, m_manual);
+        Vector<T> test_vec_manual(TestBase::bundle, h_vec_manual, m_manual);
 
         Vector<T> target_vec_manual(
-            *handle_ptr,
+            TestBase::bundle,
             {static_cast<T>(-5), static_cast<T>(100), static_cast<T>(-20)}
         );
 
@@ -168,7 +168,7 @@ public:
         T *h_vec_rand = static_cast<T *>(malloc(m_rand*sizeof(T)));
         for (int i=0; i<m_rand; ++i) { h_vec_rand[i] = rand(); }
 
-        Vector<T> test_vec_rand(*handle_ptr, h_vec_rand, m_rand);
+        Vector<T> test_vec_rand(TestBase::bundle, h_vec_rand, m_rand);
 
         ASSERT_EQ(test_vec_rand.rows(), m_rand);
         ASSERT_EQ(test_vec_rand.cols(), 1);
@@ -186,7 +186,7 @@ public:
         const int m_manual(3);
 
         Vector<T> vec_manual(
-            *handle_ptr,
+            TestBase::bundle,
             {static_cast<T>(-5), static_cast<T>(100), static_cast<T>(-20)}
         );
 
@@ -202,7 +202,7 @@ public:
         const int m_rand(7);
 
         Vector<T> vec_rand(
-            *handle_ptr,
+            TestBase::bundle,
             {static_cast<T>(rand()), static_cast<T>(rand()), static_cast<T>(rand()),
              static_cast<T>(rand()), static_cast<T>(rand()), static_cast<T>(rand()),
              static_cast<T>(rand())}
@@ -220,7 +220,7 @@ public:
     void TestBadDynamicMemCopyToPtr() {
 
         const int m_rand(10);
-        Vector<double> vec_rand(*handle_ptr, m_rand);
+        Vector<double> vec_rand(TestBase::bundle, m_rand);
         double *h_vec_rand = static_cast<double *>(malloc(m_rand*sizeof(double)));
         
         auto try_row_too_small = [=]() { vec_rand.copy_data_to_ptr(h_vec_rand, m_rand-2); };
@@ -234,18 +234,18 @@ public:
     template <typename T>
     void TestCopyAssignment() {
 
-        Vector<T> test_vec_empty(*handle_ptr, {});
+        Vector<T> test_vec_empty(TestBase::bundle, {});
         Vector<T> test_vec_4(
-            *handle_ptr,
+            TestBase::bundle,
             {static_cast<T>(-3.), static_cast<T>(0.), static_cast<T>(1.), static_cast<T>(10.)}
         );
         Vector<T> test_vec_5(
-            *handle_ptr,
+            TestBase::bundle,
             {static_cast<T>(-3.), static_cast<T>(0.), static_cast<T>(1.),
              static_cast<T>(10.), static_cast<T>(0.)}
         );
         Vector<T> test_vec_6(
-            *handle_ptr,
+            TestBase::bundle,
             {static_cast<T>(12.), static_cast<T>(12.), static_cast<T>(14.),
              static_cast<T>(14.), static_cast<T>(12.), static_cast<T>(12.)}
         );
@@ -286,7 +286,7 @@ public:
     void TestCopyConstruction() {
 
         Vector<T> test_vec_4(
-            *handle_ptr,
+            TestBase::bundle,
             {static_cast<T>(-3.), static_cast<T>(0.), static_cast<T>(1.), static_cast<T>(10.)}
         );
 
@@ -303,12 +303,12 @@ public:
     void TestStaticCreation() {
 
         constexpr int m_zero(15);
-        Vector<T> test_zero(Vector<T>::Zero(*handle_ptr, m_zero));
+        Vector<T> test_zero(Vector<T>::Zero(TestBase::bundle, m_zero));
         ASSERT_EQ(test_zero.rows(), m_zero);
         for (int i=0; i<m_zero; ++i) { ASSERT_EQ(test_zero.get_elem(i), static_cast<T>(0.)); }
 
         constexpr int m_one(15);
-        Vector<T> test_ones(Vector<T>::Ones(*handle_ptr, m_one));
+        Vector<T> test_ones(Vector<T>::Ones(TestBase::bundle, m_one));
         ASSERT_EQ(test_ones.rows(), m_one);
         for (int i=0; i<m_one; ++i) { ASSERT_EQ(test_ones.get_elem(i), static_cast<T>(1.)); }
 
@@ -317,7 +317,7 @@ public:
         // from other 5 (so only will fail if some 5 numbers in a row are exactly
         // the same))
         constexpr int m_rand(200);
-        Vector<T> test_rand(Vector<T>::Random(*handle_ptr, m_rand));
+        Vector<T> test_rand(Vector<T>::Random(TestBase::bundle, m_rand));
         ASSERT_EQ(test_rand.rows(), m_rand);
         for (int i=2; i<m_one-2; ++i) {
             ASSERT_TRUE(
@@ -334,7 +334,7 @@ public:
     void TestScale() {
 
         Vector<T> vec(
-            *handle_ptr,
+            TestBase::bundle,
             {static_cast<T>(-8.), static_cast<T>(0.8), static_cast<T>(-0.6),
              static_cast<T>(4.), static_cast<T>(0.)}
         );
@@ -357,7 +357,7 @@ public:
     void TestScaleAssignment() {
 
         Vector<T> orig_vec(
-            *handle_ptr,
+            TestBase::bundle,
             {static_cast<T>(-8.), static_cast<T>(0.8), static_cast<T>(-0.6),
              static_cast<T>(4.), static_cast<T>(0.)}
         );
@@ -378,11 +378,11 @@ public:
     void TestAddSub() {
 
         Vector<T> vec_1(
-            *handle_ptr,
+            TestBase::bundle,
             {static_cast<T>(-42.), static_cast<T>(0.), static_cast<T>(0.6)}
         );
         Vector<T> vec_2(
-            *handle_ptr,
+            TestBase::bundle,
             {static_cast<T>(-38.), static_cast<T>(0.5), static_cast<T>(-0.6)}
         );
 
@@ -407,11 +407,11 @@ public:
     void TestAddSubAssignment() {
 
         Vector<T> vec_1(
-            *handle_ptr,
+            TestBase::bundle,
             {static_cast<T>(-42.), static_cast<T>(0.), static_cast<T>(0.6)}
         );
         Vector<T> vec_2(
-            *handle_ptr,
+            TestBase::bundle,
             {static_cast<T>(-38.), static_cast<T>(0.5), static_cast<T>(-0.6)}
         );
 
@@ -434,12 +434,12 @@ public:
 
         // Pre-calculated
         Vector<T> vec_1_dot(
-            *handle_ptr,
+            TestBase::bundle,
             {static_cast<T>(-4.), static_cast<T>(3.4), static_cast<T>(0.),
              static_cast<T>(-2.1), static_cast<T>(1.8)}
         );
         Vector<T> vec_2_dot(
-            *handle_ptr,
+            TestBase::bundle,
             {static_cast<T>(9.), static_cast<T>(10.), static_cast<T>(1.5),
              static_cast<T>(-4.5), static_cast<T>(2.)}
         );
@@ -448,8 +448,8 @@ public:
                     11.05*Tol<T>::gamma(5));
 
         // Random
-        Vector<T> vec_1_dot_r(Vector<T>::Random(*handle_ptr, 10));
-        Vector<T> vec_2_dot_r(Vector<T>::Random(*handle_ptr, 10));
+        Vector<T> vec_1_dot_r(Vector<T>::Random(TestBase::bundle, 10));
+        Vector<T> vec_2_dot_r(Vector<T>::Random(TestBase::bundle, 10));
         T acc = static_cast<T>(0.);
         for (int i=0; i<10; ++i) {
             acc += vec_1_dot_r.get_elem(i).get_scalar()*vec_2_dot_r.get_elem(i).get_scalar();
@@ -465,7 +465,7 @@ public:
 
         // Pre-calculated
         Vector<T> vec_norm(
-            *handle_ptr, 
+            TestBase::bundle, 
             {static_cast<T>(-8.), static_cast<T>(0.8), static_cast<T>(-0.6),
              static_cast<T>(4.), static_cast<T>(0.)}
         );
@@ -474,7 +474,7 @@ public:
                     static_cast<T>(9.)*static_cast<T>(Tol<T>::gamma(5)));
 
         // Random
-        Vector<T> vec_norm_r(Vector<T>::Random(*handle_ptr, 10));
+        Vector<T> vec_norm_r(Vector<T>::Random(TestBase::bundle, 10));
         ASSERT_NEAR(vec_norm_r.norm().get_scalar(),
                     std::sqrt(vec_norm_r.dot(vec_norm_r).get_scalar()),
                     std::sqrt(vec_norm_r.dot(vec_norm_r).get_scalar())*Tol<T>::gamma(10));
@@ -485,9 +485,9 @@ public:
     void TestBadVecVecOps() {
 
         const int m(7);
-        Vector<T> vec(Vector<T>::Random(*handle_ptr, m));
-        Vector<T> vec_too_small(Vector<T>::Random(*handle_ptr, m-3));
-        Vector<T> vec_too_large(Vector<T>::Random(*handle_ptr, m+2));
+        Vector<T> vec(Vector<T>::Random(TestBase::bundle, m));
+        Vector<T> vec_too_small(Vector<T>::Random(TestBase::bundle, m-3));
+        Vector<T> vec_too_large(Vector<T>::Random(TestBase::bundle, m+2));
 
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { vec + vec_too_small; });
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { vec + vec_too_large; });
@@ -510,7 +510,7 @@ public:
         
         constexpr int m(20);
 
-        Vector<double> vec_dbl(Vector<double>::Random(*handle_ptr, m));
+        Vector<double> vec_dbl(Vector<double>::Random(TestBase::bundle, m));
 
         Vector<double> dbl_to_dbl(vec_dbl.cast<double>());
         ASSERT_VECTOR_EQ(dbl_to_dbl, vec_dbl);
@@ -535,7 +535,7 @@ public:
             );
         }
 
-        Vector<float> vec_sgl(Vector<float>::Random(*handle_ptr, m));
+        Vector<float> vec_sgl(Vector<float>::Random(TestBase::bundle, m));
 
         Vector<float> sgl_to_sgl(vec_sgl.cast<float>());
         ASSERT_VECTOR_EQ(sgl_to_sgl, vec_sgl);
@@ -560,7 +560,7 @@ public:
             );
         }
 
-        Vector<__half> vec_hlf(Vector<__half>::Random(*handle_ptr, m));
+        Vector<__half> vec_hlf(Vector<__half>::Random(TestBase::bundle, m));
 
         Vector<__half> hlf_to_hlf(vec_hlf.cast<__half>());
         ASSERT_VECTOR_EQ(hlf_to_hlf, vec_hlf);
@@ -589,7 +589,7 @@ public:
 
         auto try_bad_cast = []() {
             const int m(20);
-            Vector<double> vec_dbl(Vector<double>::Random(*handle_ptr, m));
+            Vector<double> vec_dbl(Vector<double>::Random(TestBase::bundle, m));
             vec_dbl.cast<int>();
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_bad_cast);
@@ -600,42 +600,42 @@ public:
     void TestBooleanEqual() {
 
         Vector<T> vec_to_compare(
-            *handle_ptr,
+            TestBase::bundle,
             {static_cast<T>(-1.5), static_cast<T>(4), static_cast<T>(0.),
              static_cast<T>(101), static_cast<T>(-101), static_cast<T>(7)}
         );
         Vector<T> vec_same(
-            *handle_ptr,
+            TestBase::bundle,
             {static_cast<T>(-1.5), static_cast<T>(4), static_cast<T>(0.),
              static_cast<T>(101), static_cast<T>(-101), static_cast<T>(7)}
         );
         Vector<T> vec_diffbeg(
-            *handle_ptr,
+            TestBase::bundle,
             {static_cast<T>(1.5), static_cast<T>(4), static_cast<T>(0.),
              static_cast<T>(101), static_cast<T>(-101), static_cast<T>(7)}
         );
         Vector<T> vec_diffend(
-            *handle_ptr,
+            TestBase::bundle,
             {static_cast<T>(-1.5), static_cast<T>(4), static_cast<T>(0.),
              static_cast<T>(101), static_cast<T>(-101), static_cast<T>(70)}
         );
         Vector<T> vec_diffmid(
-            *handle_ptr,
+            TestBase::bundle,
             {static_cast<T>(-1.5), static_cast<T>(4), static_cast<T>(-100.),
              static_cast<T>(101), static_cast<T>(-101), static_cast<T>(7)}
         );
         Vector<T> vec_smaller(
-            *handle_ptr,
+            TestBase::bundle,
             {static_cast<T>(-1.5), static_cast<T>(4), static_cast<T>(0.),
              static_cast<T>(101)}
         );
         Vector<T> vec_bigger(
-            *handle_ptr,
+            TestBase::bundle,
             {static_cast<T>(-1.5), static_cast<T>(4), static_cast<T>(0.),
              static_cast<T>(101), static_cast<T>(-101), static_cast<T>(0)}
         );
-        Vector<T> vec_empty_1(*handle_ptr, {});
-        Vector<T> vec_empty_2(*handle_ptr, {});
+        Vector<T> vec_empty_1(TestBase::bundle, {});
+        Vector<T> vec_empty_2(TestBase::bundle, {});
 
         ASSERT_TRUE(vec_to_compare == vec_to_compare);
         ASSERT_TRUE(vec_to_compare == vec_same);
@@ -756,7 +756,7 @@ public:
     void simple_sort_even() {
 
         Vector<T> vec(
-            *handle_ptr,
+            TestBase::bundle,
             {static_cast<T>(3.519), static_cast<T>(8.525), static_cast<T>(3.978), static_cast<T>(8.645),
              static_cast<T>(2.798), static_cast<T>(1.477), static_cast<T>(7.021), static_cast<T>(5.689),
              static_cast<T>(6.185), static_cast<T>(6.315)}
@@ -773,7 +773,7 @@ public:
     void simple_sort_odd() {
 
         Vector<T> vec(
-            *handle_ptr,
+            TestBase::bundle,
             {static_cast<T>(7.063), static_cast<T>(8.824), static_cast<T>(5.430), static_cast<T>(5.107),
              static_cast<T>(5.478), static_cast<T>(8.819), static_cast<T>(7.995), static_cast<T>(9.787),
              static_cast<T>(4.139), static_cast<T>(8.946), static_cast<T>(4.861), static_cast<T>(1.678),
@@ -792,7 +792,7 @@ public:
 
         constexpr int n(7);
         Vector<T> vec(
-            *handle_ptr,
+            TestBase::bundle,
             {static_cast<T>(9.433), static_cast<T>(3.950), static_cast<T>(1.776), static_cast<T>(7.016),
              static_cast<T>(1.409), static_cast<T>(1.776), static_cast<T>(7.016)}
         );
@@ -811,7 +811,7 @@ public:
     void sorted_already() {
 
         Vector<T> vec(
-            *handle_ptr,
+            TestBase::bundle,
             {static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4),
              static_cast<T>(5), static_cast<T>(6), static_cast<T>(7), static_cast<T>(8),
              static_cast<T>(9), static_cast<T>(10)}
@@ -828,7 +828,7 @@ public:
     void one_element() {
 
         Vector<T> vec(
-            *handle_ptr,
+            TestBase::bundle,
             {static_cast<T>(1)}
         );
 

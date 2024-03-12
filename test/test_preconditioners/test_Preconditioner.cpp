@@ -15,7 +15,7 @@ public:
         ASSERT_TRUE(no_precond.check_compatibility_left(1));
         ASSERT_TRUE(no_precond.check_compatibility_right(5));
 
-        Vector<double> test_vec(Vector<double>::Random(*handle_ptr, n));
+        Vector<double> test_vec(Vector<double>::Random(TestBase::bundle, n));
         ASSERT_VECTOR_EQ(no_precond.action_inv_M(test_vec), test_vec);
     
     }
@@ -25,10 +25,10 @@ public:
         
         constexpr int n(45);
         M<double> A(
-            read_matrixCSV<M, double>(*handle_ptr, solve_matrix_dir / fs::path("A_inv_45.csv"))
+            read_matrixCSV<M, double>(TestBase::bundle, solve_matrix_dir / fs::path("A_inv_45.csv"))
         );
         MatrixInversePreconditioner<M, double> inv_precond(
-            read_matrixCSV<M, double>(*handle_ptr, solve_matrix_dir / fs::path("Ainv_inv_45.csv"))
+            read_matrixCSV<M, double>(TestBase::bundle, solve_matrix_dir / fs::path("Ainv_inv_45.csv"))
         );
 
         // Check compatibility with only 45
@@ -39,7 +39,7 @@ public:
         ASSERT_FALSE(inv_precond.check_compatibility_left(100));
         ASSERT_FALSE(inv_precond.check_compatibility_right(100));
 
-        Vector<double> orig_test_vec(Vector<double>::Random(*handle_ptr, n));
+        Vector<double> orig_test_vec(Vector<double>::Random(TestBase::bundle, n));
         Vector<double> test_vec(A*orig_test_vec);
         test_vec = inv_precond.action_inv_M(test_vec);
 
@@ -52,13 +52,13 @@ public:
         
         constexpr int n(45);
         M<double> A(
-            read_matrixCSV<M, double>(*handle_ptr, solve_matrix_dir / fs::path("A_inv_45.csv"))
+            read_matrixCSV<M, double>(TestBase::bundle, solve_matrix_dir / fs::path("A_inv_45.csv"))
         );
         MatrixInversePreconditioner<M, double> inv_precond(
-            read_matrixCSV<M, double>(*handle_ptr, solve_matrix_dir / fs::path("Ainv_inv_45.csv"))
+            read_matrixCSV<M, double>(TestBase::bundle, solve_matrix_dir / fs::path("Ainv_inv_45.csv"))
         );
 
-        Vector<double> orig_test_vec(Vector<double>::Random(*handle_ptr, n));
+        Vector<double> orig_test_vec(Vector<double>::Random(TestBase::bundle, n));
         Vector<double> test_vec_dbl(inv_precond.action_inv_M(A*orig_test_vec));
         Vector<float> test_vec_sgl(inv_precond.template casted_action_inv_M<float>(A*orig_test_vec));
 
