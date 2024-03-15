@@ -1,5 +1,5 @@
-#ifndef MATRIXSPARSE_H
-#define MATRIXSPARSE_H
+#ifndef IMMUTABLEMATRIXSPARSE_H
+#define IMMUTABLEMATRIXSPARSE_H
 
 // #include "MatrixVector.h"
 // #include "MatrixDense.h"
@@ -7,56 +7,249 @@
 // #include <cmath>
 // #include <iostream>
 
+#include "tools/cuda_check.h"
+#include "tools/cuHandleBundle.h"
+
 template <typename T>
-class MatrixSparse
+class ImmutableMatrixSparse
 {
 private:
 
-    cublasHandle_t cublas_handle;
-    cusparseHandle_t cusparse_handle;
+    cuHandleBundle cu_handles;
     int m_rows, n_cols;
-//     int nnz;
-//     T *d_col_offsets;
-//     T *d_row_indices;
-//     T *d_values;
+    int nnz;
+    int *d_col_offsets = nullptr;
+    int *d_row_indices = nullptr;
+    T *d_vals = nullptr;
+
+    size_t mem_size_col_offsets() const {
+        return n_cols*sizeof(int);
+    }
+
+    size_t mem_size_rows_ind() const {
+        return nnz*sizeof(int);
+    }
+
+    size_t mem_size_vals() const {
+        return nnz*sizeof(T);
+    }
+
+    ImmutableMatrixSparse<__half> to_half() const;
+    ImmutableMatrixSparse<float> to_float() const;
+    ImmutableMatrixSparse<double> to_double() const;
+
+    void allocate_d_mem() {
+        check_cuda_error(cudaMalloc(&d_col_offsets, mem_size_col_offsets()));
+        check_cuda_error(cudaMalloc(&d_row_indices, mem_size_rows_ind()));
+        check_cuda_error(cudaMalloc(&d_vals, mem_size_vals()));
+    }
+
+    int binary_search_for_target_index(int target, int *arr, int start, int end) const {
+
+        if (start >= end) {
+            return -1;
+        } else if (start == (end-1)) {
+            if (arr[start] == target) {
+                return start;
+            } else {
+                return -1;
+            }
+        } else {
+            int cand_ind = start+(end-start)/2;
+            if (arr[cand_ind] == target) {
+                return cand_ind;
+            } else if (arr[cand_ind] < target) {
+                return binary_search_for_target_index(target, arr, cand_ind+1, end);
+            } else {
+                return binary_search_for_target_index(target, arr, start, cand_ind);
+            }
+        }
+
+    }
 
 public:
 
     class Block; class Col; // Forward declaration of nested classes
 
-//     // *** Constructors ***
+    // *** Constructors ***
+    ImmutableMatrixSparse(
+        const cuHandleBundle &arg_cu_handles,
+        int arg_m,
+        int arg_n
+    ):
+        cu_handles(arg_cu_handles),
+        m_rows(arg_m),
+        n_cols(arg_n),
+        nnz(0)
+    { allocate_d_mem(); }
+
+    ImmutableMatrixSparse(const cuHandleBundle &arg_cu_handles):
+        ImmutableMatrixSparse(arg_cu_handles, 0, 0)
+    {}
+
+    ImmutableMatrixSparse(
+        const cuHandleBundle &arg_cu_handles,
+        std::initializer_list<std::initializer_list<T>> li
+    ):
+        cu_handles(arg_cu_handles),
+        m_rows(li.size()),
+        n_cols((li.size() == 0) ? 0 : std::cbegin(li)->size())
+    {
+
+        int *h_col_offsets = static_cast<int *>(malloc(mem_size_col_offsets()));
+        std::vector<int> vec_row_indices;
+        std::vector<T> vec_values;
+
+        // Capture iterators for each row
+        std::vector<typename std::initializer_list<T>::const_iterator> row_iters;
+        for (
+            typename std::initializer_list<std::initializer_list<T>>::const_iterator curr_row = std::cbegin(li);
+            curr_row != std::cend(li);
+            ++curr_row
+        ) {
+            // Check all row iterators have consistent size before adding
+            if (curr_row->size() == n_cols) {
+                row_iters.push_back(std::cbegin(*curr_row));
+            } else {
+                throw std::runtime_error(
+                    "ImmutableMatrixSparse: Non-consistent row size encounted in initializer list"
+                );
+            }
+        }
+
+        // Roll through iterators repeatedly to access non-zero elements column by column calculating
+        // offsets based on number of nnz values encountered
+        int next_col_offset = 0;
+        for (int j=0; j<n_cols; ++j) {
+
+            h_col_offsets[j] = next_col_offset;
+            for (int i=0; i<m_rows; ++i) {
+
+                T val = *(row_iters[i]);
+                if (val != static_cast<T>(0.)) {
+                    vec_row_indices.push_back(i);
+                    vec_values.push_back(val);
+                    ++next_col_offset;
+                }
+                ++row_iters[i];
+
+            }
+
+        }
+        nnz = vec_values.size();
+
+        // Set remaining host vectors to values to load, and load column offsets, row indices
+        // and values into gpu memory
+        allocate_d_mem();
+        int *h_row_indices = static_cast<int *>(malloc(mem_size_rows_ind()));
+        T *h_vals = static_cast<T *>(malloc(mem_size_vals()));
+        for (int i=0; i<nnz; ++i) { h_row_indices[i] = vec_row_indices[i]; }
+        for (int i=0; i<nnz; ++i) { h_vals[i] = vec_values[i]; }
+
+        if (n_cols > 0) {
+            check_cuda_error(cudaMemcpy(
+                d_col_offsets,
+                h_col_offsets,
+                mem_size_col_offsets(),
+                cudaMemcpyHostToDevice 
+            ));
+        }
+
+        if (nnz > 0) {
+            check_cuda_error(cudaMemcpy(
+                d_row_indices,
+                h_row_indices,
+                mem_size_rows_ind(),
+                cudaMemcpyHostToDevice 
+            ));
+            check_cuda_error(cudaMemcpy(
+                d_vals,
+                h_vals,
+                mem_size_vals(),
+                cudaMemcpyHostToDevice 
+            ));
+        }
+
+        free(h_col_offsets);
+        free(h_row_indices);
+        free(h_vals);
+
+    }
+
+    // *** Destructor *** 
+    ~ImmutableMatrixSparse() {
+        check_cuda_error(cudaFree(d_col_offsets));
+        check_cuda_error(cudaFree(d_row_indices));
+        check_cuda_error(cudaFree(d_vals));
+    }
+
 //     MatrixSparse(): Parent::SparseMatrix(0, 0) {}
 //     MatrixSparse(int m, int n): Parent::SparseMatrix(m, n) {}
 
-//     MatrixSparse(std::initializer_list<std::initializer_list<T>> li):
-//         MatrixSparse(li.size(), (li.size() == 0) ? 0 : std::cbegin(li)->size())
-//     { 
-//         int i=0;
-//         for (auto curr_row = std::cbegin(li); curr_row != std::cend(li); ++curr_row) {
-//             int j=0;
-//             for (auto curr_elem = std::cbegin(*curr_row); curr_elem != std::cend(*curr_row); ++curr_elem) {
-//                 if (j >= cols()) { throw(std::runtime_error("Initializer list has non-consistent row size")); }
-//                 this->coeffRef(i, j) = *curr_elem;
-//                 ++j;
-//             }
-//             if (j != cols()) { throw(std::runtime_error("Initializer list has non-consistent row size")); }
-//             ++i;
-//         }
-//         if (i != rows()) { throw(std::runtime_error("Initializer list has non-consistent row size")); }
-//         reduce();
-//     }
-
 //     MatrixSparse(const Parent &parent): Parent::SparseMatrix(parent) {}
 
-//     // *** Element Access ***
+    // *** Element Access ***
+    const Scalar<T> get_elem(int row, int col) const {
+
+        if ((row < 0) || (row >= m_rows)) {
+            throw std::runtime_error("ImmutableMatrixSparse: invalid row access in get_elem");
+        }
+        if ((col < 0) || (col >= n_cols)) {
+            throw std::runtime_error("ImmutableMatrixSparse: invalid col access in get_elem");
+        }
+
+        // Get column offset and column size
+        int col_offset_L;
+        int col_offset_R;
+        if (col != n_cols-1) {
+            check_cuda_error(cudaMemcpy(
+                &col_offset_L, d_col_offsets+col, sizeof(int), cudaMemcpyDeviceToHost
+            ));
+            check_cuda_error(cudaMemcpy(
+                &col_offset_R, d_col_offsets+col+1, sizeof(int), cudaMemcpyDeviceToHost
+            ));
+        } else {
+            check_cuda_error(cudaMemcpy(
+                &col_offset_L, d_col_offsets+col, sizeof(int), cudaMemcpyDeviceToHost
+            ));
+            col_offset_R = nnz;
+        }
+        size_t col_nnz_size = col_offset_R-col_offset_L;
+
+        // Find if row index is non-zero and find location in val array
+        int *h_row_indices_for_col = static_cast<int *>(malloc(col_nnz_size*sizeof(int)));
+        if (col_nnz_size > 0) {
+            check_cuda_error(cudaMemcpy(
+                h_row_indices_for_col,
+                d_row_indices+col_offset_L,
+                col_nnz_size*sizeof(int),
+                cudaMemcpyDeviceToHost
+            ));
+        }
+        int row_ind_offset = binary_search_for_target_index(
+            row, h_row_indices_for_col, 0, col_nnz_size
+        );
+        free(h_row_indices_for_col);
+
+        if (row_ind_offset != -1) {
+            Scalar<T> elem;
+            check_cuda_error(cudaMemcpy(
+                elem.d_scalar, d_vals+col_offset_L+row_ind_offset, sizeof(T), cudaMemcpyDeviceToDevice
+            ));
+            return elem;
+        } else {
+            return Scalar<T>(static_cast<T>(0.));
+        }
+
+    }
 //     const T coeff(int row, int col) const { return Parent::coeff(row, col); }
 //     T& coeffRef(int row, int col) { return Parent::coeffRef(row, col); }
 //     Col col(int _col) { return Parent::col(_col); }
 //     Block block(int row, int col, int m, int n) { return Parent::block(row, col, m, n); }
 
-//     // *** Properties ***
-//     int rows() const { return Parent::rows(); }
-//     int cols() const { return Parent::cols(); }
+    // *** Properties ***
+    int rows() const { return m_rows; }
+    int cols() const { return n_cols; }
 //     void print() { std::cout << *this << std::endl << std::endl; }
 
 //     // *** Static Creation ***

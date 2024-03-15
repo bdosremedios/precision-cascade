@@ -70,7 +70,7 @@ protected:
             }
         }
 
-        // Set index 2 col as incresing by 1 from -5
+        // Set index 2 col as increasing by 1 from -5
         Scalar<T> coL_3_elem(static_cast<T>(-5.));
         for (int i=0; i<m; ++i) {
             test_mat.set_elem(i, 2, coL_3_elem);
@@ -78,8 +78,7 @@ protected:
 
         }
 
-    
-    // Test matches modified matrix
+        // Test matches modified matrix
         test_elem = static_cast<T>(1);
         row_5_test_elem = static_cast<T>(-1.);
         T coL_3_test_elem = static_cast<T>(-5.);
@@ -109,10 +108,10 @@ protected:
         constexpr int n(12);
         M<double> test_mat(M<double>::Random(TestBase::bundle, m, n));
 
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { test_mat.get_elem(0, -1); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { test_mat.get_elem(0, n); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { test_mat.get_elem(-1, 0); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { test_mat.get_elem(m, 0); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [&]() { test_mat.get_elem(0, -1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [&]() { test_mat.get_elem(0, n); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [&]() { test_mat.get_elem(-1, 0); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [&]() { test_mat.get_elem(m, 0); });
 
         CHECK_FUNC_HAS_RUNTIME_ERROR(
             print_errors,

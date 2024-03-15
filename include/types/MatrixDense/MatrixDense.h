@@ -56,12 +56,12 @@ public:
     // *** Constructors ***
     MatrixDense(
         const cuHandleBundle &arg_cu_handles,
-        int arg_m,
-        int arg_n
+        int arg_m_rows,
+        int arg_n_cols
     ):
         cu_handles(arg_cu_handles),
-        m_rows(arg_m),
-        n_cols(arg_n)
+        m_rows(arg_m_rows),
+        n_cols(arg_n_cols)
     { allocate_d_mat(); }
 
     MatrixDense(const cuHandleBundle &arg_cu_handles): MatrixDense(arg_cu_handles, 0, 0) {}
@@ -209,7 +209,7 @@ public:
         }
 
         Scalar<T> elem;
-        check_cuda_error(cudaMemcpy(elem.d_scalar, d_mat+row+(col*m_rows), sizeof(T), cudaMemcpyDeviceToHost));
+        check_cuda_error(cudaMemcpy(elem.d_scalar, d_mat+row+(col*m_rows), sizeof(T), cudaMemcpyDeviceToDevice));
         return elem;
 
     }
@@ -223,7 +223,7 @@ public:
             throw std::runtime_error("MatrixDense: invalid col access in set_elem");
         }
 
-        check_cuda_error(cudaMemcpy(d_mat+row+(col*m_rows), val.d_scalar, sizeof(T), cudaMemcpyHostToDevice));
+        check_cuda_error(cudaMemcpy(d_mat+row+(col*m_rows), val.d_scalar, sizeof(T), cudaMemcpyDeviceToDevice));
 
     }
 
@@ -670,6 +670,6 @@ public:
 };
 
 #include "types/Vector/Vector.h"
-#include "types/MatrixSparse/MatrixSparse.h"
+#include "types/MatrixSparse/ImmutableMatrixSparse.h"
 
 #endif

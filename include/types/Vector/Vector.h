@@ -19,6 +19,7 @@
 
 #include "types/Scalar/Scalar.h"
 #include "types/MatrixDense/MatrixDense.h"
+#include "types/MatrixSparse/ImmutableMatrixSparse.h"
 
 template <typename T>
 class Vector
@@ -387,7 +388,5 @@ public:
     }
 
 };
-
-#include "types/MatrixSparse/MatrixSparse.h"
 
 #endif

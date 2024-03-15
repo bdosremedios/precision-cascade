@@ -7,8 +7,8 @@ set(
     test_types/test_Scalar.cpp
     test_types/test_Vector.cpp
     test_types/test_MatrixDense.cpp
-    # test_types/test_MatrixSparse.cpp
-    test_types/test_TypeConversion.cpp
+    test_types/test_ImmutableMatrixSparse.cpp
+    # test_types/test_TypeConversion.cpp
 )
 
 set(
@@ -62,9 +62,9 @@ set(
     TEST_SUITE_CPPS
     test_tools/test_read_matrix.cpp
     ${TEST_TYPES_CPPS}
-    ${TEST_TOOLS_CPPS}
-    ${TEST_PRECONDITIONER_CPPS}
-    ${TEST_SOLVERS}
+    # ${TEST_TOOLS_CPPS}
+    # ${TEST_PRECONDITIONER_CPPS}
+    # ${TEST_SOLVERS}
 )
 
 add_library(

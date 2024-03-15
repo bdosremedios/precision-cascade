@@ -170,7 +170,9 @@ TEST_F(MatrixDense_Test, TestCoeffAccess) {
     TestCoeffAccess<double>();
 }
 
-TEST_F(MatrixDense_Test, TestBadCoeffAccess) { TestBadCoeffAccess(); }
+TEST_F(MatrixDense_Test, TestBadCoeffAccess) {
+    TestBadCoeffAccess();
+}
 
 TEST_F(MatrixDense_Test, TestPropertyAccess) {
     TestPropertyAccess<__half>();
@@ -190,7 +192,9 @@ TEST_F(MatrixDense_Test, TestListInitialization) {
     TestListInitialization<double>();
 }
 
-TEST_F(MatrixDense_Test, TestBadListInitialization) { TestBadListInitialization(); }
+TEST_F(MatrixDense_Test, TestBadListInitialization) {
+    TestBadListInitialization();
+}
 
 TEST_F(MatrixDense_Test, TestNonZeros) {
     TestNonZeros<__half>();
@@ -210,7 +214,9 @@ TEST_F(MatrixDense_Test, TestDynamicMemCopyToPtr) {
     TestDynamicMemCopyToPtr<double>();
 }
 
-TEST_F(MatrixDense_Test, TestBadDynamicMemCopyToPtr) { TestBadDynamicMemCopyToPtr(); }
+TEST_F(MatrixDense_Test, TestBadDynamicMemCopyToPtr) {
+    TestBadDynamicMemCopyToPtr();
+}
 
 TEST_F(MatrixDense_Test, TestCopyAssignment) {
     TestCopyAssignment<__half>();

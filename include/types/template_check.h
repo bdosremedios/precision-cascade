@@ -1,9 +1,9 @@
 #ifndef TEMPLATE_CHECK_H
 #define TEMPLATE_CHECK_H
 
-#include "MatrixDense/MatrixDense.h"
-#include "MatrixSparse/MatrixSparse.h"
 #include "Vector/Vector.h"
+#include "MatrixDense/MatrixDense.h"
+#include "MatrixSparse/ImmutableMatrixSparse.h"
 
 // https://stackoverflow.com/questions/38630445/stdis-same-equivalent-for-unspecialised-template-types
 template <template <typename> typename, template<typename...> typename> 
