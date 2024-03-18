@@ -293,6 +293,19 @@ protected:
 
     }
 
+    void TestPrintAndInfoString() {
+
+        M<double> test_mat(
+            TestBase::bundle,
+            {{1., 2., 3.},
+             {4., 0., 0.},
+             {0., 8., 9.}}
+        );
+        std::cout << test_mat.get_matrix_string() << std::endl;
+        std::cout << test_mat.get_info_string() << std::endl;
+    
+    }
+
     template <typename T>
     void TestDynamicMemConstruction() {
     

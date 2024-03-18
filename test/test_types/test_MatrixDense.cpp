@@ -202,6 +202,10 @@ TEST_F(MatrixDense_Test, TestNonZeros) {
     TestNonZeros<double>();
 }
 
+TEST_F(MatrixDense_Test, TestPrintAndInfoString) {
+    TestPrintAndInfoString();
+}
+
 TEST_F(MatrixDense_Test, TestDynamicMemConstruction) {
     TestDynamicMemConstruction<__half>();
     TestDynamicMemConstruction<float>();

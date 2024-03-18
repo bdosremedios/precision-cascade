@@ -283,23 +283,27 @@ public:
     
     }
 
-    void print() const {
+    std::string get_matrix_string() const {
 
         T *h_mat = static_cast<T *>(malloc(mem_size()));
 
-        if ((m_rows > 0) && (n_cols > 0)) {
-            check_cublas_status(cublasGetMatrix(m_rows, n_cols, sizeof(T), d_mat, m_rows, h_mat, m_rows));
-        }
+        copy_data_to_ptr(h_mat, m_rows, n_cols);
 
-        for (int i=0; i<m_rows; ++i) {
-            for (int j=0; j<n_cols; ++j) {
-                std::cout << static_cast<double>(h_mat[i+j*m_rows]) << " ";
+        std::string acc;
+        for (int i=0; i<m_rows-1; ++i) {
+            for (int j=0; j<n_cols-1; ++j) {
+                acc += std::format("{:.6g} ", static_cast<double>(h_mat[i+j*m_rows]));
             }
-            std::cout << std::endl;
+            acc += std::format("{:.6g}\n", static_cast<double>(h_mat[i+(n_cols-1)*m_rows]));
         }
-        std::cout << std::endl;
+        for (int j=0; j<n_cols-1; ++j) {
+            acc += std::format("{:.6g} ", static_cast<double>(h_mat[(m_rows-1)+j*m_rows]));
+        }
+        acc += std::format("{:.6g}", static_cast<double>(h_mat[(m_rows-1)+(n_cols-1)*m_rows]));
 
         free(h_mat);
+
+        return acc;
     
     }
 
