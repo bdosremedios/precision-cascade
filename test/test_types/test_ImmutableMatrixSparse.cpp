@@ -201,20 +201,26 @@ TEST_F(ImmutableMatrixSparse_Test, TestPropertyAccess) {
     TestPropertyAccess<double>();
 }
 
+TEST_F(ImmutableMatrixSparse_Test, TestNonZeros) {
+    TestNonZeros<__half>();
+    TestNonZeros<float>();
+    TestNonZeros<double>();
+}
+
 TEST_F(ImmutableMatrixSparse_Test, TestConstruction) {
     TestConstruction<__half>();
     TestConstruction<float>();
     TestConstruction<double>();
 }
 
-TEST_F(ImmutableMatrixSparse_Test, TestBadListInitialization) {
-    TestBadListInitialization();
-}
-
 TEST_F(ImmutableMatrixSparse_Test, TestListInitialization) {
     TestListInitialization<__half>();
     TestListInitialization<float>();
     TestListInitialization<double>();
+}
+
+TEST_F(ImmutableMatrixSparse_Test, TestBadListInitialization) {
+    TestBadListInitialization();
 }
 
 TEST_F(ImmutableMatrixSparse_Test, TestCoeffJustGetAccess) {
@@ -226,12 +232,6 @@ TEST_F(ImmutableMatrixSparse_Test, TestCoeffJustGetAccess) {
 TEST_F(ImmutableMatrixSparse_Test, TestBadCoeffJustGetAccess) {
     TestBadCoeffJustGetAccess();
 }
-
-// TEST_F(MatrixSparse_Test, TestNonZeros) {
-//     TestNonZeros<__half>();
-//     TestNonZeros<float>();
-//     TestNonZeros<double>();
-// }
 
 // TEST_F(MatrixSparse_Test, TestDynamicMemConstruction) {
 //     TestDynamicMemConstruction<__half>();

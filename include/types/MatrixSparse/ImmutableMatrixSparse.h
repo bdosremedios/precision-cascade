@@ -183,11 +183,6 @@ public:
         check_cuda_error(cudaFree(d_vals));
     }
 
-//     MatrixSparse(): Parent::SparseMatrix(0, 0) {}
-//     MatrixSparse(int m, int n): Parent::SparseMatrix(m, n) {}
-
-//     MatrixSparse(const Parent &parent): Parent::SparseMatrix(parent) {}
-
     // *** Element Access ***
     const Scalar<T> get_elem(int row, int col) const {
 
@@ -242,15 +237,21 @@ public:
         }
 
     }
-//     const T coeff(int row, int col) const { return Parent::coeff(row, col); }
-//     T& coeffRef(int row, int col) { return Parent::coeffRef(row, col); }
+
 //     Col col(int _col) { return Parent::col(_col); }
 //     Block block(int row, int col, int m, int n) { return Parent::block(row, col, m, n); }
 
     // *** Properties ***
+    cuHandleBundle get_cu_handles() const { return cu_handles; }
     int rows() const { return m_rows; }
     int cols() const { return n_cols; }
-//     void print() { std::cout << *this << std::endl << std::endl; }
+    int non_zeros() const { return nnz; }
+
+    // void print() const {
+
+
+    //     std::cout << *this << std::endl << std::endl;
+    // }
 
 //     // *** Static Creation ***
 //     static MatrixSparse<T> Random(int m, int n) {
