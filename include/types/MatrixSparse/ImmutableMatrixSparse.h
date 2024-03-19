@@ -16,8 +16,8 @@ class ImmutableMatrixSparse
 private:
 
     cuHandleBundle cu_handles;
-    int m_rows, n_cols;
-    int nnz;
+    int m_rows = 0, n_cols = 0;
+    int nnz = 0;
     int *d_col_offsets = nullptr;
     int *d_row_indices = nullptr;
     T *d_vals = nullptr;
@@ -34,14 +34,22 @@ private:
         return nnz*sizeof(T);
     }
 
-    ImmutableMatrixSparse<__half> to_half() const;
-    ImmutableMatrixSparse<float> to_float() const;
-    ImmutableMatrixSparse<double> to_double() const;
+    void allocate_d_col_offsets() {
+        check_cuda_error(cudaMalloc(&d_col_offsets, mem_size_col_offsets()));
+    }
+
+    void allocate_d_row_indices() {
+        check_cuda_error(cudaMalloc(&d_row_indices, mem_size_rows_ind()));
+    }
+
+    void allocate_d_vals() {
+        check_cuda_error(cudaMalloc(&d_vals, mem_size_vals()));
+    }
 
     void allocate_d_mem() {
-        check_cuda_error(cudaMalloc(&d_col_offsets, mem_size_col_offsets()));
-        check_cuda_error(cudaMalloc(&d_row_indices, mem_size_rows_ind()));
-        check_cuda_error(cudaMalloc(&d_vals, mem_size_vals()));
+        allocate_d_col_offsets();
+        allocate_d_row_indices();
+        allocate_d_vals();
     }
 
     int binary_search_for_target_index(int target, int *arr, int start, int end) const {
@@ -66,6 +74,10 @@ private:
         }
 
     }
+
+    ImmutableMatrixSparse<__half> to_half() const;
+    ImmutableMatrixSparse<float> to_float() const;
+    ImmutableMatrixSparse<double> to_double() const;
 
 public:
 
@@ -176,11 +188,69 @@ public:
 
     }
 
+    // *** Copy Constructor ***
+    ImmutableMatrixSparse(const ImmutableMatrixSparse &other) {
+        *this = other;
+    }
+
     // *** Destructor *** 
     ~ImmutableMatrixSparse() {
         check_cuda_error(cudaFree(d_col_offsets));
         check_cuda_error(cudaFree(d_row_indices));
         check_cuda_error(cudaFree(d_vals));
+    }
+
+    // *** Copy-Assignment ***
+    ImmutableMatrixSparse & operator=(const ImmutableMatrixSparse &other) {
+
+        if (this != &other) {
+
+            cu_handles = other.cu_handles;
+            m_rows = other.m_rows;
+
+            if (n_cols != other.n_cols) {
+                check_cuda_error(cudaFree(d_col_offsets));
+                n_cols = other.n_cols;
+                allocate_d_col_offsets();
+            }
+
+            if (n_cols > 0) {
+                check_cuda_error(cudaMemcpy(
+                    d_col_offsets,
+                    other.d_col_offsets,
+                    mem_size_col_offsets(),
+                    cudaMemcpyDeviceToDevice
+                ));
+            }
+
+            if (nnz != other.nnz) {
+                check_cuda_error(cudaFree(d_row_indices));
+                check_cuda_error(cudaFree(d_vals));
+                nnz = other.nnz;
+                allocate_d_row_indices();
+                allocate_d_vals();
+            }
+
+            if (nnz > 0) {
+            
+                check_cuda_error(cudaMemcpy(
+                    d_row_indices,
+                    other.d_row_indices,
+                    mem_size_rows_ind(),
+                    cudaMemcpyDeviceToDevice
+                ));
+                check_cuda_error(cudaMemcpy(
+                    d_vals,
+                    other.d_vals,
+                    mem_size_vals(),
+                    cudaMemcpyDeviceToDevice
+                ));
+            }
+
+        }
+
+        return *this;
+
     }
 
     // *** Element Access ***

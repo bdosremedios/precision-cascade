@@ -162,12 +162,6 @@ public:
     }
 
     // template <typename T>
-    // void TestCopyAssignment() { TestCopyAssignment_Base<MatrixSparse, T>(); }
-
-    // template <typename T>
-    // void TestCopyConstructor() { TestCopyConstructor_Base<MatrixSparse, T>(); }
-
-    // template <typename T>
     // void TestStaticCreation() { TestStaticCreation_Base<MatrixSparse, T>(); }
 
     // template <typename T>
@@ -233,141 +227,141 @@ TEST_F(ImmutableMatrixSparse_Test, TestBadCoeffJustGetAccess) {
     TestBadCoeffJustGetAccess();
 }
 
-// TEST_F(MatrixSparse_Test, TestDynamicMemConstruction) {
+// TEST_F(ImmutableMatrixSparse_Test, TestDynamicMemConstruction) {
 //     TestDynamicMemConstruction<__half>();
 //     TestDynamicMemConstruction<float>();
 //     TestDynamicMemConstruction<double>();
 // }
 
-// TEST_F(MatrixSparse_Test, TestDynamicMemCopyToPtr) {
+// TEST_F(ImmutableMatrixSparse_Test, TestDynamicMemCopyToPtr) {
 //     TestDynamicMemCopyToPtr<__half>();
 //     TestDynamicMemCopyToPtr<float>();
 //     TestDynamicMemCopyToPtr<double>();
 // }
 
-// TEST_F(MatrixSparse_Test, TestBadDynamicMemCopyToPtr) { TestBadDynamicMemCopyToPtr(); }
+// TEST_F(ImmutableMatrixSparse_Test, TestBadDynamicMemCopyToPtr) { TestBadDynamicMemCopyToPtr(); }
 
-// TEST_F(MatrixSparse_Test, TestCopyAssignment) {
-//     TestCopyAssignment<__half>();
-//     TestCopyAssignment<float>();
-//     TestCopyAssignment<double>();
-// }
+TEST_F(ImmutableMatrixSparse_Test, TestCopyAssignment) {
+    TestCopyAssignment<__half>();
+    TestCopyAssignment<float>();
+    TestCopyAssignment<double>();
+}
 
-// TEST_F(MatrixSparse_Test, TestCopyConstructor) {
-//     TestCopyConstructor<__half>();
-//     TestCopyConstructor<float>();
-//     TestCopyConstructor<double>();
-// }
+TEST_F(ImmutableMatrixSparse_Test, TestCopyConstructor) {
+    TestCopyConstructor<__half>();
+    TestCopyConstructor<float>();
+    TestCopyConstructor<double>();
+}
 
-// TEST_F(MatrixSparse_Test, TestStaticCreation) {
+// TEST_F(ImmutableMatrixSparse_Test, TestStaticCreation) {
 //     TestStaticCreation<__half>();
 //     TestStaticCreation<float>();
 //     TestStaticCreation<double>();
 // }
 
-// TEST_F(MatrixSparse_Test, TestCol) {
+// TEST_F(ImmutableMatrixSparse_Test, TestCol) {
 //     TestCol<__half>();
 //     TestCol<float>();
 //     TestCol<double>();
 // }
 
-// TEST_F(MatrixSparse_Test, TestBadCol) { TestBadCol(); }
+// TEST_F(ImmutableMatrixSparse_Test, TestBadCol) { TestBadCol(); }
 
-// TEST_F(MatrixSparse_Test, TestBlock) {
+// TEST_F(ImmutableMatrixSparse_Test, TestBlock) {
 //     TestBlock<__half>();
 //     TestBlock<float>();
 //     TestBlock<double>();
 // }
 
-// TEST_F(MatrixSparse_Test, TestBadBlock) { TestBadBlock(); }
+// TEST_F(ImmutableMatrixSparse_Test, TestBadBlock) { TestBadBlock(); }
 
-// TEST_F(MatrixSparse_Test, TestScale) {
+// TEST_F(ImmutableMatrixSparse_Test, TestScale) {
 //     TestScale<__half>();
 //     TestScale<float>();
 //     TestScale<double>();
 // }
 
-// TEST_F(MatrixSparse_Test, TestScaleAssignment) {
+// TEST_F(ImmutableMatrixSparse_Test, TestScaleAssignment) {
 //     TestScaleAssignment<__half>();
 //     TestScaleAssignment<float>();
 //     TestScaleAssignment<double>();
 // }
 
-// TEST_F(MatrixSparse_Test, TestMaxMagElem) {
+// TEST_F(ImmutableMatrixSparse_Test, TestMaxMagElem) {
 //     TestMaxMagElem<__half>();
 //     TestMaxMagElem<float>();
 //     TestMaxMagElem<double>();
 // }
 
-// TEST_F(MatrixSparse_Test, TestNormalizeMagnitude) {
+// TEST_F(ImmutableMatrixSparse_Test, TestNormalizeMagnitude) {
 //     TestNormalizeMagnitude<__half>();
 //     TestNormalizeMagnitude<float>();
 //     TestNormalizeMagnitude<double>();
 // }
 
-// TEST_F(MatrixSparse_Test, TestMatVec) {
+// TEST_F(ImmutableMatrixSparse_Test, TestMatVec) {
 //     TestMatVec<__half>();
 //     TestMatVec<float>();
 //     TestMatVec<double>();
 // }
 
-// TEST_F(MatrixSparse_Test, TestBadMatVec) {
+// TEST_F(ImmutableMatrixSparse_Test, TestBadMatVec) {
 //     TestBadMatVec<__half>();
 //     TestBadMatVec<float>();
 //     TestBadMatVec<double>();
 // }
 
-// TEST_F(MatrixSparse_Test, TestTransposeMatVec) {
+// TEST_F(ImmutableMatrixSparse_Test, TestTransposeMatVec) {
 //     TestTransposeMatVec<__half>();
 //     TestTransposeMatVec<float>();
 //     TestTransposeMatVec<double>();
 // }
 
-// TEST_F(MatrixSparse_Test, TestBadTransposeMatVec) {
+// TEST_F(ImmutableMatrixSparse_Test, TestBadTransposeMatVec) {
 //     TestBadTransposeMatVec<__half>();
 //     TestBadTransposeMatVec<float>();
 //     TestBadTransposeMatVec<double>();
 // }
 
-// TEST_F(MatrixSparse_Test, TestTranspose) {
+// TEST_F(ImmutableMatrixSparse_Test, TestTranspose) {
 //     TestTranspose<__half>();
 //     TestTranspose<float>();
 //     TestTranspose<double>();
 // }
 
-// TEST_F(MatrixSparse_Test, TestMatMat) {
+// TEST_F(ImmutableMatrixSparse_Test, TestMatMat) {
 //     TestMatMat<__half>();
 //     TestMatMat<float>();
 //     TestMatMat<double>();
 // }
 
-// TEST_F(MatrixSparse_Test, TestBadMatMat) {
+// TEST_F(ImmutableMatrixSparse_Test, TestBadMatMat) {
 //     TestBadMatMat<__half>();
 //     TestBadMatMat<float>();
 //     TestBadMatMat<double>();
 // }
 
-// TEST_F(MatrixSparse_Test, TestAddSub) {
+// TEST_F(ImmutableMatrixSparse_Test, TestAddSub) {
 //     TestAddSub<__half>();
 //     TestAddSub<float>();
 //     TestAddSub<double>();
 // }
 
-// TEST_F(MatrixSparse_Test, TestBadAddSub) {
+// TEST_F(ImmutableMatrixSparse_Test, TestBadAddSub) {
 //     TestBadAddSub<__half>();
 //     TestBadAddSub<float>();
 //     TestBadAddSub<double>();
 // }
 
-// TEST_F(MatrixSparse_Test, TestNorm) {
+// TEST_F(ImmutableMatrixSparse_Test, TestNorm) {
 //     TestNorm<__half>();
 //     TestNorm<float>();
 //     TestNorm<double>();
 // }
 
-// TEST_F(MatrixSparse_Test, TestCast) { TestCast(); }
+// TEST_F(ImmutableMatrixSparse_Test, TestCast) { TestCast(); }
 
-// TEST_F(MatrixSparse_Test, TestBadCast) { TestBadCast(); }
+// TEST_F(ImmutableMatrixSparse_Test, TestBadCast) { TestBadCast(); }
 
 // class MatrixSparse_Substitution_Test: public Matrix_Substitution_Test<MatrixSparse> {};
 

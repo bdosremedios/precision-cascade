@@ -170,6 +170,9 @@ public:
         }
     }
 
+    // *** Copy Constructor ***
+    MatrixDense(const MatrixDense<T> &other) { *this = other; }
+
     // *** Destructor ***
     ~MatrixDense() { check_cuda_error(cudaFree(d_mat)); }
 
@@ -187,16 +190,15 @@ public:
                 allocate_d_mat();
             }
 
-            check_cuda_error(cudaMemcpy(d_mat, other.d_mat, mem_size(), cudaMemcpyDeviceToDevice));
+            if ((m_rows > 0) && (n_cols > 0)) {
+                check_cuda_error(cudaMemcpy(d_mat, other.d_mat, mem_size(), cudaMemcpyDeviceToDevice));
+            }
 
         }
 
         return *this;
 
     }
-
-    // *** Copy Constructor ***
-    MatrixDense(const MatrixDense<T> &other) { *this = other; }
 
     // *** Element Access ***
     const Scalar<T> get_elem(int row, int col) const {
