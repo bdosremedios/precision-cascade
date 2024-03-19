@@ -131,6 +131,8 @@ public:
         auto try_match_wrong_dim_col = [=]() { mat_rand.copy_data_to_ptr(h_mat_rand, m_rand, m_rand); };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_match_wrong_dim_col);
 
+        free(h_mat_rand);
+
     }
 
     template <typename T>

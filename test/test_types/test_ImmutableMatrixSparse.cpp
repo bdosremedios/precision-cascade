@@ -162,6 +162,38 @@ public:
     }
 
     template <typename T>
+    void TestDynamicMemConstruction() {
+    
+        const int m_manual(2);
+        const int n_manual(3);
+        const int nnz_manual(4);
+
+        int h_col_offsets[3] = {0, 2, 3};
+        int h_row_indices[4] = {0, 1, 1, 0};
+        T h_vals[4] = {
+            static_cast<T>(-5), static_cast<T>(3), static_cast<T>(3.5), static_cast<T>(-20)
+        };
+
+        ImmutableMatrixSparse<T> mat(
+            TestBase::bundle,
+            h_col_offsets, h_row_indices, h_vals,
+            m_manual, n_manual, nnz_manual
+        );
+
+        ASSERT_EQ(mat.rows(), m_manual);
+        ASSERT_EQ(mat.cols(), n_manual);
+        ASSERT_EQ(mat.non_zeros(), nnz_manual);
+
+        ASSERT_EQ(mat.get_elem(0, 0).get_scalar(), static_cast<T>(-5));
+        ASSERT_EQ(mat.get_elem(1, 0).get_scalar(), static_cast<T>(3));
+        ASSERT_EQ(mat.get_elem(0, 1).get_scalar(), static_cast<T>(0));
+        ASSERT_EQ(mat.get_elem(1, 1).get_scalar(), static_cast<T>(3.5));
+        ASSERT_EQ(mat.get_elem(0, 2).get_scalar(), static_cast<T>(-20));
+        ASSERT_EQ(mat.get_elem(1, 2).get_scalar(), static_cast<T>(0));
+    
+    }
+
+    template <typename T>
     void TestDynamicMemCopyToPtr() {
     
         const int m_manual(2);
@@ -343,6 +375,10 @@ public:
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_match_wrong_dim_nnz);
 
+        free(h_col_offsets);
+        free(h_row_indices);
+        free(h_vals);
+
     }
 
     // template <typename T>
@@ -423,11 +459,11 @@ TEST_F(ImmutableMatrixSparse_Test, TestCopyConstructor) {
     TestCopyConstructor<double>();
 }
 
-// TEST_F(ImmutableMatrixSparse_Test, TestDynamicMemConstruction) {
-//     TestDynamicMemConstruction<__half>();
-//     TestDynamicMemConstruction<float>();
-//     TestDynamicMemConstruction<double>();
-// }
+TEST_F(ImmutableMatrixSparse_Test, TestDynamicMemConstruction) {
+    TestDynamicMemConstruction<__half>();
+    TestDynamicMemConstruction<float>();
+    TestDynamicMemConstruction<double>();
+}
 
 TEST_F(ImmutableMatrixSparse_Test, TestDynamicMemCopyToPtr) {
     TestDynamicMemCopyToPtr<__half>();
