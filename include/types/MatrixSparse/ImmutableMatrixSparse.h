@@ -257,18 +257,18 @@ public:
 
     // *** Dynamic Memory *** (assumes outer code handles dynamic memory properly)
     ImmutableMatrixSparse(
-        const cuHandleBundle &arg_cu_handles,
-        int *arg_h_col_offsets,
-        int *arg_h_row_indices,
-        T *arg_h_vals,
-        int arg_m_rows,
-        int arg_n_cols,
-        int arg_nnz
+        const cuHandleBundle &source_cu_handles,
+        int *h_col_offsets,
+        int *h_row_indices,
+        T *h_vals,
+        int source_m_rows,
+        int source_n_cols,
+        int source_nnz
     ):
-        cu_handles(arg_cu_handles),
-        m_rows(arg_m_rows),
-        n_cols(arg_n_cols),
-        nnz(arg_nnz)
+        cu_handles(source_cu_handles),
+        m_rows(source_m_rows),
+        n_cols(source_n_cols),
+        nnz(source_nnz)
     {
 
         allocate_d_mem();
@@ -276,7 +276,7 @@ public:
         if (n_cols > 0) {
             check_cuda_error(cudaMemcpy(
                 d_col_offsets,
-                arg_h_col_offsets,
+                h_col_offsets,
                 mem_size_col_offsets(),
                 cudaMemcpyHostToDevice
             ));
@@ -285,13 +285,13 @@ public:
         if (nnz > 0) {
             check_cuda_error(cudaMemcpy(
                 d_row_indices,
-                arg_h_row_indices,
+                h_row_indices,
                 mem_size_row_indices(),
                 cudaMemcpyHostToDevice
             ));
             check_cuda_error(cudaMemcpy(
                 d_vals,
-                arg_h_vals,
+                h_vals,
                 mem_size_vals(),
                 cudaMemcpyHostToDevice
             ));

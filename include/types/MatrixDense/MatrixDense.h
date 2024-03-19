@@ -147,15 +147,15 @@ public:
 
     // *** Dynamic Memory *** (assumes outer code handles dynamic memory properly)
     MatrixDense(
-        const cuHandleBundle &arg_cu_handles,
+        const cuHandleBundle &source_cu_handles,
         T *h_mat,
-        int m_elem,
-        int n_elem
+        int source_m_rows,
+        int source_n_cols
     ):
         MatrixDense(
-            arg_cu_handles,
-            m_elem,
-            n_elem
+            source_cu_handles,
+            source_m_rows,
+            source_n_cols
         )
     {
         if ((m_rows > 0) && (n_cols > 0)) {
@@ -163,13 +163,13 @@ public:
         }
     }
 
-    void copy_data_to_ptr(T *h_mat, int m_elem, int n_elem) const {
+    void copy_data_to_ptr(T *h_mat, int target_m_rows, int target_n_cols) const {
 
-        if (m_elem != m_rows) {
-            throw std::runtime_error("MatrixDense: invalid m_elem dim for copy_data_to_ptr");
+        if (target_m_rows != m_rows) {
+            throw std::runtime_error("MatrixDense: invalid target_m_rows dim for copy_data_to_ptr");
         }
-        if (n_elem != n_cols) {
-            throw std::runtime_error("MatrixDense: invalid n_elem dim for copy_data_to_ptr");
+        if (target_n_cols != n_cols) {
+            throw std::runtime_error("MatrixDense: invalid target_n_cols dim for copy_data_to_ptr");
         }
 
         if ((m_rows > 0) && (n_cols > 0)) {
