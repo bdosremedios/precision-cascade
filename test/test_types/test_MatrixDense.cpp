@@ -110,7 +110,7 @@ public:
 
         const int m_rand(4);
         const int n_rand(5);
-        MatrixDense<double> mat_rand(TestBase::bundle, m_rand, n_rand);
+        MatrixDense<double> mat_rand(MatrixDense<double>::Random(TestBase::bundle, m_rand, n_rand));
         double *h_mat_rand = static_cast<double *>(malloc(m_rand*n_rand*sizeof(double)));
         
         auto try_row_too_small = [=]() { mat_rand.copy_data_to_ptr(h_mat_rand, m_rand-2, n_rand); };
@@ -333,6 +333,18 @@ TEST_F(MatrixDense_Test, TestPrintAndInfoString) {
     TestPrintAndInfoString();
 }
 
+TEST_F(MatrixDense_Test, TestCopyAssignment) {
+    TestCopyAssignment<__half>();
+    TestCopyAssignment<float>();
+    TestCopyAssignment<double>();
+}
+
+TEST_F(MatrixDense_Test, TestCopyConstructor) {
+    TestCopyConstructor<__half>();
+    TestCopyConstructor<float>();
+    TestCopyConstructor<double>();
+}
+
 TEST_F(MatrixDense_Test, TestDynamicMemConstruction) {
     TestDynamicMemConstruction<__half>();
     TestDynamicMemConstruction<float>();
@@ -347,18 +359,6 @@ TEST_F(MatrixDense_Test, TestDynamicMemCopyToPtr) {
 
 TEST_F(MatrixDense_Test, TestBadDynamicMemCopyToPtr) {
     TestBadDynamicMemCopyToPtr();
-}
-
-TEST_F(MatrixDense_Test, TestCopyAssignment) {
-    TestCopyAssignment<__half>();
-    TestCopyAssignment<float>();
-    TestCopyAssignment<double>();
-}
-
-TEST_F(MatrixDense_Test, TestCopyConstructor) {
-    TestCopyConstructor<__half>();
-    TestCopyConstructor<float>();
-    TestCopyConstructor<double>();
 }
 
 TEST_F(MatrixDense_Test, TestStaticCreation) {

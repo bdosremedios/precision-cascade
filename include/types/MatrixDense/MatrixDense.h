@@ -8,7 +8,6 @@
 
 #include <string>
 #include <format>
-#include <iostream>
 
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
@@ -53,7 +52,7 @@ public:
 
     class Block; class Col; // Forward declaration of nested classes
 
-    // *** Constructors ***
+    // *** Basic Constructors ***
     MatrixDense(
         const cuHandleBundle &arg_cu_handles,
         int arg_m_rows,
@@ -109,6 +108,40 @@ public:
         }
 
         free(h_mat);
+
+    }
+
+    // *** Copy Constructor ***
+    MatrixDense(const MatrixDense<T> &other) {
+        *this = other;
+    }
+
+    // *** Destructor ***
+    ~MatrixDense() {
+        check_cuda_error(cudaFree(d_mat));
+    }
+
+    // *** Copy Assignment ***
+    MatrixDense<T> & operator=(const MatrixDense &other) {
+
+        if (this != &other) {
+
+            cu_handles = other.cu_handles;
+
+            if ((m_rows != other.m_rows) || (n_cols != other.n_cols)) {
+                check_cuda_error(cudaFree(d_mat));
+                m_rows = other.m_rows;
+                n_cols = other.n_cols;
+                allocate_d_mat();
+            }
+
+            if ((m_rows > 0) && (n_cols > 0)) {
+                check_cuda_error(cudaMemcpy(d_mat, other.d_mat, mem_size(), cudaMemcpyDeviceToDevice));
+            }
+
+        }
+
+        return *this;
 
     }
 
@@ -168,36 +201,6 @@ public:
                 )
             );
         }
-    }
-
-    // *** Copy Constructor ***
-    MatrixDense(const MatrixDense<T> &other) { *this = other; }
-
-    // *** Destructor ***
-    ~MatrixDense() { check_cuda_error(cudaFree(d_mat)); }
-
-    // *** Copy Assignment ***
-    MatrixDense<T> & operator=(const MatrixDense &other) {
-
-        if (this != &other) {
-
-            cu_handles = other.cu_handles;
-
-            if ((m_rows != other.m_rows) || (n_cols != other.n_cols)) {
-                check_cuda_error(cudaFree(d_mat));
-                m_rows = other.m_rows;
-                n_cols = other.n_cols;
-                allocate_d_mat();
-            }
-
-            if ((m_rows > 0) && (n_cols > 0)) {
-                check_cuda_error(cudaMemcpy(d_mat, other.d_mat, mem_size(), cudaMemcpyDeviceToDevice));
-            }
-
-        }
-
-        return *this;
-
     }
 
     // *** Element Access ***

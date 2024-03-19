@@ -161,6 +161,190 @@ public:
 
     }
 
+    template <typename T>
+    void TestDynamicMemCopyToPtr() {
+    
+        const int m_manual(2);
+        const int n_manual(3);
+        const int nnz_manual(4);
+
+        ImmutableMatrixSparse<T> mat_manual(
+            TestBase::bundle,
+            {{static_cast<T>(-5), static_cast<T>(0.), static_cast<T>(-20)},
+             {static_cast<T>(3), static_cast<T>(3.5), static_cast<T>(0.)}}
+        );
+
+        int *h_col_offsets = static_cast<int *>(malloc(n_manual*sizeof(int)));
+        int *h_row_indices = static_cast<int *>(malloc(nnz_manual*sizeof(int)));
+        T *h_vals = static_cast<T *>(malloc(nnz_manual*sizeof(T)));
+
+        mat_manual.copy_data_to_ptr(
+            h_col_offsets, h_row_indices, h_vals,
+            m_manual, n_manual, nnz_manual
+        );
+
+        ASSERT_EQ(h_col_offsets[0], 0);
+        ASSERT_EQ(h_col_offsets[1], 2);
+        ASSERT_EQ(h_col_offsets[2], 3);
+
+        ASSERT_EQ(h_row_indices[0], 0);
+        ASSERT_EQ(h_row_indices[1], 1);
+        ASSERT_EQ(h_row_indices[2], 1);
+        ASSERT_EQ(h_row_indices[3], 0);
+
+        ASSERT_EQ(h_vals[0], static_cast<T>(-5));
+        ASSERT_EQ(h_vals[1], static_cast<T>(3));
+        ASSERT_EQ(h_vals[2], static_cast<T>(3.5));
+        ASSERT_EQ(h_vals[3], static_cast<T>(-20));
+
+        free(h_col_offsets);
+        free(h_row_indices);
+        free(h_vals);
+    
+        const int m_manual_2(3);
+        const int n_manual_2(5);
+        const int nnz_manual_2(8);
+
+        ImmutableMatrixSparse<T> mat_manual_2(
+            TestBase::bundle,
+            {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3),
+              static_cast<T>(0), static_cast<T>(5)},
+             {static_cast<T>(6), static_cast<T>(0), static_cast<T>(0),
+              static_cast<T>(9), static_cast<T>(10)},
+             {static_cast<T>(0), static_cast<T>(0), static_cast<T>(0),
+              static_cast<T>(14), static_cast<T>(0)}}
+        );
+
+        int *h_col_offsets_2 = static_cast<int *>(malloc(n_manual_2*sizeof(int)));
+        int *h_row_indices_2 = static_cast<int *>(malloc(nnz_manual_2*sizeof(int)));
+        T *h_vals_2 = static_cast<T *>(malloc(nnz_manual_2*sizeof(T)));
+
+        mat_manual_2.copy_data_to_ptr(
+            h_col_offsets_2, h_row_indices_2, h_vals_2,
+            m_manual_2, n_manual_2, nnz_manual_2
+        );
+
+        ASSERT_EQ(h_col_offsets_2[0], 0);
+        ASSERT_EQ(h_col_offsets_2[1], 2);
+        ASSERT_EQ(h_col_offsets_2[2], 3);
+        ASSERT_EQ(h_col_offsets_2[3], 4);
+        ASSERT_EQ(h_col_offsets_2[4], 6);
+
+        ASSERT_EQ(h_row_indices_2[0], 0);
+        ASSERT_EQ(h_row_indices_2[1], 1);
+        ASSERT_EQ(h_row_indices_2[2], 0);
+        ASSERT_EQ(h_row_indices_2[3], 0);
+        ASSERT_EQ(h_row_indices_2[4], 1);
+        ASSERT_EQ(h_row_indices_2[5], 2);
+        ASSERT_EQ(h_row_indices_2[6], 0);
+        ASSERT_EQ(h_row_indices_2[7], 1);
+
+        ASSERT_EQ(h_vals_2[0], static_cast<T>(1));
+        ASSERT_EQ(h_vals_2[1], static_cast<T>(6));
+        ASSERT_EQ(h_vals_2[2], static_cast<T>(2));
+        ASSERT_EQ(h_vals_2[3], static_cast<T>(3));
+        ASSERT_EQ(h_vals_2[4], static_cast<T>(9));
+        ASSERT_EQ(h_vals_2[5], static_cast<T>(14));
+        ASSERT_EQ(h_vals_2[6], static_cast<T>(5));
+        ASSERT_EQ(h_vals_2[7], static_cast<T>(10));
+
+        free(h_col_offsets_2);
+        free(h_row_indices_2);
+        free(h_vals_2);
+
+    }
+
+    void TestBadDynamicMemCopyToPtr() {
+
+        const int m_manual(4);
+        const int n_manual(5);
+        const int nnz_manual(6);
+        ImmutableMatrixSparse<double> mat(
+            TestBase::bundle,
+            {{1., 0., 0., 0., 0.},
+             {0., 3.5, 20., 0., 0.},
+             {0., 2., 0., 0., 0.},
+             {-1., 0., 0., 0., -0.5}}
+        );
+
+        int *h_col_offsets = static_cast<int *>(malloc(n_manual*sizeof(int)));
+        int *h_row_indices = static_cast<int *>(malloc(nnz_manual*sizeof(int)));
+        double *h_vals = static_cast<double *>(malloc(nnz_manual*sizeof(double)));
+        
+        auto try_row_too_small = [&]() {
+            mat.copy_data_to_ptr(
+                h_col_offsets, h_row_indices, h_vals,
+                m_manual-2, n_manual, nnz_manual
+            );
+        };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_row_too_small);
+
+        auto try_row_too_large = [&]() {
+            mat.copy_data_to_ptr(
+                h_col_offsets, h_row_indices, h_vals,
+                m_manual+2, n_manual, nnz_manual
+            );
+        };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_row_too_large);
+
+        auto try_col_too_small = [&]() {
+            mat.copy_data_to_ptr(
+                h_col_offsets, h_row_indices, h_vals,
+                m_manual, n_manual-2, nnz_manual
+            );
+        };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_col_too_small);
+
+        auto try_col_too_large = [&]() {
+            mat.copy_data_to_ptr(
+                h_col_offsets, h_row_indices, h_vals,
+                m_manual, n_manual+2, nnz_manual
+            );
+        };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_col_too_large);
+
+        auto try_nnz_too_small = [&]() {
+            mat.copy_data_to_ptr(
+                h_col_offsets, h_row_indices, h_vals,
+                m_manual, n_manual, nnz_manual-2
+            );
+        };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_nnz_too_small);
+
+        auto try_nnz_too_large = [&]() {
+            mat.copy_data_to_ptr(
+                h_col_offsets, h_row_indices, h_vals,
+                m_manual, n_manual, nnz_manual+2
+            );
+        };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_nnz_too_large);
+
+        auto try_match_wrong_dim_row = [&]() {
+            mat.copy_data_to_ptr(
+                h_col_offsets, h_row_indices, h_vals,
+                n_manual, n_manual, nnz_manual
+            ); 
+        };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_match_wrong_dim_row);
+
+        auto try_match_wrong_dim_col = [&]() {
+            mat.copy_data_to_ptr(
+                h_col_offsets, h_row_indices, h_vals,
+                m_manual, nnz_manual, nnz_manual
+            );
+        };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_match_wrong_dim_col);
+
+        auto try_match_wrong_dim_nnz = [&]() {
+            mat.copy_data_to_ptr(
+                h_col_offsets, h_row_indices, h_vals,
+                m_manual, n_manual, m_manual
+            );
+        };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_match_wrong_dim_nnz);
+
+    }
+
     // template <typename T>
     // void TestStaticCreation() { TestStaticCreation_Base<MatrixSparse, T>(); }
 
@@ -227,20 +411,6 @@ TEST_F(ImmutableMatrixSparse_Test, TestBadCoeffJustGetAccess) {
     TestBadCoeffJustGetAccess();
 }
 
-// TEST_F(ImmutableMatrixSparse_Test, TestDynamicMemConstruction) {
-//     TestDynamicMemConstruction<__half>();
-//     TestDynamicMemConstruction<float>();
-//     TestDynamicMemConstruction<double>();
-// }
-
-// TEST_F(ImmutableMatrixSparse_Test, TestDynamicMemCopyToPtr) {
-//     TestDynamicMemCopyToPtr<__half>();
-//     TestDynamicMemCopyToPtr<float>();
-//     TestDynamicMemCopyToPtr<double>();
-// }
-
-// TEST_F(ImmutableMatrixSparse_Test, TestBadDynamicMemCopyToPtr) { TestBadDynamicMemCopyToPtr(); }
-
 TEST_F(ImmutableMatrixSparse_Test, TestCopyAssignment) {
     TestCopyAssignment<__half>();
     TestCopyAssignment<float>();
@@ -251,6 +421,22 @@ TEST_F(ImmutableMatrixSparse_Test, TestCopyConstructor) {
     TestCopyConstructor<__half>();
     TestCopyConstructor<float>();
     TestCopyConstructor<double>();
+}
+
+// TEST_F(ImmutableMatrixSparse_Test, TestDynamicMemConstruction) {
+//     TestDynamicMemConstruction<__half>();
+//     TestDynamicMemConstruction<float>();
+//     TestDynamicMemConstruction<double>();
+// }
+
+TEST_F(ImmutableMatrixSparse_Test, TestDynamicMemCopyToPtr) {
+    TestDynamicMemCopyToPtr<__half>();
+    TestDynamicMemCopyToPtr<float>();
+    TestDynamicMemCopyToPtr<double>();
+}
+
+TEST_F(ImmutableMatrixSparse_Test, TestBadDynamicMemCopyToPtr) {
+    TestBadDynamicMemCopyToPtr();
 }
 
 // TEST_F(ImmutableMatrixSparse_Test, TestStaticCreation) {

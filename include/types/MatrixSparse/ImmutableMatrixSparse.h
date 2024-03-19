@@ -26,7 +26,7 @@ private:
         return n_cols*sizeof(int);
     }
 
-    size_t mem_size_rows_ind() const {
+    size_t mem_size_row_indices() const {
         return nnz*sizeof(int);
     }
 
@@ -39,7 +39,7 @@ private:
     }
 
     void allocate_d_row_indices() {
-        check_cuda_error(cudaMalloc(&d_row_indices, mem_size_rows_ind()));
+        check_cuda_error(cudaMalloc(&d_row_indices, mem_size_row_indices()));
     }
 
     void allocate_d_vals() {
@@ -83,7 +83,7 @@ public:
 
     class Block; class Col; // Forward declaration of nested classes
 
-    // *** Constructors ***
+    // *** Basic Constructors ***
     ImmutableMatrixSparse(
         const cuHandleBundle &arg_cu_handles,
         int arg_m,
@@ -153,7 +153,7 @@ public:
         // Set remaining host vectors to values to load, and load column offsets, row indices
         // and values into gpu memory
         allocate_d_mem();
-        int *h_row_indices = static_cast<int *>(malloc(mem_size_rows_ind()));
+        int *h_row_indices = static_cast<int *>(malloc(mem_size_row_indices()));
         T *h_vals = static_cast<T *>(malloc(mem_size_vals()));
         for (int i=0; i<nnz; ++i) { h_row_indices[i] = vec_row_indices[i]; }
         for (int i=0; i<nnz; ++i) { h_vals[i] = vec_values[i]; }
@@ -171,7 +171,7 @@ public:
             check_cuda_error(cudaMemcpy(
                 d_row_indices,
                 h_row_indices,
-                mem_size_rows_ind(),
+                mem_size_row_indices(),
                 cudaMemcpyHostToDevice 
             ));
             check_cuda_error(cudaMemcpy(
@@ -200,7 +200,7 @@ public:
         check_cuda_error(cudaFree(d_vals));
     }
 
-    // *** Copy-Assignment ***
+    // *** Copy Assignment ***
     ImmutableMatrixSparse & operator=(const ImmutableMatrixSparse &other) {
 
         if (this != &other) {
@@ -236,20 +236,107 @@ public:
                 check_cuda_error(cudaMemcpy(
                     d_row_indices,
                     other.d_row_indices,
-                    mem_size_rows_ind(),
+                    mem_size_row_indices(),
                     cudaMemcpyDeviceToDevice
                 ));
+
                 check_cuda_error(cudaMemcpy(
                     d_vals,
                     other.d_vals,
                     mem_size_vals(),
                     cudaMemcpyDeviceToDevice
                 ));
+
             }
 
         }
 
         return *this;
+
+    }
+
+    // *** Dynamic Memory *** (assumes outer code handles dynamic memory properly)
+    ImmutableMatrixSparse(
+        const cuHandleBundle &arg_cu_handles,
+        int *arg_h_col_offsets,
+        int *arg_h_row_indices,
+        T *arg_h_vals,
+        int arg_m_rows,
+        int arg_n_cols,
+        int arg_nnz
+    ):
+        cu_handles(arg_cu_handles),
+        m_rows(arg_m_rows),
+        n_cols(arg_n_cols),
+        nnz(arg_nnz)
+    {
+
+        allocate_d_mem();
+
+        if (n_cols > 0) {
+            check_cuda_error(cudaMemcpy(
+                d_col_offsets,
+                arg_h_col_offsets,
+                mem_size_col_offsets(),
+                cudaMemcpyHostToDevice
+            ));
+        }
+
+        if (nnz > 0) {
+            check_cuda_error(cudaMemcpy(
+                d_row_indices,
+                arg_h_row_indices,
+                mem_size_row_indices(),
+                cudaMemcpyHostToDevice
+            ));
+            check_cuda_error(cudaMemcpy(
+                d_vals,
+                arg_h_vals,
+                mem_size_vals(),
+                cudaMemcpyHostToDevice
+            ));
+        }
+
+    }
+
+    void copy_data_to_ptr(
+        int *h_col_offsets, int *h_row_indices, T *h_vals,
+        int target_m_rows, int target_n_cols, int target_nnz
+    ) const {
+
+        if (target_m_rows != m_rows) {
+            throw std::runtime_error("ImmutableMatrixSparse: invalid target_m_rows dim for copy_data_to_ptr");
+        }
+        if (target_n_cols != n_cols) {
+            throw std::runtime_error("ImmutableMatrixSparse: invalid target_n_cols dim for copy_data_to_ptr");
+        }
+        if (target_nnz != nnz) {
+            throw std::runtime_error("ImmutableMatrixSparse: invalid target_nnz dim for copy_data_to_ptr");
+        }
+
+        if (n_cols > 0) {
+            check_cuda_error(cudaMemcpy(
+                h_col_offsets,
+                d_col_offsets,
+                mem_size_col_offsets(),
+                cudaMemcpyDeviceToHost
+            ));
+        }
+
+        if (nnz > 0) {
+            check_cuda_error(cudaMemcpy(
+                h_row_indices,
+                d_row_indices,
+                mem_size_row_indices(),
+                cudaMemcpyDeviceToHost
+            ));
+            check_cuda_error(cudaMemcpy(
+                h_vals,
+                d_vals,
+                mem_size_vals(),
+                cudaMemcpyDeviceToHost
+            ));
+        }
 
     }
 
