@@ -235,7 +235,7 @@ public:
     Col get_col(int col) const {
 
         if ((col < 0) || (col >= n_cols)) {
-            throw std::runtime_error("MatrixDense: invalid col access in col");
+            throw std::runtime_error("MatrixDense: invalid col access in get_col");
         }
 
         return Col(this, col);
@@ -514,7 +514,9 @@ public:
 
     public:
 
-        Col(const MatrixDense<T>::Col &other): Col(other.associated_mat_ptr, other.col_idx) {}
+        Col(const MatrixDense<T>::Col &other):
+            Col(other.associated_mat_ptr, other.col_idx)
+        {}
 
         Scalar<T> get_elem(int arg_row) {
 

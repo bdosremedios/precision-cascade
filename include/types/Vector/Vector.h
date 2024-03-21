@@ -114,17 +114,12 @@ public:
     }
 
     // *** Conversion Constructors ***
-    Vector(const typename MatrixDense<T>::Col &col):
-        Vector(col.associated_mat_ptr->get_cu_handles(), col.m_rows)
-    {
-        check_cuda_error(
-            cudaMemcpy(
-                d_vec,
-                col.associated_mat_ptr->d_mat + col.col_idx*col.m_rows,
-                mem_size(),
-                cudaMemcpyDeviceToDevice
-            )
-        );
+    Vector(const typename MatrixDense<T>::Col &col) {
+        *this = col.copy_to_vec();
+    }
+
+    Vector(const typename ImmutableMatrixSparse<T>::Col &col) {
+        *this = col.copy_to_vec();
     }
 
     // Vector(const cublasHandle_t &arg_handle, const typename MatrixSparse<T>::Col &col):

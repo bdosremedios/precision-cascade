@@ -405,7 +405,16 @@ public:
 
     }
 
-//     Col col(int _col) { return Parent::col(_col); }
+    Col get_col(int col) const {
+
+        if ((col < 0) || (col >= n_cols)) {
+            throw std::runtime_error("ImmutableMatrixSparse: invalid col access in get_col");
+        }
+
+        return Col(this, col);
+
+    }
+
 //     Block block(int row, int col, int m, int n) { return Parent::block(row, col, m, n); }
 
     // *** Properties ***
@@ -643,46 +652,107 @@ public:
 //         return typename Parent::SparseMatrix(Parent::operator*(mat));
 //     }
 
-//     // Forward iterator over sparse inner columns skipping zeroes
-//     class InnerIterator: public Parent::InnerIterator
-//     {
-//     public:
-        
-//         InnerIterator(const MatrixSparse<T> &mat, int start):
-//             Parent::InnerIterator(mat, start)
-//         {}
+    // Nested lightweight wrapper class representing matrix column and assignment/elem access
+    // Requires: cast to Vector<T>
+    class Col
+    {
+    private:
 
-//         int col() { return Parent::InnerIterator::col(); }
-//         int row() { return Parent::InnerIterator::row(); }
-//         T value() { return Parent::InnerIterator::value(); }
-//         typename Parent::InnerIterator &operator++() {
-//             return Parent::InnerIterator::operator++();
-//         }
-//         operator bool() const { return Parent::InnerIterator::operator bool(); }
+        friend ImmutableMatrixSparse<T>;
 
-//     };
+        const int m_rows;
+        const int col_idx;
+        const ImmutableMatrixSparse<T> *associated_mat_ptr;
 
-//     // Reverse iterator over sparse inner columns skipping zeroes
-//     class ReverseInnerIterator: public Parent::ReverseInnerIterator
-//     {
-//     public:
-        
-//         ReverseInnerIterator(const MatrixSparse<T> &mat, int start):
-//             Parent::ReverseInnerIterator(mat, start)
-//         {}
+        Col(const ImmutableMatrixSparse<T> *arg_associated_mat_ptr, int arg_col_idx):
+            associated_mat_ptr(arg_associated_mat_ptr),
+            col_idx(arg_col_idx),
+            m_rows(arg_associated_mat_ptr->m_rows)
+        {}
 
-//         int col() { return Parent::ReverseInnerIterator::col(); }
-//         int row() { return Parent::ReverseInnerIterator::row(); }
-//         T value() { return Parent::ReverseInnerIterator::value(); }
-//         typename Parent::ReverseInnerIterator &operator--() {
-//             return Parent::ReverseInnerIterator::operator--();
-//         }
-//         operator bool() const { return Parent::ReverseInnerIterator::operator bool(); }
+    public:
 
-//     };
+        Col(const ImmutableMatrixSparse<T>::Col &other):
+            Col(other.associated_mat_ptr, other.col_idx)
+        {}
 
-//     // Nested class representing sparse matrix column
-//     // Requires: assignment from/cast to MatrixVector<T>
+        Scalar<T> get_elem(int arg_row) {
+
+            if ((arg_row < 0) || (arg_row >= m_rows)) {
+                throw std::runtime_error("ImmutableMatrixSparse::Col: invalid row access in get_elem");
+            }
+
+            return associated_mat_ptr->get_elem(arg_row, col_idx);
+
+        }
+
+        Vector<T> copy_to_vec() const {
+
+            T *h_vec = static_cast<T *>(malloc(m_rows*sizeof(T)));
+            for (int i=0; i<m_rows; ++i) { h_vec[i] = static_cast<T>(0.); }
+
+            // Get column offset and column size
+            int col_offset_L;
+            int col_offset_R;
+            if (col_idx != associated_mat_ptr->n_cols-1) {
+                check_cuda_error(cudaMemcpy(
+                    &col_offset_L,
+                    associated_mat_ptr->d_col_offsets + col_idx,
+                    sizeof(int),
+                    cudaMemcpyDeviceToHost
+                ));
+                check_cuda_error(cudaMemcpy(
+                    &col_offset_R,
+                    associated_mat_ptr->d_col_offsets + col_idx+1,
+                    sizeof(int),
+                    cudaMemcpyDeviceToHost
+                ));
+            } else {
+                check_cuda_error(cudaMemcpy(
+                    &col_offset_L,
+                    associated_mat_ptr->d_col_offsets + col_idx,
+                    sizeof(int),
+                    cudaMemcpyDeviceToHost
+                ));
+                col_offset_R = associated_mat_ptr->nnz;
+            }
+            size_t col_nnz_size = col_offset_R-col_offset_L;
+
+            int *h_row_indices = static_cast<int *>(malloc(col_nnz_size*sizeof(int)));
+            T *h_vals = static_cast<T *>(malloc(col_nnz_size*sizeof(T)));
+            if (col_nnz_size > 0) {
+                check_cuda_error(cudaMemcpy(
+                    h_row_indices,
+                    associated_mat_ptr->d_row_indices + col_offset_L,
+                    col_nnz_size*sizeof(int),
+                    cudaMemcpyDeviceToHost
+                ));
+                check_cuda_error(cudaMemcpy(
+                    h_vals,
+                    associated_mat_ptr->d_vals + col_offset_L,
+                    col_nnz_size*sizeof(T),
+                    cudaMemcpyDeviceToHost
+                ));
+            }
+
+            for (int i=0; i<col_nnz_size; ++i) {
+                h_vec[h_row_indices[i]] = h_vals[i];
+            }
+
+            Vector<T> created_vec(
+                associated_mat_ptr->cu_handles, h_vec, m_rows
+            );
+
+            free(h_vec);
+            free(h_row_indices);
+            free(h_vals);
+
+            return created_vec;
+
+        }
+
+    };
+
 //     class Col: private Eigen::Block<Parent, Eigen::Dynamic, 1, true>
 //     {
 //     private:
@@ -714,61 +784,6 @@ public:
 //     };
     
 // };
-
-// #endif
-
-// template <typename T>
-// MatrixVector<T> back_substitution(MatrixSparse<T> const &UT, MatrixVector<T> const &rhs) {
-
-//     // Check squareness and compatibility
-//     if (UT.rows() != UT.cols()) { throw std::runtime_error("Non square matrix in back substitution"); }
-//     if (UT.rows() != rhs.rows()) { throw std::runtime_error("Incompatible matrix and rhs"); }
-
-//     // Assume UT is upper triangular, iterate backwards through columns through non-zero entries
-//     // for backward substitution
-//     MatrixVector<T> x = rhs;
-//     for (int col=UT.cols()-1; col>=0; --col) {
-
-//         typename MatrixSparse<T>::ReverseInnerIterator it(UT, col);
-        
-//         // Skip entries until reaching diagonal guarding against extra non-zeroes
-//         for (; it && (it.row() != it.col()); --it) { ; }
-//         if (it.row() != it.col()) { throw std::runtime_error ("Diagonal in MatrixSparse triangular solve could not be reached"); }
-
-//         x(col) /= it.value();
-//         --it;
-//         for (; it; --it) { x(it.row()) -= it.value()*x(col); }
-
-//     }
-
-//     return x;
-
-// }
-// template <typename T>
-// MatrixVector<T> frwd_substitution(MatrixSparse<T> const &LT, MatrixVector<T> const &rhs) {
-
-//     // Check squareness and compatibility
-//     if (LT.rows() != LT.cols()) { throw std::runtime_error("Non square matrix in back substitution"); }
-//     if (LT.rows() != rhs.rows()) { throw std::runtime_error("Incompatible matrix and rhs"); }
-
-//     // Assume LT is lower triangular, iterate forwards through columns through non-zero entries
-//     // for forward substitution
-//     MatrixVector<T> x = rhs;
-//     for (int col=0; col<LT.cols(); ++col) {
-
-//         typename MatrixSparse<T>::InnerIterator it(LT, col);
-        
-//         // Skip entries until reaching diagonal guarding against extra non-zeroes
-//         for (; it && (it.row() != it.col()); ++it) { ; }
-//         if (it.row() != it.col()) { throw std::runtime_error ("Diagonal in MatrixSparse triangular solve could not be reached"); }
-        
-//         x(col) /= it.value();
-//         ++it;
-//         for (; it; ++it) { x(it.row()) -= it.value()*x(col); }
-
-//     }
-
-//     return x;
 
 };
 

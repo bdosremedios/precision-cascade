@@ -8,7 +8,7 @@ set(
     test_types/test_Vector.cpp
     test_types/test_MatrixDense.cpp
     test_types/test_ImmutableMatrixSparse.cpp
-    # test_types/test_TypeConversion.cpp
+    test_types/test_TypeConversion.cpp
 )
 
 set(

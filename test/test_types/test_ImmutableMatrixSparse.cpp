@@ -607,15 +607,15 @@ TEST_F(ImmutableMatrixSparse_Test, TestRandomMatrixCreation) {
     TestRandomMatrixCreation<double>();
 }
 
-// TEST_F(ImmutableMatrixSparse_Test, TestCol) {
-//     TestCol<__half>();
-//     TestCol<float>();
-//     TestCol<double>();
-// }
+TEST_F(ImmutableMatrixSparse_Test, TestCol) {
+    TestCol<__half>();
+    TestCol<float>();
+    TestCol<double>();
+}
 
-// TEST_F(ImmutableMatrixSparse_Test, TestBadCol) {
-//     TestBadCol();
-// }
+TEST_F(ImmutableMatrixSparse_Test, TestBadCol) {
+    TestBadCol();
+}
 
 // TEST_F(ImmutableMatrixSparse_Test, TestBlock) {
 //     TestBlock<__half>();

@@ -180,31 +180,31 @@ public:
 };
 
 // TEST_F(TypeConversion_Test, TestDenseToSparse) {
-//     TestDenseToSparse<half>();
+//     TestDenseToSparse<__half>();
 //     TestDenseToSparse<float>();
 //     TestDenseToSparse<double>();
 // }
 
 // TEST_F(TypeConversion_Test, TestSparseBlockToDense) {
-//     TestSparseBlockToDense<half>();
+//     TestSparseBlockToDense<__half>();
 //     TestSparseBlockToDense<float>();
 //     TestSparseBlockToDense<double>();
 // }
 
 TEST_F(TypeConversion_Test, TestMatrixDenseColToVector) {
-    TestMatrixColToVector<MatrixDense, half>();
+    TestMatrixColToVector<MatrixDense, __half>();
     TestMatrixColToVector<MatrixDense, float>();
     TestMatrixColToVector<MatrixDense, double>();
 }
 
-// TEST_F(TypeConversion_Test, TestSparseColToVector) {
-//     TestMatrixColToVector<MatrixSparse, half>();
-//     TestMatrixColToVector<MatrixSparse, float>();
-//     TestMatrixColToVector<MatrixSparse, double>();
-// }
+TEST_F(TypeConversion_Test, TestImmutableSparseColToVector) {
+    TestMatrixColToVector<ImmutableMatrixSparse, __half>();
+    TestMatrixColToVector<ImmutableMatrixSparse, float>();
+    TestMatrixColToVector<ImmutableMatrixSparse, double>();
+}
 
 TEST_F(TypeConversion_Test, TestVectorToMatrixDenseCol) {
-    TestVectorToMatrixCol<MatrixDense, half>();
+    TestVectorToMatrixCol<MatrixDense, __half>();
     TestVectorToMatrixCol<MatrixDense, float>();
     TestVectorToMatrixCol<MatrixDense, double>();
 }
@@ -212,9 +212,3 @@ TEST_F(TypeConversion_Test, TestVectorToMatrixDenseCol) {
 TEST_F(TypeConversion_Test, TestBadVectorToMatrixDenseCol) {
     TestBadVectorToMatrixCol<MatrixDense>();
 }
-
-// TEST_F(TypeConversion_Test, TestVectorToSparseCol) {
-//     TestVectorToMatrixCol<MatrixSparse, half>();
-//     TestVectorToMatrixCol<MatrixSparse, float>();
-//     TestVectorToMatrixCol<MatrixSparse, double>();
-// }
