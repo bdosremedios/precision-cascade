@@ -421,6 +421,10 @@ TEST_F(ImmutableMatrixSparse_Test, TestNonZeros) {
     TestNonZeros<double>();
 }
 
+TEST_F(ImmutableMatrixSparse_Test, TestPrintAndInfoString) {
+    TestPrintAndInfoString();
+}
+
 TEST_F(ImmutableMatrixSparse_Test, TestConstruction) {
     TestConstruction<__half>();
     TestConstruction<float>();
@@ -509,11 +513,11 @@ TEST_F(ImmutableMatrixSparse_Test, TestBadDynamicMemCopyToPtr) {
 //     TestScaleAssignment<double>();
 // }
 
-// TEST_F(ImmutableMatrixSparse_Test, TestMaxMagElem) {
-//     TestMaxMagElem<__half>();
-//     TestMaxMagElem<float>();
-//     TestMaxMagElem<double>();
-// }
+TEST_F(ImmutableMatrixSparse_Test, TestMaxMagElem) {
+    TestMaxMagElem<__half>();
+    TestMaxMagElem<float>();
+    TestMaxMagElem<double>();
+}
 
 // TEST_F(ImmutableMatrixSparse_Test, TestNormalizeMagnitude) {
 //     TestNormalizeMagnitude<__half>();

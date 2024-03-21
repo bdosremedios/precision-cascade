@@ -4,8 +4,7 @@
 // #include "MatrixVector.h"
 // #include "MatrixDense.h"
 
-// #include <cmath>
-// #include <iostream>
+#include <cmath>
 
 #include "tools/cuda_check.h"
 #include "tools/cuHandleBundle.h"
@@ -404,11 +403,55 @@ public:
     int cols() const { return n_cols; }
     int non_zeros() const { return nnz; }
 
-    // void print() const {
+    std::string get_matrix_string() const {
 
+        int *h_col_offsets = static_cast<int *>(malloc(mem_size_col_offsets()));
+        int *h_row_indices = static_cast<int *>(malloc(mem_size_row_indices()));
+        T *h_vals = static_cast<T *>(malloc(mem_size_vals()));
 
-    //     std::cout << *this << std::endl << std::endl;
-    // }
+        copy_data_to_ptr(
+            h_col_offsets, h_row_indices, h_vals,
+            m_rows, n_cols,nnz
+        );
+
+        std::string col_offsets_str = "[";
+        if (n_cols > 0) {
+            for (int i=0; i<n_cols-1; ++i) { col_offsets_str += std::format("{}, ", h_col_offsets[i]); }
+            col_offsets_str += std::format("{}", h_col_offsets[n_cols-1]);
+        }
+        col_offsets_str += "]";
+
+        std::string row_indices_str = "[";
+        std::string val_str = "[";
+        if (nnz > 0) {
+            for (int i=0; i<nnz-1; ++i) {
+                row_indices_str += std::format("{}, ", h_row_indices[i]);
+                val_str += std::format("{}, ", h_vals[i]);
+            }
+            row_indices_str += std::format("{}", h_row_indices[nnz-1]);
+            val_str += std::format("{}", h_vals[nnz-1]);
+        }
+        row_indices_str += "]";
+        val_str += "]";
+
+        free(h_col_offsets);
+        free(h_row_indices);
+        free(h_vals);
+
+        return col_offsets_str + "\n" + row_indices_str + "\n" + val_str;
+
+    }
+
+    std::string get_info_string() const {
+        return std::format(
+            "Rows: {} | Cols: {} | Non-zeroes: {} | Fill ratio: {:.3g} | Max magnitude: {:.3g}",
+            m_rows,
+            n_cols,
+            nnz,
+            static_cast<double>(nnz)/static_cast<double>(m_rows*n_cols),
+            get_max_mag_elem().get_scalar()
+        );
+    }
 
 //     // *** Static Creation ***
 //     static MatrixSparse<T> Random(int m, int n) {
@@ -435,7 +478,34 @@ public:
 //         );
 //     }
 
-//     // *** Arithmetic and Compound Operations ***
+    // *** Arithmetic and Compound Operations ***
+
+    Scalar<T> get_max_mag_elem() const {
+
+        T *h_vals = static_cast<T *>(malloc(mem_size_vals()));
+        if (nnz > 0) {
+            check_cuda_error(cudaMemcpy(
+                h_vals,
+                d_vals,
+                mem_size_vals(),
+                cudaMemcpyDeviceToHost
+            ));
+        }
+
+        T max_mag = static_cast<T>(0);
+        for (int i=0; i<nnz; ++i) {
+            T temp = static_cast<T>(std::abs(static_cast<double>(h_vals[i])));
+            if (max_mag < temp) {
+                max_mag = temp;
+            }
+        }
+
+        free(h_vals);
+
+        return Scalar<T>(max_mag);
+
+    }
+
 //     MatrixSparse<T> transpose() const {
 //         return typename Parent::SparseMatrix(Parent::transpose());
 //     }

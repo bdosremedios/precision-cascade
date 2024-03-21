@@ -316,8 +316,8 @@ public:
         int non_zeros_count = non_zeros();
         return std::format(
             "Rows: {} | Cols: {} | Non-zeroes: {} | Fill ratio: {:.3g} | Max magnitude: {:.3g}",
-            rows(),
-            cols(),
+            m_rows,
+            n_cols,
             non_zeros_count,
             static_cast<double>(non_zeros_count)/static_cast<double>(rows()*cols()),
             get_max_mag_elem().get_scalar()
@@ -430,7 +430,7 @@ public:
         T *h_mat = static_cast<T *>(malloc(mem_size()));
         copy_data_to_ptr(h_mat, rows(), cols());
 
-        T max_mag = 0.;
+        T max_mag = static_cast<T>(0.);
         for (int i=0; i<m_rows; ++i) {
             for (int j=0; j<n_cols; ++j) {
                 T temp = static_cast<T>(std::abs(static_cast<double>(h_mat[i+j*m_rows])));

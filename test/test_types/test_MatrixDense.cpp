@@ -375,7 +375,9 @@ TEST_F(MatrixDense_Test, TestCol) {
     TestCol<double>();
 }
 
-TEST_F(MatrixDense_Test, TestBadCol) { TestBadCol(); }
+TEST_F(MatrixDense_Test, TestBadCol) {
+    TestBadCol();
+}
 
 TEST_F(MatrixDense_Test, TestBlock) {
     TestBlock<__half>();
@@ -383,7 +385,9 @@ TEST_F(MatrixDense_Test, TestBlock) {
     TestBlock<double>();
 }
 
-TEST_F(MatrixDense_Test, TestBadBlock) { TestBadBlock(); }
+TEST_F(MatrixDense_Test, TestBadBlock) { 
+    TestBadBlock();
+}
 
 TEST_F(MatrixDense_Test, TestScale) {
     TestScale<__half>();
@@ -469,9 +473,13 @@ TEST_F(MatrixDense_Test, TestNorm) {
     TestNorm<double>();
 }
 
-TEST_F(MatrixDense_Test, TestCast) { TestCast(); }
+TEST_F(MatrixDense_Test, TestCast) {
+    TestCast();
+}
 
-TEST_F(MatrixDense_Test, TestBadCast) { TestBadCast(); }
+TEST_F(MatrixDense_Test, TestBadCast) {
+    TestBadCast();
+}
 
 class MatrixDense_Substitution_Test: public Matrix_Substitution_Test<MatrixDense> {};
 
