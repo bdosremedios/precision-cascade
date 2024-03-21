@@ -381,8 +381,113 @@ public:
 
     }
 
-    // template <typename T>
-    // void TestStaticCreation() { TestStaticCreation_Base<MatrixSparse, T>(); }
+    template <typename T>
+    void TestRandomMatrixCreation() {
+
+        constexpr int m_rand(30);
+        constexpr int n_rand(40);
+        constexpr double miss_tol(0.05);
+
+        // Check that zero fill_prob gives empty matrix
+        ImmutableMatrixSparse<T> test_rand_empty(
+            ImmutableMatrixSparse<T>::Random(TestBase::bundle, m_rand, n_rand, 0.)
+        );
+        ASSERT_EQ(test_rand_empty.rows(), m_rand);
+        ASSERT_EQ(test_rand_empty.cols(), n_rand);
+        ASSERT_EQ(test_rand_empty.non_zeros(), 0);
+
+        // Just test for non-zero fill_prob gives right size and numbers aren't generally the same
+        // (check middle numbers are different from 5 adjacent above and below or all are equally zero)
+        // also check if fill probability is right with 5% error
+        ImmutableMatrixSparse<T> test_rand_full(
+            ImmutableMatrixSparse<T>::Random(TestBase::bundle, m_rand, n_rand, 1.)
+        );
+        ASSERT_EQ(test_rand_full.rows(), m_rand);
+        ASSERT_EQ(test_rand_full.cols(), n_rand);
+        for (int i=1; i<m_rand-1; ++i) {
+            for (int j=1; j<n_rand-1; ++j) {
+                ASSERT_TRUE(
+                    (((test_rand_full.get_elem(i, j).get_scalar() !=
+                       test_rand_full.get_elem(i-1, j).get_scalar()) ||
+                      (test_rand_full.get_elem(i, j).get_scalar() !=
+                       test_rand_full.get_elem(i+1, j).get_scalar()) ||
+                      (test_rand_full.get_elem(i, j).get_scalar() !=
+                       test_rand_full.get_elem(i, j-1).get_scalar()) ||
+                      (test_rand_full.get_elem(i, j).get_scalar() !=
+                       test_rand_full.get_elem(i, j+1).get_scalar()))
+                     ||
+                     ((test_rand_full.get_elem(i, j).get_scalar() == static_cast<T>(0.)) &&
+                      (test_rand_full.get_elem(i-1, j).get_scalar() == static_cast<T>(0.)) &&
+                      (test_rand_full.get_elem(i+1, j).get_scalar() == static_cast<T>(0.)) &&
+                      (test_rand_full.get_elem(i, j-1).get_scalar() == static_cast<T>(0.)) &&
+                      (test_rand_full.get_elem(i, j+1).get_scalar() == static_cast<T>(0.))))
+                );
+            }
+        }
+        ASSERT_NEAR(
+            (static_cast<T>(test_rand_full.non_zeros())/
+             static_cast<T>(test_rand_full.rows()*test_rand_full.cols())),
+            1.,
+            miss_tol
+        );
+
+        ImmutableMatrixSparse<T> test_rand_67(
+            ImmutableMatrixSparse<T>::Random(TestBase::bundle, m_rand, n_rand, 0.67)
+        );
+        ASSERT_EQ(test_rand_67.rows(), m_rand);
+        ASSERT_EQ(test_rand_67.cols(), n_rand);
+        for (int i=1; i<m_rand-1; ++i) {
+            for (int j=1; j<n_rand-1; ++j) {
+                ASSERT_TRUE(
+                    (((test_rand_67.get_elem(i, j).get_scalar() != test_rand_67.get_elem(i-1, j).get_scalar()) ||
+                      (test_rand_67.get_elem(i, j).get_scalar() != test_rand_67.get_elem(i+1, j).get_scalar()) ||
+                      (test_rand_67.get_elem(i, j).get_scalar() != test_rand_67.get_elem(i, j-1).get_scalar()) ||
+                      (test_rand_67.get_elem(i, j).get_scalar() != test_rand_67.get_elem(i, j+1).get_scalar()))
+                     ||
+                     ((test_rand_67.get_elem(i, j).get_scalar() == static_cast<T>(0.)) &&
+                      (test_rand_67.get_elem(i-1, j).get_scalar() == static_cast<T>(0.)) &&
+                      (test_rand_67.get_elem(i+1, j).get_scalar() == static_cast<T>(0.)) &&
+                      (test_rand_67.get_elem(i, j-1).get_scalar() == static_cast<T>(0.)) &&
+                      (test_rand_67.get_elem(i, j+1).get_scalar() == static_cast<T>(0.))))
+                );
+            }
+        }
+        ASSERT_NEAR(
+            (static_cast<T>(test_rand_67.non_zeros())/
+             static_cast<T>(test_rand_67.rows()*test_rand_67.cols())),
+            0.67,
+            miss_tol
+        );
+
+        ImmutableMatrixSparse<T> test_rand_50(
+            ImmutableMatrixSparse<T>::Random(TestBase::bundle, m_rand, n_rand, 0.5)
+        );
+        ASSERT_EQ(test_rand_50.rows(), m_rand);
+        ASSERT_EQ(test_rand_50.cols(), n_rand);
+        for (int i=1; i<m_rand-1; ++i) {
+            for (int j=1; j<n_rand-1; ++j) {
+                ASSERT_TRUE(
+                    (((test_rand_50.get_elem(i, j).get_scalar() != test_rand_50.get_elem(i-1, j).get_scalar()) ||
+                      (test_rand_50.get_elem(i, j).get_scalar() != test_rand_50.get_elem(i+1, j).get_scalar()) ||
+                      (test_rand_50.get_elem(i, j).get_scalar() != test_rand_50.get_elem(i, j-1).get_scalar()) ||
+                      (test_rand_50.get_elem(i, j).get_scalar() != test_rand_50.get_elem(i, j+1).get_scalar()))
+                     ||
+                     ((test_rand_50.get_elem(i, j).get_scalar() == static_cast<T>(0.)) &&
+                      (test_rand_50.get_elem(i-1, j).get_scalar() == static_cast<T>(0.)) &&
+                      (test_rand_50.get_elem(i+1, j).get_scalar() == static_cast<T>(0.)) &&
+                      (test_rand_50.get_elem(i, j-1).get_scalar() == static_cast<T>(0.)) &&
+                      (test_rand_50.get_elem(i, j+1).get_scalar() == static_cast<T>(0.))))
+                );
+            }
+        }
+        ASSERT_NEAR(
+            (static_cast<T>(test_rand_50.non_zeros())/
+             static_cast<T>(test_rand_50.rows()*test_rand_50.cols())),
+            0.5,
+            miss_tol
+        );
+
+    }
 
     // template <typename T>
     // void TestCol() { TestCol_Base<MatrixSparse, T>(); }
@@ -496,6 +601,11 @@ TEST_F(ImmutableMatrixSparse_Test, TestIdentityMatrixCreation) {
     TestIdentityMatrixCreation<double>();
 }
 
+TEST_F(ImmutableMatrixSparse_Test, TestRandomMatrixCreation) {
+    TestRandomMatrixCreation<__half>();
+    TestRandomMatrixCreation<float>();
+    TestRandomMatrixCreation<double>();
+}
 
 // TEST_F(ImmutableMatrixSparse_Test, TestCol) {
 //     TestCol<__half>();
