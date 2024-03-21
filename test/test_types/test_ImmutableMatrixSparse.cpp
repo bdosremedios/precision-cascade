@@ -478,12 +478,24 @@ TEST_F(ImmutableMatrixSparse_Test, TestDynamicMemCopyToPtr) {
 TEST_F(ImmutableMatrixSparse_Test, TestBadDynamicMemCopyToPtr) {
     TestBadDynamicMemCopyToPtr();
 }
+TEST_F(ImmutableMatrixSparse_Test, TestZeroMatrixCreation) {
+    TestZeroMatrixCreation<__half>();
+    TestZeroMatrixCreation<float>();
+    TestZeroMatrixCreation<double>();
+}
 
-// TEST_F(ImmutableMatrixSparse_Test, TestStaticCreation) {
-//     TestStaticCreation<__half>();
-//     TestStaticCreation<float>();
-//     TestStaticCreation<double>();
-// }
+TEST_F(ImmutableMatrixSparse_Test, TestOnesMatrixCreation) {
+    TestOnesMatrixCreation<__half>();
+    TestOnesMatrixCreation<float>();
+    TestOnesMatrixCreation<double>();
+}
+
+TEST_F(ImmutableMatrixSparse_Test, TestIdentityMatrixCreation) {
+    TestIdentityMatrixCreation<__half>();
+    TestIdentityMatrixCreation<float>();
+    TestIdentityMatrixCreation<double>();
+}
+
 
 // TEST_F(ImmutableMatrixSparse_Test, TestCol) {
 //     TestCol<__half>();
@@ -491,7 +503,9 @@ TEST_F(ImmutableMatrixSparse_Test, TestBadDynamicMemCopyToPtr) {
 //     TestCol<double>();
 // }
 
-// TEST_F(ImmutableMatrixSparse_Test, TestBadCol) { TestBadCol(); }
+// TEST_F(ImmutableMatrixSparse_Test, TestBadCol) {
+//     TestBadCol();
+// }
 
 // TEST_F(ImmutableMatrixSparse_Test, TestBlock) {
 //     TestBlock<__half>();
@@ -499,7 +513,9 @@ TEST_F(ImmutableMatrixSparse_Test, TestBadDynamicMemCopyToPtr) {
 //     TestBlock<double>();
 // }
 
-// TEST_F(ImmutableMatrixSparse_Test, TestBadBlock) { TestBadBlock(); }
+// TEST_F(ImmutableMatrixSparse_Test, TestBadBlock) {
+//     TestBadBlock();
+// }
 
 // TEST_F(ImmutableMatrixSparse_Test, TestScale) {
 //     TestScale<__half>();

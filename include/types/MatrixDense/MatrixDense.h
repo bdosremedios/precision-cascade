@@ -320,7 +320,7 @@ public:
             n_cols,
             non_zeros_count,
             static_cast<double>(non_zeros_count)/static_cast<double>(rows()*cols()),
-            get_max_mag_elem().get_scalar()
+            static_cast<double>(get_max_mag_elem().get_scalar())
         );
     }
 

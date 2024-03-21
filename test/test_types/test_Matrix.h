@@ -395,7 +395,7 @@ protected:
     }
 
     template <typename T>
-    void TestStaticCreation() {
+    void TestZeroMatrixCreation() {
 
         constexpr int m_zero(15);
         constexpr int n_zero(17);
@@ -408,6 +408,11 @@ protected:
             }
         }
 
+    }
+
+    template <typename T>
+    void TestOnesMatrixCreation() {
+
         constexpr int m_one(32);
         constexpr int n_one(13);
         M<T> test_ones(M<T>::Ones(TestBase::bundle, m_one, n_one));
@@ -419,37 +424,50 @@ protected:
             }
         }
 
+    }
+
+    template <typename T>
+    void TestIdentityMatrixCreation() {
+
         constexpr int m_identity(40);
         constexpr int n_identity(20);
-        M<T> test_identity(M<T>::Identity(TestBase::bundle, m_identity, n_identity));
-        ASSERT_EQ(test_identity.rows(), m_identity);
-        ASSERT_EQ(test_identity.cols(), n_identity);
+    
+        M<T> test_identity_tall(M<T>::Identity(TestBase::bundle, m_identity, n_identity));
+        ASSERT_EQ(test_identity_tall.rows(), m_identity);
+        ASSERT_EQ(test_identity_tall.cols(), n_identity);
         for (int i=0; i<m_identity; ++i) {
             for (int j=0; j<n_identity; ++j) {
                 if (i == j) {
-                    ASSERT_EQ(test_identity.get_elem(i, j).get_scalar(), static_cast<T>(1.));
+                    ASSERT_EQ(test_identity_tall.get_elem(i, j).get_scalar(), static_cast<T>(1.));
                 } else {
-                    ASSERT_EQ(test_identity.get_elem(i, j).get_scalar(), static_cast<T>(0.));
+                    ASSERT_EQ(test_identity_tall.get_elem(i, j).get_scalar(), static_cast<T>(0.));
                 }
             }
         }
 
-        // Just test gives right size and numbers aren't generally the same
-        // will fail with very low probability (check middle numbers are different
-        // from 5 adjacent above and below)
-        constexpr int m_rand(40);
-        constexpr int n_rand(40);
-        M<T> test_rand(M<T>::Random(TestBase::bundle, m_rand, n_rand));
-        ASSERT_EQ(test_rand.rows(), m_rand);
-        ASSERT_EQ(test_rand.cols(), n_rand);
-        for (int i=1; i<m_rand-1; ++i) {
-            for (int j=1; j<n_rand-1; ++j) {
-                ASSERT_TRUE(
-                    ((test_rand.get_elem(i, j).get_scalar() != test_rand.get_elem(i-1, j).get_scalar()) ||
-                     (test_rand.get_elem(i, j).get_scalar() != test_rand.get_elem(i+1, j).get_scalar()) ||
-                     (test_rand.get_elem(i, j).get_scalar() != test_rand.get_elem(i, j-1).get_scalar()) ||
-                     (test_rand.get_elem(i, j).get_scalar() != test_rand.get_elem(i, j+1).get_scalar()))
-                );
+        M<T> test_identity_wide(M<T>::Identity(TestBase::bundle, n_identity, m_identity));
+        ASSERT_EQ(test_identity_wide.rows(), n_identity);
+        ASSERT_EQ(test_identity_wide.cols(), m_identity);
+        for (int i=0; i<n_identity; ++i) {
+            for (int j=0; j<m_identity; ++j) {
+                if (i == j) {
+                    ASSERT_EQ(test_identity_wide.get_elem(i, j).get_scalar(), static_cast<T>(1.));
+                } else {
+                    ASSERT_EQ(test_identity_wide.get_elem(i, j).get_scalar(), static_cast<T>(0.));
+                }
+            }
+        }
+
+        M<T> test_identity_square(M<T>::Identity(TestBase::bundle, m_identity, m_identity));
+        ASSERT_EQ(test_identity_square.rows(), m_identity);
+        ASSERT_EQ(test_identity_square.cols(), m_identity);
+        for (int i=0; i<m_identity; ++i) {
+            for (int j=0; j<m_identity; ++j) {
+                if (i == j) {
+                    ASSERT_EQ(test_identity_square.get_elem(i, j).get_scalar(), static_cast<T>(1.));
+                } else {
+                    ASSERT_EQ(test_identity_square.get_elem(i, j).get_scalar(), static_cast<T>(0.));
+                }
             }
         }
 

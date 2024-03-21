@@ -136,6 +136,30 @@ public:
     }
 
     template <typename T>
+    void TestRandomMatrixCreation() {
+
+        // Just test gives right size and numbers aren't generally the same
+        // will fail with very low probability (check middle numbers are different
+        // from 5 adjacent above and below)
+        constexpr int m_rand(40);
+        constexpr int n_rand(40);
+        MatrixDense<T> test_rand(MatrixDense<T>::Random(TestBase::bundle, m_rand, n_rand));
+        ASSERT_EQ(test_rand.rows(), m_rand);
+        ASSERT_EQ(test_rand.cols(), n_rand);
+        for (int i=1; i<m_rand-1; ++i) {
+            for (int j=1; j<n_rand-1; ++j) {
+                ASSERT_TRUE(
+                    ((test_rand.get_elem(i, j).get_scalar() != test_rand.get_elem(i-1, j).get_scalar()) ||
+                     (test_rand.get_elem(i, j).get_scalar() != test_rand.get_elem(i+1, j).get_scalar()) ||
+                     (test_rand.get_elem(i, j).get_scalar() != test_rand.get_elem(i, j-1).get_scalar()) ||
+                     (test_rand.get_elem(i, j).get_scalar() != test_rand.get_elem(i, j+1).get_scalar()))
+                );
+            }
+        }
+
+    }
+
+    template <typename T>
     void TestBlock() {
 
         const MatrixDense<T> const_mat (
@@ -363,10 +387,28 @@ TEST_F(MatrixDense_Test, TestBadDynamicMemCopyToPtr) {
     TestBadDynamicMemCopyToPtr();
 }
 
-TEST_F(MatrixDense_Test, TestStaticCreation) {
-    TestStaticCreation<__half>();
-    TestStaticCreation<float>();
-    TestStaticCreation<double>();
+TEST_F(MatrixDense_Test, TestZeroMatrixCreation) {
+    TestZeroMatrixCreation<__half>();
+    TestZeroMatrixCreation<float>();
+    TestZeroMatrixCreation<double>();
+}
+
+TEST_F(MatrixDense_Test, TestOnesMatrixCreation) {
+    TestOnesMatrixCreation<__half>();
+    TestOnesMatrixCreation<float>();
+    TestOnesMatrixCreation<double>();
+}
+
+TEST_F(MatrixDense_Test, TestIdentityMatrixCreation) {
+    TestIdentityMatrixCreation<__half>();
+    TestIdentityMatrixCreation<float>();
+    TestIdentityMatrixCreation<double>();
+}
+
+TEST_F(MatrixDense_Test, TestRandomMatrixCreation) {
+    TestRandomMatrixCreation<__half>();
+    TestRandomMatrixCreation<float>();
+    TestRandomMatrixCreation<double>();
 }
 
 TEST_F(MatrixDense_Test, TestCol) {

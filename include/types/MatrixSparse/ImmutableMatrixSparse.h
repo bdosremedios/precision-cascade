@@ -92,7 +92,18 @@ public:
         m_rows(arg_m),
         n_cols(arg_n),
         nnz(0)
-    { allocate_d_mem(); }
+    {
+
+        allocate_d_mem();
+
+        int *h_col_offsets = static_cast<int *>(malloc(mem_size_col_offsets()));
+        for (int i=0; i<n_cols; ++i) { h_col_offsets[i] = 0; }
+        check_cuda_error(cudaMemcpy(
+            d_col_offsets, h_col_offsets, mem_size_col_offsets(), cudaMemcpyHostToDevice
+        ));
+        free(h_col_offsets);
+
+    }
 
     ImmutableMatrixSparse(const cuHandleBundle &arg_cu_handles):
         ImmutableMatrixSparse(arg_cu_handles, 0, 0)
@@ -411,7 +422,7 @@ public:
 
         copy_data_to_ptr(
             h_col_offsets, h_row_indices, h_vals,
-            m_rows, n_cols,nnz
+            m_rows, n_cols, nnz
         );
 
         std::string col_offsets_str = "[";
@@ -426,10 +437,10 @@ public:
         if (nnz > 0) {
             for (int i=0; i<nnz-1; ++i) {
                 row_indices_str += std::format("{}, ", h_row_indices[i]);
-                val_str += std::format("{}, ", h_vals[i]);
+                val_str += std::format("{:.6g}, ", static_cast<double>(h_vals[i]));
             }
             row_indices_str += std::format("{}", h_row_indices[nnz-1]);
-            val_str += std::format("{}", h_vals[nnz-1]);
+            val_str += std::format("{:.6g}", static_cast<double>(h_vals[nnz-1]));
         }
         row_indices_str += "]";
         val_str += "]";
@@ -449,23 +460,81 @@ public:
             n_cols,
             nnz,
             static_cast<double>(nnz)/static_cast<double>(m_rows*n_cols),
-            get_max_mag_elem().get_scalar()
+            static_cast<double>(get_max_mag_elem().get_scalar())
         );
     }
 
-//     // *** Static Creation ***
+    // *** Static Creation ***
+    static ImmutableMatrixSparse<T> Zero(
+        const cuHandleBundle &arg_cu_handles, int arg_m_rows, int arg_n_cols
+    ) {
+        return ImmutableMatrixSparse<T>(arg_cu_handles, arg_m_rows, arg_n_cols);
+    }
+
+    static ImmutableMatrixSparse<T> Ones(
+        const cuHandleBundle &arg_cu_handles, int arg_m_rows, int arg_n_cols
+    ) {
+
+        int *h_col_offsets = static_cast<int *>(malloc(arg_n_cols*sizeof(int)));
+        int *h_row_indices = static_cast<int *>(malloc(arg_m_rows*arg_n_cols*sizeof(int)));
+        T *h_vals = static_cast<T *>(malloc(arg_m_rows*arg_n_cols*sizeof(T)));
+
+        for (int i=0; i<arg_n_cols; ++i) { h_col_offsets[i] = i*arg_m_rows; }
+        for (int i=0; i<arg_m_rows*arg_n_cols; ++i) { h_row_indices[i] = i%arg_m_rows; }
+        for (int i=0; i<arg_m_rows*arg_n_cols; ++i) { h_vals[i] = static_cast<T>(1.); }
+
+        ImmutableMatrixSparse<T> ret_mat(
+            arg_cu_handles,
+            h_col_offsets, h_row_indices, h_vals,
+            arg_m_rows, arg_n_cols, arg_m_rows*arg_n_cols
+        );
+
+        free(h_col_offsets);
+        free(h_row_indices);
+        free(h_vals);
+
+        return ret_mat;
+
+    }
+
+    static ImmutableMatrixSparse<T> Identity(
+        const cuHandleBundle &arg_cu_handles, int arg_m_rows, int arg_n_cols
+    ) {
+
+        int smaller_dim = std::min(arg_m_rows, arg_n_cols);
+
+        int *h_col_offsets = static_cast<int *>(malloc(arg_n_cols*sizeof(int)));
+        int *h_row_indices = static_cast<int *>(malloc(smaller_dim*sizeof(int)));
+        T *h_vals = static_cast<T *>(malloc(smaller_dim*sizeof(T)));
+
+        if (arg_n_cols == smaller_dim) {
+            for (int i=0; i<arg_n_cols; ++i) { h_col_offsets[i] = i; }
+        } else {
+            for (int i=0; i<smaller_dim; ++i) { h_col_offsets[i] = i; }
+            for (int i=smaller_dim; i<arg_n_cols; ++i) { h_col_offsets[i] = smaller_dim; }
+        }
+
+        for (int i=0; i<smaller_dim; ++i) { h_row_indices[i] = i; }
+    
+        for (int i=0; i<smaller_dim; ++i) { h_vals[i] = static_cast<T>(1.); }
+
+        ImmutableMatrixSparse<T> ret_mat(
+            arg_cu_handles,
+            h_col_offsets, h_row_indices, h_vals,
+            arg_m_rows, arg_n_cols, smaller_dim
+        );
+
+        free(h_col_offsets);
+        free(h_row_indices);
+        free(h_vals);
+
+        return ret_mat;
+
+    }
+
 //     static MatrixSparse<T> Random(int m, int n) {
 //         return typename Parent::SparseMatrix(Matrix<T, Dynamic, Dynamic>::Random(m, n).sparseView());
 //     }
-//     static MatrixSparse<T> Identity(int m, int n) {
-//         Parent temp = Parent(m, n);
-//         for (int i=0; i<std::min(m, n); ++i) { temp.coeffRef(i, i) = static_cast<T>(1); }
-//         return temp;
-//     }
-//     static MatrixSparse<T> Ones(int m, int n) {
-//         return typename Parent::SparseMatrix(Matrix<T, Dynamic, Dynamic>::Ones(m, n).sparseView());
-//     }
-//     static MatrixSparse<T> Zero(int m, int n) { return Parent(m, n); }
 
 //     // *** Resizing ***
 //     void reduce() { Parent::prune(static_cast<T>(0)); }
