@@ -1,3 +1,5 @@
+#include "types/Vector/Vector.h"
+
 #ifndef IMMUTABLEMATRIXSPARSE_H
 #define IMMUTABLEMATRIXSPARSE_H
 
@@ -9,8 +11,9 @@
 #include "tools/cuda_check.h"
 #include "tools/cuHandleBundle.h"
 
+#include "types/GeneralMatrix/GeneralMatrix_gpu_kernels.cuh"
+
 #include "types/Scalar/Scalar.h"
-#include "types/Vector/Vector.h"
 #include "types/MatrixDense/MatrixDense.h"
 
 template <typename T>

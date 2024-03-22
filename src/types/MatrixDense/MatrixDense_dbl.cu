@@ -276,7 +276,7 @@ MatrixDense<__half> MatrixDense<double>::to_half() const {
     double NUM_BLOCKS = static_cast<double>(
         std::ceil(static_cast<double>(m_rows*n_cols)/static_cast<double>(NUM_THREADS))
     );
-    matrixdense_dbl_kernels::cast_to_half<<<NUM_THREADS, NUM_BLOCKS>>>(
+    generalmatrix_dbl_kernels::cast_to_half<<<NUM_THREADS, NUM_BLOCKS>>>(
         d_mat, created_mat.d_mat, m_rows*n_cols
     );
 
@@ -292,7 +292,7 @@ MatrixDense<float> MatrixDense<double>::to_float() const {
     double NUM_BLOCKS = static_cast<double>(
         std::ceil(static_cast<double>(m_rows*n_cols)/static_cast<double>(NUM_THREADS))
     );
-    matrixdense_dbl_kernels::cast_to_float<<<NUM_THREADS, NUM_BLOCKS>>>(
+    generalmatrix_dbl_kernels::cast_to_float<<<NUM_THREADS, NUM_BLOCKS>>>(
         d_mat, created_mat.d_mat, m_rows*n_cols
     );
 

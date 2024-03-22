@@ -16,9 +16,10 @@ set (CMAKE_CUDA_STANDARD_REQUIRED ON)
 add_library(
     precision-cascade-gpu_kernels
     STATIC
-    types/Scalar/Scalar_kernels.cu
-    types/Vector/Vector_kernels.cu
-    types/MatrixDense/MatrixDense_kernels.cu
+    types/Scalar/Scalar_gpu_kernels.cu
+    types/Vector/Vector_gpu_kernels.cu
+    types/GeneralMatrix/GeneralMatrix_gpu_kernels.cu
+    types/MatrixDense/MatrixDense_gpu_kernels.cu
 )
 
 target_link_options(precision-cascade-gpu_kernels PUBLIC "/NODEFAULTLIB:LIBCMT")
@@ -62,6 +63,9 @@ add_library(
     types/MatrixDense/MatrixDense_hlf.cu
     types/MatrixDense/MatrixDense_sgl.cu
     types/MatrixDense/MatrixDense_dbl.cu
+    types/MatrixSparse/ImmutableMatrixSparse_hlf.cu
+    types/MatrixSparse/ImmutableMatrixSparse_sgl.cu
+    types/MatrixSparse/ImmutableMatrixSparse_dbl.cu
 )
 
 target_link_options(precision-cascade PUBLIC "/NODEFAULTLIB:LIBCMT")

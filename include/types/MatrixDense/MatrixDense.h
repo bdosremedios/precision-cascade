@@ -18,6 +18,7 @@
 #include "tools/CuHandleBundle.h"
 
 #include "MatrixDense_gpu_kernels.cuh"
+#include "types/GeneralMatrix/GeneralMatrix_gpu_kernels.cuh"
 
 #include "types/Scalar/Scalar.h"
 #include "types/MatrixSparse/ImmutableMatrixSparse.h"
