@@ -300,9 +300,6 @@ public:
 
     }
 
-    // *** Resizing ***
-    void reduce() { ; } // Do nothing since Vector is dense
-
     // *** Boolean ***
     bool operator==(const Vector<T> &other) const {
         

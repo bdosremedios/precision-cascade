@@ -20,17 +20,10 @@ private:
     std::function<bool (const W &curr_val, const int &row, const int &col, const W &zero_tol)> drop_rule_tau;
     std::function<void (const int &col, const W &zero_tol, const int &m, W *U_mat, W *L_mat)> apply_drop_rule_col;
 
-    void reduce_matrices() {
-        L.reduce();
-        U.reduce();
-        P.reduce();
-    }
-
     void construct_ILU(const M<W> &A, const W &zero_tol, const bool &pivot) {
         ilu::dynamic_construct_leftlook_square_ILU(
             zero_tol, pivot, drop_rule_tau, apply_drop_rule_col, A, U, L, P
         );
-        reduce_matrices();
     }
 
 public:
@@ -63,7 +56,6 @@ public:
         if (arg_L.rows() != arg_P.rows()) {
             throw std::runtime_error("ILU(L, U, P): L and P dim mismatch");
         }
-        reduce_matrices();
     }
 
     // ILU(0)   

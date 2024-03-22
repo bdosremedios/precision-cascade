@@ -41,40 +41,70 @@ public:
 
     // }
 
-    // template <typename T>
-    // void TestSparseBlockToDense() {
+    template <typename T>
+    void TestImmutableSparseBlockToDense() {
 
-    //     MatrixSparse<T> const_mat(
-    //         {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3),
-    //           static_cast<T>(4), static_cast<T>(5)},
-    //          {static_cast<T>(6), static_cast<T>(7), static_cast<T>(8),
-    //           static_cast<T>(9), static_cast<T>(10)},
-    //          {static_cast<T>(11), static_cast<T>(12), static_cast<T>(13),
-    //           static_cast<T>(14), static_cast<T>(15)},
-    //          {static_cast<T>(16), static_cast<T>(17), static_cast<T>(18),
-    //           static_cast<T>(19), static_cast<T>(20)}}
-    //     );
-    //     MatrixSparse<T> mat(const_mat);
-        
-    //     // Test cast/access for block 0, 0, 3, 4
-    //     MatrixDense<T> mat_0_0_3_4(mat.block(0, 0, 3, 4));
-    //     MatrixDense<T> test_0_0_3_4(
-    //         {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4)},
-    //          {static_cast<T>(6), static_cast<T>(7), static_cast<T>(8), static_cast<T>(9)},
-    //          {static_cast<T>(11), static_cast<T>(12), static_cast<T>(13), static_cast<T>(14)}}
-    //     );
-    //     ASSERT_MATRIX_EQ(mat_0_0_3_4, test_0_0_3_4);
+        const ImmutableMatrixSparse<T> mat (
+            TestBase::bundle,
+            {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3),
+              static_cast<T>(4), static_cast<T>(0)},
+             {static_cast<T>(0), static_cast<T>(0), static_cast<T>(8),
+              static_cast<T>(9), static_cast<T>(0)},
+             {static_cast<T>(0), static_cast<T>(0), static_cast<T>(0),
+              static_cast<T>(0), static_cast<T>(0)},
+             {static_cast<T>(0), static_cast<T>(0), static_cast<T>(0),
+              static_cast<T>(19), static_cast<T>(20)}}
+        );
 
-    //     // Test cast/access for block 1, 2, 3, 1
-    //     MatrixDense<T> mat_1_2_3_1(mat.block(1, 2, 3, 1));
-    //     MatrixDense<T> test_1_2_3_1(
-    //         {{static_cast<T>(8)},
-    //          {static_cast<T>(13)},
-    //          {static_cast<T>(18)}}
-    //     );
-    //     ASSERT_MATRIX_EQ(mat_1_2_3_1, test_1_2_3_1);
+        // Test copy constructor and access for block 0, 0, 4, 2
+        typename ImmutableMatrixSparse<T>::Block blk_0_0_4_2(mat.get_block(0, 0, 4, 2));
+        ASSERT_EQ(blk_0_0_4_2.get_elem(0, 0).get_scalar(), static_cast<T>(1));
+        ASSERT_EQ(blk_0_0_4_2.get_elem(1, 0).get_scalar(), static_cast<T>(0));
+        ASSERT_EQ(blk_0_0_4_2.get_elem(2, 0).get_scalar(), static_cast<T>(0));
+        ASSERT_EQ(blk_0_0_4_2.get_elem(3, 0).get_scalar(), static_cast<T>(0));
+        ASSERT_EQ(blk_0_0_4_2.get_elem(0, 1).get_scalar(), static_cast<T>(2));
+        ASSERT_EQ(blk_0_0_4_2.get_elem(1, 1).get_scalar(), static_cast<T>(0));
+        ASSERT_EQ(blk_0_0_4_2.get_elem(2, 1).get_scalar(), static_cast<T>(0));
+        ASSERT_EQ(blk_0_0_4_2.get_elem(3, 1).get_scalar(), static_cast<T>(0));
 
-    // }
+        // Test copy constructor and access for block 2, 1, 2, 3
+        typename ImmutableMatrixSparse<T>::Block blk_2_1_2_3(mat.get_block(2, 1, 2, 3));
+        ASSERT_EQ(blk_2_1_2_3.get_elem(0, 0).get_scalar(), static_cast<T>(0));
+        ASSERT_EQ(blk_2_1_2_3.get_elem(0, 1).get_scalar(), static_cast<T>(0));
+        ASSERT_EQ(blk_2_1_2_3.get_elem(0, 2).get_scalar(), static_cast<T>(0));
+        ASSERT_EQ(blk_2_1_2_3.get_elem(1, 0).get_scalar(), static_cast<T>(0));
+        ASSERT_EQ(blk_2_1_2_3.get_elem(1, 1).get_scalar(), static_cast<T>(0));
+        ASSERT_EQ(blk_2_1_2_3.get_elem(1, 2).get_scalar(), static_cast<T>(19));
+
+        // Test MatrixDense cast/access for block 0, 0, 3, 4
+        MatrixDense<T> mat_0_0_3_4(mat.get_block(0, 0, 3, 4));
+        MatrixDense<T> test_0_0_3_4(
+            TestBase::bundle,
+            {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4)},
+             {static_cast<T>(0), static_cast<T>(0), static_cast<T>(8), static_cast<T>(9)},
+             {static_cast<T>(0), static_cast<T>(0), static_cast<T>(0), static_cast<T>(0)}}
+        );
+        ASSERT_MATRIX_EQ(mat_0_0_3_4, test_0_0_3_4);
+
+        // Test MatrixDense cast/access for block 1, 2, 3, 1
+        MatrixDense<T> mat_1_2_3_1(mat.get_block(1, 2, 3, 1));
+        MatrixDense<T> test_1_2_3_1(
+            TestBase::bundle,
+            {{static_cast<T>(8)},
+             {static_cast<T>(0)},
+             {static_cast<T>(0)}}
+        );
+        ASSERT_MATRIX_EQ(mat_1_2_3_1, test_1_2_3_1);
+
+        // Test MatrixDense cast/access for block 0, 0, 3, 4
+        MatrixDense<T> mat_0_0_3_4_copy(mat.get_block(0, 0, 3, 4).copy_to_mat());
+        ASSERT_MATRIX_EQ(mat_0_0_3_4_copy, test_0_0_3_4);
+
+        // Test MatrixDense cast/access for block 1, 2, 3, 1
+        MatrixDense<T> mat_1_2_3_1_copy(mat.get_block(1, 2, 3, 1).copy_to_mat());
+        ASSERT_MATRIX_EQ(mat_1_2_3_1_copy, test_1_2_3_1);
+
+    }
 
     template <template <typename> typename M, typename T>
     void TestMatrixColToVector() {
@@ -86,14 +116,14 @@ public:
              {static_cast<T>(9), static_cast<T>(10), static_cast<T>(11), static_cast<T>(12)}}
         );
 
-        Vector<T> vec_col_0(mat.get_col(0));
+        Vector<T> vec_col_0(mat.get_col(0).copy_to_vec());
         Vector<T> test_vec_col_0(
             TestBase::bundle,
             {static_cast<T>(1), static_cast<T>(5), static_cast<T>(9)}
         );
         ASSERT_VECTOR_EQ(vec_col_0, test_vec_col_0);
 
-        Vector<T> vec_col_2(mat.get_col(2));
+        Vector<T> vec_col_2(mat.get_col(2).copy_to_vec());
         Vector<T> test_vec_col_2(
             TestBase::bundle,
             {static_cast<T>(3), static_cast<T>(7), static_cast<T>(11)}
@@ -185,11 +215,11 @@ public:
 //     TestDenseToSparse<double>();
 // }
 
-// TEST_F(TypeConversion_Test, TestSparseBlockToDense) {
-//     TestSparseBlockToDense<__half>();
-//     TestSparseBlockToDense<float>();
-//     TestSparseBlockToDense<double>();
-// }
+TEST_F(TypeConversion_Test, TestImmutableSparseBlockToDense) {
+    TestImmutableSparseBlockToDense<__half>();
+    TestImmutableSparseBlockToDense<float>();
+    TestImmutableSparseBlockToDense<double>();
+}
 
 TEST_F(TypeConversion_Test, TestMatrixDenseColToVector) {
     TestMatrixColToVector<MatrixDense, __half>();

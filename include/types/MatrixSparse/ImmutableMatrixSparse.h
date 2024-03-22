@@ -1,13 +1,17 @@
 #ifndef IMMUTABLEMATRIXSPARSE_H
 #define IMMUTABLEMATRIXSPARSE_H
 
-// #include "MatrixVector.h"
-// #include "MatrixDense.h"
-
 #include <cmath>
+#include <vector>
+
+#include <format>
 
 #include "tools/cuda_check.h"
 #include "tools/cuHandleBundle.h"
+
+#include "types/Scalar/Scalar.h"
+#include "types/Vector/Vector.h"
+#include "types/MatrixDense/MatrixDense.h"
 
 template <typename T>
 class ImmutableMatrixSparse
@@ -415,7 +419,24 @@ public:
 
     }
 
-//     Block block(int row, int col, int m, int n) { return Parent::block(row, col, m, n); }
+    Block get_block(int start_row, int start_col, int block_rows, int block_cols) const {
+
+        if ((start_row < 0) || (start_row >= m_rows)) {
+            throw std::runtime_error("ImmutableMatrixSparse: invalid starting row in block");
+        }
+        if ((start_col < 0) || (start_col >= n_cols)) {
+            throw std::runtime_error("ImmutableMatrixSparse: invalid starting col in block");
+        }
+        if ((block_rows < 0) || (start_row+block_rows > m_rows)) {
+            throw std::runtime_error("ImmutableMatrixSparse: invalid number of rows in block");
+        }
+        if ((block_cols < 0) || (start_col+block_cols > n_cols)) {
+            throw std::runtime_error("ImmutableMatrixSparse: invalid number of cols in block");
+        }
+
+        return Block(this, start_row, start_col, block_rows, block_cols);
+
+    }
 
     // *** Properties ***
     cuHandleBundle get_cu_handles() const { return cu_handles; }
@@ -590,9 +611,6 @@ public:
 
     }
 
-//     // *** Resizing ***
-//     void reduce() { Parent::prune(static_cast<T>(0)); }
-
 //     // *** Explicit Cast ***
 //     template <typename Cast_T>
 //     MatrixSparse<Cast_T> cast() const {
@@ -753,37 +771,102 @@ public:
 
     };
 
-//     class Col: private Eigen::Block<Parent, Eigen::Dynamic, 1, true>
-//     {
-//     private:
+    // Nested lightweight wrapper class representing matrix block and elem access
+    // Requires: cast to MatrixDense<T>
+    class Block
+    {
+    private:
 
-//         using ColParent = Eigen::Block<Parent, Eigen::Dynamic, 1, true>;
-//         friend MatrixVector<T>;
-//         friend MatrixSparse<T>;
-//         const ColParent &base() const { return *this; }
-//         Col(const ColParent &other): ColParent(other) {}
+        friend ImmutableMatrixSparse<T>;
 
-//     public:
+        const int row_idx_start;
+        const int col_idx_start;
+        const int m_rows;
+        const int n_cols;
+        const ImmutableMatrixSparse<T> *associated_mat_ptr;
 
-//         Col operator=(const MatrixVector<T> vec) { return ColParent::operator=(vec.base().sparseView()); }
-
-//     };
-
-//     // Nested class representing sparse matrix block
-//     // Requires: cast to MatrixDense<T>
-//     class Block: private Eigen::Block<Parent, Eigen::Dynamic, Eigen::Dynamic>
-//     {
-//     private:
-
-//         using BlockParent = Eigen::Block<Parent, Eigen::Dynamic, Eigen::Dynamic>;
-//         friend MatrixDense<T>;
-//         friend MatrixSparse<T>;
-//         const BlockParent &base() const { return *this; }
-//         Block(const BlockParent &other): BlockParent(other) {}
-
-//     };
+        Block(
+            const ImmutableMatrixSparse<T> *arg_associated_mat_ptr,
+            int arg_row_idx_start, int arg_col_idx_start,
+            int arg_m_rows, int arg_n_cols
+        ):
+            associated_mat_ptr(arg_associated_mat_ptr),
+            row_idx_start(arg_row_idx_start), col_idx_start(arg_col_idx_start),
+            m_rows(arg_m_rows), n_cols(arg_n_cols)
+        {}
     
-// };
+    public:
+
+        Block(const ImmutableMatrixSparse<T>::Block &other):
+            Block(
+                other.associated_mat_ptr,
+                other.row_idx_start, other.col_idx_start,
+                other.m_rows, other.n_cols
+            )
+        {}
+
+        MatrixDense<T> copy_to_mat() const {
+
+            T *h_mat = static_cast<T *>(malloc(m_rows*n_cols*sizeof(T)));
+            for (int i=0; i<m_rows*n_cols; ++i) { h_mat[i] = static_cast<T>(0.); }
+
+            int *h_col_offsets = static_cast<int *>(malloc(associated_mat_ptr->n_cols*sizeof(int)));
+            int *h_row_indices = static_cast<int *>(malloc(associated_mat_ptr->nnz*sizeof(int)));
+            T *h_vals = static_cast<T *>(malloc(associated_mat_ptr->nnz*sizeof(T)));
+            associated_mat_ptr->copy_data_to_ptr(
+                h_col_offsets, h_row_indices, h_vals,
+                associated_mat_ptr->m_rows, associated_mat_ptr->n_cols, associated_mat_ptr->nnz
+            );
+
+            // Copy column by column 1D slices relevant to matrix
+            for (int j=0; j<n_cols; ++j) {
+
+                // Get offsets of row indices/values for corresponding offseted column of block
+                int col_offset_L = h_col_offsets[col_idx_start + j];
+                int col_offset_R;
+                if ((col_idx_start + j + 1) == associated_mat_ptr->n_cols) {
+                    col_offset_R = associated_mat_ptr->nnz;
+                } else {
+                    col_offset_R = h_col_offsets[col_idx_start + j + 1];
+                }
+                int col_size_nnz = col_offset_R-col_offset_L;
+
+                // Load values into h_mat if they are within the block
+                int cand_row_ind;
+                for (int i=0; i<col_size_nnz; ++i) {
+                    cand_row_ind = h_row_indices[i];
+                    if ((row_idx_start <= cand_row_ind) && (cand_row_ind < row_idx_start + m_rows)) {
+                        h_mat[cand_row_ind-row_idx_start] = h_vals[cand_row_ind];
+                    }
+                }
+
+            }
+
+            MatrixDense<T> created_mat(associated_mat_ptr->cu_handles, h_mat, m_rows, n_cols);
+
+            free(h_mat);
+            free(h_col_offsets);
+            free(h_row_indices);
+            free(h_vals);
+
+            return created_mat;
+
+        }
+
+        Scalar<T> get_elem(int row, int col) {
+
+            if ((row < 0) || (row >= m_rows)) {
+                throw std::runtime_error("ImmutableMatrixSparse::Block: invalid row access in get_elem");
+            }
+            if ((col < 0) || (col >= n_cols)) {
+                throw std::runtime_error("ImmutableMatrixSparse::Block: invalid col access in get_elem");
+            }
+
+            return associated_mat_ptr->get_elem(row_idx_start+row, col_idx_start+col);
+
+        }
+
+    };
 
 };
 

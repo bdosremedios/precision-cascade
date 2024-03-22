@@ -15,18 +15,18 @@ struct is_same_template<T,T> : std::true_type{};
 template <template <typename> typename M>
 void assert_valid_type() {
     static_assert(
-        ((is_same_template<M, MatrixSparse>::value) || (is_same_template<M, MatrixDense>::value)),
-        "M argument must be type MatrixSparse or MatrixDense"
+        ((is_same_template<M, ImmutableMatrixSparse>::value) || (is_same_template<M, MatrixDense>::value)),
+        "M argument must be type ImmutableMatrixSparse or MatrixDense"
     );
 }
 
 template <template <typename> typename M>
 void assert_valid_type_or_vec() {
     static_assert(
-        ((is_same_template<M, MatrixSparse>::value) ||
+        ((is_same_template<M, ImmutableMatrixSparse>::value) ||
          (is_same_template<M, MatrixDense>::value) ||
          (is_same_template<M, Vector>::value)),
-        "M argument must be type MatrixSparse or MatrixDense or Vector"
+        "M argument must be type ImmutableMatrixSparse or MatrixDense or Vector"
     );
 }
 

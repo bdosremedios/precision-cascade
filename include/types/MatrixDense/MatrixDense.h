@@ -1,3 +1,5 @@
+#include "types/Vector/Vector.h"
+
 #ifndef MATRIX_DENSE_H
 #define MATRIX_DENSE_H
 
@@ -18,10 +20,7 @@
 #include "MatrixDense_gpu_kernels.cuh"
 
 #include "types/Scalar/Scalar.h"
-
-template <typename T> class Scalar;
-template <typename T> class Vector;
-template <typename T> class MatrixSparse;
+#include "types/MatrixSparse/ImmutableMatrixSparse.h"
 
 template <typename T>
 class MatrixDense
@@ -181,26 +180,12 @@ public:
     // MatrixDense(const typename MatrixSparse<T>::Block &block): Parent::Matrix(block.base()) {}
 
     // *** Conversion Constructor ***
-    MatrixDense(const MatrixDense<T>::Block &block):
-        MatrixDense(
-            block.associated_mat_ptr->cu_handles,
-            block.m_rows,
-            block.n_cols
-        )
-    {
-        // Copy column by column 1D slices relevant to matrix
-        for (int j=0; j<block.n_cols; ++j) {
-            check_cuda_error(
-                cudaMemcpy(
-                    d_mat + j*block.m_rows,
-                    (block.associated_mat_ptr->d_mat +
-                        block.row_idx_start +
-                        (block.col_idx_start+j)*block.associated_mat_ptr->m_rows),
-                    block.m_rows*sizeof(T),
-                    cudaMemcpyDeviceToDevice
-                )
-            );
-        }
+    MatrixDense(const MatrixDense<T>::Block &block) {
+        *this = block.copy_to_mat();
+    }
+
+    MatrixDense(const typename ImmutableMatrixSparse<T>::Block &block) {
+        *this = block.copy_to_mat();
     }
 
     // *** Element Access ***
@@ -402,9 +387,6 @@ public:
     
     }
 
-    // *** Resizing ***
-    void reduce() { ; } // Do nothing on reduction
-
     // *** Cast ***
     template <typename Cast_T>
     MatrixDense<Cast_T> cast() const { throw std::runtime_error("MatrixDense: invalid cast conversion"); }
@@ -571,6 +553,7 @@ public:
     private:
 
         friend MatrixDense<T>;
+
         const int row_idx_start;
         const int col_idx_start;
         const int m_rows;
@@ -679,8 +662,5 @@ public:
     };
 
 };
-
-#include "types/Vector/Vector.h"
-#include "types/MatrixSparse/ImmutableMatrixSparse.h"
 
 #endif

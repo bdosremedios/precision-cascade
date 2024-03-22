@@ -90,7 +90,6 @@ M<T> read_matrixCSV(const cuHandleBundle &cu_handles, fs::path const &path) {
     }
 
     M<T> mat(cu_handles, h_mat, m_rows, n_cols);
-    mat.reduce();
 
     free(h_mat);
 
