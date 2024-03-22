@@ -98,6 +98,7 @@ public:
         nnz(0)
     {
 
+
         allocate_d_mem();
 
         int *h_col_offsets = static_cast<int *>(malloc(mem_size_col_offsets()));
@@ -284,6 +285,22 @@ public:
         n_cols(source_n_cols),
         nnz(source_nnz)
     {
+
+        if (source_m_rows < 0) {
+            throw std::runtime_error(
+                "ImmutableMatrixSparse: invalid source_m_rows dim for dynamic mem constructor"
+            );
+        }
+        if (source_n_cols < 0) {
+            throw std::runtime_error(
+                "ImmutableMatrixSparse: invalid source_n_cols dim for dynamic mem constructor"
+            );
+        }
+        if (source_nnz < 0) {
+            throw std::runtime_error(
+                "ImmutableMatrixSparse: invalid source_nnz dim for dynamic mem constructor"
+            );
+        }
 
         allocate_d_mem();
 
@@ -831,12 +848,12 @@ public:
                 }
                 int col_size_nnz = col_offset_R-col_offset_L;
 
-                // Load values into h_mat if they are within the block
+                // Load values into h_mat if they are within the block rows
                 int cand_row_ind;
                 for (int i=0; i<col_size_nnz; ++i) {
-                    cand_row_ind = h_row_indices[i];
+                    cand_row_ind = h_row_indices[col_offset_L+i];
                     if ((row_idx_start <= cand_row_ind) && (cand_row_ind < row_idx_start + m_rows)) {
-                        h_mat[cand_row_ind-row_idx_start] = h_vals[cand_row_ind];
+                        h_mat[(cand_row_ind-row_idx_start)+j*m_rows] = h_vals[col_offset_L+i];
                     }
                 }
 

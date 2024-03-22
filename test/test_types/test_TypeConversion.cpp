@@ -96,6 +96,16 @@ public:
         );
         ASSERT_MATRIX_EQ(mat_1_2_3_1, test_1_2_3_1);
 
+        // Test MatrixDense cast/access for block 1, 2, 3, 3
+        MatrixDense<T> mat_1_2_3_3(mat.get_block(1, 2, 3, 3));
+        MatrixDense<T> test_1_2_3_3(
+            TestBase::bundle,
+            {{static_cast<T>(8), static_cast<T>(9), static_cast<T>(0)},
+             {static_cast<T>(0), static_cast<T>(0), static_cast<T>(0)},
+             {static_cast<T>(0), static_cast<T>(19), static_cast<T>(20)}}
+        );
+        ASSERT_MATRIX_EQ(mat_1_2_3_3, test_1_2_3_3);
+
         // Test MatrixDense cast/access for block 0, 0, 3, 4
         MatrixDense<T> mat_0_0_3_4_copy(mat.get_block(0, 0, 3, 4).copy_to_mat());
         ASSERT_MATRIX_EQ(mat_0_0_3_4_copy, test_0_0_3_4);
@@ -103,6 +113,10 @@ public:
         // Test MatrixDense cast/access for block 1, 2, 3, 1
         MatrixDense<T> mat_1_2_3_1_copy(mat.get_block(1, 2, 3, 1).copy_to_mat());
         ASSERT_MATRIX_EQ(mat_1_2_3_1_copy, test_1_2_3_1);
+
+        // Test MatrixDense cast/access for block 1, 2, 3, 3
+        MatrixDense<T> mat_1_2_3_3_copy(mat.get_block(1, 2, 3, 3).copy_to_mat());
+        ASSERT_MATRIX_EQ(mat_1_2_3_3_copy, test_1_2_3_3);
 
     }
 
