@@ -6,40 +6,47 @@ class TypeConversion_Test: public TestBase
 {
 public:
 
-    // template <typename T>
-    // void TestDenseToSparse() {
+    template <typename T>
+    void TestDenseToImmutableSparse() {
 
-    //     // Test manual
-    //     constexpr int m_manual(3);
-    //     constexpr int n_manual(4);
-    //     MatrixDense<T> dense_manual(
-    //         {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4)},
-    //          {static_cast<T>(5), static_cast<T>(6), static_cast<T>(7), static_cast<T>(8)},
-    //          {static_cast<T>(9), static_cast<T>(10), static_cast<T>(11), static_cast<T>(12)}}
-    //     );
-    //     MatrixSparse<T> sparse_manual(dense_manual.sparse());
-    //     ASSERT_EQ(sparse_manual.rows(), m_manual);
-    //     ASSERT_EQ(sparse_manual.cols(), n_manual);
-    //     for (int i=0; i<m_manual; ++i) {
-    //         for (int j=0; j<n_manual; ++j) {
-    //             ASSERT_EQ(sparse_manual.coeff(i, j), dense_manual.coeff(i, j));
-    //         }
-    //     }
+        // Test manual
+        constexpr int m_manual(3);
+        constexpr int n_manual(4);
+        MatrixDense<T> dense_manual(
+            TestBase::bundle,
+            {{static_cast<T>(1), static_cast<T>(0), static_cast<T>(3), static_cast<T>(0)},
+             {static_cast<T>(5), static_cast<T>(0), static_cast<T>(7), static_cast<T>(8)},
+             {static_cast<T>(9), static_cast<T>(10), static_cast<T>(11), static_cast<T>(0)}}
+        );
 
-    //     // Test random
-    //     constexpr int m_random(12);
-    //     constexpr int n_random(7);
-    //     MatrixDense<T> dense_rand(MatrixDense<T>::Random(12, 7));
-    //     MatrixSparse<T> sparse_rand(dense_rand.sparse());
-    //     ASSERT_EQ(sparse_rand.rows(), m_random);
-    //     ASSERT_EQ(sparse_rand.cols(), n_random);
-    //     for (int i=0; i<m_random; ++i) {
-    //         for (int j=0; j<n_random; ++j) {
-    //             ASSERT_EQ(sparse_rand.coeff(i, j), dense_rand.coeff(i, j));
-    //         }
-    //     }
+        ImmutableMatrixSparse<T> sparse_manual(dense_manual.sparse());
 
-    // }
+        ASSERT_EQ(sparse_manual.rows(), m_manual);
+        ASSERT_EQ(sparse_manual.cols(), n_manual);
+        ASSERT_EQ(sparse_manual.non_zeros(), 8);
+        for (int i=0; i<m_manual; ++i) {
+            for (int j=0; j<n_manual; ++j) {
+                ASSERT_EQ(sparse_manual.get_elem(i, j), dense_manual.get_elem(i, j));
+            }
+        }
+
+        // Test random
+        constexpr int m_random(12);
+        constexpr int n_random(7);
+        MatrixDense<T> dense_rand(MatrixDense<T>::Random(TestBase::bundle, 12, 7));
+
+        ImmutableMatrixSparse<T> sparse_rand(dense_rand.sparse());
+
+        ASSERT_EQ(sparse_rand.rows(), m_random);
+        ASSERT_EQ(sparse_rand.cols(), n_random);
+        ASSERT_EQ(sparse_rand.non_zeros(), dense_rand.non_zeros());
+        for (int i=0; i<m_random; ++i) {
+            for (int j=0; j<n_random; ++j) {
+                ASSERT_EQ(sparse_rand.get_elem(i, j), dense_rand.get_elem(i, j));
+            }
+        }
+
+    }
 
     template <typename T>
     void TestImmutableSparseBlockToDense() {
@@ -223,11 +230,11 @@ public:
 
 };
 
-// TEST_F(TypeConversion_Test, TestDenseToSparse) {
-//     TestDenseToSparse<__half>();
-//     TestDenseToSparse<float>();
-//     TestDenseToSparse<double>();
-// }
+TEST_F(TypeConversion_Test, TestDenseToImmutableSparse) {
+    TestDenseToImmutableSparse<__half>();
+    TestDenseToImmutableSparse<float>();
+    TestDenseToImmutableSparse<double>();
+}
 
 TEST_F(TypeConversion_Test, TestImmutableSparseBlockToDense) {
     TestImmutableSparseBlockToDense<__half>();
