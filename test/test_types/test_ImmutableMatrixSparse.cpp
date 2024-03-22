@@ -193,6 +193,47 @@ public:
     
     }
 
+    void TestBadDynamicMemConstruction() {
+
+        int *h_col_offsets_dummy = nullptr;
+        int *h_row_indices_dummy = nullptr;
+        double *h_vals_dummy = nullptr;
+
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            [=]() {
+                ImmutableMatrixSparse<double>(
+                    TestBase::bundle,
+                    h_col_offsets_dummy, h_row_indices_dummy, h_vals_dummy,
+                    -1, 4, 4
+                );
+            }
+        );
+
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            [=]() {
+                ImmutableMatrixSparse<double>(
+                    TestBase::bundle,
+                    h_col_offsets_dummy, h_row_indices_dummy, h_vals_dummy,
+                    4, -2, 4
+                );
+            }
+        );
+
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            [=]() {
+                ImmutableMatrixSparse<double>(
+                    TestBase::bundle,
+                    h_col_offsets_dummy, h_row_indices_dummy, h_vals_dummy,
+                    4, 4, -1
+                );
+            }
+        );
+
+    }
+
     template <typename T>
     void TestDynamicMemCopyToPtr() {
     
@@ -536,6 +577,10 @@ TEST_F(ImmutableMatrixSparse_Test, TestConstruction) {
     TestConstruction<double>();
 }
 
+TEST_F(ImmutableMatrixSparse_Test, TestBadConstruction) {
+    TestBadConstruction();
+}
+
 TEST_F(ImmutableMatrixSparse_Test, TestListInitialization) {
     TestListInitialization<__half>();
     TestListInitialization<float>();
@@ -572,6 +617,10 @@ TEST_F(ImmutableMatrixSparse_Test, TestDynamicMemConstruction) {
     TestDynamicMemConstruction<__half>();
     TestDynamicMemConstruction<float>();
     TestDynamicMemConstruction<double>();
+}
+
+TEST_F(ImmutableMatrixSparse_Test, TestBadDynamicMemConstruction) {
+    TestBadDynamicMemConstruction();
 }
 
 TEST_F(ImmutableMatrixSparse_Test, TestDynamicMemCopyToPtr) {

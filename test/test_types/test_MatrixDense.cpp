@@ -54,6 +54,23 @@ public:
 
     }
 
+    void TestBadDynamicMemConstruction() {
+
+        double *h_mat = nullptr;
+
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            [=]() { MatrixDense<double>(TestBase::bundle, h_mat, -1, 4);
+            }
+        );
+
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            [=]() { MatrixDense<double>(TestBase::bundle, h_mat, 4, -2 ); }
+        );
+
+    }
+
     template <typename T>
     void TestDynamicMemCopyToPtr() {
     
@@ -339,6 +356,10 @@ TEST_F(MatrixDense_Test, TestConstruction) {
     TestConstruction<double>();
 }
 
+TEST_F(MatrixDense_Test, TestBadConstruction) {
+    TestBadConstruction();
+}
+
 TEST_F(MatrixDense_Test, TestListInitialization) {
     TestListInitialization<__half>();
     TestListInitialization<float>();
@@ -375,6 +396,10 @@ TEST_F(MatrixDense_Test, TestDynamicMemConstruction) {
     TestDynamicMemConstruction<__half>();
     TestDynamicMemConstruction<float>();
     TestDynamicMemConstruction<double>();
+}
+
+TEST_F(MatrixDense_Test, TestBadDynamicMemConstruction) {
+    TestBadDynamicMemConstruction();
 }
 
 TEST_F(MatrixDense_Test, TestDynamicMemCopyToPtr) {

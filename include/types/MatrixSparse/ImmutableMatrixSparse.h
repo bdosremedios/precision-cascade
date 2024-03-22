@@ -89,15 +89,25 @@ public:
     // *** Basic Constructors ***
     ImmutableMatrixSparse(
         const cuHandleBundle &arg_cu_handles,
-        int arg_m,
-        int arg_n
+        int arg_m_rows,
+        int arg_n_cols
     ):
         cu_handles(arg_cu_handles),
-        m_rows(arg_m),
-        n_cols(arg_n),
+        m_rows(arg_m_rows),
+        n_cols(arg_n_cols),
         nnz(0)
     {
 
+        if (arg_m_rows < 0) {
+            throw std::runtime_error(
+                "ImmutableMatrixSparse: invalid arg_m_rows dim for constructor"
+            );
+        }
+        if (arg_n_cols < 0) {
+            throw std::runtime_error(
+                "ImmutableMatrixSparse: invalid arg_n_cols dim for constructor"
+            );
+        }
 
         allocate_d_mem();
 

@@ -178,6 +178,31 @@ protected:
 
     }
 
+    void TestBadConstruction() {
+
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            []() {
+                M<double> test_mat(TestBase::bundle, -1, 4);
+            }
+        );
+
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            []() {
+                M<double> test_mat(TestBase::bundle, 5, -2);
+            }
+        );
+
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            []() {
+                M<double> test_mat(TestBase::bundle, -1, -2);
+            }
+        );
+
+    }
+
     template <typename T>
     void TestListInitialization() {
 

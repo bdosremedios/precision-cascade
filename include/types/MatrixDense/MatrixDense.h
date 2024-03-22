@@ -60,7 +60,22 @@ public:
         cu_handles(arg_cu_handles),
         m_rows(arg_m_rows),
         n_cols(arg_n_cols)
-    { allocate_d_mat(); }
+    {
+
+        if (arg_m_rows < 0) {
+            throw std::runtime_error(
+                "MatrixDense: invalid arg_m_rows dim for constructor"
+            );
+        }
+        if (arg_n_cols < 0) {
+            throw std::runtime_error(
+                "MatrixDense: invalid arg_n_cols dim for constructor"
+            );
+        }
+
+        allocate_d_mat();
+
+    }
 
     MatrixDense(const cuHandleBundle &arg_cu_handles): MatrixDense(arg_cu_handles, 0, 0) {}
 
