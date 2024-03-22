@@ -272,7 +272,9 @@ Vector<__half> MatrixDense<__half>::frwd_sub(const Vector<__half> &arg_rhs) cons
 
 }
 
-MatrixDense<__half> MatrixDense<__half>::to_half() const { return MatrixDense<__half>(*this); }
+MatrixDense<__half> MatrixDense<__half>::to_half() const {
+    return MatrixDense<__half>(*this);
+}
 
 MatrixDense<float> MatrixDense<__half>::to_float() const {
     

@@ -21,6 +21,8 @@ class ImmutableMatrixSparse
 {
 private:
 
+    template <typename> friend class ImmutableMatrixSparse;
+
     cuHandleBundle cu_handles;
     int m_rows = 0, n_cols = 0;
     int nnz = 0;
@@ -84,6 +86,22 @@ private:
     ImmutableMatrixSparse<__half> to_half() const;
     ImmutableMatrixSparse<float> to_float() const;
     ImmutableMatrixSparse<double> to_double() const;
+    
+    // Load space for arg_nnz non-zeros but without instantiation, used for private
+    // construction with known sized val array
+    ImmutableMatrixSparse(
+        const cuHandleBundle &arg_cu_handles,
+        int arg_m_rows,
+        int arg_n_cols,
+        int arg_nnz
+    ):
+        cu_handles(arg_cu_handles),
+        m_rows(arg_m_rows),
+        n_cols(arg_n_cols),
+        nnz(arg_nnz)
+    {
+        allocate_d_mem();
+    }
 
 public:
 
@@ -641,13 +659,15 @@ public:
 
     }
 
-//     // *** Explicit Cast ***
-//     template <typename Cast_T>
-//     MatrixSparse<Cast_T> cast() const {
-//         return typename Eigen::SparseMatrix<Cast_T>::SparseMatrix(
-//             Parent::template cast<Cast_T>()
-//         );
-//     }
+    // *** Explicit Cast ***
+    template <typename Cast_T>
+    ImmutableMatrixSparse<Cast_T> cast() const  {
+        throw std::runtime_error("ImmutableMatrixSparse: invalid cast conversion");
+    }
+
+    template <> ImmutableMatrixSparse<__half> cast<__half>() const { return to_half(); }
+    template <> ImmutableMatrixSparse<float> cast<float>() const { return to_float(); }
+    template <> ImmutableMatrixSparse<double> cast<double>() const { return to_double(); }
 
     // *** Arithmetic and Compound Operations ***
 

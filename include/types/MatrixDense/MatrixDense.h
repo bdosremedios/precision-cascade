@@ -30,7 +30,6 @@ private:
 
     template <typename> friend class MatrixDense;
     friend class Vector<T>;
-    // friend MatrixSparse<T>;
 
     cuHandleBundle cu_handles;
     int m_rows = 0, n_cols = 0;
@@ -449,7 +448,9 @@ public:
 
     // *** Cast ***
     template <typename Cast_T>
-    MatrixDense<Cast_T> cast() const { throw std::runtime_error("MatrixDense: invalid cast conversion"); }
+    MatrixDense<Cast_T> cast() const {
+        throw std::runtime_error("MatrixDense: invalid cast conversion");
+    }
 
     template <> MatrixDense<__half> cast<__half>() const { return to_half(); }
     template <> MatrixDense<float> cast<float>() const { return to_float(); }

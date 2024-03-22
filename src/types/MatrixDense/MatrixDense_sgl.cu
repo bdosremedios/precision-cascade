@@ -284,7 +284,9 @@ MatrixDense<__half> MatrixDense<float>::to_half() const {
 
 }
 
-MatrixDense<float> MatrixDense<float>::to_float() const { return MatrixDense<float>(*this); }
+MatrixDense<float> MatrixDense<float>::to_float() const {
+    return MatrixDense<float>(*this);
+}
 
 MatrixDense<double> MatrixDense<float>::to_double() const {
     

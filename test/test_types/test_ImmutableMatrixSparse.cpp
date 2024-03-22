@@ -530,8 +530,42 @@ public:
 
     }
 
-    // template <typename T>
-    // void TestCol() { TestCol_Base<MatrixSparse, T>(); }
+    template <typename T>
+    void TestBlock() {
+
+        const ImmutableMatrixSparse<T> mat (
+            TestBase::bundle,
+            {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3),
+              static_cast<T>(4), static_cast<T>(0)},
+             {static_cast<T>(0), static_cast<T>(0), static_cast<T>(8),
+              static_cast<T>(9), static_cast<T>(0)},
+             {static_cast<T>(0), static_cast<T>(0), static_cast<T>(0),
+              static_cast<T>(0), static_cast<T>(0)},
+             {static_cast<T>(0), static_cast<T>(0), static_cast<T>(0),
+              static_cast<T>(19), static_cast<T>(20)}}
+        );
+
+        // Test copy constructor and access for block 0, 0, 4, 2
+        typename ImmutableMatrixSparse<T>::Block blk_0_0_4_2(mat.get_block(0, 0, 4, 2));
+        ASSERT_EQ(blk_0_0_4_2.get_elem(0, 0).get_scalar(), static_cast<T>(1));
+        ASSERT_EQ(blk_0_0_4_2.get_elem(1, 0).get_scalar(), static_cast<T>(0));
+        ASSERT_EQ(blk_0_0_4_2.get_elem(2, 0).get_scalar(), static_cast<T>(0));
+        ASSERT_EQ(blk_0_0_4_2.get_elem(3, 0).get_scalar(), static_cast<T>(0));
+        ASSERT_EQ(blk_0_0_4_2.get_elem(0, 1).get_scalar(), static_cast<T>(2));
+        ASSERT_EQ(blk_0_0_4_2.get_elem(1, 1).get_scalar(), static_cast<T>(0));
+        ASSERT_EQ(blk_0_0_4_2.get_elem(2, 1).get_scalar(), static_cast<T>(0));
+        ASSERT_EQ(blk_0_0_4_2.get_elem(3, 1).get_scalar(), static_cast<T>(0));
+
+        // Test copy constructor and access for block 2, 1, 2, 3
+        typename ImmutableMatrixSparse<T>::Block blk_2_1_2_3(mat.get_block(2, 1, 2, 3));
+        ASSERT_EQ(blk_2_1_2_3.get_elem(0, 0).get_scalar(), static_cast<T>(0));
+        ASSERT_EQ(blk_2_1_2_3.get_elem(0, 1).get_scalar(), static_cast<T>(0));
+        ASSERT_EQ(blk_2_1_2_3.get_elem(0, 2).get_scalar(), static_cast<T>(0));
+        ASSERT_EQ(blk_2_1_2_3.get_elem(1, 0).get_scalar(), static_cast<T>(0));
+        ASSERT_EQ(blk_2_1_2_3.get_elem(1, 1).get_scalar(), static_cast<T>(0));
+        ASSERT_EQ(blk_2_1_2_3.get_elem(1, 2).get_scalar(), static_cast<T>(19));
+    
+    }
 
     // template <typename T>
     // void TestTranspose() { TestTranspose_Base<MatrixSparse, T>(); }
@@ -551,7 +585,118 @@ public:
     // template <typename T>
     // void TestAddSub() { TestAddSub_Base<MatrixSparse, T>(); }
 
-    // void TestCast() { TestCast_Base<MatrixSparse>(); }
+    void TestCast() {
+        
+        constexpr int m(10);
+        constexpr int n(15);
+        constexpr double fill_ratio(0.67);
+
+        ImmutableMatrixSparse<double> mat_dbl(
+            ImmutableMatrixSparse<double>::Random(TestBase::bundle, m, n, fill_ratio)
+        );
+
+        ImmutableMatrixSparse<double> dbl_to_dbl(mat_dbl.template cast<double>());
+        ASSERT_MATRIX_EQ(dbl_to_dbl, mat_dbl);
+
+        ImmutableMatrixSparse<float> dbl_to_sgl(mat_dbl.template cast<float>());
+        ASSERT_EQ(dbl_to_sgl.rows(), m);
+        ASSERT_EQ(dbl_to_sgl.cols(), n);
+        for (int i=0; i<m; ++i) {
+            for (int j=0; j<n; ++j) {
+                ASSERT_NEAR(
+                    dbl_to_sgl.get_elem(i, j).get_scalar(),
+                    static_cast<float>(mat_dbl.get_elem(i, j).get_scalar()),
+                    min_1_mag(static_cast<float>(mat_dbl.get_elem(i, j).get_scalar()))*
+                        Tol<float>::roundoff_T()
+                );
+            }
+        }
+
+        ImmutableMatrixSparse<__half> dbl_to_hlf(mat_dbl.template cast<__half>());
+        ASSERT_EQ(dbl_to_hlf.rows(), m);
+        ASSERT_EQ(dbl_to_hlf.cols(), n);
+        for (int i=0; i<m; ++i) {
+            for (int j=0; j<n; ++j) {
+                ASSERT_NEAR(
+                    dbl_to_hlf.get_elem(i, j).get_scalar(),
+                    static_cast<__half>(mat_dbl.get_elem(i, j).get_scalar()),
+                    min_1_mag(static_cast<__half>(mat_dbl.get_elem(i, j).get_scalar()))*
+                        Tol<__half>::roundoff_T()
+                );
+            }
+        }
+
+        ImmutableMatrixSparse<float> mat_sgl(
+            ImmutableMatrixSparse<float>::Random(TestBase::bundle, m, n, fill_ratio)
+        );
+
+        ImmutableMatrixSparse<float> sgl_to_sgl(mat_sgl.template cast<float>());
+        ASSERT_MATRIX_EQ(sgl_to_sgl, mat_sgl);
+    
+        ImmutableMatrixSparse<double> sgl_to_dbl(mat_sgl.template cast<double>());
+        ASSERT_EQ(sgl_to_dbl.rows(), m);
+        ASSERT_EQ(sgl_to_dbl.cols(), n);
+        for (int i=0; i<m; ++i) {
+            for (int j=0; j<n; ++j) {
+                ASSERT_NEAR(
+                    sgl_to_dbl.get_elem(i, j).get_scalar(),
+                    static_cast<double>(mat_sgl.get_elem(i, j).get_scalar()),
+                    min_1_mag(static_cast<double>(mat_sgl.get_elem(i, j).get_scalar()))*
+                        static_cast<double>(Tol<float>::roundoff_T())
+                );
+            }
+        }
+
+        ImmutableMatrixSparse<__half> sgl_to_hlf(mat_sgl.template cast<__half>());
+        ASSERT_EQ(sgl_to_hlf.rows(), m);
+        ASSERT_EQ(sgl_to_hlf.cols(), n);
+        for (int i=0; i<m; ++i) {
+            for (int j=0; j<n; ++j) {
+                ASSERT_NEAR(
+                    sgl_to_hlf.get_elem(i, j).get_scalar(),
+                    static_cast<__half>(mat_sgl.get_elem(i, j).get_scalar()),
+                    min_1_mag(static_cast<__half>(mat_sgl.get_elem(i, j).get_scalar()))*
+                        Tol<__half>::roundoff_T()
+                );
+            }
+        }
+
+        ImmutableMatrixSparse<__half> mat_hlf(
+            ImmutableMatrixSparse<__half>::Random(TestBase::bundle, m, n, fill_ratio)
+        );
+
+        ImmutableMatrixSparse<__half> hlf_to_hlf(mat_hlf.template cast<__half>());
+        ASSERT_MATRIX_EQ(hlf_to_hlf, mat_hlf);
+
+        ImmutableMatrixSparse<float> hlf_to_sgl(mat_hlf.template cast<float>());
+        ASSERT_EQ(hlf_to_sgl.rows(), m);
+        ASSERT_EQ(hlf_to_sgl.cols(), n);
+        for (int i=0; i<m; ++i) {
+            for (int j=0; j<n; ++j) {
+                ASSERT_NEAR(
+                    hlf_to_sgl.get_elem(i, j).get_scalar(),
+                    static_cast<float>(mat_hlf.get_elem(i, j).get_scalar()),
+                    min_1_mag(static_cast<double>(mat_hlf.get_elem(i, j).get_scalar()))*
+                        static_cast<float>(Tol<__half>::roundoff_T())
+                );
+            }
+        }
+
+        ImmutableMatrixSparse<double> hlf_to_dbl(mat_hlf.template cast<double>());
+        ASSERT_EQ(hlf_to_dbl.rows(), m);
+        ASSERT_EQ(hlf_to_dbl.cols(), n);
+        for (int i=0; i<m; ++i) {
+            for (int j=0; j<n; ++j) {
+                ASSERT_NEAR(
+                    hlf_to_dbl.get_elem(i, j).get_scalar(),
+                    static_cast<double>(mat_hlf.get_elem(i, j).get_scalar()),
+                    min_1_mag(static_cast<double>(mat_hlf.get_elem(i, j).get_scalar()))*
+                        static_cast<double>(Tol<__half>::roundoff_T())
+                );
+            }
+        }
+
+    }
 
 };
 
@@ -666,15 +811,15 @@ TEST_F(ImmutableMatrixSparse_Test, TestBadCol) {
     TestBadCol();
 }
 
-// TEST_F(ImmutableMatrixSparse_Test, TestBlock) {
-//     TestBlock<__half>();
-//     TestBlock<float>();
-//     TestBlock<double>();
-// }
+TEST_F(ImmutableMatrixSparse_Test, TestBlock) {
+    TestBlock<__half>();
+    TestBlock<float>();
+    TestBlock<double>();
+}
 
-// TEST_F(ImmutableMatrixSparse_Test, TestBadBlock) {
-//     TestBadBlock();
-// }
+TEST_F(ImmutableMatrixSparse_Test, TestBadBlock) {
+    TestBadBlock();
+}
 
 // TEST_F(ImmutableMatrixSparse_Test, TestScale) {
 //     TestScale<__half>();
@@ -760,20 +905,10 @@ TEST_F(ImmutableMatrixSparse_Test, TestMaxMagElem) {
 //     TestNorm<double>();
 // }
 
-// TEST_F(ImmutableMatrixSparse_Test, TestCast) { TestCast(); }
+TEST_F(ImmutableMatrixSparse_Test, TestCast) {
+    TestCast();
+}
 
-// TEST_F(ImmutableMatrixSparse_Test, TestBadCast) { TestBadCast(); }
-
-// class MatrixSparse_Substitution_Test: public Matrix_Substitution_Test<MatrixSparse> {};
-
-// TEST_F(MatrixSparse_Substitution_Test, TestBackwardSubstitution) {
-//     TestBackwardSubstitution<__half>();
-//     TestBackwardSubstitution<float>();
-//     TestBackwardSubstitution<double>();
-// }
-
-// TEST_F(MatrixSparse_Substitution_Test, TestForwardSubstitution) {
-//     TestForwardSubstitution<__half>();
-//     TestForwardSubstitution<float>();
-//     TestForwardSubstitution<double>();
-// }
+TEST_F(ImmutableMatrixSparse_Test, TestBadCast) {
+    TestBadCast();
+}

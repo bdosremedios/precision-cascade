@@ -63,26 +63,6 @@ public:
               static_cast<T>(19), static_cast<T>(20)}}
         );
 
-        // Test copy constructor and access for block 0, 0, 4, 2
-        typename ImmutableMatrixSparse<T>::Block blk_0_0_4_2(mat.get_block(0, 0, 4, 2));
-        ASSERT_EQ(blk_0_0_4_2.get_elem(0, 0).get_scalar(), static_cast<T>(1));
-        ASSERT_EQ(blk_0_0_4_2.get_elem(1, 0).get_scalar(), static_cast<T>(0));
-        ASSERT_EQ(blk_0_0_4_2.get_elem(2, 0).get_scalar(), static_cast<T>(0));
-        ASSERT_EQ(blk_0_0_4_2.get_elem(3, 0).get_scalar(), static_cast<T>(0));
-        ASSERT_EQ(blk_0_0_4_2.get_elem(0, 1).get_scalar(), static_cast<T>(2));
-        ASSERT_EQ(blk_0_0_4_2.get_elem(1, 1).get_scalar(), static_cast<T>(0));
-        ASSERT_EQ(blk_0_0_4_2.get_elem(2, 1).get_scalar(), static_cast<T>(0));
-        ASSERT_EQ(blk_0_0_4_2.get_elem(3, 1).get_scalar(), static_cast<T>(0));
-
-        // Test copy constructor and access for block 2, 1, 2, 3
-        typename ImmutableMatrixSparse<T>::Block blk_2_1_2_3(mat.get_block(2, 1, 2, 3));
-        ASSERT_EQ(blk_2_1_2_3.get_elem(0, 0).get_scalar(), static_cast<T>(0));
-        ASSERT_EQ(blk_2_1_2_3.get_elem(0, 1).get_scalar(), static_cast<T>(0));
-        ASSERT_EQ(blk_2_1_2_3.get_elem(0, 2).get_scalar(), static_cast<T>(0));
-        ASSERT_EQ(blk_2_1_2_3.get_elem(1, 0).get_scalar(), static_cast<T>(0));
-        ASSERT_EQ(blk_2_1_2_3.get_elem(1, 1).get_scalar(), static_cast<T>(0));
-        ASSERT_EQ(blk_2_1_2_3.get_elem(1, 2).get_scalar(), static_cast<T>(19));
-
         // Test MatrixDense cast/access for block 0, 0, 3, 4
         MatrixDense<T> mat_0_0_3_4(mat.get_block(0, 0, 3, 4));
         MatrixDense<T> test_0_0_3_4(

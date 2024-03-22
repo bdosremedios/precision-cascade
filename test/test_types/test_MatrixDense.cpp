@@ -281,54 +281,109 @@ public:
 
     }
 
-    void TestBadBlock() {
+    void TestCast() {
+        
+        constexpr int m(10);
+        constexpr int n(15);
 
-        const int m(4);
-        const int n(5);
-        const MatrixDense<double> const_mat (
-            TestBase::bundle,
-            {{1, 2, 3, 4, 5},
-             {6, 7, 8, 9, 10},
-             {11, 12, 13, 14, 15},
-             {16, 17, 18, 19, 20}}
-        );
-        MatrixDense<double> mat(const_mat);
+        MatrixDense<double> mat_dbl(MatrixDense<double>::Random(TestBase::bundle, m, n));
 
-        // Test invalid starts
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { mat.get_block(-1, 0, 1, 1); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { mat.get_block(m, 0, 1, 1); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { mat.get_block(0, -1, 1, 1); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { mat.get_block(0, n, 1, 1); });
+        MatrixDense<double> dbl_to_dbl(mat_dbl.template cast<double>());
+        ASSERT_MATRIX_EQ(dbl_to_dbl, mat_dbl);
 
-        // Test invalid sizes from 0
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { mat.get_block(0, 0, -1, 1); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { mat.get_block(0, 0, 1, -1); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { mat.get_block(0, 0, m+1, 1); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { mat.get_block(0, 0, 1, n+1); });
+        MatrixDense<float> dbl_to_sgl(mat_dbl.template cast<float>());
+        ASSERT_EQ(dbl_to_sgl.rows(), m);
+        ASSERT_EQ(dbl_to_sgl.cols(), n);
+        for (int i=0; i<m; ++i) {
+            for (int j=0; j<n; ++j) {
+                ASSERT_NEAR(
+                    dbl_to_sgl.get_elem(i, j).get_scalar(),
+                    static_cast<float>(mat_dbl.get_elem(i, j).get_scalar()),
+                    min_1_mag(static_cast<float>(mat_dbl.get_elem(i, j).get_scalar()))*
+                        Tol<float>::roundoff_T()
+                );
+            }
+        }
 
-        // Test invalid sizes from not initial index
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { mat.get_block(1, 2, -1, 1); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { mat.get_block(1, 2, 1, -1); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { mat.get_block(1, 2, m, 1); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() mutable { mat.get_block(1, 2, 1, n-1); });
+        MatrixDense<__half> dbl_to_hlf(mat_dbl.template cast<__half>());
+        ASSERT_EQ(dbl_to_hlf.rows(), m);
+        ASSERT_EQ(dbl_to_hlf.cols(), n);
+        for (int i=0; i<m; ++i) {
+            for (int j=0; j<n; ++j) {
+                ASSERT_NEAR(
+                    dbl_to_hlf.get_elem(i, j).get_scalar(),
+                    static_cast<__half>(mat_dbl.get_elem(i, j).get_scalar()),
+                    min_1_mag(static_cast<__half>(mat_dbl.get_elem(i, j).get_scalar()))*
+                        Tol<__half>::roundoff_T()
+                );
+            }
+        }
 
-        // Test invalid access to valid block
-        CHECK_FUNC_HAS_RUNTIME_ERROR(
-            print_errors,
-            [=]() mutable { mat.get_block(1, 2, 2, 2).get_elem(-1, 0); }
-        );
-        CHECK_FUNC_HAS_RUNTIME_ERROR(
-            print_errors,
-            [=]() mutable { mat.get_block(1, 2, 2, 2).get_elem(0, -1); }
-        );
-        CHECK_FUNC_HAS_RUNTIME_ERROR(
-            print_errors,
-            [=]() mutable { mat.get_block(1, 2, 2, 2).get_elem(2, 0); }
-        );
-        CHECK_FUNC_HAS_RUNTIME_ERROR(
-            print_errors,
-            [=]() mutable { mat.get_block(1, 2, 2, 2).get_elem(0, 2); }
-        );
+        MatrixDense<float> mat_sgl(MatrixDense<float>::Random(TestBase::bundle, m, n));
+
+        MatrixDense<float> sgl_to_sgl(mat_sgl.template cast<float>());
+        ASSERT_MATRIX_EQ(sgl_to_sgl, mat_sgl);
+    
+        MatrixDense<double> sgl_to_dbl(mat_sgl.template cast<double>());
+        ASSERT_EQ(sgl_to_dbl.rows(), m);
+        ASSERT_EQ(sgl_to_dbl.cols(), n);
+        for (int i=0; i<m; ++i) {
+            for (int j=0; j<n; ++j) {
+                ASSERT_NEAR(
+                    sgl_to_dbl.get_elem(i, j).get_scalar(),
+                    static_cast<double>(mat_sgl.get_elem(i, j).get_scalar()),
+                    min_1_mag(static_cast<double>(mat_sgl.get_elem(i, j).get_scalar()))*
+                        static_cast<double>(Tol<float>::roundoff_T())
+                );
+            }
+        }
+
+        MatrixDense<__half> sgl_to_hlf(mat_sgl.template cast<__half>());
+        ASSERT_EQ(sgl_to_hlf.rows(), m);
+        ASSERT_EQ(sgl_to_hlf.cols(), n);
+        for (int i=0; i<m; ++i) {
+            for (int j=0; j<n; ++j) {
+                ASSERT_NEAR(
+                    sgl_to_hlf.get_elem(i, j).get_scalar(),
+                    static_cast<__half>(mat_sgl.get_elem(i, j).get_scalar()),
+                    min_1_mag(static_cast<__half>(mat_sgl.get_elem(i, j).get_scalar()))*
+                        Tol<__half>::roundoff_T()
+                );
+            }
+        }
+
+        MatrixDense<__half> mat_hlf(MatrixDense<__half>::Random(TestBase::bundle, m, n));
+
+        MatrixDense<__half> hlf_to_hlf(mat_hlf.template cast<__half>());
+        ASSERT_MATRIX_EQ(hlf_to_hlf, mat_hlf);
+
+        MatrixDense<float> hlf_to_sgl(mat_hlf.template cast<float>());
+        ASSERT_EQ(hlf_to_sgl.rows(), m);
+        ASSERT_EQ(hlf_to_sgl.cols(), n);
+        for (int i=0; i<m; ++i) {
+            for (int j=0; j<n; ++j) {
+                ASSERT_NEAR(
+                    hlf_to_sgl.get_elem(i, j).get_scalar(),
+                    static_cast<float>(mat_hlf.get_elem(i, j).get_scalar()),
+                    min_1_mag(static_cast<double>(mat_hlf.get_elem(i, j).get_scalar()))*
+                        static_cast<float>(Tol<__half>::roundoff_T())
+                );
+            }
+        }
+
+        MatrixDense<double> hlf_to_dbl(mat_hlf.template cast<double>());
+        ASSERT_EQ(hlf_to_dbl.rows(), m);
+        ASSERT_EQ(hlf_to_dbl.cols(), n);
+        for (int i=0; i<m; ++i) {
+            for (int j=0; j<n; ++j) {
+                ASSERT_NEAR(
+                    hlf_to_dbl.get_elem(i, j).get_scalar(),
+                    static_cast<double>(mat_hlf.get_elem(i, j).get_scalar()),
+                    min_1_mag(static_cast<double>(mat_hlf.get_elem(i, j).get_scalar()))*
+                        static_cast<double>(Tol<__half>::roundoff_T())
+                );
+            }
+        }
 
     }
 

@@ -300,4 +300,6 @@ MatrixDense<float> MatrixDense<double>::to_float() const {
 
 }
 
-MatrixDense<double> MatrixDense<double>::to_double() const { return MatrixDense<double>(*this); }
+MatrixDense<double> MatrixDense<double>::to_double() const {
+    return MatrixDense<double>(*this);
+}
