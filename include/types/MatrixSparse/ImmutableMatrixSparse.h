@@ -670,6 +670,17 @@ public:
     template <> ImmutableMatrixSparse<double> cast<double>() const { return to_double(); }
 
     // *** Arithmetic and Compound Operations ***
+    ImmutableMatrixSparse<T> operator*(const Scalar<T> &scalar) const;
+    ImmutableMatrixSparse<T> operator/(const Scalar<T> &scalar) const {
+        Scalar<T> temp(scalar);
+        return operator*(temp.reciprocol());
+    }
+    
+    ImmutableMatrixSparse<T> & operator*=(const Scalar<T> &scalar);
+    ImmutableMatrixSparse<T> & operator/=(const Scalar<T> &scalar) {
+        Scalar<T> temp(scalar);
+        return operator*=(temp.reciprocol());
+    }
 
     Scalar<T> get_max_mag_elem() const {
 
@@ -759,12 +770,6 @@ public:
 
         return created_mat;
 
-    }
-
-    ImmutableMatrixSparse<T> operator*(const Scalar<T> &scalar) const;
-    ImmutableMatrixSparse<T> operator/(const Scalar<T> &scalar) const {
-        Scalar<T> temp(scalar);
-        return operator*(temp.reciprocol());
     }
 
 //     MatrixVector<T> operator*(const MatrixVector<T> &vec) const {

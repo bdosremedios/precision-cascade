@@ -844,11 +844,11 @@ TEST_F(ImmutableMatrixSparse_Test, TestScale) {
     TestScale<double>();
 }
 
-// TEST_F(ImmutableMatrixSparse_Test, TestScaleAssignment) {
-//     TestScaleAssignment<__half>();
-//     TestScaleAssignment<float>();
-//     TestScaleAssignment<double>();
-// }
+TEST_F(ImmutableMatrixSparse_Test, TestScaleAssignment) {
+    TestScaleAssignment<__half>();
+    TestScaleAssignment<float>();
+    TestScaleAssignment<double>();
+}
 
 TEST_F(ImmutableMatrixSparse_Test, TestMaxMagElem) {
     TestMaxMagElem<__half>();

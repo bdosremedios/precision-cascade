@@ -18,6 +18,22 @@ ImmutableMatrixSparse<double> ImmutableMatrixSparse<double>::operator*(const Sca
 
 }
 
+ImmutableMatrixSparse<double> & ImmutableMatrixSparse<double>::operator*=(const Scalar<double> &scalar) {
+
+    check_cublas_status(
+        cublasScalEx(
+            cu_handles.get_cublas_handle(),
+            nnz,
+            scalar.d_scalar, CUDA_R_64F,
+            d_vals, CUDA_R_64F, 1,
+            CUDA_R_64F
+        )
+    );
+
+    return *this;
+
+}
+
 ImmutableMatrixSparse<__half> ImmutableMatrixSparse<double>::to_half() const {
 
     ImmutableMatrixSparse<__half> created_mat(cu_handles, m_rows, n_cols, nnz);

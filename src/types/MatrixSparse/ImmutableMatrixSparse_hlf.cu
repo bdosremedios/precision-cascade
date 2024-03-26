@@ -20,6 +20,25 @@ ImmutableMatrixSparse<__half> ImmutableMatrixSparse<__half>::operator*(const Sca
 
 }
 
+
+ImmutableMatrixSparse<__half> & ImmutableMatrixSparse<__half>::operator*=(const Scalar<__half> &scalar) {
+
+    Scalar<float> temp_cast(scalar.cast<float>());
+
+    check_cublas_status(
+        cublasScalEx(
+            cu_handles.get_cublas_handle(),
+            nnz,
+            temp_cast.d_scalar, CUDA_R_32F,
+            d_vals, CUDA_R_16F, 1,
+            CUDA_R_32F
+        )
+    );
+
+    return *this;
+
+}
+
 ImmutableMatrixSparse<__half> ImmutableMatrixSparse<__half>::to_half() const {
     return ImmutableMatrixSparse<__half>(*this);
 }
