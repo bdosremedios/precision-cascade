@@ -124,7 +124,7 @@ public:
                 "ImmutableMatrixSparse: invalid arg_m_rows dim for constructor"
             );
         }
-        if (arg_n_cols < 0) {
+        if ((arg_n_cols < 0) || ((arg_m_rows == 0) && (arg_n_cols != 0))) {
             throw std::runtime_error(
                 "ImmutableMatrixSparse: invalid arg_n_cols dim for constructor"
             );
@@ -697,9 +697,70 @@ public:
 
     }
 
-//     MatrixSparse<T> transpose() const {
-//         return typename Parent::SparseMatrix(Parent::transpose());
-//     }
+    ImmutableMatrixSparse<T> transpose() const {
+
+        int *curr_h_col_offsets = static_cast<int *>(malloc(mem_size_col_offsets()));
+        int *curr_h_row_indices = static_cast<int *>(malloc(mem_size_row_indices()));
+        T *curr_h_vals = static_cast<T *>(malloc(mem_size_vals()));
+
+        copy_data_to_ptr(
+            curr_h_col_offsets, curr_h_row_indices, curr_h_vals,
+            m_rows, n_cols, nnz
+        );
+
+        int *trans_h_col_offsets = static_cast<int *>(malloc(m_rows*sizeof(int)));
+        int *trans_h_row_indices = static_cast<int *>(malloc(mem_size_row_indices()));
+        T *trans_h_vals = static_cast<T *>(malloc(mem_size_vals()));
+
+        for (int j=0; j<m_rows; ++j) { trans_h_col_offsets[j] = 0; }
+        for (int k=0; k<nnz; ++k) {
+            if (curr_h_row_indices[k] != (m_rows-1)) {
+                ++trans_h_col_offsets[curr_h_row_indices[k]+1];
+            }
+        }
+        for (int j=1; j<m_rows; ++j) { trans_h_col_offsets[j] += trans_h_col_offsets[j-1]; }
+
+        int *trans_col_count = static_cast<int *>(malloc(m_rows*sizeof(int)));
+        for (int j=0; j<m_rows; ++j) { trans_col_count[j] = 0; }
+
+        int curr_col_ind = 0;
+        for (int k=0; k<nnz; ++k) {
+
+            // Ensure we are we have the correct current column index
+            while ((curr_col_ind < n_cols-1) && (k >= curr_h_col_offsets[curr_col_ind+1])) {
+                ++curr_col_ind;
+            }
+            int curr_row_ind = curr_h_row_indices[k];
+            T curr_val = curr_h_vals[k];
+
+            int trans_k_location = trans_h_col_offsets[curr_row_ind] + trans_col_count[curr_row_ind];
+            trans_h_row_indices[trans_k_location] = curr_col_ind;
+            trans_h_vals[trans_k_location] = curr_val;
+
+            ++trans_col_count[curr_row_ind];
+
+        }
+
+        free(trans_col_count);
+
+        free(curr_h_col_offsets);
+        free(curr_h_row_indices);
+        free(curr_h_vals);
+
+        ImmutableMatrixSparse<T> created_mat(
+            cu_handles,
+            trans_h_col_offsets, trans_h_row_indices, trans_h_vals,
+            n_cols, m_rows, nnz
+        );
+
+        free(trans_h_col_offsets);
+        free(trans_h_row_indices);
+        free(trans_h_vals);
+
+        return created_mat;
+
+    }
+
 //     MatrixSparse<T> operator*(const T &scalar) const {
 //         return typename Parent::SparseMatrix(Parent::operator*(scalar));
 //     }

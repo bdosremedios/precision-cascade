@@ -281,6 +281,27 @@ public:
 
     }
 
+    template <typename T>
+    void TestRandomTranspose() {
+
+        constexpr int m_rand(4);
+        constexpr int n_rand(3);
+        MatrixDense<T> mat(MatrixDense<T>::Random(TestBase::bundle, n_rand, m_rand));
+
+        MatrixDense<T> mat_transposed(mat.transpose());
+        ASSERT_EQ(mat_transposed.rows(), m_rand);
+        ASSERT_EQ(mat_transposed.cols(), n_rand);
+        for (int i=0; i<m_rand; ++i) {
+            for (int j=0; j<n_rand; ++j) {
+                ASSERT_EQ(
+                    mat_transposed.get_elem(i, j).get_scalar(),
+                    mat.get_elem(j, i).get_scalar()
+                );
+            }
+        }
+
+    }
+
     void TestCast() {
         
         constexpr int m(10);
@@ -563,6 +584,12 @@ TEST_F(MatrixDense_Test, TestTranspose) {
     TestTranspose<__half>();
     TestTranspose<float>();
     TestTranspose<double>();
+}
+
+TEST_F(MatrixDense_Test, TestRandomTranspose) {
+    TestRandomTranspose<__half>();
+    TestRandomTranspose<float>();
+    TestRandomTranspose<double>();
 }
 
 TEST_F(MatrixDense_Test, TestMatMat) {

@@ -67,7 +67,7 @@ public:
                 "MatrixDense: invalid arg_m_rows dim for constructor"
             );
         }
-        if (arg_n_cols < 0) {
+        if ((arg_n_cols < 0) || ((arg_m_rows == 0) && (arg_n_cols != 0))) {
             throw std::runtime_error(
                 "MatrixDense: invalid arg_n_cols dim for constructor"
             );
