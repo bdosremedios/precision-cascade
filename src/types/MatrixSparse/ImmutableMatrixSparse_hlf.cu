@@ -1,5 +1,25 @@
 #include "types/MatrixSparse/ImmutableMatrixSparse.h"
 
+ImmutableMatrixSparse<__half> ImmutableMatrixSparse<__half>::operator*(const Scalar<__half> &scalar) const {
+
+    ImmutableMatrixSparse<__half> created_mat(*this);
+
+    Scalar<float> temp_cast(scalar.cast<float>());
+
+    check_cublas_status(
+        cublasScalEx(
+            cu_handles.get_cublas_handle(),
+            nnz,
+            temp_cast.d_scalar, CUDA_R_32F,
+            created_mat.d_vals, CUDA_R_16F, 1,
+            CUDA_R_32F
+        )
+    );
+
+    return created_mat;
+
+}
+
 ImmutableMatrixSparse<__half> ImmutableMatrixSparse<__half>::to_half() const {
     return ImmutableMatrixSparse<__half>(*this);
 }

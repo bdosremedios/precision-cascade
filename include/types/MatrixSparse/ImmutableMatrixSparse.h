@@ -761,12 +761,12 @@ public:
 
     }
 
-//     MatrixSparse<T> operator*(const T &scalar) const {
-//         return typename Parent::SparseMatrix(Parent::operator*(scalar));
-//     }
-//     MatrixSparse<T> operator/(const T &scalar) const {
-//         return typename Parent::SparseMatrix(Parent::operator/(scalar));
-//     }
+    ImmutableMatrixSparse<T> operator*(const Scalar<T> &scalar) const;
+    ImmutableMatrixSparse<T> operator/(const Scalar<T> &scalar) const {
+        Scalar<T> temp(scalar);
+        return operator*(temp.reciprocol());
+    }
+
 //     MatrixVector<T> operator*(const MatrixVector<T> &vec) const {
 //         return typename Matrix<T, Dynamic, 1>::Matrix(Parent::operator*(vec.base()));
 //     }

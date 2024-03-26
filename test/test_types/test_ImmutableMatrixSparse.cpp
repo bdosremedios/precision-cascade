@@ -591,9 +591,6 @@ public:
     }
 
     // template <typename T>
-    // void TestScale() { TestScale_Base<MatrixSparse, T>(); }
-
-    // template <typename T>
     // void TestMatVec() { TestMatVec_Base<MatrixSparse, T>(); }
 
     // template <typename T>
@@ -841,11 +838,11 @@ TEST_F(ImmutableMatrixSparse_Test, TestBadBlock) {
     TestBadBlock();
 }
 
-// TEST_F(ImmutableMatrixSparse_Test, TestScale) {
-//     TestScale<__half>();
-//     TestScale<float>();
-//     TestScale<double>();
-// }
+TEST_F(ImmutableMatrixSparse_Test, TestScale) {
+    TestScale<__half>();
+    TestScale<float>();
+    TestScale<double>();
+}
 
 // TEST_F(ImmutableMatrixSparse_Test, TestScaleAssignment) {
 //     TestScaleAssignment<__half>();
