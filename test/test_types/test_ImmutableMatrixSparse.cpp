@@ -856,11 +856,11 @@ TEST_F(ImmutableMatrixSparse_Test, TestMaxMagElem) {
     TestMaxMagElem<double>();
 }
 
-// TEST_F(ImmutableMatrixSparse_Test, TestNormalizeMagnitude) {
-//     TestNormalizeMagnitude<__half>();
-//     TestNormalizeMagnitude<float>();
-//     TestNormalizeMagnitude<double>();
-// }
+TEST_F(ImmutableMatrixSparse_Test, TestNormalizeMagnitude) {
+    TestNormalizeMagnitude<__half>();
+    TestNormalizeMagnitude<float>();
+    TestNormalizeMagnitude<double>();
+}
 
 // TEST_F(ImmutableMatrixSparse_Test, TestMatVec) {
 //     TestMatVec<__half>();

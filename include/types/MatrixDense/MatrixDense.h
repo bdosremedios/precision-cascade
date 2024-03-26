@@ -489,7 +489,9 @@ public:
 
     }
 
-    void normalize_magnitude() { *this /= get_max_mag_elem(); }
+    void normalize_magnitude() {
+        *this /= get_max_mag_elem();
+    }
 
     Vector<T> operator*(const Vector<T> &vec) const;
 

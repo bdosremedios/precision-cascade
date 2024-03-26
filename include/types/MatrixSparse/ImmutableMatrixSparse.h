@@ -708,6 +708,10 @@ public:
 
     }
 
+    void normalize_magnitude() {
+        *this /= get_max_mag_elem();
+    }
+
     ImmutableMatrixSparse<T> transpose() const {
 
         int *curr_h_col_offsets = static_cast<int *>(malloc(mem_size_col_offsets()));
