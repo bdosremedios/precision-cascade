@@ -168,7 +168,7 @@ public:
         const int n_manual(3);
         const int nnz_manual(4);
 
-        int h_col_offsets[3] = {0, 2, 3};
+        int h_col_offsets[4] = {0, 2, 3, 4};
         int h_row_indices[4] = {0, 1, 1, 0};
         T h_vals[4] = {
             static_cast<T>(-5), static_cast<T>(3), static_cast<T>(3.5), static_cast<T>(-20)
@@ -247,7 +247,7 @@ public:
              {static_cast<T>(3), static_cast<T>(3.5), static_cast<T>(0.)}}
         );
 
-        int *h_col_offsets = static_cast<int *>(malloc(n_manual*sizeof(int)));
+        int *h_col_offsets = static_cast<int *>(malloc((n_manual+1)*sizeof(int)));
         int *h_row_indices = static_cast<int *>(malloc(nnz_manual*sizeof(int)));
         T *h_vals = static_cast<T *>(malloc(nnz_manual*sizeof(T)));
 
@@ -288,7 +288,7 @@ public:
               static_cast<T>(14), static_cast<T>(0)}}
         );
 
-        int *h_col_offsets_2 = static_cast<int *>(malloc(n_manual_2*sizeof(int)));
+        int *h_col_offsets_2 = static_cast<int *>(malloc((n_manual_2+1)*sizeof(int)));
         int *h_row_indices_2 = static_cast<int *>(malloc(nnz_manual_2*sizeof(int)));
         T *h_vals_2 = static_cast<T *>(malloc(nnz_manual_2*sizeof(T)));
 
@@ -340,7 +340,7 @@ public:
              {-1., 0., 0., 0., -0.5}}
         );
 
-        int *h_col_offsets = static_cast<int *>(malloc(n_manual*sizeof(int)));
+        int *h_col_offsets = static_cast<int *>(malloc((n_manual+1)*sizeof(int)));
         int *h_row_indices = static_cast<int *>(malloc(nnz_manual*sizeof(int)));
         double *h_vals = static_cast<double *>(malloc(nnz_manual*sizeof(double)));
         

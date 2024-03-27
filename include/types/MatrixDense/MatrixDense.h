@@ -32,7 +32,8 @@ private:
     friend class Vector<T>;
 
     cuHandleBundle cu_handles;
-    int m_rows = 0, n_cols = 0;
+    int m_rows = 0;
+    int n_cols = 0;
     T *d_mat = nullptr;
 
     size_t mem_size() const {
@@ -207,7 +208,7 @@ public:
         T *h_mat = static_cast<T *>(malloc(m_rows*n_cols*sizeof(T)));
         copy_data_to_ptr(h_mat, m_rows, n_cols);
         
-        int *h_col_offsets = static_cast<int *>(malloc(n_cols*sizeof(int)));
+        int *h_col_offsets = static_cast<int *>(malloc((n_cols+1)*sizeof(int)));
         std::vector<int> h_vec_row_indices;
         std::vector<T> h_vec_vals;
 
@@ -227,7 +228,8 @@ public:
             }
 
         }
-        int nnz = h_vec_row_indices.size();
+        h_col_offsets[n_cols] = next_col_offset;
+        int nnz = next_col_offset;
 
         ImmutableMatrixSparse<T> created_mat(cu_handles);
         if (nnz != 0) {

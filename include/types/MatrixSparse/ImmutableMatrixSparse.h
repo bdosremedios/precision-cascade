@@ -24,14 +24,15 @@ private:
     template <typename> friend class ImmutableMatrixSparse;
 
     cuHandleBundle cu_handles;
-    int m_rows = 0, n_cols = 0;
+    int m_rows = 0;
+    int n_cols = 0;
     int nnz = 0;
     int *d_col_offsets = nullptr;
     int *d_row_indices = nullptr;
     T *d_vals = nullptr;
 
     size_t mem_size_col_offsets() const {
-        return n_cols*sizeof(int);
+        return (n_cols+1)*sizeof(int);
     }
 
     size_t mem_size_row_indices() const {
@@ -133,7 +134,7 @@ public:
         allocate_d_mem();
 
         int *h_col_offsets = static_cast<int *>(malloc(mem_size_col_offsets()));
-        for (int i=0; i<n_cols; ++i) { h_col_offsets[i] = 0; }
+        for (int i=0; i<n_cols+1; ++i) { h_col_offsets[i] = 0; }
         check_cuda_error(cudaMemcpy(
             d_col_offsets, h_col_offsets, mem_size_col_offsets(), cudaMemcpyHostToDevice
         ));
@@ -194,6 +195,7 @@ public:
             }
 
         }
+        h_col_offsets[n_cols] = next_col_offset;
         nnz = vec_values.size();
 
         // Set remaining host vectors to values to load, and load column offsets, row indices
@@ -278,21 +280,18 @@ public:
             }
 
             if (nnz > 0) {
-            
                 check_cuda_error(cudaMemcpy(
                     d_row_indices,
                     other.d_row_indices,
                     mem_size_row_indices(),
                     cudaMemcpyDeviceToDevice
                 ));
-
                 check_cuda_error(cudaMemcpy(
                     d_vals,
                     other.d_vals,
                     mem_size_vals(),
                     cudaMemcpyDeviceToDevice
                 ));
-
             }
 
         }
@@ -415,19 +414,12 @@ public:
         // Get column offset and column size
         int col_offset_L;
         int col_offset_R;
-        if (col != n_cols-1) {
-            check_cuda_error(cudaMemcpy(
-                &col_offset_L, d_col_offsets+col, sizeof(int), cudaMemcpyDeviceToHost
-            ));
-            check_cuda_error(cudaMemcpy(
-                &col_offset_R, d_col_offsets+col+1, sizeof(int), cudaMemcpyDeviceToHost
-            ));
-        } else {
-            check_cuda_error(cudaMemcpy(
-                &col_offset_L, d_col_offsets+col, sizeof(int), cudaMemcpyDeviceToHost
-            ));
-            col_offset_R = nnz;
-        }
+        check_cuda_error(cudaMemcpy(
+            &col_offset_L, d_col_offsets+col, sizeof(int), cudaMemcpyDeviceToHost
+        ));
+        check_cuda_error(cudaMemcpy(
+            &col_offset_R, d_col_offsets+col+1, sizeof(int), cudaMemcpyDeviceToHost
+        ));
         size_t col_nnz_size = col_offset_R-col_offset_L;
 
         // Find if row index is non-zero and find location in val array
@@ -505,8 +497,8 @@ public:
 
         std::string col_offsets_str = "[";
         if (n_cols > 0) {
-            for (int i=0; i<n_cols-1; ++i) { col_offsets_str += std::format("{}, ", h_col_offsets[i]); }
-            col_offsets_str += std::format("{}", h_col_offsets[n_cols-1]);
+            for (int i=0; i<n_cols; ++i) { col_offsets_str += std::format("{}, ", h_col_offsets[i]); }
+            col_offsets_str += std::format("{}", h_col_offsets[n_cols]);
         }
         col_offsets_str += "]";
 
@@ -553,11 +545,11 @@ public:
         const cuHandleBundle &arg_cu_handles, int arg_m_rows, int arg_n_cols
     ) {
 
-        int *h_col_offsets = static_cast<int *>(malloc(arg_n_cols*sizeof(int)));
+        int *h_col_offsets = static_cast<int *>(malloc((arg_n_cols+1)*sizeof(int)));
         int *h_row_indices = static_cast<int *>(malloc(arg_m_rows*arg_n_cols*sizeof(int)));
         T *h_vals = static_cast<T *>(malloc(arg_m_rows*arg_n_cols*sizeof(T)));
 
-        for (int i=0; i<arg_n_cols; ++i) { h_col_offsets[i] = i*arg_m_rows; }
+        for (int i=0; i<arg_n_cols+1; ++i) { h_col_offsets[i] = i*arg_m_rows; }
         for (int i=0; i<arg_m_rows*arg_n_cols; ++i) { h_row_indices[i] = i%arg_m_rows; }
         for (int i=0; i<arg_m_rows*arg_n_cols; ++i) { h_vals[i] = static_cast<T>(1.); }
 
@@ -581,15 +573,15 @@ public:
 
         int smaller_dim = std::min(arg_m_rows, arg_n_cols);
 
-        int *h_col_offsets = static_cast<int *>(malloc(arg_n_cols*sizeof(int)));
+        int *h_col_offsets = static_cast<int *>(malloc((arg_n_cols+1)*sizeof(int)));
         int *h_row_indices = static_cast<int *>(malloc(smaller_dim*sizeof(int)));
         T *h_vals = static_cast<T *>(malloc(smaller_dim*sizeof(T)));
 
         if (arg_n_cols == smaller_dim) {
-            for (int i=0; i<arg_n_cols; ++i) { h_col_offsets[i] = i; }
+            for (int i=0; i<arg_n_cols+1; ++i) { h_col_offsets[i] = i; }
         } else {
             for (int i=0; i<smaller_dim; ++i) { h_col_offsets[i] = i; }
-            for (int i=smaller_dim; i<arg_n_cols; ++i) { h_col_offsets[i] = smaller_dim; }
+            for (int i=smaller_dim; i<arg_n_cols+1; ++i) { h_col_offsets[i] = smaller_dim; }
         }
 
         for (int i=0; i<smaller_dim; ++i) { h_row_indices[i] = i; }
@@ -623,7 +615,7 @@ public:
         std::uniform_real_distribution<double> val_dist(-1., 1.);
         std::uniform_real_distribution<double> fill_prob_dist(0., 1.);
 
-        int *h_col_offsets = static_cast<int *>(malloc(arg_n_cols*sizeof(int)));
+        int *h_col_offsets = static_cast<int *>(malloc((arg_n_cols+1)*sizeof(int)));
         std::vector<int> h_vec_row_indices;
         std::vector<T> h_vec_vals;
 
@@ -641,6 +633,7 @@ public:
                 }
             }
         }
+        h_col_offsets[arg_n_cols] = curr_nnz;
 
         ImmutableMatrixSparse<T> created_mat(arg_cu_handles);
         if (curr_nnz != 0) {
@@ -661,7 +654,7 @@ public:
 
     // *** Explicit Cast ***
     template <typename Cast_T>
-    ImmutableMatrixSparse<Cast_T> cast() const  {
+    ImmutableMatrixSparse<Cast_T> cast() const {
         throw std::runtime_error("ImmutableMatrixSparse: invalid cast conversion");
     }
 
@@ -723,17 +716,13 @@ public:
             m_rows, n_cols, nnz
         );
 
-        int *trans_h_col_offsets = static_cast<int *>(malloc(m_rows*sizeof(int)));
+        int *trans_h_col_offsets = static_cast<int *>(malloc((m_rows+1)*sizeof(int)));
         int *trans_h_row_indices = static_cast<int *>(malloc(mem_size_row_indices()));
         T *trans_h_vals = static_cast<T *>(malloc(mem_size_vals()));
 
-        for (int j=0; j<m_rows; ++j) { trans_h_col_offsets[j] = 0; }
-        for (int k=0; k<nnz; ++k) {
-            if (curr_h_row_indices[k] != (m_rows-1)) {
-                ++trans_h_col_offsets[curr_h_row_indices[k]+1];
-            }
-        }
-        for (int j=1; j<m_rows; ++j) { trans_h_col_offsets[j] += trans_h_col_offsets[j-1]; }
+        for (int j=0; j<m_rows+1; ++j) { trans_h_col_offsets[j] = 0; }
+        for (int k=0; k<nnz; ++k) { ++trans_h_col_offsets[curr_h_row_indices[k]+1]; }
+        for (int j=1; j<m_rows+1; ++j) { trans_h_col_offsets[j] += trans_h_col_offsets[j-1]; }
 
         int *trans_col_count = static_cast<int *>(malloc(m_rows*sizeof(int)));
         for (int j=0; j<m_rows; ++j) { trans_col_count[j] = 0; }
@@ -776,19 +765,7 @@ public:
 
     }
 
-//     MatrixVector<T> operator*(const MatrixVector<T> &vec) const {
-//         return typename Matrix<T, Dynamic, 1>::Matrix(Parent::operator*(vec.base()));
-//     }
-//     T norm() const { return Parent::norm(); } // Needed for testing
-//     MatrixSparse<T> operator+(const MatrixSparse<T> &mat) const { // Needed for testing
-//         return typename Parent::SparseMatrix(Parent::operator+(mat));
-//     }
-//     MatrixSparse<T> operator-(const MatrixSparse<T> &mat) const { // Needed for testing
-//         return typename Parent::SparseMatrix(Parent::operator-(mat));
-//     }
-//     MatrixSparse<T> operator*(const MatrixSparse<T> &mat) const { // Needed for testing
-//         return typename Parent::SparseMatrix(Parent::operator*(mat));
-//     }
+    Vector<T> operator*(const Vector<T> &vec) const;
 
     // Nested lightweight wrapper class representing matrix column and assignment/elem access
     // Requires: cast to Vector<T>
@@ -832,28 +809,18 @@ public:
             // Get column offset and column size
             int col_offset_L;
             int col_offset_R;
-            if (col_idx != associated_mat_ptr->n_cols-1) {
-                check_cuda_error(cudaMemcpy(
-                    &col_offset_L,
-                    associated_mat_ptr->d_col_offsets + col_idx,
-                    sizeof(int),
-                    cudaMemcpyDeviceToHost
-                ));
-                check_cuda_error(cudaMemcpy(
-                    &col_offset_R,
-                    associated_mat_ptr->d_col_offsets + col_idx+1,
-                    sizeof(int),
-                    cudaMemcpyDeviceToHost
-                ));
-            } else {
-                check_cuda_error(cudaMemcpy(
-                    &col_offset_L,
-                    associated_mat_ptr->d_col_offsets + col_idx,
-                    sizeof(int),
-                    cudaMemcpyDeviceToHost
-                ));
-                col_offset_R = associated_mat_ptr->nnz;
-            }
+            check_cuda_error(cudaMemcpy(
+                &col_offset_L,
+                associated_mat_ptr->d_col_offsets + col_idx,
+                sizeof(int),
+                cudaMemcpyDeviceToHost
+            ));
+            check_cuda_error(cudaMemcpy(
+                &col_offset_R,
+                associated_mat_ptr->d_col_offsets + col_idx + 1,
+                sizeof(int),
+                cudaMemcpyDeviceToHost
+            ));
             size_t col_nnz_size = col_offset_R-col_offset_L;
 
             int *h_row_indices = static_cast<int *>(malloc(col_nnz_size*sizeof(int)));
@@ -930,7 +897,7 @@ public:
             T *h_mat = static_cast<T *>(malloc(m_rows*n_cols*sizeof(T)));
             for (int i=0; i<m_rows*n_cols; ++i) { h_mat[i] = static_cast<T>(0.); }
 
-            int *h_col_offsets = static_cast<int *>(malloc(associated_mat_ptr->n_cols*sizeof(int)));
+            int *h_col_offsets = static_cast<int *>(malloc((associated_mat_ptr->n_cols+1)*sizeof(int)));
             int *h_row_indices = static_cast<int *>(malloc(associated_mat_ptr->nnz*sizeof(int)));
             T *h_vals = static_cast<T *>(malloc(associated_mat_ptr->nnz*sizeof(T)));
             associated_mat_ptr->copy_data_to_ptr(
@@ -943,12 +910,7 @@ public:
 
                 // Get offsets of row indices/values for corresponding offseted column of block
                 int col_offset_L = h_col_offsets[col_idx_start + j];
-                int col_offset_R;
-                if ((col_idx_start + j + 1) == associated_mat_ptr->n_cols) {
-                    col_offset_R = associated_mat_ptr->nnz;
-                } else {
-                    col_offset_R = h_col_offsets[col_idx_start + j + 1];
-                }
+                int col_offset_R = h_col_offsets[col_idx_start + j + 1];
                 int col_size_nnz = col_offset_R-col_offset_L;
 
                 // Load values into h_mat if they are within the block rows
