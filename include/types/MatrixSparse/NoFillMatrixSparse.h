@@ -1,7 +1,7 @@
 #include "types/Vector/Vector.h"
 
-#ifndef IMMUTABLEMATRIXSPARSE_H
-#define IMMUTABLEMATRIXSPARSE_H
+#ifndef NOFILLMATRIXSPARSE_H
+#define NOFILLMATRIXSPARSE_H
 
 #include <cmath>
 #include <vector>
@@ -17,11 +17,11 @@
 #include "types/MatrixDense/MatrixDense.h"
 
 template <typename T>
-class ImmutableMatrixSparse
+class NoFillMatrixSparse
 {
 private:
 
-    template <typename> friend class ImmutableMatrixSparse;
+    template <typename> friend class NoFillMatrixSparse;
 
     cuHandleBundle cu_handles;
     int m_rows = 0;
@@ -84,13 +84,13 @@ private:
 
     }
 
-    ImmutableMatrixSparse<__half> to_half() const;
-    ImmutableMatrixSparse<float> to_float() const;
-    ImmutableMatrixSparse<double> to_double() const;
+    NoFillMatrixSparse<__half> to_half() const;
+    NoFillMatrixSparse<float> to_float() const;
+    NoFillMatrixSparse<double> to_double() const;
     
     // Load space for arg_nnz non-zeros but without instantiation, used for private
     // construction with known sized val array
-    ImmutableMatrixSparse(
+    NoFillMatrixSparse(
         const cuHandleBundle &arg_cu_handles,
         int arg_m_rows,
         int arg_n_cols,
@@ -109,7 +109,7 @@ public:
     class Block; class Col; // Forward declaration of nested classes
 
     // *** Basic Constructors ***
-    ImmutableMatrixSparse(
+    NoFillMatrixSparse(
         const cuHandleBundle &arg_cu_handles,
         int arg_m_rows,
         int arg_n_cols
@@ -122,12 +122,12 @@ public:
 
         if (arg_m_rows < 0) {
             throw std::runtime_error(
-                "ImmutableMatrixSparse: invalid arg_m_rows dim for constructor"
+                "NoFillMatrixSparse: invalid arg_m_rows dim for constructor"
             );
         }
         if ((arg_n_cols < 0) || ((arg_m_rows == 0) && (arg_n_cols != 0))) {
             throw std::runtime_error(
-                "ImmutableMatrixSparse: invalid arg_n_cols dim for constructor"
+                "NoFillMatrixSparse: invalid arg_n_cols dim for constructor"
             );
         }
 
@@ -142,11 +142,11 @@ public:
 
     }
 
-    ImmutableMatrixSparse(const cuHandleBundle &arg_cu_handles):
-        ImmutableMatrixSparse(arg_cu_handles, 0, 0)
+    NoFillMatrixSparse(const cuHandleBundle &arg_cu_handles):
+        NoFillMatrixSparse(arg_cu_handles, 0, 0)
     {}
 
-    ImmutableMatrixSparse(
+    NoFillMatrixSparse(
         const cuHandleBundle &arg_cu_handles,
         std::initializer_list<std::initializer_list<T>> li
     ):
@@ -171,7 +171,7 @@ public:
                 row_iters.push_back(std::cbegin(*curr_row));
             } else {
                 throw std::runtime_error(
-                    "ImmutableMatrixSparse: Non-consistent row size encounted in initializer list"
+                    "NoFillMatrixSparse: Non-consistent row size encounted in initializer list"
                 );
             }
         }
@@ -237,19 +237,19 @@ public:
     }
 
     // *** Copy Constructor ***
-    ImmutableMatrixSparse(const ImmutableMatrixSparse &other) {
+    NoFillMatrixSparse(const NoFillMatrixSparse &other) {
         *this = other;
     }
 
     // *** Destructor *** 
-    ~ImmutableMatrixSparse() {
+    ~NoFillMatrixSparse() {
         check_cuda_error(cudaFree(d_col_offsets));
         check_cuda_error(cudaFree(d_row_indices));
         check_cuda_error(cudaFree(d_vals));
     }
 
     // *** Copy Assignment ***
-    ImmutableMatrixSparse & operator=(const ImmutableMatrixSparse &other) {
+    NoFillMatrixSparse & operator=(const NoFillMatrixSparse &other) {
 
         if (this != &other) {
 
@@ -301,7 +301,7 @@ public:
     }
 
     // *** Dynamic Memory *** (assumes outer code handles dynamic memory properly)
-    ImmutableMatrixSparse(
+    NoFillMatrixSparse(
         const cuHandleBundle &source_cu_handles,
         int *h_col_offsets,
         int *h_row_indices,
@@ -318,17 +318,17 @@ public:
 
         if (source_m_rows < 0) {
             throw std::runtime_error(
-                "ImmutableMatrixSparse: invalid source_m_rows dim for dynamic mem constructor"
+                "NoFillMatrixSparse: invalid source_m_rows dim for dynamic mem constructor"
             );
         }
         if (source_n_cols < 0) {
             throw std::runtime_error(
-                "ImmutableMatrixSparse: invalid source_n_cols dim for dynamic mem constructor"
+                "NoFillMatrixSparse: invalid source_n_cols dim for dynamic mem constructor"
             );
         }
         if (source_nnz < 0) {
             throw std::runtime_error(
-                "ImmutableMatrixSparse: invalid source_nnz dim for dynamic mem constructor"
+                "NoFillMatrixSparse: invalid source_nnz dim for dynamic mem constructor"
             );
         }
 
@@ -366,13 +366,13 @@ public:
     ) const {
 
         if (target_m_rows != m_rows) {
-            throw std::runtime_error("ImmutableMatrixSparse: invalid target_m_rows dim for copy_data_to_ptr");
+            throw std::runtime_error("NoFillMatrixSparse: invalid target_m_rows dim for copy_data_to_ptr");
         }
         if (target_n_cols != n_cols) {
-            throw std::runtime_error("ImmutableMatrixSparse: invalid target_n_cols dim for copy_data_to_ptr");
+            throw std::runtime_error("NoFillMatrixSparse: invalid target_n_cols dim for copy_data_to_ptr");
         }
         if (target_nnz != nnz) {
-            throw std::runtime_error("ImmutableMatrixSparse: invalid target_nnz dim for copy_data_to_ptr");
+            throw std::runtime_error("NoFillMatrixSparse: invalid target_nnz dim for copy_data_to_ptr");
         }
 
         if (n_cols > 0) {
@@ -405,10 +405,10 @@ public:
     const Scalar<T> get_elem(int row, int col) const {
 
         if ((row < 0) || (row >= m_rows)) {
-            throw std::runtime_error("ImmutableMatrixSparse: invalid row access in get_elem");
+            throw std::runtime_error("NoFillMatrixSparse: invalid row access in get_elem");
         }
         if ((col < 0) || (col >= n_cols)) {
-            throw std::runtime_error("ImmutableMatrixSparse: invalid col access in get_elem");
+            throw std::runtime_error("NoFillMatrixSparse: invalid col access in get_elem");
         }
 
         // Get column offset and column size
@@ -452,7 +452,7 @@ public:
     Col get_col(int col) const {
 
         if ((col < 0) || (col >= n_cols)) {
-            throw std::runtime_error("ImmutableMatrixSparse: invalid col access in get_col");
+            throw std::runtime_error("NoFillMatrixSparse: invalid col access in get_col");
         }
 
         return Col(this, col);
@@ -462,16 +462,16 @@ public:
     Block get_block(int start_row, int start_col, int block_rows, int block_cols) const {
 
         if ((start_row < 0) || (start_row >= m_rows)) {
-            throw std::runtime_error("ImmutableMatrixSparse: invalid starting row in block");
+            throw std::runtime_error("NoFillMatrixSparse: invalid starting row in block");
         }
         if ((start_col < 0) || (start_col >= n_cols)) {
-            throw std::runtime_error("ImmutableMatrixSparse: invalid starting col in block");
+            throw std::runtime_error("NoFillMatrixSparse: invalid starting col in block");
         }
         if ((block_rows < 0) || (start_row+block_rows > m_rows)) {
-            throw std::runtime_error("ImmutableMatrixSparse: invalid number of rows in block");
+            throw std::runtime_error("NoFillMatrixSparse: invalid number of rows in block");
         }
         if ((block_cols < 0) || (start_col+block_cols > n_cols)) {
-            throw std::runtime_error("ImmutableMatrixSparse: invalid number of cols in block");
+            throw std::runtime_error("NoFillMatrixSparse: invalid number of cols in block");
         }
 
         return Block(this, start_row, start_col, block_rows, block_cols);
@@ -535,13 +535,13 @@ public:
     }
 
     // *** Static Creation ***
-    static ImmutableMatrixSparse<T> Zero(
+    static NoFillMatrixSparse<T> Zero(
         const cuHandleBundle &arg_cu_handles, int arg_m_rows, int arg_n_cols
     ) {
-        return ImmutableMatrixSparse<T>(arg_cu_handles, arg_m_rows, arg_n_cols);
+        return NoFillMatrixSparse<T>(arg_cu_handles, arg_m_rows, arg_n_cols);
     }
 
-    static ImmutableMatrixSparse<T> Ones(
+    static NoFillMatrixSparse<T> Ones(
         const cuHandleBundle &arg_cu_handles, int arg_m_rows, int arg_n_cols
     ) {
 
@@ -553,7 +553,7 @@ public:
         for (int i=0; i<arg_m_rows*arg_n_cols; ++i) { h_row_indices[i] = i%arg_m_rows; }
         for (int i=0; i<arg_m_rows*arg_n_cols; ++i) { h_vals[i] = static_cast<T>(1.); }
 
-        ImmutableMatrixSparse<T> ret_mat(
+        NoFillMatrixSparse<T> ret_mat(
             arg_cu_handles,
             h_col_offsets, h_row_indices, h_vals,
             arg_m_rows, arg_n_cols, arg_m_rows*arg_n_cols
@@ -567,7 +567,7 @@ public:
 
     }
 
-    static ImmutableMatrixSparse<T> Identity(
+    static NoFillMatrixSparse<T> Identity(
         const cuHandleBundle &arg_cu_handles, int arg_m_rows, int arg_n_cols
     ) {
 
@@ -588,7 +588,7 @@ public:
     
         for (int i=0; i<smaller_dim; ++i) { h_vals[i] = static_cast<T>(1.); }
 
-        ImmutableMatrixSparse<T> ret_mat(
+        NoFillMatrixSparse<T> ret_mat(
             arg_cu_handles,
             h_col_offsets, h_row_indices, h_vals,
             arg_m_rows, arg_n_cols, smaller_dim
@@ -602,12 +602,12 @@ public:
 
     }
 
-    static ImmutableMatrixSparse<T> Random(
+    static NoFillMatrixSparse<T> Random(
         const cuHandleBundle &arg_cu_handles, int arg_m_rows, int arg_n_cols, double fill_prob
     ) {
 
         if (!((0. <= fill_prob) && (fill_prob <= 1.))) {
-            throw std::runtime_error("ImmutableMatrixSparse: Random invalid fill_prob");
+            throw std::runtime_error("NoFillMatrixSparse: Random invalid fill_prob");
         }
         
         std::random_device rd;
@@ -635,15 +635,15 @@ public:
         }
         h_col_offsets[arg_n_cols] = curr_nnz;
 
-        ImmutableMatrixSparse<T> created_mat(arg_cu_handles);
+        NoFillMatrixSparse<T> created_mat(arg_cu_handles);
         if (curr_nnz != 0) {
-            created_mat = ImmutableMatrixSparse<T>(
+            created_mat = NoFillMatrixSparse<T>(
                 arg_cu_handles,
                 h_col_offsets, &h_vec_row_indices[0], &h_vec_vals[0],
                 arg_m_rows, arg_n_cols, curr_nnz
             );
         } else {
-            created_mat = ImmutableMatrixSparse<T>(arg_cu_handles, arg_m_rows, arg_n_cols);
+            created_mat = NoFillMatrixSparse<T>(arg_cu_handles, arg_m_rows, arg_n_cols);
         }
 
         free(h_col_offsets);
@@ -654,23 +654,23 @@ public:
 
     // *** Explicit Cast ***
     template <typename Cast_T>
-    ImmutableMatrixSparse<Cast_T> cast() const {
-        throw std::runtime_error("ImmutableMatrixSparse: invalid cast conversion");
+    NoFillMatrixSparse<Cast_T> cast() const {
+        throw std::runtime_error("NoFillMatrixSparse: invalid cast conversion");
     }
 
-    template <> ImmutableMatrixSparse<__half> cast<__half>() const { return to_half(); }
-    template <> ImmutableMatrixSparse<float> cast<float>() const { return to_float(); }
-    template <> ImmutableMatrixSparse<double> cast<double>() const { return to_double(); }
+    template <> NoFillMatrixSparse<__half> cast<__half>() const { return to_half(); }
+    template <> NoFillMatrixSparse<float> cast<float>() const { return to_float(); }
+    template <> NoFillMatrixSparse<double> cast<double>() const { return to_double(); }
 
     // *** Arithmetic and Compound Operations ***
-    ImmutableMatrixSparse<T> operator*(const Scalar<T> &scalar) const;
-    ImmutableMatrixSparse<T> operator/(const Scalar<T> &scalar) const {
+    NoFillMatrixSparse<T> operator*(const Scalar<T> &scalar) const;
+    NoFillMatrixSparse<T> operator/(const Scalar<T> &scalar) const {
         Scalar<T> temp(scalar);
         return operator*(temp.reciprocol());
     }
     
-    ImmutableMatrixSparse<T> & operator*=(const Scalar<T> &scalar);
-    ImmutableMatrixSparse<T> & operator/=(const Scalar<T> &scalar) {
+    NoFillMatrixSparse<T> & operator*=(const Scalar<T> &scalar);
+    NoFillMatrixSparse<T> & operator/=(const Scalar<T> &scalar) {
         Scalar<T> temp(scalar);
         return operator*=(temp.reciprocol());
     }
@@ -705,7 +705,7 @@ public:
         *this /= get_max_mag_elem();
     }
 
-    ImmutableMatrixSparse<T> transpose() const {
+    NoFillMatrixSparse<T> transpose() const {
 
         int *curr_h_col_offsets = static_cast<int *>(malloc(mem_size_col_offsets()));
         int *curr_h_row_indices = static_cast<int *>(malloc(mem_size_row_indices()));
@@ -751,7 +751,7 @@ public:
         free(curr_h_row_indices);
         free(curr_h_vals);
 
-        ImmutableMatrixSparse<T> created_mat(
+        NoFillMatrixSparse<T> created_mat(
             cu_handles,
             trans_h_col_offsets, trans_h_row_indices, trans_h_vals,
             n_cols, m_rows, nnz
@@ -773,13 +773,13 @@ public:
     {
     private:
 
-        friend ImmutableMatrixSparse<T>;
+        friend NoFillMatrixSparse<T>;
 
         const int m_rows;
         const int col_idx;
-        const ImmutableMatrixSparse<T> *associated_mat_ptr;
+        const NoFillMatrixSparse<T> *associated_mat_ptr;
 
-        Col(const ImmutableMatrixSparse<T> *arg_associated_mat_ptr, int arg_col_idx):
+        Col(const NoFillMatrixSparse<T> *arg_associated_mat_ptr, int arg_col_idx):
             associated_mat_ptr(arg_associated_mat_ptr),
             col_idx(arg_col_idx),
             m_rows(arg_associated_mat_ptr->m_rows)
@@ -787,14 +787,14 @@ public:
 
     public:
 
-        Col(const ImmutableMatrixSparse<T>::Col &other):
+        Col(const NoFillMatrixSparse<T>::Col &other):
             Col(other.associated_mat_ptr, other.col_idx)
         {}
 
         Scalar<T> get_elem(int arg_row) {
 
             if ((arg_row < 0) || (arg_row >= m_rows)) {
-                throw std::runtime_error("ImmutableMatrixSparse::Col: invalid row access in get_elem");
+                throw std::runtime_error("NoFillMatrixSparse::Col: invalid row access in get_elem");
             }
 
             return associated_mat_ptr->get_elem(arg_row, col_idx);
@@ -864,16 +864,16 @@ public:
     {
     private:
 
-        friend ImmutableMatrixSparse<T>;
+        friend NoFillMatrixSparse<T>;
 
         const int row_idx_start;
         const int col_idx_start;
         const int m_rows;
         const int n_cols;
-        const ImmutableMatrixSparse<T> *associated_mat_ptr;
+        const NoFillMatrixSparse<T> *associated_mat_ptr;
 
         Block(
-            const ImmutableMatrixSparse<T> *arg_associated_mat_ptr,
+            const NoFillMatrixSparse<T> *arg_associated_mat_ptr,
             int arg_row_idx_start, int arg_col_idx_start,
             int arg_m_rows, int arg_n_cols
         ):
@@ -884,7 +884,7 @@ public:
     
     public:
 
-        Block(const ImmutableMatrixSparse<T>::Block &other):
+        Block(const NoFillMatrixSparse<T>::Block &other):
             Block(
                 other.associated_mat_ptr,
                 other.row_idx_start, other.col_idx_start,
@@ -938,10 +938,10 @@ public:
         Scalar<T> get_elem(int row, int col) {
 
             if ((row < 0) || (row >= m_rows)) {
-                throw std::runtime_error("ImmutableMatrixSparse::Block: invalid row access in get_elem");
+                throw std::runtime_error("NoFillMatrixSparse::Block: invalid row access in get_elem");
             }
             if ((col < 0) || (col >= n_cols)) {
-                throw std::runtime_error("ImmutableMatrixSparse::Block: invalid col access in get_elem");
+                throw std::runtime_error("NoFillMatrixSparse::Block: invalid col access in get_elem");
             }
 
             return associated_mat_ptr->get_elem(row_idx_start+row, col_idx_start+col);

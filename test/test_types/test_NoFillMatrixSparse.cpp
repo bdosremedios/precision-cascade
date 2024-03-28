@@ -1,8 +1,8 @@
 #include "test_Matrix.h"
 
-#include "types/MatrixSparse/ImmutableMatrixSparse.h"
+#include "types/MatrixSparse/NoFillMatrixSparse.h"
 
-class ImmutableMatrixSparse_Test: public Matrix_Test<ImmutableMatrixSparse>
+class NoFillMatrixSparse_Test: public Matrix_Test<NoFillMatrixSparse>
 {
 public:
 
@@ -13,7 +13,7 @@ public:
         const int n(4);
 
         // Test simple counting up
-        ImmutableMatrixSparse<T> test_mat_1(
+        NoFillMatrixSparse<T> test_mat_1(
             TestBase::bundle,
             {{static_cast<T>(1.), static_cast<T>(2.), static_cast<T>(3.), static_cast<T>(4.)},
              {static_cast<T>(5.), static_cast<T>(6.), static_cast<T>(7.), static_cast<T>(8.)},
@@ -31,7 +31,7 @@ public:
         }
 
         // Modify first row to be all -1.
-        ImmutableMatrixSparse<T> test_mat_2(
+        NoFillMatrixSparse<T> test_mat_2(
             TestBase::bundle,
             {{static_cast<T>(-1.), static_cast<T>(-1.), static_cast<T>(-1.), static_cast<T>(-1.)},
              {static_cast<T>(5.), static_cast<T>(6.), static_cast<T>(7.), static_cast<T>(8.)},
@@ -53,7 +53,7 @@ public:
         }
 
         // Set index 4 row as decreasing by -1 from -1
-        ImmutableMatrixSparse<T> test_mat_3(
+        NoFillMatrixSparse<T> test_mat_3(
             TestBase::bundle,
             {{static_cast<T>(-1.), static_cast<T>(-1.), static_cast<T>(-1.), static_cast<T>(-1.)},
              {static_cast<T>(5.), static_cast<T>(6.), static_cast<T>(7.), static_cast<T>(8.)},
@@ -79,7 +79,7 @@ public:
         }
 
         // Set index 2 col as increasing by 1 from -5
-        ImmutableMatrixSparse<T> test_mat_4(
+        NoFillMatrixSparse<T> test_mat_4(
             TestBase::bundle,
             {{static_cast<T>(-1.), static_cast<T>(-1.), static_cast<T>(-5.), static_cast<T>(-1.)},
              {static_cast<T>(5.), static_cast<T>(6.), static_cast<T>(-4.), static_cast<T>(8.)},
@@ -110,7 +110,7 @@ public:
         }
 
         // Test reading an all zero matrix
-        ImmutableMatrixSparse<T> test_mat_5(
+        NoFillMatrixSparse<T> test_mat_5(
             TestBase::bundle,
             {{static_cast<T>(0.), static_cast<T>(0.), static_cast<T>(0.), static_cast<T>(0.)},
              {static_cast<T>(0.), static_cast<T>(0.), static_cast<T>(0.), static_cast<T>(0.)},
@@ -125,7 +125,7 @@ public:
         }
 
         // Test reading a sparse matrix
-        ImmutableMatrixSparse<T> test_mat_6(
+        NoFillMatrixSparse<T> test_mat_6(
             TestBase::bundle,
             {{static_cast<T>(1.), static_cast<T>(0.), static_cast<T>(0.), static_cast<T>(0.)},
              {static_cast<T>(0.), static_cast<T>(0.), static_cast<T>(0.), static_cast<T>(4.)},
@@ -153,7 +153,7 @@ public:
         
         constexpr int m(24);
         constexpr int n(12);
-        ImmutableMatrixSparse<double> test_mat(TestBase::bundle, m, n);
+        NoFillMatrixSparse<double> test_mat(TestBase::bundle, m, n);
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [&]() { test_mat.get_elem(0, -1); });
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [&]() { test_mat.get_elem(0, n); });
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [&]() { test_mat.get_elem(-1, 0); });
@@ -174,7 +174,7 @@ public:
             static_cast<T>(-5), static_cast<T>(3), static_cast<T>(3.5), static_cast<T>(-20)
         };
 
-        ImmutableMatrixSparse<T> mat(
+        NoFillMatrixSparse<T> mat(
             TestBase::bundle,
             h_col_offsets, h_row_indices, h_vals,
             m_manual, n_manual, nnz_manual
@@ -202,7 +202,7 @@ public:
         CHECK_FUNC_HAS_RUNTIME_ERROR(
             print_errors,
             [=]() {
-                ImmutableMatrixSparse<double>(
+                NoFillMatrixSparse<double>(
                     TestBase::bundle,
                     h_col_offsets_dummy, h_row_indices_dummy, h_vals_dummy,
                     -1, 4, 4
@@ -213,7 +213,7 @@ public:
         CHECK_FUNC_HAS_RUNTIME_ERROR(
             print_errors,
             [=]() {
-                ImmutableMatrixSparse<double>(
+                NoFillMatrixSparse<double>(
                     TestBase::bundle,
                     h_col_offsets_dummy, h_row_indices_dummy, h_vals_dummy,
                     4, -2, 4
@@ -224,7 +224,7 @@ public:
         CHECK_FUNC_HAS_RUNTIME_ERROR(
             print_errors,
             [=]() {
-                ImmutableMatrixSparse<double>(
+                NoFillMatrixSparse<double>(
                     TestBase::bundle,
                     h_col_offsets_dummy, h_row_indices_dummy, h_vals_dummy,
                     4, 4, -1
@@ -241,7 +241,7 @@ public:
         const int n_manual(3);
         const int nnz_manual(4);
 
-        ImmutableMatrixSparse<T> mat_manual(
+        NoFillMatrixSparse<T> mat_manual(
             TestBase::bundle,
             {{static_cast<T>(-5), static_cast<T>(0.), static_cast<T>(-20)},
              {static_cast<T>(3), static_cast<T>(3.5), static_cast<T>(0.)}}
@@ -278,7 +278,7 @@ public:
         const int n_manual_2(5);
         const int nnz_manual_2(8);
 
-        ImmutableMatrixSparse<T> mat_manual_2(
+        NoFillMatrixSparse<T> mat_manual_2(
             TestBase::bundle,
             {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3),
               static_cast<T>(0), static_cast<T>(5)},
@@ -332,7 +332,7 @@ public:
         const int m_manual(4);
         const int n_manual(5);
         const int nnz_manual(6);
-        ImmutableMatrixSparse<double> mat(
+        NoFillMatrixSparse<double> mat(
             TestBase::bundle,
             {{1., 0., 0., 0., 0.},
              {0., 3.5, 20., 0., 0.},
@@ -430,8 +430,8 @@ public:
         constexpr double miss_tol(0.05);
 
         // Check that zero fill_prob gives empty matrix
-        ImmutableMatrixSparse<T> test_rand_empty(
-            ImmutableMatrixSparse<T>::Random(TestBase::bundle, m_rand, n_rand, 0.)
+        NoFillMatrixSparse<T> test_rand_empty(
+            NoFillMatrixSparse<T>::Random(TestBase::bundle, m_rand, n_rand, 0.)
         );
         ASSERT_EQ(test_rand_empty.rows(), m_rand);
         ASSERT_EQ(test_rand_empty.cols(), n_rand);
@@ -440,8 +440,8 @@ public:
         // Just test for non-zero fill_prob gives right size and numbers aren't generally the same
         // (check middle numbers are different from 5 adjacent above and below or all are equally zero)
         // also check if fill probability is right with 5% error
-        ImmutableMatrixSparse<T> test_rand_full(
-            ImmutableMatrixSparse<T>::Random(TestBase::bundle, m_rand, n_rand, 1.)
+        NoFillMatrixSparse<T> test_rand_full(
+            NoFillMatrixSparse<T>::Random(TestBase::bundle, m_rand, n_rand, 1.)
         );
         ASSERT_EQ(test_rand_full.rows(), m_rand);
         ASSERT_EQ(test_rand_full.cols(), n_rand);
@@ -472,8 +472,8 @@ public:
             miss_tol
         );
 
-        ImmutableMatrixSparse<T> test_rand_67(
-            ImmutableMatrixSparse<T>::Random(TestBase::bundle, m_rand, n_rand, 0.67)
+        NoFillMatrixSparse<T> test_rand_67(
+            NoFillMatrixSparse<T>::Random(TestBase::bundle, m_rand, n_rand, 0.67)
         );
         ASSERT_EQ(test_rand_67.rows(), m_rand);
         ASSERT_EQ(test_rand_67.cols(), n_rand);
@@ -500,8 +500,8 @@ public:
             miss_tol
         );
 
-        ImmutableMatrixSparse<T> test_rand_50(
-            ImmutableMatrixSparse<T>::Random(TestBase::bundle, m_rand, n_rand, 0.5)
+        NoFillMatrixSparse<T> test_rand_50(
+            NoFillMatrixSparse<T>::Random(TestBase::bundle, m_rand, n_rand, 0.5)
         );
         ASSERT_EQ(test_rand_50.rows(), m_rand);
         ASSERT_EQ(test_rand_50.cols(), n_rand);
@@ -533,7 +533,7 @@ public:
     template <typename T>
     void TestBlock() {
 
-        const ImmutableMatrixSparse<T> mat (
+        const NoFillMatrixSparse<T> mat (
             TestBase::bundle,
             {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3),
               static_cast<T>(4), static_cast<T>(0)},
@@ -546,7 +546,7 @@ public:
         );
 
         // Test copy constructor and access for block 0, 0, 4, 2
-        typename ImmutableMatrixSparse<T>::Block blk_0_0_4_2(mat.get_block(0, 0, 4, 2));
+        typename NoFillMatrixSparse<T>::Block blk_0_0_4_2(mat.get_block(0, 0, 4, 2));
         ASSERT_EQ(blk_0_0_4_2.get_elem(0, 0).get_scalar(), static_cast<T>(1));
         ASSERT_EQ(blk_0_0_4_2.get_elem(1, 0).get_scalar(), static_cast<T>(0));
         ASSERT_EQ(blk_0_0_4_2.get_elem(2, 0).get_scalar(), static_cast<T>(0));
@@ -557,7 +557,7 @@ public:
         ASSERT_EQ(blk_0_0_4_2.get_elem(3, 1).get_scalar(), static_cast<T>(0));
 
         // Test copy constructor and access for block 2, 1, 2, 3
-        typename ImmutableMatrixSparse<T>::Block blk_2_1_2_3(mat.get_block(2, 1, 2, 3));
+        typename NoFillMatrixSparse<T>::Block blk_2_1_2_3(mat.get_block(2, 1, 2, 3));
         ASSERT_EQ(blk_2_1_2_3.get_elem(0, 0).get_scalar(), static_cast<T>(0));
         ASSERT_EQ(blk_2_1_2_3.get_elem(0, 1).get_scalar(), static_cast<T>(0));
         ASSERT_EQ(blk_2_1_2_3.get_elem(0, 2).get_scalar(), static_cast<T>(0));
@@ -572,11 +572,11 @@ public:
 
         constexpr int m_rand(4);
         constexpr int n_rand(3);
-        ImmutableMatrixSparse<T> mat(
-            ImmutableMatrixSparse<T>::Random(TestBase::bundle, n_rand, m_rand, 0.67)
+        NoFillMatrixSparse<T> mat(
+            NoFillMatrixSparse<T>::Random(TestBase::bundle, n_rand, m_rand, 0.67)
         );
 
-        ImmutableMatrixSparse<T> mat_transposed(mat.transpose());
+        NoFillMatrixSparse<T> mat_transposed(mat.transpose());
         ASSERT_EQ(mat_transposed.rows(), m_rand);
         ASSERT_EQ(mat_transposed.cols(), n_rand);
         for (int i=0; i<m_rand; ++i) {
@@ -608,14 +608,14 @@ public:
         constexpr int n(15);
         constexpr double fill_ratio(0.67);
 
-        ImmutableMatrixSparse<double> mat_dbl(
-            ImmutableMatrixSparse<double>::Random(TestBase::bundle, m, n, fill_ratio)
+        NoFillMatrixSparse<double> mat_dbl(
+            NoFillMatrixSparse<double>::Random(TestBase::bundle, m, n, fill_ratio)
         );
 
-        ImmutableMatrixSparse<double> dbl_to_dbl(mat_dbl.template cast<double>());
+        NoFillMatrixSparse<double> dbl_to_dbl(mat_dbl.template cast<double>());
         ASSERT_MATRIX_EQ(dbl_to_dbl, mat_dbl);
 
-        ImmutableMatrixSparse<float> dbl_to_sgl(mat_dbl.template cast<float>());
+        NoFillMatrixSparse<float> dbl_to_sgl(mat_dbl.template cast<float>());
         ASSERT_EQ(dbl_to_sgl.rows(), m);
         ASSERT_EQ(dbl_to_sgl.cols(), n);
         for (int i=0; i<m; ++i) {
@@ -629,7 +629,7 @@ public:
             }
         }
 
-        ImmutableMatrixSparse<__half> dbl_to_hlf(mat_dbl.template cast<__half>());
+        NoFillMatrixSparse<__half> dbl_to_hlf(mat_dbl.template cast<__half>());
         ASSERT_EQ(dbl_to_hlf.rows(), m);
         ASSERT_EQ(dbl_to_hlf.cols(), n);
         for (int i=0; i<m; ++i) {
@@ -643,14 +643,14 @@ public:
             }
         }
 
-        ImmutableMatrixSparse<float> mat_sgl(
-            ImmutableMatrixSparse<float>::Random(TestBase::bundle, m, n, fill_ratio)
+        NoFillMatrixSparse<float> mat_sgl(
+            NoFillMatrixSparse<float>::Random(TestBase::bundle, m, n, fill_ratio)
         );
 
-        ImmutableMatrixSparse<float> sgl_to_sgl(mat_sgl.template cast<float>());
+        NoFillMatrixSparse<float> sgl_to_sgl(mat_sgl.template cast<float>());
         ASSERT_MATRIX_EQ(sgl_to_sgl, mat_sgl);
     
-        ImmutableMatrixSparse<double> sgl_to_dbl(mat_sgl.template cast<double>());
+        NoFillMatrixSparse<double> sgl_to_dbl(mat_sgl.template cast<double>());
         ASSERT_EQ(sgl_to_dbl.rows(), m);
         ASSERT_EQ(sgl_to_dbl.cols(), n);
         for (int i=0; i<m; ++i) {
@@ -664,7 +664,7 @@ public:
             }
         }
 
-        ImmutableMatrixSparse<__half> sgl_to_hlf(mat_sgl.template cast<__half>());
+        NoFillMatrixSparse<__half> sgl_to_hlf(mat_sgl.template cast<__half>());
         ASSERT_EQ(sgl_to_hlf.rows(), m);
         ASSERT_EQ(sgl_to_hlf.cols(), n);
         for (int i=0; i<m; ++i) {
@@ -678,14 +678,14 @@ public:
             }
         }
 
-        ImmutableMatrixSparse<__half> mat_hlf(
-            ImmutableMatrixSparse<__half>::Random(TestBase::bundle, m, n, fill_ratio)
+        NoFillMatrixSparse<__half> mat_hlf(
+            NoFillMatrixSparse<__half>::Random(TestBase::bundle, m, n, fill_ratio)
         );
 
-        ImmutableMatrixSparse<__half> hlf_to_hlf(mat_hlf.template cast<__half>());
+        NoFillMatrixSparse<__half> hlf_to_hlf(mat_hlf.template cast<__half>());
         ASSERT_MATRIX_EQ(hlf_to_hlf, mat_hlf);
 
-        ImmutableMatrixSparse<float> hlf_to_sgl(mat_hlf.template cast<float>());
+        NoFillMatrixSparse<float> hlf_to_sgl(mat_hlf.template cast<float>());
         ASSERT_EQ(hlf_to_sgl.rows(), m);
         ASSERT_EQ(hlf_to_sgl.cols(), n);
         for (int i=0; i<m; ++i) {
@@ -699,7 +699,7 @@ public:
             }
         }
 
-        ImmutableMatrixSparse<double> hlf_to_dbl(mat_hlf.template cast<double>());
+        NoFillMatrixSparse<double> hlf_to_dbl(mat_hlf.template cast<double>());
         ASSERT_EQ(hlf_to_dbl.rows(), m);
         ASSERT_EQ(hlf_to_dbl.cols(), n);
         for (int i=0; i<m; ++i) {
@@ -717,221 +717,221 @@ public:
 
 };
 
-TEST_F(ImmutableMatrixSparse_Test, TestPropertyAccess) {
+TEST_F(NoFillMatrixSparse_Test, TestPropertyAccess) {
     TestPropertyAccess<__half>();
     TestPropertyAccess<float>();
     TestPropertyAccess<double>();
 }
 
-TEST_F(ImmutableMatrixSparse_Test, TestNonZeros) {
+TEST_F(NoFillMatrixSparse_Test, TestNonZeros) {
     TestNonZeros<__half>();
     TestNonZeros<float>();
     TestNonZeros<double>();
 }
 
-TEST_F(ImmutableMatrixSparse_Test, TestPrintAndInfoString) {
+TEST_F(NoFillMatrixSparse_Test, TestPrintAndInfoString) {
     TestPrintAndInfoString();
 }
 
-TEST_F(ImmutableMatrixSparse_Test, TestConstruction) {
+TEST_F(NoFillMatrixSparse_Test, TestConstruction) {
     TestConstruction<__half>();
     TestConstruction<float>();
     TestConstruction<double>();
 }
 
-TEST_F(ImmutableMatrixSparse_Test, TestBadConstruction) {
+TEST_F(NoFillMatrixSparse_Test, TestBadConstruction) {
     TestBadConstruction();
 }
 
-TEST_F(ImmutableMatrixSparse_Test, TestListInitialization) {
+TEST_F(NoFillMatrixSparse_Test, TestListInitialization) {
     TestListInitialization<__half>();
     TestListInitialization<float>();
     TestListInitialization<double>();
 }
 
-TEST_F(ImmutableMatrixSparse_Test, TestBadListInitialization) {
+TEST_F(NoFillMatrixSparse_Test, TestBadListInitialization) {
     TestBadListInitialization();
 }
 
-TEST_F(ImmutableMatrixSparse_Test, TestCoeffJustGetAccess) {
+TEST_F(NoFillMatrixSparse_Test, TestCoeffJustGetAccess) {
     TestCoeffJustGetAccess<__half>();
     TestCoeffJustGetAccess<float>();
     TestCoeffJustGetAccess<double>();
 }
 
-TEST_F(ImmutableMatrixSparse_Test, TestBadCoeffJustGetAccess) {
+TEST_F(NoFillMatrixSparse_Test, TestBadCoeffJustGetAccess) {
     TestBadCoeffJustGetAccess();
 }
 
-TEST_F(ImmutableMatrixSparse_Test, TestCopyAssignment) {
+TEST_F(NoFillMatrixSparse_Test, TestCopyAssignment) {
     TestCopyAssignment<__half>();
     TestCopyAssignment<float>();
     TestCopyAssignment<double>();
 }
 
-TEST_F(ImmutableMatrixSparse_Test, TestCopyConstructor) {
+TEST_F(NoFillMatrixSparse_Test, TestCopyConstructor) {
     TestCopyConstructor<__half>();
     TestCopyConstructor<float>();
     TestCopyConstructor<double>();
 }
 
-TEST_F(ImmutableMatrixSparse_Test, TestDynamicMemConstruction) {
+TEST_F(NoFillMatrixSparse_Test, TestDynamicMemConstruction) {
     TestDynamicMemConstruction<__half>();
     TestDynamicMemConstruction<float>();
     TestDynamicMemConstruction<double>();
 }
 
-TEST_F(ImmutableMatrixSparse_Test, TestBadDynamicMemConstruction) {
+TEST_F(NoFillMatrixSparse_Test, TestBadDynamicMemConstruction) {
     TestBadDynamicMemConstruction();
 }
 
-TEST_F(ImmutableMatrixSparse_Test, TestDynamicMemCopyToPtr) {
+TEST_F(NoFillMatrixSparse_Test, TestDynamicMemCopyToPtr) {
     TestDynamicMemCopyToPtr<__half>();
     TestDynamicMemCopyToPtr<float>();
     TestDynamicMemCopyToPtr<double>();
 }
 
-TEST_F(ImmutableMatrixSparse_Test, TestBadDynamicMemCopyToPtr) {
+TEST_F(NoFillMatrixSparse_Test, TestBadDynamicMemCopyToPtr) {
     TestBadDynamicMemCopyToPtr();
 }
-TEST_F(ImmutableMatrixSparse_Test, TestZeroMatrixCreation) {
+TEST_F(NoFillMatrixSparse_Test, TestZeroMatrixCreation) {
     TestZeroMatrixCreation<__half>();
     TestZeroMatrixCreation<float>();
     TestZeroMatrixCreation<double>();
 }
 
-TEST_F(ImmutableMatrixSparse_Test, TestOnesMatrixCreation) {
+TEST_F(NoFillMatrixSparse_Test, TestOnesMatrixCreation) {
     TestOnesMatrixCreation<__half>();
     TestOnesMatrixCreation<float>();
     TestOnesMatrixCreation<double>();
 }
 
-TEST_F(ImmutableMatrixSparse_Test, TestIdentityMatrixCreation) {
+TEST_F(NoFillMatrixSparse_Test, TestIdentityMatrixCreation) {
     TestIdentityMatrixCreation<__half>();
     TestIdentityMatrixCreation<float>();
     TestIdentityMatrixCreation<double>();
 }
 
-TEST_F(ImmutableMatrixSparse_Test, TestRandomMatrixCreation) {
+TEST_F(NoFillMatrixSparse_Test, TestRandomMatrixCreation) {
     TestRandomMatrixCreation<__half>();
     TestRandomMatrixCreation<float>();
     TestRandomMatrixCreation<double>();
 }
 
-TEST_F(ImmutableMatrixSparse_Test, TestCol) {
+TEST_F(NoFillMatrixSparse_Test, TestCol) {
     TestCol<__half>();
     TestCol<float>();
     TestCol<double>();
 }
 
-TEST_F(ImmutableMatrixSparse_Test, TestBadCol) {
+TEST_F(NoFillMatrixSparse_Test, TestBadCol) {
     TestBadCol();
 }
 
-TEST_F(ImmutableMatrixSparse_Test, TestBlock) {
+TEST_F(NoFillMatrixSparse_Test, TestBlock) {
     TestBlock<__half>();
     TestBlock<float>();
     TestBlock<double>();
 }
 
-TEST_F(ImmutableMatrixSparse_Test, TestBadBlock) {
+TEST_F(NoFillMatrixSparse_Test, TestBadBlock) {
     TestBadBlock();
 }
 
-TEST_F(ImmutableMatrixSparse_Test, TestScale) {
+TEST_F(NoFillMatrixSparse_Test, TestScale) {
     TestScale<__half>();
     TestScale<float>();
     TestScale<double>();
 }
 
-TEST_F(ImmutableMatrixSparse_Test, TestScaleAssignment) {
+TEST_F(NoFillMatrixSparse_Test, TestScaleAssignment) {
     TestScaleAssignment<__half>();
     TestScaleAssignment<float>();
     TestScaleAssignment<double>();
 }
 
-TEST_F(ImmutableMatrixSparse_Test, TestMaxMagElem) {
+TEST_F(NoFillMatrixSparse_Test, TestMaxMagElem) {
     TestMaxMagElem<__half>();
     TestMaxMagElem<float>();
     TestMaxMagElem<double>();
 }
 
-TEST_F(ImmutableMatrixSparse_Test, TestNormalizeMagnitude) {
+TEST_F(NoFillMatrixSparse_Test, TestNormalizeMagnitude) {
     TestNormalizeMagnitude<__half>();
     TestNormalizeMagnitude<float>();
     TestNormalizeMagnitude<double>();
 }
 
-// TEST_F(ImmutableMatrixSparse_Test, TestMatVec) {
+// TEST_F(NoFillMatrixSparse_Test, TestMatVec) {
 //     TestMatVec<__half>();
 //     TestMatVec<float>();
 //     TestMatVec<double>();
 // }
 
-// TEST_F(ImmutableMatrixSparse_Test, TestBadMatVec) {
+// TEST_F(NoFillMatrixSparse_Test, TestBadMatVec) {
 //     TestBadMatVec<__half>();
 //     TestBadMatVec<float>();
 //     TestBadMatVec<double>();
 // }
 
-// TEST_F(ImmutableMatrixSparse_Test, TestTransposeMatVec) {
+// TEST_F(NoFillMatrixSparse_Test, TestTransposeMatVec) {
 //     TestTransposeMatVec<__half>();
 //     TestTransposeMatVec<float>();
 //     TestTransposeMatVec<double>();
 // }
 
-// TEST_F(ImmutableMatrixSparse_Test, TestBadTransposeMatVec) {
+// TEST_F(NoFillMatrixSparse_Test, TestBadTransposeMatVec) {
 //     TestBadTransposeMatVec<__half>();
 //     TestBadTransposeMatVec<float>();
 //     TestBadTransposeMatVec<double>();
 // }
 
-TEST_F(ImmutableMatrixSparse_Test, TestTranspose) {
+TEST_F(NoFillMatrixSparse_Test, TestTranspose) {
     TestTranspose<__half>();
     TestTranspose<float>();
     TestTranspose<double>();
 }
 
-TEST_F(ImmutableMatrixSparse_Test, TestRandomTranspose) {
+TEST_F(NoFillMatrixSparse_Test, TestRandomTranspose) {
     TestRandomTranspose<__half>();
     TestRandomTranspose<float>();
     TestRandomTranspose<double>();
 }
 
-// TEST_F(ImmutableMatrixSparse_Test, TestMatMat) {
+// TEST_F(NoFillMatrixSparse_Test, TestMatMat) {
 //     TestMatMat<__half>();
 //     TestMatMat<float>();
 //     TestMatMat<double>();
 // }
 
-// TEST_F(ImmutableMatrixSparse_Test, TestBadMatMat) {
+// TEST_F(NoFillMatrixSparse_Test, TestBadMatMat) {
 //     TestBadMatMat<__half>();
 //     TestBadMatMat<float>();
 //     TestBadMatMat<double>();
 // }
 
-// TEST_F(ImmutableMatrixSparse_Test, TestAddSub) {
+// TEST_F(NoFillMatrixSparse_Test, TestAddSub) {
 //     TestAddSub<__half>();
 //     TestAddSub<float>();
 //     TestAddSub<double>();
 // }
 
-// TEST_F(ImmutableMatrixSparse_Test, TestBadAddSub) {
+// TEST_F(NoFillMatrixSparse_Test, TestBadAddSub) {
 //     TestBadAddSub<__half>();
 //     TestBadAddSub<float>();
 //     TestBadAddSub<double>();
 // }
 
-// TEST_F(ImmutableMatrixSparse_Test, TestNorm) {
+// TEST_F(NoFillMatrixSparse_Test, TestNorm) {
 //     TestNorm<__half>();
 //     TestNorm<float>();
 //     TestNorm<double>();
 // }
 
-TEST_F(ImmutableMatrixSparse_Test, TestCast) {
+TEST_F(NoFillMatrixSparse_Test, TestCast) {
     TestCast();
 }
 
-TEST_F(ImmutableMatrixSparse_Test, TestBadCast) {
+TEST_F(NoFillMatrixSparse_Test, TestBadCast) {
     TestBadCast();
 }

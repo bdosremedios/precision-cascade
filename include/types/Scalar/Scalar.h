@@ -13,7 +13,7 @@
 
 template <typename T> class Vector;
 template <typename T> class MatrixDense;
-template <typename T> class ImmutableMatrixSparse;
+template <typename T> class NoFillMatrixSparse;
 
 template <typename T>
 class Scalar
@@ -23,7 +23,7 @@ private:
     template <typename> friend class Scalar;
     template <typename> friend class Vector;
     template <typename> friend class MatrixDense;
-    template <typename> friend class ImmutableMatrixSparse;
+    template <typename> friend class NoFillMatrixSparse;
 
     T *d_scalar = nullptr;
 

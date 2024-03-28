@@ -1,8 +1,8 @@
-#include "types/MatrixSparse/ImmutableMatrixSparse.h"
+#include "types/MatrixSparse/NoFillMatrixSparse.h"
 
-ImmutableMatrixSparse<float> ImmutableMatrixSparse<float>::operator*(const Scalar<float> &scalar) const {
+NoFillMatrixSparse<float> NoFillMatrixSparse<float>::operator*(const Scalar<float> &scalar) const {
 
-    ImmutableMatrixSparse<float> created_mat(*this);
+    NoFillMatrixSparse<float> created_mat(*this);
 
     check_cublas_status(
         cublasScalEx(
@@ -18,7 +18,7 @@ ImmutableMatrixSparse<float> ImmutableMatrixSparse<float>::operator*(const Scala
 
 }
 
-ImmutableMatrixSparse<float> & ImmutableMatrixSparse<float>::operator*=(const Scalar<float> &scalar) {
+NoFillMatrixSparse<float> & NoFillMatrixSparse<float>::operator*=(const Scalar<float> &scalar) {
 
     check_cublas_status(
         cublasScalEx(
@@ -34,9 +34,9 @@ ImmutableMatrixSparse<float> & ImmutableMatrixSparse<float>::operator*=(const Sc
 
 }
 
-ImmutableMatrixSparse<__half> ImmutableMatrixSparse<float>::to_half() const {
+NoFillMatrixSparse<__half> NoFillMatrixSparse<float>::to_half() const {
 
-    ImmutableMatrixSparse<__half> created_mat(cu_handles, m_rows, n_cols, nnz);
+    NoFillMatrixSparse<__half> created_mat(cu_handles, m_rows, n_cols, nnz);
 
     double NUM_THREADS = 1024; // threads per thread block just 1 warp
     double NUM_BLOCKS = static_cast<double>(
@@ -65,13 +65,13 @@ ImmutableMatrixSparse<__half> ImmutableMatrixSparse<float>::to_half() const {
 
 }
 
-ImmutableMatrixSparse<float> ImmutableMatrixSparse<float>::to_float() const {
-    return ImmutableMatrixSparse<float>(*this);
+NoFillMatrixSparse<float> NoFillMatrixSparse<float>::to_float() const {
+    return NoFillMatrixSparse<float>(*this);
 }
 
-ImmutableMatrixSparse<double> ImmutableMatrixSparse<float>::to_double() const {
+NoFillMatrixSparse<double> NoFillMatrixSparse<float>::to_double() const {
 
-    ImmutableMatrixSparse<double> created_mat(cu_handles, m_rows, n_cols, nnz);
+    NoFillMatrixSparse<double> created_mat(cu_handles, m_rows, n_cols, nnz);
 
     double NUM_THREADS = 1024; // threads per thread block just 1 warp
     double NUM_BLOCKS = static_cast<double>(

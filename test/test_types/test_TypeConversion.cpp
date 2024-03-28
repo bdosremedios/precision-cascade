@@ -7,7 +7,7 @@ class TypeConversion_Test: public TestBase
 public:
 
     template <typename T>
-    void TestDenseToImmutableSparse() {
+    void TestDenseToNoFillSparse() {
 
         // Test manual
         constexpr int m_manual(3);
@@ -19,7 +19,7 @@ public:
              {static_cast<T>(9), static_cast<T>(10), static_cast<T>(11), static_cast<T>(0)}}
         );
 
-        ImmutableMatrixSparse<T> sparse_manual(dense_manual.sparse());
+        NoFillMatrixSparse<T> sparse_manual(dense_manual.sparse());
 
         ASSERT_EQ(sparse_manual.rows(), m_manual);
         ASSERT_EQ(sparse_manual.cols(), n_manual);
@@ -35,7 +35,7 @@ public:
         constexpr int n_random(7);
         MatrixDense<T> dense_rand(MatrixDense<T>::Random(TestBase::bundle, 12, 7));
 
-        ImmutableMatrixSparse<T> sparse_rand(dense_rand.sparse());
+        NoFillMatrixSparse<T> sparse_rand(dense_rand.sparse());
 
         ASSERT_EQ(sparse_rand.rows(), m_random);
         ASSERT_EQ(sparse_rand.cols(), n_random);
@@ -49,9 +49,9 @@ public:
     }
 
     template <typename T>
-    void TestImmutableSparseBlockToDense() {
+    void TestNoFillSparseBlockToDense() {
 
-        const ImmutableMatrixSparse<T> mat (
+        const NoFillMatrixSparse<T> mat (
             TestBase::bundle,
             {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3),
               static_cast<T>(4), static_cast<T>(0)},
@@ -210,16 +210,16 @@ public:
 
 };
 
-TEST_F(TypeConversion_Test, TestDenseToImmutableSparse) {
-    TestDenseToImmutableSparse<__half>();
-    TestDenseToImmutableSparse<float>();
-    TestDenseToImmutableSparse<double>();
+TEST_F(TypeConversion_Test, TestDenseToNoFillSparse) {
+    TestDenseToNoFillSparse<__half>();
+    TestDenseToNoFillSparse<float>();
+    TestDenseToNoFillSparse<double>();
 }
 
-TEST_F(TypeConversion_Test, TestImmutableSparseBlockToDense) {
-    TestImmutableSparseBlockToDense<__half>();
-    TestImmutableSparseBlockToDense<float>();
-    TestImmutableSparseBlockToDense<double>();
+TEST_F(TypeConversion_Test, TestNoFillSparseBlockToDense) {
+    TestNoFillSparseBlockToDense<__half>();
+    TestNoFillSparseBlockToDense<float>();
+    TestNoFillSparseBlockToDense<double>();
 }
 
 TEST_F(TypeConversion_Test, TestMatrixDenseColToVector) {
@@ -228,10 +228,10 @@ TEST_F(TypeConversion_Test, TestMatrixDenseColToVector) {
     TestMatrixColToVector<MatrixDense, double>();
 }
 
-TEST_F(TypeConversion_Test, TestImmutableSparseColToVector) {
-    TestMatrixColToVector<ImmutableMatrixSparse, __half>();
-    TestMatrixColToVector<ImmutableMatrixSparse, float>();
-    TestMatrixColToVector<ImmutableMatrixSparse, double>();
+TEST_F(TypeConversion_Test, TestNoFillSparseColToVector) {
+    TestMatrixColToVector<NoFillMatrixSparse, __half>();
+    TestMatrixColToVector<NoFillMatrixSparse, float>();
+    TestMatrixColToVector<NoFillMatrixSparse, double>();
 }
 
 TEST_F(TypeConversion_Test, TestVectorToMatrixDenseCol) {

@@ -1,8 +1,8 @@
-#include "types/MatrixSparse/ImmutableMatrixSparse.h"
+#include "types/MatrixSparse/NoFillMatrixSparse.h"
 
-ImmutableMatrixSparse<__half> ImmutableMatrixSparse<__half>::operator*(const Scalar<__half> &scalar) const {
+NoFillMatrixSparse<__half> NoFillMatrixSparse<__half>::operator*(const Scalar<__half> &scalar) const {
 
-    ImmutableMatrixSparse<__half> created_mat(*this);
+    NoFillMatrixSparse<__half> created_mat(*this);
 
     Scalar<float> temp_cast(scalar.cast<float>());
 
@@ -21,7 +21,7 @@ ImmutableMatrixSparse<__half> ImmutableMatrixSparse<__half>::operator*(const Sca
 }
 
 
-ImmutableMatrixSparse<__half> & ImmutableMatrixSparse<__half>::operator*=(const Scalar<__half> &scalar) {
+NoFillMatrixSparse<__half> & NoFillMatrixSparse<__half>::operator*=(const Scalar<__half> &scalar) {
 
     Scalar<float> temp_cast(scalar.cast<float>());
 
@@ -39,13 +39,13 @@ ImmutableMatrixSparse<__half> & ImmutableMatrixSparse<__half>::operator*=(const 
 
 }
 
-ImmutableMatrixSparse<__half> ImmutableMatrixSparse<__half>::to_half() const {
-    return ImmutableMatrixSparse<__half>(*this);
+NoFillMatrixSparse<__half> NoFillMatrixSparse<__half>::to_half() const {
+    return NoFillMatrixSparse<__half>(*this);
 }
 
-ImmutableMatrixSparse<float> ImmutableMatrixSparse<__half>::to_float() const {
+NoFillMatrixSparse<float> NoFillMatrixSparse<__half>::to_float() const {
 
-    ImmutableMatrixSparse<float> created_mat(cu_handles, m_rows, n_cols, nnz);
+    NoFillMatrixSparse<float> created_mat(cu_handles, m_rows, n_cols, nnz);
 
     double NUM_THREADS = 1024; // threads per thread block just 1 warp
     double NUM_BLOCKS = static_cast<double>(
@@ -74,9 +74,9 @@ ImmutableMatrixSparse<float> ImmutableMatrixSparse<__half>::to_float() const {
 
 }
 
-ImmutableMatrixSparse<double> ImmutableMatrixSparse<__half>::to_double() const {
+NoFillMatrixSparse<double> NoFillMatrixSparse<__half>::to_double() const {
     
-    ImmutableMatrixSparse<double> created_mat(cu_handles, m_rows, n_cols, nnz);
+    NoFillMatrixSparse<double> created_mat(cu_handles, m_rows, n_cols, nnz);
 
     double NUM_THREADS = 1024; // threads per thread block just 1 warp
     double NUM_BLOCKS = static_cast<double>(

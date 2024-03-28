@@ -1,8 +1,8 @@
-#include "types/MatrixSparse/ImmutableMatrixSparse.h"
+#include "types/MatrixSparse/NoFillMatrixSparse.h"
 
-ImmutableMatrixSparse<double> ImmutableMatrixSparse<double>::operator*(const Scalar<double> &scalar) const {
+NoFillMatrixSparse<double> NoFillMatrixSparse<double>::operator*(const Scalar<double> &scalar) const {
 
-    ImmutableMatrixSparse<double> created_mat(*this);
+    NoFillMatrixSparse<double> created_mat(*this);
 
     check_cublas_status(
         cublasScalEx(
@@ -18,7 +18,7 @@ ImmutableMatrixSparse<double> ImmutableMatrixSparse<double>::operator*(const Sca
 
 }
 
-ImmutableMatrixSparse<double> & ImmutableMatrixSparse<double>::operator*=(const Scalar<double> &scalar) {
+NoFillMatrixSparse<double> & NoFillMatrixSparse<double>::operator*=(const Scalar<double> &scalar) {
 
     check_cublas_status(
         cublasScalEx(
@@ -34,9 +34,9 @@ ImmutableMatrixSparse<double> & ImmutableMatrixSparse<double>::operator*=(const 
 
 }
 
-ImmutableMatrixSparse<__half> ImmutableMatrixSparse<double>::to_half() const {
+NoFillMatrixSparse<__half> NoFillMatrixSparse<double>::to_half() const {
 
-    ImmutableMatrixSparse<__half> created_mat(cu_handles, m_rows, n_cols, nnz);
+    NoFillMatrixSparse<__half> created_mat(cu_handles, m_rows, n_cols, nnz);
 
     double NUM_THREADS = 1024; // threads per thread block just 1 warp
     double NUM_BLOCKS = static_cast<double>(
@@ -65,9 +65,9 @@ ImmutableMatrixSparse<__half> ImmutableMatrixSparse<double>::to_half() const {
 
 }
 
-ImmutableMatrixSparse<float> ImmutableMatrixSparse<double>::to_float() const {
+NoFillMatrixSparse<float> NoFillMatrixSparse<double>::to_float() const {
 
-    ImmutableMatrixSparse<float> created_mat(cu_handles, m_rows, n_cols, nnz);
+    NoFillMatrixSparse<float> created_mat(cu_handles, m_rows, n_cols, nnz);
 
     double NUM_THREADS = 1024; // threads per thread block just 1 warp
     double NUM_BLOCKS = static_cast<double>(
@@ -96,6 +96,6 @@ ImmutableMatrixSparse<float> ImmutableMatrixSparse<double>::to_float() const {
 
 }
 
-ImmutableMatrixSparse<double> ImmutableMatrixSparse<double>::to_double() const {
-    return ImmutableMatrixSparse<double>(*this);
+NoFillMatrixSparse<double> NoFillMatrixSparse<double>::to_double() const {
+    return NoFillMatrixSparse<double>(*this);
 }

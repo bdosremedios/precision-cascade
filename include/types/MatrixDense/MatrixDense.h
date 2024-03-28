@@ -21,7 +21,7 @@
 #include "types/GeneralMatrix/GeneralMatrix_gpu_kernels.cuh"
 
 #include "types/Scalar/Scalar.h"
-#include "types/MatrixSparse/ImmutableMatrixSparse.h"
+#include "types/MatrixSparse/NoFillMatrixSparse.h"
 
 template <typename T>
 class MatrixDense
@@ -198,12 +198,12 @@ public:
         *this = block.copy_to_mat();
     }
 
-    MatrixDense(const typename ImmutableMatrixSparse<T>::Block &block) {
+    MatrixDense(const typename NoFillMatrixSparse<T>::Block &block) {
         *this = block.copy_to_mat();
     }
 
     // *** Conversion Methods ***
-    ImmutableMatrixSparse<T> sparse() const {
+    NoFillMatrixSparse<T> sparse() const {
 
         T *h_mat = static_cast<T *>(malloc(m_rows*n_cols*sizeof(T)));
         copy_data_to_ptr(h_mat, m_rows, n_cols);
@@ -231,15 +231,15 @@ public:
         h_col_offsets[n_cols] = next_col_offset;
         int nnz = next_col_offset;
 
-        ImmutableMatrixSparse<T> created_mat(cu_handles);
+        NoFillMatrixSparse<T> created_mat(cu_handles);
         if (nnz != 0) {
-            created_mat = ImmutableMatrixSparse<T>(
+            created_mat = NoFillMatrixSparse<T>(
                 cu_handles,
                 h_col_offsets, &h_vec_row_indices[0], &h_vec_vals[0],
                 m_rows, n_cols, nnz
             );
         } else {
-            created_mat = ImmutableMatrixSparse<T>(cu_handles, m_rows, n_cols);
+            created_mat = NoFillMatrixSparse<T>(cu_handles, m_rows, n_cols);
         }
 
         free(h_mat);

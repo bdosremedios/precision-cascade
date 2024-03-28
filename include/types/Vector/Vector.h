@@ -19,7 +19,7 @@
 
 #include "types/Scalar/Scalar.h"
 #include "types/MatrixDense/MatrixDense.h"
-#include "types/MatrixSparse/ImmutableMatrixSparse.h"
+#include "types/MatrixSparse/NoFillMatrixSparse.h"
 
 template <typename T>
 class Vector
@@ -118,7 +118,7 @@ public:
         *this = col.copy_to_vec();
     }
 
-    Vector(const typename ImmutableMatrixSparse<T>::Col &col) {
+    Vector(const typename NoFillMatrixSparse<T>::Col &col) {
         *this = col.copy_to_vec();
     }
 

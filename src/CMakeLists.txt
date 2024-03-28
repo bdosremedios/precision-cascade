@@ -63,9 +63,9 @@ add_library(
     types/MatrixDense/MatrixDense_hlf.cu
     types/MatrixDense/MatrixDense_sgl.cu
     types/MatrixDense/MatrixDense_dbl.cu
-    types/MatrixSparse/ImmutableMatrixSparse_hlf.cu
-    types/MatrixSparse/ImmutableMatrixSparse_sgl.cu
-    types/MatrixSparse/ImmutableMatrixSparse_dbl.cu
+    types/MatrixSparse/NoFillMatrixSparse_hlf.cu
+    types/MatrixSparse/NoFillMatrixSparse_sgl.cu
+    types/MatrixSparse/NoFillMatrixSparse_dbl.cu
 )
 
 target_link_options(precision-cascade PUBLIC "/NODEFAULTLIB:LIBCMT")
