@@ -44,7 +44,7 @@ Vector<__half> NoFillMatrixSparse<__half>::matvec_prod_subroutine(
 
     if (vec.rows() != n_cols) {
         throw std::runtime_error(
-            "NoFillMatrixSparse: invalid vec in matrix-vector prod (operator*(const Vector<__half> &vec))"
+            "NoFillMatrixSparse: invalid vec in matvec_prod_subroutine"
         );
     }
 
