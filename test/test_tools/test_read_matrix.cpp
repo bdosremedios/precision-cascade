@@ -1,6 +1,7 @@
 #include "../test.h"
 
 #include "tools/read_matrix.h"
+#include "tools/DenseConverter.h"
 
 // General matrix read tests
 class MatrixRead_General_Test: public TestBase
@@ -128,23 +129,33 @@ public:
     template <template <typename> typename M>
     void ReadPrecise(
         fs::path precise_file,
-        M<T> target_precise
+        MatrixDense<T> target_precise
     ) {
 
         M<T> test_precise(read_matrixCSV<M, T>(TestBase::bundle, precise_file));
-        ASSERT_MATRIX_NEAR(test_precise, target_precise, static_cast<T>(Tol<T>::roundoff()));
+        DenseConverter<M, T> converter;
+        ASSERT_MATRIX_NEAR(
+            test_precise,
+            converter.convert_matrix(target_precise),
+            static_cast<T>(Tol<T>::roundoff())
+        );
 
     }
 
     template <template <typename> typename M>
     void ReadDifferentThanPrecise(
         fs::path precise_file,
-        M<T> target_precise
+        MatrixDense<T> target_precise
     ) {
 
         T eps(static_cast<T>(1.5)*static_cast<T>(Tol<T>::roundoff()));
-        M<T> miss_precise_up(target_precise + M<T>::Ones(TestBase::bundle, 2, 2)*eps);
-        M<T> miss_precise_down(target_precise - M<T>::Ones(TestBase::bundle, 2, 2)*eps);
+        DenseConverter<M, T> converter;
+        M<T> miss_precise_up(
+            converter.convert_matrix(target_precise + MatrixDense<T>::Ones(TestBase::bundle, 2, 2)*eps)
+        );
+        M<T> miss_precise_down(
+            converter.convert_matrix(target_precise - MatrixDense<T>::Ones(TestBase::bundle, 2, 2)*eps)
+        );
 
         M<T> test_precise(read_matrixCSV<M, T>(TestBase::bundle, precise_file));
         ASSERT_MATRIX_LT(test_precise, miss_precise_up);
@@ -209,7 +220,7 @@ TEST_F(MatrixRead_Double_Test, ReadPreciseMatrix) {
     );
 
     ReadPrecise<MatrixDense>(precise_file, target);
-    ReadPrecise<NoFillMatrixSparse>(precise_file, target.sparse());
+    ReadPrecise<NoFillMatrixSparse>(precise_file, target);
 
 }
 
@@ -224,7 +235,7 @@ TEST_F(MatrixRead_Double_Test, ReadDifferentThanPreciseMatrix) {
     );
 
     ReadDifferentThanPrecise<MatrixDense>(precise_file, target);
-    ReadDifferentThanPrecise<NoFillMatrixSparse>(precise_file, target.sparse());
+    ReadDifferentThanPrecise<NoFillMatrixSparse>(precise_file, target);
 
 }
 
@@ -239,7 +250,7 @@ TEST_F(MatrixRead_Double_Test, ReadPreciseMatrixDoubleLimit) {
     );
     
     ReadPrecise<MatrixDense>(precise_file, target);
-    ReadPrecise<NoFillMatrixSparse>(precise_file, target.sparse());
+    ReadPrecise<NoFillMatrixSparse>(precise_file, target);
 
 }
 
@@ -254,7 +265,7 @@ TEST_F(MatrixRead_Double_Test, ReadDifferentThanPreciseMatrixDoubleLimit) {
     );
 
     ReadDifferentThanPrecise<MatrixDense>(precise_file, target);
-    ReadDifferentThanPrecise<NoFillMatrixSparse>(precise_file, target.sparse());
+    ReadDifferentThanPrecise<NoFillMatrixSparse>(precise_file, target);
 
 }
 
@@ -282,7 +293,7 @@ TEST_F(MatrixRead_Single_Test, ReadPreciseMatrix) {
     );
 
     ReadPrecise<MatrixDense>(precise_file, target);
-    ReadPrecise<NoFillMatrixSparse>(precise_file, target.sparse());
+    ReadPrecise<NoFillMatrixSparse>(precise_file, target);
 
 }
 
@@ -297,7 +308,7 @@ TEST_F(MatrixRead_Single_Test, ReadDifferentThanPreciseMatrix) {
     );
 
     ReadDifferentThanPrecise<MatrixDense>(precise_file, target);
-    ReadDifferentThanPrecise<NoFillMatrixSparse>(precise_file, target.sparse());
+    ReadDifferentThanPrecise<NoFillMatrixSparse>(precise_file, target);
 
 }
 
@@ -325,7 +336,7 @@ TEST_F(MatrixRead_Half_Test, ReadPreciseMatrix) {
     );
 
     ReadPrecise<MatrixDense>(precise_file, target);
-    ReadPrecise<NoFillMatrixSparse>(precise_file, target.sparse());
+    ReadPrecise<NoFillMatrixSparse>(precise_file, target);
 
 }
 
@@ -340,6 +351,6 @@ TEST_F(MatrixRead_Half_Test, ReadDifferentThanPreciseMatrix) {
     );
 
     ReadDifferentThanPrecise<MatrixDense>(precise_file, target);
-    ReadDifferentThanPrecise<NoFillMatrixSparse>(precise_file, target.sparse());
+    ReadDifferentThanPrecise<NoFillMatrixSparse>(precise_file, target);
 
 }
