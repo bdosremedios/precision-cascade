@@ -34,13 +34,11 @@ NoFillMatrixSparse<float> & NoFillMatrixSparse<float>::operator*=(const Scalar<f
 
 }
 
-Vector<float> NoFillMatrixSparse<float>::matvec_prod_subroutine(
-    const Vector<float> &vec, cusparseOperation_t op
-) const {
+Vector<float> NoFillMatrixSparse<float>::operator*(const Vector<float> &vec) const {
 
     if (vec.rows() != n_cols) {
         throw std::runtime_error(
-            "NoFillMatrixSparse: invalid vec in matvec_prod_subroutine"
+            "NoFillMatrixSparse: invalid vec in operator*(const Vector<float> &vec)"
         );
     }
 
@@ -63,7 +61,7 @@ Vector<float> NoFillMatrixSparse<float>::matvec_prod_subroutine(
     size_t bufferSize;
     check_cusparse_status(cusparseSpMV_bufferSize(
         cu_handles.get_cusparse_handle(),
-        op,
+        CUSPARSE_OPERATION_NON_TRANSPOSE,
         SCALAR_ONE_F.d_scalar, spMatDescr, dnVecDescr_orig,
         SCALAR_ZERO_F.d_scalar, dnVecDescr_new,
         CUDA_R_32F,
@@ -76,7 +74,7 @@ Vector<float> NoFillMatrixSparse<float>::matvec_prod_subroutine(
 
     check_cusparse_status(cusparseSpMV(
         cu_handles.get_cusparse_handle(),
-        op,
+        CUSPARSE_OPERATION_NON_TRANSPOSE,
         SCALAR_ONE_F.d_scalar, spMatDescr, dnVecDescr_orig,
         SCALAR_ZERO_F.d_scalar, dnVecDescr_new,
         CUDA_R_32F,
@@ -92,10 +90,6 @@ Vector<float> NoFillMatrixSparse<float>::matvec_prod_subroutine(
 
     return new_vec;
 
-}
-
-Vector<float> NoFillMatrixSparse<float>::operator*(const Vector<float> &vec) const {
-    return matvec_prod_subroutine(vec, CUSPARSE_OPERATION_NON_TRANSPOSE);
 }
 
 NoFillMatrixSparse<__half> NoFillMatrixSparse<float>::to_half() const {

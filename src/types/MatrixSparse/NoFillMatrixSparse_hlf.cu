@@ -38,13 +38,11 @@ NoFillMatrixSparse<__half> & NoFillMatrixSparse<__half>::operator*=(const Scalar
 
 }
 
-Vector<__half> NoFillMatrixSparse<__half>::matvec_prod_subroutine(
-    const Vector<__half> &vec, cusparseOperation_t op
-) const {
+Vector<__half> NoFillMatrixSparse<__half>::operator*(const Vector<__half> &vec) const {
 
     if (vec.rows() != n_cols) {
         throw std::runtime_error(
-            "NoFillMatrixSparse: invalid vec in matvec_prod_subroutine"
+            "NoFillMatrixSparse: invalid vec in operator*(const Vector<__half> &vec)"
         );
     }
 
@@ -96,10 +94,6 @@ Vector<__half> NoFillMatrixSparse<__half>::matvec_prod_subroutine(
 
     return new_vec;
 
-}
-
-Vector<__half> NoFillMatrixSparse<__half>::operator*(const Vector<__half> &vec) const {
-    return matvec_prod_subroutine(vec, CUSPARSE_OPERATION_NON_TRANSPOSE);
 }
 
 NoFillMatrixSparse<__half> NoFillMatrixSparse<__half>::to_half() const {

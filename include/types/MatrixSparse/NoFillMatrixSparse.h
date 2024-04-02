@@ -87,8 +87,6 @@ private:
     NoFillMatrixSparse<__half> to_half() const;
     NoFillMatrixSparse<float> to_float() const;
     NoFillMatrixSparse<double> to_double() const;
-
-    Vector<T> matvec_prod_subroutine(const Vector<T> &vec, cusparseOperation_t op) const;
     
     // Load space for arg_nnz non-zeros but without instantiation, used for private
     // construction with known sized val array
