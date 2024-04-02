@@ -92,6 +92,64 @@ Vector<float> NoFillMatrixSparse<float>::operator*(const Vector<float> &vec) con
 
 }
 
+Vector<float> NoFillMatrixSparse<float>::transpose_prod(const Vector<float> &vec) const {
+
+    if (vec.rows() != m_rows) {
+        throw std::runtime_error(
+            "NoFillMatrixSparse: invalid vec in transpose_prod"
+        );
+    }
+
+    Vector<float> new_vec(cu_handles, n_cols);
+
+    cusparseConstSpMatDescr_t spMatDescr;
+    cusparseConstDnVecDescr_t dnVecDescr_orig;
+    cusparseDnVecDescr_t dnVecDescr_new;
+    
+    check_cusparse_status(cusparseCreateConstCsc(
+        &spMatDescr,
+        m_rows, n_cols, nnz,
+        d_col_offsets, d_row_indices, d_vals,
+        CUSPARSE_INDEX_32I, CUSPARSE_INDEX_32I, CUSPARSE_INDEX_BASE_ZERO,
+        CUDA_R_32F
+    ));
+    check_cusparse_status(cusparseCreateConstDnVec(&dnVecDescr_orig, m_rows, vec.d_vec, CUDA_R_32F));
+    check_cusparse_status(cusparseCreateDnVec(&dnVecDescr_new, n_cols, new_vec.d_vec, CUDA_R_32F));
+
+    size_t bufferSize;
+    check_cusparse_status(cusparseSpMV_bufferSize(
+        cu_handles.get_cusparse_handle(),
+        CUSPARSE_OPERATION_TRANSPOSE,
+        SCALAR_ONE_F.d_scalar, spMatDescr, dnVecDescr_orig,
+        SCALAR_ZERO_F.d_scalar, dnVecDescr_new,
+        CUDA_R_32F,
+        CUSPARSE_SPMV_CSR_ALG1,
+        &bufferSize
+    ));
+
+    float *d_buffer;
+    check_cuda_error(cudaMalloc(&d_buffer, bufferSize));
+
+    check_cusparse_status(cusparseSpMV(
+        cu_handles.get_cusparse_handle(),
+        CUSPARSE_OPERATION_TRANSPOSE,
+        SCALAR_ONE_F.d_scalar, spMatDescr, dnVecDescr_orig,
+        SCALAR_ZERO_F.d_scalar, dnVecDescr_new,
+        CUDA_R_32F,
+        CUSPARSE_SPMV_CSR_ALG1,
+        d_buffer
+    ));
+
+    check_cuda_error(cudaFree(d_buffer));
+    
+    check_cusparse_status(cusparseDestroySpMat(spMatDescr));
+    check_cusparse_status(cusparseDestroyDnVec(dnVecDescr_orig));
+    check_cusparse_status(cusparseDestroyDnVec(dnVecDescr_new));
+
+    return new_vec;
+
+}
+
 NoFillMatrixSparse<__half> NoFillMatrixSparse<float>::to_half() const {
 
     NoFillMatrixSparse<__half> created_mat(cu_handles, m_rows, n_cols, nnz);

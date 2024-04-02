@@ -707,6 +707,8 @@ public:
 
     Vector<T> operator*(const Vector<T> &vec) const;
 
+    Vector<T> transpose_prod(const Vector<T> &vec) const;
+
     NoFillMatrixSparse<T> transpose() const {
 
         int *curr_h_col_offsets = static_cast<int *>(malloc(mem_size_col_offsets()));

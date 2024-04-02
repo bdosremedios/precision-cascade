@@ -1037,23 +1037,23 @@ TEST_F(NoFillMatrixSparse_Test, TestBadMatVec) {
     TestBadMatVec<double>();
 }
 
-// TEST_F(NoFillMatrixSparse_Test, TestTransposeMatVec) {
-//     TestTransposeMatVec<__half>();
-//     TestTransposeMatVec<float>();
-//     TestTransposeMatVec<double>();
-// }
+TEST_F(NoFillMatrixSparse_Test, TestTransposeMatVec) {
+    TestTransposeMatVec<__half>();
+    TestTransposeMatVec<float>();
+    TestTransposeMatVec<double>();
+}
 
-// TEST_F(NoFillMatrixSparse_Test, TestRandomTransposeMatVec) {
-//     TestRandomTransposeMatVec<__half>();
-//     TestRandomTransposeMatVec<float>();
-//     TestRandomTransposeMatVec<double>();
-// }
+TEST_F(NoFillMatrixSparse_Test, TestRandomTransposeMatVec) {
+    TestRandomTransposeMatVec<__half>();
+    TestRandomTransposeMatVec<float>();
+    TestRandomTransposeMatVec<double>();
+}
 
-// TEST_F(NoFillMatrixSparse_Test, TestBadTransposeMatVec) {
-//     TestBadTransposeMatVec<__half>();
-//     TestBadTransposeMatVec<float>();
-//     TestBadTransposeMatVec<double>();
-// }
+TEST_F(NoFillMatrixSparse_Test, TestBadTransposeMatVec) {
+    TestBadTransposeMatVec<__half>();
+    TestBadTransposeMatVec<float>();
+    TestBadTransposeMatVec<double>();
+}
 
 TEST_F(NoFillMatrixSparse_Test, TestTranspose) {
     TestTranspose<__half>();
