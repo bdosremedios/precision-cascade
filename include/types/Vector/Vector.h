@@ -33,8 +33,7 @@ private:
     // Allow all similar type Matrices and different type variants of self to access private methods
     template <typename> friend class Vector;
     friend MatrixDense<T>;
-    // friend MatrixDense<T>::Block;
-    // friend MatrixSparse<T>;
+    friend NoFillMatrixSparse<T>;
 
     cuHandleBundle cu_handles;
     int m_rows = 0;
@@ -121,19 +120,6 @@ public:
     Vector(const typename NoFillMatrixSparse<T>::Col &col) {
         *this = col.copy_to_vec();
     }
-
-    // Vector(const cublasHandle_t &arg_handle, const typename MatrixSparse<T>::Col &col):
-    //     handle(arg_handle), m(col.rows()), mem_size(m*sizeof(T))
-    // {
-
-    //     allocate_d_vec();
-
-    //     T *h_vec = static_cast<T *>(malloc(mem_size));
-    //     for (int i=0; i<m; ++i) { h_vec[i] = col.coeff(i, 0); }
-    //     cublasSetVector(m, sizeof(T), h_vec, 1, d_vec, 1);
-    //     free(h_vec);
-
-    // }
 
     // *** Destructor ***
     virtual ~Vector() { check_cuda_error(cudaFree(d_vec)); }

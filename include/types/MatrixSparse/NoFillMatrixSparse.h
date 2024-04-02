@@ -27,8 +27,8 @@ private:
     int m_rows = 0;
     int n_cols = 0;
     int nnz = 0;
-    int *d_col_offsets = nullptr;
-    int *d_row_indices = nullptr;
+    int32_t *d_col_offsets = nullptr;
+    int32_t *d_row_indices = nullptr;
     T *d_vals = nullptr;
 
     size_t mem_size_col_offsets() const {
@@ -87,6 +87,8 @@ private:
     NoFillMatrixSparse<__half> to_half() const;
     NoFillMatrixSparse<float> to_float() const;
     NoFillMatrixSparse<double> to_double() const;
+
+    Vector<T> matvec_prod_subroutine(const Vector<T> &vec, cusparseOperation_t op) const;
     
     // Load space for arg_nnz non-zeros but without instantiation, used for private
     // construction with known sized val array
@@ -705,6 +707,8 @@ public:
         *this /= get_max_mag_elem();
     }
 
+    Vector<T> operator*(const Vector<T> &vec) const;
+
     NoFillMatrixSparse<T> transpose() const {
 
         int *curr_h_col_offsets = static_cast<int *>(malloc(mem_size_col_offsets()));
@@ -764,8 +768,6 @@ public:
         return created_mat;
 
     }
-
-    Vector<T> operator*(const Vector<T> &vec) const;
 
     // Nested lightweight wrapper class representing matrix column and assignment/elem access
     // Requires: cast to Vector<T>

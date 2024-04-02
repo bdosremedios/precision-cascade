@@ -282,6 +282,160 @@ public:
     }
 
     template <typename T>
+    void TestRandomMatVec() {
+
+        // Test random
+        const int m_rand(3);
+        const int n_rand(4);
+        MatrixDense<T> rand_mat(MatrixDense<T>::Random(TestBase::bundle, m_rand, n_rand));
+        ASSERT_VECTOR_NEAR(
+            rand_mat*Vector<T>(
+                TestBase::bundle,
+                {static_cast<T>(1), static_cast<T>(0), static_cast<T>(0), static_cast<T>(0)}
+            ),
+            Vector<T>(
+                TestBase::bundle,
+                {rand_mat.get_elem(0, 0).get_scalar(),
+                 rand_mat.get_elem(1, 0).get_scalar(),
+                 rand_mat.get_elem(2, 0).get_scalar()}
+            ),
+            static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
+        );
+        ASSERT_VECTOR_NEAR(
+            rand_mat*Vector<T>(
+                TestBase::bundle,
+                {static_cast<T>(0), static_cast<T>(1), static_cast<T>(0), static_cast<T>(0)}
+            ),
+            Vector<T>(
+                TestBase::bundle,
+                {rand_mat.get_elem(0, 1).get_scalar(),
+                 rand_mat.get_elem(1, 1).get_scalar(),
+                 rand_mat.get_elem(2, 1).get_scalar()}
+            ),
+            static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
+        );
+        ASSERT_VECTOR_NEAR(
+            rand_mat*Vector<T>(
+                TestBase::bundle,
+                {static_cast<T>(0), static_cast<T>(0), static_cast<T>(1), static_cast<T>(0)}
+            ),
+            Vector<T>(
+                TestBase::bundle,
+                {rand_mat.get_elem(0, 2).get_scalar(),
+                 rand_mat.get_elem(1, 2).get_scalar(),
+                 rand_mat.get_elem(2, 2).get_scalar()}
+            ),
+            static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
+        );
+        ASSERT_VECTOR_NEAR(
+            rand_mat*Vector<T>(
+                TestBase::bundle,
+                {static_cast<T>(0), static_cast<T>(0), static_cast<T>(0), static_cast<T>(1)}
+            ),
+            Vector<T>(
+                TestBase::bundle,
+                {rand_mat.get_elem(0, 3).get_scalar(),
+                 rand_mat.get_elem(1, 3).get_scalar(),
+                 rand_mat.get_elem(2, 3).get_scalar()}
+            ),
+            static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
+        );
+        ASSERT_VECTOR_NEAR(
+            rand_mat*Vector<T>(
+                TestBase::bundle,
+                {static_cast<T>(1), static_cast<T>(0.1), static_cast<T>(0.01), static_cast<T>(0.001)}
+            ),
+            Vector<T>(
+                TestBase::bundle,
+                {(static_cast<T>(1)*rand_mat.get_elem(0, 0).get_scalar() +
+                  static_cast<T>(0.1)*rand_mat.get_elem(0, 1).get_scalar() +
+                  static_cast<T>(0.01)*rand_mat.get_elem(0, 2).get_scalar() +
+                  static_cast<T>(0.001)*rand_mat.get_elem(0, 3).get_scalar()),
+                 (static_cast<T>(1)*rand_mat.get_elem(1, 0).get_scalar() +
+                  static_cast<T>(0.1)*rand_mat.get_elem(1, 1).get_scalar() +
+                  static_cast<T>(0.01)*rand_mat.get_elem(1, 2).get_scalar()+
+                  static_cast<T>(0.001)*rand_mat.get_elem(1, 3).get_scalar()),
+                 (static_cast<T>(1)*rand_mat.get_elem(2, 0).get_scalar() +
+                  static_cast<T>(0.1)*rand_mat.get_elem(2, 1).get_scalar() +
+                  static_cast<T>(0.01)*rand_mat.get_elem(2, 2).get_scalar()+
+                  static_cast<T>(0.001)*rand_mat.get_elem(2, 3).get_scalar())}
+            ),
+            static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
+        );
+
+    }
+
+    template <typename T>
+    void TestRandomTransposeMatVec() {
+
+        // Test random
+        const int m_rand(3);
+        const int n_rand(2);
+        MatrixDense<T> rand_mat(MatrixDense<T>::Random(TestBase::bundle, m_rand, n_rand));
+        ASSERT_VECTOR_NEAR(
+            rand_mat.transpose_prod(
+                Vector<T>(
+                    TestBase::bundle,
+                    {static_cast<T>(1), static_cast<T>(0), static_cast<T>(0)}
+                )
+            ),
+            Vector<T>(
+                TestBase::bundle,
+                {rand_mat.get_elem(0, 0).get_scalar(),
+                 rand_mat.get_elem(0, 1).get_scalar()}
+            ),
+            static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
+        );
+        ASSERT_VECTOR_NEAR(
+            rand_mat.transpose_prod(
+                Vector<T>(
+                    TestBase::bundle,
+                    {static_cast<T>(0), static_cast<T>(1), static_cast<T>(0)}
+                )
+            ),
+            Vector<T>(
+                TestBase::bundle,
+                {rand_mat.get_elem(1, 0).get_scalar(),
+                 rand_mat.get_elem(1, 1).get_scalar()}
+            ),
+            static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
+        );
+        ASSERT_VECTOR_NEAR(
+            rand_mat.transpose_prod(
+                Vector<T>(
+                    TestBase::bundle,
+                    {static_cast<T>(0), static_cast<T>(0), static_cast<T>(1)}
+                )
+            ),
+            Vector<T>(
+                TestBase::bundle,
+                {rand_mat.get_elem(2, 0).get_scalar(),
+                 rand_mat.get_elem(2, 1).get_scalar()}
+            ),
+            static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
+        );
+        ASSERT_VECTOR_NEAR(
+            rand_mat.transpose_prod(
+                Vector<T>(
+                    TestBase::bundle,
+                    {static_cast<T>(1), static_cast<T>(0.1), static_cast<T>(0.01)}
+                )
+            ),
+            Vector<T>(
+                TestBase::bundle,
+                {(static_cast<T>(1)*rand_mat.get_elem(0, 0).get_scalar() +
+                  static_cast<T>(0.1)*rand_mat.get_elem(1, 0).get_scalar() +
+                  static_cast<T>(0.01)*rand_mat.get_elem(2, 0).get_scalar()),
+                 (static_cast<T>(1)*rand_mat.get_elem(0, 1).get_scalar() +
+                  static_cast<T>(0.1)*rand_mat.get_elem(1, 1).get_scalar() +
+                  static_cast<T>(0.01)*rand_mat.get_elem(2, 1).get_scalar())}
+            ),
+            static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
+        );
+
+    }
+
+    template <typename T>
     void TestRandomTranspose() {
 
         constexpr int m_rand(4);
@@ -562,6 +716,12 @@ TEST_F(MatrixDense_Test, TestMatVec) {
     TestMatVec<double>();
 }
 
+TEST_F(MatrixDense_Test, TestRandomMatVec) {
+    TestRandomMatVec<__half>();
+    TestRandomMatVec<float>();
+    TestRandomMatVec<double>();
+}
+
 TEST_F(MatrixDense_Test, TestBadMatVec) {
     TestBadMatVec<__half>();
     TestBadMatVec<float>();
@@ -572,6 +732,12 @@ TEST_F(MatrixDense_Test, TestTransposeMatVec) {
     TestTransposeMatVec<__half>();
     TestTransposeMatVec<float>();
     TestTransposeMatVec<double>();
+}
+
+TEST_F(MatrixDense_Test, TestRandomTransposeMatVec) {
+    TestRandomTransposeMatVec<__half>();
+    TestRandomTransposeMatVec<float>();
+    TestRandomTransposeMatVec<double>();
 }
 
 TEST_F(MatrixDense_Test, TestBadTransposeMatVec) {
