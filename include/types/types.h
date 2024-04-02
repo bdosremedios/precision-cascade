@@ -2,4 +2,4 @@
 #include "Scalar/Scalar.h"
 #include "Vector/Vector.h"
 #include "MatrixDense/MatrixDense.h"
-// #include "MatrixSparse/MatrixSparse.h"
+#include "MatrixSparse/NoFillMatrixSparse.h"

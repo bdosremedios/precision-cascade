@@ -55,12 +55,12 @@ public:
 
 TEST_F(MatrixRead_General_Test, ReadEmptyMatrix) {
     ReadEmptyMatrix<MatrixDense>();
-    // ReadEmptyMatrix<MatrixSparse>();
+    ReadEmptyMatrix<NoFillMatrixSparse>();
 }
 
 TEST_F(MatrixRead_General_Test, ReadBadFiles) {
     ReadBadMatrices<MatrixDense>();
-    // ReadBadMatrices<MatrixSparse>();
+    ReadBadMatrices<NoFillMatrixSparse>();
 }
 
 template <typename T>
@@ -190,12 +190,12 @@ class MatrixRead_Double_Test: public MatrixRead_T_Test<double> {};
 
 TEST_F(MatrixRead_Double_Test, ReadSquareMatrix) {
     ReadSquareMatrix<MatrixDense>();
-    // ReadSquareMatrix<MatrixSparse>();
+    ReadSquareMatrix<NoFillMatrixSparse>();
 }
 
 TEST_F(MatrixRead_Double_Test, ReadWideTallMatrix) {
     ReadWideTallMatrix<MatrixDense>();
-    // ReadWideTallMatrix<MatrixSparse>();
+    ReadWideTallMatrix<NoFillMatrixSparse>();
 }
 
 TEST_F(MatrixRead_Double_Test, ReadPreciseMatrix) {
@@ -209,7 +209,7 @@ TEST_F(MatrixRead_Double_Test, ReadPreciseMatrix) {
     );
 
     ReadPrecise<MatrixDense>(precise_file, target);
-    // ReadPrecise<MatrixSparse>(precise_file, target.sparse());
+    ReadPrecise<NoFillMatrixSparse>(precise_file, target.sparse());
 
 }
 
@@ -224,7 +224,7 @@ TEST_F(MatrixRead_Double_Test, ReadDifferentThanPreciseMatrix) {
     );
 
     ReadDifferentThanPrecise<MatrixDense>(precise_file, target);
-//     ReadDifferentThanPrecise<MatrixSparse>(precise_file, target.sparse());
+    ReadDifferentThanPrecise<NoFillMatrixSparse>(precise_file, target.sparse());
 
 }
 
@@ -239,7 +239,7 @@ TEST_F(MatrixRead_Double_Test, ReadPreciseMatrixDoubleLimit) {
     );
     
     ReadPrecise<MatrixDense>(precise_file, target);
-    // ReadPrecise<MatrixSparse>(precise_file, target.sparse());
+    ReadPrecise<NoFillMatrixSparse>(precise_file, target.sparse());
 
 }
 
@@ -254,7 +254,7 @@ TEST_F(MatrixRead_Double_Test, ReadDifferentThanPreciseMatrixDoubleLimit) {
     );
 
     ReadDifferentThanPrecise<MatrixDense>(precise_file, target);
-//     ReadDifferentThanPrecise<MatrixSparse>(precise_file, target.sparse());
+    ReadDifferentThanPrecise<NoFillMatrixSparse>(precise_file, target.sparse());
 
 }
 
@@ -263,12 +263,12 @@ class MatrixRead_Single_Test: public MatrixRead_T_Test<float> {};
 
 TEST_F(MatrixRead_Single_Test, ReadSquareMatrix) {
     ReadSquareMatrix<MatrixDense>();
-    // ReadSquareMatrix<MatrixSparse>();
+    ReadSquareMatrix<NoFillMatrixSparse>();
 }
 
 TEST_F(MatrixRead_Single_Test, ReadWideTallMatrix) {
     ReadWideTallMatrix<MatrixDense>();
-    // ReadWideTallMatrix<MatrixSparse>();
+    ReadWideTallMatrix<NoFillMatrixSparse>();
 }
 
 TEST_F(MatrixRead_Single_Test, ReadPreciseMatrix) {
@@ -282,7 +282,7 @@ TEST_F(MatrixRead_Single_Test, ReadPreciseMatrix) {
     );
 
     ReadPrecise<MatrixDense>(precise_file, target);
-    // ReadPrecise<MatrixSparse>(precise_file, target.sparse());
+    ReadPrecise<NoFillMatrixSparse>(precise_file, target.sparse());
 
 }
 
@@ -297,7 +297,7 @@ TEST_F(MatrixRead_Single_Test, ReadDifferentThanPreciseMatrix) {
     );
 
     ReadDifferentThanPrecise<MatrixDense>(precise_file, target);
-//     ReadDifferentThanPrecise<MatrixSparse>(precise_file, target.sparse());
+    ReadDifferentThanPrecise<NoFillMatrixSparse>(precise_file, target.sparse());
 
 }
 
@@ -306,12 +306,12 @@ class MatrixRead_Half_Test: public MatrixRead_T_Test<__half> {};
 
 TEST_F(MatrixRead_Half_Test, ReadSquareMatrix) {
     ReadSquareMatrix<MatrixDense>();
-    // ReadSquareMatrix<MatrixSparse>();
+    ReadSquareMatrix<NoFillMatrixSparse>();
 }
 
 TEST_F(MatrixRead_Half_Test, ReadWideTallMatrix) {
     ReadWideTallMatrix<MatrixDense>();
-    // ReadWideTallMatrix<MatrixSparse>();
+    ReadWideTallMatrix<NoFillMatrixSparse>();
 }
 
 TEST_F(MatrixRead_Half_Test, ReadPreciseMatrix) {
@@ -325,7 +325,7 @@ TEST_F(MatrixRead_Half_Test, ReadPreciseMatrix) {
     );
 
     ReadPrecise<MatrixDense>(precise_file, target);
-    // ReadPrecise<MatrixSparse>(precise_file, target.sparse());
+    ReadPrecise<NoFillMatrixSparse>(precise_file, target.sparse());
 
 }
 
@@ -340,6 +340,6 @@ TEST_F(MatrixRead_Half_Test, ReadDifferentThanPreciseMatrix) {
     );
 
     ReadDifferentThanPrecise<MatrixDense>(precise_file, target);
-//     ReadDifferentThanPrecise<MatrixSparse>(precise_file, target.sparse());
+    ReadDifferentThanPrecise<NoFillMatrixSparse>(precise_file, target.sparse());
 
 }

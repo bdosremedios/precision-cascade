@@ -7,15 +7,14 @@
 #include <sstream>
 #include <string>
 
-#include "tools/cuHandleBundle.h"
 #include "types/types.h"
+#include "tools/cuHandleBundle.h"
+#include "tools/DenseConverter.h"
 
 namespace fs = std::filesystem;
 
 template <template<typename> typename M, typename T>
 M<T> read_matrixCSV(const cuHandleBundle &cu_handles, fs::path const &path) {
-
-    assert_valid_type_or_vec<M>();
 
     // Open given file
     std::ifstream file_in;
@@ -89,11 +88,12 @@ M<T> read_matrixCSV(const cuHandleBundle &cu_handles, fs::path const &path) {
 
     }
 
-    M<T> mat(cu_handles, h_mat, m_rows, n_cols);
+    MatrixDense<T> mat(cu_handles, h_mat, m_rows, n_cols);
 
     free(h_mat);
 
-    return mat;
+    DenseConverter<M, T> converter;
+    return converter.convert_matrix(mat);
 
 }
 
