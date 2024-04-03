@@ -52,7 +52,7 @@ class DenseConverter<NoFillMatrixSparse, T>
 public:
 
     NoFillMatrixSparse<T> convert_matrix(MatrixDense<T> mat) const {
-        return mat.sparse();
+        return NoFillMatrixSparse<T>(mat);
     }
 
 };

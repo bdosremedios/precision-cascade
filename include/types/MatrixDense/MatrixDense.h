@@ -30,6 +30,7 @@ private:
 
     template <typename> friend class MatrixDense;
     friend class Vector<T>;
+    friend class NoFillMatrixSparse<T>;
 
     cuHandleBundle cu_handles;
     int m_rows = 0;
@@ -201,53 +202,6 @@ public:
     MatrixDense(const typename NoFillMatrixSparse<T>::Block &block) {
         *this = block.copy_to_mat();
     }
-
-    // *** Conversion Methods ***
-    NoFillMatrixSparse<T> sparse() const {
-
-        T *h_mat = static_cast<T *>(malloc(m_rows*n_cols*sizeof(T)));
-        copy_data_to_ptr(h_mat, m_rows, n_cols);
-        
-        int *h_col_offsets = static_cast<int *>(malloc((n_cols+1)*sizeof(int)));
-        std::vector<int> h_vec_row_indices;
-        std::vector<T> h_vec_vals;
-
-        int next_col_offset = 0;
-        for (int j=0; j<n_cols; ++j) {
-
-            h_col_offsets[j] = next_col_offset;
-            for (int i=0; i<m_rows; ++i) {
-
-                T val = h_mat[i+j*m_rows];
-                if (val != static_cast<T>(0.)) {
-                    h_vec_row_indices.push_back(i);
-                    h_vec_vals.push_back(val);
-                    ++next_col_offset;
-                }
-
-            }
-
-        }
-        h_col_offsets[n_cols] = next_col_offset;
-        int nnz = next_col_offset;
-
-        NoFillMatrixSparse<T> created_mat(cu_handles);
-        if (nnz != 0) {
-            created_mat = NoFillMatrixSparse<T>(
-                cu_handles,
-                h_col_offsets, &h_vec_row_indices[0], &h_vec_vals[0],
-                m_rows, n_cols, nnz
-            );
-        } else {
-            created_mat = NoFillMatrixSparse<T>(cu_handles, m_rows, n_cols);
-        }
-
-        free(h_mat);
-        free(h_col_offsets);
-
-        return created_mat;
-
-    };
 
     // *** Element Access ***
     const Scalar<T> get_elem(int row, int col) const {

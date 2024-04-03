@@ -88,8 +88,8 @@ private:
     NoFillMatrixSparse<float> to_float() const;
     NoFillMatrixSparse<double> to_double() const;
     
-    // Load space for arg_nnz non-zeros but without instantiation, used for private
-    // construction with known sized val array
+    // Private constructor creating load space for arg_nnz non-zeros but without instantiation
+    // for use with known sized val array but not known values on construction
     NoFillMatrixSparse(
         const cuHandleBundle &arg_cu_handles,
         int arg_m_rows,
@@ -102,6 +102,96 @@ private:
         nnz(arg_nnz)
     {
         allocate_d_mem();
+    }
+
+    // Private constructor converting MatrixDense to NoFillMatrixSparse
+    // using cuda subroutine, but differing on specified datatype for specialized
+    // template class code resuse
+    NoFillMatrixSparse(const MatrixDense<T> &source_mat, cudaDataType cuda_data_type):
+        cu_handles(source_mat.get_cu_handles()),
+        m_rows(source_mat.rows()),
+        n_cols(source_mat.cols()),
+        nnz(0)
+    {
+
+        cusparseSpMatDescr_t spMatDescr;
+        cusparseConstDnMatDescr_t dnMatDescr;
+
+        allocate_d_col_offsets();
+
+        check_cusparse_status(cusparseCreateCsc(
+            &spMatDescr,
+            m_rows, n_cols, 0,
+            d_col_offsets, d_row_indices, d_vals,
+            CUSPARSE_INDEX_32I, CUSPARSE_INDEX_32I, CUSPARSE_INDEX_BASE_ZERO,
+            cuda_data_type
+        ));
+
+        check_cusparse_status(cusparseCreateConstDnMat(
+            &dnMatDescr,
+            source_mat.rows(), source_mat.cols(),
+            source_mat.rows(),
+            source_mat.d_mat,
+            cuda_data_type,
+            CUSPARSE_ORDER_COL
+        ));
+
+        size_t bufferSize;
+        check_cusparse_status(cusparseDenseToSparse_bufferSize(
+            cu_handles.get_cusparse_handle(),
+            dnMatDescr,
+            spMatDescr,
+            CUSPARSE_DENSETOSPARSE_ALG_DEFAULT,
+            &bufferSize
+        ));
+
+        T *buffer;
+        check_cuda_error(cudaMalloc(&buffer, bufferSize));
+
+        check_cusparse_status(cusparseDenseToSparse_analysis(
+            cu_handles.get_cusparse_handle(),
+            dnMatDescr,
+            spMatDescr,
+            CUSPARSE_DENSETOSPARSE_ALG_DEFAULT,
+            buffer
+        ));
+
+        int64_t dump1, dump2;
+        int64_t nnz_64_temp;
+        void *dump3, *dump4, *dump5;
+        cusparseIndexType_t dump6, dump7;
+        cusparseIndexBase_t dump8;
+        cudaDataType dump9;
+
+        check_cusparse_status(cusparseCscGet(
+            spMatDescr,
+            &dump1, &dump2,
+            &nnz_64_temp,
+            &dump3, &dump4, &dump5,
+            &dump6, &dump7, &dump8, &dump9
+        ));
+
+        nnz = static_cast<int>(nnz_64_temp);
+        allocate_d_row_indices();
+        allocate_d_vals();
+
+        check_cusparse_status(cusparseCscSetPointers(
+            spMatDescr, d_col_offsets, d_row_indices, d_vals
+        ));
+
+        check_cusparse_status(cusparseDenseToSparse_convert(
+            cu_handles.get_cusparse_handle(),
+            dnMatDescr,
+            spMatDescr,
+            CUSPARSE_DENSETOSPARSE_ALG_DEFAULT,
+            buffer
+        ));
+
+        check_cuda_error(cudaFree(buffer));
+
+        check_cusparse_status(cusparseDestroyDnMat(dnMatDescr));
+        check_cusparse_status(cusparseDestroySpMat(spMatDescr));
+
     }
 
 public:
@@ -299,6 +389,9 @@ public:
         return *this;
 
     }
+
+    // *** Conversion Constructor ***
+    NoFillMatrixSparse(const MatrixDense<T> &source_mat);
 
     // *** Dynamic Memory *** (assumes outer code handles dynamic memory properly)
     NoFillMatrixSparse(

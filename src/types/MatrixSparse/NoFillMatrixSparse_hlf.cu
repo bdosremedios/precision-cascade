@@ -1,5 +1,9 @@
 #include "types/MatrixSparse/NoFillMatrixSparse.h"
 
+NoFillMatrixSparse<__half>::NoFillMatrixSparse(const MatrixDense<__half> &source_mat):
+    NoFillMatrixSparse(source_mat, CUDA_R_16F)
+{}
+
 NoFillMatrixSparse<__half> NoFillMatrixSparse<__half>::operator*(const Scalar<__half> &scalar) const {
 
     NoFillMatrixSparse<__half> created_mat(*this);

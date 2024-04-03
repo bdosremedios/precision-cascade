@@ -19,7 +19,7 @@ public:
              {static_cast<T>(9), static_cast<T>(10), static_cast<T>(11), static_cast<T>(0)}}
         );
 
-        NoFillMatrixSparse<T> sparse_manual(dense_manual.sparse());
+        NoFillMatrixSparse<T> sparse_manual(dense_manual);
 
         ASSERT_EQ(sparse_manual.rows(), m_manual);
         ASSERT_EQ(sparse_manual.cols(), n_manual);
@@ -35,7 +35,7 @@ public:
         constexpr int n_random(7);
         MatrixDense<T> dense_rand(MatrixDense<T>::Random(TestBase::bundle, 12, 7));
 
-        NoFillMatrixSparse<T> sparse_rand(dense_rand.sparse());
+        NoFillMatrixSparse<T> sparse_rand(dense_rand);
 
         ASSERT_EQ(sparse_rand.rows(), m_random);
         ASSERT_EQ(sparse_rand.cols(), n_random);
