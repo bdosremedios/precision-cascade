@@ -25,31 +25,31 @@ public:
 
     template <template <typename> typename M>
     void TestEmptyMatrix() {
-
-        try {
-            M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, 0, 0));
-            Vector<double> b(Vector<double>::Random(TestBase::bundle, 0));
-            GenericLinearSystem<M> lin_sys(A, b);
-            FAIL();
-        } catch (std::runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
+        
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            [=]() {
+                M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, 0, 0));
+                Vector<double> b(Vector<double>::Random(TestBase::bundle, 0));
+                GenericLinearSystem<M> lin_sys(A, b);
+            }
+        );
 
     }
 
     template <template <typename> typename M>
     void TestMismatchb() {
-
-        try {
-            constexpr int m(63);
-            constexpr int n(27);
-            M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, m, n));
-            Vector<double> b(Vector<double>::Random(TestBase::bundle, n-1));
-            GenericLinearSystem<M> lin_sys(A, b);
-            FAIL();
-        } catch (std::runtime_error e) {
-            std::cout << e.what() << std::endl;
-        }
+        
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            [=]() {
+                constexpr int m(63);
+                constexpr int n(27);
+                M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, m, n));
+                Vector<double> b(Vector<double>::Random(TestBase::bundle, n-1));
+                GenericLinearSystem<M> lin_sys(A, b);
+            }
+        );
 
     }
 
