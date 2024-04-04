@@ -75,4 +75,47 @@ public:
 
 };
 
+template <template <typename> typename M, typename T>
+class CommonMatRandomInterface
+{
+public:
+
+    static M<T> rand_matrix(cuHandleBundle cu_handles, int arg_m_rows, int arg_n_cols) {
+        throw std::runtime_error(
+            "CommonRandomInterface: reached unimplemented default implementation in generate_rand_matrix"
+        );
+    }
+
+};
+
+template <typename T>
+class CommonMatRandomInterface<MatrixDense, T>
+{
+public:
+
+    static MatrixDense<T> rand_matrix(
+        cuHandleBundle cu_handles, int arg_m_rows, int arg_n_cols
+    ) {
+        return MatrixDense<T>::Random(cu_handles, arg_m_rows, arg_n_cols);
+    }
+
+};
+
+template <typename T>
+class CommonMatRandomInterface<NoFillMatrixSparse, T>
+{
+private:
+
+    inline static double sparse_fill_ratio = 0.67;
+
+public:
+
+    static NoFillMatrixSparse<T> rand_matrix(
+        cuHandleBundle cu_handles, int arg_m_rows, int arg_n_cols
+    ) {
+        return NoFillMatrixSparse<T>::Random(cu_handles, arg_m_rows, arg_n_cols, sparse_fill_ratio);
+    }
+
+};
+
 #endif

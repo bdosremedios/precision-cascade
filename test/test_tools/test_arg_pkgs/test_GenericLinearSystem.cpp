@@ -11,7 +11,7 @@ public:
 
         constexpr int m(63);
         constexpr int n(27);
-        M<double> A(M<double>::Random(TestBase::bundle, m, n));
+        M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, m, n));
         Vector<double> b(Vector<double>::Random(TestBase::bundle, m));
         GenericLinearSystem<M> lin_sys(A, b);
 
@@ -27,7 +27,7 @@ public:
     void TestEmptyMatrix() {
 
         try {
-            M<double> A(M<double>::Random(TestBase::bundle, 0, 0));
+            M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, 0, 0));
             Vector<double> b(Vector<double>::Random(TestBase::bundle, 0));
             GenericLinearSystem<M> lin_sys(A, b);
             FAIL();
@@ -43,7 +43,7 @@ public:
         try {
             constexpr int m(63);
             constexpr int n(27);
-            M<double> A(M<double>::Random(TestBase::bundle, m, n));
+            M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, m, n));
             Vector<double> b(Vector<double>::Random(TestBase::bundle, n-1));
             GenericLinearSystem<M> lin_sys(A, b);
             FAIL();
@@ -57,15 +57,15 @@ public:
 
 TEST_F(GenericLinearSystem_Test, TestConstructor) {
     TestConstructor<MatrixDense>();
-    // TestConstructor<MatrixSparse>();
+    TestConstructor<NoFillMatrixSparse>();
 }
 
 TEST_F(GenericLinearSystem_Test, TestEmptyMatrix) {
     TestEmptyMatrix<MatrixDense>();
-    // TestEmptyMatrix<MatrixSparse>();
+    TestEmptyMatrix<NoFillMatrixSparse>();
 }
 
 TEST_F(GenericLinearSystem_Test, TestMismatchb) {
     TestMismatchb<MatrixDense>();
-    // TestMismatchb<MatrixSparse>();
+    TestMismatchb<NoFillMatrixSparse>();
 }

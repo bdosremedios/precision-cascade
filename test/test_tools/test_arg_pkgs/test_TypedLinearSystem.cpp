@@ -11,7 +11,7 @@ public:
 
         constexpr int m(63);
         constexpr int n(27);
-        M<double> A(M<double>::Random(TestBase::bundle, m, n));
+        M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, m, n));
         Vector<double> b(Vector<double>::Random(TestBase::bundle, m));
         TypedLinearSystem<M, T> lin_sys(A, b);
 
@@ -24,15 +24,15 @@ public:
 
 TEST_F(TypedLinearSystem_Test, TestHalfConstructor) {
     TestTypedConstructor<MatrixDense, __half>();
-    // TestTypedConstructor<MatrixSparse, __half>();
+    TestTypedConstructor<NoFillMatrixSparse, __half>();
 }
 
 TEST_F(TypedLinearSystem_Test, TestSingleConstructor) {
     TestTypedConstructor<MatrixDense, float>();
-    // TestTypedConstructor<MatrixSparse, float>();
+    TestTypedConstructor<NoFillMatrixSparse, float>();
 }
 
 TEST_F(TypedLinearSystem_Test, TestDoubleConstructor) {
     TestTypedConstructor<MatrixDense, double>();
-    // TestTypedConstructor<MatrixSparse, double>();
+    TestTypedConstructor<NoFillMatrixSparse, double>();
 }
