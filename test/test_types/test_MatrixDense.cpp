@@ -809,3 +809,9 @@ TEST_F(MatrixDense_Substitution_Test, TestForwardSubstitution) {
     TestForwardSubstitution<float>();
     TestForwardSubstitution<double>();
 }
+
+TEST_F(MatrixDense_Substitution_Test, TestRandomForwardSubstitution) {
+    TestRandomForwardSubstitution<__half>();
+    TestRandomForwardSubstitution<float>();
+    TestRandomForwardSubstitution<double>();
+}
