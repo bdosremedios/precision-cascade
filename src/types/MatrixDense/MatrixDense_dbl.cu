@@ -233,10 +233,9 @@ MatrixDense<__half> MatrixDense<double>::to_half() const {
 
     MatrixDense<__half> created_mat(cu_handles, m_rows, n_cols);
 
-    double NUM_THREADS = 1024; // threads per thread block just 1 warp
-    double NUM_BLOCKS = static_cast<double>(
-        std::ceil(static_cast<double>(m_rows*n_cols)/static_cast<double>(NUM_THREADS))
-    );
+    int NUM_THREADS = 1024; // threads per thread block just maximum
+    int NUM_BLOCKS = std::ceil(static_cast<double>(m_rows*n_cols)/static_cast<double>(NUM_THREADS));
+
     generalmatrix_dbl_kernels::cast_to_half<<<NUM_THREADS, NUM_BLOCKS>>>(
         d_mat, created_mat.d_mat, m_rows*n_cols
     );
@@ -249,10 +248,9 @@ MatrixDense<float> MatrixDense<double>::to_float() const {
 
     MatrixDense<float> created_mat(cu_handles, m_rows, n_cols);
 
-    double NUM_THREADS = 1024; // threads per thread block just 1 warp
-    double NUM_BLOCKS = static_cast<double>(
-        std::ceil(static_cast<double>(m_rows*n_cols)/static_cast<double>(NUM_THREADS))
-    );
+    int NUM_THREADS = 1024; // threads per thread block just maximum
+    int NUM_BLOCKS = std::ceil(static_cast<double>(m_rows*n_cols)/static_cast<double>(NUM_THREADS));
+
     generalmatrix_dbl_kernels::cast_to_float<<<NUM_THREADS, NUM_BLOCKS>>>(
         d_mat, created_mat.d_mat, m_rows*n_cols
     );
