@@ -1,5 +1,6 @@
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
+#include <cmath>
 
 #include "types/MatrixDense/MatrixDense.h"
 
@@ -230,6 +231,9 @@ Vector<double> MatrixDense<double>::back_sub(const Vector<double> &arg_rhs) cons
 
 Vector<double> MatrixDense<double>::frwd_sub(const Vector<double> &arg_rhs) const {
 
+    constexpr int WARPSIZE = 32;
+    dim3 block_dim(WARPSIZE, WARPSIZE);
+
     if (m_rows != n_cols) {
         throw std::runtime_error("MatrixDense::frwd_sub: non-square matrix");
     }
@@ -239,30 +243,48 @@ Vector<double> MatrixDense<double>::frwd_sub(const Vector<double> &arg_rhs) cons
 
     Vector<double> soln(arg_rhs);
 
-    double *d_scale_val;
-    check_cuda_error(cudaMalloc(&d_scale_val, sizeof(double)));
+    double *d_soln = soln.d_vec;
+    
+    int n_blk = std::ceil(static_cast<float>(m_rows)/WARPSIZE);
 
-    for (int col=0; col<n_cols; ++col) {
+    for (int i=0; i<n_blk; ++i) {
 
-        matrixdense_dbl_kernels::solve_pivot_and_find_alpha<<<1, 1>>>(
-            soln.d_vec+col, d_mat+(col*m_rows+col), d_scale_val
+        // Solve linear system for WARPSIZExWARPSIZE diag block i
+        matrixdense_dbl_kernels::fwrd_blk_solve<<<1, WARPSIZE>>>(
+            d_mat, m_rows, i*WARPSIZE, d_soln
         );
-        if (col < m_rows-1) {
-            check_cublas_status(
-                cublasAxpyEx(
-                    cu_handles.get_cublas_handle(),
-                    m_rows-1-col,
-                    d_scale_val, CUDA_R_64F,
-                    d_mat+(col*m_rows+(col+1)), CUDA_R_64F, 1,
-                    soln.d_vec+(col+1), CUDA_R_64F, 1,
-                    CUDA_R_64F
-                )
-            );
-        }
+
+        dim3 grid_dim(1, n_blk-1-i);
+        matrixdense_dbl_kernels::fwrd_rect_update<<<grid_dim, block_dim>>>(
+            d_mat, m_rows, i*WARPSIZE, d_soln
+        );
 
     }
 
-    check_cuda_error(cudaFree(d_scale_val));
+    // double *d_scale_val;
+    // check_cuda_error(cudaMalloc(&d_scale_val, sizeof(double)));
+
+    // for (int col=0; col<n_cols; ++col) {
+
+    //     matrixdense_dbl_kernels::solve_pivot_and_find_alpha<<<1, 1>>>(
+    //         soln.d_vec+col, d_mat+(col*m_rows+col), d_scale_val
+    //     );
+    //     if (col < m_rows-1) {
+    //         check_cublas_status(
+    //             cublasAxpyEx(
+    //                 cu_handles.get_cublas_handle(),
+    //                 m_rows-1-col,
+    //                 d_scale_val, CUDA_R_64F,
+    //                 d_mat+(col*m_rows+(col+1)), CUDA_R_64F, 1,
+    //                 soln.d_vec+(col+1), CUDA_R_64F, 1,
+    //                 CUDA_R_64F
+    //             )
+    //         );
+    //     }
+
+    // }
+
+    // check_cuda_error(cudaFree(d_scale_val));
 
     return soln;
 
