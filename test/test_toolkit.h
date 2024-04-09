@@ -59,7 +59,7 @@ public:
         double scale_c_on_n = 1.74*std::sqrt(static_cast<double>(n))*(static_cast<double>(n)+1);
         return scale_c_on_n*cond*roundoff();
     }
-    static T loss_of_ortho_tol_T(int n) { return static_cast<T>(loss_of_ortho_tol(n)); }
+    static T loss_of_ortho_tol_T(T cond, int n) { return static_cast<T>(loss_of_ortho_tol(cond, n)); }
 
     // Special case values
     static double matlab_dbl_near() { return std::pow(10, -14); }

@@ -232,46 +232,6 @@ Vector<__half> MatrixDense<__half>::back_sub(const Vector<__half> &arg_rhs) cons
 
 }
 
-Vector<__half> MatrixDense<__half>::frwd_sub(const Vector<__half> &arg_rhs) const {
-
-    if (m_rows != n_cols) {
-        throw std::runtime_error("MatrixDense::frwd_sub: non-square matrix");
-    }
-    if (m_rows != arg_rhs.rows()) {
-        throw std::runtime_error("MatrixDense::frwd_sub: incompatible matrix and rhs");
-    }
-
-    Vector<__half> soln(arg_rhs);
-
-    float *d_scale_val;
-    check_cuda_error(cudaMalloc(&d_scale_val, sizeof(float)));
-
-    for (int col=0; col<n_cols; ++col) {
-
-        matrixdense_hlf_kernels::solve_pivot_and_find_alpha<<<1, 1>>>(
-            soln.d_vec+col, d_mat+(col*m_rows+col), d_scale_val
-        );
-        if (col < m_rows-1) {
-            check_cublas_status(
-                cublasAxpyEx(
-                    cu_handles.get_cublas_handle(),
-                    m_rows-1-col,
-                    d_scale_val, CUDA_R_32F,
-                    d_mat+(col*m_rows+(col+1)), CUDA_R_16F, 1,
-                    soln.d_vec+(col+1), CUDA_R_16F, 1,
-                    CUDA_R_32F
-                )
-            );
-        }
-
-    }
-
-    check_cuda_error(cudaFree(d_scale_val));
-
-    return soln;
-
-}
-
 MatrixDense<__half> MatrixDense<__half>::to_half() const {
     return MatrixDense<__half>(*this);
 }

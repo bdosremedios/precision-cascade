@@ -3,9 +3,11 @@
 #ifndef MATRIX_DENSE_H
 #define MATRIX_DENSE_H
 
+#include <cmath>
+#include <random>
+
 #include <stdexcept>
 #include <cstdlib>
-#include <random>
 #include <initializer_list>
 
 #include <string>

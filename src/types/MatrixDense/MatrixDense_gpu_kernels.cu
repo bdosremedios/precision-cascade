@@ -1,28 +1,54 @@
-#include <cuda_runtime.h>
-#include <cublas_v2.h>
-#include <stdio.h>
-
 #include "types/MatrixDense/MatrixDense_gpu_kernels.cuh"
 
-// template <int blk_size, typename T>
-// __global__ void blk_solve(const T *A, int m_rows, int diag_offset, T *x_soln) {
+template <typename T>
+__global__ void matrixdense_kernels::lowtri_blk_solve_warp(
+    const T *L, int m_rows, int diag_offset, T *x_soln
+) {
 
-//     volatile __shared__ T xs;
+    volatile __shared__ T xs;
 
-//     #pragma unroll
-//     for (int i=0; i<blk_size; ++i) {
+    #pragma unroll
+    for (int i=0; i<WARPSIZE; ++i) {
 
-//         if (threadIdx.x == i) {
-//             xs = x_soln/A[(diag_offset+threadIdx.x)+(diag_offset+threadIdx.x)*m_rows];
-//         }
+        if (diag_offset+threadIdx.x < m_rows) {
 
-//         if (threadIdx.x >= i+1) {
-//             x_soln -= A[(diag_offset+threadIdx.x)+(diag_offset+i)*m_rows]*xs;
-//         }
+            if (threadIdx.x == i) {
+                xs = x_soln[diag_offset+threadIdx.x]/L[(diag_offset+threadIdx.x)+(diag_offset+threadIdx.x)*m_rows];
+                x_soln[diag_offset+threadIdx.x] = xs;
+            }
 
-//     }
+            if (threadIdx.x >= i+1) {
+                x_soln[diag_offset+threadIdx.x] -= (
+                    static_cast<T>(L[(diag_offset+threadIdx.x)+(diag_offset+i)*m_rows])*static_cast<T>(xs)
+                );
+            }
 
-// }
+        }
+
+    }
+
+}
+
+template __global__ void matrixdense_kernels::lowtri_blk_solve_warp<__half>(const __half *, int , int , __half *);
+template __global__ void matrixdense_kernels::lowtri_blk_solve_warp<float>(const float *, int , int , float *);
+template __global__ void matrixdense_kernels::lowtri_blk_solve_warp<double>(const double *, int , int , double *);
+
+template <typename T>
+__global__ void matrixdense_kernels::lowtri_rect_update_warp(const T *L, int m_rows, int diag_offset, T *x_soln) {
+
+    int soln_row = diag_offset + threadIdx.x; 
+    int col = diag_offset + threadIdx.x;
+    int row = diag_offset + WARPSIZE + (blockIdx.y*blockDim.y) + threadIdx.y;
+
+    if (row < m_rows) {
+        atomicAdd(x_soln+row, -L[row+col*m_rows]*x_soln[soln_row]);
+    }
+
+}
+
+template __global__ void matrixdense_kernels::lowtri_rect_update_warp<__half>(const __half *, int , int , __half *);
+template __global__ void matrixdense_kernels::lowtri_rect_update_warp<float>(const float *, int , int , float *);
+template __global__ void matrixdense_kernels::lowtri_rect_update_warp<double>(const double *, int , int , double *);
 
 // *** MatrixDense double kernel implementations ***
 
