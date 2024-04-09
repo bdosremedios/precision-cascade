@@ -20,7 +20,6 @@ Vector<T> MatrixDense<T>::frwd_sub(const Vector<T> &arg_rhs) const {
 
     for (int i=0; i<n_blk; ++i) {
 
-        // Solve linear system for WARPSIZExWARPSIZE diag block i
         matrixdense_kernels::lowtri_blk_solve_warp<T><<<1, matrixdense_kernels::WARPSIZE>>>(
             d_mat, m_rows, i*matrixdense_kernels::WARPSIZE, d_soln
         );
