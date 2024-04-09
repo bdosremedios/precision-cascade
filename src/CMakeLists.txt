@@ -80,6 +80,7 @@ target_link_libraries(
     precision-cascade-constants
     "$ENV{CUDA_PATH}/lib/x64/cuda.lib"
     "$ENV{CUDA_PATH}/lib/x64/cublas.lib"
+    "$ENV{CUDA_PATH}/lib/x64/cusparse.lib"
 )
 
 set_property(TARGET precision-cascade PROPERTY CUDA_ARCHITECTURES 80)

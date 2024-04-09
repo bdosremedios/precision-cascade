@@ -90,8 +90,6 @@ target_link_libraries(
     test_toolkit
     gtest_main
     precision-cascade
-    "$ENV{CUDA_PATH}/lib/x64/cublas.lib"
-    "$ENV{CUDA_PATH}/lib/x64/cusparse.lib"
 )
 
 add_library(
