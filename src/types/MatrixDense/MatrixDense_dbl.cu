@@ -189,46 +189,6 @@ Scalar<double> MatrixDense<double>::norm() const {
 
 }
 
-Vector<double> MatrixDense<double>::back_sub(const Vector<double> &arg_rhs) const {
-
-    if (m_rows != n_cols) {
-        throw std::runtime_error("MatrixDense::back_sub: non-square matrix");
-    }
-    if (m_rows != arg_rhs.rows()) {
-        throw std::runtime_error("MatrixDense::back_sub: incompatible matrix and rhs");
-    }
-
-    Vector<double> soln(arg_rhs);
-
-    double *d_scale_val;
-    check_cuda_error(cudaMalloc(&d_scale_val, sizeof(double)));
-
-    for (int col=n_cols-1; col>=0; --col) {
-
-        matrixdense_dbl_kernels::solve_pivot_and_find_alpha<<<1, 1>>>(
-            soln.d_vec+col, d_mat+(col+col*m_rows), d_scale_val
-        );
-        if (col > 0) {
-            check_cublas_status(
-                cublasAxpyEx(
-                    cu_handles.get_cublas_handle(),
-                    col,
-                    d_scale_val, CUDA_R_64F,
-                    d_mat+(col*m_rows), CUDA_R_64F, 1,
-                    soln.d_vec, CUDA_R_64F, 1,
-                    CUDA_R_64F
-                )
-            );
-        }
-
-    }
-
-    check_cuda_error(cudaFree(d_scale_val));
-
-    return soln;
-
-}
-
 MatrixDense<__half> MatrixDense<double>::to_half() const {
 
     MatrixDense<__half> created_mat(cu_handles, m_rows, n_cols);

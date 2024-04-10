@@ -1,3 +1,5 @@
+#include <time.h>
+
 #include "../test.h"
 
 template <template <typename> typename M>
@@ -1233,6 +1235,51 @@ public:
         );
 
     }
+    
+    template <typename T>
+    void TestRandomBackwardSubstitution() {
+
+        const double approx_U_tri_cond_number_upbound(2.3);
+        srand(time(NULL));
+        const int n((rand() % 100)+100);
+
+        MatrixDense<T> temp(CommonMatRandomInterface<M, T>::rand_matrix(TestBase::bundle, n, n));
+        temp = (temp - MatrixDense<T>::Ones(TestBase::bundle, n, n))*Scalar<T>(static_cast<T>(2.));
+        Scalar<T> scale_coeff(static_cast<T>(30.));
+        for (int i=0; i<n; ++i) {
+            Scalar<T> u_i_i = temp.get_elem(i, i);
+            Scalar<T> abs_u_i_i = u_i_i;
+            abs_u_i_i.abs();
+            temp.set_elem(i, i, (u_i_i/abs_u_i_i)*scale_coeff+u_i_i); 
+        }
+        for (int i=0; i<n; ++i) {
+            for (int j=0; j<i; ++j) {
+                temp.set_elem(i, j, SCALAR_ZERO<T>::get()); 
+            }
+        }
+
+        M<T> U_tri(temp);
+
+        Vector<T> x_tri(TestBase::bundle, n);
+        for (int i=0; i<n; ++i) { 
+            if ((rand() % 100) < 50) {
+                x_tri.set_elem(i, SCALAR_ONE<T>::get());
+            } else {
+                x_tri.set_elem(i, SCALAR_MINUS_ONE<T>::get());
+            }
+        }
+
+        Vector<T> Ub_tri(U_tri*x_tri);
+    
+        Vector<T> test_soln(U_tri.back_sub(Ub_tri));
+
+        ASSERT_VECTOR_NEAR(
+            test_soln,
+            x_tri,
+            Tol<T>::substitution_tol_T(approx_U_tri_cond_number_upbound, n)
+        );
+
+    }
 
     template <typename T>
     void TestForwardSubstitution() {
@@ -1263,12 +1310,13 @@ public:
     template <typename T>
     void TestRandomForwardSubstitution() {
 
-        const double approx_L_tri_cond_number_upbound(6);
+        const double approx_L_tri_cond_number_upbound(2.3);
+        srand(time(NULL));
         const int n((rand() % 100)+100);
 
         MatrixDense<T> temp(CommonMatRandomInterface<M, T>::rand_matrix(TestBase::bundle, n, n));
         temp = (temp - MatrixDense<T>::Ones(TestBase::bundle, n, n))*Scalar<T>(static_cast<T>(2.));
-        Scalar<T> scale_coeff(static_cast<T>(15.));
+        Scalar<T> scale_coeff(static_cast<T>(30.));
         for (int i=0; i<n; ++i) {
             Scalar<T> l_i_i = temp.get_elem(i, i);
             Scalar<T> abs_l_i_i = l_i_i;
