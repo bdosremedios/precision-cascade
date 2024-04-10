@@ -1,3 +1,6 @@
+#include <cuda_runtime.h>
+#include <cublas_v2.h>
+
 #include "types/MatrixDense/MatrixDense_gpu_kernels.cuh"
 
 template <typename T>
@@ -38,15 +41,25 @@ __global__ void matrixdense_kernels::upptri_rect_update_warp(
     const T *U, int m_rows, int diag_offset, T *x_soln
 ) {
 
-    __shared__ T xs[WARPSIZE];
-    xs[threadIdx.x] = x_soln[diag_offset + threadIdx.x];
+    __shared__ T xs_updating[WARPSIZE];
+    __shared__ T xs_using[WARPSIZE];
+    __shared__ int col;
 
-    int col = diag_offset + threadIdx.x;
-    int row = (blockIdx.y*blockDim.y) + threadIdx.y;
+    int updating_row = (blockIdx.x*blockDim.x) + threadIdx.x;
+    int using_row = diag_offset + threadIdx.x;
 
-    if ((row < m_rows) && (col < m_rows)) {
-        atomicAdd(x_soln+row, -U[row+col*m_rows]*xs[threadIdx.x]);
+    xs_updating[threadIdx.x] = x_soln[updating_row];
+    xs_using[threadIdx.x] = x_soln[using_row];
+
+    #pragma unroll
+    for (int i=0; i<WARPSIZE; ++i) {
+        col = diag_offset + i;
+        if (col < m_rows) {
+            xs_updating[threadIdx.x] -= U[updating_row+col*m_rows]*xs_using[i];
+        }
     }
+
+    x_soln[updating_row] = xs_updating[threadIdx.x];
 
 }
 
@@ -92,14 +105,29 @@ __global__ void matrixdense_kernels::lowtri_rect_update_warp(
     const T *L, int m_rows, int diag_offset, T *x_soln
 ) {
 
-    __shared__ T xs[WARPSIZE];
-    xs[threadIdx.x] = x_soln[diag_offset + threadIdx.x];
+    __shared__ T xs_updating[WARPSIZE];
+    __shared__ T xs_using[WARPSIZE];
+    __shared__ int col;
 
-    int col = diag_offset + threadIdx.x;
-    int row = diag_offset + WARPSIZE + (blockIdx.y*blockDim.y) + threadIdx.y;
+    int updating_row = diag_offset + (blockIdx.x*blockDim.x) + threadIdx.x + WARPSIZE;
+    int using_row = diag_offset + threadIdx.x;
 
-    if (row < m_rows) {
-        atomicAdd(x_soln+row, -L[row+col*m_rows]*xs[threadIdx.x]);
+    xs_using[threadIdx.x] = x_soln[using_row];
+
+    if (updating_row < m_rows) {
+
+        xs_updating[threadIdx.x] = x_soln[updating_row];
+
+        #pragma unroll
+        for (int i=0; i<WARPSIZE; ++i) {
+            col = diag_offset + i;
+            if (col < m_rows) {
+                xs_updating[threadIdx.x] -= L[updating_row+col*m_rows]*xs_using[i];
+            }
+        }
+
+        x_soln[updating_row] = xs_updating[threadIdx.x];
+
     }
 
 }

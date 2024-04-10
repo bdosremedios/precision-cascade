@@ -6,6 +6,7 @@
 
 namespace matrixdense_kernels
 {
+
     constexpr int WARPSIZE(32);
 
     template <typename T>

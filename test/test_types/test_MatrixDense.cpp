@@ -804,16 +804,16 @@ TEST_F(MatrixDense_Substitution_Test, TestBackwardSubstitution) {
     TestBackwardSubstitution<double>();
 }
 
-TEST_F(MatrixDense_Substitution_Test, TestRandomBackwardSubstitution) {
-    TestRandomBackwardSubstitution<__half>();
-    TestRandomBackwardSubstitution<float>();
-    TestRandomBackwardSubstitution<double>();
-}
-
 TEST_F(MatrixDense_Substitution_Test, TestForwardSubstitution) {
     TestForwardSubstitution<__half>();
     TestForwardSubstitution<float>();
     TestForwardSubstitution<double>();
+}
+
+TEST_F(MatrixDense_Substitution_Test, TestRandomBackwardSubstitution) {
+    TestRandomBackwardSubstitution<__half>();
+    TestRandomBackwardSubstitution<float>();
+    TestRandomBackwardSubstitution<double>();
 }
 
 TEST_F(MatrixDense_Substitution_Test, TestRandomForwardSubstitution) {

@@ -1,9 +1,10 @@
+#include <cuda_runtime.h>
+#include <cublas_v2.h>
+
 #include "types/MatrixDense/MatrixDense.h"
 
 template <typename T>
 Vector<T> MatrixDense<T>::back_sub(const Vector<T> &arg_rhs) const {
-
-    dim3 block_dim(matrixdense_kernels::WARPSIZE, matrixdense_kernels::WARPSIZE);
 
     if (m_rows != n_cols) {
         throw std::runtime_error("MatrixDense::back_sub: non-square matrix");
@@ -24,8 +25,7 @@ Vector<T> MatrixDense<T>::back_sub(const Vector<T> &arg_rhs) const {
             d_mat, m_rows, i*matrixdense_kernels::WARPSIZE, d_soln
         );
 
-        dim3 grid_dim(1, i);
-        matrixdense_kernels::upptri_rect_update_warp<T><<<grid_dim, block_dim>>>(
+        matrixdense_kernels::upptri_rect_update_warp<T><<<i, matrixdense_kernels::WARPSIZE>>>(
             d_mat, m_rows, i*matrixdense_kernels::WARPSIZE, d_soln
         );
 
@@ -42,8 +42,6 @@ template Vector<double> MatrixDense<double>::back_sub(const Vector<double> &arg_
 template <typename T>
 Vector<T> MatrixDense<T>::frwd_sub(const Vector<T> &arg_rhs) const {
 
-    dim3 block_dim(matrixdense_kernels::WARPSIZE, matrixdense_kernels::WARPSIZE);
-
     if (m_rows != n_cols) {
         throw std::runtime_error("MatrixDense::frwd_sub: non-square matrix");
     }
@@ -54,7 +52,7 @@ Vector<T> MatrixDense<T>::frwd_sub(const Vector<T> &arg_rhs) const {
     Vector<T> soln(arg_rhs);
 
     T *d_soln = soln.d_vec;
-    
+
     int n_blk = std::ceil(static_cast<float>(m_rows)/matrixdense_kernels::WARPSIZE);
 
     for (int i=0; i<n_blk; ++i) {
@@ -63,8 +61,7 @@ Vector<T> MatrixDense<T>::frwd_sub(const Vector<T> &arg_rhs) const {
             d_mat, m_rows, i*matrixdense_kernels::WARPSIZE, d_soln
         );
 
-        dim3 grid_dim(1, n_blk-1-i);
-        matrixdense_kernels::lowtri_rect_update_warp<T><<<grid_dim, block_dim>>>(
+        matrixdense_kernels::lowtri_rect_update_warp<T><<<n_blk-1-i, matrixdense_kernels::WARPSIZE>>>(
             d_mat, m_rows, i*matrixdense_kernels::WARPSIZE, d_soln
         );
 
