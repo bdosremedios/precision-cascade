@@ -1,6 +1,8 @@
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
 
+#include "types/GeneralMatrix/GeneralMatrix_gpu_constants.cuh"
+
 #include "types/MatrixDense/MatrixDense.h"
 
 template <typename T>
@@ -17,16 +19,16 @@ Vector<T> MatrixDense<T>::back_sub(const Vector<T> &arg_rhs) const {
 
     T *d_soln = soln.d_vec;
     
-    int n_blk = std::ceil(static_cast<float>(m_rows)/matrixdense_kernels::WARPSIZE);
+    int n_blk = std::ceil(static_cast<float>(m_rows)/genmat_gpu_const::WARPSIZE);
 
     for (int i=n_blk-1; i>=0; --i) {
 
-        matrixdense_kernels::upptri_blk_solve_warp<T><<<1, matrixdense_kernels::WARPSIZE>>>(
-            d_mat, m_rows, i*matrixdense_kernels::WARPSIZE, d_soln
+        matrixdense_kernels::upptri_blk_solve_warp<T><<<1, genmat_gpu_const::WARPSIZE>>>(
+            d_mat, m_rows, i*genmat_gpu_const::WARPSIZE, d_soln
         );
 
-        matrixdense_kernels::upptri_rect_update_warp<T><<<i, matrixdense_kernels::WARPSIZE>>>(
-            d_mat, m_rows, i*matrixdense_kernels::WARPSIZE, d_soln
+        matrixdense_kernels::upptri_rect_update_warp<T><<<i, genmat_gpu_const::WARPSIZE>>>(
+            d_mat, m_rows, i*genmat_gpu_const::WARPSIZE, d_soln
         );
 
     }
@@ -53,16 +55,16 @@ Vector<T> MatrixDense<T>::frwd_sub(const Vector<T> &arg_rhs) const {
 
     T *d_soln = soln.d_vec;
 
-    int n_blk = std::ceil(static_cast<float>(m_rows)/matrixdense_kernels::WARPSIZE);
+    int n_blk = std::ceil(static_cast<float>(m_rows)/genmat_gpu_const::WARPSIZE);
 
     for (int i=0; i<n_blk; ++i) {
 
-        matrixdense_kernels::lowtri_blk_solve_warp<T><<<1, matrixdense_kernels::WARPSIZE>>>(
-            d_mat, m_rows, i*matrixdense_kernels::WARPSIZE, d_soln
+        matrixdense_kernels::lowtri_blk_solve_warp<T><<<1, genmat_gpu_const::WARPSIZE>>>(
+            d_mat, m_rows, i*genmat_gpu_const::WARPSIZE, d_soln
         );
 
-        matrixdense_kernels::lowtri_rect_update_warp<T><<<n_blk-1-i, matrixdense_kernels::WARPSIZE>>>(
-            d_mat, m_rows, i*matrixdense_kernels::WARPSIZE, d_soln
+        matrixdense_kernels::lowtri_rect_update_warp<T><<<n_blk-1-i, genmat_gpu_const::WARPSIZE>>>(
+            d_mat, m_rows, i*genmat_gpu_const::WARPSIZE, d_soln
         );
 
     }

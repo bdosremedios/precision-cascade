@@ -7,8 +7,6 @@
 namespace matrixdense_kernels
 {
 
-    constexpr int WARPSIZE(32);
-
     template <typename T>
     __global__ void upptri_blk_solve_warp(const T *U, int m_rows, int diag_offset, T *x_soln);
 

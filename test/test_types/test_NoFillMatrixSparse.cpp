@@ -1104,3 +1104,11 @@ TEST_F(NoFillMatrixSparse_Test, TestCast) {
 TEST_F(NoFillMatrixSparse_Test, TestBadCast) {
     TestBadCast();
 }
+
+class NoFillMatrixSparse_Substitution_Test: public Matrix_Substitution_Test<NoFillMatrixSparse> {};
+
+TEST_F(NoFillMatrixSparse_Substitution_Test, TestForwardSubstitution) {
+    TestForwardSubstitution<__half>();
+    TestForwardSubstitution<float>();
+    TestForwardSubstitution<double>();
+}

@@ -1,6 +1,8 @@
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
 
+#include "types/GeneralMatrix/GeneralMatrix_gpu_constants.cuh"
+
 #include "types/MatrixDense/MatrixDense_gpu_kernels.cuh"
 
 template <typename T>
@@ -8,11 +10,11 @@ __global__ void matrixdense_kernels::upptri_blk_solve_warp(
     const T *U, int m_rows, int diag_offset, T *x_soln
 ) {
 
-    __shared__ T xs[WARPSIZE];
+    __shared__ T xs[genmat_gpu_const::WARPSIZE];
     xs[threadIdx.x] = x_soln[diag_offset+threadIdx.x];
 
     #pragma unroll
-    for (int i=WARPSIZE-1; i>=0; --i) {
+    for (int i=genmat_gpu_const::WARPSIZE-1; i>=0; --i) {
 
         if ((diag_offset+threadIdx.x < m_rows) && (diag_offset+i < m_rows)) {
 
@@ -41,8 +43,8 @@ __global__ void matrixdense_kernels::upptri_rect_update_warp(
     const T *U, int m_rows, int diag_offset, T *x_soln
 ) {
 
-    __shared__ T xs_updating[WARPSIZE];
-    __shared__ T xs_using[WARPSIZE];
+    __shared__ T xs_updating[genmat_gpu_const::WARPSIZE];
+    __shared__ T xs_using[genmat_gpu_const::WARPSIZE];
     __shared__ int col;
 
     int updating_row = (blockIdx.x*blockDim.x) + threadIdx.x;
@@ -52,7 +54,7 @@ __global__ void matrixdense_kernels::upptri_rect_update_warp(
     xs_using[threadIdx.x] = x_soln[using_row];
 
     #pragma unroll
-    for (int i=0; i<WARPSIZE; ++i) {
+    for (int i=0; i<genmat_gpu_const::WARPSIZE; ++i) {
         col = diag_offset + i;
         if (col < m_rows) {
             xs_updating[threadIdx.x] -= U[updating_row+col*m_rows]*xs_using[i];
@@ -72,11 +74,11 @@ __global__ void matrixdense_kernels::lowtri_blk_solve_warp(
     const T *L, int m_rows, int diag_offset, T *x_soln
 ) {
 
-    __shared__ T xs[WARPSIZE];
+    __shared__ T xs[genmat_gpu_const::WARPSIZE];
     xs[threadIdx.x] = x_soln[diag_offset+threadIdx.x];
 
     #pragma unroll
-    for (int i=0; i<WARPSIZE; ++i) {
+    for (int i=0; i<genmat_gpu_const::WARPSIZE; ++i) {
 
         if ((diag_offset+threadIdx.x < m_rows) && (diag_offset+i < m_rows)) {
 
@@ -105,11 +107,11 @@ __global__ void matrixdense_kernels::lowtri_rect_update_warp(
     const T *L, int m_rows, int diag_offset, T *x_soln
 ) {
 
-    __shared__ T xs_updating[WARPSIZE];
-    __shared__ T xs_using[WARPSIZE];
+    __shared__ T xs_updating[genmat_gpu_const::WARPSIZE];
+    __shared__ T xs_using[genmat_gpu_const::WARPSIZE];
     __shared__ int col;
 
-    int updating_row = diag_offset + (blockIdx.x*blockDim.x) + threadIdx.x + WARPSIZE;
+    int updating_row = diag_offset + (blockIdx.x*blockDim.x) + threadIdx.x + genmat_gpu_const::WARPSIZE;
     int using_row = diag_offset + threadIdx.x;
 
     xs_using[threadIdx.x] = x_soln[using_row];
@@ -119,7 +121,7 @@ __global__ void matrixdense_kernels::lowtri_rect_update_warp(
         xs_updating[threadIdx.x] = x_soln[updating_row];
 
         #pragma unroll
-        for (int i=0; i<WARPSIZE; ++i) {
+        for (int i=0; i<genmat_gpu_const::WARPSIZE; ++i) {
             col = diag_offset + i;
             if (col < m_rows) {
                 xs_updating[threadIdx.x] -= L[updating_row+col*m_rows]*xs_using[i];

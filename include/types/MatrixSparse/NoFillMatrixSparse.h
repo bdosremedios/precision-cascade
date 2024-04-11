@@ -11,6 +11,7 @@
 #include "tools/cuda_check.h"
 #include "tools/cuHandleBundle.h"
 
+#include "NoFillMatrixSparse_gpu_kernels.cuh"
 #include "types/GeneralMatrix/GeneralMatrix_gpu_kernels.cuh"
 
 #include "types/Scalar/Scalar.h"
@@ -861,6 +862,10 @@ public:
         return created_mat;
 
     }
+
+    // *** Substitution *** (correct triangularity assumed)
+    Vector<T> back_sub(Vector<T> &arg_rhs) const;
+    Vector<T> frwd_sub(Vector<T> &arg_rhs) const;
 
     // Nested lightweight wrapper class representing matrix column and assignment/elem access
     // Requires: cast to Vector<T>

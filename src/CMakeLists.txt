@@ -20,6 +20,7 @@ add_library(
     types/Vector/Vector_gpu_kernels.cu
     types/GeneralMatrix/GeneralMatrix_gpu_kernels.cu
     types/MatrixDense/MatrixDense_gpu_kernels.cu
+    types/MatrixSparse/NoFillMatrixSparse_gpu_kernels.cu
 )
 
 target_link_options(precision-cascade-gpu_kernels PUBLIC "/NODEFAULTLIB:LIBCMT")
@@ -65,6 +66,7 @@ add_library(
     types/MatrixDense/MatrixDense_hlf.cu
     types/MatrixDense/MatrixDense_sgl.cu
     types/MatrixDense/MatrixDense_dbl.cu
+    types/MatrixSparse/NoFillMatrixSparse_general.cu
     types/MatrixSparse/NoFillMatrixSparse_hlf.cu
     types/MatrixSparse/NoFillMatrixSparse_sgl.cu
     types/MatrixSparse/NoFillMatrixSparse_dbl.cu
