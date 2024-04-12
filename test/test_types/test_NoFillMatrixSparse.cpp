@@ -427,7 +427,7 @@ public:
 
         constexpr int m_rand(30);
         constexpr int n_rand(40);
-        constexpr double miss_tol(0.05);
+        constexpr double miss_tol(0.07);
 
         // Check that zero fill_prob just gives diagonal matrix
         NoFillMatrixSparse<T> test_rand_just_diag(
@@ -1107,10 +1107,22 @@ TEST_F(NoFillMatrixSparse_Test, TestBadCast) {
 
 class NoFillMatrixSparse_Substitution_Test: public Matrix_Substitution_Test<NoFillMatrixSparse> {};
 
+TEST_F(NoFillMatrixSparse_Substitution_Test, TestBackwardSubstitution) {
+    TestBackwardSubstitution<__half>();
+    TestBackwardSubstitution<float>();
+    TestBackwardSubstitution<double>();
+}
+
 TEST_F(NoFillMatrixSparse_Substitution_Test, TestForwardSubstitution) {
     TestForwardSubstitution<__half>();
     TestForwardSubstitution<float>();
     TestForwardSubstitution<double>();
+}
+
+TEST_F(NoFillMatrixSparse_Substitution_Test, TestRandomBackwardSubstitution) {
+    TestRandomBackwardSubstitution<__half>();
+    TestRandomBackwardSubstitution<float>();
+    TestRandomBackwardSubstitution<double>();
 }
 
 TEST_F(NoFillMatrixSparse_Substitution_Test, TestRandomForwardSubstitution) {

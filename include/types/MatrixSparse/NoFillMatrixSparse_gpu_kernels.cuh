@@ -8,12 +8,17 @@ namespace nofillmatrixsparse_kernels
 
     template <typename T>
     __global__ void update_pivot(
-        int pivot_offset, int32_t *d_row_indices, T *d_vals, T *x_soln
+        int pivot_offset, int *d_row_indices, T *d_vals, T *x_soln
     );
 
     template <typename T>
     __global__ void lowtri_update_remaining_col(
-        int pivot_offset, int max_offset, int32_t *d_row_indices, T *d_vals, T *x_soln
+        int pivot_offset, int max_offset, int *d_row_indices, T *d_vals, T *x_soln
+    );
+
+    template <typename T>
+    __global__ void upptri_update_remaining_col(
+        int col_start_offset, int col_size, int *d_row_indices, T *d_vals, T *x_soln
     );
 
 }
