@@ -72,11 +72,11 @@ Vector<T> NoFillMatrixSparse<T>::frwd_sub(Vector<T> &arg_rhs) const {
         );
 
         // Update solution corresponding to remainder to column
-        int remaining_col_size = h_col_offsets[j+1]-h_col_offsets[j]-1;
-        if (remaining_col_size > 0) {
+        int col_size = h_col_offsets[j+1]-h_col_offsets[j];
+        if (col_size > 1) {
 
             int NBLOCKS = std::ceil(
-                static_cast<double>(remaining_col_size)/
+                static_cast<double>(col_size-1)/
                 static_cast<double>(genmat_gpu_const::MAXTHREADSPERBLOCK)
             );
 
@@ -84,7 +84,7 @@ Vector<T> NoFillMatrixSparse<T>::frwd_sub(Vector<T> &arg_rhs) const {
                 <T>
                 <<<NBLOCKS, genmat_gpu_const::MAXTHREADSPERBLOCK>>>
             (
-                h_col_offsets[j], h_col_offsets[j+1], d_row_indices, d_vals, soln.d_vec
+                h_col_offsets[j], col_size, d_row_indices, d_vals, soln.d_vec
             );
 
         }

@@ -17,15 +17,17 @@ template __global__ void nofillmatrixsparse_kernels::update_pivot<double>(int, i
 
 template <typename T>
 __global__ void nofillmatrixsparse_kernels::lowtri_update_remaining_col(
-    int pivot_offset, int max_offset, int *d_row_indices, T *d_vals, T *x_soln
+    int col_start_offset, int col_size, int *d_row_indices, T *d_vals, T *x_soln
 ) {
+
     __shared__ T xs;
 
-    xs = x_soln[d_row_indices[pivot_offset]];
+    xs = x_soln[d_row_indices[col_start_offset]];
 
-    if (pivot_offset+threadIdx.x+1 < max_offset) {
-        int row = d_row_indices[pivot_offset+threadIdx.x+1];
-        x_soln[row] -= d_vals[pivot_offset+threadIdx.x+1]*xs;
+    if (threadIdx.x+1 < col_size) {
+        int coeff_offset = col_start_offset+threadIdx.x+1;
+        int updating_row = d_row_indices[coeff_offset];
+        x_soln[updating_row] -= d_vals[coeff_offset]*xs;
     }
 
 }
@@ -38,16 +40,15 @@ template <typename T>
 __global__ void nofillmatrixsparse_kernels::upptri_update_remaining_col(
     int col_start_offset, int col_size, int *d_row_indices, T *d_vals, T *x_soln
 ) {
-    __shared__ T xs;
-    __shared__ int pivot_offset;
-    pivot_offset = col_start_offset+col_size-1;
 
-    xs = x_soln[d_row_indices[pivot_offset]];
+    __shared__ T xs;
+
+    xs = x_soln[d_row_indices[col_start_offset+col_size-1]];
 
     if (threadIdx.x < col_size-1) {
-        int val_offset = col_start_offset+threadIdx.x;
-        int row = d_row_indices[val_offset];
-        x_soln[row] -= d_vals[val_offset]*xs;
+        int coeff_offset = col_start_offset+threadIdx.x;
+        int updating_row = d_row_indices[coeff_offset];
+        x_soln[updating_row] -= d_vals[coeff_offset]*xs;
     }
 
 }
