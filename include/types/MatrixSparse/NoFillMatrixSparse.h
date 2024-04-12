@@ -28,8 +28,8 @@ private:
     int m_rows = 0;
     int n_cols = 0;
     int nnz = 0;
-    int32_t *d_col_offsets = nullptr;
-    int32_t *d_row_indices = nullptr;
+    int *d_col_offsets = nullptr;
+    int *d_row_indices = nullptr;
     T *d_vals = nullptr;
 
     size_t mem_size_col_offsets() const {
@@ -88,7 +88,7 @@ private:
     NoFillMatrixSparse<__half> to_half() const;
     NoFillMatrixSparse<float> to_float() const;
     NoFillMatrixSparse<double> to_double() const;
-    
+
     // Private constructor creating load space for arg_nnz non-zeros but without instantiation
     // for use with known sized val array but not known values on construction
     NoFillMatrixSparse(
@@ -115,83 +115,56 @@ private:
         nnz(0)
     {
 
-        cusparseSpMatDescr_t spMatDescr;
-        cusparseConstDnMatDescr_t dnMatDescr;
+        size_t col_mem_size = m_rows*sizeof(T);
+        T *h_rolling_col = static_cast<T *>(malloc(col_mem_size));
 
-        allocate_d_col_offsets();
+        int *h_col_offsets = static_cast<int *>(malloc(mem_size_col_offsets()));
+        std::vector<int> vec_row_indices;
+        std::vector<T> vec_vals;
 
-        check_cusparse_status(cusparseCreateCsc(
-            &spMatDescr,
-            m_rows, n_cols, 0,
-            d_col_offsets, d_row_indices, d_vals,
-            CUSPARSE_INDEX_32I, CUSPARSE_INDEX_32I, CUSPARSE_INDEX_BASE_ZERO,
-            cuda_data_type
+        int nnz_count_so_far = 0;
+        for (int j=0; j<n_cols; ++j) {
+
+            h_col_offsets[j] = nnz_count_so_far;
+
+            check_cuda_error(cudaMemcpy(
+                h_rolling_col, source_mat.d_mat+j*m_rows, col_mem_size, cudaMemcpyDeviceToHost
+            ));
+
+            T val;
+            for (int i=0; i<m_rows; ++i) {
+                val = h_rolling_col[i];
+                if (val != static_cast<T>(0.)) {
+                    vec_row_indices.push_back(i);
+                    vec_vals.push_back(val);
+                    ++nnz_count_so_far;
+                }
+            }
+
+        }
+        h_col_offsets[n_cols] = nnz_count_so_far;
+        nnz = nnz_count_so_far;
+
+        allocate_d_mem();
+
+        check_cuda_error(cudaMemcpy(
+            d_col_offsets, h_col_offsets, mem_size_col_offsets(), cudaMemcpyHostToDevice
         ));
 
-        check_cusparse_status(cusparseCreateConstDnMat(
-            &dnMatDescr,
-            source_mat.rows(), source_mat.cols(),
-            source_mat.rows(),
-            source_mat.d_mat,
-            cuda_data_type,
-            CUSPARSE_ORDER_COL
-        ));
+        if (nnz > 0) {
 
-        size_t bufferSize;
-        check_cusparse_status(cusparseDenseToSparse_bufferSize(
-            cu_handles.get_cusparse_handle(),
-            dnMatDescr,
-            spMatDescr,
-            CUSPARSE_DENSETOSPARSE_ALG_DEFAULT,
-            &bufferSize
-        ));
+            check_cuda_error(cudaMemcpy(
+                d_row_indices, &vec_row_indices[0], mem_size_row_indices(), cudaMemcpyHostToDevice
+            ));
 
-        T *buffer;
-        check_cuda_error(cudaMalloc(&buffer, bufferSize));
+            check_cuda_error(cudaMemcpy(
+                d_vals, &vec_vals[0], mem_size_vals(), cudaMemcpyHostToDevice
+            ));
 
-        check_cusparse_status(cusparseDenseToSparse_analysis(
-            cu_handles.get_cusparse_handle(),
-            dnMatDescr,
-            spMatDescr,
-            CUSPARSE_DENSETOSPARSE_ALG_DEFAULT,
-            buffer
-        ));
+        }
 
-        int64_t dump1, dump2;
-        int64_t nnz_64_temp;
-        void *dump3, *dump4, *dump5;
-        cusparseIndexType_t dump6, dump7;
-        cusparseIndexBase_t dump8;
-        cudaDataType dump9;
-
-        check_cusparse_status(cusparseCscGet(
-            spMatDescr,
-            &dump1, &dump2,
-            &nnz_64_temp,
-            &dump3, &dump4, &dump5,
-            &dump6, &dump7, &dump8, &dump9
-        ));
-
-        nnz = static_cast<int>(nnz_64_temp);
-        allocate_d_row_indices();
-        allocate_d_vals();
-
-        check_cusparse_status(cusparseCscSetPointers(
-            spMatDescr, d_col_offsets, d_row_indices, d_vals
-        ));
-
-        check_cusparse_status(cusparseDenseToSparse_convert(
-            cu_handles.get_cusparse_handle(),
-            dnMatDescr,
-            spMatDescr,
-            CUSPARSE_DENSETOSPARSE_ALG_DEFAULT,
-            buffer
-        ));
-
-        check_cuda_error(cudaFree(buffer));
-
-        check_cusparse_status(cusparseDestroyDnMat(dnMatDescr));
-        check_cusparse_status(cusparseDestroySpMat(spMatDescr));
+        free(h_rolling_col);
+        free(h_col_offsets);
 
     }
 
@@ -618,6 +591,7 @@ public:
     }
 
     std::string get_info_string() const {
+
         return std::format(
             "Rows: {} | Cols: {} | Non-zeroes: {} | Fill ratio: {:.3g} | Max magnitude: {:.3g}",
             m_rows,
@@ -626,6 +600,7 @@ public:
             static_cast<double>(nnz)/static_cast<double>(m_rows*n_cols),
             static_cast<double>(get_max_mag_elem().get_scalar())
         );
+
     }
 
     // *** Static Creation ***
@@ -717,7 +692,8 @@ public:
         for (int j=0; j<arg_n_cols; ++j) {
             h_col_offsets[j] = curr_nnz;
             for (int i=0; i<arg_m_rows; ++i) {
-                if ((fill_prob != 0.) && (fill_prob_dist(gen) <= fill_prob)) {
+                // Enforce diagonal is non-zero for sake of non-singularity
+                if ((i == j) || ((fill_prob != 0.) && (fill_prob_dist(gen) <= fill_prob))) {
                     T val = val_dist(gen);
                     if (val != static_cast<T>(0.)) {
                         h_vec_row_indices.push_back(i);

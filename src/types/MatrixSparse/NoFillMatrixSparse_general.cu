@@ -18,12 +18,28 @@ Vector<T> NoFillMatrixSparse<T>::frwd_sub(Vector<T> &arg_rhs) const {
 
     for (int i=0; i<n_cols; ++i) {
 
-        int col_size = h_col_offsets[i+1]-h_col_offsets[i];
-        int NBLOCKS = std::ceil(static_cast<double>(col_size)/static_cast<double>(genmat_gpu_const::WARPSIZE));
-            
-        nofillmatrixsparse_kernels::solve_column<T><<<NBLOCKS, genmat_gpu_const::WARPSIZE>>>(
-            h_col_offsets[i], d_row_indices, d_vals
+        // Update solution with column pivot
+        nofillmatrixsparse_kernels::update_pivot<T><<<1, 1>>>(
+            h_col_offsets[i], d_row_indices, d_vals, soln.d_vec
         );
+
+        // Update solution corresponding to remainder to column
+        int remaining_col_size = h_col_offsets[i+1]-h_col_offsets[i];
+        if (remaining_col_size > 0) {
+
+            int NBLOCKS = std::ceil(
+                static_cast<double>(remaining_col_size)/
+                static_cast<double>(genmat_gpu_const::MAXTHREADSPERBLOCK)
+            );
+
+            nofillmatrixsparse_kernels::lowtri_update_remaining_col
+                <T>
+                <<<NBLOCKS, genmat_gpu_const::MAXTHREADSPERBLOCK>>>
+            (
+                h_col_offsets[i], h_col_offsets[i+1], d_row_indices, d_vals, soln.d_vec
+            );
+
+        }
 
     }
 

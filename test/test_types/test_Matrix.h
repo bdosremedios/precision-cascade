@@ -1244,7 +1244,7 @@ public:
         const int n((rand() % 100)+100);
 
         MatrixDense<T> temp(CommonMatRandomInterface<M, T>::rand_matrix(TestBase::bundle, n, n));
-        temp = (temp - MatrixDense<T>::Ones(TestBase::bundle, n, n))*Scalar<T>(static_cast<T>(2.));
+    
         Scalar<T> scale_coeff(static_cast<T>(30.));
         for (int i=0; i<n; ++i) {
             Scalar<T> u_i_i = temp.get_elem(i, i);
@@ -1252,6 +1252,7 @@ public:
             abs_u_i_i.abs();
             temp.set_elem(i, i, (u_i_i/abs_u_i_i)*scale_coeff+u_i_i); 
         }
+
         for (int i=0; i<n; ++i) {
             for (int j=0; j<i; ++j) {
                 temp.set_elem(i, j, SCALAR_ZERO<T>::get()); 
@@ -1312,17 +1313,18 @@ public:
 
         const double approx_L_tri_cond_number_upbound(2.3);
         srand(time(NULL));
-        const int n((rand() % 100)+100);
+        const int n(100 + (rand() % 100));//)+100);
 
         MatrixDense<T> temp(CommonMatRandomInterface<M, T>::rand_matrix(TestBase::bundle, n, n));
-        temp = (temp - MatrixDense<T>::Ones(TestBase::bundle, n, n))*Scalar<T>(static_cast<T>(2.));
+
         Scalar<T> scale_coeff(static_cast<T>(30.));
         for (int i=0; i<n; ++i) {
             Scalar<T> l_i_i = temp.get_elem(i, i);
             Scalar<T> abs_l_i_i = l_i_i;
             abs_l_i_i.abs();
-            temp.set_elem(i, i, (l_i_i/abs_l_i_i)*scale_coeff+l_i_i); 
+            temp.set_elem(i, i, (l_i_i/abs_l_i_i)*scale_coeff+l_i_i);
         }
+
         for (int i=0; i<n; ++i) {
             for (int j=i+1; j<n; ++j) {
                 temp.set_elem(i, j, SCALAR_ZERO<T>::get()); 

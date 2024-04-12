@@ -429,13 +429,13 @@ public:
         constexpr int n_rand(40);
         constexpr double miss_tol(0.05);
 
-        // Check that zero fill_prob gives empty matrix
-        NoFillMatrixSparse<T> test_rand_empty(
+        // Check that zero fill_prob just gives diagonal matrix
+        NoFillMatrixSparse<T> test_rand_just_diag(
             NoFillMatrixSparse<T>::Random(TestBase::bundle, m_rand, n_rand, 0.)
         );
-        ASSERT_EQ(test_rand_empty.rows(), m_rand);
-        ASSERT_EQ(test_rand_empty.cols(), n_rand);
-        ASSERT_EQ(test_rand_empty.non_zeros(), 0);
+        ASSERT_EQ(test_rand_just_diag.rows(), m_rand);
+        ASSERT_EQ(test_rand_just_diag.cols(), n_rand);
+        ASSERT_EQ(test_rand_just_diag.non_zeros(), m_rand);
 
         // Just test for non-zero fill_prob gives right size and numbers aren't generally the same
         // (check middle numbers are different from 5 adjacent above and below or all are equally zero)
@@ -864,8 +864,8 @@ public:
                 ASSERT_NEAR(
                     hlf_to_dbl.get_elem(i, j).get_scalar(),
                     static_cast<double>(mat_hlf.get_elem(i, j).get_scalar()),
-                    min_1_mag(static_cast<double>(mat_hlf.get_elem(i, j).get_scalar()))*
-                        static_cast<double>(Tol<__half>::roundoff_T())
+                    (min_1_mag(static_cast<double>(mat_hlf.get_elem(i, j).get_scalar()))*
+                     static_cast<double>(Tol<__half>::roundoff_T()))
                 );
             }
         }
@@ -1111,4 +1111,10 @@ TEST_F(NoFillMatrixSparse_Substitution_Test, TestForwardSubstitution) {
     TestForwardSubstitution<__half>();
     TestForwardSubstitution<float>();
     TestForwardSubstitution<double>();
+}
+
+TEST_F(NoFillMatrixSparse_Substitution_Test, TestRandomForwardSubstitution) {
+    TestRandomForwardSubstitution<__half>();
+    TestRandomForwardSubstitution<float>();
+    TestRandomForwardSubstitution<double>();
 }

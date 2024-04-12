@@ -30,10 +30,16 @@ public:
             }
         }
 
+    }
+
+    template <typename T>
+    void TestDenseToNoFillSparse_LONGRUNTIME() {
+
         // Test random
-        constexpr int m_random(12);
-        constexpr int n_random(7);
-        MatrixDense<T> dense_rand(MatrixDense<T>::Random(TestBase::bundle, 12, 7));
+        srand(time(NULL));
+        const int m_random((rand() % 50) + 100);
+        const int n_random((rand() % 50) + 100);
+        MatrixDense<T> dense_rand(MatrixDense<T>::Random(TestBase::bundle, m_random, n_random));
 
         NoFillMatrixSparse<T> sparse_rand(dense_rand);
 
@@ -45,6 +51,29 @@ public:
                 ASSERT_EQ(sparse_rand.get_elem(i, j), dense_rand.get_elem(i, j));
             }
         }
+
+    }
+    
+    template <typename T>
+    void TestNoFillSparseToDense() {
+
+        std::initializer_list<std::initializer_list<T>> li = {
+            {static_cast<T>(1), static_cast<T>(2), static_cast<T>(3),
+             static_cast<T>(4), static_cast<T>(0)},
+            {static_cast<T>(0), static_cast<T>(0), static_cast<T>(8),
+             static_cast<T>(9), static_cast<T>(0)},
+            {static_cast<T>(0), static_cast<T>(0), static_cast<T>(0),
+             static_cast<T>(0), static_cast<T>(0)},
+            {static_cast<T>(0), static_cast<T>(0), static_cast<T>(0),
+             static_cast<T>(19), static_cast<T>(20)}
+        };
+
+        const NoFillMatrixSparse<T> nofillsparse_mat(TestBase::bundle, li);
+        const MatrixDense<T> target_mat(TestBase::bundle, li);
+
+        MatrixDense<T> test_mat(nofillsparse_mat);
+
+        ASSERT_MATRIX_EQ(target_mat, test_mat);
 
     }
 
@@ -214,6 +243,18 @@ TEST_F(TypeConversion_Test, TestDenseToNoFillSparse) {
     TestDenseToNoFillSparse<__half>();
     TestDenseToNoFillSparse<float>();
     TestDenseToNoFillSparse<double>();
+}
+
+TEST_F(TypeConversion_Test, TestDenseToNoFillSparse_LONGRUNTIME) {
+    TestDenseToNoFillSparse_LONGRUNTIME<__half>();
+    TestDenseToNoFillSparse_LONGRUNTIME<float>();
+    TestDenseToNoFillSparse_LONGRUNTIME<double>();
+}
+
+TEST_F(TypeConversion_Test, TestNoFillSparseToDense) {
+    TestNoFillSparseToDense<__half>();
+    TestNoFillSparseToDense<float>();
+    TestNoFillSparseToDense<double>();
 }
 
 TEST_F(TypeConversion_Test, TestNoFillSparseBlockToDense) {

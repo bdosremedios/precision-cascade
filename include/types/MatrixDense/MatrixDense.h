@@ -197,6 +197,10 @@ public:
     }
 
     // *** Conversion Constructor ***
+    MatrixDense(const NoFillMatrixSparse<T> &sparse_mat):
+        MatrixDense(sparse_mat.get_block(0, 0, sparse_mat.rows(), sparse_mat.cols()).copy_to_mat())
+    {}
+
     MatrixDense(const MatrixDense<T>::Block &block) {
         *this = block.copy_to_mat();
     }

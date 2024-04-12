@@ -4,6 +4,7 @@
 namespace genmat_gpu_const
 {
     constexpr int WARPSIZE(32);
+    constexpr int MAXTHREADSPERBLOCK(1024);
 }
 
 #endif
