@@ -25,7 +25,7 @@ inline void _CHECK_FUNC_HAS_RUNTIME_ERROR(
     try {
         func();
         FAIL();
-    } catch (std::runtime_error e) {
+    } catch (std::runtime_error &e) {
         if (*to_print) {
             std::cout << e.what() << std::endl;
         }

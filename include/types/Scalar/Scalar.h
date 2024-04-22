@@ -27,6 +27,10 @@ private:
 
     T *d_scalar = nullptr;
 
+    Scalar<__half> to_half() const;
+    Scalar<float> to_float() const;
+    Scalar<double> to_double() const;
+
 public:
 
     // *** Constructors ***
@@ -39,7 +43,9 @@ public:
     // *** Copy Assignment ***
     Scalar<T> & operator=(const Scalar<T> &other) {
         if (this != &other) {
-            check_cuda_error(cudaMemcpy(d_scalar, other.d_scalar, sizeof(T), cudaMemcpyDeviceToDevice));
+            check_cuda_error(cudaMemcpy(
+                d_scalar, other.d_scalar, sizeof(T), cudaMemcpyDeviceToDevice
+            ));
         }
         return *this;
     }
@@ -60,13 +66,12 @@ public:
 
     // *** Cast ***
     template <typename Cast_T>
-    Scalar<Cast_T> cast() const { throw std::runtime_error("Scalar: invalid cast conversion"); }
+    Scalar<Cast_T> cast() const {
+        throw std::runtime_error("Scalar: invalid cast conversion");
+    }
 
-    Scalar<__half> to_half() const;
     template <> Scalar<__half> cast<__half>() const { return to_half(); }
-    Scalar<float> to_float() const;
     template <> Scalar<float> cast<float>() const { return to_float(); }
-    Scalar<double> to_double() const;
     template <> Scalar<double> cast<double>() const { return to_double(); }
 
     // *** Operations ***

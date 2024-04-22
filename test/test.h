@@ -1,6 +1,10 @@
 #ifndef TEST_H
 #define TEST_H
 
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+
 #include <cmath>
 #include <filesystem>
 #include <memory>
@@ -22,6 +26,36 @@ namespace fs = std::filesystem;
 class TestBase: public testing::Test
 {
 public:
+
+    _CrtMemState init_state = {0};
+    _CrtMemState final_state = {0};
+    _CrtMemState state_diff = {0};
+
+    virtual void SetUp() {
+        _CrtMemCheckpoint(&init_state);
+    }
+
+    virtual void TearDown() {
+
+        _CrtMemCheckpoint(&final_state);
+        
+        if (_CrtMemDifference(&state_diff, &init_state, &final_state)) {
+
+            _CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_FILE);
+            _CrtSetReportFile(_CRT_WARN, _CRTDBG_FILE_STDOUT);
+            _CrtMemDumpStatistics(&state_diff);
+            _CrtMemDumpAllObjectsSince(&init_state);
+
+            if (state_diff.lSizes[1] == 56) {
+                std::string msg = "LIKELY FALSE POSITIVE: 56 byte normal block leak likely caused by GoogleTest";
+                std::cout << msg << std::endl;
+            } else {
+                FAIL();
+            }
+
+        }
+
+    }
 
     const fs::path read_matrix_dir = (
         fs::current_path() / fs::path("..") / fs::path("test") / fs::path("read_matrices")

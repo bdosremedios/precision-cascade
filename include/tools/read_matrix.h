@@ -76,6 +76,7 @@ M<T> read_matrixCSV(const cuHandleBundle &cu_handles, fs::path const &path) {
             try {
                 temp_number = static_cast<T>(stod(temp_str));
             } catch (std::invalid_argument e) {
+                free(h_mat);
                 throw std::runtime_error(
                     "read_matrixCSV: error in: " + path.string() + "\n" +
                     "Invalid argument in file, failed to convert to numeric"

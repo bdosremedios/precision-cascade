@@ -52,10 +52,26 @@ target_link_libraries(
 set_property(TARGET precision-cascade-constants PROPERTY CUDA_ARCHITECTURES 80)
 
 add_library(
-    precision-cascade
+    precision-cascade-tools
     STATIC
     tools/cuda_check.cu
     tools/cuHandleBundle.cu
+)
+
+target_link_libraries(
+    precision-cascade-tools
+    PUBLIC
+    precision-cascade-headers
+    "$ENV{CUDA_PATH}/lib/x64/cuda.lib"
+    "$ENV{CUDA_PATH}/lib/x64/cublas.lib"
+    "$ENV{CUDA_PATH}/lib/x64/cusparse.lib"
+)
+
+set_property(TARGET precision-cascade-tools PROPERTY CUDA_ARCHITECTURES 80)
+
+add_library(
+    precision-cascade
+    STATIC
     types/Scalar/Scalar_hlf.cu
     types/Scalar/Scalar_sgl.cu
     types/Scalar/Scalar_dbl.cu
@@ -80,6 +96,7 @@ target_link_libraries(
     precision-cascade-headers
     precision-cascade-gpu_kernels
     precision-cascade-constants
+    precision-cascade-tools
     "$ENV{CUDA_PATH}/lib/x64/cuda.lib"
     "$ENV{CUDA_PATH}/lib/x64/cublas.lib"
     "$ENV{CUDA_PATH}/lib/x64/cusparse.lib"

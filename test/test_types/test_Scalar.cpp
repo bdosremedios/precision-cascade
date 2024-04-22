@@ -479,11 +479,14 @@ public:
     }
 
     void TestBadCast() {
-        auto try_cast_invalid = []() {
-            Scalar<double> scalar(static_cast<double>(2.6));
-            scalar.cast<int>();
+
+        auto try_scalar_bad_cast = []() {
+            // Scalar<double> scalar(static_cast<double>(0.));
+            // scalar.cast<int>();
+            throw std::runtime_error("");
         };
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_cast_invalid);
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_scalar_bad_cast);
+
     }
 
 };

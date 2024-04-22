@@ -229,6 +229,8 @@ public:
         auto try_row_too_large = [=]() { vec_rand.copy_data_to_ptr(h_vec_rand, m_rand+2); };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_row_too_large);
 
+        free(h_vec_rand);
+
     }
 
     template <typename T>

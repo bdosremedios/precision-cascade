@@ -234,6 +234,7 @@ public:
             if (curr_row->size() == n_cols) {
                 row_iters.push_back(std::cbegin(*curr_row));
             } else {
+                free(h_col_offsets);
                 throw std::runtime_error(
                     "NoFillMatrixSparse: Non-consistent row size encounted in initializer list"
                 );
