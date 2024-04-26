@@ -6,7 +6,8 @@
 #include <functional>
 
 #include "Preconditioner.h"
-#include "tools/ILU.h"
+
+#include "tools/ILU_subroutines.h"
 
 template <template <typename> typename M, typename W>
 class ILUPreconditioner: public Preconditioner<M, W>
@@ -17,14 +18,14 @@ private:
     M<W> L = M<W>(cuHandleBundle());
     M<W> U = M<W>(cuHandleBundle());
     M<W> P = M<W>(cuHandleBundle());
-    std::function<bool (const W &curr_val, const int &row, const int &col, const W &zero_tol)> drop_rule_tau;
-    std::function<void (const int &col, const W &zero_tol, const int &m, W *U_mat, W *L_mat)> apply_drop_rule_col;
+    // std::function<bool (const W &curr_val, const int &row, const int &col, const W &zero_tol)> drop_rule_tau;
+    // std::function<void (const int &col, const W &zero_tol, const int &m, W *U_mat, W *L_mat)> apply_drop_rule_col;
 
-    void construct_ILU(const M<W> &A, const W &zero_tol, const bool &pivot) {
-        ilu::dynamic_construct_leftlook_square_ILU(
-            zero_tol, pivot, drop_rule_tau, apply_drop_rule_col, A, U, L, P
-        );
-    }
+    // void construct_ILU(const M<W> &A, const W &zero_tol, const bool &pivot) {
+    //     ilu::dynamic_construct_leftlook_square_ILU(
+    //         zero_tol, pivot, drop_rule_tau, apply_drop_rule_col, A, U, L, P
+    //     );
+    // }
 
 public:
 
@@ -58,97 +59,43 @@ public:
         }
     }
 
-    // ILU(0)   
-    ILUPreconditioner(const M<W> &A, const W &zero_tol, const bool &pivot):
+
+    // ILU(0)
+    ILUPreconditioner(const MatrixDense<W> &A, const bool &to_pivot):
         m(A.rows())
     {
-
-        drop_rule_tau = [A] (
-            const W &curr_val, const int &i, const int &j, W const &_zero_tol
-        ) -> bool {
-            return (std::abs(A.get_elem(i, j).get_scalar()) <= _zero_tol);
-        };
-
-        apply_drop_rule_col = [this] (
-            const int &col, const W &_zero_tol, const int &m, W *U_mat, W *L_mat
-        ) -> void { 
-
-            int U_size = col;
-            int L_size = m-(col+1);
-
-            for (int l=0; l<U_size; ++l) { // Apply tau drop rule
-                if (drop_rule_tau(U_mat[l+col*m], l, col, _zero_tol)) {
-                    U_mat[l+col*m] = static_cast<W>(0);
-                }
-            }
-            for (int l=col+1; l<L_size+col+1; ++l) { // Apply tau drop rule
-                if (drop_rule_tau(L_mat[l+col*m], l, col, _zero_tol)) {
-                    L_mat[l+col*m] = static_cast<W>(0);
-                }
-            }
-
-        };
-
-        construct_ILU(A, zero_tol, pivot);
-
+        ilu_subroutines::ILUTriplet<MatrixDense, W> ret = ilu_subroutines::construct_square_ILU_0<MatrixDense, W>(
+            NoFillMatrixSparse<W>(A), to_pivot
+        );
+        L = ret.L; U = ret.U; P = ret.P;
     }
 
     // ILUT(tau, p), tau threshold to drop and p number of entries to keep
-    ILUPreconditioner(M<W> &A, const W &tau, const int &p, const W &zero_tol, const bool &pivot):
+    ILUPreconditioner(const NoFillMatrixSparse<W> &A, const bool &to_pivot):
         m(A.rows())
     {
+        ilu_subroutines::ILUTriplet<NoFillMatrixSparse, W> ret = ilu_subroutines::construct_square_ILU_0<NoFillMatrixSparse, W>(
+            A, to_pivot
+        );
+        L = ret.L; U = ret.U; P = ret.P;
+    }
 
-        // Calculate original A col norm for threshold comparison
-        Vector<W> A_col_norms(A.get_cu_handles(), A.cols());
-        for (int j=0; j<A.cols(); ++j) {
-            A_col_norms.set_elem(j, A.get_col(j).copy_to_vec().norm());
-        }
+    ILUPreconditioner(const MatrixDense<W> &A, const W &tau, const int &p, const bool &to_pivot):
+        m(A.rows())
+    {
+        ilu_subroutines::ILUTriplet<MatrixDense, W> ret = ilu_subroutines::construct_square_ILU_0<MatrixDense, W>(
+            NoFillMatrixSparse<W>(A), tau, p, to_pivot
+        );
+        L = ret.L; U = ret.U; P = ret.P;
+    }
 
-        drop_rule_tau = [A_col_norms, tau] (
-            const W &curr_val, const int &row, const int &col, const W &_zero_tol
-        ) -> bool {
-            return (std::abs(curr_val) <= tau*A_col_norms.get_elem(col).get_scalar());
-        };
-
-        apply_drop_rule_col = [this, p, &A] (
-            const int &col, const W &_zero_tol, const int &m, W *U_mat, W *L_mat
-        ) -> void {
-
-            int U_size = col;
-            int L_size = m-(col+1);
-
-            // Modify col in U
-            for (int l=0; l<U_size; ++l) { // Apply tau drop rule
-                if (drop_rule_tau(U_mat[l+col*m], l, col, _zero_tol)) {
-                    U_mat[l+col*m] = static_cast<W>(0);
-                }
-            }
-            if (p < U_size) { // Drop all but p largest elements
-                Vector<W> U_col(A.get_cu_handles(), U_mat+col*m, U_size);
-                std::vector<int> U_sorted_indices = U_col.sort_indices();
-                for (int i=0; i<U_size-p; ++i) {
-                    U_mat[U_sorted_indices[i]+col*m] = static_cast<W>(0);
-                }
-            }
-
-            // Modify col in L
-            for (int l=col+1; l<L_size+col+1; ++l) { // Apply tau drop rule
-                if (drop_rule_tau(L_mat[l+col*m], l, col, _zero_tol)) {
-                    L_mat[l+col*m] = static_cast<W>(0);
-                }
-            }
-            if (p < L_size) { // Drop all but p largest elements
-                Vector<W> L_col(A.get_cu_handles(), L_mat+col+1+col*m, L_size);
-                std::vector<int> L_sorted_indices = L_col.sort_indices();
-                for (int i=0; i<L_size-p; ++i) {
-                    L_mat[L_sorted_indices[i]+col+1+col*m] = static_cast<W>(0);
-                }
-            }
-
-        };
-
-        construct_ILU(A, zero_tol, pivot);
-
+    ILUPreconditioner(const NoFillMatrixSparse<W> &A, const W &tau, const int &p, const bool &to_pivot):
+        m(A.rows())
+    {
+        ilu_subroutines::ILUTriplet<NoFillMatrixSparse, W> ret = ilu_subroutines::construct_square_ILU_0<NoFillMatrixSparse, W>(
+            A, tau, p, to_pivot
+        );
+        L = ret.L; U = ret.U; P = ret.P;
     }
 
     Vector<W> action_inv_M(const Vector<W> &vec) const override {
@@ -166,7 +113,7 @@ public:
     M<T> get_U_cast() const { return U.template cast<T>(); }
 
     bool check_compatibility_left(const int &arg_m) const override { return arg_m == m; };
-    bool check_compatibility_right( const int &arg_n) const override { return arg_n == m; };
+    bool check_compatibility_right(const int &arg_n) const override { return arg_n == m; };
 
 };
 

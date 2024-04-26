@@ -303,12 +303,12 @@ public:
         std::string acc;
         for (int i=0; i<m_rows-1; ++i) {
             for (int j=0; j<n_cols-1; ++j) {
-                acc += std::format("{:.6g} ", static_cast<double>(h_mat[i+j*m_rows]));
+                acc += std::format("{:.8g} ", static_cast<double>(h_mat[i+j*m_rows]));
             }
-            acc += std::format("{:.6g}\n", static_cast<double>(h_mat[i+(n_cols-1)*m_rows]));
+            acc += std::format("{:.8g}\n", static_cast<double>(h_mat[i+(n_cols-1)*m_rows]));
         }
         for (int j=0; j<n_cols-1; ++j) {
-            acc += std::format("{:.6g} ", static_cast<double>(h_mat[(m_rows-1)+j*m_rows]));
+            acc += std::format("{:.8g} ", static_cast<double>(h_mat[(m_rows-1)+j*m_rows]));
         }
         acc += std::format("{:.6g}", static_cast<double>(h_mat[(m_rows-1)+(n_cols-1)*m_rows]));
 

@@ -11,7 +11,7 @@ public:
 
         auto try_non_square = []() { 
             M<double> A(M<double>::Ones(TestBase::bundle, 7, 5));
-            ILUPreconditioner<M, double> ilu(A, Tol<double>::roundoff(), false);
+            ILUPreconditioner<M, double> ilu(A, false);
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_non_square);
 
@@ -23,7 +23,7 @@ public:
         // Test that 7x7 matrix is only compatible with 7
         constexpr int n(7);
         M<double> A(M<double>::Identity(TestBase::bundle, 7, 7));
-        ILUPreconditioner<M, double> ilu(A, Tol<double>::roundoff(), false);
+        ILUPreconditioner<M, double> ilu(A, false);
         EXPECT_TRUE(ilu.check_compatibility_left(n));
         EXPECT_TRUE(ilu.check_compatibility_right(n));
         EXPECT_FALSE(ilu.check_compatibility_left(n-4));
@@ -39,16 +39,16 @@ public:
         constexpr int n(7);
 
         auto try_ilu_zero_at_0_0 = [=]() {
-            M<double> A(M<double>::Identity(TestBase::bundle, n, n));
+            MatrixDense<double> A(MatrixDense<double>::Identity(TestBase::bundle, n, n));
             A.set_elem(0, 0, 0);
-            ILUPreconditioner<M, double> ilu(A, Tol<double>::roundoff(), false);
+            ILUPreconditioner<M, double> ilu(M<double>(A), false);
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_ilu_zero_at_0_0);
 
         auto try_ilu_zero_at_4_4 = [=]() {
-            M<double> A(M<double>::Identity(TestBase::bundle, n, n));
+            MatrixDense<double> A(MatrixDense<double>::Identity(TestBase::bundle, n, n));
             A.set_elem(4, 4, 0);
-            ILUPreconditioner<M, double> ilu(A, Tol<double>::roundoff(), false);
+            ILUPreconditioner<M, double> ilu(M<double>(A), false);
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_ilu_zero_at_4_4);
 
@@ -59,7 +59,7 @@ public:
 
         constexpr int n(8);
         M<double> A(read_matrixCSV<M, double>(TestBase::bundle, solve_matrix_dir / fs::path("ilu_A.csv")));
-        ILUPreconditioner<M, double> ilu(A, Tol<double>::roundoff(), false); // Make dense LU
+        ILUPreconditioner<M, double> ilu(A, false); // Make dense LU
 
         // Test matching ILU to MATLAB for the dense matrix
         Vector<double> test_vec(Vector<double>::Random(TestBase::bundle, n));
@@ -74,7 +74,7 @@ public:
         // Test that using a completely dense matrix one just gets a LU
         constexpr int n(8);
         M<double> A(read_matrixCSV<M, double>(TestBase::bundle, solve_matrix_dir / fs::path("ilu_A.csv")));
-        ILUPreconditioner<M, double> ilu(A, Tol<double>::roundoff(), true);
+        ILUPreconditioner<M, double> ilu(A, true);
         
         // Test matching ILU to MATLAB for the dense matrix
         Vector<double> test_vec(Vector<double>::Random(TestBase::bundle, n));
@@ -87,22 +87,22 @@ public:
     void TestILUPremadeErrorChecks() {
 
         auto try_smaller_mismatch_col = []() {
-            M<double> L_not_sq(M<double>::Random(TestBase::bundle, 8, 7));
-            M<double> U(M<double>::Random(TestBase::bundle, 8, 8));
+            M<double> L_not_sq(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, 8, 7));
+            M<double> U(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, 8, 8));
             ILUPreconditioner<M, double> ilu(L_not_sq, U);
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_smaller_mismatch_col);
 
         auto try_smaller_mismatch_row = []() {
-            M<double> L(M<double>::Random(TestBase::bundle, 8, 8));
-            M<double> U_not_sq(M<double>::Random(TestBase::bundle, 6, 8));
+            M<double> L(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, 8, 8));
+            M<double> U_not_sq(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, 6, 8));
             ILUPreconditioner<M, double> ilu(L, U_not_sq);
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_smaller_mismatch_row);
 
         auto try_smaller_mismatch_both = []() {
-            M<double> L_not_match(M<double>::Random(TestBase::bundle, 8, 8));
-            M<double> U_not_match(M<double>::Random(TestBase::bundle, 7, 7));
+            M<double> L_not_match(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, 8, 8));
+            M<double> U_not_match(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, 7, 7));
             ILUPreconditioner<M, double> ilu(L_not_match, U_not_match);
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_smaller_mismatch_both);
@@ -114,7 +114,7 @@ public:
 
         constexpr int n(8);
         M<double> A(read_matrixCSV<M, double>(TestBase::bundle, solve_matrix_dir / fs::path("ilu_A.csv")));
-        ILUPreconditioner<M, double> ilu0_dbl(A, Tol<double>::roundoff(), false);
+        ILUPreconditioner<M, double> ilu0_dbl(A, false);
 
         M<double> L_dbl(ilu0_dbl.get_L());
         M<double> U_dbl(ilu0_dbl.get_U());
@@ -145,35 +145,35 @@ public:
 
 TEST_F(ILUPreconditioner_Test, TestSquareCheck) {
     TestSquareCheck<MatrixDense>();
-    // TestSquareCheck<MatrixSparse>();
+    TestSquareCheck<NoFillMatrixSparse>();
 }
 
 TEST_F(ILUPreconditioner_Test, TestCompatibilityCheck) {
     TestCompatibilityCheck<MatrixDense>();
-    // TestCompatibilityCheck<MatrixSparse>();
+    TestCompatibilityCheck<NoFillMatrixSparse>();
 }
 
 TEST_F(ILUPreconditioner_Test, TestZeroDiagonalEntries) {
     TestZeroDiagonalEntries<MatrixDense>();
-    // TestZeroDiagonalEntries<MatrixSparse>();
+    TestZeroDiagonalEntries<NoFillMatrixSparse>();
 }
 
 TEST_F(ILUPreconditioner_Test, TestApplyInverseM) {
     TestApplyInverseM<MatrixDense>();
-    // TestApplyInverseM<MatrixSparse>();
+    TestApplyInverseM<NoFillMatrixSparse>();
 }
 
 TEST_F(ILUPreconditioner_Test, TestApplyInverseM_Pivoted) {
     TestApplyInverseM_Pivoted<MatrixDense>();
-    // TestApplyInverseM_Pivoted<MatrixSparse>();
+    TestApplyInverseM_Pivoted<NoFillMatrixSparse>();
 }
 
 TEST_F(ILUPreconditioner_Test, TestILUPremadeErrorChecks) {
     TestILUPremadeErrorChecks<MatrixDense>();
-    // TestILUPremadeErrorChecks<MatrixSparse>();
+    TestILUPremadeErrorChecks<NoFillMatrixSparse>();
 }
 
 TEST_F(ILUPreconditioner_Test, TestDoubleSingleHalfCast) {
     TestDoubleSingleHalfCast<MatrixDense>();
-    // TestDoubleSingleHalfCast<MatrixSparse>();
+    TestDoubleSingleHalfCast<NoFillMatrixSparse>();
 }

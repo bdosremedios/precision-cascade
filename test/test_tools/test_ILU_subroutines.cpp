@@ -1,6 +1,6 @@
-// #include "../test.h"
+#include "../test.h"
 
-// #include "tools/ILU_subroutines.h"
+#include "tools/ILU_subroutines.h"
 
 // using namespace ilu;
 

@@ -1,383 +1,470 @@
 #ifndef ILU_SUBROUTINES_H
 #define ILU_SUBROUTINES_H
 
-// #include <functional>
+#include <functional>
 
 #include "types/types.h"
+#include "tools/Sort.h"
 
-namespace ilu
+namespace ilu_subroutines
 {
 
-// template <typename W>
-// void apply_prev_zeroing_col(
-//     const int &col_ind, const W &zero_tol,
-//     std::function<bool (const W &curr_val, const int &row, const int &col, const W &zero_tol)> drop_rule_tau,
-//     const int &m_dim,
-//     W *U_mat, W *L_mat
-// ) {
-//     for (int i=0; i<col_ind; ++i) {
-//         W prev_col_val = U_mat[i+col_ind*m_dim];
-//         if ((std::abs(prev_col_val) <= zero_tol) || (drop_rule_tau(prev_col_val, i, col_ind, zero_tol))) {
-//             U_mat[i+col_ind*m_dim] = static_cast<W>(0);
-//         } else {
-//             for (int k=i+1; k<m_dim; ++k) {
-//                 U_mat[k+col_ind*m_dim] -= L_mat[k+i*m_dim]*prev_col_val;
-//             }
-//         }
-//     }
-// }
+template <template <typename> typename M, typename T>
+struct ILUTriplet {
+    M<T> L = M<T>(cuHandleBundle());
+    M<T> U = M<T>(cuHandleBundle());
+    M<T> P = M<T>(cuHandleBundle());
+};
 
-// template <typename W>
-// int find_largest_pivot(
-//     const int &col_ind, const int &m_dim, W *mat
-// ) {
-
-//     int pivot_ind = col_ind;
-//     W largest_val = std::abs(mat[col_ind+col_ind*m_dim]);
-//     for (int i=col_ind+1; i<m_dim; ++i) {
-//         W temp = std::abs(mat[i+col_ind*m_dim]);
-//         if (temp > largest_val) {
-//             pivot_ind = i;
-//             largest_val = temp;
-//         }
-//     }
-
-//     return pivot_ind;
-
-// }
-
-// template <typename W>
-// void partial_swap_row(
-//     const int &row_1, const int &row_2, const int &beg, const int &end,
-//     const int &m_dim,
-//     W *mat
-// ) {
-//     for (int j=beg; j<end; ++j) {
-//         W temp = mat[row_1+j*m_dim];
-//         mat[row_1+j*m_dim] = mat[row_2+j*m_dim];
-//         mat[row_2+j*m_dim] = temp;
-//     }
-// }
-
-// template <typename W>
-// void pivot_rows_U_L_P(
-//     const int &pivot_ind, const int &diag_ind,
-//     const int &m_dim,
-//     W *U_mat, W *L_mat, W *P_mat
-// ) {
-//     if (diag_ind != pivot_ind) {
-//         partial_swap_row(diag_ind, pivot_ind, diag_ind, m_dim, m_dim, U_mat);
-//         partial_swap_row(diag_ind, pivot_ind, 0, diag_ind, m_dim, L_mat);
-//         partial_swap_row(diag_ind, pivot_ind, 0, m_dim, m_dim, P_mat);
-//     }
-// }
-
-// template <typename W>
-// void zero_below_diag_col_update_U_L(
-//     const int &col_ind, const W &zero_tol,
-//     const int &m_dim,
-//     W *U_mat, W *L_mat
-// ) {
-
-//     W pivot_val = U_mat[col_ind+col_ind*m_dim];
-//     if (std::abs(pivot_val) >= zero_tol) {
-//         for (int i=col_ind+1; i<m_dim; ++i) {
-//             W val_to_zero = U_mat[i+col_ind*m_dim];
-//             if (std::abs(val_to_zero) >= zero_tol) {
-//                 W l_ij = val_to_zero/pivot_val;
-//                 if (std::abs(l_ij) >= zero_tol) { L_mat[i+col_ind*m_dim] = l_ij; }
-//                 U_mat[i+col_ind*m_dim] = static_cast<W>(0);
-//             }
-//         }
-//     } else {
-//         throw std::runtime_error("ILU has zero pivot in elimination");
-//     }
-
-// }
-
-// // Left looking LU factorization for better memory access
-// template <typename W>
-// void execute_leftlook_col_elimination(
-//     const int &col_ind,
-//     const W &zero_tol, bool to_pivot_row,
-//     std::function<bool (const W &curr_val, const int &row, const int &col, const W &zero_tol)> drop_rule_tau,
-//     std::function<void (const int &col, const W &zero_tol, const int &m, W *U_mat, W *L_mat)> apply_drop_rule_col,
-//     const int &m_dim,
-//     W *U_mat, W *L_mat, W *P_mat
-// ) {
-
-//     apply_prev_zeroing_col(col_ind, zero_tol, drop_rule_tau, m_dim, U_mat, L_mat);
-
-//     if (to_pivot_row) {
-//         int pivot_ind = find_largest_pivot(col_ind, m_dim, U_mat);
-//         pivot_rows_U_L_P(pivot_ind, col_ind, m_dim, U_mat, L_mat, P_mat);
-//     }
-
-//     zero_below_diag_col_update_U_L(col_ind, zero_tol, m_dim, U_mat, L_mat);
-//     apply_drop_rule_col(col_ind, zero_tol, m_dim, U_mat, L_mat);
-
-// }
-
-// template <template <typename> typename M, typename W>
-// void dynamic_construct_leftlook_square_ILU(
-//     const W &zero_tol, const bool &pivot,
-//     std::function<bool (const W &curr_val, const int &row, const int &col, const W &zero_tol)> drop_rule_tau,
-//     std::function<void (const int &col, const W &zero_tol, const int &m, W *U_mat, W *L_mat)> apply_drop_rule_col,
-//     const M<W> &A,
-//     M<W> &U, M<W> &L, M<W> &P
-// ) {
-
-//     if (A.rows() != A.cols()) { throw std::runtime_error("Non square matrix A"); }
-//     const int m_dim(A.rows());
-
-//     W *U_mat = static_cast<W *>(malloc(m_dim*m_dim*sizeof(W)));
-//     W *L_mat = static_cast<W *>(malloc(m_dim*m_dim*sizeof(W)));
-//     W *P_mat = static_cast<W *>(malloc(m_dim*m_dim*sizeof(W)));
-
-//     U = A;
-//     L = M<W>::Identity(A.get_cu_handles(), m_dim, m_dim);
-//     P = M<W>::Identity(A.get_cu_handles(), m_dim, m_dim);
-
-//     U.copy_data_to_ptr(U_mat, m_dim, m_dim);
-//     L.copy_data_to_ptr(L_mat, m_dim, m_dim);
-//     P.copy_data_to_ptr(P_mat, m_dim, m_dim);
-
-//     for (int j=0; j<m_dim; ++j) {
-//         execute_leftlook_col_elimination(
-//             j,
-//             zero_tol, pivot,
-//             drop_rule_tau,
-//             apply_drop_rule_col,
-//             m_dim,
-//             U_mat, L_mat, P_mat
-//         );
-//     }
-
-//     U = M<W>(A.get_cu_handles(), U_mat, m_dim, m_dim);
-//     L = M<W>(A.get_cu_handles(), L_mat, m_dim, m_dim);
-//     P = M<W>(A.get_cu_handles(), P_mat, m_dim, m_dim);
-
-//     free(U_mat);
-//     free(L_mat);
-//     free(P_mat);
-
-//
-
-template <typename T> class ColValHeadManager;
+namespace
+{
 
 template <typename T>
-class ColVal_DblLink
-{
-public:
+using DropRuleTauFunc = std::function<bool (T curr_val, int row, int col)>;
 
-    ColVal_DblLink<T> *prev_col_val;
-    ColVal_DblLink<T> *next_col_val;
-    const int row;
-    const int col;
-    const T val;
-    ColValHeadManager<T> *manager_ptr;
+template <typename T>
+using DropRulePFunc = std::function<void (int col_ind, int pivot_ind, T *col_ptr, int m_dim)>;
 
-    ColVal_DblLink(int arg_row, int arg_col, T arg_val, ColValHeadManager<T> *arg_manager_ptr):
-        row(arg_row), col(arg_col), val(arg_val),
-        prev_col_val(nullptr), next_col_val(nullptr), manager_ptr(arg_manager_ptr)
-    {
-        arg_manager_ptr->validate_col_val(this);
-    }
-
-    ~ColVal_DblLink() {
-        manager_ptr->update_manager_on_deletion(this);
-        if (prev_col_val != nullptr) {
-            prev_col_val->next_col_val = next_col_val;
-        }
-        if (next_col_val != nullptr) {
-            next_col_val->prev_col_val = prev_col_val;
-        }
-    }
-
-    ColVal_DblLink(const ColVal_DblLink &) = delete;
-    ColVal_DblLink &operator=(const ColVal_DblLink &) = delete;
-
-    bool operator>(const ColVal_DblLink &other) const {
-        return val > other.val;
-    }
-
-    ColVal_DblLink * connect(ColVal_DblLink *other) {
-        next_col_val = other;
-        other->prev_col_val = this;
-        return this;
-    }
-
+template <typename T>
+struct SparseMatrixDescrPtrs {
+    int *col_offsets;
+    int *row_indices;
+    T *vals;
 };
 
 template <typename T>
-class ColValHeadManager
-{
-private:
-
-    const int n_cols;
-
-public:
-
-    std::vector<ColVal_DblLink<T> *> heads;
-
-    ColValHeadManager(int arg_n_cols): n_cols(arg_n_cols) {
-        heads.resize(n_cols);
-        for (int i=0; i<n_cols; ++i) { heads[i] = nullptr; }
-    }
-
-    ColValHeadManager(const ColValHeadManager &) = delete;
-    ColValHeadManager &operator=(const ColValHeadManager &) = delete;
-
-    void update_manager_on_deletion(const ColVal_DblLink<T> *col_val) {
-
-        if ((heads[col_val->col] != nullptr) && (heads[col_val->col] == col_val)) {
-            heads[col_val->col] = col_val->next_col_val;
-        }
-
-    }
-
-    void validate_col_val(ColVal_DblLink<T> *col_val) {
-        if ((col_val->col < 0) || (col_val->col >= n_cols)) {
-            throw std::runtime_error(
-                "ColValHeadManager: col_val col invalid for ColValHeadManager"
-            );
-        }
-    }
-
-    void add_head(ColVal_DblLink<T> *col_val) {
-        if ((heads[col_val->col] == nullptr) && (col_val->prev_col_val == nullptr)) {
-            heads[col_val->col] = col_val;
-        } else {
-            throw std::runtime_error(
-                "ColValHeadManager: invalid use of add_head either filled or non head val"
-            );
-        }
-    }
-
-};
+NoFillMatrixSparse<T> convert_SparseMatrixDescrPtrs_to_NoFillMatrixSparse(
+    const cuHandleBundle &arg_cu_handles, int m_dim, SparseMatrixDescrPtrs<T> mat_descrp_ptrs
+) {
+    return NoFillMatrixSparse<T>(
+        arg_cu_handles,
+        mat_descrp_ptrs.col_offsets,
+        mat_descrp_ptrs.row_indices,
+        mat_descrp_ptrs.vals,
+        m_dim, m_dim, mat_descrp_ptrs.col_offsets[m_dim]
+    );
+}
 
 template <typename T>
-class PSizeRowHeap
-{
-private:
-
-    const int p;
-    const int row;
-    int count = 0;
-
-    int calc_parent_ind(int curr_ind) const {
-        return (curr_ind-1)/2;
+T * get_new_U_col_from_left_look(
+    int col_ind,
+    int m_dim,
+    DropRuleTauFunc<T> drop_rule_tau_U,
+    SparseMatrixDescrPtrs<T> h_A,
+    SparseMatrixDescrPtrs<T> h_L,
+    int *pivot_row_hist
+) {
+    
+    // Instantiate new dense U col with A column
+    T *new_col_U = static_cast<T *>(malloc(m_dim*sizeof(T)));
+    for (int i=0; i<m_dim; ++i) {
+        new_col_U[i] = static_cast<T>(0.);
+    }
+    int col_beg_A = h_A.col_offsets[col_ind];
+    int col_end_A = h_A.col_offsets[col_ind+1];
+    for (int offset_A=col_beg_A; offset_A<col_end_A; ++offset_A) {
+        new_col_U[h_A.row_indices[offset_A]] = h_A.vals[offset_A];
     }
 
-    int calc_child_ind_L(int curr_ind) const {
-        return 2*curr_ind + 1;
-    }
+    // Apply effects from previous column updates
+    for (int k=0; k<col_ind; ++k) {
 
-    void heap_swap(int i, int j) {
-        ColVal_DblLink<T> *temp = heap[i];
-        heap[i] = heap[j];
-        heap[j] = temp;
-    }
+        int col_beg_L = h_L.col_offsets[k];
+        int col_end_L = h_L.col_offsets[k+1];
 
-    void no_replace_push(ColVal_DblLink<T> *new_val, int end_ind) {
-
-        heap[end_ind] = new_val;
-
-        int curr_ind = end_ind;
-        int parent_ind = calc_parent_ind(curr_ind);
-        while ((curr_ind > 0) && (*heap[parent_ind] > *heap[curr_ind])) {
-            heap_swap(parent_ind, curr_ind);
-            curr_ind = parent_ind;
-            parent_ind = calc_parent_ind(curr_ind);
+        if (drop_rule_tau_U(new_col_U[pivot_row_hist[k]], pivot_row_hist[k], col_ind)) { // Drop pivot U if matches rule
+            new_col_U[pivot_row_hist[k]] = static_cast<T>(0.);
         }
+        T effecting_U_val = new_col_U[pivot_row_hist[k]];
 
-    }
-
-    void replace_min_push(ColVal_DblLink<T> *new_val) {
-
-        heap[0] = new_val;
-
-        int curr_ind = 0;
-        int child_ind_L = calc_child_ind_L(curr_ind);
-        while (child_ind_L < p) {
-
-            int min_child = child_ind_L;
-            if (((child_ind_L+1) < p) && (*heap[child_ind_L] > *heap[child_ind_L+1])) {
-                min_child = child_ind_L+1;
+        if (effecting_U_val != static_cast<T>(0.)) { // Skip if no effect from U value
+            for (int offset_L=col_beg_L; offset_L<col_end_L; ++offset_L) {
+                int row_L = h_L.row_indices[offset_L];
+                if (row_L != pivot_row_hist[k]) { // Don't apply to own pivot row
+                    T val_L = h_L.vals[offset_L];
+                    if (val_L != static_cast<T>(0.)) { // Skip computation if there's no L modification
+                        new_col_U[row_L] -= val_L*effecting_U_val;
+                    }
+                }
             }
-
-            if (*heap[curr_ind] > *heap[min_child]) {
-                heap_swap(curr_ind, min_child);
-                curr_ind = min_child;
-                child_ind_L = calc_child_ind_L(curr_ind);
-            } else {
-                break;
-            }
-
         }
     
     }
 
-public:
+    return new_col_U;
 
-    std::vector<ColVal_DblLink<T> *> heap;
-
-    PSizeRowHeap(int arg_row, int arg_p):
-        row(arg_row), p(arg_p)
-    {
-        if (arg_p <= 0) { throw std::runtime_error("PSizeRowHeap: invalid row size"); }
-        heap.resize(p);
-        for (int i=0; i<p; ++i) { heap[i] = nullptr; }
-    }
-
-    void attempt_add_and_delete_min_val(ColVal_DblLink<T> *new_val) {
-        
-        if (new_val->row != row) {
-            throw std::runtime_error("PSizeRowHeap: unmatched row in ColVal_DblLink");
-        }
-
-        if (count < p) {
-            no_replace_push(new_val, count);
-            count++;
-        } else {
-            if (*new_val > *heap[0]) {
-                delete heap[0];
-                replace_min_push(new_val);
-            } else {
-                delete new_val;
-            }
-        }
-
-    }
-
-    PSizeRowHeap(const PSizeRowHeap &other):
-        PSizeRowHeap(other.row, other.p)
-    {}
-
-    PSizeRowHeap &operator=(const PSizeRowHeap &other) = delete;
-
-};
+}
 
 template <typename T>
-void sparse_construct_square_ILUTP(
-    double tau, int p, bool to_pivot,
-    const NoFillMatrixSparse<T> &A,
-    NoFillMatrixSparse<T> &L, NoFillMatrixSparse<T> &U, NoFillMatrixSparse<T> &P
+void single_elem_swap(int i, int j, T *vec) {
+    if (i != j) {
+        T temp = vec[i];
+        vec[i] = vec[j];
+        vec[j] = temp;
+    }
+}
+
+template <typename T>
+int find_pivot_loc_in_perm_map(
+    int col_ind, bool to_pivot, int m_dim, T *new_U_col, int *row_permutation_map, bool *row_finished
+) {
+
+    int ret_val = col_ind;
+    if (to_pivot) {
+        for (int i=0; i<m_dim; ++i) {
+            if (
+                !row_finished[row_permutation_map[i]] &&
+                (std::abs(new_U_col[row_permutation_map[i]]) >
+                 std::abs(new_U_col[row_permutation_map[ret_val]]))
+            ) {
+                ret_val = i;
+            }
+        }
+    }
+
+    if (new_U_col[row_permutation_map[ret_val]] == static_cast<T>(0.)) {
+        throw std::runtime_error("find_pivot: zero pivot encountered");
+    }
+
+    return ret_val;
+
+}
+
+template <typename T>
+T * get_new_L_col_from_zeroing(
+    int col_ind,
+    int pivot_ind,
+    int m_dim,
+    T *U_col,
+    bool *row_finished
+) {
+
+    T *new_L_col = static_cast<T *>(malloc(m_dim*sizeof(T)));
+    for (int i=0; i<m_dim; ++i) {
+        if (i == pivot_ind) {
+            new_L_col[i] = static_cast<T>(1.);
+        } else {
+            new_L_col[i] = static_cast<T>(0.);
+        }
+    }
+
+    T pivot_val = U_col[pivot_ind];
+    for (int i=0; i<m_dim; ++i) {
+        if (!row_finished[i] && (i != pivot_ind)) {
+            new_L_col[i] = U_col[i]/pivot_val;
+            U_col[i] = static_cast<T>(0.);
+        }
+    }
+
+    return new_L_col;
+
+}
+
+template <typename T>
+void update_SparseMatrixDescrPtrs_w_col(
+    int col_ind, int m_dim, SparseMatrixDescrPtrs<T> mat_descrp_ptrs, T *col_ptr
+) {
+
+    int col_nnz = 0;
+    int init_offset = mat_descrp_ptrs.col_offsets[col_ind];
+    for (int i=0; i<m_dim; ++i) {
+        if (col_ptr[i] != static_cast<T>(0.)) {
+            mat_descrp_ptrs.row_indices[init_offset + col_nnz] = i;
+            mat_descrp_ptrs.vals[init_offset + col_nnz] = col_ptr[i];
+            ++col_nnz;
+        }
+    }
+    mat_descrp_ptrs.col_offsets[col_ind+1] = init_offset + col_nnz;
+
+}
+
+template <typename T>
+void left_looking_col_elim_delay_perm(
+    int col_ind,
+    bool to_pivot,
+    DropRuleTauFunc<T> drop_rule_tau_U,
+    DropRuleTauFunc<T> drop_rule_tau_L,
+    DropRulePFunc<T> drop_rule_p,
+    int m_dim,
+    SparseMatrixDescrPtrs<T> h_A,
+    SparseMatrixDescrPtrs<T> h_U,
+    SparseMatrixDescrPtrs<T> h_L,
+    int *row_permutation_map,
+    int *pivot_row_hist,
+    bool *row_finished
+) {
+
+    // Determine new column of U
+    T *new_U_col = get_new_U_col_from_left_look<T>(
+        col_ind, m_dim, drop_rule_tau_U, h_A, h_L, pivot_row_hist
+    );
+
+    // Determine pivot row
+    int pivot_loc;
+    try {
+        pivot_loc = find_pivot_loc_in_perm_map<T>(
+            col_ind, to_pivot, m_dim, new_U_col, row_permutation_map, row_finished
+        );
+    } catch (std::runtime_error e) {
+        free(new_U_col);
+        throw e;
+    }
+    int pivot_ind = row_permutation_map[pivot_loc];
+    single_elem_swap(col_ind, pivot_loc, row_permutation_map);
+    pivot_row_hist[col_ind] = pivot_ind;
+    row_finished[pivot_ind] = true;
+
+    // Determine new column of L
+    T *new_L_col = get_new_L_col_from_zeroing<T>(
+        col_ind, pivot_ind, m_dim, new_U_col, row_finished
+    );
+
+    // Apply drop rules to new columns ensuring skip of pivot
+    for (int i=0; i<m_dim; ++i) {
+        if ((i != pivot_ind) && drop_rule_tau_U(new_U_col[i], i, col_ind)) {
+            new_U_col[i] = static_cast<T>(0.);
+        }
+        if ((i != pivot_ind) && drop_rule_tau_L(new_L_col[i], i, col_ind)) {
+            new_L_col[i] = static_cast<T>(0.);
+        }
+    }
+    drop_rule_p(col_ind, pivot_ind, new_U_col, m_dim);
+    drop_rule_p(col_ind, pivot_ind, new_L_col, m_dim);
+
+    // Update h_U and h_L
+    update_SparseMatrixDescrPtrs_w_col<T>(col_ind, m_dim, h_U, new_U_col);
+    update_SparseMatrixDescrPtrs_w_col<T>(col_ind, m_dim, h_L, new_L_col);
+
+    // Free columns
+    free(new_U_col);
+    free(new_L_col);
+
+}
+
+template <typename T>
+void exec_SparseMatrixDescrPtrs_perm(
+    int m_dim, SparseMatrixDescrPtrs<T> mat_descrp_ptrs, int *row_permutation_dict
+) {
+
+    for (int j=0; j<m_dim; ++j) {
+
+        int col_begin = mat_descrp_ptrs.col_offsets[j];
+        int col_end = mat_descrp_ptrs.col_offsets[j+1];
+
+        for (int offset = col_begin; offset < col_end; ++offset) {
+            mat_descrp_ptrs.row_indices[offset] = row_permutation_dict[mat_descrp_ptrs.row_indices[offset]];
+        }
+
+        sort::in_place_passengered_sort<int, T>(
+            col_begin, col_end, mat_descrp_ptrs.row_indices, mat_descrp_ptrs.vals
+        );
+
+    }
+
+}
+
+template <typename T>
+NoFillMatrixSparse<T> form_permutation_matrix(
+    const cuHandleBundle &arg_cu_handles, int m_dim, int *row_permutation_map
+) {
+
+    int *col_offsets = static_cast<int *>(malloc((m_dim+1)*sizeof(int)));
+    int *row_indices = static_cast<int *>(malloc(m_dim*sizeof(int)));
+    T *vals = static_cast<T *>(malloc(m_dim*sizeof(T)));
+
+    for (int i=0; i<(m_dim+1); ++i) { col_offsets[i] = i; }
+    for (int i=0; i<m_dim; ++i) {
+        row_indices[row_permutation_map[i]] = i;
+        vals[i] = static_cast<T>(1.);
+    }
+
+    NoFillMatrixSparse<T> ret_val(
+        arg_cu_handles,
+        col_offsets,
+        row_indices,
+        vals,
+        m_dim, m_dim, m_dim
+    );
+
+    free(col_offsets);
+    free(row_indices);
+    free(vals);
+
+    return ret_val;
+
+}
+
+template <template <typename> typename M, typename T>
+ILUTriplet<M, T> sparse_construct_drop_rule_ILU(
+    bool to_pivot,
+    DropRuleTauFunc<T> drop_rule_tau_U,
+    DropRuleTauFunc<T> drop_rule_tau_L,
+    DropRulePFunc<T> drop_rule_p,
+    int max_output_nnz,
+    const NoFillMatrixSparse<T> &A
 ) {
 
     if (A.rows() != A.cols()) { throw std::runtime_error("Non square matrix A"); }
 
-    int m = A.rows();
+    int m_dim = A.rows();
+    int input_nnz = A.non_zeros();
 
-    int *h_U_col_offsets = static_cast<T>(malloc(m*sizeof(T)));
-    int *h_L_col_offsets = static_cast<T>(malloc(m*sizeof(T)));
-    int *h_P_col_offsets = static_cast<T>(malloc(m*sizeof(T)));
+    // Load data of A into host memory
+    SparseMatrixDescrPtrs<T> h_A;
+    h_A.col_offsets = static_cast<int *>(malloc((m_dim+1)*sizeof(int)));
+    h_A.row_indices = static_cast<int *>(malloc(input_nnz*sizeof(int)));
+    h_A.vals = static_cast<T *>(malloc(input_nnz*sizeof(T)));
 
-    
+    A.copy_data_to_ptr(
+        h_A.col_offsets, h_A.row_indices, h_A.vals,
+        m_dim, m_dim, input_nnz
+    );
 
-    free(h_U_col_offsets);
-    free(h_L_col_offsets);
-    free(h_P_col_offsets);
+    // Instantiate storage for L and U
+    SparseMatrixDescrPtrs<T> h_U;
+    h_U.col_offsets = static_cast<int *>(malloc((m_dim+1)*sizeof(int)));
+    h_U.col_offsets[0] = 0;
+    h_U.row_indices = static_cast<int *>(malloc(max_output_nnz*sizeof(int)));
+    h_U.vals = static_cast<T *>(malloc(max_output_nnz*sizeof(T)));
+
+    SparseMatrixDescrPtrs<T> h_L;
+    h_L.col_offsets = static_cast<int *>(malloc((m_dim+1)*sizeof(int)));
+    h_L.col_offsets[0] = 0;
+    h_L.row_indices = static_cast<int *>(malloc(max_output_nnz*sizeof(int)));
+    h_L.vals = static_cast<T *>(malloc(max_output_nnz*sizeof(T)));
+
+    // Instantiate trackers for permutations, previous pivots, and for completed rows
+    // information for delayed permutation
+    int *row_permutation_map = static_cast<int *>(malloc(m_dim*sizeof(int)));
+    for (int i=0; i<m_dim; ++i) { row_permutation_map[i] = i; }
+
+    int *pivot_row_hist = static_cast<int *>(malloc(m_dim*sizeof(int)));
+
+    bool *row_finished = static_cast<bool *>(malloc(m_dim*sizeof(bool)));
+    for (int i=0; i<m_dim; ++i) { row_finished[i] = false; }
+
+    // Eliminate columns of U with partial pivoting and drop rules
+    for (int j=0; j<m_dim; ++j) {
+        try {
+            left_looking_col_elim_delay_perm(
+                j,
+                to_pivot,
+                drop_rule_tau_U,
+                drop_rule_tau_L,
+                drop_rule_p,
+                m_dim,
+                h_A, h_U, h_L,
+                row_permutation_map,
+                pivot_row_hist,
+                row_finished
+            );
+        } catch (std::runtime_error e) {
+            free(h_A.col_offsets);
+            free(h_A.row_indices);
+            free(h_A.vals);
+            free(h_U.col_offsets);
+            free(h_U.row_indices);
+            free(h_U.vals);
+            free(h_L.col_offsets);
+            free(h_L.row_indices);
+            free(h_L.vals);
+            free(row_permutation_map);
+            free(pivot_row_hist);
+            free(row_finished);
+            throw e;
+        }
+    }
+
+    // Create permutation dict such that every access where it should be
+    int *row_permutation_dict = static_cast<int *>(malloc(m_dim*sizeof(int)));
+    for (int i=0; i<m_dim; ++i) {
+        row_permutation_dict[row_permutation_map[i]] = i;
+    }
+
+    // Execute permutations from elimination
+    exec_SparseMatrixDescrPtrs_perm<T>(m_dim, h_L, row_permutation_dict);
+    exec_SparseMatrixDescrPtrs_perm<T>(m_dim, h_U, row_permutation_dict);
+
+    // Form matrices
+    ILUTriplet<M, T> ret_val;
+    ret_val.U = M<T>(
+        convert_SparseMatrixDescrPtrs_to_NoFillMatrixSparse(A.get_cu_handles(), m_dim, h_U)
+    );
+    ret_val.L = M<T>(
+        convert_SparseMatrixDescrPtrs_to_NoFillMatrixSparse(A.get_cu_handles(), m_dim, h_L)
+    );
+    ret_val.P = M<T>(
+        form_permutation_matrix<T>(A.get_cu_handles(), m_dim, row_permutation_map)
+    );
+
+    // Free allocated memory
+    free(h_A.col_offsets);
+    free(h_A.row_indices);
+    free(h_A.vals);
+
+    free(h_U.col_offsets);
+    free(h_U.row_indices);
+    free(h_U.vals);
+
+    free(h_L.col_offsets);
+    free(h_L.row_indices);
+    free(h_L.vals);
+
+    free(row_permutation_map);
+    free(row_permutation_dict);
+    free(pivot_row_hist);
+    free(row_finished);
+
+    return ret_val;
+
+}
+
+}
+
+template <template <typename> typename M, typename T>
+ILUTriplet<M, T> construct_square_ILU_0(
+   const NoFillMatrixSparse<T> &A, bool to_pivot
+) {
+
+    DropRuleTauFunc<T> drop_rule_tau_U = [&A] (T _, int row, int col) -> bool {
+        return A.get_elem(row, col) == SCALAR_ZERO<T>::get();
+    };
+
+    DropRuleTauFunc<T> drop_rule_tau_L = [&A] (T _, int row, int col) -> bool {
+        return A.get_elem(row, col) == SCALAR_ZERO<T>::get();
+    };
+
+    DropRulePFunc<T> drop_rule_p = [&A] (int col_ind, int pivot_ind, T *col_ptr, int m_dim) { ; };
+
+    return sparse_construct_drop_rule_ILU<M ,T>(
+        to_pivot,
+        drop_rule_tau_U,
+        drop_rule_tau_L,
+        drop_rule_p,
+        A.non_zeros(),
+        A
+    );
+
+}
+
+template <template <typename> typename M, typename T>
+ILUTriplet<M, T> construct_square_ILUTP(
+    const NoFillMatrixSparse<T> &A, double tau, int p, bool to_pivot
+) {
+
+    DropRuleTauFunc<T> drop_rule_tau_U = [&A] (T _, int row, int col) -> bool {
+        return false;
+    };
+
+    DropRuleTauFunc<T> drop_rule_tau_L = [&A] (T _, int row, int col) -> bool {
+        return false;
+    };
+
+    DropRulePFunc<T> drop_rule_p = [&A] (int col_ind, int pivot_ind, T *col_ptr, int m_dim) { ; };
+
+    return sparse_construct_drop_rule_ILU(
+        to_pivot, drop_rule_tau_U, drop_rule_tau_L, drop_rule_p, p*A.rows(), A
+    );
 
 }
 

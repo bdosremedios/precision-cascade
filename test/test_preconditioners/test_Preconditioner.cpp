@@ -74,15 +74,15 @@ public:
 
 TEST_F(Preconditioner_Test, TestNoPreconditioner) {
     TestNoPreconditioner<MatrixDense>();
-    // TestNoPreconditioner<MatrixSparse>();
+    TestNoPreconditioner<NoFillMatrixSparse>();
 }
 
 TEST_F(Preconditioner_Test, TestMatrixInversePreconditioner) {
     TestMatrixInversePreconditioner<MatrixDense>();
-    // TestMatrixInverse<MatrixSparse>();
+    TestMatrixInversePreconditioner<NoFillMatrixSparse>();
 }
 
 TEST_F(Preconditioner_Test, TestCastInverseMAction) {
     TestCastInverseMAction<MatrixDense>();
-    // TestCastInverseMAction<MatrixSparse>();
+    TestCastInverseMAction<NoFillMatrixSparse>();
 }

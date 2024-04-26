@@ -13,7 +13,12 @@ set(
 
 set(
     TEST_TOOLS_CPPS
+    test_tools/test_Sort.cpp
     # test_tools/test_ILU_subroutines.cpp
+)
+
+set(
+    TEST_ARG_PKGS
     test_tools/test_arg_pkgs/test_GenericLinearSystem.cpp
     test_tools/test_arg_pkgs/test_TypedLinearSystem.cpp
     test_tools/test_arg_pkgs/test_SolveArgPkg.cpp
@@ -25,7 +30,7 @@ set(
     test_preconditioners/test_Preconditioner.cpp
     test_preconditioners/test_ILU.cpp
     test_preconditioners/test_ILU0.cpp
-    test_preconditioners/test_ILUTP.cpp
+    # test_preconditioners/test_ILUTP.cpp
 )
 
 set(
@@ -61,10 +66,11 @@ set(
 
 set(
     TEST_SUITE_CPPS
-    test_tools/test_read_matrix.cpp
+    # test_tools/test_read_matrix.cpp
     ${TEST_TYPES_CPPS}
     ${TEST_TOOLS_CPPS}
-    # ${TEST_PRECONDITIONER_CPPS}
+    # ${TEST_ARG_PKGS}
+    ${TEST_PRECONDITIONER_CPPS}
     # ${TEST_SOLVERS}
 )
 

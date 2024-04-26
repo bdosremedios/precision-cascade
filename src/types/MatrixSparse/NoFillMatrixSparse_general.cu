@@ -6,7 +6,7 @@
 #include "types/MatrixSparse/NoFillMatrixSparse.h"
 
 template <typename T>
-Vector<T> NoFillMatrixSparse<T>::back_sub(Vector<T> &arg_rhs) const {
+Vector<T> NoFillMatrixSparse<T>::back_sub(const Vector<T> &arg_rhs) const {
 
     Vector<T> soln(arg_rhs);
 
@@ -49,12 +49,12 @@ Vector<T> NoFillMatrixSparse<T>::back_sub(Vector<T> &arg_rhs) const {
 
 }
 
-template Vector<__half> NoFillMatrixSparse<__half>::back_sub(Vector<__half> &) const;
-template Vector<float> NoFillMatrixSparse<float>::back_sub(Vector<float> &) const;
-template Vector<double> NoFillMatrixSparse<double>::back_sub(Vector<double> &) const;
+template Vector<__half> NoFillMatrixSparse<__half>::back_sub(const Vector<__half> &) const;
+template Vector<float> NoFillMatrixSparse<float>::back_sub(const Vector<float> &) const;
+template Vector<double> NoFillMatrixSparse<double>::back_sub(const Vector<double> &) const;
 
 template <typename T>
-Vector<T> NoFillMatrixSparse<T>::frwd_sub(Vector<T> &arg_rhs) const {
+Vector<T> NoFillMatrixSparse<T>::frwd_sub(const Vector<T> &arg_rhs) const {
 
     Vector<T> soln(arg_rhs);
 
@@ -97,6 +97,6 @@ Vector<T> NoFillMatrixSparse<T>::frwd_sub(Vector<T> &arg_rhs) const {
 
 }
 
-template Vector<__half> NoFillMatrixSparse<__half>::frwd_sub(Vector<__half> &) const;
-template Vector<float> NoFillMatrixSparse<float>::frwd_sub(Vector<float> &) const;
-template Vector<double> NoFillMatrixSparse<double>::frwd_sub(Vector<double> &) const;
+template Vector<__half> NoFillMatrixSparse<__half>::frwd_sub(const Vector<__half> &) const;
+template Vector<float> NoFillMatrixSparse<float>::frwd_sub(const Vector<float> &) const;
+template Vector<double> NoFillMatrixSparse<double>::frwd_sub(const Vector<double> &) const;
