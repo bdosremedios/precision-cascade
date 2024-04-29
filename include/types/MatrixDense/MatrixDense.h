@@ -272,26 +272,15 @@ public:
     int rows() const { return m_rows; }
     int cols() const { return n_cols; }
     int non_zeros() const { 
-
-        T *h_mat = static_cast<T *>(malloc(mem_size()));
-
-        if ((m_rows > 0) && (n_cols > 0)) {
-            check_cublas_status(cublasGetMatrix(m_rows, n_cols, sizeof(T), d_mat, m_rows, h_mat, m_rows));
-        }
-        
-        int count = 0;
+        int nnz = 0;
         for (int i=0; i<m_rows; ++i) {
             for (int j=0; j<n_cols; ++j) {
-                if (static_cast<double>(h_mat[i+j*m_rows]) != static_cast<double>(0.)) {
-                    count++;
+                if (get_elem(i, j) != SCALAR_ZERO<T>::get()) {
+                    nnz++;
                 }
             }
         }
-
-        free(h_mat);
-
-        return count;
-    
+        return nnz;
     }
 
     std::string get_matrix_string() const {

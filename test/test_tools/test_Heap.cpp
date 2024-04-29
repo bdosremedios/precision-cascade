@@ -200,13 +200,37 @@ public:
 
         p_heap.push(static_cast<T>(-22), 17);
         ASSERT_EQ(p_heap.heap.size(), n);
-        ASSERT_EQ(p_heap.count, 4);
+        ASSERT_EQ(p_heap.count, n);
         ASSERT_EQ(p_heap.heap[0].abs_val, static_cast<T>(15));
         ASSERT_TRUE(
             (p_heap.heap[0].row == 11) ||
             (p_heap.heap[0].row == 13) ||
             (p_heap.heap[0].row == 14)
         );
+
+    }
+
+    void BadHeap() {
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, []() { heap::PSizeHeap<double> p_heap(-1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, []() { heap::PSizeHeap<double> p_heap(-5); });
+    }
+
+    template <typename T>
+    void EmptyHeap() {
+
+        const int n(0);
+
+        heap::PSizeHeap<T> p_heap(n);
+
+        ASSERT_EQ(p_heap.heap.size(), 0);
+
+        p_heap.push(static_cast<T>(-0.5), 4);
+        ASSERT_EQ(p_heap.heap.size(), n);
+        ASSERT_EQ(p_heap.count, 0);
+
+        p_heap.push(static_cast<T>(-1.5), 0);
+        ASSERT_EQ(p_heap.heap.size(), n);
+        ASSERT_EQ(p_heap.count, 0);
 
     }
 
@@ -222,4 +246,14 @@ TEST_F(PSizeHeap_Test, OverflowHeap) {
     OverflowHeap<__half>();
     OverflowHeap<float>();
     OverflowHeap<double>();
+}
+
+TEST_F(PSizeHeap_Test, BadHeap) {
+    BadHeap();
+}
+
+TEST_F(PSizeHeap_Test, EmptyHeap) {
+    EmptyHeap<__half>();
+    EmptyHeap<float>();
+    EmptyHeap<double>();
 }

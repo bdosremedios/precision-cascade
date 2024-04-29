@@ -268,6 +268,13 @@ public:
     // *** Properties ***
     int rows() const { return m_rows; }
     int cols() const { return 1; }
+    int non_zeros() const {
+        int nnz = 0;
+        for (int i=0; i<m_rows; ++i) {
+            if (get_elem(i) != SCALAR_ZERO<T>::get()) { ++nnz; }
+        }
+        return nnz;
+    }
     cuHandleBundle get_cu_handles() const { return cu_handles; }
     void print() const {
 

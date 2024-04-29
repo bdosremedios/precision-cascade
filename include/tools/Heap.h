@@ -125,18 +125,20 @@ public:
     std::vector<ColValInfo<T>> heap;
 
     PSizeHeap(int arg_p): p(arg_p) {
-        if (p <= 0) { throw std::runtime_error("PSizeHeap: invalid row size"); }
+        if (p < 0) { throw std::runtime_error("PSizeHeap: invalid row size"); }
         heap.resize(p);
     }
 
     void push(T val, int row) {
-        ColValInfo<T> new_val(val, row);
-        if (count < p) {
-            no_replace_push(new_val);
-            count++;
-        } else {
-            if (new_val > heap[0]) {
-                replace_min_push(new_val);
+        if (p > 0) {
+            ColValInfo<T> new_val(val, row);
+            if (count < p) {
+                no_replace_push(new_val);
+                count++;
+            } else {
+                if (new_val > heap[0]) {
+                    replace_min_push(new_val);
+                }
             }
         }
     }

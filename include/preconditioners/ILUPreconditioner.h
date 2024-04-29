@@ -59,8 +59,10 @@ public:
     ILUPreconditioner(const MatrixDense<W> &A, const bool &to_pivot):
         m(A.rows())
     {
-        ilu_subroutines::ILUTriplet<MatrixDense, W> ret = ilu_subroutines::construct_square_ILU_0<MatrixDense, W>(
-            NoFillMatrixSparse<W>(A), to_pivot
+        ilu_subroutines::ILUTriplet<MatrixDense, W> ret = (
+            ilu_subroutines::construct_square_ILU_0<MatrixDense, W>(
+                NoFillMatrixSparse<W>(A), to_pivot
+            )
         );
         L = ret.L; U = ret.U; P = ret.P;
     }
@@ -69,8 +71,10 @@ public:
     ILUPreconditioner(const NoFillMatrixSparse<W> &A, const bool &to_pivot):
         m(A.rows())
     {
-        ilu_subroutines::ILUTriplet<NoFillMatrixSparse, W> ret = ilu_subroutines::construct_square_ILU_0<NoFillMatrixSparse, W>(
-            A, to_pivot
+        ilu_subroutines::ILUTriplet<NoFillMatrixSparse, W> ret = (
+            ilu_subroutines::construct_square_ILU_0<NoFillMatrixSparse, W>(
+                A, to_pivot
+            )
         );
         L = ret.L; U = ret.U; P = ret.P;
     }
@@ -78,8 +82,10 @@ public:
     ILUPreconditioner(const MatrixDense<W> &A, const W &tau, const int &p, const bool &to_pivot):
         m(A.rows())
     {
-        ilu_subroutines::ILUTriplet<MatrixDense, W> ret = ilu_subroutines::construct_square_ILU_0<MatrixDense, W>(
-            NoFillMatrixSparse<W>(A), tau, p, to_pivot
+        ilu_subroutines::ILUTriplet<MatrixDense, W> ret = (
+            ilu_subroutines::construct_square_ILUTP<MatrixDense, W>(
+                NoFillMatrixSparse<W>(A), tau, p, to_pivot
+            )
         );
         L = ret.L; U = ret.U; P = ret.P;
     }
@@ -87,8 +93,10 @@ public:
     ILUPreconditioner(const NoFillMatrixSparse<W> &A, const W &tau, const int &p, const bool &to_pivot):
         m(A.rows())
     {
-        ilu_subroutines::ILUTriplet<NoFillMatrixSparse, W> ret = ilu_subroutines::construct_square_ILU_0<NoFillMatrixSparse, W>(
-            A, tau, p, to_pivot
+        ilu_subroutines::ILUTriplet<NoFillMatrixSparse, W> ret = (
+            ilu_subroutines::construct_square_ILUTP<NoFillMatrixSparse, W>(
+                A, tau, p, to_pivot
+            )
         );
         L = ret.L; U = ret.U; P = ret.P;
     }

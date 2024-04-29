@@ -25,19 +25,6 @@ T min_1_mag(const T &val) {
     return static_cast<T>(std::max(std::abs(static_cast<double>(val)), 1.));
 }
 
-template <template <typename> typename M, typename T>
-int count_zeros(M<T> A, double zero_tol) {
-
-    int count = 0;
-    for (int i=0; i<A.rows(); ++i) {
-        for (int j=0; j<A.cols(); ++j) {
-            if (abs(A.get_elem(i, j).get_scalar()) <= zero_tol) { ++count; }
-        }
-    }
-    return count;
-
-}
-
 template <typename T>
 class Tol
 {

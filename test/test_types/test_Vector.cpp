@@ -110,7 +110,38 @@ public:
         ASSERT_EQ(test_vec_n.rows(), n);
         ASSERT_EQ(test_vec_n.cols(), 1);
 
-    } 
+    }
+
+    template <typename T>
+    void TestNonZeros() {
+        
+        constexpr int n(12);
+        Vector<T> test_vec(Vector<T>::Zero(TestBase::bundle, n));
+        ASSERT_EQ(test_vec.non_zeros(), 0);
+
+        test_vec.set_elem(1, Scalar<T>(static_cast<T>(1.)));
+        test_vec.set_elem(3, Scalar<T>(static_cast<T>(4.)));
+        test_vec.set_elem(4, Scalar<T>(static_cast<T>(-1.)));
+        ASSERT_EQ(test_vec.non_zeros(), 3);
+
+        test_vec.set_elem(3, Scalar<T>(static_cast<T>(0.)));
+        ASSERT_EQ(test_vec.non_zeros(), 2);
+
+        test_vec.set_elem(2, Scalar<T>(static_cast<T>(1.)));
+        test_vec.set_elem(3, Scalar<T>(static_cast<T>(1.)));
+        test_vec.set_elem(5, Scalar<T>(static_cast<T>(1.)));
+        ASSERT_EQ(test_vec.non_zeros(), 5);
+
+        test_vec.set_elem(0, Scalar<T>(static_cast<T>(1.)));
+        test_vec.set_elem(6, Scalar<T>(static_cast<T>(1.)));
+        test_vec.set_elem(7, Scalar<T>(static_cast<T>(1.)));
+        test_vec.set_elem(8, Scalar<T>(static_cast<T>(1.)));
+        test_vec.set_elem(9, Scalar<T>(static_cast<T>(1.)));
+        test_vec.set_elem(10, Scalar<T>(static_cast<T>(1.)));
+        test_vec.set_elem(11, Scalar<T>(static_cast<T>(1.)));
+        ASSERT_EQ(test_vec.non_zeros(), n);
+
+    }
 
     void TestConstruction() {
 
@@ -672,6 +703,12 @@ TEST_F(Vector_Test, TestPropertyMethods) {
     TestPropertyMethods<__half>();
     TestPropertyMethods<float>();
     TestPropertyMethods<double>();
+}
+
+TEST_F(Vector_Test, TestNonZeros) {
+    TestNonZeros<__half>();
+    TestNonZeros<float>();
+    TestNonZeros<double>();
 }
 
 TEST_F(Vector_Test, TestConstruction) { TestConstruction(); }

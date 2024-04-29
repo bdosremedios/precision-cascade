@@ -347,6 +347,7 @@ ILUTriplet<M, T> sparse_construct_drop_rule_ILU(
 
     // Eliminate columns of U with partial pivoting and drop rules
     for (int j=0; j<m_dim; ++j) {
+
         try {
             left_looking_col_elim_delay_perm(
                 j,
@@ -499,22 +500,28 @@ ILUTriplet<M, T> construct_square_ILUTP(
 
     DropRulePFunc<T> drop_rule_p = [p] (int col_ind, int pivot_ind, T *col_ptr, int m_dim) {
         
-        if (p > 1) { // Skip if just keeping only pivot
-         
-            heap::PSizeHeap<T> heap(p-1);
+        heap::PSizeHeap<T> heap(p-1);
 
-            for (int i=0; i<m_dim; ++i) {
-                if (*col_ptr[i] != static_cast<T>(0.)) {
-                    heap.push(*col_ptr[i], i);
-                }
-            } 
-        
+        for (int i=0; i<m_dim; ++i) {
+            if ((i != pivot_ind) && (col_ptr[i] != static_cast<T>(0.))) {
+                heap.push(col_ptr[i], i);
+                col_ptr[i] = static_cast<T>(0.);
+            }
+        }
+
+        for (int k=0; k<heap.count; ++k) {
+            col_ptr[heap.heap[k].row] = heap.heap[k].orig_val;
         }
 
     };
 
-    return sparse_construct_drop_rule_ILU(
-        to_pivot, drop_rule_tau_U, drop_rule_tau_L, drop_rule_p, p*A.rows(), A
+    return sparse_construct_drop_rule_ILU<M, T>(
+        to_pivot,
+        drop_rule_tau_U,
+        drop_rule_tau_L,
+        drop_rule_p,
+        p*A.rows(),
+        A
     );
 
 }
