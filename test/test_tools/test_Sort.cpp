@@ -6,7 +6,7 @@
 
 #include "tools/Sort.h"
 
-class TestSort: public TestBase
+class Sort_Test: public TestBase
 {
 public:
 
@@ -42,6 +42,7 @@ public:
 
     template <typename T, typename W>
     void TestRandomSort() {
+
         srand(time(NULL));
         const int n(rand() % 100);
 
@@ -69,34 +70,34 @@ public:
 
 };
 
-TEST_F(TestSort, TestMatchingIntSort) {
+TEST_F(Sort_Test, TestMatchingIntSort) {
     TestManualSort<int, int>();
 }
 
-TEST_F(TestSort, TestMatchingDoubleSort) {
+TEST_F(Sort_Test, TestMatchingDoubleSort) {
     TestManualSort<double, double>();
 }
 
-TEST_F(TestSort, TestIntDoubleSort) {
+TEST_F(Sort_Test, TestIntDoubleSort) {
     TestManualSort<int, double>();
 }
 
-TEST_F(TestSort, TestDoubleIntSort) {
+TEST_F(Sort_Test, TestDoubleIntSort) {
     TestManualSort<double, int>();
 }
 
-TEST_F(TestSort, TestRandomMatchingIntSort) {
+TEST_F(Sort_Test, TestRandomMatchingIntSort) {
     TestRandomSort<int, int>();
 }
 
-TEST_F(TestSort, TestRandomMatchingDoubleSort) {
+TEST_F(Sort_Test, TestRandomMatchingDoubleSort) {
     TestRandomSort<double, double>();
 }
 
-TEST_F(TestSort, TestRandomIntDoubleSort) {
+TEST_F(Sort_Test, TestRandomIntDoubleSort) {
     TestRandomSort<int, double>();
 }
 
-TEST_F(TestSort, TestRandomDoubleIntSort) {
+TEST_F(Sort_Test, TestRandomDoubleIntSort) {
     TestRandomSort<double, int>();
 }

@@ -13,8 +13,8 @@ set(
 
 set(
     TEST_TOOLS_CPPS
+    test_tools/test_Heap.cpp
     test_tools/test_Sort.cpp
-    # test_tools/test_ILU_subroutines.cpp
 )
 
 set(

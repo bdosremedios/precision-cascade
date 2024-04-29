@@ -4,7 +4,9 @@
 #include <functional>
 
 #include "types/types.h"
+
 #include "tools/Sort.h"
+#include "tools/Heap.h"
 
 namespace ilu_subroutines
 {
@@ -434,7 +436,7 @@ ILUTriplet<M, T> construct_square_ILU_0(
         return A.get_elem(row, col) == SCALAR_ZERO<T>::get();
     };
 
-    DropRulePFunc<T> drop_rule_p = [&A] (int col_ind, int pivot_ind, T *col_ptr, int m_dim) { ; };
+    DropRulePFunc<T> drop_rule_p = [] (int col_ind, int pivot_ind, T *col_ptr, int m_dim) { ; };
 
     return sparse_construct_drop_rule_ILU<M ,T>(
         to_pivot,
@@ -447,20 +449,67 @@ ILUTriplet<M, T> construct_square_ILU_0(
 
 }
 
+template <typename T>
+T get_largest_magnitude_in_col(int col_ind, int *col_offsets, T *vals) {
+    T largest_mag = 0.;
+    for (int offset = col_offsets[col_ind]; offset < col_offsets[col_ind+1]; ++offset) {
+        if (std::abs(vals[offset]) > largest_mag) {
+            largest_mag = std::abs(vals[offset]);
+        }
+    }
+    return largest_mag;
+}
+
 template <template <typename> typename M, typename T>
 ILUTriplet<M, T> construct_square_ILUTP(
     const NoFillMatrixSparse<T> &A, double tau, int p, bool to_pivot
 ) {
 
-    DropRuleTauFunc<T> drop_rule_tau_U = [&A] (T _, int row, int col) -> bool {
-        return false;
+    if (p < 1) {
+        throw std::runtime_error(
+            "construct_square_ILUTP: must at least keep pivot for p drop rule"
+        );
+    }
+
+    int *col_offsets = static_cast<int *>(malloc((A.cols()+1)*sizeof(int)));
+    int *row_indices = static_cast<int *>(malloc(A.non_zeros()*sizeof(int)));
+    T *vals = static_cast<T *>(malloc(A.non_zeros()*sizeof(T)));
+
+    A.copy_data_to_ptr(
+        col_offsets, row_indices, vals,
+        A.rows(), A.cols(), A.non_zeros()
+    );
+
+    std::vector<T> col_inf_norm(A.cols());
+    for (int j=0; j<A.cols(); ++j) {
+        col_inf_norm[j] = get_largest_magnitude_in_col(j, col_offsets, vals);
+    }
+
+    free(col_offsets);
+    free(row_indices);
+    free(vals);
+
+    DropRuleTauFunc<T> drop_rule_tau_U = [col_inf_norm, tau] (T val, int _, int col) -> bool {
+        return std::abs(val) <= tau*col_inf_norm[col];
     };
 
-    DropRuleTauFunc<T> drop_rule_tau_L = [&A] (T _, int row, int col) -> bool {
-        return false;
+    DropRuleTauFunc<T> drop_rule_tau_L = [tau] (T val, int _, int col) -> bool {
+        return std::abs(val) <= tau;
     };
 
-    DropRulePFunc<T> drop_rule_p = [&A] (int col_ind, int pivot_ind, T *col_ptr, int m_dim) { ; };
+    DropRulePFunc<T> drop_rule_p = [p] (int col_ind, int pivot_ind, T *col_ptr, int m_dim) {
+        
+        if (p > 1) { // Skip if just keeping only pivot
+         
+            heap::PSizeHeap heap(p-1);
+
+            // for (int i=0; i<m_dim; ++i) {
+            //     if (col_ptr != static_cast)
+            // } 
+        
+        }
+
+    };
 
     return sparse_construct_drop_rule_ILU(
         to_pivot, drop_rule_tau_U, drop_rule_tau_L, drop_rule_p, p*A.rows(), A

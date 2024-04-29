@@ -1,12 +1,7 @@
 #ifndef ILU_PRECONDITIONER_H
 #define ILU_PRECONDITIONER_H
 
-#include <cmath>
-#include <vector>
-#include <functional>
-
 #include "Preconditioner.h"
-
 #include "tools/ILU_subroutines.h"
 
 template <template <typename> typename M, typename W>
