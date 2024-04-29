@@ -141,26 +141,6 @@ public:
         }
     }
 
-    // void attempt_add_and_delete_min_val(ColVal_DblLink<T> *new_val) {
-        
-    //     if (new_val->row != row) {
-    //         throw std::runtime_error("PSizeHeap: unmatched row in ColVal_DblLink");
-    //     }
-
-    //     if (count < p) {
-    //         no_replace_push(new_val, count);
-    //         count++;
-    //     } else {
-    //         if (*new_val > *heap[0]) {
-    //             delete heap[0];
-    //             replace_min_push(new_val);
-    //         } else {
-    //             delete new_val;
-    //         }
-    //     }
-
-    // }
-
     PSizeHeap(const PSizeHeap &other): PSizeHeap(other.p) {
         count = other.count;
         for (int i=0; i<count; ++i) {

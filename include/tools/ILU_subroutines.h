@@ -501,11 +501,13 @@ ILUTriplet<M, T> construct_square_ILUTP(
         
         if (p > 1) { // Skip if just keeping only pivot
          
-            heap::PSizeHeap heap(p-1);
+            heap::PSizeHeap<T> heap(p-1);
 
-            // for (int i=0; i<m_dim; ++i) {
-            //     if (col_ptr != static_cast)
-            // } 
+            for (int i=0; i<m_dim; ++i) {
+                if (*col_ptr[i] != static_cast<T>(0.)) {
+                    heap.push(*col_ptr[i], i);
+                }
+            } 
         
         }
 
