@@ -26,13 +26,13 @@ public:
 
         constexpr int n(14);
 
-        M<double> A(M<double>::Random(TestBase::bundle, n, n));
+        M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, n, n));
         
         NoPreconditioner<M, double> no_precond;
-        ILUPreconditioner<M, double> ilu_precond(A, Tol<double>::roundoff(), false);
+        ILUPreconditioner<M, double> ilu_precond(A, false);
 
         PrecondArgPkg<M, double> args(
-            std::make_shared<ILUPreconditioner<M, double>>(A, Tol<double>::roundoff(), false)
+            std::make_shared<ILUPreconditioner<M, double>>(A, false)
         );
 
         Vector<double> test_vec(Vector<double>::Random(TestBase::bundle, n));
@@ -47,14 +47,14 @@ public:
 
         constexpr int n(17);
 
-        M<double> A(M<double>::Random(TestBase::bundle, n, n));
+        M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, n, n));
 
         NoPreconditioner<M, double> no_precond;
-        ILUPreconditioner<M, double> ilu_precond(A, Tol<double>::roundoff(), false);
+        ILUPreconditioner<M, double> ilu_precond(A, false);
         
         PrecondArgPkg<M, double> args(
             std::make_shared<NoPreconditioner<M, double>>(no_precond),
-            std::make_shared<ILUPreconditioner<M, double>>(A, Tol<double>::roundoff(), false)
+            std::make_shared<ILUPreconditioner<M, double>>(A, false)
         );
 
         Vector<double> test_vec(Vector<double>::Random(TestBase::bundle, n));
@@ -69,14 +69,14 @@ public:
 
         constexpr int n(25);
 
-        M<double> A(M<double>::Random(TestBase::bundle, n, n));
+        M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, n, n));
 
         NoPreconditioner<M, double> no_precond;
-        ILUPreconditioner<M, double> ilu_precond(A, Tol<double>::roundoff(), false);
+        ILUPreconditioner<M, double> ilu_precond(A, false);
 
         PrecondArgPkg<M, double> args(
-            std::make_shared<ILUPreconditioner<M, double>>(A, Tol<double>::roundoff(), false),
-            std::make_shared<ILUPreconditioner<M, double>>(A, Tol<double>::roundoff(), false)
+            std::make_shared<ILUPreconditioner<M, double>>(A, false),
+            std::make_shared<ILUPreconditioner<M, double>>(A, false)
         );
 
         Vector<double> test_vec(Vector<double>::Random(TestBase::bundle, n));
@@ -90,20 +90,20 @@ public:
 
 TEST_F(PrecondArgPkg_Test, TestDefaultConstruction) {
     TestDefaultConstruction<MatrixDense>();
-    // TestDefaultConstruction<MatrixSparse>();
+    TestDefaultConstruction<NoFillMatrixSparse>();
 }
 
 TEST_F(PrecondArgPkg_Test, TestLeftPreconditionerSet) {
     TestLeftPreconditionerSet<MatrixDense>();
-//     // TestLeftPreconditionerSet<MatrixSparse>();
+    TestLeftPreconditionerSet<NoFillMatrixSparse>();
 }
 
 TEST_F(PrecondArgPkg_Test, TestRightPreconditionerSet) {
     TestRightPreconditionerSet<MatrixDense>();
-//     // TestRightPreconditionerSet<MatrixSparse>();
+    TestRightPreconditionerSet<NoFillMatrixSparse>();
 }
 
 TEST_F(PrecondArgPkg_Test, TestBothPreconditionerSet) {
     TestBothPreconditionerSet<MatrixDense>();
-//     // TestBothPreconditionerSet<MatrixSparse>();
+    TestBothPreconditionerSet<NoFillMatrixSparse>();
 }

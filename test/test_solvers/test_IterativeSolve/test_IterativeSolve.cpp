@@ -11,7 +11,7 @@ public:
 
         // Test with no initial guess and default parameters
         constexpr int n(6);
-        M<double> A(M<double>::Random(TestBase::bundle, n, n));
+        M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, n, n));
         Vector<double> b(Vector<double>::Random(TestBase::bundle, n));
         Vector<T> soln(Vector<T>::Random(TestBase::bundle, 1));
         TypedLinearSystem<M, T> typed_lin_sys(A, b);
@@ -239,55 +239,55 @@ public:
 
 TEST_F(TypedIterativeSolve_Test, TestConstructorsDouble) {
     TestConstructors<MatrixDense, double>();
-    // TestConstructors<MatrixSparse, double>();
+    TestConstructors<NoFillMatrixSparse, double>();
 }
 
 TEST_F(TypedIterativeSolve_Test, TestConstructorsSingle) {
     TestConstructors<MatrixDense, float>();
-    // TestConstructors<MatrixSparse, float>();
+    TestConstructors<NoFillMatrixSparse, float>();
 }
 
 TEST_F(TypedIterativeSolve_Test, TestConstructorsHalf) {
     TestConstructors<MatrixDense, half>();
-    // TestConstructors<MatrixSparse, half>();
+    TestConstructors<NoFillMatrixSparse, half>();
 }
 
 TEST_F(TypedIterativeSolve_Test, TestSolveAndRelresDouble) {
     TestSolve<MatrixDense, double>();
-    // TestSolve<MatrixSparse, double>();
+    TestSolve<NoFillMatrixSparse, double>();
 }
 
 TEST_F(TypedIterativeSolve_Test, TestSolveAndRelresSingle) {
     TestSolve<MatrixDense, float>();
-    // TestSolve<MatrixSparse, float>();
+    TestSolve<NoFillMatrixSparse, float>();
 }
 
 TEST_F(TypedIterativeSolve_Test, TestSolveAndRelresHalf) {
     TestSolve<MatrixDense, half>();
-    // TestSolve<MatrixSparse, half>();
+    TestSolve<NoFillMatrixSparse, half>();
 }
 
 TEST_F(TypedIterativeSolve_Test, TestResetDouble) {
     TestReset<MatrixDense, double>();
-    // TestReset<MatrixSparse, double>();
+    TestReset<NoFillMatrixSparse, double>();
 }
 
 TEST_F(TypedIterativeSolve_Test, TestResetSingle) {
     TestReset<MatrixDense, float>();
-    // TestReset<MatrixSparse, float>();
+    TestReset<NoFillMatrixSparse, float>();
 }
 
 TEST_F(TypedIterativeSolve_Test, TestResetHalf) {
     TestReset<MatrixDense, half>();
-    // TestReset<MatrixSparse, half>();
+    TestReset<NoFillMatrixSparse, half>();
 }
 
 TEST_F(TypedIterativeSolve_Test, TestErrorMismatchedCols) {
     TestMismatchedCols<MatrixDense>();
-    // TestMismatchedCols<MatrixSparse>();
+    TestMismatchedCols<NoFillMatrixSparse>();
 }
 
 TEST_F(TypedIterativeSolve_Test, TestErrorNonSquare) {
     TestErrorNonSquare<MatrixDense>();
-    // TestErrorNonSquare<MatrixSparse>();
+    TestErrorNonSquare<NoFillMatrixSparse>();
 }

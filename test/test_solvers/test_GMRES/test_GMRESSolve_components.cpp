@@ -9,14 +9,19 @@ public:
     template <template <typename> typename M>
     void CheckConstruction(const int &n) {
 
-        M<double> A(M<double>::Random(TestBase::bundle, n, n));
+        M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, n, n));
         Vector<double> b(Vector<double>::Random(TestBase::bundle, n));
         TypedLinearSystem<M, double> lin_sys(A, b);
 
         GMRESSolveTestingMock<M, double> test_mock(lin_sys, Tol<double>::roundoff(), default_args);
 
         ASSERT_EQ(test_mock.max_kry_space_dim, n);
-        ASSERT_EQ(test_mock.rho, (b - A*Vector<double>::Ones(TestBase::bundle, n)).norm());
+        ASSERT_NEAR(
+            test_mock.rho.get_scalar(),
+            (b - A*Vector<double>::Ones(TestBase::bundle, n)).norm().get_scalar(),
+            std::abs((b - A*Vector<double>::Ones(TestBase::bundle, n)).norm().get_scalar())*
+                Tol<double>::roundoff()
+        );
         
         ASSERT_EQ(test_mock.Q_kry_basis.rows(), n);
         ASSERT_EQ(test_mock.Q_kry_basis.cols(), n);
@@ -423,7 +428,7 @@ public:
     void Solve() {
 
         constexpr int n(20);
-        M<double> A(M<double>::Random(TestBase::bundle, n, n));
+        M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, n, n));
         Vector<double> b(Vector<double>::Random(TestBase::bundle, n));
         TypedLinearSystem<M, double> lin_sys(A, b);
 
@@ -445,7 +450,7 @@ public:
     void Reset() {
 
         constexpr int n(20);
-        M<double> A(M<double>::Random(TestBase::bundle, n, n));
+        M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, n, n));
         Vector<double> b(Vector<double>::Random(TestBase::bundle, n));
         TypedLinearSystem<M, double> lin_sys(A, b);
 
@@ -485,125 +490,111 @@ public:
 
     }
 
+    template <template <typename> typename M>
+    void CheckCorrectDefaultMaxIter() {
+    
+        constexpr int n(7);
+        M<double> A_n(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, n, n));
+        Vector<double> b_n(Vector<double>::Random(TestBase::bundle, n));
+        TypedLinearSystem<M, double> lin_sys_n(A_n, b_n);
+        GMRESSolveTestingMock<M, double> test_mock_n(lin_sys_n, Tol<double>::roundoff(), default_args);
+        ASSERT_EQ(test_mock_n.max_iter, n);
+
+        constexpr int m(53);
+        M<double> A_m(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, m, m));
+        Vector<double> b_m(Vector<double>::Random(TestBase::bundle, m));
+        TypedLinearSystem<M, double> lin_sys_m(A_m, b_m);
+        GMRESSolveTestingMock<M, double> test_mock_m(lin_sys_m, Tol<double>::roundoff(), default_args);
+        ASSERT_EQ(test_mock_m.max_iter, m);
+
+        constexpr int o(64);
+        constexpr int non_default_iter(10);
+        M<double> A_o(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, o, o));
+        Vector<double> b_o(Vector<double>::Random(TestBase::bundle, o));
+        TypedLinearSystem<M, double> lin_sys_o(A_o, b_o);
+        SolveArgPkg non_default_args;
+        non_default_args.max_iter = non_default_iter;
+        GMRESSolveTestingMock<M, double> test_mock_o(lin_sys_o, Tol<double>::roundoff(), non_default_args);
+        ASSERT_EQ(test_mock_o.max_iter, non_default_iter);
+
+    }
+
+    template <template <typename> typename M>
+    void CheckErrorExceedDimension() {
+    
+        constexpr int n(7);
+        M<double> A_n(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, n, n));
+        Vector<double> b_n(Vector<double>::Random(TestBase::bundle, n));
+        SolveArgPkg args;
+        args.max_iter = 100;
+
+        TypedLinearSystem<M, double> lin_sys_n(A_n, b_n);
+        auto try_to_exceed_dim = [=]() {
+            GMRESSolveTestingMock<M, double> test_mock_n(lin_sys_n, Tol<double>::roundoff(), args);
+        };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_to_exceed_dim);
+
+    }
+
+
 };
 
 TEST_F(GMRESSolve_Component_Test, CheckConstruction5x5) {
     CheckConstruction<MatrixDense>(5);
-    // CheckConstruction<MatrixSparse>(5);
+    CheckConstruction<NoFillMatrixSparse>(5);
 }
 
 TEST_F(GMRESSolve_Component_Test, CheckConstruction64x64) {
     CheckConstruction<MatrixDense>(64);
-    // CheckConstruction<MatrixSparse>(64);
+    CheckConstruction<NoFillMatrixSparse>(64);
 }
 
 TEST_F(GMRESSolve_Component_Test, CheckCorrectDefaultMaxIter) {
-    
-    constexpr int n(7);
-    MatrixDense<double> A_n(MatrixDense<double>::Random(TestBase::bundle, n, n));
-    Vector<double> b_n(Vector<double>::Random(TestBase::bundle, n));
-    TypedLinearSystem<MatrixDense, double> lin_sys_n(A_n, b_n);
-    GMRESSolveTestingMock<MatrixDense, double> test_mock_n_dense(
-        lin_sys_n, Tol<double>::roundoff(), default_args
-    );
-    ASSERT_EQ(test_mock_n_dense.max_iter, n);
-    // TypedLinearSystem<MatrixSparse, double> lin_sys_sparse_n(A_n.sparse(), b_n);
-    // GMRESSolveTestingMock<MatrixSparse, double> test_mock_n_sparse(
-    //     lin_sys_sparse_n, Tol<double>::roundoff(), default_args
-    // );
-    // ASSERT_EQ(test_mock_n_sparse.max_iter, n);
-
-    constexpr int m(53);
-    MatrixDense<double> A_m(MatrixDense<double>::Random(TestBase::bundle, m, m));
-    Vector<double> b_m(Vector<double>::Random(TestBase::bundle, m));
-    TypedLinearSystem<MatrixDense, double> lin_sys_m(A_m, b_m);
-    GMRESSolveTestingMock<MatrixDense, double> test_mock_m_dense(
-        lin_sys_m, Tol<double>::roundoff(), default_args
-    );
-    ASSERT_EQ(test_mock_m_dense.max_iter, m);
-    // TypedLinearSystem<MatrixSparse, double> lin_sys_sparse_m(A_m.sparse(), b_m);
-    // GMRESSolveTestingMock<MatrixSparse, double> test_mock_m_sparse(
-    //     lin_sys_sparse_m, Tol<double>::roundoff(), default_args
-    // );
-    // ASSERT_EQ(test_mock_m_sparse.max_iter, m);
-
-    constexpr int o(64);
-    constexpr int non_default_iter(10);
-    MatrixDense<double> A_o(MatrixDense<double>::Random(TestBase::bundle, o, o));
-    Vector<double> b_o(Vector<double>::Random(TestBase::bundle, o));
-    TypedLinearSystem<MatrixDense, double> lin_sys_o(A_o, b_o);
-    SolveArgPkg non_default_args;
-    non_default_args.max_iter = non_default_iter;
-    GMRESSolveTestingMock<MatrixDense, double> test_mock_o_dense(
-        lin_sys_o, Tol<double>::roundoff(), non_default_args
-    );
-    ASSERT_EQ(test_mock_o_dense.max_iter, non_default_iter);
-    // TypedLinearSystem<MatrixSparse, double> lin_sys_sparse_o(A_o.sparse(), b_o);
-    // GMRESSolveTestingMock<MatrixSparse, double> test_mock_o_sparse(
-    //     lin_sys_sparse_o, Tol<double>::roundoff(), non_default_args
-    // );
-    // ASSERT_EQ(test_mock_o_sparse.max_iter, non_default_iter);
-
+    CheckCorrectDefaultMaxIter<MatrixDense>();
+    CheckCorrectDefaultMaxIter<NoFillMatrixSparse>();
 }
 
 TEST_F(GMRESSolve_Component_Test, CheckErrorExceedDimension) {
-    
-    constexpr int n(7);
-    MatrixDense<double> A_n(MatrixDense<double>::Random(TestBase::bundle, n, n));
-    Vector<double> b_n(Vector<double>::Random(TestBase::bundle, n));
-    SolveArgPkg args;
-    args.max_iter = 100;
-
-    TypedLinearSystem<MatrixDense, double> lin_sys_n(A_n, b_n);
-    auto try_to_exceed_dim_dense = [=]() {
-        GMRESSolveTestingMock<MatrixDense, double> test_mock_n(lin_sys_n, Tol<double>::roundoff(), args);
-    };
-    CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_to_exceed_dim_dense);
-
-    // TypedLinearSystem<MatrixSparse, double> lin_sys_sparse_n(A_n.sparse(), b_n);
-    // auto try_to_exceed_dim_sparse = [=]() {
-    //     GMRESSolveTestingMock<MatrixSparse, double> test_mock_n(lin_sys_sparse_n, Tol<double>::roundoff(), args);
-    // };
-    // CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_to_exceed_dim_sparse);
-
+    CheckErrorExceedDimension<MatrixDense>();
+    CheckErrorExceedDimension<NoFillMatrixSparse>();
 }
 
 TEST_F(GMRESSolve_Component_Test, KrylovInitAndUpdate) {
     KrylovInitAndUpdate<MatrixDense>();
-    // KrylovInitAndUpdate<MatrixSparse>();
+    KrylovInitAndUpdate<NoFillMatrixSparse>();
 }
 
 TEST_F(GMRESSolve_Component_Test, H_QR_Update) {
     H_QR_Update<MatrixDense>();
-    // H_QR_Update<MatrixSparse>();
+    H_QR_Update<NoFillMatrixSparse>();
 }
 
 TEST_F(GMRESSolve_Component_Test, Update_x_Back_Substitution) {
     Update_x_Back_Substitution<MatrixDense>();
-    // Update_x_Back_Substitution<MatrixSparse>();
+    Update_x_Back_Substitution<NoFillMatrixSparse>();
 }
 
 TEST_F(GMRESSolve_Component_Test, KrylovLuckyBreakFirstIter) {
     KrylovLuckyBreakFirstIter<MatrixDense>();
-    // KrylovLuckyBreakFirstIter<MatrixSparse>();
+    KrylovLuckyBreakFirstIter<NoFillMatrixSparse>();
 }
 
 TEST_F(GMRESSolve_Component_Test, KrylovLuckyBreakLaterIter) {
     KrylovLuckyBreakLaterIter<MatrixDense>();
-    // KrylovLuckyBreakLaterIter<MatrixSparse>();
+    KrylovLuckyBreakLaterIter<NoFillMatrixSparse>();
 }
 
 TEST_F(GMRESSolve_Component_Test, KrylovLuckyBreakThroughSolve) {
     KrylovLuckyBreakThroughSolve<MatrixDense>();
-    // KrylovLuckyBreakThroughSolve<MatrixSparse>();
+    KrylovLuckyBreakThroughSolve<NoFillMatrixSparse>();
 }
 
 TEST_F(GMRESSolve_Component_Test, Solve) {
     Solve<MatrixDense>();
-    // Solve<MatrixSparse>();
+    Solve<NoFillMatrixSparse>();
 }
 
 TEST_F(GMRESSolve_Component_Test, Reset) {
     Reset<MatrixDense>();
-    // Reset<MatrixSparse>();
+    Reset<NoFillMatrixSparse>();
 }

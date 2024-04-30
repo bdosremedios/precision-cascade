@@ -26,16 +26,17 @@ public:
 
     // *** Constructors ***
     SORSolve(
-        const TypedLinearSystem<M, T> &arg_typed_lin_sys,
+        const TypedLinearSystem<MatrixDense, T> &arg_typed_lin_sys,
         double arg_w,
         const SolveArgPkg &arg_pkg
     ):
         w(static_cast<T>(arg_w)),
-        TypedIterativeSolve<M, T>::TypedIterativeSolve(arg_typed_lin_sys, arg_pkg)
+        TypedIterativeSolve<MatrixDense, T>::TypedIterativeSolve(arg_typed_lin_sys, arg_pkg)
     {
 
         T *h_D_wL = static_cast<T *>(malloc(typed_lin_sys.get_m()*typed_lin_sys.get_n()*sizeof(T)));
         typed_lin_sys.get_A_typed().copy_data_to_ptr(h_D_wL, typed_lin_sys.get_m(), typed_lin_sys.get_n());
+
         for (int i=0; i<typed_lin_sys.get_m(); ++i) {
             for (int j=0; j<typed_lin_sys.get_n(); ++j) {
                 if (i < j) {
@@ -46,7 +47,7 @@ public:
             }
         }
 
-        D_wL = M<T>(
+        D_wL = MatrixDense<T>(
             arg_typed_lin_sys.get_cu_handles(),
             h_D_wL,
             typed_lin_sys.get_m(),
@@ -54,6 +55,65 @@ public:
         );
 
         free(h_D_wL);
+
+    }
+
+    SORSolve(
+        const TypedLinearSystem<NoFillMatrixSparse, T> &arg_typed_lin_sys,
+        double arg_w,
+        const SolveArgPkg &arg_pkg
+    ):
+        w(static_cast<T>(arg_w)),
+        TypedIterativeSolve<NoFillMatrixSparse, T>::TypedIterativeSolve(arg_typed_lin_sys, arg_pkg)
+    {
+
+        int *new_col_offsets = static_cast<int *>(malloc((typed_lin_sys.get_n()+1)*sizeof(int)));
+        new_col_offsets[0] = 0;
+        std::vector<int> new_row_indices;
+        std::vector<T> new_vals;
+
+        int *A_col_offsets = static_cast<int *>(malloc((typed_lin_sys.get_n()+1)*sizeof(int)));
+        int *A_row_indices = static_cast<int *>(malloc(typed_lin_sys.get_nnz()*sizeof(int)));
+        T *A_vals = static_cast<T *>(malloc(typed_lin_sys.get_nnz()*sizeof(T)));
+
+        typed_lin_sys.get_A_typed().copy_data_to_ptr(
+            A_col_offsets, A_row_indices, A_vals,
+            typed_lin_sys.get_m(), typed_lin_sys.get_n(), typed_lin_sys.get_nnz()
+        );
+
+        int D_wL_count = 0;
+        for (int j=0; j<typed_lin_sys.get_n(); ++j) {
+            int col_beg = A_col_offsets[j];
+            int col_end = A_col_offsets[j+1];
+            for (int offset=col_beg; offset<col_end; ++offset) {
+                int row = A_row_indices[offset];
+                if (row >= j) {
+                    T val = A_vals[offset];
+                    if (val != static_cast<T>(0.)) {
+                        new_row_indices.push_back(row);
+                        if (row == j) {
+                            new_vals.push_back(val);
+                        } else {
+                            new_vals.push_back(static_cast<T>(arg_w)*val);
+                        }
+                        ++D_wL_count;
+                    }
+                }
+            }
+            new_col_offsets[j+1] = D_wL_count;
+        }
+
+        D_wL = NoFillMatrixSparse<T>(
+            arg_typed_lin_sys.get_cu_handles(),
+            new_col_offsets, &new_row_indices[0], &new_vals[0],
+            typed_lin_sys.get_m(), typed_lin_sys.get_n(), D_wL_count
+        );
+
+        free(new_col_offsets);
+
+        free(A_col_offsets);
+        free(A_row_indices);
+        free(A_vals);
 
     }
 

@@ -13,6 +13,7 @@ set(
 
 set(
     TEST_TOOLS_CPPS
+    test_tools/test_read_matrix.cpp
     test_tools/test_Heap.cpp
     test_tools/test_Sort.cpp
 )
@@ -43,17 +44,17 @@ set(
 set(
     TEST_GMRES_SOLVERS
     test_solvers/test_GMRES/test_GMRESSolve_components.cpp
-    test_solvers/test_GMRES/test_GMRESSolve_solve_dbl.cpp
-    test_solvers/test_GMRES/test_GMRESSolve_solve_sgl.cpp
     test_solvers/test_GMRES/test_GMRESSolve_solve_hlf.cpp
+    test_solvers/test_GMRES/test_GMRESSolve_solve_sgl.cpp
+    test_solvers/test_GMRES/test_GMRESSolve_solve_dbl.cpp
     test_solvers/test_GMRES/test_PGMRES.cpp
 )
 
 set(
     TEST_NESTED_SOLVERS
-        test_solvers/test_nested/test_FP_GMRES_IR_solve.cpp
-        test_solvers/test_nested/test_MP_GMRES_IR_component.cpp
-        test_solvers/test_nested/test_MP_GMRES_IR_solve.cpp
+    test_solvers/test_nested/test_FP_GMRES_IR_solve.cpp
+    test_solvers/test_nested/test_MP_GMRES_IR_component.cpp
+    test_solvers/test_nested/test_MP_GMRES_IR_solve.cpp
 )
 
 set(
@@ -66,12 +67,11 @@ set(
 
 set(
     TEST_SUITE_CPPS
-    # test_tools/test_read_matrix.cpp
     ${TEST_TYPES_CPPS}
     ${TEST_TOOLS_CPPS}
-    # ${TEST_ARG_PKGS}
     ${TEST_PRECONDITIONER_CPPS}
-    # ${TEST_SOLVERS}
+    ${TEST_ARG_PKGS}
+    ${TEST_SOLVERS}
 )
 
 add_library(

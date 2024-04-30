@@ -7,10 +7,22 @@ class MP_GMRES_IR_ComponentTest: public TestBase
 public:
 
     template <template <typename> typename M>
+    void TestConstructor() {
+
+        GenericLinearSystem<M> lin_sys_dense(
+            M<double>(TestBase::bundle, 2, 2),
+            Vector<double>(TestBase::bundle, 2, 1)
+        );
+        MP_GMRES_IR_Solve_TestingMock<M> dense_mock(lin_sys_dense, default_args);
+        EXPECT_EQ(dense_mock.cascade_phase, MP_GMRES_IR_Solve_TestingMock<M>::INIT_PHASE);
+
+    }
+
+    template <template <typename> typename M>
     void TestOuterIterateCorrectSolvers() {
 
         GenericLinearSystem<M> lin_sys(
-            M<double>::Random(TestBase::bundle, 2, 2),
+            CommonMatRandomInterface<M ,double>::rand_matrix(TestBase::bundle, 2, 2),
             Vector<double>::Random(TestBase::bundle, 2, 1)
         );
         MP_GMRES_IR_Solve_TestingMock<M> test_mock(lin_sys, default_args);
@@ -52,7 +64,7 @@ public:
 
         // Check initial __half set to float and test if reset to __half
         GenericLinearSystem<M> lin_sys(
-            M<double>::Random(TestBase::bundle, 2, 2),
+            CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, 2, 2),
             Vector<double>::Random(TestBase::bundle, 2, 1)
         );
         MP_GMRES_IR_Solve_TestingMock<M> test_mock(lin_sys, default_args);
@@ -82,29 +94,16 @@ public:
 };
 
 TEST_F(MP_GMRES_IR_ComponentTest, Test_Constructor) {
-
-    GenericLinearSystem<MatrixDense> lin_sys_dense(
-        MatrixDense<double>(TestBase::bundle, 2, 2),
-        Vector<double>(TestBase::bundle, 2, 1)
-    );
-    MP_GMRES_IR_Solve_TestingMock<MatrixDense> dense_mock(lin_sys_dense, default_args);
-    EXPECT_EQ(dense_mock.cascade_phase, MP_GMRES_IR_Solve_TestingMock<MatrixDense>::INIT_PHASE);
-
-    // GenericLinearSystem<MatrixSparse> lin_sys_sparse(
-    //     MatrixSparse<double>(2, 2),
-    //     Vector<double>(2, 1)
-    // );
-    // MP_GMRES_IR_Solve_TestingMock<MatrixSparse> sparse_mock(lin_sys_sparse, default_args);
-    // EXPECT_EQ(sparse_mock.cascade_phase, MP_GMRES_IR_Solve_TestingMock<MatrixSparse>::INIT_PHASE);
-
+    TestConstructor<MatrixDense>();
+    TestConstructor<NoFillMatrixSparse>();
 }
 
 TEST_F(MP_GMRES_IR_ComponentTest, Test_SetCorrectPhaseSolvers) {
     TestOuterIterateCorrectSolvers<MatrixDense>();
-    // TestOuterIterateCorrectSolvers<MatrixSparse>();
+    TestOuterIterateCorrectSolvers<NoFillMatrixSparse>();
 }
 
 TEST_F(MP_GMRES_IR_ComponentTest, Test_Reset) {
     TestReset<MatrixDense>();
-    // TestReset<MatrixSparse>();
+    TestReset<NoFillMatrixSparse>();
 }

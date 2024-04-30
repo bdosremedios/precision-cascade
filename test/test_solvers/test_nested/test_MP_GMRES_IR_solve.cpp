@@ -37,7 +37,7 @@ TEST_F(MP_GMRES_IR_SolveTest, SimpleConstantThreshold_ConvDiff64) {
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
 
     SolveTest<SimpleConstantThreshold, MatrixDense>(A_path, b_path);
-    // SolveTest<MatrixSparse>(A_path, b_path);
+    SolveTest<SimpleConstantThreshold, NoFillMatrixSparse>(A_path, b_path);
 
 }
 
@@ -47,7 +47,7 @@ TEST_F(MP_GMRES_IR_SolveTest, SimpleConstantThreshold_ConvDiff256) {
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_256_b.csv"));
 
     SolveTest<SimpleConstantThreshold, MatrixDense>(A_path, b_path);
-    // SolveTest<MatrixSparse>(A_path, b_path);
+    SolveTest<SimpleConstantThreshold, NoFillMatrixSparse>(A_path, b_path);
 
 }
 
@@ -57,7 +57,7 @@ TEST_F(MP_GMRES_IR_SolveTest, SimpleConstantThreshold_ConvDiff1024_LONGRUNTIME) 
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_1024_b.csv"));
 
     SolveTest<SimpleConstantThreshold, MatrixDense>(A_path, b_path);
-    // SolveTest<MatrixSparse>(A_path, b_path);
+    SolveTest<SimpleConstantThreshold, NoFillMatrixSparse>(A_path, b_path);
 
 }
 
@@ -67,7 +67,7 @@ TEST_F(MP_GMRES_IR_SolveTest, RestartCount_ConvDiff64) {
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
 
     SolveTest<RestartCount, MatrixDense>(A_path, b_path);
-    // SolveTest<MatrixSparse>(A_path, b_path);
+    SolveTest<RestartCount, NoFillMatrixSparse>(A_path, b_path);
 
 }
 
@@ -77,7 +77,7 @@ TEST_F(MP_GMRES_IR_SolveTest, RestartCount_ConvDiff256) {
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_256_b.csv"));
 
     SolveTest<RestartCount, MatrixDense>(A_path, b_path);
-    // SolveTest<MatrixSparse>(A_path, b_path);
+    SolveTest<RestartCount, NoFillMatrixSparse>(A_path, b_path);
 
 }
 
@@ -87,6 +87,6 @@ TEST_F(MP_GMRES_IR_SolveTest, RestartCount_ConvDiff1024_LONGRUNTIME) {
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_1024_b.csv"));
 
     SolveTest<RestartCount, MatrixDense>(A_path, b_path);
-    // SolveTest<MatrixSparse>(A_path, b_path);
+    SolveTest<RestartCount, NoFillMatrixSparse>(A_path, b_path);
 
 }

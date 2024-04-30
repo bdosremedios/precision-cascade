@@ -8,7 +8,10 @@ public:
 
     SolveArgPkg pgmres_args;
 
-    void SetUp() { pgmres_args.target_rel_res = Tol<double>::krylov_conv_tol(); }
+    void SetUp() {
+        TestBase::SetUp();
+        pgmres_args.target_rel_res = Tol<double>::krylov_conv_tol();
+    }
 
     template <template <typename> typename M>
     void TestMatchIdentity() {
@@ -47,17 +50,23 @@ public:
         pgmres_solve_inverse_of_identity.solve();
         if (*show_plots) { pgmres_solve_inverse_of_identity.view_relres_plot("log"); }
 
-        ASSERT_VECTOR_EQ(
+        double error_coeff = std::abs(
+            (MatrixDense<double>(A).norm()*pgmres_solve_default.get_typed_soln().norm()).get_scalar()
+        );
+        ASSERT_VECTOR_NEAR(
             pgmres_solve_default.get_typed_soln(),
-            pgmres_solve_explicit_noprecond.get_typed_soln()
-        );
-        ASSERT_VECTOR_EQ(
             pgmres_solve_explicit_noprecond.get_typed_soln(),
-            pgmres_solve_inverse_of_identity.get_typed_soln()
+            error_coeff*Tol<double>::gamma(n)
         );
-        ASSERT_VECTOR_EQ(
+        ASSERT_VECTOR_NEAR(
+            pgmres_solve_explicit_noprecond.get_typed_soln(),
             pgmres_solve_inverse_of_identity.get_typed_soln(),
-            pgmres_solve_default.get_typed_soln()
+            error_coeff*Tol<double>::gamma(n)
+        );
+        ASSERT_VECTOR_NEAR(
+            pgmres_solve_inverse_of_identity.get_typed_soln(),
+            pgmres_solve_default.get_typed_soln(),
+            error_coeff*Tol<double>::gamma(n)
         );
 
     }
@@ -142,7 +151,7 @@ public:
         Vector<double> b(read_matrixCSV<Vector, double>(TestBase::bundle, b_path));
 
         TestPrecondSingleIter<M>(
-            A*A, b,
+            M<double>(MatrixDense<double>(A)*MatrixDense<double>(A)), b,
             PrecondArgPkg<M, double>(std::make_shared<MatrixInversePreconditioner<M, double>>(Ainv),
                                      std::make_shared<MatrixInversePreconditioner<M, double>>(Ainv))
         );
@@ -206,7 +215,7 @@ public:
 
 TEST_F(PGMRES_Solve_Test, TestDefaultandNoPreconditioningMatchesIdentity) {
     TestMatchIdentity<MatrixDense>();
-    // TestMatchIdentity<MatrixSparse>();
+    TestMatchIdentity<NoFillMatrixSparse>();
 }
 
 TEST_F(PGMRES_Solve_Test, TestLeftPreconditioning_RandA45) {
@@ -216,7 +225,7 @@ TEST_F(PGMRES_Solve_Test, TestLeftPreconditioning_RandA45) {
     fs::path b_path(solve_matrix_dir / fs::path("b_inv_45.csv"));
 
     TestLeftPreconditioning<MatrixDense>(A_path, Ainv_path, b_path);
-    // TestLeftPreconditioning<MatrixSparse>(A_path, Ainv_path, b_path);
+    TestLeftPreconditioning<NoFillMatrixSparse>(A_path, Ainv_path, b_path);
 
 }
 
@@ -227,7 +236,7 @@ TEST_F(PGMRES_Solve_Test, TestRightPreconditioning_RandA45) {
     fs::path b_path(solve_matrix_dir / fs::path("b_inv_45.csv"));
 
     TestRightPreconditioning<MatrixDense>(A_path, Ainv_path, b_path);
-    // TestRightPreconditioning<MatrixSparse>(A_path, Ainv_path, b_path);
+    TestRightPreconditioning<NoFillMatrixSparse>(A_path, Ainv_path, b_path);
 
 }
 
@@ -238,7 +247,7 @@ TEST_F(PGMRES_Solve_Test, TestSymmeticPreconditioning_RandA45) {
     fs::path b_path(solve_matrix_dir / fs::path("b_inv_45.csv"));
 
     TestSymmetricPreconditioning<MatrixDense>(A_path, Ainv_path, b_path);
-    // TestSymmetricPreconditioning<MatrixSparse>(A_path, Ainv_path, b_path);
+    TestSymmetricPreconditioning<NoFillMatrixSparse>(A_path, Ainv_path, b_path);
 
 }
 
@@ -250,7 +259,7 @@ TEST_F(PGMRES_Solve_Test, TestLeftPreconditioning_3eigs) {
     fs::path xtest_path(solve_matrix_dir / fs::path("x_25_saddle.csv"));
 
     TestLeftPreconditioning_3eigs<MatrixDense>(A_path, Ainv_path, b_path, xtest_path);
-    // TestLeftPreconditioning_3eigs<MatrixSparse>(A_path, Ainv_path, b_path, xtest_path);
+    TestLeftPreconditioning_3eigs<NoFillMatrixSparse>(A_path, Ainv_path, b_path, xtest_path);
 
 }
 
@@ -262,6 +271,6 @@ TEST_F(PGMRES_Solve_Test, TestRightPreconditioning_3eigs) {
     fs::path xtest_path(solve_matrix_dir / fs::path("x_25_saddle.csv"));
 
     TestRightPreconditioning_3eigs<MatrixDense>(A_path, Ainv_path, b_path, xtest_path);
-    // TestRightPreconditioning_3eigs<MatrixSparse>(A_path, Ainv_path, b_path, xtest_path);
+    TestRightPreconditioning_3eigs<NoFillMatrixSparse>(A_path, Ainv_path, b_path, xtest_path);
 
 }

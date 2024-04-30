@@ -43,9 +43,9 @@ TEST_F(FP_GMRES_IR_Test, DoubleConvergenceTest_ConvDiff64) {
     SolveTest<MatrixDense, double>(
         A_path, b_path, dbl_GMRES_IR_args, Tol<double>::krylov_conv_tol()
     );
-    // SolveTest<MatrixSparse, double>(
-    //     A_path, b_path, dbl_GMRES_IR_args, Tol<double>::krylov_conv_tol()
-    // );
+    SolveTest<NoFillMatrixSparse, double>(
+        A_path, b_path, dbl_GMRES_IR_args, Tol<double>::krylov_conv_tol()
+    );
 
 }
 
@@ -57,9 +57,9 @@ TEST_F(FP_GMRES_IR_Test, DoubleConvergenceTest_ConvDiff256) {
     SolveTest<MatrixDense, double>(
         A_path, b_path, dbl_GMRES_IR_args, Tol<double>::nested_krylov_conv_tol()
     );
-    // SolveTest<MatrixSparse, double>(
-    //     A_path, b_path, dbl_GMRES_IR_args, Tol<double>::nested_krylov_conv_tol()
-    // );
+    SolveTest<NoFillMatrixSparse, double>(
+        A_path, b_path, dbl_GMRES_IR_args, Tol<double>::nested_krylov_conv_tol()
+    );
 
 }
 
@@ -71,9 +71,9 @@ TEST_F(FP_GMRES_IR_Test, DoubleConvergenceTest_ConvDiff1024_LONGRUNTIME) {
     SolveTest<MatrixDense, double>(
         A_path, b_path, dbl_GMRES_IR_args, Tol<double>::nested_krylov_conv_tol()
     );
-    // SolveTest<MatrixSparse, double>(
-    //     A_path, b_path, dbl_GMRES_IR_args, Tol<double>::nested_krylov_conv_tol()
-    // );
+    SolveTest<NoFillMatrixSparse, double>(
+        A_path, b_path, dbl_GMRES_IR_args, Tol<double>::nested_krylov_conv_tol()
+    );
 
 }
 
@@ -85,9 +85,9 @@ TEST_F(FP_GMRES_IR_Test, SingleConvergenceTest_ConvDiff64) {
     SolveTest<MatrixDense, float>(
         A_path, b_path, sgl_GMRES_IR_args, Tol<float>::krylov_conv_tol()
     );
-    // SolveTest<MatrixSparse, float>(
-    //     A_path, b_path, sgl_GMRES_IR_args, Tol<float>::krylov_conv_tol()
-    // );
+    SolveTest<NoFillMatrixSparse, float>(
+        A_path, b_path, sgl_GMRES_IR_args, Tol<float>::krylov_conv_tol()
+    );
 
 }
 
@@ -99,9 +99,9 @@ TEST_F(FP_GMRES_IR_Test, SingleConvergenceTest_ConvDiff256) {
     SolveTest<MatrixDense, float>(
         A_path, b_path, sgl_GMRES_IR_args, Tol<float>::nested_krylov_conv_tol()
     );
-    // SolveTest<MatrixSparse, float>(
-    //     A_path, b_path, sgl_GMRES_IR_args, Tol<float>::nested_krylov_conv_tol()
-    // );
+    SolveTest<NoFillMatrixSparse, float>(
+        A_path, b_path, sgl_GMRES_IR_args, Tol<float>::nested_krylov_conv_tol()
+    );
 
 }
 
@@ -113,9 +113,9 @@ TEST_F(FP_GMRES_IR_Test, SingleConvergenceTest_ConvDiff1024_LONGRUNTIME) {
     SolveTest<MatrixDense, float>(
         A_path, b_path, sgl_GMRES_IR_args, Tol<float>::nested_krylov_conv_tol()
     );
-    // SolveTest<MatrixSparse, float>(
-    //     A_path, b_path, sgl_GMRES_IR_args, Tol<float>::nested_krylov_conv_tol()
-    // );
+    SolveTest<NoFillMatrixSparse, float>(
+        A_path, b_path, sgl_GMRES_IR_args, Tol<float>::nested_krylov_conv_tol()
+    );
 
 }
 
@@ -128,9 +128,9 @@ TEST_F(FP_GMRES_IR_Test, HalfConvergenceTest_ConvDiff64) {
     SolveTest<MatrixDense, half>(
         A_path, b_path, hlf_GMRES_IR_args, Tol<half>::nested_krylov_conv_tol()
     );
-    // SolveTest<MatrixSparse, half>(
-    //     A_path, b_path, hlf_GMRES_IR_args, Tol<half>::nested_krylov_conv_tol()
-    // );
+    SolveTest<NoFillMatrixSparse, half>(
+        A_path, b_path, hlf_GMRES_IR_args, Tol<half>::nested_krylov_conv_tol()
+    );
 
 }
 
@@ -142,9 +142,9 @@ TEST_F(FP_GMRES_IR_Test, HalfConvergenceTest_ConvDiff256) {
     SolveTest<MatrixDense, half>(
         A_path, b_path, hlf_GMRES_IR_args, Tol<half>::nested_krylov_conv_tol()
     );
-    // SolveTest<MatrixSparse, half>(
-    //     A_path, b_path, hlf_GMRES_IR_args, Tol<half>::nested_krylov_conv_tol()
-    // );
+    SolveTest<NoFillMatrixSparse, half>(
+        A_path, b_path, hlf_GMRES_IR_args, Tol<half>::nested_krylov_conv_tol()
+    );
 
 }
 
@@ -156,8 +156,8 @@ TEST_F(FP_GMRES_IR_Test, HalfConvergenceTest_ConvDiff1024_LONGRUNTIME) {
     SolveTest<MatrixDense, half>(
         A_path, b_path, hlf_GMRES_IR_args, Tol<half>::nested_krylov_conv_tol()
     );
-    // SolveTest<MatrixSparse, half>(
-    //     A_path, b_path, hlf_GMRES_IR_args, Tol<half>::nested_krylov_conv_tol()
-    // );
+    SolveTest<NoFillMatrixSparse, half>(
+        A_path, b_path, hlf_GMRES_IR_args, Tol<half>::nested_krylov_conv_tol()
+    );
 
 }

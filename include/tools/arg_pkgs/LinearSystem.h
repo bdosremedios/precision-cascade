@@ -12,6 +12,7 @@ protected:
 
     const int m;
     const int n;
+    const int nnz;
     const cuHandleBundle cu_handles;
     const M<double> A;
     const Vector<double> b;
@@ -25,6 +26,7 @@ public:
     ):
         m(arg_A.rows()),
         n(arg_A.cols()),
+        nnz(arg_A.non_zeros()),
         cu_handles(arg_A.get_cu_handles()),
         A(arg_A),
         b(arg_b)
@@ -42,6 +44,7 @@ public:
     virtual const Vector<double> &get_b() const { return b; }
     const int &get_m() const { return m; }
     const int &get_n() const { return n; }
+    const int &get_nnz() const { return nnz; }
     const cuHandleBundle &get_cu_handles() const { return cu_handles; }
 
 };

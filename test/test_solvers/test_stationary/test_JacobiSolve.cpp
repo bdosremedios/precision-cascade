@@ -56,53 +56,13 @@ public:
 
 };
 
-TEST_F(Jacobi_Test, SolveConvDiff64Double) {
-
-    fs::path A_path(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
-    fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
-
-    SolveSuccessTest<MatrixDense, double>(A_path, b_path, Tol<double>::stationary_conv_tol());
-    // SolveSuccessTest<MatrixSparse, double>(A_path, b_path, Tol<double>::stationary_conv_tol());
-
-}
-
-TEST_F(Jacobi_Test, SolveConvDiff256Double_LONGRUNTIME) {
-
-    fs::path A_path(solve_matrix_dir / fs::path("conv_diff_256_A.csv"));
-    fs::path b_path(solve_matrix_dir / fs::path("conv_diff_256_b.csv"));
-
-    SolveSuccessTest<MatrixDense, double>(A_path, b_path, Tol<double>::stationary_conv_tol());
-    // SolveSuccessTest<MatrixSparse, double>(A_path, b_path, Tol<double>::stationary_conv_tol());
-
-}
-
-TEST_F(Jacobi_Test, SolveConvDiff64Single) {
-
-    fs::path A_path(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
-    fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
-
-    SolveSuccessTest<MatrixDense, float>(A_path, b_path, Tol<float>::stationary_conv_tol());
-    // SolveSuccessTest<MatrixSparse, float>(A_path, b_path, Tol<float>::stationary_conv_tol());
-
-}
-
-TEST_F(Jacobi_Test, SolveConvDiff256Single_LONGRUNTIME) {
-
-    fs::path A_path(solve_matrix_dir / fs::path("conv_diff_256_A.csv"));
-    fs::path b_path(solve_matrix_dir / fs::path("conv_diff_256_b.csv"));
-
-    SolveSuccessTest<MatrixDense, float>(A_path, b_path, Tol<float>::stationary_conv_tol());
-    // SolveSuccessTest<MatrixSparse, float>(A_path, b_path, Tol<float>::stationary_conv_tol());
-
-}
-
 TEST_F(Jacobi_Test, SolveConvDiff64Single_FailBeyondCapabilities) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
 
     SolveFailTest<MatrixDense, float>(A_path, b_path, 0.1*Tol<float>::roundoff());
-    // SolveFailTest<MatrixSparse, float>(A_path, b_path, 0.1*Tol<float>::roundoff());
+    SolveFailTest<NoFillMatrixSparse, float>(A_path, b_path, 0.1*Tol<float>::roundoff());
 
 }
 
@@ -112,7 +72,7 @@ TEST_F(Jacobi_Test, SolveConvDiff64Half) {
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
 
     SolveSuccessTest<MatrixDense, half>(A_path, b_path, Tol<half>::stationary_conv_tol());
-    // SolveSuccessTest<MatrixSparse, half>(A_path, b_path, Tol<half>::stationary_conv_tol());
+    SolveSuccessTest<NoFillMatrixSparse, half>(A_path, b_path, Tol<half>::stationary_conv_tol());
 
 }
 
@@ -122,7 +82,7 @@ TEST_F(Jacobi_Test, SolveConvDiff256Half_LONGRUNTIME) {
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_256_b.csv"));
 
     SolveSuccessTest<MatrixDense, half>(A_path, b_path, Tol<half>::stationary_conv_tol());
-    // SolveSuccessTest<MatrixSparse, half>(A_path, b_path, Tol<half>::stationary_conv_tol());
+    SolveSuccessTest<NoFillMatrixSparse, half>(A_path, b_path, Tol<half>::stationary_conv_tol());
 
 }
 
@@ -132,6 +92,46 @@ TEST_F(Jacobi_Test, SolveConvDiff64Half_FailBeyondCapabilities) {
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
 
     SolveFailTest<MatrixDense, half>(A_path, b_path, 0.1*Tol<half>::roundoff());
-    // SolveFailTest<MatrixSparse, half>(A_path, b_path, 0.1*Tol<half>::roundoff());
+    SolveFailTest<NoFillMatrixSparse, half>(A_path, b_path, 0.1*Tol<half>::roundoff());
+
+}
+
+TEST_F(Jacobi_Test, SolveConvDiff64Single) {
+
+    fs::path A_path(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
+    fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
+
+    SolveSuccessTest<MatrixDense, float>(A_path, b_path, Tol<float>::stationary_conv_tol());
+    SolveSuccessTest<NoFillMatrixSparse, float>(A_path, b_path, Tol<float>::stationary_conv_tol());
+
+}
+
+TEST_F(Jacobi_Test, SolveConvDiff256Single_LONGRUNTIME) {
+
+    fs::path A_path(solve_matrix_dir / fs::path("conv_diff_256_A.csv"));
+    fs::path b_path(solve_matrix_dir / fs::path("conv_diff_256_b.csv"));
+
+    SolveSuccessTest<MatrixDense, float>(A_path, b_path, Tol<float>::stationary_conv_tol());
+    SolveSuccessTest<NoFillMatrixSparse, float>(A_path, b_path, Tol<float>::stationary_conv_tol());
+
+}
+
+TEST_F(Jacobi_Test, SolveConvDiff64Double) {
+
+    fs::path A_path(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
+    fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
+
+    SolveSuccessTest<MatrixDense, double>(A_path, b_path, Tol<double>::stationary_conv_tol());
+    SolveSuccessTest<NoFillMatrixSparse, double>(A_path, b_path, Tol<double>::stationary_conv_tol());
+
+}
+
+TEST_F(Jacobi_Test, SolveConvDiff256Double_LONGRUNTIME) {
+
+    fs::path A_path(solve_matrix_dir / fs::path("conv_diff_256_A.csv"));
+    fs::path b_path(solve_matrix_dir / fs::path("conv_diff_256_b.csv"));
+
+    SolveSuccessTest<MatrixDense, double>(A_path, b_path, Tol<double>::stationary_conv_tol());
+    SolveSuccessTest<NoFillMatrixSparse, double>(A_path, b_path, Tol<double>::stationary_conv_tol());
 
 }
