@@ -269,11 +269,21 @@ public:
     int rows() const { return m_rows; }
     int cols() const { return 1; }
     int non_zeros() const {
+        
+        T *h_vec = static_cast<T *>(malloc(mem_size()));
+        copy_data_to_ptr(h_vec, m_rows);
+
         int nnz = 0;
         for (int i=0; i<m_rows; ++i) {
-            if (get_elem(i) != SCALAR_ZERO<T>::get()) { ++nnz; }
+            if (h_vec[i] != static_cast<T>(0.))  {
+                ++nnz;
+            }
         }
+
+        free(h_vec);
+
         return nnz;
+
     }
     cuHandleBundle get_cu_handles() const { return cu_handles; }
     void print() const {

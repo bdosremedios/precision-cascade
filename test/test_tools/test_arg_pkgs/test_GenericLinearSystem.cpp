@@ -8,19 +8,31 @@ public:
 
     template <template <typename> typename M>
     void TestConstructor() {
+        
+        clock_start();
 
         constexpr int m(63);
         constexpr int n(27);
         M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, m, n));
         Vector<double> b(Vector<double>::Random(TestBase::bundle, m));
+        
+        clock_stop();
+        
+        clock_start();
         GenericLinearSystem<M> lin_sys(A, b);
 
         EXPECT_EQ(lin_sys.get_m(), m);
         EXPECT_EQ(lin_sys.get_n(), n);
         EXPECT_EQ(lin_sys.get_nnz(), A.non_zeros());
+        
+        clock_stop();
+        
+        clock_start();
 
         ASSERT_MATRIX_EQ(lin_sys.get_A(), A);
         ASSERT_VECTOR_EQ(lin_sys.get_b(), b);
+        
+        clock_stop();
 
     }
 

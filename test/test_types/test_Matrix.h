@@ -1,4 +1,5 @@
 #include <time.h>
+#include <chrono>
 
 #include "../test.h"
 
@@ -1297,7 +1298,7 @@ public:
         Vector<T> Lb_tri(
             read_matrixCSV<Vector, T>(TestBase::bundle, solve_matrix_dir / fs::path("Lb_tri_90.csv"))
         );
-    
+
         Vector<T> test_soln(L_tri.frwd_sub(Lb_tri));
 
         ASSERT_VECTOR_NEAR(
@@ -1313,7 +1314,7 @@ public:
 
         const double approx_L_tri_cond_number_upbound(2.3);
         srand(time(NULL));
-        const int n(100 + (rand() % 100));//)+100);
+        const int n(100 + (rand() % 100));
 
         MatrixDense<T> temp(CommonMatRandomInterface<M, T>::rand_matrix(TestBase::bundle, n, n));
 

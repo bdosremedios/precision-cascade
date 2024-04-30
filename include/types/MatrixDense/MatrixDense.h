@@ -271,15 +271,22 @@ public:
     cuHandleBundle get_cu_handles() const { return cu_handles; }
     int rows() const { return m_rows; }
     int cols() const { return n_cols; }
-    int non_zeros() const { 
+    int non_zeros() const {
+        
+        T *h_mat = static_cast<T *>(malloc(mem_size()));
+        copy_data_to_ptr(h_mat, m_rows, n_cols);
+
         int nnz = 0;
         for (int i=0; i<m_rows; ++i) {
             for (int j=0; j<n_cols; ++j) {
-                if (get_elem(i, j) != SCALAR_ZERO<T>::get()) {
+                if (h_mat[i+j*m_rows] != static_cast<T>(0.)) {
                     nnz++;
                 }
             }
         }
+
+        free(h_mat);
+
         return nnz;
     }
 

@@ -21,8 +21,8 @@ public:
 
     // *** Constructors ***
     GenericLinearSystem(
-        M<double> arg_A,
-        Vector<double> arg_b
+        const M<double> &arg_A,
+        const Vector<double> &arg_b
     ):
         m(arg_A.rows()),
         n(arg_A.cols()),
@@ -61,8 +61,8 @@ public:
 
     // *** Constructors ***
     TypedLinearSystem(
-        M<double> arg_A,
-        Vector<double> arg_b
+        const M<double> &arg_A,
+        const Vector<double> &arg_b
     ):
         A_typed(arg_A.template cast<T>()),
         b_typed(arg_b.template cast<T>()),

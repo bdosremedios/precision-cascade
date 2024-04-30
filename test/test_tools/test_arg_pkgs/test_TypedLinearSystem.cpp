@@ -13,6 +13,7 @@ public:
         constexpr int n(27);
         M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, m, n));
         Vector<double> b(Vector<double>::Random(TestBase::bundle, m));
+
         TypedLinearSystem<M, T> lin_sys(A, b);
 
         ASSERT_MATRIX_EQ(lin_sys.get_A(), A);

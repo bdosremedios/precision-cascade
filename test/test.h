@@ -27,9 +27,35 @@ class TestBase: public testing::Test
 {
 public:
 
+    bool clock_ticking = false;
+
+    std::chrono::steady_clock clock;
+    std::chrono::time_point<std::chrono::steady_clock> start;
+    std::chrono::time_point<std::chrono::steady_clock> stop;
+
+    int window_count = 1;
+
     _CrtMemState init_state = {0};
     _CrtMemState final_state = {0};
     _CrtMemState state_diff = {0};
+
+    void clock_start() {
+        clock_ticking = true;
+        start = clock.now();
+    }
+
+    void clock_stop() {
+        if (clock_ticking) {
+            stop = clock.now();
+            clock_ticking = false;
+            std::cout << "Test Window " << window_count++
+                      << " Time elapsed (ms): "
+                      << std::chrono::duration_cast<std::chrono::milliseconds>(stop-start)
+                      << std::endl;
+        } else {
+            std::cout << "CLOCK NOT TICKING!" << std::endl;
+        }
+    }
 
     virtual void SetUp() {
         _CrtMemCheckpoint(&init_state);
