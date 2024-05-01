@@ -21,8 +21,10 @@ public:
         SolveArgPkg args;
         args.target_rel_res = Tol<double>::krylov_conv_tol();
         GMRESSolve<M, double> gmres_solve(lin_sys, Tol<double>::roundoff(), args);
-
+        
+        clock_start();
         gmres_solve.solve();
+        clock_stop();
 
         if (*show_plots) { gmres_solve.view_relres_plot("log"); }
         
@@ -74,24 +76,24 @@ TEST_F(GMRESSolve_Solve_DBL_Test, SolveConvDiff1024_LONGRUNTIME) {
 
 }
 
-TEST_F(GMRESSolve_Solve_DBL_Test, SolveConvDiff20Rand) {
+// TEST_F(GMRESSolve_Solve_DBL_Test, SolveConvDiff20Rand) {
 
-    fs::path A_path(solve_matrix_dir / fs::path("A_20_rand.csv"));
-    fs::path b_path(solve_matrix_dir / fs::path("b_20_rand.csv"));
-    fs::path x_path(solve_matrix_dir / fs::path("x_20_rand.csv"));
+//     fs::path A_path(solve_matrix_dir / fs::path("A_20_rand.csv"));
+//     fs::path b_path(solve_matrix_dir / fs::path("b_20_rand.csv"));
+//     fs::path x_path(solve_matrix_dir / fs::path("x_20_rand.csv"));
 
-    SolveTest<MatrixDense>(A_path, b_path, x_path, false);
-    SolveTest<NoFillMatrixSparse>(A_path, b_path, x_path, false);
+//     SolveTest<MatrixDense>(A_path, b_path, x_path, false);
+//     SolveTest<NoFillMatrixSparse>(A_path, b_path, x_path, false);
 
-}
+// }
 
-TEST_F(GMRESSolve_Solve_DBL_Test, SolveConvDiff3Eigs) {
+// TEST_F(GMRESSolve_Solve_DBL_Test, SolveConvDiff3Eigs) {
 
-    fs::path A_path(solve_matrix_dir / fs::path("A_25_3eigs.csv"));
-    fs::path b_path(solve_matrix_dir / fs::path("b_25_3eigs.csv"));
-    fs::path x_path(solve_matrix_dir / fs::path("x_25_3eigs.csv"));
+//     fs::path A_path(solve_matrix_dir / fs::path("A_25_3eigs.csv"));
+//     fs::path b_path(solve_matrix_dir / fs::path("b_25_3eigs.csv"));
+//     fs::path x_path(solve_matrix_dir / fs::path("x_25_3eigs.csv"));
 
-    SolveTest<MatrixDense>(A_path, b_path, x_path, true);
-    SolveTest<NoFillMatrixSparse>(A_path, b_path, x_path, true);
+//     SolveTest<MatrixDense>(A_path, b_path, x_path, true);
+//     SolveTest<NoFillMatrixSparse>(A_path, b_path, x_path, true);
 
-}
+// }

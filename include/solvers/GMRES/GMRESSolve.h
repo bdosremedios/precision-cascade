@@ -7,6 +7,9 @@ template <template <typename> typename M, typename T, typename W=T>
 class GMRESSolve: public TypedIterativeSolve<M, T>
 {
 protected:
+    // std::chrono::steady_clock clock;
+    // std::chrono::time_point<std::chrono::steady_clock> start;
+    // std::chrono::time_point<std::chrono::steady_clock> stop;
 
     using TypedIterativeSolve<M, T>::typed_lin_sys;
     using TypedIterativeSolve<M, T>::init_guess_typed;
@@ -49,10 +52,8 @@ protected:
     }
 
     Vector<T> get_precond_b() {
-        return(
-            left_precond_ptr->casted_action_inv_M<T>(
-                typed_lin_sys.get_b_typed().template cast<W>()
-            )
+        return left_precond_ptr->casted_action_inv_M<T>(
+            typed_lin_sys.get_b_typed().template cast<W>()
         );
     }
 
@@ -208,18 +209,40 @@ protected:
         }
     }
 
+    // void clock_start() {
+    //     start = clock.now();
+    // }
+
+    // std::chrono::microseconds clock_stop() {
+    //     stop = clock.now();
+    //     return std::chrono::duration_cast<std::chrono::microseconds>(stop-start);
+    // }
+
     void typed_iterate() override {
         // Check isn't terminated and if exceeding max krylov dim, if is just do nothing
         if (!this->terminated) {
             if (kry_space_dim < max_kry_space_dim) {
+                // bool benchmark = false;
+                // if (this->curr_iter % 10 == 0) {benchmark=true;}
+                // clock_start();
                 update_subspace_k();
+                // if (benchmark) {std::cout << clock_stop() << " ";}
+                // clock_start();
                 update_nextq_and_Hkplus1();
+                // if (benchmark) {std::cout << clock_stop() << " ";}
+                // clock_start();
                 update_QR_fact();
+                // if (benchmark) {std::cout << clock_stop() << " ";}
+                // clock_start();
                 update_x_minimizing_res();
+                // if (benchmark) {std::cout << clock_stop() << " ";}
+                // clock_start();
                 check_termination();
+                // if (benchmark) {std::cout << clock_stop() << std::endl;}
             }
         }
     }
+
     void derived_typed_reset() override { set_initial_space(); } // Erase current krylov subspace
 
 public:

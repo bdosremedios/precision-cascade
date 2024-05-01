@@ -61,8 +61,8 @@ set(
     TEST_SOLVERS
     test_solvers/test_IterativeSolve/test_IterativeSolve.cpp
     ${TEST_STATIONARY_SOLVERS}
-    # ${TEST_GMRES_SOLVERS}
-    # ${TEST_NESTED_SOLVERS}
+    ${TEST_GMRES_SOLVERS}
+    ${TEST_NESTED_SOLVERS}
 )
 
 set(
@@ -71,7 +71,7 @@ set(
     ${TEST_TOOLS_CPPS}
     ${TEST_PRECONDITIONER_CPPS}
     ${TEST_ARG_PKGS}
-    # ${TEST_SOLVERS}
+    ${TEST_SOLVERS}
 )
 
 add_library(

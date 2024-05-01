@@ -251,15 +251,13 @@ public:
             throw(std::runtime_error("Vector: invalid slice start"));
         }
 
-        T *h_vec = static_cast<T *>(malloc(m_elem*sizeof(T)));
+        Vector<T> created_vec(cu_handles, m_elem);
 
         if (m_elem > 0) {
-            check_cublas_status(cublasGetVector(m_elem, sizeof(T), d_vec+start, 1, h_vec, 1));
+            check_cuda_error(cudaMemcpy(
+                created_vec.d_vec, d_vec+start, m_elem*sizeof(T), cudaMemcpyDeviceToDevice
+            ));
         }
-
-        Vector<T> created_vec(cu_handles, h_vec, m_elem);
-
-        free(h_vec);
 
         return created_vec;
 
