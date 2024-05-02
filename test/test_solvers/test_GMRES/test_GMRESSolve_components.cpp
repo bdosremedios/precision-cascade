@@ -9,17 +9,11 @@ public:
     template <template <typename> typename M>
     void CheckConstruction(const int &n) {
 
-        clock_start();
-
         M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, n, n));
         Vector<double> b(Vector<double>::Random(TestBase::bundle, n));
         TypedLinearSystem<M, double> lin_sys(A, b);
 
         GMRESSolveTestingMock<M, double> test_mock(lin_sys, Tol<double>::roundoff(), default_args);
-
-        clock_stop();
-
-        clock_start();
 
         ASSERT_EQ(test_mock.max_kry_space_dim, n);
         ASSERT_NEAR(
@@ -44,8 +38,6 @@ public:
         ASSERT_EQ(test_mock.R_H.rows(), n+1);
         ASSERT_EQ(test_mock.R_H.cols(), n);
         ASSERT_MATRIX_ZERO(test_mock.R_H, 0.);
-
-        clock_stop();
 
     }
 

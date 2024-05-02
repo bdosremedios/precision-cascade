@@ -3,9 +3,12 @@
 
 #include <functional>
 #include <string>
+#include <format>
 
 #include "gtest/gtest.h"
 
+#include "tools/cuda_check.h"
+#include "tools/AbsoluteVal.h"
 #include "types/types.h"
 
 static bool *print_errors;
