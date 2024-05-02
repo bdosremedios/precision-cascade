@@ -13,22 +13,14 @@ public:
         const fs::path &A_file_path,
         const fs::path &b_file_path
     ) {
-        
-        clock_start();
 
         M<double> A(read_matrixCSV<M, double>(TestBase::bundle, A_file_path));
         Vector<double> b(read_matrixCSV<Vector, double>(TestBase::bundle, b_file_path));
 
         GenericLinearSystem<M> lin_sys(A, b);
         MP_GMRES_Impl<M> mp_gmres_ir_solve(lin_sys, dbl_GMRES_IR_args);
-        
-        clock_stop();
-        
-        clock_start();
 
         mp_gmres_ir_solve.solve();
-        
-        clock_stop();
 
         if (*show_plots) { mp_gmres_ir_solve.view_relres_plot("log"); }
 

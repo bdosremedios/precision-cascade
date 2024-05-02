@@ -8,7 +8,7 @@
 #include "gtest/gtest.h"
 
 #include "tools/cuda_check.h"
-#include "tools/AbsoluteVal.h"
+#include "tools/abs.h"
 #include "types/types.h"
 
 static bool *print_errors;

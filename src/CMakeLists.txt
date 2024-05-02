@@ -56,7 +56,7 @@ add_library(
     STATIC
     tools/cuda_check.cu
     tools/cuHandleBundle.cu
-    tools/AbsoluteVal.cpp
+    tools/abs.cpp
 )
 
 target_link_libraries(

@@ -24,34 +24,55 @@ int main(int argc, char **argv) {
     std::string filter_include = "";
     std::string filter_exclude = "";
 
-    // Check if should onlu run MPGMRES tests
-    bool only_mp_gmres = false;
+    // Check if should run exclusively benchmark tests
+    bool benchmark = false;
     for (int i=0; i<argc; ++i) {
-        if ((std::string(argv[i]) == "--only_mpgmres") || (std::string(argv[i]) == "-om")) {
-            only_mp_gmres = true;
+        if ((std::string(argv[i]) == "--benchmark") || (std::string(argv[i]) == "-bm")) {
+            benchmark = true;
         }
     }
-    if (only_mp_gmres) {
-        std::cout << "Running only MP_GMRES_IR_Solve related tests..." << std::endl;
-        if (filter_include != "") { filter_include += ":"; }
-        filter_include += "*MP_GMRES_IR*";
-    } else {
-        std::cout << "Running all tests..." << std::endl;
-    }
+    if (benchmark) {
 
-    // Check if should run long tests
-    bool run_long_tests = false;
-    for (int i=0; i<argc; ++i) {
-        if ((std::string(argv[i]) == "--run_long_tests") || (std::string(argv[i]) == "-rlt")) {
-            run_long_tests = true;
-        }
-    }
-    if (run_long_tests) {
-        std::cout << "Running long tests..." << std::endl;
+        std::cout << "Running benchmark tests..." << std::endl;
+        if (filter_include != "") { filter_include += ":"; }
+        filter_include += "*BENCHMARK*";
+
     } else {
-        std::cout << "Skipping long tests..." << std::endl;
+
+        std::cout << "Excluding benchmark tests..." << std::endl;
         if (filter_exclude != "") { filter_exclude += ":"; }
-        filter_exclude += "*LONGRUNTIME";
+        filter_exclude += "*BENCHMARK";
+
+        // Check if should run exclusively MPGMRES tests
+        bool only_mp_gmres = false;
+        for (int i=0; i<argc; ++i) {
+            if ((std::string(argv[i]) == "--mpgmres") || (std::string(argv[i]) == "-mp")) {
+                only_mp_gmres = true;
+            }
+        }
+        if (only_mp_gmres) {
+            std::cout << "Running exclusively MP_GMRES_IR_Solve related tests..." << std::endl;
+            if (filter_include != "") { filter_include += ":"; }
+            filter_include += "*MP_GMRES_IR*";
+        } else {
+            std::cout << "Running all tests..." << std::endl;
+        }
+
+        // Check if should run long tests
+        bool run_long_tests = false;
+        for (int i=0; i<argc; ++i) {
+            if ((std::string(argv[i]) == "--run_long_tests") || (std::string(argv[i]) == "-rlt")) {
+                run_long_tests = true;
+            }
+        }
+        if (run_long_tests) {
+            std::cout << "Running long tests..." << std::endl;
+        } else {
+            std::cout << "Skipping long tests..." << std::endl;
+            if (filter_exclude != "") { filter_exclude += ":"; }
+            filter_exclude += "*LONGRUNTIME";
+        }
+
     }
 
     if (filter_include == "") {

@@ -1,5 +1,5 @@
-#ifndef ABSOLUTEVAL_H
-#define ABSOLUTEVAL_H
+#ifndef ABS_H
+#define ABS_H
 
 #include <stdexcept>
 #include <cuda_fp16.h>

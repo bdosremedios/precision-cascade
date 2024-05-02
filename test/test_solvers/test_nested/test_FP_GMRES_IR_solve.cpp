@@ -17,21 +17,14 @@ public:
         const SolveArgPkg &args,
         const double &conv_tol
     ) {
-        
-        clock_start();
 
         M<double> A(read_matrixCSV<M, double>(TestBase::bundle, A_file_path));
         Vector<double> b(read_matrixCSV<Vector, double>(TestBase::bundle, b_file_path));
         TypedLinearSystem<M, T> lin_sys(A, b);
 
         FP_GMRES_IR_Solve<M, T> gmres_ir(lin_sys, Tol<T>::roundoff(), args);
-        
-        clock_stop();
-        clock_start();
 
         gmres_ir.solve();
-        
-        clock_stop();
 
         if (*show_plots) { gmres_ir.view_relres_plot("log"); }
 

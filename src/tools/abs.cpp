@@ -1,4 +1,4 @@
-#include "tools/AbsoluteVal.h"
+#include "tools/abs.h"
 
 #include <cmath>
 #include <cuda_fp16.h>

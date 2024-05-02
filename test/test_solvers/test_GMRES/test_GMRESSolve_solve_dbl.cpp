@@ -21,10 +21,8 @@ public:
         SolveArgPkg args;
         args.target_rel_res = Tol<double>::krylov_conv_tol();
         GMRESSolve<M, double> gmres_solve(lin_sys, Tol<double>::roundoff(), args);
-        
-        clock_start();
+
         gmres_solve.solve();
-        clock_stop();
 
         if (*show_plots) { gmres_solve.view_relres_plot("log"); }
         

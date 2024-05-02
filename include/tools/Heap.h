@@ -4,7 +4,7 @@
 #include <vector>
 #include <utility>
 
-#include "tools/AbsoluteVal.h"
+#include "tools/abs.h"
 
 namespace heap
 {
