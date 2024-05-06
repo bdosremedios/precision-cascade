@@ -67,7 +67,8 @@ set(
 
 set(
     TEST_BENCHMARK
-    benchmarking/benchmark_Matrix.cpp
+    benchmarking/benchmark_MatrixDense.cpp
+    benchmarking/benchmark_NoFillMatrixSparse.cpp
     benchmarking/benchmark_GMRESSolve.cpp
     benchmarking/benchmark_FPGMRES_IR.cpp
     benchmarking/benchmark_MPGMRES_IR.cpp
@@ -97,6 +98,7 @@ target_link_libraries(
 add_executable(
     test
     test.cpp
+    benchmarking/src/benchmark.cpp
     ${TEST_SUITE_CPPS}
 )
 

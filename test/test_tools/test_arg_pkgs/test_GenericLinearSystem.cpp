@@ -8,8 +8,6 @@ public:
 
     template <template <typename> typename M>
     void TestConstructor() {
-        
-        clock_start();
 
         constexpr int m(63);
         constexpr int n(27);
