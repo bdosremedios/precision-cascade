@@ -8,7 +8,7 @@
 
 #include "types/types.h"
 
-class MatrixDense_Benchmark_Test: public Benchmark_Matrix_Test
+class MatrixDense_Benchmark: public Benchmark_Matrix
 {
 public:
 
@@ -38,7 +38,7 @@ public:
 
 };
 
-TEST_F(MatrixDense_Benchmark_Test, MatrixVectorMult_BENCHMARK) {
+TEST_F(MatrixDense_Benchmark, MatrixVectorMult_BENCHMARK) {
 
     std::function<void (MatrixDense<double> &, Vector<double> &)> execute_func = [] (
         MatrixDense<double> &A, Vector<double> &b
@@ -46,13 +46,13 @@ TEST_F(MatrixDense_Benchmark_Test, MatrixVectorMult_BENCHMARK) {
         A*b;
     };
 
-    basic_matrix_func_benchmark<MatrixDense>(
+    basic_func_benchmark<MatrixDense>(
         min_n_mult, max_n_mult, make_A, execute_func, "matdense_mv"
     );
 
 }
 
-TEST_F(MatrixDense_Benchmark_Test, TransposeMatrixVectorMult_BENCHMARK) {
+TEST_F(MatrixDense_Benchmark, TransposeMatrixVectorMult_BENCHMARK) {
 
     std::function<void (MatrixDense<double> &, Vector<double> &)> execute_func = [] (
         MatrixDense<double> &A, Vector<double> &b
@@ -60,21 +60,21 @@ TEST_F(MatrixDense_Benchmark_Test, TransposeMatrixVectorMult_BENCHMARK) {
         A.transpose_prod(b);
     };
 
-    basic_matrix_func_benchmark<MatrixDense>(
+    basic_func_benchmark<MatrixDense>(
         min_n_mult, max_n_mult, make_A, execute_func, "matdense_tmv"
     );
 
 }
 
-TEST_F(MatrixDense_Benchmark_Test, MatrixBlockVectorMult_BENCHMARK) {
+TEST_F(MatrixDense_Benchmark, MatrixBlockVectorMult_BENCHMARK) {
 
 }
 
-TEST_F(MatrixDense_Benchmark_Test, TransposeMatrixBlockVectorMult_BENCHMARK) {
+TEST_F(MatrixDense_Benchmark, TransposeMatrixBlockVectorMult_BENCHMARK) {
 
 }
 
-TEST_F(MatrixDense_Benchmark_Test, ForwardSubstitution_BENCHMARK) {
+TEST_F(MatrixDense_Benchmark, ForwardSubstitution_BENCHMARK) {
 
     std::function<void (MatrixDense<double> &, Vector<double> &)> execute_func = [] (
         MatrixDense<double> &A, Vector<double> &b
@@ -82,13 +82,13 @@ TEST_F(MatrixDense_Benchmark_Test, ForwardSubstitution_BENCHMARK) {
         A.frwd_sub(b);
     };
 
-    basic_matrix_func_benchmark<MatrixDense>(
+    basic_func_benchmark<MatrixDense>(
         min_n_substitution, max_n_substitution, make_low_tri_A, execute_func, "matdense_frwdsub"
     );
 
 }
 
-TEST_F(MatrixDense_Benchmark_Test, BackwardSubstitution_BENCHMARK) {
+TEST_F(MatrixDense_Benchmark, BackwardSubstitution_BENCHMARK) {
 
     std::function<void (MatrixDense<double> &, Vector<double> &)> execute_func = [] (
         MatrixDense<double> &A, Vector<double> &b
@@ -96,7 +96,7 @@ TEST_F(MatrixDense_Benchmark_Test, BackwardSubstitution_BENCHMARK) {
         A.back_sub(b);
     };
 
-    basic_matrix_func_benchmark<MatrixDense>(
+    basic_func_benchmark<MatrixDense>(
         min_n_substitution, max_n_substitution, make_upp_tri_A, execute_func, "matdense_backsub"
     );
 
