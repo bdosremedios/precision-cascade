@@ -750,15 +750,6 @@ public:
 
     }
 
-    // template <typename T>
-    // void TestMatMat() { TestMatMat_Base<MatrixSparse, T>(); }
-
-    // template <typename T>
-    // void TestNorm() { TestNorm_Base<MatrixSparse, T>(); }
-
-    // template <typename T>
-    // void TestAddSub() { TestAddSub_Base<MatrixSparse, T>(); }
-
     void TestCast() {
         
         constexpr int m(10);
