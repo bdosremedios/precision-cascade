@@ -23,27 +23,32 @@ private:
     std::chrono::time_point<std::chrono::steady_clock> start;
     std::chrono::time_point<std::chrono::steady_clock> stop;
 
-    acc_clock_duration total;
-    int window_count;
+    std::vector<acc_clock_duration> prev_durations;
 
 public:
 
-    Benchmark_AccumulatingClock(): total(0), window_count(0) {}
+    Benchmark_AccumulatingClock() {}
 
     void clock_start();
     void clock_stop();
 
     int get_count();
     acc_clock_duration get_avg();
+    acc_clock_duration get_median();
     acc_clock_duration get_total();
 
 };
 
 class BenchmarkTestBase: public TestBase
 {
-public:
+protected:
 
-    const fs::path data_dir = (fs::current_path() / fs::path("..") / fs::path("data"));
+    const fs::path data_dir = (
+        fs::current_path() / fs::path("..") /
+        fs::path("test") / fs::path("benchmarking") / fs::path("data")
+    );
+
+public:
 
     void SetUp() {
         TestBase::SetUp();
@@ -64,10 +69,11 @@ public:
         }
         std::string label_formatted = (label == "") ? "" : std::format(" {}", label);
         std::cout << std::format(
-                        "[Benchmark{}] runs: {} | avg: {} | total: {}",
+                        "[Benchmark{}] runs: {} | avg: {} | median: {} | total: {}",
                         label_formatted,
                         benchmark_clock.get_count(),
                         benchmark_clock.get_avg(),
+                        benchmark_clock.get_median(),
                         benchmark_clock.get_total()
                      )
                   << std::endl;
