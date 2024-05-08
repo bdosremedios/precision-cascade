@@ -7,9 +7,6 @@ template <template <typename> typename M, typename T, typename W=T>
 class GMRESSolve: public TypedIterativeSolve<M, T>
 {
 protected:
-    // std::chrono::steady_clock clock;
-    // std::chrono::time_point<std::chrono::steady_clock> start;
-    // std::chrono::time_point<std::chrono::steady_clock> stop;
 
     using TypedIterativeSolve<M, T>::typed_lin_sys;
     using TypedIterativeSolve<M, T>::init_guess_typed;
@@ -21,12 +18,12 @@ protected:
 
     MatrixDense<T> Q_kry_basis = MatrixDense<T>(cuHandleBundle());
     Vector<T> H_k = Vector<T>(cuHandleBundle());
-    MatrixDense<T> Q_H = MatrixDense<T>(cuHandleBundle());
-    MatrixDense<T> R_H = MatrixDense<T>(cuHandleBundle());
+    MatrixDense<T> H_Q = MatrixDense<T>(cuHandleBundle());
+    MatrixDense<T> H_R = MatrixDense<T>(cuHandleBundle());
     Vector<T> next_q = Vector<T>(cuHandleBundle());
 
-    int kry_space_dim;
-    int max_kry_space_dim;
+    int curr_kry_dim;
+    int max_kry_dim;
     double basis_zero_tol;
     Scalar<T> rho;
 
@@ -63,25 +60,25 @@ protected:
 
     void set_initial_space() {
 
-        kry_space_dim = 0;
+        curr_kry_dim = 0;
 
         // Pre-allocate all possible space needed to prevent memory
         // re-allocation
         Q_kry_basis = MatrixDense<T>::Zero(
             typed_lin_sys.get_cu_handles(),
             typed_lin_sys.get_m(),
-            max_kry_space_dim
+            max_kry_dim
         );
-        H_k = Vector<T>::Zero(typed_lin_sys.get_cu_handles(), typed_lin_sys.get_m()+1);
-        Q_H = MatrixDense<T>::Identity(
+        H_k = Vector<T>::Zero(typed_lin_sys.get_cu_handles(), max_kry_dim+1);
+        H_Q = MatrixDense<T>::Identity(
             typed_lin_sys.get_cu_handles(),
-            typed_lin_sys.get_m()+1,
-            typed_lin_sys.get_m()+1
+            max_kry_dim+1,
+            max_kry_dim+1
         );
-        R_H = MatrixDense<T>::Zero(
+        H_R = MatrixDense<T>::Zero(
             typed_lin_sys.get_cu_handles(),
-            typed_lin_sys.get_m()+1,
-            typed_lin_sys.get_m()
+            max_kry_dim+1,
+            max_kry_dim
         );
 
         // Set rho as initial residual norm
@@ -100,70 +97,72 @@ protected:
         if (max_iter > typed_lin_sys.get_m()) {
             throw std::runtime_error("GMRESSolve: GMRES max_iter exceeds matrix size");
         }
-        max_kry_space_dim = max_iter;
+        max_kry_dim = max_iter;
         check_compatibility();
         set_initial_space();
     }
 
     void update_subspace_k() {
 
+        int curr_kry_idx = curr_kry_dim-1;
+
         // Normalize next vector q and update subspace with it, assume that
         // checked in previous iteration that vector q was not zero vector
-        int k = kry_space_dim-1;
-        if (kry_space_dim == 0) {
-            Q_kry_basis.get_col(kry_space_dim).set_from_vec(next_q/next_q.norm());
+        if (curr_kry_dim == 0) {
+            Q_kry_basis.get_col(curr_kry_dim).set_from_vec(next_q/next_q.norm());
         } else {
-            Q_kry_basis.get_col(kry_space_dim).set_from_vec(next_q/H_k.get_elem(k+1));
+            Q_kry_basis.get_col(curr_kry_dim).set_from_vec(next_q/H_k.get_elem(curr_kry_idx+1));
         }
-        ++kry_space_dim;
+        ++curr_kry_dim;
 
     }
 
     void update_nextq_and_Hkplus1() {
 
-        int k = kry_space_dim-1;
+        int curr_kry_idx = curr_kry_dim-1;
 
         // Generate next basis vector base
-        next_q = apply_precond_A(Q_kry_basis.get_col(k));
+        next_q = apply_precond_A(Q_kry_basis.get_col(curr_kry_idx));
 
         // Orthogonalize basis vector to previous vectors
-        for (int i=0; i<=k; ++i) {
+        for (int j=0; j<curr_kry_dim; ++j) {
             // MGS from newly orthog q used for orthogonalizing next vectors
-            Vector<T> q_i(Q_kry_basis.get_col(i));
-            H_k.set_elem(i, q_i.dot(next_q));
-            next_q -= q_i*H_k.get_elem(i);
+            Vector<T> q_j(Q_kry_basis.get_col(j));
+            H_k.set_elem(j, q_j.dot(next_q));
+            next_q -= q_j*H_k.get_elem(j);
         }
-        H_k.set_elem(k+1, next_q.norm());
+        H_k.set_elem(curr_kry_idx+1, next_q.norm());
 
     }
 
     void update_QR_fact() {
 
+        int curr_kry_idx = curr_kry_dim-1;
+
         // Initiate next column of QR fact as most recent of H
-        int k = kry_space_dim-1;
-        R_H.get_col(k).set_from_vec(H_k);
+        H_R.get_col(curr_kry_idx).set_from_vec(H_k);
 
         // Apply previous Given's rotations to new column
-        R_H.get_block(0, k, k+1, 1).set_from_vec(
-            Q_H.get_block(0, 0, k+1, k+1).copy_to_mat().transpose_prod(
-                H_k.slice(0, k+1)
+        H_R.get_block(0, curr_kry_idx, curr_kry_idx+1, 1).set_from_vec(
+            H_Q.get_block(0, 0, curr_kry_idx+1, curr_kry_idx+1).copy_to_mat().transpose_prod(
+                H_k.slice(0, curr_kry_idx+1)
             )
         );
 
-        // Apply the final Given's rotation manually making R_H upper triangular
-        Scalar<T> alpha = R_H.get_elem(k, k);
-        Scalar<T> beta = R_H.get_elem(k+1, k);
+        // Apply the final Given's rotation manually making H_R upper triangular
+        Scalar<T> alpha = H_R.get_elem(curr_kry_idx, curr_kry_idx);
+        Scalar<T> beta = H_R.get_elem(curr_kry_idx+1, curr_kry_idx);
         Scalar<T> r = alpha*alpha + beta*beta;
         r.sqrt();
         Scalar<T> c = alpha/r;
         Scalar<T> minus_s = beta/r;
-        R_H.set_elem(k, k, r);
-        R_H.set_elem(k+1, k, SCALAR_ZERO<T>::get());
+        H_R.set_elem(curr_kry_idx, curr_kry_idx, r);
+        H_R.set_elem(curr_kry_idx+1, curr_kry_idx, SCALAR_ZERO<T>::get());
 
-        Vector<T> Q_H_col_k(Q_H.get_col(k));
-        Vector<T> Q_H_col_kp1(Q_H.get_col(k+1));
-        Q_H.get_col(k).set_from_vec(Q_H_col_k*c + Q_H_col_kp1*minus_s);
-        Q_H.get_col(k+1).set_from_vec(Q_H_col_kp1*c - Q_H_col_k*minus_s);
+        Vector<T> H_Q_col_k(H_Q.get_col(curr_kry_idx));
+        Vector<T> H_Q_col_kp1(H_Q.get_col(curr_kry_idx+1));
+        H_Q.get_col(curr_kry_idx).set_from_vec(H_Q_col_k*c + H_Q_col_kp1*minus_s);
+        H_Q.get_col(curr_kry_idx+1).set_from_vec(H_Q_col_kp1*c - H_Q_col_k*minus_s);
 
     }
 
@@ -171,23 +170,23 @@ protected:
 
         // Calculate rhs to solve
         Vector<T> rho_e1(
-            Vector<T>::Zero(typed_lin_sys.get_cu_handles(), kry_space_dim+1)
+            Vector<T>::Zero(typed_lin_sys.get_cu_handles(), curr_kry_dim+1)
         );
         rho_e1.set_elem(0, rho);
         Vector<T> rhs(
-            Q_H.get_block(0, 0, kry_space_dim+1, kry_space_dim+1).copy_to_mat().transpose_prod(rho_e1)
+            H_Q.get_block(0, 0, curr_kry_dim+1, curr_kry_dim+1).copy_to_mat().transpose_prod(rho_e1)
         );
 
         // Use back substitution to solve
         Vector<T> y(
-            R_H.get_block(0, 0, kry_space_dim, kry_space_dim).copy_to_mat().back_sub(
-                rhs.slice(0, kry_space_dim)
+            H_R.get_block(0, 0, curr_kry_dim, curr_kry_dim).copy_to_mat().back_sub(
+                rhs.slice(0, curr_kry_dim)
             )
         );
 
         // Update typed_soln adjusting with right preconditioning
         MatrixDense<T> Q_kry_basis_block(
-            Q_kry_basis.get_block(0, 0, typed_lin_sys.get_m(), kry_space_dim).copy_to_mat()
+            Q_kry_basis.get_block(0, 0, typed_lin_sys.get_m(), curr_kry_dim).copy_to_mat()
         );
         typed_soln = init_guess_typed +
                      right_precond_ptr->casted_action_inv_M<T>(
@@ -197,42 +196,21 @@ protected:
     }
 
     void check_termination() {
-        int k = kry_space_dim-1;
+        int k = curr_kry_dim-1;
         if (static_cast<double>(H_k.get_elem(k+1).get_scalar()) <= basis_zero_tol) {
             this->terminated = true;
         }
     }
 
-    // void clock_start() {
-    //     start = clock.now();
-    // }
-
-    // std::chrono::microseconds clock_stop() {
-    //     stop = clock.now();
-    //     return std::chrono::duration_cast<std::chrono::microseconds>(stop-start);
-    // }
-
     void typed_iterate() override {
         // Check isn't terminated and if exceeding max krylov dim, if is just do nothing
         if (!this->terminated) {
-            if (kry_space_dim < max_kry_space_dim) {
-                // bool benchmark = false;
-                // if (this->curr_iter % 10 == 0) {benchmark=true;}
-                // clock_start();
+            if (curr_kry_dim < max_kry_dim) {
                 update_subspace_k();
-                // if (benchmark) {std::cout << clock_stop() << " ";}
-                // clock_start();
                 update_nextq_and_Hkplus1();
-                // if (benchmark) {std::cout << clock_stop() << " ";}
-                // clock_start();
                 update_QR_fact();
-                // if (benchmark) {std::cout << clock_stop() << " ";}
-                // clock_start();
                 update_x_minimizing_res();
-                // if (benchmark) {std::cout << clock_stop() << " ";}
-                // clock_start();
                 check_termination();
-                // if (benchmark) {std::cout << clock_stop() << std::endl;}
             }
         }
     }

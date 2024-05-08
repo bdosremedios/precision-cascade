@@ -15,7 +15,7 @@ public:
 
         GMRESSolveTestingMock<M, double> test_mock(lin_sys, Tol<double>::roundoff(), default_args);
 
-        ASSERT_EQ(test_mock.max_kry_space_dim, n);
+        ASSERT_EQ(test_mock.max_kry_dim, n);
         ASSERT_NEAR(
             test_mock.rho.get_scalar(),
             (b - A*Vector<double>::Ones(TestBase::bundle, n)).norm().get_scalar(),
@@ -30,13 +30,13 @@ public:
         ASSERT_EQ(test_mock.H_k.rows(), n+1);
         ASSERT_VECTOR_ZERO(test_mock.H_k, 0.);
 
-        ASSERT_EQ(test_mock.Q_H.rows(), n+1);
-        ASSERT_EQ(test_mock.Q_H.cols(), n+1);
-        ASSERT_MATRIX_IDENTITY(test_mock.Q_H, 0.);
+        ASSERT_EQ(test_mock.H_Q.rows(), n+1);
+        ASSERT_EQ(test_mock.H_Q.cols(), n+1);
+        ASSERT_MATRIX_IDENTITY(test_mock.H_Q, 0.);
 
-        ASSERT_EQ(test_mock.R_H.rows(), n+1);
-        ASSERT_EQ(test_mock.R_H.cols(), n);
-        ASSERT_MATRIX_ZERO(test_mock.R_H, 0.);
+        ASSERT_EQ(test_mock.H_R.rows(), n+1);
+        ASSERT_EQ(test_mock.H_R.cols(), n);
+        ASSERT_MATRIX_ZERO(test_mock.H_R, 0.);
 
     }
 
@@ -155,8 +155,8 @@ public:
         test_mock.typed_soln = Vector<double>::Ones(TestBase::bundle, n);
         Vector<double> r_0(b - A*Vector<double>::Ones(TestBase::bundle, n));
 
-        MatrixDense<double> save_Q_H(MatrixDense<double>::Zero(TestBase::bundle, n+1, n+1));
-        MatrixDense<double> save_R_H(MatrixDense<double>::Zero(TestBase::bundle, n+1, n));
+        MatrixDense<double> save_H_Q(MatrixDense<double>::Zero(TestBase::bundle, n+1, n+1));
+        MatrixDense<double> save_H_R(MatrixDense<double>::Zero(TestBase::bundle, n+1, n));
 
         for (int kry_dim=1; kry_dim<=n; ++kry_dim) {
 
@@ -169,30 +169,30 @@ public:
             // Check that previous columns are unchanged by new update
             for (int i=0; i<k; ++i) {
                 ASSERT_VECTOR_EQ(
-                    test_mock.Q_H.get_col(i).copy_to_vec(),
-                    save_Q_H.get_col(i).copy_to_vec()
+                    test_mock.H_Q.get_col(i).copy_to_vec(),
+                    save_H_Q.get_col(i).copy_to_vec()
                 );
                 ASSERT_VECTOR_EQ(
-                    test_mock.R_H.get_col(i).copy_to_vec(),
-                    save_R_H.get_col(i).copy_to_vec()
+                    test_mock.H_R.get_col(i).copy_to_vec(),
+                    save_H_R.get_col(i).copy_to_vec()
                 );
             }
 
             // Save new columns generated
-            save_Q_H.get_col(k).set_from_vec(test_mock.Q_H.get_col(k));
-            save_R_H.get_col(k).set_from_vec(test_mock.R_H.get_col(k));
+            save_H_Q.get_col(k).set_from_vec(test_mock.H_Q.get_col(k));
+            save_H_R.get_col(k).set_from_vec(test_mock.H_R.get_col(k));
 
-            // Test that k+1 by k+1 block of Q_H is orthogonal
-            MatrixDense<double> Q_H_block(test_mock.Q_H.get_block(0, 0, k+2, k+2));
-            MatrixDense<double> orthog_check(Q_H_block*Q_H_block.transpose());
+            // Test that k+1 by k+1 block of H_Q is orthogonal
+            MatrixDense<double> H_Q_block(test_mock.H_Q.get_block(0, 0, k+2, k+2));
+            MatrixDense<double> orthog_check(H_Q_block*H_Q_block.transpose());
             ASSERT_MATRIX_IDENTITY(
                 orthog_check,
                 Tol<double>::loss_of_ortho_tol(approx_cond_A_upbound, k+2)
             );
 
-            // Test that k+1 by k block of R_H is uppertriangular
+            // Test that k+1 by k block of H_R is uppertriangular
             ASSERT_MATRIX_UPPTRI(
-                test_mock.R_H.get_block(0, 0, k+2, k+1).copy_to_mat(),
+                test_mock.H_R.get_block(0, 0, k+2, k+1).copy_to_mat(),
                 Tol<double>::roundoff()
             );
 
@@ -232,19 +232,19 @@ public:
         test_mock.Q_kry_basis = MatrixDense<double>::Identity(TestBase::bundle, n, n);
 
         // Set premade Q R decomposition for H
-        test_mock.Q_H = Q;
-        test_mock.R_H = R;
+        test_mock.H_Q = Q;
+        test_mock.H_R = R;
 
         // Test that for each possible Hessenberg size determined by the Krylov subspace dimension
         // that the coefficient solution matches the pre-determined correct one from MATLAB solving
         for (int kry_dim=1; kry_dim<=n; ++kry_dim) {
 
             // Set Krylov subspace dim
-            test_mock.kry_space_dim = kry_dim;
+            test_mock.curr_kry_dim = kry_dim;
 
             // Get relevant upper triangular system to solve
-            MatrixDense<double> R_H_block(
-                test_mock.R_H.get_block(0, 0, kry_dim, kry_dim).copy_to_mat()
+            MatrixDense<double> H_R_block(
+                test_mock.H_R.get_block(0, 0, kry_dim, kry_dim).copy_to_mat()
             );
             
             // Load test solution
@@ -297,7 +297,7 @@ public:
         // not converged
         EXPECT_FALSE(test_mock.check_converged());
         EXPECT_TRUE(test_mock.check_terminated());
-        EXPECT_EQ(test_mock.kry_space_dim, 0);
+        EXPECT_EQ(test_mock.curr_kry_dim, 0);
         ASSERT_MATRIX_ZERO(test_mock.Q_kry_basis, Tol<double>::roundoff());
         ASSERT_VECTOR_ZERO(test_mock.H_k, Tol<double>::roundoff());
 
@@ -338,7 +338,7 @@ public:
         // check for LinearSolve
         EXPECT_FALSE(test_mock.check_converged());
         EXPECT_TRUE(test_mock.check_terminated());
-        EXPECT_EQ(test_mock.kry_space_dim, 1);
+        EXPECT_EQ(test_mock.curr_kry_dim, 1);
         EXPECT_NEAR(
             test_mock.Q_kry_basis.get_col(0).copy_to_vec().norm().get_scalar(),
             1,
@@ -382,7 +382,7 @@ public:
 
         // Check that subspace has not gone beyond 1 dimension and that krylov basis
         // as expected to have only a single column
-        EXPECT_EQ(test_mock.kry_space_dim, 1);
+        EXPECT_EQ(test_mock.curr_kry_dim, 1);
         EXPECT_NEAR(
             test_mock.Q_kry_basis.get_col(0).copy_to_vec().norm().get_scalar(),
             1,
@@ -444,12 +444,12 @@ public:
         if (*show_plots) { test_mock.view_relres_plot("log"); }
 
         // Check that all matrices are zero again and that krylov dim is back to 0
-        EXPECT_EQ(test_mock.kry_space_dim, 0);
+        EXPECT_EQ(test_mock.curr_kry_dim, 0);
 
         ASSERT_MATRIX_ZERO(test_mock.Q_kry_basis, Tol<double>::roundoff());
         ASSERT_VECTOR_ZERO(test_mock.H_k, Tol<double>::roundoff());
-        ASSERT_MATRIX_IDENTITY(test_mock.Q_H, Tol<double>::roundoff());
-        ASSERT_MATRIX_ZERO(test_mock.R_H, Tol<double>::roundoff());
+        ASSERT_MATRIX_IDENTITY(test_mock.H_Q, Tol<double>::roundoff());
+        ASSERT_MATRIX_ZERO(test_mock.H_R, Tol<double>::roundoff());
 
         // Test 2nd solve
         test_mock.solve();

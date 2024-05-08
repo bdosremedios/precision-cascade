@@ -15,11 +15,11 @@ class GMRESSolveTestingMock: public GMRESSolve<M, T, W> {
 
         using GMRESSolve<M, T, W>::Q_kry_basis;
         using GMRESSolve<M, T, W>::H_k;
-        using GMRESSolve<M, T, W>::Q_H;
-        using GMRESSolve<M, T, W>::R_H;
+        using GMRESSolve<M, T, W>::H_Q;
+        using GMRESSolve<M, T, W>::H_R;
 
-        using GMRESSolve<M, T, W>::kry_space_dim;
-        using GMRESSolve<M, T, W>::max_kry_space_dim;
+        using GMRESSolve<M, T, W>::curr_kry_dim;
+        using GMRESSolve<M, T, W>::max_kry_dim;
         using GMRESSolve<M, T, W>::next_q;
         using GMRESSolve<M, T, W>::rho;
         using GMRESSolve<M, T, W>::max_iter;
