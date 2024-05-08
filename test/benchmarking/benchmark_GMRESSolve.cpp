@@ -27,25 +27,37 @@ public:
 
 };
 
-TEST_F(Benchmark_GMRESSolve_Sparse, GMRESSolve_BENCHMARK) {
+// TEST_F(Benchmark_GMRESSolve_Sparse, GMRESSolve_BENCHMARK) {
 
-    std::function<void (NoFillMatrixSparse<double> &, Vector<double> &)> execute_func = [this] (
-        NoFillMatrixSparse<double> &A, Vector<double> &x_temp
-    ) {
+//     std::function<void (NoFillMatrixSparse<double> &, Vector<double> &)> execute_func = [this] (
+//         NoFillMatrixSparse<double> &A, Vector<double> &x_temp
+//     ) {
 
-        Vector<double> b = A*x_temp;
+//         Vector<double> b = A*x_temp;
 
-        TypedLinearSystem<NoFillMatrixSparse, double> lin_sys(A, b);
-        SolveArgPkg args(gmressolve_iters, SolveArgPkg::default_max_inner_iter, 0);
+//         TypedLinearSystem<NoFillMatrixSparse, double> lin_sys(A, b);
+//         SolveArgPkg args(gmressolve_iters, SolveArgPkg::default_max_inner_iter, 0);
 
-        GMRESSolve gmres(lin_sys, 0., args);
+//         GMRESSolve gmres(lin_sys, 0., args);
 
-        gmres.solve();
+//         gmres.solve();
 
-    };
+//     };
 
-    basic_func_benchmark<NoFillMatrixSparse>(
-        gmres_n_min, gmres_n_max, make_A, execute_func, "gmressolve"
-    );
+//     basic_func_benchmark<NoFillMatrixSparse>(
+//         gmres_n_min, gmres_n_max, make_A, execute_func, "gmressolve"
+//     );
+
+// }
+
+TEST_F(Benchmark_GMRESSolve_Sparse, GMRESSolve_Figure_out_15_BENCHMARK) {
+
+    int m = std::pow(2, 15);
+    Vector<double> b = Vector<double>::Random(TestBase::bundle, m);
+    TypedLinearSystem<NoFillMatrixSparse, double> lin_sys(make_A(m, m), b);
+    std::cout << lin_sys.get_A().get_info_string() << std::endl;
+
+    SolveArgPkg args(gmressolve_iters, SolveArgPkg::default_max_inner_iter, 0);
+    GMRESSolve gmres(lin_sys, 0., args);
 
 }

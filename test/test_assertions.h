@@ -57,6 +57,23 @@ void _ASSERT_VECTOR_NEAR(
 
 }
 
+#define ASSERT_VECTOR_ZERO(test, tol) \
+_ASSERT_VECTOR_ZERO( \
+    test, tol, __FILE__, __LINE__, "AssertionError for _ASSERT_VECTOR_ZERO" \
+)
+template <typename T>
+void _ASSERT_VECTOR_ZERO(
+    const Vector<T> &test, T tol,
+    const char* file, int line, std::string message
+) {
+    _ASSERT_VECTOR_NEAR(
+        test,
+        Vector<T>::Zero(test.get_cu_handles(), test.rows(), test.cols()),
+        tol,
+        file, line, message
+    );
+}
+
 #define ASSERT_VECTOR_EQ(test, target) \
 _ASSERT_VECTOR_EQ( \
     test, target, __FILE__, __LINE__, "AssertionError for ASSERT_VECTOR_EQ" \

@@ -283,6 +283,32 @@ public:
 
     }
     cuHandleBundle get_cu_handles() const { return cu_handles; }
+    std::string get_vector_string() const {
+
+        T *h_vec = static_cast<T *>(malloc(mem_size()));
+
+        copy_data_to_ptr(h_vec, m_rows);
+
+        std::string acc;
+        for (int i=0; i<m_rows-1; ++i) {
+            acc += std::format("{:.8g}\n", static_cast<double>(h_vec[i]));
+        }
+        acc += std::format("{:.8g}", static_cast<double>(h_vec[m_rows-1]));
+
+        free(h_vec);
+
+        return acc;
+    
+    }
+    std::string get_info_string() const {
+        int non_zeros_count = non_zeros();
+        return std::format(
+            "Rows: {} | Non-zeroes: {} | Fill ratio: {:.3g}",
+            m_rows,
+            non_zeros_count,
+            static_cast<double>(non_zeros_count)/static_cast<double>(rows()*cols())
+        );
+    }
     void print() const {
 
         T *h_vec = static_cast<T *>(malloc(mem_size()));

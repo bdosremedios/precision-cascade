@@ -20,7 +20,7 @@ protected:
     std::shared_ptr<Preconditioner<M, W>> right_precond_ptr;
 
     MatrixDense<T> Q_kry_basis = MatrixDense<T>(cuHandleBundle());
-    MatrixDense<T> H = MatrixDense<T>(cuHandleBundle());
+    Vector<T> H_k = Vector<T>(cuHandleBundle());
     MatrixDense<T> Q_H = MatrixDense<T>(cuHandleBundle());
     MatrixDense<T> R_H = MatrixDense<T>(cuHandleBundle());
     Vector<T> next_q = Vector<T>(cuHandleBundle());
@@ -70,13 +70,9 @@ protected:
         Q_kry_basis = MatrixDense<T>::Zero(
             typed_lin_sys.get_cu_handles(),
             typed_lin_sys.get_m(),
-            typed_lin_sys.get_m()
+            max_kry_space_dim
         );
-        H = MatrixDense<T>::Zero(
-            typed_lin_sys.get_cu_handles(),
-            typed_lin_sys.get_m()+1,
-            typed_lin_sys.get_m()
-        );
+        H_k = Vector<T>::Zero(typed_lin_sys.get_cu_handles(), typed_lin_sys.get_m()+1);
         Q_H = MatrixDense<T>::Identity(
             typed_lin_sys.get_cu_handles(),
             typed_lin_sys.get_m()+1,
@@ -101,10 +97,10 @@ protected:
     }
 
     void initializeGMRES() {
-        max_kry_space_dim = typed_lin_sys.get_m();
-        if (max_iter > max_kry_space_dim) {
+        if (max_iter > typed_lin_sys.get_m()) {
             throw std::runtime_error("GMRESSolve: GMRES max_iter exceeds matrix size");
         }
+        max_kry_space_dim = max_iter;
         check_compatibility();
         set_initial_space();
     }
@@ -117,7 +113,7 @@ protected:
         if (kry_space_dim == 0) {
             Q_kry_basis.get_col(kry_space_dim).set_from_vec(next_q/next_q.norm());
         } else {
-            Q_kry_basis.get_col(kry_space_dim).set_from_vec(next_q/H.get_elem(k+1, k));
+            Q_kry_basis.get_col(kry_space_dim).set_from_vec(next_q/H_k.get_elem(k+1));
         }
         ++kry_space_dim;
 
@@ -127,11 +123,10 @@ protected:
 
         int k = kry_space_dim-1;
 
+        // Generate next basis vector base
         next_q = apply_precond_A(Q_kry_basis.get_col(k));
 
-        // Orthogonlize next_q to previous basis vectors and store coefficients/normalization in H
-        Vector<T> H_k(Vector<T>::Zero(typed_lin_sys.get_cu_handles(), typed_lin_sys.get_m()+1));
-
+        // Orthogonalize basis vector to previous vectors
         for (int i=0; i<=k; ++i) {
             // MGS from newly orthog q used for orthogonalizing next vectors
             Vector<T> q_i(Q_kry_basis.get_col(i));
@@ -139,7 +134,6 @@ protected:
             next_q -= q_i*H_k.get_elem(i);
         }
         H_k.set_elem(k+1, next_q.norm());
-        H.get_col(k).set_from_vec(H_k);
 
     }
 
@@ -147,12 +141,12 @@ protected:
 
         // Initiate next column of QR fact as most recent of H
         int k = kry_space_dim-1;
-        R_H.get_col(k).set_from_vec(H.get_col(k));
+        R_H.get_col(k).set_from_vec(H_k);
 
         // Apply previous Given's rotations to new column
         R_H.get_block(0, k, k+1, 1).set_from_vec(
             Q_H.get_block(0, 0, k+1, k+1).copy_to_mat().transpose_prod(
-                H.get_col(k).copy_to_vec().slice(0, k+1)
+                H_k.slice(0, k+1)
             )
         );
 
@@ -204,7 +198,7 @@ protected:
 
     void check_termination() {
         int k = kry_space_dim-1;
-        if (static_cast<double>(H.get_elem(k+1, k).get_scalar()) <= basis_zero_tol) {
+        if (static_cast<double>(H_k.get_elem(k+1).get_scalar()) <= basis_zero_tol) {
             this->terminated = true;
         }
     }

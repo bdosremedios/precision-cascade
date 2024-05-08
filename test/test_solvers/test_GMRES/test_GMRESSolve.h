@@ -13,8 +13,8 @@ class GMRESSolveTestingMock: public GMRESSolve<M, T, W> {
         using GMRESSolve<M, T, W>::GMRESSolve;
         using GMRESSolve<M, T, W>::typed_soln;
 
-        using GMRESSolve<M, T, W>::H;
         using GMRESSolve<M, T, W>::Q_kry_basis;
+        using GMRESSolve<M, T, W>::H_k;
         using GMRESSolve<M, T, W>::Q_H;
         using GMRESSolve<M, T, W>::R_H;
 

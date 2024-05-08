@@ -27,9 +27,8 @@ public:
         ASSERT_EQ(test_mock.Q_kry_basis.cols(), n);
         ASSERT_MATRIX_ZERO(test_mock.Q_kry_basis, 0.);
 
-        ASSERT_EQ(test_mock.H.rows(), n+1);
-        ASSERT_EQ(test_mock.H.cols(), n);
-        ASSERT_MATRIX_ZERO(test_mock.H, 0.);
+        ASSERT_EQ(test_mock.H_k.rows(), n+1);
+        ASSERT_VECTOR_ZERO(test_mock.H_k, 0.);
 
         ASSERT_EQ(test_mock.Q_H.rows(), n+1);
         ASSERT_EQ(test_mock.Q_H.cols(), n+1);
@@ -63,7 +62,7 @@ public:
 
         // Create matrix to store previous basis vectors to ensure no change across iterations
         MatrixDense<double> Q_save(MatrixDense<double>::Zero(TestBase::bundle, n, n));
-        MatrixDense<double> H_save(MatrixDense<double>::Zero(TestBase::bundle, n+1, n));
+        Vector<double> H_k_save(Vector<double>::Zero(TestBase::bundle, n+1));
 
         // First update check first vector for basis is residual norm
         // and that Hessenberg first vector contructs next vector with entries
@@ -76,10 +75,10 @@ public:
             Tol<double>::roundoff()
         );
         next_q = A*next_q;
-        next_q -= test_mock.Q_kry_basis.get_col(0).copy_to_vec()*test_mock.H.get_elem(0, 0);
+        next_q -= test_mock.Q_kry_basis.get_col(0).copy_to_vec()*test_mock.H_k.get_elem(0);
         ASSERT_NEAR(
             next_q.norm().get_scalar(),
-            test_mock.H.get_elem(1, 0).get_scalar(),
+            test_mock.H_k.get_elem(1).get_scalar(),
             Tol<double>::roundoff()
         );
         ASSERT_VECTOR_NEAR(
@@ -88,9 +87,8 @@ public:
             Tol<double>::roundoff()
         );
 
-        // Save basis and H entries to check that they remain unchanged
+        // Save basis to check that they remain unchanged
         Q_save.get_col(0).set_from_vec(test_mock.Q_kry_basis.get_col(0));
-        H_save.get_col(0).set_from_vec(test_mock.H.get_col(0));
 
         // Subsequent updates
         for (int k=1; k<n; ++k) {
@@ -98,7 +96,6 @@ public:
             // Iterate Krylov subspace and Hessenberg
             test_mock.iterate_no_soln_solve();
             Q_save.get_col(k).set_from_vec(test_mock.Q_kry_basis.get_col(k));
-            H_save.get_col(k).set_from_vec(test_mock.H.get_col(k));
 
             // Get newly generated basis vector
             Vector<double> q(test_mock.Q_kry_basis.get_col(k));
@@ -118,30 +115,21 @@ public:
 
             // Confirm that Hessenberg matrix column corresponding to new basis vector
             // approximately constructs the next basis vector
-            Vector<double> h(test_mock.H.get_col(k));
             Vector<double> construct_q(test_mock.Q_kry_basis.get_col(k));
             construct_q = A*construct_q;
             for (int i=0; i<=k; ++i) {
                 ASSERT_NEAR(
                     test_mock.Q_kry_basis.get_col(i).copy_to_vec().dot(construct_q).get_scalar(),
-                    h.get_elem(i).get_scalar(),
+                    test_mock.H_k.get_elem(i).get_scalar(),
                     Tol<double>::roundoff()
                 );
-                construct_q -= test_mock.Q_kry_basis.get_col(i).copy_to_vec()*h.get_elem(i);
+                construct_q -= test_mock.Q_kry_basis.get_col(i).copy_to_vec()*test_mock.H_k.get_elem(i);
             }
             ASSERT_NEAR(
                 construct_q.norm().get_scalar(),
-                h.get_elem(k+1).get_scalar(),
+                test_mock.H_k.get_elem(k+1).get_scalar(),
                 Tol<double>::roundoff()
             );
-            
-            // Confirm that previous Hessenberg columns are untouched
-            for (int j=0; j<=k; ++j) {
-                ASSERT_VECTOR_EQ(
-                    test_mock.H.get_col(j).copy_to_vec(),
-                    H_save.get_col(j).copy_to_vec()
-                );
-            }
 
         }
     
@@ -167,13 +155,6 @@ public:
         test_mock.typed_soln = Vector<double>::Ones(TestBase::bundle, n);
         Vector<double> r_0(b - A*Vector<double>::Ones(TestBase::bundle, n));
 
-        // Fully create Hessenberg matrix
-        test_mock.iterate_no_soln_solve();
-        test_mock.iterate_no_soln_solve();
-        test_mock.iterate_no_soln_solve();
-        test_mock.iterate_no_soln_solve();
-        test_mock.iterate_no_soln_solve();
-
         MatrixDense<double> save_Q_H(MatrixDense<double>::Zero(TestBase::bundle, n+1, n+1));
         MatrixDense<double> save_R_H(MatrixDense<double>::Zero(TestBase::bundle, n+1, n));
 
@@ -181,8 +162,8 @@ public:
 
             int k = kry_dim-1;
 
-            // Set krylov dimension to kry_dim and update QR
-            test_mock.kry_space_dim = kry_dim;
+            // Perform iteration and update QR_fact
+            test_mock.iterate_no_soln_solve();
             test_mock.update_QR_fact();
 
             // Check that previous columns are unchanged by new update
@@ -197,7 +178,7 @@ public:
                 );
             }
 
-            // Save second last new basis vector and new column of R
+            // Save new columns generated
             save_Q_H.get_col(k).set_from_vec(test_mock.Q_H.get_col(k));
             save_R_H.get_col(k).set_from_vec(test_mock.R_H.get_col(k));
 
@@ -213,16 +194,6 @@ public:
             ASSERT_MATRIX_UPPTRI(
                 test_mock.R_H.get_block(0, 0, k+2, k+1).copy_to_mat(),
                 Tol<double>::roundoff()
-            );
-
-            // Test that k+1 by k+1 block of Q_H is and k+1 by k block of R_H
-            // constructs k+1 by k block of H
-            MatrixDense<double> R_H_block(test_mock.R_H.get_block(0, 0, k+2, k+1));
-            MatrixDense<double> construct_H(Q_H_block*R_H_block);
-            ASSERT_MATRIX_NEAR(
-                construct_H,
-                test_mock.H.get_block(0, 0, k+2, k+1).copy_to_mat(),
-                mat_max_mag(construct_H)*Tol<double>::gamma(n)
             );
 
         }
@@ -328,7 +299,7 @@ public:
         EXPECT_TRUE(test_mock.check_terminated());
         EXPECT_EQ(test_mock.kry_space_dim, 0);
         ASSERT_MATRIX_ZERO(test_mock.Q_kry_basis, Tol<double>::roundoff());
-        ASSERT_MATRIX_ZERO(test_mock.H, Tol<double>::roundoff());
+        ASSERT_VECTOR_ZERO(test_mock.H_k, Tol<double>::roundoff());
 
         // Attempt to solve and check that iteration does not occur since
         // should be terminated already but that convergence is updated
@@ -476,7 +447,7 @@ public:
         EXPECT_EQ(test_mock.kry_space_dim, 0);
 
         ASSERT_MATRIX_ZERO(test_mock.Q_kry_basis, Tol<double>::roundoff());
-        ASSERT_MATRIX_ZERO(test_mock.H, Tol<double>::roundoff());
+        ASSERT_VECTOR_ZERO(test_mock.H_k, Tol<double>::roundoff());
         ASSERT_MATRIX_IDENTITY(test_mock.Q_H, Tol<double>::roundoff());
         ASSERT_MATRIX_ZERO(test_mock.R_H, Tol<double>::roundoff());
 
