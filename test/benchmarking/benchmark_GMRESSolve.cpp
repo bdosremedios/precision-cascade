@@ -10,7 +10,7 @@ class Benchmark_GMRESSolve_Sparse: public Benchmark_Sparse
 public:
 
     int gmres_n_min = 8;
-    int gmres_n_max = 14-prototying_n_speed_up;
+    int gmres_n_max = 16-prototying_n_speed_up;
     
     double gmressolve_iters = 100;
 

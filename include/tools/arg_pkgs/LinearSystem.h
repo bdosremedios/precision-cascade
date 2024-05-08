@@ -39,6 +39,8 @@ public:
         }
     }
 
+public:
+
     // *** Getters ***
     const M<double> &get_A() const { return A; }
     virtual const Vector<double> &get_b() const { return b; }
@@ -75,11 +77,30 @@ public:
 
 };
 
+template <template <typename> typename M>
+class TypedLinearSystem<M, double>: public GenericLinearSystem<M>
+{
+public:
+
+    // *** Constructors ***
+    TypedLinearSystem(
+        const M<double> &arg_A,
+        const Vector<double> &arg_b
+    ):
+        GenericLinearSystem<M>(arg_A, arg_b)
+    {}
+
+    const M<double> &get_A_typed() const { return this->A; }
+    virtual const Vector<double> &get_b_typed() const { return this->b; }
+
+};
+
 template <template <typename> typename M, typename T>
 class Mutb_TypedLinearSystem: public TypedLinearSystem<M, T>
 {
 private:
     
+    // Make variables non-zonst
     Vector<double> b;
     Vector<T> b_typed;
 
@@ -87,8 +108,8 @@ public:
 
     // *** Constructors ***
     Mutb_TypedLinearSystem(
-        M<double> arg_A,
-        Vector<double> arg_b
+        const M<double> &arg_A,
+        const Vector<double> &arg_b
     ):
         b(arg_b),
         b_typed(arg_b.template cast<T>()),
@@ -100,7 +121,7 @@ public:
     const Vector<T> &get_b_typed() const override { return b_typed; }
 
     // *** Setters ***
-    void set_b(Vector<double> arg_b) {
+    void set_b(const Vector<double> &arg_b) {
         b = arg_b;
         b_typed = b.template cast<T>();
     }
