@@ -165,6 +165,7 @@ Vector<__half> Vector<float>::to_half() const {
         std::ceil(static_cast<double>(m_rows)/static_cast<double>(NUM_THREADS))
     );
     vector_sgl_kernels::cast_to_half<<<NUM_THREADS, NUM_BLOCKS>>>(d_vec, created_vec.d_vec, m_rows);
+    check_cuda_error(cudaGetLastError());
 
     return created_vec;
 
@@ -181,6 +182,7 @@ Vector<double> Vector<float>::to_double() const {
         std::ceil(static_cast<double>(m_rows)/static_cast<double>(NUM_THREADS))
     );
     vector_sgl_kernels::cast_to_double<<<NUM_THREADS, NUM_BLOCKS>>>(d_vec, created_vec.d_vec, m_rows);
+    check_cuda_error(cudaGetLastError());
 
     return created_vec;
 

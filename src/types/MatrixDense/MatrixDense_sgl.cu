@@ -198,6 +198,7 @@ MatrixDense<__half> MatrixDense<float>::to_half() const {
     generalmatrix_sgl_kernels::cast_to_half<<<NUM_THREADS, NUM_BLOCKS>>>(
         d_mat, created_mat.d_mat, m_rows*n_cols
     );
+    check_cuda_error(cudaGetLastError());
 
     return created_mat;
 
@@ -217,6 +218,7 @@ MatrixDense<double> MatrixDense<float>::to_double() const {
     generalmatrix_sgl_kernels::cast_to_double<<<NUM_THREADS, NUM_BLOCKS>>>(
         d_mat, created_mat.d_mat, m_rows*n_cols
     );
+    check_cuda_error(cudaGetLastError());
 
     return created_mat;
 

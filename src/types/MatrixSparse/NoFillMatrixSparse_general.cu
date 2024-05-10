@@ -22,6 +22,7 @@ Vector<T> NoFillMatrixSparse<T>::back_sub(const Vector<T> &arg_rhs) const {
         nofillmatrixsparse_kernels::update_pivot<T><<<1, 1>>>(
             h_col_offsets[j+1]-1, d_row_indices, d_vals, soln.d_vec
         );
+        check_cuda_error(cudaGetLastError());
 
         // Update solution corresponding to remainder to column
         int col_size = h_col_offsets[j+1]-h_col_offsets[j];
@@ -38,6 +39,7 @@ Vector<T> NoFillMatrixSparse<T>::back_sub(const Vector<T> &arg_rhs) const {
             (
                 h_col_offsets[j], col_size, d_row_indices, d_vals, soln.d_vec
             );
+            check_cuda_error(cudaGetLastError());
 
         }
 
@@ -70,6 +72,7 @@ Vector<T> NoFillMatrixSparse<T>::frwd_sub(const Vector<T> &arg_rhs) const {
         nofillmatrixsparse_kernels::update_pivot<T><<<1, 1>>>(
             h_col_offsets[j], d_row_indices, d_vals, soln.d_vec
         );
+        check_cuda_error(cudaGetLastError());
 
         // Update solution corresponding to remainder to column
         int col_size = h_col_offsets[j+1]-h_col_offsets[j];
@@ -86,6 +89,7 @@ Vector<T> NoFillMatrixSparse<T>::frwd_sub(const Vector<T> &arg_rhs) const {
             (
                 h_col_offsets[j], col_size, d_row_indices, d_vals, soln.d_vec
             );
+            check_cuda_error(cudaGetLastError());
 
         }
 

@@ -18,6 +18,7 @@
 
 #include "tools/cuda_check.h"
 #include "tools/CuHandleBundle.h"
+#include "tools/abs.h"
 
 #include "MatrixDense_gpu_kernels.cuh"
 #include "types/GeneralMatrix/GeneralMatrix_gpu_kernels.cuh"
@@ -122,7 +123,9 @@ public:
         }
 
         if ((m_rows != 0) && (n_cols != 0)) {
-            check_cublas_status(cublasSetMatrix(m_rows, n_cols, sizeof(T), h_mat, m_rows, d_mat, m_rows));
+            check_cublas_status(cublasSetMatrix(
+                m_rows, n_cols, sizeof(T), h_mat, m_rows, d_mat, m_rows
+            ));
         }
 
         free(h_mat);
@@ -154,7 +157,9 @@ public:
             }
 
             if ((m_rows > 0) && (n_cols > 0)) {
-                check_cuda_error(cudaMemcpy(d_mat, other.d_mat, mem_size(), cudaMemcpyDeviceToDevice));
+                check_cuda_error(cudaMemcpy(
+                    d_mat, other.d_mat, mem_size(), cudaMemcpyDeviceToDevice
+                ));
             }
 
         }
@@ -177,11 +182,17 @@ public:
         )
     {
         if ((m_rows > 0) && (n_cols > 0)) {
-            check_cublas_status(cublasSetMatrix(m_rows, n_cols, sizeof(T), h_mat, m_rows, d_mat, m_rows));
+            check_cublas_status(cublasSetMatrix(
+                m_rows, n_cols, sizeof(T), h_mat, m_rows, d_mat, m_rows
+            ));
         }
     }
 
-    void copy_data_to_ptr(T *h_mat, int target_m_rows, int target_n_cols) const {
+    void copy_data_to_ptr(
+        T *h_mat,
+        int target_m_rows,
+        int target_n_cols
+    ) const {
 
         if (target_m_rows != m_rows) {
             throw std::runtime_error("MatrixDense: invalid target_m_rows dim for copy_data_to_ptr");
@@ -191,7 +202,9 @@ public:
         }
 
         if ((m_rows > 0) && (n_cols > 0)) {
-            check_cublas_status(cublasGetMatrix(m_rows, n_cols, sizeof(T), d_mat, m_rows, h_mat, m_rows));
+            check_cublas_status(cublasGetMatrix(
+                m_rows, n_cols, sizeof(T), d_mat, m_rows, h_mat, m_rows
+            ));
         }
 
     }
@@ -220,7 +233,9 @@ public:
         }
 
         Scalar<T> elem;
-        check_cuda_error(cudaMemcpy(elem.d_scalar, d_mat+row+(col*m_rows), sizeof(T), cudaMemcpyDeviceToDevice));
+        check_cuda_error(cudaMemcpy(
+            elem.d_scalar, d_mat+row+(col*m_rows), sizeof(T), cudaMemcpyDeviceToDevice
+        ));
         return elem;
 
     }
@@ -234,7 +249,9 @@ public:
             throw std::runtime_error("MatrixDense: invalid col access in set_elem");
         }
 
-        check_cuda_error(cudaMemcpy(d_mat+row+(col*m_rows), val.d_scalar, sizeof(T), cudaMemcpyDeviceToDevice));
+        check_cuda_error(cudaMemcpy(
+            d_mat+row+(col*m_rows), val.d_scalar, sizeof(T), cudaMemcpyDeviceToDevice
+        ));
 
     }
 
@@ -434,7 +451,7 @@ public:
         T max_mag = static_cast<T>(0.);
         for (int i=0; i<m_rows; ++i) {
             for (int j=0; j<n_cols; ++j) {
-                T temp = static_cast<T>(std::abs(static_cast<double>(h_mat[i+j*m_rows])));
+                T temp = abs_ns::abs(h_mat[i+j*m_rows]);
                 if (temp > max_mag) {
                     max_mag = temp;
                 }
@@ -462,7 +479,9 @@ public:
         T *h_mat_trans = static_cast<T *>(malloc(n_cols*m_rows*sizeof(T)));
 
         if ((m_rows > 0) && (n_cols > 0)) {
-            check_cublas_status(cublasGetMatrix(m_rows, n_cols, sizeof(T), d_mat, m_rows, h_mat, m_rows));
+            check_cublas_status(cublasGetMatrix(
+                m_rows, n_cols, sizeof(T), d_mat, m_rows, h_mat, m_rows
+            ));
         }
 
         for (int i=0; i<m_rows; ++i) {

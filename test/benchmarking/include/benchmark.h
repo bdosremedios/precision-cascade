@@ -44,7 +44,7 @@ class BenchmarkBase: public TestBase
 protected:
 
     const int n_runs = 10;
-    const int prototying_n_speed_up = 0;
+    const int prototying_n_speed_up = 5;
     const fs::path data_dir = (
         fs::current_path() / fs::path("..") /
         fs::path("test") / fs::path("benchmarking") / fs::path("data")
@@ -81,17 +81,12 @@ public:
                   << std::endl;
     }
 
-    template <typename T, typename W>
-    void record_data_row(std::ofstream &os, T indepedent_var, W dependent_var) {
-        os << std::format("{},{}", indepedent_var, dependent_var) << std::endl;
-    }
-
-    template <template <typename> typename M>
+    template <template <typename> typename M, typename T>
     void basic_func_benchmark(
         int two_pow_n_start,
         int two_pow_n_end,
-        std::function<M<double> (int, int)> make_A,
-        std::function<void (M<double> &, Vector<double> &)> execute_func,
+        std::function<M<T> (int, int)> make_A,
+        std::function<void (M<T> &, Vector<T> &)> execute_func,
         std::string label
     ) {
 
@@ -114,12 +109,11 @@ public:
 
             int m = std::pow(2, n);
 
-            M<double> A = make_A(m, m);
-
+            M<T> A = make_A(m, m);
             std::function<void(Benchmark_AccumulatingClock &)> test_func = [m, execute_func, &A](
                 Benchmark_AccumulatingClock &arg_clock
             ) {
-                Vector<double> b = Vector<double>::Random(TestBase::bundle, m);
+                Vector<T> b = Vector<T>::Random(TestBase::bundle, m);
                 arg_clock.clock_start();
                 execute_func(A, b);
                 arg_clock.clock_stop();

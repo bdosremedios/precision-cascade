@@ -9,21 +9,10 @@ class Benchmark_GMRESSolve_Sparse: public Benchmark_Sparse
 {
 public:
 
-    int gmres_n_min = 8;
+    int gmres_n_min = 11;
     int gmres_n_max = 17-prototying_n_speed_up;
     
-    double gmressolve_iters = 100;
-
-    double gmresolve_col_non_zeros = 1000.;
-
-    std::function<NoFillMatrixSparse<double> (int, int)> make_A = [this] (
-        int m, int n
-    ) -> NoFillMatrixSparse<double> {
-        return NoFillMatrixSparse<double>::Random(
-            TestBase::bundle, m, m,
-            (gmresolve_col_non_zeros/static_cast<double>(m) > 1) ? 1 : gmresolve_col_non_zeros/static_cast<double>(m)
-        );
-    };
+    double gmressolve_iters = 50;
 
 };
 
@@ -41,6 +30,7 @@ TEST_F(Benchmark_GMRESSolve_Sparse, GMRESSolve_BENCHMARK) {
         GMRESSolve gmres(lin_sys, 0., args);
 
         gmres.solve();
+        std::cout << gmres.get_info_string() << std::endl;
 
     };
 

@@ -109,9 +109,9 @@ protected:
         // Normalize next vector q and update subspace with it, assume that
         // checked in previous iteration that vector q was not zero vector
         if (curr_kry_dim == 0) {
-            Q_kry_basis.get_col(curr_kry_dim).set_from_vec(next_q/next_q.norm());
+            Q_kry_basis.get_col(0).set_from_vec(next_q/next_q.norm());
         } else {
-            Q_kry_basis.get_col(curr_kry_dim).set_from_vec(next_q/H_k.get_elem(curr_kry_idx+1));
+            Q_kry_basis.get_col(curr_kry_idx+1).set_from_vec(next_q/H_k.get_elem(curr_kry_idx+1));
         }
         ++curr_kry_dim;
 
@@ -206,9 +206,19 @@ protected:
         // Check isn't terminated and if exceeding max krylov dim, if is just do nothing
         if (!this->terminated) {
             if (curr_kry_dim < max_kry_dim) {
+                // std::cout << "Mark 0" << std::endl;
+                // std::cout << next_q.get_info_string() << std::endl;
                 update_subspace_k();
+                // std::cout << "Mark 1" << std::endl;
+                // std::cout << Q_kry_basis.get_col(0).copy_to_vec().get_info_string() << std::endl;
+                // std::cout << typed_lin_sys.get_A_typed().get_info_string() << std::endl;
+                // std::cout << (typed_lin_sys.get_A_typed()*Q_kry_basis.get_col(0)).get_info_string() << std::endl;
                 update_nextq_and_Hkplus1();
+                // std::cout << "Mark 2" << std::endl;
+                // std::cout << next_q.get_info_string() << std::endl;
                 update_QR_fact();
+                // std::cout << "Mark 3" << std::endl;
+                // std::cout << H_k.get_info_string() << std::endl;
                 update_x_minimizing_res();
                 check_termination();
             }

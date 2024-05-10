@@ -180,6 +180,7 @@ NoFillMatrixSparse<__half> NoFillMatrixSparse<float>::to_half() const {
     generalmatrix_sgl_kernels::cast_to_half<<<NUM_THREADS, NUM_BLOCKS>>>(
         d_vals, created_mat.d_vals, nnz
     );
+    check_cuda_error(cudaGetLastError());
 
     return created_mat;
 
@@ -215,6 +216,7 @@ NoFillMatrixSparse<double> NoFillMatrixSparse<float>::to_double() const {
     generalmatrix_sgl_kernels::cast_to_double<<<NUM_THREADS, NUM_BLOCKS>>>(
         d_vals, created_mat.d_vals, nnz
     );
+    check_cuda_error(cudaGetLastError());
 
     return created_mat;
 

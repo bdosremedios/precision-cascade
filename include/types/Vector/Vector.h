@@ -13,6 +13,7 @@
 
 #include "tools/cuda_check.h"
 #include "tools/cuHandleBundle.h"
+#include "tools/abs.h"
 
 #include "Vector_gpu_kernels.cuh"
 
@@ -303,27 +304,12 @@ public:
     std::string get_info_string() const {
         int non_zeros_count = non_zeros();
         return std::format(
-            "Rows: {} | Non-zeroes: {} | Fill ratio: {:.3g}",
+            "Rows: {} | Non-zeroes: {} | Fill ratio: {:.3g} | Max magnitude: {:.3g}",
             m_rows,
             non_zeros_count,
-            static_cast<double>(non_zeros_count)/static_cast<double>(rows()*cols())
+            static_cast<double>(non_zeros_count)/static_cast<double>(rows()*cols()),
+            static_cast<double>(get_max_mag_elem().get_scalar())
         );
-    }
-    void print() const {
-
-        T *h_vec = static_cast<T *>(malloc(mem_size()));
-
-        if (m_rows > 0) {
-            check_cublas_status(cublasGetVector(m_rows, sizeof(T), d_vec, 1, h_vec, 1));
-        }
-
-        for (int i=0; i<m_rows; ++i) {
-            std::cout << static_cast<double>(h_vec[i]) << std::endl;
-        }
-        std::cout << std::endl;
-
-        free(h_vec);
-
     }
 
     // *** Boolean ***
@@ -383,6 +369,25 @@ public:
     Scalar<T> dot(const Vector<T> &vec) const;
 
     Scalar<T> norm() const;
+
+    Scalar<T> get_max_mag_elem() const {
+        
+        T *h_vec = static_cast<T *>(malloc(mem_size()));
+        copy_data_to_ptr(h_vec, m_rows);
+
+        T max_mag = static_cast<T>(0.);
+        for (int i=0; i<m_rows; ++i) {
+            T temp = abs_ns::abs(h_vec[i]);
+            if (temp > max_mag) {
+                max_mag = temp;
+            }
+        }
+
+        free(h_vec);
+
+        return Scalar<T>(max_mag);
+
+    }
 
 };
 
