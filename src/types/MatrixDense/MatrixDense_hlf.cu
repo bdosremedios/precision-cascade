@@ -206,7 +206,12 @@ MatrixDense<float> MatrixDense<__half>::to_float() const {
     generalmatrix_hlf_kernels::cast_to_float<<<NUM_THREADS, NUM_BLOCKS>>>(
         d_mat, created_mat.d_mat, m_rows*n_cols
     );
-    check_cuda_error(cudaGetLastError());
+    check_kernel_launch(
+        cudaGetLastError(),
+        "MatrixDense<__half>::to_float()",
+        "generalmatrix_hlf_kernels::cast_to_float",
+        NUM_THREADS, NUM_BLOCKS
+    );
 
     return created_mat;
 
@@ -222,7 +227,12 @@ MatrixDense<double> MatrixDense<__half>::to_double() const {
     generalmatrix_hlf_kernels::cast_to_double<<<NUM_THREADS, NUM_BLOCKS>>>(
         d_mat, created_mat.d_mat, m_rows*n_cols
     );
-    check_cuda_error(cudaGetLastError());
+    check_kernel_launch(
+        cudaGetLastError(),
+        "MatrixDense<__half>::to_double()",
+        "generalmatrix_hlf_kernels::cast_to_double",
+        NUM_THREADS, NUM_BLOCKS
+    );
 
     return created_mat;
 

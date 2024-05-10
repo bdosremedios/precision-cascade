@@ -1,5 +1,6 @@
 #include <stdexcept>
 #include <format>
+#include <string>
 
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
@@ -8,7 +9,36 @@
 
 void check_cuda_error(cudaError_t error) {
     if (error != cudaSuccess) {
-        throw std::runtime_error(std::format("cudaError_t failure: {:d}", static_cast<int>(error)));
+        throw std::runtime_error(
+            std::format(
+                "cudaError_t {:d}: {} {}",
+                static_cast<int>(error),
+                cudaGetErrorName(error),
+                cudaGetErrorString(error)
+            )
+        );
+    }
+}
+
+void check_kernel_launch(
+    cudaError_t error,
+    std::string function_name,
+    std::string kernel_name,
+    int n_blocks,
+    int n_threads
+) {
+    if (error != cudaSuccess) {
+        throw std::runtime_error(
+            std::format(
+                "cuda kernel {}<<<{}, {}>>> in {} failed with error {} ({}: {})",
+                kernel_name,
+                function_name,
+                n_blocks, n_threads,
+                static_cast<int>(error),
+                cudaGetErrorName(error),
+                cudaGetErrorString(error)
+            )
+        );
     }
 }
 

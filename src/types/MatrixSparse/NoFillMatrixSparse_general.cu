@@ -22,7 +22,12 @@ Vector<T> NoFillMatrixSparse<T>::back_sub(const Vector<T> &arg_rhs) const {
         nofillmatrixsparse_kernels::update_pivot<T><<<1, 1>>>(
             h_col_offsets[j+1]-1, d_row_indices, d_vals, soln.d_vec
         );
-        check_cuda_error(cudaGetLastError());
+        check_kernel_launch(
+            cudaGetLastError(),
+            "NoFillMatrixSparse<T>::back_sub",
+            "nofillmatrixsparse_kernels::update_pivot<T>",
+            1, 1
+        );
 
         // Update solution corresponding to remainder to column
         int col_size = h_col_offsets[j+1]-h_col_offsets[j];
@@ -39,7 +44,12 @@ Vector<T> NoFillMatrixSparse<T>::back_sub(const Vector<T> &arg_rhs) const {
             (
                 h_col_offsets[j], col_size, d_row_indices, d_vals, soln.d_vec
             );
-            check_cuda_error(cudaGetLastError());
+            check_kernel_launch(
+                cudaGetLastError(),
+                "NoFillMatrixSparse<T>::back_sub",
+                "nofillmatrixsparse_kernels::upptri_update_remaining_col<T>",
+                NBLOCKS, genmat_gpu_const::MAXTHREADSPERBLOCK
+            );
 
         }
 
@@ -72,7 +82,12 @@ Vector<T> NoFillMatrixSparse<T>::frwd_sub(const Vector<T> &arg_rhs) const {
         nofillmatrixsparse_kernels::update_pivot<T><<<1, 1>>>(
             h_col_offsets[j], d_row_indices, d_vals, soln.d_vec
         );
-        check_cuda_error(cudaGetLastError());
+        check_kernel_launch(
+            cudaGetLastError(),
+            "NoFillMatrixSparse<T>::frwd_sub",
+            "nofillmatrixsparse_kernels::update_pivot<T>",
+            1, 1
+        );
 
         // Update solution corresponding to remainder to column
         int col_size = h_col_offsets[j+1]-h_col_offsets[j];
@@ -89,7 +104,12 @@ Vector<T> NoFillMatrixSparse<T>::frwd_sub(const Vector<T> &arg_rhs) const {
             (
                 h_col_offsets[j], col_size, d_row_indices, d_vals, soln.d_vec
             );
-            check_cuda_error(cudaGetLastError());
+            check_kernel_launch(
+                cudaGetLastError(),
+                "NoFillMatrixSparse<T>::frwd_sub",
+                "nofillmatrixsparse_kernels::lowtri_update_remaining_col",
+                NBLOCKS, genmat_gpu_const::MAXTHREADSPERBLOCK
+            );
 
         }
 

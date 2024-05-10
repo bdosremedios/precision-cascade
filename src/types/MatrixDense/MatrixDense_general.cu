@@ -26,12 +26,24 @@ Vector<T> MatrixDense<T>::back_sub(const Vector<T> &arg_rhs) const {
         matrixdense_kernels::upptri_blk_solve_warp<T><<<1, genmat_gpu_const::WARPSIZE>>>(
             d_mat, m_rows, i*genmat_gpu_const::WARPSIZE, d_soln
         );
-        check_cuda_error(cudaGetLastError());
-
-        matrixdense_kernels::upptri_rect_update_warp<T><<<i, genmat_gpu_const::WARPSIZE>>>(
-            d_mat, m_rows, i*genmat_gpu_const::WARPSIZE, d_soln
+        check_kernel_launch(
+            cudaGetLastError(),
+            "MatrixDense<T>::back_sub",
+            "matrixdense_kernels::upptri_blk_solve_warp",
+            1, genmat_gpu_const::WARPSIZE
         );
-        check_cuda_error(cudaGetLastError());
+
+        if (i > 0) {
+            matrixdense_kernels::upptri_rect_update_warp<T><<<i, genmat_gpu_const::WARPSIZE>>>(
+                d_mat, m_rows, i*genmat_gpu_const::WARPSIZE, d_soln
+            );
+            check_kernel_launch(
+                cudaGetLastError(),
+                "MatrixDense<T>::back_sub",
+                "matrixdense_kernels::upptri_rect_update_warp",
+                i, genmat_gpu_const::WARPSIZE
+            );
+        } 
 
     }
 
@@ -64,12 +76,24 @@ Vector<T> MatrixDense<T>::frwd_sub(const Vector<T> &arg_rhs) const {
         matrixdense_kernels::lowtri_blk_solve_warp<T><<<1, genmat_gpu_const::WARPSIZE>>>(
             d_mat, m_rows, i*genmat_gpu_const::WARPSIZE, d_soln
         );
-        check_cuda_error(cudaGetLastError());
-
-        matrixdense_kernels::lowtri_rect_update_warp<T><<<n_blk-1-i, genmat_gpu_const::WARPSIZE>>>(
-            d_mat, m_rows, i*genmat_gpu_const::WARPSIZE, d_soln
+        check_kernel_launch(
+            cudaGetLastError(),
+            "MatrixDense<T>::frwd_sub",
+            "matrixdense_kernels::lowtri_blk_solve_warp",
+            1, genmat_gpu_const::WARPSIZE
         );
-        check_cuda_error(cudaGetLastError());
+
+        if (n_blk-1-i > 0) {
+            matrixdense_kernels::lowtri_rect_update_warp<T><<<n_blk-1-i, genmat_gpu_const::WARPSIZE>>>(
+                d_mat, m_rows, i*genmat_gpu_const::WARPSIZE, d_soln
+            );
+            check_kernel_launch(
+                cudaGetLastError(),
+                "MatrixDense<T>::frwd_sub",
+                "matrixdense_kernels::lowtri_rect_update_warp",
+                n_blk-1-i, genmat_gpu_const::WARPSIZE
+            );
+        }
 
     }
 
