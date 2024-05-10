@@ -1,5 +1,8 @@
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
+#include <cuda_fp16.h>
+
+#include "types/GeneralMatrix/GeneralMatrix_gpu_constants.cuh"
 
 #include "types/MatrixDense/MatrixDense.h"
 
@@ -200,7 +203,7 @@ MatrixDense<float> MatrixDense<__half>::to_float() const {
     
     MatrixDense<float> created_mat(cu_handles, m_rows, n_cols);
 
-    int NUM_THREADS = 1024; // threads per thread block just maximum
+    int NUM_THREADS = genmat_gpu_const::MAXTHREADSPERBLOCK;
     int NUM_BLOCKS = std::ceil(static_cast<double>(m_rows*n_cols)/static_cast<double>(NUM_THREADS));
 
     generalmatrix_hlf_kernels::cast_to_float<<<NUM_THREADS, NUM_BLOCKS>>>(
@@ -221,7 +224,7 @@ MatrixDense<double> MatrixDense<__half>::to_double() const {
     
     MatrixDense<double> created_mat(cu_handles, m_rows, n_cols);
 
-    int NUM_THREADS = 1024; // threads per thread block just maximum
+    int NUM_THREADS = genmat_gpu_const::MAXTHREADSPERBLOCK;
     int NUM_BLOCKS = std::ceil(static_cast<double>(m_rows*n_cols)/static_cast<double>(NUM_THREADS));
 
     generalmatrix_hlf_kernels::cast_to_double<<<NUM_THREADS, NUM_BLOCKS>>>(

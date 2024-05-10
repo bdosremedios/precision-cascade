@@ -3,6 +3,8 @@
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
 
+#include "types/GeneralMatrix/GeneralMatrix_gpu_constants.cuh"
+
 #include "types/Vector/Vector.h"
 
 Vector<double> Vector<double>::operator*(const Scalar<double> &scalar) const {
@@ -162,7 +164,7 @@ Vector<__half> Vector<double>::to_half() const {
 
     Vector<__half> created_vec(cu_handles, m_rows);
 
-    double NUM_THREADS = 1024; // threads per thread block just 1 warp
+    double NUM_THREADS = genmat_gpu_const::MAXTHREADSPERBLOCK;
     double NUM_BLOCKS = static_cast<double>(
         std::ceil(static_cast<double>(m_rows)/static_cast<double>(NUM_THREADS))
     );
@@ -182,7 +184,7 @@ Vector<float> Vector<double>::to_float() const {
 
     Vector<float> created_vec(cu_handles, m_rows);
 
-    double NUM_THREADS = 1024; // threads per thread block just 1 warp
+    double NUM_THREADS = genmat_gpu_const::MAXTHREADSPERBLOCK;
     double NUM_BLOCKS = static_cast<double>(
         std::ceil(static_cast<double>(m_rows)/static_cast<double>(NUM_THREADS))
     );

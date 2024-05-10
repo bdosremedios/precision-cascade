@@ -1,4 +1,5 @@
 #include <cuda_runtime.h>
+#include <cusparse.h>
 #include <cuda_fp16.h>
 
 #include "types/GeneralMatrix/GeneralMatrix_gpu_constants.cuh"

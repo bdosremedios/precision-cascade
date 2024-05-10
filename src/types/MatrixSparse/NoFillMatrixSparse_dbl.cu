@@ -1,3 +1,9 @@
+#include <cuda_runtime.h>
+#include <cusparse.h>
+#include <cuda_fp16.h>
+
+#include "types/GeneralMatrix/GeneralMatrix_gpu_constants.cuh"
+
 #include "types/MatrixSparse/NoFillMatrixSparse.h"
 
 NoFillMatrixSparse<double>::NoFillMatrixSparse(const MatrixDense<double> &source_mat):
@@ -158,7 +164,7 @@ NoFillMatrixSparse<__half> NoFillMatrixSparse<double>::to_half() const {
 
     NoFillMatrixSparse<__half> created_mat(cu_handles, m_rows, n_cols, nnz);
 
-    double NUM_THREADS = 1024; // threads per thread block just 1 warp
+    double NUM_THREADS = genmat_gpu_const::MAXTHREADSPERBLOCK;
     double NUM_BLOCKS = static_cast<double>(
         std::ceil(static_cast<double>(nnz)/static_cast<double>(NUM_THREADS))
     );
@@ -195,7 +201,7 @@ NoFillMatrixSparse<float> NoFillMatrixSparse<double>::to_float() const {
 
     NoFillMatrixSparse<float> created_mat(cu_handles, m_rows, n_cols, nnz);
 
-    double NUM_THREADS = 1024; // threads per thread block just 1 warp
+    double NUM_THREADS = genmat_gpu_const::MAXTHREADSPERBLOCK;
     double NUM_BLOCKS = static_cast<double>(
         std::ceil(static_cast<double>(nnz)/static_cast<double>(NUM_THREADS))
     );
