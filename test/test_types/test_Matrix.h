@@ -1192,6 +1192,118 @@ protected:
 
     }
 
+    void TestCast() {
+
+        const int m = 15;
+        const int n = 12;
+
+        M<double> mat_dbl(
+            CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, m, n)
+        );
+
+        M<double> dbl_to_dbl(mat_dbl.template cast<double>());
+        ASSERT_MATRIX_EQ(dbl_to_dbl, mat_dbl);
+
+        M<float> dbl_to_sgl(mat_dbl.template cast<float>());
+        ASSERT_EQ(dbl_to_sgl.rows(), m);
+        ASSERT_EQ(dbl_to_sgl.cols(), n);
+        for (int i=0; i<m; ++i) {
+            for (int j=0; j<n; ++j) {
+                ASSERT_NEAR(
+                    dbl_to_sgl.get_elem(i, j).get_scalar(),
+                    static_cast<float>(mat_dbl.get_elem(i, j).get_scalar()),
+                    min_1_mag(static_cast<float>(mat_dbl.get_elem(i, j).get_scalar()))*
+                        Tol<float>::roundoff_T()
+                );
+            }
+        }
+
+        M<__half> dbl_to_hlf(mat_dbl.template cast<__half>());
+        ASSERT_EQ(dbl_to_hlf.rows(), m);
+        ASSERT_EQ(dbl_to_hlf.cols(), n);
+        for (int i=0; i<m; ++i) {
+            for (int j=0; j<n; ++j) {
+                ASSERT_NEAR(
+                    dbl_to_hlf.get_elem(i, j).get_scalar(),
+                    static_cast<__half>(mat_dbl.get_elem(i, j).get_scalar()),
+                    min_1_mag(static_cast<__half>(mat_dbl.get_elem(i, j).get_scalar()))*
+                        Tol<__half>::roundoff_T()
+                );
+            }
+        }
+
+        M<float> mat_sgl(
+            CommonMatRandomInterface<M, float>::rand_matrix(TestBase::bundle, m, n)
+        );
+
+        M<float> sgl_to_sgl(mat_sgl.template cast<float>());
+        ASSERT_MATRIX_EQ(sgl_to_sgl, mat_sgl);
+    
+        M<double> sgl_to_dbl(mat_sgl.template cast<double>());
+        ASSERT_EQ(sgl_to_dbl.rows(), m);
+        ASSERT_EQ(sgl_to_dbl.cols(), n);
+        for (int i=0; i<m; ++i) {
+            for (int j=0; j<n; ++j) {
+                ASSERT_NEAR(
+                    sgl_to_dbl.get_elem(i, j).get_scalar(),
+                    static_cast<double>(mat_sgl.get_elem(i, j).get_scalar()),
+                    min_1_mag(static_cast<double>(mat_sgl.get_elem(i, j).get_scalar()))*
+                        static_cast<double>(Tol<float>::roundoff_T())
+                );
+            }
+        }
+
+        M<__half> sgl_to_hlf(mat_sgl.template cast<__half>());
+        ASSERT_EQ(sgl_to_hlf.rows(), m);
+        ASSERT_EQ(sgl_to_hlf.cols(), n);
+        for (int i=0; i<m; ++i) {
+            for (int j=0; j<n; ++j) {
+                ASSERT_NEAR(
+                    sgl_to_hlf.get_elem(i, j).get_scalar(),
+                    static_cast<__half>(mat_sgl.get_elem(i, j).get_scalar()),
+                    min_1_mag(static_cast<__half>(mat_sgl.get_elem(i, j).get_scalar()))*
+                        Tol<__half>::roundoff_T()
+                );
+            }
+        }
+
+        M<__half> mat_hlf(
+            CommonMatRandomInterface<M, __half>::rand_matrix(TestBase::bundle, m, n)
+        );
+
+        M<__half> hlf_to_hlf(mat_hlf.template cast<__half>());
+        ASSERT_MATRIX_EQ(hlf_to_hlf, mat_hlf);
+
+        M<float> hlf_to_sgl(mat_hlf.template cast<float>());
+        ASSERT_EQ(hlf_to_sgl.rows(), m);
+        ASSERT_EQ(hlf_to_sgl.cols(), n);
+        for (int i=0; i<m; ++i) {
+            for (int j=0; j<n; ++j) {
+                ASSERT_NEAR(
+                    hlf_to_sgl.get_elem(i, j).get_scalar(),
+                    static_cast<float>(mat_hlf.get_elem(i, j).get_scalar()),
+                    min_1_mag(static_cast<double>(mat_hlf.get_elem(i, j).get_scalar()))*
+                        static_cast<float>(Tol<__half>::roundoff_T())
+                );
+            }
+        }
+
+        M<double> hlf_to_dbl(mat_hlf.template cast<double>());
+        ASSERT_EQ(hlf_to_dbl.rows(), m);
+        ASSERT_EQ(hlf_to_dbl.cols(), n);
+        for (int i=0; i<m; ++i) {
+            for (int j=0; j<n; ++j) {
+                ASSERT_NEAR(
+                    hlf_to_dbl.get_elem(i, j).get_scalar(),
+                    static_cast<double>(mat_hlf.get_elem(i, j).get_scalar()),
+                    (min_1_mag(static_cast<double>(mat_hlf.get_elem(i, j).get_scalar()))*
+                     static_cast<double>(Tol<__half>::roundoff_T()))
+                );
+            }
+        }
+
+    }
+
     void TestBadCast() {
 
         auto try_bad_cast = []() {

@@ -208,7 +208,7 @@ MatrixDense<float> MatrixDense<__half>::to_float() const {
     );
     check_kernel_launch(
         cudaGetLastError(),
-        "MatrixDense<__half>::to_float()",
+        "MatrixDense<__half>::to_float",
         "generalmatrix_hlf_kernels::cast_to_float",
         NUM_THREADS, NUM_BLOCKS
     );
@@ -229,7 +229,7 @@ MatrixDense<double> MatrixDense<__half>::to_double() const {
     );
     check_kernel_launch(
         cudaGetLastError(),
-        "MatrixDense<__half>::to_double()",
+        "MatrixDense<__half>::to_double",
         "generalmatrix_hlf_kernels::cast_to_double",
         NUM_THREADS, NUM_BLOCKS
     );

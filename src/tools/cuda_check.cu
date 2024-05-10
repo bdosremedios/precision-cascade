@@ -32,8 +32,8 @@ void check_kernel_launch(
             std::format(
                 "cuda kernel {}<<<{}, {}>>> in {} failed with error {} ({}: {})",
                 kernel_name,
-                function_name,
                 n_blocks, n_threads,
+                function_name,
                 static_cast<int>(error),
                 cudaGetErrorName(error),
                 cudaGetErrorString(error)

@@ -182,7 +182,7 @@ NoFillMatrixSparse<__half> NoFillMatrixSparse<double>::to_half() const {
     );
     check_kernel_launch(
         cudaGetLastError(),
-        "NoFillMatrixSparse<double>::to_half()",
+        "NoFillMatrixSparse<double>::to_half",
         "generalmatrix_dbl_kernels::cast_to_half",
         NUM_THREADS, NUM_BLOCKS
     );
@@ -219,7 +219,7 @@ NoFillMatrixSparse<float> NoFillMatrixSparse<double>::to_float() const {
     );
     check_kernel_launch(
         cudaGetLastError(),
-        "NoFillMatrixSparse<double>::to_float()",
+        "NoFillMatrixSparse<double>::to_float",
         "generalmatrix_dbl_kernels::cast_to_float",
         NUM_THREADS, NUM_BLOCKS
     );
