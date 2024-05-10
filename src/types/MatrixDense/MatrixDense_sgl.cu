@@ -198,14 +198,14 @@ MatrixDense<__half> MatrixDense<float>::to_half() const {
     int NUM_THREADS = genmat_gpu_const::MAXTHREADSPERBLOCK;
     int NUM_BLOCKS = std::ceil(static_cast<double>(m_rows*n_cols)/static_cast<double>(NUM_THREADS));
 
-    generalmatrix_sgl_kernels::cast_to_half<<<NUM_THREADS, NUM_BLOCKS>>>(
+    generalmatrix_sgl_kernels::cast_to_half<<<NUM_BLOCKS, NUM_THREADS>>>(
         d_mat, created_mat.d_mat, m_rows*n_cols
     );
     check_kernel_launch(
         cudaGetLastError(),
         "MatrixDense<float>::to_half",
         "generalmatrix_sgl_kernels::cast_to_half",
-        NUM_THREADS, NUM_BLOCKS
+        NUM_BLOCKS, NUM_THREADS
     );
 
     return created_mat;
@@ -223,7 +223,7 @@ MatrixDense<double> MatrixDense<float>::to_double() const {
     int NUM_THREADS = genmat_gpu_const::MAXTHREADSPERBLOCK;
     int NUM_BLOCKS = std::ceil(static_cast<double>(m_rows*n_cols)/static_cast<double>(NUM_THREADS));
 
-    generalmatrix_sgl_kernels::cast_to_double<<<NUM_THREADS, NUM_BLOCKS>>>(
+    generalmatrix_sgl_kernels::cast_to_double<<<NUM_BLOCKS, NUM_THREADS>>>(
         d_mat, created_mat.d_mat, m_rows*n_cols
     );
     check_kernel_launch(
