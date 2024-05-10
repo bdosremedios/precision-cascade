@@ -162,17 +162,25 @@ Vector<__half> Vector<float>::to_half() const {
     
     Vector<__half> created_vec(cu_handles, m_rows);
 
-    double NUM_THREADS = genmat_gpu_const::MAXTHREADSPERBLOCK;
-    double NUM_BLOCKS = static_cast<double>(
+    int NUM_THREADS = genmat_gpu_const::MAXTHREADSPERBLOCK;
+    int NUM_BLOCKS = static_cast<int>(
         std::ceil(static_cast<double>(m_rows)/static_cast<double>(NUM_THREADS))
     );
-    vector_sgl_kernels::cast_to_half<<<NUM_BLOCKS, NUM_THREADS>>>(d_vec, created_vec.d_vec, m_rows);
-    check_kernel_launch(
-        cudaGetLastError(),
-        "Vector<float>::to_half",
-        "vector_sgl_kernels::cast_to_half",
-        NUM_BLOCKS, NUM_THREADS
-    );
+
+    if (NUM_BLOCKS > 0) {
+
+        vector_sgl_kernels::cast_to_half<<<NUM_BLOCKS, NUM_THREADS>>>(
+            d_vec, created_vec.d_vec, m_rows
+        );
+
+        check_kernel_launch(
+            cudaGetLastError(),
+            "Vector<float>::to_half",
+            "vector_sgl_kernels::cast_to_half",
+            NUM_BLOCKS, NUM_THREADS
+        );
+
+    }
 
     return created_vec;
 
@@ -184,17 +192,25 @@ Vector<double> Vector<float>::to_double() const {
     
     Vector<double> created_vec(cu_handles, m_rows);
 
-    double NUM_THREADS = genmat_gpu_const::MAXTHREADSPERBLOCK;
-    double NUM_BLOCKS = static_cast<double>(
+    int NUM_THREADS = genmat_gpu_const::MAXTHREADSPERBLOCK;
+    int NUM_BLOCKS = static_cast<int>(
         std::ceil(static_cast<double>(m_rows)/static_cast<double>(NUM_THREADS))
     );
-    vector_sgl_kernels::cast_to_double<<<NUM_BLOCKS, NUM_THREADS>>>(d_vec, created_vec.d_vec, m_rows);
-    check_kernel_launch(
-        cudaGetLastError(),
-        "Vector<float>::to_double",
-        "vector_sgl_kernels::cast_to_double",
-        NUM_BLOCKS, NUM_THREADS
-    );
+
+    if (NUM_BLOCKS > 0) {
+
+        vector_sgl_kernels::cast_to_double<<<NUM_BLOCKS, NUM_THREADS>>>(
+            d_vec, created_vec.d_vec, m_rows
+        );
+
+        check_kernel_launch(
+            cudaGetLastError(),
+            "Vector<float>::to_double",
+            "vector_sgl_kernels::cast_to_double",
+            NUM_BLOCKS, NUM_THREADS
+        );
+
+    }
 
     return created_vec;
 

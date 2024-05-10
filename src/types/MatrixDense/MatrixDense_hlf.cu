@@ -206,15 +206,20 @@ MatrixDense<float> MatrixDense<__half>::to_float() const {
     int NUM_THREADS = genmat_gpu_const::MAXTHREADSPERBLOCK;
     int NUM_BLOCKS = std::ceil(static_cast<double>(m_rows*n_cols)/static_cast<double>(NUM_THREADS));
 
-    generalmatrix_hlf_kernels::cast_to_float<<<NUM_BLOCKS, NUM_THREADS>>>(
-        d_mat, created_mat.d_mat, m_rows*n_cols
-    );
-    check_kernel_launch(
-        cudaGetLastError(),
-        "MatrixDense<__half>::to_float",
-        "generalmatrix_hlf_kernels::cast_to_float",
-        NUM_BLOCKS, NUM_THREADS
-    );
+    if (NUM_BLOCKS > 0) {
+
+        generalmatrix_hlf_kernels::cast_to_float<<<NUM_BLOCKS, NUM_THREADS>>>(
+            d_mat, created_mat.d_mat, m_rows*n_cols
+        );
+
+        check_kernel_launch(
+            cudaGetLastError(),
+            "MatrixDense<__half>::to_float",
+            "generalmatrix_hlf_kernels::cast_to_float",
+            NUM_BLOCKS, NUM_THREADS
+        );
+
+    }
 
     return created_mat;
 
@@ -227,15 +232,20 @@ MatrixDense<double> MatrixDense<__half>::to_double() const {
     int NUM_THREADS = genmat_gpu_const::MAXTHREADSPERBLOCK;
     int NUM_BLOCKS = std::ceil(static_cast<double>(m_rows*n_cols)/static_cast<double>(NUM_THREADS));
 
-    generalmatrix_hlf_kernels::cast_to_double<<<NUM_BLOCKS, NUM_THREADS>>>(
-        d_mat, created_mat.d_mat, m_rows*n_cols
-    );
-    check_kernel_launch(
-        cudaGetLastError(),
-        "MatrixDense<__half>::to_double",
-        "generalmatrix_hlf_kernels::cast_to_double",
-        NUM_BLOCKS, NUM_THREADS
-    );
+    if (NUM_BLOCKS > 0) {
+
+        generalmatrix_hlf_kernels::cast_to_double<<<NUM_BLOCKS, NUM_THREADS>>>(
+            d_mat, created_mat.d_mat, m_rows*n_cols
+        );
+
+        check_kernel_launch(
+            cudaGetLastError(),
+            "MatrixDense<__half>::to_double",
+            "generalmatrix_hlf_kernels::cast_to_double",
+            NUM_BLOCKS, NUM_THREADS
+        );
+
+    }
 
     return created_mat;
 

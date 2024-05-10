@@ -164,10 +164,8 @@ NoFillMatrixSparse<__half> NoFillMatrixSparse<double>::to_half() const {
 
     NoFillMatrixSparse<__half> created_mat(cu_handles, m_rows, n_cols, nnz);
 
-    double NUM_THREADS = genmat_gpu_const::MAXTHREADSPERBLOCK;
-    double NUM_BLOCKS = static_cast<double>(
-        std::ceil(static_cast<double>(nnz)/static_cast<double>(NUM_THREADS))
-    );
+    int NUM_THREADS = genmat_gpu_const::MAXTHREADSPERBLOCK;
+    int NUM_BLOCKS = std::ceil(static_cast<double>(nnz)/static_cast<double>(NUM_THREADS));
 
     check_cuda_error(cudaMemcpy(
         created_mat.d_col_offsets,
@@ -183,15 +181,20 @@ NoFillMatrixSparse<__half> NoFillMatrixSparse<double>::to_half() const {
         cudaMemcpyDeviceToDevice
     ));
 
-    generalmatrix_dbl_kernels::cast_to_half<<<NUM_BLOCKS, NUM_THREADS>>>(
-        d_vals, created_mat.d_vals, nnz
-    );
-    check_kernel_launch(
-        cudaGetLastError(),
-        "NoFillMatrixSparse<double>::to_half",
-        "generalmatrix_dbl_kernels::cast_to_half",
-        NUM_BLOCKS, NUM_THREADS
-    );
+    if (NUM_BLOCKS > 0) {
+
+        generalmatrix_dbl_kernels::cast_to_half<<<NUM_BLOCKS, NUM_THREADS>>>(
+            d_vals, created_mat.d_vals, nnz
+        );
+
+        check_kernel_launch(
+            cudaGetLastError(),
+            "NoFillMatrixSparse<double>::to_half",
+            "generalmatrix_dbl_kernels::cast_to_half",
+            NUM_BLOCKS, NUM_THREADS
+        );
+
+    }
 
     return created_mat;
 
@@ -201,10 +204,8 @@ NoFillMatrixSparse<float> NoFillMatrixSparse<double>::to_float() const {
 
     NoFillMatrixSparse<float> created_mat(cu_handles, m_rows, n_cols, nnz);
 
-    double NUM_THREADS = genmat_gpu_const::MAXTHREADSPERBLOCK;
-    double NUM_BLOCKS = static_cast<double>(
-        std::ceil(static_cast<double>(nnz)/static_cast<double>(NUM_THREADS))
-    );
+    int NUM_THREADS = genmat_gpu_const::MAXTHREADSPERBLOCK;
+    int NUM_BLOCKS = std::ceil(static_cast<double>(nnz)/static_cast<double>(NUM_THREADS));
 
     check_cuda_error(cudaMemcpy(
         created_mat.d_col_offsets,
@@ -220,15 +221,20 @@ NoFillMatrixSparse<float> NoFillMatrixSparse<double>::to_float() const {
         cudaMemcpyDeviceToDevice
     ));
 
-    generalmatrix_dbl_kernels::cast_to_float<<<NUM_BLOCKS, NUM_THREADS>>>(
-        d_vals, created_mat.d_vals, nnz
-    );
-    check_kernel_launch(
-        cudaGetLastError(),
-        "NoFillMatrixSparse<double>::to_float",
-        "generalmatrix_dbl_kernels::cast_to_float",
-        NUM_BLOCKS, NUM_THREADS
-    );
+    if (NUM_BLOCKS > 0) {
+
+        generalmatrix_dbl_kernels::cast_to_float<<<NUM_BLOCKS, NUM_THREADS>>>(
+            d_vals, created_mat.d_vals, nnz
+        );
+
+        check_kernel_launch(
+            cudaGetLastError(),
+            "NoFillMatrixSparse<double>::to_float",
+            "generalmatrix_dbl_kernels::cast_to_float",
+            NUM_BLOCKS, NUM_THREADS
+        );
+
+    }
 
     return created_mat;
 
