@@ -421,6 +421,68 @@ public:
     
     }
 
+    // Needed for testing (don't need to optimize performance)
+    static MatrixDense<T> Random_UT(const cuHandleBundle &arg_cu_handles, int arg_m, int arg_n) {
+
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_real_distribution<double> dist(-1., 1.);
+
+        T *h_mat = static_cast<T *>(malloc(arg_m*arg_n*sizeof(T)));
+        
+        for (int j=0; j<arg_n; ++j) {
+            for (int i=0; i<arg_m; ++i) {
+                if (i <= j) {
+                    h_mat[i+j*arg_m] = static_cast<T>(dist(gen));
+                    if (i == j) { // Re-roll out of zeros on the diagonal
+                        while(h_mat[i+j*arg_m] == static_cast<T>(0.)) {
+                            h_mat[i+j*arg_m] = static_cast<T>(dist(gen));
+                        }
+                    }
+                } else {
+                    h_mat[i+j*arg_m] = static_cast<T>(0.);
+                }
+            }
+        }
+        MatrixDense<T> created_mat(arg_cu_handles, h_mat, arg_m, arg_n);
+
+        free(h_mat);
+
+        return created_mat;
+    
+    }
+
+    // Needed for testing (don't need to optimize performance)
+    static MatrixDense<T> Random_LT(const cuHandleBundle &arg_cu_handles, int arg_m, int arg_n) {
+
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_real_distribution<double> dist(-1., 1.);
+
+        T *h_mat = static_cast<T *>(malloc(arg_m*arg_n*sizeof(T)));
+        
+        for (int j=0; j<arg_n; ++j) {
+            for (int i=0; i<arg_m; ++i) {
+                if (i >= j) {
+                    h_mat[i+j*arg_m] = static_cast<T>(dist(gen));
+                    if (i == j) { // Re-roll out of zeros on the diagonal
+                        while(h_mat[i+j*arg_m] == static_cast<T>(0.)) {
+                            h_mat[i+j*arg_m] = static_cast<T>(dist(gen));
+                        }
+                    }
+                } else {
+                    h_mat[i+j*arg_m] = static_cast<T>(0.);
+                }
+            }
+        }
+        MatrixDense<T> created_mat(arg_cu_handles, h_mat, arg_m, arg_n);
+
+        free(h_mat);
+
+        return created_mat;
+    
+    }
+
     // *** Cast ***
     template <typename Cast_T>
     MatrixDense<Cast_T> cast() const {

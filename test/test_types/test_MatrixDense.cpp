@@ -177,6 +177,78 @@ public:
     }
 
     template <typename T>
+    void TestRandomUTMatrixCreation() {
+
+        // Test gives right size and numbers aren't generally the same
+        // will fail with very low probability (check middle numbers are different
+        // from 5 adjacent above and below)
+        constexpr int m_rand(40);
+        constexpr int n_rand(40);
+        MatrixDense<T> test_rand(MatrixDense<T>::Random_UT(TestBase::bundle, m_rand, n_rand));
+        ASSERT_EQ(test_rand.rows(), m_rand);
+        ASSERT_EQ(test_rand.cols(), n_rand);
+        for (int i=1; i<m_rand-1; ++i) {
+            for (int j=i+1; j<n_rand-1; ++j) {
+                ASSERT_TRUE(
+                    ((test_rand.get_elem(i, j).get_scalar() != test_rand.get_elem(i-1, j).get_scalar()) ||
+                     (test_rand.get_elem(i, j).get_scalar() != test_rand.get_elem(i+1, j).get_scalar()) ||
+                     (test_rand.get_elem(i, j).get_scalar() != test_rand.get_elem(i, j-1).get_scalar()) ||
+                     (test_rand.get_elem(i, j).get_scalar() != test_rand.get_elem(i, j+1).get_scalar()))
+                );
+            }
+        }
+
+        // Check non-zero diagonal
+        for (int i=0; i<m_rand; ++i) {
+            ASSERT_FALSE(test_rand.get_elem(i, i).get_scalar() == static_cast<T>(0.));
+        }
+
+        // Check zero below diagonal
+        for (int i=0; i<m_rand; ++i) {
+            for (int j=0; j<i; ++j) {
+                ASSERT_EQ(test_rand.get_elem(i, j).get_scalar(), static_cast<T>(0.));
+            }
+        }
+
+    }
+
+    template <typename T>
+    void TestRandomLTMatrixCreation() {
+
+        // Test gives right size and numbers aren't generally the same
+        // will fail with very low probability (check middle numbers are different
+        // from 5 adjacent above and below)
+        constexpr int m_rand(40);
+        constexpr int n_rand(40);
+        MatrixDense<T> test_rand(MatrixDense<T>::Random_LT(TestBase::bundle, m_rand, n_rand));
+        ASSERT_EQ(test_rand.rows(), m_rand);
+        ASSERT_EQ(test_rand.cols(), n_rand);
+        for (int i=1; i<m_rand-1; ++i) {
+            for (int j=1; j<i; ++j) {
+                ASSERT_TRUE(
+                    ((test_rand.get_elem(i, j).get_scalar() != test_rand.get_elem(i-1, j).get_scalar()) ||
+                     (test_rand.get_elem(i, j).get_scalar() != test_rand.get_elem(i+1, j).get_scalar()) ||
+                     (test_rand.get_elem(i, j).get_scalar() != test_rand.get_elem(i, j-1).get_scalar()) ||
+                     (test_rand.get_elem(i, j).get_scalar() != test_rand.get_elem(i, j+1).get_scalar()))
+                );
+            }
+        }
+
+        // Check non-zero diagonal
+        for (int i=0; i<m_rand; ++i) {
+            ASSERT_FALSE(test_rand.get_elem(i, i).get_scalar() == static_cast<T>(0.));
+        }
+
+        // Check zero above diagonal
+        for (int i=0; i<m_rand; ++i) {
+            for (int j=i+1; j<n_rand; ++j) {
+                ASSERT_EQ(test_rand.get_elem(i, j).get_scalar(), static_cast<T>(0.));
+            }
+        }
+
+    }
+
+    template <typename T>
     void TestBlock() {
 
         const MatrixDense<T> const_mat (
@@ -558,6 +630,18 @@ TEST_F(MatrixDense_Test, TestRandomMatrixCreation) {
     TestRandomMatrixCreation<__half>();
     TestRandomMatrixCreation<float>();
     TestRandomMatrixCreation<double>();
+}
+
+TEST_F(MatrixDense_Test, TestRandomUTMatrixCreation) {
+    TestRandomUTMatrixCreation<__half>();
+    TestRandomUTMatrixCreation<float>();
+    TestRandomUTMatrixCreation<double>();
+}
+
+TEST_F(MatrixDense_Test, TestRandomLTMatrixCreation) {
+    TestRandomLTMatrixCreation<__half>();
+    TestRandomLTMatrixCreation<float>();
+    TestRandomLTMatrixCreation<double>();
 }
 
 TEST_F(MatrixDense_Test, TestCol) {
