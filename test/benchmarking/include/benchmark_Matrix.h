@@ -4,6 +4,8 @@
 #include <filesystem>
 #include <fstream>
 
+#include <functional>
+
 #include "benchmark.h"
 
 namespace fs = std::filesystem;

@@ -1,22 +1,11 @@
 #include "../test.h"
 #include "include/benchmark_Matrix.h"
 
-#include <functional>
-#include <fstream>
-
-#include <cmath>
-
 #include "types/types.h"
 
 class MatrixDense_Benchmark: public Benchmark_Matrix
 {
 public:
-
-    int min_n_mult = 8;
-    int max_n_mult = 14-prototying_n_speed_up;
-
-    int min_n_substitution = 7;
-    int max_n_substitution = 12-prototying_n_speed_up;
 
     std::function<MatrixDense<double> (int, int)> make_A = [this] (
         int m, int n
@@ -40,28 +29,36 @@ public:
 
 TEST_F(MatrixDense_Benchmark, MatrixVectorMult_BENCHMARK) {
 
-    std::function<void (MatrixDense<double> &, Vector<double> &)> execute_func = [] (
-        MatrixDense<double> &A, Vector<double> &b
+    std::function<void (Benchmark_AccumulatingClock &, MatrixDense<double> &)> execute_func = [] (
+        Benchmark_AccumulatingClock &clock, MatrixDense<double> &A
     ) {
+        Vector<double> b = Vector<double>::Random(TestBase::bundle, A.rows());
+        clock.clock_start();
         A*b;
+        clock.clock_stop();
     };
 
-    basic_func_benchmark<MatrixDense>(
-        min_n_mult, max_n_mult, make_A, execute_func, "matdense_mv"
+    benchmark_exec_func<MatrixDense, double>(
+        dense_start, dense_stop, dense_incr,
+        make_A, execute_func, "matdense_mv"
     );
 
 }
 
 TEST_F(MatrixDense_Benchmark, TransposeMatrixVectorMult_BENCHMARK) {
 
-    std::function<void (MatrixDense<double> &, Vector<double> &)> execute_func = [] (
-        MatrixDense<double> &A, Vector<double> &b
+    std::function<void (Benchmark_AccumulatingClock &, MatrixDense<double> &)> execute_func = [] (
+        Benchmark_AccumulatingClock &clock, MatrixDense<double> &A
     ) {
+        Vector<double> b = Vector<double>::Random(TestBase::bundle, A.rows());
+        clock.clock_start();
         A.transpose_prod(b);
+        clock.clock_stop();
     };
 
-    basic_func_benchmark<MatrixDense>(
-        min_n_mult, max_n_mult, make_A, execute_func, "matdense_tmv"
+    benchmark_exec_func<MatrixDense, double>(
+        dense_start, dense_stop, dense_incr,
+        make_A, execute_func, "matdense_tmv"
     );
 
 }
@@ -76,28 +73,38 @@ TEST_F(MatrixDense_Benchmark, TransposeMatrixBlockVectorMult_BENCHMARK) {
 
 TEST_F(MatrixDense_Benchmark, ForwardSubstitution_BENCHMARK) {
 
-    std::function<void (MatrixDense<double> &, Vector<double> &)> execute_func = [] (
-        MatrixDense<double> &A, Vector<double> &b
+    std::function<void (Benchmark_AccumulatingClock &, MatrixDense<double> &)> execute_func = [] (
+        Benchmark_AccumulatingClock &clock, MatrixDense<double> &A
     ) {
+        Vector<double> x = Vector<double>::Random(TestBase::bundle, A.rows());
+        Vector<double> b = A*x;
+        clock.clock_start();
         A.frwd_sub(b);
+        clock.clock_stop();
     };
 
-    basic_func_benchmark<MatrixDense>(
-        min_n_substitution, max_n_substitution, make_low_tri_A, execute_func, "matdense_frwdsub"
+    benchmark_exec_func<MatrixDense, double>(
+        dense_start, dense_stop, dense_incr,
+        make_low_tri_A, execute_func, "matdense_frwdsub"
     );
 
 }
 
 TEST_F(MatrixDense_Benchmark, BackwardSubstitution_BENCHMARK) {
 
-    std::function<void (MatrixDense<double> &, Vector<double> &)> execute_func = [] (
-        MatrixDense<double> &A, Vector<double> &b
+    std::function<void (Benchmark_AccumulatingClock &, MatrixDense<double> &)> execute_func = [] (
+        Benchmark_AccumulatingClock &clock, MatrixDense<double> &A
     ) {
+        Vector<double> x = Vector<double>::Random(TestBase::bundle, A.rows());
+        Vector<double> b = A*x;
+        clock.clock_start();
         A.back_sub(b);
+        clock.clock_stop();
     };
 
-    basic_func_benchmark<MatrixDense>(
-        min_n_substitution, max_n_substitution, make_upp_tri_A, execute_func, "matdense_backsub"
+    benchmark_exec_func<MatrixDense, double>(
+        dense_start, dense_stop, dense_incr,
+        make_upp_tri_A, execute_func, "matdense_backsub"
     );
 
 }

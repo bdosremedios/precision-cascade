@@ -44,13 +44,21 @@ class BenchmarkBase: public TestBase
 protected:
 
     const int n_runs = 10;
-    const int prototying_n_speed_up = 5;
+    bool prototyping_speed_up = true;
     const fs::path data_dir = (
         fs::current_path() / fs::path("..") /
         fs::path("test") / fs::path("benchmarking") / fs::path("data")
     );
 
 public:
+
+    int dense_start = 2500;
+    int dense_stop = 20001;
+    int dense_incr = (prototyping_speed_up) ? dense_stop : 2500;
+
+    int sparse_start = 25000;
+    int sparse_stop = 200001;
+    int sparse_incr = (prototyping_speed_up) ? sparse_stop : 25000;
 
     void SetUp() {
         TestBase::SetUp();
@@ -66,9 +74,11 @@ public:
         Benchmark_AccumulatingClock &benchmark_clock,
         std::string label=""
     ) {
+
         for (int i=0; i<n; ++i) {
             f(benchmark_clock);
         }
+
         std::string label_formatted = (label == "") ? "" : std::format(" {}", label);
         std::cout << std::format(
                         "[Benchmark{}] runs: {} | avg: {} | median: {} | total: {}",
@@ -79,14 +89,16 @@ public:
                         benchmark_clock.get_total()
                      )
                   << std::endl;
+
     }
 
     template <template <typename> typename M, typename T>
-    void basic_func_benchmark(
-        int two_pow_n_start,
-        int two_pow_n_end,
+    void benchmark_exec_func(
+        int m_start_incl,
+        int m_stop_excl,
+        int m_incr,
         std::function<M<T> (int, int)> make_A,
-        std::function<void (M<T> &, Vector<T> &)> execute_func,
+        std::function<void (Benchmark_AccumulatingClock &, M<T> &)> exec_func,
         std::string label
     ) {
 
@@ -103,27 +115,27 @@ public:
             );
         }
 
-        for (int n=two_pow_n_start; n<=two_pow_n_end; ++n) {
+        std::vector<int> exp_m_values;
+        for (int m = m_start_incl; m < m_stop_excl; m += m_incr) {
+            exp_m_values.push_back(m);
+        }
+
+        for (int m : exp_m_values) {
 
             Benchmark_AccumulatingClock curr_clock;
 
-            int m = std::pow(2, n);
-
             M<T> A = make_A(m, m);
-            std::function<void(Benchmark_AccumulatingClock &)> test_func = [m, execute_func, &A](
+            std::function<void(Benchmark_AccumulatingClock &)> test_func = [exec_func, &A](
                 Benchmark_AccumulatingClock &arg_clock
             ) {
-                Vector<T> b = Vector<T>::Random(TestBase::bundle, m);
-                arg_clock.clock_start();
-                execute_func(A, b);
-                arg_clock.clock_stop();
+                exec_func(arg_clock, A);
             };
 
             benchmark_n_runs(
                 n_runs,
                 test_func,
                 curr_clock,
-                label + std::format("_2^{:d}", n)
+                label + std::format("{}", m)
             );
 
             f_out << std::format("{},{}", m, curr_clock.get_median().count()) << std::endl; 
