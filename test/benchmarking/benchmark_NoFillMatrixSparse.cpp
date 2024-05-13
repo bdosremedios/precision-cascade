@@ -9,23 +9,7 @@
 
 #include "include/benchmark_Sparse.h"
 
-class NoFillMatrixSparse_Benchmark: public Benchmark_Sparse
-{
-public:
-
-    std::function<NoFillMatrixSparse<double> (int, int)> make_low_tri_A = [this] (
-        int m, int n
-    ) -> NoFillMatrixSparse<double> {
-        return make_lower_tri(make_A_dbl(m, n));
-    };
-    
-    std::function<NoFillMatrixSparse<double> (int, int)> make_upp_tri_A = [this] (
-        int m, int n
-    ) -> NoFillMatrixSparse<double> {
-        return make_upper_tri(make_A_dbl(m, n));
-    };
-
-};
+class NoFillMatrixSparse_Benchmark: public Benchmark_Sparse {};
 
 TEST_F(NoFillMatrixSparse_Benchmark, MatrixVectorMult_Double_BENCHMARK) {
 

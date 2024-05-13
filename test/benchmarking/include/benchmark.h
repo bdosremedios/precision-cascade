@@ -135,7 +135,7 @@ public:
                 n_runs,
                 test_func,
                 curr_clock,
-                label + std::format("{}", m)
+                label + std::format("_{}", m)
             );
 
             f_out << std::format("{},{}", m, curr_clock.get_median().count()) << std::endl; 

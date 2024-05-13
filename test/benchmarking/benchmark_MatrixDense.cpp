@@ -16,13 +16,13 @@ public:
     std::function<MatrixDense<double> (int, int)> make_low_tri_A = [this] (
         int m, int n
     ) -> MatrixDense<double> {
-        return make_lower_tri(make_A(m, n));
+        return MatrixDense<double>::Random_LT(TestBase::bundle, m, m);
     };
     
     std::function<MatrixDense<double> (int, int)> make_upp_tri_A = [this] (
         int m, int n
     ) -> MatrixDense<double> {
-        return make_upper_tri(make_A(m, n));
+        return MatrixDense<double>::Random_UT(TestBase::bundle, m, m);
     };
 
 };

@@ -42,6 +42,24 @@ public:
         );
     };
 
+    std::function<NoFillMatrixSparse<double> (int, int)> make_low_tri_A = [this] (
+        int m, int n
+    ) -> NoFillMatrixSparse<double> {
+        return NoFillMatrixSparse<double>::Random_LT(
+            TestBase::bundle, m, m,
+            (col_non_zeros/static_cast<double>(m) > 1) ? 1 : col_non_zeros/static_cast<double>(m)
+        );
+    };
+    
+    std::function<NoFillMatrixSparse<double> (int, int)> make_upp_tri_A = [this] (
+        int m, int n
+    ) -> NoFillMatrixSparse<double> {
+        return NoFillMatrixSparse<double>::Random_UT(
+            TestBase::bundle, m, m,
+            (col_non_zeros/static_cast<double>(m) > 1) ? 1 : col_non_zeros/static_cast<double>(m)
+        );
+    };
+
 };
 
 #endif

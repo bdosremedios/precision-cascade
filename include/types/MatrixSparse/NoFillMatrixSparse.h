@@ -723,6 +723,124 @@ public:
 
     }
 
+    static NoFillMatrixSparse<T> Random_UT(
+        const cuHandleBundle &arg_cu_handles, int arg_m_rows, int arg_n_cols, double fill_prob
+    ) {
+
+        if (!((0. <= fill_prob) && (fill_prob <= 1.))) {
+            throw std::runtime_error("NoFillMatrixSparse: Random invalid fill_prob");
+        }
+        
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_real_distribution<double> val_dist(-1., 1.);
+        std::uniform_real_distribution<double> fill_prob_dist(0., 1.);
+
+        int *h_col_offsets = static_cast<int *>(malloc((arg_n_cols+1)*sizeof(int)));
+        std::vector<int> h_vec_row_indices;
+        std::vector<T> h_vec_vals;
+
+        int curr_nnz = 0;
+        for (int j=0; j<arg_n_cols; ++j) {
+            h_col_offsets[j] = curr_nnz;
+            for (int i=0; ((i <= j) && (i < arg_m_rows)); ++i) {
+                // Enforce diagonal is non-zero for sake of non-singularity
+                if (i == j) {
+                    T val = val_dist(gen);
+                    while (val == static_cast<T>(0.)) {
+                        val = val_dist(gen);
+                    }
+                    h_vec_row_indices.push_back(i);
+                    h_vec_vals.push_back(val);
+                    ++curr_nnz;
+                } else if ((fill_prob != 0.) && (fill_prob_dist(gen) <= fill_prob)) {
+                    T val = val_dist(gen);
+                    if (val != static_cast<T>(0.)) {
+                        h_vec_row_indices.push_back(i);
+                        h_vec_vals.push_back(val);
+                        ++curr_nnz;
+                    }
+                }
+            }
+        }
+        h_col_offsets[arg_n_cols] = curr_nnz;
+
+        NoFillMatrixSparse<T> created_mat(arg_cu_handles);
+        if (curr_nnz != 0) {
+            created_mat = NoFillMatrixSparse<T>(
+                arg_cu_handles,
+                h_col_offsets, &h_vec_row_indices[0], &h_vec_vals[0],
+                arg_m_rows, arg_n_cols, curr_nnz
+            );
+        } else {
+            created_mat = NoFillMatrixSparse<T>(arg_cu_handles, arg_m_rows, arg_n_cols);
+        }
+
+        free(h_col_offsets);
+
+        return created_mat;
+
+    }
+
+    static NoFillMatrixSparse<T> Random_LT(
+        const cuHandleBundle &arg_cu_handles, int arg_m_rows, int arg_n_cols, double fill_prob
+    ) {
+
+        if (!((0. <= fill_prob) && (fill_prob <= 1.))) {
+            throw std::runtime_error("NoFillMatrixSparse: Random invalid fill_prob");
+        }
+        
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_real_distribution<double> val_dist(-1., 1.);
+        std::uniform_real_distribution<double> fill_prob_dist(0., 1.);
+
+        int *h_col_offsets = static_cast<int *>(malloc((arg_n_cols+1)*sizeof(int)));
+        std::vector<int> h_vec_row_indices;
+        std::vector<T> h_vec_vals;
+
+        int curr_nnz = 0;
+        for (int j=0; j<arg_n_cols; ++j) {
+            h_col_offsets[j] = curr_nnz;
+            for (int i=j; i<arg_m_rows; ++i) {
+                // Enforce diagonal is non-zero for sake of non-singularity
+                if (i == j) {
+                    T val = val_dist(gen);
+                    while (val == static_cast<T>(0.)) {
+                        val = val_dist(gen);
+                    }
+                    h_vec_row_indices.push_back(i);
+                    h_vec_vals.push_back(val);
+                    ++curr_nnz;
+                } else if ((fill_prob != 0.) && (fill_prob_dist(gen) <= fill_prob)) {
+                    T val = val_dist(gen);
+                    if (val != static_cast<T>(0.)) {
+                        h_vec_row_indices.push_back(i);
+                        h_vec_vals.push_back(val);
+                        ++curr_nnz;
+                    }
+                }
+            }
+        }
+        h_col_offsets[arg_n_cols] = curr_nnz;
+
+        NoFillMatrixSparse<T> created_mat(arg_cu_handles);
+        if (curr_nnz != 0) {
+            created_mat = NoFillMatrixSparse<T>(
+                arg_cu_handles,
+                h_col_offsets, &h_vec_row_indices[0], &h_vec_vals[0],
+                arg_m_rows, arg_n_cols, curr_nnz
+            );
+        } else {
+            created_mat = NoFillMatrixSparse<T>(arg_cu_handles, arg_m_rows, arg_n_cols);
+        }
+
+        free(h_col_offsets);
+
+        return created_mat;
+
+    }
+
     // *** Explicit Cast ***
     template <typename Cast_T>
     NoFillMatrixSparse<Cast_T> cast() const {

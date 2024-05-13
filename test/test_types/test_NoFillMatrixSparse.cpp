@@ -445,8 +445,8 @@ public:
         );
         ASSERT_EQ(test_rand_full.rows(), m_rand);
         ASSERT_EQ(test_rand_full.cols(), n_rand);
-        for (int i=1; i<m_rand-1; ++i) {
-            for (int j=1; j<n_rand-1; ++j) {
+        for (int j=1; j<n_rand-1; ++j) {
+            for (int i=1; i<m_rand-1; ++i) {
                 ASSERT_TRUE(
                     (((test_rand_full.get_elem(i, j).get_scalar() !=
                        test_rand_full.get_elem(i-1, j).get_scalar()) ||
@@ -477,8 +477,8 @@ public:
         );
         ASSERT_EQ(test_rand_67.rows(), m_rand);
         ASSERT_EQ(test_rand_67.cols(), n_rand);
-        for (int i=1; i<m_rand-1; ++i) {
-            for (int j=1; j<n_rand-1; ++j) {
+        for (int j=1; j<n_rand-1; ++j) {
+            for (int i=1; i<m_rand-1; ++i) {
                 ASSERT_TRUE(
                     (((test_rand_67.get_elem(i, j).get_scalar() != test_rand_67.get_elem(i-1, j).get_scalar()) ||
                       (test_rand_67.get_elem(i, j).get_scalar() != test_rand_67.get_elem(i+1, j).get_scalar()) ||
@@ -505,8 +505,8 @@ public:
         );
         ASSERT_EQ(test_rand_50.rows(), m_rand);
         ASSERT_EQ(test_rand_50.cols(), n_rand);
-        for (int i=1; i<m_rand-1; ++i) {
-            for (int j=1; j<n_rand-1; ++j) {
+        for (int j=1; j<n_rand-1; ++j) {
+            for (int i=1; i<m_rand-1; ++i) {
                 ASSERT_TRUE(
                     (((test_rand_50.get_elem(i, j).get_scalar() != test_rand_50.get_elem(i-1, j).get_scalar()) ||
                       (test_rand_50.get_elem(i, j).get_scalar() != test_rand_50.get_elem(i+1, j).get_scalar()) ||
@@ -527,6 +527,321 @@ public:
             0.5,
             miss_tol
         );
+
+    }
+
+    template <typename T>
+    void TestRandomUTMatrixCreation(int m_rand, int n_rand) {
+
+        constexpr double miss_tol(0.1);
+        int min_dim;
+        int max_non_zeros;
+        if (m_rand >= n_rand) {
+            min_dim = n_rand;
+            max_non_zeros = (n_rand*n_rand-n_rand)/2;
+        } else {
+            max_non_zeros = (m_rand*m_rand-m_rand)/2+(n_rand-m_rand)*m_rand;
+            min_dim = m_rand;
+        }
+        
+
+        // Check that zero fill_prob just gives diagonal matrix
+        NoFillMatrixSparse<T> test_rand_just_diag(
+            NoFillMatrixSparse<T>::Random_UT(TestBase::bundle, m_rand, n_rand, 0.)
+        );
+        ASSERT_EQ(test_rand_just_diag.rows(), m_rand);
+        ASSERT_EQ(test_rand_just_diag.cols(), n_rand);
+        ASSERT_EQ(test_rand_just_diag.non_zeros(), min_dim);
+
+        // Just test for non-zero fill_prob gives right size and numbers aren't generally the same
+        // (check middle numbers are different from 5 adjacent above and below or all are equally zero)
+        // also check if fill probability is right with 5% error
+        NoFillMatrixSparse<T> test_rand_full(
+            NoFillMatrixSparse<T>::Random_UT(TestBase::bundle, m_rand, n_rand, 1.)
+        );
+
+        ASSERT_EQ(test_rand_full.rows(), m_rand);
+        ASSERT_EQ(test_rand_full.cols(), n_rand);
+
+        for (int j=1; j<n_rand-1; ++j) {
+            for (int i=1; ((i < j) && (i < m_rand-1)); ++i) {
+                ASSERT_TRUE(
+                    (((test_rand_full.get_elem(i, j).get_scalar() !=
+                       test_rand_full.get_elem(i-1, j).get_scalar()) ||
+                      (test_rand_full.get_elem(i, j).get_scalar() !=
+                       test_rand_full.get_elem(i+1, j).get_scalar()) ||
+                      (test_rand_full.get_elem(i, j).get_scalar() !=
+                       test_rand_full.get_elem(i, j-1).get_scalar()) ||
+                      (test_rand_full.get_elem(i, j).get_scalar() !=
+                       test_rand_full.get_elem(i, j+1).get_scalar()))
+                     ||
+                     ((test_rand_full.get_elem(i, j).get_scalar() == static_cast<T>(0.)) &&
+                      (test_rand_full.get_elem(i-1, j).get_scalar() == static_cast<T>(0.)) &&
+                      (test_rand_full.get_elem(i+1, j).get_scalar() == static_cast<T>(0.)) &&
+                      (test_rand_full.get_elem(i, j-1).get_scalar() == static_cast<T>(0.)) &&
+                      (test_rand_full.get_elem(i, j+1).get_scalar() == static_cast<T>(0.))))
+                );
+            }
+        }
+
+        ASSERT_NEAR(
+            (static_cast<T>(test_rand_full.non_zeros()-m_rand)/static_cast<T>(max_non_zeros)),
+            1.,
+            miss_tol
+        );
+
+        // Check non-zero diagonal
+        for (int i=0; i<min_dim; ++i) {
+            ASSERT_FALSE(test_rand_full.get_elem(i, i).get_scalar() == static_cast<T>(0.));
+        }
+
+        // Check zero below diagonal
+        for (int j=0; j<n_rand; ++j) {
+            for (int i=j+1; i<m_rand; ++i) {
+                ASSERT_EQ(test_rand_full.get_elem(i, j).get_scalar(), static_cast<T>(0.));
+            }
+        }
+
+        NoFillMatrixSparse<T> test_rand_67(
+            NoFillMatrixSparse<T>::Random_UT(TestBase::bundle, m_rand, n_rand, 0.67)
+        );
+
+        ASSERT_EQ(test_rand_67.rows(), m_rand);
+        ASSERT_EQ(test_rand_67.cols(), n_rand);
+
+        for (int j=1; j<n_rand-1; ++j) {
+            for (int i=1; ((i < j) && (i < m_rand-1)); ++i) {
+                ASSERT_TRUE(
+                    (((test_rand_67.get_elem(i, j).get_scalar() != test_rand_67.get_elem(i-1, j).get_scalar()) ||
+                      (test_rand_67.get_elem(i, j).get_scalar() != test_rand_67.get_elem(i+1, j).get_scalar()) ||
+                      (test_rand_67.get_elem(i, j).get_scalar() != test_rand_67.get_elem(i, j-1).get_scalar()) ||
+                      (test_rand_67.get_elem(i, j).get_scalar() != test_rand_67.get_elem(i, j+1).get_scalar()))
+                     ||
+                     ((test_rand_67.get_elem(i, j).get_scalar() == static_cast<T>(0.)) &&
+                      (test_rand_67.get_elem(i-1, j).get_scalar() == static_cast<T>(0.)) &&
+                      (test_rand_67.get_elem(i+1, j).get_scalar() == static_cast<T>(0.)) &&
+                      (test_rand_67.get_elem(i, j-1).get_scalar() == static_cast<T>(0.)) &&
+                      (test_rand_67.get_elem(i, j+1).get_scalar() == static_cast<T>(0.))))
+                );
+            }
+        }
+
+        ASSERT_NEAR(
+            (static_cast<T>(test_rand_67.non_zeros()-m_rand)/static_cast<T>(max_non_zeros)),
+            0.67,
+            miss_tol
+        );
+
+        // Check non-zero diagonal
+        for (int i=0; i<min_dim; ++i) {
+            ASSERT_FALSE(test_rand_67.get_elem(i, i).get_scalar() == static_cast<T>(0.));
+        }
+
+        // Check zero below diagonal
+        for (int j=0; j<n_rand; ++j) {
+            for (int i=j+1; i<m_rand; ++i) {
+                ASSERT_EQ(test_rand_67.get_elem(i, j).get_scalar(), static_cast<T>(0.));
+            }
+        }
+
+        NoFillMatrixSparse<T> test_rand_50(
+            NoFillMatrixSparse<T>::Random_UT(TestBase::bundle, m_rand, n_rand, 0.5)
+        );
+
+        ASSERT_EQ(test_rand_50.rows(), m_rand);
+        ASSERT_EQ(test_rand_50.cols(), n_rand);
+
+        for (int j=1; j<n_rand-1; ++j) {
+            for (int i=1; ((i < j) && (i < m_rand-1)); ++i) {
+                ASSERT_TRUE(
+                    (((test_rand_50.get_elem(i, j).get_scalar() != test_rand_50.get_elem(i-1, j).get_scalar()) ||
+                      (test_rand_50.get_elem(i, j).get_scalar() != test_rand_50.get_elem(i+1, j).get_scalar()) ||
+                      (test_rand_50.get_elem(i, j).get_scalar() != test_rand_50.get_elem(i, j-1).get_scalar()) ||
+                      (test_rand_50.get_elem(i, j).get_scalar() != test_rand_50.get_elem(i, j+1).get_scalar()))
+                     ||
+                     ((test_rand_50.get_elem(i, j).get_scalar() == static_cast<T>(0.)) &&
+                      (test_rand_50.get_elem(i-1, j).get_scalar() == static_cast<T>(0.)) &&
+                      (test_rand_50.get_elem(i+1, j).get_scalar() == static_cast<T>(0.)) &&
+                      (test_rand_50.get_elem(i, j-1).get_scalar() == static_cast<T>(0.)) &&
+                      (test_rand_50.get_elem(i, j+1).get_scalar() == static_cast<T>(0.))))
+                );
+            }
+        }
+
+        ASSERT_NEAR(
+            (static_cast<T>(test_rand_50.non_zeros()-min_dim)/static_cast<T>(static_cast<T>(max_non_zeros))),
+            0.5,
+            miss_tol
+        );
+
+        // Check non-zero diagonal
+        for (int i=0; i<min_dim; ++i) {
+            ASSERT_FALSE(test_rand_50.get_elem(i, i).get_scalar() == static_cast<T>(0.));
+        }
+
+        // Check zero below diagonal
+        for (int j=0; j<n_rand; ++j) {
+            for (int i=j+1; i<m_rand; ++i) {
+                ASSERT_EQ(test_rand_67.get_elem(i, j).get_scalar(), static_cast<T>(0.));
+            }
+        }
+
+    }
+
+    template <typename T>
+    void TestRandomLTMatrixCreation(int m_rand, int n_rand) {
+
+        constexpr double miss_tol(0.1);
+        int min_dim;
+        int max_non_zeros;
+        if (m_rand >= n_rand) {
+            max_non_zeros = (n_rand*n_rand-n_rand)/2+(m_rand-n_rand)*n_rand;
+            min_dim = n_rand;
+        } else {
+            max_non_zeros = (m_rand*m_rand-m_rand)/2;
+            min_dim = m_rand;
+        }
+
+        // Check that zero fill_prob just gives diagonal matrix
+        NoFillMatrixSparse<T> test_rand_just_diag(
+            NoFillMatrixSparse<T>::Random_LT(TestBase::bundle, m_rand, n_rand, 0.)
+        );
+        ASSERT_EQ(test_rand_just_diag.rows(), m_rand);
+        ASSERT_EQ(test_rand_just_diag.cols(), n_rand);
+        ASSERT_EQ(test_rand_just_diag.non_zeros(), min_dim);
+
+        // Just test for non-zero fill_prob gives right size and numbers aren't generally the same
+        // (check middle numbers are different from 5 adjacent above and below or all are equally zero)
+        // also check if fill probability is right with 5% error
+        NoFillMatrixSparse<T> test_rand_full(
+            NoFillMatrixSparse<T>::Random_LT(TestBase::bundle, m_rand, n_rand, 1.)
+        );
+
+        ASSERT_EQ(test_rand_full.rows(), m_rand);
+        ASSERT_EQ(test_rand_full.cols(), n_rand);
+
+        for (int j=1; j<n_rand-1; ++j) {
+            for (int i=j+1; i<m_rand-1; ++i) {
+                ASSERT_TRUE(
+                    (((test_rand_full.get_elem(i, j).get_scalar() !=
+                       test_rand_full.get_elem(i-1, j).get_scalar()) ||
+                      (test_rand_full.get_elem(i, j).get_scalar() !=
+                       test_rand_full.get_elem(i+1, j).get_scalar()) ||
+                      (test_rand_full.get_elem(i, j).get_scalar() !=
+                       test_rand_full.get_elem(i, j-1).get_scalar()) ||
+                      (test_rand_full.get_elem(i, j).get_scalar() !=
+                       test_rand_full.get_elem(i, j+1).get_scalar()))
+                     ||
+                     ((test_rand_full.get_elem(i, j).get_scalar() == static_cast<T>(0.)) &&
+                      (test_rand_full.get_elem(i-1, j).get_scalar() == static_cast<T>(0.)) &&
+                      (test_rand_full.get_elem(i+1, j).get_scalar() == static_cast<T>(0.)) &&
+                      (test_rand_full.get_elem(i, j-1).get_scalar() == static_cast<T>(0.)) &&
+                      (test_rand_full.get_elem(i, j+1).get_scalar() == static_cast<T>(0.))))
+                );
+            }
+        }
+
+        ASSERT_NEAR(
+            (static_cast<T>(test_rand_full.non_zeros()-min_dim)/static_cast<T>(max_non_zeros)),
+            1.,
+            miss_tol
+        );
+
+        // Check non-zero diagonal
+        for (int i=0; i<min_dim; ++i) {
+            ASSERT_FALSE(test_rand_full.get_elem(i, i).get_scalar() == static_cast<T>(0.));
+        }
+
+        // Check zero above diagonal
+        for (int j=0; j<n_rand; ++j) {
+            for (int i=0; ((i < j) && (i < m_rand)); ++i) {
+                ASSERT_EQ(test_rand_full.get_elem(i, j).get_scalar(), static_cast<T>(0.));
+            }
+        }
+
+        NoFillMatrixSparse<T> test_rand_67(
+            NoFillMatrixSparse<T>::Random_LT(TestBase::bundle, m_rand, n_rand, 0.67)
+        );
+
+        ASSERT_EQ(test_rand_67.rows(), m_rand);
+        ASSERT_EQ(test_rand_67.cols(), n_rand);
+
+        for (int j=1; j<n_rand-1; ++j) {
+            for (int i=j+1; i<m_rand-1; ++i) {
+                ASSERT_TRUE(
+                    (((test_rand_67.get_elem(i, j).get_scalar() != test_rand_67.get_elem(i-1, j).get_scalar()) ||
+                      (test_rand_67.get_elem(i, j).get_scalar() != test_rand_67.get_elem(i+1, j).get_scalar()) ||
+                      (test_rand_67.get_elem(i, j).get_scalar() != test_rand_67.get_elem(i, j-1).get_scalar()) ||
+                      (test_rand_67.get_elem(i, j).get_scalar() != test_rand_67.get_elem(i, j+1).get_scalar()))
+                     ||
+                     ((test_rand_67.get_elem(i, j).get_scalar() == static_cast<T>(0.)) &&
+                      (test_rand_67.get_elem(i-1, j).get_scalar() == static_cast<T>(0.)) &&
+                      (test_rand_67.get_elem(i+1, j).get_scalar() == static_cast<T>(0.)) &&
+                      (test_rand_67.get_elem(i, j-1).get_scalar() == static_cast<T>(0.)) &&
+                      (test_rand_67.get_elem(i, j+1).get_scalar() == static_cast<T>(0.))))
+                );
+            }
+        }
+
+        ASSERT_NEAR(
+            (static_cast<T>(test_rand_67.non_zeros()-min_dim)/static_cast<T>(max_non_zeros)),
+            0.67,
+            miss_tol
+        );
+
+        // Check non-zero diagonal
+        for (int i=0; i<min_dim; ++i) {
+            ASSERT_FALSE(test_rand_67.get_elem(i, i).get_scalar() == static_cast<T>(0.));
+        }
+
+        // Check zero above diagonal
+        for (int j=0; j<n_rand; ++j) {
+            for (int i=0; ((i < j) && (i < m_rand)); ++i) {
+                ASSERT_EQ(test_rand_67.get_elem(i, j).get_scalar(), static_cast<T>(0.));
+            }
+        }
+
+        NoFillMatrixSparse<T> test_rand_50(
+            NoFillMatrixSparse<T>::Random_LT(TestBase::bundle, m_rand, n_rand, 0.5)
+        );
+
+        ASSERT_EQ(test_rand_50.rows(), m_rand);
+        ASSERT_EQ(test_rand_50.cols(), n_rand);
+
+        for (int j=1; j<n_rand-1; ++j) {
+            for (int i=j+1; i<m_rand-1; ++i) {
+                ASSERT_TRUE(
+                    (((test_rand_50.get_elem(i, j).get_scalar() != test_rand_50.get_elem(i-1, j).get_scalar()) ||
+                      (test_rand_50.get_elem(i, j).get_scalar() != test_rand_50.get_elem(i+1, j).get_scalar()) ||
+                      (test_rand_50.get_elem(i, j).get_scalar() != test_rand_50.get_elem(i, j-1).get_scalar()) ||
+                      (test_rand_50.get_elem(i, j).get_scalar() != test_rand_50.get_elem(i, j+1).get_scalar()))
+                     ||
+                     ((test_rand_50.get_elem(i, j).get_scalar() == static_cast<T>(0.)) &&
+                      (test_rand_50.get_elem(i-1, j).get_scalar() == static_cast<T>(0.)) &&
+                      (test_rand_50.get_elem(i+1, j).get_scalar() == static_cast<T>(0.)) &&
+                      (test_rand_50.get_elem(i, j-1).get_scalar() == static_cast<T>(0.)) &&
+                      (test_rand_50.get_elem(i, j+1).get_scalar() == static_cast<T>(0.))))
+                );
+            }
+        }
+
+        ASSERT_NEAR(
+            (static_cast<T>(test_rand_50.non_zeros()-min_dim)/static_cast<T>(static_cast<T>(max_non_zeros))),
+            0.5,
+            miss_tol
+        );
+
+        // Check non-zero diagonal
+        for (int i=0; i<min_dim; ++i) {
+            ASSERT_FALSE(test_rand_50.get_elem(i, i).get_scalar() == static_cast<T>(0.));
+        }
+
+        // Check zero above diagonal
+        for (int j=0; j<n_rand; ++j) {
+            for (int i=0; ((i < j) && (i < m_rand)); ++i) {
+                ASSERT_EQ(test_rand_67.get_elem(i, j).get_scalar(), static_cast<T>(0.));
+            }
+        }
 
     }
 
@@ -853,6 +1168,24 @@ TEST_F(NoFillMatrixSparse_Test, TestRandomMatrixCreation) {
     TestRandomMatrixCreation<double>();
 }
 
+TEST_F(NoFillMatrixSparse_Test, TestRandomUTMatrixCreation) {
+    TestRandomUTMatrixCreation<__half>(30, 40);
+    TestRandomUTMatrixCreation<__half>(40, 30);
+    TestRandomUTMatrixCreation<float>(30, 40);
+    TestRandomUTMatrixCreation<float>(40, 30);
+    TestRandomUTMatrixCreation<double>(30, 40);
+    TestRandomUTMatrixCreation<double>(40, 30);
+}
+
+TEST_F(NoFillMatrixSparse_Test, TestRandomLTMatrixCreation) {
+    TestRandomLTMatrixCreation<__half>(30, 40);
+    TestRandomLTMatrixCreation<__half>(40, 30);
+    TestRandomLTMatrixCreation<float>(30, 40);
+    TestRandomLTMatrixCreation<float>(40, 30);
+    TestRandomLTMatrixCreation<double>(30, 40);
+    TestRandomLTMatrixCreation<double>(40, 30);
+}
+
 TEST_F(NoFillMatrixSparse_Test, TestCol) {
     TestCol<__half>();
     TestCol<float>();
@@ -944,36 +1277,6 @@ TEST_F(NoFillMatrixSparse_Test, TestRandomTranspose) {
     TestRandomTranspose<float>();
     TestRandomTranspose<double>();
 }
-
-// TEST_F(NoFillMatrixSparse_Test, TestMatMat) {
-//     TestMatMat<__half>();
-//     TestMatMat<float>();
-//     TestMatMat<double>();
-// }
-
-// TEST_F(NoFillMatrixSparse_Test, TestBadMatMat) {
-//     TestBadMatMat<__half>();
-//     TestBadMatMat<float>();
-//     TestBadMatMat<double>();
-// }
-
-// TEST_F(NoFillMatrixSparse_Test, TestAddSub) {
-//     TestAddSub<__half>();
-//     TestAddSub<float>();
-//     TestAddSub<double>();
-// }
-
-// TEST_F(NoFillMatrixSparse_Test, TestBadAddSub) {
-//     TestBadAddSub<__half>();
-//     TestBadAddSub<float>();
-//     TestBadAddSub<double>();
-// }
-
-// TEST_F(NoFillMatrixSparse_Test, TestNorm) {
-//     TestNorm<__half>();
-//     TestNorm<float>();
-//     TestNorm<double>();
-// }
 
 TEST_F(NoFillMatrixSparse_Test, TestCast) {
     TestCast();
