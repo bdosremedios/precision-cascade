@@ -748,10 +748,6 @@ public:
 
         }
 
-        Vector<T> operator*(Vector<T> vec) {
-            return vec;
-        }
-
         Scalar<T> get_elem(int row, int col) {
 
             if ((row < 0) || (row >= m_rows)) {
