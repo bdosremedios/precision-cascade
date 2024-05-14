@@ -88,22 +88,22 @@ public:
 
 };
 
-TEST_F(PrecondArgPkg_Test, TestDefaultConstruction) {
+TEST_F(PrecondArgPkg_Test, TestDefaultConstruction_PRECONDITIONER) {
     TestDefaultConstruction<MatrixDense>();
     TestDefaultConstruction<NoFillMatrixSparse>();
 }
 
-TEST_F(PrecondArgPkg_Test, TestLeftPreconditionerSet) {
+TEST_F(PrecondArgPkg_Test, TestLeftPreconditionerSet_PRECONDITIONER) {
     TestLeftPreconditionerSet<MatrixDense>();
     TestLeftPreconditionerSet<NoFillMatrixSparse>();
 }
 
-TEST_F(PrecondArgPkg_Test, TestRightPreconditionerSet) {
+TEST_F(PrecondArgPkg_Test, TestRightPreconditionerSet_PRECONDITIONER) {
     TestRightPreconditionerSet<MatrixDense>();
     TestRightPreconditionerSet<NoFillMatrixSparse>();
 }
 
-TEST_F(PrecondArgPkg_Test, TestBothPreconditionerSet) {
+TEST_F(PrecondArgPkg_Test, TestBothPreconditionerSet_PRECONDITIONER) {
     TestBothPreconditionerSet<MatrixDense>();
     TestBothPreconditionerSet<NoFillMatrixSparse>();
 }

@@ -93,17 +93,17 @@ public:
 
 };
 
-TEST_F(MP_GMRES_IR_ComponentTest, Test_Constructor) {
+TEST_F(MP_GMRES_IR_ComponentTest, Test_Constructor_SOLVER) {
     TestConstructor<MatrixDense>();
     TestConstructor<NoFillMatrixSparse>();
 }
 
-TEST_F(MP_GMRES_IR_ComponentTest, Test_SetCorrectPhaseSolvers) {
+TEST_F(MP_GMRES_IR_ComponentTest, Test_SetCorrectPhaseSolvers_SOLVER) {
     TestOuterIterateCorrectSolvers<MatrixDense>();
     TestOuterIterateCorrectSolvers<NoFillMatrixSparse>();
 }
 
-TEST_F(MP_GMRES_IR_ComponentTest, Test_Reset) {
+TEST_F(MP_GMRES_IR_ComponentTest, Test_Reset_SOLVER) {
     TestReset<MatrixDense>();
     TestReset<NoFillMatrixSparse>();
 }

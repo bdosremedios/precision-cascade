@@ -19,6 +19,7 @@ public:
         ILUPreconditioner<M, double> ilu0(A, false);
         ILUPreconditioner<M, double> ilut0(A, 0., n, false);
         ASSERT_MATRIX_EQ(ilut0.get_U(), ilu0.get_U());
+        ASSERT_MATRIX_EQ(ilut0.get_L(), ilu0.get_L());
 
     }
 
@@ -200,37 +201,37 @@ public:
 
 };
 
-TEST_F(ILUTP_Test, TestEquivalentILUTNoDropAndDenseILU0) {
+TEST_F(ILUTP_Test, TestEquivalentILUTNoDropAndDenseILU0_PRECONDITIONER) {
     TestEquivalentILUTNoDropAndDenseILU0<MatrixDense>();
     TestEquivalentILUTNoDropAndDenseILU0<NoFillMatrixSparse>();
 }
 
-TEST_F(ILUTP_Test, TestILUTDropping) {
+TEST_F(ILUTP_Test, TestILUTDropping_PRECONDITIONER) {
     TestILUTDropping<MatrixDense>(false);
     TestILUTDropping<NoFillMatrixSparse>(false);
 }
 
-TEST_F(ILUTP_Test, TestILUTDropping_Pivoted) {
+TEST_F(ILUTP_Test, TestILUTDropping_Pivoted_PRECONDITIONER) {
     TestILUTDropping<MatrixDense>(true);
     TestILUTDropping<NoFillMatrixSparse>(true);
 }
 
-TEST_F(ILUTP_Test, TestILUTDroppingLimits) {
+TEST_F(ILUTP_Test, TestILUTDroppingLimits_PRECONDITIONER) {
     TestILUTDroppingLimits<MatrixDense>(false);
     TestILUTDroppingLimits<NoFillMatrixSparse>(false);
 }
 
-TEST_F(ILUTP_Test, TestILUTDroppingLimits_Pivoted) {
+TEST_F(ILUTP_Test, TestILUTDroppingLimits_Pivoted_PRECONDITIONER) {
     TestILUTDroppingLimits<MatrixDense>(true);
     TestILUTDroppingLimits<NoFillMatrixSparse>(true);
 }
 
-TEST_F(ILUTP_Test, TestKeepPLargest) {
+TEST_F(ILUTP_Test, TestKeepPLargest_PRECONDITIONER) {
     TestKeepPLargest<MatrixDense>(false);
     TestKeepPLargest<NoFillMatrixSparse>(false);
 }
 
-TEST_F(ILUTP_Test, TestKeepPLargest_Pivoted) {
+TEST_F(ILUTP_Test, TestKeepPLargest_Pivoted_PRECONDITIONER) {
     TestKeepPLargest<MatrixDense>(true);
     TestKeepPLargest<NoFillMatrixSparse>(true);
 }

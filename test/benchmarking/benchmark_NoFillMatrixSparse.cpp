@@ -113,12 +113,6 @@ TEST_F(NoFillMatrixSparse_Benchmark, TransposeMatrixVectorMult_Half_BENCHMARK) {
 
 }
 
-TEST_F(NoFillMatrixSparse_Benchmark, MatrixBlockVectorMult_BENCHMARK) {
-}
-
-TEST_F(NoFillMatrixSparse_Benchmark, TransposeMatrixBlockVectorMult_BENCHMARK) {
-}
-
 TEST_F(NoFillMatrixSparse_Benchmark, ForwardSubstitution_BENCHMARK) {
 
     std::function<void (Benchmark_AccumulatingClock &, NoFillMatrixSparse<double> &)> execute_func = [] (

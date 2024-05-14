@@ -72,17 +72,17 @@ public:
 
 };
 
-TEST_F(Preconditioner_Test, TestNoPreconditioner) {
+TEST_F(Preconditioner_Test, TestNoPreconditioner_PRECONDITIONER) {
     TestNoPreconditioner<MatrixDense>();
     TestNoPreconditioner<NoFillMatrixSparse>();
 }
 
-TEST_F(Preconditioner_Test, TestMatrixInversePreconditioner) {
+TEST_F(Preconditioner_Test, TestMatrixInversePreconditioner_PRECONDITIONER) {
     TestMatrixInversePreconditioner<MatrixDense>();
     TestMatrixInversePreconditioner<NoFillMatrixSparse>();
 }
 
-TEST_F(Preconditioner_Test, TestCastInverseMAction) {
+TEST_F(Preconditioner_Test, TestCastInverseMAction_PRECONDITIONER) {
     TestCastInverseMAction<MatrixDense>();
     TestCastInverseMAction<NoFillMatrixSparse>();
 }

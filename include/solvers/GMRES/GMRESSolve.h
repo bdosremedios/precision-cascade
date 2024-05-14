@@ -3,10 +3,24 @@
 
 #include "../IterativeSolve.h"
 
+#include <chrono>
+
 template <template <typename> typename M, typename T, typename W=T>
 class GMRESSolve: public TypedIterativeSolve<M, T>
 {
 protected:
+
+    std::chrono::high_resolution_clock clock;
+    std::chrono::time_point<std::chrono::high_resolution_clock> start;
+
+    void mark_start() {
+        start = clock.now();
+    }
+
+    void mark_stop(int m) {
+        std::cout << "Mark " << m << ": "
+                  << std::chrono::duration_cast<std::chrono::microseconds>(clock.now()-start);
+    }
 
     using TypedIterativeSolve<M, T>::typed_lin_sys;
     using TypedIterativeSolve<M, T>::init_guess_typed;
@@ -124,6 +138,15 @@ protected:
         // Generate next basis vector base
         next_q = apply_precond_A(Q_kry_basis.get_col(curr_kry_idx));
 
+        // Orthogonalize new basis vector with CGS2
+        // Vector<T> first_ortho(Q_kry_basis.transpose_prod_subset_cols(0, curr_kry_dim, next_q));
+        // next_q -= Q_kry_basis.mult_subset_cols(0, curr_kry_dim, first_ortho);
+        // Vector<T> second_ortho(Q_kry_basis.transpose_prod_subset_cols(0, curr_kry_dim, next_q));
+        // next_q -= Q_kry_basis.mult_subset_cols(0, curr_kry_dim, second_ortho);
+
+        // H_k.set_get_slice(0, curr_kry_dim, first_ortho + second_ortho);
+        // H_k.set_elem(curr_kry_idx+1, next_q.norm());
+
         // Orthogonalize basis vector to previous vectors
         for (int j=0; j<curr_kry_dim; ++j) {
             // MGS from newly orthog q used for orthogonalizing next vectors
@@ -145,7 +168,7 @@ protected:
         // Apply previous Given's rotations to new column
         H_R.get_block(0, curr_kry_idx, curr_kry_idx+1, 1).set_from_vec(
             H_Q.get_block(0, 0, curr_kry_idx+1, curr_kry_idx+1).copy_to_mat().transpose_prod(
-                H_k.slice(0, curr_kry_idx+1)
+                H_k.get_slice(0, curr_kry_idx+1)
             )
         );
 
@@ -180,7 +203,7 @@ protected:
         // Use back substitution to solve
         Vector<T> y(
             H_R.get_block(0, 0, curr_kry_dim, curr_kry_dim).copy_to_mat().back_sub(
-                rhs.slice(0, curr_kry_dim)
+                rhs.get_slice(0, curr_kry_dim)
             )
         );
 
@@ -206,19 +229,25 @@ protected:
         // Check isn't terminated and if exceeding max krylov dim, if is just do nothing
         if (!this->terminated) {
             if (curr_kry_dim < max_kry_dim) {
-                // std::cout << "Mark 0" << std::endl;
-                // std::cout << next_q.get_info_string() << std::endl;
+                // mark_start();
+                // update_subspace_k();
+                // mark_stop(1); std::cout << " | ";
+                // mark_start();
+                // update_nextq_and_Hkplus1();
+                // mark_stop(2); std::cout << " | ";
+                // mark_start();
+                // update_QR_fact();
+                // mark_stop(3); std::cout << " | ";
+                // mark_start();
+                // update_x_minimizing_res();
+                // mark_stop(4); std::cout << " | ";
+                // mark_start();
+                // check_termination();
+                // mark_stop(5);
+                // std::cout << std::endl;
                 update_subspace_k();
-                // std::cout << "Mark 1" << std::endl;
-                // std::cout << Q_kry_basis.get_col(0).copy_to_vec().get_info_string() << std::endl;
-                // std::cout << typed_lin_sys.get_A_typed().get_info_string() << std::endl;
-                // std::cout << (typed_lin_sys.get_A_typed()*Q_kry_basis.get_col(0)).get_info_string() << std::endl;
                 update_nextq_and_Hkplus1();
-                // std::cout << "Mark 2" << std::endl;
-                // std::cout << next_q.get_info_string() << std::endl;
                 update_QR_fact();
-                // std::cout << "Mark 3" << std::endl;
-                // std::cout << H_k.get_info_string() << std::endl;
                 update_x_minimizing_res();
                 check_termination();
             }

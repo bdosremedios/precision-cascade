@@ -35,7 +35,7 @@ public:
 
 };
 
-TEST_F(FP_GMRES_IR_Test, DoubleConvergenceTest_ConvDiff64) {
+TEST_F(FP_GMRES_IR_Test, DoubleConvergenceTest_ConvDiff64_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
@@ -49,7 +49,7 @@ TEST_F(FP_GMRES_IR_Test, DoubleConvergenceTest_ConvDiff64) {
 
 }
 
-TEST_F(FP_GMRES_IR_Test, DoubleConvergenceTest_ConvDiff256) {
+TEST_F(FP_GMRES_IR_Test, DoubleConvergenceTest_ConvDiff256_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_256_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_256_b.csv"));
@@ -63,7 +63,7 @@ TEST_F(FP_GMRES_IR_Test, DoubleConvergenceTest_ConvDiff256) {
 
 }
 
-TEST_F(FP_GMRES_IR_Test, DoubleConvergenceTest_ConvDiff1024_LONGRUNTIME) {
+TEST_F(FP_GMRES_IR_Test, DoubleConvergenceTest_ConvDiff1024_LONGRUNTIME_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_1024_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_1024_b.csv"));
@@ -77,7 +77,7 @@ TEST_F(FP_GMRES_IR_Test, DoubleConvergenceTest_ConvDiff1024_LONGRUNTIME) {
 
 }
 
-TEST_F(FP_GMRES_IR_Test, SingleConvergenceTest_ConvDiff64) {
+TEST_F(FP_GMRES_IR_Test, SingleConvergenceTest_ConvDiff64_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
@@ -91,7 +91,7 @@ TEST_F(FP_GMRES_IR_Test, SingleConvergenceTest_ConvDiff64) {
 
 }
 
-TEST_F(FP_GMRES_IR_Test, SingleConvergenceTest_ConvDiff256) {
+TEST_F(FP_GMRES_IR_Test, SingleConvergenceTest_ConvDiff256_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_256_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_256_b.csv"));
@@ -105,7 +105,7 @@ TEST_F(FP_GMRES_IR_Test, SingleConvergenceTest_ConvDiff256) {
 
 }
 
-TEST_F(FP_GMRES_IR_Test, SingleConvergenceTest_ConvDiff1024_LONGRUNTIME) {
+TEST_F(FP_GMRES_IR_Test, SingleConvergenceTest_ConvDiff1024_LONGRUNTIME_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_1024_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_1024_b.csv"));
@@ -120,7 +120,7 @@ TEST_F(FP_GMRES_IR_Test, SingleConvergenceTest_ConvDiff1024_LONGRUNTIME) {
 }
 
 
-TEST_F(FP_GMRES_IR_Test, HalfConvergenceTest_ConvDiff64) {
+TEST_F(FP_GMRES_IR_Test, HalfConvergenceTest_ConvDiff64_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
@@ -134,7 +134,7 @@ TEST_F(FP_GMRES_IR_Test, HalfConvergenceTest_ConvDiff64) {
 
 }
 
-TEST_F(FP_GMRES_IR_Test, HalfConvergenceTest_ConvDiff256) {
+TEST_F(FP_GMRES_IR_Test, HalfConvergenceTest_ConvDiff256_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_256_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_256_b.csv"));
@@ -148,7 +148,7 @@ TEST_F(FP_GMRES_IR_Test, HalfConvergenceTest_ConvDiff256) {
 
 }
 
-TEST_F(FP_GMRES_IR_Test, HalfConvergenceTest_ConvDiff1024_LONGRUNTIME) {
+TEST_F(FP_GMRES_IR_Test, HalfConvergenceTest_ConvDiff1024_LONGRUNTIME_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_1024_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_1024_b.csv"));

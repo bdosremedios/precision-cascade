@@ -213,12 +213,12 @@ public:
 
 };
 
-TEST_F(PGMRES_Solve_Test, TestDefaultandNoPreconditioningMatchesIdentity) {
+TEST_F(PGMRES_Solve_Test, TestDefaultandNoPreconditioningMatchesIdentity_SOLVER) {
     TestMatchIdentity<MatrixDense>();
     TestMatchIdentity<NoFillMatrixSparse>();
 }
 
-TEST_F(PGMRES_Solve_Test, TestLeftPreconditioning_RandA45) {
+TEST_F(PGMRES_Solve_Test, TestLeftPreconditioning_RandA45_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("A_inv_45.csv"));
     fs::path Ainv_path(solve_matrix_dir / fs::path("Ainv_inv_45.csv"));
@@ -229,7 +229,7 @@ TEST_F(PGMRES_Solve_Test, TestLeftPreconditioning_RandA45) {
 
 }
 
-TEST_F(PGMRES_Solve_Test, TestRightPreconditioning_RandA45) {
+TEST_F(PGMRES_Solve_Test, TestRightPreconditioning_RandA45_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("A_inv_45.csv"));
     fs::path Ainv_path(solve_matrix_dir / fs::path("Ainv_inv_45.csv"));
@@ -240,7 +240,7 @@ TEST_F(PGMRES_Solve_Test, TestRightPreconditioning_RandA45) {
 
 }
 
-TEST_F(PGMRES_Solve_Test, TestSymmeticPreconditioning_RandA45) {
+TEST_F(PGMRES_Solve_Test, TestSymmeticPreconditioning_RandA45_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("A_inv_45.csv"));
     fs::path Ainv_path(solve_matrix_dir / fs::path("Ainv_inv_45.csv"));
@@ -251,7 +251,7 @@ TEST_F(PGMRES_Solve_Test, TestSymmeticPreconditioning_RandA45) {
 
 }
 
-TEST_F(PGMRES_Solve_Test, TestLeftPreconditioning_3eigs) {
+TEST_F(PGMRES_Solve_Test, TestLeftPreconditioning_3eigs_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("A_25_saddle.csv"));
     fs::path Ainv_path(solve_matrix_dir / fs::path("A_25_invprecond_saddle.csv"));
@@ -263,7 +263,7 @@ TEST_F(PGMRES_Solve_Test, TestLeftPreconditioning_3eigs) {
 
 }
 
-TEST_F(PGMRES_Solve_Test, TestRightPreconditioning_3eigs) {
+TEST_F(PGMRES_Solve_Test, TestRightPreconditioning_3eigs_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("A_25_saddle.csv"));
     fs::path Ainv_path(solve_matrix_dir / fs::path("A_25_invprecond_saddle.csv"));

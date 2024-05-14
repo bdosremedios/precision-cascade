@@ -56,7 +56,7 @@ public:
 
 };
 
-TEST_F(Jacobi_Test, SolveConvDiff64Single_FailBeyondCapabilities) {
+TEST_F(Jacobi_Test, SolveConvDiff64Single_FailBeyondCapabilities_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
@@ -66,7 +66,7 @@ TEST_F(Jacobi_Test, SolveConvDiff64Single_FailBeyondCapabilities) {
 
 }
 
-TEST_F(Jacobi_Test, SolveConvDiff64Half) {
+TEST_F(Jacobi_Test, SolveConvDiff64Half_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
@@ -76,7 +76,7 @@ TEST_F(Jacobi_Test, SolveConvDiff64Half) {
 
 }
 
-TEST_F(Jacobi_Test, SolveConvDiff256Half_LONGRUNTIME) {
+TEST_F(Jacobi_Test, SolveConvDiff256Half_LONGRUNTIME_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_256_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_256_b.csv"));
@@ -86,7 +86,7 @@ TEST_F(Jacobi_Test, SolveConvDiff256Half_LONGRUNTIME) {
 
 }
 
-TEST_F(Jacobi_Test, SolveConvDiff64Half_FailBeyondCapabilities) {
+TEST_F(Jacobi_Test, SolveConvDiff64Half_FailBeyondCapabilities_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
@@ -96,7 +96,7 @@ TEST_F(Jacobi_Test, SolveConvDiff64Half_FailBeyondCapabilities) {
 
 }
 
-TEST_F(Jacobi_Test, SolveConvDiff64Single) {
+TEST_F(Jacobi_Test, SolveConvDiff64Single_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
@@ -106,7 +106,7 @@ TEST_F(Jacobi_Test, SolveConvDiff64Single) {
 
 }
 
-TEST_F(Jacobi_Test, SolveConvDiff256Single_LONGRUNTIME) {
+TEST_F(Jacobi_Test, SolveConvDiff256Single_LONGRUNTIME_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_256_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_256_b.csv"));
@@ -116,7 +116,7 @@ TEST_F(Jacobi_Test, SolveConvDiff256Single_LONGRUNTIME) {
 
 }
 
-TEST_F(Jacobi_Test, SolveConvDiff64Double) {
+TEST_F(Jacobi_Test, SolveConvDiff64Double_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
@@ -126,7 +126,7 @@ TEST_F(Jacobi_Test, SolveConvDiff64Double) {
 
 }
 
-TEST_F(Jacobi_Test, SolveConvDiff256Double_LONGRUNTIME) {
+TEST_F(Jacobi_Test, SolveConvDiff256Double_LONGRUNTIME_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_256_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_256_b.csv"));

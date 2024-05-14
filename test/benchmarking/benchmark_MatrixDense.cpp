@@ -63,11 +63,11 @@ TEST_F(MatrixDense_Benchmark, TransposeMatrixVectorMult_BENCHMARK) {
 
 }
 
-TEST_F(MatrixDense_Benchmark, MatrixBlockVectorMult_BENCHMARK) {
+TEST_F(MatrixDense_Benchmark, SubsetcolsMatrixVectorMult_BENCHMARK) {
 
 }
 
-TEST_F(MatrixDense_Benchmark, TransposeMatrixBlockVectorMult_BENCHMARK) {
+TEST_F(MatrixDense_Benchmark, SubsetcolsTransposeMatrixVectorMult_BENCHMARK) {
 
 }
 

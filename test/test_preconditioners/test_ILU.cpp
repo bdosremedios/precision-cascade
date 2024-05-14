@@ -143,37 +143,37 @@ public:
 
 };
 
-TEST_F(ILUPreconditioner_Test, TestSquareCheck) {
+TEST_F(ILUPreconditioner_Test, TestSquareCheck_PRECONDITIONER) {
     TestSquareCheck<MatrixDense>();
     TestSquareCheck<NoFillMatrixSparse>();
 }
 
-TEST_F(ILUPreconditioner_Test, TestCompatibilityCheck) {
+TEST_F(ILUPreconditioner_Test, TestCompatibilityCheck_PRECONDITIONER) {
     TestCompatibilityCheck<MatrixDense>();
     TestCompatibilityCheck<NoFillMatrixSparse>();
 }
 
-TEST_F(ILUPreconditioner_Test, TestZeroDiagonalEntries) {
+TEST_F(ILUPreconditioner_Test, TestZeroDiagonalEntries_PRECONDITIONER) {
     TestZeroDiagonalEntries<MatrixDense>();
     TestZeroDiagonalEntries<NoFillMatrixSparse>();
 }
 
-TEST_F(ILUPreconditioner_Test, TestApplyInverseM) {
+TEST_F(ILUPreconditioner_Test, TestApplyInverseM_PRECONDITIONER) {
     TestApplyInverseM<MatrixDense>();
     TestApplyInverseM<NoFillMatrixSparse>();
 }
 
-TEST_F(ILUPreconditioner_Test, TestApplyInverseM_Pivoted) {
+TEST_F(ILUPreconditioner_Test, TestApplyInverseM_Pivoted_PRECONDITIONER) {
     TestApplyInverseM_Pivoted<MatrixDense>();
     TestApplyInverseM_Pivoted<NoFillMatrixSparse>();
 }
 
-TEST_F(ILUPreconditioner_Test, TestILUPremadeErrorChecks) {
+TEST_F(ILUPreconditioner_Test, TestILUPremadeErrorChecks_PRECONDITIONER) {
     TestILUPremadeErrorChecks<MatrixDense>();
     TestILUPremadeErrorChecks<NoFillMatrixSparse>();
 }
 
-TEST_F(ILUPreconditioner_Test, TestDoubleSingleHalfCast) {
+TEST_F(ILUPreconditioner_Test, TestDoubleSingleHalfCast_PRECONDITIONER) {
     TestDoubleSingleHalfCast<MatrixDense>();
     TestDoubleSingleHalfCast<NoFillMatrixSparse>();
 }

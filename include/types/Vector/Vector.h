@@ -227,7 +227,7 @@ public:
 
     const Scalar<T> get_elem(int row) const { return get_elem(row, 0); }
 
-    void set_elem(int row, int col, Scalar<T> val) {
+    void set_elem(int row, int col, const Scalar<T> &val) {
 
         if (col != 0) {
             throw std::runtime_error("Vector: invalid vector col access in set_elem");
@@ -240,9 +240,9 @@ public:
 
     }
 
-    void set_elem(int row, Scalar<T> val) { set_elem(row, 0, val); }
+    void set_elem(int row, const Scalar<T> &val) { set_elem(row, 0, val); }
 
-    Vector<T> slice(int start, int m_elem) const {
+    Vector<T> get_slice(int start, int m_elem) const {
 
         if ((m_elem < 0) || ((start+m_elem) > m_rows)) {
             throw(std::runtime_error("Vector: slice size invalid"));
@@ -262,6 +262,8 @@ public:
         return created_vec;
 
     }
+
+    void set_slice(const Vector<T> &vec, int start, int m_elem) {}
 
     // *** Properties ***
     int rows() const { return m_rows; }

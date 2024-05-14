@@ -9,7 +9,7 @@ class Benchmark_Sparse: public Benchmark_Matrix
 {
 private:
 
-    const double col_non_zeros = 1000.;
+    const double col_non_zeros = 200.;
 
 public:
 

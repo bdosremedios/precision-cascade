@@ -58,6 +58,36 @@ int main(int argc, char **argv) {
             std::cout << "Running all tests..." << std::endl;
         }
 
+        // Check if should run preconditioner tests
+        bool no_preconditioners = false;
+        for (int i=0; i<argc; ++i) {
+            if ((std::string(argv[i]) == "--no_preconditioners") || (std::string(argv[i]) == "-np")) {
+                no_preconditioners = true;
+            }
+        }
+        if (no_preconditioners) {
+            std::cout << "Skipping preconditioner tests..." << std::endl;
+            if (filter_exclude != "") { filter_exclude += ":"; }
+            filter_exclude += "*_PRECONDITIONER*";
+        } else {
+            std::cout << "Running preconditioner tests..." << std::endl;
+        }
+
+        // Check if should run solver tests
+        bool no_solvers = false;
+        for (int i=0; i<argc; ++i) {
+            if ((std::string(argv[i]) == "--no_solvers") || (std::string(argv[i]) == "-ns")) {
+                no_solvers = true;
+            }
+        }
+        if (no_solvers) {
+            std::cout << "Skipping solver tests..." << std::endl;
+            if (filter_exclude != "") { filter_exclude += ":"; }
+            filter_exclude += "*_SOLVER*";
+        } else {
+            std::cout << "Running solver tests..." << std::endl;
+        }
+
         // Check if should run long tests
         bool run_long_tests = false;
         for (int i=0; i<argc; ++i) {
@@ -70,7 +100,7 @@ int main(int argc, char **argv) {
         } else {
             std::cout << "Skipping long tests..." << std::endl;
             if (filter_exclude != "") { filter_exclude += ":"; }
-            filter_exclude += "*LONGRUNTIME";
+            filter_exclude += "*_LONGRUNTIME*";
         }
 
     }

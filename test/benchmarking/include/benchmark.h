@@ -19,9 +19,9 @@ private:
 
     using acc_clock_duration = std::chrono::microseconds;
 
-    std::chrono::steady_clock clock;
-    std::chrono::time_point<std::chrono::steady_clock> start;
-    std::chrono::time_point<std::chrono::steady_clock> stop;
+    std::chrono::high_resolution_clock clock;
+    std::chrono::time_point<std::chrono::high_resolution_clock> start;
+    std::chrono::time_point<std::chrono::high_resolution_clock> stop;
 
     std::vector<acc_clock_duration> prev_durations;
 
@@ -44,7 +44,7 @@ class BenchmarkBase: public TestBase
 protected:
 
     const int n_runs = 10;
-    bool prototyping_speed_up = true;
+    bool prototyping_speed_up = false;
     const fs::path data_dir = (
         fs::current_path() / fs::path("..") /
         fs::path("test") / fs::path("benchmarking") / fs::path("data")
@@ -54,11 +54,11 @@ public:
 
     int dense_start = 2500;
     int dense_stop = 20001;
-    int dense_incr = (prototyping_speed_up) ? dense_stop : 2500;
+    int dense_incr = (prototyping_speed_up) ? (dense_stop-dense_start)/2 : 2500;
 
     int sparse_start = 25000;
     int sparse_stop = 200001;
-    int sparse_incr = (prototyping_speed_up) ? sparse_stop : 25000;
+    int sparse_incr = (prototyping_speed_up) ? (sparse_stop-sparse_start)/2 : 25000;
 
     void SetUp() {
         TestBase::SetUp();

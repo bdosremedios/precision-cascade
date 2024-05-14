@@ -510,62 +510,62 @@ public:
 
 };
 
-TEST_F(GMRESSolve_Component_Test, CheckConstruction5x5) {
+TEST_F(GMRESSolve_Component_Test, CheckConstruction5x5_SOLVER) {
     CheckConstruction<MatrixDense>(5);
     CheckConstruction<NoFillMatrixSparse>(5);
 }
 
-TEST_F(GMRESSolve_Component_Test, CheckConstruction64x64) {
+TEST_F(GMRESSolve_Component_Test, CheckConstruction64x64_SOLVER) {
     CheckConstruction<MatrixDense>(64);
     CheckConstruction<NoFillMatrixSparse>(64);
 }
 
-TEST_F(GMRESSolve_Component_Test, CheckCorrectDefaultMaxIter) {
+TEST_F(GMRESSolve_Component_Test, CheckCorrectDefaultMaxIter_SOLVER) {
     CheckCorrectDefaultMaxIter<MatrixDense>();
     CheckCorrectDefaultMaxIter<NoFillMatrixSparse>();
 }
 
-TEST_F(GMRESSolve_Component_Test, CheckErrorExceedDimension) {
+TEST_F(GMRESSolve_Component_Test, CheckErrorExceedDimension_SOLVER) {
     CheckErrorExceedDimension<MatrixDense>();
     CheckErrorExceedDimension<NoFillMatrixSparse>();
 }
 
-TEST_F(GMRESSolve_Component_Test, KrylovInitAndUpdate) {
+TEST_F(GMRESSolve_Component_Test, KrylovInitAndUpdate_SOLVER) {
     KrylovInitAndUpdate<MatrixDense>();
     KrylovInitAndUpdate<NoFillMatrixSparse>();
 }
 
-TEST_F(GMRESSolve_Component_Test, H_QR_Update) {
+TEST_F(GMRESSolve_Component_Test, H_QR_Update_SOLVER) {
     H_QR_Update<MatrixDense>();
     H_QR_Update<NoFillMatrixSparse>();
 }
 
-TEST_F(GMRESSolve_Component_Test, Update_x_Back_Substitution) {
+TEST_F(GMRESSolve_Component_Test, Update_x_Back_Substitution_SOLVER) {
     Update_x_Back_Substitution<MatrixDense>();
     Update_x_Back_Substitution<NoFillMatrixSparse>();
 }
 
-TEST_F(GMRESSolve_Component_Test, KrylovLuckyBreakFirstIter) {
+TEST_F(GMRESSolve_Component_Test, KrylovLuckyBreakFirstIter_SOLVER) {
     KrylovLuckyBreakFirstIter<MatrixDense>();
     KrylovLuckyBreakFirstIter<NoFillMatrixSparse>();
 }
 
-TEST_F(GMRESSolve_Component_Test, KrylovLuckyBreakLaterIter) {
+TEST_F(GMRESSolve_Component_Test, KrylovLuckyBreakLaterIter_SOLVER) {
     KrylovLuckyBreakLaterIter<MatrixDense>();
     KrylovLuckyBreakLaterIter<NoFillMatrixSparse>();
 }
 
-TEST_F(GMRESSolve_Component_Test, KrylovLuckyBreakThroughSolve) {
+TEST_F(GMRESSolve_Component_Test, KrylovLuckyBreakThroughSolve_SOLVER) {
     KrylovLuckyBreakThroughSolve<MatrixDense>();
     KrylovLuckyBreakThroughSolve<NoFillMatrixSparse>();
 }
 
-TEST_F(GMRESSolve_Component_Test, Solve) {
+TEST_F(GMRESSolve_Component_Test, Solve_SOLVER) {
     Solve<MatrixDense>();
     Solve<NoFillMatrixSparse>();
 }
 
-TEST_F(GMRESSolve_Component_Test, Reset) {
+TEST_F(GMRESSolve_Component_Test, Reset_SOLVER) {
     Reset<MatrixDense>();
     Reset<NoFillMatrixSparse>();
 }

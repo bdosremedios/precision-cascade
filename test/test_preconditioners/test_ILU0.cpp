@@ -116,17 +116,17 @@ public:
 
 };
 
-TEST_F(ILU0_Test, TestMatchesDenseLU) {
+TEST_F(ILU0_Test, TestMatchesDenseLU_PRECONDITIONER) {
     TestMatchesDenseLU<MatrixDense>();
     TestMatchesDenseLU<NoFillMatrixSparse>();
 }
 
-TEST_F(ILU0_Test, TestMatchesDenseLU_Pivoted) {
+TEST_F(ILU0_Test, TestMatchesDenseLU_Pivoted_PRECONDITIONER) {
     TestMatchesDenseLU_Pivoted<MatrixDense>();
     TestMatchesDenseLU_Pivoted<NoFillMatrixSparse>();
 }
 
-TEST_F(ILU0_Test, TestMatchesSparseILU0) {
+TEST_F(ILU0_Test, TestMatchesSparseILU0_PRECONDITIONER) {
     TestMatchesSparseILU0<MatrixDense>();
     TestMatchesSparseILU0<NoFillMatrixSparse>();
 }

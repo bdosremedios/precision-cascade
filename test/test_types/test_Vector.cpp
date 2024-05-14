@@ -53,30 +53,30 @@ public:
         Vector<T> test_vec_cnt(TestBase::bundle, cnt);
         for (int i=0; i<cnt; ++i) { test_vec_cnt.set_elem(i, static_cast<T>(1+i)); }
 
-        Vector<T> test_vec_cnt_2_6(test_vec_cnt.slice(2, 6));
+        Vector<T> test_vec_cnt_2_6(test_vec_cnt.get_slice(2, 6));
         ASSERT_EQ(test_vec_cnt_2_6.rows(), 6);
         for (int i=0; i<6; ++i) { ASSERT_EQ(test_vec_cnt_2_6.get_elem(i),
                                             test_vec_cnt.get_elem(i+2)); }
         
-        Vector<T> test_vec_m_1_3(test_vec_m.slice(1, 3));
+        Vector<T> test_vec_m_1_3(test_vec_m.get_slice(1, 3));
         ASSERT_EQ(test_vec_m_1_3.rows(), 3);
         for (int i=0; i<3; ++i) { ASSERT_EQ(test_vec_m_1_3.get_elem(i),
                                             test_vec_m.get_elem(i+1)); }
 
-        Vector<T> test_vec_n_0_4(test_vec_n.slice(0, 4));
+        Vector<T> test_vec_n_0_4(test_vec_n.get_slice(0, 4));
         ASSERT_EQ(test_vec_n_0_4.rows(), 4);
         for (int i=0; i<4; ++i) { ASSERT_EQ(test_vec_n_0_4.get_elem(i),
                                             test_vec_n.get_elem(i)); }
 
-        Vector<T> test_vec_m_dupe(test_vec_m.slice(0, m));
+        Vector<T> test_vec_m_dupe(test_vec_m.get_slice(0, m));
         ASSERT_EQ(test_vec_m_dupe.rows(), m);
         ASSERT_VECTOR_EQ(test_vec_m_dupe, test_vec_m);
 
-        Vector<T> test_vec_slice_empty(test_vec_m.slice(0, 0));
-        ASSERT_EQ(test_vec_slice_empty.rows(), 0);
+        Vector<T> test_vec_get_slice_empty(test_vec_m.get_slice(0, 0));
+        ASSERT_EQ(test_vec_get_slice_empty.rows(), 0);
 
-        Vector<T> test_vec_slice_empty_2(test_vec_n.slice(1, 0));
-        ASSERT_EQ(test_vec_slice_empty_2.rows(), 0);
+        Vector<T> test_vec_get_slice_empty_2(test_vec_n.get_slice(1, 0));
+        ASSERT_EQ(test_vec_get_slice_empty_2.rows(), 0);
 
     }
 
@@ -87,10 +87,10 @@ public:
         Vector<T> test_vec_m(TestBase::bundle, m);
         for (int i=0; i<m; ++i) { test_vec_m.set_elem(i, static_cast<T>(2*i*i-m)); }
 
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { test_vec_m.slice(1, -1); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { test_vec_m.slice(-1, 1); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { test_vec_m.slice(m, 1); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { test_vec_m.slice(0, m+1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { test_vec_m.get_slice(1, -1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { test_vec_m.get_slice(-1, 1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { test_vec_m.get_slice(m, 1); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { test_vec_m.get_slice(0, m+1); });
         
     }
 

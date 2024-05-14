@@ -31,7 +31,7 @@ public:
 
 };
 
-TEST_F(MP_GMRES_IR_SolveTest, SimpleConstantThreshold_ConvDiff64) {
+TEST_F(MP_GMRES_IR_SolveTest, SimpleConstantThreshold_ConvDiff64_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
@@ -41,7 +41,7 @@ TEST_F(MP_GMRES_IR_SolveTest, SimpleConstantThreshold_ConvDiff64) {
 
 }
 
-TEST_F(MP_GMRES_IR_SolveTest, SimpleConstantThreshold_ConvDiff256) {
+TEST_F(MP_GMRES_IR_SolveTest, SimpleConstantThreshold_ConvDiff256_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_256_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_256_b.csv"));
@@ -51,7 +51,7 @@ TEST_F(MP_GMRES_IR_SolveTest, SimpleConstantThreshold_ConvDiff256) {
 
 }
 
-TEST_F(MP_GMRES_IR_SolveTest, SimpleConstantThreshold_ConvDiff1024_LONGRUNTIME) {
+TEST_F(MP_GMRES_IR_SolveTest, SimpleConstantThreshold_ConvDiff1024_LONGRUNTIME_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_1024_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_1024_b.csv"));
@@ -61,7 +61,7 @@ TEST_F(MP_GMRES_IR_SolveTest, SimpleConstantThreshold_ConvDiff1024_LONGRUNTIME) 
 
 }
 
-TEST_F(MP_GMRES_IR_SolveTest, RestartCount_ConvDiff64) {
+TEST_F(MP_GMRES_IR_SolveTest, RestartCount_ConvDiff64_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
@@ -71,7 +71,7 @@ TEST_F(MP_GMRES_IR_SolveTest, RestartCount_ConvDiff64) {
 
 }
 
-TEST_F(MP_GMRES_IR_SolveTest, RestartCount_ConvDiff256) {
+TEST_F(MP_GMRES_IR_SolveTest, RestartCount_ConvDiff256_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_256_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_256_b.csv"));
@@ -81,7 +81,7 @@ TEST_F(MP_GMRES_IR_SolveTest, RestartCount_ConvDiff256) {
 
 }
 
-TEST_F(MP_GMRES_IR_SolveTest, RestartCount_ConvDiff1024_LONGRUNTIME) {
+TEST_F(MP_GMRES_IR_SolveTest, RestartCount_ConvDiff1024_LONGRUNTIME_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_1024_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_1024_b.csv"));
