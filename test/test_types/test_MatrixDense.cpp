@@ -438,6 +438,181 @@ public:
     }
 
     template <typename T>
+    void TestSubsetcolsMatVec() {
+
+        // Test manually
+        MatrixDense<T> mat(
+            TestBase::bundle,
+            {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3)},
+             {static_cast<T>(4), static_cast<T>(5), static_cast<T>(6)},
+             {static_cast<T>(7), static_cast<T>(8), static_cast<T>(9)},
+             {static_cast<T>(3), static_cast<T>(2), static_cast<T>(1)}}
+        );
+        Vector<T> mat_0(mat.get_col(0));
+        Vector<T> mat_1(mat.get_col(1));
+        Vector<T> mat_2(mat.get_col(2));
+
+        Vector<T> vec_2_0_1(TestBase::bundle, {static_cast<T>(0), static_cast<T>(1)});
+        Vector<T> vec_2_1_0(TestBase::bundle, {static_cast<T>(1), static_cast<T>(0)});
+        Vector<T> vec_2_1_01(TestBase::bundle, {static_cast<T>(1), static_cast<T>(0.1)});
+
+        // Test multiplication of first 2 columns
+        ASSERT_VECTOR_NEAR(mat.mult_subset_cols(0, 2, vec_2_0_1), mat_1, Tol<T>::gamma_T(2));
+        ASSERT_VECTOR_NEAR(mat.mult_subset_cols(0, 2, vec_2_1_0), mat_0, Tol<T>::gamma_T(2));
+        ASSERT_VECTOR_NEAR(
+            mat.mult_subset_cols(0, 2, vec_2_1_01),
+            mat_0+mat_1*Scalar<T>(static_cast<T>(0.1)),
+            Tol<T>::gamma_T(2)
+        );
+
+        // Test multiplication of last 2 columns
+        ASSERT_VECTOR_NEAR(mat.mult_subset_cols(1, 2, vec_2_0_1), mat_2, Tol<T>::gamma_T(2));
+        ASSERT_VECTOR_NEAR(mat.mult_subset_cols(1, 2, vec_2_1_0), mat_1, Tol<T>::gamma_T(2));
+        ASSERT_VECTOR_NEAR(
+            mat.mult_subset_cols(1, 2, vec_2_1_01),
+            mat_1+mat_2*Scalar<T>(static_cast<T>(0.1)),
+            Tol<T>::gamma_T(2)
+        );
+
+        // Test multiplication of all columns
+        Vector<T> vec_3_001_01_1(
+            TestBase::bundle,
+            {static_cast<T>(0.01), static_cast<T>(0.1), static_cast<T>(1.)}
+        );
+        ASSERT_VECTOR_NEAR(
+            mat.mult_subset_cols(0, 3, vec_3_001_01_1),
+            mat_0*Scalar<T>(static_cast<T>(0.01))+
+            mat_1*Scalar<T>(static_cast<T>(0.1))+
+            mat_2*Scalar<T>(static_cast<T>(1.)),
+            Tol<T>::gamma_T(3)
+        );
+
+        // Test multiplication of individual
+        Vector<T> vec_1_2(TestBase::bundle, {static_cast<T>(2.)});
+        ASSERT_VECTOR_NEAR(
+            mat.mult_subset_cols(0, 1, vec_1_2),
+            mat_0*Scalar<T>(static_cast<T>(2.)),
+            Tol<T>::roundoff_T()
+        );
+        ASSERT_VECTOR_NEAR(
+            mat.mult_subset_cols(1, 1, vec_1_2),
+            mat_1*Scalar<T>(static_cast<T>(2.)),
+            Tol<T>::roundoff_T()
+        );
+        ASSERT_VECTOR_NEAR(
+            mat.mult_subset_cols(2, 1, vec_1_2),
+            mat_2*Scalar<T>(static_cast<T>(2.)),
+            Tol<T>::roundoff_T()
+        );
+
+    }
+
+    template <typename T>
+    void TestRandomSubsetcolsMatVec() {
+
+        // Test manually
+        MatrixDense<T> mat(MatrixDense<T>::Random(TestBase::bundle, 4, 3));
+        Vector<T> mat_0(mat.get_col(0));
+        Vector<T> mat_1(mat.get_col(1));
+        Vector<T> mat_2(mat.get_col(2));
+
+        Vector<T> vec_2_0_1(TestBase::bundle, {static_cast<T>(0), static_cast<T>(1)});
+        Vector<T> vec_2_1_0(TestBase::bundle, {static_cast<T>(1), static_cast<T>(0)});
+        Vector<T> vec_2_1_01(TestBase::bundle, {static_cast<T>(1), static_cast<T>(0.1)});
+
+        // Test multiplication of first 2 columns
+        ASSERT_VECTOR_NEAR(mat.mult_subset_cols(0, 2, vec_2_0_1), mat_1, Tol<T>::gamma_T(2));
+        ASSERT_VECTOR_NEAR(mat.mult_subset_cols(0, 2, vec_2_1_0), mat_0, Tol<T>::gamma_T(2));
+        ASSERT_VECTOR_NEAR(
+            mat.mult_subset_cols(0, 2, vec_2_1_01),
+            mat_0+mat_1*Scalar<T>(static_cast<T>(0.1)),
+            Tol<T>::gamma_T(2)
+        );
+
+        // Test multiplication of last 2 columns
+        ASSERT_VECTOR_NEAR(mat.mult_subset_cols(1, 2, vec_2_0_1), mat_2, Tol<T>::gamma_T(2));
+        ASSERT_VECTOR_NEAR(mat.mult_subset_cols(1, 2, vec_2_1_0), mat_1, Tol<T>::gamma_T(2));
+        ASSERT_VECTOR_NEAR(
+            mat.mult_subset_cols(1, 2, vec_2_1_01),
+            mat_1+mat_2*Scalar<T>(static_cast<T>(0.1)),
+            Tol<T>::gamma_T(2)
+        );
+
+        // Test multiplication of all columns
+        Vector<T> vec_3_001_01_1(
+            TestBase::bundle,
+            {static_cast<T>(0.01), static_cast<T>(0.1), static_cast<T>(1.)}
+        );
+        ASSERT_VECTOR_NEAR(
+            mat.mult_subset_cols(0, 3, vec_3_001_01_1),
+            mat_0*Scalar<T>(static_cast<T>(0.01))+
+            mat_1*Scalar<T>(static_cast<T>(0.1))+
+            mat_2*Scalar<T>(static_cast<T>(1.)),
+            Tol<T>::gamma_T(3)
+        );
+
+        // Test multiplication of individual
+        Vector<T> vec_1_2(TestBase::bundle, {static_cast<T>(2.)});
+        ASSERT_VECTOR_NEAR(
+            mat.mult_subset_cols(0, 1, vec_1_2),
+            mat_0*Scalar<T>(static_cast<T>(2.)),
+            Tol<T>::roundoff_T()
+        );
+        ASSERT_VECTOR_NEAR(
+            mat.mult_subset_cols(1, 1, vec_1_2),
+            mat_1*Scalar<T>(static_cast<T>(2.)),
+            Tol<T>::roundoff_T()
+        );
+        ASSERT_VECTOR_NEAR(
+            mat.mult_subset_cols(2, 1, vec_1_2),
+            mat_2*Scalar<T>(static_cast<T>(2.)),
+            Tol<T>::roundoff_T()
+        );
+
+    }
+
+    template <typename T>
+    void TestBadSubsetcolsMatVec() {
+
+        MatrixDense<T> mat(
+            TestBase::bundle,
+            {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4)},
+             {static_cast<T>(5), static_cast<T>(6), static_cast<T>(7), static_cast<T>(8)},
+             {static_cast<T>(9), static_cast<T>(10), static_cast<T>(11), static_cast<T>(12)}}
+        );
+
+        Vector<T> valid_vec(
+            TestBase::bundle,
+            {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)}
+        );
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { mat.mult_subset_cols(-1, 3, valid_vec); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { mat.mult_subset_cols(4, 3, valid_vec); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { mat.mult_subset_cols(2, 3, valid_vec); });
+
+        Vector<T> empty_vec(TestBase::bundle, {});
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors,[=]() { mat.mult_subset_cols(0, 0, empty_vec); });
+
+        Vector<T> vec_too_small(
+            TestBase::bundle,
+            {static_cast<T>(1), static_cast<T>(1)}
+        );
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            [=]() { mat.mult_subset_cols(0, 3, vec_too_small); }
+        );
+
+        Vector<T> vec_too_large(
+            TestBase::bundle, 
+            {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)}
+        );
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,
+            [=]() { mat.mult_subset_cols(0, 3, vec_too_large); }
+        );
+    
+    }
+
+    template <typename T>
     void TestRandomTransposeMatVec() {
 
         // Test random
@@ -698,6 +873,24 @@ TEST_F(MatrixDense_Test, TestRandomMatVec) {
     TestRandomMatVec<__half>();
     TestRandomMatVec<float>();
     TestRandomMatVec<double>();
+}
+
+TEST_F(MatrixDense_Test, TestSubsetcolsMatVec) {
+    TestSubsetcolsMatVec<__half>();
+    TestSubsetcolsMatVec<float>();
+    TestSubsetcolsMatVec<double>();
+}
+
+TEST_F(MatrixDense_Test, TestRandomSubsetcolsMatVec) {
+    TestRandomSubsetcolsMatVec<__half>();
+    TestRandomSubsetcolsMatVec<float>();
+    TestRandomSubsetcolsMatVec<double>();
+}
+
+TEST_F(MatrixDense_Test, TestBadSubsetcolsMatVec) {
+    TestBadSubsetcolsMatVec<__half>();
+    TestBadSubsetcolsMatVec<float>();
+    TestBadSubsetcolsMatVec<double>();
 }
 
 TEST_F(MatrixDense_Test, TestBadMatVec) {

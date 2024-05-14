@@ -69,6 +69,36 @@ Vector<float> MatrixDense<float>::operator*(const Vector<float> &vec) const {
 
 }
 
+Vector<float> MatrixDense<float>::mult_subset_cols(int start, int cols, const Vector<float> &vec) const {
+
+    if ((start < 0) || ((start+cols) > n_cols) || (cols <= 0)) {
+        throw std::runtime_error("MatrixDense: invalid column values in mult_subset_cols");
+    }
+    if (vec.rows() != cols) {
+        throw std::runtime_error("MatrixDense: invalid vec in mult_subset_cols");
+    }
+
+    Vector<float> c(Vector<float>::Zero(cu_handles, m_rows));
+
+    check_cublas_status(
+        cublasGemmEx(
+            cu_handles.get_cublas_handle(),
+            CUBLAS_OP_N, CUBLAS_OP_N,
+            m_rows, 1, cols,
+            SCALAR_ONE_F.d_scalar,
+            d_mat+start*m_rows, CUDA_R_32F, m_rows,
+            vec.d_vec, CUDA_R_32F, n_cols,
+            SCALAR_ZERO_F.d_scalar,
+            c.d_vec, CUDA_R_32F, m_rows,
+            CUBLAS_COMPUTE_32F,
+            CUBLAS_GEMM_DEFAULT
+        )
+    );
+
+    return c;
+
+}
+
 Vector<float> MatrixDense<float>::transpose_prod(const Vector<float> &vec) const {
 
     if (vec.rows() != m_rows) { throw std::runtime_error("MatrixDense: invalid vec in transpose_prod"); }

@@ -34,6 +34,7 @@ public:
     static double roundoff();
     static T roundoff_T() { return static_cast<T>(roundoff()); }
     static double gamma(int n) { return n*roundoff()/(1-n*roundoff()); }  // 2002 Higham Ch.3
+    static T gamma_T(int n) { return static_cast<T>(gamma(n)); }
 
     // Algorithm accumulation error tolerance
     static double substitution_tol(double cond, int n) {

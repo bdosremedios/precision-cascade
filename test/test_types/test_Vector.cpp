@@ -136,38 +136,39 @@ public:
 
     }
 
+    template <typename T>
     void TestBadSetSlice() {
 
         constexpr int m(18);
-        Vector<double> test_vec_m(TestBase::bundle, m);
-        for (int i=0; i<m; ++i) { test_vec_m.set_elem(i, static_cast<double>(2*i*i-m)); }
+        Vector<T> test_vec_m(TestBase::bundle, m);
+        for (int i=0; i<m; ++i) { test_vec_m.set_elem(i, static_cast<T>(2*i*i-m)); }
 
-        auto inval_start_1 = [&test_vec_m]() {
-            Vector<double> valid_slice(TestBase::bundle, 1);
+        auto inval_start_1 = [&]() {
+            Vector<T> valid_slice(TestBase::bundle, 1);
             test_vec_m.set_slice(-1, 1, valid_slice);
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, inval_start_1);
 
-        auto inval_start_2 = [&test_vec_m]() {
-            Vector<double> valid_slice(TestBase::bundle, 1);
+        auto inval_start_2 = [&]() {
+            Vector<T> valid_slice(TestBase::bundle, 1);
             test_vec_m.set_slice(m, 1, valid_slice);
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, inval_start_2);
 
-        auto inval_size_1 = [&test_vec_m]() {
-            Vector<double> valid_slice(TestBase::bundle, 1);
+        auto inval_size_1 = [&]() {
+            Vector<T> valid_slice(TestBase::bundle, 1);
             test_vec_m.set_slice(0, -1, valid_slice);
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, inval_size_1);
 
-        auto inval_size_2 = [&test_vec_m]() {
-            Vector<double> valid_slice(TestBase::bundle, m+1);
+        auto inval_size_2 = [&]() {
+            Vector<T> valid_slice(TestBase::bundle, m+1);
             test_vec_m.set_slice(0, m+1, valid_slice);
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, inval_size_2);
 
-        auto mismatch_size = [&test_vec_m]() {
-            Vector<double> valid_slice(TestBase::bundle, 5);
+        auto mismatch_size = [&]() {
+            Vector<T> valid_slice(TestBase::bundle, 5);
             test_vec_m.set_slice(0, 6, valid_slice);
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, mismatch_size);
@@ -788,7 +789,9 @@ TEST_F(Vector_Test, TestSetSlice) {
 }
 
 TEST_F(Vector_Test, TestBadSetSlice) {
-    TestBadSetSlice();
+    TestBadSetSlice<__half>();
+    TestBadSetSlice<float>();
+    TestBadSetSlice<double>();
 }
 
 TEST_F(Vector_Test, TestPropertyMethods) {
