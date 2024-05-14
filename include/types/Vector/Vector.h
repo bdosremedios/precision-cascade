@@ -245,10 +245,10 @@ public:
     Vector<T> get_slice(int start, int m_elem) const {
 
         if ((m_elem < 0) || ((start+m_elem) > m_rows)) {
-            throw(std::runtime_error("Vector: slice size invalid"));
+            throw(std::runtime_error("Vector: get_slice size invalid"));
         }
         if ((start < 0) || (start >= m_rows)) {
-            throw(std::runtime_error("Vector: invalid slice start"));
+            throw(std::runtime_error("Vector: invalid get_slice start"));
         }
 
         Vector<T> created_vec(cu_handles, m_elem);
@@ -263,7 +263,25 @@ public:
 
     }
 
-    void set_slice(const Vector<T> &vec, int start, int m_elem) {}
+    void set_slice(int start, int m_elem, const Vector<T> &other) {
+
+        if ((m_elem < 0) || ((start+m_elem) > m_rows)) {
+            throw(std::runtime_error("Vector: set_slice size invalid"));
+        }
+        if ((start < 0) || (start >= m_rows)) {
+            throw(std::runtime_error("Vector: invalid set_slice start"));
+        }
+        if (other.rows() != m_elem) {
+            throw(std::runtime_error("Vector: set_slice given slice does not match m_elem"));
+        }
+
+        if (m_elem > 0) {
+            check_cuda_error(cudaMemcpy(
+                d_vec+start, other.d_vec, m_elem*sizeof(T), cudaMemcpyDeviceToDevice
+            ));
+        }
+
+    }
 
     // *** Properties ***
     int rows() const { return m_rows; }

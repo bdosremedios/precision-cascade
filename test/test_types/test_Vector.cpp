@@ -1,5 +1,7 @@
 #include "../test.h"
 
+#include <utility>
+
 #include "types/Vector/Vector.h"
 
 class Vector_Test: public TestBase
@@ -39,7 +41,7 @@ public:
     }
 
     template <typename T>
-    void TestSlice() {
+    void TestGetSlice() {
 
         constexpr int n(10);
         Vector<T> test_vec_n(TestBase::bundle, n);
@@ -80,18 +82,96 @@ public:
 
     }
 
-    template <typename T>
-    void TestBadSlice() {
+    void TestBadGetSlice() {
 
         constexpr int m(18);
-        Vector<T> test_vec_m(TestBase::bundle, m);
-        for (int i=0; i<m; ++i) { test_vec_m.set_elem(i, static_cast<T>(2*i*i-m)); }
+        Vector<double> test_vec_m(TestBase::bundle, m);
+        for (int i=0; i<m; ++i) { test_vec_m.set_elem(i, static_cast<double>(2*i*i-m)); }
 
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { test_vec_m.get_slice(1, -1); });
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { test_vec_m.get_slice(-1, 1); });
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { test_vec_m.get_slice(m, 1); });
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { test_vec_m.get_slice(0, m+1); });
         
+    }
+
+    template <typename T>
+    void TestSetSlice() {
+
+        constexpr int m(6);
+        Vector<double> test_vec(Vector<double>::Zero(TestBase::bundle, m));
+
+        Vector<double> slice_size_3(TestBase::bundle, {1, 2, 3});
+        Vector<double> target_vec_1(TestBase::bundle, {0, 1, 2, 3, 0, 0});
+
+        test_vec.set_slice(1, 3, slice_size_3);
+        ASSERT_VECTOR_EQ(test_vec, target_vec_1);
+
+        Vector<double> slice_size_2(TestBase::bundle, {1, 2});
+        Vector<double> target_vec_2(TestBase::bundle, {1, 2, 2, 3, 0, 0});
+
+        test_vec.set_slice(0, 2, slice_size_2);
+        ASSERT_VECTOR_EQ(test_vec, target_vec_2);
+
+        Vector<double> slice_size_1(TestBase::bundle, {1});
+        Vector<double> target_vec_3(TestBase::bundle, {1, 2, 2, 3, 0, 1});
+        Vector<double> target_vec_4(TestBase::bundle, {1, 2, 2, 3, 1, 1});
+
+        test_vec.set_slice(5, 1, slice_size_1);
+        ASSERT_VECTOR_EQ(test_vec, target_vec_3);
+
+        test_vec.set_slice(4, 1, slice_size_1);
+        ASSERT_VECTOR_EQ(test_vec, target_vec_4);
+
+        Vector<double> slice_size_6(TestBase::bundle, {2, 3, 4, 5, 6, 7});
+        Vector<double> target_vec_5(TestBase::bundle, {2, 3, 4, 5, 6, 7});
+
+        test_vec.set_slice(0, 6, slice_size_6);
+        ASSERT_VECTOR_EQ(test_vec, target_vec_5);
+
+        Vector<double> slice_size_0(TestBase::bundle, 0);
+
+        test_vec.set_slice(0, 0, slice_size_0);
+        ASSERT_VECTOR_EQ(test_vec, target_vec_5);
+
+    }
+
+    void TestBadSetSlice() {
+
+        constexpr int m(18);
+        Vector<double> test_vec_m(TestBase::bundle, m);
+        for (int i=0; i<m; ++i) { test_vec_m.set_elem(i, static_cast<double>(2*i*i-m)); }
+
+        auto inval_start_1 = [&test_vec_m]() {
+            Vector<double> valid_slice(TestBase::bundle, 1);
+            test_vec_m.set_slice(-1, 1, valid_slice);
+        };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, inval_start_1);
+
+        auto inval_start_2 = [&test_vec_m]() {
+            Vector<double> valid_slice(TestBase::bundle, 1);
+            test_vec_m.set_slice(m, 1, valid_slice);
+        };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, inval_start_2);
+
+        auto inval_size_1 = [&test_vec_m]() {
+            Vector<double> valid_slice(TestBase::bundle, 1);
+            test_vec_m.set_slice(0, -1, valid_slice);
+        };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, inval_size_1);
+
+        auto inval_size_2 = [&test_vec_m]() {
+            Vector<double> valid_slice(TestBase::bundle, m+1);
+            test_vec_m.set_slice(0, m+1, valid_slice);
+        };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, inval_size_2);
+
+        auto mismatch_size = [&test_vec_m]() {
+            Vector<double> valid_slice(TestBase::bundle, 5);
+            test_vec_m.set_slice(0, 6, valid_slice);
+        };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, mismatch_size);
+
     }
 
     template <typename T>
@@ -691,12 +771,24 @@ TEST_F(Vector_Test, TestElementAccess) {
 
 TEST_F(Vector_Test, TestBadElementAccess) { TestBadElementAccess(); }
 
-TEST_F(Vector_Test, TestSlice) {
-    TestSlice<__half>(); TestSlice<float>(); TestSlice<double>();
+TEST_F(Vector_Test, TestGetSlice) {
+    TestGetSlice<__half>();
+    TestGetSlice<float>();
+    TestGetSlice<double>();
 }
 
-TEST_F(Vector_Test, TestBadSlice) {
-    TestBadSlice<__half>(); TestBadSlice<float>(); TestBadSlice<double>();
+TEST_F(Vector_Test, TestBadGetSlice) {
+    TestBadGetSlice();
+}
+
+TEST_F(Vector_Test, TestSetSlice) {
+    TestSetSlice<__half>();
+    TestSetSlice<float>();
+    TestSetSlice<double>();
+}
+
+TEST_F(Vector_Test, TestBadSetSlice) {
+    TestBadSetSlice();
 }
 
 TEST_F(Vector_Test, TestPropertyMethods) {
