@@ -128,6 +128,36 @@ Vector<__half> MatrixDense<__half>::transpose_prod(const Vector<__half> &vec) co
 
 }
 
+Vector<__half> MatrixDense<__half>::transpose_prod_subset_cols(int start, int cols, const Vector<__half> &vec) const {
+
+    if ((start < 0) || ((start+cols) > n_cols) || (cols <= 0)) {
+        throw std::runtime_error("MatrixDense: invalid column values in transpose_prod_subset_cols");
+    }
+    if (vec.rows() != m_rows) {
+        throw std::runtime_error("MatrixDense: invalid vec in transpose_prod_subset_cols");
+    }
+
+    Vector<__half> c(Vector<__half>::Zero(cu_handles, cols));
+
+    check_cublas_status(
+        cublasGemmEx(
+            cu_handles.get_cublas_handle(),
+            CUBLAS_OP_T, CUBLAS_OP_N,
+            cols, 1, m_rows,
+            SCALAR_ONE_H.d_scalar,
+            d_mat+start*m_rows, CUDA_R_16F, m_rows,
+            vec.d_vec, CUDA_R_16F, m_rows,
+            SCALAR_ZERO_H.d_scalar,
+            c.d_vec, CUDA_R_16F, cols,
+            CUBLAS_COMPUTE_16F,
+            CUBLAS_GEMM_DEFAULT
+        )
+    );
+
+    return c;
+
+}
+
 MatrixDense<__half> MatrixDense<__half>::operator*(const MatrixDense<__half> &mat) const {
 
     if (mat.rows() != n_cols) {

@@ -533,6 +533,7 @@ public:
     Vector<T> operator*(const Vector<T> &vec) const;
     Vector<T> mult_subset_cols(int start, int cols, const Vector<T> &vec) const;
     Vector<T> transpose_prod(const Vector<T> &vec) const;
+    Vector<T> transpose_prod_subset_cols(int start, int cols, const Vector<T> &vec) const;
 
     // Needed for testing (don't need to optimize performance)
     MatrixDense<T> transpose() const {
