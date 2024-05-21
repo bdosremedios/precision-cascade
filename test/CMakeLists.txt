@@ -81,8 +81,8 @@ set(
     ${TEST_TOOLS_CPPS}
     ${TEST_PRECONDITIONER_CPPS}
     ${TEST_ARG_PKGS}
-    ${TEST_SOLVERS}
-    ${TEST_BENCHMARK}
+    # ${TEST_SOLVERS}
+    # ${TEST_BENCHMARK}
 )
 
 add_library(

@@ -20,10 +20,10 @@ class GenericIterativeSolve
 private:
 
     void check_compatibility() const {
-        if (lin_sys.get_n() != init_guess.rows()) {
+        if (lin_sys->get_n() != init_guess.rows()) {
             throw std::runtime_error("GenericIterativeSolve: initial guess not compatible");
         }
-        if (lin_sys.get_m() != lin_sys.get_n()) {
+        if (lin_sys->get_m() != lin_sys->get_n()) {
             throw std::runtime_error("GenericIterativeSolve: A is not square");
         }
     }
@@ -44,8 +44,8 @@ private:
     void initialize_instantiate_residual() {
 
         res_norm_hist.clear();
-        res_hist = MatrixDense<double>(lin_sys.get_cu_handles(), lin_sys.get_m(), max_iter+1);
-        curr_res = lin_sys.get_b()-lin_sys.get_A()*init_guess;
+        res_hist = MatrixDense<double>(lin_sys->get_cu_handles(), lin_sys->get_m(), max_iter+1);
+        curr_res = lin_sys->get_b()-lin_sys->get_A()*init_guess;
         res_hist.get_col(0).set_from_vec(curr_res);
         curr_res_norm = curr_res.norm().get_scalar();
         res_norm_hist.push_back(curr_res_norm);
@@ -54,7 +54,7 @@ private:
 
     void update_residual() {
 
-        curr_res = lin_sys.get_b()-lin_sys.get_A()*generic_soln;
+        curr_res = lin_sys->get_b()-lin_sys->get_A()*generic_soln;
         res_hist.get_col(curr_iter).set_from_vec(curr_res);
         curr_res_norm = curr_res.norm().get_scalar();
         res_norm_hist.push_back(curr_res_norm);
@@ -64,7 +64,7 @@ private:
 protected:
 
     // *** Const Attributes ***
-    const GenericLinearSystem<M> &lin_sys;
+    const GenericLinearSystem<M> *lin_sys_ptr;
     const Vector<double> init_guess;
     const double target_rel_res;
 
@@ -82,10 +82,10 @@ protected:
 
     // *** Constructors ***
     GenericIterativeSolve(
-        const GenericLinearSystem<M> &arg_lin_sys,
+        const GenericLinearSystem<M> *arg_lin_sys_ptr,
         const SolveArgPkg &arg_pkg
     ):
-        lin_sys(arg_lin_sys),
+        lin_sys_ptr(arg_lin_sys_ptr),
         init_guess(
             arg_pkg.check_default_init_guess() ? make_guess(arg_lin_sys) : arg_pkg.init_guess
         ),
@@ -105,14 +105,15 @@ protected:
     virtual void iterate() = 0;
     virtual void derived_generic_reset() = 0;
 
-    static Vector<double> make_guess(const GenericLinearSystem<M> &arg_lin_sys) {
-        return Vector<double>::Ones(arg_lin_sys.get_cu_handles(), arg_lin_sys.get_n());
+    static Vector<double> make_guess(const GenericLinearSystem<M> *arg_lin_sys_ptr) {
+        return Vector<double>::Ones(
+            arg_lin_sys_ptr->get_cu_handles(),
+            arg_lin_sys_ptr->get_n()
+        );
     }
 
     // Forbid rvalue instantiation
-    GenericIterativeSolve(const GenericLinearSystem<M> &, const SolveArgPkg &&) = delete;
-    GenericIterativeSolve(const GenericLinearSystem<M> &&, const SolveArgPkg &) = delete;
-    GenericIterativeSolve(const GenericLinearSystem<M> &&, const SolveArgPkg &&) = delete;
+    GenericIterativeSolve(const GenericLinearSystem<M> *, const SolveArgPkg &&) = delete;
 
     // Disable copy constructor and copy assignment
     GenericIterativeSolve(const GenericIterativeSolve &) = delete;
@@ -152,7 +153,7 @@ public:
         terminated = true;
         converged = (
             (get_relres() <= target_rel_res) ||
-            (curr_iter == 0) && ((curr_res.norm()/lin_sys.get_b().norm()).get_scalar() <= target_rel_res)
+            (curr_iter == 0) && ((curr_res.norm()/lin_sys->get_b().norm()).get_scalar() <= target_rel_res)
         );
 
     }
@@ -269,7 +270,7 @@ private:
 protected:
 
     // *** Const Attributes ***
-    const TypedLinearSystem<M, T> &typed_lin_sys;
+    const TypedLinearSystem<M, T> *typed_lin_sys;
     const Vector<T> init_guess_typed;
 
     // *** Mutable Attributes ***
