@@ -139,21 +139,12 @@ protected:
         next_q = apply_precond_A(Q_kry_basis.get_col(curr_kry_idx));
 
         // Orthogonalize new basis vector with CGS2
-        // Vector<T> first_ortho(Q_kry_basis.transpose_prod_subset_cols(0, curr_kry_dim, next_q));
-        // next_q -= Q_kry_basis.mult_subset_cols(0, curr_kry_dim, first_ortho);
-        // Vector<T> second_ortho(Q_kry_basis.transpose_prod_subset_cols(0, curr_kry_dim, next_q));
-        // next_q -= Q_kry_basis.mult_subset_cols(0, curr_kry_dim, second_ortho);
+        Vector<T> first_ortho(Q_kry_basis.transpose_prod_subset_cols(0, curr_kry_dim, next_q));
+        next_q -= Q_kry_basis.mult_subset_cols(0, curr_kry_dim, first_ortho);
+        Vector<T> second_ortho(Q_kry_basis.transpose_prod_subset_cols(0, curr_kry_dim, next_q));
+        next_q -= Q_kry_basis.mult_subset_cols(0, curr_kry_dim, second_ortho);
 
-        // H_k.set_get_slice(0, curr_kry_dim, first_ortho + second_ortho);
-        // H_k.set_elem(curr_kry_idx+1, next_q.norm());
-
-        // Orthogonalize basis vector to previous vectors
-        for (int j=0; j<curr_kry_dim; ++j) {
-            // MGS from newly orthog q used for orthogonalizing next vectors
-            Vector<T> q_j(Q_kry_basis.get_col(j));
-            H_k.set_elem(j, q_j.dot(next_q));
-            next_q -= q_j*H_k.get_elem(j);
-        }
+        H_k.set_slice(0, curr_kry_dim, first_ortho + second_ortho);
         H_k.set_elem(curr_kry_idx+1, next_q.norm());
 
     }
