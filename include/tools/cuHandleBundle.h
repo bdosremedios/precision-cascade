@@ -33,6 +33,8 @@ public:
 
     cusparseHandle_t get_cusparse_handle() const;
 
+    bool operator==(const cuHandleBundle &) const;
+
 };
 
 #endif

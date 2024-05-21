@@ -23,3 +23,10 @@ cublasHandle_t cuHandleBundle::get_cublas_handle() const {
 cusparseHandle_t cuHandleBundle::get_cusparse_handle() const {
     return cusparse_handle;
 }
+
+bool cuHandleBundle::operator==(const cuHandleBundle &other) const {
+    return (
+        (cublas_handle == other.cublas_handle) &&
+        (cusparse_handle == other.cusparse_handle)
+    );
+}

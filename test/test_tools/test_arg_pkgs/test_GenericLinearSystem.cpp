@@ -19,6 +19,7 @@ public:
         EXPECT_EQ(lin_sys.get_m(), m);
         EXPECT_EQ(lin_sys.get_n(), n);
         EXPECT_EQ(lin_sys.get_nnz(), A.non_zeros());
+        EXPECT_EQ(lin_sys.get_cu_handles(), TestBase::bundle);
 
         ASSERT_MATRIX_EQ(lin_sys.get_A(), A);
         ASSERT_VECTOR_EQ(lin_sys.get_b(), b);
