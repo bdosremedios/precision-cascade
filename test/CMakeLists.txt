@@ -60,7 +60,7 @@ set(
 set(
     TEST_SOLVERS
     test_solvers/test_IterativeSolve/test_IterativeSolve.cpp
-    # ${TEST_STATIONARY_SOLVERS}
+    ${TEST_STATIONARY_SOLVERS}
     # ${TEST_GMRES_SOLVERS}
     # ${TEST_NESTED_SOLVERS}
 )

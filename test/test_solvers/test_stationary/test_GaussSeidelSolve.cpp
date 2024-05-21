@@ -15,13 +15,15 @@ public:
 
         M<double> A(read_matrixCSV<M, double>(TestBase::bundle, A_file_path));
         Vector<double> b(read_matrixCSV<Vector, double>(TestBase::bundle, b_file_path));
-        TypedLinearSystem<M, T> lin_sys(A, b);
+
+        GenericLinearSystem<M> gen_lin_sys(A, b);
+        TypedLinearSystem<M, T> typed_lin_sys(&gen_lin_sys);
 
         SolveArgPkg args;
         args.max_iter = 1000;
         args.target_rel_res = conv_tol;
     
-        SORSolve<M, T> gauss_seidel_solve(lin_sys, 1, args);
+        SORSolve<M, T> gauss_seidel_solve(&typed_lin_sys, 1, args);
         gauss_seidel_solve.solve();
         if (*show_plots) { gauss_seidel_solve.view_relres_plot("log"); }
         
@@ -39,13 +41,15 @@ public:
 
         M<double> A(read_matrixCSV<M, double>(TestBase::bundle, A_file_path));
         Vector<double> b(read_matrixCSV<Vector, double>(TestBase::bundle, b_file_path));
-        TypedLinearSystem<M, T> lin_sys(A, b);
+
+        GenericLinearSystem<M> gen_lin_sys(A, b);
+        TypedLinearSystem<M, T> typed_lin_sys(&gen_lin_sys);
 
         SolveArgPkg args;
         args.max_iter = 300;
         args.target_rel_res = fail_tol;
     
-        SORSolve<M, T> gauss_seidel_solve(lin_sys, 1, args);
+        SORSolve<M, T> gauss_seidel_solve(&typed_lin_sys, 1, args);
         gauss_seidel_solve.solve();
         if (*show_plots) { gauss_seidel_solve.view_relres_plot("log"); }
         
