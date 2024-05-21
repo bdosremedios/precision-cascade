@@ -44,7 +44,7 @@ class BenchmarkBase: public TestBase
 protected:
 
     const int n_runs = 10;
-    bool prototyping_speed_up = false;
+    bool prototyping_speed_up = true;
     const fs::path data_dir = (
         fs::current_path() / fs::path("..") /
         fs::path("test") / fs::path("benchmarking") / fs::path("data")
@@ -52,13 +52,13 @@ protected:
 
 public:
 
-    int dense_start = 2500;
+    int dense_start = (prototyping_speed_up) ? 1000 : 2500;
     int dense_stop = 20001;
-    int dense_incr = (prototyping_speed_up) ? (dense_stop-dense_start)/2 : 2500;
+    int dense_incr = (prototyping_speed_up) ? (dense_stop-dense_start) : 2500;
 
-    int sparse_start = 25000;
+    int sparse_start = (prototyping_speed_up) ? 1000 : 25000;
     int sparse_stop = 200001;
-    int sparse_incr = (prototyping_speed_up) ? (sparse_stop-sparse_start)/2 : 25000;
+    int sparse_incr = (prototyping_speed_up) ? (sparse_stop-sparse_start) : 25000;
 
     void SetUp() {
         TestBase::SetUp();
