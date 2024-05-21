@@ -52,11 +52,12 @@ protected:
 
 public:
 
-    int dense_start = (prototyping_speed_up) ? 1000 : 2500;
+    int dense_start = (prototyping_speed_up) ? 1024 : 2500;
     int dense_stop = 20001;
     int dense_incr = (prototyping_speed_up) ? (dense_stop-dense_start) : 2500;
+    int dense_subset_cols = 1000;
 
-    int sparse_start = (prototyping_speed_up) ? 1000 : 25000;
+    int sparse_start = (prototyping_speed_up) ? 1024 : 25000;
     int sparse_stop = 200001;
     int sparse_incr = (prototyping_speed_up) ? (sparse_stop-sparse_start) : 25000;
 

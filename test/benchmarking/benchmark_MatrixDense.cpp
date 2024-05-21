@@ -173,25 +173,109 @@ TEST_F(MatrixDense_Benchmark, TransposeMatrixVectorMult_Half_BENCHMARK) {
 
 TEST_F(MatrixDense_Benchmark, SubsetcolsMatrixVectorMult_Double_BENCHMARK) {
 
+    std::function<void (Benchmark_AccumulatingClock &, MatrixDense<double> &)> execute_func = [this] (
+        Benchmark_AccumulatingClock &clock, MatrixDense<double> &A
+    ) {
+        Vector<double> b = Vector<double>::Random(TestBase::bundle, dense_subset_cols);
+        clock.clock_start();
+        A.mult_subset_cols(0, dense_subset_cols, b);
+        clock.clock_stop();
+    };
+
+    benchmark_exec_func<MatrixDense, double>(
+        dense_start, dense_stop, dense_incr,
+        make_A_dbl, execute_func, "matdense_subsetcolsmv_dbl"
+    );
+
 }
 
 TEST_F(MatrixDense_Benchmark, SubsetcolsMatrixVectorMult_Single_BENCHMARK) {
+
+    std::function<void (Benchmark_AccumulatingClock &, MatrixDense<float> &)> execute_func = [this] (
+        Benchmark_AccumulatingClock &clock, MatrixDense<float> &A
+    ) {
+        Vector<float> b = Vector<float>::Random(TestBase::bundle, dense_subset_cols);
+        clock.clock_start();
+        A.mult_subset_cols(0, dense_subset_cols, b);
+        clock.clock_stop();
+    };
+
+    benchmark_exec_func<MatrixDense, float>(
+        dense_start, dense_stop, dense_incr,
+        make_A_sgl, execute_func, "matdense_subsetcolsmv_sgl"
+    );
 
 }
 
 TEST_F(MatrixDense_Benchmark, SubsetcolsMatrixVectorMult_Half_BENCHMARK) {
 
+    std::function<void (Benchmark_AccumulatingClock &, MatrixDense<__half> &)> execute_func = [this] (
+        Benchmark_AccumulatingClock &clock, MatrixDense<__half> &A
+    ) {
+        Vector<__half> b = Vector<__half>::Random(TestBase::bundle, dense_subset_cols);
+        clock.clock_start();
+        A.mult_subset_cols(0, dense_subset_cols, b);
+        clock.clock_stop();
+    };
+
+    benchmark_exec_func<MatrixDense, __half>(
+        dense_start, dense_stop, dense_incr,
+        make_A_hlf, execute_func, "matdense_subsetcolsmv_hlf"
+    );
+
 }
 
 TEST_F(MatrixDense_Benchmark, SubsetcolsTransposeMatrixVectorMult_Double_BENCHMARK) {
+
+    std::function<void (Benchmark_AccumulatingClock &, MatrixDense<double> &)> execute_func = [this] (
+        Benchmark_AccumulatingClock &clock, MatrixDense<double> &A
+    ) {
+        Vector<double> b = Vector<double>::Random(TestBase::bundle, A.rows());
+        clock.clock_start();
+        A.transpose_prod_subset_cols(0, dense_subset_cols, b);
+        clock.clock_stop();
+    };
+
+    benchmark_exec_func<MatrixDense, double>(
+        dense_start, dense_stop, dense_incr,
+        make_A_dbl, execute_func, "matdense_subsetcolstmv_dbl"
+    );
 
 }
 
 TEST_F(MatrixDense_Benchmark, SubsetcolsTransposeMatrixVectorMult_Single_BENCHMARK) {
 
+    std::function<void (Benchmark_AccumulatingClock &, MatrixDense<float> &)> execute_func = [this] (
+        Benchmark_AccumulatingClock &clock, MatrixDense<float> &A
+    ) {
+        Vector<float> b = Vector<float>::Random(TestBase::bundle, A.rows());
+        clock.clock_start();
+        A.transpose_prod_subset_cols(0, dense_subset_cols, b);
+        clock.clock_stop();
+    };
+
+    benchmark_exec_func<MatrixDense, float>(
+        dense_start, dense_stop, dense_incr,
+        make_A_sgl, execute_func, "matdense_subsetcolstmv_sgl"
+    );
+
 }
 
 TEST_F(MatrixDense_Benchmark, SubsetcolsTransposeMatrixVectorMult_Half_BENCHMARK) {
+
+    std::function<void (Benchmark_AccumulatingClock &, MatrixDense<__half> &)> execute_func = [this] (
+        Benchmark_AccumulatingClock &clock, MatrixDense<__half> &A
+    ) {
+        Vector<__half> b = Vector<__half>::Random(TestBase::bundle, A.rows());
+        clock.clock_start();
+        A.transpose_prod_subset_cols(0, dense_subset_cols, b);
+        clock.clock_stop();
+    };
+
+    benchmark_exec_func<MatrixDense, __half>(
+        dense_start, dense_stop, dense_incr,
+        make_A_hlf, execute_func, "matdense_subsetcolstmv_hlf"
+    );
 
 }
 
