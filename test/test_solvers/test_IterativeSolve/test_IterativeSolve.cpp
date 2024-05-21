@@ -14,9 +14,11 @@ public:
         M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, n, n));
         Vector<double> b(Vector<double>::Random(TestBase::bundle, n));
         Vector<T> soln(Vector<T>::Random(TestBase::bundle, 1));
-        TypedLinearSystem<M, T> typed_lin_sys(A, b);
 
-        TypedIterativeSolveTestingMock<M, T> test_mock_no_guess(typed_lin_sys, soln, default_args);
+        GenericLinearSystem<M> gen_lin_sys(A, b);
+        TypedLinearSystem<M, T> typed_lin_sys(&gen_lin_sys);
+
+        TypedIterativeSolveTestingMock<M, T> test_mock_no_guess(&typed_lin_sys, soln, default_args);
 
         ASSERT_VECTOR_EQ(
             test_mock_no_guess.init_guess,
@@ -57,7 +59,7 @@ public:
         args.max_iter = n;
         args.target_rel_res = std::pow(10, -4);
 
-        TypedIterativeSolveTestingMock<M, T> test_mock_guess(typed_lin_sys, soln, args);
+        TypedIterativeSolveTestingMock<M, T> test_mock_guess(&typed_lin_sys, soln, args);
 
         ASSERT_VECTOR_EQ(test_mock_guess.init_guess, init_guess);
         ASSERT_VECTOR_EQ(
@@ -96,7 +98,8 @@ public:
             read_matrixCSV<Vector, double>(TestBase::bundle, solve_matrix_dir / fs::path("conv_diff_64_b.csv"))
         );
 
-        TypedLinearSystem<M, T> typed_lin_sys(A, b);
+        GenericLinearSystem<M> gen_lin_sys(A, b);
+        TypedLinearSystem<M, T> typed_lin_sys(&gen_lin_sys);
 
         SolveArgPkg args;
         Vector<T> typed_soln(
@@ -110,7 +113,7 @@ public:
             ((b-A*typed_soln.template cast<double>()).norm()/(b-A*init_guess).norm()).get_scalar()
         );
 
-        TypedIterativeSolveTestingMock<M, T> test_mock(typed_lin_sys, typed_soln, args);
+        TypedIterativeSolveTestingMock<M, T> test_mock(&typed_lin_sys, typed_soln, args);
 
         EXPECT_NEAR(test_mock.get_relres(), 1., Tol<T>::gamma(n));
     
@@ -173,12 +176,14 @@ public:
         Vector<double> b(
             read_matrixCSV<Vector, double>(TestBase::bundle, solve_matrix_dir / fs::path("conv_diff_64_b.csv"))
         );
-        TypedLinearSystem<M, T> typed_lin_sys(A, b);
         Vector<T> typed_soln(
             read_matrixCSV<Vector, T>(TestBase::bundle, solve_matrix_dir / fs::path("conv_diff_64_x.csv"))
         );
 
-        TypedIterativeSolveTestingMock<M, T> test_mock(typed_lin_sys, typed_soln, default_args);
+        GenericLinearSystem<M> gen_lin_sys(A, b);
+        TypedLinearSystem<M, T> typed_lin_sys(&gen_lin_sys);
+
+        TypedIterativeSolveTestingMock<M, T> test_mock(&typed_lin_sys, typed_soln, default_args);
 
         // Call solve and then reset
         test_mock.solve();
@@ -202,16 +207,20 @@ public:
     void TestMismatchedCols() {
 
         auto try_create_solve_mismatched_cols = []() {
+
             SolveArgPkg args;
             args.init_guess = Vector<double>::Ones(TestBase::bundle, 5, 1);
-            TypedIterativeSolveTestingMock<M, double> test(
-                TypedLinearSystem<M, double>(
-                    M<double>::Ones(TestBase::bundle, 64, 64),
-                    Vector<double>::Ones(TestBase::bundle, 64)
-                ),
-                Vector<double>::Ones(TestBase::bundle, 5),
-                args
+
+            GenericLinearSystem<M> gen_lin_sys(
+                M<double>::Ones(TestBase::bundle, 64, 64),
+                Vector<double>::Ones(TestBase::bundle, 64)
             );
+            TypedLinearSystem<M, double> typed_lin_sys(&gen_lin_sys);
+
+            TypedIterativeSolveTestingMock<M, double> test(
+                &typed_lin_sys, Vector<double>::Ones(TestBase::bundle, 64), args
+            );
+
         };
 
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_create_solve_mismatched_cols);
@@ -222,13 +231,15 @@ public:
     void TestErrorNonSquare() {
 
         auto try_create_solve_non_square = [=]() {
-            TypedIterativeSolveTestingMock<M, double> test_mock(
-                TypedLinearSystem<M, double>(
-                    M<double>::Ones(TestBase::bundle, 43, 64),
-                    Vector<double>::Ones(TestBase::bundle, 42)
-                ),
-                Vector<double>::Ones(TestBase::bundle, 64),
-                default_args
+
+            GenericLinearSystem<M> gen_lin_sys(
+                M<double>::Ones(TestBase::bundle, 43, 64),
+                Vector<double>::Ones(TestBase::bundle, 42)
+            );
+            TypedLinearSystem<M, double> typed_lin_sys(&gen_lin_sys);
+
+            TypedIterativeSolveTestingMock<M, double> test(
+                &typed_lin_sys, Vector<double>::Ones(TestBase::bundle, 64),  default_args
             );
         };
 
