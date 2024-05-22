@@ -25,7 +25,7 @@ public:
 
     // *** Constructors ***
     JacobiSolve(
-        TypedLinearSystem<MatrixDense, T> * const arg_typed_lin_sys_ptr,
+        TypedLinearSystem_Intf<MatrixDense, T> * const arg_typed_lin_sys_ptr,
         const SolveArgPkg &arg_pkg
     ):
         TypedIterativeSolve<MatrixDense, T>::TypedIterativeSolve(arg_typed_lin_sys_ptr, arg_pkg)
@@ -60,7 +60,7 @@ public:
     }
 
     JacobiSolve(
-        TypedLinearSystem<NoFillMatrixSparse, T> * const arg_typed_lin_sys_ptr,
+        TypedLinearSystem_Intf<NoFillMatrixSparse, T> * const arg_typed_lin_sys_ptr,
         const SolveArgPkg &arg_pkg
     ):
         TypedIterativeSolve<NoFillMatrixSparse, T>::TypedIterativeSolve(arg_typed_lin_sys_ptr, arg_pkg)
@@ -91,7 +91,7 @@ public:
     }
 
     // Forbid rvalue instantiation
-    JacobiSolve(TypedLinearSystem<M, T> * const, const SolveArgPkg &&) = delete;
+    JacobiSolve(TypedLinearSystem_Intf<M, T> * const, const SolveArgPkg &&) = delete;
 
 };
 

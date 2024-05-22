@@ -28,7 +28,7 @@ public:
 
     // *** Constructors ***
     SORSolve(
-        TypedLinearSystem<MatrixDense, T> * const arg_typed_lin_sys_ptr,
+        TypedLinearSystem_Intf<MatrixDense, T> * const arg_typed_lin_sys_ptr,
         double arg_w,
         const SolveArgPkg &arg_pkg
     ):
@@ -67,7 +67,7 @@ public:
     }
 
     SORSolve(
-        TypedLinearSystem<NoFillMatrixSparse, T> * const arg_typed_lin_sys_ptr,
+        TypedLinearSystem_Intf<NoFillMatrixSparse, T> * const arg_typed_lin_sys_ptr,
         double arg_w,
         const SolveArgPkg &arg_pkg
     ):
@@ -126,7 +126,7 @@ public:
     }
 
     // Forbid rvalue instantiation
-    SORSolve(TypedLinearSystem<M, T> * const, double, const SolveArgPkg &&) = delete;
+    SORSolve(TypedLinearSystem_Intf<M, T> * const, double, const SolveArgPkg &&) = delete;
 
 };
 

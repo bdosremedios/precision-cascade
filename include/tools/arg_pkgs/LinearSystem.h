@@ -57,7 +57,7 @@ public:
 };
 
 template <template <typename> typename M, typename T>
-class TypedLinearSystem_Base
+class TypedLinearSystem_Intf
 {
 protected:
 
@@ -65,7 +65,7 @@ protected:
 
 public:
 
-    TypedLinearSystem_Base(GenericLinearSystem<M> * const arg_gen_lin_sys_ptr):
+    TypedLinearSystem_Intf(GenericLinearSystem<M> * const arg_gen_lin_sys_ptr):
         gen_lin_sys_ptr(arg_gen_lin_sys_ptr)
     {}
 
@@ -73,7 +73,7 @@ public:
 
     // Wrapper behavior, wrapping GenericLinearSystem<M> methods
     const M<double> &get_A() const { return gen_lin_sys_ptr->get_A(); }
-    const Vector<double> &get_b() const { return gen_lin_sys_ptr->get_b(); }
+    virtual const Vector<double> &get_b() const { return gen_lin_sys_ptr->get_b(); }
     const int get_m() const { return gen_lin_sys_ptr->get_m(); }
     const int get_n() const { return gen_lin_sys_ptr->get_n(); }
     const int get_nnz() const { return gen_lin_sys_ptr->get_nnz(); }
@@ -87,7 +87,7 @@ public:
 };
 
 template <template <typename> typename M, typename T>
-class TypedLinearSystem: public TypedLinearSystem_Base<M, T>
+class TypedLinearSystem: public TypedLinearSystem_Intf<M, T>
 {
 private:
 
@@ -97,7 +97,7 @@ private:
 public:
 
     TypedLinearSystem(GenericLinearSystem<M> * const arg_gen_lin_sys_ptr):
-        TypedLinearSystem_Base<M, T>(arg_gen_lin_sys_ptr),
+        TypedLinearSystem_Intf<M, T>(arg_gen_lin_sys_ptr),
         A_typed(this->gen_lin_sys_ptr->get_A().template cast<T>()),
         b_typed(this->gen_lin_sys_ptr->get_b().template cast<T>())
     {}
@@ -114,18 +114,54 @@ public:
 
 // Partial specialization with double to remove unneccessary repeated data of typed vector/matrix
 template <template <typename> typename M>
-class TypedLinearSystem<M, double>: public TypedLinearSystem_Base<M, double>
+class TypedLinearSystem<M, double>: public TypedLinearSystem_Intf<M, double>
 {
 public:
 
     TypedLinearSystem(GenericLinearSystem<M> * const arg_gen_lin_sys_ptr):
-        TypedLinearSystem_Base<M, double>(arg_gen_lin_sys_ptr)
+        TypedLinearSystem_Intf<M, double>(arg_gen_lin_sys_ptr)
     {}
 
     // *** Implemented virtual methods ***
     const M<double> &get_A_typed() const override { return this->gen_lin_sys_ptr->get_A(); }
     const Vector<double> &get_b_typed() const override { return this->gen_lin_sys_ptr->get_b(); }
     void set_b(const Vector<double> &arg_b) override { this->gen_lin_sys_ptr->set_b(arg_b); }
+
+};
+
+template <template <typename> typename M, typename T>
+class TypedLinearSystem_MutableAdditionalRHS: public TypedLinearSystem_Intf<M, T>
+{
+private:
+
+    Vector<double> additional_rhs;
+    Vector<T> additional_rhs_typed;
+    const TypedLinearSystem<M, T> * const orig_typed_lin_sys_ptr;
+
+public:
+
+    TypedLinearSystem_MutableAdditionalRHS(
+        const TypedLinearSystem<M, T> * const arg_orig_typed_lin_sys_ptr,
+        Vector<double> arg_additional_rhs
+    ):
+        TypedLinearSystem_Intf<M, T>(arg_orig_typed_lin_sys_ptr->get_gen_lin_sys_ptr()),
+        orig_typed_lin_sys_ptr(arg_orig_typed_lin_sys_ptr),
+        additional_rhs(arg_additional_rhs),
+        additional_rhs_typed(arg_additional_rhs.template cast<T>())
+    {}
+
+    // *** Implemented virtual methods ***
+    const Vector<double> &get_b() const override { return additional_rhs; }
+    const M<T> &get_A_typed() const override { return orig_typed_lin_sys_ptr->get_A_typed(); }
+    const Vector<T> &get_b_typed() const override { return additional_rhs_typed; }
+
+    void set_b(const Vector<double> &arg_b) override {
+        if (orig_typed_lin_sys_ptr->get_m() != arg_b.rows()) {
+            std::runtime_error("TypedLinearSystem_MutableAdditionalRHS: b for linear system in set_b");
+        }
+        additional_rhs = arg_b;
+        additional_rhs_typed = arg_b.template cast<T>();
+    }
 
 };
 

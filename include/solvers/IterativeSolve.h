@@ -273,7 +273,7 @@ private:
 protected:
 
     // *** Const Attributes ***
-    TypedLinearSystem<M, T> * const typed_lin_sys_ptr;
+    TypedLinearSystem_Intf<M, T> * const typed_lin_sys_ptr;
     const Vector<T> init_guess_typed;
 
     // *** Mutable Attributes ***
@@ -301,7 +301,7 @@ public:
 
     // *** Constructors ***
     TypedIterativeSolve(
-        TypedLinearSystem<M, T> * const arg_typed_lin_sys_ptr,
+        TypedLinearSystem_Intf<M, T> * const arg_typed_lin_sys_ptr,
         const SolveArgPkg &arg_pkg
     ): 
         typed_lin_sys_ptr(arg_typed_lin_sys_ptr),
@@ -317,7 +317,7 @@ public:
     }
 
     // Forbid rvalue instantiation
-    TypedIterativeSolve(GenericLinearSystem<M> * const, const SolveArgPkg &&) = delete;
+    TypedIterativeSolve(TypedLinearSystem_Intf<M, T> * const, const SolveArgPkg &&) = delete;
 
     // *** Getters ***
     Vector<T> get_typed_soln() const { return typed_soln; };
