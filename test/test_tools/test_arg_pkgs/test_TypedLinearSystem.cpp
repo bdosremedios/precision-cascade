@@ -30,59 +30,104 @@ public:
 
     }
 
-    // template <template <typename> typename M, typename T>
-    // void TestTypedSetb() {
+    template <template <typename> typename M, typename T>
+    void TestTypedMutableRHSConstructor() {
 
-    //     constexpr int m(63);
-    //     constexpr int n(27);
-    //     M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, m, n));
-    //     Vector<double> b(Vector<double>::Random(TestBase::bundle, m));
-    //     Vector<double> new_b(Vector<double>::Random(TestBase::bundle, m));
+        constexpr int m(63);
+        constexpr int n(27);
+        M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, m, n));
+        Vector<double> b(Vector<double>::Random(TestBase::bundle, m));
+        Vector<double> additional_rhs(Vector<double>::Random(TestBase::bundle, m));
 
-    //     GenericLinearSystem<M> gen_lin_sys(A, b);
-    //     TypedLinearSystem<M, T> typed_lin_sys(&gen_lin_sys);
+        GenericLinearSystem<M> gen_lin_sys(A, b);
+        TypedLinearSystem<M, T> temp(&gen_lin_sys);
+        TypedLinearSystem_MutableAdditionalRHS typed_lin_sys(&temp, additional_rhs);
 
-    //     typed_lin_sys.set_b(new_b);
+        EXPECT_EQ(typed_lin_sys.get_m(), m);
+        EXPECT_EQ(typed_lin_sys.get_n(), n);
+        EXPECT_EQ(typed_lin_sys.get_nnz(), A.non_zeros());
+        EXPECT_EQ(typed_lin_sys.get_cu_handles(), TestBase::bundle);
 
-    //     ASSERT_VECTOR_EQ(typed_lin_sys.get_b(), new_b);
-    //     ASSERT_VECTOR_EQ(typed_lin_sys.get_b_typed(), new_b.template cast<T>());
+        ASSERT_MATRIX_EQ(typed_lin_sys.get_A(), A);
+        ASSERT_VECTOR_EQ(typed_lin_sys.get_b(), additional_rhs);
 
-    // }
+        ASSERT_MATRIX_EQ(typed_lin_sys.get_A_typed(), A.template cast<T>());
+        ASSERT_VECTOR_EQ(typed_lin_sys.get_b_typed(), additional_rhs.template cast<T>());
 
-    // template <template <typename> typename M, typename T>
-    // void TestBadMismatchTypedSetb() {
+    }
+
+
+    template <template <typename> typename M, typename T>
+    void TestTypedMutableRHSSetRHS() {
+
+        constexpr int m(63);
+        constexpr int n(27);
+        M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, m, n));
+        Vector<double> b(Vector<double>::Random(TestBase::bundle, m));
+        Vector<double> additional_rhs(Vector<double>::Random(TestBase::bundle, m));
+        Vector<double> new_rhs(Vector<double>::Random(TestBase::bundle, m));
+
+        GenericLinearSystem<M> gen_lin_sys(A, b);
+        TypedLinearSystem<M, T> temp(&gen_lin_sys);
+        TypedLinearSystem_MutableAdditionalRHS typed_lin_sys(&temp, additional_rhs);
         
-    //     auto mismatch_setb_under = [=]() {
-    //         constexpr int m(63);
-    //         constexpr int n(27);
-    //         M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, m, n));
-    //         Vector<double> b(Vector<double>::Random(TestBase::bundle, n));
+        // Check b has changed
+        typed_lin_sys.set_rhs(new_rhs);
+        ASSERT_VECTOR_EQ(typed_lin_sys.get_b(), new_rhs);
+        ASSERT_VECTOR_EQ(typed_lin_sys.get_b_typed(), new_rhs.template cast<T>());
 
-    //         GenericLinearSystem<M> gen_lin_sys(A, b);
-    //         TypedLinearSystem<M, T> typed_lin_sys(&gen_lin_sys);
+        // Check remaining values are unchanged
+        EXPECT_EQ(typed_lin_sys.get_m(), m);
+        EXPECT_EQ(typed_lin_sys.get_n(), n);
+        EXPECT_EQ(typed_lin_sys.get_nnz(), A.non_zeros());
+        EXPECT_EQ(typed_lin_sys.get_cu_handles(), TestBase::bundle);
+        ASSERT_MATRIX_EQ(typed_lin_sys.get_A(), A);
+        ASSERT_MATRIX_EQ(typed_lin_sys.get_A_typed(), A.template cast<T>());
 
-    //         Vector<double> bad_b(Vector<double>::Random(TestBase::bundle, n-1));
-    //         typed_lin_sys.set_b(bad_b);
-    //     };
+    }
+
+    template <template <typename> typename M, typename T>
+    void TestTypedMutableRHSBadMismatchSetRHS() {
         
-    //     CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, mismatch_setb_under);
+        auto mismatch_setrhs_under = [=]() {
+
+            constexpr int m(63);
+            constexpr int n(27);
+            M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, m, n));
+            Vector<double> b(Vector<double>::Random(TestBase::bundle, m));
+            Vector<double> additional_rhs(Vector<double>::Random(TestBase::bundle, m));
+
+            GenericLinearSystem<M> gen_lin_sys(A, b);
+            TypedLinearSystem<M, T> temp(&gen_lin_sys);
+            TypedLinearSystem_MutableAdditionalRHS typed_lin_sys(&temp, additional_rhs);
+
+            Vector<double> bad_rhs(Vector<double>::Random(TestBase::bundle, m-1));
+            typed_lin_sys.set_rhs(bad_rhs);
+
+        };
         
-    //     auto mismatch_setb_over = [=]() {
-    //         constexpr int m(63);
-    //         constexpr int n(27);
-    //         M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, m, n));
-    //         Vector<double> b(Vector<double>::Random(TestBase::bundle, n));
-
-    //         GenericLinearSystem<M> gen_lin_sys(A, b);
-    //         TypedLinearSystem<M, T> typed_lin_sys(&gen_lin_sys);
-
-    //         Vector<double> bad_b(Vector<double>::Random(TestBase::bundle, n+1));
-    //         typed_lin_sys.set_b(bad_b);
-    //     };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, mismatch_setrhs_under);
         
-    //     CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, mismatch_setb_over);
+        auto mismatch_setrhs_over = [=]() {
 
-    // }
+            constexpr int m(63);
+            constexpr int n(27);
+            M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, m, n));
+            Vector<double> b(Vector<double>::Random(TestBase::bundle, m));
+            Vector<double> additional_rhs(Vector<double>::Random(TestBase::bundle, m));
+
+            GenericLinearSystem<M> gen_lin_sys(A, b);
+            TypedLinearSystem<M, T> temp(&gen_lin_sys);
+            TypedLinearSystem_MutableAdditionalRHS typed_lin_sys(&temp, additional_rhs);
+
+            Vector<double> bad_rhs(Vector<double>::Random(TestBase::bundle, m+1));
+            typed_lin_sys.set_rhs(bad_rhs);
+
+        };
+        
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, mismatch_setrhs_over);
+
+    }
 
 };
 
@@ -101,32 +146,47 @@ TEST_F(TypedLinearSystem_Test, TestDoubleConstructor) {
     TestTypedConstructor<NoFillMatrixSparse, double>();
 }
 
-// TEST_F(TypedLinearSystem_Test, TestHalfTypedSetb) {
-//     TestTypedSetb<MatrixDense, __half>();
-//     TestTypedSetb<NoFillMatrixSparse, __half>();
-// }
+TEST_F(TypedLinearSystem_Test, TestHalfTypedMutableRHSConstructor) {
+    TestTypedMutableRHSConstructor<MatrixDense, __half>();
+    TestTypedMutableRHSConstructor<NoFillMatrixSparse, __half>();
+}
 
-// TEST_F(TypedLinearSystem_Test, TestSingleTypedSetb) {
-//     TestTypedSetb<MatrixDense, float>();
-//     TestTypedSetb<NoFillMatrixSparse, float>();
-// }
+TEST_F(TypedLinearSystem_Test, TestSingleTypedMutableRHSConstructor) {
+    TestTypedMutableRHSConstructor<MatrixDense, float>();
+    TestTypedMutableRHSConstructor<NoFillMatrixSparse, float>();
+}
 
-// TEST_F(TypedLinearSystem_Test, TestDoubleTypedSetb) {
-//     TestTypedSetb<MatrixDense, double>();
-//     TestTypedSetb<NoFillMatrixSparse, double>();
-// }
+TEST_F(TypedLinearSystem_Test, TestDoubleTypedMutableRHSConstructor) {
+    TestTypedMutableRHSConstructor<MatrixDense, double>();
+    TestTypedMutableRHSConstructor<NoFillMatrixSparse, double>();
+}
 
-// TEST_F(TypedLinearSystem_Test, TestHalfBadMismatchTypedSetb) {
-//     TestBadMismatchTypedSetb<MatrixDense, __half>();
-//     TestBadMismatchTypedSetb<NoFillMatrixSparse, __half>();
-// }
+TEST_F(TypedLinearSystem_Test, TestHalfMutableRHSSetRHS) {
+    TestTypedMutableRHSSetRHS<MatrixDense, __half>();
+    TestTypedMutableRHSSetRHS<NoFillMatrixSparse, __half>();
+}
 
-// TEST_F(TypedLinearSystem_Test, TestSingleBadMismatchTypedSetb) {
-//     TestBadMismatchTypedSetb<MatrixDense, float>();
-//     TestBadMismatchTypedSetb<NoFillMatrixSparse, float>();
-// }
+TEST_F(TypedLinearSystem_Test, TestSingleMutableRHSSetRHS) {
+    TestTypedMutableRHSSetRHS<MatrixDense, float>();
+    TestTypedMutableRHSSetRHS<NoFillMatrixSparse, float>();
+}
 
-// TEST_F(TypedLinearSystem_Test, TestDoubleBadMismatchTypedSetb) {
-//     TestBadMismatchTypedSetb<MatrixDense, double>();
-//     TestBadMismatchTypedSetb<NoFillMatrixSparse, double>();
-// }
+TEST_F(TypedLinearSystem_Test, TestDoubleMutableRHSSetRHS) {
+    TestTypedMutableRHSSetRHS<MatrixDense, double>();
+    TestTypedMutableRHSSetRHS<NoFillMatrixSparse, double>();
+}
+
+TEST_F(TypedLinearSystem_Test, TestHalfTypedMutableRHSBadMismatchSetRHS) {
+    TestTypedMutableRHSBadMismatchSetRHS<MatrixDense, __half>();
+    TestTypedMutableRHSBadMismatchSetRHS<NoFillMatrixSparse, __half>();
+}
+
+TEST_F(TypedLinearSystem_Test, TestSingleTypedMutableRHSBadMismatchSetRHS) {
+    TestTypedMutableRHSBadMismatchSetRHS<MatrixDense, float>();
+    TestTypedMutableRHSBadMismatchSetRHS<NoFillMatrixSparse, float>();
+}
+
+TEST_F(TypedLinearSystem_Test, TestDoubleTypedMutableRHSBadMismatchSetRHS) {
+    TestTypedMutableRHSBadMismatchSetRHS<MatrixDense, double>();
+    TestTypedMutableRHSBadMismatchSetRHS<NoFillMatrixSparse, double>();
+}

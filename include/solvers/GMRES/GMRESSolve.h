@@ -199,10 +199,12 @@ protected:
         );
 
         // Update typed_soln adjusting with right preconditioning
-        typed_soln = init_guess_typed +
-                     right_precond_ptr->casted_action_inv_M<T>(
-                        Q_kry_basis.mult_subset_cols(0, curr_kry_dim, y).template cast<W>()
-                     );
+        typed_soln = (
+            init_guess_typed +
+            right_precond_ptr->casted_action_inv_M<T>(
+                Q_kry_basis.mult_subset_cols(0, curr_kry_dim, y).template cast<W>()
+            )
+        );
 
     }
 

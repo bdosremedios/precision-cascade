@@ -26,23 +26,6 @@ public:
 
     }
 
-    // template <template <typename> typename M>
-    // void TestSetb() {
-
-    //     constexpr int m(63);
-    //     constexpr int n(27);
-    //     M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, m, n));
-    //     Vector<double> b(Vector<double>::Random(TestBase::bundle, m));
-    //     Vector<double> new_b(Vector<double>::Random(TestBase::bundle, m));
-
-    //     GenericLinearSystem<M> lin_sys(A, b);
-
-    //     lin_sys.set_b(new_b);
-
-    //     ASSERT_VECTOR_EQ(lin_sys.get_b(), new_b);
-
-    // }
-
     template <template <typename> typename M>
     void TestBadEmptyMatrix() {
         
@@ -66,7 +49,7 @@ public:
                 constexpr int m(63);
                 constexpr int n(27);
                 M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, m, n));
-                Vector<double> bad_b(Vector<double>::Random(TestBase::bundle, n-1));
+                Vector<double> bad_b(Vector<double>::Random(TestBase::bundle, m-1));
                 GenericLinearSystem<M> lin_sys(A, bad_b);
             }
         );
@@ -77,38 +60,10 @@ public:
                 constexpr int m(63);
                 constexpr int n(27);
                 M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, m, n));
-                Vector<double> bad_b(Vector<double>::Random(TestBase::bundle, n+1));
+                Vector<double> bad_b(Vector<double>::Random(TestBase::bundle, m+1));
                 GenericLinearSystem<M> lin_sys(A, bad_b);
             }
         );
-        
-        // CHECK_FUNC_HAS_RUNTIME_ERROR(
-        //     print_errors,
-        //     [=]() {
-        //         constexpr int m(63);
-        //         constexpr int n(27);
-        //         M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, m, n));
-        //         Vector<double> b(Vector<double>::Random(TestBase::bundle, n));
-        //         GenericLinearSystem<M> lin_sys(A, b);
-
-        //         Vector<double> bad_b(Vector<double>::Random(TestBase::bundle, n-1));
-        //         lin_sys.set_b(bad_b);
-        //     }
-        // );
-
-        // CHECK_FUNC_HAS_RUNTIME_ERROR(
-        //     print_errors,
-        //     [=]() {
-        //         constexpr int m(63);
-        //         constexpr int n(27);
-        //         M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, m, n));
-        //         Vector<double> b(Vector<double>::Random(TestBase::bundle, n));
-        //         GenericLinearSystem<M> lin_sys(A, b);
-
-        //         Vector<double> bad_b(Vector<double>::Random(TestBase::bundle, n+1));
-        //         lin_sys.set_b(bad_b);
-        //     }
-        // );
 
     }
 
@@ -118,11 +73,6 @@ TEST_F(GenericLinearSystem_Test, TestConstructor) {
     TestConstructor<MatrixDense>();
     TestConstructor<NoFillMatrixSparse>();
 }
-
-// TEST_F(GenericLinearSystem_Test, TestSetb) {
-//     TestSetb<MatrixDense>();
-//     TestSetb<NoFillMatrixSparse>();
-// }
 
 TEST_F(GenericLinearSystem_Test, TestBadEmptyMatrix) {
     TestBadEmptyMatrix<MatrixDense>();

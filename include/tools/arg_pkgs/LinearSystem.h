@@ -141,12 +141,14 @@ public:
     const M<T> &get_A_typed() const override { return orig_typed_lin_sys_ptr->get_A_typed(); }
     const Vector<T> &get_b_typed() const override { return additional_rhs_typed; }
 
-    void set_b(const Vector<double> &arg_b) {
-        if (orig_typed_lin_sys_ptr->get_m() != arg_b.rows()) {
-            std::runtime_error("TypedLinearSystem_MutableAdditionalRHS: b for linear system in set_b");
+    void set_rhs(const Vector<double> &arg_rhs) {
+        if (orig_typed_lin_sys_ptr->get_m() != arg_rhs.rows()) {
+            throw std::runtime_error(
+                "TypedLinearSystem_MutableAdditionalRHS: rhs for linear system in set_rhs is incompatible"
+            );
         }
-        additional_rhs = arg_b;
-        additional_rhs_typed = arg_b.template cast<T>();
+        additional_rhs = arg_rhs;
+        additional_rhs_typed = arg_rhs.template cast<T>();
     }
 
 };
