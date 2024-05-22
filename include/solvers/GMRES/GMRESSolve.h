@@ -5,7 +5,7 @@
 
 #include <chrono>
 
-template <template <typename> typename M, typename T, typename W=T>
+template <template <typename> typename M, typename T>
 class GMRESSolve: public TypedIterativeSolve<M, T>
 {
 protected:
@@ -27,8 +27,8 @@ protected:
     using TypedIterativeSolve<M, T>::typed_soln;
     using TypedIterativeSolve<M, T>::max_iter;
 
-    std::shared_ptr<Preconditioner<M, W>> left_precond_ptr;
-    std::shared_ptr<Preconditioner<M, W>> right_precond_ptr;
+    std::shared_ptr<Preconditioner<M, T>> left_precond_ptr;
+    std::shared_ptr<Preconditioner<M, T>> right_precond_ptr;
 
     MatrixDense<T> Q_kry_basis = MatrixDense<T>(cuHandleBundle());
     Vector<T> H_k = Vector<T>(cuHandleBundle());
@@ -50,26 +50,21 @@ protected:
         }
     }
 
-    Vector<T> apply_left_precond_A(const Vector<T> &vec) {
-        return left_precond_ptr->template casted_action_inv_M<T>(
-            (typed_lin_sys_ptr->get_A_typed()*vec).template cast<W>()
-        );
-    }
-
     Vector<T> apply_precond_A(const Vector<T> &vec) {
-        return apply_left_precond_A(
-            right_precond_ptr->template casted_action_inv_M<T>(vec.template cast<W>())
+        return left_precond_ptr->action_inv_M(
+            typed_lin_sys_ptr->get_A_typed()*right_precond_ptr->action_inv_M(vec)
         );
     }
 
     Vector<T> get_precond_b() {
-        return left_precond_ptr->casted_action_inv_M<T>(
-            typed_lin_sys_ptr->get_b_typed().template cast<W>()
-        );
+        return left_precond_ptr->action_inv_M(typed_lin_sys_ptr->get_b_typed());
     }
 
     Vector<T> calc_precond_residual(const Vector<T> &soln) {
-        return(get_precond_b() - apply_left_precond_A(soln));
+        return (
+            get_precond_b() -
+            left_precond_ptr->action_inv_M(typed_lin_sys_ptr->get_A_typed()*soln)
+        );
     }
 
     void set_initial_space() {
@@ -201,9 +196,7 @@ protected:
         // Update typed_soln adjusting with right preconditioning
         typed_soln = (
             init_guess_typed +
-            right_precond_ptr->casted_action_inv_M<T>(
-                Q_kry_basis.mult_subset_cols(0, curr_kry_dim, y).template cast<W>()
-            )
+            right_precond_ptr->action_inv_M(Q_kry_basis.mult_subset_cols(0, curr_kry_dim, y))
         );
 
     }
@@ -253,7 +246,7 @@ public:
         const TypedLinearSystem_Intf<M, T> * const arg_typed_lin_sys_ptr,
         double arg_basis_zero_tol,
         const SolveArgPkg &solve_arg_pkg,
-        const PrecondArgPkg<M, W> &precond_arg_pkg = PrecondArgPkg<M, W>()
+        const PrecondArgPkg<M, T> &precond_arg_pkg = PrecondArgPkg<M, T>()
     ):
         basis_zero_tol(arg_basis_zero_tol),
         left_precond_ptr(precond_arg_pkg.left_precond),
@@ -267,9 +260,9 @@ public:
     }
 
     // Forbid rvalue instantiation
-    GMRESSolve(const TypedLinearSystem_Intf<M, T> * const, double, const SolveArgPkg &, const PrecondArgPkg<M, W> &&) = delete;
-    GMRESSolve(const TypedLinearSystem_Intf<M, T> * const, double, const SolveArgPkg &&, const PrecondArgPkg<M, W> &) = delete;
-    GMRESSolve(const TypedLinearSystem_Intf<M, T> * const, double, const SolveArgPkg &&, const PrecondArgPkg<M, W> &&) = delete;
+    GMRESSolve(const TypedLinearSystem_Intf<M, T> * const, double, const SolveArgPkg &, const PrecondArgPkg<M, T> &&) = delete;
+    GMRESSolve(const TypedLinearSystem_Intf<M, T> * const, double, const SolveArgPkg &&, const PrecondArgPkg<M, T> &) = delete;
+    GMRESSolve(const TypedLinearSystem_Intf<M, T> * const, double, const SolveArgPkg &&, const PrecondArgPkg<M, T> &&) = delete;
 
 };
 
