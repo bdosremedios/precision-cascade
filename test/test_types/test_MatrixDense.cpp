@@ -572,6 +572,22 @@ public:
     }
 
     template <typename T>
+    void TestLimitRandomSubsetcolsMatVec() {
+
+        const int m(12);
+        const int n(7);
+
+        MatrixDense<T> mat(MatrixDense<T>::Random(TestBase::bundle, m, n));
+        Vector<T> vec(TestBase::bundle, n);
+
+        ASSERT_VECTOR_EQ(
+            mat.mult_subset_cols(0, n, vec),
+            mat*vec
+        );
+
+    }
+
+    template <typename T>
     void TestBadSubsetcolsMatVec() {
 
         MatrixDense<T> mat(
@@ -933,6 +949,22 @@ public:
     }
 
     template <typename T>
+    void TestLimitRandomSubsetcolsTransposeMatVec() {
+
+        const int m(12);
+        const int n(7);
+
+        MatrixDense<T> mat(MatrixDense<T>::Random(TestBase::bundle, m, n));
+        Vector<T> vec(TestBase::bundle, m);
+
+        ASSERT_VECTOR_EQ(
+            mat.transpose_prod_subset_cols(0, n, vec),
+            mat.transpose_prod(vec)
+        );
+
+    }
+
+    template <typename T>
     void TestBadSubsetcolsTransposeMatVec() {
 
         MatrixDense<T> mat(
@@ -1194,6 +1226,13 @@ TEST_F(MatrixDense_Test, TestRandomSubsetcolsMatVec) {
     TestRandomSubsetcolsMatVec<double>();
 }
 
+TEST_F(MatrixDense_Test, TestLimitRandomSubsetcolsMatVec) {
+    TestLimitRandomSubsetcolsMatVec<__half>();
+    TestLimitRandomSubsetcolsMatVec<float>();
+    TestLimitRandomSubsetcolsMatVec<double>();
+}
+
+
 TEST_F(MatrixDense_Test, TestBadSubsetcolsMatVec) {
     TestBadSubsetcolsMatVec<__half>();
     TestBadSubsetcolsMatVec<float>();
@@ -1228,6 +1267,12 @@ TEST_F(MatrixDense_Test, TestRandomSubsetcolsTransposeMatVec) {
     TestRandomSubsetcolsTransposeMatVec<__half>();
     TestRandomSubsetcolsTransposeMatVec<float>();
     TestRandomSubsetcolsTransposeMatVec<double>();
+}
+
+TEST_F(MatrixDense_Test, TestLimitRandomSubsetcolsTransposeMatVec) {
+    TestLimitRandomSubsetcolsTransposeMatVec<__half>();
+    TestLimitRandomSubsetcolsTransposeMatVec<float>();
+    TestLimitRandomSubsetcolsTransposeMatVec<double>();
 }
 
 TEST_F(MatrixDense_Test, TestBadSubsetcolsTransposeMatVec) {
