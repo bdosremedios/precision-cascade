@@ -68,11 +68,11 @@ set(
 set(
     TEST_BENCHMARK
     benchmarking/playground.cpp
-    # benchmarking/benchmark_MatrixDense.cpp
-    # benchmarking/benchmark_NoFillMatrixSparse.cpp
-    # benchmarking/benchmark_GMRES.cpp
-    # benchmarking/benchmark_FP_GMRES_IR.cpp
-    # benchmarking/benchmark_MP_GMRES_IR.cpp
+    benchmarking/benchmark_MatrixDense.cpp
+    benchmarking/benchmark_NoFillMatrixSparse.cpp
+    benchmarking/benchmark_GMRES.cpp
+    benchmarking/benchmark_FP_GMRES_IR.cpp
+    benchmarking/benchmark_MP_GMRES_IR.cpp
 )
 
 set(
@@ -82,7 +82,7 @@ set(
     ${TEST_PRECONDITIONER_CPPS}
     ${TEST_ARG_PKGS}
     ${TEST_SOLVERS}
-    # ${TEST_BENCHMARK}
+    ${TEST_BENCHMARK}
 )
 
 add_library(

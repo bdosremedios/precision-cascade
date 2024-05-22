@@ -13,11 +13,12 @@ TEST_F(Benchmark_GMRES, GMRESSolve_BENCHMARK) {
 
         Vector<double> x_soln = Vector<double>::Random(TestBase::bundle, A.rows());
 
-        TypedLinearSystem<NoFillMatrixSparse, double> lin_sys(A, A*x_soln);
+        GenericLinearSystem<NoFillMatrixSparse> gen_lin_sys(A, A*x_soln);
+        TypedLinearSystem<NoFillMatrixSparse, double> typed_lin_sys(&gen_lin_sys);
         SolveArgPkg args(gmressolve_iters, SolveArgPkg::default_max_inner_iter, 0);
 
         clock.clock_start();
-        GMRESSolve gmres(lin_sys, 0., args);
+        GMRESSolve gmres(&typed_lin_sys, 0., args);
         gmres.solve();
         clock.clock_stop();
 
