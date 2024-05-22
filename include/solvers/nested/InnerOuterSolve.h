@@ -37,7 +37,7 @@ public:
     // *** Constructors ***
 
     InnerOuterSolve(
-        GenericLinearSystem<M> * const arg_gen_lin_sys,
+        const GenericLinearSystem<M> * const arg_gen_lin_sys,
         const SolveArgPkg &arg_pkg
     ): 
         max_inner_iter(arg_pkg.max_inner_iter),
@@ -55,7 +55,7 @@ public:
     }
 
     // Forbid rvalue instantiation
-    InnerOuterSolve(GenericLinearSystem<M> * const, const SolveArgPkg &&);
+    InnerOuterSolve(const GenericLinearSystem<M> * const, const SolveArgPkg &&);
 
     std::vector<std::vector<double>> get_inner_res_norm_hist() const { return inner_res_norm_hist; };
 

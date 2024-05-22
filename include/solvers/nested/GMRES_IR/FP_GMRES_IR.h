@@ -42,7 +42,7 @@ public:
 
     // *** Constructors ***
     FP_GMRES_IR_Solve(
-        TypedLinearSystem<M, T> * const arg_outer_typed_lin_sys_ptr,
+        const TypedLinearSystem<M, T> * const arg_outer_typed_lin_sys_ptr,
         double arg_basis_zero_tol,
         const SolveArgPkg &arg_solve_arg_pkg,
         const PrecondArgPkg<M, W> &arg_inner_precond_arg_pkg = PrecondArgPkg<M, W>()
@@ -57,9 +57,9 @@ public:
     }
 
     // Forbid rvalue instantiation
-    FP_GMRES_IR_Solve(TypedLinearSystem<M, T> * const, double, const SolveArgPkg &&, const PrecondArgPkg<M, W> &) = delete;
-    FP_GMRES_IR_Solve(TypedLinearSystem<M, T> * const, double, const SolveArgPkg &, const PrecondArgPkg<M, W> &&) = delete;
-    FP_GMRES_IR_Solve(TypedLinearSystem<M, T> * const, double, const SolveArgPkg &&, const PrecondArgPkg<M, W> &&) = delete;
+    FP_GMRES_IR_Solve(const TypedLinearSystem<M, T> * const, double, const SolveArgPkg &&, const PrecondArgPkg<M, W> &) = delete;
+    FP_GMRES_IR_Solve(const TypedLinearSystem<M, T> * const, double, const SolveArgPkg &, const PrecondArgPkg<M, W> &&) = delete;
+    FP_GMRES_IR_Solve(const TypedLinearSystem<M, T> * const, double, const SolveArgPkg &&, const PrecondArgPkg<M, W> &&) = delete;
 
 };
 

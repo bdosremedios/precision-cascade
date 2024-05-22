@@ -248,7 +248,7 @@ public:
 
     // *** Constructors ***
     GMRESSolve(
-        TypedLinearSystem_Intf<M, T> * const arg_typed_lin_sys_ptr,
+        const TypedLinearSystem_Intf<M, T> * const arg_typed_lin_sys_ptr,
         double arg_basis_zero_tol,
         const SolveArgPkg &solve_arg_pkg,
         const PrecondArgPkg<M, W> &precond_arg_pkg = PrecondArgPkg<M, W>()
@@ -265,9 +265,9 @@ public:
     }
 
     // Forbid rvalue instantiation
-    GMRESSolve(TypedLinearSystem_Intf<M, T> * const, double, const SolveArgPkg &, const PrecondArgPkg<M, W> &&) = delete;
-    GMRESSolve(TypedLinearSystem_Intf<M, T> * const, double, const SolveArgPkg &&, const PrecondArgPkg<M, W> &) = delete;
-    GMRESSolve(TypedLinearSystem_Intf<M, T> * const, double, const SolveArgPkg &&, const PrecondArgPkg<M, W> &&) = delete;
+    GMRESSolve(const TypedLinearSystem_Intf<M, T> * const, double, const SolveArgPkg &, const PrecondArgPkg<M, W> &&) = delete;
+    GMRESSolve(const TypedLinearSystem_Intf<M, T> * const, double, const SolveArgPkg &&, const PrecondArgPkg<M, W> &) = delete;
+    GMRESSolve(const TypedLinearSystem_Intf<M, T> * const, double, const SolveArgPkg &&, const PrecondArgPkg<M, W> &&) = delete;
 
 };
 

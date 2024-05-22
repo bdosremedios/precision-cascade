@@ -66,7 +66,7 @@ private:
 protected:
 
     // *** Const Attributes ***
-    GenericLinearSystem<M> * const gen_lin_sys_ptr;
+    const GenericLinearSystem<M> * const gen_lin_sys_ptr;
     const Vector<double> init_guess;
     const double target_rel_res;
 
@@ -84,7 +84,7 @@ protected:
 
     // *** Constructors ***
     GenericIterativeSolve(
-        GenericLinearSystem<M> * const arg_gen_lin_sys_ptr,
+        const GenericLinearSystem<M> * const arg_gen_lin_sys_ptr,
         const SolveArgPkg &arg_pkg
     ):
         gen_lin_sys_ptr(arg_gen_lin_sys_ptr),
@@ -107,7 +107,7 @@ protected:
     virtual void iterate() = 0;
     virtual void derived_generic_reset() = 0;
 
-    static Vector<double> make_guess(GenericLinearSystem<M> * const arg_gen_lin_sys_ptr) {
+    Vector<double> make_guess(const GenericLinearSystem<M> * const arg_gen_lin_sys_ptr) const {
         return Vector<double>::Ones(
             arg_gen_lin_sys_ptr->get_cu_handles(),
             arg_gen_lin_sys_ptr->get_n()
@@ -115,7 +115,7 @@ protected:
     }
 
     // Forbid rvalue instantiation
-    GenericIterativeSolve(GenericLinearSystem<M> * const, const SolveArgPkg &&) = delete;
+    GenericIterativeSolve(const GenericLinearSystem<M> * const, const SolveArgPkg &&) = delete;
 
     // Disable copy constructor and copy assignment
     GenericIterativeSolve(const GenericIterativeSolve &) = delete;
@@ -273,7 +273,7 @@ private:
 protected:
 
     // *** Const Attributes ***
-    TypedLinearSystem_Intf<M, T> * const typed_lin_sys_ptr;
+    const TypedLinearSystem_Intf<M, T> * const typed_lin_sys_ptr;
     const Vector<T> init_guess_typed;
 
     // *** Mutable Attributes ***
@@ -301,7 +301,7 @@ public:
 
     // *** Constructors ***
     TypedIterativeSolve(
-        TypedLinearSystem_Intf<M, T> * const arg_typed_lin_sys_ptr,
+        const TypedLinearSystem_Intf<M, T> * const arg_typed_lin_sys_ptr,
         const SolveArgPkg &arg_pkg
     ): 
         typed_lin_sys_ptr(arg_typed_lin_sys_ptr),
@@ -317,7 +317,7 @@ public:
     }
 
     // Forbid rvalue instantiation
-    TypedIterativeSolve(TypedLinearSystem_Intf<M, T> * const, const SolveArgPkg &&) = delete;
+    TypedIterativeSolve(const TypedLinearSystem_Intf<M, T> * const, const SolveArgPkg &&) = delete;
 
     // *** Getters ***
     Vector<T> get_typed_soln() const { return typed_soln; };

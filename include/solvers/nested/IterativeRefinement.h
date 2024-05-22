@@ -30,7 +30,7 @@ protected:
     }
 
     // Create initial guess for inner solver
-    Vector<double> make_inner_IR_guess(GenericLinearSystem<M> * const arg_gen_lin_sys) const {
+    Vector<double> make_inner_IR_guess(const GenericLinearSystem<M> * const arg_gen_lin_sys) const {
         return Vector<double>::Zero(arg_gen_lin_sys->get_cu_handles(), arg_gen_lin_sys->get_n());
     }
 
@@ -38,7 +38,7 @@ public:
 
     // *** Constructors ***
     IterativeRefinement(
-        GenericLinearSystem<M> * const arg_gen_lin_sys,
+        const GenericLinearSystem<M> * const arg_gen_lin_sys,
         const SolveArgPkg &arg_pkg
     ):
         InnerOuterSolve<M>(arg_gen_lin_sys, arg_pkg)
@@ -48,7 +48,7 @@ public:
     }
 
     // Forbid rvalue instantiation
-    IterativeRefinement(GenericLinearSystem<M> * const, const SolveArgPkg &&);
+    IterativeRefinement(const GenericLinearSystem<M> * const, const SolveArgPkg &&);
 
 };
 
