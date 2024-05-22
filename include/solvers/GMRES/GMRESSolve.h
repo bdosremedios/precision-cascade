@@ -199,12 +199,9 @@ protected:
         );
 
         // Update typed_soln adjusting with right preconditioning
-        MatrixDense<T> Q_kry_basis_block(
-            Q_kry_basis.get_block(0, 0, typed_lin_sys_ptr->get_m(), curr_kry_dim).copy_to_mat()
-        );
         typed_soln = init_guess_typed +
                      right_precond_ptr->casted_action_inv_M<T>(
-                        (Q_kry_basis_block*y).template cast<W>()
+                        Q_kry_basis.mult_subset_cols(0, curr_kry_dim, y).template cast<W>()
                      );
 
     }
