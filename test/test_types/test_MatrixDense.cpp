@@ -574,11 +574,11 @@ public:
     template <typename T>
     void TestLimitRandomSubsetcolsMatVec() {
 
-        const int m(5);
-        const int n(3);
+        const int m(12);
+        const int n(7);
 
         MatrixDense<T> mat(MatrixDense<T>::Random(TestBase::bundle, m, n));
-        Vector<T> vec(TestBase::bundle, n);
+        Vector<T> vec(Vector<T>::Random(TestBase::bundle, n));
 
         ASSERT_VECTOR_EQ(
             mat.mult_subset_cols(0, n, vec),
@@ -951,11 +951,11 @@ public:
     template <typename T>
     void TestLimitRandomSubsetcolsTransposeMatVec() {
 
-        const int m(5);
-        const int n(3);
+        const int m(12);
+        const int n(7);
 
         MatrixDense<T> mat(MatrixDense<T>::Random(TestBase::bundle, m, n));
-        Vector<T> vec(TestBase::bundle, m);
+        Vector<T> vec(Vector<T>::Random(TestBase::bundle, m));
 
         ASSERT_VECTOR_EQ(
             mat.transpose_prod_subset_cols(0, n, vec),
