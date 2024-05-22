@@ -15,11 +15,12 @@ TEST_F(Benchmark_FP_GMRES_IR, FP_GMRES_IR_BENCHMARK) {
 
         Vector<double> x_soln = Vector<double>::Random(TestBase::bundle, A.rows());
 
-        TypedLinearSystem<NoFillMatrixSparse, double> lin_sys(A, A*x_soln);
+        GenericLinearSystem<NoFillMatrixSparse> gen_lin_sys(A, A*x_soln);
+        TypedLinearSystem<NoFillMatrixSparse, double> typed_lin_sys(&gen_lin_sys);
         SolveArgPkg args(nested_outer_iter, nested_inner_iter, 0.);
 
         clock.clock_start();
-        FP_GMRES_IR_Solve fp_restarted_gmres(lin_sys, 0., args);
+        FP_GMRES_IR_Solve fp_restarted_gmres(&typed_lin_sys, 0., args);
         fp_restarted_gmres.solve();
         clock.clock_stop();
 

@@ -20,9 +20,11 @@ public:
 
         M<double> A(read_matrixCSV<M, double>(TestBase::bundle, A_file_path));
         Vector<double> b(read_matrixCSV<Vector, double>(TestBase::bundle, b_file_path));
-        TypedLinearSystem<M, T> lin_sys(A, b);
 
-        FP_GMRES_IR_Solve<M, T> gmres_ir(lin_sys, Tol<T>::roundoff(), args);
+        GenericLinearSystem<M> gen_lin_sys(A, b);
+        TypedLinearSystem<M, T> typed_lin_sys(&gen_lin_sys);
+
+        FP_GMRES_IR_Solve<M, T> gmres_ir(&typed_lin_sys, Tol<T>::roundoff(), args);
 
         gmres_ir.solve();
 

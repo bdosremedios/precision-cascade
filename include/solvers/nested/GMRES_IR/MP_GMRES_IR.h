@@ -11,47 +11,146 @@ class MP_GMRES_IR_Solve: public IterativeRefinement<M>
 {
 private:
 
-    Mutb_TypedLinearSystem<M, __half> IR_inner_lin_sys_hlf;
-    Mutb_TypedLinearSystem<M, float> IR_inner_lin_sys_sgl;
-    Mutb_TypedLinearSystem<M, double> IR_inner_lin_sys_dbl;
+    TypedLinearSystem<M, __half> * innerlinsys_hlf_ptr = nullptr;
+    TypedLinearSystem<M, float> * innerlinsys_sgl_ptr = nullptr;
+    TypedLinearSystem<M, double> * innerlinsys_dbl_ptr = nullptr;
+
+    TypedLinearSystem_MutAddlRHS<M, __half> * mutrhs_innerlinsys_hlf_ptr = nullptr;
+    TypedLinearSystem_MutAddlRHS<M, float> * mutrhs_innerlinsys_sgl_ptr = nullptr;
+    TypedLinearSystem_MutAddlRHS<M, double> * mutrhs_innerlinsys_dbl_ptr = nullptr;
 
     // *** Helper Methods ***
+
+    bool innerlinsys_hlf_instantiated() {
+        return (innerlinsys_hlf_ptr != nullptr) && (mutrhs_innerlinsys_hlf_ptr != nullptr);
+    };
+
+    bool innerlinsys_hlf_empty() {
+        return (innerlinsys_hlf_ptr == nullptr) && (mutrhs_innerlinsys_hlf_ptr == nullptr);
+    };
+
+    bool innerlinsys_sgl_instantiated() {
+        return (innerlinsys_sgl_ptr != nullptr) && (mutrhs_innerlinsys_sgl_ptr != nullptr);
+    };
+
+    bool innerlinsys_sgl_empty() {
+        return (innerlinsys_sgl_ptr == nullptr) && (mutrhs_innerlinsys_sgl_ptr == nullptr);
+    };
+
+    bool innerlinsys_dbl_instantiated() {
+        return (innerlinsys_dbl_ptr != nullptr) && (mutrhs_innerlinsys_dbl_ptr != nullptr);
+    };
+
+    bool innerlinsys_dbl_empty() {
+        return (innerlinsys_dbl_ptr == nullptr) && (mutrhs_innerlinsys_dbl_ptr == nullptr);
+    };
+
+    void free_innerlinsys_hlf_ptrs() {
+        free(innerlinsys_hlf_ptr);
+        innerlinsys_hlf_ptr = nullptr;
+        free(mutrhs_innerlinsys_hlf_ptr);
+        mutrhs_innerlinsys_hlf_ptr = nullptr;
+    }
+
+    void free_innerlinsys_sgl_ptrs() {
+        free(innerlinsys_sgl_ptr);
+        innerlinsys_sgl_ptr = nullptr;
+        free(mutrhs_innerlinsys_sgl_ptr);
+        mutrhs_innerlinsys_sgl_ptr = nullptr;
+    }
+
+    void free_innerlinsys_dbl_ptrs() {
+        free(innerlinsys_dbl_ptr);
+        innerlinsys_dbl_ptr = nullptr;
+        free(mutrhs_innerlinsys_dbl_ptr);
+        mutrhs_innerlinsys_dbl_ptr = nullptr;
+    }
+
+    void free_innerlinsys_ptrs() {
+        free_innerlinsys_hlf_ptrs();
+        free_innerlinsys_sgl_ptrs();
+        free_innerlinsys_dbl_ptrs();
+    }
+
     template <typename T>
-    void setup_inner_solve() {
+    void setup_linear_system() {
 
         if (std::is_same<T, __half>::value) {
 
-            IR_inner_lin_sys_hlf.set_b(this->curr_res);
+            if (innerlinsys_hlf_empty()) {
+                innerlinsys_hlf_ptr = new TypedLinearSystem<M, __half>(this->gen_lin_sys_ptr);
+                mutrhs_innerlinsys_hlf_ptr = new TypedLinearSystem_MutAddlRHS<M, __half>(
+                    innerlinsys_hlf_ptr, this->curr_res
+                );
+            } else if (innerlinsys_hlf_instantiated()) {
+                mutrhs_innerlinsys_hlf_ptr->set_rhs(this->curr_res);
+            } else {
+                free_innerlinsys_ptrs();
+                throw std::runtime_error("MP_GMRES_IR_Solve: mismatching ptrs in setup_inner_solve<__half>");
+            }
+
+        } else if (std::is_same<T, float>::value) {
+
+            if (innerlinsys_hlf_instantiated() && innerlinsys_sgl_empty()) {
+                free_innerlinsys_hlf_ptrs();
+                innerlinsys_sgl_ptr = new TypedLinearSystem<M, float>(this->gen_lin_sys_ptr);
+                mutrhs_innerlinsys_sgl_ptr = new TypedLinearSystem_MutAddlRHS<M, float>(
+                    innerlinsys_sgl_ptr, this->curr_res
+                );
+            } else if (innerlinsys_sgl_instantiated()) {
+                mutrhs_innerlinsys_sgl_ptr->set_rhs(this->curr_res);
+            } else {
+                free_innerlinsys_ptrs();
+                throw std::runtime_error("MP_GMRES_IR_Solve: mismatching ptrs in setup_inner_solve<float>");
+            }
+
+        } else if (std::is_same<T, double>::value) {
+
+            if (innerlinsys_sgl_instantiated() && innerlinsys_dbl_empty()) {
+                free_innerlinsys_hlf_ptrs();
+                innerlinsys_dbl_ptr = new TypedLinearSystem<M, double>(this->gen_lin_sys_ptr);
+                mutrhs_innerlinsys_dbl_ptr = new TypedLinearSystem_MutAddlRHS<M, double>(
+                    innerlinsys_dbl_ptr, this->curr_res
+                );
+            } else if (innerlinsys_dbl_instantiated()) {
+                mutrhs_innerlinsys_dbl_ptr->set_rhs(this->curr_res);
+            } else {
+                free_innerlinsys_ptrs();
+                throw std::runtime_error("MP_GMRES_IR_Solve: mismatching ptrs in setup_inner_solve<double>");
+            }
+
+        } else {
+            throw std::runtime_error("MP_GMRES_IR_Solve: Invalid T used in setup_linear_system<T>");
+        }
+
+
+    }
+
+    template <typename T>
+    void setup_inner_solve() {
+
+        setup_linear_system<T>();
+
+        if (std::is_same<T, __half>::value) {
+
             this->inner_solver = std::make_shared<GMRESSolve<M, __half>>(
-                IR_inner_lin_sys_hlf,
-                u_hlf,
-                this->inner_solve_arg_pkg
+                mutrhs_innerlinsys_hlf_ptr, u_hlf, this->inner_solve_arg_pkg
             );
 
         } else if (std::is_same<T, float>::value) {
 
-            IR_inner_lin_sys_sgl.set_b(this->curr_res);
             this->inner_solver = std::make_shared<GMRESSolve<M, float>>(
-                IR_inner_lin_sys_sgl,
-                u_sgl,
-                this->inner_solve_arg_pkg
+                mutrhs_innerlinsys_sgl_ptr, u_sgl, this->inner_solve_arg_pkg
             );
 
         } else if (std::is_same<T, double>::value) {
 
-            IR_inner_lin_sys_dbl.set_b(this->curr_res);
             this->inner_solver = std::make_shared<GMRESSolve<M, double>>(
-                IR_inner_lin_sys_dbl,
-                u_dbl,
-                this->inner_solve_arg_pkg
+                mutrhs_innerlinsys_dbl_ptr, u_dbl, this->inner_solve_arg_pkg
             );
 
         } else {
-
-            throw std::runtime_error(
-                "MP_GMRES_IR_Solve: Invalid type T used in call to setup_inner_solve<T>"
-            );
-
+            throw std::runtime_error("MP_GMRES_IR_Solve: Invalid T used in setup_inner_solve<T>");
         }
 
     }
@@ -59,23 +158,15 @@ private:
     void choose_phase_solver() {
 
         if (cascade_phase == HLF_PHASE) {
-
             setup_inner_solve<__half>();
-    
         } else if (cascade_phase == SGL_PHASE) {
-
             setup_inner_solve<float>();
-
         } else if (cascade_phase == DBL_PHASE) {
-            
             setup_inner_solve<double>();
-            
         } else {
-
             throw std::runtime_error(
                 "MP_GMRES_IR_Solve: Invalid cascade_phase in MP_GMRES_IR_Solver"
             );
-
         }
 
     }
@@ -99,8 +190,7 @@ protected:
 
     // *** Virtual Abstract Methods ***
 
-    // Determine which phase should be used based on current phase and
-    // current convergence progress
+    // Determine which phase should be used based on current phase and current convergence progress
     virtual int determine_next_phase() = 0;
 
     // *** Concrete Override Methods ***
@@ -132,30 +222,24 @@ public:
 
     // *** Constructors ***
     MP_GMRES_IR_Solve(
-        const GenericLinearSystem<M> &arg_lin_sys,
+        const GenericLinearSystem<M> * const arg_gen_lin_sys_ptr,
         const SolveArgPkg &arg_solve_arg_pkg
     ):
-        IterativeRefinement<M>(arg_lin_sys, arg_solve_arg_pkg),
-        IR_inner_lin_sys_hlf(arg_lin_sys.get_A(), this->curr_res),
-        IR_inner_lin_sys_sgl(arg_lin_sys.get_A(), this->curr_res),
-        IR_inner_lin_sys_dbl(arg_lin_sys.get_A(), this->curr_res)
+        IterativeRefinement<M>(arg_gen_lin_sys_ptr, arg_solve_arg_pkg)
     {
         cascade_phase = INIT_PHASE;
         initialize_inner_outer_solver();
     }
 
+    ~MP_GMRES_IR_Solve() {
+        free_innerlinsys_ptrs();
+    }
+
     // Forbid rvalue instantiation
-    MP_GMRES_IR_Solve(const GenericLinearSystem<M> &, const SolveArgPkg &&) = delete;
-    MP_GMRES_IR_Solve(const GenericLinearSystem<M> &&, const SolveArgPkg &) = delete;
-    MP_GMRES_IR_Solve(const GenericLinearSystem<M> &&, const SolveArgPkg &&) = delete;
+    MP_GMRES_IR_Solve(const GenericLinearSystem<M> * const, const SolveArgPkg &&) = delete;
 
-    int get_hlf_sgl_cascade_change() const {
-        return hlf_sgl_cascade_change;
-    }
-
-    int get_sgl_dbl_cascade_change() const {
-        return sgl_dbl_cascade_change;
-    }
+    int get_hlf_sgl_cascade_change() const { return hlf_sgl_cascade_change; }
+    int get_sgl_dbl_cascade_change() const { return sgl_dbl_cascade_change; }
 
 };
 

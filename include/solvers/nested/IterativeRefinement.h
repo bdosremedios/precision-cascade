@@ -19,7 +19,10 @@ protected:
         std::vector<double> temp;
         for (int i=0; i < this->inner_solver->get_iteration(); ++i) {
             temp.push_back(
-                (this->lin_sys.get_b()-(this->inner_solver->get_res_hist()).get_col(i)).norm().get_scalar()
+                (
+                    this->gen_lin_sys_ptr->get_b()-
+                    (this->inner_solver->get_res_hist()).get_col(i)
+                ).norm().get_scalar()
             );
         }
         this->inner_res_norm_hist.push_back(temp);
@@ -27,27 +30,25 @@ protected:
     }
 
     // Create initial guess for inner solver
-    Vector<double> make_inner_IR_guess(GenericLinearSystem<M> const &arg_lin_sys) const {
-        return Vector<double>::Zero(arg_lin_sys.get_cu_handles(), arg_lin_sys.get_n());
+    Vector<double> make_inner_IR_guess(const GenericLinearSystem<M> * const arg_gen_lin_sys) const {
+        return Vector<double>::Zero(arg_gen_lin_sys->get_cu_handles(), arg_gen_lin_sys->get_n());
     }
 
 public:
 
     // *** Constructors ***
     IterativeRefinement(
-        const GenericLinearSystem<M> &arg_lin_sys,
+        const GenericLinearSystem<M> * const arg_gen_lin_sys,
         const SolveArgPkg &arg_pkg
     ):
-        InnerOuterSolve<M>(arg_lin_sys, arg_pkg)
+        InnerOuterSolve<M>(arg_gen_lin_sys, arg_pkg)
     {
         // Replace initial guess with IR guess of zeroes for existing inner_solve_arg_pkg
-        this->inner_solve_arg_pkg.init_guess = make_inner_IR_guess(arg_lin_sys);
+        this->inner_solve_arg_pkg.init_guess = make_inner_IR_guess(arg_gen_lin_sys);
     }
 
     // Forbid rvalue instantiation
-    IterativeRefinement(const GenericLinearSystem<M> &&, const SolveArgPkg &);
-    IterativeRefinement(const GenericLinearSystem<M> &, const SolveArgPkg &&);
-    IterativeRefinement(const GenericLinearSystem<M> &&, const SolveArgPkg &&);
+    IterativeRefinement(const GenericLinearSystem<M> * const, const SolveArgPkg &&);
 
 };
 

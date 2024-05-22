@@ -22,7 +22,7 @@ protected:
                   << std::chrono::duration_cast<std::chrono::microseconds>(clock.now()-start);
     }
 
-    using TypedIterativeSolve<M, T>::typed_lin_sys;
+    using TypedIterativeSolve<M, T>::typed_lin_sys_ptr;
     using TypedIterativeSolve<M, T>::init_guess_typed;
     using TypedIterativeSolve<M, T>::typed_soln;
     using TypedIterativeSolve<M, T>::max_iter;
@@ -42,17 +42,17 @@ protected:
     Scalar<T> rho;
 
     void check_compatibility() const {
-        if (!left_precond_ptr->check_compatibility_left(typed_lin_sys.get_m())) {
+        if (!left_precond_ptr->check_compatibility_left(typed_lin_sys_ptr->get_m())) {
             throw std::runtime_error("GMRESSolve: Left preconditioner not compatible");
         }
-        if (!right_precond_ptr->check_compatibility_right(typed_lin_sys.get_n())) {
+        if (!right_precond_ptr->check_compatibility_right(typed_lin_sys_ptr->get_n())) {
             throw std::runtime_error("GMRESSolve: Right preconditioner not compatible");
         }
     }
 
     Vector<T> apply_left_precond_A(const Vector<T> &vec) {
         return left_precond_ptr->template casted_action_inv_M<T>(
-            (typed_lin_sys.get_A_typed()*vec).template cast<W>()
+            (typed_lin_sys_ptr->get_A_typed()*vec).template cast<W>()
         );
     }
 
@@ -64,7 +64,7 @@ protected:
 
     Vector<T> get_precond_b() {
         return left_precond_ptr->casted_action_inv_M<T>(
-            typed_lin_sys.get_b_typed().template cast<W>()
+            typed_lin_sys_ptr->get_b_typed().template cast<W>()
         );
     }
 
@@ -79,18 +79,18 @@ protected:
         // Pre-allocate all possible space needed to prevent memory
         // re-allocation
         Q_kry_basis = MatrixDense<T>::Zero(
-            typed_lin_sys.get_cu_handles(),
-            typed_lin_sys.get_m(),
+            typed_lin_sys_ptr->get_cu_handles(),
+            typed_lin_sys_ptr->get_m(),
             max_kry_dim
         );
-        H_k = Vector<T>::Zero(typed_lin_sys.get_cu_handles(), max_kry_dim+1);
+        H_k = Vector<T>::Zero(typed_lin_sys_ptr->get_cu_handles(), max_kry_dim+1);
         H_Q = MatrixDense<T>::Identity(
-            typed_lin_sys.get_cu_handles(),
+            typed_lin_sys_ptr->get_cu_handles(),
             max_kry_dim+1,
             max_kry_dim+1
         );
         H_R = MatrixDense<T>::Zero(
-            typed_lin_sys.get_cu_handles(),
+            typed_lin_sys_ptr->get_cu_handles(),
             max_kry_dim+1,
             max_kry_dim
         );
@@ -108,7 +108,7 @@ protected:
     }
 
     void initializeGMRES() {
-        if (max_iter > typed_lin_sys.get_m()) {
+        if (max_iter > typed_lin_sys_ptr->get_m()) {
             throw std::runtime_error("GMRESSolve: GMRES max_iter exceeds matrix size");
         }
         max_kry_dim = max_iter;
@@ -184,7 +184,7 @@ protected:
 
         // Calculate rhs to solve
         Vector<T> rho_e1(
-            Vector<T>::Zero(typed_lin_sys.get_cu_handles(), curr_kry_dim+1)
+            Vector<T>::Zero(typed_lin_sys_ptr->get_cu_handles(), curr_kry_dim+1)
         );
         rho_e1.set_elem(0, rho);
         Vector<T> rhs(
@@ -199,13 +199,12 @@ protected:
         );
 
         // Update typed_soln adjusting with right preconditioning
-        MatrixDense<T> Q_kry_basis_block(
-            Q_kry_basis.get_block(0, 0, typed_lin_sys.get_m(), curr_kry_dim).copy_to_mat()
+        typed_soln = (
+            init_guess_typed +
+            right_precond_ptr->casted_action_inv_M<T>(
+                Q_kry_basis.mult_subset_cols(0, curr_kry_dim, y).template cast<W>()
+            )
         );
-        typed_soln = init_guess_typed +
-                     right_precond_ptr->casted_action_inv_M<T>(
-                        (Q_kry_basis_block*y).template cast<W>()
-                     );
 
     }
 
@@ -251,7 +250,7 @@ public:
 
     // *** Constructors ***
     GMRESSolve(
-        const TypedLinearSystem<M, T> &arg_typed_lin_sys,
+        const TypedLinearSystem_Intf<M, T> * const arg_typed_lin_sys_ptr,
         double arg_basis_zero_tol,
         const SolveArgPkg &solve_arg_pkg,
         const PrecondArgPkg<M, W> &precond_arg_pkg = PrecondArgPkg<M, W>()
@@ -259,22 +258,18 @@ public:
         basis_zero_tol(arg_basis_zero_tol),
         left_precond_ptr(precond_arg_pkg.left_precond),
         right_precond_ptr(precond_arg_pkg.right_precond),
-        TypedIterativeSolve<M, T>::TypedIterativeSolve(arg_typed_lin_sys, solve_arg_pkg)
+        TypedIterativeSolve<M, T>::TypedIterativeSolve(arg_typed_lin_sys_ptr, solve_arg_pkg)
     {
         max_iter = (
-            (solve_arg_pkg.check_default_max_iter()) ? typed_lin_sys.get_m() : solve_arg_pkg.max_iter
+            (solve_arg_pkg.check_default_max_iter()) ? typed_lin_sys_ptr->get_m() : solve_arg_pkg.max_iter
         );
         initializeGMRES();
     }
 
     // Forbid rvalue instantiation
-    GMRESSolve(const TypedLinearSystem<M, T> &&, double, const SolveArgPkg &, const PrecondArgPkg<M, W> &) = delete;
-    GMRESSolve(const TypedLinearSystem<M, T> &, double, const SolveArgPkg &&, const PrecondArgPkg<M, W> &) = delete;
-    GMRESSolve(const TypedLinearSystem<M, T> &, double, const SolveArgPkg &, const PrecondArgPkg<M, W> &&) = delete;
-    GMRESSolve(const TypedLinearSystem<M, T> &&, double, const SolveArgPkg &&, const PrecondArgPkg<M, W> &) = delete;
-    GMRESSolve(const TypedLinearSystem<M, T> &, double, const SolveArgPkg &&, const PrecondArgPkg<M, W> &&) = delete;
-    GMRESSolve(const TypedLinearSystem<M, T> &&, double, const SolveArgPkg &, const PrecondArgPkg<M, W> &&) = delete;
-    GMRESSolve(const TypedLinearSystem<M, T> &&, double, const SolveArgPkg &&, const PrecondArgPkg<M, W> &&) = delete;
+    GMRESSolve(const TypedLinearSystem_Intf<M, T> * const, double, const SolveArgPkg &, const PrecondArgPkg<M, W> &&) = delete;
+    GMRESSolve(const TypedLinearSystem_Intf<M, T> * const, double, const SolveArgPkg &&, const PrecondArgPkg<M, W> &) = delete;
+    GMRESSolve(const TypedLinearSystem_Intf<M, T> * const, double, const SolveArgPkg &&, const PrecondArgPkg<M, W> &&) = delete;
 
 };
 

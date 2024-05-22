@@ -13,12 +13,14 @@ private:
 
 protected:
 
-    using TypedIterativeSolve<M, T>::typed_lin_sys;
+    using TypedIterativeSolve<M, T>::typed_lin_sys_ptr;
     using TypedIterativeSolve<M, T>::typed_soln;
 
     // *** Helper Methods ***
     void typed_iterate() override {
-        typed_soln += (D_wL.frwd_sub(typed_lin_sys.get_b_typed()-typed_lin_sys.get_A_typed()*typed_soln))*w;
+        typed_soln += (
+            (D_wL.frwd_sub(typed_lin_sys_ptr->get_b_typed()-typed_lin_sys_ptr->get_A_typed()*typed_soln))*w
+        );
     }
     void derived_typed_reset() override {}; // Set reset as empty function
 
@@ -26,32 +28,38 @@ public:
 
     // *** Constructors ***
     SORSolve(
-        const TypedLinearSystem<MatrixDense, T> &arg_typed_lin_sys,
+        const TypedLinearSystem_Intf<MatrixDense, T> * const arg_typed_lin_sys_ptr,
         double arg_w,
         const SolveArgPkg &arg_pkg
     ):
         w(static_cast<T>(arg_w)),
-        TypedIterativeSolve<MatrixDense, T>::TypedIterativeSolve(arg_typed_lin_sys, arg_pkg)
+        TypedIterativeSolve<MatrixDense, T>::TypedIterativeSolve(arg_typed_lin_sys_ptr, arg_pkg)
     {
 
-        T *h_D_wL = static_cast<T *>(malloc(typed_lin_sys.get_m()*typed_lin_sys.get_n()*sizeof(T)));
-        typed_lin_sys.get_A_typed().copy_data_to_ptr(h_D_wL, typed_lin_sys.get_m(), typed_lin_sys.get_n());
+        T *h_D_wL = static_cast<T *>(
+            malloc(typed_lin_sys_ptr->get_m()*typed_lin_sys_ptr->get_n()*sizeof(T))
+        );
+        typed_lin_sys_ptr->get_A_typed().copy_data_to_ptr(
+            h_D_wL, typed_lin_sys_ptr->get_m(), typed_lin_sys_ptr->get_n()
+        );
 
-        for (int i=0; i<typed_lin_sys.get_m(); ++i) {
-            for (int j=0; j<typed_lin_sys.get_n(); ++j) {
+        for (int i=0; i<typed_lin_sys_ptr->get_m(); ++i) {
+            for (int j=0; j<typed_lin_sys_ptr->get_n(); ++j) {
                 if (i < j) {
-                    h_D_wL[i+j*typed_lin_sys.get_m()] = static_cast<T>(0);
+                    h_D_wL[i+j*typed_lin_sys_ptr->get_m()] = static_cast<T>(0);
                 } else if (i > j) {
-                    h_D_wL[i+j*typed_lin_sys.get_m()] = static_cast<T>(arg_w)*h_D_wL[i+j*typed_lin_sys.get_m()];
+                    h_D_wL[i+j*typed_lin_sys_ptr->get_m()] = (
+                        static_cast<T>(arg_w)*h_D_wL[i+j*typed_lin_sys_ptr->get_m()]
+                    );
                 }
             }
         }
 
         D_wL = MatrixDense<T>(
-            arg_typed_lin_sys.get_cu_handles(),
+            typed_lin_sys_ptr->get_cu_handles(),
             h_D_wL,
-            typed_lin_sys.get_m(),
-            typed_lin_sys.get_n()
+            typed_lin_sys_ptr->get_m(),
+            typed_lin_sys_ptr->get_n()
         );
 
         free(h_D_wL);
@@ -59,30 +67,30 @@ public:
     }
 
     SORSolve(
-        const TypedLinearSystem<NoFillMatrixSparse, T> &arg_typed_lin_sys,
+        const TypedLinearSystem_Intf<NoFillMatrixSparse, T> * const arg_typed_lin_sys_ptr,
         double arg_w,
         const SolveArgPkg &arg_pkg
     ):
         w(static_cast<T>(arg_w)),
-        TypedIterativeSolve<NoFillMatrixSparse, T>::TypedIterativeSolve(arg_typed_lin_sys, arg_pkg)
+        TypedIterativeSolve<NoFillMatrixSparse, T>::TypedIterativeSolve(arg_typed_lin_sys_ptr, arg_pkg)
     {
 
-        int *new_col_offsets = static_cast<int *>(malloc((typed_lin_sys.get_n()+1)*sizeof(int)));
+        int *new_col_offsets = static_cast<int *>(malloc((typed_lin_sys_ptr->get_n()+1)*sizeof(int)));
         new_col_offsets[0] = 0;
         std::vector<int> new_row_indices;
         std::vector<T> new_vals;
 
-        int *A_col_offsets = static_cast<int *>(malloc((typed_lin_sys.get_n()+1)*sizeof(int)));
-        int *A_row_indices = static_cast<int *>(malloc(typed_lin_sys.get_nnz()*sizeof(int)));
-        T *A_vals = static_cast<T *>(malloc(typed_lin_sys.get_nnz()*sizeof(T)));
+        int *A_col_offsets = static_cast<int *>(malloc((typed_lin_sys_ptr->get_n()+1)*sizeof(int)));
+        int *A_row_indices = static_cast<int *>(malloc(typed_lin_sys_ptr->get_nnz()*sizeof(int)));
+        T *A_vals = static_cast<T *>(malloc(typed_lin_sys_ptr->get_nnz()*sizeof(T)));
 
-        typed_lin_sys.get_A_typed().copy_data_to_ptr(
+        typed_lin_sys_ptr->get_A_typed().copy_data_to_ptr(
             A_col_offsets, A_row_indices, A_vals,
-            typed_lin_sys.get_m(), typed_lin_sys.get_n(), typed_lin_sys.get_nnz()
+            typed_lin_sys_ptr->get_m(), typed_lin_sys_ptr->get_n(), typed_lin_sys_ptr->get_nnz()
         );
 
         int D_wL_count = 0;
-        for (int j=0; j<typed_lin_sys.get_n(); ++j) {
+        for (int j=0; j<typed_lin_sys_ptr->get_n(); ++j) {
             int col_beg = A_col_offsets[j];
             int col_end = A_col_offsets[j+1];
             for (int offset=col_beg; offset<col_end; ++offset) {
@@ -104,9 +112,9 @@ public:
         }
 
         D_wL = NoFillMatrixSparse<T>(
-            arg_typed_lin_sys.get_cu_handles(),
+            typed_lin_sys_ptr->get_cu_handles(),
             new_col_offsets, &new_row_indices[0], &new_vals[0],
-            typed_lin_sys.get_m(), typed_lin_sys.get_n(), D_wL_count
+            typed_lin_sys_ptr->get_m(), typed_lin_sys_ptr->get_n(), D_wL_count
         );
 
         free(new_col_offsets);
@@ -118,9 +126,7 @@ public:
     }
 
     // Forbid rvalue instantiation
-    SORSolve(const TypedLinearSystem<M, T> &&, double, const SolveArgPkg &) = delete;
-    SORSolve(const TypedLinearSystem<M, T> &, double, const SolveArgPkg &&) = delete;
-    SORSolve(const TypedLinearSystem<M, T> &&, double, const SolveArgPkg &&) = delete;
+    SORSolve(const TypedLinearSystem_Intf<M, T> * const, double, const SolveArgPkg &&) = delete;
 
 };
 

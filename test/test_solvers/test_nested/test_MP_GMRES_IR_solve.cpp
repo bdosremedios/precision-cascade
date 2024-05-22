@@ -18,7 +18,7 @@ public:
         Vector<double> b(read_matrixCSV<Vector, double>(TestBase::bundle, b_file_path));
 
         GenericLinearSystem<M> lin_sys(A, b);
-        MP_GMRES_Impl<M> mp_gmres_ir_solve(lin_sys, dbl_GMRES_IR_args);
+        MP_GMRES_Impl<M> mp_gmres_ir_solve(&lin_sys, dbl_GMRES_IR_args);
 
         mp_gmres_ir_solve.solve();
 
