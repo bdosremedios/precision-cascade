@@ -11,10 +11,10 @@ private:
 
     void set_inner_solve() {
 
-        IR_inner_typed_lin_sys.set_rhs(this->curr_res);
+        mutrhs_innerlinsys_ptr.set_rhs(this->curr_res);
 
         this->inner_solver = std::make_shared<GMRESSolve<M, T>>(
-            &IR_inner_typed_lin_sys,
+            &mutrhs_innerlinsys_ptr,
             basis_zero_tol,
             this->inner_solve_arg_pkg,
             inner_precond_arg_pkg
@@ -29,7 +29,7 @@ protected:
     const PrecondArgPkg<M, W> inner_precond_arg_pkg;
 
     // *** Mutable Attributes ***
-    TypedLinearSystem_MutableAdditionalRHS<M, T> IR_inner_typed_lin_sys;
+    TypedLinearSystem_MutAddlRHS<M, T> mutrhs_innerlinsys_ptr;
 
     // *** Virtual Abstract Methods ***
     void initialize_inner_outer_solver() override { set_inner_solve(); }
@@ -50,7 +50,7 @@ public:
         basis_zero_tol(arg_basis_zero_tol),
         inner_precond_arg_pkg(arg_inner_precond_arg_pkg),
         IterativeRefinement<M>(arg_outer_typed_lin_sys_ptr->get_gen_lin_sys_ptr(), arg_solve_arg_pkg),
-        IR_inner_typed_lin_sys(arg_outer_typed_lin_sys_ptr, this->curr_res)
+        mutrhs_innerlinsys_ptr(arg_outer_typed_lin_sys_ptr, this->curr_res)
 
     {
         initialize_inner_outer_solver();

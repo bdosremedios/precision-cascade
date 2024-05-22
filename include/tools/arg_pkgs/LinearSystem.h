@@ -116,7 +116,7 @@ public:
 };
 
 template <template <typename> typename M, typename T>
-class TypedLinearSystem_MutableAdditionalRHS: public TypedLinearSystem_Intf<M, T>
+class TypedLinearSystem_MutAddlRHS: public TypedLinearSystem_Intf<M, T>
 {
 private:
 
@@ -126,7 +126,7 @@ private:
 
 public:
 
-    TypedLinearSystem_MutableAdditionalRHS(
+    TypedLinearSystem_MutAddlRHS(
         const TypedLinearSystem<M, T> * const arg_orig_typed_lin_sys_ptr,
         const Vector<double> &arg_additional_rhs
     ):
