@@ -11,16 +11,18 @@ public:
 
         M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, n, n));
         Vector<double> b(Vector<double>::Random(TestBase::bundle, n));
-        TypedLinearSystem<M, double> lin_sys(A, b);
 
-        GMRESSolveTestingMock<M, double> test_mock(lin_sys, Tol<double>::roundoff(), default_args);
+        GenericLinearSystem<M> gen_lin_sys(A, b);
+        TypedLinearSystem<M, double> typed_lin_sys(&gen_lin_sys);
+
+        GMRESSolveTestingMock<M, double> test_mock(&typed_lin_sys, Tol<double>::roundoff(), default_args);
 
         ASSERT_EQ(test_mock.max_kry_dim, n);
         ASSERT_NEAR(
             test_mock.rho.get_scalar(),
             (b - A*Vector<double>::Ones(TestBase::bundle, n)).norm().get_scalar(),
             std::abs((b - A*Vector<double>::Ones(TestBase::bundle, n)).norm().get_scalar())*
-                Tol<double>::roundoff()
+                Tol<double>::gamma(n)
         );
         
         ASSERT_EQ(test_mock.Q_kry_basis.rows(), n);
@@ -52,9 +54,11 @@ public:
         Vector<double> b(
             read_matrixCSV<Vector, double>(TestBase::bundle, solve_matrix_dir / fs::path("b_5_toy.csv"))
         );
-        TypedLinearSystem<M, double> lin_sys(A, b);
 
-        GMRESSolveTestingMock<M, double> test_mock(lin_sys, Tol<double>::roundoff(), default_args);
+        GenericLinearSystem<M> gen_lin_sys(A, b);
+        TypedLinearSystem<M, double> typed_lin_sys(&gen_lin_sys);
+
+        GMRESSolveTestingMock<M, double> test_mock(&typed_lin_sys, Tol<double>::roundoff(), default_args);
 
         // Manually instantiate initial guess
         test_mock.typed_soln = Vector<double>::Ones(TestBase::bundle, n);
@@ -147,9 +151,11 @@ public:
         Vector<double> b(
             read_matrixCSV<Vector, double>(TestBase::bundle, solve_matrix_dir / fs::path("b_5_toy.csv"))
         );
-        TypedLinearSystem<M, double> lin_sys(A, b);
 
-        GMRESSolveTestingMock<M, double> test_mock(lin_sys, Tol<double>::roundoff(), default_args);
+        GenericLinearSystem<M> gen_lin_sys(A, b);
+        TypedLinearSystem<M, double> typed_lin_sys(&gen_lin_sys);
+
+        GMRESSolveTestingMock<M, double> test_mock(&typed_lin_sys, Tol<double>::roundoff(), default_args);
 
         // Manually instantiate initial guess
         test_mock.typed_soln = Vector<double>::Ones(TestBase::bundle, n);
@@ -218,14 +224,16 @@ public:
         Vector<double> b(
             read_matrixCSV<Vector, double>(TestBase::bundle, solve_matrix_dir / fs::path("b_7_dummy_backsub.csv"))
         );
-        TypedLinearSystem<M, double> lin_sys(A, b);
+
+        GenericLinearSystem<M> gen_lin_sys(A, b);
+        TypedLinearSystem<M, double> typed_lin_sys(&gen_lin_sys);
 
         // Set initial guess to zeros such that residual is just b
         Vector<double> x_0(Vector<double>::Zero(TestBase::bundle, n));
         SolveArgPkg args;
         args.init_guess = x_0;
 
-        GMRESSolveTestingMock<M, double> test_mock(lin_sys, Tol<double>::roundoff(), args);
+        GMRESSolveTestingMock<M, double> test_mock(&typed_lin_sys, Tol<double>::roundoff(), args);
 
         // Set test_mock krylov basis to the identity to have typed_soln be directly the solved coefficients
         // of the back substitution
@@ -279,7 +287,9 @@ public:
         Vector<double> b(
             read_matrixCSV<Vector, double>(TestBase::bundle, solve_matrix_dir / fs::path("b_5_easysoln.csv"))
         );
-        TypedLinearSystem<M, double> lin_sys(A, b);
+
+        GenericLinearSystem<M> gen_lin_sys(A, b);
+        TypedLinearSystem<M, double> typed_lin_sys(&gen_lin_sys);
 
         // Instantiate initial guess as true solution
         Vector<double> soln(Vector<double>::Ones(TestBase::bundle, n));
@@ -287,7 +297,7 @@ public:
         args.target_rel_res = Tol<double>::krylov_conv_tol();
         args.init_guess = soln;
 
-        GMRESSolveTestingMock<M, double> test_mock(lin_sys, Tol<double>::roundoff(), args);
+        GMRESSolveTestingMock<M, double> test_mock(&typed_lin_sys, Tol<double>::roundoff(), args);
 
         // Attempt to update subspace and Hessenberg
         test_mock.iterate();
@@ -319,7 +329,9 @@ public:
         Vector<double> b(
             read_matrixCSV<Vector, double>(TestBase::bundle, solve_matrix_dir / fs::path("b_5_easysoln.csv"))
         );
-        TypedLinearSystem<M, double> lin_sys(A, b);
+
+        GenericLinearSystem<M> gen_lin_sys(A, b);
+        TypedLinearSystem<M, double> typed_lin_sys(&gen_lin_sys);
 
         // Instantiate initial guess as true solution
         Vector<double> soln(Vector<double>::Zero(TestBase::bundle, n));
@@ -327,7 +339,7 @@ public:
         SolveArgPkg args;
         args.init_guess = soln;
 
-        GMRESSolveTestingMock<M, double> test_mock(lin_sys, Tol<double>::roundoff(), args);
+        GMRESSolveTestingMock<M, double> test_mock(&typed_lin_sys, Tol<double>::roundoff(), args);
 
         // Attempt to update subspace and convergence twice
         test_mock.iterate();
@@ -361,7 +373,9 @@ public:
         Vector<double> b(
             read_matrixCSV<Vector, double>(TestBase::bundle, solve_matrix_dir / fs::path("b_5_easysoln.csv"))
         );
-        TypedLinearSystem<M, double> lin_sys(A, b);
+
+        GenericLinearSystem<M> gen_lin_sys(A, b);
+        TypedLinearSystem<M, double> typed_lin_sys(&gen_lin_sys);
 
         // Instantiate initial guess as true solution
         Vector<double> soln(Vector<double>::Zero(TestBase::bundle, n));
@@ -370,7 +384,7 @@ public:
         args.init_guess = soln;
         args.target_rel_res = Tol<double>::krylov_conv_tol();
 
-        GMRESSolveTestingMock<M, double> test_mock(lin_sys, Tol<double>::roundoff(), args);
+        GMRESSolveTestingMock<M, double> test_mock(&typed_lin_sys, Tol<double>::roundoff(), args);
 
         // Attempt to update and solve through solve of LinearSolve
         test_mock.solve();
@@ -401,13 +415,15 @@ public:
         constexpr int n(20);
         M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, n, n));
         Vector<double> b(Vector<double>::Random(TestBase::bundle, n));
-        TypedLinearSystem<M, double> lin_sys(A, b);
+
+        GenericLinearSystem<M> gen_lin_sys(A, b);
+        TypedLinearSystem<M, double> typed_lin_sys(&gen_lin_sys);
 
         SolveArgPkg args;
         args.max_iter = n;
         args.target_rel_res = Tol<double>::krylov_conv_tol();
 
-        GMRESSolve<M, double> gmres_solve(lin_sys, Tol<double>::roundoff(), args);
+        GMRESSolve<M, double> gmres_solve(&typed_lin_sys, Tol<double>::roundoff(), args);
 
         gmres_solve.solve();
         if (*show_plots) { gmres_solve.view_relres_plot("log"); }
@@ -423,13 +439,15 @@ public:
         constexpr int n(20);
         M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, n, n));
         Vector<double> b(Vector<double>::Random(TestBase::bundle, n));
-        TypedLinearSystem<M, double> lin_sys(A, b);
+
+        GenericLinearSystem<M> gen_lin_sys(A, b);
+        TypedLinearSystem<M, double> typed_lin_sys(&gen_lin_sys);
 
         SolveArgPkg args;
         args.max_iter = n;
         args.target_rel_res = Tol<double>::krylov_conv_tol();
 
-        GMRESSolveTestingMock<M, double> test_mock(lin_sys, Tol<double>::roundoff(), args);
+        GMRESSolveTestingMock<M, double> test_mock(&typed_lin_sys, Tol<double>::roundoff(), args);
 
         test_mock.solve();
         if (*show_plots) { test_mock.view_relres_plot("log"); }
@@ -467,25 +485,34 @@ public:
         constexpr int n(7);
         M<double> A_n(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, n, n));
         Vector<double> b_n(Vector<double>::Random(TestBase::bundle, n));
-        TypedLinearSystem<M, double> lin_sys_n(A_n, b_n);
-        GMRESSolveTestingMock<M, double> test_mock_n(lin_sys_n, Tol<double>::roundoff(), default_args);
+
+        GenericLinearSystem<M> gen_lin_sys_n(A_n, b_n);
+        TypedLinearSystem<M, double> typed_lin_sys_n(&gen_lin_sys_n);
+
+        GMRESSolveTestingMock<M, double> test_mock_n(&typed_lin_sys_n, Tol<double>::roundoff(), default_args);
         ASSERT_EQ(test_mock_n.max_iter, n);
 
         constexpr int m(53);
         M<double> A_m(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, m, m));
         Vector<double> b_m(Vector<double>::Random(TestBase::bundle, m));
-        TypedLinearSystem<M, double> lin_sys_m(A_m, b_m);
-        GMRESSolveTestingMock<M, double> test_mock_m(lin_sys_m, Tol<double>::roundoff(), default_args);
+
+        GenericLinearSystem<M> gen_lin_sys_m(A_m, b_m);
+        TypedLinearSystem<M, double> typed_lin_sys_m(&gen_lin_sys_m);
+
+        GMRESSolveTestingMock<M, double> test_mock_m(&typed_lin_sys_m, Tol<double>::roundoff(), default_args);
         ASSERT_EQ(test_mock_m.max_iter, m);
 
         constexpr int o(64);
         constexpr int non_default_iter(10);
         M<double> A_o(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, o, o));
         Vector<double> b_o(Vector<double>::Random(TestBase::bundle, o));
-        TypedLinearSystem<M, double> lin_sys_o(A_o, b_o);
+
+        GenericLinearSystem<M> gen_lin_sys_o(A_o, b_o);
+        TypedLinearSystem<M, double> typed_lin_sys_o(&gen_lin_sys_o);
+
         SolveArgPkg non_default_args;
         non_default_args.max_iter = non_default_iter;
-        GMRESSolveTestingMock<M, double> test_mock_o(lin_sys_o, Tol<double>::roundoff(), non_default_args);
+        GMRESSolveTestingMock<M, double> test_mock_o(&typed_lin_sys_o, Tol<double>::roundoff(), non_default_args);
         ASSERT_EQ(test_mock_o.max_iter, non_default_iter);
 
     }
@@ -499,9 +526,13 @@ public:
         SolveArgPkg args;
         args.max_iter = 100;
 
-        TypedLinearSystem<M, double> lin_sys_n(A_n, b_n);
         auto try_to_exceed_dim = [=]() {
-            GMRESSolveTestingMock<M, double> test_mock_n(lin_sys_n, Tol<double>::roundoff(), args);
+
+            GenericLinearSystem<M> gen_lin_sys_n(A_n, b_n);
+            TypedLinearSystem<M, double> typed_lin_sys_n(&gen_lin_sys_n);
+
+            GMRESSolveTestingMock<M, double> test_mock_n(&typed_lin_sys_n, Tol<double>::roundoff(), args);
+
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_to_exceed_dim);
 

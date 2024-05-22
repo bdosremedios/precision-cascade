@@ -16,11 +16,13 @@ public:
 
         M<double> A(read_matrixCSV<M, double>(TestBase::bundle, A_file_path));
         Vector<double> b(read_matrixCSV<Vector, double>(TestBase::bundle, b_file_path));
-        TypedLinearSystem<M, double> lin_sys(A, b);
+
+        GenericLinearSystem<M> gen_lin_sys(A, b);
+        TypedLinearSystem<M, double> typed_lin_sys(&gen_lin_sys);
 
         SolveArgPkg args;
         args.target_rel_res = Tol<double>::krylov_conv_tol();
-        GMRESSolve<M, double> gmres_solve(lin_sys, Tol<double>::roundoff(), args);
+        GMRESSolve<M, double> gmres_solve(&typed_lin_sys, Tol<double>::roundoff(), args);
 
         gmres_solve.solve();
 

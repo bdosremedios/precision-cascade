@@ -23,16 +23,18 @@ public:
         Vector<double> b(
             read_matrixCSV<Vector, double>(TestBase::bundle, solve_matrix_dir / fs::path("b_inv_45.csv"))
         );
-        TypedLinearSystem<M, double> lin_sys(A, b);
 
-        GMRESSolve<M, double> pgmres_solve_default(lin_sys, Tol<double>::roundoff(), pgmres_args);
+        GenericLinearSystem<M> gen_lin_sys(A, b);
+        TypedLinearSystem<M, double> typed_lin_sys(&gen_lin_sys);
+
+        GMRESSolve<M, double> pgmres_solve_default(&typed_lin_sys, Tol<double>::roundoff(), pgmres_args);
 
         PrecondArgPkg<M, double> noprecond(
             std::make_shared<NoPreconditioner<M, double>>(),
             std::make_shared<NoPreconditioner<M, double>>()
         );
         GMRESSolve<M, double> pgmres_solve_explicit_noprecond(
-            lin_sys, Tol<double>::roundoff(), pgmres_args, noprecond
+            &typed_lin_sys, Tol<double>::roundoff(), pgmres_args, noprecond
         );
 
         PrecondArgPkg<M, double> identity(
@@ -40,7 +42,7 @@ public:
             std::make_shared<MatrixInversePreconditioner<M, double>>(M<double>::Identity(TestBase::bundle, n, n))
         );
         GMRESSolve<M, double> pgmres_solve_inverse_of_identity(
-            lin_sys, Tol<double>::roundoff(), pgmres_args, identity
+            &typed_lin_sys, Tol<double>::roundoff(), pgmres_args, identity
         );
 
         pgmres_solve_default.solve();
@@ -78,8 +80,10 @@ public:
         const PrecondArgPkg<M, double> &precond_pkg
     ) {
 
-        TypedLinearSystem<M, double> lin_sys(A, b);
-        GMRESSolve<M, double> pgmres_solve(lin_sys, Tol<double>::roundoff(), pgmres_args, precond_pkg);
+        GenericLinearSystem<M> gen_lin_sys(A, b);
+        TypedLinearSystem<M, double> typed_lin_sys(&gen_lin_sys);
+
+        GMRESSolve<M, double> pgmres_solve(&typed_lin_sys, Tol<double>::roundoff(), pgmres_args, precond_pkg);
 
         pgmres_solve.solve();
         if (*show_plots) { pgmres_solve.view_relres_plot("log"); }
@@ -97,8 +101,10 @@ public:
         const PrecondArgPkg<M, double> &precond_pkg
     ) {
 
-        TypedLinearSystem<M, double> lin_sys(A, b);
-        GMRESSolve<M, double> pgmres_solve(lin_sys, Tol<double>::roundoff(), pgmres_args, precond_pkg);
+        GenericLinearSystem<M> gen_lin_sys(A, b);
+        TypedLinearSystem<M, double> typed_lin_sys(&gen_lin_sys);
+
+        GMRESSolve<M, double> pgmres_solve(&typed_lin_sys, Tol<double>::roundoff(), pgmres_args, precond_pkg);
 
         pgmres_solve.solve();
         if (*show_plots) { pgmres_solve.view_relres_plot("log"); }

@@ -15,11 +15,13 @@ public:
 
         M<double> A(read_matrixCSV<M, double>(TestBase::bundle, A_file_path));
         Vector<double> b(read_matrixCSV<Vector, double>(TestBase::bundle, b_file_path));
-        TypedLinearSystem<M, float> lin_sys(A, b);
+
+        GenericLinearSystem<M> gen_lin_sys(A, b);
+        TypedLinearSystem<M, float> typed_lin_sys(&gen_lin_sys);
 
         SolveArgPkg args;
         args.target_rel_res = Tol<float>::krylov_conv_tol();
-        GMRESSolve<M, float> gmres_solve(lin_sys, Tol<float>::roundoff(), args);
+        GMRESSolve<M, float> gmres_solve(&typed_lin_sys, Tol<float>::roundoff(), args);
 
         gmres_solve.solve();
 
@@ -41,12 +43,14 @@ public:
         Vector<double> b(
             read_matrixCSV<Vector, double>(TestBase::bundle, solve_matrix_dir / fs::path("conv_diff_64_b.csv"))
         );
-        TypedLinearSystem<M, float> lin_sys(A, b);
+
+        GenericLinearSystem<M> gen_lin_sys(A, b);
+        TypedLinearSystem<M, float> typed_lin_sys(&gen_lin_sys);
 
         // Check convergence under single capabilities
         SolveArgPkg args;
         args.target_rel_res = Tol<float>::krylov_conv_tol();
-        GMRESSolve<M, float> gmres_solve_succeed(lin_sys, Tol<float>::roundoff(), args);
+        GMRESSolve<M, float> gmres_solve_succeed(&typed_lin_sys, Tol<float>::roundoff(), args);
 
         gmres_solve_succeed.solve();
         if (*show_plots) { gmres_solve_succeed.view_relres_plot("log"); }
@@ -57,7 +61,7 @@ public:
         // Check divergence beyond single capability of the single machine epsilon
         SolveArgPkg fail_args;
         fail_args.target_rel_res = 0.1*Tol<float>::roundoff();
-        GMRESSolve<M, float> gmres_solve_fail(lin_sys, Tol<float>::roundoff(), fail_args);
+        GMRESSolve<M, float> gmres_solve_fail(&typed_lin_sys, Tol<float>::roundoff(), fail_args);
 
         gmres_solve_fail.solve();
         if (*show_plots) { gmres_solve_fail.view_relres_plot("log"); }
