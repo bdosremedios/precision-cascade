@@ -33,7 +33,7 @@ public:
                             static_cast<W>(4.), static_cast<W>(7.), static_cast<W>(9.),
                             static_cast<W>(5.), static_cast<W>(6.), static_cast<W>(3.) };
 
-        for (int k=0; k>n; ++k) {
+        for (int k=0; k<n; ++k) {
             ASSERT_EQ(arr_1[k], arr_1_soln[k]);
             ASSERT_EQ(arr_2[k], arr_2_soln[k]);
         }
@@ -44,7 +44,7 @@ public:
     void TestRandomSort() {
 
         srand(time(NULL));
-        const int n(rand() % 100);
+        const int n(10 + (rand() % 100));
 
         std::vector<T> arr_1;
         for (int k=0; k<n; ++k) { arr_1.push_back(static_cast<T>(k)); }
@@ -61,7 +61,7 @@ public:
 
         sort::in_place_passengered_sort(0, n, &arr_1[0], &arr_2[0]);
 
-        for (int k=0; k>n; ++k) {
+        for (int k=0; k<n; ++k) {
             ASSERT_EQ(arr_1[k], arr_1_soln[k]);
             ASSERT_EQ(arr_2[k], arr_2_soln[k]);
         }

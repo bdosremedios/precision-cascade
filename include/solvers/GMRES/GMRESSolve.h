@@ -50,10 +50,12 @@ protected:
         }
     }
 
+    Vector<T> apply_left_precond_A(const Vector<T> &vec) {
+        return left_precond_ptr->action_inv_M(typed_lin_sys_ptr->get_A_typed()*vec);
+    }
+
     Vector<T> apply_precond_A(const Vector<T> &vec) {
-        return left_precond_ptr->action_inv_M(
-            typed_lin_sys_ptr->get_A_typed()*right_precond_ptr->action_inv_M(vec)
-        );
+        return apply_left_precond_A(right_precond_ptr->action_inv_M(vec));
     }
 
     Vector<T> get_precond_b() {
@@ -61,10 +63,7 @@ protected:
     }
 
     Vector<T> calc_precond_residual(const Vector<T> &soln) {
-        return (
-            get_precond_b() -
-            left_precond_ptr->action_inv_M(typed_lin_sys_ptr->get_A_typed()*soln)
-        );
+        return get_precond_b() - apply_left_precond_A(soln);
     }
 
     void set_initial_space() {
@@ -152,9 +151,9 @@ protected:
         H_R.get_col(curr_kry_idx).set_from_vec(H_k);
 
         // Apply previous Given's rotations to new column
-        H_R.get_block(0, curr_kry_idx, curr_kry_idx+1, 1).set_from_vec(
-            H_Q.get_block(0, 0, curr_kry_idx+1, curr_kry_idx+1).copy_to_mat().transpose_prod(
-                H_k.get_slice(0, curr_kry_idx+1)
+        H_R.get_block(0, curr_kry_idx, curr_kry_dim, 1).set_from_vec(
+            H_Q.get_block(0, 0, curr_kry_dim, curr_kry_dim).copy_to_mat().transpose_prod(
+                H_k.get_slice(0, curr_kry_dim)
             )
         );
 
