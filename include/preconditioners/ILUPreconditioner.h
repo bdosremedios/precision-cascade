@@ -13,14 +13,6 @@ private:
     M<W> L = M<W>(cuHandleBundle());
     M<W> U = M<W>(cuHandleBundle());
     M<W> P = M<W>(cuHandleBundle());
-    // std::function<bool (const W &curr_val, const int &row, const int &col, const W &zero_tol)> drop_rule_tau;
-    // std::function<void (const int &col, const W &zero_tol, const int &m, W *U_mat, W *L_mat)> apply_drop_rule_col;
-
-    // void construct_ILU(const M<W> &A, const W &zero_tol, const bool &pivot) {
-    //     ilu::dynamic_construct_leftlook_square_ILU(
-    //         zero_tol, pivot, drop_rule_tau, apply_drop_rule_col, A, U, L, P
-    //     );
-    // }
 
 public:
 
@@ -101,22 +93,36 @@ public:
         L = ret.L; U = ret.U; P = ret.P;
     }
 
-    Vector<W> action_inv_M(const Vector<W> &vec) const override {
-        return U.back_sub(L.frwd_sub(P*vec));
-    }
-
     M<W> get_L() const { return L; }
     M<W> get_U() const { return U; }
     M<W> get_P() const { return P; }
 
-    template <typename T>
-    M<T> get_L_cast() const { return L.template cast<T>(); }
+    // *** Concrete Methods ***
 
-    template <typename T>
-    M<T> get_U_cast() const { return U.template cast<T>(); }
+    Vector<W> action_inv_M(const Vector<W> &vec) const override {
+        return U.back_sub(L.frwd_sub(P*vec));
+    }
 
     bool check_compatibility_left(const int &arg_m) const override { return arg_m == m; };
     bool check_compatibility_right(const int &arg_n) const override { return arg_n == m; };
+
+    ILUPreconditioner<M, double> * cast_dbl_ptr() const override {
+        return new ILUPreconditioner<M, double>(
+            L.template cast<double>(), U.template cast<double>(), P.template cast<double>()
+        );
+    }
+
+    ILUPreconditioner<M, float> * cast_sgl_ptr() const override {
+        return new ILUPreconditioner<M, float>(
+            L.template cast<float>(), U.template cast<float>(), P.template cast<float>()
+        );
+    }
+
+    ILUPreconditioner<M, __half> * cast_hlf_ptr() const override {
+        return new ILUPreconditioner<M, __half>(
+            L.template cast<__half>(), U.template cast<__half>(), P.template cast<__half>()
+        );
+    }
 
 };
 

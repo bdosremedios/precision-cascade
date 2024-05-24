@@ -5,6 +5,7 @@
 
 #include "types/types.h"
 
+#include "tools/abs.h"
 #include "tools/Sort.h"
 #include "tools/Heap.h"
 
@@ -116,8 +117,8 @@ int find_pivot_loc_in_perm_map(
         for (int i=0; i<m_dim; ++i) {
             if (
                 !row_finished[row_permutation_map[i]] &&
-                (std::abs(new_U_col[row_permutation_map[i]]) >
-                 std::abs(new_U_col[row_permutation_map[ret_val]]))
+                (abs_ns::abs(new_U_col[row_permutation_map[i]]) >
+                 abs_ns::abs(new_U_col[row_permutation_map[ret_val]]))
             ) {
                 ret_val = i;
             }

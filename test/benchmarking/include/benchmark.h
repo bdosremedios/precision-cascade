@@ -44,7 +44,7 @@ class BenchmarkBase: public TestBase
 protected:
 
     const int n_runs = 10;
-    bool prototyping_speed_up = true;
+    bool prototyping_speed_up = false;
     const fs::path data_dir = (
         fs::current_path() / fs::path("..") /
         fs::path("test") / fs::path("benchmarking") / fs::path("data")

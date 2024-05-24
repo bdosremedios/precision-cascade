@@ -232,7 +232,7 @@ NoFillMatrixSparse<double> NoFillMatrixSparse<__half>::to_double() const {
     if (NUM_BLOCKS > 0) {
 
         generalmatrix_hlf_kernels::cast_to_double<<<NUM_BLOCKS, NUM_THREADS>>>(
-            d_vals, created_mat.d_vals, m_rows*n_cols
+            d_vals, created_mat.d_vals, nnz
         );
 
         check_kernel_launch(

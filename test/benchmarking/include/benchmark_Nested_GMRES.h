@@ -7,7 +7,7 @@ class Benchmark_Nested_GMRES: public Benchmark_GMRES
 {
 public:
 
-    const int nested_outer_iter = 5;
+    const int nested_outer_iter = 10;
     const int nested_inner_iter = gmressolve_iters;
 
 };

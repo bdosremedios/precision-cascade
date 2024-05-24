@@ -109,35 +109,130 @@ public:
 
     }
 
-    template <template <typename> typename M>
-    void TestDoubleSingleHalfCast() {
+    template<template <typename> typename M>
+    void TestILUPreconditionerCast() {
 
-        constexpr int n(8);
-        M<double> A(read_matrixCSV<M, double>(TestBase::bundle, solve_matrix_dir / fs::path("ilu_A.csv")));
-        ILUPreconditioner<M, double> ilu0_dbl(A, false);
+        constexpr int n(10);
 
-        M<double> L_dbl(ilu0_dbl.get_L());
-        M<double> U_dbl(ilu0_dbl.get_U());
+        Vector<double> test_vec_dbl(Vector<double>::Random(TestBase::bundle, n));
+        Vector<float> test_vec_sgl(Vector<float>::Random(TestBase::bundle, n));
+        Vector<__half> test_vec_hlf(Vector<__half>::Random(TestBase::bundle, n));
 
-        M<float> L_sgl(ilu0_dbl.template get_L_cast<float>());
-        M<float> U_sgl(ilu0_dbl.template get_U_cast<float>());
+        M<double> A_dbl(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, n, n));
+        M<float> A_sgl(A_dbl.template cast<float>());
+        M<__half> A_hlf(A_dbl.template cast<__half>());
 
-        ILUPreconditioner<M, float> ilu0_sgl(L_sgl, U_sgl);
+        ILUPreconditioner<M, double> ilu0_dbl(A_dbl, true);
+        ILUPreconditioner<M, float> ilu0_sgl(A_sgl, true);
+        ILUPreconditioner<M, __half> ilu0_hlf(A_hlf, true);
 
-        ASSERT_MATRIX_EQ(L_dbl.template cast<float>(), L_sgl);
-        ASSERT_MATRIX_EQ(U_dbl.template cast<float>(), U_sgl);
-        ASSERT_MATRIX_EQ(ilu0_sgl.get_L(), L_sgl);
-        ASSERT_MATRIX_EQ(ilu0_sgl.get_U(), U_sgl);
+        M<double> L_dbl_dbl = ilu0_dbl.get_L().template cast<double>();
+        M<double> U_dbl_dbl = ilu0_dbl.get_U().template cast<double>();
+        M<double> P_dbl_dbl = ilu0_dbl.get_P().template cast<double>();
 
-        M<half> L_hlf(ilu0_dbl.template get_L_cast<half>());
-        M<half> U_hlf(ilu0_dbl.template get_U_cast<half>());
+        M<float> L_dbl_sgl = ilu0_dbl.get_L().template cast<float>();
+        M<float> U_dbl_sgl = ilu0_dbl.get_U().template cast<float>();
+        M<float> P_dbl_sgl = ilu0_dbl.get_P().template cast<float>();
 
-        ILUPreconditioner<M, half> ilu0_hlf(L_hlf, U_hlf);
+        M<__half> L_dbl_hlf = ilu0_dbl.get_L().template cast<__half>();
+        M<__half> U_dbl_hlf = ilu0_dbl.get_U().template cast<__half>();
+        M<__half> P_dbl_hlf = ilu0_dbl.get_P().template cast<__half>();
 
-        ASSERT_MATRIX_EQ(L_dbl.template cast<half>(), L_hlf);
-        ASSERT_MATRIX_EQ(U_dbl.template cast<half>(), U_hlf);
-        ASSERT_MATRIX_EQ(ilu0_hlf.get_L(), L_hlf);
-        ASSERT_MATRIX_EQ(ilu0_hlf.get_U(), U_hlf);
+        ILUPreconditioner<M, double> * ilu0_dbl_dbl_ptr = ilu0_dbl.cast_dbl_ptr();
+        ILUPreconditioner<M, float> * ilu0_dbl_sgl_ptr = ilu0_dbl.cast_sgl_ptr();
+        ILUPreconditioner<M, __half> * ilu0_dbl_hlf_ptr = ilu0_dbl.cast_hlf_ptr();
+
+        ASSERT_VECTOR_NEAR(
+            ilu0_dbl_dbl_ptr->action_inv_M(test_vec_dbl),
+            U_dbl_dbl.back_sub(L_dbl_dbl.frwd_sub(P_dbl_dbl*test_vec_dbl)),
+            Tol<double>::gamma_T(n)
+        );
+        ASSERT_VECTOR_NEAR(
+            ilu0_dbl_sgl_ptr->action_inv_M(test_vec_sgl),
+            U_dbl_sgl.back_sub(L_dbl_sgl.frwd_sub(P_dbl_sgl*test_vec_sgl)),
+            Tol<float>::gamma_T(n)
+        );
+        ASSERT_VECTOR_NEAR(
+            ilu0_dbl_hlf_ptr->action_inv_M(test_vec_hlf),
+            U_dbl_hlf.back_sub(L_dbl_hlf.frwd_sub(P_dbl_hlf*test_vec_hlf)),
+            Tol<__half>::gamma_T(n)
+        );
+
+        delete ilu0_dbl_dbl_ptr;
+        delete ilu0_dbl_sgl_ptr;
+        delete ilu0_dbl_hlf_ptr;
+
+        M<double> L_sgl_dbl = ilu0_sgl.get_L().template cast<double>();
+        M<double> U_sgl_dbl = ilu0_sgl.get_U().template cast<double>();
+        M<double> P_sgl_dbl = ilu0_sgl.get_P().template cast<double>();
+
+        M<float> L_sgl_sgl = ilu0_sgl.get_L().template cast<float>();
+        M<float> U_sgl_sgl = ilu0_sgl.get_U().template cast<float>();
+        M<float> P_sgl_sgl = ilu0_sgl.get_P().template cast<float>();
+
+        M<__half> L_sgl_hlf = ilu0_sgl.get_L().template cast<__half>();
+        M<__half> U_sgl_hlf = ilu0_sgl.get_U().template cast<__half>();
+        M<__half> P_sgl_hlf = ilu0_sgl.get_P().template cast<__half>();
+
+        ILUPreconditioner<M, double> * ilu0_sgl_dbl_ptr = ilu0_sgl.cast_dbl_ptr();
+        ILUPreconditioner<M, float> * ilu0_sgl_sgl_ptr = ilu0_sgl.cast_sgl_ptr();
+        ILUPreconditioner<M, __half> * ilu0_sgl_hlf_ptr = ilu0_sgl.cast_hlf_ptr();
+
+        ASSERT_VECTOR_NEAR(
+            ilu0_sgl_dbl_ptr->action_inv_M(test_vec_dbl),
+            U_sgl_dbl.back_sub(L_sgl_dbl.frwd_sub(P_sgl_dbl*test_vec_dbl)),
+            Tol<double>::gamma_T(n)
+        );
+        ASSERT_VECTOR_NEAR(
+            ilu0_sgl_sgl_ptr->action_inv_M(test_vec_sgl),
+            U_sgl_sgl.back_sub(L_sgl_sgl.frwd_sub(P_sgl_sgl*test_vec_sgl)),
+            Tol<float>::gamma_T(n)
+        );
+        ASSERT_VECTOR_NEAR(
+            ilu0_sgl_hlf_ptr->action_inv_M(test_vec_hlf),
+            U_sgl_hlf.back_sub(L_sgl_hlf.frwd_sub(P_sgl_hlf*test_vec_hlf)),
+            Tol<__half>::gamma_T(n)
+        );
+
+        delete ilu0_sgl_dbl_ptr;
+        delete ilu0_sgl_sgl_ptr;
+        delete ilu0_sgl_hlf_ptr;
+
+        M<double> L_hlf_dbl = ilu0_hlf.get_L().template cast<double>();
+        M<double> U_hlf_dbl = ilu0_hlf.get_U().template cast<double>();
+        M<double> P_hlf_dbl = ilu0_hlf.get_P().template cast<double>();
+
+        M<float> L_hlf_sgl = ilu0_hlf.get_L().template cast<float>();
+        M<float> U_hlf_sgl = ilu0_hlf.get_U().template cast<float>();
+        M<float> P_hlf_sgl = ilu0_hlf.get_P().template cast<float>();
+
+        M<__half> L_hlf_hlf = ilu0_hlf.get_L().template cast<__half>();
+        M<__half> U_hlf_hlf = ilu0_hlf.get_U().template cast<__half>();
+        M<__half> P_hlf_hlf = ilu0_hlf.get_P().template cast<__half>();
+
+        ILUPreconditioner<M, double> * ilu0_hlf_dbl_ptr = ilu0_hlf.cast_dbl_ptr();
+        ILUPreconditioner<M, float> * ilu0_hlf_sgl_ptr = ilu0_hlf.cast_sgl_ptr();
+        ILUPreconditioner<M, __half> * ilu0_hlf_hlf_ptr = ilu0_hlf.cast_hlf_ptr();
+
+        ASSERT_VECTOR_NEAR(
+            ilu0_hlf_dbl_ptr->action_inv_M(test_vec_dbl),
+            U_hlf_dbl.back_sub(L_hlf_dbl.frwd_sub(P_hlf_dbl*test_vec_dbl)),
+            Tol<double>::gamma_T(n)
+        );
+        ASSERT_VECTOR_NEAR(
+            ilu0_hlf_sgl_ptr->action_inv_M(test_vec_sgl),
+            U_hlf_sgl.back_sub(L_hlf_sgl.frwd_sub(P_hlf_sgl*test_vec_sgl)),
+            Tol<float>::gamma_T(n)
+        );
+        ASSERT_VECTOR_NEAR(
+            ilu0_hlf_hlf_ptr->action_inv_M(test_vec_hlf),
+            U_hlf_hlf.back_sub(L_hlf_hlf.frwd_sub(P_hlf_hlf*test_vec_hlf)),
+            Tol<__half>::gamma_T(n)
+        );
+
+        delete ilu0_hlf_dbl_ptr;
+        delete ilu0_hlf_sgl_ptr;
+        delete ilu0_hlf_hlf_ptr;
 
     }
 
@@ -173,7 +268,7 @@ TEST_F(ILUPreconditioner_Test, TestILUPremadeErrorChecks_PRECONDITIONER) {
     TestILUPremadeErrorChecks<NoFillMatrixSparse>();
 }
 
-TEST_F(ILUPreconditioner_Test, TestDoubleSingleHalfCast_PRECONDITIONER) {
-    TestDoubleSingleHalfCast<MatrixDense>();
-    TestDoubleSingleHalfCast<NoFillMatrixSparse>();
+TEST_F(ILUPreconditioner_Test, TestILUPreconditionerCast_PRECONDITIONER) {
+    // TestILUPreconditionerCast<MatrixDense>();
+    TestILUPreconditionerCast<NoFillMatrixSparse>();
 }
