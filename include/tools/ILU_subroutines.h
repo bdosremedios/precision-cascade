@@ -1,6 +1,8 @@
 #ifndef ILU_SUBROUTINES_H
 #define ILU_SUBROUTINES_H
 
+#include <vector>
+#include <unordered_set>
 #include <functional>
 
 #include "types/types.h"
@@ -195,7 +197,7 @@ void left_looking_col_elim_delay_perm(
     int *row_permutation_map,
     int *pivot_row_hist,
     bool *row_finished
-) {
+) { 
 
     // Determine new column of U
     T *new_U_col = get_new_U_col_from_left_look<T>(
@@ -430,12 +432,32 @@ ILUTriplet<M, T> construct_square_ILU_0(
    const NoFillMatrixSparse<T> &A, bool to_pivot
 ) {
 
-    DropRuleTauFunc<T> drop_rule_tau_U = [&A] (T _, int row, int col) -> bool {
-        return A.get_elem(row, col) == SCALAR_ZERO<T>::get();
+    int *col_offsets = static_cast<int *>(malloc((A.cols()+1)*sizeof(int)));
+    int *row_indices = static_cast<int *>(malloc(A.non_zeros()*sizeof(int)));
+    T *vals = static_cast<T *>(malloc(A.non_zeros()*sizeof(T)));
+
+    A.copy_data_to_ptr(
+        col_offsets, row_indices, vals,
+        A.rows(), A.cols(), A.non_zeros()
+    );
+
+    std::vector<std::unordered_set<int>> A_sparsity_map(A.cols());
+    for (int j=0; j<A.cols(); ++j) {
+        for (int offset=col_offsets[j]; offset<col_offsets[j+1]; ++offset) {
+            A_sparsity_map[j].insert(row_indices[offset]);
+        }
+    }
+
+    free(col_offsets);
+    free(row_indices);
+    free(vals);
+
+    DropRuleTauFunc<T> drop_rule_tau_U = [&A_sparsity_map] (T _, int row, int col) -> bool {
+        return !static_cast<bool>(A_sparsity_map[col].count(row));
     };
 
-    DropRuleTauFunc<T> drop_rule_tau_L = [&A] (T _, int row, int col) -> bool {
-        return A.get_elem(row, col) == SCALAR_ZERO<T>::get();
+    DropRuleTauFunc<T> drop_rule_tau_L = [&A_sparsity_map] (T _, int row, int col) -> bool {
+        return !static_cast<bool>(A_sparsity_map[col].count(row));
     };
 
     DropRulePFunc<T> drop_rule_p = [] (int col_ind, int pivot_ind, T *col_ptr, int m_dim) { ; };
@@ -491,7 +513,7 @@ ILUTriplet<M, T> construct_square_ILUTP(
     free(row_indices);
     free(vals);
 
-    DropRuleTauFunc<T> drop_rule_tau_U = [col_inf_norm, tau] (T val, int _, int col) -> bool {
+    DropRuleTauFunc<T> drop_rule_tau_U = [&col_inf_norm, tau] (T val, int _, int col) -> bool {
         return std::abs(val) <= tau*col_inf_norm[col];
     };
 

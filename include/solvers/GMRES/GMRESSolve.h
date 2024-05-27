@@ -3,24 +3,10 @@
 
 #include "../IterativeSolve.h"
 
-#include <chrono>
-
 template <template <typename> typename M, typename T>
 class GMRESSolve: public TypedIterativeSolve<M, T>
 {
 protected:
-
-    std::chrono::high_resolution_clock clock;
-    std::chrono::time_point<std::chrono::high_resolution_clock> start;
-
-    void mark_start() {
-        start = clock.now();
-    }
-
-    void mark_stop(int m) {
-        std::cout << "Mark " << m << ": "
-                  << std::chrono::duration_cast<std::chrono::microseconds>(clock.now()-start);
-    }
 
     using TypedIterativeSolve<M, T>::typed_lin_sys_ptr;
     using TypedIterativeSolve<M, T>::init_guess_typed;
@@ -211,22 +197,6 @@ protected:
         // Check isn't terminated and if exceeding max krylov dim, if is just do nothing
         if (!this->terminated) {
             if (curr_kry_dim < max_kry_dim) {
-                // mark_start();
-                // update_subspace_k();
-                // mark_stop(1); std::cout << " | ";
-                // mark_start();
-                // update_nextq_and_Hkplus1();
-                // mark_stop(2); std::cout << " | ";
-                // mark_start();
-                // update_QR_fact();
-                // mark_stop(3); std::cout << " | ";
-                // mark_start();
-                // update_x_minimizing_res();
-                // mark_stop(4); std::cout << " | ";
-                // mark_start();
-                // check_termination();
-                // mark_stop(5);
-                // std::cout << std::endl;
                 update_subspace_k();
                 update_nextq_and_Hkplus1();
                 update_QR_fact();
