@@ -53,6 +53,7 @@ set(
 set(
     TEST_NESTED_SOLVERS
     test_solvers/test_nested/test_FP_GMRES_IR_solve.cpp
+    # test_solvers/test_nested/test_Preconditioned_FP_GMRES_IR_solve.cpp
     test_solvers/test_nested/test_MP_GMRES_IR_component.cpp
     test_solvers/test_nested/test_MP_GMRES_IR_solve.cpp
 )
@@ -70,9 +71,10 @@ set(
     # benchmarking/playground.cpp
     # benchmarking/benchmark_MatrixDense.cpp
     # benchmarking/benchmark_NoFillMatrixSparse.cpp
+    benchmarking/benchmark_ILUPreconditioner.cpp
     benchmarking/benchmark_GMRES.cpp
-    benchmarking/benchmark_FP_GMRES_IR.cpp
-    benchmarking/benchmark_MP_GMRES_IR.cpp
+    # benchmarking/benchmark_FP_GMRES_IR.cpp
+    # benchmarking/benchmark_MP_GMRES_IR.cpp
 )
 
 set(
