@@ -694,7 +694,15 @@ public:
             h_col_offsets[j] = curr_nnz;
             for (int i=0; i<arg_m_rows; ++i) {
                 // Enforce diagonal is non-zero for sake of non-singularity
-                if ((i == j) || ((fill_prob != 0.) && (fill_prob_dist(gen) <= fill_prob))) {
+                if (i == j) {
+                    T val = val_dist(gen);
+                    while (val == static_cast<T>(0.)) {
+                        val = val_dist(gen);
+                    }
+                    h_vec_row_indices.push_back(i);
+                    h_vec_vals.push_back(val);
+                    ++curr_nnz;
+                } else if ((fill_prob != 0.) && (fill_prob_dist(gen) <= fill_prob)) {
                     T val = val_dist(gen);
                     if (val != static_cast<T>(0.)) {
                         h_vec_row_indices.push_back(i);

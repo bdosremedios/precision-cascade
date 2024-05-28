@@ -128,7 +128,13 @@ int find_pivot_loc_in_perm_map(
     }
 
     if (new_U_col[row_permutation_map[ret_val]] == static_cast<T>(0.)) {
-        throw std::runtime_error("find_pivot: zero pivot encountered");
+        throw std::runtime_error(
+            std::format(
+                "find_pivot_loc_in_perm_map: zero pivot encountered at ({}, {})",
+                row_permutation_map[ret_val],
+                col_ind
+            )
+        );
     }
 
     return ret_val;

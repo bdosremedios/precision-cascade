@@ -61,9 +61,9 @@ public:
     int sparse_stop = 200001;
     int sparse_incr = (prototyping_speed_up) ? (sparse_stop-sparse_start) : 25000;
 
-    int ilu_start = (prototyping_speed_up) ? 64 : 100;
-    int ilu_stop = 1101;
-    int ilu_incr = (prototyping_speed_up) ? (sparse_stop-sparse_start) : 125;
+    int ilu_start = (prototyping_speed_up) ? 1024 : 10000;
+    int ilu_stop = 80001;
+    int ilu_incr = (prototyping_speed_up) ? (sparse_stop-sparse_start) : 10000;
 
     void SetUp() {
         TestBase::SetUp();

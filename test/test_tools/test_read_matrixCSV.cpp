@@ -4,7 +4,7 @@
 #include "tools/DenseConverter.h"
 
 // General matrix read tests
-class MatrixRead_General_Test: public TestBase
+class read_matrixCSV_General_Test: public TestBase
 {
 public:
 
@@ -54,18 +54,18 @@ public:
 
 };
 
-TEST_F(MatrixRead_General_Test, ReadEmptyMatrix) {
+TEST_F(read_matrixCSV_General_Test, ReadEmptyMatrix) {
     ReadEmptyMatrix<MatrixDense>();
     ReadEmptyMatrix<NoFillMatrixSparse>();
 }
 
-TEST_F(MatrixRead_General_Test, ReadBadFiles) {
+TEST_F(read_matrixCSV_General_Test, ReadBadFiles) {
     ReadBadMatrices<MatrixDense>();
     ReadBadMatrices<NoFillMatrixSparse>();
 }
 
 template <typename T>
-class MatrixRead_T_Test: public TestBase
+class read_matrixCSV_T_Test: public TestBase
 {
 public:
 
@@ -166,7 +166,7 @@ public:
 };
 
 // All type vector read tests
-class MatrixRead_Vector_Test: public TestBase
+class read_matrixCSV_Vector_Test: public TestBase
 {
 public:
 
@@ -184,11 +184,11 @@ public:
 
 };
 
-TEST_F(MatrixRead_Vector_Test, ReadDoubleVector) { ReadVector<double>(); }
-TEST_F(MatrixRead_Vector_Test, ReadSingleVector) { ReadVector<float>(); }
-TEST_F(MatrixRead_Vector_Test, ReadHalfVector) { ReadVector<__half>(); }
+TEST_F(read_matrixCSV_Vector_Test, ReadDoubleVector) { ReadVector<double>(); }
+TEST_F(read_matrixCSV_Vector_Test, ReadSingleVector) { ReadVector<float>(); }
+TEST_F(read_matrixCSV_Vector_Test, ReadHalfVector) { ReadVector<__half>(); }
 
-TEST_F(MatrixRead_Vector_Test, FailOnMatrix) {    
+TEST_F(read_matrixCSV_Vector_Test, FailOnMatrix) {    
     fs::path mat(read_matrix_dir / fs::path("square1.csv"));
     CHECK_FUNC_HAS_RUNTIME_ERROR(
         print_errors,
@@ -197,19 +197,19 @@ TEST_F(MatrixRead_Vector_Test, FailOnMatrix) {
 }
 
 // Double type matrix read tests
-class MatrixRead_Double_Test: public MatrixRead_T_Test<double> {};
+class read_matrixCSV_Double_Test: public read_matrixCSV_T_Test<double> {};
 
-TEST_F(MatrixRead_Double_Test, ReadSquareMatrix) {
+TEST_F(read_matrixCSV_Double_Test, ReadSquareMatrix) {
     ReadSquareMatrix<MatrixDense>();
     ReadSquareMatrix<NoFillMatrixSparse>();
 }
 
-TEST_F(MatrixRead_Double_Test, ReadWideTallMatrix) {
+TEST_F(read_matrixCSV_Double_Test, ReadWideTallMatrix) {
     ReadWideTallMatrix<MatrixDense>();
     ReadWideTallMatrix<NoFillMatrixSparse>();
 }
 
-TEST_F(MatrixRead_Double_Test, ReadPreciseMatrix) {
+TEST_F(read_matrixCSV_Double_Test, ReadPreciseMatrix) {
 
     fs::path precise_file(read_matrix_dir / fs::path("double_precise.csv"));
 
@@ -224,7 +224,7 @@ TEST_F(MatrixRead_Double_Test, ReadPreciseMatrix) {
 
 }
 
-TEST_F(MatrixRead_Double_Test, ReadDifferentThanPreciseMatrix) {
+TEST_F(read_matrixCSV_Double_Test, ReadDifferentThanPreciseMatrix) {
 
     fs::path precise_file(read_matrix_dir / fs::path("double_precise.csv"));
 
@@ -239,7 +239,7 @@ TEST_F(MatrixRead_Double_Test, ReadDifferentThanPreciseMatrix) {
 
 }
 
-TEST_F(MatrixRead_Double_Test, ReadPreciseMatrixDoubleLimit) {
+TEST_F(read_matrixCSV_Double_Test, ReadPreciseMatrixDoubleLimit) {
 
     fs::path precise_file(read_matrix_dir / fs::path("double_precise_manual.csv"));
 
@@ -254,7 +254,7 @@ TEST_F(MatrixRead_Double_Test, ReadPreciseMatrixDoubleLimit) {
 
 }
 
-TEST_F(MatrixRead_Double_Test, ReadDifferentThanPreciseMatrixDoubleLimit) {
+TEST_F(read_matrixCSV_Double_Test, ReadDifferentThanPreciseMatrixDoubleLimit) {
 
     fs::path precise_file(read_matrix_dir / fs::path("double_precise_manual.csv"));
 
@@ -270,19 +270,19 @@ TEST_F(MatrixRead_Double_Test, ReadDifferentThanPreciseMatrixDoubleLimit) {
 }
 
 // Single type matrix read tests
-class MatrixRead_Single_Test: public MatrixRead_T_Test<float> {};
+class read_matrixCSV_Single_Test: public read_matrixCSV_T_Test<float> {};
 
-TEST_F(MatrixRead_Single_Test, ReadSquareMatrix) {
+TEST_F(read_matrixCSV_Single_Test, ReadSquareMatrix) {
     ReadSquareMatrix<MatrixDense>();
     ReadSquareMatrix<NoFillMatrixSparse>();
 }
 
-TEST_F(MatrixRead_Single_Test, ReadWideTallMatrix) {
+TEST_F(read_matrixCSV_Single_Test, ReadWideTallMatrix) {
     ReadWideTallMatrix<MatrixDense>();
     ReadWideTallMatrix<NoFillMatrixSparse>();
 }
 
-TEST_F(MatrixRead_Single_Test, ReadPreciseMatrix) {
+TEST_F(read_matrixCSV_Single_Test, ReadPreciseMatrix) {
 
     fs::path precise_file(read_matrix_dir / fs::path("single_precise.csv"));
 
@@ -297,7 +297,7 @@ TEST_F(MatrixRead_Single_Test, ReadPreciseMatrix) {
 
 }
 
-TEST_F(MatrixRead_Single_Test, ReadDifferentThanPreciseMatrix) {
+TEST_F(read_matrixCSV_Single_Test, ReadDifferentThanPreciseMatrix) {
 
     fs::path precise_file(read_matrix_dir / fs::path("single_precise.csv"));
 
@@ -313,19 +313,19 @@ TEST_F(MatrixRead_Single_Test, ReadDifferentThanPreciseMatrix) {
 }
 
 // Half type matrix read tests
-class MatrixRead_Half_Test: public MatrixRead_T_Test<__half> {};
+class read_matrixCSV_Half_Test: public read_matrixCSV_T_Test<__half> {};
 
-TEST_F(MatrixRead_Half_Test, ReadSquareMatrix) {
+TEST_F(read_matrixCSV_Half_Test, ReadSquareMatrix) {
     ReadSquareMatrix<MatrixDense>();
     ReadSquareMatrix<NoFillMatrixSparse>();
 }
 
-TEST_F(MatrixRead_Half_Test, ReadWideTallMatrix) {
+TEST_F(read_matrixCSV_Half_Test, ReadWideTallMatrix) {
     ReadWideTallMatrix<MatrixDense>();
     ReadWideTallMatrix<NoFillMatrixSparse>();
 }
 
-TEST_F(MatrixRead_Half_Test, ReadPreciseMatrix) {
+TEST_F(read_matrixCSV_Half_Test, ReadPreciseMatrix) {
 
     fs::path precise_file(read_matrix_dir / fs::path("half_precise.csv"));
 
@@ -340,7 +340,7 @@ TEST_F(MatrixRead_Half_Test, ReadPreciseMatrix) {
 
 }
 
-TEST_F(MatrixRead_Half_Test, ReadDifferentThanPreciseMatrix) {
+TEST_F(read_matrixCSV_Half_Test, ReadDifferentThanPreciseMatrix) {
 
     fs::path precise_file(read_matrix_dir / fs::path("half_precise.csv"));
 

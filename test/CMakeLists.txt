@@ -13,7 +13,8 @@ set(
 
 set(
     TEST_TOOLS_CPPS
-    test_tools/test_read_matrix.cpp
+    test_tools/test_read_matrixCSV.cpp
+    test_tools/test_read_matrixMTX.cpp
     test_tools/test_Heap.cpp
     test_tools/test_Sort.cpp
 )
