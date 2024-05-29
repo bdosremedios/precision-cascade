@@ -34,21 +34,27 @@ public:
             Vector<double>::Ones(TestBase::bundle, n).template cast<T>()
         );
         ASSERT_VECTOR_EQ(
-            test_mock_no_guess.typed_soln,
+            test_mock_no_guess.get_typed_soln(),
             Vector<double>::Ones(TestBase::bundle, n).template cast<T>()
         );
 
         EXPECT_EQ(test_mock_no_guess.max_iter, 100);
         EXPECT_EQ(test_mock_no_guess.target_rel_res, std::pow(10, -10));
 
-        EXPECT_FALSE(test_mock_no_guess.initiated);
-        EXPECT_FALSE(test_mock_no_guess.converged);
-        EXPECT_FALSE(test_mock_no_guess.terminated);
-        EXPECT_EQ(test_mock_no_guess.curr_iter, 0);
-        EXPECT_EQ(test_mock_no_guess.res_norm_history.size(), 1);
+        EXPECT_FALSE(test_mock_no_guess.check_initiated());
+        EXPECT_FALSE(test_mock_no_guess.check_converged());
+        EXPECT_FALSE(test_mock_no_guess.check_terminated());
+        EXPECT_EQ(test_mock_no_guess.get_iteration(), 0);
+        EXPECT_EQ(test_mock_no_guess.get_res_norm_history().size(), 1);
         EXPECT_NEAR(
-            test_mock_no_guess.res_norm_history[0],
+            test_mock_no_guess.get_res_norm_history()[0],
             (b-A*test_mock_no_guess.init_guess).norm().get_scalar(),
+            Tol<T>::gamma(n)
+        );
+        EXPECT_EQ(test_mock_no_guess.get_res_costheta_history().size(), 1);
+        EXPECT_NEAR(
+            test_mock_no_guess.get_res_costheta_history()[0],
+            0.,
             Tol<T>::gamma(n)
         );
 
@@ -63,24 +69,30 @@ public:
 
         ASSERT_VECTOR_EQ(test_mock_guess.init_guess, init_guess);
         ASSERT_VECTOR_EQ(
-            test_mock_guess.generic_soln,
+            test_mock_guess.get_generic_soln(),
             init_guess.template cast<T>().template cast<double>()
         );
 
         ASSERT_VECTOR_EQ(test_mock_guess.init_guess_typed, init_guess.template cast<T>());
-        ASSERT_VECTOR_EQ(test_mock_guess.typed_soln, init_guess.template cast<T>());
+        ASSERT_VECTOR_EQ(test_mock_guess.get_typed_soln(), init_guess.template cast<T>());
 
         EXPECT_EQ(test_mock_guess.max_iter, args.max_iter);
         EXPECT_EQ(test_mock_guess.target_rel_res, args.target_rel_res);
 
-        EXPECT_FALSE(test_mock_guess.initiated);
-        EXPECT_FALSE(test_mock_guess.converged);
-        EXPECT_FALSE(test_mock_guess.terminated);
-        EXPECT_EQ(test_mock_guess.curr_iter, 0);
-        EXPECT_EQ(test_mock_guess.res_norm_history.size(), 1);
+        EXPECT_FALSE(test_mock_guess.check_initiated());
+        EXPECT_FALSE(test_mock_guess.check_converged());
+        EXPECT_FALSE(test_mock_guess.check_terminated());
+        EXPECT_EQ(test_mock_guess.get_iteration(), 0);
+        EXPECT_EQ(test_mock_guess.get_res_norm_history().size(), 1);
         EXPECT_NEAR(
-            test_mock_guess.res_norm_history[0],
+            test_mock_guess.get_res_norm_history()[0],
             (b - A*init_guess).norm().get_scalar(),
+            Tol<T>::gamma(n)
+        );
+        EXPECT_EQ(test_mock_guess.get_res_costheta_history().size(), 1);
+        EXPECT_NEAR(
+            test_mock_guess.get_res_costheta_history()[0],
+            0.,
             Tol<T>::gamma(n)
         );
 
@@ -124,29 +136,42 @@ public:
         ASSERT_VECTOR_EQ(test_mock.init_guess_typed, init_guess.template cast<T>());
 
         // Check changed soln on iterate
-        ASSERT_VECTOR_EQ(test_mock.typed_soln, typed_soln);
+        ASSERT_VECTOR_EQ(test_mock.get_typed_soln(), typed_soln);
 
         // Check convergence
-        EXPECT_TRUE(test_mock.initiated);
-        EXPECT_TRUE(test_mock.converged);
-        EXPECT_TRUE(test_mock.terminated);
-        EXPECT_EQ(test_mock.curr_iter, 1);
+        EXPECT_TRUE(test_mock.check_initiated());
+        EXPECT_TRUE(test_mock.check_converged());
+        EXPECT_TRUE(test_mock.check_terminated());
+        EXPECT_EQ(test_mock.get_iteration(), 1);
 
         // Check residual history and relres correctly calculates
-        EXPECT_EQ(test_mock.res_norm_history.size(), 2);
+        EXPECT_EQ(test_mock.get_res_norm_history().size(), 2);
         EXPECT_NEAR(
-            test_mock.res_norm_history[0],
+            test_mock.get_res_norm_history()[0],
             (b-A*init_guess).norm().get_scalar(),
             Tol<T>::gamma(n)
         );
         EXPECT_NEAR(
-            test_mock.res_norm_history[1],
+            test_mock.get_res_norm_history()[1],
             (b-A*(typed_soln.template cast<double>())).norm().get_scalar(),
             Tol<T>::gamma(n)
         );
         EXPECT_NEAR(
             test_mock.get_relres(),
             ((b-A*(typed_soln.template cast<double>())).norm()/(b-A*init_guess).norm()).get_scalar(),
+            Tol<T>::gamma(n)
+        );
+        EXPECT_EQ(test_mock.get_res_costheta_history().size(), 2);
+        EXPECT_NEAR(
+            test_mock.get_res_costheta_history()[0],
+            0.,
+            Tol<T>::gamma(n)
+        );
+        EXPECT_NEAR(
+            test_mock.get_res_costheta_history()[1],
+            ((b-A*(typed_soln.template cast<double>())).dot(b-A*init_guess) /
+             ((b-A*(typed_soln.template cast<double>())).norm()*(b-A*init_guess).norm())
+            ).get_scalar(),
             Tol<T>::gamma(n)
         );
 
@@ -181,13 +206,13 @@ public:
         ASSERT_VECTOR_EQ(test_mock.init_guess, Vector<double>::Ones(TestBase::bundle, n));
 
         // Check solve variables are all reset
-        ASSERT_VECTOR_EQ(test_mock.typed_soln, Vector<T>::Ones(TestBase::bundle, n));
-        EXPECT_FALSE(test_mock.initiated);
-        EXPECT_FALSE(test_mock.converged);
-        EXPECT_FALSE(test_mock.terminated);
-        EXPECT_EQ(test_mock.curr_iter, 0);
+        ASSERT_VECTOR_EQ(test_mock.get_typed_soln(), Vector<T>::Ones(TestBase::bundle, n));
+        EXPECT_FALSE(test_mock.check_initiated());
+        EXPECT_FALSE(test_mock.check_converged());
+        EXPECT_FALSE(test_mock.check_terminated());
+        EXPECT_EQ(test_mock.get_iteration(), 0);
         std::vector<double> init_res_norm_history{(b - A*test_mock.init_guess).norm().get_scalar()};
-        EXPECT_EQ(test_mock.res_norm_history, init_res_norm_history);
+        EXPECT_EQ(test_mock.get_res_norm_history(), init_res_norm_history);
 
     }
 
