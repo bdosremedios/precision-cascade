@@ -54,82 +54,90 @@ public:
         }
     }
 
+    template <template <typename> typename M>
+    void TestRunAndOutputJsonFPGMRES(std::string id) {
+
+        GenericLinearSystem<M> gen_lin_sys(A, b);
+        TypedLinearSystem<M, double> typ_lin_sys(&gen_lin_sys);
+
+        std::shared_ptr<FP_GMRES_IR_Solve<M, double>> solve_ptr;
+        solve_ptr = std::make_shared<FP_GMRES_IR_Solve<M, double>>(&typ_lin_sys, u_dbl, solve_args);
+
+        Experiment_Data<GenericIterativeSolve, M> data(
+            execute_solve<GenericIterativeSolve, M>(solve_ptr, false)
+        );
+
+        record_FPGMRES_experimental_data_json(data, id, test_json_dir, logger);
+
+        fs::path file_path = test_json_dir / fs::path(id + ".json");
+        std::ifstream file_in(file_path);
+
+        json loaded_file = json::parse(file_in);
+        ASSERT_EQ(loaded_file["id"], id);
+        ASSERT_EQ(loaded_file["solver_class"], typeid(*solve_ptr).name());
+        ASSERT_EQ(loaded_file["initiated"], bool_to_string(solve_ptr->check_initiated()));
+        ASSERT_EQ(loaded_file["converged"], bool_to_string(solve_ptr->check_converged()));
+        ASSERT_EQ(loaded_file["terminated"], bool_to_string(solve_ptr->check_terminated()));
+        ASSERT_EQ(loaded_file["iteration"], solve_ptr->get_iteration());
+        ASSERT_EQ(loaded_file["elapsed_time_ms"], data.clock.get_elapsed_time_ms());
+
+        std::vector<double> res_norm_hist = solve_ptr->get_res_norm_hist();
+        for (int i=0; i<res_norm_hist.size(); ++i) {
+            ASSERT_EQ(loaded_file["res_norm_hist"][i], res_norm_hist[i]);
+        }
+
+        MatrixDense<double> res_hist = solve_ptr->get_res_hist();
+
+        file_in.close();
+
+    }
+
+    template <template <typename> typename M>
+    void TestRunAndOutputJsonMPGMRES(std::string id) {
+
+        GenericLinearSystem<M> gen_lin_sys(A, b);
+
+        std::shared_ptr<MP_GMRES_IR_Solve<M>> solve_ptr;
+        solve_ptr = std::make_shared<SimpleConstantThreshold<M>>(&gen_lin_sys, solve_args);
+
+        Experiment_Data<MP_GMRES_IR_Solve, M> data(
+            execute_solve<MP_GMRES_IR_Solve, M>(solve_ptr, false)
+        );
+
+        std::string id = "MPGMRESTestRecord";
+        record_MPGMRES_experimental_data_json(data, id, test_json_dir, logger);
+
+        fs::path file_path = test_json_dir / fs::path(id + ".json");
+        std::ifstream file_in(file_path);
+
+        json loaded_file = json::parse(file_in);
+        ASSERT_EQ(loaded_file["id"], id);
+        ASSERT_EQ(loaded_file["solver_class"], typeid(*solve_ptr).name());
+        ASSERT_EQ(loaded_file["initiated"], bool_to_string(solve_ptr->check_initiated()));
+        ASSERT_EQ(loaded_file["converged"], bool_to_string(solve_ptr->check_converged()));
+        ASSERT_EQ(loaded_file["terminated"], bool_to_string(solve_ptr->check_terminated()));
+        ASSERT_EQ(loaded_file["iteration"], solve_ptr->get_iteration());
+        ASSERT_EQ(loaded_file["elapsed_time_ms"], data.clock.get_elapsed_time_ms());
+
+        std::vector<double> res_norm_hist = solve_ptr->get_res_norm_hist();
+        for (int i=0; i<res_norm_hist.size(); ++i) {
+            ASSERT_EQ(loaded_file["res_norm_hist"][i], res_norm_hist[i]);
+        }
+
+        MatrixDense<double> res_hist = solve_ptr->get_res_hist();
+
+        file_in.close();
+
+    }
 
 };
 
 TEST_F(TestRecord, TestRunAndOutputJsonFPGMRES) {
-
-    GenericLinearSystem<MatrixDense> gen_lin_sys(A, b);
-    TypedLinearSystem<MatrixDense, double> typ_lin_sys(&gen_lin_sys);
-
-    std::shared_ptr<FP_GMRES_IR_Solve<MatrixDense, double>> solve_ptr;
-    solve_ptr = std::make_shared<FP_GMRES_IR_Solve<MatrixDense, double>>(&typ_lin_sys, u_dbl, solve_args);
-
-    Experiment_Data<GenericIterativeSolve, MatrixDense> data(
-        execute_solve<GenericIterativeSolve, MatrixDense>(solve_ptr, false)
-    );
-
-    std::string id = "FPGMRESTestRecord";
-    record_FPGMRES_experimental_data_json(data, id, test_json_dir, logger);
-
-    fs::path file_path = test_json_dir / fs::path(id + ".json");
-    std::ifstream file_in(file_path);
-
-    json loaded_file = json::parse(file_in);
-    ASSERT_EQ(loaded_file["id"], id);
-    ASSERT_EQ(loaded_file["solver_class"], typeid(*solve_ptr).name());
-    ASSERT_EQ(loaded_file["initiated"], bool_to_string(solve_ptr->check_initiated()));
-    ASSERT_EQ(loaded_file["converged"], bool_to_string(solve_ptr->check_converged()));
-    ASSERT_EQ(loaded_file["terminated"], bool_to_string(solve_ptr->check_terminated()));
-    ASSERT_EQ(loaded_file["iteration"], solve_ptr->get_iteration());
-    ASSERT_EQ(loaded_file["elapsed_time_ms"], data.clock.get_elapsed_time_ms());
-
-    std::vector<double> res_norm_hist = solve_ptr->get_res_norm_hist();
-    for (int i=0; i<res_norm_hist.size(); ++i) {
-        ASSERT_EQ(loaded_file["res_norm_hist"][i], res_norm_hist[i]);
-    }
-
-    MatrixDense<double> res_hist = solve_ptr->get_res_hist();
-
-    file_in.close();
-    std::remove(file_path.string().c_str());
-
+    TestRunAndOutputJsonFPGMRES<MatrixDense>("FPGMRESTestRecord_Dense");
+    TestRunAndOutputJsonFPGMRES<NoFillMatrixSparse>("FPGMRESTestRecord_Sparse");
 }
 
 TEST_F(TestRecord, TestRunAndOutputJsonMPGMRES) {
-
-    GenericLinearSystem<MatrixDense> gen_lin_sys(A, b);
-
-    std::shared_ptr<MP_GMRES_IR_Solve<MatrixDense>> solve_ptr;
-    solve_ptr = std::make_shared<SimpleConstantThreshold<MatrixDense>>(&gen_lin_sys, solve_args);
-
-    Experiment_Data<MP_GMRES_IR_Solve, MatrixDense> data(
-        execute_solve<MP_GMRES_IR_Solve, MatrixDense>(solve_ptr, false)
-    );
-
-    std::string id = "MPGMRESTestRecord";
-    record_MPGMRES_experimental_data_json(data, id, test_json_dir, logger);
-
-    fs::path file_path = test_json_dir / fs::path(id + ".json");
-    std::ifstream file_in(file_path);
-
-    json loaded_file = json::parse(file_in);
-    ASSERT_EQ(loaded_file["id"], id);
-    ASSERT_EQ(loaded_file["solver_class"], typeid(*solve_ptr).name());
-    ASSERT_EQ(loaded_file["initiated"], bool_to_string(solve_ptr->check_initiated()));
-    ASSERT_EQ(loaded_file["converged"], bool_to_string(solve_ptr->check_converged()));
-    ASSERT_EQ(loaded_file["terminated"], bool_to_string(solve_ptr->check_terminated()));
-    ASSERT_EQ(loaded_file["iteration"], solve_ptr->get_iteration());
-    ASSERT_EQ(loaded_file["elapsed_time_ms"], data.clock.get_elapsed_time_ms());
-
-    std::vector<double> res_norm_hist = solve_ptr->get_res_norm_hist();
-    for (int i=0; i<res_norm_hist.size(); ++i) {
-        ASSERT_EQ(loaded_file["res_norm_hist"][i], res_norm_hist[i]);
-    }
-
-    MatrixDense<double> res_hist = solve_ptr->get_res_hist();
-
-    file_in.close();
-    std::remove(file_path.string().c_str());
-
+    TestRunAndOutputJsonFPGMRES<MatrixDense>("MPGMRESTestRecord_Dense");
+    TestRunAndOutputJsonFPGMRES<NoFillMatrixSparse>("MPGMRESTestRecord_Sparse");
 }
