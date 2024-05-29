@@ -15,7 +15,7 @@ void create_or_clear_directory(fs::path dir, Experiment_Log logger) {
 }
 
 void run_experimental_spec(
-    cublasHandle_t handle,
+    const cuHandleBundle &cu_handles,
     Experiment_Specification exp_spec,
     fs::path data_dir,
     fs::path output_dir,
@@ -29,7 +29,7 @@ void run_experimental_spec(
 
     for (Solve_Group solve_group : exp_spec.solve_groups) {
         if (solve_group.matrix_type == "dense") {
-            run_solve_group<MatrixDense>(handle, solve_group, data_dir, exp_spec_dir, logger);
+            run_solve_group<MatrixDense>(cu_handles, solve_group, data_dir, exp_spec_dir, logger);
         } else {
             throw std::runtime_error("run_experimental_spec error invalid Solve_Group matrix type");
         }

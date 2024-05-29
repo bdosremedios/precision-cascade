@@ -11,6 +11,7 @@
 
 #include <nlohmann/json.hpp>
 
+#include "tools/cuHandleBundle.h"
 #include "types/types.h"
 #include "solvers/nested/GMRES_IR/FP_GMRES_IR.h"
 #include "solvers/nested/GMRES_IR/MP_GMRES_IR.h"
@@ -25,25 +26,24 @@ class TestRecord: public TestExperimentBase
 {
 public:
 
-    cublasHandle_t *handle_ptr;
+    cuHandleBundle *cu_handles_ptr;
     SolveArgPkg solve_args;
-    MatrixDense<double> A = MatrixDense<double>(NULL);
-    Vector<double> b = Vector<double>(NULL);
+    MatrixDense<double> A = MatrixDense<double>(cuHandleBundle());
+    Vector<double> b = Vector<double>(cuHandleBundle());
     const double u_dbl = std::pow(2, -52);
     Experiment_Log logger;
 
     TestRecord() {
-        handle_ptr = new cublasHandle_t;
-        cublasCreate(handle_ptr);
-        cublasSetPointerMode(*handle_ptr, CUBLAS_POINTER_MODE_DEVICE);
-        A = MatrixDense<double>::Random(*handle_ptr, 16, 16);
-        b = A*Vector<double>::Random(*handle_ptr, 16);
+        cu_handles_ptr = new cuHandleBundle();
+        cu_handles_ptr->create();
+        A = MatrixDense<double>::Random(*cu_handles_ptr, 16, 16);
+        b = A*Vector<double>::Random(*cu_handles_ptr, 16);
         logger = Experiment_Log();
     }
 
     ~TestRecord() {
-        cublasDestroy(*handle_ptr);
-        free(handle_ptr);
+        cu_handles_ptr->destroy();
+        delete cu_handles_ptr;
     }
 
     std::string bool_to_string(bool b) {
@@ -59,9 +59,11 @@ public:
 
 TEST_F(TestRecord, TestRunAndOutputJsonFPGMRES) {
 
-    TypedLinearSystem<MatrixDense, double> lin_sys(A, b);
+    GenericLinearSystem<MatrixDense> gen_lin_sys(A, b);
+    TypedLinearSystem<MatrixDense, double> typ_lin_sys(&gen_lin_sys);
+
     std::shared_ptr<FP_GMRES_IR_Solve<MatrixDense, double>> solve_ptr;
-    solve_ptr = std::make_shared<FP_GMRES_IR_Solve<MatrixDense, double>>(lin_sys, u_dbl, solve_args);
+    solve_ptr = std::make_shared<FP_GMRES_IR_Solve<MatrixDense, double>>(&typ_lin_sys, u_dbl, solve_args);
 
     Experiment_Data<GenericIterativeSolve, MatrixDense> data(
         execute_solve<GenericIterativeSolve, MatrixDense>(solve_ptr, false)
@@ -96,9 +98,10 @@ TEST_F(TestRecord, TestRunAndOutputJsonFPGMRES) {
 
 TEST_F(TestRecord, TestRunAndOutputJsonMPGMRES) {
 
-    TypedLinearSystem<MatrixDense, double> lin_sys(A, b);
+    GenericLinearSystem<MatrixDense> gen_lin_sys(A, b);
+
     std::shared_ptr<MP_GMRES_IR_Solve<MatrixDense>> solve_ptr;
-    solve_ptr = std::make_shared<SimpleConstantThreshold<MatrixDense>>(lin_sys, solve_args);
+    solve_ptr = std::make_shared<SimpleConstantThreshold<MatrixDense>>(&gen_lin_sys, solve_args);
 
     Experiment_Data<MP_GMRES_IR_Solve, MatrixDense> data(
         execute_solve<MP_GMRES_IR_Solve, MatrixDense>(solve_ptr, false)

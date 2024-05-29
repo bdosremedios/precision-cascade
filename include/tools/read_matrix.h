@@ -1,8 +1,10 @@
 #ifndef MATRIX_READER_H
 #define MATRIX_READER_H
 
+#include <cassert>
 #include <memory>
 #include <filesystem>
+
 #include <fstream>
 #include <sstream>
 #include <string>

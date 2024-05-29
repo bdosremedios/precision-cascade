@@ -9,6 +9,7 @@
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
 
+#include "tools/cuHandleBundle.h"
 #include "types/types.h"
 #include "tools/read_matrix.h"
 
@@ -27,11 +28,11 @@ static const double u_sgl = std::pow(2, -23);
 static const double u_dbl = std::pow(2, -52);
 
 template <template <typename> typename M>
-using LinSysSolnPair = std::pair<TypedLinearSystem<M, double>, Vector<double>>;
+using LinSysSolnPair = std::pair<GenericLinearSystem<M>, Vector<double>>;
 
 template <template <typename> typename M>
 LinSysSolnPair<M> load_linear_problem(
-    cublasHandle_t handle,
+    const cuHandleBundle &cu_handles,
     fs::path input_dir,
     std::string matrix_name,
     Experiment_Log logger
@@ -41,14 +42,14 @@ LinSysSolnPair<M> load_linear_problem(
 
     logger.info(std::format("Loading: {}", matrix_path.string()));
 
-    M<double> A(read_matrixCSV<M, double>(handle, matrix_path));
+    M<double> A(read_matrixCSV<M, double>(cu_handles, matrix_path));
     A.normalize_magnitude();
     logger.info(std::format("Matrix info: {}", A.get_info_string()));
 
-    Vector<double> true_x(Vector<double>::Random(handle, A.cols()));
+    Vector<double> true_x(Vector<double>::Random(cu_handles, A.cols()));
     Vector<double> b(A*true_x);
 
-    return LinSysSolnPair(TypedLinearSystem<M, double>(A, b), true_x);
+    return LinSysSolnPair(GenericLinearSystem<M>(A, b), true_x);
 
 }
 
@@ -112,7 +113,7 @@ void run_record_MPGMRES_solve(
 
 template <template <typename> typename M>
 void run_solve_group(
-    cublasHandle_t handle,
+    const cuHandleBundle &cu_handles,
     Solve_Group solve_group,
     fs::path data_dir,
     fs::path output_dir,
@@ -134,27 +135,28 @@ void run_solve_group(
     for (std::string matrix_name : solve_group.matrices_to_test) {
         for (int exp_iter = 0; exp_iter < solve_group.experiment_iterations; ++exp_iter) {
 
-            LinSysSolnPair<M> lin_sys_pair = load_linear_problem<M>(handle, data_dir, matrix_name, logger);
-            TypedLinearSystem<M, double> lin_sys_dbl(lin_sys_pair.first);
+            LinSysSolnPair<M> lin_sys_pair = load_linear_problem<M>(
+                cu_handles, data_dir, matrix_name, logger
+            );
 
             if (solve_group.solver_suite_type == "all") {
 
-                TypedLinearSystem<M, __half> lin_sys_hlf(lin_sys_dbl.get_A(), lin_sys_dbl.get_b());
+                TypedLinearSystem<M, __half> lin_sys_hlf(&lin_sys_pair.first);
 
                 run_record_FPGMRES_solve<GenericIterativeSolve, M>(
                     std::make_shared<FP_GMRES_IR_Solve<M, __half>>(
-                        lin_sys_hlf, u_hlf, solve_group.solver_args
+                        &lin_sys_hlf, u_hlf, solve_group.solver_args
                     ),
                     matrix_name, "FPGMRES16", exp_iter,
                     solve_group_dir,
                     false, logger
                 );
 
-                TypedLinearSystem<M, float> lin_sys_sgl(lin_sys_dbl.get_A(), lin_sys_dbl.get_b());
+                TypedLinearSystem<M, float> lin_sys_sgl(&lin_sys_pair.first);
 
                 run_record_FPGMRES_solve<GenericIterativeSolve, M>(
                     std::make_shared<FP_GMRES_IR_Solve<M, float>>(
-                        lin_sys_sgl, u_sgl, solve_group.solver_args
+                        &lin_sys_sgl, u_sgl, solve_group.solver_args
                     ),
                     matrix_name, "FPGMRES32", exp_iter,
                     solve_group_dir,
@@ -165,9 +167,11 @@ void run_solve_group(
 
             if ((solve_group.solver_suite_type == "all") || (solve_group.solver_suite_type == "FP64_MP")) {
 
+                TypedLinearSystem<M, double> lin_sys_dbl(&lin_sys_pair.first);
+
                 run_record_FPGMRES_solve<GenericIterativeSolve, M>(
                     std::make_shared<FP_GMRES_IR_Solve<M, double>>(
-                        lin_sys_dbl, u_dbl, solve_group.solver_args
+                        &lin_sys_dbl, u_dbl, solve_group.solver_args
                     ),
                     matrix_name, "FPGMRES64", exp_iter,
                     solve_group_dir,
@@ -176,7 +180,7 @@ void run_solve_group(
 
                 run_record_MPGMRES_solve<M>(
                     std::make_shared<SimpleConstantThreshold<M>>(
-                        lin_sys_dbl, solve_group.solver_args
+                        &lin_sys_pair.first, solve_group.solver_args
                     ),
                     matrix_name, "MPGMRES", exp_iter,
                     solve_group_dir,
@@ -191,7 +195,7 @@ void run_solve_group(
 }
 
 void run_experimental_spec(
-    cublasHandle_t handle,
+    const cuHandleBundle &cu_handles,
     Experiment_Specification exp_spec,
     fs::path data_dir,
     fs::path output_dir,
