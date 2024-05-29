@@ -139,53 +139,76 @@ void run_solve_group(
                 cu_handles, data_dir, matrix_name, logger
             );
 
-            if (solve_group.solver_suite_type == "all") {
+            for (std::string solver_id : solve_group.solvers_to_use) {
 
-                TypedLinearSystem<M, __half> lin_sys_hlf(&lin_sys_pair.first);
+                if (solver_id == "FP16") {
 
-                run_record_FPGMRES_solve<GenericIterativeSolve, M>(
-                    std::make_shared<FP_GMRES_IR_Solve<M, __half>>(
-                        &lin_sys_hlf, u_hlf, solve_group.solver_args
-                    ),
-                    matrix_name, "FPGMRES16", exp_iter,
-                    solve_group_dir,
-                    false, logger
-                );
+                    TypedLinearSystem<M, __half> lin_sys_hlf(&lin_sys_pair.first);
+                    run_record_FPGMRES_solve<GenericIterativeSolve, M>(
+                        std::make_shared<FP_GMRES_IR_Solve<M, __half>>(
+                            &lin_sys_hlf, u_hlf, solve_group.solver_args
+                        ),
+                        matrix_name, "FPGMRES16", exp_iter,
+                        solve_group_dir,
+                        false, logger
+                    );
 
-                TypedLinearSystem<M, float> lin_sys_sgl(&lin_sys_pair.first);
+                } else if (solver_id == "FP32") {
 
-                run_record_FPGMRES_solve<GenericIterativeSolve, M>(
-                    std::make_shared<FP_GMRES_IR_Solve<M, float>>(
-                        &lin_sys_sgl, u_sgl, solve_group.solver_args
-                    ),
-                    matrix_name, "FPGMRES32", exp_iter,
-                    solve_group_dir,
-                    false, logger
-                );
+                    TypedLinearSystem<M, float> lin_sys_sgl(&lin_sys_pair.first);
+                    run_record_FPGMRES_solve<GenericIterativeSolve, M>(
+                        std::make_shared<FP_GMRES_IR_Solve<M, float>>(
+                            &lin_sys_sgl, u_sgl, solve_group.solver_args
+                        ),
+                        matrix_name, "FPGMRES32", exp_iter,
+                        solve_group_dir,
+                        false, logger
+                    );
 
-            }
+                } else if (solver_id == "FP64") {
 
-            if ((solve_group.solver_suite_type == "all") || (solve_group.solver_suite_type == "FP64_MP")) {
+                    TypedLinearSystem<M, double> lin_sys_dbl(&lin_sys_pair.first);
+                    run_record_FPGMRES_solve<GenericIterativeSolve, M>(
+                        std::make_shared<FP_GMRES_IR_Solve<M, double>>(
+                            &lin_sys_dbl, u_dbl, solve_group.solver_args
+                        ),
+                        matrix_name, "FPGMRES64", exp_iter,
+                        solve_group_dir,
+                        false, logger
+                    );
 
-                TypedLinearSystem<M, double> lin_sys_dbl(&lin_sys_pair.first);
+                } else if (solver_id == "SimpleConstantThreshold") {
 
-                run_record_FPGMRES_solve<GenericIterativeSolve, M>(
-                    std::make_shared<FP_GMRES_IR_Solve<M, double>>(
-                        &lin_sys_dbl, u_dbl, solve_group.solver_args
-                    ),
-                    matrix_name, "FPGMRES64", exp_iter,
-                    solve_group_dir,
-                    false, logger
-                );
+                    run_record_MPGMRES_solve<M>(
+                        std::make_shared<SimpleConstantThreshold<M>>(
+                            &lin_sys_pair.first, solve_group.solver_args
+                        ),
+                        matrix_name, "SimpleConstantThreshold", exp_iter,
+                        solve_group_dir,
+                        false, logger
+                    );
 
-                run_record_MPGMRES_solve<M>(
-                    std::make_shared<SimpleConstantThreshold<M>>(
-                        &lin_sys_pair.first, solve_group.solver_args
-                    ),
-                    matrix_name, "MPGMRES", exp_iter,
-                    solve_group_dir,
-                    false, logger
-                );
+                } else if (solver_id == "RestartCount") {
+
+                    run_record_MPGMRES_solve<M>(
+                        std::make_shared<RestartCount<M>>(
+                            &lin_sys_pair.first, solve_group.solver_args
+                        ),
+                        matrix_name, "RestartCount", exp_iter,
+                        solve_group_dir,
+                        false, logger
+                    );
+
+                } else {
+
+                    throw std::runtime_error(
+                        std::format(
+                            "run_solve_group: invalid solver id encountered \"{}\"",
+                            solver_id
+                        )
+                    ); 
+
+                }
 
             }
 

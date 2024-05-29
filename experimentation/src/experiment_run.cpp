@@ -30,6 +30,8 @@ void run_experimental_spec(
     for (Solve_Group solve_group : exp_spec.solve_groups) {
         if (solve_group.matrix_type == "dense") {
             run_solve_group<MatrixDense>(cu_handles, solve_group, data_dir, exp_spec_dir, logger);
+        } if (solve_group.matrix_type == "sparse") {
+            run_solve_group<NoFillMatrixSparse>(cu_handles, solve_group, data_dir, exp_spec_dir, logger);
         } else {
             throw std::runtime_error("run_experimental_spec error invalid Solve_Group matrix type");
         }

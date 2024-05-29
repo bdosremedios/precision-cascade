@@ -14,7 +14,10 @@ TEST_F(TestRead, TestCorrectSingleEntryJson) {
     ASSERT_EQ(test_spec.solve_groups.size(), 1);
     ASSERT_EQ(test_spec.solve_groups[0].id, "solve_group_1");
     ASSERT_EQ(test_spec.solve_groups[0].experiment_iterations, 3);
-    ASSERT_EQ(test_spec.solve_groups[0].solver_suite_type, "all");
+    ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[0], "FP16");
+    ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[1], "FP32");
+    ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[2], "FP64");
+    ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[3], "RestartCount");
     ASSERT_EQ(test_spec.solve_groups[0].matrix_type, "dense");
     ASSERT_EQ(test_spec.solve_groups[0].solver_args.max_iter, 10);
     ASSERT_EQ(test_spec.solve_groups[0].solver_args.max_inner_iter, 3);
@@ -38,7 +41,10 @@ TEST_F(TestRead, TestCorrectMultipleEntryJson) {
 
     ASSERT_EQ(test_spec.solve_groups[0].id, "a");
     ASSERT_EQ(test_spec.solve_groups[0].experiment_iterations, 3);
-    ASSERT_EQ(test_spec.solve_groups[0].solver_suite_type, "all");
+    ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[0], "FP16");
+    ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[1], "FP32");
+    ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[2], "FP64");
+    ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[3], "RestartCount");
     ASSERT_EQ(test_spec.solve_groups[0].matrix_type, "dense");
     ASSERT_EQ(test_spec.solve_groups[0].solver_args.max_iter, 10);
     ASSERT_EQ(test_spec.solve_groups[0].solver_args.max_inner_iter, 3);
@@ -51,7 +57,10 @@ TEST_F(TestRead, TestCorrectMultipleEntryJson) {
 
     ASSERT_EQ(test_spec.solve_groups[1].id, "b");
     ASSERT_EQ(test_spec.solve_groups[1].experiment_iterations, 1);
-    ASSERT_EQ(test_spec.solve_groups[1].solver_suite_type, "all");
+    ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[0], "FP16");
+    ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[1], "FP32");
+    ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[2], "FP64");
+    ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[3], "RestartCount");
     ASSERT_EQ(test_spec.solve_groups[1].matrix_type, "sparse");
     ASSERT_EQ(test_spec.solve_groups[1].solver_args.max_iter, 4);
     ASSERT_EQ(test_spec.solve_groups[1].solver_args.max_inner_iter, 4);
@@ -62,7 +71,8 @@ TEST_F(TestRead, TestCorrectMultipleEntryJson) {
 
     ASSERT_EQ(test_spec.solve_groups[2].id, "c");
     ASSERT_EQ(test_spec.solve_groups[2].experiment_iterations, 3);
-    ASSERT_EQ(test_spec.solve_groups[2].solver_suite_type, "FP64_MP");
+    ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[2], "FP64");
+    ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[3], "RestartCount");
     ASSERT_EQ(test_spec.solve_groups[2].matrix_type, "dense");
     ASSERT_EQ(test_spec.solve_groups[2].solver_args.max_iter, 10);
     ASSERT_EQ(test_spec.solve_groups[2].solver_args.max_inner_iter, 3);
@@ -162,7 +172,7 @@ TEST_F(TestRead, TestBadJsonSolveGroupMemberValues) {
         print_errors,
         [=] () -> void {
             parse_experiment_spec(
-                test_json_dir / fs::path("bad_solve_group_arg_bad_solver_suite_type.json")
+                test_json_dir / fs::path("bad_solve_group_arg_bad_solvers_to_use_type.json")
             );
         }
     );
@@ -171,7 +181,16 @@ TEST_F(TestRead, TestBadJsonSolveGroupMemberValues) {
         print_errors,
         [=] () -> void {
             parse_experiment_spec(
-                test_json_dir / fs::path("bad_solve_group_arg_bad_solver_suite_type_wrong_str.json")
+                test_json_dir / fs::path("bad_solve_group_arg_bad_solvers_to_use_wrong_solverid.json")
+            );
+        }
+    );
+
+    CHECK_FUNC_HAS_RUNTIME_ERROR(
+        print_errors,
+        [=] () -> void {
+            parse_experiment_spec(
+                test_json_dir / fs::path("bad_solve_group_arg_bad_solvers_to_use_repeat_solverid.json")
             );
         }
     );

@@ -44,7 +44,7 @@ void record_residual_solver_data(
     const std::shared_ptr<GenericIterativeSolve<M>> &solver_ptr,
     const int padding
 ) {
-    file_out << std::format("\t\"res_norm_history\" : {},\n",
+    file_out << std::format("\t\"res_norm_history\" : {}\n",
         vector_to_jsonarray_str(solver_ptr->get_res_norm_history(), padding)
     );
 }

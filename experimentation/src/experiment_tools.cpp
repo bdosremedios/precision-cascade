@@ -10,7 +10,7 @@ void check_dir_exists(fs::path dir) {
 
 Solve_Group::Solve_Group(
     std::string arg_id,
-    std::string arg_solver_suite_type,
+    std::vector<std::string> arg_solvers_to_use,
     std::string arg_matrix_type,
     int arg_experiment_iterations,
     int arg_solver_max_outer_iterations,
@@ -20,7 +20,7 @@ Solve_Group::Solve_Group(
     std::vector<std::string> arg_matrices_to_test
 ): 
     id(arg_id),
-    solver_suite_type(arg_solver_suite_type),
+    solvers_to_use(arg_solvers_to_use),
     matrix_type(arg_matrix_type),
     experiment_iterations(arg_experiment_iterations),
     solver_args(

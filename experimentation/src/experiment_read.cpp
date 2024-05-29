@@ -13,13 +13,36 @@ int extract_integer(json::iterator member) {
     }
 }
 
-std::string extract_solver_suite_type(json::iterator member) {
-    if ((member->is_string()) && ((*member == "all") || (*member == "FP64_MP"))) {
-        return *member;
+std::vector<std::string> extract_solvers_to_use(json::iterator member) {
+    std::vector<std::string> solvers_to_use;
+    std::unordered_set<std::string> solvers_seen;
+    if (member->is_array()) {
+        for (json::iterator it = member->begin(); it != member->end(); ++it) {
+            if (
+                it->is_string() &&
+                ((*it == "FP16") ||
+                 (*it == "FP32") ||
+                 (*it == "FP64") ||
+                 (*it == "SimpleConstantThreshold") ||
+                 (*it == "RestartCount")) &&
+                (solvers_seen.count(*it) == 0)
+            ) {
+                solvers_to_use.push_back(*it);
+                solvers_seen.insert(*it);
+            } else {
+                throw std::runtime_error(
+                    std::format(
+                        "extract_solve_group: extract_solvers_to_use invalid solver or repeat solver \"{}\"",
+                        member.key()
+                    )
+                );
+            }
+        }
+        return solvers_to_use;
     } else {
         throw std::runtime_error(
             std::format(
-                "extract_solve_group: extract_solver_suite_type invalid value for key \"{}\"",
+                "extract_solve_group: extract_solvers_to_use invalid value for key \"{}\"",
                 member.key()
             )
         );
@@ -40,7 +63,7 @@ std::string extract_matrix_type(json::iterator member) {
 }
 
 std::string extract_preconditioning(json::iterator member) {
-    if ((member->is_string()) && ((*member == "none") || (*member == "ilu"))) {
+    if ((member->is_string()) && ((*member == "none") || (*member == "jacobi") || (*member == "ilu"))) {
         return *member;
     } else {
         throw std::runtime_error(
@@ -95,7 +118,7 @@ Solve_Group extract_solve_group(std::string id, json cand_obj) {
 
     int member_count = 0;
     int experiment_iterations = -1;
-    std::string solver_suite_type = "";
+    std::vector<std::string> solvers_to_use;
     std::string matrix_type = "";
     int solver_max_outer_iterations = -1;
     int solver_max_inner_iterations = -1;
@@ -106,8 +129,8 @@ Solve_Group extract_solve_group(std::string id, json cand_obj) {
 
         if (it.key() == "experiment_iterations") {
             experiment_iterations = extract_integer(it);
-        } else if (it.key() == "solver_suite_type") {
-            solver_suite_type = extract_solver_suite_type(it);
+        } else if (it.key() == "solvers_to_use") {
+            solvers_to_use = extract_solvers_to_use(it);
         } else if (it.key() == "matrix_type") {
             matrix_type = extract_matrix_type(it);
         } else if (it.key() == "solver_max_outer_iterations") {
@@ -136,7 +159,7 @@ Solve_Group extract_solve_group(std::string id, json cand_obj) {
     if (
         (member_count != 8) ||
         (experiment_iterations == -1) ||
-        (solver_suite_type == "") ||
+        (solvers_to_use.size() == 0) ||
         (matrix_type == "") ||
         (solver_max_outer_iterations == -1) ||
         (solver_max_inner_iterations == -1) ||
@@ -151,7 +174,7 @@ Solve_Group extract_solve_group(std::string id, json cand_obj) {
 
     return Solve_Group(
         id,
-        solver_suite_type,
+        solvers_to_use,
         matrix_type,
         experiment_iterations,
         solver_max_outer_iterations,

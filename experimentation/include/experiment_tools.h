@@ -16,7 +16,7 @@ public:
     
     const std::string id;
     const int experiment_iterations;
-    const std::string solver_suite_type;
+    const std::vector<std::string> solvers_to_use;
     const std::string matrix_type;
     const SolveArgPkg solver_args;
     const std::string preconditioning;
@@ -24,7 +24,7 @@ public:
 
     Solve_Group(
         std::string arg_id,
-        std::string arg_solver_suite_type,
+        std::vector<std::string> arg_solvers_to_use,
         std::string arg_matrix_type,
         int arg_experiment_iterations,
         int arg_solver_max_outer_iterations,
