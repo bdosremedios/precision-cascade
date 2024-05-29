@@ -27,8 +27,7 @@ class TypedIterativeSolveTestingMock: public TypedIterativeSolve<M, T> {
         using TypedIterativeSolve<M, T>::curr_iter;
         using TypedIterativeSolve<M, T>::max_iter;
         using TypedIterativeSolve<M, T>::target_rel_res;
-        using TypedIterativeSolve<M, T>::res_hist;
-        using TypedIterativeSolve<M, T>::res_norm_hist;
+        using TypedIterativeSolve<M, T>::res_norm_history;
 
         TypedIterativeSolveTestingMock(
             TypedLinearSystem<M, T> * const arg_typed_lin_sys_ptr,

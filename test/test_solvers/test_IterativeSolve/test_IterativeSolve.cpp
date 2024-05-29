@@ -45,9 +45,9 @@ public:
         EXPECT_FALSE(test_mock_no_guess.converged);
         EXPECT_FALSE(test_mock_no_guess.terminated);
         EXPECT_EQ(test_mock_no_guess.curr_iter, 0);
-        EXPECT_EQ(test_mock_no_guess.res_norm_hist.size(), 1);
+        EXPECT_EQ(test_mock_no_guess.res_norm_history.size(), 1);
         EXPECT_NEAR(
-            test_mock_no_guess.res_norm_hist[0],
+            test_mock_no_guess.res_norm_history[0],
             (b-A*test_mock_no_guess.init_guess).norm().get_scalar(),
             Tol<T>::gamma(n)
         );
@@ -77,9 +77,9 @@ public:
         EXPECT_FALSE(test_mock_guess.converged);
         EXPECT_FALSE(test_mock_guess.terminated);
         EXPECT_EQ(test_mock_guess.curr_iter, 0);
-        EXPECT_EQ(test_mock_guess.res_norm_hist.size(), 1);
+        EXPECT_EQ(test_mock_guess.res_norm_history.size(), 1);
         EXPECT_NEAR(
-            test_mock_guess.res_norm_hist[0],
+            test_mock_guess.res_norm_history[0],
             (b - A*init_guess).norm().get_scalar(),
             Tol<T>::gamma(n)
         );
@@ -133,26 +133,14 @@ public:
         EXPECT_EQ(test_mock.curr_iter, 1);
 
         // Check residual history and relres correctly calculates
-        EXPECT_EQ(test_mock.res_hist.cols(), max_iter+1);
-        EXPECT_EQ(test_mock.res_hist.rows(), n);
-        EXPECT_EQ(test_mock.res_norm_hist.size(), 2);
-        ASSERT_VECTOR_NEAR(
-            test_mock.res_hist.get_col(0).copy_to_vec(),
-            b-A*init_guess,
-            Tol<T>::gamma(n)
-        );
-        ASSERT_VECTOR_NEAR(
-            test_mock.res_hist.get_col(1).copy_to_vec(),
-            b-A*(typed_soln.template cast<double>()),
-            Tol<T>::gamma(n)
-        );
+        EXPECT_EQ(test_mock.res_norm_history.size(), 2);
         EXPECT_NEAR(
-            test_mock.res_norm_hist[0],
+            test_mock.res_norm_history[0],
             (b-A*init_guess).norm().get_scalar(),
             Tol<T>::gamma(n)
         );
         EXPECT_NEAR(
-            test_mock.res_norm_hist[1],
+            test_mock.res_norm_history[1],
             (b-A*(typed_soln.template cast<double>())).norm().get_scalar(),
             Tol<T>::gamma(n)
         );
@@ -198,8 +186,8 @@ public:
         EXPECT_FALSE(test_mock.converged);
         EXPECT_FALSE(test_mock.terminated);
         EXPECT_EQ(test_mock.curr_iter, 0);
-        std::vector<double> init_res_norm_hist{(b - A*test_mock.init_guess).norm().get_scalar()};
-        EXPECT_EQ(test_mock.res_norm_hist, init_res_norm_hist);
+        std::vector<double> init_res_norm_history{(b - A*test_mock.init_guess).norm().get_scalar()};
+        EXPECT_EQ(test_mock.res_norm_history, init_res_norm_history);
 
     }
 

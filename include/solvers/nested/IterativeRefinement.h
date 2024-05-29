@@ -15,17 +15,8 @@ protected:
         // iterative refinement
         this->generic_soln += this->inner_solver->get_generic_soln();
 
-        // Residual is b - inner_solver residual so update through that
-        std::vector<double> temp;
-        for (int i=0; i < this->inner_solver->get_iteration(); ++i) {
-            temp.push_back(
-                (
-                    this->gen_lin_sys_ptr->get_b()-
-                    (this->inner_solver->get_res_hist()).get_col(i)
-                ).norm().get_scalar()
-            );
-        }
-        this->inner_res_norm_hist.push_back(temp);
+        // Record inner res_norm_hist
+        this->inner_res_norm_hist.push_back(this->inner_solver->get_res_norm_history());
 
     }
 

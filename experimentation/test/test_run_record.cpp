@@ -81,12 +81,10 @@ public:
         ASSERT_EQ(loaded_file["iteration"], solve_ptr->get_iteration());
         ASSERT_EQ(loaded_file["elapsed_time_ms"], data.clock.get_elapsed_time_ms());
 
-        std::vector<double> res_norm_hist = solve_ptr->get_res_norm_hist();
-        for (int i=0; i<res_norm_hist.size(); ++i) {
-            ASSERT_EQ(loaded_file["res_norm_hist"][i], res_norm_hist[i]);
+        std::vector<double> res_norm_history = solve_ptr->get_res_norm_history();
+        for (int i=0; i<res_norm_history.size(); ++i) {
+            ASSERT_EQ(loaded_file["res_norm_history"][i], res_norm_history[i]);
         }
-
-        MatrixDense<double> res_hist = solve_ptr->get_res_hist();
 
         file_in.close();
 
@@ -119,12 +117,10 @@ public:
         ASSERT_EQ(loaded_file["iteration"], solve_ptr->get_iteration());
         ASSERT_EQ(loaded_file["elapsed_time_ms"], data.clock.get_elapsed_time_ms());
 
-        std::vector<double> res_norm_hist = solve_ptr->get_res_norm_hist();
-        for (int i=0; i<res_norm_hist.size(); ++i) {
-            ASSERT_EQ(loaded_file["res_norm_hist"][i], res_norm_hist[i]);
+        std::vector<double> res_norm_history = solve_ptr->get_res_norm_history();
+        for (int i=0; i<res_norm_history.size(); ++i) {
+            ASSERT_EQ(loaded_file["res_norm_history"][i], res_norm_history[i]);
         }
-
-        MatrixDense<double> res_hist = solve_ptr->get_res_hist();
 
         file_in.close();
 

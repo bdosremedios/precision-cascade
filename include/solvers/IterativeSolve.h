@@ -43,23 +43,24 @@ private:
 
     void initialize_instantiate_residual() {
 
-        res_norm_hist.clear();
-        res_hist = MatrixDense<double>(
-            gen_lin_sys_ptr->get_cu_handles(), gen_lin_sys_ptr->get_m(), max_iter+1
-        );
+        res_norm_history.clear();
+        res_costheta_history.clear();
         curr_res = gen_lin_sys_ptr->get_b()-gen_lin_sys_ptr->get_A()*init_guess;
-        res_hist.get_col(0).set_from_vec(curr_res);
-        curr_res_norm = curr_res.norm().get_scalar();
-        res_norm_hist.push_back(curr_res_norm);
+        curr_res_norm = curr_res.norm();
+        res_norm_history.push_back(curr_res_norm.get_scalar());
+        res_costheta_history.push_back(0.);
 
     }
 
     void update_residual() {
 
+        last_res = curr_res;
         curr_res = gen_lin_sys_ptr->get_b()-gen_lin_sys_ptr->get_A()*generic_soln;
-        res_hist.get_col(curr_iter).set_from_vec(curr_res);
-        curr_res_norm = curr_res.norm().get_scalar();
-        res_norm_hist.push_back(curr_res_norm);
+        curr_res_norm = curr_res.norm();
+        res_norm_history.push_back(curr_res_norm.get_scalar());
+        res_costheta_history.push_back(
+            (last_res.dot(curr_res)/(last_res.norm()*curr_res_norm)).get_scalar()
+        );
 
     }
     
@@ -77,10 +78,11 @@ protected:
     bool converged;
     bool terminated;
     Vector<double> generic_soln = Vector<double>(cuHandleBundle());
+    Vector<double> last_res = Vector<double>(cuHandleBundle());
     Vector<double> curr_res = Vector<double>(cuHandleBundle());
-    double curr_res_norm;
-    MatrixDense<double> res_hist = MatrixDense<double>(cuHandleBundle());
-    std::vector<double> res_norm_hist;
+    Scalar<double> curr_res_norm;
+    std::vector<double> res_norm_history;
+    std::vector<double> res_costheta_history;
 
     // *** Constructors ***
     GenericIterativeSolve(
@@ -128,9 +130,9 @@ public:
     // *** Getters ***
     Vector<double> get_generic_soln() const { return generic_soln; };
     Vector<double> get_curr_res() const { return curr_res; };
-    double get_relres() const { return curr_res_norm/res_norm_hist[0]; }
-    MatrixDense<double> get_res_hist() const { return res_hist; };
-    std::vector<double> get_res_norm_hist() const { return res_norm_hist; };
+    double get_relres() const { return curr_res_norm.get_scalar()/res_norm_history[0]; }
+    std::vector<double> get_res_norm_history() const { return res_norm_history; };
+    std::vector<double> get_res_costheta_history() const { return res_costheta_history; };
     bool check_initiated() const { return initiated; };
     bool check_converged() const { return converged; };
     bool check_terminated() const { return terminated; };
@@ -182,13 +184,13 @@ public:
         // Get max max_length entries to plot
         const int max_length(70);
         std::vector<double> plot_y;
-        if (res_norm_hist.size() > max_length) {
-            double h = (res_norm_hist.size()-1.0)/(max_length-1.0);
+        if (res_norm_history.size() > max_length) {
+            double h = (res_norm_history.size()-1.0)/(max_length-1.0);
             for (int i=0; i<max_length; ++i) {
-                plot_y.push_back(res_norm_hist[static_cast<int>(i*h)]);
+                plot_y.push_back(res_norm_history[static_cast<int>(i*h)]);
             }
         } else {
-            plot_y = res_norm_hist;
+            plot_y = res_norm_history;
         }
         int length = plot_y.size();
 
