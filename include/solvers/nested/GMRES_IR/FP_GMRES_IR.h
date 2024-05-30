@@ -26,7 +26,7 @@ protected:
 
     // *** Const Attributes ***
     const double basis_zero_tol;
-    const PrecondArgPkg<M, T> inner_precond_arg_pkg;
+    const PrecondArgPkg<M, T> &inner_precond_arg_pkg;
 
     // *** Mutable Attributes ***
     TypedLinearSystem_MutAddlRHS<M, T> mutrhs_innerlinsys_ptr;

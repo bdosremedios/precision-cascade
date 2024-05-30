@@ -46,7 +46,6 @@ public:
         }
     }
 
-
     // ILU(0)
     ILUPreconditioner(const MatrixDense<W> &A, const bool &to_pivot):
         m(A.rows())
