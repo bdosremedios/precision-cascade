@@ -11,6 +11,7 @@ A_5_toy = A_5_toy/10;
 b_5_toy = [3;2;4;2;2];
 writematrix(A_5_toy, "solve_matrices\\A_5_toy.csv");
 writematrix(b_5_toy, "solve_matrices\\b_5_toy.csv");
+fprintf("5x5 Toy Mat Condition Number A: %0.5g\n", cond(A_5_toy));
 
 % Create 5x5 Matrix with solution can be found trivially
 A_5_easysoln = [1, 0, 0, 0, 0;
@@ -54,6 +55,9 @@ writematrix(x_5, "solve_matrices\\x_5_backsub.csv");
 writematrix(x_6, "solve_matrices\\x_6_backsub.csv");
 writematrix(x_7, "solve_matrices\\x_7_backsub.csv");
 
+fprintf("GMRES QR Triag. Solve Test Condition Number A: %0.5g\n", cond(A_7_backsub));
+fprintf("GMRES QR Triag. Solve Test Condition Number R: %0.5g\n", cond(R_8_backsub(1:7, 1:7)));
+
 % End-to-end matrices
 convergence_tolerance_double = 1e-10;
 
@@ -64,6 +68,7 @@ x_convdiff64 = gmres( ...
     [], convergence_tolerance_double, 64 ...
 );
 writematrix(full(A_convdiff64), "solve_matrices\\conv_diff_64_A.csv");
+writematrix(full(A_convdiff64*A_convdiff64), "solve_matrices\\conv_diff_64_Asqr.csv");
 writematrix(full(b_convdiff64), "solve_matrices\\conv_diff_64_b.csv");
 writematrix(full(x_convdiff64), "solve_matrices\\conv_diff_64_x.csv");
 
@@ -74,9 +79,9 @@ x_convdiff256 = gmres( ...
     [], convergence_tolerance_double, 256 ...
 );
 writematrix(full(A_convdiff256), "solve_matrices\\conv_diff_256_A.csv");
+writematrix(full(A_convdiff256*A_convdiff256), "solve_matrices\\conv_diff_256_Asqr.csv");
 writematrix(full(b_convdiff256), "solve_matrices\\conv_diff_256_b.csv");
 writematrix(full(x_convdiff256), "solve_matrices\\conv_diff_256_x.csv");
-
 
 % Create 1024x1024 convection diffusion with rhs sin(x)cos(y)
 [A_convdiff1024, b_convdiff1024] = generate_conv_diff_rhs_sinxcosy(32, 0.1, 0.1);
@@ -84,6 +89,7 @@ x_convdiff1024 = gmres( ...
     A_convdiff1024, b_convdiff1024, [], convergence_tolerance_double, 1024 ...
 );
 writematrix(full(A_convdiff1024), "solve_matrices\\conv_diff_1024_A.csv");
+writematrix(full(A_convdiff1024*A_convdiff1024), "solve_matrices\\conv_diff_1024_Asqr.csv");
 writematrix(full(b_convdiff1024), "solve_matrices\\conv_diff_1024_b.csv");
 writematrix(full(x_convdiff1024), "solve_matrices\\conv_diff_1024_x.csv");
 
@@ -127,7 +133,7 @@ writematrix(inv_pre_cond, "solve_matrices\\A_25_invprecond_saddle.csv");
 
 % Create lower/upper triangular to check substitution solve
 A_2_temp = 2*(rand(90, 90)-0.5);
-A_2_temp = A_2_temp + 10*diag(diag(A_2_temp)./abs(diag(A_2_temp)));
+A_2_temp = A_2_temp + 15*diag(diag(A_2_temp)./abs(diag(A_2_temp)));
 U_tri_90 = triu(A_2_temp);
 x_90 = 2*(randi(2, 90, 1)-1.5);
 Ub_90 = U_tri_90*x_90;
@@ -138,12 +144,17 @@ L_tri_90 = tril(A_2_temp);
 Lb_90 = L_tri_90*x_90;
 writematrix(L_tri_90, "solve_matrices\\L_tri_90.csv");
 writematrix(Lb_90, "solve_matrices\\Lb_tri_90.csv");
+fprintf("Triag. Solve Test Condition Number A: %0.5g\n", cond(A_2_temp));
+fprintf("Triag. Solve Test Condition Number U: %0.5g\n", cond(U_tri_90));
+fprintf("Triag. Solve Test Condition Number L: %0.5g\n", cond(L_tri_90));
 
 % Create Matrix and Inverse to test inverse preconditioner
-A_inv_test = randi(45, 45);
+A_inv_test = randn(45, 45);
+Asqr_inv_test = A_inv_test*A_inv_test;
 Ainv_inv_test = inv(A_inv_test);
 b_inv_test = randn(45, 1);
 writematrix(A_inv_test, "solve_matrices\\A_inv_45.csv");
+writematrix(Asqr_inv_test, "solve_matrices\\Asqr_inv_45.csv");
 writematrix(Ainv_inv_test, "solve_matrices\\Ainv_inv_45.csv");
 writematrix(b_inv_test, "solve_matrices\\b_inv_45.csv");
 
@@ -185,6 +196,16 @@ writematrix(full(ilu_sparse_U), "solve_matrices\\ilu_sparse_U.csv");
 writematrix(full(ilu_sparse_L_pivot), "solve_matrices\\ilu_sparse_L_pivot.csv");
 writematrix(full(ilu_sparse_U_pivot), "solve_matrices\\ilu_sparse_U_pivot.csv");
 writematrix(full(ilu_sparse_P_pivot), "solve_matrices\\ilu_sparse_P_pivot.csv");
+
+fprintf("Sparse ILU Test Condition Number A: %g\n", cond(ilu_sparse_A));
+
+tic
+gmres(A_convdiff1024, b_convdiff1024, 1024, 1e-10, 1024);
+toc
+
+tic
+gmres(full(A_convdiff1024), b_convdiff1024, 1024, 1e-10, 1024);
+toc
 
 function [A, b] = generate_conv_diff_rhs_sinxcosy(n, sigma, tau)
 

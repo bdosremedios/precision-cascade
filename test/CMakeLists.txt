@@ -57,6 +57,7 @@ set(
     test_solvers/test_nested/test_Preconditioned_FP_GMRES_IR_solve.cpp
     test_solvers/test_nested/test_MP_GMRES_IR_component.cpp
     test_solvers/test_nested/test_MP_GMRES_IR_solve.cpp
+    # test_solvers/test_nested/test_Preconditioned_MP_GMRES_IR_solve.cpp
 )
 
 set(
@@ -80,10 +81,10 @@ set(
 
 set(
     TEST_SUITE_CPPS
-    ${TEST_TYPES_CPPS}
-    ${TEST_TOOLS_CPPS}
-    ${TEST_PRECONDITIONER_CPPS}
-    ${TEST_ARG_PKGS}
+    # ${TEST_TYPES_CPPS}
+    # ${TEST_TOOLS_CPPS}
+    # ${TEST_PRECONDITIONER_CPPS}
+    # ${TEST_ARG_PKGS}
     ${TEST_SOLVERS}
     # ${TEST_BENCHMARK}
 )

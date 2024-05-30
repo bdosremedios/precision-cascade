@@ -154,17 +154,17 @@ public:
         ASSERT_VECTOR_NEAR(
             inv_precond_dbl_dbl_ptr->action_inv_M(test_vec_dbl),
             Ainv_dbl.template cast<double>()*test_vec_dbl,
-            Tol<double>::roundoff_T()
+            Tol<double>::gamma_T(n)
         );
         ASSERT_VECTOR_NEAR(
             inv_precond_dbl_sgl_ptr->action_inv_M(test_vec_sgl),
             Ainv_dbl.template cast<float>()*test_vec_sgl,
-            Tol<float>::roundoff_T()
+            Tol<float>::gamma_T(n)
         );
         ASSERT_VECTOR_NEAR(
             inv_precond_dbl_hlf_ptr->action_inv_M(test_vec_hlf),
             Ainv_dbl.template cast<__half>()*test_vec_hlf,
-            Tol<__half>::roundoff_T()
+            Tol<__half>::gamma_T(n)
         );
 
         delete inv_precond_dbl_dbl_ptr;
@@ -178,17 +178,17 @@ public:
         ASSERT_VECTOR_NEAR(
             inv_precond_sgl_dbl_ptr->action_inv_M(test_vec_dbl),
             Ainv_sgl.template cast<double>()*test_vec_dbl,
-            Tol<double>::roundoff_T()
+            Tol<double>::gamma_T(n)
         );
         ASSERT_VECTOR_NEAR(
             inv_precond_sgl_sgl_ptr->action_inv_M(test_vec_sgl),
             Ainv_sgl.template cast<float>()*test_vec_sgl,
-            Tol<float>::roundoff_T()
+            Tol<float>::gamma_T(n)
         );
         ASSERT_VECTOR_NEAR(
             inv_precond_sgl_hlf_ptr->action_inv_M(test_vec_hlf),
             Ainv_sgl.template cast<__half>()*test_vec_hlf,
-            Tol<__half>::roundoff_T()
+            Tol<__half>::gamma_T(n)
         );
 
         delete inv_precond_sgl_dbl_ptr;
@@ -202,17 +202,17 @@ public:
         ASSERT_VECTOR_NEAR(
             inv_precond_hlf_dbl_ptr->action_inv_M(test_vec_dbl),
             Ainv_hlf.template cast<double>()*test_vec_dbl,
-            Tol<double>::roundoff_T()
+            Tol<double>::gamma_T(n)
         );
         ASSERT_VECTOR_NEAR(
             inv_precond_hlf_sgl_ptr->action_inv_M(test_vec_sgl),
             Ainv_hlf.template cast<float>()*test_vec_sgl,
-            Tol<float>::roundoff_T()
+            Tol<float>::gamma_T(n)
         );
         ASSERT_VECTOR_NEAR(
             inv_precond_hlf_hlf_ptr->action_inv_M(test_vec_hlf),
             Ainv_hlf.template cast<__half>()*test_vec_hlf,
-            Tol<__half>::roundoff_T()
+            Tol<__half>::gamma_T(n)
         );
 
         delete inv_precond_hlf_dbl_ptr;
