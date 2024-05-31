@@ -9,7 +9,7 @@ public:
     const SolveArgPkg solve_args = SolveArgPkg(80, 10, Tol<double>::krylov_conv_tol());
 
     template <template <typename> typename M>
-    void PreconditionedSingleIterTest(
+    void PreconditionedMinimumIterTest(
         const SolveArgPkg &args
     ) {
 
@@ -28,12 +28,12 @@ public:
         PrecondArgPkg<M, double> precond_left_args(
             std::make_shared<MatrixInversePreconditioner<M, double>>(Ainv)
         );
-        RestartCount<M> precond_left_gmres_ir(&gen_lin_sys, args, precond_left_args);
+        SimpleConstantThreshold<M> precond_left_gmres_ir(&gen_lin_sys, args, precond_left_args);
         precond_left_gmres_ir.solve();
 
         if (*show_plots) { precond_left_gmres_ir.view_relres_plot("log"); }
 
-        EXPECT_EQ(precond_left_gmres_ir.get_iteration(), 1);
+        EXPECT_EQ(precond_left_gmres_ir.get_iteration(), 3);
         EXPECT_TRUE(precond_left_gmres_ir.check_converged());
         EXPECT_LE(precond_left_gmres_ir.get_relres(), args.target_rel_res);
 
@@ -41,12 +41,12 @@ public:
             std::make_shared<NoPreconditioner<M, double>>(),
             std::make_shared<MatrixInversePreconditioner<M, double>>(Ainv)
         );
-        RestartCount<M> precond_right_gmres_ir(&gen_lin_sys, args, precond_right_args);
+        SimpleConstantThreshold<M> precond_right_gmres_ir(&gen_lin_sys, args, precond_right_args);
         precond_right_gmres_ir.solve();
 
         if (*show_plots) { precond_right_gmres_ir.view_relres_plot("log"); }
 
-        EXPECT_EQ(precond_right_gmres_ir.get_iteration(), 1);
+        EXPECT_EQ(precond_right_gmres_ir.get_iteration(), 3);
         EXPECT_TRUE(precond_right_gmres_ir.check_converged());
         EXPECT_LE(precond_right_gmres_ir.get_relres(), args.target_rel_res);
 
@@ -56,12 +56,12 @@ public:
         );
         GenericLinearSystem<M> gen_lin_sys_Asqr(Asqr, b);
 
-        RestartCount<M> precond_symmetric_gmres_ir(&gen_lin_sys_Asqr, args, precond_symmetric_args);
+        SimpleConstantThreshold<M> precond_symmetric_gmres_ir(&gen_lin_sys_Asqr, args, precond_symmetric_args);
         precond_symmetric_gmres_ir.solve();
 
         if (*show_plots) { precond_symmetric_gmres_ir.view_relres_plot("log"); }
 
-        EXPECT_EQ(precond_symmetric_gmres_ir.get_iteration(), 1);
+        EXPECT_EQ(precond_symmetric_gmres_ir.get_iteration(), 3);
         EXPECT_TRUE(precond_symmetric_gmres_ir.check_converged());
         EXPECT_LE(precond_symmetric_gmres_ir.get_relres(), args.target_rel_res);
 
@@ -110,10 +110,10 @@ public:
 
 };
 
-TEST_F(Preconditioned_MP_GMRES_IR_Test, SingleIterTest_SOLVER) {
+TEST_F(Preconditioned_MP_GMRES_IR_Test, MinimumIterTest_SOLVER) {
     
-    PreconditionedSingleIterTest<MatrixDense>(solve_args);
-    PreconditionedSingleIterTest<NoFillMatrixSparse>(solve_args);
+    PreconditionedMinimumIterTest<MatrixDense>(solve_args);
+    PreconditionedMinimumIterTest<NoFillMatrixSparse>(solve_args);
 
 }
 

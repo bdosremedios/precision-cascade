@@ -173,8 +173,8 @@ private:
             this->inner_solver = std::make_shared<GMRESSolve<M, __half>>(
                 mutrhs_innerlinsys_hlf_ptr,
                 u_hlf,
-                this->inner_solve_arg_pkg//,
-                // *this->inner_precond_arg_pkg_hlf_ptr
+                this->inner_solve_arg_pkg,
+                *this->inner_precond_arg_pkg_hlf_ptr
             );
 
         } else if (std::is_same<T, float>::value) {
@@ -182,8 +182,8 @@ private:
             this->inner_solver = std::make_shared<GMRESSolve<M, float>>(
                 mutrhs_innerlinsys_sgl_ptr,
                 u_sgl,
-                this->inner_solve_arg_pkg//,
-                // *this->inner_precond_arg_pkg_sgl_ptr
+                this->inner_solve_arg_pkg,
+                *this->inner_precond_arg_pkg_sgl_ptr
             );
 
         } else if (std::is_same<T, double>::value) {
@@ -191,8 +191,8 @@ private:
             this->inner_solver = std::make_shared<GMRESSolve<M, double>>(
                 mutrhs_innerlinsys_dbl_ptr,
                 u_dbl,
-                this->inner_solve_arg_pkg//,
-                // orig_inner_precond_arg_pkg_dbl
+                this->inner_solve_arg_pkg,
+                orig_inner_precond_arg_pkg_dbl
             );
 
         } else {

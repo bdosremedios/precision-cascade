@@ -57,7 +57,7 @@ set(
     test_solvers/test_nested/test_Preconditioned_FP_GMRES_IR_solve.cpp
     test_solvers/test_nested/test_MP_GMRES_IR_component.cpp
     test_solvers/test_nested/test_MP_GMRES_IR_solve.cpp
-    # test_solvers/test_nested/test_Preconditioned_MP_GMRES_IR_solve.cpp
+    test_solvers/test_nested/test_Preconditioned_MP_GMRES_IR_solve.cpp
 )
 
 set(
