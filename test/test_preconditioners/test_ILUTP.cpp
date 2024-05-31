@@ -16,7 +16,7 @@ public:
         M<double> A(
             read_matrixCSV<M, double>(TestBase::bundle, solve_matrix_dir / fs::path("ilu_A.csv"))
         );
-        ILUPreconditioner<M, double> ilu0(A, false);
+        ILUPreconditioner<M, double> ilu0(A);
         ILUPreconditioner<M, double> ilut0(A, 0., n, false);
         ASSERT_MATRIX_EQ(ilut0.get_U(), ilu0.get_U());
         ASSERT_MATRIX_EQ(ilut0.get_L(), ilu0.get_L());
@@ -158,6 +158,47 @@ public:
 
     }
 
+    template<template <typename> typename M>
+    void TestMatchesDenseLU_Pivoted() {
+
+        // Test that using a completely dense matrix one just gets a pivoted LU
+        constexpr int n(8);
+        M<double> A(
+            read_matrixCSV<M, double>(TestBase::bundle, solve_matrix_dir / fs::path("ilu_A.csv"))
+        );
+        ILUPreconditioner<M, double> ilu_precond(A, 0., n, true);
+        M<double> test(
+            MatrixDense<double>(ilu_precond.get_L())*MatrixDense<double>(ilu_precond.get_U()) -
+            MatrixDense<double>(ilu_precond.get_P())*MatrixDense<double>(A)
+        );
+
+        ASSERT_MATRIX_ZERO(test, Tol<double>::dbl_ilu_elem_tol());
+
+        ASSERT_MATRIX_LOWTRI(ilu_precond.get_L(), Tol<double>::roundoff());
+        ASSERT_MATRIX_UPPTRI(ilu_precond.get_U(), Tol<double>::roundoff());
+
+        // Test validity of permutation matrix P
+        M<double> P_squared(
+            MatrixDense<double>(ilu_precond.get_P())*MatrixDense<double>(ilu_precond.get_P().transpose())
+        );
+        ASSERT_MATRIX_IDENTITY(P_squared, Tol<double>::dbl_ilu_elem_tol());
+
+        M<double> L(
+            read_matrixCSV<M, double>(TestBase::bundle, solve_matrix_dir / fs::path("ilu_L_pivot.csv"))
+        );
+        M<double> U(
+            read_matrixCSV<M, double>(TestBase::bundle, solve_matrix_dir / fs::path("ilu_U_pivot.csv"))
+        );
+        M<double> P(
+            read_matrixCSV<M, double>(TestBase::bundle, solve_matrix_dir / fs::path("ilu_P_pivot.csv"))
+        );
+
+        ASSERT_MATRIX_NEAR(ilu_precond.get_L(), L, Tol<double>::dbl_ilu_elem_tol());
+        ASSERT_MATRIX_NEAR(ilu_precond.get_U(), U, Tol<double>::dbl_ilu_elem_tol());
+        ASSERT_MATRIX_NEAR(ilu_precond.get_P(), P, Tol<double>::dbl_ilu_elem_tol());
+
+    }
+
     template <template <typename> typename M>
     void TestKeepPLargest(bool pivot) {
 
@@ -224,6 +265,11 @@ TEST_F(ILUTP_Test, TestILUTDroppingLimits_PRECONDITIONER) {
 TEST_F(ILUTP_Test, TestILUTDroppingLimits_Pivoted_PRECONDITIONER) {
     TestILUTDroppingLimits<MatrixDense>(true);
     TestILUTDroppingLimits<NoFillMatrixSparse>(true);
+}
+
+TEST_F(ILUTP_Test, TestMatchesDenseLU_Pivoted_PRECONDITIONER) {
+    TestMatchesDenseLU_Pivoted<MatrixDense>();
+    TestMatchesDenseLU_Pivoted<NoFillMatrixSparse>();
 }
 
 TEST_F(ILUTP_Test, TestKeepPLargest_PRECONDITIONER) {

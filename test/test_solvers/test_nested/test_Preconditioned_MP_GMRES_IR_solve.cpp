@@ -77,9 +77,7 @@ public:
         M<double> A = read_matrixCSV<M, double>(TestBase::bundle, A_file_path);
         Vector<double> b = read_matrixCSV<Vector, double>(TestBase::bundle, b_file_path);
 
-        std::shared_ptr<ILUPreconditioner<M, double>> ilu_ptr = std::make_shared<ILUPreconditioner<M, double>>(
-            A, true
-        );
+        std::shared_ptr<ILUPreconditioner<M, double>> ilu_ptr(new ILUPreconditioner<M, double>(A));
 
         GenericLinearSystem<M> gen_lin_sys(A, b);
 
@@ -96,7 +94,10 @@ public:
         EXPECT_LE(precond_left_gmres_ir.get_relres(), args.target_rel_res);
         EXPECT_LT(precond_left_gmres_ir.get_iteration(), gmres_ir.get_iteration());
 
-        PrecondArgPkg<M, double> precond_right_args(std::make_shared<NoPreconditioner<M, double>>(), ilu_ptr);
+        PrecondArgPkg<M, double> precond_right_args(
+            std::make_shared<NoPreconditioner<M, double>>(),
+            ilu_ptr
+        );
         RestartCount<M> precond_right_gmres_ir(&gen_lin_sys, args, precond_right_args);
         precond_right_gmres_ir.solve();
 

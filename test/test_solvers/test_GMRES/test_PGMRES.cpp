@@ -163,7 +163,7 @@ public:
         Vector<double> b = read_matrixCSV<Vector, double>(TestBase::bundle, b_file_path);
 
         std::shared_ptr<ILUPreconditioner<M, T>> ilu_ptr = std::make_shared<ILUPreconditioner<M, T>>(
-            A.template cast<T>(), true
+            A.template cast<T>()
         );
 
         GenericLinearSystem<M> gen_lin_sys(A, b);

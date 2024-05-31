@@ -29,10 +29,10 @@ public:
         M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, n, n));
         
         NoPreconditioner<M, double> no_precond;
-        ILUPreconditioner<M, double> ilu_precond(A, false);
+        ILUPreconditioner<M, double> ilu_precond(A);
 
         PrecondArgPkg<M, double> args(
-            std::make_shared<ILUPreconditioner<M, double>>(A, false)
+            std::make_shared<ILUPreconditioner<M, double>>(A)
         );
 
         Vector<double> test_vec(Vector<double>::Random(TestBase::bundle, n));
@@ -50,11 +50,11 @@ public:
         M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, n, n));
 
         NoPreconditioner<M, double> no_precond;
-        ILUPreconditioner<M, double> ilu_precond(A, false);
+        ILUPreconditioner<M, double> ilu_precond(A);
         
         PrecondArgPkg<M, double> args(
-            std::make_shared<NoPreconditioner<M, double>>(no_precond),
-            std::make_shared<ILUPreconditioner<M, double>>(A, false)
+            std::make_shared<NoPreconditioner<M, double>>(),
+            std::make_shared<ILUPreconditioner<M, double>>(A)
         );
 
         Vector<double> test_vec(Vector<double>::Random(TestBase::bundle, n));
@@ -71,11 +71,11 @@ public:
 
         M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, n, n));
 
-        ILUPreconditioner<M, double> ilu_precond(A, false);
+        ILUPreconditioner<M, double> ilu_precond(A);
 
         PrecondArgPkg<M, double> args(
-            std::make_shared<ILUPreconditioner<M, double>>(A, false),
-            std::make_shared<ILUPreconditioner<M, double>>(A, false)
+            std::make_shared<ILUPreconditioner<M, double>>(A),
+            std::make_shared<ILUPreconditioner<M, double>>(A)
         );
 
         Vector<double> test_vec(Vector<double>::Random(TestBase::bundle, n));
@@ -92,21 +92,21 @@ public:
 
         M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, n, n));
 
-        ILUPreconditioner<M, double> ilu_precond_dbl(A, false);
-        ILUPreconditioner<M, float> ilu_precond_sgl(A.template cast<float>(), false);
-        ILUPreconditioner<M, __half> ilu_precond_hlf(A.template cast<__half>(), false);
+        ILUPreconditioner<M, double> ilu_precond_dbl(A);
+        ILUPreconditioner<M, float> ilu_precond_sgl(A.template cast<float>());
+        ILUPreconditioner<M, __half> ilu_precond_hlf(A.template cast<__half>());
 
         PrecondArgPkg<M, double> args_dbl(
-            std::make_shared<ILUPreconditioner<M, double>>(A, false),
-            std::make_shared<ILUPreconditioner<M, double>>(A, false)
+            std::make_shared<ILUPreconditioner<M, double>>(A),
+            std::make_shared<ILUPreconditioner<M, double>>(A)
         );
         PrecondArgPkg<M, float> args_sgl(
-            std::make_shared<ILUPreconditioner<M, float>>(A.template cast<float>(), false),
-            std::make_shared<ILUPreconditioner<M, float>>(A.template cast<float>(), false)
+            std::make_shared<ILUPreconditioner<M, float>>(A.template cast<float>()),
+            std::make_shared<ILUPreconditioner<M, float>>(A.template cast<float>())
         );
         PrecondArgPkg<M, __half> args_hlf(
-            std::make_shared<ILUPreconditioner<M, __half>>(A.template cast<__half>(), false),
-            std::make_shared<ILUPreconditioner<M, __half>>(A.template cast<__half>(), false)
+            std::make_shared<ILUPreconditioner<M, __half>>(A.template cast<__half>()),
+            std::make_shared<ILUPreconditioner<M, __half>>(A.template cast<__half>())
         );
 
         Vector<double> test_vec_dbl(Vector<double>::Random(TestBase::bundle, n));

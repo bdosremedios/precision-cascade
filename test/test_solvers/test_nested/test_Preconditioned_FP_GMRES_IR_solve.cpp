@@ -87,8 +87,8 @@ public:
         M<double> A = read_matrixCSV<M, double>(TestBase::bundle, A_file_path);
         Vector<double> b = read_matrixCSV<Vector, double>(TestBase::bundle, b_file_path);
 
-        std::shared_ptr<ILUPreconditioner<M, T>> ilu_ptr = std::make_shared<ILUPreconditioner<M, T>>(
-            A.template cast<T>(), true
+        std::shared_ptr<ILUPreconditioner<M, T>> ilu_ptr(
+            new ILUPreconditioner<M, T>(A.template cast<T>())
         );
 
         GenericLinearSystem<M> gen_lin_sys(A, b);
@@ -109,7 +109,10 @@ public:
         EXPECT_LE(precond_left_gmres_ir.get_relres(), args.target_rel_res);
         EXPECT_LT(precond_left_gmres_ir.get_iteration(), gmres_ir.get_iteration());
 
-        PrecondArgPkg<M, T> precond_right_args(std::make_shared<NoPreconditioner<M, T>>(), ilu_ptr);
+        PrecondArgPkg<M, T> precond_right_args(
+            std::make_shared<NoPreconditioner<M, T>>(),
+            ilu_ptr
+        );
         FP_GMRES_IR_Solve<M, T> precond_right_gmres_ir(
             &typed_lin_sys, Tol<T>::roundoff(), args, precond_right_args
         );

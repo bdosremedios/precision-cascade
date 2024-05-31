@@ -11,7 +11,7 @@ public:
 
         auto try_non_square = []() { 
             M<double> A(M<double>::Ones(TestBase::bundle, 7, 5));
-            ILUPreconditioner<M, double> ilu(A, false);
+            ILUPreconditioner<M, double> ilu(A);
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_non_square);
 
@@ -23,7 +23,7 @@ public:
         // Test that 7x7 matrix is only compatible with 7
         constexpr int n(7);
         M<double> A(M<double>::Identity(TestBase::bundle, 7, 7));
-        ILUPreconditioner<M, double> ilu(A, false);
+        ILUPreconditioner<M, double> ilu(A);
         EXPECT_TRUE(ilu.check_compatibility_left(n));
         EXPECT_TRUE(ilu.check_compatibility_right(n));
         EXPECT_FALSE(ilu.check_compatibility_left(n-4));
@@ -41,14 +41,16 @@ public:
         auto try_ilu_zero_at_0_0 = [=]() {
             MatrixDense<double> A(MatrixDense<double>::Identity(TestBase::bundle, n, n));
             A.set_elem(0, 0, 0);
-            ILUPreconditioner<M, double> ilu(M<double>(A), false);
+            M<double> A_cast(A);
+            ILUPreconditioner<M, double> ilu(A_cast);
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_ilu_zero_at_0_0);
 
         auto try_ilu_zero_at_4_4 = [=]() {
             MatrixDense<double> A(MatrixDense<double>::Identity(TestBase::bundle, n, n));
             A.set_elem(4, 4, 0);
-            ILUPreconditioner<M, double> ilu(M<double>(A), false);
+            M<double> A_cast(A);
+            ILUPreconditioner<M, double> ilu(A_cast);
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_ilu_zero_at_4_4);
 
@@ -59,7 +61,7 @@ public:
 
         constexpr int n(8);
         M<double> A(read_matrixCSV<M, double>(TestBase::bundle, solve_matrix_dir / fs::path("ilu_A.csv")));
-        ILUPreconditioner<M, double> ilu(A, false); // Make dense LU
+        ILUPreconditioner<M, double> ilu(A); // Make dense LU
 
         // Test matching ILU to MATLAB for the dense matrix
         Vector<double> test_vec(Vector<double>::Random(TestBase::bundle, n));
@@ -74,7 +76,7 @@ public:
         // Test that using a completely dense matrix one just gets a LU
         constexpr int n(8);
         M<double> A(read_matrixCSV<M, double>(TestBase::bundle, solve_matrix_dir / fs::path("ilu_A.csv")));
-        ILUPreconditioner<M, double> ilu(A, true);
+        ILUPreconditioner<M, double> ilu(A);
         
         // Test matching ILU to MATLAB for the dense matrix
         Vector<double> test_vec(Vector<double>::Random(TestBase::bundle, n));
@@ -122,9 +124,9 @@ public:
         M<float> A_sgl(A_dbl.template cast<float>());
         M<__half> A_hlf(A_dbl.template cast<__half>());
 
-        ILUPreconditioner<M, double> ilu0_dbl(A_dbl, true);
-        ILUPreconditioner<M, float> ilu0_sgl(A_sgl, true);
-        ILUPreconditioner<M, __half> ilu0_hlf(A_hlf, true);
+        ILUPreconditioner<M, double> ilu0_dbl(A_dbl);
+        ILUPreconditioner<M, float> ilu0_sgl(A_sgl);
+        ILUPreconditioner<M, __half> ilu0_hlf(A_hlf);
 
         M<double> L_dbl_dbl = ilu0_dbl.get_L().template cast<double>();
         M<double> U_dbl_dbl = ilu0_dbl.get_U().template cast<double>();
@@ -269,6 +271,6 @@ TEST_F(ILUPreconditioner_Test, TestILUPremadeErrorChecks_PRECONDITIONER) {
 }
 
 TEST_F(ILUPreconditioner_Test, TestILUPreconditionerCast_PRECONDITIONER) {
-    // TestILUPreconditionerCast<MatrixDense>();
+    TestILUPreconditionerCast<MatrixDense>();
     TestILUPreconditionerCast<NoFillMatrixSparse>();
 }

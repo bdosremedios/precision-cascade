@@ -435,7 +435,7 @@ ILUTriplet<M, T> sparse_construct_drop_rule_ILU(
 
 template <template <typename> typename M, typename T>
 ILUTriplet<M, T> construct_square_ILU_0(
-   const NoFillMatrixSparse<T> &A, bool to_pivot
+   const NoFillMatrixSparse<T> &A
 ) {
 
     int *col_offsets = static_cast<int *>(malloc((A.cols()+1)*sizeof(int)));
@@ -469,7 +469,7 @@ ILUTriplet<M, T> construct_square_ILU_0(
     DropRulePFunc<T> drop_rule_p = [] (int col_ind, int pivot_ind, T *col_ptr, int m_dim) { ; };
 
     return sparse_construct_drop_rule_ILU<M ,T>(
-        to_pivot,
+        false,
         drop_rule_tau_U,
         drop_rule_tau_L,
         drop_rule_p,
@@ -549,7 +549,7 @@ ILUTriplet<M, T> construct_square_ILUTP(
         drop_rule_tau_U,
         drop_rule_tau_L,
         drop_rule_p,
-        p*A.rows(),
+        p*A.cols(),
         A
     );
 

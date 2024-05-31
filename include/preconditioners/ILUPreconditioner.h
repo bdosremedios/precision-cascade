@@ -47,29 +47,21 @@ public:
     }
 
     // ILU(0)
-    ILUPreconditioner(const MatrixDense<W> &A, const bool &to_pivot):
-        m(A.rows())
-    {
+    ILUPreconditioner(const MatrixDense<W> &A): m(A.rows()) {
         ilu_subroutines::ILUTriplet<MatrixDense, W> ret = (
-            ilu_subroutines::construct_square_ILU_0<MatrixDense, W>(
-                NoFillMatrixSparse<W>(A), to_pivot
-            )
+            ilu_subroutines::construct_square_ILU_0<MatrixDense, W>(NoFillMatrixSparse<W>(A))
+        );
+        L = ret.L; U = ret.U; P = ret.P;
+    }
+
+    ILUPreconditioner(const NoFillMatrixSparse<W> &A): m(A.rows()) {
+        ilu_subroutines::ILUTriplet<NoFillMatrixSparse, W> ret = (
+            ilu_subroutines::construct_square_ILU_0<NoFillMatrixSparse, W>(A)
         );
         L = ret.L; U = ret.U; P = ret.P;
     }
 
     // ILUT(tau, p), tau threshold to drop and p number of entries to keep
-    ILUPreconditioner(const NoFillMatrixSparse<W> &A, const bool &to_pivot):
-        m(A.rows())
-    {
-        ilu_subroutines::ILUTriplet<NoFillMatrixSparse, W> ret = (
-            ilu_subroutines::construct_square_ILU_0<NoFillMatrixSparse, W>(
-                A, to_pivot
-            )
-        );
-        L = ret.L; U = ret.U; P = ret.P;
-    }
-
     ILUPreconditioner(const MatrixDense<W> &A, const W &tau, const int &p, const bool &to_pivot):
         m(A.rows())
     {
