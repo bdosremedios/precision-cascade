@@ -19,7 +19,7 @@ private:
     TypedLinearSystem_MutAddlRHS<M, float> * mutrhs_innerlinsys_sgl_ptr = nullptr;
     TypedLinearSystem_MutAddlRHS<M, __half> * mutrhs_innerlinsys_hlf_ptr = nullptr;
 
-    const PrecondArgPkg<M, double> &orig_inner_precond_arg_pkg_dbl;
+    const PrecondArgPkg<M, double> orig_inner_precond_arg_pkg_dbl;
     PrecondArgPkg<M, float> * inner_precond_arg_pkg_sgl_ptr = nullptr;
     PrecondArgPkg<M, __half> * inner_precond_arg_pkg_hlf_ptr = nullptr;
 
@@ -28,32 +28,32 @@ private:
     bool hlf_ptrs_instantiated() {
         return (
             (innerlinsys_hlf_ptr != nullptr) &&
-            (mutrhs_innerlinsys_hlf_ptr != nullptr) //&&
-            // (inner_precond_arg_pkg_hlf_ptr != nullptr)
+            (mutrhs_innerlinsys_hlf_ptr != nullptr) &&
+            (inner_precond_arg_pkg_hlf_ptr != nullptr)
         );
     };
 
     bool hlf_ptrs_empty() {
         return (
             (innerlinsys_hlf_ptr == nullptr) &&
-            (mutrhs_innerlinsys_hlf_ptr == nullptr) //&&
-            // (inner_precond_arg_pkg_hlf_ptr == nullptr)
+            (mutrhs_innerlinsys_hlf_ptr == nullptr) &&
+            (inner_precond_arg_pkg_hlf_ptr == nullptr)
         );
     };
 
     bool sgl_ptrs_instantiated() {
         return (
             (innerlinsys_sgl_ptr != nullptr) &&
-            (mutrhs_innerlinsys_sgl_ptr != nullptr) //&&
-            // (inner_precond_arg_pkg_sgl_ptr != nullptr)
+            (mutrhs_innerlinsys_sgl_ptr != nullptr) &&
+            (inner_precond_arg_pkg_sgl_ptr != nullptr)
         );
     };
 
     bool sgl_ptrs_empty() {
         return (
             (innerlinsys_sgl_ptr == nullptr) &&
-            (mutrhs_innerlinsys_sgl_ptr == nullptr) //&&
-            // (inner_precond_arg_pkg_sgl_ptr == nullptr)
+            (mutrhs_innerlinsys_sgl_ptr == nullptr) &&
+            (inner_precond_arg_pkg_sgl_ptr == nullptr)
         );
     };
 
@@ -107,7 +107,6 @@ private:
         delete_dbl_ptrs();
     }
 
-    // TODO: ADD SETUP FOR PRECONDITIONERS
     template <typename T>
     void setup_systems() {
 
@@ -118,6 +117,7 @@ private:
                 mutrhs_innerlinsys_hlf_ptr = new TypedLinearSystem_MutAddlRHS<M, __half>(
                     innerlinsys_hlf_ptr, this->curr_res
                 );
+                inner_precond_arg_pkg_hlf_ptr = orig_inner_precond_arg_pkg_dbl.cast_hlf_ptr();
             } else if (hlf_ptrs_instantiated()) {
                 mutrhs_innerlinsys_hlf_ptr->set_rhs(this->curr_res);
             } else {
@@ -133,6 +133,7 @@ private:
                 mutrhs_innerlinsys_sgl_ptr = new TypedLinearSystem_MutAddlRHS<M, float>(
                     innerlinsys_sgl_ptr, this->curr_res
                 );
+                inner_precond_arg_pkg_sgl_ptr = orig_inner_precond_arg_pkg_dbl.cast_sgl_ptr();
             } else if (sgl_ptrs_instantiated()) {
                 mutrhs_innerlinsys_sgl_ptr->set_rhs(this->curr_res);
             } else {
@@ -170,19 +171,28 @@ private:
         if (std::is_same<T, __half>::value) {
 
             this->inner_solver = std::make_shared<GMRESSolve<M, __half>>(
-                mutrhs_innerlinsys_hlf_ptr, u_hlf, this->inner_solve_arg_pkg
+                mutrhs_innerlinsys_hlf_ptr,
+                u_hlf,
+                this->inner_solve_arg_pkg//,
+                // *this->inner_precond_arg_pkg_hlf_ptr
             );
 
         } else if (std::is_same<T, float>::value) {
 
             this->inner_solver = std::make_shared<GMRESSolve<M, float>>(
-                mutrhs_innerlinsys_sgl_ptr, u_sgl, this->inner_solve_arg_pkg
+                mutrhs_innerlinsys_sgl_ptr,
+                u_sgl,
+                this->inner_solve_arg_pkg//,
+                // *this->inner_precond_arg_pkg_sgl_ptr
             );
 
         } else if (std::is_same<T, double>::value) {
 
             this->inner_solver = std::make_shared<GMRESSolve<M, double>>(
-                mutrhs_innerlinsys_dbl_ptr, u_dbl, this->inner_solve_arg_pkg
+                mutrhs_innerlinsys_dbl_ptr,
+                u_dbl,
+                this->inner_solve_arg_pkg//,
+                // orig_inner_precond_arg_pkg_dbl
             );
 
         } else {
@@ -260,7 +270,7 @@ public:
     MP_GMRES_IR_Solve(
         const GenericLinearSystem<M> * const arg_gen_lin_sys_ptr,
         const SolveArgPkg &arg_solve_arg_pkg,
-        const PrecondArgPkg<M, double> &arg_inner_precond_arg_pkg_dbl = PrecondArgPkg<M, double>()
+        const PrecondArgPkg<M, double> arg_inner_precond_arg_pkg_dbl = PrecondArgPkg<M, double>()
     ):
         IterativeRefinement<M>(arg_gen_lin_sys_ptr, arg_solve_arg_pkg),
         orig_inner_precond_arg_pkg_dbl(arg_inner_precond_arg_pkg_dbl)
@@ -274,7 +284,7 @@ public:
     }
 
     // Forbid rvalue instantiation
-    MP_GMRES_IR_Solve(const GenericLinearSystem<M> * const, const SolveArgPkg &&) = delete;
+    MP_GMRES_IR_Solve(const GenericLinearSystem<M> * const, const SolveArgPkg &&, const PrecondArgPkg<M, double>) = delete;
 
     int get_hlf_sgl_cascade_change() const { return hlf_sgl_cascade_change; }
     int get_sgl_dbl_cascade_change() const { return sgl_dbl_cascade_change; }

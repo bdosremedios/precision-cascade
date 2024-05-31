@@ -215,7 +215,7 @@ public:
         const TypedLinearSystem_Intf<M, T> * const arg_typed_lin_sys_ptr,
         double arg_basis_zero_tol,
         const SolveArgPkg &solve_arg_pkg,
-        const PrecondArgPkg<M, T> &precond_arg_pkg = PrecondArgPkg<M, T>()
+        const PrecondArgPkg<M, T> precond_arg_pkg = PrecondArgPkg<M, T>()
     ):
         basis_zero_tol(arg_basis_zero_tol),
         left_precond_ptr(precond_arg_pkg.left_precond),
@@ -229,9 +229,7 @@ public:
     }
 
     // Forbid rvalue instantiation
-    GMRESSolve(const TypedLinearSystem_Intf<M, T> * const, double, const SolveArgPkg &, const PrecondArgPkg<M, T> &&) = delete;
-    GMRESSolve(const TypedLinearSystem_Intf<M, T> * const, double, const SolveArgPkg &&, const PrecondArgPkg<M, T> &) = delete;
-    GMRESSolve(const TypedLinearSystem_Intf<M, T> * const, double, const SolveArgPkg &&, const PrecondArgPkg<M, T> &&) = delete;
+    GMRESSolve(const TypedLinearSystem_Intf<M, T> * const, double, const SolveArgPkg &&, const PrecondArgPkg<M, T>) = delete;
 
 };
 

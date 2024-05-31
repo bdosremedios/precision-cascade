@@ -40,7 +40,7 @@ public:
 
         EXPECT_EQ(precond_left_gmres_ir.get_iteration(), 1);
         EXPECT_TRUE(precond_left_gmres_ir.check_converged());
-        EXPECT_LE(precond_left_gmres_ir.get_relres(), Tol<T>::krylov_conv_tol());
+        EXPECT_LE(precond_left_gmres_ir.get_relres(), args.target_rel_res);
 
         PrecondArgPkg<M, T> precond_right_args(
             std::make_shared<NoPreconditioner<M, T>>(),
@@ -55,7 +55,7 @@ public:
 
         EXPECT_EQ(precond_right_gmres_ir.get_iteration(), 1);
         EXPECT_TRUE(precond_right_gmres_ir.check_converged());
-        EXPECT_LE(precond_right_gmres_ir.get_relres(), Tol<T>::krylov_conv_tol());
+        EXPECT_LE(precond_right_gmres_ir.get_relres(), args.target_rel_res);
 
         PrecondArgPkg<M, T> precond_symmetric_args(
             std::make_shared<MatrixInversePreconditioner<M, T>>(Ainv.template cast<T>()),
@@ -73,7 +73,7 @@ public:
 
         EXPECT_EQ(precond_symmetric_gmres_ir.get_iteration(), 1);
         EXPECT_TRUE(precond_symmetric_gmres_ir.check_converged());
-        EXPECT_LE(precond_symmetric_gmres_ir.get_relres(), Tol<T>::krylov_conv_tol());
+        EXPECT_LE(precond_symmetric_gmres_ir.get_relres(), args.target_rel_res);
 
     }
 
@@ -106,7 +106,7 @@ public:
         if (*show_plots) { precond_left_gmres_ir.view_relres_plot("log"); }
 
         EXPECT_TRUE(precond_left_gmres_ir.check_converged());
-        EXPECT_LE(precond_left_gmres_ir.get_relres(), Tol<T>::krylov_conv_tol());
+        EXPECT_LE(precond_left_gmres_ir.get_relres(), args.target_rel_res);
         EXPECT_LT(precond_left_gmres_ir.get_iteration(), gmres_ir.get_iteration());
 
         PrecondArgPkg<M, T> precond_right_args(std::make_shared<NoPreconditioner<M, T>>(), ilu_ptr);
@@ -118,7 +118,7 @@ public:
         if (*show_plots) { precond_right_gmres_ir.view_relres_plot("log"); }
 
         EXPECT_TRUE(precond_right_gmres_ir.check_converged());
-        EXPECT_LE(precond_right_gmres_ir.get_relres(), Tol<T>::krylov_conv_tol());
+        EXPECT_LE(precond_right_gmres_ir.get_relres(), args.target_rel_res);
         EXPECT_LT(precond_right_gmres_ir.get_iteration(), gmres_ir.get_iteration());
 
     }
