@@ -71,12 +71,12 @@ set(
 set(
     TEST_BENCHMARK
     # benchmarking/playground.cpp
-    # benchmarking/benchmark_MatrixDense.cpp
-    # benchmarking/benchmark_NoFillMatrixSparse.cpp
+    benchmarking/benchmark_MatrixDense.cpp
+    benchmarking/benchmark_NoFillMatrixSparse.cpp
+    benchmarking/benchmark_GMRES.cpp
+    benchmarking/benchmark_FP_GMRES_IR.cpp
+    benchmarking/benchmark_MP_GMRES_IR.cpp
     benchmarking/benchmark_ILUPreconditioner.cpp
-    # benchmarking/benchmark_GMRES.cpp
-    # benchmarking/benchmark_FP_GMRES_IR.cpp
-    # benchmarking/benchmark_MP_GMRES_IR.cpp
 )
 
 set(
@@ -86,7 +86,7 @@ set(
     ${TEST_PRECONDITIONER_CPPS}
     ${TEST_ARG_PKGS}
     ${TEST_SOLVERS}
-    # ${TEST_BENCHMARK}
+    ${TEST_BENCHMARK}
 )
 
 add_library(
@@ -107,11 +107,8 @@ add_executable(
     ${TEST_SUITE_CPPS}
 )
 
-target_compile_options(
-    test
-    PRIVATE
-    /MDd
-)
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MDd")
 
 target_link_libraries(
     test

@@ -7,11 +7,9 @@ class Benchmark_GMRES: public BenchmarkBase
 {
 private:
 
-    const double nested_col_non_zeros = 1000.;
+    const double nested_col_non_zeros = 200.;
 
 public:
-    
-    double gmressolve_iters = 30;
 
     std::function<NoFillMatrixSparse<double> (int, int)> make_norm_A = [this] (
         int m, int n

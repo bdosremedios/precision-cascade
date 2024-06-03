@@ -1,9 +1,11 @@
 #ifndef TEST_H
 #define TEST_H
 
+#ifdef _DEBUG
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
+#endif
 
 #include <cmath>
 #include <filesystem>
@@ -31,6 +33,7 @@ public:
     _CrtMemState final_state = {0};
     _CrtMemState state_diff = {0};
 
+    #ifdef _DEBUG
     virtual void SetUp() {
         _CrtMemCheckpoint(&init_state);
     }
@@ -56,6 +59,7 @@ public:
         }
 
     }
+    #endif
 
     const fs::path read_matrix_dir = (
         fs::current_path() / fs::path("..") / fs::path("test") / fs::path("read_matrices")

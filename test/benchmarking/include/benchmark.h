@@ -43,7 +43,7 @@ class BenchmarkBase: public TestBase
 {
 protected:
 
-    const int n_runs = 10;
+    const int n_runs = 5;
     bool prototyping_speed_up = false;
     const fs::path data_dir = (
         fs::current_path() / fs::path("..") /
@@ -64,6 +64,10 @@ public:
     int ilu_start = (prototyping_speed_up) ? 1024 : 10000;
     int ilu_stop = 80001;
     int ilu_incr = (prototyping_speed_up) ? (sparse_stop-sparse_start) : 10000;
+
+    const int gmressolve_iters = 200;
+    const int nested_outer_iter = 300;
+    const int nested_inner_iter = gmressolve_iters;
 
     void SetUp() {
         TestBase::SetUp();

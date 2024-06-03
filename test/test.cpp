@@ -21,6 +21,12 @@ int main(int argc, char **argv) {
 
     testing::InitGoogleTest();
 
+    #ifdef _DEBUG
+    std::cout << "In debug checking memory allocations" << std::endl;
+    #else
+    std::cout << "Skip debug not checking memory allocations" << std::endl;
+    #endif
+
     std::string filter_include = "";
     std::string filter_exclude = "";
 
