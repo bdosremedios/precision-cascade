@@ -3,6 +3,7 @@
 
 #include "NoPreconditioner.h"
 #include "MatrixInversePreconditioner.h"
+#include "JacobiPreconditioner.h"
 #include "ILUPreconditioner.h"
 
 #endif

@@ -6,9 +6,11 @@
 template <template <typename> typename M, typename W>
 class MatrixInversePreconditioner: public Preconditioner<M, W>
 {
-public:
+protected:
 
     M<W> inv_M;
+
+public:
 
     // *** Constructors ***
 

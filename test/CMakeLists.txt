@@ -29,10 +29,12 @@ set(
 
 set(
     TEST_PRECONDITIONER_CPPS
-    test_preconditioners/test_Preconditioner.cpp
-    test_preconditioners/test_ILU.cpp
-    test_preconditioners/test_ILU0.cpp
-    test_preconditioners/test_ILUTP.cpp
+    test_preconditioners/test_NoPreconditioner.cpp
+    test_preconditioners/test_MatrixInversePreconditioner.cpp
+    test_preconditioners/test_JacobiPreconditioner.cpp
+    test_preconditioners/test_ILUPreconditioner.cpp
+    test_preconditioners/test_ILU0Preconditioner.cpp
+    test_preconditioners/test_ILUTPPreconditioner.cpp
 )
 
 set(
