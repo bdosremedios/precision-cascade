@@ -65,8 +65,10 @@ public:
     int ilu_stop = 80001;
     int ilu_incr = (prototyping_speed_up) ? (sparse_stop-sparse_start) : 10000;
 
+    const bool pivot_ilu = false;
+
     const int gmressolve_iters = 200;
-    const int nested_outer_iter = 300;
+    const int nested_outer_iter = (prototyping_speed_up) ? 5 : 300;
     const int nested_inner_iter = gmressolve_iters;
 
     void SetUp() {

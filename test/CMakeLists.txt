@@ -79,6 +79,8 @@ set(
     benchmarking/benchmark_FP_GMRES_IR.cpp
     benchmarking/benchmark_MP_GMRES_IR.cpp
     benchmarking/benchmark_ILUPreconditioner.cpp
+    benchmarking/benchmark_Precond_FP_GMRES_IR.cpp
+    benchmarking/benchmark_Precond_MP_GMRES_IR.cpp
 )
 
 set(

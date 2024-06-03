@@ -29,7 +29,7 @@ TEST_F(Benchmark_ILUPreconditioner, Double_ILUT_10e_4_20_Preconditioner_BENCHMAR
     ) {
 
         clock.clock_start();
-        ILUPreconditioner<NoFillMatrixSparse, double> ilu(A, 1e-4, 20, false);
+        ILUPreconditioner<NoFillMatrixSparse, double> ilu(A, 1e-4, 20, pivot_ilu);
         clock.clock_stop();
 
     };
@@ -47,7 +47,7 @@ TEST_F(Benchmark_ILUPreconditioner, Double_ILUT_10e_6_20_Preconditioner_BENCHMAR
     ) {
 
         clock.clock_start();
-        ILUPreconditioner<NoFillMatrixSparse, double> ilu(A, 1e-6, 20, false);
+        ILUPreconditioner<NoFillMatrixSparse, double> ilu(A, 1e-6, 20, pivot_ilu);
         clock.clock_stop();
 
     };
