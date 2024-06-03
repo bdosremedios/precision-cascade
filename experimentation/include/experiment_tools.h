@@ -10,16 +10,56 @@ namespace fs = std::filesystem;
 
 void check_dir_exists(fs::path dir);
 
-struct Solve_Group
-{
-public:
-    
+struct Solve_Group_Precond_Specs {
+
+    std::string name = "";
+    double ilutp_tau = -1.0;
+    int ilutp_p = -1;
+
+    Solve_Group_Precond_Specs() {}
+
+    Solve_Group_Precond_Specs(std::string arg_name): name(arg_name) {}
+
+    Solve_Group_Precond_Specs(std::string arg_name, double arg_ilutp_tau, int arg_ilutp_p):
+        name(arg_name), ilutp_tau(arg_ilutp_tau), ilutp_p(arg_ilutp_p)
+    {}
+
+    bool is_default() const {
+        return ((name == "") && (ilutp_tau == -1.0) && (ilutp_p == -1));
+    }
+
+    Solve_Group_Precond_Specs(const Solve_Group_Precond_Specs &other) {
+        *this = other;
+    }
+
+    Solve_Group_Precond_Specs &operator=(const Solve_Group_Precond_Specs &other) {
+
+        name = other.name;
+        ilutp_tau = other.ilutp_tau;
+        ilutp_p = other.ilutp_p;
+
+        return *this;
+
+    }
+
+    bool operator==(const Solve_Group_Precond_Specs &other) const {
+        return (
+            (name == other.name) &&
+            (ilutp_tau == other.ilutp_tau) &&
+            (ilutp_p == other.ilutp_p)
+        );
+    }
+
+};
+
+struct Solve_Group {
+
     const std::string id;
     const int experiment_iterations;
     const std::vector<std::string> solvers_to_use;
     const std::string matrix_type;
     const SolveArgPkg solver_args;
-    const std::string preconditioning;
+    const Solve_Group_Precond_Specs precond_specs;
     const std::vector<std::string> matrices_to_test;
 
     Solve_Group(
@@ -30,7 +70,7 @@ public:
         int arg_solver_max_outer_iterations,
         int arg_solver_max_inner_iterations,
         double arg_solver_target_relres,
-        std::string preconditioning,
+        Solve_Group_Precond_Specs arg_precond_specs,
         std::vector<std::string> arg_matrices_to_test
     );
 

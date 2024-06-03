@@ -5,6 +5,6 @@
 	"converged" : "true",
 	"terminated" : "true",
 	"iteration" : 1,
-	"elapsed_time_ms" : 25,
-	"res_norm_history" : [1.0326660753217908e+01,3.0753941802460505e-15]
+	"elapsed_time_ms" : 28,
+	"res_norm_history" : [9.5692657192533233e+00,3.7528067257176514e-15]
 }

@@ -16,7 +16,7 @@ Solve_Group::Solve_Group(
     int arg_solver_max_outer_iterations,
     int arg_solver_max_inner_iterations,
     double arg_solver_target_relres,
-    std::string arg_preconditioning,
+    Solve_Group_Precond_Specs arg_precond_specs,
     std::vector<std::string> arg_matrices_to_test
 ): 
     id(arg_id),
@@ -28,7 +28,7 @@ Solve_Group::Solve_Group(
         arg_solver_max_inner_iterations,
         arg_solver_target_relres
     ),
-    preconditioning(arg_preconditioning),
+    precond_specs(arg_precond_specs),
     matrices_to_test(arg_matrices_to_test)
 {}
 

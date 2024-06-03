@@ -8,7 +8,7 @@
         "solver_max_outer_iterations": 10,
         "solver_max_inner_iterations": 3,
         "solver_target_relres": 1e-10,
-        "preconditioning": "none",
+        "precond_specs": "none",
         "matrices_to_test": [
             "494_bus",
             "662_bus",
@@ -23,7 +23,7 @@
         "matrix_type": "dense",
         "solver_max_outer_iterations": 4,
         "solver_target_relres": 5e-10,
-        "preconditioning": "none",
+        "precond_specs": "none",
         "matrices_to_test": [
             "685_bus"
         ]
@@ -37,7 +37,7 @@
         "solver_max_outer_iterations": 4,
         "solver_max_inner_iterations": 10,
         "solver_target_relres": 5e-10,
-        "preconditioning": "none",
+        "precond_specs": "none",
         "matrices_to_test": [
             "685_bus"
         ]

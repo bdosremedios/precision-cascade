@@ -22,7 +22,7 @@
 namespace fs = std::filesystem;
 using json = nlohmann::json;
 
-class TestRecord: public TestExperimentBase
+class TestRunAndRecord: public TestExperimentBase
 {
 public:
 
@@ -33,7 +33,7 @@ public:
     const double u_dbl = std::pow(2, -52);
     Experiment_Log logger;
 
-    TestRecord() {
+    TestRunAndRecord() {
         cu_handles_ptr = new cuHandleBundle();
         cu_handles_ptr->create();
         A = MatrixDense<double>::Random(*cu_handles_ptr, 16, 16);
@@ -41,7 +41,7 @@ public:
         logger = Experiment_Log();
     }
 
-    ~TestRecord() {
+    ~TestRunAndRecord() {
         cu_handles_ptr->destroy();
         delete cu_handles_ptr;
     }
@@ -128,12 +128,12 @@ public:
 
 };
 
-TEST_F(TestRecord, TestRunAndOutputJsonFPGMRES) {
+TEST_F(TestRunAndRecord, TestRunAndOutputJsonFPGMRES) {
     TestRunAndOutputJsonFPGMRES<MatrixDense>("FPGMRESTestRecord_Dense");
     TestRunAndOutputJsonFPGMRES<NoFillMatrixSparse>("FPGMRESTestRecord_Sparse");
 }
 
-TEST_F(TestRecord, TestRunAndOutputJsonMPGMRES) {
+TEST_F(TestRunAndRecord, TestRunAndOutputJsonMPGMRES) {
     TestRunAndOutputJsonFPGMRES<MatrixDense>("MPGMRESTestRecord_Dense");
     TestRunAndOutputJsonFPGMRES<NoFillMatrixSparse>("MPGMRESTestRecord_Sparse");
 }

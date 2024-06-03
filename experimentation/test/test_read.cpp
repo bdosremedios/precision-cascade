@@ -22,7 +22,36 @@ TEST_F(TestRead, TestCorrectSingleEntryJson) {
     ASSERT_EQ(test_spec.solve_groups[0].solver_args.max_iter, 10);
     ASSERT_EQ(test_spec.solve_groups[0].solver_args.max_inner_iter, 3);
     ASSERT_EQ(test_spec.solve_groups[0].solver_args.target_rel_res, 1e-10);
-    ASSERT_EQ(test_spec.solve_groups[0].preconditioning, "none");
+    ASSERT_EQ(test_spec.solve_groups[0].precond_specs, Solve_Group_Precond_Specs("none"));
+    ASSERT_EQ(test_spec.solve_groups[0].matrices_to_test.size(), 3);
+    ASSERT_EQ(test_spec.solve_groups[0].matrices_to_test[0], "494_bus");
+    ASSERT_EQ(test_spec.solve_groups[0].matrices_to_test[1], "662_bus");
+    ASSERT_EQ(test_spec.solve_groups[0].matrices_to_test[2], "685_bus");
+
+}
+
+TEST_F(TestRead, TestCorrectILUTPJson) {
+
+    Experiment_Specification test_spec = parse_experiment_spec(
+        test_json_dir / fs::path("good_spec_ILUTP.json")
+    );
+
+    ASSERT_EQ(test_spec.id, "good_spec_ILUTP");
+    ASSERT_EQ(test_spec.solve_groups.size(), 1);
+    ASSERT_EQ(test_spec.solve_groups[0].id, "solve_group_1");
+    ASSERT_EQ(test_spec.solve_groups[0].experiment_iterations, 3);
+    ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[0], "FP16");
+    ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[1], "FP32");
+    ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[2], "FP64");
+    ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[3], "RestartCount");
+    ASSERT_EQ(test_spec.solve_groups[0].matrix_type, "dense");
+    ASSERT_EQ(test_spec.solve_groups[0].solver_args.max_iter, 10);
+    ASSERT_EQ(test_spec.solve_groups[0].solver_args.max_inner_iter, 3);
+    ASSERT_EQ(test_spec.solve_groups[0].solver_args.target_rel_res, 1e-10);
+    ASSERT_EQ(
+        test_spec.solve_groups[0].precond_specs,
+        Solve_Group_Precond_Specs("ilutp", 1e-6, 21)
+    );
     ASSERT_EQ(test_spec.solve_groups[0].matrices_to_test.size(), 3);
     ASSERT_EQ(test_spec.solve_groups[0].matrices_to_test[0], "494_bus");
     ASSERT_EQ(test_spec.solve_groups[0].matrices_to_test[1], "662_bus");
@@ -49,7 +78,7 @@ TEST_F(TestRead, TestCorrectMultipleEntryJson) {
     ASSERT_EQ(test_spec.solve_groups[0].solver_args.max_iter, 10);
     ASSERT_EQ(test_spec.solve_groups[0].solver_args.max_inner_iter, 3);
     ASSERT_EQ(test_spec.solve_groups[0].solver_args.target_rel_res, 1e-10);
-    ASSERT_EQ(test_spec.solve_groups[0].preconditioning, "none");
+    ASSERT_EQ(test_spec.solve_groups[0].precond_specs, Solve_Group_Precond_Specs("none"));
     ASSERT_EQ(test_spec.solve_groups[0].matrices_to_test.size(), 3);
     ASSERT_EQ(test_spec.solve_groups[0].matrices_to_test[0], "494_bus");
     ASSERT_EQ(test_spec.solve_groups[0].matrices_to_test[1], "662_bus");
@@ -65,7 +94,7 @@ TEST_F(TestRead, TestCorrectMultipleEntryJson) {
     ASSERT_EQ(test_spec.solve_groups[1].solver_args.max_iter, 4);
     ASSERT_EQ(test_spec.solve_groups[1].solver_args.max_inner_iter, 4);
     ASSERT_EQ(test_spec.solve_groups[1].solver_args.target_rel_res, 3.5);
-    ASSERT_EQ(test_spec.solve_groups[1].preconditioning, "ilu");
+    ASSERT_EQ(test_spec.solve_groups[1].precond_specs, Solve_Group_Precond_Specs("ilu0"));
     ASSERT_EQ(test_spec.solve_groups[1].matrices_to_test.size(), 1);
     ASSERT_EQ(test_spec.solve_groups[1].matrices_to_test[0], "494_bus");
 
@@ -77,7 +106,7 @@ TEST_F(TestRead, TestCorrectMultipleEntryJson) {
     ASSERT_EQ(test_spec.solve_groups[2].solver_args.max_iter, 10);
     ASSERT_EQ(test_spec.solve_groups[2].solver_args.max_inner_iter, 3);
     ASSERT_EQ(test_spec.solve_groups[2].solver_args.target_rel_res, 1e-10);
-    ASSERT_EQ(test_spec.solve_groups[2].preconditioning, "none");
+    ASSERT_EQ(test_spec.solve_groups[2].precond_specs, Solve_Group_Precond_Specs("none"));
     ASSERT_EQ(test_spec.solve_groups[2].matrices_to_test.size(), 2);
     ASSERT_EQ(test_spec.solve_groups[2].matrices_to_test[0], "662_bus");
     ASSERT_EQ(test_spec.solve_groups[2].matrices_to_test[1], "685_bus");
@@ -217,7 +246,7 @@ TEST_F(TestRead, TestBadJsonSolveGroupMemberValues) {
         print_errors,
         [=] () -> void {
             parse_experiment_spec(
-                test_json_dir / fs::path("bad_solve_group_arg_bad_preconditioning.json")
+                test_json_dir / fs::path("bad_solve_group_arg_bad_precond_specs.json")
             );
         }
     );
@@ -226,7 +255,52 @@ TEST_F(TestRead, TestBadJsonSolveGroupMemberValues) {
         print_errors,
         [=] () -> void {
             parse_experiment_spec(
-                test_json_dir / fs::path("bad_solve_group_arg_bad_preconditioning_wrong_str.json")
+                test_json_dir / fs::path("bad_solve_group_arg_bad_precond_specs_wrong_str.json")
+            );
+        }
+    );
+
+    CHECK_FUNC_HAS_RUNTIME_ERROR(
+        print_errors,
+        [=] () -> void {
+            parse_experiment_spec(
+                test_json_dir / fs::path("bad_solve_group_arg_bad_precond_specs_shortarr.json")
+            );
+        }
+    );
+
+    CHECK_FUNC_HAS_RUNTIME_ERROR(
+        print_errors,
+        [=] () -> void {
+            parse_experiment_spec(
+                test_json_dir / fs::path("bad_solve_group_arg_bad_precond_specs_longarr.json")
+            );
+        }
+    );
+
+    CHECK_FUNC_HAS_RUNTIME_ERROR(
+        print_errors,
+        [=] () -> void {
+            parse_experiment_spec(
+                test_json_dir / fs::path("bad_solve_group_arg_bad_precond_specs_badname.json")
+            );
+        }
+    );
+
+    CHECK_FUNC_HAS_RUNTIME_ERROR(
+        print_errors,
+        [=] () -> void {
+            parse_experiment_spec(
+                test_json_dir / fs::path("bad_solve_group_arg_bad_precond_specs_badilutptau.json")
+            );
+        }
+    );
+
+    CHECK_FUNC_HAS_RUNTIME_ERROR(
+        print_errors,
+        [=] () -> void {
+            parse_experiment_spec(
+                test_json_dir / fs::path("bad_solve_group_arg_bad_precond_specs_badilutpp.json")
             );
         }
     );

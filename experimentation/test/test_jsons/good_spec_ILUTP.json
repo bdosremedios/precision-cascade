@@ -8,7 +8,7 @@
         "solver_max_outer_iterations": 10,
         "solver_max_inner_iterations": 3,
         "solver_target_relres": 1e-10,
-        "precond_specs": "none",
+        "precond_specs": ["ilutp", 1e-6, 21],
         "matrices_to_test": [
             "494_bus",
             "662_bus",

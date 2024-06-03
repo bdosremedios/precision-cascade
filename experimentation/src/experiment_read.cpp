@@ -62,17 +62,58 @@ std::string extract_matrix_type(json::iterator member) {
     }
 }
 
-std::string extract_preconditioning(json::iterator member) {
-    if ((member->is_string()) && ((*member == "none") || (*member == "jacobi") || (*member == "ilu"))) {
-        return *member;
+Solve_Group_Precond_Specs extract_solve_group_precond_specs(json::iterator member) {
+
+    if ((member->is_string()) && ((*member == "none") || (*member == "jacobi") || (*member == "ilu0"))) {
+
+        return Solve_Group_Precond_Specs(*member);
+
+    } else if (member->is_array()) {
+
+        json::iterator it = member->begin();
+        std::string name;
+        double ilutp_tau;
+        double ilutp_p;
+        if (it != member->end() && it->is_string() && (*it == "ilutp")) {
+            name = *it;
+        } else {
+            throw std::runtime_error(
+                "extract_solve_group: extract_solve_group_precond_specs invalid array in key precond_specs"
+            );
+        }
+        ++it;
+        if (it != member->end() && it->is_number_float()) {
+            ilutp_tau = *it;
+        } else {
+            throw std::runtime_error(
+                "extract_solve_group: extract_solve_group_precond_specs invalid array in key precond_specs"
+            );
+        }
+        ++it;
+        if (it != member->end() && it->is_number_integer()) {
+            ilutp_p = *it;
+        } else {
+            throw std::runtime_error(
+                "extract_solve_group: extract_solve_group_precond_specs invalid array in key precond_specs"
+            );
+        }
+        if (++it != member->end()) {
+            throw std::runtime_error(
+                "extract_solve_group: extract_solve_group_precond_specs too many values in array"
+            );
+        }
+        return Solve_Group_Precond_Specs(name, ilutp_tau, ilutp_p);
+
     } else {
+
         throw std::runtime_error(
             std::format(
-                "extract_solve_group: extract_preconditioning invalid value for key \"{}\"",
-                member.key()
+                "extract_solve_group: extract_solve_group_precond_specs invalid value for key precond_specs"
             )
         );
+
     }
+
 }
 
 double extract_double(json::iterator member) {
@@ -123,7 +164,7 @@ Solve_Group extract_solve_group(std::string id, json cand_obj) {
     int solver_max_outer_iterations = -1;
     int solver_max_inner_iterations = -1;
     double solver_target_relres = -1.;
-    std::string preconditioning = "";
+    Solve_Group_Precond_Specs precond_specs;
     std::vector<std::string> matrices_to_test;
     for (json::iterator it = cand_obj.begin(); (it != cand_obj.end()) && (member_count < 8); ++it) {
 
@@ -139,8 +180,8 @@ Solve_Group extract_solve_group(std::string id, json cand_obj) {
             solver_max_inner_iterations = extract_integer(it);
         } else if (it.key() == "solver_target_relres") {
             solver_target_relres = extract_double(it);
-        } else if (it.key() == "preconditioning") {
-            preconditioning = extract_preconditioning(it);
+        } else if (it.key() == "precond_specs") {
+            precond_specs = extract_solve_group_precond_specs(it);
         } else if (it.key() == "matrices_to_test") {
             matrices_to_test = extract_string_vector(it);
         } else {
@@ -164,7 +205,7 @@ Solve_Group extract_solve_group(std::string id, json cand_obj) {
         (solver_max_outer_iterations == -1) ||
         (solver_max_inner_iterations == -1) ||
         (solver_target_relres == -1.) ||
-        (preconditioning == "") ||
+        (precond_specs.is_default()) ||
         (matrices_to_test.size() == 0)
     ) {
         throw std::runtime_error(
@@ -180,7 +221,7 @@ Solve_Group extract_solve_group(std::string id, json cand_obj) {
         solver_max_outer_iterations,
         solver_max_inner_iterations,
         solver_target_relres,
-        preconditioning,
+        precond_specs,
         matrices_to_test
     );
 
