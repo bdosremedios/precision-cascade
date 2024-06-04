@@ -38,6 +38,26 @@ void record_basic_solver_data(
     file_out << std::format("\t\"elapsed_time_ms\" : {},\n", clock.get_elapsed_time_ms());
 }
 
+template <template <typename> typename M, typename T>
+void record_precond_data(
+    std::ofstream &file_out,
+    const PrecondArgPkg<M, T> arg_precond_arg_pkg,
+    const std::string precond_specs_str
+) {
+    file_out << std::format(
+        "\t\"precond_class\" : \"{}\",\n", typeid(arg_precond_arg_pkg).name()
+    );
+    file_out << std::format(
+        "\t\"precond_left\" : \"{}\",\n", typeid(*arg_precond_arg_pkg.left_precond).name()
+    );
+    file_out << std::format(
+        "\t\"precond_right\" : \"{}\",\n", typeid(*arg_precond_arg_pkg.right_precond).name()
+    );
+    file_out << std::format(
+        "\t\"precond_specs\" : \"{}\",\n", precond_specs_str
+    );
+}
+
 template <template <typename> typename M>
 void record_residual_solver_data(
     std::ofstream &file_out,
@@ -49,15 +69,17 @@ void record_residual_solver_data(
     );
 }
 
-template <template <typename> typename M>
-void record_FPGMRES_experimental_data_json(
+template <template <typename> typename M, typename T>
+void record_FPGMRES_data_json(
     const Experiment_Data<GenericIterativeSolve, M> &data,
-    const std::string ID,
+    const PrecondArgPkg<M, T> arg_precond_arg_pkg,
+    const std::string precond_specs_str,
+    const std::string file_name,
     const fs::path save_dir,
     Experiment_Log logger
 ) {
 
-    fs::path save_path(save_dir / fs::path(ID + ".json"));
+    fs::path save_path(save_dir / fs::path(file_name + ".json"));
     logger.info(std::format("Save data to: {}", save_path.string()));
     
     std::ofstream file_out;
@@ -67,7 +89,8 @@ void record_FPGMRES_experimental_data_json(
 
         file_out << "{\n";
 
-        record_basic_solver_data<M>(file_out, ID, data.solver_ptr, data.clock);
+        record_basic_solver_data<M>(file_out, file_name, data.solver_ptr, data.clock);
+        record_precond_data<M, T>(file_out, arg_precond_arg_pkg, precond_specs_str);
         record_residual_solver_data<M>(file_out, data.solver_ptr, 0);
 
         file_out << "}";
@@ -83,14 +106,16 @@ void record_FPGMRES_experimental_data_json(
 }
 
 template <template <typename> typename M>
-void record_MPGMRES_experimental_data_json(
+void record_MPGMRES_data_json(
     const Experiment_Data<MP_GMRES_IR_Solve, M> &data,
-    const std::string ID,
+    const PrecondArgPkg<M, double> arg_precond_arg_pkg,
+    const std::string precond_specs_str,
+    const std::string file_name,
     const fs::path save_dir,
     Experiment_Log logger
 ) {
 
-    fs::path save_path(save_dir / fs::path(ID + ".json"));
+    fs::path save_path(save_dir / fs::path(file_name + ".json"));
     logger.info(std::format("Save data to: {}", save_path.string()));
     
     std::ofstream file_out;
@@ -100,13 +125,14 @@ void record_MPGMRES_experimental_data_json(
 
         file_out << "{\n";
 
-        record_basic_solver_data<M>(file_out, ID, data.solver_ptr, data.clock);
+        record_basic_solver_data<M>(file_out, file_name, data.solver_ptr, data.clock);
         file_out << std::format(
             "\t\"hlf_sgl_cascade_change\" : \"{}\",\n", data.solver_ptr->get_hlf_sgl_cascade_change()
         );
         file_out << std::format(
             "\t\"sgl_dbl_cascade_change\" : \"{}\",\n", data.solver_ptr->get_sgl_dbl_cascade_change()
         );
+        record_precond_data<M, double>(file_out, arg_precond_arg_pkg, precond_specs_str);
         record_residual_solver_data<M>(file_out, data.solver_ptr, 0);
 
         file_out << "}";

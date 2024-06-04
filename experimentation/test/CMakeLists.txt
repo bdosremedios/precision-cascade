@@ -7,7 +7,8 @@ add_compile_definitions(_SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING=1)
 set(
     TEST_SUITES
     test_read.cpp
-    test_run_record.cpp
+    test_run.cpp
+    test_record.cpp
 )
 
 add_executable(

@@ -5,6 +5,7 @@
 #include "test_experiment.h"
 
 bool *TestExperimentBase::print_errors = new bool;
+cuHandleBundle *TestExperimentBase::cu_handles_ptr = new cuHandleBundle();
 
 int main(int argc, char **argv) {
 
@@ -25,6 +26,15 @@ int main(int argc, char **argv) {
         *(TestExperimentBase::print_errors) = false;
     }
 
-    return RUN_ALL_TESTS();
+    TestExperimentBase::cu_handles_ptr->create();
+
+    int return_status = RUN_ALL_TESTS();
+
+    TestExperimentBase::cu_handles_ptr->destroy();
+
+    delete TestExperimentBase::cu_handles_ptr;
+    delete TestExperimentBase::print_errors;
+
+    return return_status;
 
 }

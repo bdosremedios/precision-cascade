@@ -28,6 +28,21 @@ struct Solve_Group_Precond_Specs {
         return ((name == "") && (ilutp_tau == -1.0) && (ilutp_p == -1));
     }
 
+    std::string get_spec_string() const {
+        if ((ilutp_tau == -1.0) && (ilutp_p == -1)) {
+            return std::format("{}_NA_NA", name);
+        } else {
+            std::string ilutp_tau_str = std::format("{:.3e}", ilutp_tau);
+            for (int i=0; i<ilutp_tau_str.size(); ++i) {
+                if (ilutp_tau_str[i] == '.') {
+                    ilutp_tau_str.erase(i, 1);
+                    --i;
+                }
+            }
+            return std::format("{}_{}_{}", name, ilutp_tau_str, ilutp_p);
+        }
+    }
+
     Solve_Group_Precond_Specs(const Solve_Group_Precond_Specs &other) {
         *this = other;
     }
@@ -109,7 +124,10 @@ public:
 
 };
 
-template <template <template <typename> typename> typename Solver, template <typename> typename M>
+template <
+    template <template <typename> typename> typename Solver,
+    template <typename> typename M
+>
 struct Experiment_Data
 {
 public:

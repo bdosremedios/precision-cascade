@@ -3,3 +3,4 @@ build
 out
 .vs
 test/benchmarking/data
+experimentation/test/test_output/*
