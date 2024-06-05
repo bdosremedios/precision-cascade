@@ -55,7 +55,6 @@ public:
     int dense_start = (prototyping_speed_up) ? 1024 : 2500;
     int dense_stop = 20001;
     int dense_incr = (prototyping_speed_up) ? (dense_stop-dense_start) : 2500;
-    int dense_subset_cols = 1000;
 
     int sparse_start = (prototyping_speed_up) ? 1024 : 25000;
     int sparse_stop = 200001;
@@ -66,10 +65,10 @@ public:
     int ilu_incr = (prototyping_speed_up) ? (sparse_stop-sparse_start) : 10000;
 
     const bool pivot_ilu = false;
-
     const int gmressolve_iters = 200;
     const int nested_outer_iter = (prototyping_speed_up) ? 5 : 300;
     const int nested_inner_iter = gmressolve_iters;
+    const int dense_subset_cols = gmressolve_iters;
 
     void SetUp() {
         TestBase::SetUp();
