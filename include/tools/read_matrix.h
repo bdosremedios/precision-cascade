@@ -15,7 +15,7 @@
 
 namespace fs = std::filesystem;
 
-template <template<typename> typename M, typename T>
+template <template <typename> typename M, typename T>
 M<T> read_matrixCSV(const cuHandleBundle &cu_handles, fs::path const &path) {
 
     // Open given file
@@ -96,12 +96,13 @@ M<T> read_matrixCSV(const cuHandleBundle &cu_handles, fs::path const &path) {
     free(h_mat);
 
     DenseConverter<M, T> converter;
+
     return converter.convert_matrix(mat);
 
 }
 
-template <typename T>
-NoFillMatrixSparse<T> read_matrixMTX(const cuHandleBundle &cu_handles, fs::path const &path) {
+template <template <typename> typename M, typename T>
+M<T> read_matrixMTX(const cuHandleBundle &cu_handles, fs::path const &path) {
 
     // Open given file
     std::ifstream file_in;

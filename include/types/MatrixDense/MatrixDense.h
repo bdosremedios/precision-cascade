@@ -211,8 +211,14 @@ public:
 
     // *** Conversion Constructor ***
     MatrixDense(const NoFillMatrixSparse<T> &sparse_mat):
-        MatrixDense(sparse_mat.get_block(0, 0, sparse_mat.rows(), sparse_mat.cols()).copy_to_mat())
-    {}
+        MatrixDense(sparse_mat.get_cu_handles())
+    {
+        if ((sparse_mat.rows() > 0) && (sparse_mat.cols() > 0)) {
+            *this = MatrixDense(
+                sparse_mat.get_block(0, 0, sparse_mat.rows(), sparse_mat.cols()).copy_to_mat()
+            );
+        }
+    }
 
     MatrixDense(const MatrixDense<T>::Block &block) {
         *this = block.copy_to_mat();
