@@ -83,7 +83,6 @@ public:
         ASSERT_EQ(loaded_file["iteration"], solve_ptr->get_iteration());
         ASSERT_EQ(loaded_file["elapsed_time_ms"], data.clock.get_elapsed_time_ms());
 
-        ASSERT_EQ(loaded_file["precond_class"], typeid(precond_arg_pkg).name());
         ASSERT_EQ(loaded_file["precond_left"], typeid(*precond_arg_pkg.left_precond).name());
         ASSERT_EQ(loaded_file["precond_right"], typeid(*precond_arg_pkg.right_precond).name());
         ASSERT_EQ(loaded_file["precond_specs"], sg_precond_specs.get_spec_string());
@@ -129,7 +128,6 @@ public:
         ASSERT_EQ(loaded_file["iteration"], solve_ptr->get_iteration());
         ASSERT_EQ(loaded_file["elapsed_time_ms"], data.clock.get_elapsed_time_ms());
 
-        ASSERT_EQ(loaded_file["precond_class"], typeid(precond_arg_pkg).name());
         ASSERT_EQ(loaded_file["precond_left"], typeid(*precond_arg_pkg.left_precond).name());
         ASSERT_EQ(loaded_file["precond_right"], typeid(*precond_arg_pkg.right_precond).name());
         ASSERT_EQ(loaded_file["precond_specs"], sg_precond_specs.get_spec_string());

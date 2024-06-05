@@ -27,7 +27,8 @@ TEST_F(Benchmark_FP_GMRES_IR, FP_GMRES_IR_BENCHMARK) {
     };
 
     benchmark_exec_func<NoFillMatrixSparse>(
-        sparse_start, sparse_stop, sparse_incr, make_norm_A, execute_func, "fp_gmres_ir"
+        150000,// sparse_start,
+        sparse_stop, sparse_incr, make_norm_A, execute_func, "fp_gmres_ir"
     );
 
 }

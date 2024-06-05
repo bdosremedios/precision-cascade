@@ -45,9 +45,6 @@ void record_precond_data(
     const std::string precond_specs_str
 ) {
     file_out << std::format(
-        "\t\"precond_class\" : \"{}\",\n", typeid(arg_precond_arg_pkg).name()
-    );
-    file_out << std::format(
         "\t\"precond_left\" : \"{}\",\n", typeid(*arg_precond_arg_pkg.left_precond).name()
     );
     file_out << std::format(
