@@ -170,7 +170,7 @@ TEST_F(TestRun, Test_AllSolvers_Run_Solve_Group) {
         std::vector<std::string>({"FP16", "FP32", "FP64", "SimpleConstantThreshold", "RestartCount"}),
         "dense", 3, 10, 4, 1e-4,
         Solve_Group_Precond_Specs("none"),
-        std::vector<std::string>({"easy_4_4", "easy_5_5"})
+        std::vector<std::string>({"easy_4_4.csv", "easy_5_5.csv"})
     );
 
     Test_Run_Solve_Group<MatrixDense>(solve_group_dense);
@@ -180,7 +180,7 @@ TEST_F(TestRun, Test_AllSolvers_Run_Solve_Group) {
         std::vector<std::string>({"FP16", "FP32", "FP64", "SimpleConstantThreshold", "RestartCount"}),
         "sparse", 3, 10, 4, 1e-4,
         Solve_Group_Precond_Specs("none"),
-        std::vector<std::string>({"easy_4_4", "easy_5_5"})
+        std::vector<std::string>({"easy_4_4.csv", "easy_5_5.csv"})
     );
 
     Test_Run_Solve_Group<NoFillMatrixSparse>(solve_group_sparse);
@@ -203,7 +203,7 @@ TEST_F(TestRun, Test_AllPreconditioners_Run_Solve_Group) {
             std::vector<std::string>({"FP16", "FP32", "FP64", "RestartCount"}),
             "dense", 3, 10, 4, 1e-4,
             precond_specs,
-            std::vector<std::string>({"easy_4_4", "easy_5_5"})
+            std::vector<std::string>({"easy_4_4.csv", "easy_5_5.csv"})
         );
 
         Test_Run_Solve_Group<MatrixDense>(solve_group_dense);
@@ -213,7 +213,7 @@ TEST_F(TestRun, Test_AllPreconditioners_Run_Solve_Group) {
             std::vector<std::string>({"FP16", "FP32", "FP64", "RestartCount"}),
             "sparse", 3, 10, 4, 1e-4,
             precond_specs,
-            std::vector<std::string>({"easy_4_4", "easy_5_5"})
+            std::vector<std::string>({"easy_4_4.csv", "easy_5_5.csv"})
         );
 
         Test_Run_Solve_Group<NoFillMatrixSparse>(solve_group_sparse);
@@ -229,7 +229,7 @@ TEST_F(TestRun, Test_Mix_Run_Solve_Group) {
         std::vector<std::string>({"FP64", "FP16", "SimpleConstantThreshold"}),
         "dense", 3, 10, 4, 1e-4,
         Solve_Group_Precond_Specs("none"),
-        std::vector<std::string>({"easy_4_4", "easy_5_5"})
+        std::vector<std::string>({"easy_4_4.csv", "easy_5_5.csv"})
     );
 
     Test_Run_Solve_Group<MatrixDense>(solve_group_dense);
@@ -239,7 +239,7 @@ TEST_F(TestRun, Test_Mix_Run_Solve_Group) {
         std::vector<std::string>({"FP64", "FP16", "SimpleConstantThreshold"}),
         "sparse", 3, 10, 4, 1e-4,
         Solve_Group_Precond_Specs("none"),
-        std::vector<std::string>({"easy_4_4", "easy_5_5"})
+        std::vector<std::string>({"easy_4_4.csv", "easy_5_5.csv"})
     );
 
     Test_Run_Solve_Group<NoFillMatrixSparse>(solve_group_sparse);

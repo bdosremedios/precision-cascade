@@ -38,7 +38,7 @@ LinSysSolnPair<M> load_linear_problem(
     Experiment_Log logger
 ) {
 
-    fs::path matrix_path = input_dir / fs::path(matrix_name+".csv");
+    fs::path matrix_path = input_dir / fs::path(matrix_name);
 
     logger.info(std::format("Loading: {}", matrix_path.string()));
 

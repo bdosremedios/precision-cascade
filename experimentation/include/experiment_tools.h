@@ -1,6 +1,10 @@
 #ifndef EXPERIMENT_TOOLS_H
 #define EXPERIMENT_TOOLS_H
 
+#include <string>
+#include <vector>
+#include <unordered_set>
+
 #include <format>
 #include <filesystem>
 
@@ -76,6 +80,8 @@ struct Solve_Group {
     const SolveArgPkg solver_args;
     const Solve_Group_Precond_Specs precond_specs;
     const std::vector<std::string> matrices_to_test;
+
+    static const std::unordered_set<std::string> valid_solvers;
 
     Solve_Group(
         std::string arg_id,

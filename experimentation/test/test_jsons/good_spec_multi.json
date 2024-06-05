@@ -10,9 +10,9 @@
         "solver_target_relres": 1e-10,
         "precond_specs": "none",
         "matrices_to_test": [
-            "494_bus",
-            "662_bus",
-            "685_bus"
+            "494_bus.csv",
+            "662_bus.csv",
+            "685_bus.csv"
         ]
     },
     "b": {
@@ -26,7 +26,7 @@
         "solver_target_relres": 3.5,
         "precond_specs": "ilu0",
         "matrices_to_test": [
-            "494_bus"
+            "494_bus.csv"
         ]
     },
     "c": {
@@ -40,8 +40,8 @@
         "solver_target_relres": 1e-10,
         "precond_specs": "none",
         "matrices_to_test": [
-            "662_bus",
-            "685_bus"
+            "662_bus.csv",
+            "685_bus.csv"
         ]
     }
 }

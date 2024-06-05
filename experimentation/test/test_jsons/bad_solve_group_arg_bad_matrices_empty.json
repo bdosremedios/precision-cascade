@@ -22,7 +22,7 @@
         "solver_target_relres": 5e-10,
         "precond_specs": "none",
         "matrices_to_test": [
-            1
+            "685_bus.csv"
         ]
     },
     "solve_group_3": {
@@ -36,7 +36,7 @@
         "solver_target_relres": "asd",
         "precond_specs": "none",
         "matrices_to_test": [
-            "685_bus"
+            "685_bus.csv"
         ]
     }
 }

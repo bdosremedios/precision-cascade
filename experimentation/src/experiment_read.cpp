@@ -1,6 +1,7 @@
 #include "experiment_read.h"
 
 int extract_integer(json::iterator member) {
+
     if (member->is_number_integer()) {
         return *member;
     } else {
@@ -11,24 +12,16 @@ int extract_integer(json::iterator member) {
             )
         );
     }
+
 }
 
 std::vector<std::string> extract_solvers_to_use(json::iterator member) {
+
     std::vector<std::string> solvers_to_use;
-    std::unordered_set<std::string> solvers_seen;
     if (member->is_array()) {
         for (json::iterator it = member->begin(); it != member->end(); ++it) {
-            if (
-                it->is_string() &&
-                ((*it == "FP16") ||
-                 (*it == "FP32") ||
-                 (*it == "FP64") ||
-                 (*it == "SimpleConstantThreshold") ||
-                 (*it == "RestartCount")) &&
-                (solvers_seen.count(*it) == 0)
-            ) {
+            if (it->is_string()) {
                 solvers_to_use.push_back(*it);
-                solvers_seen.insert(*it);
             } else {
                 throw std::runtime_error(
                     std::format(
@@ -47,10 +40,12 @@ std::vector<std::string> extract_solvers_to_use(json::iterator member) {
             )
         );
     }
+
 }
 
 std::string extract_matrix_type(json::iterator member) {
-    if ((member->is_string()) && ((*member == "dense") || (*member == "sparse"))) {
+
+    if (member->is_string()) {
         return *member;
     } else {
         throw std::runtime_error(
@@ -60,11 +55,12 @@ std::string extract_matrix_type(json::iterator member) {
             )
         );
     }
+
 }
 
 Solve_Group_Precond_Specs extract_solve_group_precond_specs(json::iterator member) {
 
-    if ((member->is_string()) && ((*member == "none") || (*member == "jacobi") || (*member == "ilu0"))) {
+    if (member->is_string()) {
 
         return Solve_Group_Precond_Specs(*member);
 
@@ -105,18 +101,17 @@ Solve_Group_Precond_Specs extract_solve_group_precond_specs(json::iterator membe
         return Solve_Group_Precond_Specs(name, ilutp_tau, ilutp_p);
 
     } else {
-
         throw std::runtime_error(
             std::format(
                 "extract_solve_group: extract_solve_group_precond_specs invalid value for key precond_specs"
             )
         );
-
     }
 
 }
 
 double extract_double(json::iterator member) {
+
     if (member->is_number_float()) {
         return *member;
     } else {
@@ -127,11 +122,14 @@ double extract_double(json::iterator member) {
             )
         );
     }
+
 }
 
 std::vector<std::string> extract_string_vector(json::iterator member) {
+
     std::vector<std::string> matrix_names;
     if (member->is_array()) {
+
         for (json::iterator it = member->begin(); it != member->end(); ++it) {
             if (it->is_string()) {
                 matrix_names.push_back(*it);
@@ -144,7 +142,9 @@ std::vector<std::string> extract_string_vector(json::iterator member) {
                 );
             }
         }
+
         return matrix_names;
+
     } else {
         throw std::runtime_error(
             std::format(
@@ -153,9 +153,10 @@ std::vector<std::string> extract_string_vector(json::iterator member) {
             )
         );
     }
+
 }
 
-Solve_Group extract_solve_group(std::string id, json cand_obj) {
+Solve_Group check_and_extract_solve_group(std::string id, json cand_obj) {
 
     int member_count = 0;
     int experiment_iterations = -1;
@@ -255,7 +256,7 @@ Experiment_Specification parse_experiment_spec(fs::path exp_spec_path) {
 
         if (iter->is_object()) {
 
-            Solve_Group solve_group = extract_solve_group(iter.key(), *iter);
+            Solve_Group solve_group = check_and_extract_solve_group(iter.key(), *iter);
             exp_spec.add_solve_group(solve_group);
 
         } else {
