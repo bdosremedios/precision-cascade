@@ -276,104 +276,158 @@ TEST_F(read_matrixMTX_Test, ReadSimpleSymmetric) {
     ReadSimpleSymmetric<NoFillMatrixSparse, double>();
 }
 
-// TEST_F(read_matrixMTX_Test, ReadPreciseGeneral_Double) {
-//     ReadPreciseGeneral(
-//         read_matrix_dir / fs::path("double_precise.mtx"),
-//         NoFillMatrixSparse<double>(
-//             TestBase::bundle,
-//             {{static_cast<double>(1.1234567890123450), static_cast<double>(1.1234567890123454),
-//               static_cast<double>(1.1234567890123458), static_cast<double>(1.1234567890123452)},
-//              {static_cast<double>(1.1234567890123451), static_cast<double>(1.1234567890123455),
-//               static_cast<double>(1.1234567890123459), static_cast<double>(1.1234567890123453)},
-//              {static_cast<double>(1.1234567890123452), static_cast<double>(1.1234567890123456),
-//               static_cast<double>(1.1234567890123450), static_cast<double>(1.1234567890123454)},
-//              {static_cast<double>(1.1234567890123453), static_cast<double>(1.1234567890123457),
-//               static_cast<double>(1.1234567890123451), static_cast<double>(1.1234567890123455)}}
-//         )
-//     );
-// }
+TEST_F(read_matrixMTX_Test, ReadPreciseGeneral_Double) {
+    
+    MatrixDense<double> mat(
+        TestBase::bundle,
+        {{static_cast<double>(1.1234567890123450), static_cast<double>(1.1234567890123454),
+          static_cast<double>(1.1234567890123458), static_cast<double>(1.1234567890123452)},
+         {static_cast<double>(1.1234567890123451), static_cast<double>(1.1234567890123455),
+          static_cast<double>(1.1234567890123459), static_cast<double>(1.1234567890123453)},
+         {static_cast<double>(1.1234567890123452), static_cast<double>(1.1234567890123456),
+          static_cast<double>(1.1234567890123450), static_cast<double>(1.1234567890123454)},
+         {static_cast<double>(1.1234567890123453), static_cast<double>(1.1234567890123457),
+          static_cast<double>(1.1234567890123451), static_cast<double>(1.1234567890123455)}}
+    );
 
-// TEST_F(read_matrixMTX_Test, ReadPreciseSymmetric_Double) {
-//     ReadPreciseSymmetric(
-//         read_matrix_dir / fs::path("double_precise_symmetric.mtx"),
-//         NoFillMatrixSparse<double>(
-//             TestBase::bundle,
-//             {{static_cast<double>(1.1234567890123450), static_cast<double>(1.1234567890123451),
-//               static_cast<double>(1.1234567890123452), static_cast<double>(1.1234567890123453)},
-//              {static_cast<double>(1.1234567890123451), static_cast<double>(1.1234567890123454),
-//               static_cast<double>(1.1234567890123455), static_cast<double>(1.1234567890123456)},
-//              {static_cast<double>(1.1234567890123452), static_cast<double>(1.1234567890123455),
-//               static_cast<double>(1.1234567890123457), static_cast<double>(1.1234567890123458)},
-//              {static_cast<double>(1.1234567890123453), static_cast<double>(1.1234567890123456),
-//               static_cast<double>(1.1234567890123458), static_cast<double>(1.1234567890123459)}}
-//         )
-//     );
-// }
+    ReadPreciseGeneral(
+        read_matrix_dir / fs::path("double_precise.mtx"),
+        mat
+    );
+    ReadPreciseGeneral(
+        read_matrix_dir / fs::path("double_precise.mtx"),
+        NoFillMatrixSparse<double>(mat)
+    );
 
-// TEST_F(read_matrixMTX_Test, ReadPreciseGeneral_Single) {
-//     ReadPreciseGeneral(
-//         read_matrix_dir / fs::path("single_precise.mtx"),
-//         NoFillMatrixSparse<float>(
-//             TestBase::bundle,
-//             {{static_cast<float>(1.12345670), static_cast<float>(1.12345674), static_cast<float>(1.12345678), static_cast<float>(1.12345672)},
-//              {static_cast<float>(1.12345671), static_cast<float>(1.12345675), static_cast<float>(1.12345679), static_cast<float>(1.12345673)},
-//              {static_cast<float>(1.12345672), static_cast<float>(1.12345676), static_cast<float>(1.12345670), static_cast<float>(1.12345674)},
-//              {static_cast<float>(1.12345673), static_cast<float>(1.12345677), static_cast<float>(1.12345671), static_cast<float>(1.12345675)}}
-//         )
-//     );
-// }
+}
 
-// TEST_F(read_matrixMTX_Test, ReadPreciseSymmetric_Single) {
-//     ReadPreciseSymmetric(
-//         read_matrix_dir / fs::path("single_precise_symmetric.mtx"),
-//         NoFillMatrixSparse<float>(
-//             TestBase::bundle,
-//             {{static_cast<float>(1.12345670), static_cast<float>(1.12345671),
-//               static_cast<float>(1.12345672), static_cast<float>(1.12345673)},
-//              {static_cast<float>(1.12345671), static_cast<float>(1.12345674),
-//               static_cast<float>(1.12345675), static_cast<float>(1.12345676)},
-//              {static_cast<float>(1.12345672), static_cast<float>(1.12345675),
-//               static_cast<float>(1.12345677), static_cast<float>(1.12345678)},
-//              {static_cast<float>(1.12345673), static_cast<float>(1.12345676),
-//               static_cast<float>(1.12345678), static_cast<float>(1.12345679)}}
-//         )
-//     );
-// }
+TEST_F(read_matrixMTX_Test, ReadPreciseSymmetric_Double) {
 
-// TEST_F(read_matrixMTX_Test, ReadPreciseGeneral_Half) {
-//     ReadPreciseGeneral(
-//         read_matrix_dir / fs::path("half_precise.mtx"),
-//         NoFillMatrixSparse<__half>(
-//             TestBase::bundle,
-//             {{static_cast<__half>(1.120), static_cast<__half>(1.124),
-//               static_cast<__half>(1.128), static_cast<__half>(1.122)},
-//              {static_cast<__half>(1.121), static_cast<__half>(1.125),
-//               static_cast<__half>(1.129), static_cast<__half>(1.123)},
-//              {static_cast<__half>(1.122), static_cast<__half>(1.126),
-//               static_cast<__half>(1.120), static_cast<__half>(1.124)},
-//              {static_cast<__half>(1.123), static_cast<__half>(1.127),
-//               static_cast<__half>(1.121), static_cast<__half>(1.125)}}
-//         )
-//     );
-// }
+    MatrixDense<double> mat(
+        TestBase::bundle,
+        {{static_cast<double>(1.1234567890123450), static_cast<double>(1.1234567890123451),
+          static_cast<double>(1.1234567890123452), static_cast<double>(1.1234567890123453)},
+         {static_cast<double>(1.1234567890123451), static_cast<double>(1.1234567890123454),
+          static_cast<double>(1.1234567890123455), static_cast<double>(1.1234567890123456)},
+         {static_cast<double>(1.1234567890123452), static_cast<double>(1.1234567890123455),
+          static_cast<double>(1.1234567890123457), static_cast<double>(1.1234567890123458)},
+         {static_cast<double>(1.1234567890123453), static_cast<double>(1.1234567890123456),
+          static_cast<double>(1.1234567890123458), static_cast<double>(1.1234567890123459)}}
+    );
 
-// TEST_F(read_matrixMTX_Test, ReadPreciseSymmetric_Half) {
-//     ReadPreciseSymmetric(
-//         read_matrix_dir / fs::path("half_precise_symmetric.mtx"),
-//         NoFillMatrixSparse<__half>(
-//             TestBase::bundle,
-//             {{static_cast<__half>(1.120), static_cast<__half>(1.121),
-//               static_cast<__half>(1.122), static_cast<__half>(1.123)},
-//              {static_cast<__half>(1.121), static_cast<__half>(1.124),
-//               static_cast<__half>(1.125), static_cast<__half>(1.126)},
-//              {static_cast<__half>(1.122), static_cast<__half>(1.125),
-//               static_cast<__half>(1.127), static_cast<__half>(1.128)},
-//              {static_cast<__half>(1.123), static_cast<__half>(1.126),
-//               static_cast<__half>(1.128), static_cast<__half>(1.129)}}
-//         )
-//     );
-// }
+    ReadPreciseSymmetric(
+        read_matrix_dir / fs::path("double_precise_symmetric.mtx"),
+        mat
+    );
+    ReadPreciseSymmetric(
+        read_matrix_dir / fs::path("double_precise_symmetric.mtx"),
+        NoFillMatrixSparse<double>(mat)
+    );
 
-// TEST_F(read_matrixMTX_Test, BadReadMTX) {
-//     BadReadMTX();
-// }
+}
+
+TEST_F(read_matrixMTX_Test, ReadPreciseGeneral_Single) {
+
+    MatrixDense<float> mat(
+        TestBase::bundle,
+        {{static_cast<float>(1.12345670), static_cast<float>(1.12345674),
+          static_cast<float>(1.12345678), static_cast<float>(1.12345672)},
+         {static_cast<float>(1.12345671), static_cast<float>(1.12345675),
+          static_cast<float>(1.12345679), static_cast<float>(1.12345673)},
+         {static_cast<float>(1.12345672), static_cast<float>(1.12345676),
+          static_cast<float>(1.12345670), static_cast<float>(1.12345674)},
+         {static_cast<float>(1.12345673), static_cast<float>(1.12345677),
+          static_cast<float>(1.12345671), static_cast<float>(1.12345675)}}
+
+    );
+
+    ReadPreciseGeneral(
+        read_matrix_dir / fs::path("single_precise.mtx"),
+        mat
+    );
+    ReadPreciseGeneral(
+        read_matrix_dir / fs::path("single_precise.mtx"),
+        NoFillMatrixSparse<float>(mat)
+    );
+
+}
+
+TEST_F(read_matrixMTX_Test, ReadPreciseSymmetric_Single) {
+    
+    MatrixDense<float> mat(
+        TestBase::bundle,
+        {{static_cast<float>(1.12345670), static_cast<float>(1.12345671),
+          static_cast<float>(1.12345672), static_cast<float>(1.12345673)},
+         {static_cast<float>(1.12345671), static_cast<float>(1.12345674),
+          static_cast<float>(1.12345675), static_cast<float>(1.12345676)},
+         {static_cast<float>(1.12345672), static_cast<float>(1.12345675),
+          static_cast<float>(1.12345677), static_cast<float>(1.12345678)},
+         {static_cast<float>(1.12345673), static_cast<float>(1.12345676),
+          static_cast<float>(1.12345678), static_cast<float>(1.12345679)}}
+    );
+
+    ReadPreciseSymmetric(
+        read_matrix_dir / fs::path("single_precise_symmetric.mtx"),
+        mat
+    );
+    ReadPreciseSymmetric(
+        read_matrix_dir / fs::path("single_precise_symmetric.mtx"),
+        NoFillMatrixSparse<float>(mat)
+    );
+
+}
+
+TEST_F(read_matrixMTX_Test, ReadPreciseGeneral_Half) {
+
+    MatrixDense<__half> mat(
+        TestBase::bundle,
+        {{static_cast<__half>(1.120), static_cast<__half>(1.124),
+          static_cast<__half>(1.128), static_cast<__half>(1.122)},
+         {static_cast<__half>(1.121), static_cast<__half>(1.125),
+          static_cast<__half>(1.129), static_cast<__half>(1.123)},
+         {static_cast<__half>(1.122), static_cast<__half>(1.126),
+          static_cast<__half>(1.120), static_cast<__half>(1.124)},
+         {static_cast<__half>(1.123), static_cast<__half>(1.127),
+          static_cast<__half>(1.121), static_cast<__half>(1.125)}}
+    );
+
+    ReadPreciseGeneral(
+        read_matrix_dir / fs::path("half_precise.mtx"),
+        mat
+    );
+    ReadPreciseGeneral(
+        read_matrix_dir / fs::path("half_precise.mtx"),
+        NoFillMatrixSparse<__half>(mat)
+    );
+
+}
+
+TEST_F(read_matrixMTX_Test, ReadPreciseSymmetric_Half) {
+
+    MatrixDense<__half> mat(
+        TestBase::bundle,
+        {{static_cast<__half>(1.120), static_cast<__half>(1.121),
+          static_cast<__half>(1.122), static_cast<__half>(1.123)},
+         {static_cast<__half>(1.121), static_cast<__half>(1.124),
+          static_cast<__half>(1.125), static_cast<__half>(1.126)},
+         {static_cast<__half>(1.122), static_cast<__half>(1.125),
+          static_cast<__half>(1.127), static_cast<__half>(1.128)},
+         {static_cast<__half>(1.123), static_cast<__half>(1.126),
+          static_cast<__half>(1.128), static_cast<__half>(1.129)}}
+    );
+
+    ReadPreciseSymmetric(
+        read_matrix_dir / fs::path("half_precise_symmetric.mtx"),
+        mat
+    );
+    ReadPreciseSymmetric(
+        read_matrix_dir / fs::path("half_precise_symmetric.mtx"),
+        NoFillMatrixSparse<__half>(mat)
+    );
+
+}
+
+TEST_F(read_matrixMTX_Test, BadReadMTX) {
+    BadReadMTX<MatrixDense>();
+    BadReadMTX<NoFillMatrixSparse>();
+}
