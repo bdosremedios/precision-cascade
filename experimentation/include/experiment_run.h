@@ -42,7 +42,15 @@ LinSysSolnPair<M> load_linear_problem(
 
     logger.info(std::format("Loading: {}", matrix_path.string()));
 
-    M<double> A(read_matrixCSV<M, double>(cu_handles, matrix_path));
+    M<double> A(cu_handles);
+    if (matrix_path.extension() == ".mtx") {
+        A = read_matrixMTX<M, double>(cu_handles, matrix_path);
+    } else if (matrix_path.extension() == ".csv") {
+        A = read_matrixCSV<M, double>(cu_handles, matrix_path);
+    } else {
+        throw std::runtime_error("load_linear_problem: invalid extension");
+    }
+
     A.normalize_magnitude();
     logger.info(std::format("Matrix info: {}", A.get_info_string()));
 

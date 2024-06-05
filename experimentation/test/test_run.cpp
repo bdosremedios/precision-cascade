@@ -90,6 +90,45 @@ public:
     ~TestRun() {}
 
     template <template <typename> typename M>
+    void Test_Load_Linear_Problem(std::string matrix_name) {
+        
+        LinSysSolnPair<M> pair = load_linear_problem<M>(
+            *TestExperimentBase::cu_handles_ptr,
+            test_data_dir,
+            matrix_name,
+            logger
+        );
+
+        fs::path matrix_path(test_data_dir / fs::path(matrix_name));
+        M<double> target_A(*TestExperimentBase::cu_handles_ptr);
+        if (matrix_path.extension() == ".mtx") {
+            target_A = read_matrixMTX<M, double>(
+                *TestExperimentBase::cu_handles_ptr, matrix_path
+            );
+        } else if (matrix_path.extension() == ".csv") {
+            target_A = read_matrixCSV<M, double>(
+                *TestExperimentBase::cu_handles_ptr, matrix_path
+            );
+        }
+        target_A.normalize_magnitude();
+
+        ASSERT_EQ(pair.first.get_A().rows(), target_A.rows());
+        ASSERT_EQ(pair.first.get_A().cols(), target_A.cols());
+        for (int j=0; j<target_A.cols(); ++j) {
+            for (int i=0; i<target_A.rows(); ++i) {
+                ASSERT_EQ(pair.first.get_A().get_elem(i, j), target_A.get_elem(i, j));
+            }
+        }
+
+        Vector<double> target_b(pair.first.get_A()*pair.second);
+        ASSERT_EQ(pair.first.get_b(), target_b);
+        for (int i=0; i<target_b.rows(); ++i) {
+            ASSERT_EQ(pair.first.get_b().get_elem(i), target_b.get_elem(i));
+        }
+
+    }
+
+    template <template <typename> typename M>
     void Test_Run_Solve_Group(Solve_Group solve_group) {
 
         run_solve_group<M>(
@@ -162,6 +201,16 @@ public:
     }
 
 };
+
+TEST_F(TestRun, TestLoadLinearProblem) {
+
+    Test_Load_Linear_Problem<MatrixDense>("easy_4_4.csv");
+    Test_Load_Linear_Problem<NoFillMatrixSparse>("easy_4_4.csv");
+
+    Test_Load_Linear_Problem<MatrixDense>("easy_4_4.mtx");
+    Test_Load_Linear_Problem<NoFillMatrixSparse>("easy_4_4.mtx");
+    
+}
 
 TEST_F(TestRun, Test_AllSolvers_Run_Solve_Group) {
 
