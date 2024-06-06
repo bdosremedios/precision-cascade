@@ -1,4 +1,4 @@
-#include "include/benchmark_Nested_GMRES.h"
+#include "benchmark_Nested_GMRES.h"
 
 #include "tools/arg_pkgs/LinearSystem.h"
 #include "tools/arg_pkgs/SolveArgPkg.h"
@@ -13,7 +13,7 @@ TEST_F(Benchmark_FP_GMRES_IR, FP_GMRES_IR_BENCHMARK) {
         Benchmark_AccumulatingClock &clock, NoFillMatrixSparse<double> &A
     ) {
 
-        Vector<double> x_soln = Vector<double>::Random(TestBase::bundle, A.rows());
+        Vector<double> x_soln = Vector<double>::Random(BenchmarkBase::bundle, A.rows());
 
         GenericLinearSystem<NoFillMatrixSparse> gen_lin_sys(A, A*x_soln);
         TypedLinearSystem<NoFillMatrixSparse, double> typed_lin_sys(&gen_lin_sys);

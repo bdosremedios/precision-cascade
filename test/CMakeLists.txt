@@ -106,7 +106,7 @@ target_link_libraries(
 
 add_executable(
     test
-    src/test.cpp
+    main/test.cpp
     ${TEST_SUITE_CPPS}
 )
 

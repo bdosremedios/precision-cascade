@@ -20,6 +20,12 @@ option(
 )
 
 option(
+    BUILD_BENCHMARK
+    "Whether to build benchmark"
+    ON
+)
+
+option(
     BUILD_EXPERIMENTATION
     "Whether to build experiment"
     ON
@@ -28,6 +34,11 @@ option(
 if(BUILD_TEST)
     message(STATUS "Building test...")
     add_subdirectory(test)
+endif()
+
+if(BUILD_BENCHMARK)
+    message(STATUS "Building benchmark...")
+    add_subdirectory(benchmark)
 endif()
 
 if(BUILD_EXPERIMENTATION)

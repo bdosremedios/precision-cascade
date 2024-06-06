@@ -1,4 +1,4 @@
-#include "include/benchmark_Sparse.h"
+#include "benchmark_Sparse.h"
 
 #include "preconditioners/ILUPreconditioner.h"
 

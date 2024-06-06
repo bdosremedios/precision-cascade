@@ -1,56 +1,33 @@
 #ifndef BENCHMARK_H
 #define BENCHMARK_H
 
-#include "../../test.h"
-
 #include <filesystem>
 #include <fstream>
 
-#include <chrono>
 #include <functional>
+
+#include <gtest/gtest.h>
+
+#include "tools/cuHandleBundle.h"
+#include "types/types.h"
+
+#include "benchmark_tools.h"
 
 namespace fs = std::filesystem;
 
-class Benchmark_AccumulatingClock
-{
-private:
-
-    bool clock_ticking = false;
-
-    using acc_clock_duration = std::chrono::microseconds;
-
-    std::chrono::high_resolution_clock clock;
-    std::chrono::time_point<std::chrono::high_resolution_clock> start;
-    std::chrono::time_point<std::chrono::high_resolution_clock> stop;
-
-    std::vector<acc_clock_duration> prev_durations;
-
-public:
-
-    Benchmark_AccumulatingClock() {}
-
-    void clock_start();
-    void clock_stop();
-
-    int get_count();
-    acc_clock_duration get_avg();
-    acc_clock_duration get_median();
-    acc_clock_duration get_total();
-
-};
-
-class BenchmarkBase: public TestBase
+class BenchmarkBase: public testing::Test
 {
 protected:
 
     const int n_runs = 5;
-    bool prototyping_speed_up = false;
+    bool prototyping_speed_up = true;
     const fs::path data_dir = (
-        fs::current_path() / fs::path("..") /
-        fs::path("test") / fs::path("benchmarking") / fs::path("data")
+        fs::current_path() / fs::path("..") / fs::path("benchmark") / fs::path("data")
     );
 
 public:
+
+    static cuHandleBundle bundle;
 
     int dense_start = (prototyping_speed_up) ? 1024 : 2500;
     int dense_stop = 20001;
@@ -69,14 +46,6 @@ public:
     const int nested_outer_iter = (prototyping_speed_up) ? 5 : 300;
     const int nested_inner_iter = gmressolve_iters;
     const int dense_subset_cols = gmressolve_iters;
-
-    void SetUp() {
-        TestBase::SetUp();
-    }
-
-    void TearDown() {
-        TestBase::TearDown();
-    }
 
     void benchmark_n_runs(
         int n,
