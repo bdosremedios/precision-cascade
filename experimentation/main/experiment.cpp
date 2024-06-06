@@ -5,6 +5,7 @@
 #include <sstream>
 
 #include <cmath>
+#include <string>
 
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
@@ -17,9 +18,35 @@ namespace fs = std::filesystem;
 
 int main(int argc, char *argv[]) {
 
-    fs::path data_dir_path("C:\\Users\\dosre\\dev\\numerical_experimentation\\data");
-    fs::path input_dir_path("C:\\Users\\dosre\\dev\\numerical_experimentation\\input");
-    fs::path output_dir_path("C:\\Users\\dosre\\dev\\numerical_experimentation\\output");
+    if ((argc == 2) && ((std::string(argv[1]) == "--help") || (std::string(argv[1]) == "-h"))) {
+        std::cout << "---- Entry point of precision-cascade experimentation ----" << std::endl;
+        std::cout << "Use with command \"<executable path> <data dir> <input exp spec dir> <output exp data dir>\"" << std::endl;
+        std::cout << "- <executable path> is the path of the compiled test_experiment executable" << std::endl;
+        std::cout << "- <data dir> is the directory of the data matrix csv and mtx files" << std::endl;
+        std::cout << "- <input exp spec dir> is the directory experimental spec json files to run" << std::endl;
+        std::cout << "- <output exp data dir> is the directory to store experimental data in" << std::endl;
+        return EXIT_SUCCESS;
+    } else if (argc == 4) {
+        if (!fs::is_directory(argv[1])) {
+            std::cerr << "Invalid data directory" << std::endl;
+            return EXIT_FAILURE;
+        }
+        if (!fs::is_directory(argv[2])) {
+            std::cerr << "Invalid input experimental spec directory" << std::endl;
+            return EXIT_FAILURE;
+        }
+        if (!fs::is_directory(argv[3])) {
+            std::cerr << "Invalid output experimental data directory" << std::endl;
+            return EXIT_FAILURE;
+        }
+    } else {
+        std::cerr << "Invalid arguments for "+std::string(argv[0]) << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    fs::path data_dir_path(argv[1]);
+    fs::path input_dir_path(argv[2]);
+    fs::path output_dir_path(argv[3]);
 
     Experiment_Log experiment_logger(
         "experiment", output_dir_path / fs::path("experiment.log"), true
@@ -42,7 +69,7 @@ int main(int argc, char *argv[]) {
     }
     experiment_logger.info(std::format("Found {} experimental spec files", candidate_exp_specs.size()));
 
-    // Validate found experimental specs
+    // Extract and validate found experimental specs
     std::vector<Experiment_Specification> valid_exp_specs;
     experiment_logger.info("Validating experimental spec files");
     for (fs::path cand_exp_spec_path : candidate_exp_specs) {
@@ -51,7 +78,13 @@ int main(int argc, char *argv[]) {
             Experiment_Specification loaded_exp_spec = parse_experiment_spec(cand_exp_spec_path);
             valid_exp_specs.push_back(loaded_exp_spec);
         } catch (std::runtime_error e) {
-            experiment_logger.warn("Failed validation for: " + cand_exp_spec_path.filename().string());
+            experiment_logger.warn(
+                std::format(
+                    "Failed validation for: {} with runtime_error {}",
+                    cand_exp_spec_path.filename().string(),
+                    e.what()
+                )
+            );
             experiment_logger.warn("Skipping: " + cand_exp_spec_path.filename().string());
         }
     }
@@ -69,13 +102,23 @@ int main(int argc, char *argv[]) {
 
     // Run valid experimental specs
     for (Experiment_Specification exp_spec : valid_exp_specs) {
-        run_experimental_spec(cu_handles, exp_spec, data_dir_path, output_dir_path, experiment_logger);
+        try {
+            run_experimental_spec(cu_handles, exp_spec, data_dir_path, output_dir_path, experiment_logger);
+        } catch (std::runtime_error e) {
+            experiment_logger.warn(
+                std::format(
+                    "Failed running of for: {} with runtime_error {}",
+                    exp_spec.id,
+                    e.what()
+                )
+            );
+        }
     }
 
     cu_handles.destroy();
 
     experiment_logger.info("Finish numerical experiment");
     
-    return 0;
+    return EXIT_SUCCESS;
 
 }
