@@ -163,23 +163,34 @@ void run_solve_group(
             // Determine preconditioning
             PrecondArgPkg<M, double> precond_args_dbl;
             if (solve_group.precond_specs.name == "none") {
+                logger.info("Preconditioner: NoPreconditioner");
                 precond_args_dbl = PrecondArgPkg<M, double>(
                     std::make_shared<NoPreconditioner<M, double>>()
                 );
             } else if (solve_group.precond_specs.name == "jacobi") {
+                logger.info("Preconditioner: JacobiPreconditioner");
                 precond_args_dbl = PrecondArgPkg<M, double>(
                     std::make_shared<JacobiPreconditioner<M, double>>(
                         lin_sys_pair.first.get_A()
                     )
                 );
             } else if (solve_group.precond_specs.name == "ilu0") {
-                precond_args_dbl = PrecondArgPkg<M, double>(
-                    std::make_shared<ILUPreconditioner<M, double>>(
-                        lin_sys_pair.first.get_A()
-                    )
+                logger.info("Preconditioner: ILU(0) starting computation");
+                std::shared_ptr<ILUPreconditioner<M, double>> ilu0 = (
+                    std::make_shared<ILUPreconditioner<M, double>>(lin_sys_pair.first.get_A())
                 );
+                logger.info("Preconditioner: ILU(0) finished computation");
+                logger.info("Preconditioner: L info: "+ilu0->get_L().get_info_string());
+                logger.info("Preconditioner: U info: "+ilu0->get_U().get_info_string());
+                precond_args_dbl = PrecondArgPkg<M, double>(ilu0);
             } else if (solve_group.precond_specs.name == "ilutp") {
-                precond_args_dbl = PrecondArgPkg<M, double>(
+                std::string ilutp_str = std::format(
+                    "ILUTP({:.3g}, {})",
+                    solve_group.precond_specs.ilutp_tau,
+                    solve_group.precond_specs.ilutp_p
+                );
+                logger.info(std::format("Preconditioner: {} starting computation", ilutp_str));
+                std::shared_ptr<ILUPreconditioner<M, double>> ilutp = (
                     std::make_shared<ILUPreconditioner<M, double>>(
                         lin_sys_pair.first.get_A(),
                         solve_group.precond_specs.ilutp_tau,
@@ -187,6 +198,11 @@ void run_solve_group(
                         true
                     )
                 );
+                logger.info(std::format("Preconditioner: {} finished computation", ilutp_str));
+                logger.info("Preconditioner: L info: "+ilutp->get_L().get_info_string());
+                logger.info("Preconditioner: U info: "+ilutp->get_U().get_info_string());
+                logger.info("Preconditioner: P info: "+ilutp->get_P().get_info_string());
+                precond_args_dbl = PrecondArgPkg<M, double>(ilutp);
             } else {
                 throw std::runtime_error(
                     std::format(

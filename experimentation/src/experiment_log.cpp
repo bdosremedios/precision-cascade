@@ -35,12 +35,15 @@ Experiment_Log::Experiment_Log(std::string logger_name, fs::path log_file, bool 
 
 void Experiment_Log::info(std::string s) {
     logger->info(s);
+    logger->flush();
 }
 
 void Experiment_Log::warn(std::string s) {
     logger->warn(s);
+    logger->flush();
 }
 
 void Experiment_Log::critical(std::string s) {
     logger->critical(s);
+    logger->flush();
 }
