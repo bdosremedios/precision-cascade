@@ -4,9 +4,9 @@
 #include "../../types/types.h"
 #include "../../preconditioners/implemented_preconditioners.h"
 
-#include <memory>
-
 #include <cuda_fp16.h>
+
+#include <memory>
 
 template <template <typename> typename M, typename U>
 class PrecondArgPkg

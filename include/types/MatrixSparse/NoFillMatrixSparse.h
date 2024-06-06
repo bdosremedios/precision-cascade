@@ -3,19 +3,17 @@
 #ifndef NOFILLMATRIXSPARSE_H
 #define NOFILLMATRIXSPARSE_H
 
-#include <cmath>
-#include <vector>
-
-#include <format>
-
 #include "tools/cuda_check.h"
 #include "tools/cuHandleBundle.h"
-
+#include "types/Scalar/Scalar.h"
+#include "types/MatrixDense/MatrixDense.h"
 #include "NoFillMatrixSparse_gpu_kernels.cuh"
 #include "types/GeneralMatrix/GeneralMatrix_gpu_kernels.cuh"
 
-#include "types/Scalar/Scalar.h"
-#include "types/MatrixDense/MatrixDense.h"
+#include <cmath>
+#include <random>
+#include <vector>
+#include <format>
 
 template <typename T>
 class NoFillMatrixSparse

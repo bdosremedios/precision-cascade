@@ -1,7 +1,8 @@
 #include "tools/abs.h"
 
-#include <cmath>
 #include <cuda_fp16.h>
+
+#include <cmath>
 
 template <> double abs_ns::abs(const double &val) {
     return std::abs(val);

@@ -2,7 +2,6 @@
 #define LINEARSYSTEM_H
 
 #include "tools/cuHandleBundle.h"
-
 #include "types/types.h"
 
 template <template <typename> typename M>

@@ -1,10 +1,9 @@
+#include "types/GeneralMatrix/GeneralMatrix_gpu_constants.cuh"
+#include "types/MatrixDense/MatrixDense.h"
+
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
 #include <cuda_fp16.h>
-
-#include "types/GeneralMatrix/GeneralMatrix_gpu_constants.cuh"
-
-#include "types/MatrixDense/MatrixDense.h"
 
 template <typename T>
 Vector<T> MatrixDense<T>::back_sub(const Vector<T> &arg_rhs) const {

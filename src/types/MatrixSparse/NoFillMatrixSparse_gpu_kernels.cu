@@ -1,8 +1,8 @@
+#include "types/MatrixSparse/NoFillMatrixSparse_gpu_kernels.cuh"
+
 #include <cuda_runtime.h>
 #include <cusparse.h>
 #include <cuda_fp16.h>
-
-#include "types/MatrixSparse/NoFillMatrixSparse_gpu_kernels.cuh"
 
 template <typename T>
 __global__ void nofillmatrixsparse_kernels::update_pivot(

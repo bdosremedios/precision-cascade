@@ -1,10 +1,10 @@
 #ifndef SOLVEARGPKG_H
 #define SOLVEARGPKG_H
 
+#include "../../types/types.h"
+
 #include <string>
 #include <format>
-
-#include "../../types/types.h"
 
 class SolveArgPkg
 {

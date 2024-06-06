@@ -1,10 +1,9 @@
+#include "types/GeneralMatrix/GeneralMatrix_gpu_constants.cuh"
+#include "types/MatrixSparse/NoFillMatrixSparse.h"
+
 #include <cuda_runtime.h>
 #include <cusparse.h>
 #include <cuda_fp16.h>
-
-#include "types/GeneralMatrix/GeneralMatrix_gpu_constants.cuh"
-
-#include "types/MatrixSparse/NoFillMatrixSparse.h"
 
 NoFillMatrixSparse<double>::NoFillMatrixSparse(const MatrixDense<double> &source_mat):
     NoFillMatrixSparse(source_mat, CUDA_R_64F)

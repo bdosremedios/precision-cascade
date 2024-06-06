@@ -1,11 +1,12 @@
+#include "types/Vector/Vector_gpu_kernels.cuh"
+
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
-
-#include "types/Vector/Vector_gpu_kernels.cuh"
+#include <cuda_fp16.h>
 
 // *** Vector double kernel implementations ***
 
-__global__ void vector_dbl_kernels::cast_to_half(double *vec_src, half *vec_dest, int m) {
+__global__ void vector_dbl_kernels::cast_to_half(double *vec_src, __half *vec_dest, int m) {
     int tid = (blockIdx.x * blockDim.x) + threadIdx.x;
     if (tid < m) {
         vec_dest[tid] = __double2half(vec_src[tid]);
@@ -21,7 +22,7 @@ __global__ void vector_dbl_kernels::cast_to_float(double *vec_src, float *vec_de
 
 // *** Vector single kernel implementations ***
 
-__global__ void vector_sgl_kernels::cast_to_half(float *vec_src, half *vec_dest, int m) {
+__global__ void vector_sgl_kernels::cast_to_half(float *vec_src, __half *vec_dest, int m) {
     int tid = (blockIdx.x * blockDim.x) + threadIdx.x;
     if (tid < m) {
         vec_dest[tid] = __float2half(vec_src[tid]);

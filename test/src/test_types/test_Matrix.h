@@ -1,7 +1,7 @@
+#include "test.h"
+
 #include <time.h>
 #include <chrono>
-
-#include "test.h"
 
 template <template <typename> typename M>
 class Matrix_Test: public TestBase

@@ -1,18 +1,17 @@
 #ifndef ITERATIVE_SOLVE_H
 #define ITERATIVE_SOLVE_H
 
-#include <vector>
-#include <algorithm>
-#include <cmath>
-
-#include <string>
-#include <format>
-#include <iostream>
-#include <iomanip>
-
 #include "types/types.h"
 #include "tools/arg_pkgs/argument_pkgs.h"
 #include "preconditioners/implemented_preconditioners.h"
+
+#include <vector>
+#include <string>
+#include <cmath>
+#include <format>
+#include <algorithm>
+#include <iostream>
+#include <iomanip>
 
 template <template <typename> typename M>
 class GenericIterativeSolve

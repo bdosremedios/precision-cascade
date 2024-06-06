@@ -1,11 +1,10 @@
-#include <cmath>
+#include "types/GeneralMatrix/GeneralMatrix_gpu_constants.cuh"
+#include "types/Vector/Vector.h"
 
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
 
-#include "types/GeneralMatrix/GeneralMatrix_gpu_constants.cuh"
-
-#include "types/Vector/Vector.h"
+#include <cmath>
 
 Vector<double> Vector<double>::operator*(const Scalar<double> &scalar) const {
 

@@ -1,17 +1,16 @@
 #ifndef BENCHMARK_H
 #define BENCHMARK_H
 
-#include <filesystem>
-#include <fstream>
-
-#include <functional>
-
-#include <gtest/gtest.h>
+#include "benchmark_tools.h"
 
 #include "tools/cuHandleBundle.h"
 #include "types/types.h"
 
-#include "benchmark_tools.h"
+#include <gtest/gtest.h>
+
+#include <filesystem>
+#include <fstream>
+#include <functional>
 
 namespace fs = std::filesystem;
 

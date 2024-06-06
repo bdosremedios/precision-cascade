@@ -1,11 +1,10 @@
-#include <functional>
-#include <fstream>
-
-#include <cmath>
+#include "benchmark_Sparse.h"
 
 #include "types/types.h"
 
-#include "benchmark_Sparse.h"
+#include <functional>
+#include <fstream>
+#include <cmath>
 
 class NoFillMatrixSparse_Benchmark: public Benchmark_Sparse {};
 

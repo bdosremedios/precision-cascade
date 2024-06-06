@@ -1,8 +1,8 @@
 #include "test.h"
 
-#include <utility>
-
 #include "types/Vector/Vector.h"
+
+#include <utility>
 
 class Vector_Test: public TestBase
 {

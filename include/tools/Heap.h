@@ -1,10 +1,10 @@
 #ifndef HEAP_H
 #define HEAP_H
 
+#include "tools/abs.h"
+
 #include <vector>
 #include <utility>
-
-#include "tools/abs.h"
 
 namespace heap
 {

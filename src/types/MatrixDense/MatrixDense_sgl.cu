@@ -1,10 +1,9 @@
+#include "types/GeneralMatrix/GeneralMatrix_gpu_constants.cuh"
+#include "types/MatrixDense/MatrixDense.h"
+
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
 #include <cuda_fp16.h>
-
-#include "types/GeneralMatrix/GeneralMatrix_gpu_constants.cuh"
-
-#include "types/MatrixDense/MatrixDense.h"
 
 MatrixDense<float> MatrixDense<float>::operator*(const Scalar<float> &scalar) const {
 

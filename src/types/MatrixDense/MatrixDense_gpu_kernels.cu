@@ -1,10 +1,9 @@
+#include "types/GeneralMatrix/GeneralMatrix_gpu_constants.cuh"
+#include "types/MatrixDense/MatrixDense_gpu_kernels.cuh"
+
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
 #include <cuda_fp16.h>
-
-#include "types/GeneralMatrix/GeneralMatrix_gpu_constants.cuh"
-
-#include "types/MatrixDense/MatrixDense_gpu_kernels.cuh"
 
 template <typename T>
 __global__ void matrixdense_kernels::upptri_blk_solve_warp(

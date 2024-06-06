@@ -1,15 +1,14 @@
 #ifndef SCALAR_H
 #define SCALAR_H
 
-#include <iostream>
+#include "tools/cuda_check.h"
+#include "Scalar_gpu_kernels.cuh"
 
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
 #include <cuda_fp16.h>
 
-#include "tools/cuda_check.h"
-
-#include "Scalar_gpu_kernels.cuh"
+#include <stdexcept>
 
 template <typename T> class Vector;
 template <typename T> class MatrixDense;
@@ -62,7 +61,6 @@ public:
         check_cuda_error(cudaMemcpy(&h_scalar, d_scalar, sizeof(T), cudaMemcpyDeviceToHost));
         return h_scalar;
     }
-    void print() { std::cout << static_cast<double>(get_scalar()) << std::endl; }
 
     // *** Cast ***
     template <typename Cast_T>

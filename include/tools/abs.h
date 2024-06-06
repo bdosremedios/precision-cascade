@@ -1,8 +1,9 @@
 #ifndef ABS_H
 #define ABS_H
 
-#include <stdexcept>
 #include <cuda_fp16.h>
+
+#include <stdexcept>
 
 namespace abs_ns
 {

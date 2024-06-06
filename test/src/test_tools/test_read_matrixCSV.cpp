@@ -1,7 +1,7 @@
 #include "test.h"
 
-#include "tools/read_matrix.h"
 #include "tools/DenseConverter.h"
+#include "tools/read_matrix.h"
 
 // General matrix read tests
 class read_matrixCSV_General_Test: public TestBase

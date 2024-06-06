@@ -2,7 +2,6 @@
 
 #include "tools/arg_pkgs/LinearSystem.h"
 #include "tools/arg_pkgs/SolveArgPkg.h"
-
 #include "solvers/GMRES/GMRESSolve.h"
 
 TEST_F(Benchmark_GMRES, GMRESSolve_BENCHMARK) {

@@ -1,10 +1,9 @@
+#include "types/GeneralMatrix/GeneralMatrix_gpu_constants.cuh"
+#include "types/MatrixSparse/NoFillMatrixSparse.h"
+
 #include <cuda_runtime.h>
 #include <cusparse.h>
 #include <cuda_fp16.h>
-
-#include "types/GeneralMatrix/GeneralMatrix_gpu_constants.cuh"
-
-#include "types/MatrixSparse/NoFillMatrixSparse.h"
 
 template <typename T>
 Vector<T> NoFillMatrixSparse<T>::back_sub(const Vector<T> &arg_rhs) const {

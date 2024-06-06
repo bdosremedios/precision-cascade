@@ -1,25 +1,22 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
-#include <iostream>
+#include "tools/cuda_check.h"
+#include "tools/cuHandleBundle.h"
+#include "tools/abs.h"
+#include "types/Scalar/Scalar.h"
+#include "types/MatrixDense/MatrixDense.h"
+#include "types/MatrixSparse/NoFillMatrixSparse.h"
+#include "Vector_gpu_kernels.cuh"
+
+#include <cuda_runtime.h>
+#include <cublas_v2.h>
+
 #include <stdexcept>
 #include <cstdlib>
 #include <vector>
 #include <random>
 #include <initializer_list>
-
-#include <cuda_runtime.h>
-#include <cublas_v2.h>
-
-#include "tools/cuda_check.h"
-#include "tools/cuHandleBundle.h"
-#include "tools/abs.h"
-
-#include "Vector_gpu_kernels.cuh"
-
-#include "types/Scalar/Scalar.h"
-#include "types/MatrixDense/MatrixDense.h"
-#include "types/MatrixSparse/NoFillMatrixSparse.h"
 
 template <typename T>
 class Vector

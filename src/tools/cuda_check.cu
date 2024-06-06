@@ -1,11 +1,11 @@
-#include <stdexcept>
-#include <format>
-#include <string>
+#include "tools/cuda_check.h"
 
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
 
-#include "tools/cuda_check.h"
+#include <stdexcept>
+#include <format>
+#include <string>
 
 void check_cuda_error(cudaError_t error) {
     if (error != cudaSuccess) {

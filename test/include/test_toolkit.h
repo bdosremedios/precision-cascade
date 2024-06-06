@@ -1,9 +1,9 @@
 #ifndef TEST_TOOLKIT_H
 #define TEST_TOOLKIT_H
 
-#include <cmath>
-
 #include "types/types.h"
+
+#include <cmath>
 
 template <template <typename> typename M, typename T>
 T mat_max_mag(const M<T> &A) {

@@ -1,10 +1,10 @@
 #ifndef MP_GMRES_IR_SOLVE_H
 #define MP_GMRES_IR_SOLVE_H
 
-#include <cuda_fp16.h>
-
 #include "../IterativeRefinement.h"
 #include "../../GMRES/GMRESSolve.h"
+
+#include <cuda_fp16.h>
 
 template <template <typename> typename M>
 class MP_GMRES_IR_Solve: public IterativeRefinement<M>

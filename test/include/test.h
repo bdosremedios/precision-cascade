@@ -1,27 +1,26 @@
 #ifndef TEST_H
 #define TEST_H
 
+#include "test_assertions.h"
+#include "test_toolkit.h"
+
+#include "tools/cuHandleBundle.h"
+#include "tools/read_matrix.h"
+#include "tools/arg_pkgs/SolveArgPkg.h"
+#include "types/types.h"
+
+#include "gtest/gtest.h"
+
 #ifdef _DEBUG
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
 #endif
 
-#include <cmath>
-#include <filesystem>
 #include <memory>
 #include <iostream>
-
-#include "gtest/gtest.h"
-
-#include "tools/cuHandleBundle.h"
-#include "types/types.h"
-
-#include "tools/read_matrix.h"
-#include "tools/arg_pkgs/SolveArgPkg.h"
-
-#include "test_assertions.h"
-#include "test_toolkit.h"
+#include <filesystem>
+#include <cmath>
 
 namespace fs = std::filesystem;
 

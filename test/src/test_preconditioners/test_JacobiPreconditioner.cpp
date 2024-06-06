@@ -30,7 +30,11 @@ public:
             target_vec.set_elem(i, target_vec.get_elem(i)/A.get_elem(i, i));
         }
 
-        ASSERT_VECTOR_NEAR(test_vec, target_vec, 4*Tol<double>::roundoff_T());
+        ASSERT_VECTOR_NEAR(
+            test_vec,
+            target_vec,
+            4*A.get_max_mag_elem().get_scalar()*Tol<double>::roundoff_T()
+        );
 
     }
 

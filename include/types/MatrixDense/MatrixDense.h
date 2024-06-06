@@ -3,28 +3,24 @@
 #ifndef MATRIX_DENSE_H
 #define MATRIX_DENSE_H
 
-#include <cmath>
-#include <random>
-
-#include <stdexcept>
-#include <cstdlib>
-#include <initializer_list>
-
-#include <string>
-#include <format>
+#include "tools/cuda_check.h"
+#include "tools/CuHandleBundle.h"
+#include "tools/abs.h"
+#include "types/Scalar/Scalar.h"
+#include "types/MatrixSparse/NoFillMatrixSparse.h"
+#include "MatrixDense_gpu_kernels.cuh"
+#include "types/GeneralMatrix/GeneralMatrix_gpu_kernels.cuh"
 
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
 
-#include "tools/cuda_check.h"
-#include "tools/CuHandleBundle.h"
-#include "tools/abs.h"
-
-#include "MatrixDense_gpu_kernels.cuh"
-#include "types/GeneralMatrix/GeneralMatrix_gpu_kernels.cuh"
-
-#include "types/Scalar/Scalar.h"
-#include "types/MatrixSparse/NoFillMatrixSparse.h"
+#include <stdexcept>
+#include <cstdlib>
+#include <initializer_list>
+#include <cmath>
+#include <random>
+#include <string>
+#include <format>
 
 template <typename T>
 class MatrixDense

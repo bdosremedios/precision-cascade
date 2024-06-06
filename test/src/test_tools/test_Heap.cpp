@@ -1,8 +1,8 @@
 #include "test.h"
 
-#include <map>
-
 #include "tools/Heap.h"
+
+#include <map>
 
 class PSizeHeap_Test: public TestBase
 {

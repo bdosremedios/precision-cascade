@@ -1,8 +1,6 @@
 #ifndef PRECONDITIONER_H
 #define PRECONDITIONER_H
 
-#include <memory>
-
 #include "../types/types.h"
 
 template <template <typename> typename M, typename W>

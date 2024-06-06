@@ -1,17 +1,16 @@
 #ifndef MATRIX_READER_H
 #define MATRIX_READER_H
 
-#include <cassert>
-#include <memory>
-#include <filesystem>
+#include "tools/cuHandleBundle.h"
+#include "types/types.h"
+#include "tools/DenseConverter.h"
 
+#include <cassert>
+#include <filesystem>
 #include <fstream>
 #include <sstream>
 #include <string>
-
-#include "types/types.h"
-#include "tools/cuHandleBundle.h"
-#include "tools/DenseConverter.h"
+#include <memory>
 
 namespace fs = std::filesystem;
 

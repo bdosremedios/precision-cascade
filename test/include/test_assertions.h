@@ -1,15 +1,15 @@
 #ifndef TEST_ASSERTIONS_H
 #define TEST_ASSERTIONS_H
 
-#include <functional>
-#include <string>
-#include <format>
-
-#include "gtest/gtest.h"
-
 #include "tools/cuda_check.h"
 #include "tools/abs.h"
 #include "types/types.h"
+
+#include "gtest/gtest.h"
+
+#include <functional>
+#include <string>
+#include <format>
 
 static bool *print_errors;
 

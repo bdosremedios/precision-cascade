@@ -2,7 +2,6 @@
 
 #include "tools/arg_pkgs/LinearSystem.h"
 #include "tools/arg_pkgs/SolveArgPkg.h"
-
 #include "solvers/nested/GMRES_IR/MP_GMRES_IR.h"
 
 class Benchmark_MP_GMRES_IR_Sparse: public Benchmark_Nested_GMRES {};

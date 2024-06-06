@@ -1,6 +1,6 @@
-#include <cuda_runtime.h>
-
 #include "types/Scalar/Scalar.h"
+
+#include <cuda_runtime.h>
 
 template<>
 Scalar<__half> SCALAR_ONE<__half>::get() { return SCALAR_ONE_H; }

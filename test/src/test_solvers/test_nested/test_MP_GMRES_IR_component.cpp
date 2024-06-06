@@ -1,6 +1,6 @@
-#include <cuda_fp16.h>
-
 #include "test_MP_GMRES_IR_component.h"
+
+#include <cuda_fp16.h>
 
 class MP_GMRES_IR_ComponentTest: public TestBase
 {

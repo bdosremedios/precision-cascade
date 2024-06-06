@@ -1,8 +1,8 @@
 #include "test.h"
 
-#include <vector>
-
 #include "solvers/stationary/SORSolve.h"
+
+#include <vector>
 
 class SOR_Test: public TestBase
 {

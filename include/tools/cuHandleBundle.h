@@ -1,11 +1,11 @@
 #ifndef CUHANDLEBUNDLE_H
 #define CUHANDLEBUNDLE_H
 
+#include "cuda_check.h"
+
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
 #include <cusparse.h>
-
-#include "cuda_check.h"
 
 class cuHandleBundle
 {

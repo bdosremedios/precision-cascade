@@ -1,10 +1,10 @@
 #include "test.h"
 
+#include "tools/Sort.h"
+
 #include <vector>
 #include <random>
 #include <algorithm>
-
-#include "tools/Sort.h"
 
 class Sort_Test: public TestBase
 {

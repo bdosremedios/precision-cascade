@@ -1,9 +1,9 @@
 #ifndef BENCHMARK_SPARSE_H
 #define BENCHMARK_SPARSE_H
 
-#include "types/types.h"
-
 #include "benchmark_Matrix.h"
+
+#include "types/types.h"
 
 class Benchmark_Sparse: public Benchmark_Matrix
 {

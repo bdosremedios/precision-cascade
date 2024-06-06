@@ -1,17 +1,18 @@
-#include <cmath>
-#include <string>
-#include <iostream>
+#include "test.h"
+
+#include "types/types.h"
+#include "tools/arg_pkgs/argument_pkgs.h"
+
+#include <gtest/gtest.h>
 
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
 #include <cuda_fp16.h>
 
-#include <gtest/gtest.h>
+#include <cmath>
+#include <string>
+#include <iostream>
 
-#include "test.h"
-
-#include "types/types.h"
-#include "tools/arg_pkgs/argument_pkgs.h"
 
 bool *TestBase::show_plots = new bool;
 bool *TestBase::print_errors = new bool;
