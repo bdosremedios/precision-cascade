@@ -7,7 +7,8 @@ int extract_integer(json::iterator member) {
     } else {
         throw std::runtime_error(
             std::format(
-                "extract_solve_group: extract_integer invalid value for key \"{}\"",
+                "extract_solve_group: extract_integer invalid value for "
+                "key \"{}\"",
                 member.key()
             )
         );
@@ -25,7 +26,8 @@ std::vector<std::string> extract_solvers_to_use(json::iterator member) {
             } else {
                 throw std::runtime_error(
                     std::format(
-                        "extract_solve_group: extract_solvers_to_use invalid solver or repeat solver \"{}\"",
+                        "extract_solve_group: extract_solvers_to_use invalid "
+                        "solver or repeat solver \"{}\"",
                         member.key()
                     )
                 );
@@ -35,7 +37,8 @@ std::vector<std::string> extract_solvers_to_use(json::iterator member) {
     } else {
         throw std::runtime_error(
             std::format(
-                "extract_solve_group: extract_solvers_to_use invalid value for key \"{}\"",
+                "extract_solve_group: extract_solvers_to_use invalid value "
+                "for key \"{}\"",
                 member.key()
             )
         );
@@ -50,7 +53,8 @@ std::string extract_matrix_type(json::iterator member) {
     } else {
         throw std::runtime_error(
             std::format(
-                "extract_solve_group: extract_matrix_type invalid value for key \"{}\"",
+                "extract_solve_group: extract_matrix_type invalid value "
+                "for key \"{}\"",
                 member.key()
             )
         );
@@ -58,7 +62,9 @@ std::string extract_matrix_type(json::iterator member) {
 
 }
 
-Solve_Group_Precond_Specs extract_solve_group_precond_specs(json::iterator member) {
+Solve_Group_Precond_Specs extract_solve_group_precond_specs(
+    json::iterator member
+) {
 
     if (member->is_string()) {
 
@@ -74,7 +80,8 @@ Solve_Group_Precond_Specs extract_solve_group_precond_specs(json::iterator membe
             name = *it;
         } else {
             throw std::runtime_error(
-                "extract_solve_group: extract_solve_group_precond_specs invalid array in key precond_specs"
+                "extract_solve_group: extract_solve_group_precond_specs "
+                "invalid array in key precond_specs"
             );
         }
         ++it;
@@ -82,7 +89,8 @@ Solve_Group_Precond_Specs extract_solve_group_precond_specs(json::iterator membe
             ilutp_tau = *it;
         } else {
             throw std::runtime_error(
-                "extract_solve_group: extract_solve_group_precond_specs invalid array in key precond_specs"
+                "extract_solve_group: extract_solve_group_precond_specs "
+                "invalid array in key precond_specs"
             );
         }
         ++it;
@@ -90,21 +98,22 @@ Solve_Group_Precond_Specs extract_solve_group_precond_specs(json::iterator membe
             ilutp_p = *it;
         } else {
             throw std::runtime_error(
-                "extract_solve_group: extract_solve_group_precond_specs invalid array in key precond_specs"
+                "extract_solve_group: extract_solve_group_precond_specs "
+                "invalid array in key precond_specs"
             );
         }
         if (++it != member->end()) {
             throw std::runtime_error(
-                "extract_solve_group: extract_solve_group_precond_specs too many values in array"
+                "extract_solve_group: extract_solve_group_precond_specs too "
+                "many values in array"
             );
         }
         return Solve_Group_Precond_Specs(name, ilutp_tau, ilutp_p);
 
     } else {
         throw std::runtime_error(
-            std::format(
-                "extract_solve_group: extract_solve_group_precond_specs invalid value for key precond_specs"
-            )
+            "extract_solve_group: extract_solve_group_precond_specs invalid "
+            "value for key precond_specs"
         );
     }
 
@@ -117,7 +126,8 @@ double extract_double(json::iterator member) {
     } else {
         throw std::runtime_error(
             std::format(
-                "extract_solve_group: extract_double invalid value for key \"{}\"",
+                "extract_solve_group: extract_double invalid value for "
+                "key \"{}\"",
                 member.key()
             )
         );
@@ -136,7 +146,8 @@ std::vector<std::string> extract_string_vector(json::iterator member) {
             } else {
                 throw std::runtime_error(
                     std::format(
-                        "extract_solve_group: extract_string_vector in id \"{}\" non string member",
+                        "extract_solve_group: extract_string_vector in id "
+                        "\"{}\" non string member",
                         member.key()
                     )
                 );
@@ -148,7 +159,8 @@ std::vector<std::string> extract_string_vector(json::iterator member) {
     } else {
         throw std::runtime_error(
             std::format(
-                "extract_solve_group: extract_string_vector invalid value for key \"{}\"",
+                "extract_solve_group: extract_string_vector invalid value "
+                "for key \"{}\"",
                 member.key()
             )
         );
@@ -167,7 +179,11 @@ Solve_Group check_and_extract_solve_group(std::string id, json cand_obj) {
     double solver_target_relres = -1.;
     Solve_Group_Precond_Specs precond_specs;
     std::vector<std::string> matrices_to_test;
-    for (json::iterator it = cand_obj.begin(); (it != cand_obj.end()) && (member_count < 8); ++it) {
+    for (
+        json::iterator it = cand_obj.begin();
+        (it != cand_obj.end()) && (member_count < 8);
+        ++it
+    ) {
 
         if (it.key() == "experiment_iterations") {
             experiment_iterations = extract_integer(it);
@@ -188,7 +204,8 @@ Solve_Group check_and_extract_solve_group(std::string id, json cand_obj) {
         } else {
             throw std::runtime_error(
                 std::format(
-                    "extract_solve_group: in solve group id \"{}\" invalid key \"{}\"",
+                    "extract_solve_group: in solve group id \"{}\" invalid "
+                    "key \"{}\"",
                     id,
                     it.key()
                 )
@@ -210,7 +227,11 @@ Solve_Group check_and_extract_solve_group(std::string id, json cand_obj) {
         (matrices_to_test.size() == 0)
     ) {
         throw std::runtime_error(
-            std::format("extract_solve_group: incorrect members for solve group id \"{}\"", id)
+            std::format(
+                "extract_solve_group: incorrect members for solve group "
+                "id \"{}\"",
+                id
+            )
         );
     }
 
@@ -233,7 +254,10 @@ Experiment_Specification parse_experiment_spec(fs::path exp_spec_path) {
     std::ifstream exp_spec_stream(exp_spec_path);
 
     if (!exp_spec_stream.is_open()) {
-        throw std::runtime_error("parse_experiment_spec: failed to open " + exp_spec_path.string());
+        throw std::runtime_error(
+            "parse_experiment_spec: failed to open " +
+            exp_spec_path.string()
+        );
     }
     
     std::string exp_spec_id = exp_spec_path.stem().string();
@@ -245,25 +269,33 @@ Experiment_Specification parse_experiment_spec(fs::path exp_spec_path) {
     } catch (json::parse_error e) {
         throw std::runtime_error(
             std::format(
-                "parse_experiment_spec: error in json::parse of experiment specification id \"{}\" - {}",
+                "parse_experiment_spec: error in json::parse of experiment "
+                "specification id \"{}\" - {}",
                 exp_spec_id,
                 e.what()
             )
         );
     }
 
-    for (json::iterator iter = exp_spec_json.begin(); iter != exp_spec_json.end(); ++iter) {
+    for (
+        json::iterator iter = exp_spec_json.begin();
+        iter != exp_spec_json.end();
+        ++iter
+    ) {
 
         if (iter->is_object()) {
 
-            Solve_Group solve_group = check_and_extract_solve_group(iter.key(), *iter);
+            Solve_Group solve_group = check_and_extract_solve_group(
+                iter.key(), *iter
+            );
             exp_spec.add_solve_group(solve_group);
 
         } else {
 
             throw std::runtime_error(
                 std::format(
-                    "parse_experiment_spec: solve group with id \"{}\" is not a json object",
+                    "parse_experiment_spec: solve group with id \"{}\" is not "
+                    "a json object",
                     iter.key()
                 )
             );

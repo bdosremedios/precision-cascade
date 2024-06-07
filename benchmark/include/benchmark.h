@@ -19,7 +19,7 @@ class BenchmarkBase: public testing::Test
 protected:
 
     const int n_runs = 5;
-    bool prototyping_speed_up = true;
+    bool prototyping_speed_up = false;
     const fs::path data_dir = (
         fs::current_path() / fs::path("..") / fs::path("benchmark") / fs::path("data")
     );
@@ -48,8 +48,8 @@ public:
 
     void benchmark_n_runs(
         int n,
-        std::function<void (Benchmark_AccumulatingClock &)> f,
-        Benchmark_AccumulatingClock &benchmark_clock,
+        std::function<void (Benchmark_AccumClock &)> f,
+        Benchmark_AccumClock &benchmark_clock,
         std::string label=""
     ) {
 
@@ -70,13 +70,13 @@ public:
 
     }
 
-    template <template <typename> typename M, typename T>
+    template <template <typename> typename TMatrix, typename TPrecision>
     void benchmark_exec_func(
         int m_start_incl,
         int m_stop_excl,
         int m_incr,
-        std::function<M<T> (int, int)> make_A,
-        std::function<void (Benchmark_AccumulatingClock &, M<T> &)> exec_func,
+        std::function<TMatrix<TPrecision> (int, int)> make_A,
+        std::function<void (Benchmark_AccumClock &, TMatrix<TPrecision> &)> exec_func,
         std::string label
     ) {
 
@@ -100,11 +100,11 @@ public:
 
         for (int m : exp_m_values) {
 
-            Benchmark_AccumulatingClock curr_clock;
+            Benchmark_AccumClock curr_clock;
 
-            M<T> A = make_A(m, m);
-            std::function<void(Benchmark_AccumulatingClock &)> test_func = [exec_func, &A](
-                Benchmark_AccumulatingClock &arg_clock
+            TMatrix<TPrecision> A = make_A(m, m);
+            std::function<void(Benchmark_AccumClock &)> test_func = [exec_func, &A](
+                Benchmark_AccumClock &arg_clock
             ) {
                 exec_func(arg_clock, A);
             };

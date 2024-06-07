@@ -1,8 +1,8 @@
-#include <iostream>
+#include "test_experiment.h"
 
 #include <gtest/gtest.h>
 
-#include "test_experiment.h"
+#include <iostream>
 
 bool *TestExperimentBase::print_errors = new bool;
 cuHandleBundle *TestExperimentBase::cu_handles_ptr = new cuHandleBundle();
@@ -14,7 +14,10 @@ int main(int argc, char **argv) {
     // Check if should print errors
     bool print_errors = false;
     for (int i=0; i<argc; ++i) {
-        if ((std::string(argv[i]) == "--print_errors") || (std::string(argv[i]) == "-pe")) {
+        if (
+            (std::string(argv[i]) == "--print_errors") ||
+            (std::string(argv[i]) == "-pe")
+        ) {
             print_errors = true;
         }
     }

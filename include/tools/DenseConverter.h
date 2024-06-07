@@ -3,56 +3,68 @@
 
 #include "types/types.h"
 
-template <template <typename> typename M, typename T>
+template <template <typename> typename TMatrix, typename TPrecision>
 class DenseConverter
 {
 public:
 
     DenseConverter() = default;
 
-    M<T> convert_matrix(MatrixDense<T> mat) const {
-        std::runtime_error("DenseConverter: reached unimplemented default convert_matrix implementation");
+    TMatrix<TPrecision> convert_matrix(
+        MatrixDense<TPrecision> mat
+    ) const {
+        std::runtime_error(
+            "DenseConverter: reached unimplemented default convert_matrix "
+            "implementation"
+        );
     }
 
 };
 
-template <typename T>
-class DenseConverter<MatrixDense, T>
+template <typename TPrecision>
+class DenseConverter<MatrixDense, TPrecision>
 {
 public:
 
-    MatrixDense<T> convert_matrix(MatrixDense<T> mat) const {
+    MatrixDense<TPrecision> convert_matrix(
+        MatrixDense<TPrecision> mat
+    ) const {
         return mat;
     }
 
 };
 
-template <typename T>
-class DenseConverter<Vector, T>
+template <typename TPrecision>
+class DenseConverter<Vector, TPrecision>
 {
 public:
 
-    Vector<T> convert_matrix(MatrixDense<T> mat) const {
+    Vector<TPrecision> convert_matrix(
+        MatrixDense<TPrecision> mat
+    ) const {
 
         if (mat.cols() != 1) {
             throw std::runtime_error(
-                "DenseConverter<Vector, T>: invalid csv for conversion to Vector in convert_matrix"
+                "DenseConverter<Vector, TPrecision>: invalid csv for "
+                "conversion in convert_matrix"
             );
         }
 
-        return Vector<T>(mat.get_col(0));
+        return Vector<TPrecision>(mat.get_col(0));
 
     }
 
 };
 
-template <typename T>
-class DenseConverter<NoFillMatrixSparse, T>
+template <typename TPrecision>
+class DenseConverter<NoFillMatrixSparse, TPrecision>
 {
 public:
 
-    NoFillMatrixSparse<T> convert_matrix(MatrixDense<T> mat) const {
-        return NoFillMatrixSparse<T>(mat);
+    NoFillMatrixSparse<TPrecision> convert_matrix(
+        MatrixDense<TPrecision> mat
+    ) const {
+        return NoFillMatrixSparse<TPrecision>(mat);
     }
 
 };

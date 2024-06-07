@@ -8,8 +8,8 @@ class Benchmark_MP_GMRES_IR_Sparse: public Benchmark_Nested_GMRES {};
 
 TEST_F(Benchmark_MP_GMRES_IR_Sparse, MP_GMRES_IR_RestartCount_BENCHMARK) {
     
-    std::function<void (Benchmark_AccumulatingClock &, NoFillMatrixSparse<double> &)> execute_func = [this] (
-        Benchmark_AccumulatingClock &clock, NoFillMatrixSparse<double> &A
+    std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<double> &)> execute_func = [this] (
+        Benchmark_AccumClock &clock, NoFillMatrixSparse<double> &A
     ) {
 
         Vector<double> x_soln = Vector<double>::Random(BenchmarkBase::bundle, A.rows());
@@ -25,15 +25,16 @@ TEST_F(Benchmark_MP_GMRES_IR_Sparse, MP_GMRES_IR_RestartCount_BENCHMARK) {
     };
 
     benchmark_exec_func<NoFillMatrixSparse, double>(
-        sparse_start, sparse_stop, sparse_incr, make_norm_A, execute_func, "restart_count"
+        sparse_start, sparse_stop, sparse_incr,
+        make_norm_A, execute_func, "restart_count"
     );
 
 }
 
 TEST_F(Benchmark_MP_GMRES_IR_Sparse, MP_GMRES_IR_SimpleConstantThreshold_BENCHMARK) {
     
-    std::function<void (Benchmark_AccumulatingClock &, NoFillMatrixSparse<double> &)> execute_func = [this] (
-        Benchmark_AccumulatingClock &clock, NoFillMatrixSparse<double> &A
+    std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<double> &)> execute_func = [this] (
+        Benchmark_AccumClock &clock, NoFillMatrixSparse<double> &A
     ) {
 
         Vector<double> x_soln = Vector<double>::Random(BenchmarkBase::bundle, A.rows());
@@ -49,7 +50,8 @@ TEST_F(Benchmark_MP_GMRES_IR_Sparse, MP_GMRES_IR_SimpleConstantThreshold_BENCHMA
     };
 
     benchmark_exec_func<NoFillMatrixSparse, double>(
-        sparse_start, sparse_stop, sparse_incr, make_norm_A, execute_func, "simple_constant_threshold"
+        sparse_start, sparse_stop, sparse_incr,
+        make_norm_A, execute_func, "simple_constant_threshold"
     );
 
 }

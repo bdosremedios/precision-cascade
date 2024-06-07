@@ -31,7 +31,9 @@ void passengered_swap(int i, int j, T *arr_1, W *arr_2) {
 }
 
 template <typename T, typename W>
-void in_place_passengered_sort(int beg, int end, T *sorting_arr, W *passenger_arr) {
+void in_place_passengered_sort(
+    int beg, int end, T *sorting_arr, W *passenger_arr
+) {
 
     if (beg < end-1) {
 
@@ -40,7 +42,8 @@ void in_place_passengered_sort(int beg, int end, T *sorting_arr, W *passenger_ar
         );
         T pivot = sorting_arr[pivot_ind];
 
-        passengered_swap(pivot_ind, end-1, sorting_arr, passenger_arr); // Move pivot to end
+        // Move pivot to end
+        passengered_swap(pivot_ind, end-1, sorting_arr, passenger_arr);
         pivot_ind = end-1;
 
         int head = beg;
@@ -48,14 +51,22 @@ void in_place_passengered_sort(int beg, int end, T *sorting_arr, W *passenger_ar
             if (sorting_arr[head] <= pivot) {
                 ++head;
             } else {
-                passengered_swap(head, pivot_ind-1, sorting_arr, passenger_arr);
-                passengered_swap(pivot_ind-1, pivot_ind, sorting_arr, passenger_arr);
+                passengered_swap(
+                    head, pivot_ind-1, sorting_arr, passenger_arr
+                );
+                passengered_swap(
+                    pivot_ind-1, pivot_ind, sorting_arr, passenger_arr
+                );
                 --pivot_ind;
             }
         }
 
-        in_place_passengered_sort(beg, pivot_ind, sorting_arr, passenger_arr);
-        in_place_passengered_sort(pivot_ind+1, end, sorting_arr, passenger_arr);
+        in_place_passengered_sort(
+            beg, pivot_ind, sorting_arr, passenger_arr
+        );
+        in_place_passengered_sort(
+            pivot_ind+1, end, sorting_arr, passenger_arr
+        );
 
     }
 

@@ -42,14 +42,16 @@ Solve_Group::Solve_Group(
         if (valid_solvers.count(solver_id) == 0) {
             throw std::runtime_error(
                 std::format(
-                    "Solve_Group: invalid solver encountered in solvers_to_use \"{}\"",
+                    "Solve_Group: invalid solver encountered in "
+                    "solvers_to_use \"{}\"",
                     solver_id
                 )
             );
         } else if (solvers_seen.count(solver_id) == 1) {
             throw std::runtime_error(
                 std::format(
-                    "Solve_Group: repeated solver encountered in solvers_to_use \"{}\"",
+                    "Solve_Group: repeated solver encountered in "
+                    "solvers_to_use \"{}\"",
                     solver_id
                 )
             );
@@ -59,12 +61,18 @@ Solve_Group::Solve_Group(
     }
     if (!((matrix_type == "dense") || (matrix_type == "sparse"))) {
         throw std::runtime_error(
-            std::format("Solve_Group: invalid matrix_type \"{}\"", matrix_type)
+            std::format(
+                "Solve_Group: invalid matrix_type \"{}\"",
+                matrix_type
+            )
         );
     }
     if (experiment_iterations <= 0) {
         throw std::runtime_error(
-            std::format("Solve_Group: invalid experiment_iterations \"{}\"", experiment_iterations)
+            std::format(
+                "Solve_Group: invalid experiment_iterations \"{}\"",
+                experiment_iterations
+            )
         );
     }
     if (
@@ -72,7 +80,9 @@ Solve_Group::Solve_Group(
         (arg_solver_max_inner_iterations < 0) ||
         (arg_solver_target_relres < 0.)
     ) {
-        throw std::runtime_error("Solve_Group: invalid nested solver arguments");
+        throw std::runtime_error(
+            "Solve_Group: invalid nested solver arguments"
+        );
     }
     if (matrices_to_test.size() == 0) {
         throw std::runtime_error(
@@ -81,7 +91,10 @@ Solve_Group::Solve_Group(
     }
     for (std::string mat_file_name : matrices_to_test) {
         fs::path file_path(mat_file_name);
-        if (!((file_path.extension() == ".mtx") || (file_path.extension() == ".csv"))) {
+        if (
+            !((file_path.extension() == ".mtx") ||
+              (file_path.extension() == ".csv"))
+        ) {
             throw std::runtime_error(
                 std::format(
                     "Solve_Group: invalid matrix in matrices_to_test \"{}\"",
@@ -106,7 +119,9 @@ void Experiment_Clock::start_clock_experiment() {
         start = clock.now();
         clock_ticking = true;
     } else {
-        throw std::runtime_error("Experiment_Clock: start_clock_experiment clock already ticking");
+        throw std::runtime_error(
+            "Experiment_Clock: start_clock_experiment clock already ticking"
+        );
     } 
 }
     
@@ -114,9 +129,13 @@ void Experiment_Clock::stop_clock_experiment() {
     if (clock_ticking) {
         stop = clock.now();
         clock_ticking = false;
-        time_ms = std::chrono::duration_cast<std::chrono::milliseconds>(stop-start);
+        time_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+            stop-start
+        );
     } else {
-        throw std::runtime_error("Experiment_Clock: stop_clock_experiment clock not ticking");
+        throw std::runtime_error(
+            "Experiment_Clock: stop_clock_experiment clock not ticking"
+        );
     }
 }
 

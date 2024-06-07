@@ -3,7 +3,7 @@
 
 #include <chrono>
 
-class Benchmark_AccumulatingClock
+class Benchmark_AccumClock
 {
 private:
 
@@ -19,7 +19,7 @@ private:
 
 public:
 
-    Benchmark_AccumulatingClock() {}
+    Benchmark_AccumClock() {}
 
     void clock_start();
     void clock_stop();

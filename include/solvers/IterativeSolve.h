@@ -13,17 +13,21 @@
 #include <iostream>
 #include <iomanip>
 
-template <template <typename> typename M>
+template <template <typename> typename TMatrix>
 class GenericIterativeSolve
 {
 private:
 
     void check_compatibility() const {
         if (gen_lin_sys_ptr->get_n() != init_guess.rows()) {
-            throw std::runtime_error("GenericIterativeSolve: initial guess not compatible");
+            throw std::runtime_error(
+                "GenericIterativeSolve: initial guess not compatible"
+            );
         }
         if (gen_lin_sys_ptr->get_m() != gen_lin_sys_ptr->get_n()) {
-            throw std::runtime_error("GenericIterativeSolve: A is not square");
+            throw std::runtime_error(
+                "GenericIterativeSolve: A is not square"
+            );
         }
     }
 
@@ -44,7 +48,10 @@ private:
 
         res_norm_history.clear();
         res_costheta_history.clear();
-        curr_res = gen_lin_sys_ptr->get_b()-gen_lin_sys_ptr->get_A()*init_guess;
+        curr_res = (
+            gen_lin_sys_ptr->get_b() -
+            gen_lin_sys_ptr->get_A()*init_guess
+        );
         curr_res_norm = curr_res.norm();
         res_norm_history.push_back(curr_res_norm.get_scalar());
         res_costheta_history.push_back(0.);
@@ -54,23 +61,25 @@ private:
     void update_residual() {
 
         last_res = curr_res;
-        curr_res = gen_lin_sys_ptr->get_b()-gen_lin_sys_ptr->get_A()*generic_soln;
+        curr_res = (
+            gen_lin_sys_ptr->get_b() -
+            gen_lin_sys_ptr->get_A()*generic_soln
+        );
         curr_res_norm = curr_res.norm();
         res_norm_history.push_back(curr_res_norm.get_scalar());
         res_costheta_history.push_back(
-            (last_res.dot(curr_res)/(last_res.norm()*curr_res_norm)).get_scalar()
+            (last_res.dot(curr_res) /
+            (last_res.norm()*curr_res_norm)).get_scalar()
         );
 
     }
     
 protected:
 
-    // *** Const Attributes ***
-    const GenericLinearSystem<M> * const gen_lin_sys_ptr;
+    const GenericLinearSystem<TMatrix> * const gen_lin_sys_ptr;
     const Vector<double> init_guess;
     const double target_rel_res;
 
-    // *** Mutable Attributes ***
     int max_iter; // mutable to allow setting by derived solvers
     int curr_iter;
     bool initiated;
@@ -83,32 +92,35 @@ protected:
     std::vector<double> res_norm_history;
     std::vector<double> res_costheta_history;
 
-    // *** Constructors ***
     GenericIterativeSolve(
-        const GenericLinearSystem<M> * const arg_gen_lin_sys_ptr,
+        const GenericLinearSystem<TMatrix> * const arg_gen_lin_sys_ptr,
         const SolveArgPkg &arg_pkg
     ):
         gen_lin_sys_ptr(arg_gen_lin_sys_ptr),
         init_guess(
-            arg_pkg.check_default_init_guess() ? make_guess(gen_lin_sys_ptr) : arg_pkg.init_guess
+            arg_pkg.check_default_init_guess() ?
+            make_guess(gen_lin_sys_ptr) : arg_pkg.init_guess
         ),
         max_iter(
-            arg_pkg.check_default_max_iter() ? 100 : arg_pkg.max_iter
+            arg_pkg.check_default_max_iter() ?
+            100 : arg_pkg.max_iter
         ),
         target_rel_res(
-            arg_pkg.check_default_target_rel_res() ? 1e-10 : arg_pkg.target_rel_res
+            arg_pkg.check_default_target_rel_res() ?
+            1e-10 : arg_pkg.target_rel_res
         )
     {
-        assert_valid_type<M>();
+        assert_valid_type<TMatrix>();
         check_compatibility();
         set_self_to_initial_state();
     }
-    
-    // *** Abstract Virtual Methods ***
+
     virtual void iterate() = 0;
     virtual void derived_generic_reset() = 0;
 
-    Vector<double> make_guess(const GenericLinearSystem<M> * const arg_gen_lin_sys_ptr) const {
+    Vector<double> make_guess(
+        const GenericLinearSystem<TMatrix> * const arg_gen_lin_sys_ptr
+    ) const {
         return Vector<double>::Ones(
             arg_gen_lin_sys_ptr->get_cu_handles(),
             arg_gen_lin_sys_ptr->get_n()
@@ -116,22 +128,36 @@ protected:
     }
 
     // Forbid rvalue instantiation
-    GenericIterativeSolve(const GenericLinearSystem<M> * const, const SolveArgPkg &&) = delete;
+    GenericIterativeSolve(
+        const GenericLinearSystem<TMatrix> * const,
+        const SolveArgPkg &&
+    ) = delete;
 
     // Disable copy constructor and copy assignment
     GenericIterativeSolve(const GenericIterativeSolve &) = delete;
     GenericIterativeSolve & operator=(GenericIterativeSolve &) = delete;
-    virtual ~GenericIterativeSolve() = default; // Virtual destructor to determine destructors at runtime for
-                                                // correctness in dynamic memory usage
+
+    /* Virtual destructor to determine destructors at runtime for correctness in
+       dynamic memory usage*/
+    virtual ~GenericIterativeSolve() = default;
 
 public:
 
-    // *** Getters ***
-    Vector<double> get_generic_soln() const { return generic_soln; };
-    Vector<double> get_curr_res() const { return curr_res; };
-    double get_relres() const { return curr_res_norm.get_scalar()/res_norm_history[0]; }
-    std::vector<double> get_res_norm_history() const { return res_norm_history; };
-    std::vector<double> get_res_costheta_history() const { return res_costheta_history; };
+    Vector<double> get_generic_soln() const {
+        return generic_soln;
+    };
+    Vector<double> get_curr_res() const {
+        return curr_res;
+    };
+    double get_relres() const { 
+        return curr_res_norm.get_scalar()/res_norm_history[0];
+    }
+    std::vector<double> get_res_norm_history() const {
+        return res_norm_history;
+    };
+    std::vector<double> get_res_costheta_history() const {
+        return res_costheta_history;
+    };
     bool check_initiated() const { return initiated; };
     bool check_converged() const { return converged; };
     bool check_terminated() const { return terminated; };
@@ -141,12 +167,19 @@ public:
     void solve() {
 
         if (initiated) {
-            throw std::runtime_error("Can not safely call solve without after a initiation without reset");
+            throw std::runtime_error(
+                "Can not safely call solve without after a initiation without "
+                "reset"
+            );
         }
         initiated = true;
-        initialize_instantiate_residual(); // Set res_hist size here since max_iter is mutable before solve
+        // Set res_hist size here since max_iter is mutable before solve
+        initialize_instantiate_residual();
 
-        while (!converged && ((curr_iter < max_iter) && (get_relres() > target_rel_res))) {
+        while (
+            !converged &&
+            ((curr_iter < max_iter) && (get_relres() > target_rel_res))
+        ) {
             ++curr_iter;
             iterate();
             update_residual();
@@ -157,7 +190,8 @@ public:
         converged = (
             (get_relres() <= target_rel_res) ||
             ((curr_iter == 0) &&
-             ((curr_res.norm()/gen_lin_sys_ptr->get_b().norm()).get_scalar() <= target_rel_res))
+             ((curr_res.norm() /
+               gen_lin_sys_ptr->get_b().norm()).get_scalar() <= target_rel_res))
         );
 
     }
@@ -219,7 +253,9 @@ public:
         }
 
         double bucket_width = (max_-min_)/static_cast<double>(height);
-        for (double i=1; i<height; ++i) { bucket_ends.push_back(i*bucket_width+min_); }
+        for (double i=1; i<height; ++i) {
+            bucket_ends.push_back(i*bucket_width + min_);
+        }
         bucket_ends.push_back(max_);
         for (double y: plot_y) {
             for (int i=0; i<height; ++i) {
@@ -238,7 +274,8 @@ public:
         } else {
             std::cout << std::setprecision(3) << max_;
         };
-        std::cout << " " << std::string(std::max(min_length, length-1), '-') << std::endl;
+        std::cout << " " << std::string(std::max(min_length, length-1), '-')
+                  << std::endl;
         for (int i=height-1; i>=0; --i) {
             for (int j=-1; j<length; ++j) {
                 if ((j >= 0) && (plot_y_bucket_index[j] == i)) {
@@ -254,7 +291,8 @@ public:
         } else {
             std::cout << std::setprecision(3) << min_;
         };
-        std::cout << " " << std::string(std::max(min_length, length-4), '-') << std::endl;
+        std::cout << " " << std::string(std::max(min_length, length-4), '-')
+                  << std::endl;
         std::cout << "Iter: 0" << std::string(std::max(min_length, length-10), ' ')
                   << "Iter: " << curr_iter << std::endl;
 
@@ -262,8 +300,8 @@ public:
 
 };
 
-template <template <typename> typename M, typename T>
-class TypedIterativeSolve: public GenericIterativeSolve<M>
+template <template <typename> typename TMatrix, typename TPrecision>
+class TypedIterativeSolve: public GenericIterativeSolve<TMatrix>
 {
 private:
 
@@ -273,20 +311,16 @@ private:
     
 protected:
 
-    // *** Const Attributes ***
-    const TypedLinearSystem_Intf<M, T> * const typed_lin_sys_ptr;
-    const Vector<T> init_guess_typed;
+    const TypedLinearSystem_Intf<TMatrix, TPrecision> * const typed_lin_sys_ptr;
+    const Vector<TPrecision> init_guess_typed;
 
-    // *** Mutable Attributes ***
-    Vector<T> typed_soln = Vector<T>(cuHandleBundle());
+    Vector<TPrecision> typed_soln = Vector<TPrecision>(cuHandleBundle());
 
-    // *** Virtual Abstract Methods ***
     virtual void typed_iterate() = 0;
     virtual void derived_typed_reset() = 0;
 
-    // *** Helper Methods ***
-
-    // Perform iteration updating typed_soln and then using that to update generic_soln()
+    // Perform iteration updating typed_soln and then using that to
+    // update generic_soln()
     void iterate() override {
         typed_iterate();
         update_generic_soln();
@@ -300,28 +334,34 @@ protected:
 
 public:
 
-    // *** Constructors ***
     TypedIterativeSolve(
-        const TypedLinearSystem_Intf<M, T> * const arg_typed_lin_sys_ptr,
+        const TypedLinearSystem_Intf<TMatrix, TPrecision> * const arg_typed_lin_sys_ptr,
         const SolveArgPkg &arg_pkg
     ): 
         typed_lin_sys_ptr(arg_typed_lin_sys_ptr),
         init_guess_typed(
             (arg_pkg.check_default_init_guess()) ? 
-                this->make_guess(arg_typed_lin_sys_ptr->get_gen_lin_sys_ptr()).template cast<T>() :
-                arg_pkg.init_guess.template cast<T>()
+                this->make_guess(
+                    arg_typed_lin_sys_ptr->get_gen_lin_sys_ptr()
+                ).template cast<TPrecision>() :
+                arg_pkg.init_guess.template cast<TPrecision>()
         ),
-        GenericIterativeSolve<M>(arg_typed_lin_sys_ptr->get_gen_lin_sys_ptr(), arg_pkg)
+        GenericIterativeSolve<TMatrix>(
+            arg_typed_lin_sys_ptr->get_gen_lin_sys_ptr(),
+            arg_pkg
+        )
     {
         typed_soln = init_guess_typed;
         update_generic_soln();
     }
 
     // Forbid rvalue instantiation
-    TypedIterativeSolve(const TypedLinearSystem_Intf<M, T> * const, const SolveArgPkg &&) = delete;
+    TypedIterativeSolve(
+        const TypedLinearSystem_Intf<TMatrix, TPrecision> * const,
+        const SolveArgPkg &&
+    ) = delete;
 
-    // *** Getters ***
-    Vector<T> get_typed_soln() const { return typed_soln; };
+    Vector<TPrecision> get_typed_soln() const { return typed_soln; };
 
 };
 

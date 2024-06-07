@@ -9,22 +9,22 @@
 namespace heap
 {
 
-template <typename T>
+template <typename TPrecision>
 struct ColValInfo
 {
 public:
 
-    T abs_val;
-    T orig_val;
+    TPrecision abs_val;
+    TPrecision orig_val;
     int row;
 
     ColValInfo() {
-        abs_val = static_cast<T>(-1);
-        orig_val = static_cast<T>(-1);
+        abs_val = static_cast<TPrecision>(-1);
+        orig_val = static_cast<TPrecision>(-1);
         row = -1;
     }
 
-    ColValInfo(T arg_val, int arg_row) {
+    ColValInfo(TPrecision arg_val, int arg_row) {
         abs_val = abs_ns::abs(arg_val);
         orig_val = arg_val;
         row = arg_row;
@@ -60,7 +60,7 @@ public:
 
 };
 
-template <typename T>
+template <typename TPrecision>
 class PSizeHeap
 {
 private:
@@ -74,12 +74,12 @@ private:
     }
 
     void heap_swap(int i, int j) {
-        ColValInfo<T> temp = heap[i];
+        ColValInfo<TPrecision> temp = heap[i];
         heap[i] = heap[j];
         heap[j] = temp;
     }
 
-    void no_replace_push(ColValInfo<T> new_val) {
+    void no_replace_push(ColValInfo<TPrecision> new_val) {
 
         heap[count] = new_val;
 
@@ -93,7 +93,7 @@ private:
 
     }
 
-    void replace_min_push(ColValInfo<T> new_val) {
+    void replace_min_push(ColValInfo<TPrecision> new_val) {
 
         heap[0] = new_val;
 
@@ -102,7 +102,10 @@ private:
         while (child_ind_L < p) {
 
             int min_child = child_ind_L;
-            if (((child_ind_L+1) < p) && (heap[child_ind_L] > heap[child_ind_L+1])) {
+            if (
+                ((child_ind_L+1) < p) &&
+                (heap[child_ind_L] > heap[child_ind_L+1])
+            ) {
                 min_child = child_ind_L+1;
             }
 
@@ -122,16 +125,20 @@ public:
 
     const int p;
     int count = 0;
-    std::vector<ColValInfo<T>> heap;
+    std::vector<ColValInfo<TPrecision>> heap;
 
-    PSizeHeap(int arg_p): p(arg_p) {
-        if (p < 0) { throw std::runtime_error("PSizeHeap: invalid row size"); }
+    PSizeHeap(int arg_p):
+        p(arg_p)
+    {
+        if (p < 0) {
+            throw std::runtime_error("PSizeHeap: invalid row size");
+        }
         heap.resize(p);
     }
 
-    void push(T val, int row) {
+    void push(TPrecision val, int row) {
         if (p > 0) {
-            ColValInfo<T> new_val(val, row);
+            ColValInfo<TPrecision> new_val(val, row);
             if (count < p) {
                 no_replace_push(new_val);
                 count++;

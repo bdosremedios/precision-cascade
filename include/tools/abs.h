@@ -8,9 +8,11 @@
 namespace abs_ns
 {
 
-    template <typename T>
-    T abs(const T &val) {
-        throw std::runtime_error("abs: reached umimplimented default function");
+    template <typename TPrecision>
+    TPrecision abs(const TPrecision &val) {
+        throw std::runtime_error(
+            "abs: reached umimplimented default function"
+        );
     }
 
     template <> double abs(const double &);

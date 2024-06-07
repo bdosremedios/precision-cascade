@@ -1,8 +1,8 @@
-#include <map>
-
 #include "test_experiment.h"
 
 #include "experiment_run.h"
+
+#include <map>
 
 class TestRun: public TestExperimentBase
 {
@@ -33,12 +33,25 @@ private:
         std::string type_str = get_type_str(solver_id);
         std::string mat_type_str = get_mat_type_str(mat_type_id);
 
-        if ((solver_id == "FP16") || (solver_id == "FP32") || (solver_id == "FP64")) {
-            return std::format("class FP_GMRES_IR_Solve<{},{}>", mat_type_str, type_str);
+        if (
+            (solver_id == "FP16") ||
+            (solver_id == "FP32") ||
+            (solver_id == "FP64")
+        ) {
+            return std::format(
+                "class FP_GMRES_IR_Solve<{},{}>",
+                mat_type_str, type_str
+            );
         } else if (solver_id == "SimpleConstantThreshold") {
-            return std::format("class SimpleConstantThreshold<{}>", mat_type_str);
+            return std::format(
+                "class SimpleConstantThreshold<{}>",
+                mat_type_str
+            );
         } else if (solver_id == "RestartCount") {
-            return std::format("class RestartCount<{}>", mat_type_str);
+            return std::format(
+                "class RestartCount<{}>",
+                mat_type_str
+            );
         } else {
             throw std::runtime_error("get_solver_str: no matching solver_id");
         }
@@ -46,36 +59,60 @@ private:
     }
 
     std::string get_left_precond(
-        std::string mat_type_id, std::string solver_id, Solve_Group_Precond_Specs precond_specs
+        std::string mat_type_id,
+        std::string solver_id,
+        Solve_Group_Precond_Specs precond_specs
     ) {
 
         std::string type_str = get_type_str(solver_id);
         std::string mat_type_str = get_mat_type_str(mat_type_id);
 
         if (precond_specs.name == "none") {
-            return std::format("class NoPreconditioner<{},{}>", mat_type_str, type_str);
+            return std::format(
+                "class NoPreconditioner<{},{}>",
+                mat_type_str, type_str
+            );
         } else if (precond_specs.name == "jacobi") {
             if ((solver_id == "FP16") || (solver_id == "FP32")) {
-                return std::format("class MatrixInversePreconditioner<{},{}>", mat_type_str, type_str);
+                return std::format(
+                    "class MatrixInversePreconditioner<{},{}>",
+                    mat_type_str, type_str
+                );
             } else {
-                return std::format("class JacobiPreconditioner<{},{}>", mat_type_str, type_str);
+                return std::format(
+                    "class JacobiPreconditioner<{},{}>",
+                    mat_type_str, type_str
+                );
             }
-        } else if ((precond_specs.name == "ilu0") || (precond_specs.name == "ilutp")) {
-            return std::format("class ILUPreconditioner<{},{}>", mat_type_str, type_str);
+        } else if (
+            (precond_specs.name == "ilu0") ||
+            (precond_specs.name == "ilutp")
+        ) {
+            return std::format(
+                "class ILUPreconditioner<{},{}>",
+                mat_type_str, type_str
+            );
         } else {
-            throw std::runtime_error("get_left_precond: no matching precond_specs");
+            throw std::runtime_error(
+                "get_left_precond: no matching precond_specs"
+            );
         }
 
     }
 
     std::string get_right_precond(
-        std::string mat_type_id, std::string solver_id, Solve_Group_Precond_Specs precond_specs
+        std::string mat_type_id,
+        std::string solver_id,
+        Solve_Group_Precond_Specs precond_specs
     ) {
 
         std::string type_str = get_type_str(solver_id);
         std::string mat_type_str = get_mat_type_str(mat_type_id);
         
-        return std::format("class NoPreconditioner<{},{}>", mat_type_str, type_str);
+        return std::format(
+            "class NoPreconditioner<{},{}>",
+            mat_type_str, type_str
+        );
 
     }
 
@@ -116,7 +153,10 @@ public:
         ASSERT_EQ(pair.first.get_A().cols(), target_A.cols());
         for (int j=0; j<target_A.cols(); ++j) {
             for (int i=0; i<target_A.rows(); ++i) {
-                ASSERT_EQ(pair.first.get_A().get_elem(i, j), target_A.get_elem(i, j));
+                ASSERT_EQ(
+                    pair.first.get_A().get_elem(i, j),
+                    target_A.get_elem(i, j)
+                );
             }
         }
 
@@ -132,7 +172,11 @@ public:
     void Test_Run_Solve_Group(Solve_Group solve_group) {
 
         run_solve_group<M>(
-            *TestExperimentBase::cu_handles_ptr, solve_group, test_data_dir, test_output_dir, logger
+            *TestExperimentBase::cu_handles_ptr,
+            solve_group,
+            test_data_dir,
+            test_output_dir,
+            logger
         );
 
         fs::path solve_group_dir(test_output_dir / fs::path(solve_group.id));
@@ -140,7 +184,11 @@ public:
         // Test that the right thing was run in each case
         for (std::string matrix_str : solve_group.matrices_to_test) {
             for (std::string solver_id : solve_group.solvers_to_use) {
-                for (int exp_iter=0; exp_iter<solve_group.experiment_iterations; ++exp_iter) {
+                for (
+                    int exp_iter=0;
+                    exp_iter<solve_group.experiment_iterations;
+                    ++exp_iter
+                ) {
 
                     std::string experiment_id(
                         std::format(
@@ -151,11 +199,16 @@ public:
                             exp_iter
                         )
                     );
-                    fs::path file_path = solve_group_dir / fs::path(experiment_id+".json");
+                    fs::path file_path = (
+                        solve_group_dir /
+                        fs::path(experiment_id+".json")
+                    );
                     std::ifstream file_in(file_path);
 
                     if (!(file_in.is_open())) {
-                        throw std::runtime_error("Failed to read "+file_path.string());
+                        throw std::runtime_error(
+                            "Failed to read "+file_path.string()
+                        );
                     }
 
                     json loaded_file = json::parse(file_in);
@@ -168,13 +221,17 @@ public:
                     ASSERT_EQ(
                         loaded_file["precond_left"],
                         get_left_precond(
-                            solve_group.matrix_type, solver_id, solve_group.precond_specs
+                            solve_group.matrix_type,
+                            solver_id,
+                            solve_group.precond_specs
                         )
                     );
                     ASSERT_EQ(
                         loaded_file["precond_right"],
                         get_right_precond(
-                            solve_group.matrix_type, solver_id, solve_group.precond_specs
+                            solve_group.matrix_type,
+                            solver_id,
+                            solve_group.precond_specs
                         )
                     );
                     ASSERT_EQ(
@@ -195,7 +252,11 @@ public:
     void Test_Run_Experiment_Specification(Experiment_Specification exp_spec) {
 
         run_experimental_spec(
-            *TestExperimentBase::cu_handles_ptr, exp_spec, test_data_dir, test_output_dir, logger
+            *TestExperimentBase::cu_handles_ptr,
+            exp_spec,
+            test_data_dir,
+            test_output_dir,
+            logger
         );
 
     }
@@ -216,7 +277,9 @@ TEST_F(TestRun, Test_AllSolvers_Run_Solve_Group) {
 
     Solve_Group solve_group_dense(
         "allsolvers_dense",
-        std::vector<std::string>({"FP16", "FP32", "FP64", "SimpleConstantThreshold", "RestartCount"}),
+        std::vector<std::string>(
+            {"FP16", "FP32", "FP64", "SimpleConstantThreshold", "RestartCount"}
+        ),
         "dense", 3, 10, 4, 1e-4,
         Solve_Group_Precond_Specs("none"),
         std::vector<std::string>({"easy_4_4.csv", "easy_5_5.csv"})
@@ -226,7 +289,9 @@ TEST_F(TestRun, Test_AllSolvers_Run_Solve_Group) {
 
     Solve_Group solve_group_sparse(
         "allsolvers_sparse",
-        std::vector<std::string>({"FP16", "FP32", "FP64", "SimpleConstantThreshold", "RestartCount"}),
+        std::vector<std::string>(
+            {"FP16", "FP32", "FP64", "SimpleConstantThreshold", "RestartCount"}
+        ),
         "sparse", 3, 10, 4, 1e-4,
         Solve_Group_Precond_Specs("none"),
         std::vector<std::string>({"easy_4_4.csv", "easy_5_5.csv"})

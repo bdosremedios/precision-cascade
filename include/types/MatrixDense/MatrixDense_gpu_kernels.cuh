@@ -7,17 +7,25 @@
 namespace matrixdense_kernels
 {
 
-    template <typename T>
-    __global__ void upptri_blk_solve_warp(const T *U, int m_rows, int diag_offset, T *x_soln);
+    template <typename TPrecision>
+    __global__ void upptri_blk_solve_warp(
+        const TPrecision *U, int m_rows, int diag_offset, TPrecision *x_soln
+    );
 
-    template <typename T>
-    __global__ void upptri_rect_update_warp(const T *U, int m_rows, int diag_offset, T *x_soln);
+    template <typename TPrecision>
+    __global__ void upptri_rect_update_warp(
+        const TPrecision *U, int m_rows, int diag_offset, TPrecision *x_soln
+    );
 
-    template <typename T>
-    __global__ void lowtri_blk_solve_warp(const T *L, int m_rows, int diag_offset, T *x_soln);
+    template <typename TPrecision>
+    __global__ void lowtri_blk_solve_warp(
+        const TPrecision *L, int m_rows, int diag_offset, TPrecision *x_soln
+    );
 
-    template <typename T>
-    __global__ void lowtri_rect_update_warp(const T *L, int m_rows, int diag_offset, T *x_soln);
+    template <typename TPrecision>
+    __global__ void lowtri_rect_update_warp(
+        const TPrecision *L, int m_rows, int diag_offset, TPrecision *x_soln
+    );
 
 }
 

@@ -22,22 +22,22 @@
 #include <string>
 #include <format>
 
-template <typename T>
+template <typename TPrecision>
 class MatrixDense
 {
 private:
 
     template <typename> friend class MatrixDense;
-    friend class Vector<T>;
-    friend class NoFillMatrixSparse<T>;
+    friend class Vector<TPrecision>;
+    friend class NoFillMatrixSparse<TPrecision>;
 
     cuHandleBundle cu_handles;
     int m_rows = 0;
     int n_cols = 0;
-    T *d_mat = nullptr;
+    TPrecision *d_mat = nullptr;
 
     size_t mem_size() const {
-        return m_rows*n_cols*sizeof(T);
+        return m_rows*n_cols*sizeof(TPrecision);
     }
 
     void allocate_d_mat() {
@@ -52,7 +52,6 @@ public:
 
     class Block; class Col; // Forward declaration of nested classes
 
-    // *** Basic Constructors ***
     MatrixDense(
         const cuHandleBundle &arg_cu_handles,
         int arg_m_rows,
@@ -78,12 +77,14 @@ public:
 
     }
 
-    MatrixDense(const cuHandleBundle &arg_cu_handles): MatrixDense(arg_cu_handles, 0, 0) {}
+    MatrixDense(const cuHandleBundle &arg_cu_handles):
+        MatrixDense(arg_cu_handles, 0, 0)
+    {}
 
-    // Row-major nested initializer list assumed for intuitive user instantiation
+    // Row-major nested initializer list assumed for intuitive user use
     MatrixDense(
         const cuHandleBundle &arg_cu_handles,
-        std::initializer_list<std::initializer_list<T>> li
+        std::initializer_list<std::initializer_list<TPrecision>> li
     ):
         MatrixDense(
             arg_cu_handles,
@@ -94,25 +95,31 @@ public:
 
         struct outer_vars {
             int i;
-            typename std::initializer_list<std::initializer_list<T>>::const_iterator curr_row;
+            typename std::initializer_list<std::initializer_list<TPrecision>>::const_iterator curr_row;
         };
         struct inner_vars {
             int j;
-            typename std::initializer_list<T>::const_iterator curr_elem;
+            typename std::initializer_list<TPrecision>::const_iterator curr_elem;
         };
 
-        T *h_mat = static_cast<T *>(malloc(mem_size()));
+        TPrecision *h_mat = static_cast<TPrecision *>(malloc(mem_size()));
 
         outer_vars outer = {0, std::cbegin(li)};
         for (; outer.curr_row != std::cend(li); ++outer.curr_row, ++outer.i) {
 
             if (outer.curr_row->size() != n_cols) {
                 free(h_mat);
-                throw(std::runtime_error("MatrixDense: initializer list has non-consistent row size"));
+                throw std::runtime_error(
+                    "MatrixDense: initializer list has non-consistent row size"
+                );
             }
 
             inner_vars inner = {0, std::cbegin(*outer.curr_row)};
-            for (; inner.curr_elem != std::cend(*outer.curr_row); ++inner.curr_elem, ++inner.j) {
+            for (
+                ;
+                inner.curr_elem != std::cend(*outer.curr_row);
+                ++inner.curr_elem, ++inner.j
+            ) {
                 h_mat[outer.i+inner.j*m_rows] = *inner.curr_elem;
             }
 
@@ -120,7 +127,8 @@ public:
 
         if ((m_rows != 0) && (n_cols != 0)) {
             check_cublas_status(cublasSetMatrix(
-                m_rows, n_cols, sizeof(T), h_mat, m_rows, d_mat, m_rows
+                m_rows, n_cols, sizeof(TPrecision),
+                h_mat, m_rows, d_mat, m_rows
             ));
         }
 
@@ -128,18 +136,15 @@ public:
 
     }
 
-    // *** Copy Constructor ***
-    MatrixDense(const MatrixDense<T> &other) {
+    MatrixDense(const MatrixDense<TPrecision> &other) {
         *this = other;
     }
 
-    // *** Destructor ***
     ~MatrixDense() {
         check_cuda_error(cudaFree(d_mat));
     }
 
-    // *** Copy Assignment ***
-    MatrixDense<T> & operator=(const MatrixDense &other) {
+    MatrixDense<TPrecision> & operator=(const MatrixDense &other) {
 
         if (this != &other) {
 
@@ -154,7 +159,10 @@ public:
 
             if ((m_rows > 0) && (n_cols > 0)) {
                 check_cuda_error(cudaMemcpy(
-                    d_mat, other.d_mat, mem_size(), cudaMemcpyDeviceToDevice
+                    d_mat,
+                    other.d_mat,
+                    mem_size(),
+                    cudaMemcpyDeviceToDevice
                 ));
             }
 
@@ -164,10 +172,11 @@ public:
 
     }
 
-    // *** Dynamic Memory *** (assumes outer code handles dynamic memory properly)
+    /* Dynamic Memory Constructor (assumes outer code handles dynamic memory
+       properly) */
     MatrixDense(
         const cuHandleBundle &source_cu_handles,
-        T *h_mat,
+        TPrecision *h_mat,
         int source_m_rows,
         int source_n_cols
     ):
@@ -179,80 +188,100 @@ public:
     {
         if ((m_rows > 0) && (n_cols > 0)) {
             check_cublas_status(cublasSetMatrix(
-                m_rows, n_cols, sizeof(T), h_mat, m_rows, d_mat, m_rows
+                m_rows, n_cols, sizeof(TPrecision),
+                h_mat, m_rows, d_mat, m_rows
             ));
         }
     }
 
     void copy_data_to_ptr(
-        T *h_mat,
+        TPrecision *h_mat,
         int target_m_rows,
         int target_n_cols
     ) const {
 
         if (target_m_rows != m_rows) {
-            throw std::runtime_error("MatrixDense: invalid target_m_rows dim for copy_data_to_ptr");
+            throw std::runtime_error(
+                "MatrixDense: invalid target_m_rows dim for copy_data_to_ptr"
+            );
         }
         if (target_n_cols != n_cols) {
-            throw std::runtime_error("MatrixDense: invalid target_n_cols dim for copy_data_to_ptr");
+            throw std::runtime_error(
+                "MatrixDense: invalid target_n_cols dim for copy_data_to_ptr"
+            );
         }
 
         if ((m_rows > 0) && (n_cols > 0)) {
             check_cublas_status(cublasGetMatrix(
-                m_rows, n_cols, sizeof(T), d_mat, m_rows, h_mat, m_rows
+                m_rows, n_cols, sizeof(TPrecision),
+                d_mat, m_rows, h_mat, m_rows
             ));
         }
 
     }
 
-    // *** Conversion Constructor ***
-    MatrixDense(const NoFillMatrixSparse<T> &sparse_mat):
+    MatrixDense(const NoFillMatrixSparse<TPrecision> &sparse_mat):
         MatrixDense(sparse_mat.get_cu_handles())
     {
         if ((sparse_mat.rows() > 0) && (sparse_mat.cols() > 0)) {
             *this = MatrixDense(
-                sparse_mat.get_block(0, 0, sparse_mat.rows(), sparse_mat.cols()).copy_to_mat()
+                sparse_mat.get_block(
+                    0, 0, sparse_mat.rows(), sparse_mat.cols()
+                ).copy_to_mat()
             );
         }
     }
 
-    MatrixDense(const MatrixDense<T>::Block &block) {
+    MatrixDense(const MatrixDense<TPrecision>::Block &block) {
         *this = block.copy_to_mat();
     }
 
-    MatrixDense(const typename NoFillMatrixSparse<T>::Block &block) {
+    MatrixDense(const typename NoFillMatrixSparse<TPrecision>::Block &block) {
         *this = block.copy_to_mat();
     }
 
-    // *** Element Access ***
-    const Scalar<T> get_elem(int row, int col) const {
+    const Scalar<TPrecision> get_elem(int row, int col) const {
 
         if ((row < 0) || (row >= m_rows)) {
-            throw std::runtime_error("MatrixDense: invalid row access in get_elem");
+            throw std::runtime_error(
+                "MatrixDense: invalid row access in get_elem"
+            );
         }
         if ((col < 0) || (col >= n_cols)) {
-            throw std::runtime_error("MatrixDense: invalid col access in get_elem");
+            throw std::runtime_error(
+                "MatrixDense: invalid col access in get_elem"
+            );
         }
 
-        Scalar<T> elem;
+        Scalar<TPrecision> elem;
         check_cuda_error(cudaMemcpy(
-            elem.d_scalar, d_mat+row+(col*m_rows), sizeof(T), cudaMemcpyDeviceToDevice
+            elem.d_scalar,
+            d_mat+row+(col*m_rows),
+            sizeof(TPrecision),
+            cudaMemcpyDeviceToDevice
         ));
         return elem;
 
     }
 
-    void set_elem(int row, int col, Scalar<T> val) {
+    void set_elem(int row, int col, Scalar<TPrecision> val) {
 
         if ((row < 0) || (row >= m_rows)) {
-            throw std::runtime_error("MatrixDense: invalid row access in set_elem");
+            throw std::runtime_error(
+                "MatrixDense: invalid row access in set_elem"
+            );
         }
         if ((col < 0) || (col >= n_cols)) {
-            throw std::runtime_error("MatrixDense: invalid col access in set_elem");
+            throw std::runtime_error(
+                "MatrixDense: invalid col access in set_elem"
+            );
         }
 
         check_cuda_error(cudaMemcpy(
-            d_mat+row+(col*m_rows), val.d_scalar, sizeof(T), cudaMemcpyDeviceToDevice
+            d_mat+row+(col*m_rows),
+            val.d_scalar,
+            sizeof(TPrecision),
+            cudaMemcpyDeviceToDevice
         ));
 
     }
@@ -260,45 +289,56 @@ public:
     Col get_col(int col) const {
 
         if ((col < 0) || (col >= n_cols)) {
-            throw std::runtime_error("MatrixDense: invalid col access in get_col");
+            throw std::runtime_error(
+                "MatrixDense: invalid col access in get_col"
+            );
         }
 
         return Col(this, col);
 
     }
  
-    Block get_block(int start_row, int start_col, int block_rows, int block_cols) const {
+    Block get_block(
+        int start_row, int start_col, int block_rows, int block_cols
+    ) const {
 
         if ((start_row < 0) || (start_row >= m_rows)) {
-            throw std::runtime_error("MatrixDense: invalid starting row in block");
+            throw std::runtime_error(
+                "MatrixDense: invalid starting row in block"
+            );
         }
         if ((start_col < 0) || (start_col >= n_cols)) {
-            throw std::runtime_error("MatrixDense: invalid starting col in block");
+            throw std::runtime_error(
+                "MatrixDense: invalid starting col in block"
+            );
         }
         if ((block_rows < 0) || (start_row+block_rows > m_rows)) {
-            throw std::runtime_error("MatrixDense: invalid number of rows in block");
+            throw std::runtime_error(
+                "MatrixDense: invalid number of rows in block"
+            );
         }
         if ((block_cols < 0) || (start_col+block_cols > n_cols)) {
-            throw std::runtime_error("MatrixDense: invalid number of cols in block");
+            throw std::runtime_error(
+                "MatrixDense: invalid number of cols in block"
+            );
         }
 
         return Block(this, start_row, start_col, block_rows, block_cols);
 
     }
 
-    // *** Properties ***
     cuHandleBundle get_cu_handles() const { return cu_handles; }
     int rows() const { return m_rows; }
     int cols() const { return n_cols; }
     int non_zeros() const {
         
-        T *h_mat = static_cast<T *>(malloc(mem_size()));
+        TPrecision *h_mat = static_cast<TPrecision *>(malloc(mem_size()));
         copy_data_to_ptr(h_mat, m_rows, n_cols);
 
         int nnz = 0;
         for (int i=0; i<m_rows; ++i) {
             for (int j=0; j<n_cols; ++j) {
-                if (h_mat[i+j*m_rows] != static_cast<T>(0.)) {
+                if (h_mat[i+j*m_rows] != static_cast<TPrecision>(0.)) {
                     nnz++;
                 }
             }
@@ -311,21 +351,29 @@ public:
 
     std::string get_matrix_string() const {
 
-        T *h_mat = static_cast<T *>(malloc(mem_size()));
+        TPrecision *h_mat = static_cast<TPrecision *>(malloc(mem_size()));
 
         copy_data_to_ptr(h_mat, m_rows, n_cols);
 
         std::string acc;
         for (int i=0; i<m_rows-1; ++i) {
             for (int j=0; j<n_cols-1; ++j) {
-                acc += std::format("{:.8g} ", static_cast<double>(h_mat[i+j*m_rows]));
+                acc += std::format(
+                    "{:.8g} ", static_cast<double>(h_mat[i+j*m_rows])
+                );
             }
-            acc += std::format("{:.8g}\n", static_cast<double>(h_mat[i+(n_cols-1)*m_rows]));
+            acc += std::format(
+                "{:.8g}\n", static_cast<double>(h_mat[i+(n_cols-1)*m_rows])
+            );
         }
         for (int j=0; j<n_cols-1; ++j) {
-            acc += std::format("{:.8g} ", static_cast<double>(h_mat[(m_rows-1)+j*m_rows]));
+            acc += std::format(
+                "{:.8g} ", static_cast<double>(h_mat[(m_rows-1)+j*m_rows])
+            );
         }
-        acc += std::format("{:.6g}", static_cast<double>(h_mat[(m_rows-1)+(n_cols-1)*m_rows]));
+        acc += std::format(
+            "{:.6g}", static_cast<double>(h_mat[(m_rows-1)+(n_cols-1)*m_rows])
+        );
 
         free(h_mat);
 
@@ -336,26 +384,35 @@ public:
     std::string get_info_string() const {
         int non_zeros_count = non_zeros();
         return std::format(
-            "Rows: {} | Cols: {} | Non-zeroes: {} | Fill ratio: {:.3g} | Max magnitude: {:.3g}",
+            "Rows: {} | Cols: {} | Non-zeroes: {} | Fill ratio: {:.3g} | "
+            "Max magnitude: {:.3g}",
             m_rows,
             n_cols,
             non_zeros_count,
-            static_cast<double>(non_zeros_count)/static_cast<double>(rows()*cols()),
+            static_cast<double>(non_zeros_count) /
+            static_cast<double>(rows()*cols()),
             static_cast<double>(get_max_mag_elem().get_scalar())
         );
     }
 
-    // *** Static Creation ***
-    static MatrixDense<T> Zero(const cuHandleBundle &arg_cu_handles, int arg_m, int arg_n) {
+    // Static Matrix Creation
+    static MatrixDense<TPrecision> Zero(
+        const cuHandleBundle &arg_cu_handles, int arg_m, int arg_n
+    ) {
 
-        T *h_mat = static_cast<T *>(malloc(arg_m*arg_n*sizeof(T)));
+        TPrecision *h_mat = static_cast<TPrecision *>(
+            malloc(arg_m*arg_n*sizeof(TPrecision))
+        );
         
         for (int j=0; j<arg_n; ++j) {
             for (int i=0; i<arg_m; ++i) {
-                h_mat[i+j*arg_m] = static_cast<T>(0); 
+                h_mat[i+j*arg_m] = static_cast<TPrecision>(0); 
             }
         }
-        MatrixDense<T> created_mat(arg_cu_handles, h_mat, arg_m, arg_n);
+
+        MatrixDense<TPrecision> created_mat(
+            arg_cu_handles, h_mat, arg_m, arg_n
+        );
 
         free(h_mat);
 
@@ -363,16 +420,22 @@ public:
 
     }
 
-    static MatrixDense<T> Ones(const cuHandleBundle &arg_cu_handles, int arg_m, int arg_n) {
+    static MatrixDense<TPrecision> Ones(
+        const cuHandleBundle &arg_cu_handles, int arg_m, int arg_n
+    ) {
 
-        T *h_mat = static_cast<T *>(malloc(arg_m*arg_n*sizeof(T)));
+        TPrecision *h_mat = static_cast<TPrecision *>(
+            malloc(arg_m*arg_n*sizeof(TPrecision))
+        );
         
         for (int j=0; j<arg_n; ++j) {
             for (int i=0; i<arg_m; ++i) {
-                h_mat[i+j*arg_m] = static_cast<T>(1); 
+                h_mat[i+j*arg_m] = static_cast<TPrecision>(1); 
             }
         }
-        MatrixDense<T> created_mat(arg_cu_handles, h_mat, arg_m, arg_n);
+        MatrixDense<TPrecision> created_mat(
+            arg_cu_handles, h_mat, arg_m, arg_n
+        );
 
         free(h_mat);
 
@@ -380,20 +443,26 @@ public:
     
     }
 
-    static MatrixDense<T> Identity(const cuHandleBundle &arg_cu_handles, int arg_m, int arg_n) {
+    static MatrixDense<TPrecision> Identity(
+        const cuHandleBundle &arg_cu_handles, int arg_m, int arg_n
+    ) {
 
-        T *h_mat = static_cast<T *>(malloc(arg_m*arg_n*sizeof(T)));
+        TPrecision *h_mat = static_cast<TPrecision *>(
+            malloc(arg_m*arg_n*sizeof(TPrecision))
+        );
         
         for (int j=0; j<arg_n; ++j) {
             for (int i=0; i<arg_m; ++i) {
                 if (i == j) {
-                    h_mat[i+j*arg_m] = static_cast<T>(1);
+                    h_mat[i+j*arg_m] = static_cast<TPrecision>(1);
                 } else {
-                    h_mat[i+j*arg_m] = static_cast<T>(0);
+                    h_mat[i+j*arg_m] = static_cast<TPrecision>(0);
                 }
             }
         }
-        MatrixDense<T> created_mat(arg_cu_handles, h_mat, arg_m, arg_n);
+        MatrixDense<TPrecision> created_mat(
+            arg_cu_handles, h_mat, arg_m, arg_n
+        );
 
         free(h_mat);
 
@@ -402,20 +471,26 @@ public:
     }
 
     // Needed for testing (don't need to optimize performance)
-    static MatrixDense<T> Random(const cuHandleBundle &arg_cu_handles, int arg_m, int arg_n) {
+    static MatrixDense<TPrecision> Random(
+        const cuHandleBundle &arg_cu_handles, int arg_m, int arg_n
+    ) {
 
         std::random_device rd;
         std::mt19937 gen(rd());
         std::uniform_real_distribution<double> dist(-1., 1.);
 
-        T *h_mat = static_cast<T *>(malloc(arg_m*arg_n*sizeof(T)));
+        TPrecision *h_mat = static_cast<TPrecision *>(
+            malloc(arg_m*arg_n*sizeof(TPrecision))
+        );
         
         for (int j=0; j<arg_n; ++j) {
             for (int i=0; i<arg_m; ++i) {
-                h_mat[i+j*arg_m] = static_cast<T>(dist(gen)); 
+                h_mat[i+j*arg_m] = static_cast<TPrecision>(dist(gen)); 
             }
         }
-        MatrixDense<T> created_mat(arg_cu_handles, h_mat, arg_m, arg_n);
+        MatrixDense<TPrecision> created_mat(
+            arg_cu_handles, h_mat, arg_m, arg_n
+        );
 
         free(h_mat);
 
@@ -424,29 +499,38 @@ public:
     }
 
     // Needed for testing (don't need to optimize performance)
-    static MatrixDense<T> Random_UT(const cuHandleBundle &arg_cu_handles, int arg_m, int arg_n) {
+    static MatrixDense<TPrecision> Random_UT(
+        const cuHandleBundle &arg_cu_handles, int arg_m, int arg_n
+    ) {
 
         std::random_device rd;
         std::mt19937 gen(rd());
         std::uniform_real_distribution<double> dist(-1., 1.);
 
-        T *h_mat = static_cast<T *>(malloc(arg_m*arg_n*sizeof(T)));
+        TPrecision *h_mat = static_cast<TPrecision *>(
+            malloc(arg_m*arg_n*sizeof(TPrecision))
+        );
         
         for (int j=0; j<arg_n; ++j) {
             for (int i=0; i<arg_m; ++i) {
                 if (i <= j) {
-                    h_mat[i+j*arg_m] = static_cast<T>(dist(gen));
+                    h_mat[i+j*arg_m] = static_cast<TPrecision>(dist(gen));
                     if (i == j) { // Re-roll out of zeros on the diagonal
-                        while(h_mat[i+j*arg_m] == static_cast<T>(0.)) {
-                            h_mat[i+j*arg_m] = static_cast<T>(dist(gen));
+                        while(h_mat[i+j*arg_m] == static_cast<TPrecision>(0.)) {
+                            h_mat[i+j*arg_m] = static_cast<TPrecision>(
+                                dist(gen)
+                            );
                         }
                     }
                 } else {
-                    h_mat[i+j*arg_m] = static_cast<T>(0.);
+                    h_mat[i+j*arg_m] = static_cast<TPrecision>(0.);
                 }
             }
         }
-        MatrixDense<T> created_mat(arg_cu_handles, h_mat, arg_m, arg_n);
+
+        MatrixDense<TPrecision> created_mat(
+            arg_cu_handles, h_mat, arg_m, arg_n
+        );
 
         free(h_mat);
 
@@ -455,29 +539,37 @@ public:
     }
 
     // Needed for testing (don't need to optimize performance)
-    static MatrixDense<T> Random_LT(const cuHandleBundle &arg_cu_handles, int arg_m, int arg_n) {
+    static MatrixDense<TPrecision> Random_LT(
+        const cuHandleBundle &arg_cu_handles, int arg_m, int arg_n
+    ) {
 
         std::random_device rd;
         std::mt19937 gen(rd());
         std::uniform_real_distribution<double> dist(-1., 1.);
 
-        T *h_mat = static_cast<T *>(malloc(arg_m*arg_n*sizeof(T)));
+        TPrecision *h_mat = static_cast<TPrecision *>(
+            malloc(arg_m*arg_n*sizeof(TPrecision))
+        );
         
         for (int j=0; j<arg_n; ++j) {
             for (int i=0; i<arg_m; ++i) {
                 if (i >= j) {
-                    h_mat[i+j*arg_m] = static_cast<T>(dist(gen));
+                    h_mat[i+j*arg_m] = static_cast<TPrecision>(dist(gen));
                     if (i == j) { // Re-roll out of zeros on the diagonal
-                        while(h_mat[i+j*arg_m] == static_cast<T>(0.)) {
-                            h_mat[i+j*arg_m] = static_cast<T>(dist(gen));
+                        while(h_mat[i+j*arg_m] == static_cast<TPrecision>(0.)) {
+                            h_mat[i+j*arg_m] = static_cast<TPrecision>(
+                                dist(gen)
+                            );
                         }
                     }
                 } else {
-                    h_mat[i+j*arg_m] = static_cast<T>(0.);
+                    h_mat[i+j*arg_m] = static_cast<TPrecision>(0.);
                 }
             }
         }
-        MatrixDense<T> created_mat(arg_cu_handles, h_mat, arg_m, arg_n);
+        MatrixDense<TPrecision> created_mat(
+            arg_cu_handles, h_mat, arg_m, arg_n
+        );
 
         free(h_mat);
 
@@ -485,9 +577,8 @@ public:
     
     }
 
-    // *** Cast ***
-    template <typename Cast_T>
-    MatrixDense<Cast_T> cast() const {
+    template <typename Cast_TPrecision>
+    MatrixDense<Cast_TPrecision> cast() const {
         throw std::runtime_error("MatrixDense: invalid cast conversion");
     }
 
@@ -496,26 +587,26 @@ public:
     template <> MatrixDense<double> cast<double>() const { return to_double(); }
 
     // *** Arithmetic and Compound Operations ***
-    MatrixDense<T> operator*(const Scalar<T> &scalar) const;
-    MatrixDense<T> operator/(const Scalar<T> &scalar) const {
-        Scalar<T> temp(scalar);
+    MatrixDense<TPrecision> operator*(const Scalar<TPrecision> &scalar) const;
+    MatrixDense<TPrecision> operator/(const Scalar<TPrecision> &scalar) const {
+        Scalar<TPrecision> temp(scalar);
         return operator*(temp.reciprocol());
     }
-    MatrixDense<T> & operator*=(const Scalar<T> &scalar);
-    MatrixDense<T> & operator/=(const Scalar<T> &scalar) {
-        Scalar<T> temp(scalar);
+    MatrixDense<TPrecision> & operator*=(const Scalar<TPrecision> &scalar);
+    MatrixDense<TPrecision> & operator/=(const Scalar<TPrecision> &scalar) {
+        Scalar<TPrecision> temp(scalar);
         return operator*=(temp.reciprocol());
     }
 
-    Scalar<T> get_max_mag_elem() const {
+    Scalar<TPrecision> get_max_mag_elem() const {
         
-        T *h_mat = static_cast<T *>(malloc(mem_size()));
+        TPrecision *h_mat = static_cast<TPrecision *>(malloc(mem_size()));
         copy_data_to_ptr(h_mat, rows(), cols());
 
-        T max_mag = static_cast<T>(0.);
+        TPrecision max_mag = static_cast<TPrecision>(0.);
         for (int i=0; i<m_rows; ++i) {
             for (int j=0; j<n_cols; ++j) {
-                T temp = abs_ns::abs(h_mat[i+j*m_rows]);
+                TPrecision temp = abs_ns::abs(h_mat[i+j*m_rows]);
                 if (temp > max_mag) {
                     max_mag = temp;
                 }
@@ -524,7 +615,7 @@ public:
 
         free(h_mat);
 
-        return Scalar<T>(max_mag);
+        return Scalar<TPrecision>(max_mag);
 
     }
 
@@ -532,20 +623,33 @@ public:
         *this /= get_max_mag_elem();
     }
 
-    Vector<T> operator*(const Vector<T> &vec) const;
-    Vector<T> mult_subset_cols(int start, int cols, const Vector<T> &vec) const;
-    Vector<T> transpose_prod(const Vector<T> &vec) const;
-    Vector<T> transpose_prod_subset_cols(int start, int cols, const Vector<T> &vec) const;
+    Vector<TPrecision> operator*(
+        const Vector<TPrecision> &vec
+    ) const;
+    Vector<TPrecision> mult_subset_cols(
+        int start, int cols, const Vector<TPrecision> &vec
+    ) const;
+    Vector<TPrecision> transpose_prod(
+        const Vector<TPrecision> &vec
+    ) const;
+    Vector<TPrecision> transpose_prod_subset_cols(
+        int start, int cols, const Vector<TPrecision> &vec
+    ) const;
 
     // Needed for testing (don't need to optimize performance)
-    MatrixDense<T> transpose() const {
+    MatrixDense<TPrecision> transpose() const {
 
-        T *h_mat = static_cast<T *>(malloc(m_rows*n_cols*sizeof(T)));
-        T *h_mat_trans = static_cast<T *>(malloc(n_cols*m_rows*sizeof(T)));
+        TPrecision *h_mat = static_cast<TPrecision *>(
+            malloc(m_rows*n_cols*sizeof(TPrecision))
+        );
+        TPrecision *h_mat_trans = static_cast<TPrecision *>(
+            malloc(n_cols*m_rows*sizeof(TPrecision))
+        );
 
         if ((m_rows > 0) && (n_cols > 0)) {
             check_cublas_status(cublasGetMatrix(
-                m_rows, n_cols, sizeof(T), d_mat, m_rows, h_mat, m_rows
+                m_rows, n_cols, sizeof(TPrecision),
+                d_mat, m_rows, h_mat, m_rows
             ));
         }
 
@@ -555,7 +659,9 @@ public:
             }
         }
         
-        MatrixDense<T> created_mat(cu_handles, h_mat_trans, n_cols, m_rows);
+        MatrixDense<TPrecision> created_mat(
+            cu_handles, h_mat_trans, n_cols, m_rows
+        );
 
         free(h_mat);
         free(h_mat_trans);
@@ -565,35 +671,39 @@ public:
     }
     
     // Needed for testing (don't need to optimize performance)
-    MatrixDense<T> operator*(const MatrixDense<T> &mat) const;
+    MatrixDense<TPrecision> operator*(const MatrixDense<TPrecision> &mat) const;
 
     // Needed for testing (don't need to optimize performance)
-    MatrixDense<T> operator+(const MatrixDense<T> &mat) const;
+    MatrixDense<TPrecision> operator+(const MatrixDense<TPrecision> &mat) const;
 
     // Needed for testing (don't need to optimize performance)
-    MatrixDense<T> operator-(const MatrixDense<T> &mat) const;
+    MatrixDense<TPrecision> operator-(const MatrixDense<TPrecision> &mat) const;
 
     // Needed for testing (don't need to optimize performance)
-    Scalar<T> norm() const;
+    Scalar<TPrecision> norm() const;
 
-    // *** Substitution *** (correct triangularity assumed)
-    Vector<T> back_sub(const Vector<T> &arg_rhs) const;
-    Vector<T> frwd_sub(const Vector<T> &arg_rhs) const;
+    // Correct triangularity assumed
+    Vector<TPrecision> back_sub(const Vector<TPrecision> &arg_rhs) const;
+    Vector<TPrecision> frwd_sub(const Vector<TPrecision> &arg_rhs) const;
 
-    // Nested lightweight wrapper class representing matrix column and assignment/elem access
-    // Requires: modification by/cast to Vector<T>
+    /* Nested lightweight wrapper class representing matrix column and
+       assignment/elem access
+       Requires: modification by/cast to Vector<TPrecision>*/
     class Col
     {
     private:
 
-        friend MatrixDense<T>;
-        friend Vector<T>;
+        friend MatrixDense<TPrecision>;
+        friend Vector<TPrecision>;
 
         const int m_rows;
         const int col_idx;
-        const MatrixDense<T> *associated_mat_ptr;
+        const MatrixDense<TPrecision> *associated_mat_ptr;
 
-        Col(const MatrixDense<T> *arg_associated_mat_ptr, int arg_col_idx):
+        Col(
+            const MatrixDense<TPrecision> *arg_associated_mat_ptr,
+            int arg_col_idx
+        ):
             associated_mat_ptr(arg_associated_mat_ptr),
             col_idx(arg_col_idx),
             m_rows(arg_associated_mat_ptr->m_rows)
@@ -601,46 +711,53 @@ public:
 
     public:
 
-        Col(const MatrixDense<T>::Col &other):
+        Col(const MatrixDense<TPrecision>::Col &other):
             Col(other.associated_mat_ptr, other.col_idx)
         {}
 
-        Scalar<T> get_elem(int arg_row) {
+        Scalar<TPrecision> get_elem(int arg_row) {
 
             if ((arg_row < 0) || (arg_row >= m_rows)) {
-                throw std::runtime_error("MatrixDense::Col: invalid row access in get_elem");
+                throw std::runtime_error(
+                    "MatrixDense::Col: invalid row access in get_elem"
+                );
             }
 
             return associated_mat_ptr->get_elem(arg_row, col_idx);
 
         }
 
-        void set_from_vec(const Vector<T> &vec) const {
+        void set_from_vec(const Vector<TPrecision> &vec) const {
 
             if (vec.rows() != m_rows) {
-                throw std::runtime_error("MatrixDense::Col: invalid vector for set_from_vec");
+                throw std::runtime_error(
+                    "MatrixDense::Col: invalid vector for set_from_vec"
+                );
             }
 
             check_cuda_error(
                 cudaMemcpy(
                     associated_mat_ptr->d_mat + col_idx*m_rows,
                     vec.d_vec,
-                    m_rows*sizeof(T),
+                    m_rows*sizeof(TPrecision),
                     cudaMemcpyDeviceToDevice
                 )
             );
 
         }
 
-        Vector<T> copy_to_vec() const {
+        Vector<TPrecision> copy_to_vec() const {
 
-            Vector<T> created_vec(associated_mat_ptr->get_cu_handles(), associated_mat_ptr->m_rows);
+            Vector<TPrecision> created_vec(
+                associated_mat_ptr->get_cu_handles(),
+                associated_mat_ptr->m_rows
+            );
 
             check_cuda_error(
                 cudaMemcpy(
                     created_vec.d_vec,
                     associated_mat_ptr->d_mat + col_idx*m_rows,
-                    m_rows*sizeof(T),
+                    m_rows*sizeof(TPrecision),
                     cudaMemcpyDeviceToDevice
                 )
             );
@@ -651,22 +768,24 @@ public:
 
     };
 
-    // Nested lightweight wrapper class representing matrix block and assignment/elem access
-    // Requires: modification by/cast to MatrixDense<T> and modification by Vector
+    /* Nested lightweight wrapper class representing matrix block and
+       assignment/elem access
+       Requires: modification by/cast to MatrixDense<TPrecision> and
+                 modification by Vector */
     class Block
     {
     private:
 
-        friend MatrixDense<T>;
+        friend MatrixDense<TPrecision>;
 
         const int row_idx_start;
         const int col_idx_start;
         const int m_rows;
         const int n_cols;
-        const MatrixDense<T> *associated_mat_ptr;
+        const MatrixDense<TPrecision> *associated_mat_ptr;
 
         Block(
-            const MatrixDense<T> *arg_associated_mat_ptr,
+            const MatrixDense<TPrecision> *arg_associated_mat_ptr,
             int arg_row_idx_start, int arg_col_idx_start,
             int arg_m_rows, int arg_n_cols
         ):
@@ -677,7 +796,7 @@ public:
 
     public:
 
-        Block(const MatrixDense<T>::Block &other):
+        Block(const MatrixDense<TPrecision>::Block &other):
             Block(
                 other.associated_mat_ptr,
                 other.row_idx_start, other.col_idx_start,
@@ -685,13 +804,19 @@ public:
             )
         {}
 
-        void set_from_vec(const Vector<T> &vec) const {
+        void set_from_vec(const Vector<TPrecision> &vec) const {
 
             if (n_cols != 1) {
-                throw std::runtime_error("MatrixDense::Block invalid for set_from_vec must be 1 column");
+                throw std::runtime_error(
+                    "MatrixDense::Block invalid for set_from_vec must be 1 "
+                    "column"
+                );
             }
             if (m_rows != vec.rows()) {
-                throw std::runtime_error("MatrixDense::Block invalid vector for set_from_vec");
+                throw std::runtime_error(
+                    "MatrixDense::Block invalid vector "
+                    "for set_from_vec"
+                );
             }
 
             check_cuda_error(
@@ -700,17 +825,19 @@ public:
                      row_idx_start +
                      (col_idx_start*associated_mat_ptr->m_rows)),
                     vec.d_vec,
-                    m_rows*sizeof(T),
+                    m_rows*sizeof(TPrecision),
                     cudaMemcpyDeviceToDevice
                 )
             );
 
         }
 
-        void set_from_mat(const MatrixDense<T> &mat) const {
+        void set_from_mat(const MatrixDense<TPrecision> &mat) const {
 
             if ((m_rows != mat.rows()) || (n_cols != mat.cols())) {
-                throw std::runtime_error("MatrixDense::Block invalid matrix for set_from_mat");
+                throw std::runtime_error(
+                    "MatrixDense::Block invalid matrix for set_from_mat"
+                );
             }
 
             // Copy column by column 1D slices relevant to matrix
@@ -721,7 +848,7 @@ public:
                          row_idx_start +
                          ((col_idx_start+j)*associated_mat_ptr->m_rows)),
                         mat.d_mat + j*m_rows,
-                        m_rows*sizeof(T),
+                        m_rows*sizeof(TPrecision),
                         cudaMemcpyDeviceToDevice
                     )
                 );
@@ -729,9 +856,11 @@ public:
 
         }
 
-        MatrixDense<T> copy_to_mat() const {
+        MatrixDense<TPrecision> copy_to_mat() const {
 
-            MatrixDense<T> created_mat(associated_mat_ptr->cu_handles, m_rows, n_cols);
+            MatrixDense<TPrecision> created_mat(
+                associated_mat_ptr->cu_handles, m_rows, n_cols
+            );
 
             // Copy column by column 1D slices relevant to matrix
             for (int j=0; j<n_cols; ++j) {
@@ -741,7 +870,7 @@ public:
                         (associated_mat_ptr->d_mat +
                          row_idx_start +
                          ((col_idx_start+j)*associated_mat_ptr->m_rows)),
-                        m_rows*sizeof(T),
+                        m_rows*sizeof(TPrecision),
                         cudaMemcpyDeviceToDevice
                     )
                 );
@@ -751,16 +880,22 @@ public:
 
         }
 
-        Scalar<T> get_elem(int row, int col) {
+        Scalar<TPrecision> get_elem(int row, int col) {
 
             if ((row < 0) || (row >= m_rows)) {
-                throw std::runtime_error("MatrixDense::Block: invalid row access in get_elem");
+                throw std::runtime_error(
+                    "MatrixDense::Block: invalid row access in get_elem"
+                );
             }
             if ((col < 0) || (col >= n_cols)) {
-                throw std::runtime_error("MatrixDense::Block: invalid col access in get_elem");
+                throw std::runtime_error(
+                    "MatrixDense::Block: invalid col access in get_elem"
+                );
             }
 
-            return associated_mat_ptr->get_elem(row_idx_start+row, col_idx_start+col);
+            return associated_mat_ptr->get_elem(
+                row_idx_start+row, col_idx_start+col
+            );
 
         }
 

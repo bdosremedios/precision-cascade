@@ -4,7 +4,9 @@
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
 
-Vector<float> Vector<float>::operator*(const Scalar<float> &scalar) const {
+Vector<float> Vector<float>::operator*(
+    const Scalar<float> &scalar
+) const {
 
     Vector<float> c(*this);
 
@@ -22,7 +24,9 @@ Vector<float> Vector<float>::operator*(const Scalar<float> &scalar) const {
 
 }
 
-Vector<float> & Vector<float>::operator*=(const Scalar<float> &scalar) {
+Vector<float> & Vector<float>::operator*=(
+    const Scalar<float> &scalar
+) {
 
     check_cublas_status(
         cublasScalEx(
@@ -38,7 +42,9 @@ Vector<float> & Vector<float>::operator*=(const Scalar<float> &scalar) {
 
 }
 
-Vector<float> Vector<float>::operator+(const Vector<float> &vec) const {
+Vector<float> Vector<float>::operator+(
+    const Vector<float> &vec
+) const {
 
     check_vecvec_op_compatibility(vec);
 
@@ -59,7 +65,9 @@ Vector<float> Vector<float>::operator+(const Vector<float> &vec) const {
 
 }
 
-Vector<float> Vector<float>::operator-(const Vector<float> &vec) const {
+Vector<float> Vector<float>::operator-(
+    const Vector<float> &vec
+) const {
 
     check_vecvec_op_compatibility(vec);
 
@@ -80,7 +88,9 @@ Vector<float> Vector<float>::operator-(const Vector<float> &vec) const {
 
 }
 
-Vector<float> & Vector<float>::operator+=(const Vector<float> &vec) {
+Vector<float> & Vector<float>::operator+=(
+    const Vector<float> &vec
+) {
 
     check_vecvec_op_compatibility(vec);
 
@@ -99,7 +109,9 @@ Vector<float> & Vector<float>::operator+=(const Vector<float> &vec) {
 
 }
 
-Vector<float> & Vector<float>::operator-=(const Vector<float> &vec) {
+Vector<float> & Vector<float>::operator-=(
+    const Vector<float> &vec
+) {
 
     check_vecvec_op_compatibility(vec);
 
@@ -118,7 +130,9 @@ Vector<float> & Vector<float>::operator-=(const Vector<float> &vec) {
 
 }
 
-Scalar<float> Vector<float>::dot(const Vector<float> &vec) const {
+Scalar<float> Vector<float>::dot(
+    const Vector<float> &vec
+) const {
 
     check_vecvec_op_compatibility(vec);
     
@@ -162,8 +176,9 @@ Vector<__half> Vector<float>::to_half() const {
     Vector<__half> created_vec(cu_handles, m_rows);
 
     int NUM_THREADS = genmat_gpu_const::MAXTHREADSPERBLOCK;
-    int NUM_BLOCKS = static_cast<int>(
-        std::ceil(static_cast<double>(m_rows)/static_cast<double>(NUM_THREADS))
+    int NUM_BLOCKS = std::ceil(
+        static_cast<double>(m_rows) /
+        static_cast<double>(NUM_THREADS)
     );
 
     if (NUM_BLOCKS > 0) {
@@ -185,15 +200,18 @@ Vector<__half> Vector<float>::to_half() const {
 
 }
 
-Vector<float> Vector<float>::to_float() const { return Vector<float>(*this); }
+Vector<float> Vector<float>::to_float() const {
+    return Vector<float>(*this);
+}
 
 Vector<double> Vector<float>::to_double() const {
     
     Vector<double> created_vec(cu_handles, m_rows);
 
     int NUM_THREADS = genmat_gpu_const::MAXTHREADSPERBLOCK;
-    int NUM_BLOCKS = static_cast<int>(
-        std::ceil(static_cast<double>(m_rows)/static_cast<double>(NUM_THREADS))
+    int NUM_BLOCKS = std::ceil(
+        static_cast<double>(m_rows) /
+        static_cast<double>(NUM_THREADS)
     );
 
     if (NUM_BLOCKS > 0) {

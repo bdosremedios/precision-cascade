@@ -10,11 +10,11 @@
 
 #include <stdexcept>
 
-template <typename T> class Vector;
-template <typename T> class MatrixDense;
-template <typename T> class NoFillMatrixSparse;
+template <typename TPrecision> class Vector;
+template <typename TPrecision> class MatrixDense;
+template <typename TPrecision> class NoFillMatrixSparse;
 
-template <typename T>
+template <typename TPrecision>
 class Scalar
 {
 private:
@@ -24,7 +24,7 @@ private:
     template <typename> friend class MatrixDense;
     template <typename> friend class NoFillMatrixSparse;
 
-    T *d_scalar = nullptr;
+    TPrecision *d_scalar = nullptr;
 
     Scalar<__half> to_half() const;
     Scalar<float> to_float() const;
@@ -32,39 +32,46 @@ private:
 
 public:
 
-    // *** Constructors ***
-    Scalar() { check_cuda_error(cudaMalloc(&d_scalar, sizeof(T))); }
-    Scalar(const T &val): Scalar() { set_scalar(val); }
+    Scalar() { check_cuda_error(cudaMalloc(&d_scalar, sizeof(TPrecision))); }
+    Scalar(const TPrecision &val): Scalar() { set_scalar(val); }
 
-    // *** Destructor ***
     virtual ~Scalar() { check_cuda_error(cudaFree(d_scalar)); }
 
-    // *** Copy Assignment ***
-    Scalar<T> & operator=(const Scalar<T> &other) {
+    Scalar<TPrecision> & operator=(const Scalar<TPrecision> &other) {
         if (this != &other) {
             check_cuda_error(cudaMemcpy(
-                d_scalar, other.d_scalar, sizeof(T), cudaMemcpyDeviceToDevice
+                d_scalar,
+                other.d_scalar,
+                sizeof(TPrecision),
+                cudaMemcpyDeviceToDevice
             ));
         }
         return *this;
     }
 
-    // *** Copy Constructor ***
     Scalar(const Scalar &other): Scalar() { *this = other; }
 
-    // *** Access ***
-    void set_scalar(const T &val) {
-        check_cuda_error(cudaMemcpy(d_scalar, &val, sizeof(T), cudaMemcpyHostToDevice));
+    void set_scalar(const TPrecision &val) {
+        check_cuda_error(cudaMemcpy(
+            d_scalar,
+            &val,
+            sizeof(TPrecision),
+            cudaMemcpyHostToDevice
+        ));
     }
-    T get_scalar() const {
-        T h_scalar;
-        check_cuda_error(cudaMemcpy(&h_scalar, d_scalar, sizeof(T), cudaMemcpyDeviceToHost));
+    TPrecision get_scalar() const {
+        TPrecision h_scalar;
+        check_cuda_error(cudaMemcpy(
+            &h_scalar,
+            d_scalar,
+            sizeof(TPrecision),
+            cudaMemcpyDeviceToHost
+        ));
         return h_scalar;
     }
 
-    // *** Cast ***
-    template <typename Cast_T>
-    Scalar<Cast_T> cast() const {
+    template <typename Cast_TPrecision>
+    Scalar<Cast_TPrecision> cast() const {
         throw std::runtime_error("Scalar: invalid cast conversion");
     }
 
@@ -72,22 +79,21 @@ public:
     template <> Scalar<float> cast<float>() const { return to_float(); }
     template <> Scalar<double> cast<double>() const { return to_double(); }
 
-    // *** Operations ***
-    Scalar<T> operator+(const Scalar& other) const;
-    Scalar<T> operator-(const Scalar& other) const;
+    Scalar<TPrecision> operator+(const Scalar& other) const;
+    Scalar<TPrecision> operator-(const Scalar& other) const;
 
-    Scalar<T> & operator+=(const Scalar& other);
-    Scalar<T> & operator-=(const Scalar& other);
+    Scalar<TPrecision> & operator+=(const Scalar& other);
+    Scalar<TPrecision> & operator-=(const Scalar& other);
 
-    Scalar<T> operator*(const Scalar& other) const;
-    Scalar<T> operator/(const Scalar& other) const;
+    Scalar<TPrecision> operator*(const Scalar& other) const;
+    Scalar<TPrecision> operator/(const Scalar& other) const;
 
-    Scalar<T> & operator*=(const Scalar& other);
-    Scalar<T> & operator/=(const Scalar& other);
+    Scalar<TPrecision> & operator*=(const Scalar& other);
+    Scalar<TPrecision> & operator/=(const Scalar& other);
 
-    Scalar<T> & abs();
-    Scalar<T> & sqrt();
-    Scalar<T> & reciprocol();
+    Scalar<TPrecision> & abs();
+    Scalar<TPrecision> & sqrt();
+    Scalar<TPrecision> & reciprocol();
 
     bool operator==(const Scalar& other) const;
 
@@ -97,33 +103,33 @@ static inline Scalar<__half> SCALAR_ONE_H(static_cast<__half>(1.));
 static inline Scalar<float> SCALAR_ONE_F(static_cast<float>(1.)); 
 static inline Scalar<double> SCALAR_ONE_D(static_cast<double>(1.));
 
-template <typename T>
+template <typename TPrecision>
 class SCALAR_ONE
 { 
 public:
-    static Scalar<T> get();
+    static Scalar<TPrecision> get();
 };
 
 static inline Scalar<__half> SCALAR_ZERO_H(static_cast<__half>(0.)); 
 static inline Scalar<float> SCALAR_ZERO_F(static_cast<float>(0.)); 
 static inline Scalar<double> SCALAR_ZERO_D(static_cast<double>(0.));
 
-template <typename T>
+template <typename TPrecision>
 class SCALAR_ZERO
 {
 public:
-    static Scalar<T> get();
+    static Scalar<TPrecision> get();
 };
 
 static inline Scalar<__half> SCALAR_MINUS_ONE_H(static_cast<__half>(-1.)); 
 static inline Scalar<float> SCALAR_MINUS_ONE_F(static_cast<float>(-1.)); 
 static inline Scalar<double> SCALAR_MINUS_ONE_D(static_cast<double>(-1.));
 
-template <typename T>
+template <typename TPrecision>
 class SCALAR_MINUS_ONE
 {
 public:
-    static Scalar<T> get();
+    static Scalar<TPrecision> get();
 };
 
 #endif

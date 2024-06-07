@@ -3,37 +3,46 @@
 
 #include "MatrixInversePreconditioner.h"
 
-template <template <typename> typename M, typename W>
-class JacobiPreconditioner: public MatrixInversePreconditioner<M, W>
+template <template <typename> typename TMatrix, typename TPrecision>
+class JacobiPreconditioner:
+    public MatrixInversePreconditioner<TMatrix, TPrecision>
 {
 private:
 
-    MatrixDense<W> construct_dense_jacobi(MatrixDense<W> const &arg_A) {
+    MatrixDense<TPrecision> construct_dense_jacobi(
+        MatrixDense<TPrecision> const &arg_A
+    ) {
         
-        W * h_mat = static_cast<W *>(malloc(arg_A.rows()*arg_A.cols()*sizeof(W)));
+        TPrecision * h_mat = static_cast<TPrecision *>(
+            malloc(arg_A.rows()*arg_A.cols()*sizeof(TPrecision))
+        );
         arg_A.copy_data_to_ptr(h_mat, arg_A.rows(), arg_A.cols());
         
         for (int j=0; j<arg_A.cols(); ++j) {
             for (int i=0; i<arg_A.rows(); ++i) {
                 if (i == j) {
-                    if (h_mat[i+arg_A.rows()*j] != static_cast<W>(0.)) {
-                        h_mat[i+arg_A.rows()*j] = static_cast<W>(1.)/h_mat[i+arg_A.rows()*j];
+                    if (h_mat[i+arg_A.rows()*j] != static_cast<TPrecision>(0.)) {
+                        h_mat[i+arg_A.rows()*j] = (
+                            static_cast<TPrecision>(1.)/h_mat[i+arg_A.rows()*j]
+                        );
                     } else {
                         free(h_mat);
                         throw std::runtime_error(
                             std::format(
-                                "JacobiPreconditioner: zero in construct_dense_jacobi encountered at ({}, {})",
+                                "JacobiPreconditioner: zero in "
+                                "construct_dense_jacobi encountered at "
+                                "({}, {})",
                                 i, j
                             )
                         );
                     }
                 } else {
-                    h_mat[i+arg_A.rows()*j] = static_cast<W>(0.);
+                    h_mat[i+arg_A.rows()*j] = static_cast<TPrecision>(0.);
                 }
             }
         }
 
-        MatrixDense<W> ret_mat(
+        MatrixDense<TPrecision> ret_mat(
             arg_A.get_cu_handles(),
             h_mat,
             arg_A.rows(),
@@ -46,11 +55,19 @@ private:
 
     }
 
-    NoFillMatrixSparse<W> construct_sparse_jacobi(NoFillMatrixSparse<W> const &arg_A) {
+    NoFillMatrixSparse<TPrecision> construct_sparse_jacobi(
+        NoFillMatrixSparse<TPrecision> const &arg_A
+    ) {
 
-        int * h_col_offsets = static_cast<int *>(malloc((arg_A.cols()+1)*sizeof(int)));
-        int * h_row_indices = static_cast<int *>(malloc(arg_A.non_zeros()*sizeof(int)));
-        W * h_vals = static_cast<W *>(malloc(arg_A.non_zeros()*sizeof(W)));
+        int * h_col_offsets = static_cast<int *>(
+            malloc((arg_A.cols()+1)*sizeof(int))
+        );
+        int * h_row_indices = static_cast<int *>(
+            malloc(arg_A.non_zeros()*sizeof(int))
+        );
+        TPrecision * h_vals = static_cast<TPrecision *>(
+            malloc(arg_A.non_zeros()*sizeof(TPrecision))
+        );
         arg_A.copy_data_to_ptr(
             h_col_offsets, h_row_indices, h_vals,
             arg_A.rows(), arg_A.cols(), arg_A.non_zeros()
@@ -58,32 +75,43 @@ private:
 
         int smaller_dim = std::min(arg_A.rows(), arg_A.cols());
 
-        int * new_h_col_offsets = static_cast<int *>(malloc((arg_A.cols()+1)*sizeof(int)));
-        int * new_h_row_indices = static_cast<int *>(malloc(smaller_dim*sizeof(int)));
-        W * new_h_vals = static_cast<W *>(malloc(smaller_dim*sizeof(W)));
+        int * new_h_col_offsets = static_cast<int *>(
+            malloc((arg_A.cols()+1)*sizeof(int))
+        );
+        int * new_h_row_indices = static_cast<int *>(
+            malloc(smaller_dim*sizeof(int))
+        );
+        TPrecision * new_h_vals = static_cast<TPrecision *>(
+            malloc(smaller_dim*sizeof(TPrecision))
+        );
 
         for (int j=0; j<smaller_dim; ++j) {
 
             new_h_col_offsets[j] = j;
             new_h_row_indices[j] = j;
 
-            W diag_val = static_cast<W>(0.);
-            for (int offset=h_col_offsets[j]; offset<h_col_offsets[j+1]; ++offset) {
+            TPrecision diag_val = static_cast<TPrecision>(0.);
+            for (
+                int offset=h_col_offsets[j];
+                offset<h_col_offsets[j+1];
+                ++offset
+            ) {
                 if (h_row_indices[offset] == j) {
                     diag_val = h_vals[offset];
                     break;
                 }
             }
 
-            if (diag_val != static_cast<W>(0.)) {
-                new_h_vals[j] = static_cast<W>(1.)/diag_val;
+            if (diag_val != static_cast<TPrecision>(0.)) {
+                new_h_vals[j] = static_cast<TPrecision>(1.)/diag_val;
             } else {
                 free(h_col_offsets);
                 free(h_row_indices);
                 free(h_vals);
                 throw std::runtime_error(
                     std::format(
-                        "JacobiPreconditioner: zero in construct_sparse_jacobi encountered at ({}, {})",
+                        "JacobiPreconditioner: zero in "
+                        "construct_sparse_jacobi encountered at ({}, {})",
                         j, j
                     )
                 );
@@ -94,7 +122,7 @@ private:
             new_h_col_offsets[j] = smaller_dim;
         }
 
-        NoFillMatrixSparse<W> ret_mat(
+        NoFillMatrixSparse<TPrecision> ret_mat(
             arg_A.get_cu_handles(),
             new_h_col_offsets, new_h_row_indices, new_h_vals,
             arg_A.rows(), arg_A.cols(), smaller_dim
@@ -114,12 +142,16 @@ private:
 
 public:
 
-    JacobiPreconditioner(MatrixDense<W> const &arg_A):
-        MatrixInversePreconditioner<MatrixDense, W>(construct_dense_jacobi(arg_A))
+    JacobiPreconditioner(MatrixDense<TPrecision> const &arg_A):
+        MatrixInversePreconditioner<MatrixDense, TPrecision>(
+            construct_dense_jacobi(arg_A)
+        )
     {}
 
-    JacobiPreconditioner(NoFillMatrixSparse<W> const &arg_A):
-        MatrixInversePreconditioner<NoFillMatrixSparse, W>(construct_sparse_jacobi(arg_A))
+    JacobiPreconditioner(NoFillMatrixSparse<TPrecision> const &arg_A):
+        MatrixInversePreconditioner<NoFillMatrixSparse, TPrecision>(
+            construct_sparse_jacobi(arg_A)
+        )
     {}
 
 };

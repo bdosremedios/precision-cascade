@@ -10,8 +10,8 @@ class Benchmark_Precond_FP_GMRES_IR: public Benchmark_Nested_GMRES {};
 
 TEST_F(Benchmark_Precond_FP_GMRES_IR, ILU0_FP_GMRES_IR_BENCHMARK) {
 
-    std::function<void (Benchmark_AccumulatingClock &, NoFillMatrixSparse<double> &)> execute_func = [this] (
-        Benchmark_AccumulatingClock &clock, NoFillMatrixSparse<double> &A
+    std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<double> &)> execute_func = [this] (
+        Benchmark_AccumClock &clock, NoFillMatrixSparse<double> &A
     ) {
 
         Vector<double> x_soln = Vector<double>::Random(BenchmarkBase::bundle, A.rows());
@@ -31,7 +31,8 @@ TEST_F(Benchmark_Precond_FP_GMRES_IR, ILU0_FP_GMRES_IR_BENCHMARK) {
     };
 
     benchmark_exec_func<NoFillMatrixSparse>(
-        ilu_start, ilu_stop, ilu_incr, make_norm_A, execute_func, "ilu0_fp_gmres_ir"
+        ilu_start, ilu_stop, ilu_incr,
+        make_norm_A, execute_func, "ilu0_fp_gmres_ir"
     );
 
 }

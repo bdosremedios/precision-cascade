@@ -3,23 +3,23 @@
 
 #include "Preconditioner.h"
 
-template <template <typename> typename M, typename W>
-class MatrixInversePreconditioner: public Preconditioner<M, W>
+template <template <typename> typename TMatrix, typename TPrecision>
+class MatrixInversePreconditioner:
+    public Preconditioner<TMatrix, TPrecision>
 {
 protected:
 
-    M<W> inv_M;
+    TMatrix<TPrecision> inv_M;
 
 public:
 
-    // *** Constructors ***
+    MatrixInversePreconditioner(
+        TMatrix<TPrecision> const &arg_inv_M
+    ): inv_M(arg_inv_M) {}
 
-    MatrixInversePreconditioner(M<W> const &arg_inv_M): inv_M(arg_inv_M) {}
-
-
-    // *** Concrete Methods ***
-
-    Vector<W> action_inv_M(Vector<W> const &vec) const override {
+    Vector<TPrecision> action_inv_M(
+        Vector<TPrecision> const &vec
+    ) const override {
         return inv_M*vec;
     }
 
@@ -31,16 +31,22 @@ public:
         return ((inv_M.cols() == arg_n) && (inv_M.rows() == arg_n));
     };
 
-    MatrixInversePreconditioner<M, double> * cast_dbl_ptr() const override {
-        return new MatrixInversePreconditioner<M, double>(inv_M.cast<double>());
+    MatrixInversePreconditioner<TMatrix, double> * cast_dbl_ptr() const override {
+        return new MatrixInversePreconditioner<TMatrix, double>(
+            inv_M.cast<double>()
+        );
     }
 
-    MatrixInversePreconditioner<M, float> * cast_sgl_ptr() const override {
-        return new MatrixInversePreconditioner<M, float>(inv_M.cast<float>());
+    MatrixInversePreconditioner<TMatrix, float> * cast_sgl_ptr() const override {
+        return new MatrixInversePreconditioner<TMatrix, float>(
+            inv_M.cast<float>()
+        );
     }
 
-    MatrixInversePreconditioner<M, __half> * cast_hlf_ptr() const override {
-        return new MatrixInversePreconditioner<M, __half>(inv_M.cast<__half>());
+    MatrixInversePreconditioner<TMatrix, __half> * cast_hlf_ptr() const override {
+        return new MatrixInversePreconditioner<TMatrix, __half>(
+            inv_M.cast<__half>()
+        );
     }
 
 };

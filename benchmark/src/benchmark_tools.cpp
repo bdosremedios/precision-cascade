@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-void Benchmark_AccumulatingClock::clock_start() {
+void Benchmark_AccumClock::clock_start() {
     if (!(clock_ticking)) {
         clock_ticking = true;
         start = clock.now();
@@ -11,7 +11,7 @@ void Benchmark_AccumulatingClock::clock_start() {
     }
 }
 
-void Benchmark_AccumulatingClock::clock_stop() {
+void Benchmark_AccumClock::clock_stop() {
     if (clock_ticking) {
         stop = clock.now();
         clock_ticking = false;
@@ -21,15 +21,15 @@ void Benchmark_AccumulatingClock::clock_stop() {
     }
 }
 
-int Benchmark_AccumulatingClock::get_count() {
+int Benchmark_AccumClock::get_count() {
     return prev_durations.size();
 }
 
-Benchmark_AccumulatingClock::acc_clock_duration Benchmark_AccumulatingClock::get_avg() {
+Benchmark_AccumClock::acc_clock_duration Benchmark_AccumClock::get_avg() {
     return get_total()/get_count();
 }
 
-Benchmark_AccumulatingClock::acc_clock_duration Benchmark_AccumulatingClock::get_median() {
+Benchmark_AccumClock::acc_clock_duration Benchmark_AccumClock::get_median() {
 
     std::vector<acc_clock_duration> to_sort(prev_durations);
     std::sort(to_sort.begin(), to_sort.end());
@@ -38,7 +38,7 @@ Benchmark_AccumulatingClock::acc_clock_duration Benchmark_AccumulatingClock::get
 
 }
 
-Benchmark_AccumulatingClock::acc_clock_duration Benchmark_AccumulatingClock::get_total() {
+Benchmark_AccumClock::acc_clock_duration Benchmark_AccumClock::get_total() {
     acc_clock_duration total(0);
     for (acc_clock_duration dur : prev_durations) { total += dur; }
     return total;

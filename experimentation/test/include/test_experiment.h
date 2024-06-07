@@ -1,13 +1,13 @@
 #ifndef TEST_EXPERIMENT_H
 #define TEST_EXPERIMENT_H
 
-#include <filesystem>
-
-#include <gtest/gtest.h>
+#include "test_assertions.h"
 
 #include "tools/cuHandleBundle.h"
 
-#include "test_assertions.h"
+#include <gtest/gtest.h>
+
+#include <filesystem>
 
 namespace fs = std::filesystem;
 
@@ -21,9 +21,15 @@ public:
         fs::current_path() / fs::path("..") / fs::path("experimentation") /
         fs::path("test") / fs::path("data")
     );
-    const fs::path test_json_dir = test_exp_data_dir / fs::path("test_jsons");
-    const fs::path test_data_dir = test_exp_data_dir / fs::path("test_data");
-    const fs::path test_output_dir = test_exp_data_dir / fs::path("test_output");
+    const fs::path test_json_dir = (
+        test_exp_data_dir / fs::path("test_jsons")
+    );
+    const fs::path test_data_dir = (
+        test_exp_data_dir / fs::path("test_data")
+    );
+    const fs::path test_output_dir = (
+        test_exp_data_dir / fs::path("test_output")
+    );
 
 };
 

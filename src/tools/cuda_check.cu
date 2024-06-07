@@ -30,7 +30,8 @@ void check_kernel_launch(
     if (error != cudaSuccess) {
         throw std::runtime_error(
             std::format(
-                "cuda kernel {}<<<{}, {}>>> in {} failed with error {} ({}: {})",
+                "cuda kernel {}<<<{}, {}>>> in {} failed with error {} "
+                "({}: {})",
                 kernel_name,
                 n_blocks, n_threads,
                 function_name,
@@ -44,12 +45,22 @@ void check_kernel_launch(
 
 void check_cublas_status(cublasStatus_t status) {
     if (status != CUBLAS_STATUS_SUCCESS) {
-        throw std::runtime_error(std::format("cublasStatus_t failure: {:d}", static_cast<int>(status)));
+        throw std::runtime_error(
+            std::format(
+                "cublasStatus_t failure: {:d}",
+                static_cast<int>(status)
+            )
+        );
     }
 }
 
 void check_cusparse_status(cusparseStatus_t status) {
     if (status != CUSPARSE_STATUS_SUCCESS) {
-        throw std::runtime_error(std::format("cusparseStatus_t failure: {:d}", static_cast<int>(status)));
+        throw std::runtime_error(
+            std::format(
+                "cusparseStatus_t failure: {:d}",
+                static_cast<int>(status)
+            )
+        );
     }
 }

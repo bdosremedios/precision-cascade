@@ -6,9 +6,19 @@ cusparseHandle_t cuHandleBundle::cusparse_handle;
 
 void cuHandleBundle::create() {
     check_cublas_status(cublasCreate(&cublas_handle));
-    check_cublas_status(cublasSetPointerMode(cublas_handle, CUBLAS_POINTER_MODE_DEVICE));
+    check_cublas_status(
+        cublasSetPointerMode(
+            cublas_handle,
+            CUBLAS_POINTER_MODE_DEVICE
+        )
+    );
     check_cusparse_status(cusparseCreate(&cusparse_handle));
-    check_cusparse_status(cusparseSetPointerMode(cusparse_handle, CUSPARSE_POINTER_MODE_DEVICE));
+    check_cusparse_status(
+        cusparseSetPointerMode(
+            cusparse_handle,
+            CUSPARSE_POINTER_MODE_DEVICE
+        )
+    );
 }
 
 void cuHandleBundle::destroy() {

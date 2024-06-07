@@ -5,7 +5,9 @@
 #include <cublas_v2.h>
 #include <cuda_fp16.h>
 
-MatrixDense<float> MatrixDense<float>::operator*(const Scalar<float> &scalar) const {
+MatrixDense<float> MatrixDense<float>::operator*(
+    const Scalar<float> &scalar
+) const {
 
     MatrixDense<float> c(*this);
 
@@ -23,7 +25,9 @@ MatrixDense<float> MatrixDense<float>::operator*(const Scalar<float> &scalar) co
 
 }
 
-MatrixDense<float> & MatrixDense<float>::operator*=(const Scalar<float> &scalar) {
+MatrixDense<float> & MatrixDense<float>::operator*=(
+    const Scalar<float> &scalar
+) {
 
     check_cublas_status(
         cublasScalEx(
@@ -39,11 +43,14 @@ MatrixDense<float> & MatrixDense<float>::operator*=(const Scalar<float> &scalar)
 
 }
 
-Vector<float> MatrixDense<float>::operator*(const Vector<float> &vec) const {
+Vector<float> MatrixDense<float>::operator*(
+    const Vector<float> &vec
+) const {
 
     if (vec.rows() != n_cols) {
         throw std::runtime_error(
-            "MatrixDense: invalid vec in matrix-vector prod (operator*(const Vector<float> &vec))"
+            "MatrixDense: invalid vec in matrix-vector prod "
+            "(operator*(const Vector<float> &vec))"
         );
     }
 
@@ -68,13 +75,19 @@ Vector<float> MatrixDense<float>::operator*(const Vector<float> &vec) const {
 
 }
 
-Vector<float> MatrixDense<float>::mult_subset_cols(int start, int cols, const Vector<float> &vec) const {
+Vector<float> MatrixDense<float>::mult_subset_cols(
+    int start, int cols, const Vector<float> &vec
+) const {
 
     if ((start < 0) || ((start+cols) > n_cols) || (cols <= 0)) {
-        throw std::runtime_error("MatrixDense: invalid column values in mult_subset_cols");
+        throw std::runtime_error(
+            "MatrixDense: invalid column values in mult_subset_cols"
+        );
     }
     if (vec.rows() != cols) {
-        throw std::runtime_error("MatrixDense: invalid vec in mult_subset_cols");
+        throw std::runtime_error(
+            "MatrixDense: invalid vec in mult_subset_cols"
+        );
     }
 
     Vector<float> c(Vector<float>::Zero(cu_handles, m_rows));
@@ -98,9 +111,13 @@ Vector<float> MatrixDense<float>::mult_subset_cols(int start, int cols, const Ve
 
 }
 
-Vector<float> MatrixDense<float>::transpose_prod(const Vector<float> &vec) const {
+Vector<float> MatrixDense<float>::transpose_prod(
+    const Vector<float> &vec
+) const {
 
-    if (vec.rows() != m_rows) { throw std::runtime_error("MatrixDense: invalid vec in transpose_prod"); }
+    if (vec.rows() != m_rows) {
+        throw std::runtime_error("MatrixDense: invalid vec in transpose_prod");
+    }
 
     Vector<float> c(cu_handles, n_cols);
 
@@ -123,13 +140,19 @@ Vector<float> MatrixDense<float>::transpose_prod(const Vector<float> &vec) const
 
 }
 
-Vector<float> MatrixDense<float>::transpose_prod_subset_cols(int start, int cols, const Vector<float> &vec) const {
+Vector<float> MatrixDense<float>::transpose_prod_subset_cols(
+    int start, int cols, const Vector<float> &vec
+) const {
 
     if ((start < 0) || ((start+cols) > n_cols) || (cols <= 0)) {
-        throw std::runtime_error("MatrixDense: invalid column values in transpose_prod_subset_cols");
+        throw std::runtime_error(
+            "MatrixDense: invalid column values in transpose_prod_subset_cols"
+        );
     }
     if (vec.rows() != m_rows) {
-        throw std::runtime_error("MatrixDense: invalid vec in transpose_prod_subset_cols");
+        throw std::runtime_error(
+            "MatrixDense: invalid vec in transpose_prod_subset_cols"
+        );
     }
 
     Vector<float> c(Vector<float>::Zero(cu_handles, cols));
@@ -153,15 +176,20 @@ Vector<float> MatrixDense<float>::transpose_prod_subset_cols(int start, int cols
 
 }
 
-MatrixDense<float> MatrixDense<float>::operator*(const MatrixDense<float> &mat) const {
+MatrixDense<float> MatrixDense<float>::operator*(
+    const MatrixDense<float> &mat
+) const {
 
     if (mat.rows() != n_cols) {
         throw std::runtime_error(
-            "MatrixDense: invalid mat in matrix-matrix prod (operator*(const MatrixDense<float> &mat))"
+            "MatrixDense: invalid mat in matrix-matrix prod "
+            "(operator*(const MatrixDense<float> &mat))"
         );
     }
 
-    MatrixDense<float> c(MatrixDense<float>::Zero(cu_handles, m_rows, mat.cols()));
+    MatrixDense<float> c(
+        MatrixDense<float>::Zero(cu_handles, m_rows, mat.cols())
+    );
 
     check_cublas_status(
         cublasGemmEx(
@@ -182,11 +210,14 @@ MatrixDense<float> MatrixDense<float>::operator*(const MatrixDense<float> &mat) 
 
 }
 
-MatrixDense<float> MatrixDense<float>::operator+(const MatrixDense<float> &mat) const {
+MatrixDense<float> MatrixDense<float>::operator+(
+    const MatrixDense<float> &mat
+) const {
 
     if ((mat.rows() != m_rows) || (mat.cols() != n_cols)) {
         throw std::runtime_error(
-            "MatrixDense: invalid mat in matrix add (operator+(const MatrixDense<float> &mat))"
+            "MatrixDense: invalid mat in matrix add "
+            "(operator+(const MatrixDense<float> &mat))"
         );
     }
 
@@ -207,11 +238,14 @@ MatrixDense<float> MatrixDense<float>::operator+(const MatrixDense<float> &mat) 
 
 }
 
-MatrixDense<float> MatrixDense<float>::operator-(const MatrixDense<float> &mat) const {
+MatrixDense<float> MatrixDense<float>::operator-(
+    const MatrixDense<float> &mat
+) const {
 
     if ((mat.rows() != m_rows) || (mat.cols() != n_cols)) {
         throw std::runtime_error(
-            "MatrixDense: invalid mat in matrix subtract (operator-(const MatrixDense<float> &mat))"
+            "MatrixDense: invalid mat in matrix subtract "
+            "(operator-(const MatrixDense<float> &mat))"
         );
     }
 
@@ -255,7 +289,10 @@ MatrixDense<__half> MatrixDense<float>::to_half() const {
     MatrixDense<__half> created_mat(cu_handles, m_rows, n_cols);
 
     int NUM_THREADS = genmat_gpu_const::MAXTHREADSPERBLOCK;
-    int NUM_BLOCKS = std::ceil(static_cast<double>(m_rows*n_cols)/static_cast<double>(NUM_THREADS));
+    int NUM_BLOCKS = std::ceil(
+        static_cast<double>(m_rows*n_cols) /
+        static_cast<double>(NUM_THREADS)
+    );
 
     if (NUM_BLOCKS > 0) {
 
@@ -285,7 +322,10 @@ MatrixDense<double> MatrixDense<float>::to_double() const {
     MatrixDense<double> created_mat(cu_handles, m_rows, n_cols);
 
     int NUM_THREADS = genmat_gpu_const::MAXTHREADSPERBLOCK;
-    int NUM_BLOCKS = std::ceil(static_cast<double>(m_rows*n_cols)/static_cast<double>(NUM_THREADS));
+    int NUM_BLOCKS = std::ceil(
+        static_cast<double>(m_rows*n_cols) /
+        static_cast<double>(NUM_THREADS)
+    );
 
     if (NUM_BLOCKS > 0) {
 

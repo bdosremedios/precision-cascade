@@ -5,11 +5,15 @@
 #include <cusparse.h>
 #include <cuda_fp16.h>
 
-NoFillMatrixSparse<__half>::NoFillMatrixSparse(const MatrixDense<__half> &source_mat):
+NoFillMatrixSparse<__half>::NoFillMatrixSparse(
+    const MatrixDense<__half> &source_mat
+):
     NoFillMatrixSparse(source_mat, CUDA_R_16F)
 {}
 
-NoFillMatrixSparse<__half> NoFillMatrixSparse<__half>::operator*(const Scalar<__half> &scalar) const {
+NoFillMatrixSparse<__half> NoFillMatrixSparse<__half>::operator*(
+    const Scalar<__half> &scalar
+) const {
 
     NoFillMatrixSparse<__half> created_mat(*this);
 
@@ -29,7 +33,9 @@ NoFillMatrixSparse<__half> NoFillMatrixSparse<__half>::operator*(const Scalar<__
 
 }
 
-NoFillMatrixSparse<__half> & NoFillMatrixSparse<__half>::operator*=(const Scalar<__half> &scalar) {
+NoFillMatrixSparse<__half> & NoFillMatrixSparse<__half>::operator*=(
+    const Scalar<__half> &scalar
+) {
 
     Scalar<float> temp_cast(scalar.cast<float>());
 
@@ -47,11 +53,14 @@ NoFillMatrixSparse<__half> & NoFillMatrixSparse<__half>::operator*=(const Scalar
 
 }
 
-Vector<__half> NoFillMatrixSparse<__half>::operator*(const Vector<__half> &vec) const {
+Vector<__half> NoFillMatrixSparse<__half>::operator*(
+    const Vector<__half> &vec
+) const {
 
     if (vec.rows() != n_cols) {
         throw std::runtime_error(
-            "NoFillMatrixSparse: invalid vec in operator*(const Vector<__half> &vec)"
+            "NoFillMatrixSparse: invalid vec in "
+            "operator*(const Vector<__half> &vec)"
         );
     }
 
@@ -68,8 +77,12 @@ Vector<__half> NoFillMatrixSparse<__half>::operator*(const Vector<__half> &vec) 
         CUSPARSE_INDEX_32I, CUSPARSE_INDEX_32I, CUSPARSE_INDEX_BASE_ZERO,
         CUDA_R_16F
     ));
-    check_cusparse_status(cusparseCreateConstDnVec(&dnVecDescr_orig, n_cols, vec.d_vec, CUDA_R_16F));
-    check_cusparse_status(cusparseCreateDnVec(&dnVecDescr_new, m_rows, new_vec.d_vec, CUDA_R_16F));
+    check_cusparse_status(cusparseCreateConstDnVec(
+        &dnVecDescr_orig, n_cols, vec.d_vec, CUDA_R_16F
+    ));
+    check_cusparse_status(cusparseCreateDnVec(
+        &dnVecDescr_new, m_rows, new_vec.d_vec, CUDA_R_16F
+    ));
 
     size_t bufferSize;
     check_cusparse_status(cusparseSpMV_bufferSize(
@@ -105,11 +118,14 @@ Vector<__half> NoFillMatrixSparse<__half>::operator*(const Vector<__half> &vec) 
 
 }
 
-Vector<__half> NoFillMatrixSparse<__half>::transpose_prod(const Vector<__half> &vec) const {
+Vector<__half> NoFillMatrixSparse<__half>::transpose_prod(
+    const Vector<__half> &vec
+) const {
 
     if (vec.rows() != m_rows) {
         throw std::runtime_error(
-            "NoFillMatrixSparse: invalid vec in operator*(const Vector<__half> &vec)"
+            "NoFillMatrixSparse: invalid vec in "
+            "operator*(const Vector<__half> &vec)"
         );
     }
 
@@ -126,8 +142,12 @@ Vector<__half> NoFillMatrixSparse<__half>::transpose_prod(const Vector<__half> &
         CUSPARSE_INDEX_32I, CUSPARSE_INDEX_32I, CUSPARSE_INDEX_BASE_ZERO,
         CUDA_R_16F
     ));
-    check_cusparse_status(cusparseCreateConstDnVec(&dnVecDescr_orig, m_rows, vec.d_vec, CUDA_R_16F));
-    check_cusparse_status(cusparseCreateDnVec(&dnVecDescr_new, n_cols, new_vec.d_vec, CUDA_R_16F));
+    check_cusparse_status(cusparseCreateConstDnVec(
+        &dnVecDescr_orig, m_rows, vec.d_vec, CUDA_R_16F
+    ));
+    check_cusparse_status(cusparseCreateDnVec(
+        &dnVecDescr_new, n_cols, new_vec.d_vec, CUDA_R_16F
+    ));
 
     size_t bufferSize;
     check_cusparse_status(cusparseSpMV_bufferSize(
@@ -172,7 +192,10 @@ NoFillMatrixSparse<float> NoFillMatrixSparse<__half>::to_float() const {
     NoFillMatrixSparse<float> created_mat(cu_handles, m_rows, n_cols, nnz);
 
     int NUM_THREADS = genmat_gpu_const::MAXTHREADSPERBLOCK;
-    int NUM_BLOCKS = std::ceil(static_cast<double>(nnz)/static_cast<double>(NUM_THREADS));
+    int NUM_BLOCKS = std::ceil(
+        static_cast<double>(nnz) /
+        static_cast<double>(NUM_THREADS)
+    );
 
     check_cuda_error(cudaMemcpy(
         created_mat.d_col_offsets,
@@ -212,7 +235,10 @@ NoFillMatrixSparse<double> NoFillMatrixSparse<__half>::to_double() const {
     NoFillMatrixSparse<double> created_mat(cu_handles, m_rows, n_cols, nnz);
 
     int NUM_THREADS = genmat_gpu_const::MAXTHREADSPERBLOCK;
-    int NUM_BLOCKS = std::ceil(static_cast<double>(nnz)/static_cast<double>(NUM_THREADS));
+    int NUM_BLOCKS = std::ceil(
+        static_cast<double>(nnz) /
+        static_cast<double>(NUM_THREADS)
+    );
 
     check_cuda_error(cudaMemcpy(
         created_mat.d_col_offsets,

@@ -16,7 +16,8 @@ public:
     ) -> NoFillMatrixSparse<double> {
         NoFillMatrixSparse<double> mat = NoFillMatrixSparse<double>::Random(
             BenchmarkBase::bundle, m, m,
-            (nested_col_non_zeros/static_cast<double>(m) > 1) ? 1 : nested_col_non_zeros/static_cast<double>(m)
+            (nested_col_non_zeros/static_cast<double>(m) > 1) ?
+            1 : nested_col_non_zeros/static_cast<double>(m)
         );
         mat.normalize_magnitude();
         return mat;

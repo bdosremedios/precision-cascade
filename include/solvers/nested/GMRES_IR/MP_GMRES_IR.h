@@ -6,24 +6,22 @@
 
 #include <cuda_fp16.h>
 
-template <template <typename> typename M>
-class MP_GMRES_IR_Solve: public IterativeRefinement<M>
+template <template <typename> typename TMatrix>
+class MP_GMRES_IR_Solve: public IterativeRefinement<TMatrix>
 {
 private:
 
-    TypedLinearSystem<M, double> * innerlinsys_dbl_ptr = nullptr;
-    TypedLinearSystem<M, float> * innerlinsys_sgl_ptr = nullptr;
-    TypedLinearSystem<M, __half> * innerlinsys_hlf_ptr = nullptr;
+    TypedLinearSystem<TMatrix, double> * innerlinsys_dbl_ptr = nullptr;
+    TypedLinearSystem<TMatrix, float> * innerlinsys_sgl_ptr = nullptr;
+    TypedLinearSystem<TMatrix, __half> * innerlinsys_hlf_ptr = nullptr;
 
-    TypedLinearSystem_MutAddlRHS<M, double> * mutrhs_innerlinsys_dbl_ptr = nullptr;
-    TypedLinearSystem_MutAddlRHS<M, float> * mutrhs_innerlinsys_sgl_ptr = nullptr;
-    TypedLinearSystem_MutAddlRHS<M, __half> * mutrhs_innerlinsys_hlf_ptr = nullptr;
+    TypedLinearSystem_MutAddlRHS<TMatrix, double> * mutrhs_innerlinsys_dbl_ptr = nullptr;
+    TypedLinearSystem_MutAddlRHS<TMatrix, float> * mutrhs_innerlinsys_sgl_ptr = nullptr;
+    TypedLinearSystem_MutAddlRHS<TMatrix, __half> * mutrhs_innerlinsys_hlf_ptr = nullptr;
 
-    const PrecondArgPkg<M, double> orig_inner_precond_arg_pkg_dbl;
-    PrecondArgPkg<M, float> * inner_precond_arg_pkg_sgl_ptr = nullptr;
-    PrecondArgPkg<M, __half> * inner_precond_arg_pkg_hlf_ptr = nullptr;
-
-    // *** Helper Methods ***
+    const PrecondArgPkg<TMatrix, double> orig_inner_precond_arg_pkg_dbl;
+    PrecondArgPkg<TMatrix, float> * inner_precond_arg_pkg_sgl_ptr = nullptr;
+    PrecondArgPkg<TMatrix, __half> * inner_precond_arg_pkg_hlf_ptr = nullptr;
 
     bool hlf_ptrs_instantiated() {
         return (
@@ -58,11 +56,17 @@ private:
     };
 
     bool dbl_ptrs_instantiated() {
-        return (innerlinsys_dbl_ptr != nullptr) && (mutrhs_innerlinsys_dbl_ptr != nullptr);
+        return (
+            (innerlinsys_dbl_ptr != nullptr) &&
+            (mutrhs_innerlinsys_dbl_ptr != nullptr)
+        );
     };
 
     bool dbl_ptrs_empty() {
-        return (innerlinsys_dbl_ptr == nullptr) && (mutrhs_innerlinsys_dbl_ptr == nullptr);
+        return (
+            (innerlinsys_dbl_ptr == nullptr) &&
+            (mutrhs_innerlinsys_dbl_ptr == nullptr)
+        );
     };
 
     void delete_hlf_ptrs() {
@@ -107,88 +111,120 @@ private:
         delete_dbl_ptrs();
     }
 
-    template <typename T>
+    template <typename TPrecision>
     void setup_systems() {
 
-        if (std::is_same<T, __half>::value) {
+        if (std::is_same<TPrecision, __half>::value) {
 
             if (hlf_ptrs_empty()) {
-                innerlinsys_hlf_ptr = new TypedLinearSystem<M, __half>(this->gen_lin_sys_ptr);
-                mutrhs_innerlinsys_hlf_ptr = new TypedLinearSystem_MutAddlRHS<M, __half>(
-                    innerlinsys_hlf_ptr, this->curr_res
+                innerlinsys_hlf_ptr = (
+                    new TypedLinearSystem<TMatrix, __half>(
+                        this->gen_lin_sys_ptr
+                    )
                 );
-                inner_precond_arg_pkg_hlf_ptr = orig_inner_precond_arg_pkg_dbl.cast_hlf_ptr();
+                mutrhs_innerlinsys_hlf_ptr = (
+                    new TypedLinearSystem_MutAddlRHS<TMatrix, __half>(
+                        innerlinsys_hlf_ptr, this->curr_res
+                    )
+                );
+                inner_precond_arg_pkg_hlf_ptr = (
+                    orig_inner_precond_arg_pkg_dbl.cast_hlf_ptr()
+                );
             } else if (hlf_ptrs_instantiated()) {
                 mutrhs_innerlinsys_hlf_ptr->set_rhs(this->curr_res);
             } else {
                 delete_ptrs();
-                throw std::runtime_error("MP_GMRES_IR_Solve: mismatching ptrs in setup_inner_solve<__half>");
+                throw std::runtime_error(
+                    "MP_GMRES_IR_Solve: mismatching ptrs in "
+                    "setup_systems<__half>"
+                );
             }
 
-        } else if (std::is_same<T, float>::value) {
+        } else if (std::is_same<TPrecision, float>::value) {
 
             if (hlf_ptrs_instantiated() && sgl_ptrs_empty()) {
                 delete_hlf_ptrs();
-                innerlinsys_sgl_ptr = new TypedLinearSystem<M, float>(this->gen_lin_sys_ptr);
-                mutrhs_innerlinsys_sgl_ptr = new TypedLinearSystem_MutAddlRHS<M, float>(
-                    innerlinsys_sgl_ptr, this->curr_res
+                innerlinsys_sgl_ptr = (
+                    new TypedLinearSystem<TMatrix, float>(this->gen_lin_sys_ptr)
                 );
-                inner_precond_arg_pkg_sgl_ptr = orig_inner_precond_arg_pkg_dbl.cast_sgl_ptr();
+                mutrhs_innerlinsys_sgl_ptr = (
+                    new TypedLinearSystem_MutAddlRHS<TMatrix, float>(
+                        innerlinsys_sgl_ptr, this->curr_res
+                    )
+                );
+                inner_precond_arg_pkg_sgl_ptr = (
+                    orig_inner_precond_arg_pkg_dbl.cast_sgl_ptr()
+                );
             } else if (sgl_ptrs_instantiated()) {
                 mutrhs_innerlinsys_sgl_ptr->set_rhs(this->curr_res);
             } else {
                 delete_ptrs();
-                throw std::runtime_error("MP_GMRES_IR_Solve: mismatching ptrs in setup_inner_solve<float>");
+                throw std::runtime_error(
+                    "MP_GMRES_IR_Solve: mismatching ptrs in "
+                    "setup_systems<float>"
+                );
             }
 
-        } else if (std::is_same<T, double>::value) {
+        } else if (std::is_same<TPrecision, double>::value) {
 
             if (sgl_ptrs_instantiated() && dbl_ptrs_empty()) {
                 delete_sgl_ptrs();
-                innerlinsys_dbl_ptr = new TypedLinearSystem<M, double>(this->gen_lin_sys_ptr);
-                mutrhs_innerlinsys_dbl_ptr = new TypedLinearSystem_MutAddlRHS<M, double>(
-                    innerlinsys_dbl_ptr, this->curr_res
+                innerlinsys_dbl_ptr = (
+                    new TypedLinearSystem<TMatrix, double>(
+                        this->gen_lin_sys_ptr
+                    )
+                );
+                mutrhs_innerlinsys_dbl_ptr = (
+                    new TypedLinearSystem_MutAddlRHS<TMatrix, double>(
+                        innerlinsys_dbl_ptr, this->curr_res
+                    )
                 );
             } else if (dbl_ptrs_instantiated()) {
                 mutrhs_innerlinsys_dbl_ptr->set_rhs(this->curr_res);
             } else {
                 delete_ptrs();
-                throw std::runtime_error("MP_GMRES_IR_Solve: mismatching ptrs in setup_inner_solve<double>");
+                throw std::runtime_error(
+                    "MP_GMRES_IR_Solve: mismatching ptrs in "
+                    "setup_systems<double>"
+                );
             }
 
         } else {
-            throw std::runtime_error("MP_GMRES_IR_Solve: Invalid T used in setup_systems<T>");
+            throw std::runtime_error(
+                "MP_GMRES_IR_Solve: Invalid TPrecision used in "
+                "setup_systems<TPrecision>"
+            );
         }
 
 
     }
 
-    template <typename T>
+    template <typename TPrecision>
     void setup_inner_solve() {
 
-        setup_systems<T>();
+        setup_systems<TPrecision>();
 
-        if (std::is_same<T, __half>::value) {
+        if (std::is_same<TPrecision, __half>::value) {
 
-            this->inner_solver = std::make_shared<GMRESSolve<M, __half>>(
+            this->inner_solver = std::make_shared<GMRESSolve<TMatrix, __half>>(
                 mutrhs_innerlinsys_hlf_ptr,
                 u_hlf,
                 this->inner_solve_arg_pkg,
                 *this->inner_precond_arg_pkg_hlf_ptr
             );
 
-        } else if (std::is_same<T, float>::value) {
+        } else if (std::is_same<TPrecision, float>::value) {
 
-            this->inner_solver = std::make_shared<GMRESSolve<M, float>>(
+            this->inner_solver = std::make_shared<GMRESSolve<TMatrix, float>>(
                 mutrhs_innerlinsys_sgl_ptr,
                 u_sgl,
                 this->inner_solve_arg_pkg,
                 *this->inner_precond_arg_pkg_sgl_ptr
             );
 
-        } else if (std::is_same<T, double>::value) {
+        } else if (std::is_same<TPrecision, double>::value) {
 
-            this->inner_solver = std::make_shared<GMRESSolve<M, double>>(
+            this->inner_solver = std::make_shared<GMRESSolve<TMatrix, double>>(
                 mutrhs_innerlinsys_dbl_ptr,
                 u_dbl,
                 this->inner_solve_arg_pkg,
@@ -196,7 +232,10 @@ private:
             );
 
         } else {
-            throw std::runtime_error("MP_GMRES_IR_Solve: Invalid T used in setup_inner_solve<T>");
+            throw std::runtime_error(
+                "MP_GMRES_IR_Solve: Invalid TPrecision used in "
+                "setup_inner_solve<TPrecision>"
+            );
         }
 
     }
@@ -219,7 +258,6 @@ private:
 
 protected:
 
-    // *** Constants ***
     const double u_hlf = pow(2, -10);
     const double u_sgl = pow(2, -23);
     const double u_dbl = pow(2, -52);
@@ -229,25 +267,21 @@ protected:
     const static int DBL_PHASE = 2;
     inline const static int INIT_PHASE = HLF_PHASE;
 
-    // *** Attributes ***
     int cascade_phase;
     int hlf_sgl_cascade_change = -1;
     int sgl_dbl_cascade_change = -1;
 
-    // *** Virtual Abstract Methods ***
-
-    // Determine which phase should be used based on current phase and current convergence progress
+    /* Determine which phase should be used based on current phase and current
+       convergence progress */
     virtual int determine_next_phase() = 0;
 
-    // *** Concrete Override Methods ***
-
-    // Initialize inner outer solver in __half phase
     void initialize_inner_outer_solver() override {
+        // Initialize inner outer solver in lowest precision __half phase
         setup_inner_solve<__half>();
     }
 
-    // Specify inner_solver for outer_iterate_calc and setup
     void outer_iterate_setup() override {
+        // Specify inner_solver for outer_iterate_calc and setup
         int next_phase = determine_next_phase();
         if ((cascade_phase == HLF_PHASE) && (next_phase == SGL_PHASE)) {
             hlf_sgl_cascade_change = this->get_iteration();
@@ -266,13 +300,14 @@ protected:
     
 public:
 
-    // *** Constructors ***
     MP_GMRES_IR_Solve(
-        const GenericLinearSystem<M> * const arg_gen_lin_sys_ptr,
+        const GenericLinearSystem<TMatrix> * const arg_gen_lin_sys_ptr,
         const SolveArgPkg &arg_solve_arg_pkg,
-        const PrecondArgPkg<M, double> arg_inner_precond_arg_pkg_dbl = PrecondArgPkg<M, double>()
+        const PrecondArgPkg<TMatrix, double> arg_inner_precond_arg_pkg_dbl = (
+            PrecondArgPkg<TMatrix, double>()
+        )
     ):
-        IterativeRefinement<M>(arg_gen_lin_sys_ptr, arg_solve_arg_pkg),
+        IterativeRefinement<TMatrix>(arg_gen_lin_sys_ptr, arg_solve_arg_pkg),
         orig_inner_precond_arg_pkg_dbl(arg_inner_precond_arg_pkg_dbl)
     {
         cascade_phase = INIT_PHASE;
@@ -284,24 +319,28 @@ public:
     }
 
     // Forbid rvalue instantiation
-    MP_GMRES_IR_Solve(const GenericLinearSystem<M> * const, const SolveArgPkg &&, const PrecondArgPkg<M, double>) = delete;
+    MP_GMRES_IR_Solve(
+        const GenericLinearSystem<TMatrix> * const,
+        const SolveArgPkg &&,
+        const PrecondArgPkg<TMatrix, double>
+    ) = delete;
 
     int get_hlf_sgl_cascade_change() const { return hlf_sgl_cascade_change; }
     int get_sgl_dbl_cascade_change() const { return sgl_dbl_cascade_change; }
 
 };
 
-template <template <typename> typename M>
-class SimpleConstantThreshold : public MP_GMRES_IR_Solve<M>
+template <template <typename> typename TMatrix>
+class SimpleConstantThreshold : public MP_GMRES_IR_Solve<TMatrix>
 {
 protected:
 
-    // *** Constants ***
     const double tol_hlf = pow(10, -02);
     const double tol_sgl = pow(10, -05);
     const double tol_dbl = pow(10, -10);
 
-    // *** Concrete Override Methods ***
+    using MP_GMRES_IR_Solve<TMatrix>::MP_GMRES_IR_Solve;
+
     int determine_next_phase() override {
         if (this->cascade_phase == this->HLF_PHASE) {
             if ((this->get_relres() <= tol_hlf)) {
@@ -320,22 +359,22 @@ protected:
         }
     }
 
-    using MP_GMRES_IR_Solve<M>::MP_GMRES_IR_Solve;
-
 };
 
-template <template <typename> typename M>
-class RestartCount: public MP_GMRES_IR_Solve<M>
+template <template <typename> typename TMatrix>
+class RestartCount: public MP_GMRES_IR_Solve<TMatrix>
 {
 protected:
 
-    // *** Constants ***
-    int hlf_iters = 4; // Set time spent in half iteration to min number of iter needed
-                       // to save cost of cast as long as were guranteed 1 MV product
-    int sgl_iters = 2; // Set time spend in single iteration to min number of iter needed
-                       // to save cost of cast as long as were guranteed 1 MV product
+    int hlf_iters = 4; // Set time spent in half iteration to min number
+                       // of iter needed to save cost of cast as long as were
+                       // guaranteed 1 MV product
+    int sgl_iters = 2; // Set time spend in single iteration to min number
+                       // of iter needed to save cost of cast as long as were
+                       // guaranteed 1 MV product
 
-    // *** Concrete Override Methods ***
+    using MP_GMRES_IR_Solve<TMatrix>::MP_GMRES_IR_Solve;
+
     int determine_next_phase() override {
         if (this->cascade_phase == this->HLF_PHASE) {
             if (this->get_iteration() > hlf_iters) {
@@ -353,8 +392,6 @@ protected:
             return this->DBL_PHASE;
         }
     }
-
-    using MP_GMRES_IR_Solve<M>::MP_GMRES_IR_Solve;
 
 };
 

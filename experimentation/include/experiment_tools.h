@@ -1,14 +1,13 @@
 #ifndef EXPERIMENT_TOOLS_H
 #define EXPERIMENT_TOOLS_H
 
-#include <string>
-#include <vector>
-#include <unordered_set>
+#include "tools/arg_pkgs/SolveArgPkg.h"
 
 #include <format>
 #include <filesystem>
-
-#include "tools/arg_pkgs/SolveArgPkg.h"
+#include <string>
+#include <vector>
+#include <unordered_set>
 
 namespace fs = std::filesystem;
 
@@ -24,7 +23,9 @@ struct Solve_Group_Precond_Specs {
 
     Solve_Group_Precond_Specs(std::string arg_name): name(arg_name) {}
 
-    Solve_Group_Precond_Specs(std::string arg_name, double arg_ilutp_tau, int arg_ilutp_p):
+    Solve_Group_Precond_Specs(
+        std::string arg_name, double arg_ilutp_tau, int arg_ilutp_p
+    ):
         name(arg_name), ilutp_tau(arg_ilutp_tau), ilutp_p(arg_ilutp_p)
     {}
 
@@ -51,7 +52,9 @@ struct Solve_Group_Precond_Specs {
         *this = other;
     }
 
-    Solve_Group_Precond_Specs &operator=(const Solve_Group_Precond_Specs &other) {
+    Solve_Group_Precond_Specs &operator=(
+        const Solve_Group_Precond_Specs &other
+    ) {
 
         name = other.name;
         ilutp_tau = other.ilutp_tau;
@@ -131,19 +134,19 @@ public:
 };
 
 template <
-    template <template <typename> typename> typename Solver,
-    template <typename> typename M
+    template <template <typename> typename> typename TSolver,
+    template <typename> typename TMatrix
 >
 struct Experiment_Data
 {
 public:
     
     Experiment_Clock clock;
-    std::shared_ptr<Solver<M>> solver_ptr;
+    std::shared_ptr<TSolver<TMatrix>> solver_ptr;
 
     Experiment_Data(
         Experiment_Clock arg_clock,
-        std::shared_ptr<Solver<M>> arg_solver_ptr
+        std::shared_ptr<TSolver<TMatrix>> arg_solver_ptr
     ):
         clock(arg_clock), solver_ptr(arg_solver_ptr) 
     {}

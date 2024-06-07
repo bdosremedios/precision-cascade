@@ -11,59 +11,74 @@
 #include <unordered_set>
 #include <functional>
 
-namespace ilu_subroutines
+namespace ilu_subrtns
 {
 
-template <template <typename> typename M, typename T>
+template <template <typename> typename TMatrix, typename TPrecision>
 struct ILUTriplet {
-    M<T> L = M<T>(cuHandleBundle());
-    M<T> U = M<T>(cuHandleBundle());
-    M<T> P = M<T>(cuHandleBundle());
+    TMatrix<TPrecision> L = TMatrix<TPrecision>(cuHandleBundle());
+    TMatrix<TPrecision> U = TMatrix<TPrecision>(cuHandleBundle());
+    TMatrix<TPrecision> P = TMatrix<TPrecision>(cuHandleBundle());
 };
 
 namespace
 {
 
-template <typename T>
-using DropRuleTauFunc = std::function<bool (T curr_val, int row, int col)>;
+template <typename TPrecision>
+using DropRuleTauFunc = std::function<bool (
+    TPrecision curr_val,
+    int row,
+    int col
+)>;
 
-template <typename T>
-using DropRulePFunc = std::function<void (int col_ind, int pivot_ind, T *col_ptr, int m_dim)>;
+template <typename TPrecision>
+using DropRulePFunc = std::function<void (
+    int col_ind,
+    int pivot_ind,
+    TPrecision *col_ptr,
+    int m_dim
+)>;
 
-template <typename T>
-struct SparseMatrixDescrPtrs {
+template <typename TPrecision>
+struct SparseMatDescrPtrs {
     int *col_offsets;
     int *row_indices;
-    T *vals;
+    TPrecision *vals;
 };
 
-template <typename T>
-NoFillMatrixSparse<T> convert_SparseMatrixDescrPtrs_to_NoFillMatrixSparse(
-    const cuHandleBundle &arg_cu_handles, int m_dim, SparseMatrixDescrPtrs<T> mat_descrp_ptrs
+template <typename TPrecision>
+NoFillMatrixSparse<TPrecision> convert_SparseMatDescrPtrs_to_NoFillMatrixSparse(
+    const cuHandleBundle &arg_cu_handles,
+    int m_dim,
+    SparseMatDescrPtrs<TPrecision> mat_descrp_ptrs
 ) {
-    return NoFillMatrixSparse<T>(
+    return NoFillMatrixSparse<TPrecision>(
         arg_cu_handles,
         mat_descrp_ptrs.col_offsets,
         mat_descrp_ptrs.row_indices,
         mat_descrp_ptrs.vals,
-        m_dim, m_dim, mat_descrp_ptrs.col_offsets[m_dim]
+        m_dim,
+        m_dim,
+        mat_descrp_ptrs.col_offsets[m_dim]
     );
 }
 
-template <typename T>
-T * get_new_U_col_from_left_look(
+template <typename TPrecision>
+TPrecision * get_new_U_col_from_left_look(
     int col_ind,
     int m_dim,
-    DropRuleTauFunc<T> drop_rule_tau_U,
-    SparseMatrixDescrPtrs<T> h_A,
-    SparseMatrixDescrPtrs<T> h_L,
+    DropRuleTauFunc<TPrecision> drop_rule_tau_U,
+    SparseMatDescrPtrs<TPrecision> h_A,
+    SparseMatDescrPtrs<TPrecision> h_L,
     int *pivot_row_hist
 ) {
     
     // Instantiate new dense U col with A column
-    T *new_col_U = static_cast<T *>(malloc(m_dim*sizeof(T)));
+    TPrecision *new_col_U = static_cast<TPrecision *>(
+        malloc(m_dim*sizeof(TPrecision))
+    );
     for (int i=0; i<m_dim; ++i) {
-        new_col_U[i] = static_cast<T>(0.);
+        new_col_U[i] = static_cast<TPrecision>(0.);
     }
     int col_beg_A = h_A.col_offsets[col_ind];
     int col_end_A = h_A.col_offsets[col_ind+1];
@@ -77,17 +92,27 @@ T * get_new_U_col_from_left_look(
         int col_beg_L = h_L.col_offsets[k];
         int col_end_L = h_L.col_offsets[k+1];
 
-        if (drop_rule_tau_U(new_col_U[pivot_row_hist[k]], pivot_row_hist[k], col_ind)) { // Drop pivot U if matches rule
-            new_col_U[pivot_row_hist[k]] = static_cast<T>(0.);
+        if (
+            drop_rule_tau_U(
+                new_col_U[pivot_row_hist[k]],
+                pivot_row_hist[k],
+                col_ind
+            )
+        ) {
+            // Drop pivot U if matches rule
+            new_col_U[pivot_row_hist[k]] = static_cast<TPrecision>(0.);
         }
-        T effecting_U_val = new_col_U[pivot_row_hist[k]];
+        TPrecision effecting_U_val = new_col_U[pivot_row_hist[k]];
 
-        if (effecting_U_val != static_cast<T>(0.)) { // Skip if no effect from U value
+        // Skip if no effect from U
+        if (effecting_U_val != static_cast<TPrecision>(0.)) {
             for (int offset_L=col_beg_L; offset_L<col_end_L; ++offset_L) {
                 int row_L = h_L.row_indices[offset_L];
-                if (row_L != pivot_row_hist[k]) { // Don't apply to own pivot row
-                    T val_L = h_L.vals[offset_L];
-                    if (val_L != static_cast<T>(0.)) { // Skip computation if there's no L modification
+                // Don't apply to own pivot row
+                if (row_L != pivot_row_hist[k]) {
+                    TPrecision val_L = h_L.vals[offset_L];
+                    // Skip calc if there's no L mod
+                    if (val_L != static_cast<TPrecision>(0.)) {
                         new_col_U[row_L] -= val_L*effecting_U_val;
                     }
                 }
@@ -100,18 +125,23 @@ T * get_new_U_col_from_left_look(
 
 }
 
-template <typename T>
-void single_elem_swap(int i, int j, T *vec) {
+template <typename TPrecision>
+void single_elem_swap(int i, int j, TPrecision *vec) {
     if (i != j) {
-        T temp = vec[i];
+        TPrecision temp = vec[i];
         vec[i] = vec[j];
         vec[j] = temp;
     }
 }
 
-template <typename T>
+template <typename TPrecision>
 int find_pivot_loc_in_perm_map(
-    int col_ind, bool to_pivot, int m_dim, T *new_U_col, int *row_permutation_map, bool *row_finished
+    int col_ind,
+    bool to_pivot,
+    int m_dim,
+    TPrecision *new_U_col,
+    int *row_permutation_map,
+    bool *row_finished
 ) {
 
     int ret_val = col_ind;
@@ -127,7 +157,7 @@ int find_pivot_loc_in_perm_map(
         }
     }
 
-    if (new_U_col[row_permutation_map[ret_val]] == static_cast<T>(0.)) {
+    if (new_U_col[row_permutation_map[ret_val]] == static_cast<TPrecision>(0.)) {
         throw std::runtime_error(
             std::format(
                 "find_pivot_loc_in_perm_map: zero pivot encountered at ({}, {})",
@@ -141,29 +171,31 @@ int find_pivot_loc_in_perm_map(
 
 }
 
-template <typename T>
-T * get_new_L_col_from_zeroing(
+template <typename TPrecision>
+TPrecision * get_new_L_col_from_zeroing(
     int col_ind,
     int pivot_ind,
     int m_dim,
-    T *U_col,
+    TPrecision *U_col,
     bool *row_finished
 ) {
 
-    T *new_L_col = static_cast<T *>(malloc(m_dim*sizeof(T)));
+    TPrecision *new_L_col = static_cast<TPrecision *>(
+        malloc(m_dim*sizeof(TPrecision))
+    );
     for (int i=0; i<m_dim; ++i) {
         if (i == pivot_ind) {
-            new_L_col[i] = static_cast<T>(1.);
+            new_L_col[i] = static_cast<TPrecision>(1.);
         } else {
-            new_L_col[i] = static_cast<T>(0.);
+            new_L_col[i] = static_cast<TPrecision>(0.);
         }
     }
 
-    T pivot_val = U_col[pivot_ind];
+    TPrecision pivot_val = U_col[pivot_ind];
     for (int i=0; i<m_dim; ++i) {
         if (!row_finished[i] && (i != pivot_ind)) {
             new_L_col[i] = U_col[i]/pivot_val;
-            U_col[i] = static_cast<T>(0.);
+            U_col[i] = static_cast<TPrecision>(0.);
         }
     }
 
@@ -171,15 +203,18 @@ T * get_new_L_col_from_zeroing(
 
 }
 
-template <typename T>
+template <typename TPrecision>
 void update_SparseMatrixDescrPtrs_w_col(
-    int col_ind, int m_dim, SparseMatrixDescrPtrs<T> mat_descrp_ptrs, T *col_ptr
+    int col_ind,
+    int m_dim,
+    SparseMatDescrPtrs<TPrecision> mat_descrp_ptrs,
+    TPrecision *col_ptr
 ) {
 
     int col_nnz = 0;
     int init_offset = mat_descrp_ptrs.col_offsets[col_ind];
     for (int i=0; i<m_dim; ++i) {
-        if (col_ptr[i] != static_cast<T>(0.)) {
+        if (col_ptr[i] != static_cast<TPrecision>(0.)) {
             mat_descrp_ptrs.row_indices[init_offset + col_nnz] = i;
             mat_descrp_ptrs.vals[init_offset + col_nnz] = col_ptr[i];
             ++col_nnz;
@@ -189,32 +224,42 @@ void update_SparseMatrixDescrPtrs_w_col(
 
 }
 
-template <typename T>
+template <typename TPrecision>
 void left_looking_col_elim_delay_perm(
     int col_ind,
     bool to_pivot,
-    DropRuleTauFunc<T> drop_rule_tau_U,
-    DropRuleTauFunc<T> drop_rule_tau_L,
-    DropRulePFunc<T> drop_rule_p,
+    DropRuleTauFunc<TPrecision> drop_rule_tau_U,
+    DropRuleTauFunc<TPrecision> drop_rule_tau_L,
+    DropRulePFunc<TPrecision> drop_rule_p,
     int m_dim,
-    SparseMatrixDescrPtrs<T> h_A,
-    SparseMatrixDescrPtrs<T> h_U,
-    SparseMatrixDescrPtrs<T> h_L,
+    SparseMatDescrPtrs<TPrecision> h_A,
+    SparseMatDescrPtrs<TPrecision> h_U,
+    SparseMatDescrPtrs<TPrecision> h_L,
     int *row_permutation_map,
     int *pivot_row_hist,
     bool *row_finished
 ) { 
 
     // Determine new column of U
-    T *new_U_col = get_new_U_col_from_left_look<T>(
-        col_ind, m_dim, drop_rule_tau_U, h_A, h_L, pivot_row_hist
+    TPrecision *new_U_col = get_new_U_col_from_left_look<TPrecision>(
+        col_ind,
+        m_dim,
+        drop_rule_tau_U,
+        h_A,
+        h_L,
+        pivot_row_hist
     );
 
     // Determine pivot row
     int pivot_loc;
     try {
-        pivot_loc = find_pivot_loc_in_perm_map<T>(
-            col_ind, to_pivot, m_dim, new_U_col, row_permutation_map, row_finished
+        pivot_loc = find_pivot_loc_in_perm_map<TPrecision>(
+            col_ind,
+            to_pivot,
+            m_dim,
+            new_U_col,
+            row_permutation_map,
+            row_finished
         );
     } catch (std::runtime_error e) {
         free(new_U_col);
@@ -226,25 +271,39 @@ void left_looking_col_elim_delay_perm(
     row_finished[pivot_ind] = true;
 
     // Determine new column of L
-    T *new_L_col = get_new_L_col_from_zeroing<T>(
-        col_ind, pivot_ind, m_dim, new_U_col, row_finished
+    TPrecision *new_L_col = get_new_L_col_from_zeroing<TPrecision>(
+        col_ind,
+        pivot_ind,
+        m_dim,
+        new_U_col,
+        row_finished
     );
 
     // Apply drop rules to new columns ensuring skip of pivot
     for (int i=0; i<m_dim; ++i) {
-        if ((i != pivot_ind) && drop_rule_tau_U(new_U_col[i], i, col_ind)) {
-            new_U_col[i] = static_cast<T>(0.);
+        if (
+            (i != pivot_ind) &&
+            drop_rule_tau_U(new_U_col[i], i, col_ind)
+        ) {
+            new_U_col[i] = static_cast<TPrecision>(0.);
         }
-        if ((i != pivot_ind) && drop_rule_tau_L(new_L_col[i], i, col_ind)) {
-            new_L_col[i] = static_cast<T>(0.);
+        if (
+            (i != pivot_ind) &&
+            drop_rule_tau_L(new_L_col[i], i, col_ind)
+        ) {
+            new_L_col[i] = static_cast<TPrecision>(0.);
         }
     }
     drop_rule_p(col_ind, pivot_ind, new_U_col, m_dim);
     drop_rule_p(col_ind, pivot_ind, new_L_col, m_dim);
 
     // Update h_U and h_L
-    update_SparseMatrixDescrPtrs_w_col<T>(col_ind, m_dim, h_U, new_U_col);
-    update_SparseMatrixDescrPtrs_w_col<T>(col_ind, m_dim, h_L, new_L_col);
+    update_SparseMatrixDescrPtrs_w_col<TPrecision>(
+        col_ind, m_dim, h_U, new_U_col
+    );
+    update_SparseMatrixDescrPtrs_w_col<TPrecision>(
+        col_ind, m_dim, h_L, new_L_col
+    );
 
     // Free columns
     free(new_U_col);
@@ -252,9 +311,11 @@ void left_looking_col_elim_delay_perm(
 
 }
 
-template <typename T>
+template <typename TPrecision>
 void exec_SparseMatrixDescrPtrs_perm(
-    int m_dim, SparseMatrixDescrPtrs<T> mat_descrp_ptrs, int *row_permutation_dict
+    int m_dim,
+    SparseMatDescrPtrs<TPrecision> mat_descrp_ptrs,
+    int *row_permutation_dict
 ) {
 
     for (int j=0; j<m_dim; ++j) {
@@ -263,33 +324,44 @@ void exec_SparseMatrixDescrPtrs_perm(
         int col_end = mat_descrp_ptrs.col_offsets[j+1];
 
         for (int offset = col_begin; offset < col_end; ++offset) {
-            mat_descrp_ptrs.row_indices[offset] = row_permutation_dict[mat_descrp_ptrs.row_indices[offset]];
+            mat_descrp_ptrs.row_indices[offset] = (
+                row_permutation_dict[mat_descrp_ptrs.row_indices[offset]]
+            );
         }
 
-        sort::in_place_passengered_sort<int, T>(
-            col_begin, col_end, mat_descrp_ptrs.row_indices, mat_descrp_ptrs.vals
+        sort::in_place_passengered_sort<int, TPrecision>(
+            col_begin,
+            col_end,
+            mat_descrp_ptrs.row_indices,
+            mat_descrp_ptrs.vals
         );
 
     }
 
 }
 
-template <typename T>
-NoFillMatrixSparse<T> form_permutation_matrix(
-    const cuHandleBundle &arg_cu_handles, int m_dim, int *row_permutation_map
+template <typename TPrecision>
+NoFillMatrixSparse<TPrecision> form_permutation_matrix(
+    const cuHandleBundle &arg_cu_handles,
+    int m_dim,
+    int *row_permutation_map
 ) {
 
     int *col_offsets = static_cast<int *>(malloc((m_dim+1)*sizeof(int)));
     int *row_indices = static_cast<int *>(malloc(m_dim*sizeof(int)));
-    T *vals = static_cast<T *>(malloc(m_dim*sizeof(T)));
+    TPrecision *vals = static_cast<TPrecision *>(
+        malloc(m_dim*sizeof(TPrecision))
+    );
 
-    for (int i=0; i<(m_dim+1); ++i) { col_offsets[i] = i; }
+    for (int i=0; i<(m_dim+1); ++i) {
+        col_offsets[i] = i;
+    }
     for (int i=0; i<m_dim; ++i) {
         row_indices[row_permutation_map[i]] = i;
-        vals[i] = static_cast<T>(1.);
+        vals[i] = static_cast<TPrecision>(1.);
     }
 
-    NoFillMatrixSparse<T> ret_val(
+    NoFillMatrixSparse<TPrecision> ret_val(
         arg_cu_handles,
         col_offsets,
         row_indices,
@@ -305,26 +377,30 @@ NoFillMatrixSparse<T> form_permutation_matrix(
 
 }
 
-template <template <typename> typename M, typename T>
-ILUTriplet<M, T> sparse_construct_drop_rule_ILU(
+template <template <typename> typename TMatrix, typename TPrecision>
+ILUTriplet<TMatrix, TPrecision> sparse_construct_drop_rule_ILU(
     bool to_pivot,
-    DropRuleTauFunc<T> drop_rule_tau_U,
-    DropRuleTauFunc<T> drop_rule_tau_L,
-    DropRulePFunc<T> drop_rule_p,
+    DropRuleTauFunc<TPrecision> drop_rule_tau_U,
+    DropRuleTauFunc<TPrecision> drop_rule_tau_L,
+    DropRulePFunc<TPrecision> drop_rule_p,
     int max_output_nnz,
-    const NoFillMatrixSparse<T> &A
+    const NoFillMatrixSparse<TPrecision> &A
 ) {
 
-    if (A.rows() != A.cols()) { throw std::runtime_error("Non square matrix A"); }
+    if (A.rows() != A.cols()) {
+        throw std::runtime_error("Non square matrix A");
+    }
 
     int m_dim = A.rows();
     int input_nnz = A.non_zeros();
 
     // Load data of A into host memory
-    SparseMatrixDescrPtrs<T> h_A;
+    SparseMatDescrPtrs<TPrecision> h_A;
     h_A.col_offsets = static_cast<int *>(malloc((m_dim+1)*sizeof(int)));
     h_A.row_indices = static_cast<int *>(malloc(input_nnz*sizeof(int)));
-    h_A.vals = static_cast<T *>(malloc(input_nnz*sizeof(T)));
+    h_A.vals = static_cast<TPrecision *>(
+        malloc(input_nnz*sizeof(TPrecision))
+    );
 
     A.copy_data_to_ptr(
         h_A.col_offsets, h_A.row_indices, h_A.vals,
@@ -332,20 +408,24 @@ ILUTriplet<M, T> sparse_construct_drop_rule_ILU(
     );
 
     // Instantiate storage for L and U
-    SparseMatrixDescrPtrs<T> h_U;
+    SparseMatDescrPtrs<TPrecision> h_U;
     h_U.col_offsets = static_cast<int *>(malloc((m_dim+1)*sizeof(int)));
     h_U.col_offsets[0] = 0;
     h_U.row_indices = static_cast<int *>(malloc(max_output_nnz*sizeof(int)));
-    h_U.vals = static_cast<T *>(malloc(max_output_nnz*sizeof(T)));
+    h_U.vals = static_cast<TPrecision *>(
+        malloc(max_output_nnz*sizeof(TPrecision))
+    );
 
-    SparseMatrixDescrPtrs<T> h_L;
+    SparseMatDescrPtrs<TPrecision> h_L;
     h_L.col_offsets = static_cast<int *>(malloc((m_dim+1)*sizeof(int)));
     h_L.col_offsets[0] = 0;
     h_L.row_indices = static_cast<int *>(malloc(max_output_nnz*sizeof(int)));
-    h_L.vals = static_cast<T *>(malloc(max_output_nnz*sizeof(T)));
+    h_L.vals = static_cast<TPrecision *>(
+        malloc(max_output_nnz*sizeof(TPrecision))
+    );
 
-    // Instantiate trackers for permutations, previous pivots, and for completed rows
-    // information for delayed permutation
+    // Instantiate trackers for permutations, previous pivots, and for completed
+    // rows information for delayed permutation
     int *row_permutation_map = static_cast<int *>(malloc(m_dim*sizeof(int)));
     for (int i=0; i<m_dim; ++i) { row_permutation_map[i] = i; }
 
@@ -358,6 +438,7 @@ ILUTriplet<M, T> sparse_construct_drop_rule_ILU(
     for (int j=0; j<m_dim; ++j) {
 
         try {
+
             left_looking_col_elim_delay_perm(
                 j,
                 to_pivot,
@@ -370,7 +451,9 @@ ILUTriplet<M, T> sparse_construct_drop_rule_ILU(
                 pivot_row_hist,
                 row_finished
             );
+
         } catch (std::runtime_error e) {
+
             free(h_A.col_offsets);
             free(h_A.row_indices);
             free(h_A.vals);
@@ -384,7 +467,9 @@ ILUTriplet<M, T> sparse_construct_drop_rule_ILU(
             free(pivot_row_hist);
             free(row_finished);
             throw e;
+
         }
+
     }
 
     // Create permutation dict such that every access where it should be
@@ -394,19 +479,35 @@ ILUTriplet<M, T> sparse_construct_drop_rule_ILU(
     }
 
     // Execute permutations from elimination
-    exec_SparseMatrixDescrPtrs_perm<T>(m_dim, h_L, row_permutation_dict);
-    exec_SparseMatrixDescrPtrs_perm<T>(m_dim, h_U, row_permutation_dict);
+    exec_SparseMatrixDescrPtrs_perm<TPrecision>(
+        m_dim, h_L, row_permutation_dict
+    );
+    exec_SparseMatrixDescrPtrs_perm<TPrecision>(
+        m_dim, h_U, row_permutation_dict
+    );
 
     // Form matrices
-    ILUTriplet<M, T> ret_val;
-    ret_val.U = M<T>(
-        convert_SparseMatrixDescrPtrs_to_NoFillMatrixSparse(A.get_cu_handles(), m_dim, h_U)
+    ILUTriplet<TMatrix, TPrecision> ret_val;
+    ret_val.U = TMatrix<TPrecision>(
+        convert_SparseMatDescrPtrs_to_NoFillMatrixSparse(
+            A.get_cu_handles(),
+            m_dim,
+            h_U
+        )
     );
-    ret_val.L = M<T>(
-        convert_SparseMatrixDescrPtrs_to_NoFillMatrixSparse(A.get_cu_handles(), m_dim, h_L)
+    ret_val.L = TMatrix<TPrecision>(
+        convert_SparseMatDescrPtrs_to_NoFillMatrixSparse(
+            A.get_cu_handles(),
+            m_dim,
+            h_L
+        )
     );
-    ret_val.P = M<T>(
-        form_permutation_matrix<T>(A.get_cu_handles(), m_dim, row_permutation_map)
+    ret_val.P = TMatrix<TPrecision>(
+        form_permutation_matrix<TPrecision>(
+            A.get_cu_handles(),
+            m_dim,
+            row_permutation_map
+        )
     );
 
     // Free allocated memory
@@ -433,14 +534,16 @@ ILUTriplet<M, T> sparse_construct_drop_rule_ILU(
 
 }
 
-template <template <typename> typename M, typename T>
-ILUTriplet<M, T> construct_square_ILU_0(
-   const NoFillMatrixSparse<T> &A
+template <template <typename> typename TMatrix, typename TPrecision>
+ILUTriplet<TMatrix, TPrecision> construct_square_ILU_0(
+   const NoFillMatrixSparse<TPrecision> &A
 ) {
 
     int *col_offsets = static_cast<int *>(malloc((A.cols()+1)*sizeof(int)));
     int *row_indices = static_cast<int *>(malloc(A.non_zeros()*sizeof(int)));
-    T *vals = static_cast<T *>(malloc(A.non_zeros()*sizeof(T)));
+    TPrecision *vals = static_cast<TPrecision *>(
+        malloc(A.non_zeros()*sizeof(TPrecision))
+    );
 
     A.copy_data_to_ptr(
         col_offsets, row_indices, vals,
@@ -458,17 +561,23 @@ ILUTriplet<M, T> construct_square_ILU_0(
     free(row_indices);
     free(vals);
 
-    DropRuleTauFunc<T> drop_rule_tau_U = [&A_sparsity_map] (T _, int row, int col) -> bool {
-        return !static_cast<bool>(A_sparsity_map[col].count(row));
-    };
+    DropRuleTauFunc<TPrecision> drop_rule_tau_U = (
+        [&A_sparsity_map](TPrecision _, int row, int col) -> bool {
+            return !static_cast<bool>(A_sparsity_map[col].count(row));
+        }
+    );
 
-    DropRuleTauFunc<T> drop_rule_tau_L = [&A_sparsity_map] (T _, int row, int col) -> bool {
-        return !static_cast<bool>(A_sparsity_map[col].count(row));
-    };
+    DropRuleTauFunc<TPrecision> drop_rule_tau_L = (
+        [&A_sparsity_map](TPrecision _, int row, int col) -> bool {
+            return !static_cast<bool>(A_sparsity_map[col].count(row));
+        }
+    );
 
-    DropRulePFunc<T> drop_rule_p = [] (int col_ind, int pivot_ind, T *col_ptr, int m_dim) { ; };
+    DropRulePFunc<TPrecision> drop_rule_p = (
+        [](int col_ind, int pivot_ind, TPrecision *col_ptr, int m_dim) { ; }
+    );
 
-    return sparse_construct_drop_rule_ILU<M ,T>(
+    return sparse_construct_drop_rule_ILU<TMatrix ,TPrecision>(
         false,
         drop_rule_tau_U,
         drop_rule_tau_L,
@@ -479,10 +588,16 @@ ILUTriplet<M, T> construct_square_ILU_0(
 
 }
 
-template <typename T>
-T get_largest_magnitude_in_col(int col_ind, int *col_offsets, T *vals) {
-    T largest_mag = 0.;
-    for (int offset = col_offsets[col_ind]; offset < col_offsets[col_ind+1]; ++offset) {
+template <typename TPrecision>
+TPrecision get_largest_magnitude_in_col(
+    int col_ind, int *col_offsets, TPrecision *vals
+) {
+    TPrecision largest_mag = 0.;
+    for (
+        int offset = col_offsets[col_ind];
+        offset < col_offsets[col_ind+1];
+        ++offset
+    ) {
         if (std::abs(vals[offset]) > largest_mag) {
             largest_mag = std::abs(vals[offset]);
         }
@@ -490,9 +605,9 @@ T get_largest_magnitude_in_col(int col_ind, int *col_offsets, T *vals) {
     return largest_mag;
 }
 
-template <template <typename> typename M, typename T>
-ILUTriplet<M, T> construct_square_ILUTP(
-    const NoFillMatrixSparse<T> &A, double tau, int p, bool to_pivot
+template <template <typename> typename TMatrix, typename TPrecision>
+ILUTriplet<TMatrix, TPrecision> construct_square_ILUTP(
+    const NoFillMatrixSparse<TPrecision> &A, double tau, int p, bool to_pivot
 ) {
 
     if (p < 1) {
@@ -503,14 +618,16 @@ ILUTriplet<M, T> construct_square_ILUTP(
 
     int *col_offsets = static_cast<int *>(malloc((A.cols()+1)*sizeof(int)));
     int *row_indices = static_cast<int *>(malloc(A.non_zeros()*sizeof(int)));
-    T *vals = static_cast<T *>(malloc(A.non_zeros()*sizeof(T)));
+    TPrecision *vals = static_cast<TPrecision *>(
+        malloc(A.non_zeros()*sizeof(TPrecision))
+    );
 
     A.copy_data_to_ptr(
         col_offsets, row_indices, vals,
         A.rows(), A.cols(), A.non_zeros()
     );
 
-    std::vector<T> col_inf_norm(A.cols());
+    std::vector<TPrecision> col_inf_norm(A.cols());
     for (int j=0; j<A.cols(); ++j) {
         col_inf_norm[j] = get_largest_magnitude_in_col(j, col_offsets, vals);
     }
@@ -519,22 +636,31 @@ ILUTriplet<M, T> construct_square_ILUTP(
     free(row_indices);
     free(vals);
 
-    DropRuleTauFunc<T> drop_rule_tau_U = [&col_inf_norm, tau] (T val, int _, int col) -> bool {
-        return std::abs(val) <= tau*col_inf_norm[col];
-    };
+    DropRuleTauFunc<TPrecision> drop_rule_tau_U = (
+        [&col_inf_norm, tau](TPrecision val, int _, int col) -> bool {
+            return std::abs(val) <= tau*col_inf_norm[col];
+        }
+    );
 
-    DropRuleTauFunc<T> drop_rule_tau_L = [tau] (T val, int _, int col) -> bool {
-        return std::abs(val) <= tau;
-    };
+    DropRuleTauFunc<TPrecision> drop_rule_tau_L = (
+        [tau](TPrecision val, int _, int col) -> bool {
+            return std::abs(val) <= tau;
+        }
+    );
 
-    DropRulePFunc<T> drop_rule_p = [p] (int col_ind, int pivot_ind, T *col_ptr, int m_dim) {
+    DropRulePFunc<TPrecision> drop_rule_p = [p](
+        int col_ind, int pivot_ind, TPrecision *col_ptr, int m_dim
+    ) {
         
-        heap::PSizeHeap<T> heap(p-1);
+        heap::PSizeHeap<TPrecision> heap(p-1);
 
         for (int i=0; i<m_dim; ++i) {
-            if ((i != pivot_ind) && (col_ptr[i] != static_cast<T>(0.))) {
+            if (
+                (i != pivot_ind) &&
+                (col_ptr[i] != static_cast<TPrecision>(0.))
+            ) {
                 heap.push(col_ptr[i], i);
-                col_ptr[i] = static_cast<T>(0.);
+                col_ptr[i] = static_cast<TPrecision>(0.);
             }
         }
 
@@ -544,7 +670,7 @@ ILUTriplet<M, T> construct_square_ILUTP(
 
     };
 
-    return sparse_construct_drop_rule_ILU<M, T>(
+    return sparse_construct_drop_rule_ILU<TMatrix, TPrecision>(
         to_pivot,
         drop_rule_tau_U,
         drop_rule_tau_L,

@@ -5,11 +5,15 @@
 #include <cusparse.h>
 #include <cuda_fp16.h>
 
-NoFillMatrixSparse<double>::NoFillMatrixSparse(const MatrixDense<double> &source_mat):
+NoFillMatrixSparse<double>::NoFillMatrixSparse(
+    const MatrixDense<double> &source_mat
+):
     NoFillMatrixSparse(source_mat, CUDA_R_64F)
 {}
 
-NoFillMatrixSparse<double> NoFillMatrixSparse<double>::operator*(const Scalar<double> &scalar) const {
+NoFillMatrixSparse<double> NoFillMatrixSparse<double>::operator*(
+    const Scalar<double> &scalar
+) const {
 
     NoFillMatrixSparse<double> created_mat(*this);
 
@@ -27,7 +31,9 @@ NoFillMatrixSparse<double> NoFillMatrixSparse<double>::operator*(const Scalar<do
 
 }
 
-NoFillMatrixSparse<double> & NoFillMatrixSparse<double>::operator*=(const Scalar<double> &scalar) {
+NoFillMatrixSparse<double> & NoFillMatrixSparse<double>::operator*=(
+    const Scalar<double> &scalar
+) {
 
     check_cublas_status(
         cublasScalEx(
@@ -43,11 +49,14 @@ NoFillMatrixSparse<double> & NoFillMatrixSparse<double>::operator*=(const Scalar
 
 }
 
-Vector<double> NoFillMatrixSparse<double>::operator*(const Vector<double> &vec) const {
+Vector<double> NoFillMatrixSparse<double>::operator*(
+    const Vector<double> &vec
+) const {
 
     if (vec.rows() != n_cols) {
         throw std::runtime_error(
-            "NoFillMatrixSparse: invalid vec in operator*(const Vector<double> &vec)"
+            "NoFillMatrixSparse: invalid vec in "
+            "operator*(const Vector<double> &vec)"
         );
     }
 
@@ -64,8 +73,12 @@ Vector<double> NoFillMatrixSparse<double>::operator*(const Vector<double> &vec) 
         CUSPARSE_INDEX_32I, CUSPARSE_INDEX_32I, CUSPARSE_INDEX_BASE_ZERO,
         CUDA_R_64F
     ));
-    check_cusparse_status(cusparseCreateConstDnVec(&dnVecDescr_orig, n_cols, vec.d_vec, CUDA_R_64F));
-    check_cusparse_status(cusparseCreateDnVec(&dnVecDescr_new, m_rows, new_vec.d_vec, CUDA_R_64F));
+    check_cusparse_status(cusparseCreateConstDnVec(
+        &dnVecDescr_orig, n_cols, vec.d_vec, CUDA_R_64F
+    ));
+    check_cusparse_status(cusparseCreateDnVec(
+        &dnVecDescr_new, m_rows, new_vec.d_vec, CUDA_R_64F
+    ));
 
     size_t bufferSize;
     check_cusparse_status(cusparseSpMV_bufferSize(
@@ -101,7 +114,9 @@ Vector<double> NoFillMatrixSparse<double>::operator*(const Vector<double> &vec) 
 
 }
 
-Vector<double> NoFillMatrixSparse<double>::transpose_prod(const Vector<double> &vec) const {
+Vector<double> NoFillMatrixSparse<double>::transpose_prod(
+    const Vector<double> &vec
+) const {
 
     if (vec.rows() != m_rows) {
         throw std::runtime_error(
@@ -122,8 +137,12 @@ Vector<double> NoFillMatrixSparse<double>::transpose_prod(const Vector<double> &
         CUSPARSE_INDEX_32I, CUSPARSE_INDEX_32I, CUSPARSE_INDEX_BASE_ZERO,
         CUDA_R_64F
     ));
-    check_cusparse_status(cusparseCreateConstDnVec(&dnVecDescr_orig, m_rows, vec.d_vec, CUDA_R_64F));
-    check_cusparse_status(cusparseCreateDnVec(&dnVecDescr_new, n_cols, new_vec.d_vec, CUDA_R_64F));
+    check_cusparse_status(cusparseCreateConstDnVec(
+        &dnVecDescr_orig, m_rows, vec.d_vec, CUDA_R_64F
+    ));
+    check_cusparse_status(cusparseCreateDnVec(
+        &dnVecDescr_new, n_cols, new_vec.d_vec, CUDA_R_64F
+    ));
 
     size_t bufferSize;
     check_cusparse_status(cusparseSpMV_bufferSize(
@@ -164,7 +183,10 @@ NoFillMatrixSparse<__half> NoFillMatrixSparse<double>::to_half() const {
     NoFillMatrixSparse<__half> created_mat(cu_handles, m_rows, n_cols, nnz);
 
     int NUM_THREADS = genmat_gpu_const::MAXTHREADSPERBLOCK;
-    int NUM_BLOCKS = std::ceil(static_cast<double>(nnz)/static_cast<double>(NUM_THREADS));
+    int NUM_BLOCKS = std::ceil(
+        static_cast<double>(nnz) /
+        static_cast<double>(NUM_THREADS)
+    );
 
     check_cuda_error(cudaMemcpy(
         created_mat.d_col_offsets,
@@ -204,7 +226,10 @@ NoFillMatrixSparse<float> NoFillMatrixSparse<double>::to_float() const {
     NoFillMatrixSparse<float> created_mat(cu_handles, m_rows, n_cols, nnz);
 
     int NUM_THREADS = genmat_gpu_const::MAXTHREADSPERBLOCK;
-    int NUM_BLOCKS = std::ceil(static_cast<double>(nnz)/static_cast<double>(NUM_THREADS));
+    int NUM_BLOCKS = std::ceil(
+        static_cast<double>(nnz) /
+        static_cast<double>(NUM_THREADS)
+    );
 
     check_cuda_error(cudaMemcpy(
         created_mat.d_col_offsets,

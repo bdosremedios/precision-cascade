@@ -6,7 +6,9 @@
 
 #include <cmath>
 
-Vector<double> Vector<double>::operator*(const Scalar<double> &scalar) const {
+Vector<double> Vector<double>::operator*(
+    const Scalar<double> &scalar
+) const {
 
     Vector<double> c(*this);
 
@@ -24,7 +26,9 @@ Vector<double> Vector<double>::operator*(const Scalar<double> &scalar) const {
 
 }
 
-Vector<double> & Vector<double>::operator*=(const Scalar<double> &scalar) {
+Vector<double> & Vector<double>::operator*=(
+    const Scalar<double> &scalar
+) {
 
     check_cublas_status(
         cublasScalEx(
@@ -40,7 +44,9 @@ Vector<double> & Vector<double>::operator*=(const Scalar<double> &scalar) {
 
 }
 
-Vector<double> Vector<double>::operator+(const Vector<double> &vec) const {
+Vector<double> Vector<double>::operator+(
+    const Vector<double> &vec
+) const {
 
     check_vecvec_op_compatibility(vec);
 
@@ -61,7 +67,9 @@ Vector<double> Vector<double>::operator+(const Vector<double> &vec) const {
 
 }
 
-Vector<double> Vector<double>::operator-(const Vector<double> &vec) const {
+Vector<double> Vector<double>::operator-(
+    const Vector<double> &vec
+) const {
 
     check_vecvec_op_compatibility(vec);
 
@@ -82,7 +90,9 @@ Vector<double> Vector<double>::operator-(const Vector<double> &vec) const {
 
 }
 
-Vector<double> & Vector<double>::operator+=(const Vector<double> &vec) {
+Vector<double> & Vector<double>::operator+=(
+    const Vector<double> &vec
+) {
 
     check_vecvec_op_compatibility(vec);
 
@@ -101,7 +111,9 @@ Vector<double> & Vector<double>::operator+=(const Vector<double> &vec) {
 
 }
 
-Vector<double> & Vector<double>::operator-=(const Vector<double> &vec) {
+Vector<double> & Vector<double>::operator-=(
+    const Vector<double> &vec
+) {
 
     check_vecvec_op_compatibility(vec);
 
@@ -120,7 +132,9 @@ Vector<double> & Vector<double>::operator-=(const Vector<double> &vec) {
 
 }
 
-Scalar<double> Vector<double>::dot(const Vector<double> &vec) const {
+Scalar<double> Vector<double>::dot(
+    const Vector<double> &vec
+) const {
 
     check_vecvec_op_compatibility(vec);
     
@@ -164,8 +178,9 @@ Vector<__half> Vector<double>::to_half() const {
     Vector<__half> created_vec(cu_handles, m_rows);
 
     int NUM_THREADS = genmat_gpu_const::MAXTHREADSPERBLOCK;
-    int NUM_BLOCKS = static_cast<int>(
-        std::ceil(static_cast<double>(m_rows)/static_cast<double>(NUM_THREADS))
+    int NUM_BLOCKS = std::ceil(
+        static_cast<double>(m_rows) /
+        static_cast<double>(NUM_THREADS)
     );
 
     if (NUM_BLOCKS > 0) {
@@ -192,8 +207,9 @@ Vector<float> Vector<double>::to_float() const {
     Vector<float> created_vec(cu_handles, m_rows);
 
     int NUM_THREADS = genmat_gpu_const::MAXTHREADSPERBLOCK;
-    int NUM_BLOCKS = static_cast<int>(
-        std::ceil(static_cast<double>(m_rows)/static_cast<double>(NUM_THREADS))
+    int NUM_BLOCKS = std::ceil(
+        static_cast<double>(m_rows) /
+        static_cast<double>(NUM_THREADS)
     );
 
     if (NUM_BLOCKS > 0) {
@@ -215,4 +231,6 @@ Vector<float> Vector<double>::to_float() const {
 
 }
 
-Vector<double> Vector<double>::to_double() const { return Vector<double>(*this); }
+Vector<double> Vector<double>::to_double() const {
+    return Vector<double>(*this);
+}

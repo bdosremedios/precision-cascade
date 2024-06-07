@@ -9,12 +9,16 @@ Experiment_Log::Experiment_Log() {
 
     std::vector<spdlog::sink_ptr> logger_sinks;
     logger_sinks.push_back(std::make_shared<spdlog::sinks::stdout_sink_st>());
-    logger = std::make_shared<spdlog::logger>("", begin(logger_sinks), end(logger_sinks));
+    logger = std::make_shared<spdlog::logger>(
+        "", begin(logger_sinks), end(logger_sinks)
+    );
     logger->set_pattern("[%D %T] [%l] %v");
 
 }
 
-Experiment_Log::Experiment_Log(std::string logger_name, fs::path log_file, bool print_to_stdout) {
+Experiment_Log::Experiment_Log(
+    std::string logger_name, fs::path log_file, bool print_to_stdout
+) {
 
     clear_file(log_file);
 
@@ -28,7 +32,9 @@ Experiment_Log::Experiment_Log(std::string logger_name, fs::path log_file, bool 
         );
     }
 
-    logger = std::make_shared<spdlog::logger>(logger_name, begin(logger_sinks), end(logger_sinks));
+    logger = std::make_shared<spdlog::logger>(
+        logger_name, begin(logger_sinks), end(logger_sinks)
+    );
     logger->set_pattern("[%D %T] [%l] %v");
 
 }

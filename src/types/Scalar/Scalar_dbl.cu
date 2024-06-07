@@ -4,19 +4,37 @@
 #include <cuda_runtime.h>
 #include <cuda_fp16.h>
 
-template Scalar<double> Scalar<double>::operator+(const Scalar<double> &other) const;
-template Scalar<double> Scalar<double>::operator-(const Scalar<double> &other) const;
+template Scalar<double> Scalar<double>::operator+(
+    const Scalar<double> &
+) const;
+template Scalar<double> Scalar<double>::operator-(
+    const Scalar<double> &
+) const;
 
-template Scalar<double> & Scalar<double>::operator+=(const Scalar<double> &other);
-template Scalar<double> & Scalar<double>::operator-=(const Scalar<double> &other);
+template Scalar<double> & Scalar<double>::operator+=(
+    const Scalar<double> &
+);
+template Scalar<double> & Scalar<double>::operator-=(
+    const Scalar<double> &
+);
 
-template Scalar<double> Scalar<double>::operator*(const Scalar<double> &other) const;
-template Scalar<double> Scalar<double>::operator/(const Scalar<double> &other) const;
+template Scalar<double> Scalar<double>::operator*(
+    const Scalar<double> &
+) const;
+template Scalar<double> Scalar<double>::operator/(
+    const Scalar<double> &
+) const;
 
-template Scalar<double> & Scalar<double>::operator*=(const Scalar<double> &other);
-template Scalar<double> & Scalar<double>::operator/=(const Scalar<double> &other);
+template Scalar<double> & Scalar<double>::operator*=(
+    const Scalar<double> &
+);
+template Scalar<double> & Scalar<double>::operator/=(
+    const Scalar<double> &
+);
 
-template bool Scalar<double>::operator==(const Scalar<double> &other) const;
+template bool Scalar<double>::operator==(
+    const Scalar<double> &
+) const;
 
 Scalar<double> & Scalar<double>::abs() {
     scalar_dbl_kernels::scalar_abs<<<1, 1>>>(d_scalar);
@@ -53,7 +71,9 @@ Scalar<double> & Scalar<double>::reciprocol() {
 
 Scalar<__half> Scalar<double>::to_half() const {
     Scalar<__half> created_scalar;
-    scalar_dbl_kernels::cast_to_half<<<1, 1>>>(d_scalar, created_scalar.d_scalar);
+    scalar_dbl_kernels::cast_to_half<<<1, 1>>>(
+        d_scalar, created_scalar.d_scalar
+    );
     check_kernel_launch(
         cudaGetLastError(),
         "Scalar<double>::to_half",
@@ -65,7 +85,9 @@ Scalar<__half> Scalar<double>::to_half() const {
 
 Scalar<float> Scalar<double>::to_float() const {
     Scalar<float> created_scalar;
-    scalar_dbl_kernels::cast_to_float<<<1, 1>>>(d_scalar, created_scalar.d_scalar);
+    scalar_dbl_kernels::cast_to_float<<<1, 1>>>(
+        d_scalar, created_scalar.d_scalar
+    );
     check_kernel_launch(
         cudaGetLastError(),
         "Scalar<double>::to_float",
@@ -74,4 +96,6 @@ Scalar<float> Scalar<double>::to_float() const {
     );
     return created_scalar;}
 
-Scalar<double> Scalar<double>::to_double() const { return Scalar<double>(*this); }
+Scalar<double> Scalar<double>::to_double() const {
+    return Scalar<double>(*this);
+}
