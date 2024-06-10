@@ -6,69 +6,100 @@ class MP_GMRES_IR_ComponentTest: public TestBase
 {
 public:
 
-    template <template <typename> typename M>
+    template <template <typename> typename TMatrix>
     void TestConstructor() {
 
-        GenericLinearSystem<M> gen_lin_sys(
-            M<double>(TestBase::bundle, 2, 2),
+        GenericLinearSystem<TMatrix> gen_lin_sys(
+            TMatrix<double>(TestBase::bundle, 2, 2),
             Vector<double>(TestBase::bundle, 2, 1)
         );
-        MP_GMRES_IR_Solve_TestingMock<M> dense_mock(&gen_lin_sys, default_args);
-        EXPECT_EQ(dense_mock.cascade_phase, MP_GMRES_IR_Solve_TestingMock<M>::INIT_PHASE);
+        MP_GMRES_IR_Solve_TestingMock<TMatrix> dense_mock(
+            &gen_lin_sys, default_args
+        );
+        EXPECT_EQ(
+            dense_mock.cascade_phase,
+            MP_GMRES_IR_Solve_TestingMock<TMatrix>::INIT_PHASE
+        );
 
     }
 
-    template <template <typename> typename M>
+    template <template <typename> typename TMatrix>
     void TestOuterIterateCorrectSolvers() {
 
-        GenericLinearSystem<M> gen_lin_sys(
-            CommonMatRandomInterface<M ,double>::rand_matrix(TestBase::bundle, 2, 2),
+        GenericLinearSystem<TMatrix> gen_lin_sys(
+            CommonMatRandomInterface<TMatrix ,double>::rand_matrix(
+                TestBase::bundle, 2, 2
+            ),
             Vector<double>::Random(TestBase::bundle, 2, 1)
         );
-        MP_GMRES_IR_Solve_TestingMock<M> test_mock(&gen_lin_sys, default_args);
+        MP_GMRES_IR_Solve_TestingMock<TMatrix> test_mock(
+            &gen_lin_sys, default_args
+        );
 
-        test_mock.set_phase_to_use = MP_GMRES_IR_Solve_TestingMock<M>::HLF_PHASE;
+        test_mock.set_phase_to_use = (
+            MP_GMRES_IR_Solve_TestingMock<TMatrix>::HLF_PHASE
+        );
         test_mock.outer_iterate_setup();
 
-        TypedLinearSystem<M, __half> lin_sys_typ_hlf(&gen_lin_sys);
-        GMRESSolve<M, __half> type_test_half(&lin_sys_typ_hlf, 1., default_args);
+        TypedLinearSystem<TMatrix, __half> lin_sys_typ_hlf(&gen_lin_sys);
+        GMRESSolve<TMatrix, __half> type_test_half(
+            &lin_sys_typ_hlf, 1., default_args
+        );
         ASSERT_EQ(typeid(*test_mock.inner_solver), typeid(type_test_half));
 
-        test_mock.set_phase_to_use = MP_GMRES_IR_Solve_TestingMock<M>::SGL_PHASE;
+        test_mock.set_phase_to_use = (
+            MP_GMRES_IR_Solve_TestingMock<TMatrix>::SGL_PHASE
+        );
         test_mock.outer_iterate_setup();
 
-        TypedLinearSystem<M, float> lin_sys_typ_sgl(&gen_lin_sys);
-        GMRESSolve<M, float> type_test_single(&lin_sys_typ_sgl, 1., default_args);
+        TypedLinearSystem<TMatrix, float> lin_sys_typ_sgl(&gen_lin_sys);
+        GMRESSolve<TMatrix, float> type_test_single(
+            &lin_sys_typ_sgl, 1., default_args
+        );
         ASSERT_EQ(typeid(*test_mock.inner_solver), typeid(type_test_single));
 
-        test_mock.set_phase_to_use = MP_GMRES_IR_Solve_TestingMock<M>::DBL_PHASE;
+        test_mock.set_phase_to_use = (
+            MP_GMRES_IR_Solve_TestingMock<TMatrix>::DBL_PHASE
+        );
         test_mock.outer_iterate_setup();
 
-        TypedLinearSystem<M, double> lin_sys_typ_dbl(&gen_lin_sys);
-        GMRESSolve<M, double> type_test_double(&lin_sys_typ_dbl, 1., default_args);
+        TypedLinearSystem<TMatrix, double> lin_sys_typ_dbl(&gen_lin_sys);
+        GMRESSolve<TMatrix, double> type_test_double(
+            &lin_sys_typ_dbl, 1., default_args
+        );
         ASSERT_EQ(typeid(*test_mock.inner_solver), typeid(type_test_double));
 
     }
 
-    template <template <typename> typename M>
+    template <template <typename> typename TMatrix>
     void TestReset() {
 
         // Check initial __half set to float and test if reset to __half
-        GenericLinearSystem<M> gen_lin_sys(
-            CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, 2, 2),
+        GenericLinearSystem<TMatrix> gen_lin_sys(
+            CommonMatRandomInterface<TMatrix, double>::rand_matrix(
+                TestBase::bundle, 2, 2
+            ),
             Vector<double>::Random(TestBase::bundle, 2, 1)
         );
-        MP_GMRES_IR_Solve_TestingMock<M> test_mock(&gen_lin_sys, default_args);
+        MP_GMRES_IR_Solve_TestingMock<TMatrix> test_mock(
+            &gen_lin_sys, default_args
+        );
 
-        TypedLinearSystem<M, __half> lin_sys_typ_hlf(&gen_lin_sys);
-        GMRESSolve<M, __half> type_test_half(&lin_sys_typ_hlf, 1., default_args);
+        TypedLinearSystem<TMatrix, __half> lin_sys_typ_hlf(&gen_lin_sys);
+        GMRESSolve<TMatrix, __half> type_test_half(
+            &lin_sys_typ_hlf, 1., default_args
+        );
         ASSERT_EQ(typeid(*test_mock.inner_solver), typeid(type_test_half));
 
-        test_mock.set_phase_to_use = MP_GMRES_IR_Solve_TestingMock<M>::SGL_PHASE;
+        test_mock.set_phase_to_use = (
+            MP_GMRES_IR_Solve_TestingMock<TMatrix>::SGL_PHASE
+        );
         test_mock.outer_iterate_setup();
 
-        TypedLinearSystem<M, float> lin_sys_typ_sgl(&gen_lin_sys);
-        GMRESSolve<M, float> type_test_single(&lin_sys_typ_sgl, 1., default_args);
+        TypedLinearSystem<TMatrix, float> lin_sys_typ_sgl(&gen_lin_sys);
+        GMRESSolve<TMatrix, float> type_test_single(
+            &lin_sys_typ_sgl, 1., default_args
+        );
         ASSERT_EQ(typeid(*test_mock.inner_solver), typeid(type_test_single));
 
         test_mock.reset();

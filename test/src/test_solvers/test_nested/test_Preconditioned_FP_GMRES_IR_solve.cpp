@@ -6,11 +6,17 @@ class Preconditioned_FP_GMRES_IR_Test: public TestBase
 {
 public:
 
-    const SolveArgPkg dbl_GMRES_IR_args = SolveArgPkg(80, 10, Tol<double>::krylov_conv_tol());
-    const SolveArgPkg sgl_GMRES_IR_args = SolveArgPkg(80, 10, Tol<float>::krylov_conv_tol());
-    const SolveArgPkg hlf_GMRES_IR_args = SolveArgPkg(80, 10, Tol<__half>::krylov_conv_tol());
+    const SolveArgPkg dbl_GMRES_IR_args = SolveArgPkg(
+        80, 10, Tol<double>::krylov_conv_tol()
+    );
+    const SolveArgPkg sgl_GMRES_IR_args = SolveArgPkg(
+        80, 10, Tol<float>::krylov_conv_tol()
+    );
+    const SolveArgPkg hlf_GMRES_IR_args = SolveArgPkg(
+        80, 10, Tol<__half>::krylov_conv_tol()
+    );
 
-    template <template <typename> typename M, typename T>
+    template <template <typename> typename TMatrix, typename TPrecision>
     void PreconditionedSingleIterTest(
         const SolveArgPkg &args
     ) {
@@ -20,19 +26,29 @@ public:
         fs::path Ainv_path(solve_matrix_dir / fs::path("Ainv_inv_45.csv"));
         fs::path b_path(solve_matrix_dir / fs::path("b_inv_45.csv"));
 
-        M<double> A = read_matrixCSV<M, double>(TestBase::bundle, A_path);
-        M<double> Asqr = read_matrixCSV<M, double>(TestBase::bundle, Asqr_path);
-        Vector<double> b = read_matrixCSV<Vector, double>(TestBase::bundle, b_path);
-        M<double> Ainv = read_matrixCSV<M, double>(TestBase::bundle, Ainv_path);
-
-        GenericLinearSystem<M> gen_lin_sys(A, b);
-        TypedLinearSystem<M, T> typed_lin_sys(&gen_lin_sys);
-
-        PrecondArgPkg<M, T> precond_left_args(
-            std::make_shared<MatrixInversePreconditioner<M, T>>(Ainv.template cast<T>())
+        TMatrix<double> A = read_matrixCSV<TMatrix, double>(
+            TestBase::bundle, A_path
         );
-        FP_GMRES_IR_Solve<M, T> precond_left_gmres_ir(
-            &typed_lin_sys, Tol<T>::roundoff(), args, precond_left_args
+        TMatrix<double> Asqr = read_matrixCSV<TMatrix, double>(
+            TestBase::bundle, Asqr_path);
+        Vector<double> b = read_matrixCSV<Vector, double>(
+            TestBase::bundle, b_path
+        );
+        TMatrix<double> Ainv = read_matrixCSV<TMatrix, double>(
+            TestBase::bundle, Ainv_path
+        );
+
+        GenericLinearSystem<TMatrix> gen_lin_sys(A, b);
+        TypedLinearSystem<TMatrix, TPrecision> typed_lin_sys(&gen_lin_sys);
+
+        PrecondArgPkg<TMatrix, TPrecision> precond_left_args(
+            std::make_shared<MatrixInversePreconditioner<TMatrix, TPrecision>>(
+                Ainv.template cast<TPrecision>()
+            )
+        );
+        FP_GMRES_IR_Solve<TMatrix, TPrecision> precond_left_gmres_ir(
+            &typed_lin_sys, Tol<TPrecision>::roundoff(),
+            args, precond_left_args
         );
         precond_left_gmres_ir.solve();
 
@@ -42,12 +58,15 @@ public:
         EXPECT_TRUE(precond_left_gmres_ir.check_converged());
         EXPECT_LE(precond_left_gmres_ir.get_relres(), args.target_rel_res);
 
-        PrecondArgPkg<M, T> precond_right_args(
-            std::make_shared<NoPreconditioner<M, T>>(),
-            std::make_shared<MatrixInversePreconditioner<M, T>>(Ainv.template cast<T>())
+        PrecondArgPkg<TMatrix, TPrecision> precond_right_args(
+            std::make_shared<NoPreconditioner<TMatrix, TPrecision>>(),
+            std::make_shared<MatrixInversePreconditioner<TMatrix, TPrecision>>(
+                Ainv.template cast<TPrecision>()
+            )
         );
-        FP_GMRES_IR_Solve<M, T> precond_right_gmres_ir(
-            &typed_lin_sys, Tol<T>::roundoff(), args, precond_right_args
+        FP_GMRES_IR_Solve<TMatrix, TPrecision> precond_right_gmres_ir(
+            &typed_lin_sys, Tol<TPrecision>::roundoff(),
+            args, precond_right_args
         );
         precond_right_gmres_ir.solve();
 
@@ -57,15 +76,22 @@ public:
         EXPECT_TRUE(precond_right_gmres_ir.check_converged());
         EXPECT_LE(precond_right_gmres_ir.get_relres(), args.target_rel_res);
 
-        PrecondArgPkg<M, T> precond_symmetric_args(
-            std::make_shared<MatrixInversePreconditioner<M, T>>(Ainv.template cast<T>()),
-            std::make_shared<MatrixInversePreconditioner<M, T>>(Ainv.template cast<T>())
+        PrecondArgPkg<TMatrix, TPrecision> precond_symmetric_args(
+            std::make_shared<MatrixInversePreconditioner<TMatrix, TPrecision>>(
+                Ainv.template cast<TPrecision>()
+            ),
+            std::make_shared<MatrixInversePreconditioner<TMatrix, TPrecision>>(
+                Ainv.template cast<TPrecision>()
+            )
         );
-        GenericLinearSystem<M> gen_lin_sys_Asqr(Asqr, b);
-        TypedLinearSystem<M, T> typed_lin_sys_Asqr(&gen_lin_sys_Asqr);
+        GenericLinearSystem<TMatrix> gen_lin_sys_Asqr(Asqr, b);
+        TypedLinearSystem<TMatrix, TPrecision> typed_lin_sys_Asqr(
+            &gen_lin_sys_Asqr
+        );
 
-        FP_GMRES_IR_Solve<M, T> precond_symmetric_gmres_ir(
-            &typed_lin_sys_Asqr, Tol<T>::roundoff(), args, precond_symmetric_args
+        FP_GMRES_IR_Solve<TMatrix, TPrecision> precond_symmetric_gmres_ir(
+            &typed_lin_sys_Asqr, Tol<TPrecision>::roundoff(),
+            args, precond_symmetric_args
         );
         precond_symmetric_gmres_ir.solve();
 
@@ -77,29 +103,38 @@ public:
 
     }
 
-    template <template <typename> typename M, typename T>
+    template <template <typename> typename TMatrix, typename TPrecision>
     void PreconditionedSolveTest(
         const fs::path &A_file_path,
         const fs::path &b_file_path,
         const SolveArgPkg &args
     ) {
 
-        M<double> A = read_matrixCSV<M, double>(TestBase::bundle, A_file_path);
-        Vector<double> b = read_matrixCSV<Vector, double>(TestBase::bundle, b_file_path);
-
-        std::shared_ptr<ILUPreconditioner<M, T>> ilu_ptr(
-            new ILUPreconditioner<M, T>(A.template cast<T>())
+        TMatrix<double> A = read_matrixCSV<TMatrix, double>(
+            TestBase::bundle, A_file_path
+        );
+        Vector<double> b = read_matrixCSV<Vector, double>(
+            TestBase::bundle, b_file_path
         );
 
-        GenericLinearSystem<M> gen_lin_sys(A, b);
-        TypedLinearSystem<M, T> typed_lin_sys(&gen_lin_sys);
+        std::shared_ptr<ILUPreconditioner<TMatrix, TPrecision>> ilu_ptr(
+            new ILUPreconditioner<TMatrix, TPrecision>(
+                A.template cast<TPrecision>()
+            )
+        );
 
-        FP_GMRES_IR_Solve<M, T> gmres_ir(&typed_lin_sys, Tol<T>::roundoff(), args);
+        GenericLinearSystem<TMatrix> gen_lin_sys(A, b);
+        TypedLinearSystem<TMatrix, TPrecision> typed_lin_sys(&gen_lin_sys);
+
+        FP_GMRES_IR_Solve<TMatrix, TPrecision> gmres_ir(
+            &typed_lin_sys, Tol<TPrecision>::roundoff(), args
+        );
         gmres_ir.solve();
 
-        PrecondArgPkg<M, T> precond_left_args(ilu_ptr);
-        FP_GMRES_IR_Solve<M, T> precond_left_gmres_ir(
-            &typed_lin_sys, Tol<T>::roundoff(), args, precond_left_args
+        PrecondArgPkg<TMatrix, TPrecision> precond_left_args(ilu_ptr);
+        FP_GMRES_IR_Solve<TMatrix, TPrecision> precond_left_gmres_ir(
+            &typed_lin_sys, Tol<TPrecision>::roundoff(),
+            args, precond_left_args
         );
         precond_left_gmres_ir.solve();
 
@@ -107,14 +142,18 @@ public:
 
         EXPECT_TRUE(precond_left_gmres_ir.check_converged());
         EXPECT_LE(precond_left_gmres_ir.get_relres(), args.target_rel_res);
-        EXPECT_LT(precond_left_gmres_ir.get_iteration(), gmres_ir.get_iteration());
+        EXPECT_LT(
+            precond_left_gmres_ir.get_iteration(),
+            gmres_ir.get_iteration()
+        );
 
-        PrecondArgPkg<M, T> precond_right_args(
-            std::make_shared<NoPreconditioner<M, T>>(),
+        PrecondArgPkg<TMatrix, TPrecision> precond_right_args(
+            std::make_shared<NoPreconditioner<TMatrix, TPrecision>>(),
             ilu_ptr
         );
-        FP_GMRES_IR_Solve<M, T> precond_right_gmres_ir(
-            &typed_lin_sys, Tol<T>::roundoff(), args, precond_right_args
+        FP_GMRES_IR_Solve<TMatrix, TPrecision> precond_right_gmres_ir(
+            &typed_lin_sys, Tol<TPrecision>::roundoff(),
+            args, precond_right_args
         );
         precond_right_gmres_ir.solve();
 
@@ -122,89 +161,125 @@ public:
 
         EXPECT_TRUE(precond_right_gmres_ir.check_converged());
         EXPECT_LE(precond_right_gmres_ir.get_relres(), args.target_rel_res);
-        EXPECT_LT(precond_right_gmres_ir.get_iteration(), gmres_ir.get_iteration());
+        EXPECT_LT(
+            precond_right_gmres_ir.get_iteration(),
+            gmres_ir.get_iteration()
+        );
 
     }
 
 };
 
-TEST_F(Preconditioned_FP_GMRES_IR_Test, DoubleSingleIterTest_SOLVER) {
+TEST_F(Preconditioned_FP_GMRES_IR_Test, SolveSingleIterTest_Double_SOLVER) {
     
     PreconditionedSingleIterTest<MatrixDense, double>(dbl_GMRES_IR_args);
     PreconditionedSingleIterTest<NoFillMatrixSparse, double>(dbl_GMRES_IR_args);
 
 }
 
-TEST_F(Preconditioned_FP_GMRES_IR_Test, DoubleConvergenceTest_ConvDiff256_SOLVER) {
+TEST_F(Preconditioned_FP_GMRES_IR_Test, SolveConvDiff256_Double_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_256_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_256_b.csv"));
     
-    PreconditionedSolveTest<MatrixDense, double>(A_path, b_path, dbl_GMRES_IR_args);
-    PreconditionedSolveTest<NoFillMatrixSparse, double>(A_path, b_path, dbl_GMRES_IR_args);
+    PreconditionedSolveTest<MatrixDense, double>(
+        A_path, b_path, dbl_GMRES_IR_args
+    );
+    PreconditionedSolveTest<NoFillMatrixSparse, double>(
+        A_path, b_path, dbl_GMRES_IR_args
+    );
 
 }
 
-TEST_F(Preconditioned_FP_GMRES_IR_Test, DoubleConvergenceTest_ConvDiff1024_LONGRUNTIME_SOLVER) {
+TEST_F(
+    Preconditioned_FP_GMRES_IR_Test,
+    SolveConvDiff1024_Double_LONGRUNTIME_SOLVER
+) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_1024_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_1024_b.csv"));
 
-    PreconditionedSolveTest<MatrixDense, double>(A_path, b_path, dbl_GMRES_IR_args);
-    PreconditionedSolveTest<NoFillMatrixSparse, double>(A_path, b_path, dbl_GMRES_IR_args);
+    PreconditionedSolveTest<MatrixDense, double>(
+        A_path, b_path, dbl_GMRES_IR_args
+    );
+    PreconditionedSolveTest<NoFillMatrixSparse, double>(
+        A_path, b_path, dbl_GMRES_IR_args
+    );
 
 }
 
-TEST_F(Preconditioned_FP_GMRES_IR_Test, SingleSingleIterTest_SOLVER) {
+TEST_F(Preconditioned_FP_GMRES_IR_Test, SolveSingleIterTest_Single_SOLVER) {
     
     PreconditionedSingleIterTest<MatrixDense, float>(sgl_GMRES_IR_args);
     PreconditionedSingleIterTest<NoFillMatrixSparse, float>(sgl_GMRES_IR_args);
 
 }
 
-TEST_F(Preconditioned_FP_GMRES_IR_Test, SingleConvergenceTest_ConvDiff256_SOLVER) {
+TEST_F(Preconditioned_FP_GMRES_IR_Test, SolveConvDiff256_Single_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_256_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_256_b.csv"));
 
-    PreconditionedSolveTest<MatrixDense, float>(A_path, b_path, sgl_GMRES_IR_args);
-    PreconditionedSolveTest<NoFillMatrixSparse, float>(A_path, b_path, sgl_GMRES_IR_args);
+    PreconditionedSolveTest<MatrixDense, float>(
+        A_path, b_path, sgl_GMRES_IR_args
+    );
+    PreconditionedSolveTest<NoFillMatrixSparse, float>(
+        A_path, b_path, sgl_GMRES_IR_args
+    );
 
 }
 
-TEST_F(Preconditioned_FP_GMRES_IR_Test, SingleConvergenceTest_ConvDiff1024_LONGRUNTIME_SOLVER) {
+TEST_F(
+    Preconditioned_FP_GMRES_IR_Test,
+    SolveConvDiff1024_Single_LONGRUNTIME_SOLVER
+) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_1024_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_1024_b.csv"));
 
-    PreconditionedSolveTest<MatrixDense, float>(A_path, b_path, sgl_GMRES_IR_args);
-    PreconditionedSolveTest<NoFillMatrixSparse, float>(A_path, b_path, sgl_GMRES_IR_args);
+    PreconditionedSolveTest<MatrixDense, float>(
+        A_path, b_path, sgl_GMRES_IR_args
+    );
+    PreconditionedSolveTest<NoFillMatrixSparse, float>(
+        A_path, b_path, sgl_GMRES_IR_args
+    );
 
 }
 
-TEST_F(Preconditioned_FP_GMRES_IR_Test, HalfSingleIterTest_SOLVER) {
+TEST_F(Preconditioned_FP_GMRES_IR_Test, SolveSingleIterTest_Half_SOLVER) {
     
     PreconditionedSingleIterTest<MatrixDense, __half>(hlf_GMRES_IR_args);
     PreconditionedSingleIterTest<NoFillMatrixSparse, __half>(hlf_GMRES_IR_args);
 
 }
 
-TEST_F(Preconditioned_FP_GMRES_IR_Test, HalfConvergenceTest_ConvDiff256_SOLVER) {
+TEST_F(Preconditioned_FP_GMRES_IR_Test, SolveConvDiff256_Half_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_256_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_256_b.csv"));
 
-    PreconditionedSolveTest<MatrixDense, __half>(A_path, b_path, hlf_GMRES_IR_args);
-    PreconditionedSolveTest<NoFillMatrixSparse, __half>(A_path, b_path, hlf_GMRES_IR_args);
+    PreconditionedSolveTest<MatrixDense, __half>(
+        A_path, b_path, hlf_GMRES_IR_args
+    );
+    PreconditionedSolveTest<NoFillMatrixSparse, __half>(
+        A_path, b_path, hlf_GMRES_IR_args
+    );
 
 }
 
-TEST_F(Preconditioned_FP_GMRES_IR_Test, HalfConvergenceTest_ConvDiff1024_LONGRUNTIME_SOLVER) {
+TEST_F(
+    Preconditioned_FP_GMRES_IR_Test,
+    HalfConvergenceTest_ConvDiff1024_LONGRUNTIME_SOLVER
+) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_1024_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_1024_b.csv"));
 
-    PreconditionedSolveTest<MatrixDense, __half>(A_path, b_path, hlf_GMRES_IR_args);
-    PreconditionedSolveTest<NoFillMatrixSparse, __half>(A_path, b_path, hlf_GMRES_IR_args);
+    PreconditionedSolveTest<MatrixDense, __half>(
+        A_path, b_path, hlf_GMRES_IR_args
+    );
+    PreconditionedSolveTest<NoFillMatrixSparse, __half>(
+        A_path, b_path, hlf_GMRES_IR_args
+    );
 
 }

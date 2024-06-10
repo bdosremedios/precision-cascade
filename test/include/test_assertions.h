@@ -15,7 +15,8 @@ static bool *print_errors;
 
 #define CHECK_FUNC_HAS_RUNTIME_ERROR(to_print, func) \
 _CHECK_FUNC_HAS_RUNTIME_ERROR( \
-    to_print, func, __FILE__, __LINE__, "AssertionError for CHECK_FUNC_HAS_RUNTIME_ERROR" \
+    to_print, func, \
+    __FILE__, __LINE__, "AssertionError for CHECK_FUNC_HAS_RUNTIME_ERROR" \
 )
 
 inline void _CHECK_FUNC_HAS_RUNTIME_ERROR(
@@ -38,12 +39,15 @@ inline void _CHECK_FUNC_HAS_RUNTIME_ERROR(
 
 #define ASSERT_VECTOR_NEAR(test, target, tol) \
 _ASSERT_VECTOR_NEAR( \
-    test, target, tol, __FILE__, __LINE__, "AssertionError for ASSERT_VECTOR_NEAR" \
+    test, target, tol, \
+    __FILE__, __LINE__, "AssertionError for ASSERT_VECTOR_NEAR" \
 )
 
-template <typename T>
+template <typename TPrecision>
 void _ASSERT_VECTOR_NEAR(
-    const Vector<T> &test, const Vector<T> &target, T tol,
+    const Vector<TPrecision> &test,
+    const Vector<TPrecision> &target,
+    TPrecision tol,
     const char* file, int line, std::string message
 ) {
 
@@ -52,23 +56,33 @@ void _ASSERT_VECTOR_NEAR(
     ASSERT_EQ(test.rows(), target.rows());
 
     for (int i=0; i<target.rows(); ++i) {
-        ASSERT_NEAR(test.get_elem(i).get_scalar(), target.get_elem(i).get_scalar(), tol);
+        ASSERT_NEAR(
+            test.get_elem(i).get_scalar(),
+            target.get_elem(i).get_scalar(),
+            tol
+        );
     }
 
 }
 
 #define ASSERT_VECTOR_ZERO(test, tol) \
 _ASSERT_VECTOR_ZERO( \
-    test, tol, __FILE__, __LINE__, "AssertionError for _ASSERT_VECTOR_ZERO" \
+    test, tol, \
+    __FILE__, __LINE__, "AssertionError for _ASSERT_VECTOR_ZERO" \
 )
-template <typename T>
+template <typename TPrecision>
 void _ASSERT_VECTOR_ZERO(
-    const Vector<T> &test, T tol,
+    const Vector<TPrecision> &test,
+    TPrecision tol,
     const char* file, int line, std::string message
 ) {
     _ASSERT_VECTOR_NEAR(
         test,
-        Vector<T>::Zero(test.get_cu_handles(), test.rows(), test.cols()),
+        Vector<TPrecision>::Zero(
+            test.get_cu_handles(),
+            test.rows(),
+            test.cols()
+        ),
         tol,
         file, line, message
     );
@@ -76,24 +90,31 @@ void _ASSERT_VECTOR_ZERO(
 
 #define ASSERT_VECTOR_EQ(test, target) \
 _ASSERT_VECTOR_EQ( \
-    test, target, __FILE__, __LINE__, "AssertionError for ASSERT_VECTOR_EQ" \
+    test, target, \
+    __FILE__, __LINE__, "AssertionError for ASSERT_VECTOR_EQ" \
 )
 
-template <typename T>
+template <typename TPrecision>
 void _ASSERT_VECTOR_EQ(
-    const Vector<T> &test, const Vector<T> &target,
+    const Vector<TPrecision> &test,
+    const Vector<TPrecision> &target,
     const char* file, int line, std::string message
 ) {
-    _ASSERT_VECTOR_NEAR(test, target, static_cast<T>(0), file, line, message);
+    _ASSERT_VECTOR_NEAR(
+        test, target, static_cast<TPrecision>(0), file, line, message
+    );
 }
 
 #define ASSERT_MATRIX_NEAR(test, target, tol) \
 _ASSERT_MATRIX_NEAR( \
-    test, target, tol, __FILE__, __LINE__, "AssertionError for ASSERT_MATRIX_NEAR" \
+    test, target, tol, \
+    __FILE__, __LINE__, "AssertionError for ASSERT_MATRIX_NEAR" \
 )
-template <template <typename> typename M, typename T>
+template <template <typename> typename TMatrix, typename TPrecision>
 void _ASSERT_MATRIX_NEAR(
-    const M<T> &test, const M<T> &target, T tol,
+    const TMatrix<TPrecision> &test,
+    const TMatrix<TPrecision> &target,
+    TPrecision tol,
     const char* file, int line, std::string message
 ) {
 
@@ -104,7 +125,11 @@ void _ASSERT_MATRIX_NEAR(
 
     for (int i=0; i<target.rows(); ++i) {
         for (int j=0; j<target.cols(); ++j) {
-            ASSERT_NEAR(test.get_elem(i, j).get_scalar(), target.get_elem(i, j).get_scalar(), tol);
+            ASSERT_NEAR(
+                test.get_elem(i, j).get_scalar(),
+                target.get_elem(i, j).get_scalar(),
+                tol
+            );
         }
     }
 
@@ -112,11 +137,13 @@ void _ASSERT_MATRIX_NEAR(
 
 #define ASSERT_MATRIX_LT(test, target) \
 _ASSERT_MATRIX_LT( \
-    test, target, __FILE__, __LINE__, "AssertionError for ASSERT_MATRIX_LT" \
+    test, target, \
+    __FILE__, __LINE__, "AssertionError for ASSERT_MATRIX_LT" \
 )
-template <template <typename> typename M, typename T>
+template <template <typename> typename TMatrix, typename TPrecision>
 void _ASSERT_MATRIX_LT(
-    const M<T> &test, const M<T> &target,
+    const TMatrix<TPrecision> &test,
+    const TMatrix<TPrecision> &target,
     const char* file, int line, std::string message
 ) {
 
@@ -127,7 +154,10 @@ void _ASSERT_MATRIX_LT(
 
     for (int i=0; i<target.rows(); ++i) {
         for (int j=0; j<target.cols(); ++j) {
-            ASSERT_LT(test.get_elem(i, j).get_scalar(), target.get_elem(i, j).get_scalar());
+            ASSERT_LT(
+                test.get_elem(i, j).get_scalar(),
+                target.get_elem(i, j).get_scalar()
+            );
         }
     }
 
@@ -135,11 +165,13 @@ void _ASSERT_MATRIX_LT(
 
 #define ASSERT_MATRIX_GT(test, target) \
 _ASSERT_MATRIX_GT( \
-    test, target, __FILE__, __LINE__, "AssertionError for ASSERT_MATRIX_GT" \
+    test, target, \
+    __FILE__, __LINE__, "AssertionError for ASSERT_MATRIX_GT" \
 )
-template <template <typename> typename M, typename T>
+template <template <typename> typename TMatrix, typename TPrecision>
 void _ASSERT_MATRIX_GT(
-    const M<T> &test, const M<T> &target,
+    const TMatrix<TPrecision> &test,
+    const TMatrix<TPrecision> &target,
     const char* file, int line, std::string message
 ) {
 
@@ -150,7 +182,10 @@ void _ASSERT_MATRIX_GT(
 
     for (int i=0; i<target.rows(); ++i) {
         for (int j=0; j<target.cols(); ++j) {
-            ASSERT_GT(test.get_elem(i, j).get_scalar(), target.get_elem(i, j).get_scalar());
+            ASSERT_GT(
+                test.get_elem(i, j).get_scalar(),
+                target.get_elem(i, j).get_scalar()
+            );
         }
     }
 
@@ -158,23 +193,30 @@ void _ASSERT_MATRIX_GT(
 
 #define ASSERT_MATRIX_EQ(test, target) \
 _ASSERT_MATRIX_EQ( \
-    test, target, __FILE__, __LINE__, "AssertionError for ASSERT_MATRIX_EQ" \
+    test, target, \
+    __FILE__, __LINE__, "AssertionError for ASSERT_MATRIX_EQ" \
 )
-template <template <typename> typename M, typename T>
+template <template <typename> typename TMatrix, typename TPrecision>
 void _ASSERT_MATRIX_EQ(
-    const M<T> &test, const M<T> &target,
+    const TMatrix<TPrecision> &test,
+    const TMatrix<TPrecision> &target,
     const char* file, int line, std::string message
 ) {
-    _ASSERT_MATRIX_NEAR(test, target, static_cast<T>(0), file, line, message);
+    _ASSERT_MATRIX_NEAR(
+        test, target, static_cast<TPrecision>(0), file, line, message
+    );
 }
 
 #define ASSERT_MATRIX_SAMESPARSITY(test, target, zero_tol) \
 _ASSERT_MATRIX_SAMESPARSITY( \
-    test, target, zero_tol, __FILE__, __LINE__, "AssertionError for ASSERT_MATRIX_SAMESPARSITY" \
+    test, target, zero_tol, \
+    __FILE__, __LINE__, "AssertionError for ASSERT_MATRIX_SAMESPARSITY" \
 )
-template <template <typename> typename M, typename T>
+template <template <typename> typename TMatrix, typename TPrecision>
 void _ASSERT_MATRIX_SAMESPARSITY(
-    const M<T> &test, const M<T> &target, T zero_tol,
+    const TMatrix<TPrecision> &test,
+    const TMatrix<TPrecision> &target,
+    TPrecision zero_tol,
     const char* file, int line, std::string message
 ) {
 
@@ -186,7 +228,10 @@ void _ASSERT_MATRIX_SAMESPARSITY(
     for (int i=0; i<target.rows(); ++i) {
         for (int j=0; j<target.cols(); ++j) {
             if (std::abs(target.get_elem(i, j).get_scalar()) <= zero_tol) {
-                ASSERT_LE(std::abs(test.get_elem(i, j).get_scalar()), zero_tol);
+                ASSERT_LE(
+                    std::abs(test.get_elem(i, j).get_scalar()),
+                    zero_tol
+                );
             }
         }
     }
@@ -195,39 +240,58 @@ void _ASSERT_MATRIX_SAMESPARSITY(
 
 #define ASSERT_MATRIX_ZERO(test, tol) \
 _ASSERT_MATRIX_ZERO( \
-    test, tol, __FILE__, __LINE__, "AssertionError for ASSERT_MATRIX_ZEROconst " \
+    test, tol, \
+    __FILE__, __LINE__, "AssertionError for ASSERT_MATRIX_ZERO" \
 )
-template <template <typename> typename M, typename T>
+template <template <typename> typename TMatrix, typename TPrecision>
 void _ASSERT_MATRIX_ZERO(
-    const M<T> &test, T tol,
+    const TMatrix<TPrecision> &test,
+    TPrecision tol,
     const char* file, int line, std::string message
 ) {
     _ASSERT_MATRIX_NEAR(
-        test, M<T>::Zero(test.get_cu_handles(), test.rows(), test.cols()), tol, file, line, message
+        test,
+        TMatrix<TPrecision>::Zero(
+            test.get_cu_handles(),
+            test.rows(),
+            test.cols()
+        ),
+        tol,
+        file, line, message
     );
 }
 
 #define ASSERT_MATRIX_IDENTITY(test, tol) \
 _ASSERT_MATRIX_IDENTITY( \
-    test, tol, __FILE__, __LINE__, "AssertionError for ASSERT_MATRIX_IDENTITY" \
+    test, tol, \
+    __FILE__, __LINE__, "AssertionError for ASSERT_MATRIX_IDENTITY" \
 )
-template <template <typename> typename M, typename T>
+template <template <typename> typename TMatrix, typename TPrecision>
 void _ASSERT_MATRIX_IDENTITY(
-    const M<T> &test, T tol,
+    const TMatrix<TPrecision> &test,
+    TPrecision tol,
     const char* file, int line, std::string message
 ) {
     _ASSERT_MATRIX_NEAR(
-        test, M<T>::Identity(test.get_cu_handles(), test.rows(), test.cols()), tol, file, line, message
+        test,
+        TMatrix<TPrecision>::Identity(
+            test.get_cu_handles(),
+            test.rows(),
+            test.cols()
+        ),
+        tol, file, line, message
     );
 }
 
 #define ASSERT_MATRIX_LOWTRI(test, tol) \
 _ASSERT_MATRIX_LOWTRI( \
-    test, tol, __FILE__, __LINE__, "AssertionError for ASSERT_MATRIX_LOWTRI" \
+    test, tol, \
+    __FILE__, __LINE__, "AssertionError for ASSERT_MATRIX_LOWTRI" \
 )
-template <template <typename> typename M, typename T>
+template <template <typename> typename TMatrix, typename TPrecision>
 void _ASSERT_MATRIX_LOWTRI(
-    const M<T> &test, T tol,
+    const TMatrix<TPrecision> &test,
+    TPrecision tol,
     const char* file, int line, std::string message
 ) {
 
@@ -235,7 +299,11 @@ void _ASSERT_MATRIX_LOWTRI(
 
     for (int i=0; i<test.rows(); ++i) {
         for (int j=i+1; j<test.cols(); ++j) {
-            ASSERT_NEAR(test.get_elem(i, j).get_scalar(), static_cast<T>(0), tol);
+            ASSERT_NEAR(
+                test.get_elem(i, j).get_scalar(),
+                static_cast<TPrecision>(0),
+                tol
+            );
         }
     }
 
@@ -243,11 +311,13 @@ void _ASSERT_MATRIX_LOWTRI(
 
 #define ASSERT_MATRIX_UPPTRI(test, tol) \
 _ASSERT_MATRIX_UPPTRI( \
-    test, tol, __FILE__, __LINE__, "AssertionError for ASSERT_MATRIX_UPPTRI" \
+    test, tol, \
+    __FILE__, __LINE__, "AssertionError for ASSERT_MATRIX_UPPTRI" \
 )
-template <template <typename> typename M, typename T>
+template <template <typename> typename TMatrix, typename TPrecision>
 void _ASSERT_MATRIX_UPPTRI(
-    const M<T> &test, T tol,
+    const TMatrix<TPrecision> &test,
+    TPrecision tol,
     const char* file, int line, std::string message
 ) {
 
@@ -255,7 +325,11 @@ void _ASSERT_MATRIX_UPPTRI(
 
     for (int i=0; i<test.rows(); ++i) {
         for (int j=0; j<i; ++j) {
-            ASSERT_NEAR(test.get_elem(i, j).get_scalar(), static_cast<T>(0), tol);
+            ASSERT_NEAR(
+                test.get_elem(i, j).get_scalar(),
+                static_cast<TPrecision>(0),
+                tol
+            );
         }
     }
 

@@ -5,28 +5,28 @@
 
 #include "solvers/GMRES/GMRESSolve.h"
 
-template <template <typename> typename M, typename T>
-class GMRESSolveTestingMock: public GMRESSolve<M, T> {
+template <template <typename> typename TMatrix, typename TPrecision>
+class GMRESSolveTestingMock: public GMRESSolve<TMatrix, TPrecision> {
 
     public:
 
-        using GMRESSolve<M, T>::GMRESSolve;
-        using GMRESSolve<M, T>::typed_soln;
+        using GMRESSolve<TMatrix, TPrecision>::GMRESSolve;
+        using GMRESSolve<TMatrix, TPrecision>::typed_soln;
 
-        using GMRESSolve<M, T>::Q_kry_basis;
-        using GMRESSolve<M, T>::H_k;
-        using GMRESSolve<M, T>::H_Q;
-        using GMRESSolve<M, T>::H_R;
+        using GMRESSolve<TMatrix, TPrecision>::Q_kry_basis;
+        using GMRESSolve<TMatrix, TPrecision>::H_k;
+        using GMRESSolve<TMatrix, TPrecision>::H_Q;
+        using GMRESSolve<TMatrix, TPrecision>::H_R;
 
-        using GMRESSolve<M, T>::curr_kry_dim;
-        using GMRESSolve<M, T>::max_kry_dim;
-        using GMRESSolve<M, T>::next_q;
-        using GMRESSolve<M, T>::rho;
-        using GMRESSolve<M, T>::max_iter;
+        using GMRESSolve<TMatrix, TPrecision>::curr_kry_dim;
+        using GMRESSolve<TMatrix, TPrecision>::max_kry_dim;
+        using GMRESSolve<TMatrix, TPrecision>::next_q;
+        using GMRESSolve<TMatrix, TPrecision>::rho;
+        using GMRESSolve<TMatrix, TPrecision>::max_iter;
 
-        using GMRESSolve<M, T>::update_QR_fact;
-        using GMRESSolve<M, T>::update_x_minimizing_res;
-        using GMRESSolve<M, T>::iterate;
+        using GMRESSolve<TMatrix, TPrecision>::update_QR_fact;
+        using GMRESSolve<TMatrix, TPrecision>::update_x_minimizing_res;
+        using GMRESSolve<TMatrix, TPrecision>::iterate;
 
         void iterate_no_soln_solve() {
             this->update_subspace_k();

@@ -6,7 +6,7 @@ class GMRESSolve_Solve_DBL_Test: public TestBase
 {
 public:
 
-    template <template <typename> typename M>
+    template <template <typename> typename TMatrix>
     void SolveTest(
         const fs::path &A_file_path,
         const fs::path &b_file_path,
@@ -14,15 +14,21 @@ public:
         const bool &check_3_iter
     ) {
 
-        M<double> A(read_matrixCSV<M, double>(TestBase::bundle, A_file_path));
-        Vector<double> b(read_matrixCSV<Vector, double>(TestBase::bundle, b_file_path));
+        TMatrix<double> A(read_matrixCSV<TMatrix, double>(
+            TestBase::bundle, A_file_path
+        ));
+        Vector<double> b(read_matrixCSV<Vector, double>(
+            TestBase::bundle, b_file_path
+        ));
 
-        GenericLinearSystem<M> gen_lin_sys(A, b);
-        TypedLinearSystem<M, double> typed_lin_sys(&gen_lin_sys);
+        GenericLinearSystem<TMatrix> gen_lin_sys(A, b);
+        TypedLinearSystem<TMatrix, double> typed_lin_sys(&gen_lin_sys);
 
         SolveArgPkg args;
         args.target_rel_res = Tol<double>::krylov_conv_tol();
-        GMRESSolve<M, double> gmres_solve(&typed_lin_sys, Tol<double>::roundoff(), args);
+        GMRESSolve<TMatrix, double> gmres_solve(
+            &typed_lin_sys, Tol<double>::roundoff(), args
+        );
 
         gmres_solve.solve();
 
@@ -33,9 +39,12 @@ public:
         if (check_3_iter) { EXPECT_EQ(gmres_solve.get_iteration(), 3); }
 
         // Check that matches MATLAB gmres solution close within conv_tol_dbl
-        Vector<double> x_test(read_matrixCSV<Vector, double>(TestBase::bundle, x_file_path));
+        Vector<double> x_test(read_matrixCSV<Vector, double>(
+            TestBase::bundle, x_file_path
+        ));
         EXPECT_LE(
-            ((gmres_solve.get_typed_soln() - x_test).norm()/(x_test.norm())).get_scalar(),
+            ((gmres_solve.get_typed_soln() - x_test).norm() /
+             (x_test.norm())).get_scalar(),
             2*Tol<double>::krylov_conv_tol()
         );
 

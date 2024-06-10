@@ -203,7 +203,8 @@ public:
 
     std::string get_info_string() {
         return std::format(
-            "Initiated: {} | Converged: {} | Current iter: {} | Current rel-res: {:.3g}",
+            "Initiated: {} | Converged: {} | Current iter: {} | "
+            "Current rel-res: {:.3g}",
             initiated,
             converged,
             curr_iter,
@@ -293,8 +294,10 @@ public:
         };
         std::cout << " " << std::string(std::max(min_length, length-4), '-')
                   << std::endl;
-        std::cout << "Iter: 0" << std::string(std::max(min_length, length-10), ' ')
-                  << "Iter: " << curr_iter << std::endl;
+        std::cout << "Iter: 0"
+                  << std::string(std::max(min_length, length-10), ' ')
+                  << "Iter: "
+                  << curr_iter << std::endl;
 
     }
 

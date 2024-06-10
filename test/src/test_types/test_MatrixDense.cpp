@@ -6,25 +6,31 @@ class MatrixDense_Test: public Matrix_Test<MatrixDense>
 {
 public:
 
-    template <typename T>
+    template <typename TPrecision>
     void TestDynamicMemConstruction() {
     
         const int m_manual(2);
         const int n_manual(3);
-        T *h_mat_manual = static_cast<T *>(malloc(m_manual*n_manual*sizeof(T)));
-        h_mat_manual[0+0*m_manual] = static_cast<T>(-5);
-        h_mat_manual[1+0*m_manual] = static_cast<T>(3);
-        h_mat_manual[0+1*m_manual] = static_cast<T>(100);
-        h_mat_manual[1+1*m_manual] = static_cast<T>(3.5);
-        h_mat_manual[0+2*m_manual] = static_cast<T>(-20);
-        h_mat_manual[1+2*m_manual] = static_cast<T>(3);
+        TPrecision *h_mat_manual = static_cast<TPrecision *>(
+            malloc(m_manual*n_manual*sizeof(TPrecision))
+        );
+        h_mat_manual[0+0*m_manual] = static_cast<TPrecision>(-5);
+        h_mat_manual[1+0*m_manual] = static_cast<TPrecision>(3);
+        h_mat_manual[0+1*m_manual] = static_cast<TPrecision>(100);
+        h_mat_manual[1+1*m_manual] = static_cast<TPrecision>(3.5);
+        h_mat_manual[0+2*m_manual] = static_cast<TPrecision>(-20);
+        h_mat_manual[1+2*m_manual] = static_cast<TPrecision>(3);
 
-        MatrixDense<T> test_mat_manual(TestBase::bundle, h_mat_manual, m_manual, n_manual);
+        MatrixDense<TPrecision> test_mat_manual(
+            TestBase::bundle, h_mat_manual, m_manual, n_manual
+        );
 
-        MatrixDense<T> target_mat_manual(
+        MatrixDense<TPrecision> target_mat_manual(
             TestBase::bundle,
-            {{static_cast<T>(-5), static_cast<T>(100), static_cast<T>(-20)},
-             {static_cast<T>(3), static_cast<T>(3.5), static_cast<T>(3)}}
+            {{static_cast<TPrecision>(-5), static_cast<TPrecision>(100),
+              static_cast<TPrecision>(-20)},
+             {static_cast<TPrecision>(3), static_cast<TPrecision>(3.5),
+              static_cast<TPrecision>(3)}}
         );
 
         ASSERT_MATRIX_EQ(test_mat_manual, target_mat_manual);
@@ -33,20 +39,27 @@ public:
     
         const int m_rand(4);
         const int n_rand(5);
-        T *h_mat_rand = static_cast<T *>(malloc(m_rand*n_rand*sizeof(T)));
+        TPrecision *h_mat_rand = static_cast<TPrecision *>(
+            malloc(m_rand*n_rand*sizeof(TPrecision))
+        );
         for (int i=0; i<m_rand; ++i) {
             for (int j=0; j<n_rand; ++j) {
-                h_mat_rand[i+j*m_rand] = static_cast<T>(rand());
+                h_mat_rand[i+j*m_rand] = static_cast<TPrecision>(rand());
             }
         }
 
-        MatrixDense<T> test_mat_rand(TestBase::bundle, h_mat_rand, m_rand, n_rand);
+        MatrixDense<TPrecision> test_mat_rand(
+            TestBase::bundle, h_mat_rand, m_rand, n_rand
+        );
 
         ASSERT_EQ(test_mat_rand.rows(), m_rand);
         ASSERT_EQ(test_mat_rand.cols(), n_rand);
         for (int i=0; i<m_rand; ++i) {
             for (int j=0; j<n_rand; ++j) {
-                ASSERT_EQ(test_mat_rand.get_elem(i, j).get_scalar(), h_mat_rand[i+j*m_rand]);
+                ASSERT_EQ(
+                    test_mat_rand.get_elem(i, j).get_scalar(),
+                    h_mat_rand[i+j*m_rand]
+                );
             }
         }
 
@@ -60,8 +73,7 @@ public:
 
         CHECK_FUNC_HAS_RUNTIME_ERROR(
             print_errors,
-            [=]() { MatrixDense<double>(TestBase::bundle, h_mat, -1, 4);
-            }
+            [=]() { MatrixDense<double>(TestBase::bundle, h_mat, -1, 4); }
         );
 
         CHECK_FUNC_HAS_RUNTIME_ERROR(
@@ -71,51 +83,64 @@ public:
 
     }
 
-    template <typename T>
+    template <typename TPrecision>
     void TestDynamicMemCopyToPtr() {
     
         const int m_manual(2);
         const int n_manual(3);
 
-        MatrixDense<T> mat_manual(
+        MatrixDense<TPrecision> mat_manual(
             TestBase::bundle,
-            {{static_cast<T>(-5), static_cast<T>(100), static_cast<T>(-20)},
-             {static_cast<T>(3), static_cast<T>(3.5), static_cast<T>(3)}}
+            {{static_cast<TPrecision>(-5), static_cast<TPrecision>(100),
+              static_cast<TPrecision>(-20)},
+             {static_cast<TPrecision>(3), static_cast<TPrecision>(3.5),
+              static_cast<TPrecision>(3)}}
         );
 
-        T *h_mat_manual = static_cast<T *>(malloc(m_manual*n_manual*sizeof(T)));
+        TPrecision *h_mat_manual = static_cast<TPrecision *>(
+            malloc(m_manual*n_manual*sizeof(TPrecision))
+        );
         mat_manual.copy_data_to_ptr(h_mat_manual, m_manual, n_manual);
 
-        ASSERT_EQ(h_mat_manual[0+0*m_manual], static_cast<T>(-5));
-        ASSERT_EQ(h_mat_manual[1+0*m_manual], static_cast<T>(3));
-        ASSERT_EQ(h_mat_manual[0+1*m_manual], static_cast<T>(100));
-        ASSERT_EQ(h_mat_manual[1+1*m_manual], static_cast<T>(3.5));
-        ASSERT_EQ(h_mat_manual[0+2*m_manual], static_cast<T>(-20));
-        ASSERT_EQ(h_mat_manual[1+2*m_manual], static_cast<T>(3));
+        ASSERT_EQ(h_mat_manual[0+0*m_manual], static_cast<TPrecision>(-5));
+        ASSERT_EQ(h_mat_manual[1+0*m_manual], static_cast<TPrecision>(3));
+        ASSERT_EQ(h_mat_manual[0+1*m_manual], static_cast<TPrecision>(100));
+        ASSERT_EQ(h_mat_manual[1+1*m_manual], static_cast<TPrecision>(3.5));
+        ASSERT_EQ(h_mat_manual[0+2*m_manual], static_cast<TPrecision>(-20));
+        ASSERT_EQ(h_mat_manual[1+2*m_manual], static_cast<TPrecision>(3));
 
         free(h_mat_manual);
     
         const int m_rand(4);
         const int n_rand(5);
 
-        MatrixDense<T> mat_rand(
+        MatrixDense<TPrecision> mat_rand(
             TestBase::bundle,
-            {{static_cast<T>(rand()), static_cast<T>(rand()), static_cast<T>(rand()),
-              static_cast<T>(rand()), static_cast<T>(rand())},
-             {static_cast<T>(rand()), static_cast<T>(rand()), static_cast<T>(rand()),
-              static_cast<T>(rand()), static_cast<T>(rand())},
-             {static_cast<T>(rand()), static_cast<T>(rand()), static_cast<T>(rand()),
-              static_cast<T>(rand()), static_cast<T>(rand())},
-             {static_cast<T>(rand()), static_cast<T>(rand()), static_cast<T>(rand()),
-              static_cast<T>(rand()), static_cast<T>(rand())}}
+            {{static_cast<TPrecision>(rand()), static_cast<TPrecision>(rand()),
+              static_cast<TPrecision>(rand()), static_cast<TPrecision>(rand()),
+              static_cast<TPrecision>(rand())},
+             {static_cast<TPrecision>(rand()), static_cast<TPrecision>(rand()),
+              static_cast<TPrecision>(rand()), static_cast<TPrecision>(rand()),
+              static_cast<TPrecision>(rand())},
+             {static_cast<TPrecision>(rand()), static_cast<TPrecision>(rand()),
+              static_cast<TPrecision>(rand()), static_cast<TPrecision>(rand()),
+              static_cast<TPrecision>(rand())},
+             {static_cast<TPrecision>(rand()), static_cast<TPrecision>(rand()),
+              static_cast<TPrecision>(rand()), static_cast<TPrecision>(rand()),
+              static_cast<TPrecision>(rand())}}
         );
 
-        T *h_mat_rand = static_cast<T *>(malloc(m_rand*n_rand*sizeof(T)));
+        TPrecision *h_mat_rand = static_cast<TPrecision *>(
+            malloc(m_rand*n_rand*sizeof(TPrecision))
+        );
         mat_rand.copy_data_to_ptr(h_mat_rand, m_rand, n_rand);
 
         for (int i=0; i<m_rand; ++i) {
             for (int j=0; j<n_rand; ++j) {
-                ASSERT_EQ(h_mat_rand[i+j*m_rand], mat_rand.get_elem(i, j).get_scalar());
+                ASSERT_EQ(
+                    h_mat_rand[i+j*m_rand],
+                    mat_rand.get_elem(i, j).get_scalar()
+                );
             }
         }
 
@@ -127,458 +152,667 @@ public:
 
         const int m_rand(4);
         const int n_rand(5);
-        MatrixDense<double> mat_rand(MatrixDense<double>::Random(TestBase::bundle, m_rand, n_rand));
-        double *h_mat_rand = static_cast<double *>(malloc(m_rand*n_rand*sizeof(double)));
+        MatrixDense<double> mat_rand(MatrixDense<double>::Random(
+            TestBase::bundle, m_rand, n_rand
+        ));
+        double *h_mat_rand = static_cast<double *>(
+            malloc(m_rand*n_rand*sizeof(double))
+        );
         
-        auto try_row_too_small = [=]() { mat_rand.copy_data_to_ptr(h_mat_rand, m_rand-2, n_rand); };
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_row_too_small);
+        auto try_row_too_small = [=]() {
+            mat_rand.copy_data_to_ptr(h_mat_rand, m_rand-2, n_rand);
+        };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors, try_row_too_small);
 
-        auto try_row_too_large = [=]() { mat_rand.copy_data_to_ptr(h_mat_rand, m_rand+2, n_rand); };
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_row_too_large);
+        auto try_row_too_large = [=]() {
+            mat_rand.copy_data_to_ptr(h_mat_rand, m_rand+2, n_rand);
+        };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors, try_row_too_large);
 
-        auto try_col_too_small = [=]() { mat_rand.copy_data_to_ptr(h_mat_rand, m_rand, n_rand-2); };
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_col_too_small);
+        auto try_col_too_small = [=]() {
+            mat_rand.copy_data_to_ptr(h_mat_rand, m_rand, n_rand-2);
+        };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors, try_col_too_small);
 
-        auto try_col_too_large = [=]() { mat_rand.copy_data_to_ptr(h_mat_rand, m_rand, n_rand+2); };
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_col_too_large);
+        auto try_col_too_large = [=]() {
+            mat_rand.copy_data_to_ptr(h_mat_rand, m_rand, n_rand+2);
+        };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors, try_col_too_large);
 
-        auto try_match_wrong_dim_row = [=]() { mat_rand.copy_data_to_ptr(h_mat_rand, n_rand, n_rand); };
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_match_wrong_dim_row);
+        auto try_match_wrong_dim_row = [=]() {
+            mat_rand.copy_data_to_ptr(h_mat_rand, n_rand, n_rand);
+        };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors, try_match_wrong_dim_row);
 
-        auto try_match_wrong_dim_col = [=]() { mat_rand.copy_data_to_ptr(h_mat_rand, m_rand, m_rand); };
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_match_wrong_dim_col);
+        auto try_match_wrong_dim_col = [=]() {
+            mat_rand.copy_data_to_ptr(h_mat_rand, m_rand, m_rand);
+        };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors, try_match_wrong_dim_col);
 
         free(h_mat_rand);
 
     }
 
-    template <typename T>
+    template <typename TPrecision>
     void TestRandomMatrixCreation() {
 
         // Just test gives right size and numbers aren't generally the same
-        // will fail with very low probability (check middle numbers are different
-        // from 5 adjacent above and below)
+        // will fail with very low probability (check middle numbers are
+        // different from 5 adjacent above and below)
         constexpr int m_rand(40);
         constexpr int n_rand(40);
-        MatrixDense<T> test_rand(MatrixDense<T>::Random(TestBase::bundle, m_rand, n_rand));
+        MatrixDense<TPrecision> test_rand(MatrixDense<TPrecision>::Random(
+            TestBase::bundle, m_rand, n_rand
+        ));
         ASSERT_EQ(test_rand.rows(), m_rand);
         ASSERT_EQ(test_rand.cols(), n_rand);
         for (int i=1; i<m_rand-1; ++i) {
             for (int j=1; j<n_rand-1; ++j) {
                 ASSERT_TRUE(
-                    ((test_rand.get_elem(i, j).get_scalar() != test_rand.get_elem(i-1, j).get_scalar()) ||
-                     (test_rand.get_elem(i, j).get_scalar() != test_rand.get_elem(i+1, j).get_scalar()) ||
-                     (test_rand.get_elem(i, j).get_scalar() != test_rand.get_elem(i, j-1).get_scalar()) ||
-                     (test_rand.get_elem(i, j).get_scalar() != test_rand.get_elem(i, j+1).get_scalar()))
+                    ((test_rand.get_elem(i, j).get_scalar() !=
+                      test_rand.get_elem(i-1, j).get_scalar()) ||
+                     (test_rand.get_elem(i, j).get_scalar() !=
+                      test_rand.get_elem(i+1, j).get_scalar()) ||
+                     (test_rand.get_elem(i, j).get_scalar() !=
+                      test_rand.get_elem(i, j-1).get_scalar()) ||
+                     (test_rand.get_elem(i, j).get_scalar() !=
+                      test_rand.get_elem(i, j+1).get_scalar()))
                 );
             }
         }
 
     }
 
-    template <typename T>
+    template <typename TPrecision>
     void TestRandomUTMatrixCreation() {
 
         // Test gives right size and numbers aren't generally the same
-        // will fail with very low probability (check middle numbers are different
-        // from 5 adjacent above and below)
+        // will fail with very low probability (check middle numbers are
+        // different from 5 adjacent above and below)
         constexpr int m_rand(40);
         constexpr int n_rand(40);
-        MatrixDense<T> test_rand(MatrixDense<T>::Random_UT(TestBase::bundle, m_rand, n_rand));
+        MatrixDense<TPrecision> test_rand(MatrixDense<TPrecision>::Random_UT(
+            TestBase::bundle, m_rand, n_rand
+        ));
         ASSERT_EQ(test_rand.rows(), m_rand);
         ASSERT_EQ(test_rand.cols(), n_rand);
         for (int i=1; i<m_rand-1; ++i) {
             for (int j=i+1; j<n_rand-1; ++j) {
                 ASSERT_TRUE(
-                    ((test_rand.get_elem(i, j).get_scalar() != test_rand.get_elem(i-1, j).get_scalar()) ||
-                     (test_rand.get_elem(i, j).get_scalar() != test_rand.get_elem(i+1, j).get_scalar()) ||
-                     (test_rand.get_elem(i, j).get_scalar() != test_rand.get_elem(i, j-1).get_scalar()) ||
-                     (test_rand.get_elem(i, j).get_scalar() != test_rand.get_elem(i, j+1).get_scalar()))
+                    ((test_rand.get_elem(i, j).get_scalar() !=
+                      test_rand.get_elem(i-1, j).get_scalar()) ||
+                     (test_rand.get_elem(i, j).get_scalar() !=
+                      test_rand.get_elem(i+1, j).get_scalar()) ||
+                     (test_rand.get_elem(i, j).get_scalar() !=
+                      test_rand.get_elem(i, j-1).get_scalar()) ||
+                     (test_rand.get_elem(i, j).get_scalar() !=
+                      test_rand.get_elem(i, j+1).get_scalar()))
                 );
             }
         }
 
         // Check non-zero diagonal
         for (int i=0; i<m_rand; ++i) {
-            ASSERT_FALSE(test_rand.get_elem(i, i).get_scalar() == static_cast<T>(0.));
+            ASSERT_FALSE(
+                test_rand.get_elem(i, i).get_scalar() ==
+                static_cast<TPrecision>(0.)
+            );
         }
 
         // Check zero below diagonal
         for (int i=0; i<m_rand; ++i) {
             for (int j=0; j<i; ++j) {
-                ASSERT_EQ(test_rand.get_elem(i, j).get_scalar(), static_cast<T>(0.));
+                ASSERT_EQ(
+                    test_rand.get_elem(i, j).get_scalar(),
+                    static_cast<TPrecision>(0.)
+                );
             }
         }
 
     }
 
-    template <typename T>
+    template <typename TPrecision>
     void TestRandomLTMatrixCreation() {
 
         // Test gives right size and numbers aren't generally the same
-        // will fail with very low probability (check middle numbers are different
-        // from 5 adjacent above and below)
+        // will fail with very low probability (check middle numbers are
+        // different from 5 adjacent above and below)
         constexpr int m_rand(40);
         constexpr int n_rand(40);
-        MatrixDense<T> test_rand(MatrixDense<T>::Random_LT(TestBase::bundle, m_rand, n_rand));
+        MatrixDense<TPrecision> test_rand(MatrixDense<TPrecision>::Random_LT(
+            TestBase::bundle, m_rand, n_rand
+        ));
         ASSERT_EQ(test_rand.rows(), m_rand);
         ASSERT_EQ(test_rand.cols(), n_rand);
         for (int i=1; i<m_rand-1; ++i) {
             for (int j=1; j<i; ++j) {
                 ASSERT_TRUE(
-                    ((test_rand.get_elem(i, j).get_scalar() != test_rand.get_elem(i-1, j).get_scalar()) ||
-                     (test_rand.get_elem(i, j).get_scalar() != test_rand.get_elem(i+1, j).get_scalar()) ||
-                     (test_rand.get_elem(i, j).get_scalar() != test_rand.get_elem(i, j-1).get_scalar()) ||
-                     (test_rand.get_elem(i, j).get_scalar() != test_rand.get_elem(i, j+1).get_scalar()))
+                    ((test_rand.get_elem(i, j).get_scalar() !=
+                      test_rand.get_elem(i-1, j).get_scalar()) ||
+                     (test_rand.get_elem(i, j).get_scalar() !=
+                      test_rand.get_elem(i+1, j).get_scalar()) ||
+                     (test_rand.get_elem(i, j).get_scalar() !=
+                      test_rand.get_elem(i, j-1).get_scalar()) ||
+                     (test_rand.get_elem(i, j).get_scalar() !=
+                      test_rand.get_elem(i, j+1).get_scalar()))
                 );
             }
         }
 
         // Check non-zero diagonal
         for (int i=0; i<m_rand; ++i) {
-            ASSERT_FALSE(test_rand.get_elem(i, i).get_scalar() == static_cast<T>(0.));
+            ASSERT_FALSE(
+                test_rand.get_elem(i, i).get_scalar() ==
+                static_cast<TPrecision>(0.)
+            );
         }
 
         // Check zero above diagonal
         for (int i=0; i<m_rand; ++i) {
             for (int j=i+1; j<n_rand; ++j) {
-                ASSERT_EQ(test_rand.get_elem(i, j).get_scalar(), static_cast<T>(0.));
+                ASSERT_EQ(
+                    test_rand.get_elem(i, j).get_scalar(),
+                    static_cast<TPrecision>(0.)
+                );
             }
         }
 
     }
 
-    template <typename T>
+    template <typename TPrecision>
     void TestBlock() {
 
-        const MatrixDense<T> const_mat (
+        const MatrixDense<TPrecision> const_mat (
             TestBase::bundle,
-            {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3),
-              static_cast<T>(4), static_cast<T>(5)},
-             {static_cast<T>(6), static_cast<T>(7), static_cast<T>(8),
-              static_cast<T>(9), static_cast<T>(10)},
-             {static_cast<T>(11), static_cast<T>(12), static_cast<T>(13),
-              static_cast<T>(14), static_cast<T>(15)},
-             {static_cast<T>(16), static_cast<T>(17), static_cast<T>(18),
-              static_cast<T>(19), static_cast<T>(20)}}
+            {{static_cast<TPrecision>(1), static_cast<TPrecision>(2),
+              static_cast<TPrecision>(3), static_cast<TPrecision>(4),
+              static_cast<TPrecision>(5)},
+             {static_cast<TPrecision>(6), static_cast<TPrecision>(7),
+              static_cast<TPrecision>(8), static_cast<TPrecision>(9),
+              static_cast<TPrecision>(10)},
+             {static_cast<TPrecision>(11), static_cast<TPrecision>(12),
+              static_cast<TPrecision>(13), static_cast<TPrecision>(14),
+              static_cast<TPrecision>(15)},
+             {static_cast<TPrecision>(16), static_cast<TPrecision>(17),
+              static_cast<TPrecision>(18), static_cast<TPrecision>(19),
+              static_cast<TPrecision>(20)}}
         );
-        MatrixDense<T> mat(const_mat);
+        MatrixDense<TPrecision> mat(const_mat);
 
         // Test copy constructor and access for block 0, 0, 4, 2
-        typename MatrixDense<T>::Block blk_0_0_4_2(mat.get_block(0, 0, 4, 2));
-        ASSERT_EQ(blk_0_0_4_2.get_elem(0, 0).get_scalar(), static_cast<T>(1));
-        ASSERT_EQ(blk_0_0_4_2.get_elem(1, 0).get_scalar(), static_cast<T>(6));
-        ASSERT_EQ(blk_0_0_4_2.get_elem(2, 0).get_scalar(), static_cast<T>(11));
-        ASSERT_EQ(blk_0_0_4_2.get_elem(3, 0).get_scalar(), static_cast<T>(16));
-        ASSERT_EQ(blk_0_0_4_2.get_elem(0, 1).get_scalar(), static_cast<T>(2));
-        ASSERT_EQ(blk_0_0_4_2.get_elem(1, 1).get_scalar(), static_cast<T>(7));
-        ASSERT_EQ(blk_0_0_4_2.get_elem(2, 1).get_scalar(), static_cast<T>(12));
-        ASSERT_EQ(blk_0_0_4_2.get_elem(3, 1).get_scalar(), static_cast<T>(17));
+        typename MatrixDense<TPrecision>::Block blk_0_0_4_2(
+            mat.get_block(0, 0, 4, 2)
+        );
+        ASSERT_EQ(
+            blk_0_0_4_2.get_elem(0, 0).get_scalar(),
+            static_cast<TPrecision>(1)
+        );
+        ASSERT_EQ(
+            blk_0_0_4_2.get_elem(1, 0).get_scalar(),
+            static_cast<TPrecision>(6)
+        );
+        ASSERT_EQ(
+            blk_0_0_4_2.get_elem(2, 0).get_scalar(),
+            static_cast<TPrecision>(11)
+        );
+        ASSERT_EQ(
+            blk_0_0_4_2.get_elem(3, 0).get_scalar(),
+            static_cast<TPrecision>(16)
+        );
+        ASSERT_EQ(
+            blk_0_0_4_2.get_elem(0, 1).get_scalar(),
+            static_cast<TPrecision>(2)
+        );
+        ASSERT_EQ(
+            blk_0_0_4_2.get_elem(1, 1).get_scalar(),
+            static_cast<TPrecision>(7)
+        );
+        ASSERT_EQ(
+            blk_0_0_4_2.get_elem(2, 1).get_scalar(),
+            static_cast<TPrecision>(12)
+        );
+        ASSERT_EQ(
+            blk_0_0_4_2.get_elem(3, 1).get_scalar(),
+            static_cast<TPrecision>(17)
+        );
 
         // Test copy constructor and access for block 2, 1, 2, 3
-        typename MatrixDense<T>::Block blk_2_1_2_3(mat.get_block(2, 1, 2, 3));
-        ASSERT_EQ(blk_2_1_2_3.get_elem(0, 0).get_scalar(), static_cast<T>(12));
-        ASSERT_EQ(blk_2_1_2_3.get_elem(0, 1).get_scalar(), static_cast<T>(13));
-        ASSERT_EQ(blk_2_1_2_3.get_elem(0, 2).get_scalar(), static_cast<T>(14));
-        ASSERT_EQ(blk_2_1_2_3.get_elem(1, 0).get_scalar(), static_cast<T>(17));
-        ASSERT_EQ(blk_2_1_2_3.get_elem(1, 1).get_scalar(), static_cast<T>(18));
-        ASSERT_EQ(blk_2_1_2_3.get_elem(1, 2).get_scalar(), static_cast<T>(19));
+        typename MatrixDense<TPrecision>::Block blk_2_1_2_3(
+            mat.get_block(2, 1, 2, 3)
+        );
+        ASSERT_EQ(
+            blk_2_1_2_3.get_elem(0, 0).get_scalar(),
+            static_cast<TPrecision>(12)
+        );
+        ASSERT_EQ(
+            blk_2_1_2_3.get_elem(0, 1).get_scalar(),
+            static_cast<TPrecision>(13)
+        );
+        ASSERT_EQ(
+            blk_2_1_2_3.get_elem(0, 2).get_scalar(),
+            static_cast<TPrecision>(14)
+        );
+        ASSERT_EQ(
+            blk_2_1_2_3.get_elem(1, 0).get_scalar(),
+            static_cast<TPrecision>(17)
+        );
+        ASSERT_EQ(
+            blk_2_1_2_3.get_elem(1, 1).get_scalar(),
+            static_cast<TPrecision>(18)
+        );
+        ASSERT_EQ(
+            blk_2_1_2_3.get_elem(1, 2).get_scalar(),
+            static_cast<TPrecision>(19)
+        );
 
         // Test MatrixDense cast/access for block 0, 0, 3, 4
-        MatrixDense<T> mat_0_0_3_4(mat.get_block(0, 0, 3, 4));
-        MatrixDense<T> test_0_0_3_4(
+        MatrixDense<TPrecision> mat_0_0_3_4(mat.get_block(0, 0, 3, 4));
+        MatrixDense<TPrecision> test_0_0_3_4(
             TestBase::bundle,
-            {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4)},
-             {static_cast<T>(6), static_cast<T>(7), static_cast<T>(8), static_cast<T>(9)},
-             {static_cast<T>(11), static_cast<T>(12), static_cast<T>(13), static_cast<T>(14)}}
+            {{static_cast<TPrecision>(1), static_cast<TPrecision>(2),
+              static_cast<TPrecision>(3), static_cast<TPrecision>(4)},
+             {static_cast<TPrecision>(6), static_cast<TPrecision>(7),
+              static_cast<TPrecision>(8), static_cast<TPrecision>(9)},
+             {static_cast<TPrecision>(11), static_cast<TPrecision>(12),
+              static_cast<TPrecision>(13), static_cast<TPrecision>(14)}}
         );
         ASSERT_MATRIX_EQ(mat_0_0_3_4, test_0_0_3_4);
 
         // Test MatrixDense cast/access for block 1, 2, 3, 1
-        MatrixDense<T> mat_1_2_3_1(mat.get_block(1, 2, 3, 1));
-        MatrixDense<T> test_1_2_3_1(
+        MatrixDense<TPrecision> mat_1_2_3_1(mat.get_block(1, 2, 3, 1));
+        MatrixDense<TPrecision> test_1_2_3_1(
             TestBase::bundle,
-            {{static_cast<T>(8)},
-             {static_cast<T>(13)},
-             {static_cast<T>(18)}}
+            {{static_cast<TPrecision>(8)},
+             {static_cast<TPrecision>(13)},
+             {static_cast<TPrecision>(18)}}
         );
         ASSERT_MATRIX_EQ(mat_1_2_3_1, test_1_2_3_1);
 
         // Test MatrixDense cast/access for block 0, 0, 3, 4
-        MatrixDense<T> mat_0_0_3_4_copy(mat.get_block(0, 0, 3, 4).copy_to_mat());
+        MatrixDense<TPrecision> mat_0_0_3_4_copy(
+            mat.get_block(0, 0, 3, 4).copy_to_mat()
+        );
         ASSERT_MATRIX_EQ(mat_0_0_3_4_copy, test_0_0_3_4);
 
         // Test MatrixDense cast/access for block 1, 2, 3, 1
-        MatrixDense<T> mat_1_2_3_1_copy(mat.get_block(1, 2, 3, 1).copy_to_mat());
+        MatrixDense<TPrecision> mat_1_2_3_1_copy(
+            mat.get_block(1, 2, 3, 1).copy_to_mat()
+        );
         ASSERT_MATRIX_EQ(mat_1_2_3_1_copy, test_1_2_3_1);
 
         // Test assignment from MatrixDense
         mat = const_mat;
-        MatrixDense<T> zero_2_3(MatrixDense<T>::Zero(TestBase::bundle, 2, 3));
+        MatrixDense<TPrecision> zero_2_3(MatrixDense<TPrecision>::Zero(
+            TestBase::bundle, 2, 3
+        ));
         mat.get_block(1, 1, 2, 3).set_from_mat(zero_2_3);
-        MatrixDense<T> test_assign_2_3(
+        MatrixDense<TPrecision> test_assign_2_3(
             TestBase::bundle,
-            {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3),
-              static_cast<T>(4), static_cast<T>(5)},
-             {static_cast<T>(6), static_cast<T>(0), static_cast<T>(0),
-              static_cast<T>(0), static_cast<T>(10)},
-             {static_cast<T>(11), static_cast<T>(0), static_cast<T>(0),
-              static_cast<T>(0), static_cast<T>(15)},
-             {static_cast<T>(16), static_cast<T>(17), static_cast<T>(18),
-              static_cast<T>(19), static_cast<T>(20)}}
+            {{static_cast<TPrecision>(1), static_cast<TPrecision>(2),
+              static_cast<TPrecision>(3), static_cast<TPrecision>(4),
+              static_cast<TPrecision>(5)},
+             {static_cast<TPrecision>(6), static_cast<TPrecision>(0),
+              static_cast<TPrecision>(0), static_cast<TPrecision>(0),
+              static_cast<TPrecision>(10)},
+             {static_cast<TPrecision>(11), static_cast<TPrecision>(0),
+              static_cast<TPrecision>(0), static_cast<TPrecision>(0),
+              static_cast<TPrecision>(15)},
+             {static_cast<TPrecision>(16), static_cast<TPrecision>(17),
+              static_cast<TPrecision>(18), static_cast<TPrecision>(19),
+              static_cast<TPrecision>(20)}}
         );
         ASSERT_MATRIX_EQ(mat, test_assign_2_3);
 
         // Test assignment from Vector
         mat = const_mat;
-        Vector<T> assign_vec(
+        Vector<TPrecision> assign_vec(
             TestBase::bundle,
-            {static_cast<T>(1),
-             static_cast<T>(1),
-             static_cast<T>(1)}
+            {static_cast<TPrecision>(1),
+             static_cast<TPrecision>(1),
+             static_cast<TPrecision>(1)}
         );
         mat.get_block(1, 4, 3, 1).set_from_vec(assign_vec);
-        MatrixDense<T> test_assign_1_4(
+        MatrixDense<TPrecision> test_assign_1_4(
             TestBase::bundle,
-            {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3),
-              static_cast<T>(4), static_cast<T>(5)},
-             {static_cast<T>(6), static_cast<T>(7), static_cast<T>(8),
-              static_cast<T>(9), static_cast<T>(1)},
-             {static_cast<T>(11), static_cast<T>(12), static_cast<T>(13),
-              static_cast<T>(14), static_cast<T>(1)},
-             {static_cast<T>(16), static_cast<T>(17), static_cast<T>(18),
-              static_cast<T>(19), static_cast<T>(1)}}
+            {{static_cast<TPrecision>(1), static_cast<TPrecision>(2),
+              static_cast<TPrecision>(3), static_cast<TPrecision>(4),
+              static_cast<TPrecision>(5)},
+             {static_cast<TPrecision>(6), static_cast<TPrecision>(7),
+              static_cast<TPrecision>(8), static_cast<TPrecision>(9),
+              static_cast<TPrecision>(1)},
+             {static_cast<TPrecision>(11), static_cast<TPrecision>(12),
+              static_cast<TPrecision>(13), static_cast<TPrecision>(14),
+              static_cast<TPrecision>(1)},
+             {static_cast<TPrecision>(16), static_cast<TPrecision>(17),
+              static_cast<TPrecision>(18), static_cast<TPrecision>(19),
+              static_cast<TPrecision>(1)}}
         );
         ASSERT_MATRIX_EQ(mat, test_assign_1_4);
 
     }
 
-    template <typename T>
+    template <typename TPrecision>
     void TestRandomMatVec() {
 
         // Test random
         const int m_rand(3);
         const int n_rand(4);
-        MatrixDense<T> rand_mat(MatrixDense<T>::Random(TestBase::bundle, m_rand, n_rand));
+        MatrixDense<TPrecision> rand_mat(MatrixDense<TPrecision>::Random(
+            TestBase::bundle, m_rand, n_rand
+        ));
         ASSERT_VECTOR_NEAR(
-            rand_mat*Vector<T>(
+            rand_mat*Vector<TPrecision>(
                 TestBase::bundle,
-                {static_cast<T>(1), static_cast<T>(0), static_cast<T>(0), static_cast<T>(0)}
+                {static_cast<TPrecision>(1), static_cast<TPrecision>(0),
+                 static_cast<TPrecision>(0), static_cast<TPrecision>(0)}
             ),
-            Vector<T>(
+            Vector<TPrecision>(
                 TestBase::bundle,
                 {rand_mat.get_elem(0, 0).get_scalar(),
                  rand_mat.get_elem(1, 0).get_scalar(),
                  rand_mat.get_elem(2, 0).get_scalar()}
             ),
-            static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
+            (static_cast<TPrecision>(2.) *
+             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
         );
         ASSERT_VECTOR_NEAR(
-            rand_mat*Vector<T>(
+            rand_mat*Vector<TPrecision>(
                 TestBase::bundle,
-                {static_cast<T>(0), static_cast<T>(1), static_cast<T>(0), static_cast<T>(0)}
+                {static_cast<TPrecision>(0), static_cast<TPrecision>(1),
+                 static_cast<TPrecision>(0), static_cast<TPrecision>(0)}
             ),
-            Vector<T>(
+            Vector<TPrecision>(
                 TestBase::bundle,
                 {rand_mat.get_elem(0, 1).get_scalar(),
                  rand_mat.get_elem(1, 1).get_scalar(),
                  rand_mat.get_elem(2, 1).get_scalar()}
             ),
-            static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
+            (static_cast<TPrecision>(2.) *
+             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
         );
         ASSERT_VECTOR_NEAR(
-            rand_mat*Vector<T>(
+            rand_mat*Vector<TPrecision>(
                 TestBase::bundle,
-                {static_cast<T>(0), static_cast<T>(0), static_cast<T>(1), static_cast<T>(0)}
+                {static_cast<TPrecision>(0), static_cast<TPrecision>(0),
+                 static_cast<TPrecision>(1), static_cast<TPrecision>(0)}
             ),
-            Vector<T>(
+            Vector<TPrecision>(
                 TestBase::bundle,
                 {rand_mat.get_elem(0, 2).get_scalar(),
                  rand_mat.get_elem(1, 2).get_scalar(),
                  rand_mat.get_elem(2, 2).get_scalar()}
             ),
-            static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
+            (static_cast<TPrecision>(2.) *
+             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
         );
         ASSERT_VECTOR_NEAR(
-            rand_mat*Vector<T>(
+            rand_mat*Vector<TPrecision>(
                 TestBase::bundle,
-                {static_cast<T>(0), static_cast<T>(0), static_cast<T>(0), static_cast<T>(1)}
+                {static_cast<TPrecision>(0), static_cast<TPrecision>(0),
+                 static_cast<TPrecision>(0), static_cast<TPrecision>(1)}
             ),
-            Vector<T>(
+            Vector<TPrecision>(
                 TestBase::bundle,
                 {rand_mat.get_elem(0, 3).get_scalar(),
                  rand_mat.get_elem(1, 3).get_scalar(),
                  rand_mat.get_elem(2, 3).get_scalar()}
             ),
-            static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
+            (static_cast<TPrecision>(2.) *
+             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
         );
         ASSERT_VECTOR_NEAR(
-            rand_mat*Vector<T>(
+            rand_mat*Vector<TPrecision>(
                 TestBase::bundle,
-                {static_cast<T>(1), static_cast<T>(0.1), static_cast<T>(0.01), static_cast<T>(0.001)}
+                {static_cast<TPrecision>(1), static_cast<TPrecision>(0.1),
+                 static_cast<TPrecision>(0.01), static_cast<TPrecision>(0.001)}
             ),
-            Vector<T>(
+            Vector<TPrecision>(
                 TestBase::bundle,
-                {(static_cast<T>(1)*rand_mat.get_elem(0, 0).get_scalar() +
-                  static_cast<T>(0.1)*rand_mat.get_elem(0, 1).get_scalar() +
-                  static_cast<T>(0.01)*rand_mat.get_elem(0, 2).get_scalar() +
-                  static_cast<T>(0.001)*rand_mat.get_elem(0, 3).get_scalar()),
-                 (static_cast<T>(1)*rand_mat.get_elem(1, 0).get_scalar() +
-                  static_cast<T>(0.1)*rand_mat.get_elem(1, 1).get_scalar() +
-                  static_cast<T>(0.01)*rand_mat.get_elem(1, 2).get_scalar()+
-                  static_cast<T>(0.001)*rand_mat.get_elem(1, 3).get_scalar()),
-                 (static_cast<T>(1)*rand_mat.get_elem(2, 0).get_scalar() +
-                  static_cast<T>(0.1)*rand_mat.get_elem(2, 1).get_scalar() +
-                  static_cast<T>(0.01)*rand_mat.get_elem(2, 2).get_scalar()+
-                  static_cast<T>(0.001)*rand_mat.get_elem(2, 3).get_scalar())}
+                {(static_cast<TPrecision>(1) *
+                  rand_mat.get_elem(0, 0).get_scalar() +
+                  static_cast<TPrecision>(0.1) *
+                  rand_mat.get_elem(0, 1).get_scalar() +
+                  static_cast<TPrecision>(0.01) *
+                  rand_mat.get_elem(0, 2).get_scalar() +
+                  static_cast<TPrecision>(0.001) *
+                  rand_mat.get_elem(0, 3).get_scalar()),
+                 (static_cast<TPrecision>(1) *
+                  rand_mat.get_elem(1, 0).get_scalar() +
+                  static_cast<TPrecision>(0.1) *
+                  rand_mat.get_elem(1, 1).get_scalar() +
+                  static_cast<TPrecision>(0.01) *
+                  rand_mat.get_elem(1, 2).get_scalar()+
+                  static_cast<TPrecision>(0.001) *
+                  rand_mat.get_elem(1, 3).get_scalar()),
+                 (static_cast<TPrecision>(1) *
+                  rand_mat.get_elem(2, 0).get_scalar() +
+                  static_cast<TPrecision>(0.1) *
+                  rand_mat.get_elem(2, 1).get_scalar() +
+                  static_cast<TPrecision>(0.01) *
+                  rand_mat.get_elem(2, 2).get_scalar()+
+                  static_cast<TPrecision>(0.001) *
+                  rand_mat.get_elem(2, 3).get_scalar())}
             ),
-            static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
+            (static_cast<TPrecision>(2.) *
+             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
         );
 
     }
 
-    template <typename T>
+    template <typename TPrecision>
     void TestSubsetcolsMatVec() {
 
         // Test manually
-        MatrixDense<T> mat(
+        MatrixDense<TPrecision> mat(
             TestBase::bundle,
-            {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3)},
-             {static_cast<T>(4), static_cast<T>(5), static_cast<T>(6)},
-             {static_cast<T>(7), static_cast<T>(8), static_cast<T>(9)},
-             {static_cast<T>(3), static_cast<T>(2), static_cast<T>(1)}}
+            {{static_cast<TPrecision>(1), static_cast<TPrecision>(2),
+              static_cast<TPrecision>(3)},
+             {static_cast<TPrecision>(4), static_cast<TPrecision>(5),
+              static_cast<TPrecision>(6)},
+             {static_cast<TPrecision>(7), static_cast<TPrecision>(8),
+              static_cast<TPrecision>(9)},
+             {static_cast<TPrecision>(3), static_cast<TPrecision>(2),
+              static_cast<TPrecision>(1)}}
         );
-        Vector<T> mat_0(mat.get_col(0));
-        Vector<T> mat_1(mat.get_col(1));
-        Vector<T> mat_2(mat.get_col(2));
+        Vector<TPrecision> mat_0(mat.get_col(0));
+        Vector<TPrecision> mat_1(mat.get_col(1));
+        Vector<TPrecision> mat_2(mat.get_col(2));
 
-        Vector<T> vec_2_0_1(TestBase::bundle, {static_cast<T>(0), static_cast<T>(1)});
-        Vector<T> vec_2_1_0(TestBase::bundle, {static_cast<T>(1), static_cast<T>(0)});
-        Vector<T> vec_2_1_01(TestBase::bundle, {static_cast<T>(1), static_cast<T>(0.1)});
+        Vector<TPrecision> vec_2_0_1(
+            TestBase::bundle,
+            {static_cast<TPrecision>(0), static_cast<TPrecision>(1)}
+        );
+        Vector<TPrecision> vec_2_1_0(
+            TestBase::bundle,
+            {static_cast<TPrecision>(1), static_cast<TPrecision>(0)}
+        );
+        Vector<TPrecision> vec_2_1_01(
+            TestBase::bundle,
+            {static_cast<TPrecision>(1), static_cast<TPrecision>(0.1)}
+        );
 
         // Test multiplication of first 2 columns
-        ASSERT_VECTOR_NEAR(mat.mult_subset_cols(0, 2, vec_2_0_1), mat_1, Tol<T>::gamma_T(2));
-        ASSERT_VECTOR_NEAR(mat.mult_subset_cols(0, 2, vec_2_1_0), mat_0, Tol<T>::gamma_T(2));
+        ASSERT_VECTOR_NEAR(
+            mat.mult_subset_cols(0, 2, vec_2_0_1),
+            mat_1,
+            Tol<TPrecision>::gamma_T(2)
+        );
+        ASSERT_VECTOR_NEAR(
+            mat.mult_subset_cols(0, 2, vec_2_1_0),
+            mat_0,
+            Tol<TPrecision>::gamma_T(2)
+        );
         ASSERT_VECTOR_NEAR(
             mat.mult_subset_cols(0, 2, vec_2_1_01),
-            mat_0+mat_1*Scalar<T>(static_cast<T>(0.1)),
-            Tol<T>::gamma_T(2)
+            mat_0+mat_1*Scalar<TPrecision>(static_cast<TPrecision>(0.1)),
+            Tol<TPrecision>::gamma_T(2)
         );
 
         // Test multiplication of last 2 columns
-        ASSERT_VECTOR_NEAR(mat.mult_subset_cols(1, 2, vec_2_0_1), mat_2, Tol<T>::gamma_T(2));
-        ASSERT_VECTOR_NEAR(mat.mult_subset_cols(1, 2, vec_2_1_0), mat_1, Tol<T>::gamma_T(2));
+        ASSERT_VECTOR_NEAR(
+            mat.mult_subset_cols(1, 2, vec_2_0_1),
+            mat_2,
+            Tol<TPrecision>::gamma_T(2)
+        );
+        ASSERT_VECTOR_NEAR(
+            mat.mult_subset_cols(1, 2, vec_2_1_0),
+            mat_1,
+            Tol<TPrecision>::gamma_T(2)
+        );
         ASSERT_VECTOR_NEAR(
             mat.mult_subset_cols(1, 2, vec_2_1_01),
-            mat_1+mat_2*Scalar<T>(static_cast<T>(0.1)),
-            Tol<T>::gamma_T(2)
+            mat_1+mat_2*Scalar<TPrecision>(static_cast<TPrecision>(0.1)),
+            Tol<TPrecision>::gamma_T(2)
         );
 
         // Test multiplication of all columns
-        Vector<T> vec_3_001_01_1(
+        Vector<TPrecision> vec_3_001_01_1(
             TestBase::bundle,
-            {static_cast<T>(0.01), static_cast<T>(0.1), static_cast<T>(1.)}
+            {static_cast<TPrecision>(0.01), static_cast<TPrecision>(0.1),
+             static_cast<TPrecision>(1.)}
         );
         ASSERT_VECTOR_NEAR(
             mat.mult_subset_cols(0, 3, vec_3_001_01_1),
-            mat_0*Scalar<T>(static_cast<T>(0.01))+
-            mat_1*Scalar<T>(static_cast<T>(0.1))+
-            mat_2*Scalar<T>(static_cast<T>(1.)),
-            Tol<T>::gamma_T(3)
+            mat_0*Scalar<TPrecision>(static_cast<TPrecision>(0.01)) +
+            mat_1*Scalar<TPrecision>(static_cast<TPrecision>(0.1)) +
+            mat_2*Scalar<TPrecision>(static_cast<TPrecision>(1.)),
+            Tol<TPrecision>::gamma_T(3)
         );
 
         // Test multiplication of individual
-        Vector<T> vec_1_2(TestBase::bundle, {static_cast<T>(2.)});
+        Vector<TPrecision> vec_1_2(
+            TestBase::bundle, {static_cast<TPrecision>(2.)}
+        );
         ASSERT_VECTOR_NEAR(
             mat.mult_subset_cols(0, 1, vec_1_2),
-            mat_0*Scalar<T>(static_cast<T>(2.)),
-            Tol<T>::roundoff_T()
+            mat_0*Scalar<TPrecision>(static_cast<TPrecision>(2.)),
+            Tol<TPrecision>::roundoff_T()
         );
         ASSERT_VECTOR_NEAR(
             mat.mult_subset_cols(1, 1, vec_1_2),
-            mat_1*Scalar<T>(static_cast<T>(2.)),
-            Tol<T>::roundoff_T()
+            mat_1*Scalar<TPrecision>(static_cast<TPrecision>(2.)),
+            Tol<TPrecision>::roundoff_T()
         );
         ASSERT_VECTOR_NEAR(
             mat.mult_subset_cols(2, 1, vec_1_2),
-            mat_2*Scalar<T>(static_cast<T>(2.)),
-            Tol<T>::roundoff_T()
+            mat_2*Scalar<TPrecision>(static_cast<TPrecision>(2.)),
+            Tol<TPrecision>::roundoff_T()
         );
 
     }
 
-    template <typename T>
+    template <typename TPrecision>
     void TestRandomSubsetcolsMatVec() {
 
         // Test manually
-        MatrixDense<T> mat(MatrixDense<T>::Random(TestBase::bundle, 4, 3));
-        Vector<T> mat_0(mat.get_col(0));
-        Vector<T> mat_1(mat.get_col(1));
-        Vector<T> mat_2(mat.get_col(2));
+        MatrixDense<TPrecision> mat(MatrixDense<TPrecision>::Random(
+            TestBase::bundle, 4, 3
+        ));
+        Vector<TPrecision> mat_0(mat.get_col(0));
+        Vector<TPrecision> mat_1(mat.get_col(1));
+        Vector<TPrecision> mat_2(mat.get_col(2));
 
-        Vector<T> vec_2_0_1(TestBase::bundle, {static_cast<T>(0), static_cast<T>(1)});
-        Vector<T> vec_2_1_0(TestBase::bundle, {static_cast<T>(1), static_cast<T>(0)});
-        Vector<T> vec_2_1_01(TestBase::bundle, {static_cast<T>(1), static_cast<T>(0.1)});
+        Vector<TPrecision> vec_2_0_1(
+            TestBase::bundle,
+            {static_cast<TPrecision>(0), static_cast<TPrecision>(1)}
+        );
+        Vector<TPrecision> vec_2_1_0(
+            TestBase::bundle,
+            {static_cast<TPrecision>(1), static_cast<TPrecision>(0)}
+        );
+        Vector<TPrecision> vec_2_1_01(
+            TestBase::bundle,
+            {static_cast<TPrecision>(1), static_cast<TPrecision>(0.1)}
+        );
 
         // Test multiplication of first 2 columns
-        ASSERT_VECTOR_NEAR(mat.mult_subset_cols(0, 2, vec_2_0_1), mat_1, Tol<T>::gamma_T(2));
-        ASSERT_VECTOR_NEAR(mat.mult_subset_cols(0, 2, vec_2_1_0), mat_0, Tol<T>::gamma_T(2));
+        ASSERT_VECTOR_NEAR(
+            mat.mult_subset_cols(0, 2, vec_2_0_1),
+            mat_1,
+            Tol<TPrecision>::gamma_T(2)
+        );
+        ASSERT_VECTOR_NEAR(
+            mat.mult_subset_cols(0, 2, vec_2_1_0),
+            mat_0,
+            Tol<TPrecision>::gamma_T(2)
+        );
         ASSERT_VECTOR_NEAR(
             mat.mult_subset_cols(0, 2, vec_2_1_01),
-            mat_0+mat_1*Scalar<T>(static_cast<T>(0.1)),
-            Tol<T>::gamma_T(2)
+            mat_0+mat_1*Scalar<TPrecision>(static_cast<TPrecision>(0.1)),
+            Tol<TPrecision>::gamma_T(2)
         );
 
         // Test multiplication of last 2 columns
-        ASSERT_VECTOR_NEAR(mat.mult_subset_cols(1, 2, vec_2_0_1), mat_2, Tol<T>::gamma_T(2));
-        ASSERT_VECTOR_NEAR(mat.mult_subset_cols(1, 2, vec_2_1_0), mat_1, Tol<T>::gamma_T(2));
+        ASSERT_VECTOR_NEAR(
+            mat.mult_subset_cols(1, 2, vec_2_0_1),
+            mat_2,
+            Tol<TPrecision>::gamma_T(2)
+        );
+        ASSERT_VECTOR_NEAR(
+            mat.mult_subset_cols(1, 2, vec_2_1_0),
+            mat_1,
+            Tol<TPrecision>::gamma_T(2)
+        );
         ASSERT_VECTOR_NEAR(
             mat.mult_subset_cols(1, 2, vec_2_1_01),
-            mat_1+mat_2*Scalar<T>(static_cast<T>(0.1)),
-            Tol<T>::gamma_T(2)
+            mat_1+mat_2*Scalar<TPrecision>(static_cast<TPrecision>(0.1)),
+            Tol<TPrecision>::gamma_T(2)
         );
 
         // Test multiplication of all columns
-        Vector<T> vec_3_001_01_1(
+        Vector<TPrecision> vec_3_001_01_1(
             TestBase::bundle,
-            {static_cast<T>(0.01), static_cast<T>(0.1), static_cast<T>(1.)}
+            {static_cast<TPrecision>(0.01), static_cast<TPrecision>(0.1),
+             static_cast<TPrecision>(1.)}
         );
         ASSERT_VECTOR_NEAR(
             mat.mult_subset_cols(0, 3, vec_3_001_01_1),
-            mat_0*Scalar<T>(static_cast<T>(0.01))+
-            mat_1*Scalar<T>(static_cast<T>(0.1))+
-            mat_2*Scalar<T>(static_cast<T>(1.)),
-            Tol<T>::gamma_T(3)
+            mat_0*Scalar<TPrecision>(static_cast<TPrecision>(0.01)) +
+            mat_1*Scalar<TPrecision>(static_cast<TPrecision>(0.1)) +
+            mat_2*Scalar<TPrecision>(static_cast<TPrecision>(1.)),
+            Tol<TPrecision>::gamma_T(3)
         );
 
         // Test multiplication of individual
-        Vector<T> vec_1_2(TestBase::bundle, {static_cast<T>(2.)});
+        Vector<TPrecision> vec_1_2(
+            TestBase::bundle, {static_cast<TPrecision>(2.)}
+        );
         ASSERT_VECTOR_NEAR(
             mat.mult_subset_cols(0, 1, vec_1_2),
-            mat_0*Scalar<T>(static_cast<T>(2.)),
-            Tol<T>::roundoff_T()
+            mat_0*Scalar<TPrecision>(static_cast<TPrecision>(2.)),
+            Tol<TPrecision>::roundoff_T()
         );
         ASSERT_VECTOR_NEAR(
             mat.mult_subset_cols(1, 1, vec_1_2),
-            mat_1*Scalar<T>(static_cast<T>(2.)),
-            Tol<T>::roundoff_T()
+            mat_1*Scalar<TPrecision>(static_cast<TPrecision>(2.)),
+            Tol<TPrecision>::roundoff_T()
         );
         ASSERT_VECTOR_NEAR(
             mat.mult_subset_cols(2, 1, vec_1_2),
-            mat_2*Scalar<T>(static_cast<T>(2.)),
-            Tol<T>::roundoff_T()
+            mat_2*Scalar<TPrecision>(static_cast<TPrecision>(2.)),
+            Tol<TPrecision>::roundoff_T()
         );
 
     }
 
-    template <typename T>
+    template <typename TPrecision>
     void TestLimitRandomSubsetcolsMatVec() {
 
         const int m(12);
         const int n(7);
 
-        MatrixDense<T> mat(MatrixDense<T>::Random(TestBase::bundle, m, n));
-        Vector<T> vec(Vector<T>::Random(TestBase::bundle, n));
+        MatrixDense<TPrecision> mat(MatrixDense<TPrecision>::Random(
+            TestBase::bundle, m, n
+        ));
+        Vector<TPrecision> vec(Vector<TPrecision>::Random(
+            TestBase::bundle, n
+        ));
 
         ASSERT_VECTOR_EQ(
             mat.mult_subset_cols(0, n, vec),
@@ -587,40 +821,55 @@ public:
 
     }
 
-    template <typename T>
+    template <typename TPrecision>
     void TestBadSubsetcolsMatVec() {
 
-        MatrixDense<T> mat(
+        MatrixDense<TPrecision> mat(
             TestBase::bundle,
-            {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4)},
-             {static_cast<T>(5), static_cast<T>(6), static_cast<T>(7), static_cast<T>(8)},
-             {static_cast<T>(9), static_cast<T>(10), static_cast<T>(11), static_cast<T>(12)}}
+            {{static_cast<TPrecision>(1), static_cast<TPrecision>(2),
+              static_cast<TPrecision>(3), static_cast<TPrecision>(4)},
+             {static_cast<TPrecision>(5), static_cast<TPrecision>(6),
+              static_cast<TPrecision>(7), static_cast<TPrecision>(8)},
+             {static_cast<TPrecision>(9), static_cast<TPrecision>(10),
+              static_cast<TPrecision>(11), static_cast<TPrecision>(12)}}
         );
 
-        Vector<T> valid_vec(
+        Vector<TPrecision> valid_vec(
             TestBase::bundle,
-            {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)}
+            {static_cast<TPrecision>(1), static_cast<TPrecision>(1),
+             static_cast<TPrecision>(1)}
         );
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { mat.mult_subset_cols(-1, 3, valid_vec); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { mat.mult_subset_cols(4, 3, valid_vec); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { mat.mult_subset_cols(2, 3, valid_vec); });
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, [=]() { mat.mult_subset_cols(1, -1, valid_vec); });
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors, [=]() { mat.mult_subset_cols(-1, 3, valid_vec); }
+        );
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors, [=]() { mat.mult_subset_cols(4, 3, valid_vec); }
+        );
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors, [=]() { mat.mult_subset_cols(2, 3, valid_vec); }
+        );
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors, [=]() { mat.mult_subset_cols(1, -1, valid_vec); }
+        );
 
-        Vector<T> empty_vec(TestBase::bundle, {});
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors,[=]() { mat.mult_subset_cols(0, 0, empty_vec); });
+        Vector<TPrecision> empty_vec(TestBase::bundle, {});
+        CHECK_FUNC_HAS_RUNTIME_ERROR(
+            print_errors,[=]() { mat.mult_subset_cols(0, 0, empty_vec); }
+        );
 
-        Vector<T> vec_too_small(
+        Vector<TPrecision> vec_too_small(
             TestBase::bundle,
-            {static_cast<T>(1), static_cast<T>(1)}
+            {static_cast<TPrecision>(1), static_cast<TPrecision>(1)}
         );
         CHECK_FUNC_HAS_RUNTIME_ERROR(
             print_errors,
             [=]() { mat.mult_subset_cols(0, 3, vec_too_small); }
         );
 
-        Vector<T> vec_too_large(
+        Vector<TPrecision> vec_too_large(
             TestBase::bundle, 
-            {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)}
+            {static_cast<TPrecision>(1), static_cast<TPrecision>(1),
+             static_cast<TPrecision>(1), static_cast<TPrecision>(1)}
         );
         CHECK_FUNC_HAS_RUNTIME_ERROR(
             print_errors,
@@ -629,333 +878,412 @@ public:
     
     }
 
-    template <typename T>
+    template <typename TPrecision>
     void TestRandomTransposeMatVec() {
 
         // Test random
         const int m_rand(3);
         const int n_rand(2);
-        MatrixDense<T> rand_mat(MatrixDense<T>::Random(TestBase::bundle, m_rand, n_rand));
+        MatrixDense<TPrecision> rand_mat(MatrixDense<TPrecision>::Random(
+            TestBase::bundle, m_rand, n_rand
+        ));
         ASSERT_VECTOR_NEAR(
             rand_mat.transpose_prod(
-                Vector<T>(
+                Vector<TPrecision>(
                     TestBase::bundle,
-                    {static_cast<T>(1), static_cast<T>(0), static_cast<T>(0)}
+                    {static_cast<TPrecision>(1), static_cast<TPrecision>(0),
+                     static_cast<TPrecision>(0)}
                 )
             ),
-            Vector<T>(
+            Vector<TPrecision>(
                 TestBase::bundle,
                 {rand_mat.get_elem(0, 0).get_scalar(),
                  rand_mat.get_elem(0, 1).get_scalar()}
             ),
-            static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
+            (static_cast<TPrecision>(2.) *
+             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
         );
         ASSERT_VECTOR_NEAR(
             rand_mat.transpose_prod(
-                Vector<T>(
+                Vector<TPrecision>(
                     TestBase::bundle,
-                    {static_cast<T>(0), static_cast<T>(1), static_cast<T>(0)}
+                    {static_cast<TPrecision>(0), static_cast<TPrecision>(1),
+                     static_cast<TPrecision>(0)}
                 )
             ),
-            Vector<T>(
+            Vector<TPrecision>(
                 TestBase::bundle,
                 {rand_mat.get_elem(1, 0).get_scalar(),
                  rand_mat.get_elem(1, 1).get_scalar()}
             ),
-            static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
+            (static_cast<TPrecision>(2.) *
+             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
         );
         ASSERT_VECTOR_NEAR(
             rand_mat.transpose_prod(
-                Vector<T>(
+                Vector<TPrecision>(
                     TestBase::bundle,
-                    {static_cast<T>(0), static_cast<T>(0), static_cast<T>(1)}
+                    {static_cast<TPrecision>(0), static_cast<TPrecision>(0),
+                     static_cast<TPrecision>(1)}
                 )
             ),
-            Vector<T>(
+            Vector<TPrecision>(
                 TestBase::bundle,
                 {rand_mat.get_elem(2, 0).get_scalar(),
                  rand_mat.get_elem(2, 1).get_scalar()}
             ),
-            static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
+            (static_cast<TPrecision>(2.) *
+             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
         );
         ASSERT_VECTOR_NEAR(
             rand_mat.transpose_prod(
-                Vector<T>(
+                Vector<TPrecision>(
                     TestBase::bundle,
-                    {static_cast<T>(1), static_cast<T>(0.1), static_cast<T>(0.01)}
+                    {static_cast<TPrecision>(1), static_cast<TPrecision>(0.1),
+                     static_cast<TPrecision>(0.01)}
                 )
             ),
-            Vector<T>(
+            Vector<TPrecision>(
                 TestBase::bundle,
-                {(static_cast<T>(1)*rand_mat.get_elem(0, 0).get_scalar() +
-                  static_cast<T>(0.1)*rand_mat.get_elem(1, 0).get_scalar() +
-                  static_cast<T>(0.01)*rand_mat.get_elem(2, 0).get_scalar()),
-                 (static_cast<T>(1)*rand_mat.get_elem(0, 1).get_scalar() +
-                  static_cast<T>(0.1)*rand_mat.get_elem(1, 1).get_scalar() +
-                  static_cast<T>(0.01)*rand_mat.get_elem(2, 1).get_scalar())}
+                {(static_cast<TPrecision>(1) *
+                  rand_mat.get_elem(0, 0).get_scalar() +
+                  static_cast<TPrecision>(0.1) *
+                  rand_mat.get_elem(1, 0).get_scalar() +
+                  (static_cast<TPrecision>(0.01) *
+                   rand_mat.get_elem(2, 0).get_scalar())),
+                 (static_cast<TPrecision>(1) *
+                  rand_mat.get_elem(0, 1).get_scalar() +
+                  static_cast<TPrecision>(0.1) *
+                  rand_mat.get_elem(1, 1).get_scalar() +
+                  (static_cast<TPrecision>(0.01) *
+                   rand_mat.get_elem(2, 1).get_scalar()))}
             ),
-            static_cast<T>(2.)*static_cast<T>(Tol<T>::gamma(3))
+            (static_cast<TPrecision>(2.) *
+             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
         );
 
     }
 
-    template <typename T>
+    template <typename TPrecision>
     void TestSubsetcolsTransposeMatVec() {
 
         // Test manually
-        MatrixDense<T> mat(
+        MatrixDense<TPrecision> mat(
             TestBase::bundle,
-            {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4)},
-             {static_cast<T>(5), static_cast<T>(6), static_cast<T>(7), static_cast<T>(8)},
-             {static_cast<T>(9), static_cast<T>(1), static_cast<T>(2), static_cast<T>(3)}}
+            {{static_cast<TPrecision>(1), static_cast<TPrecision>(2),
+              static_cast<TPrecision>(3), static_cast<TPrecision>(4)},
+             {static_cast<TPrecision>(5), static_cast<TPrecision>(6),
+              static_cast<TPrecision>(7), static_cast<TPrecision>(8)},
+             {static_cast<TPrecision>(9), static_cast<TPrecision>(1),
+              static_cast<TPrecision>(2), static_cast<TPrecision>(3)}}
         );
-        MatrixDense<T> trans_mat = mat.transpose();
-        Vector<T> mat_r0(trans_mat.get_col(0));
-        Vector<T> mat_r1(trans_mat.get_col(1));
-        Vector<T> mat_r2(trans_mat.get_col(2));
+        MatrixDense<TPrecision> trans_mat = mat.transpose();
+        Vector<TPrecision> mat_r0(trans_mat.get_col(0));
+        Vector<TPrecision> mat_r1(trans_mat.get_col(1));
+        Vector<TPrecision> mat_r2(trans_mat.get_col(2));
 
-        Vector<T> vec_3_1_0_0(TestBase::bundle, {static_cast<T>(1), static_cast<T>(0), static_cast<T>(0)});
-        Vector<T> vec_3_0_1_0(TestBase::bundle, {static_cast<T>(0), static_cast<T>(1), static_cast<T>(0)});
-        Vector<T> vec_3_0_0_1(TestBase::bundle, {static_cast<T>(0), static_cast<T>(0), static_cast<T>(1)});
-        Vector<T> vec_3_001_01_1(
+        Vector<TPrecision> vec_3_1_0_0(
             TestBase::bundle,
-            {static_cast<T>(0.01), static_cast<T>(0.1), static_cast<T>(1.)}
+            {static_cast<TPrecision>(1), static_cast<TPrecision>(0),
+             static_cast<TPrecision>(0)}
+        );
+        Vector<TPrecision> vec_3_0_1_0(
+            TestBase::bundle,
+            {static_cast<TPrecision>(0), static_cast<TPrecision>(1),
+             static_cast<TPrecision>(0)}
+        );
+        Vector<TPrecision> vec_3_0_0_1(
+            TestBase::bundle,
+            {static_cast<TPrecision>(0), static_cast<TPrecision>(0),
+             static_cast<TPrecision>(1)}
+        );
+        Vector<TPrecision> vec_3_001_01_1(
+            TestBase::bundle,
+            {static_cast<TPrecision>(0.01), static_cast<TPrecision>(0.1),
+             static_cast<TPrecision>(1.)}
         );
 
         // Test multiplication of first 2 columns
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(0, 2, vec_3_1_0_0),
             mat_r0.get_slice(0, 2),
-            Tol<T>::gamma_T(3)
+            Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(0, 2, vec_3_0_1_0),
             mat_r1.get_slice(0, 2),
-            Tol<T>::gamma_T(3)
+            Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(0, 2, vec_3_0_0_1),
             mat_r2.get_slice(0, 2),
-            Tol<T>::gamma_T(3)
+            Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(0, 2, vec_3_001_01_1),
-            mat_r0.get_slice(0, 2)*Scalar<T>(static_cast<T>(0.01)) +
-            mat_r1.get_slice(0, 2)*Scalar<T>(static_cast<T>(0.1)) +
+            (mat_r0.get_slice(0, 2) *
+             Scalar<TPrecision>(static_cast<TPrecision>(0.01))) +
+            (mat_r1.get_slice(0, 2) *
+             Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
             mat_r2.get_slice(0, 2),
-            Tol<T>::gamma_T(3)
+            Tol<TPrecision>::gamma_T(3)
         );
 
         // Test multiplication of last 2 columns
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(2, 2, vec_3_1_0_0),
             mat_r0.get_slice(2, 2),
-            Tol<T>::gamma_T(3)
+            Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(2, 2, vec_3_0_1_0),
             mat_r1.get_slice(2, 2),
-            Tol<T>::gamma_T(3)
+            Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(2, 2, vec_3_0_0_1),
             mat_r2.get_slice(2, 2),
-            Tol<T>::gamma_T(3)
+            Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(2, 2, vec_3_001_01_1),
-            mat_r0.get_slice(2, 2)*Scalar<T>(static_cast<T>(0.01)) +
-            mat_r1.get_slice(2, 2)*Scalar<T>(static_cast<T>(0.1)) +
+            (mat_r0.get_slice(2, 2) *
+             Scalar<TPrecision>(static_cast<TPrecision>(0.01))) +
+            (mat_r1.get_slice(2, 2) *
+             Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
             mat_r2.get_slice(2, 2),
-            Tol<T>::gamma_T(3)
+            Tol<TPrecision>::gamma_T(3)
         );
 
         // Test multiplication of all columns
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(0, 4, vec_3_1_0_0),
             mat_r0.get_slice(0, 4),
-            Tol<T>::gamma_T(3)
+            Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(0, 4, vec_3_0_1_0),
             mat_r1.get_slice(0, 4),
-            Tol<T>::gamma_T(3)
+            Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(0, 4, vec_3_0_0_1),
             mat_r2.get_slice(0, 4),
-            Tol<T>::gamma_T(3)
+            Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(0, 4, vec_3_001_01_1),
-            mat_r0.get_slice(0, 4)*Scalar<T>(static_cast<T>(0.01)) +
-            mat_r1.get_slice(0, 4)*Scalar<T>(static_cast<T>(0.1)) +
+            (mat_r0.get_slice(0, 4) *
+             Scalar<TPrecision>(static_cast<TPrecision>(0.01))) +
+            (mat_r1.get_slice(0, 4) *
+             Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
             mat_r2.get_slice(0, 4),
-            Tol<T>::gamma_T(3)
+            Tol<TPrecision>::gamma_T(3)
         );
 
         // Test multiplication of individual
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(0, 1, vec_3_001_01_1),
-            mat_r0.get_slice(0, 1)*Scalar<T>(static_cast<T>(0.01)) +
-            mat_r1.get_slice(0, 1)*Scalar<T>(static_cast<T>(0.1)) +
+            (mat_r0.get_slice(0, 1) *
+             Scalar<TPrecision>(static_cast<TPrecision>(0.01))) +
+            (mat_r1.get_slice(0, 1) *
+             Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
             mat_r2.get_slice(0, 1),
-            Tol<T>::roundoff_T()
+            Tol<TPrecision>::roundoff_T()
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(1, 1, vec_3_001_01_1),
-            mat_r0.get_slice(1, 1)*Scalar<T>(static_cast<T>(0.01)) +
-            mat_r1.get_slice(1, 1)*Scalar<T>(static_cast<T>(0.1)) +
+            (mat_r0.get_slice(1, 1) *
+             Scalar<TPrecision>(static_cast<TPrecision>(0.01))) +
+            (mat_r1.get_slice(1, 1) *
+             Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
             mat_r2.get_slice(1, 1),
-            Tol<T>::gamma_T(3)
+            Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(2, 1, vec_3_001_01_1),
-            mat_r0.get_slice(2, 1)*Scalar<T>(static_cast<T>(0.01)) +
-            mat_r1.get_slice(2, 1)*Scalar<T>(static_cast<T>(0.1)) +
+            (mat_r0.get_slice(2, 1) *
+             Scalar<TPrecision>(static_cast<TPrecision>(0.01))) +
+            (mat_r1.get_slice(2, 1) *
+             Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
             mat_r2.get_slice(2, 1),
-            Tol<T>::gamma_T(3)
+            Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(3, 1, vec_3_001_01_1),
-            mat_r0.get_slice(3, 1)*Scalar<T>(static_cast<T>(0.01)) +
-            mat_r1.get_slice(3, 1)*Scalar<T>(static_cast<T>(0.1)) +
+            (mat_r0.get_slice(3, 1) *
+             Scalar<TPrecision>(static_cast<TPrecision>(0.01))) +
+            (mat_r1.get_slice(3, 1) *
+             Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
             mat_r2.get_slice(3, 1),
-            Tol<T>::gamma_T(3)
+            Tol<TPrecision>::gamma_T(3)
         );
 
     }
 
-    template <typename T>
+    template <typename TPrecision>
     void TestRandomSubsetcolsTransposeMatVec() {
 
         // Test manually
-        MatrixDense<T> mat(MatrixDense<T>::Random(TestBase::bundle, 3, 4));
-        MatrixDense<T> trans_mat = mat.transpose();
-        Vector<T> mat_r0(trans_mat.get_col(0));
-        Vector<T> mat_r1(trans_mat.get_col(1));
-        Vector<T> mat_r2(trans_mat.get_col(2));
+        MatrixDense<TPrecision> mat(MatrixDense<TPrecision>::Random(
+            TestBase::bundle, 3, 4
+        ));
+        MatrixDense<TPrecision> trans_mat = mat.transpose();
+        Vector<TPrecision> mat_r0(trans_mat.get_col(0));
+        Vector<TPrecision> mat_r1(trans_mat.get_col(1));
+        Vector<TPrecision> mat_r2(trans_mat.get_col(2));
 
-        Vector<T> vec_3_1_0_0(TestBase::bundle, {static_cast<T>(1), static_cast<T>(0), static_cast<T>(0)});
-        Vector<T> vec_3_0_1_0(TestBase::bundle, {static_cast<T>(0), static_cast<T>(1), static_cast<T>(0)});
-        Vector<T> vec_3_0_0_1(TestBase::bundle, {static_cast<T>(0), static_cast<T>(0), static_cast<T>(1)});
-        Vector<T> vec_3_001_01_1(
+        Vector<TPrecision> vec_3_1_0_0(
             TestBase::bundle,
-            {static_cast<T>(0.01), static_cast<T>(0.1), static_cast<T>(1.)}
+            {static_cast<TPrecision>(1), static_cast<TPrecision>(0),
+             static_cast<TPrecision>(0)}
+        );
+        Vector<TPrecision> vec_3_0_1_0(
+            TestBase::bundle,
+            {static_cast<TPrecision>(0), static_cast<TPrecision>(1),
+             static_cast<TPrecision>(0)}
+        );
+        Vector<TPrecision> vec_3_0_0_1(
+            TestBase::bundle,
+            {static_cast<TPrecision>(0), static_cast<TPrecision>(0),
+             static_cast<TPrecision>(1)}
+        );
+        Vector<TPrecision> vec_3_001_01_1(
+            TestBase::bundle,
+            {static_cast<TPrecision>(0.01), static_cast<TPrecision>(0.1),
+             static_cast<TPrecision>(1.)}
         );
 
         // Test multiplication of first 2 columns
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(0, 2, vec_3_1_0_0),
             mat_r0.get_slice(0, 2),
-            Tol<T>::gamma_T(3)
+            Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(0, 2, vec_3_0_1_0),
             mat_r1.get_slice(0, 2),
-            Tol<T>::gamma_T(3)
+            Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(0, 2, vec_3_0_0_1),
             mat_r2.get_slice(0, 2),
-            Tol<T>::gamma_T(3)
+            Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(0, 2, vec_3_001_01_1),
-            mat_r0.get_slice(0, 2)*Scalar<T>(static_cast<T>(0.01)) +
-            mat_r1.get_slice(0, 2)*Scalar<T>(static_cast<T>(0.1)) +
+            (mat_r0.get_slice(0, 2) *
+             Scalar<TPrecision>(static_cast<TPrecision>(0.01))) +
+            (mat_r1.get_slice(0, 2) *
+             Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
             mat_r2.get_slice(0, 2),
-            Tol<T>::gamma_T(3)
+            Tol<TPrecision>::gamma_T(3)
         );
 
         // Test multiplication of last 2 columns
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(2, 2, vec_3_1_0_0),
             mat_r0.get_slice(2, 2),
-            Tol<T>::gamma_T(3)
+            Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(2, 2, vec_3_0_1_0),
             mat_r1.get_slice(2, 2),
-            Tol<T>::gamma_T(3)
+            Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(2, 2, vec_3_0_0_1),
             mat_r2.get_slice(2, 2),
-            Tol<T>::gamma_T(3)
+            Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(2, 2, vec_3_001_01_1),
-            mat_r0.get_slice(2, 2)*Scalar<T>(static_cast<T>(0.01)) +
-            mat_r1.get_slice(2, 2)*Scalar<T>(static_cast<T>(0.1)) +
+            (mat_r0.get_slice(2, 2) *
+             Scalar<TPrecision>(static_cast<TPrecision>(0.01))) +
+            (mat_r1.get_slice(2, 2) *
+             Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
             mat_r2.get_slice(2, 2),
-            Tol<T>::gamma_T(3)
+            Tol<TPrecision>::gamma_T(3)
         );
 
         // Test multiplication of all columns
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(0, 4, vec_3_1_0_0),
             mat_r0.get_slice(0, 4),
-            Tol<T>::gamma_T(3)
+            Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(0, 4, vec_3_0_1_0),
             mat_r1.get_slice(0, 4),
-            Tol<T>::gamma_T(3)
+            Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(0, 4, vec_3_0_0_1),
             mat_r2.get_slice(0, 4),
-            Tol<T>::gamma_T(3)
+            Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(0, 4, vec_3_001_01_1),
-            mat_r0.get_slice(0, 4)*Scalar<T>(static_cast<T>(0.01)) +
-            mat_r1.get_slice(0, 4)*Scalar<T>(static_cast<T>(0.1)) +
+            (mat_r0.get_slice(0, 4) *
+             Scalar<TPrecision>(static_cast<TPrecision>(0.01))) +
+            (mat_r1.get_slice(0, 4) *
+             Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
             mat_r2.get_slice(0, 4),
-            Tol<T>::gamma_T(3)
+            Tol<TPrecision>::gamma_T(3)
         );
 
         // Test multiplication of individual
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(0, 1, vec_3_001_01_1),
-            mat_r0.get_slice(0, 1)*Scalar<T>(static_cast<T>(0.01)) +
-            mat_r1.get_slice(0, 1)*Scalar<T>(static_cast<T>(0.1)) +
+            (mat_r0.get_slice(0, 1) *
+             Scalar<TPrecision>(static_cast<TPrecision>(0.01))) +
+            (mat_r1.get_slice(0, 1) *
+             Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
             mat_r2.get_slice(0, 1),
-            Tol<T>::roundoff_T()
+            Tol<TPrecision>::roundoff_T()
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(1, 1, vec_3_001_01_1),
-            mat_r0.get_slice(1, 1)*Scalar<T>(static_cast<T>(0.01)) +
-            mat_r1.get_slice(1, 1)*Scalar<T>(static_cast<T>(0.1)) +
+            (mat_r0.get_slice(1, 1) *
+             Scalar<TPrecision>(static_cast<TPrecision>(0.01))) +
+            (mat_r1.get_slice(1, 1) *
+             Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
             mat_r2.get_slice(1, 1),
-            Tol<T>::gamma_T(3)
+            Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(2, 1, vec_3_001_01_1),
-            mat_r0.get_slice(2, 1)*Scalar<T>(static_cast<T>(0.01)) +
-            mat_r1.get_slice(2, 1)*Scalar<T>(static_cast<T>(0.1)) +
+            (mat_r0.get_slice(2, 1) *
+             Scalar<TPrecision>(static_cast<TPrecision>(0.01))) +
+            (mat_r1.get_slice(2, 1) *
+             Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
             mat_r2.get_slice(2, 1),
-            Tol<T>::gamma_T(3)
+            Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(3, 1, vec_3_001_01_1),
-            mat_r0.get_slice(3, 1)*Scalar<T>(static_cast<T>(0.01)) +
-            mat_r1.get_slice(3, 1)*Scalar<T>(static_cast<T>(0.1)) +
+            (mat_r0.get_slice(3, 1) *
+             Scalar<TPrecision>(static_cast<TPrecision>(0.01))) +
+            (mat_r1.get_slice(3, 1) *
+             Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
             mat_r2.get_slice(3, 1),
-            Tol<T>::gamma_T(3)
+            Tol<TPrecision>::gamma_T(3)
         );
 
     }
 
-    template <typename T>
+    template <typename TPrecision>
     void TestLimitRandomSubsetcolsTransposeMatVec() {
 
         const int m(12);
         const int n(7);
 
-        MatrixDense<T> mat(MatrixDense<T>::Random(TestBase::bundle, m, n));
-        Vector<T> vec(Vector<T>::Random(TestBase::bundle, m));
+        MatrixDense<TPrecision> mat(MatrixDense<TPrecision>::Random(
+            TestBase::bundle, m, n
+        ));
+        Vector<TPrecision> vec(Vector<TPrecision>::Random(
+            TestBase::bundle, m
+        ));
 
         ASSERT_VECTOR_EQ(
             mat.transpose_prod_subset_cols(0, n, vec),
@@ -964,19 +1292,23 @@ public:
 
     }
 
-    template <typename T>
+    template <typename TPrecision>
     void TestBadSubsetcolsTransposeMatVec() {
 
-        MatrixDense<T> mat(
+        MatrixDense<TPrecision> mat(
             TestBase::bundle,
-            {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4)},
-             {static_cast<T>(5), static_cast<T>(6), static_cast<T>(7), static_cast<T>(8)},
-             {static_cast<T>(9), static_cast<T>(10), static_cast<T>(11), static_cast<T>(12)}}
+            {{static_cast<TPrecision>(1), static_cast<TPrecision>(2),
+              static_cast<TPrecision>(3), static_cast<TPrecision>(4)},
+             {static_cast<TPrecision>(5), static_cast<TPrecision>(6),
+              static_cast<TPrecision>(7), static_cast<TPrecision>(8)},
+             {static_cast<TPrecision>(9), static_cast<TPrecision>(10),
+              static_cast<TPrecision>(11), static_cast<TPrecision>(12)}}
         );
 
-        Vector<T> valid_vec(
+        Vector<TPrecision> valid_vec(
             TestBase::bundle,
-            {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)}
+            {static_cast<TPrecision>(1), static_cast<TPrecision>(1),
+             static_cast<TPrecision>(1)}
         );
         CHECK_FUNC_HAS_RUNTIME_ERROR(
             print_errors,
@@ -995,18 +1327,19 @@ public:
             [=]() { mat.transpose_prod_subset_cols(1, -1, valid_vec); }
         );
 
-        Vector<T> vec_too_small(
+        Vector<TPrecision> vec_too_small(
             TestBase::bundle,
-            {static_cast<T>(1), static_cast<T>(1)}
+            {static_cast<TPrecision>(1), static_cast<TPrecision>(1)}
         );
         CHECK_FUNC_HAS_RUNTIME_ERROR(
             print_errors,
             [=]() { mat.transpose_prod_subset_cols(0, 2, vec_too_small); }
         );
 
-        Vector<T> vec_too_large(
+        Vector<TPrecision> vec_too_large(
             TestBase::bundle, 
-            {static_cast<T>(1), static_cast<T>(1), static_cast<T>(1), static_cast<T>(1)}
+            {static_cast<TPrecision>(1), static_cast<TPrecision>(1),
+             static_cast<TPrecision>(1), static_cast<TPrecision>(1)}
         );
         CHECK_FUNC_HAS_RUNTIME_ERROR(
             print_errors,
@@ -1015,14 +1348,16 @@ public:
     
     }
 
-    template <typename T>
+    template <typename TPrecision>
     void TestRandomTranspose() {
 
         constexpr int m_rand(4);
         constexpr int n_rand(3);
-        MatrixDense<T> mat(MatrixDense<T>::Random(TestBase::bundle, n_rand, m_rand));
+        MatrixDense<TPrecision> mat(MatrixDense<TPrecision>::Random(
+            TestBase::bundle, n_rand, m_rand
+        ));
 
-        MatrixDense<T> mat_transposed(mat.transpose());
+        MatrixDense<TPrecision> mat_transposed(mat.transpose());
         ASSERT_EQ(mat_transposed.rows(), m_rand);
         ASSERT_EQ(mat_transposed.cols(), n_rand);
         for (int i=0; i<m_rand; ++i) {
@@ -1331,7 +1666,9 @@ TEST_F(MatrixDense_Test, TestBadCast) {
     TestBadCast();
 }
 
-class MatrixDense_Substitution_Test: public Matrix_Substitution_Test<MatrixDense> {};
+class MatrixDense_Substitution_Test:
+    public Matrix_Substitution_Test<MatrixDense>
+{};
 
 TEST_F(MatrixDense_Substitution_Test, TestBackwardSubstitution) {
     TestBackwardSubstitution<__half>();

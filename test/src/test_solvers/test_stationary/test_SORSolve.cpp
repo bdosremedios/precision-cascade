@@ -10,18 +10,22 @@ public:
 
     std::vector<double> ws{1.25, 1.5, 1.75};
 
-    template <template <typename> typename M, typename T>
+    template <template <typename> typename TMatrix, typename TPrecision>
     void SolveSuccessTest(
         const fs::path &A_file_path,
         const fs::path &b_file_path,
         const double conv_tol
     ) {
 
-        M<double> A(read_matrixCSV<M, double>(TestBase::bundle, A_file_path));
-        Vector<double> b(read_matrixCSV<Vector, double>(TestBase::bundle, b_file_path));
+        TMatrix<double> A(read_matrixCSV<TMatrix, double>(
+            TestBase::bundle, A_file_path
+        ));
+        Vector<double> b(read_matrixCSV<Vector, double>(
+            TestBase::bundle, b_file_path
+        ));
 
-        GenericLinearSystem<M> gen_lin_sys(A, b);
-        TypedLinearSystem<M, T> typed_lin_sys(&gen_lin_sys);
+        GenericLinearSystem<TMatrix> gen_lin_sys(A, b);
+        TypedLinearSystem<TMatrix, TPrecision> typed_lin_sys(&gen_lin_sys);
 
         SolveArgPkg args;
         args.max_iter = 1000;
@@ -31,7 +35,9 @@ public:
 
             std::cout << "Testing w=" << *w << std::endl;
 
-            SORSolve<M, T> gauss_seidel_solve(&typed_lin_sys, *w, args);
+            SORSolve<TMatrix, TPrecision> gauss_seidel_solve(
+                &typed_lin_sys, *w, args
+            );
             gauss_seidel_solve.solve();
             if (*show_plots) { gauss_seidel_solve.view_relres_plot("log"); }
             
@@ -42,18 +48,22 @@ public:
 
     }
 
-    template <template <typename> typename M, typename T>
+    template <template <typename> typename TMatrix, typename TPrecision>
     void SolveFailTest(
         const fs::path &A_file_path,
         const fs::path &b_file_path,
         const double fail_tol
     ) {
 
-        M<double> A(read_matrixCSV<M, double>(TestBase::bundle, A_file_path));
-        Vector<double> b(read_matrixCSV<Vector, double>(TestBase::bundle, b_file_path));
+        TMatrix<double> A(read_matrixCSV<TMatrix, double>(
+            TestBase::bundle, A_file_path
+        ));
+        Vector<double> b(read_matrixCSV<Vector, double>(
+            TestBase::bundle, b_file_path
+        ));
 
-        GenericLinearSystem<M> gen_lin_sys(A, b);
-        TypedLinearSystem<M, T> typed_lin_sys(&gen_lin_sys);
+        GenericLinearSystem<TMatrix> gen_lin_sys(A, b);
+        TypedLinearSystem<TMatrix, TPrecision> typed_lin_sys(&gen_lin_sys);
 
         SolveArgPkg args;
         args.max_iter = 300;
@@ -61,7 +71,9 @@ public:
 
         for (auto w = ws.cbegin(); w != ws.cend(); ++w) {
     
-            SORSolve<M, T> gauss_seidel_solve(&typed_lin_sys, *w, args);
+            SORSolve<TMatrix, TPrecision> gauss_seidel_solve(
+                &typed_lin_sys, *w, args
+            );
             gauss_seidel_solve.solve();
             if (*show_plots) { gauss_seidel_solve.view_relres_plot("log"); }
             
@@ -74,82 +86,114 @@ public:
 
 };
 
-TEST_F(SOR_Test, SolveConvDiff64Half_SOLVER) {
+TEST_F(SOR_Test, SolveConvDiff64_Half_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
 
-    SolveSuccessTest<MatrixDense, half>(A_path, b_path, Tol<half>::stationary_conv_tol());
-    SolveSuccessTest<NoFillMatrixSparse, half>(A_path, b_path, Tol<half>::stationary_conv_tol());
+    SolveSuccessTest<MatrixDense, half>(
+        A_path, b_path, Tol<half>::stationary_conv_tol()
+    );
+    SolveSuccessTest<NoFillMatrixSparse, half>(
+        A_path, b_path, Tol<half>::stationary_conv_tol()
+    );
 
 }
 
-TEST_F(SOR_Test, SolveConvDiff256Half_LONGRUNTIME_SOLVER) {
+TEST_F(SOR_Test, SolveConvDiff256_Half_LONGRUNTIME_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_256_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_256_b.csv"));
 
-    SolveSuccessTest<MatrixDense, half>(A_path, b_path, Tol<half>::stationary_conv_tol());
-    SolveSuccessTest<NoFillMatrixSparse, half>(A_path, b_path, Tol<half>::stationary_conv_tol());
+    SolveSuccessTest<MatrixDense, half>(
+        A_path, b_path, Tol<half>::stationary_conv_tol()
+    );
+    SolveSuccessTest<NoFillMatrixSparse, half>(
+        A_path, b_path, Tol<half>::stationary_conv_tol()
+    );
 
 }
 
-TEST_F(SOR_Test, SolveConvDiff64Half_FailBeyondCapabilities_SOLVER) {
+TEST_F(SOR_Test, DivergeBeyondCapabilities_Half_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
 
-    SolveFailTest<MatrixDense, half>(A_path, b_path, 0.1*Tol<half>::roundoff());
-    SolveFailTest<NoFillMatrixSparse, half>(A_path, b_path, 0.1*Tol<half>::roundoff());
+    SolveFailTest<MatrixDense, half>(
+        A_path, b_path, 0.1*Tol<half>::roundoff()
+    );
+    SolveFailTest<NoFillMatrixSparse, half>(
+        A_path, b_path, 0.1*Tol<half>::roundoff()
+    );
 
 }
 
-TEST_F(SOR_Test, SolveConvDiff64Single_SOLVER) {
+TEST_F(SOR_Test, SolveConvDiff64_Single_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
 
-    SolveSuccessTest<MatrixDense, float>(A_path, b_path, Tol<float>::stationary_conv_tol());
-    SolveSuccessTest<NoFillMatrixSparse, float>(A_path, b_path, Tol<float>::stationary_conv_tol());
+    SolveSuccessTest<MatrixDense, float>(
+        A_path, b_path, Tol<float>::stationary_conv_tol()
+    );
+    SolveSuccessTest<NoFillMatrixSparse, float>(
+        A_path, b_path, Tol<float>::stationary_conv_tol()
+    );
 
 }
 
-TEST_F(SOR_Test, SolveConvDiff256Single_LONGRUNTIME_SOLVER) {
+TEST_F(SOR_Test, SolveConvDiff256_Single_LONGRUNTIME_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_256_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_256_b.csv"));
 
-    SolveSuccessTest<MatrixDense, float>(A_path, b_path, Tol<float>::stationary_conv_tol());
-    SolveSuccessTest<NoFillMatrixSparse, float>(A_path, b_path, Tol<float>::stationary_conv_tol());
+    SolveSuccessTest<MatrixDense, float>(
+        A_path, b_path, Tol<float>::stationary_conv_tol()
+    );
+    SolveSuccessTest<NoFillMatrixSparse, float>(
+        A_path, b_path, Tol<float>::stationary_conv_tol()
+    );
 
 }
 
-TEST_F(SOR_Test, SolveConvDiff64Single_FailBeyondCapabilities_SOLVER) {
+TEST_F(SOR_Test, DivergeBeyondCapabilities_Single_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
 
-    SolveFailTest<MatrixDense, float>(A_path, b_path, 0.1*Tol<float>::roundoff());
-    SolveFailTest<NoFillMatrixSparse, float>(A_path, b_path, 0.1*Tol<float>::roundoff());
+    SolveFailTest<MatrixDense, float>(
+        A_path, b_path, 0.1*Tol<float>::roundoff()
+    );
+    SolveFailTest<NoFillMatrixSparse, float>(
+        A_path, b_path, 0.1*Tol<float>::roundoff()
+    );
 
 }
 
-TEST_F(SOR_Test, SolveConvDiff64Double_SOLVER) {
+TEST_F(SOR_Test, SolveConvDiff64_Double_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
 
-    SolveSuccessTest<MatrixDense, double>(A_path, b_path, Tol<double>::stationary_conv_tol());
-    SolveSuccessTest<NoFillMatrixSparse, double>(A_path, b_path, Tol<double>::stationary_conv_tol());
+    SolveSuccessTest<MatrixDense, double>(
+        A_path, b_path, Tol<double>::stationary_conv_tol()
+    );
+    SolveSuccessTest<NoFillMatrixSparse, double>(
+        A_path, b_path, Tol<double>::stationary_conv_tol()
+    );
 
 }
 
-TEST_F(SOR_Test, SolveConvDiff256Double_LONGRUNTIME_SOLVER) {
+TEST_F(SOR_Test, SolveConvDiff256_Double_LONGRUNTIME_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_256_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_256_b.csv"));
 
-    SolveSuccessTest<MatrixDense, double>(A_path, b_path, Tol<double>::stationary_conv_tol());
-    SolveSuccessTest<NoFillMatrixSparse, double>(A_path, b_path, Tol<double>::stationary_conv_tol());
+    SolveSuccessTest<MatrixDense, double>(
+        A_path, b_path, Tol<double>::stationary_conv_tol()
+    );
+    SolveSuccessTest<NoFillMatrixSparse, double>(
+        A_path, b_path, Tol<double>::stationary_conv_tol()
+    );
 
 }

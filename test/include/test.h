@@ -49,8 +49,9 @@ public:
             _CrtMemDumpAllObjectsSince(&init_state);
 
             if (state_diff.lSizes[1] == 56) {
-                std::string msg = "LIKELY FALSE POSITIVE: 56 byte normal block leak likely caused by GoogleTest";
-                std::cout << msg << std::endl;
+                std::cout << "LIKELY FALSE POSITIVE: 56 byte normal block leak "
+                             "likely caused by GoogleTest"
+                          << std::endl;
             } else {
                 FAIL();
             }
@@ -61,7 +62,10 @@ public:
     #endif
 
     const fs::path data_dir = (
-        fs::current_path() / fs::path("..") / fs::path("test") / fs::path("data") 
+        fs::current_path() /
+        fs::path("..") /
+        fs::path("test") /
+        fs::path("data") 
     );
     const fs::path read_matrix_dir = data_dir / fs::path("read_matrices");
     const fs::path solve_matrix_dir = data_dir / fs::path("solve_matrices");

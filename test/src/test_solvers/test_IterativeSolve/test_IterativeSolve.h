@@ -3,8 +3,9 @@
 
 #include "solvers/IterativeSolve.h"
 
-template <template<typename> typename M, typename T>
-class TypedIterativeSolveTestingMock: public TypedIterativeSolve<M, T>
+template <template<typename> typename TMatrix, typename TPrecision>
+class TypedIterativeSolveTestingMock:
+    public TypedIterativeSolve<TMatrix, TPrecision>
 {
 protected:
 
@@ -13,24 +14,27 @@ protected:
 
 public:
 
-    Vector<T> soln;
+    Vector<TPrecision> soln;
 
-    using TypedIterativeSolve<M, T>::gen_lin_sys_ptr;
-    using TypedIterativeSolve<M, T>::init_guess;
+    using TypedIterativeSolve<TMatrix, TPrecision>::gen_lin_sys_ptr;
+    using TypedIterativeSolve<TMatrix, TPrecision>::init_guess;
 
-    using TypedIterativeSolve<M, T>::typed_lin_sys_ptr;
-    using TypedIterativeSolve<M, T>::init_guess_typed;
+    using TypedIterativeSolve<TMatrix, TPrecision>::typed_lin_sys_ptr;
+    using TypedIterativeSolve<TMatrix, TPrecision>::init_guess_typed;
 
-    using TypedIterativeSolve<M, T>::max_iter;
-    using TypedIterativeSolve<M, T>::target_rel_res;
+    using TypedIterativeSolve<TMatrix, TPrecision>::max_iter;
+    using TypedIterativeSolve<TMatrix, TPrecision>::target_rel_res;
 
     TypedIterativeSolveTestingMock(
-        TypedLinearSystem<M, T> * const arg_typed_lin_sys_ptr,
-        const Vector<T> &arg_soln_typed,
+        TypedLinearSystem<TMatrix, TPrecision> * const arg_typed_lin_sys_ptr,
+        const Vector<TPrecision> &arg_soln_typed,
         const SolveArgPkg &arg_pkg
     ):
         soln(arg_soln_typed),
-        TypedIterativeSolve<M, T>::TypedIterativeSolve(arg_typed_lin_sys_ptr, arg_pkg)
+        TypedIterativeSolve<TMatrix, TPrecision>::TypedIterativeSolve(
+            arg_typed_lin_sys_ptr,
+            arg_pkg
+        )
     {}
 
 };

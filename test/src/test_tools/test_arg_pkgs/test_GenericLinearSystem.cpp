@@ -6,15 +6,19 @@ class GenericLinearSystem_Test: public TestBase
 {
 public:
 
-    template <template <typename> typename M>
+    template <template <typename> typename TMatrix>
     void TestConstructor() {
 
         constexpr int m(63);
         constexpr int n(27);
-        M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, m, n));
+        TMatrix<double> A(
+            CommonMatRandomInterface<TMatrix, double>::rand_matrix(
+                TestBase::bundle, m, n
+            )
+        );
         Vector<double> b(Vector<double>::Random(TestBase::bundle, m));
 
-        GenericLinearSystem<M> lin_sys(A, b);
+        GenericLinearSystem<TMatrix> lin_sys(A, b);
 
         EXPECT_EQ(lin_sys.get_m(), m);
         EXPECT_EQ(lin_sys.get_n(), n);
@@ -26,21 +30,25 @@ public:
 
     }
 
-    template <template <typename> typename M>
+    template <template <typename> typename TMatrix>
     void TestBadEmptyMatrix() {
         
         CHECK_FUNC_HAS_RUNTIME_ERROR(
             print_errors,
             [=]() {
-                M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, 0, 0));
+                TMatrix<double> A(
+                    CommonMatRandomInterface<TMatrix, double>::rand_matrix(
+                        TestBase::bundle, 0, 0
+                    )
+                );
                 Vector<double> b(Vector<double>::Random(TestBase::bundle, 0));
-                GenericLinearSystem<M> lin_sys(A, b);
+                GenericLinearSystem<TMatrix> lin_sys(A, b);
             }
         );
 
     }
 
-    template <template <typename> typename M>
+    template <template <typename> typename TMatrix>
     void TestBadMismatchb() {
         
         CHECK_FUNC_HAS_RUNTIME_ERROR(
@@ -48,9 +56,15 @@ public:
             [=]() {
                 constexpr int m(63);
                 constexpr int n(27);
-                M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, m, n));
-                Vector<double> bad_b(Vector<double>::Random(TestBase::bundle, m-1));
-                GenericLinearSystem<M> lin_sys(A, bad_b);
+                TMatrix<double> A(
+                    CommonMatRandomInterface<TMatrix, double>::rand_matrix(
+                        TestBase::bundle, m, n
+                    )
+                );
+                Vector<double> bad_b(
+                    Vector<double>::Random(TestBase::bundle, m-1)
+                );
+                GenericLinearSystem<TMatrix> lin_sys(A, bad_b);
             }
         );
         
@@ -59,9 +73,15 @@ public:
             [=]() {
                 constexpr int m(63);
                 constexpr int n(27);
-                M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, m, n));
-                Vector<double> bad_b(Vector<double>::Random(TestBase::bundle, m+1));
-                GenericLinearSystem<M> lin_sys(A, bad_b);
+                TMatrix<double> A(
+                    CommonMatRandomInterface<TMatrix, double>::rand_matrix(
+                        TestBase::bundle, m, n
+                    )
+                );
+                Vector<double> bad_b(
+                    Vector<double>::Random(TestBase::bundle, m+1)
+                );
+                GenericLinearSystem<TMatrix> lin_sys(A, bad_b);
             }
         );
 

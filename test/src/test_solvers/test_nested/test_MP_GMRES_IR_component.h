@@ -5,21 +5,21 @@
 
 #include "solvers/nested/GMRES_IR/MP_GMRES_IR.h"
 
-template <template <typename> typename M>
-class MP_GMRES_IR_Solve_TestingMock: public MP_GMRES_IR_Solve<M>
+template <template <typename> typename TMatrix>
+class MP_GMRES_IR_Solve_TestingMock: public MP_GMRES_IR_Solve<TMatrix>
 {
 public:
 
-    using MP_GMRES_IR_Solve<M>::cascade_phase;
-    using MP_GMRES_IR_Solve<M>::INIT_PHASE;
-    using MP_GMRES_IR_Solve<M>::HLF_PHASE;
-    using MP_GMRES_IR_Solve<M>::SGL_PHASE;
-    using MP_GMRES_IR_Solve<M>::DBL_PHASE;
+    using MP_GMRES_IR_Solve<TMatrix>::cascade_phase;
+    using MP_GMRES_IR_Solve<TMatrix>::INIT_PHASE;
+    using MP_GMRES_IR_Solve<TMatrix>::HLF_PHASE;
+    using MP_GMRES_IR_Solve<TMatrix>::SGL_PHASE;
+    using MP_GMRES_IR_Solve<TMatrix>::DBL_PHASE;
 
-    using MP_GMRES_IR_Solve<M>::inner_solver;
-    using MP_GMRES_IR_Solve<M>::outer_iterate_setup;
+    using MP_GMRES_IR_Solve<TMatrix>::inner_solver;
+    using MP_GMRES_IR_Solve<TMatrix>::outer_iterate_setup;
 
-    using MP_GMRES_IR_Solve<M>::MP_GMRES_IR_Solve;
+    using MP_GMRES_IR_Solve<TMatrix>::MP_GMRES_IR_Solve;
 
     int set_phase_to_use;
 

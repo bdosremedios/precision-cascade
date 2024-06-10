@@ -6,23 +6,31 @@ class GMRESSolve_Component_Test: public TestBase
 {
 public:
 
-    template <template <typename> typename M>
+    template <template <typename> typename TMatrix>
     void CheckConstruction(const int &n) {
 
-        M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, n, n));
+        TMatrix<double> A(
+            CommonMatRandomInterface<TMatrix, double>::rand_matrix(
+                TestBase::bundle, n, n
+            )
+        );
         Vector<double> b(Vector<double>::Random(TestBase::bundle, n));
 
-        GenericLinearSystem<M> gen_lin_sys(A, b);
-        TypedLinearSystem<M, double> typed_lin_sys(&gen_lin_sys);
+        GenericLinearSystem<TMatrix> gen_lin_sys(A, b);
+        TypedLinearSystem<TMatrix, double> typed_lin_sys(&gen_lin_sys);
 
-        GMRESSolveTestingMock<M, double> test_mock(&typed_lin_sys, Tol<double>::roundoff(), default_args);
+        GMRESSolveTestingMock<TMatrix, double> test_mock(
+            &typed_lin_sys, Tol<double>::roundoff(), default_args
+        );
 
         ASSERT_EQ(test_mock.max_kry_dim, n);
         ASSERT_NEAR(
             test_mock.rho.get_scalar(),
-            (b - A*Vector<double>::Ones(TestBase::bundle, n)).norm().get_scalar(),
-            std::abs((b - A*Vector<double>::Ones(TestBase::bundle, n)).norm().get_scalar())*
-                Tol<double>::gamma(n)
+            (b -
+             A*Vector<double>::Ones(TestBase::bundle, n)).norm().get_scalar(),
+            abs_ns::abs(
+                (b - A*Vector<double>::Ones(TestBase::bundle, n)
+            ).norm().get_scalar())*Tol<double>::gamma(n)
         );
         
         ASSERT_EQ(test_mock.Q_kry_basis.rows(), n);
@@ -42,31 +50,38 @@ public:
 
     }
 
-    template <template <typename> typename M>
+    template <template <typename> typename TMatrix>
     void KrylovInitAndUpdate() {
 
         const double approx_cond_A_upbound(5.5);
         const int n(5);
 
-        M<double> A(
-            read_matrixCSV<M, double>(TestBase::bundle, solve_matrix_dir / fs::path("A_5_toy.csv"))
-        );
-        Vector<double> b(
-            read_matrixCSV<Vector, double>(TestBase::bundle, solve_matrix_dir / fs::path("b_5_toy.csv"))
-        );
+        TMatrix<double> A(read_matrixCSV<TMatrix, double>(
+            TestBase::bundle, solve_matrix_dir / fs::path("A_5_toy.csv")
+        ));
+        Vector<double> b(read_matrixCSV<Vector, double>(
+            TestBase::bundle, solve_matrix_dir / fs::path("b_5_toy.csv")
+        ));
 
-        GenericLinearSystem<M> gen_lin_sys(A, b);
-        TypedLinearSystem<M, double> typed_lin_sys(&gen_lin_sys);
+        GenericLinearSystem<TMatrix> gen_lin_sys(A, b);
+        TypedLinearSystem<TMatrix, double> typed_lin_sys(&gen_lin_sys);
 
-        GMRESSolveTestingMock<M, double> test_mock(&typed_lin_sys, Tol<double>::roundoff(), default_args);
+        GMRESSolveTestingMock<TMatrix, double> test_mock(
+            &typed_lin_sys, Tol<double>::roundoff(), default_args
+        );
 
         // Manually instantiate initial guess
         test_mock.typed_soln = Vector<double>::Ones(TestBase::bundle, n);
         Vector<double> r_0(b - A*Vector<double>::Ones(TestBase::bundle, n));
 
-        // Create matrix to store previous basis vectors to ensure no change across iterations
-        MatrixDense<double> Q_save(MatrixDense<double>::Zero(TestBase::bundle, n, n));
-        Vector<double> H_k_save(Vector<double>::Zero(TestBase::bundle, n+1));
+        // Create matrix to store previous basis vectors to ensure no change
+        // across iterations
+        MatrixDense<double> Q_save(
+            MatrixDense<double>::Zero(TestBase::bundle, n, n)
+        );
+        Vector<double> H_k_save(
+            Vector<double>::Zero(TestBase::bundle, n+1)
+        );
 
         // First update check first vector for basis is residual norm
         // and that Hessenberg first vector contructs next vector with entries
@@ -79,7 +94,10 @@ public:
             Tol<double>::roundoff()
         );
         next_q = A*next_q;
-        next_q -= test_mock.Q_kry_basis.get_col(0).copy_to_vec()*test_mock.H_k.get_elem(0);
+        next_q -= (
+            test_mock.Q_kry_basis.get_col(0).copy_to_vec() *
+            test_mock.H_k.get_elem(0)
+        );
         ASSERT_NEAR(
             next_q.norm().get_scalar(),
             test_mock.H_k.get_elem(1).get_scalar(),
@@ -104,30 +122,38 @@ public:
             // Get newly generated basis vector
             Vector<double> q(test_mock.Q_kry_basis.get_col(k));
 
-            // Confirm that previous vectors are unchanged and are orthogonal to new one
+            // Confirm that previous vectors are unchanged and are orthogonal
+            // to new one
             for (int j=0; j<k; ++j) {
                 ASSERT_VECTOR_EQ(
                     test_mock.Q_kry_basis.get_col(j).copy_to_vec(),
                     Q_save.get_col(j).copy_to_vec()
                 );
                 ASSERT_NEAR(
-                    test_mock.Q_kry_basis.get_col(j).copy_to_vec().dot(q).get_scalar(),
+                    test_mock.Q_kry_basis.get_col(j).copy_to_vec().dot(
+                        q
+                    ).get_scalar(),
                     0.,
                     Tol<double>::loss_of_ortho_tol(approx_cond_A_upbound, k)
                 );
             }
 
-            // Confirm that Hessenberg matrix column corresponding to new basis vector
-            // approximately constructs the next basis vector
+            // Confirm that Hessenberg matrix column corresponding to new basis
+            // vector approximately constructs the next basis vector
             Vector<double> construct_q(test_mock.Q_kry_basis.get_col(k));
             construct_q = A*construct_q;
             for (int i=0; i<=k; ++i) {
                 ASSERT_NEAR(
-                    test_mock.Q_kry_basis.get_col(i).copy_to_vec().dot(construct_q).get_scalar(),
+                    test_mock.Q_kry_basis.get_col(i).copy_to_vec().dot(
+                        construct_q
+                    ).get_scalar(),
                     test_mock.H_k.get_elem(i).get_scalar(),
                     Tol<double>::roundoff()
                 );
-                construct_q -= test_mock.Q_kry_basis.get_col(i).copy_to_vec()*test_mock.H_k.get_elem(i);
+                construct_q -= (
+                    test_mock.Q_kry_basis.get_col(i).copy_to_vec() *
+                    test_mock.H_k.get_elem(i)
+                );
             }
             ASSERT_NEAR(
                 construct_q.norm().get_scalar(),
@@ -139,30 +165,36 @@ public:
     
     }
 
-    template <template <typename> typename M>
+    template <template <typename> typename TMatrix>
     void H_QR_Update() {
 
         const double approx_cond_A_upbound(5.5);
         const int n(5);
 
-        M<double> A(
-            read_matrixCSV<M, double>(TestBase::bundle, solve_matrix_dir / fs::path("A_5_toy.csv"))
-        );
-        Vector<double> b(
-            read_matrixCSV<Vector, double>(TestBase::bundle, solve_matrix_dir / fs::path("b_5_toy.csv"))
-        );
+        TMatrix<double> A(read_matrixCSV<TMatrix, double>(
+            TestBase::bundle, solve_matrix_dir / fs::path("A_5_toy.csv")
+        ));
+        Vector<double> b(read_matrixCSV<Vector, double>(
+            TestBase::bundle, solve_matrix_dir / fs::path("b_5_toy.csv")
+        ));
 
-        GenericLinearSystem<M> gen_lin_sys(A, b);
-        TypedLinearSystem<M, double> typed_lin_sys(&gen_lin_sys);
+        GenericLinearSystem<TMatrix> gen_lin_sys(A, b);
+        TypedLinearSystem<TMatrix, double> typed_lin_sys(&gen_lin_sys);
 
-        GMRESSolveTestingMock<M, double> test_mock(&typed_lin_sys, Tol<double>::roundoff(), default_args);
+        GMRESSolveTestingMock<TMatrix, double> test_mock(
+            &typed_lin_sys, Tol<double>::roundoff(), default_args
+        );
 
         // Manually instantiate initial guess
         test_mock.typed_soln = Vector<double>::Ones(TestBase::bundle, n);
         Vector<double> r_0(b - A*Vector<double>::Ones(TestBase::bundle, n));
 
-        MatrixDense<double> save_H_Q(MatrixDense<double>::Zero(TestBase::bundle, n+1, n+1));
-        MatrixDense<double> save_H_R(MatrixDense<double>::Zero(TestBase::bundle, n+1, n));
+        MatrixDense<double> save_H_Q(
+            MatrixDense<double>::Zero(TestBase::bundle, n+1, n+1)
+        );
+        MatrixDense<double> save_H_R(
+            MatrixDense<double>::Zero(TestBase::bundle, n+1, n)
+        );
 
         for (int kry_dim=1; kry_dim<=n; ++kry_dim) {
 
@@ -189,7 +221,9 @@ public:
             save_H_R.get_col(k).set_from_vec(test_mock.H_R.get_col(k));
 
             // Test that k+1 by k+1 block of H_Q is orthogonal
-            MatrixDense<double> H_Q_block(test_mock.H_Q.get_block(0, 0, k+2, k+2));
+            MatrixDense<double> H_Q_block(
+                test_mock.H_Q.get_block(0, 0, k+2, k+2)
+            );
             MatrixDense<double> orthog_check(H_Q_block*H_Q_block.transpose());
             ASSERT_MATRIX_IDENTITY(
                 orthog_check,
@@ -206,45 +240,52 @@ public:
 
     }
 
-    template <template <typename> typename M>
+    template <template <typename> typename TMatrix>
     void Update_x_Back_Substitution() {
 
         const double approx_R_cond_number_upbound(1.1);
         const int n(7);
 
-        MatrixDense<double> Q(
-            read_matrixCSV<MatrixDense, double>(TestBase::bundle, solve_matrix_dir / fs::path("Q_8_backsub.csv"))
-        );
-        MatrixDense<double> R(
-            read_matrixCSV<MatrixDense, double>(TestBase::bundle, solve_matrix_dir / fs::path("R_8_backsub.csv"))
-        );
-        M<double> A(
-            read_matrixCSV<M, double>(TestBase::bundle, solve_matrix_dir / fs::path("A_7_dummy_backsub.csv"))
-        );
-        Vector<double> b(
-            read_matrixCSV<Vector, double>(TestBase::bundle, solve_matrix_dir / fs::path("b_7_dummy_backsub.csv"))
-        );
+        MatrixDense<double> Q(read_matrixCSV<MatrixDense, double>(
+            TestBase::bundle, solve_matrix_dir / fs::path("Q_8_backsub.csv")
+        ));
+        MatrixDense<double> R(read_matrixCSV<MatrixDense, double>(
+            TestBase::bundle, solve_matrix_dir / fs::path("R_8_backsub.csv")
+        ));
+        TMatrix<double> A(read_matrixCSV<TMatrix, double>(
+            TestBase::bundle,
+            solve_matrix_dir / fs::path("A_7_dummy_backsub.csv")
+        ));
+        Vector<double> b(read_matrixCSV<Vector, double>(
+            TestBase::bundle,
+            solve_matrix_dir / fs::path("b_7_dummy_backsub.csv")
+        ));
 
-        GenericLinearSystem<M> gen_lin_sys(A, b);
-        TypedLinearSystem<M, double> typed_lin_sys(&gen_lin_sys);
+        GenericLinearSystem<TMatrix> gen_lin_sys(A, b);
+        TypedLinearSystem<TMatrix, double> typed_lin_sys(&gen_lin_sys);
 
         // Set initial guess to zeros such that residual is just b
         Vector<double> x_0(Vector<double>::Zero(TestBase::bundle, n));
         SolveArgPkg args;
         args.init_guess = x_0;
 
-        GMRESSolveTestingMock<M, double> test_mock(&typed_lin_sys, Tol<double>::roundoff(), args);
+        GMRESSolveTestingMock<TMatrix, double> test_mock(
+            &typed_lin_sys, Tol<double>::roundoff(), args
+        );
 
-        // Set test_mock krylov basis to the identity to have typed_soln be directly the solved coefficients
-        // of the back substitution
-        test_mock.Q_kry_basis = MatrixDense<double>::Identity(TestBase::bundle, n, n);
+        // Set test_mock krylov basis to the identity to have typed_soln be
+        // directly the solved coefficients of the back substitution
+        test_mock.Q_kry_basis = MatrixDense<double>::Identity(
+            TestBase::bundle, n, n
+        );
 
         // Set premade Q R decomposition for H
         test_mock.H_Q = Q;
         test_mock.H_R = R;
 
-        // Test that for each possible Hessenberg size determined by the Krylov subspace dimension
-        // that the coefficient solution matches the pre-determined correct one from MATLAB solving
+        // Test that for each possible Hessenberg size determined by the
+        // Krylov subspace dimension that the coefficient solution matches the
+        // pre-determined correct one from MATLAB solving
         for (int kry_dim=1; kry_dim<=n; ++kry_dim) {
 
             // Set Krylov subspace dim
@@ -256,11 +297,12 @@ public:
             );
             
             // Load test solution
-            Vector<double> test_soln(
-                read_matrixCSV<Vector, double>(
-                    TestBase::bundle, solve_matrix_dir / fs::path("x_" + std::to_string(kry_dim) + "_backsub.csv")
+            Vector<double> test_soln(read_matrixCSV<Vector, double>(
+                TestBase::bundle,
+                solve_matrix_dir / fs::path(
+                    "x_" + std::to_string(kry_dim) + "_backsub.csv"
                 )
-            );
+            ));
 
             // Solve with backsubstitution
             test_mock.update_x_minimizing_res();
@@ -269,7 +311,11 @@ public:
                 ASSERT_NEAR(
                     test_mock.typed_soln.get_elem(i).get_scalar(),
                     test_soln.get_elem(i).get_scalar(), 
-                    2*mat_max_mag(test_soln)*Tol<double>::substitution_tol(approx_R_cond_number_upbound, n)
+                    (2 *
+                     mat_max_mag(test_soln) *
+                     Tol<double>::substitution_tol(
+                        approx_R_cond_number_upbound, n
+                    ))
                 );
             }
 
@@ -277,19 +323,19 @@ public:
 
     }
 
-    template <template <typename> typename M>
+    template <template <typename> typename TMatrix>
     void KrylovLuckyBreakFirstIter () {
 
         const int n(5);
-        M<double> A(
-            read_matrixCSV<M, double>(TestBase::bundle, solve_matrix_dir / fs::path("A_5_easysoln.csv"))
-        );
-        Vector<double> b(
-            read_matrixCSV<Vector, double>(TestBase::bundle, solve_matrix_dir / fs::path("b_5_easysoln.csv"))
-        );
+        TMatrix<double> A(read_matrixCSV<TMatrix, double>(
+            TestBase::bundle, solve_matrix_dir / fs::path("A_5_easysoln.csv")
+        ));
+        Vector<double> b(read_matrixCSV<Vector, double>(
+            TestBase::bundle, solve_matrix_dir / fs::path("b_5_easysoln.csv")
+        ));
 
-        GenericLinearSystem<M> gen_lin_sys(A, b);
-        TypedLinearSystem<M, double> typed_lin_sys(&gen_lin_sys);
+        GenericLinearSystem<TMatrix> gen_lin_sys(A, b);
+        TypedLinearSystem<TMatrix, double> typed_lin_sys(&gen_lin_sys);
 
         // Instantiate initial guess as true solution
         Vector<double> soln(Vector<double>::Ones(TestBase::bundle, n));
@@ -297,14 +343,16 @@ public:
         args.target_rel_res = Tol<double>::krylov_conv_tol();
         args.init_guess = soln;
 
-        GMRESSolveTestingMock<M, double> test_mock(&typed_lin_sys, Tol<double>::roundoff(), args);
+        GMRESSolveTestingMock<TMatrix, double> test_mock(
+            &typed_lin_sys, Tol<double>::roundoff(), args
+        );
 
         // Attempt to update subspace and Hessenberg
         test_mock.iterate();
 
-        // Check basis Q and H are empty and Krylov hasn't been updated since already
-        // hit the lucky break so can't build subspace and check that terminated but
-        // not converged
+        // Check basis Q and H are empty and Krylov hasn't been updated since
+        // already hit the lucky break so can't build subspace and check that
+        // terminated but not converged
         EXPECT_FALSE(test_mock.check_converged());
         EXPECT_TRUE(test_mock.check_terminated());
         EXPECT_EQ(test_mock.curr_kry_dim, 0);
@@ -319,19 +367,19 @@ public:
 
     }
 
-    template <template <typename> typename M>
+    template <template <typename> typename TMatrix>
     void KrylovLuckyBreakLaterIter() {
 
         constexpr int n(5);
-        M<double> A(
-            read_matrixCSV<M, double>(TestBase::bundle, solve_matrix_dir / fs::path("A_5_easysoln.csv"))
-        );
-        Vector<double> b(
-            read_matrixCSV<Vector, double>(TestBase::bundle, solve_matrix_dir / fs::path("b_5_easysoln.csv"))
-        );
+        TMatrix<double> A(read_matrixCSV<TMatrix, double>(
+            TestBase::bundle, solve_matrix_dir / fs::path("A_5_easysoln.csv")
+        ));
+        Vector<double> b(read_matrixCSV<Vector, double>(
+            TestBase::bundle, solve_matrix_dir / fs::path("b_5_easysoln.csv")
+        ));
 
-        GenericLinearSystem<M> gen_lin_sys(A, b);
-        TypedLinearSystem<M, double> typed_lin_sys(&gen_lin_sys);
+        GenericLinearSystem<TMatrix> gen_lin_sys(A, b);
+        TypedLinearSystem<TMatrix, double> typed_lin_sys(&gen_lin_sys);
 
         // Instantiate initial guess as true solution
         Vector<double> soln(Vector<double>::Zero(TestBase::bundle, n));
@@ -339,15 +387,17 @@ public:
         SolveArgPkg args;
         args.init_guess = soln;
 
-        GMRESSolveTestingMock<M, double> test_mock(&typed_lin_sys, Tol<double>::roundoff(), args);
+        GMRESSolveTestingMock<TMatrix, double> test_mock(
+            &typed_lin_sys, Tol<double>::roundoff(), args
+        );
 
         // Attempt to update subspace and convergence twice
         test_mock.iterate();
         test_mock.iterate();
         
-        // Check basis Q has one normalized basis vector and others are empty and
-        // has been marked terminated but not converged since we want to delay that
-        // check for LinearSolve
+        // Check basis Q has one normalized basis vector and others are empty
+        // and has been marked terminated but not converged since we want to
+        // delay that check for LinearSolve
         EXPECT_FALSE(test_mock.check_converged());
         EXPECT_TRUE(test_mock.check_terminated());
         EXPECT_EQ(test_mock.curr_kry_dim, 1);
@@ -363,19 +413,19 @@ public:
 
     }
 
-    template <template <typename> typename M>
+    template <template <typename> typename TMatrix>
     void KrylovLuckyBreakThroughSolve() {
 
         constexpr int n(5);
-        M<double> A(
-            read_matrixCSV<M, double>(TestBase::bundle, solve_matrix_dir / fs::path("A_5_easysoln.csv"))
-        );
-        Vector<double> b(
-            read_matrixCSV<Vector, double>(TestBase::bundle, solve_matrix_dir / fs::path("b_5_easysoln.csv"))
-        );
+        TMatrix<double> A(read_matrixCSV<TMatrix, double>(
+            TestBase::bundle, solve_matrix_dir / fs::path("A_5_easysoln.csv")
+        ));
+        Vector<double> b(read_matrixCSV<Vector, double>(
+            TestBase::bundle, solve_matrix_dir / fs::path("b_5_easysoln.csv")
+        ));
 
-        GenericLinearSystem<M> gen_lin_sys(A, b);
-        TypedLinearSystem<M, double> typed_lin_sys(&gen_lin_sys);
+        GenericLinearSystem<TMatrix> gen_lin_sys(A, b);
+        TypedLinearSystem<TMatrix, double> typed_lin_sys(&gen_lin_sys);
 
         // Instantiate initial guess as true solution
         Vector<double> soln(Vector<double>::Zero(TestBase::bundle, n));
@@ -384,7 +434,9 @@ public:
         args.init_guess = soln;
         args.target_rel_res = Tol<double>::krylov_conv_tol();
 
-        GMRESSolveTestingMock<M, double> test_mock(&typed_lin_sys, Tol<double>::roundoff(), args);
+        GMRESSolveTestingMock<TMatrix, double> test_mock(
+            &typed_lin_sys, Tol<double>::roundoff(), args
+        );
 
         // Attempt to update and solve through solve of LinearSolve
         test_mock.solve();
@@ -394,8 +446,8 @@ public:
         EXPECT_TRUE(test_mock.check_terminated());
         EXPECT_EQ(test_mock.get_iteration(), 1);
 
-        // Check that subspace has not gone beyond 1 dimension and that krylov basis
-        // as expected to have only a single column
+        // Check that subspace has not gone beyond 1 dimension and that krylov
+        // basis as expected to have only a single column
         EXPECT_EQ(test_mock.curr_kry_dim, 1);
         EXPECT_NEAR(
             test_mock.Q_kry_basis.get_col(0).copy_to_vec().norm().get_scalar(),
@@ -409,21 +461,27 @@ public:
 
     }
 
-    template <template <typename> typename M>
+    template <template <typename> typename TMatrix>
     void Solve() {
 
         constexpr int n(20);
-        M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, n, n));
+        TMatrix<double> A(
+            CommonMatRandomInterface<TMatrix, double>::rand_matrix(
+                TestBase::bundle, n, n
+            )
+        );
         Vector<double> b(Vector<double>::Random(TestBase::bundle, n));
 
-        GenericLinearSystem<M> gen_lin_sys(A, b);
-        TypedLinearSystem<M, double> typed_lin_sys(&gen_lin_sys);
+        GenericLinearSystem<TMatrix> gen_lin_sys(A, b);
+        TypedLinearSystem<TMatrix, double> typed_lin_sys(&gen_lin_sys);
 
         SolveArgPkg args;
         args.max_iter = n;
         args.target_rel_res = Tol<double>::krylov_conv_tol();
 
-        GMRESSolve<M, double> gmres_solve(&typed_lin_sys, Tol<double>::roundoff(), args);
+        GMRESSolve<TMatrix, double> gmres_solve(
+            &typed_lin_sys, Tol<double>::roundoff(), args
+        );
 
         gmres_solve.solve();
         if (*show_plots) { gmres_solve.view_relres_plot("log"); }
@@ -433,21 +491,27 @@ public:
 
     }
 
-    template <template <typename> typename M>
+    template <template <typename> typename TMatrix>
     void Reset() {
 
         constexpr int n(20);
-        M<double> A(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, n, n));
+        TMatrix<double> A(
+            CommonMatRandomInterface<TMatrix, double>::rand_matrix(
+                TestBase::bundle, n, n
+            )
+        );
         Vector<double> b(Vector<double>::Random(TestBase::bundle, n));
 
-        GenericLinearSystem<M> gen_lin_sys(A, b);
-        TypedLinearSystem<M, double> typed_lin_sys(&gen_lin_sys);
+        GenericLinearSystem<TMatrix> gen_lin_sys(A, b);
+        TypedLinearSystem<TMatrix, double> typed_lin_sys(&gen_lin_sys);
 
         SolveArgPkg args;
         args.max_iter = n;
         args.target_rel_res = Tol<double>::krylov_conv_tol();
 
-        GMRESSolveTestingMock<M, double> test_mock(&typed_lin_sys, Tol<double>::roundoff(), args);
+        GMRESSolveTestingMock<TMatrix, double> test_mock(
+            &typed_lin_sys, Tol<double>::roundoff(), args
+        );
 
         test_mock.solve();
         if (*show_plots) { test_mock.view_relres_plot("log"); }
@@ -461,7 +525,7 @@ public:
         ASSERT_EQ(test_mock.get_iteration(), 0);
         if (*show_plots) { test_mock.view_relres_plot("log"); }
 
-        // Check that all matrices are zero again and that krylov dim is back to 0
+        // Check all matrices are zero again and that krylov dim is back to 0
         EXPECT_EQ(test_mock.curr_kry_dim, 0);
 
         ASSERT_MATRIX_ZERO(test_mock.Q_kry_basis, Tol<double>::roundoff());
@@ -479,65 +543,88 @@ public:
 
     }
 
-    template <template <typename> typename M>
+    template <template <typename> typename TMatrix>
     void CheckCorrectDefaultMaxIter() {
     
         constexpr int n(7);
-        M<double> A_n(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, n, n));
+        TMatrix<double> A_n(
+            CommonMatRandomInterface<TMatrix, double>::rand_matrix(
+                TestBase::bundle, n, n
+            )
+        );
         Vector<double> b_n(Vector<double>::Random(TestBase::bundle, n));
 
-        GenericLinearSystem<M> gen_lin_sys_n(A_n, b_n);
-        TypedLinearSystem<M, double> typed_lin_sys_n(&gen_lin_sys_n);
+        GenericLinearSystem<TMatrix> gen_lin_sys_n(A_n, b_n);
+        TypedLinearSystem<TMatrix, double> typed_lin_sys_n(&gen_lin_sys_n);
 
-        GMRESSolveTestingMock<M, double> test_mock_n(&typed_lin_sys_n, Tol<double>::roundoff(), default_args);
+        GMRESSolveTestingMock<TMatrix, double> test_mock_n(
+            &typed_lin_sys_n, Tol<double>::roundoff(), default_args
+        );
         ASSERT_EQ(test_mock_n.max_iter, n);
 
         constexpr int m(53);
-        M<double> A_m(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, m, m));
+        TMatrix<double> A_m(
+            CommonMatRandomInterface<TMatrix, double>::rand_matrix(
+                TestBase::bundle, m, m
+            )
+        );
         Vector<double> b_m(Vector<double>::Random(TestBase::bundle, m));
 
-        GenericLinearSystem<M> gen_lin_sys_m(A_m, b_m);
-        TypedLinearSystem<M, double> typed_lin_sys_m(&gen_lin_sys_m);
+        GenericLinearSystem<TMatrix> gen_lin_sys_m(A_m, b_m);
+        TypedLinearSystem<TMatrix, double> typed_lin_sys_m(&gen_lin_sys_m);
 
-        GMRESSolveTestingMock<M, double> test_mock_m(&typed_lin_sys_m, Tol<double>::roundoff(), default_args);
+        GMRESSolveTestingMock<TMatrix, double> test_mock_m(
+            &typed_lin_sys_m, Tol<double>::roundoff(), default_args
+        );
         ASSERT_EQ(test_mock_m.max_iter, m);
 
         constexpr int o(64);
         constexpr int non_default_iter(10);
-        M<double> A_o(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, o, o));
+        TMatrix<double> A_o(
+            CommonMatRandomInterface<TMatrix, double>::rand_matrix(
+                TestBase::bundle, o, o
+            )
+        );
         Vector<double> b_o(Vector<double>::Random(TestBase::bundle, o));
 
-        GenericLinearSystem<M> gen_lin_sys_o(A_o, b_o);
-        TypedLinearSystem<M, double> typed_lin_sys_o(&gen_lin_sys_o);
+        GenericLinearSystem<TMatrix> gen_lin_sys_o(A_o, b_o);
+        TypedLinearSystem<TMatrix, double> typed_lin_sys_o(&gen_lin_sys_o);
 
         SolveArgPkg non_default_args;
         non_default_args.max_iter = non_default_iter;
-        GMRESSolveTestingMock<M, double> test_mock_o(&typed_lin_sys_o, Tol<double>::roundoff(), non_default_args);
+        GMRESSolveTestingMock<TMatrix, double> test_mock_o(
+            &typed_lin_sys_o, Tol<double>::roundoff(), non_default_args
+        );
         ASSERT_EQ(test_mock_o.max_iter, non_default_iter);
 
     }
 
-    template <template <typename> typename M>
+    template <template <typename> typename TMatrix>
     void CheckErrorExceedDimension() {
     
         constexpr int n(7);
-        M<double> A_n(CommonMatRandomInterface<M, double>::rand_matrix(TestBase::bundle, n, n));
+        TMatrix<double> A_n(
+            CommonMatRandomInterface<TMatrix, double>::rand_matrix(
+                TestBase::bundle, n, n
+            )
+        );
         Vector<double> b_n(Vector<double>::Random(TestBase::bundle, n));
         SolveArgPkg args;
         args.max_iter = 100;
 
         auto try_to_exceed_dim = [=]() {
 
-            GenericLinearSystem<M> gen_lin_sys_n(A_n, b_n);
-            TypedLinearSystem<M, double> typed_lin_sys_n(&gen_lin_sys_n);
+            GenericLinearSystem<TMatrix> gen_lin_sys_n(A_n, b_n);
+            TypedLinearSystem<TMatrix, double> typed_lin_sys_n(&gen_lin_sys_n);
 
-            GMRESSolveTestingMock<M, double> test_mock_n(&typed_lin_sys_n, Tol<double>::roundoff(), args);
+            GMRESSolveTestingMock<TMatrix, double> test_mock_n(
+                &typed_lin_sys_n, Tol<double>::roundoff(), args
+            );
 
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_to_exceed_dim);
 
     }
-
 
 };
 

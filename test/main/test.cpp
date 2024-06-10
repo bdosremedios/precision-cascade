@@ -34,12 +34,16 @@ int main(int argc, char **argv) {
     // Check if should run exclusively MPGMRES tests
     bool only_mp_gmres = false;
     for (int i=0; i<argc; ++i) {
-        if ((std::string(argv[i]) == "--mpgmres") || (std::string(argv[i]) == "-mp")) {
+        if (
+            (std::string(argv[i]) == "--mpgmres") ||
+            (std::string(argv[i]) == "-mp")
+        ) {
             only_mp_gmres = true;
         }
     }
     if (only_mp_gmres) {
-        std::cout << "Running exclusively MP_GMRES_IR_Solve related tests..." << std::endl;
+        std::cout << "Running exclusively MP_GMRES_IR_Solve related tests..."
+                  << std::endl;
         if (filter_include != "") { filter_include += ":"; }
         filter_include += "*MP_GMRES_IR*";
     } else {
@@ -49,7 +53,10 @@ int main(int argc, char **argv) {
     // Check if should run preconditioner tests
     bool no_preconditioners = false;
     for (int i=0; i<argc; ++i) {
-        if ((std::string(argv[i]) == "--no_preconditioners") || (std::string(argv[i]) == "-np")) {
+        if (
+            (std::string(argv[i]) == "--no_preconditioners") ||
+            (std::string(argv[i]) == "-np")
+        ) {
             no_preconditioners = true;
         }
     }
@@ -64,7 +71,10 @@ int main(int argc, char **argv) {
     // Check if should run solver tests
     bool no_solvers = false;
     for (int i=0; i<argc; ++i) {
-        if ((std::string(argv[i]) == "--no_solvers") || (std::string(argv[i]) == "-ns")) {
+        if (
+            (std::string(argv[i]) == "--no_solvers") ||
+            (std::string(argv[i]) == "-ns")
+        ) {
             no_solvers = true;
         }
     }
@@ -79,7 +89,10 @@ int main(int argc, char **argv) {
     // Check if should run long tests
     bool run_long_tests = false;
     for (int i=0; i<argc; ++i) {
-        if ((std::string(argv[i]) == "--run_long_tests") || (std::string(argv[i]) == "-rlt")) {
+        if (
+            (std::string(argv[i]) == "--run_long_tests") ||
+            (std::string(argv[i]) == "-rlt")
+        ) {
             run_long_tests = true;
         }
     }
@@ -92,15 +105,24 @@ int main(int argc, char **argv) {
     }
 
     if (filter_include == "") {
-        testing::GTEST_FLAG(filter) = std::format("*:-{}", filter_exclude);
+        testing::GTEST_FLAG(filter) = std::format(
+            "*:-{}",
+            filter_exclude
+        );
     } else {
-        testing::GTEST_FLAG(filter) = std::format("{}:-{}", filter_include, filter_exclude);
+        testing::GTEST_FLAG(filter) = std::format(
+            "{}:-{}",
+            filter_include, filter_exclude
+        );
     }
 
     // Check if should show plots
     bool show_plots = false;
     for (int i=0; i<argc; ++i) {
-        if ((std::string(argv[i]) == "--show_plots") || (std::string(argv[i]) == "-sp")) {
+        if (
+            (std::string(argv[i]) == "--show_plots") ||
+            (std::string(argv[i]) == "-sp")
+        ) {
             show_plots = true;
         }
     }
@@ -115,7 +137,10 @@ int main(int argc, char **argv) {
     // Check if should print errors
     bool print_errors = false;
     for (int i=0; i<argc; ++i) {
-        if ((std::string(argv[i]) == "--print_errors") || (std::string(argv[i]) == "-pe")) {
+        if (
+            (std::string(argv[i]) == "--print_errors") ||
+            (std::string(argv[i]) == "-pe")
+        ) {
             print_errors = true;
         }
     }

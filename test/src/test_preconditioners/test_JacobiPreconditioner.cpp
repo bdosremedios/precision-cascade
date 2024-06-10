@@ -6,14 +6,14 @@ class JacobiPreconditioner_Test: public TestBase
 {
 public:
 
-    template<template <typename> typename M>
+    template< template <typename> typename TMatrix>
     void TestJacobiPreconditioner() {
         
         constexpr int n(45);
-        M<double> A(
-            read_matrixCSV<M, double>(TestBase::bundle, solve_matrix_dir / fs::path("A_inv_45.csv"))
-        );
-        JacobiPreconditioner<M, double> jacobi_precond(A);
+        TMatrix<double> A(read_matrixCSV<TMatrix, double>(
+            TestBase::bundle, solve_matrix_dir / fs::path("A_inv_45.csv")
+        ));
+        JacobiPreconditioner<TMatrix, double> jacobi_precond(A);
 
         // Check compatibility with only 45
         ASSERT_TRUE(jacobi_precond.check_compatibility_left(n));
@@ -23,7 +23,9 @@ public:
         ASSERT_FALSE(jacobi_precond.check_compatibility_left(100));
         ASSERT_FALSE(jacobi_precond.check_compatibility_right(100));
 
-        Vector<double> orig_test_vec(Vector<double>::Random(TestBase::bundle, n));
+        Vector<double> orig_test_vec(Vector<double>::Random(
+            TestBase::bundle, n
+        ));
         Vector<double> test_vec(jacobi_precond.action_inv_M(orig_test_vec));
         Vector<double> target_vec(orig_test_vec);
         for (int i=0; i<orig_test_vec.rows(); ++i) {

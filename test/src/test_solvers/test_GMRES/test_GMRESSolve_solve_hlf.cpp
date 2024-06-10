@@ -6,22 +6,28 @@ class GMRESSolve_Solve_HLF_Test: public TestBase
 {
 public:
 
-    template <template <typename> typename M>
+    template <template <typename> typename TMatrix>
     void SolveTest(
         const fs::path &A_file_path,
         const fs::path &b_file_path,
         const bool &check_3_iter
     ) {
 
-        M<double> A(read_matrixCSV<M, double>(TestBase::bundle, A_file_path));
-        Vector<double> b(read_matrixCSV<Vector, double>(TestBase::bundle, b_file_path));
+        TMatrix<double> A(read_matrixCSV<TMatrix, double>(
+            TestBase::bundle, A_file_path
+        ));
+        Vector<double> b(read_matrixCSV<Vector, double>(
+            TestBase::bundle, b_file_path
+        ));
 
-        GenericLinearSystem<M> gen_lin_sys(A, b);
-        TypedLinearSystem<M, __half> typed_lin_sys(&gen_lin_sys);
+        GenericLinearSystem<TMatrix> gen_lin_sys(A, b);
+        TypedLinearSystem<TMatrix, __half> typed_lin_sys(&gen_lin_sys);
 
         SolveArgPkg args;
         args.target_rel_res = Tol<__half>::krylov_conv_tol();
-        GMRESSolve<M, __half> gmres_solve(&typed_lin_sys, Tol<__half>::roundoff(), args);
+        GMRESSolve<TMatrix, __half> gmres_solve(
+            &typed_lin_sys, Tol<__half>::roundoff(), args
+        );
 
         gmres_solve.solve();
 
@@ -33,35 +39,42 @@ public:
 
     }
 
-    template <template <typename> typename M>
+    template <template <typename> typename TMatrix>
     void FailTest() {
 
         constexpr int n(64);
-        M<double> A(
-            read_matrixCSV<M, double>(TestBase::bundle, solve_matrix_dir / fs::path("conv_diff_64_A.csv"))
-        );
-        Vector<double> b(
-            read_matrixCSV<Vector, double>(TestBase::bundle, solve_matrix_dir / fs::path("conv_diff_64_b.csv"))
-        );
+        TMatrix<double> A(read_matrixCSV<TMatrix, double>(
+            TestBase::bundle, solve_matrix_dir / fs::path("conv_diff_64_A.csv")
+        ));
+        Vector<double> b(read_matrixCSV<Vector, double>(
+            TestBase::bundle, solve_matrix_dir / fs::path("conv_diff_64_b.csv")
+        ));
 
-        GenericLinearSystem<M> gen_lin_sys(A, b);
-        TypedLinearSystem<M, __half> typed_lin_sys(&gen_lin_sys);
+        GenericLinearSystem<TMatrix> gen_lin_sys(A, b);
+        TypedLinearSystem<TMatrix, __half> typed_lin_sys(&gen_lin_sys);
 
         // Check convergence under single capabilities
         SolveArgPkg args;
         args.target_rel_res = Tol<__half>::krylov_conv_tol();
-        GMRESSolve<M, __half> gmres_solve_succeed(&typed_lin_sys, Tol<__half>::roundoff(), args);
+        GMRESSolve<TMatrix, __half> gmres_solve_succeed(
+            &typed_lin_sys, Tol<__half>::roundoff(), args
+        );
 
         gmres_solve_succeed.solve();
         if (*show_plots) { gmres_solve_succeed.view_relres_plot("log"); }
         
         EXPECT_TRUE(gmres_solve_succeed.check_converged());
-        EXPECT_LE(gmres_solve_succeed.get_relres(), Tol<__half>::krylov_conv_tol());
+        EXPECT_LE(
+            gmres_solve_succeed.get_relres(),
+            Tol<__half>::krylov_conv_tol()
+        );
 
-        // Check divergence beyond single capability of the single machine epsilon
+        // Check divergence beyond single capability of the half machine eps
         SolveArgPkg fail_args;
         fail_args.target_rel_res = 0.1*Tol<__half>::roundoff();
-        GMRESSolve<M, __half> gmres_solve_fail(&typed_lin_sys, Tol<__half>::roundoff(), fail_args);
+        GMRESSolve<TMatrix, __half> gmres_solve_fail(
+            &typed_lin_sys, Tol<__half>::roundoff(), fail_args
+        );
 
         gmres_solve_fail.solve();
         if (*show_plots) { gmres_solve_fail.view_relres_plot("log"); }
@@ -123,7 +136,7 @@ TEST_F(GMRESSolve_Solve_HLF_Test, SolveConvDiff3Eigs_SOLVER) {
 
 }
 
-TEST_F(GMRESSolve_Solve_HLF_Test, DivergeBeyondHalfCapabilities_SOLVER) {
+TEST_F(GMRESSolve_Solve_HLF_Test, DivergeBeyondCapabilities_Half_SOLVER) {
     FailTest<MatrixDense>();
     FailTest<NoFillMatrixSparse>();
 }

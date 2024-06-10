@@ -8,45 +8,63 @@ class read_matrixCSV_General_Test: public TestBase
 {
 public:
 
-    template <template <typename> typename M>
+    template <template <typename> typename TMatrix>
     void ReadEmptyMatrix() {
 
         fs::path empty_file(read_matrix_dir / fs::path("empty.csv"));
-        M<double> test_empty(read_matrixCSV<M, double>(TestBase::bundle, empty_file));
+        TMatrix<double> test_empty(read_matrixCSV<TMatrix, double>(
+            TestBase::bundle, empty_file
+        ));
         ASSERT_EQ(test_empty.rows(), 0);
         ASSERT_EQ(test_empty.cols(), 0);
 
     }
 
-    template <template <typename> typename M>
+    template <template <typename> typename TMatrix>
     void ReadBadMatrices() {
 
         // Try to load non-existent file
         fs::path bad_file_0(read_matrix_dir / fs::path("thisfile"));
         CHECK_FUNC_HAS_RUNTIME_ERROR(
             print_errors,
-            [=]() { M<double> test(read_matrixCSV<M, double>(TestBase::bundle, bad_file_0)); }
+            [=]() {
+                TMatrix<double> test(read_matrixCSV<TMatrix, double>(
+                    TestBase::bundle, bad_file_0
+                ));
+            }
         );
 
         // Try to load file with too small row
         fs::path bad_file_1(read_matrix_dir / fs::path("bad1.csv"));
         CHECK_FUNC_HAS_RUNTIME_ERROR(
             print_errors,
-            [=]() { M<double> test(read_matrixCSV<M, double>(TestBase::bundle, bad_file_1)); }
+            [=]() {
+                TMatrix<double> test(read_matrixCSV<TMatrix, double>(
+                    TestBase::bundle, bad_file_1
+                ));
+            }
         );
 
         // Try to load file with too big row
         fs::path bad_file_2(read_matrix_dir / fs::path("bad2.csv"));
         CHECK_FUNC_HAS_RUNTIME_ERROR(
             print_errors,
-            [=]() { M<double> test(read_matrixCSV<M, double>(TestBase::bundle, bad_file_2)); }
+            [=]() {
+                TMatrix<double> test(read_matrixCSV<TMatrix, double>(
+                    TestBase::bundle, bad_file_2
+                ));
+            }
         );
 
         // Try to load file with invalid character argument
         fs::path bad_file_3(read_matrix_dir / fs::path("bad3.csv"));
         CHECK_FUNC_HAS_RUNTIME_ERROR(
             print_errors,
-            [=]() { M<double> test(read_matrixCSV<M, double>(TestBase::bundle, bad_file_3)); }
+            [=]() {
+                TMatrix<double> test(read_matrixCSV<TMatrix, double>(
+                    TestBase::bundle, bad_file_3
+                ));
+            }
         );
 
 
@@ -64,100 +82,154 @@ TEST_F(read_matrixCSV_General_Test, ReadBadFiles) {
     ReadBadMatrices<NoFillMatrixSparse>();
 }
 
-template <typename T>
-class read_matrixCSV_T_Test: public TestBase
+template <typename TPrecision>
+class read_matrixCSV_TPrecision_Test: public TestBase
 {
 public:
 
-    template <template <typename> typename M>
+    template <template <typename> typename TMatrix>
     void ReadSquareMatrix() {
 
-        M<T> target1(
+        TMatrix<TPrecision> target1(
             TestBase::bundle,
-            {{static_cast<T>(1),  static_cast<T>(2),  static_cast<T>(3)},
-             {static_cast<T>(4),  static_cast<T>(5),  static_cast<T>(6)},
-             {static_cast<T>(7),  static_cast<T>(8),  static_cast<T>(9)}}
+            {{static_cast<TPrecision>(1), static_cast<TPrecision>(2),
+              static_cast<TPrecision>(3)},
+             {static_cast<TPrecision>(4), static_cast<TPrecision>(5),
+              static_cast<TPrecision>(6)},
+             {static_cast<TPrecision>(7), static_cast<TPrecision>(8),
+              static_cast<TPrecision>(9)}}
         );
 
-        M<T> target2(
+        TMatrix<TPrecision> target2(
             TestBase::bundle,
-            {{static_cast<T>(1), static_cast<T>(2), static_cast<T>(3), static_cast<T>(4), static_cast<T>(5)},
-             {static_cast<T>(6), static_cast<T>(7), static_cast<T>(8), static_cast<T>(9), static_cast<T>(10)},
-             {static_cast<T>(11), static_cast<T>(12), static_cast<T>(13), static_cast<T>(14), static_cast<T>(15)},
-             {static_cast<T>(16), static_cast<T>(17), static_cast<T>(18), static_cast<T>(19), static_cast<T>(20)},
-             {static_cast<T>(21), static_cast<T>(22), static_cast<T>(23), static_cast<T>(24), static_cast<T>(25)}}
+            {{static_cast<TPrecision>(1), static_cast<TPrecision>(2),
+              static_cast<TPrecision>(3), static_cast<TPrecision>(4),
+              static_cast<TPrecision>(5)},
+             {static_cast<TPrecision>(6), static_cast<TPrecision>(7),
+              static_cast<TPrecision>(8), static_cast<TPrecision>(9),
+              static_cast<TPrecision>(10)},
+             {static_cast<TPrecision>(11), static_cast<TPrecision>(12),
+              static_cast<TPrecision>(13), static_cast<TPrecision>(14),
+              static_cast<TPrecision>(15)},
+             {static_cast<TPrecision>(16), static_cast<TPrecision>(17),
+              static_cast<TPrecision>(18), static_cast<TPrecision>(19),
+              static_cast<TPrecision>(20)},
+             {static_cast<TPrecision>(21), static_cast<TPrecision>(22),
+              static_cast<TPrecision>(23), static_cast<TPrecision>(24),
+              static_cast<TPrecision>(25)}}
         );
     
         fs::path square1_file(read_matrix_dir / fs::path("square1.csv"));
         fs::path square2_file(read_matrix_dir / fs::path("square2.csv"));
-        M<T> test1(read_matrixCSV<M, T>(TestBase::bundle, square1_file));
-        M<T> test2(read_matrixCSV<M, T>(TestBase::bundle, square2_file));
+        TMatrix<TPrecision> test1(read_matrixCSV<TMatrix, TPrecision>(
+            TestBase::bundle, square1_file
+        ));
+        TMatrix<TPrecision> test2(read_matrixCSV<TMatrix, TPrecision>(
+            TestBase::bundle, square2_file
+        ));
 
-        ASSERT_MATRIX_NEAR(test1, target1, static_cast<T>(Tol<T>::roundoff()));
-        ASSERT_MATRIX_NEAR(test2, target2, static_cast<T>(Tol<T>::roundoff()));
+        ASSERT_MATRIX_NEAR(
+            test1,
+            target1,
+            static_cast<TPrecision>(Tol<TPrecision>::roundoff())
+        );
+        ASSERT_MATRIX_NEAR(
+            test2,
+            target2,
+            static_cast<TPrecision>(Tol<TPrecision>::roundoff())
+        );
 
     }
 
-    template <template <typename> typename M>
+    template <template <typename> typename TMatrix>
     void ReadWideTallMatrix() {
 
-        M<T> target_wide(
+        TMatrix<TPrecision> target_wide(
             TestBase::bundle,
-            {{static_cast<T>(10), static_cast<T>(9), static_cast<T>(8), static_cast<T>(7), static_cast<T>(6)},
-             {static_cast<T>(5), static_cast<T>(4), static_cast<T>(3), static_cast<T>(2), static_cast<T>(1)}}
+            {{static_cast<TPrecision>(10), static_cast<TPrecision>(9),
+              static_cast<TPrecision>(8), static_cast<TPrecision>(7),
+              static_cast<TPrecision>(6)},
+             {static_cast<TPrecision>(5), static_cast<TPrecision>(4),
+              static_cast<TPrecision>(3), static_cast<TPrecision>(2),
+              static_cast<TPrecision>(1)}}
         );
 
-        M<T> target_tall(
+        TMatrix<TPrecision> target_tall(
             TestBase::bundle,
-            {{static_cast<T>(1), static_cast<T>(2)},
-             {static_cast<T>(3), static_cast<T>(4)},
-             {static_cast<T>(5), static_cast<T>(6)},
-             {static_cast<T>(7), static_cast<T>(8)}}
+            {{static_cast<TPrecision>(1), static_cast<TPrecision>(2)},
+             {static_cast<TPrecision>(3), static_cast<TPrecision>(4)},
+             {static_cast<TPrecision>(5), static_cast<TPrecision>(6)},
+             {static_cast<TPrecision>(7), static_cast<TPrecision>(8)}}
         );
 
         fs::path wide_file(read_matrix_dir / fs::path("wide.csv"));
         fs::path tall_file(read_matrix_dir / fs::path("tall.csv"));
 
-        M<T> test_wide(read_matrixCSV<M, T>(TestBase::bundle, wide_file));
-        M<T> test_tall(read_matrixCSV<M, T>(TestBase::bundle, tall_file));
+        TMatrix<TPrecision> test_wide(read_matrixCSV<TMatrix, TPrecision>(
+            TestBase::bundle, wide_file
+        ));
+        TMatrix<TPrecision> test_tall(read_matrixCSV<TMatrix, TPrecision>(
+            TestBase::bundle, tall_file
+        ));
 
-        ASSERT_MATRIX_NEAR(test_wide, target_wide, static_cast<T>(Tol<T>::roundoff()));
-        ASSERT_MATRIX_NEAR(test_tall, target_tall, static_cast<T>(Tol<T>::roundoff()));
+        ASSERT_MATRIX_NEAR(
+            test_wide,
+            target_wide,
+            static_cast<TPrecision>(Tol<TPrecision>::roundoff())
+        );
+        ASSERT_MATRIX_NEAR(
+            test_tall,
+            target_tall,
+            static_cast<TPrecision>(Tol<TPrecision>::roundoff())
+        );
 
     }
 
-    template <template <typename> typename M>
+    template <template <typename> typename TMatrix>
     void ReadPrecise(
         fs::path precise_file,
-        MatrixDense<T> target_precise
+        MatrixDense<TPrecision> target_precise
     ) {
 
-        M<T> test_precise(read_matrixCSV<M, T>(TestBase::bundle, precise_file));
-        DenseConverter<M, T> converter;
+        TMatrix<TPrecision> test_precise(read_matrixCSV<TMatrix, TPrecision>(
+            TestBase::bundle, precise_file
+        ));
+        DenseConverter<TMatrix, TPrecision> converter;
         ASSERT_MATRIX_NEAR(
             test_precise,
             converter.convert_matrix(target_precise),
-            static_cast<T>(Tol<T>::roundoff())
+            static_cast<TPrecision>(Tol<TPrecision>::roundoff())
         );
 
     }
 
-    template <template <typename> typename M>
+    template <template <typename> typename TMatrix>
     void ReadDifferentThanPrecise(
         fs::path precise_file,
-        MatrixDense<T> target_precise
+        MatrixDense<TPrecision> target_precise
     ) {
 
-        T eps(static_cast<T>(1.5)*static_cast<T>(Tol<T>::roundoff()));
-        DenseConverter<M, T> converter;
-        M<T> miss_precise_up(
-            converter.convert_matrix(target_precise + MatrixDense<T>::Ones(TestBase::bundle, 2, 2)*eps)
+        TPrecision eps(
+            static_cast<TPrecision>(1.5) *
+            static_cast<TPrecision>(Tol<TPrecision>::roundoff())
         );
-        M<T> miss_precise_down(
-            converter.convert_matrix(target_precise - MatrixDense<T>::Ones(TestBase::bundle, 2, 2)*eps)
+        DenseConverter<TMatrix, TPrecision> converter;
+        TMatrix<TPrecision> miss_precise_up(
+            converter.convert_matrix(
+                target_precise +
+                MatrixDense<TPrecision>::Ones(TestBase::bundle, 2, 2)*eps
+            )
+        );
+        TMatrix<TPrecision> miss_precise_down(
+            converter.convert_matrix(
+                target_precise -
+                MatrixDense<TPrecision>::Ones(TestBase::bundle, 2, 2)*eps
+            )
         );
 
-        M<T> test_precise(read_matrixCSV<M, T>(TestBase::bundle, precise_file));
+        TMatrix<TPrecision> test_precise(read_matrixCSV<TMatrix, TPrecision>(
+            TestBase::bundle, precise_file
+        ));
         ASSERT_MATRIX_LT(test_precise, miss_precise_up);
         ASSERT_MATRIX_GT(test_precise, miss_precise_down);
 
@@ -170,15 +242,21 @@ class read_matrixCSV_Vector_Test: public TestBase
 {
 public:
 
-    template <typename T>
+    template <typename TPrecision>
     void ReadVector() {
 
-        Vector<T> target(TestBase::bundle, {1, 2, 3, 4, 5, 6});
+        Vector<TPrecision> target(TestBase::bundle, {1, 2, 3, 4, 5, 6});
 
         fs::path vector_file(read_matrix_dir / fs::path("vector.csv"));
-        Vector<T> test(read_matrixCSV<Vector, T>(TestBase::bundle, vector_file));
+        Vector<TPrecision> test(read_matrixCSV<Vector, TPrecision>(
+            TestBase::bundle, vector_file
+        ));
 
-        ASSERT_VECTOR_NEAR(test, target, static_cast<T>(Tol<T>::roundoff()));
+        ASSERT_VECTOR_NEAR(
+            test,
+            target,
+            static_cast<TPrecision>(Tol<TPrecision>::roundoff())
+        );
 
     }
 
@@ -192,12 +270,18 @@ TEST_F(read_matrixCSV_Vector_Test, FailOnMatrix) {
     fs::path mat(read_matrix_dir / fs::path("square1.csv"));
     CHECK_FUNC_HAS_RUNTIME_ERROR(
         print_errors,
-        [=]() { Vector<double> test(read_matrixCSV<Vector, double>(TestBase::bundle, mat)); }
+        [=]() {
+            Vector<double> test(read_matrixCSV<Vector, double>(
+                TestBase::bundle, mat
+            ));
+        }
     );
 }
 
 // Double type matrix read tests
-class read_matrixCSV_Double_Test: public read_matrixCSV_T_Test<double> {};
+class read_matrixCSV_Double_Test:
+    public read_matrixCSV_TPrecision_Test<double>
+{};
 
 TEST_F(read_matrixCSV_Double_Test, ReadSquareMatrix) {
     ReadSquareMatrix<MatrixDense>();
@@ -241,7 +325,9 @@ TEST_F(read_matrixCSV_Double_Test, ReadDifferentThanPreciseMatrix) {
 
 TEST_F(read_matrixCSV_Double_Test, ReadPreciseMatrixDoubleLimit) {
 
-    fs::path precise_file(read_matrix_dir / fs::path("double_precise_manual.csv"));
+    fs::path precise_file(
+        read_matrix_dir / fs::path("double_precise_manual.csv")
+    );
 
     MatrixDense<double> target(
         TestBase::bundle,
@@ -256,7 +342,9 @@ TEST_F(read_matrixCSV_Double_Test, ReadPreciseMatrixDoubleLimit) {
 
 TEST_F(read_matrixCSV_Double_Test, ReadDifferentThanPreciseMatrixDoubleLimit) {
 
-    fs::path precise_file(read_matrix_dir / fs::path("double_precise_manual.csv"));
+    fs::path precise_file(
+        read_matrix_dir / fs::path("double_precise_manual.csv")
+    );
 
     MatrixDense<double> target(
         TestBase::bundle,
@@ -270,7 +358,9 @@ TEST_F(read_matrixCSV_Double_Test, ReadDifferentThanPreciseMatrixDoubleLimit) {
 }
 
 // Single type matrix read tests
-class read_matrixCSV_Single_Test: public read_matrixCSV_T_Test<float> {};
+class read_matrixCSV_Single_Test:
+    public read_matrixCSV_TPrecision_Test<float>
+{};
 
 TEST_F(read_matrixCSV_Single_Test, ReadSquareMatrix) {
     ReadSquareMatrix<MatrixDense>();
@@ -313,7 +403,9 @@ TEST_F(read_matrixCSV_Single_Test, ReadDifferentThanPreciseMatrix) {
 }
 
 // Half type matrix read tests
-class read_matrixCSV_Half_Test: public read_matrixCSV_T_Test<__half> {};
+class read_matrixCSV_Half_Test:
+    public read_matrixCSV_TPrecision_Test<__half>
+{};
 
 TEST_F(read_matrixCSV_Half_Test, ReadSquareMatrix) {
     ReadSquareMatrix<MatrixDense>();
