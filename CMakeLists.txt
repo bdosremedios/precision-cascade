@@ -1,13 +1,16 @@
-cmake_minimum_required(VERSION 3.27.2)
+cmake_minimum_required(VERSION 3.27)
 
 project(precision-cascade LANGUAGES CXX CUDA)
 
 set(CMAKE_EXE_LINKER_FLAGS, "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:LIBCMT")
 
+include_directories("${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES}")
+
 set (CMAKE_CXX_STANDARD 20)
 set (CMAKE_CUDA_STANDARD 20)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 set (CMAKE_CUDA_STANDARD_REQUIRED ON)
+set (CMAKE_CUDA_ARCHITECTURES 80)
 
 add_subdirectory(lib)
 add_subdirectory(include)
