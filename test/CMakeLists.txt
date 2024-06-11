@@ -79,7 +79,6 @@ set(
     ${TEST_SOLVERS}
 )
 
-
 add_library(
     test_headers
     INTERFACE
@@ -90,7 +89,6 @@ target_include_directories(
     INTERFACE
     include
 )
-
 
 add_library(
     test_toolkit
@@ -110,8 +108,10 @@ add_executable(
     ${TEST_SUITE_CPPS}
 )
 
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MDd")
+if (WIN32)
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD")
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MDd")
+endif ()
 
 target_link_libraries(
     test

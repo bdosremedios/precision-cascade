@@ -33,19 +33,19 @@ public:
 
     MatrixInversePreconditioner<TMatrix, double> * cast_dbl_ptr() const override {
         return new MatrixInversePreconditioner<TMatrix, double>(
-            inv_M.cast<double>()
+            inv_M.template cast<double>()
         );
     }
 
     MatrixInversePreconditioner<TMatrix, float> * cast_sgl_ptr() const override {
         return new MatrixInversePreconditioner<TMatrix, float>(
-            inv_M.cast<float>()
+            inv_M.template cast<float>()
         );
     }
 
     MatrixInversePreconditioner<TMatrix, __half> * cast_hlf_ptr() const override {
         return new MatrixInversePreconditioner<TMatrix, __half>(
-            inv_M.cast<__half>()
+            inv_M.template cast<__half>()
         );
     }
 

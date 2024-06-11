@@ -11,10 +11,12 @@
 
 #include "gtest/gtest.h"
 
-#ifdef _DEBUG
+#if defined(WIN32) && defined(_DEBUG)
+
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
+
 #endif
 
 #include <memory>
@@ -28,11 +30,12 @@ class TestBase: public testing::Test
 {
 public:
 
+    #if defined(WIN32) && defined(_DEBUG)
+
     _CrtMemState init_state = {0};
     _CrtMemState final_state = {0};
     _CrtMemState state_diff = {0};
 
-    #ifdef _DEBUG
     virtual void SetUp() {
         _CrtMemCheckpoint(&init_state);
     }
@@ -59,6 +62,7 @@ public:
         }
 
     }
+
     #endif
 
     const fs::path data_dir = (
