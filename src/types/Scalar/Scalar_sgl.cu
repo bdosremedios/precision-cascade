@@ -36,6 +36,7 @@ template bool Scalar<float>::operator==(
     const Scalar<float> &
 ) const;
 
+template <>
 Scalar<float> & Scalar<float>::abs() {
     scalar_sgl_kernels::scalar_abs<<<1, 1>>>(d_scalar);
     check_kernel_launch(
@@ -47,6 +48,7 @@ Scalar<float> & Scalar<float>::abs() {
     return *this;
 }
 
+template <>
 Scalar<float> & Scalar<float>::sqrt() {
     scalar_sgl_kernels::scalar_sqrt<<<1, 1>>>(d_scalar);
     check_kernel_launch(
@@ -58,6 +60,7 @@ Scalar<float> & Scalar<float>::sqrt() {
     return *this;
 }
 
+template <>
 Scalar<float> & Scalar<float>::reciprocol() {
     scalar_sgl_kernels::scalar_recip<<<1, 1>>>(d_scalar);
     check_kernel_launch(
@@ -69,6 +72,7 @@ Scalar<float> & Scalar<float>::reciprocol() {
     return *this;
 }
 
+template <>
 Scalar<__half> Scalar<float>::to_half() const {
     Scalar<__half> created_scalar;
     scalar_sgl_kernels::cast_to_half<<<1, 1>>>(
@@ -83,10 +87,12 @@ Scalar<__half> Scalar<float>::to_half() const {
     return created_scalar;
 }
 
+template <>
 Scalar<float> Scalar<float>::to_float() const {
     return Scalar<float>(*this);
 }
 
+template <>
 Scalar<double> Scalar<float>::to_double() const{
     Scalar<double> created_scalar;
     scalar_sgl_kernels::cast_to_double<<<1, 1>>>(

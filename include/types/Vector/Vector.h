@@ -57,6 +57,22 @@ private:
         }
     }
 
+    Vector<__half> to_half() const;
+    Vector<float> to_float() const;
+    Vector<double> to_double() const;
+
+    // Use argument overload for type specification rather than explicit
+    // specialization due to limitation in g++
+    Vector<__half> cast(TypeIdentity<__half> __) const {
+        return to_half();
+    }
+    Vector<float> cast(TypeIdentity<float> __) const {
+        return to_float();
+    }
+    Vector<double> cast(TypeIdentity<double> __) const {
+        return to_double();
+    }
+
 public:
 
     Vector(const cuHandleBundle &arg_cu_handles, int arg_m, int arg_n):
@@ -452,15 +468,8 @@ public:
 
     template <typename Cast_TPrecision>
     Vector<Cast_TPrecision> cast() const {
-        throw std::runtime_error("Vector: invalid cast conversion");
+        return cast(TypeIdentity<Cast_TPrecision>());
     }
-
-    Vector<__half> to_half() const;
-    template <> Vector<__half> cast<__half>() const { return to_half(); }
-    Vector<float> to_float() const;
-    template <> Vector<float> cast<float>() const { return to_float(); }
-    Vector<double> to_double() const;
-    template <> Vector<double> cast<double>() const { return to_double(); }
 
     Vector<TPrecision> operator*(const Scalar<TPrecision> &scalar) const;
     Vector<TPrecision> operator/(const Scalar<TPrecision> &scalar) const {

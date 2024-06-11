@@ -5,6 +5,7 @@
 #include <cublas_v2.h>
 #include <cuda_fp16.h>
 
+template <>
 MatrixDense<float> MatrixDense<float>::operator*(
     const Scalar<float> &scalar
 ) const {
@@ -25,6 +26,7 @@ MatrixDense<float> MatrixDense<float>::operator*(
 
 }
 
+template <>
 MatrixDense<float> & MatrixDense<float>::operator*=(
     const Scalar<float> &scalar
 ) {
@@ -43,6 +45,7 @@ MatrixDense<float> & MatrixDense<float>::operator*=(
 
 }
 
+template <>
 Vector<float> MatrixDense<float>::operator*(
     const Vector<float> &vec
 ) const {
@@ -75,6 +78,7 @@ Vector<float> MatrixDense<float>::operator*(
 
 }
 
+template <>
 Vector<float> MatrixDense<float>::mult_subset_cols(
     int start, int cols, const Vector<float> &vec
 ) const {
@@ -111,6 +115,7 @@ Vector<float> MatrixDense<float>::mult_subset_cols(
 
 }
 
+template <>
 Vector<float> MatrixDense<float>::transpose_prod(
     const Vector<float> &vec
 ) const {
@@ -140,6 +145,7 @@ Vector<float> MatrixDense<float>::transpose_prod(
 
 }
 
+template <>
 Vector<float> MatrixDense<float>::transpose_prod_subset_cols(
     int start, int cols, const Vector<float> &vec
 ) const {
@@ -176,6 +182,7 @@ Vector<float> MatrixDense<float>::transpose_prod_subset_cols(
 
 }
 
+template <>
 MatrixDense<float> MatrixDense<float>::operator*(
     const MatrixDense<float> &mat
 ) const {
@@ -210,6 +217,7 @@ MatrixDense<float> MatrixDense<float>::operator*(
 
 }
 
+template <>
 MatrixDense<float> MatrixDense<float>::operator+(
     const MatrixDense<float> &mat
 ) const {
@@ -238,6 +246,7 @@ MatrixDense<float> MatrixDense<float>::operator+(
 
 }
 
+template <>
 MatrixDense<float> MatrixDense<float>::operator-(
     const MatrixDense<float> &mat
 ) const {
@@ -266,6 +275,7 @@ MatrixDense<float> MatrixDense<float>::operator-(
 
 }
 
+template <>
 Scalar<float> MatrixDense<float>::norm() const {
 
     Scalar<float> result;
@@ -284,6 +294,7 @@ Scalar<float> MatrixDense<float>::norm() const {
 
 }
 
+template <>
 MatrixDense<__half> MatrixDense<float>::to_half() const {
     
     MatrixDense<__half> created_mat(cu_handles, m_rows, n_cols);
@@ -313,10 +324,12 @@ MatrixDense<__half> MatrixDense<float>::to_half() const {
 
 }
 
+template <>
 MatrixDense<float> MatrixDense<float>::to_float() const {
     return MatrixDense<float>(*this);
 }
 
+template <>
 MatrixDense<double> MatrixDense<float>::to_double() const {
     
     MatrixDense<double> created_mat(cu_handles, m_rows, n_cols);

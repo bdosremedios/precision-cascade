@@ -5,12 +5,14 @@
 #include <cusparse.h>
 #include <cuda_fp16.h>
 
+template <>
 NoFillMatrixSparse<float>::NoFillMatrixSparse(
     const MatrixDense<float> &source_mat
 ):
     NoFillMatrixSparse(source_mat, CUDA_R_32F)
 {}
 
+template <>
 NoFillMatrixSparse<float> NoFillMatrixSparse<float>::operator*(
     const Scalar<float> &scalar
 ) const {
@@ -31,6 +33,7 @@ NoFillMatrixSparse<float> NoFillMatrixSparse<float>::operator*(
 
 }
 
+template <>
 NoFillMatrixSparse<float> & NoFillMatrixSparse<float>::operator*=(
     const Scalar<float> &scalar
 ) {
@@ -49,6 +52,7 @@ NoFillMatrixSparse<float> & NoFillMatrixSparse<float>::operator*=(
 
 }
 
+template <>
 Vector<float> NoFillMatrixSparse<float>::operator*(
     const Vector<float> &vec
 ) const {
@@ -114,6 +118,7 @@ Vector<float> NoFillMatrixSparse<float>::operator*(
 
 }
 
+template <>
 Vector<float> NoFillMatrixSparse<float>::transpose_prod(
     const Vector<float> &vec
 ) const {
@@ -178,6 +183,7 @@ Vector<float> NoFillMatrixSparse<float>::transpose_prod(
 
 }
 
+template <>
 NoFillMatrixSparse<__half> NoFillMatrixSparse<float>::to_half() const {
 
     NoFillMatrixSparse<__half> created_mat(cu_handles, m_rows, n_cols, nnz);
@@ -221,10 +227,12 @@ NoFillMatrixSparse<__half> NoFillMatrixSparse<float>::to_half() const {
 
 }
 
+template <>
 NoFillMatrixSparse<float> NoFillMatrixSparse<float>::to_float() const {
     return NoFillMatrixSparse<float>(*this);
 }
 
+template <>
 NoFillMatrixSparse<double> NoFillMatrixSparse<float>::to_double() const {
 
     NoFillMatrixSparse<double> created_mat(cu_handles, m_rows, n_cols, nnz);

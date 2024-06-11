@@ -4,6 +4,7 @@
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
 
+template <>
 Vector<float> Vector<float>::operator*(
     const Scalar<float> &scalar
 ) const {
@@ -24,6 +25,7 @@ Vector<float> Vector<float>::operator*(
 
 }
 
+template <>
 Vector<float> & Vector<float>::operator*=(
     const Scalar<float> &scalar
 ) {
@@ -42,6 +44,7 @@ Vector<float> & Vector<float>::operator*=(
 
 }
 
+template <>
 Vector<float> Vector<float>::operator+(
     const Vector<float> &vec
 ) const {
@@ -65,6 +68,7 @@ Vector<float> Vector<float>::operator+(
 
 }
 
+template <>
 Vector<float> Vector<float>::operator-(
     const Vector<float> &vec
 ) const {
@@ -88,6 +92,7 @@ Vector<float> Vector<float>::operator-(
 
 }
 
+template <>
 Vector<float> & Vector<float>::operator+=(
     const Vector<float> &vec
 ) {
@@ -109,6 +114,7 @@ Vector<float> & Vector<float>::operator+=(
 
 }
 
+template <>
 Vector<float> & Vector<float>::operator-=(
     const Vector<float> &vec
 ) {
@@ -130,6 +136,7 @@ Vector<float> & Vector<float>::operator-=(
 
 }
 
+template <>
 Scalar<float> Vector<float>::dot(
     const Vector<float> &vec
 ) const {
@@ -153,6 +160,7 @@ Scalar<float> Vector<float>::dot(
 
 }
 
+template <>
 Scalar<float> Vector<float>::norm() const {
 
     Scalar<float> result;
@@ -171,6 +179,7 @@ Scalar<float> Vector<float>::norm() const {
 
 }
 
+template <>
 Vector<__half> Vector<float>::to_half() const {
     
     Vector<__half> created_vec(cu_handles, m_rows);
@@ -200,10 +209,12 @@ Vector<__half> Vector<float>::to_half() const {
 
 }
 
+template <>
 Vector<float> Vector<float>::to_float() const {
     return Vector<float>(*this);
 }
 
+template <>
 Vector<double> Vector<float>::to_double() const {
     
     Vector<double> created_vec(cu_handles, m_rows);

@@ -92,6 +92,18 @@ private:
     NoFillMatrixSparse<__half> to_half() const;
     NoFillMatrixSparse<float> to_float() const;
     NoFillMatrixSparse<double> to_double() const;
+    
+    // Use argument overload for type specification rather than explicit
+    // specialization due to limitation in g++
+    NoFillMatrixSparse<__half> cast(TypeIdentity<__half> _) const {
+        return to_half();
+    }
+    NoFillMatrixSparse<float> cast(TypeIdentity<float> _) const {
+        return to_float();
+    }
+    NoFillMatrixSparse<double> cast(TypeIdentity<double> _) const {
+        return to_double();
+    }
 
     /* Private constructor creating load space for arg_nnz non-zeros but
        without instantiation for use with known sized val array but not known
@@ -989,20 +1001,9 @@ public:
 
     }
 
-    // *** Explicit Cast ***
-    template <typename Cast_T>
-    NoFillMatrixSparse<Cast_T> cast() const {
-        throw std::runtime_error("NoFillMatrixSparse: invalid cast conversion");
-    }
-
-    template <> NoFillMatrixSparse<__half> cast<__half>() const {
-        return to_half();
-    }
-    template <> NoFillMatrixSparse<float> cast<float>() const {
-        return to_float();
-    }
-    template <> NoFillMatrixSparse<double> cast<double>() const {
-        return to_double();
+    template <typename Cast_TPrecision>
+    NoFillMatrixSparse<Cast_TPrecision> cast() const {
+        return cast(TypeIdentity<Cast_TPrecision>());
     }
 
     NoFillMatrixSparse<TPrecision> operator*(

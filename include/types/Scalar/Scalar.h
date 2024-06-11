@@ -2,6 +2,7 @@
 #define SCALAR_H
 
 #include "tools/cuda_check.h"
+#include "tools/TypeIdentity.h"
 #include "Scalar_gpu_kernels.cuh"
 
 #include <cuda_runtime.h>
@@ -29,6 +30,12 @@ private:
     Scalar<__half> to_half() const;
     Scalar<float> to_float() const;
     Scalar<double> to_double() const;
+
+    // Use argument overload for type specification rather than explicit
+    // specialization due to limitation in g++
+    Scalar<__half> cast(TypeIdentity<__half> _) const { return to_half(); }
+    Scalar<float> cast(TypeIdentity<float> _) const { return to_float(); }
+    Scalar<double> cast(TypeIdentity<double> _) const { return to_double(); }
 
 public:
 
@@ -72,12 +79,8 @@ public:
 
     template <typename Cast_TPrecision>
     Scalar<Cast_TPrecision> cast() const {
-        throw std::runtime_error("Scalar: invalid cast conversion");
+        return cast(TypeIdentity<Cast_TPrecision>());
     }
-
-    template <> Scalar<__half> cast<__half>() const { return to_half(); }
-    template <> Scalar<float> cast<float>() const { return to_float(); }
-    template <> Scalar<double> cast<double>() const { return to_double(); }
 
     Scalar<TPrecision> operator+(const Scalar& other) const;
     Scalar<TPrecision> operator-(const Scalar& other) const;

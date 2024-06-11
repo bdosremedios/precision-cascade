@@ -4,7 +4,7 @@
 #define MATRIX_DENSE_H
 
 #include "tools/cuda_check.h"
-#include "tools/CuHandleBundle.h"
+#include "tools/cuHandleBundle.h"
 #include "tools/abs.h"
 #include "types/Scalar/Scalar.h"
 #include "types/MatrixSparse/NoFillMatrixSparse.h"
@@ -47,6 +47,18 @@ private:
     MatrixDense<__half> to_half() const;
     MatrixDense<float> to_float() const;
     MatrixDense<double> to_double() const;
+
+    // Use argument overload for type specification rather than explicit
+    // specialization due to limitation in g++
+    MatrixDense<__half> cast(TypeIdentity<__half> _) const {
+        return to_half();
+    }
+    MatrixDense<float> cast(TypeIdentity<float> _) const {
+        return to_float();
+    }
+    MatrixDense<double> cast(TypeIdentity<double> _) const {
+        return to_double();
+    }
 
 public:
 
@@ -579,12 +591,8 @@ public:
 
     template <typename Cast_TPrecision>
     MatrixDense<Cast_TPrecision> cast() const {
-        throw std::runtime_error("MatrixDense: invalid cast conversion");
+        return cast(TypeIdentity<Cast_TPrecision>());
     }
-
-    template <> MatrixDense<__half> cast<__half>() const { return to_half(); }
-    template <> MatrixDense<float> cast<float>() const { return to_float(); }
-    template <> MatrixDense<double> cast<double>() const { return to_double(); }
 
     // *** Arithmetic and Compound Operations ***
     MatrixDense<TPrecision> operator*(const Scalar<TPrecision> &scalar) const;
