@@ -292,7 +292,7 @@ public:
     template <template <typename> typename TMatrix>
     void TestErrorNonSquare() {
 
-        auto try_create_solve_non_square = [=]() {
+        auto try_create_solve_non_square = [this]() {
 
             GenericLinearSystem<TMatrix> gen_lin_sys(
                 TMatrix<double>::Ones(TestBase::bundle, 43, 64),

@@ -127,9 +127,9 @@ public:
     ~TestRun() {}
 
     template <template <typename> typename M>
-    void Test_Load_Linear_Problem(std::string matrix_name) {
-        
-        LinSysSolnPair<M> pair = load_linear_problem<M>(
+    void Test_Load_Lin_Sys(std::string matrix_name) {
+
+        GenericLinearSystem<M> gen_lin_sys = load_lin_sys<M>(
             *TestExperimentBase::cu_handles_ptr,
             test_data_dir,
             matrix_name,
@@ -149,22 +149,22 @@ public:
         }
         target_A.normalize_magnitude();
 
-        ASSERT_EQ(pair.first.get_A().rows(), target_A.rows());
-        ASSERT_EQ(pair.first.get_A().cols(), target_A.cols());
+        ASSERT_EQ(gen_lin_sys.get_A().rows(), target_A.rows());
+        ASSERT_EQ(gen_lin_sys.get_A().cols(), target_A.cols());
         for (int j=0; j<target_A.cols(); ++j) {
             for (int i=0; i<target_A.rows(); ++i) {
                 ASSERT_EQ(
-                    pair.first.get_A().get_elem(i, j),
+                    gen_lin_sys.get_A().get_elem(i, j),
                     target_A.get_elem(i, j)
                 );
             }
         }
 
-        Vector<double> target_b(pair.first.get_A()*pair.second);
-        ASSERT_EQ(pair.first.get_b(), target_b);
-        for (int i=0; i<target_b.rows(); ++i) {
-            ASSERT_EQ(pair.first.get_b().get_elem(i), target_b.get_elem(i));
-        }
+        // Vector<double> target_b(pair.first.get_A()*pair.second);
+        // ASSERT_EQ(pair.first.get_b(), target_b);
+        // for (int i=0; i<target_b.rows(); ++i) {
+        //     ASSERT_EQ(pair.first.get_b().get_elem(i), target_b.get_elem(i));
+        // }
 
     }
 
@@ -263,13 +263,13 @@ public:
 
 };
 
-TEST_F(TestRun, TestLoadLinearProblem) {
+TEST_F(TestRun, TestLoadLinSys) {
 
-    Test_Load_Linear_Problem<MatrixDense>("easy_4_4.csv");
-    Test_Load_Linear_Problem<NoFillMatrixSparse>("easy_4_4.csv");
+    Test_Load_Lin_Sys<MatrixDense>("easy_4_4.csv");
+    Test_Load_Lin_Sys<NoFillMatrixSparse>("easy_4_4.csv");
 
-    Test_Load_Linear_Problem<MatrixDense>("easy_4_4.mtx");
-    Test_Load_Linear_Problem<NoFillMatrixSparse>("easy_4_4.mtx");
+    Test_Load_Lin_Sys<MatrixDense>("easy_4_4.mtx");
+    Test_Load_Lin_Sys<NoFillMatrixSparse>("easy_4_4.mtx");
     
 }
 

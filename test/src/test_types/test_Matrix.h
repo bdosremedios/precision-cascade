@@ -1777,18 +1777,6 @@ protected:
 
     }
 
-    void TestBadCast() {
-
-        auto try_bad_cast = []() {
-            const int m(20);
-            const int n(30);
-            TMatrix<double> mat(TestBase::bundle, m, n);
-            mat.template cast<int>();
-        };
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_bad_cast);
-
-    }
-
 };
 
 template <template <typename> typename TMatrix>

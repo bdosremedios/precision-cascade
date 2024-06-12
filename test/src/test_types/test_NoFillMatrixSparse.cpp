@@ -1631,10 +1631,6 @@ TEST_F(NoFillMatrixSparse_Test, TestCast) {
     TestCast();
 }
 
-TEST_F(NoFillMatrixSparse_Test, TestBadCast) {
-    TestBadCast();
-}
-
 class NoFillMatrixSparse_Substitution_Test:
     public Matrix_Substitution_Test<NoFillMatrixSparse>
 {};

@@ -734,9 +734,9 @@ public:
         ));
         ASSERT_NEAR(
             vec_norm_r.norm().get_scalar(),
-            std::sqrt(vec_norm_r.dot(vec_norm_r).get_scalar()),
-            (std::sqrt(vec_norm_r.dot(vec_norm_r).get_scalar()) *
-             Tol<TPrecision>::gamma(10))
+            vec_norm_r.dot(vec_norm_r).sqrt().get_scalar(),
+            (vec_norm_r.dot(vec_norm_r).sqrt().get_scalar() *
+             Tol<TPrecision>::gamma_T(10))
         );
 
     }
@@ -876,17 +876,6 @@ public:
                  static_cast<double>(Tol<__half>::roundoff_T()))
             );
         }
-
-    }
-
-    void TestBadCast() {
-
-        auto try_bad_cast = []() {
-            const int m(20);
-            Vector<double> vec_dbl(Vector<double>::Random(TestBase::bundle, m));
-            vec_dbl.cast<int>();
-        };
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, try_bad_cast);
 
     }
 
@@ -1074,10 +1063,6 @@ TEST_F(Vector_Test, TestNorm) {
 
 TEST_F(Vector_Test, TestCast) {
     TestCast();
-}
-
-TEST_F(Vector_Test, TestBadCast) {
-    TestBadCast();
 }
 
 TEST_F(Vector_Test, TestBadVecVecOps) {

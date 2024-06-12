@@ -129,7 +129,7 @@ TEST_F(TestRead, TestBadJsonParse) {
 
     CHECK_FUNC_HAS_RUNTIME_ERROR(
         print_errors,
-        [=]() -> void {
+        [this]() -> void {
             parse_experiment_spec(
                 test_json_dir /
                 fs::path("doesnt_exist.json")
@@ -139,7 +139,7 @@ TEST_F(TestRead, TestBadJsonParse) {
 
     CHECK_FUNC_HAS_RUNTIME_ERROR(
         print_errors,
-        [=]() -> void {
+        [this]() -> void {
             parse_experiment_spec(
                 test_json_dir /
                 fs::path("not_a_json.txt")
@@ -149,7 +149,7 @@ TEST_F(TestRead, TestBadJsonParse) {
 
     CHECK_FUNC_HAS_RUNTIME_ERROR(
         print_errors,
-        [=]() -> void {
+        [this]() -> void {
             parse_experiment_spec(
                 test_json_dir /
                 fs::path("bad_json_parse.json")
@@ -163,7 +163,7 @@ TEST_F(TestRead, TestBadJsonSolveGroupMembers) {
 
     CHECK_FUNC_HAS_RUNTIME_ERROR(
         print_errors,
-        [=]() -> void {
+        [this]() -> void {
             parse_experiment_spec(
                 test_json_dir /
                 fs::path("bad_invalid_solve_group.json")
@@ -173,7 +173,7 @@ TEST_F(TestRead, TestBadJsonSolveGroupMembers) {
 
     CHECK_FUNC_HAS_RUNTIME_ERROR(
         print_errors,
-        [=]() -> void {
+        [this]() -> void {
             parse_experiment_spec(
                 test_json_dir /
                 fs::path("bad_empty_solve_group.json")
@@ -183,7 +183,7 @@ TEST_F(TestRead, TestBadJsonSolveGroupMembers) {
 
     CHECK_FUNC_HAS_RUNTIME_ERROR(
         print_errors,
-        [=]() -> void {
+        [this]() -> void {
             parse_experiment_spec(
                 test_json_dir /
                 fs::path("bad_solve_group_bad_key.json")
@@ -193,7 +193,7 @@ TEST_F(TestRead, TestBadJsonSolveGroupMembers) {
 
     CHECK_FUNC_HAS_RUNTIME_ERROR(
         print_errors,
-        [=]() -> void {
+        [this]() -> void {
             parse_experiment_spec(
                 test_json_dir /
                 fs::path("bad_solve_group_missing_arg.json")
@@ -203,7 +203,7 @@ TEST_F(TestRead, TestBadJsonSolveGroupMembers) {
 
     CHECK_FUNC_HAS_RUNTIME_ERROR(
         print_errors,
-        [=]() -> void {
+        [this]() -> void {
             parse_experiment_spec(
                 test_json_dir /
                 fs::path("bad_solve_group_repeated_key.json")
@@ -217,7 +217,7 @@ TEST_F(TestRead, TestBadJsonSolveGroupMemberValues) {
 
     CHECK_FUNC_HAS_RUNTIME_ERROR(
         print_errors,
-        [=]() -> void {
+        [this]() -> void {
             parse_experiment_spec(
                 test_json_dir /
                 fs::path("bad_solve_group_arg_bad_int.json")
@@ -227,7 +227,7 @@ TEST_F(TestRead, TestBadJsonSolveGroupMemberValues) {
 
     CHECK_FUNC_HAS_RUNTIME_ERROR(
         print_errors,
-        [=]() -> void {
+        [this]() -> void {
             parse_experiment_spec(
                 test_json_dir /
                 fs::path("bad_solve_group_arg_bad_double.json")
@@ -237,7 +237,7 @@ TEST_F(TestRead, TestBadJsonSolveGroupMemberValues) {
 
     CHECK_FUNC_HAS_RUNTIME_ERROR(
         print_errors,
-        [=]() -> void {
+        [this]() -> void {
             parse_experiment_spec(
                 test_json_dir /
                 fs::path("bad_solve_group_arg_bad_solvers_to_use_type.json")
@@ -247,7 +247,7 @@ TEST_F(TestRead, TestBadJsonSolveGroupMemberValues) {
 
     CHECK_FUNC_HAS_RUNTIME_ERROR(
         print_errors,
-        [=]() -> void {
+        [this]() -> void {
             parse_experiment_spec(
                 test_json_dir /
                 fs::path(
@@ -260,7 +260,7 @@ TEST_F(TestRead, TestBadJsonSolveGroupMemberValues) {
 
     CHECK_FUNC_HAS_RUNTIME_ERROR(
         print_errors,
-        [=]() -> void {
+        [this]() -> void {
             parse_experiment_spec(
                 test_json_dir /
                 fs::path(
@@ -273,7 +273,7 @@ TEST_F(TestRead, TestBadJsonSolveGroupMemberValues) {
 
     CHECK_FUNC_HAS_RUNTIME_ERROR(
         print_errors,
-        [=]() -> void {
+        [this]() -> void {
             parse_experiment_spec(
                 test_json_dir /
                 fs::path("bad_solve_group_arg_bad_matrix_type.json")
@@ -283,7 +283,7 @@ TEST_F(TestRead, TestBadJsonSolveGroupMemberValues) {
 
     CHECK_FUNC_HAS_RUNTIME_ERROR(
         print_errors,
-        [=]() -> void {
+        [this]() -> void {
             parse_experiment_spec(
                 test_json_dir /
                 fs::path("bad_solve_group_arg_bad_matrix_type_wrong_str.json")
@@ -293,7 +293,7 @@ TEST_F(TestRead, TestBadJsonSolveGroupMemberValues) {
 
     CHECK_FUNC_HAS_RUNTIME_ERROR(
         print_errors,
-        [=]() -> void {
+        [this]() -> void {
             parse_experiment_spec(
                 test_json_dir /
                 fs::path("bad_solve_group_arg_bad_precond_specs.json")
@@ -303,7 +303,7 @@ TEST_F(TestRead, TestBadJsonSolveGroupMemberValues) {
 
     CHECK_FUNC_HAS_RUNTIME_ERROR(
         print_errors,
-        [=]() -> void {
+        [this]() -> void {
             parse_experiment_spec(
                 test_json_dir /
                 fs::path("bad_solve_group_arg_bad_precond_specs_wrong_str.json")
@@ -313,7 +313,7 @@ TEST_F(TestRead, TestBadJsonSolveGroupMemberValues) {
 
     CHECK_FUNC_HAS_RUNTIME_ERROR(
         print_errors,
-        [=]() -> void {
+        [this]() -> void {
             parse_experiment_spec(
                 test_json_dir /
                 fs::path("bad_solve_group_arg_bad_precond_specs_shortarr.json")
@@ -323,7 +323,7 @@ TEST_F(TestRead, TestBadJsonSolveGroupMemberValues) {
 
     CHECK_FUNC_HAS_RUNTIME_ERROR(
         print_errors,
-        [=]() -> void {
+        [this]() -> void {
             parse_experiment_spec(
                 test_json_dir /
                 fs::path("bad_solve_group_arg_bad_precond_specs_longarr.json")
@@ -333,7 +333,7 @@ TEST_F(TestRead, TestBadJsonSolveGroupMemberValues) {
 
     CHECK_FUNC_HAS_RUNTIME_ERROR(
         print_errors,
-        [=]() -> void {
+        [this]() -> void {
             parse_experiment_spec(
                 test_json_dir /
                 fs::path("bad_solve_group_arg_bad_precond_specs_badname.json")
@@ -343,7 +343,7 @@ TEST_F(TestRead, TestBadJsonSolveGroupMemberValues) {
 
     CHECK_FUNC_HAS_RUNTIME_ERROR(
         print_errors,
-        [=]() -> void {
+        [this]() -> void {
             parse_experiment_spec(
                 test_json_dir /
                 fs::path(
@@ -355,7 +355,7 @@ TEST_F(TestRead, TestBadJsonSolveGroupMemberValues) {
 
     CHECK_FUNC_HAS_RUNTIME_ERROR(
         print_errors,
-        [=]() -> void {
+        [this]() -> void {
             parse_experiment_spec(
                 test_json_dir /
                 fs::path("bad_solve_group_arg_bad_precond_specs_badilutpp.json")
@@ -365,7 +365,7 @@ TEST_F(TestRead, TestBadJsonSolveGroupMemberValues) {
 
     CHECK_FUNC_HAS_RUNTIME_ERROR(
         print_errors,
-        [=]() -> void {
+        [this]() -> void {
             parse_experiment_spec(
                 test_json_dir /
                 fs::path("bad_solve_group_arg_bad_matrices_empty.json")
@@ -375,7 +375,7 @@ TEST_F(TestRead, TestBadJsonSolveGroupMemberValues) {
 
     CHECK_FUNC_HAS_RUNTIME_ERROR(
         print_errors,
-        [=]() -> void {
+        [this]() -> void {
             parse_experiment_spec(
                 test_json_dir /
                 fs::path("bad_solve_group_arg_bad_matrices_type.json")
@@ -385,7 +385,7 @@ TEST_F(TestRead, TestBadJsonSolveGroupMemberValues) {
 
     CHECK_FUNC_HAS_RUNTIME_ERROR(
         print_errors,
-        [=]() -> void {
+        [this]() -> void {
             parse_experiment_spec(
                 test_json_dir /
                 fs::path("bad_solve_group_arg_bad_matrices_member_type.json")
@@ -395,7 +395,7 @@ TEST_F(TestRead, TestBadJsonSolveGroupMemberValues) {
 
     CHECK_FUNC_HAS_RUNTIME_ERROR(
         print_errors,
-        [=]() -> void {
+        [this]() -> void {
             parse_experiment_spec(
                 test_json_dir /
                 fs::path("bad_solve_group_arg_bad_matrices_extension.json")
@@ -405,7 +405,7 @@ TEST_F(TestRead, TestBadJsonSolveGroupMemberValues) {
 
     CHECK_FUNC_HAS_RUNTIME_ERROR(
         print_errors,
-        [=]() -> void {
+        [this]() -> void {
             parse_experiment_spec(
                 test_json_dir /
                 fs::path("bad_solve_group_arg_solver_arg_pkg_badouter.json")
@@ -415,7 +415,7 @@ TEST_F(TestRead, TestBadJsonSolveGroupMemberValues) {
 
     CHECK_FUNC_HAS_RUNTIME_ERROR(
         print_errors,
-        [=]() -> void {
+        [this]() -> void {
             parse_experiment_spec(
                 test_json_dir /
                 fs::path("bad_solve_group_arg_solver_arg_pkg_badinner.json")
@@ -425,7 +425,7 @@ TEST_F(TestRead, TestBadJsonSolveGroupMemberValues) {
 
     CHECK_FUNC_HAS_RUNTIME_ERROR(
         print_errors,
-        [=]() -> void {
+        [this]() -> void {
             parse_experiment_spec(
                 test_json_dir /
                 fs::path("bad_solve_group_arg_solver_arg_pkg_badrelres.json")

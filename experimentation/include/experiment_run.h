@@ -27,10 +27,7 @@ static const double u_sgl = std::pow(2, -23);
 static const double u_dbl = std::pow(2, -52);
 
 template <template <typename> typename TMatrix>
-using LinSysSolnPair = std::pair<GenericLinearSystem<TMatrix>, Vector<double>>;
-
-template <template <typename> typename TMatrix>
-LinSysSolnPair<TMatrix> load_linear_problem(
+GenericLinearSystem<TMatrix> load_lin_sys(
     const cuHandleBundle &cu_handles,
     fs::path input_dir,
     std::string matrix_name,
@@ -47,7 +44,7 @@ LinSysSolnPair<TMatrix> load_linear_problem(
     } else if (matrix_path.extension() == ".csv") {
         A = read_matrixCSV<TMatrix, double>(cu_handles, matrix_path);
     } else {
-        throw std::runtime_error("load_linear_problem: invalid extension");
+        throw std::runtime_error("load_lin_sys: invalid extension");
     }
 
     A.normalize_magnitude();
@@ -56,7 +53,7 @@ LinSysSolnPair<TMatrix> load_linear_problem(
     Vector<double> true_x(Vector<double>::Random(cu_handles, A.cols()));
     Vector<double> b(A*true_x);
 
-    return LinSysSolnPair(GenericLinearSystem<TMatrix>(A, b), true_x);
+    return GenericLinearSystem<TMatrix>(A, b);
 
 }
 
@@ -186,7 +183,7 @@ void run_solve_group(
         ) {
 
             // Load linear system, generating b to solve
-            LinSysSolnPair<TMatrix> lin_sys_pair = load_linear_problem<TMatrix>(
+            GenericLinearSystem<TMatrix> gen_lin_sys = load_lin_sys<TMatrix>(
                 cu_handles, data_dir, matrix_name, logger
             );
 
@@ -201,14 +198,14 @@ void run_solve_group(
                 logger.info("Preconditioner: JacobiPreconditioner");
                 precond_args_dbl = PrecondArgPkg<TMatrix, double>(
                     std::make_shared<JacobiPreconditioner<TMatrix, double>>(
-                        lin_sys_pair.first.get_A()
+                        gen_lin_sys.get_A()
                     )
                 );
             } else if (solve_group.precond_specs.name == "ilu0") {
                 logger.info("Preconditioner: ILU(0) starting computation");
                 std::shared_ptr<ILUPreconditioner<TMatrix, double>> ilu0 = (
                     std::make_shared<ILUPreconditioner<TMatrix, double>>(
-                        lin_sys_pair.first.get_A()
+                        gen_lin_sys.get_A()
                     )
                 );
                 logger.info("Preconditioner: ILU(0) finished computation");
@@ -235,7 +232,7 @@ void run_solve_group(
                 );
                 std::shared_ptr<ILUPreconditioner<TMatrix, double>> ilutp = (
                     std::make_shared<ILUPreconditioner<TMatrix, double>>(
-                        lin_sys_pair.first.get_A(),
+                        gen_lin_sys.get_A(),
                         solve_group.precond_specs.ilutp_tau,
                         solve_group.precond_specs.ilutp_p,
                         true
@@ -276,7 +273,7 @@ void run_solve_group(
                         precond_args_dbl.cast_hlf_ptr()
                     );
                     TypedLinearSystem<TMatrix, __half> lin_sys_hlf(
-                        &lin_sys_pair.first
+                        &gen_lin_sys
                     );
                     run_record_FPGMRES_solve<TMatrix, __half>(
                         std::make_shared<FP_GMRES_IR_Solve<TMatrix, __half>>(
@@ -299,7 +296,7 @@ void run_solve_group(
                         precond_args_dbl.cast_sgl_ptr()
                     );
                     TypedLinearSystem<TMatrix, float> lin_sys_sgl(
-                        &lin_sys_pair.first
+                        &gen_lin_sys
                     );
                     run_record_FPGMRES_solve<TMatrix, float>(
                         std::make_shared<FP_GMRES_IR_Solve<TMatrix, float>>(
@@ -319,7 +316,7 @@ void run_solve_group(
                 } else if (solver_id == "FP64") {
 
                     TypedLinearSystem<TMatrix, double> lin_sys_dbl(
-                        &lin_sys_pair.first
+                        &gen_lin_sys
                     );
                     run_record_FPGMRES_solve<TMatrix, double>(
                         std::make_shared<FP_GMRES_IR_Solve<TMatrix, double>>(
@@ -339,7 +336,7 @@ void run_solve_group(
 
                     run_record_MPGMRES_solve<TMatrix>(
                         std::make_shared<SimpleConstantThreshold<TMatrix>>(
-                            &lin_sys_pair.first,
+                            &gen_lin_sys,
                             solve_group.solver_args, precond_args_dbl
                         ),
                         precond_args_dbl,
@@ -355,7 +352,7 @@ void run_solve_group(
 
                     run_record_MPGMRES_solve<TMatrix>(
                         std::make_shared<RestartCount<TMatrix>>(
-                            &lin_sys_pair.first,
+                            &gen_lin_sys,
                             solve_group.solver_args, precond_args_dbl
                         ),
                         precond_args_dbl,

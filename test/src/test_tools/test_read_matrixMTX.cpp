@@ -177,7 +177,7 @@ public:
     template <template <typename> typename TMatrix>
     void BadReadMTX() {
 
-        auto missing_file = [=]() {
+        auto missing_file = [this]() {
             read_matrixMTX<TMatrix, double>(
                 TestBase::bundle,
                 read_matrix_dir / fs::path("asdasd.mtx")
@@ -185,7 +185,7 @@ public:
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, missing_file);
 
-        auto wrong_extension = [=]() {
+        auto wrong_extension = [this]() {
             read_matrixMTX<TMatrix, double>(
                 TestBase::bundle,
                 read_matrix_dir / fs::path("bad1")
@@ -193,49 +193,49 @@ public:
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, wrong_extension);
 
-        auto bad_header_1 = [=]() {
+        auto bad_header_1 = [this]() {
             read_matrixMTX<TMatrix, double>(
                 TestBase::bundle,
                 read_matrix_dir / fs::path("bad_header1.mtx")
             );
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, bad_header_1);
-        auto bad_header2 = [=]() {
+        auto bad_header2 = [this]() {
             read_matrixMTX<TMatrix, double>(
                 TestBase::bundle,
                 read_matrix_dir / fs::path("bad_header2.mtx")
             );
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, bad_header2);
-        auto bad_header3 = [=]() {
+        auto bad_header3 = [this]() {
             read_matrixMTX<TMatrix, double>(
                 TestBase::bundle,
                 read_matrix_dir / fs::path("bad_header3.mtx")
             );
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, bad_header3);
-        auto bad_header4 = [=]() {
+        auto bad_header4 = [this]() {
             read_matrixMTX<TMatrix, double>(
                 TestBase::bundle,
                 read_matrix_dir / fs::path("bad_header4.mtx")
             );
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, bad_header4);
-        auto bad_header5 = [=]() {
+        auto bad_header5 = [this]() {
             read_matrixMTX<TMatrix, double>(
                 TestBase::bundle,
                 read_matrix_dir / fs::path("bad_header5.mtx")
             );
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, bad_header5);
-        auto bad_header6 = [=]() {
+        auto bad_header6 = [this]() {
             read_matrixMTX<TMatrix, double>(
                 TestBase::bundle,
                 read_matrix_dir / fs::path("bad_header6.mtx")
             );
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, bad_header6);
-        auto bad_header7 = [=]() {
+        auto bad_header7 = [this]() {
             read_matrixMTX<TMatrix, double>(
                 TestBase::bundle,
                 read_matrix_dir / fs::path("bad_header7.mtx")
@@ -243,56 +243,56 @@ public:
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, bad_header7);
 
-        auto bad_matrixdim1 = [=]() {
+        auto bad_matrixdim1 = [this]() {
             read_matrixMTX<TMatrix, double>(
                 TestBase::bundle,
                 read_matrix_dir / fs::path("bad_matrixdim1.mtx")
             );
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, bad_matrixdim1);
-        auto bad_matrixdim2 = [=]() {
+        auto bad_matrixdim2 = [this]() {
             read_matrixMTX<TMatrix, double>(
                 TestBase::bundle,
                 read_matrix_dir / fs::path("bad_matrixdim2.mtx")
             );
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, bad_matrixdim2);
-        auto bad_matrixdim3 = [=]() {
+        auto bad_matrixdim3 = [this]() {
             read_matrixMTX<TMatrix, double>(
                 TestBase::bundle,
                 read_matrix_dir / fs::path("bad_matrixdim3.mtx")
             );
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, bad_matrixdim3);
-        auto bad_matrixdim4 = [=]() {
+        auto bad_matrixdim4 = [this]() {
             read_matrixMTX<TMatrix, double>(
                 TestBase::bundle,
                 read_matrix_dir / fs::path("bad_matrixdim4.mtx")
             );
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, bad_matrixdim4);
-        auto bad_matrixdim5 = [=]() {
+        auto bad_matrixdim5 = [this]() {
             read_matrixMTX<TMatrix, double>(
                 TestBase::bundle,
                 read_matrix_dir / fs::path("bad_matrixdim5.mtx")
             );
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, bad_matrixdim5);
-        auto bad_matrixdim6 = [=]() {
+        auto bad_matrixdim6 = [this]() {
             read_matrixMTX<TMatrix, double>(
                 TestBase::bundle,
                 read_matrix_dir / fs::path("bad_matrixdim6.mtx")
             );
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, bad_matrixdim6);
-        auto bad_matrixdim7 = [=]() {
+        auto bad_matrixdim7 = [this]() {
             read_matrixMTX<TMatrix, double>(
                 TestBase::bundle,
                 read_matrix_dir / fs::path("bad_matrixdim7.mtx")
             );
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, bad_matrixdim7);
-        auto bad_matrixdim8 = [=]() {
+        auto bad_matrixdim8 = [this]() {
             read_matrixMTX<TMatrix, double>(
                 TestBase::bundle,
                 read_matrix_dir / fs::path("bad_matrixdim8.mtx")
@@ -300,58 +300,58 @@ public:
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, bad_matrixdim8);
 
-        auto bad_matrixentry1 = [=]() {
+        auto bad_matrixentry1 = [this]() {
             read_matrixMTX<TMatrix, double>(TestBase::bundle, read_matrix_dir / fs::path("bad_matrixentry1.mtx"));
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, bad_matrixentry1);
-        auto bad_matrixentry2 = [=]() {
+        auto bad_matrixentry2 = [this]() {
             read_matrixMTX<TMatrix, double>(
                 TestBase::bundle, read_matrix_dir / fs::path("bad_matrixentry2.mtx")
             );
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, bad_matrixentry2);
-        auto bad_matrixentry3 = [=]() {
+        auto bad_matrixentry3 = [this]() {
             read_matrixMTX<TMatrix, double>(
                 TestBase::bundle, read_matrix_dir / fs::path("bad_matrixentry3.mtx")
             );
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, bad_matrixentry3);
-        auto bad_matrixentry4 = [=]() {
+        auto bad_matrixentry4 = [this]() {
             read_matrixMTX<TMatrix, double>(
                 TestBase::bundle,
                 read_matrix_dir / fs::path("bad_matrixentry4.mtx")
             );
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, bad_matrixentry4);
-        auto bad_matrixentry5 = [=]() {
+        auto bad_matrixentry5 = [this]() {
             read_matrixMTX<TMatrix, double>(
                 TestBase::bundle,
                 read_matrix_dir / fs::path("bad_matrixentry5.mtx")
             );
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, bad_matrixentry5);
-        auto bad_matrixentry6 = [=]() {
+        auto bad_matrixentry6 = [this]() {
             read_matrixMTX<TMatrix, double>(
                 TestBase::bundle,
                 read_matrix_dir / fs::path("bad_matrixentry6.mtx")
             );
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, bad_matrixentry6);
-        auto bad_matrixentry7 = [=]() {
+        auto bad_matrixentry7 = [this]() {
             read_matrixMTX<TMatrix, double>(
                 TestBase::bundle,
                 read_matrix_dir / fs::path("bad_matrixentry7.mtx")
             );
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, bad_matrixentry7);
-        auto bad_matrixentry8 = [=]() {
+        auto bad_matrixentry8 = [this]() {
             read_matrixMTX<TMatrix, double>(
                 TestBase::bundle,
                 read_matrix_dir / fs::path("bad_matrixentry8.mtx")
             );
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, bad_matrixentry8);
-        auto bad_matrixentry9 = [=]() {
+        auto bad_matrixentry9 = [this]() {
             read_matrixMTX<TMatrix, double>(
                 TestBase::bundle,
                 read_matrix_dir / fs::path("bad_matrixentry9.mtx")
@@ -359,14 +359,14 @@ public:
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, bad_matrixentry9);
 
-        auto bad_wrongorder1 = [=]() {
+        auto bad_wrongorder1 = [this]() {
             read_matrixMTX<TMatrix, double>(
                 TestBase::bundle,
                 read_matrix_dir / fs::path("bad_wrongorder1.mtx")
             );
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, bad_wrongorder1);
-        auto bad_wrongorder2 = [=]() {
+        auto bad_wrongorder2 = [this]() {
             read_matrixMTX<TMatrix, double>(
                 TestBase::bundle,
                 read_matrix_dir / fs::path("bad_wrongorder2.mtx")
@@ -374,7 +374,7 @@ public:
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, bad_wrongorder2);
 
-        auto bad_symmetricinvalidentry = [=]() {
+        auto bad_symmetricinvalidentry = [this]() {
             read_matrixMTX<TMatrix, double>(
                 TestBase::bundle,
                 read_matrix_dir / fs::path("bad_symmetricinvalidentry.mtx")
