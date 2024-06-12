@@ -1,5 +1,3 @@
 build
 out
 .vs
-benchmark/data/*
-experimentation/test/data/test_output/*
