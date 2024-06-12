@@ -50,8 +50,7 @@ GenericLinearSystem<TMatrix> load_lin_sys(
     A.normalize_magnitude();
     logger.info(std::format("Matrix info: {}", A.get_info_string()));
 
-    Vector<double> true_x(Vector<double>::Random(cu_handles, A.cols()));
-    Vector<double> b(A*true_x);
+    Vector<double> b(A*Vector<double>::Random(cu_handles, A.cols()));
 
     return GenericLinearSystem<TMatrix>(A, b);
 

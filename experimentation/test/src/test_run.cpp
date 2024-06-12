@@ -24,7 +24,9 @@ private:
         } else if (mat_type_id == "sparse") {
             return "class NoFillMatrixSparse";
         } else {
-            throw std::runtime_error("get_mat_type_str: no matching mat_type_id");
+            throw std::runtime_error(
+                "get_mat_type_str: no matching mat_type_id"
+            );
         }
     }
 
@@ -159,12 +161,8 @@ public:
                 );
             }
         }
-
-        // Vector<double> target_b(pair.first.get_A()*pair.second);
-        // ASSERT_EQ(pair.first.get_b(), target_b);
-        // for (int i=0; i<target_b.rows(); ++i) {
-        //     ASSERT_EQ(pair.first.get_b().get_elem(i), target_b.get_elem(i));
-        // }
+    
+        ASSERT_EQ(gen_lin_sys.get_b().rows(), target_A.rows());
 
     }
 
