@@ -21,7 +21,8 @@ protected:
     const int n_runs = 5;
     bool prototyping_speed_up = false;
     const fs::path data_dir = (
-        fs::current_path() / fs::path("..") / fs::path("benchmark") / fs::path("data")
+        fs::current_path() / fs::path("..") /
+        fs::path("benchmark") / fs::path("data")
     );
 
 public:
@@ -30,15 +31,21 @@ public:
 
     int dense_start = (prototyping_speed_up) ? 1024 : 2500;
     int dense_stop = 20001;
-    int dense_incr = (prototyping_speed_up) ? (dense_stop-dense_start) : 2500;
+    int dense_incr = (
+        (prototyping_speed_up) ? (dense_stop-dense_start) : 2500
+    );
 
     int sparse_start = (prototyping_speed_up) ? 1024 : 25000;
     int sparse_stop = 200001;
-    int sparse_incr = (prototyping_speed_up) ? (sparse_stop-sparse_start) : 25000;
+    int sparse_incr = (
+        (prototyping_speed_up) ? (sparse_stop-sparse_start) : 25000
+    );
 
     int ilu_start = (prototyping_speed_up) ? 1024 : 10000;
     int ilu_stop = 80001;
-    int ilu_incr = (prototyping_speed_up) ? (sparse_stop-sparse_start) : 10000;
+    int ilu_incr = (
+        (prototyping_speed_up) ? (sparse_stop-sparse_start) : 10000
+    );
 
     const bool pivot_ilu = false;
     const int gmressolve_iters = 200;
@@ -57,9 +64,12 @@ public:
             f(benchmark_clock);
         }
 
-        std::string label_formatted = (label == "") ? "" : std::format(" {}", label);
+        std::string label_formatted = (
+            (label == "") ? "" : std::format(" {}", label)
+        );
         std::cout << std::format(
-                        "[Benchmark{}] runs: {} | avg: {} | median: {} | total: {}",
+                        "[Benchmark{}] runs: {} | avg: {} | median: {} "
+                        "| total: {}",
                         label_formatted,
                         benchmark_clock.get_count(),
                         benchmark_clock.get_avg(),
@@ -103,11 +113,11 @@ public:
             Benchmark_AccumClock curr_clock;
 
             TMatrix<TPrecision> A = make_A(m, m);
-            std::function<void(Benchmark_AccumClock &)> test_func = [exec_func, &A](
-                Benchmark_AccumClock &arg_clock
-            ) {
-                exec_func(arg_clock, A);
-            };
+            std::function<void(Benchmark_AccumClock &)> test_func = (
+                [exec_func, &A](Benchmark_AccumClock &arg_clock) {
+                    exec_func(arg_clock, A);
+                }
+            );
 
             benchmark_n_runs(
                 n_runs,
@@ -116,7 +126,8 @@ public:
                 label + std::format("_{}", m)
             );
 
-            f_out << std::format("{},{}", m, curr_clock.get_median().count()) << std::endl; 
+            f_out << std::format("{},{}", m, curr_clock.get_median().count())
+                  << std::endl; 
 
         }
 

@@ -11,7 +11,7 @@ set(CMAKE_CUDA_STANDARD_REQUIRED ON)
 add_library(precision-cascade-headers INTERFACE)
 
 if(WIN32)
-    target_link_options(precision-cascade-constants PUBLIC "/NODEFAULTLIB:LIBCMT")
+    target_link_options(precision-cascade-headers INTERFACE "/NODEFAULTLIB:LIBCMT")
 endif()
 
 set_property(TARGET precision-cascade-headers PROPERTY CUDA_ARCHITECTURES 80)

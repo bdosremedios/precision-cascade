@@ -18,7 +18,8 @@ public:
     ) -> NoFillMatrixSparse<double> {
         return NoFillMatrixSparse<double>::Random(
             BenchmarkBase::bundle, m, m,
-            (col_non_zeros/static_cast<double>(m) > 1) ? 1 : col_non_zeros/static_cast<double>(m)
+            ((col_non_zeros/static_cast<double>(m) > 1) ?
+             1 : col_non_zeros/static_cast<double>(m))
         );
     };
 
@@ -27,8 +28,9 @@ public:
     ) -> NoFillMatrixSparse<float> {
         return NoFillMatrixSparse<float>::Random(
             BenchmarkBase::bundle, m, m,
-            (static_cast<float>(col_non_zeros)/static_cast<float>(m) > 1) ?
-             static_cast<float>(1) : static_cast<float>(col_non_zeros)/static_cast<float>(m)
+            ((static_cast<float>(col_non_zeros)/static_cast<float>(m) > 1) ?
+              static_cast<float>(1) :
+              static_cast<float>(col_non_zeros)/static_cast<float>(m))
         );
     };
 
@@ -37,8 +39,10 @@ public:
     ) -> NoFillMatrixSparse<__half> {
         return NoFillMatrixSparse<__half>::Random(
             BenchmarkBase::bundle, m, m,
-            (static_cast<__half>(col_non_zeros)/static_cast<__half>(m) > static_cast<__half>(1)) ?
-             static_cast<__half>(1) : static_cast<__half>(col_non_zeros)/static_cast<__half>(m)
+            ((static_cast<__half>(col_non_zeros) /
+              static_cast<__half>(m) > static_cast<__half>(1)) ?
+             static_cast<__half>(1) :
+             static_cast<__half>(col_non_zeros)/static_cast<__half>(m))
         );
     };
 
@@ -47,7 +51,8 @@ public:
     ) -> NoFillMatrixSparse<double> {
         return NoFillMatrixSparse<double>::Random_LT(
             BenchmarkBase::bundle, m, m,
-            (col_non_zeros/static_cast<double>(m) > 1) ? 1 : col_non_zeros/static_cast<double>(m)
+            ((col_non_zeros/static_cast<double>(m) > 1) ?
+             1 : col_non_zeros/static_cast<double>(m))
         );
     };
 
@@ -56,8 +61,10 @@ public:
     ) -> NoFillMatrixSparse<float> {
         return NoFillMatrixSparse<float>::Random_LT(
             BenchmarkBase::bundle, m, m,
-            (static_cast<float>(col_non_zeros)/static_cast<float>(m) > static_cast<float>(1)) ?
-             static_cast<float>(1) : static_cast<float>(col_non_zeros)/static_cast<float>(m)
+            ((static_cast<float>(col_non_zeros) /
+              static_cast<float>(m) > static_cast<float>(1)) ?
+             static_cast<float>(1) :
+             static_cast<float>(col_non_zeros)/static_cast<float>(m))
         );
     };
 
@@ -66,8 +73,10 @@ public:
     ) -> NoFillMatrixSparse<__half> {
         return NoFillMatrixSparse<__half>::Random_LT(
             BenchmarkBase::bundle, m, m,
-            (static_cast<__half>(col_non_zeros)/static_cast<__half>(m) > static_cast<__half>(1)) ?
-             static_cast<__half>(1) : static_cast<__half>(col_non_zeros)/static_cast<__half>(m)
+            ((static_cast<__half>(col_non_zeros) /
+              static_cast<__half>(m) > static_cast<__half>(1)) ?
+             static_cast<__half>(1) :
+             static_cast<__half>(col_non_zeros)/static_cast<__half>(m))
         );
     };
     
@@ -76,7 +85,8 @@ public:
     ) -> NoFillMatrixSparse<double> {
         return NoFillMatrixSparse<double>::Random_UT(
             BenchmarkBase::bundle, m, m,
-            (col_non_zeros/static_cast<double>(m) > 1) ? 1 : col_non_zeros/static_cast<double>(m)
+            ((col_non_zeros/static_cast<double>(m) > 1) ?
+             1 : col_non_zeros/static_cast<double>(m))
         );
     };
 
@@ -85,8 +95,10 @@ public:
     ) -> NoFillMatrixSparse<float> {
         return NoFillMatrixSparse<float>::Random_UT(
             BenchmarkBase::bundle, m, m,
-            (static_cast<float>(col_non_zeros)/static_cast<float>(m) > static_cast<float>(1)) ?
-             static_cast<float>(1) : static_cast<float>(col_non_zeros)/static_cast<float>(m)
+            ((static_cast<float>(col_non_zeros) /
+              static_cast<float>(m) > static_cast<float>(1)) ?
+             static_cast<float>(1) :
+             static_cast<float>(col_non_zeros)/static_cast<float>(m))
         );
     };
 
@@ -95,8 +107,10 @@ public:
     ) -> NoFillMatrixSparse<__half> {
         return NoFillMatrixSparse<__half>::Random_UT(
             BenchmarkBase::bundle, m, m,
-            (static_cast<__half>(col_non_zeros)/static_cast<__half>(m) > static_cast<__half>(1)) ?
-             static_cast<__half>(1) : static_cast<__half>(col_non_zeros)/static_cast<__half>(m)
+            ((static_cast<__half>(col_non_zeros) /
+              static_cast<__half>(m) > static_cast<__half>(1)) ?
+             static_cast<__half>(1) :
+             static_cast<__half>(col_non_zeros)/static_cast<__half>(m))
         );
     };
 

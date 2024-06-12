@@ -113,10 +113,10 @@ public:
 
     ~TestRun() {}
 
-    template <template <typename> typename M>
+    template <template <typename> typename TMatrix>
     void Test_Load_Lin_Sys(std::string matrix_name) {
 
-        GenericLinearSystem<M> gen_lin_sys = load_lin_sys<M>(
+        GenericLinearSystem<TMatrix> gen_lin_sys = load_lin_sys<TMatrix>(
             *TestExperimentBase::cu_handles_ptr,
             test_data_dir,
             matrix_name,
@@ -124,13 +124,13 @@ public:
         );
 
         fs::path matrix_path(test_data_dir / fs::path(matrix_name));
-        M<double> target_A(*TestExperimentBase::cu_handles_ptr);
+        TMatrix<double> target_A(*TestExperimentBase::cu_handles_ptr);
         if (matrix_path.extension() == ".mtx") {
-            target_A = read_matrixMTX<M, double>(
+            target_A = read_matrixMTX<TMatrix, double>(
                 *TestExperimentBase::cu_handles_ptr, matrix_path
             );
         } else if (matrix_path.extension() == ".csv") {
-            target_A = read_matrixCSV<M, double>(
+            target_A = read_matrixCSV<TMatrix, double>(
                 *TestExperimentBase::cu_handles_ptr, matrix_path
             );
         }
@@ -151,10 +151,10 @@ public:
 
     }
 
-    template <template <typename> typename M>
+    template <template <typename> typename TMatrix>
     void Test_Run_Solve_Group(Solve_Group solve_group) {
 
-        run_solve_group<M>(
+        run_solve_group<TMatrix>(
             *TestExperimentBase::cu_handles_ptr,
             solve_group,
             test_data_dir,
@@ -259,7 +259,7 @@ public:
 
     }
 
-    template <template <typename> typename M>
+    template <template <typename> typename TMatrix>
     void Test_Run_Experiment_Specification(Experiment_Specification exp_spec) {
 
         run_experimental_spec(

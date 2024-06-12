@@ -14,7 +14,9 @@ TEST_F(Benchmark_Precond_FP_GMRES_IR, ILU0_FP_GMRES_IR_BENCHMARK) {
         Benchmark_AccumClock &clock, NoFillMatrixSparse<double> &A
     ) {
 
-        Vector<double> x_soln = Vector<double>::Random(BenchmarkBase::bundle, A.rows());
+        Vector<double> x_soln = Vector<double>::Random(
+            BenchmarkBase::bundle, A.rows()
+        );
 
         GenericLinearSystem<NoFillMatrixSparse> gen_lin_sys(A, A*x_soln);
         TypedLinearSystem<NoFillMatrixSparse, double> typed_lin_sys(&gen_lin_sys);
@@ -24,7 +26,9 @@ TEST_F(Benchmark_Precond_FP_GMRES_IR, ILU0_FP_GMRES_IR_BENCHMARK) {
         PrecondArgPkg<NoFillMatrixSparse, double> precond_args(
             std::make_shared<ILUPreconditioner<NoFillMatrixSparse, double>>(A)
         );
-        FP_GMRES_IR_Solve fp_restarted_gmres(&typed_lin_sys, 0., args, precond_args);
+        FP_GMRES_IR_Solve fp_restarted_gmres(
+            &typed_lin_sys, 0., args, precond_args
+        );
         fp_restarted_gmres.solve();
         clock.clock_stop();
 

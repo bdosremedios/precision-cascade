@@ -13,7 +13,9 @@ TEST_F(NoFillMatrixSparse_Benchmark, MatrixVectorMult_Double_BENCHMARK) {
     std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<double> &)> execute_func = [] (
         Benchmark_AccumClock &clock, NoFillMatrixSparse<double> &A
     ) {
-        Vector<double> b = Vector<double>::Random(BenchmarkBase::bundle, A.rows());
+        Vector<double> b = Vector<double>::Random(
+            BenchmarkBase::bundle, A.rows()
+        );
         clock.clock_start();
         A*b;
         clock.clock_stop();
@@ -31,7 +33,9 @@ TEST_F(NoFillMatrixSparse_Benchmark, MatrixVectorMult_Single_BENCHMARK) {
     std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<float> &)> execute_func = [] (
         Benchmark_AccumClock &clock, NoFillMatrixSparse<float> &A
     ) {
-        Vector<float> b = Vector<float>::Random(BenchmarkBase::bundle, A.rows());
+        Vector<float> b = Vector<float>::Random(
+            BenchmarkBase::bundle, A.rows()
+        );
         clock.clock_start();
         A*b;
         clock.clock_stop();
@@ -49,7 +53,9 @@ TEST_F(NoFillMatrixSparse_Benchmark, MatrixVectorMult_Half_BENCHMARK) {
     std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<__half> &)> execute_func = [] (
         Benchmark_AccumClock &clock, NoFillMatrixSparse<__half> &A
     ) {
-        Vector<__half> b = Vector<__half>::Random(BenchmarkBase::bundle, A.rows());
+        Vector<__half> b = Vector<__half>::Random(
+            BenchmarkBase::bundle, A.rows()
+        );
         clock.clock_start();
         A*b;
         clock.clock_stop();
@@ -67,7 +73,9 @@ TEST_F(NoFillMatrixSparse_Benchmark, TransposeMatrixVectorMult_Double_BENCHMARK)
     std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<double> &)> execute_func = [] (
         Benchmark_AccumClock &clock, NoFillMatrixSparse<double> &A
     ) {
-        Vector<double> b = Vector<double>::Random(BenchmarkBase::bundle, A.rows());
+        Vector<double> b = Vector<double>::Random(
+            BenchmarkBase::bundle, A.rows()
+        );
         clock.clock_start();
         A.transpose_prod(b);
         clock.clock_stop();
@@ -85,7 +93,9 @@ TEST_F(NoFillMatrixSparse_Benchmark, TransposeMatrixVectorMult_Single_BENCHMARK)
     std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<float> &)> execute_func = [] (
         Benchmark_AccumClock &clock, NoFillMatrixSparse<float> &A
     ) {
-        Vector<float> b = Vector<float>::Random(BenchmarkBase::bundle, A.rows());
+        Vector<float> b = Vector<float>::Random(
+            BenchmarkBase::bundle, A.rows()
+        );
         clock.clock_start();
         A.transpose_prod(b);
         clock.clock_stop();
@@ -103,7 +113,9 @@ TEST_F(NoFillMatrixSparse_Benchmark, TransposeMatrixVectorMult_Half_BENCHMARK) {
     std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<__half> &)> execute_func = [] (
         Benchmark_AccumClock &clock, NoFillMatrixSparse<__half> &A
     ) {
-        Vector<__half> b = Vector<__half>::Random(BenchmarkBase::bundle, A.rows());
+        Vector<__half> b = Vector<__half>::Random(
+            BenchmarkBase::bundle, A.rows()
+        );
         clock.clock_start();
         A.transpose_prod(b);
         clock.clock_stop();
@@ -121,7 +133,9 @@ TEST_F(NoFillMatrixSparse_Benchmark, ForwardSubstitution_Double_BENCHMARK) {
     std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<double> &)> execute_func = [] (
         Benchmark_AccumClock &clock, NoFillMatrixSparse<double> &A
     ) {
-        Vector<double> x = Vector<double>::Random(BenchmarkBase::bundle, A.rows());
+        Vector<double> x = Vector<double>::Random(
+            BenchmarkBase::bundle, A.rows()
+        );
         Vector<double> b = A*x;
         clock.clock_start();
         A.frwd_sub(b);
@@ -140,7 +154,9 @@ TEST_F(NoFillMatrixSparse_Benchmark, ForwardSubstitution_Single_BENCHMARK) {
     std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<float> &)> execute_func = [] (
         Benchmark_AccumClock &clock, NoFillMatrixSparse<float> &A
     ) {
-        Vector<float> x = Vector<float>::Random(BenchmarkBase::bundle, A.rows());
+        Vector<float> x = Vector<float>::Random(
+            BenchmarkBase::bundle, A.rows()
+        );
         Vector<float> b = A*x;
         clock.clock_start();
         A.frwd_sub(b);
@@ -159,7 +175,9 @@ TEST_F(NoFillMatrixSparse_Benchmark, ForwardSubstitution_Half_BENCHMARK) {
     std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<__half> &)> execute_func = [] (
         Benchmark_AccumClock &clock, NoFillMatrixSparse<__half> &A
     ) {
-        Vector<__half> x = Vector<__half>::Random(BenchmarkBase::bundle, A.rows());
+        Vector<__half> x = Vector<__half>::Random(
+            BenchmarkBase::bundle, A.rows()
+        );
         Vector<__half> b = A*x;
         clock.clock_start();
         A.frwd_sub(b);
@@ -178,7 +196,9 @@ TEST_F(NoFillMatrixSparse_Benchmark, BackwardSubstitution_Double_BENCHMARK) {
     std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<double> &)> execute_func = [] (
         Benchmark_AccumClock &clock, NoFillMatrixSparse<double> &A
     ) {
-        Vector<double> x = Vector<double>::Random(BenchmarkBase::bundle, A.rows());
+        Vector<double> x = Vector<double>::Random(
+            BenchmarkBase::bundle, A.rows()
+        );
         Vector<double> b = A*x;
         clock.clock_start();
         A.back_sub(b);
@@ -197,7 +217,9 @@ TEST_F(NoFillMatrixSparse_Benchmark, BackwardSubstitution_Single_BENCHMARK) {
     std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<float> &)> execute_func = [] (
         Benchmark_AccumClock &clock, NoFillMatrixSparse<float> &A
     ) {
-        Vector<float> x = Vector<float>::Random(BenchmarkBase::bundle, A.rows());
+        Vector<float> x = Vector<float>::Random(
+            BenchmarkBase::bundle, A.rows()
+        );
         Vector<float> b = A*x;
         clock.clock_start();
         A.back_sub(b);
@@ -216,7 +238,9 @@ TEST_F(NoFillMatrixSparse_Benchmark, BackwardSubstitution_Half_BENCHMARK) {
     std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<__half> &)> execute_func = [] (
         Benchmark_AccumClock &clock, NoFillMatrixSparse<__half> &A
     ) {
-        Vector<__half> x = Vector<__half>::Random(BenchmarkBase::bundle, A.rows());
+        Vector<__half> x = Vector<__half>::Random(
+            BenchmarkBase::bundle, A.rows()
+        );
         Vector<__half> b = A*x;
         clock.clock_start();
         A.back_sub(b);
