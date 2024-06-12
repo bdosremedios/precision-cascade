@@ -10,19 +10,27 @@ private:
 
     std::string get_type_str(std::string solver_id) {
         if (solver_id == "FP16") {
-            return "struct __half";
+            return "__half";
         } else if (solver_id == "FP32") {
+            #ifdef WIN32
             return "float";
+            #else
+            return "f";
+            #endif
         } else {
+            #ifdef WIN32
             return "double";
+            #else
+            return "d";
+            #endif
         }
     }
 
     std::string get_mat_type_str(std::string mat_type_id) {
         if (mat_type_id == "dense") {
-            return "class MatrixDense";
+            return "MatrixDense";
         } else if (mat_type_id == "sparse") {
-            return "class NoFillMatrixSparse";
+            return "NoFillMatrixSparse";
         } else {
             throw std::runtime_error(
                 "get_mat_type_str: no matching mat_type_id"
@@ -30,30 +38,18 @@ private:
         }
     }
 
-    std::string get_solver_str(std::string mat_type_id, std::string solver_id) {
-
-        std::string type_str = get_type_str(solver_id);
-        std::string mat_type_str = get_mat_type_str(mat_type_id);
+    std::string get_solver_str(std::string solver_id) {
 
         if (
             (solver_id == "FP16") ||
             (solver_id == "FP32") ||
             (solver_id == "FP64")
         ) {
-            return std::format(
-                "class FP_GMRES_IR_Solve<{},{}>",
-                mat_type_str, type_str
-            );
+            return "FP_GMRES_IR_Solve";
         } else if (solver_id == "SimpleConstantThreshold") {
-            return std::format(
-                "class SimpleConstantThreshold<{}>",
-                mat_type_str
-            );
+            return "SimpleConstantThreshold";
         } else if (solver_id == "RestartCount") {
-            return std::format(
-                "class RestartCount<{}>",
-                mat_type_str
-            );
+            return "RestartCount";
         } else {
             throw std::runtime_error("get_solver_str: no matching solver_id");
         }
@@ -61,39 +57,25 @@ private:
     }
 
     std::string get_left_precond(
-        std::string mat_type_id,
         std::string solver_id,
         Solve_Group_Precond_Specs precond_specs
     ) {
 
         std::string type_str = get_type_str(solver_id);
-        std::string mat_type_str = get_mat_type_str(mat_type_id);
 
         if (precond_specs.name == "none") {
-            return std::format(
-                "class NoPreconditioner<{},{}>",
-                mat_type_str, type_str
-            );
+            return "NoPreconditioner";
         } else if (precond_specs.name == "jacobi") {
             if ((solver_id == "FP16") || (solver_id == "FP32")) {
-                return std::format(
-                    "class MatrixInversePreconditioner<{},{}>",
-                    mat_type_str, type_str
-                );
+                return "MatrixInversePreconditioner";
             } else {
-                return std::format(
-                    "class JacobiPreconditioner<{},{}>",
-                    mat_type_str, type_str
-                );
+                return "JacobiPreconditioner";
             }
         } else if (
             (precond_specs.name == "ilu0") ||
             (precond_specs.name == "ilutp")
         ) {
-            return std::format(
-                "class ILUPreconditioner<{},{}>",
-                mat_type_str, type_str
-            );
+            return "ILUPreconditioner";
         } else {
             throw std::runtime_error(
                 "get_left_precond: no matching precond_specs"
@@ -103,19 +85,22 @@ private:
     }
 
     std::string get_right_precond(
-        std::string mat_type_id,
         std::string solver_id,
         Solve_Group_Precond_Specs precond_specs
     ) {
+        return "NoPreconditioner";
 
-        std::string type_str = get_type_str(solver_id);
-        std::string mat_type_str = get_mat_type_str(mat_type_id);
-        
-        return std::format(
-            "class NoPreconditioner<{},{}>",
-            mat_type_str, type_str
-        );
+    }
 
+    bool contains_strings(
+        std::string main_str, std::vector<std::string> to_match
+    ) {
+        for (std::string match_str: to_match) {
+            if (main_str.find(match_str) == std::string::npos) {
+                return false;
+            }
+        }
+        return true;
     }
 
 public:
@@ -212,24 +197,52 @@ public:
                     json loaded_file = json::parse(file_in);
 
                     ASSERT_EQ(loaded_file["id"], experiment_id);
-                    ASSERT_EQ(
-                        loaded_file["solver_class"],
-                        get_solver_str(solve_group.matrix_type, solver_id)
-                    );
-                    ASSERT_EQ(
-                        loaded_file["precond_left"],
-                        get_left_precond(
-                            solve_group.matrix_type,
-                            solver_id,
-                            solve_group.precond_specs
+                    if (solver_id.find("FP") != std::string::npos) {
+                        ASSERT_TRUE(
+                            contains_strings(
+                                loaded_file["solver_class"],
+                                std::vector<std::string>(
+                                    {get_type_str(solver_id),
+                                     get_mat_type_str(solve_group.matrix_type),
+                                     get_solver_str(solver_id)}
+                                )
+                            )
+                        );
+                    } else {
+                        ASSERT_TRUE(
+                            contains_strings(
+                                loaded_file["solver_class"],
+                                std::vector<std::string>(
+                                    {get_mat_type_str(solve_group.matrix_type),
+                                     get_solver_str(solver_id)}
+                                )
+                            )
+                        );
+                    }
+                    ASSERT_TRUE(
+                        contains_strings(
+                            loaded_file["precond_left"],
+                            std::vector<std::string>(
+                                {get_type_str(solver_id),
+                                 get_mat_type_str(solve_group.matrix_type),
+                                 get_left_precond(
+                                    solver_id,
+                                    solve_group.precond_specs
+                                 )}
+                            )
                         )
                     );
-                    ASSERT_EQ(
-                        loaded_file["precond_right"],
-                        get_right_precond(
-                            solve_group.matrix_type,
-                            solver_id,
-                            solve_group.precond_specs
+                    ASSERT_TRUE(
+                        contains_strings(
+                            loaded_file["precond_right"],
+                            std::vector<std::string>(
+                                {get_type_str(solver_id),
+                                 get_mat_type_str(solve_group.matrix_type),
+                                 get_right_precond(
+                                    solver_id,
+                                    solve_group.precond_specs
+                                 )}
+                            )
                         )
                     );
                     ASSERT_EQ(
