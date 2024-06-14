@@ -12,10 +12,14 @@ TEST_F(Benchmark_FP_GMRES_IR, FP_GMRES_IR_BENCHMARK) {
         Benchmark_AccumClock &clock, NoFillMatrixSparse<double> &A
     ) {
 
-        Vector<double> x_soln = Vector<double>::Random(BenchmarkBase::bundle, A.rows());
+        Vector<double> x_soln = Vector<double>::Random(
+            BenchmarkBase::bundle, A.rows()
+        );
 
         GenericLinearSystem<NoFillMatrixSparse> gen_lin_sys(A, A*x_soln);
-        TypedLinearSystem<NoFillMatrixSparse, double> typed_lin_sys(&gen_lin_sys);
+        TypedLinearSystem<NoFillMatrixSparse, double> typed_lin_sys(
+            &gen_lin_sys
+        );
         SolveArgPkg args(nested_outer_iter, nested_inner_iter, 0.);
 
         clock.clock_start();

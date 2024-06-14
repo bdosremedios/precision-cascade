@@ -12,13 +12,17 @@ TEST_F(Benchmark_MP_GMRES_IR_Sparse, MP_GMRES_IR_RestartCount_BENCHMARK) {
         Benchmark_AccumClock &clock, NoFillMatrixSparse<double> &A
     ) {
 
-        Vector<double> x_soln = Vector<double>::Random(BenchmarkBase::bundle, A.rows());
+        Vector<double> x_soln = Vector<double>::Random(
+            BenchmarkBase::bundle, A.rows()
+        );
 
         GenericLinearSystem<NoFillMatrixSparse> gen_lin_sys(A, A*x_soln);
         SolveArgPkg args(nested_outer_iter, nested_inner_iter, 0.);
 
         clock.clock_start();
-        RestartCount<NoFillMatrixSparse> mp_restarted_gmres(&gen_lin_sys, args);
+        RestartCount<NoFillMatrixSparse> mp_restarted_gmres(
+            &gen_lin_sys, args
+        );
         mp_restarted_gmres.solve();
         clock.clock_stop();
 
@@ -31,19 +35,26 @@ TEST_F(Benchmark_MP_GMRES_IR_Sparse, MP_GMRES_IR_RestartCount_BENCHMARK) {
 
 }
 
-TEST_F(Benchmark_MP_GMRES_IR_Sparse, MP_GMRES_IR_SimpleConstantThreshold_BENCHMARK) {
+TEST_F(
+    Benchmark_MP_GMRES_IR_Sparse,
+    MP_GMRES_IR_SimpleConstantThreshold_BENCHMARK
+) {
     
     std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<double> &)> execute_func = [this] (
         Benchmark_AccumClock &clock, NoFillMatrixSparse<double> &A
     ) {
 
-        Vector<double> x_soln = Vector<double>::Random(BenchmarkBase::bundle, A.rows());
+        Vector<double> x_soln = Vector<double>::Random(
+            BenchmarkBase::bundle, A.rows()
+        );
 
         GenericLinearSystem<NoFillMatrixSparse> gen_lin_sys(A, A*x_soln);
         SolveArgPkg args(nested_outer_iter, nested_inner_iter, 0.);
 
         clock.clock_start();
-        SimpleConstantThreshold<NoFillMatrixSparse> mp_restarted_gmres(&gen_lin_sys, args);
+        SimpleConstantThreshold<NoFillMatrixSparse> mp_restarted_gmres(
+            &gen_lin_sys, args
+        );
         mp_restarted_gmres.solve();
         clock.clock_stop();
 

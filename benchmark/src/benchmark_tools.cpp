@@ -7,7 +7,10 @@ void Benchmark_AccumClock::clock_start() {
         clock_ticking = true;
         start = clock.now();
     } else {
-        throw std::runtime_error("BenchMark_AccumulatingClock: clock_start error clock already ticking");
+        throw std::runtime_error(
+            "BenchMark_AccumulatingClock: clock_start error clock already "
+            "ticking"
+        );
     }
 }
 
@@ -15,9 +18,13 @@ void Benchmark_AccumClock::clock_stop() {
     if (clock_ticking) {
         stop = clock.now();
         clock_ticking = false;
-        prev_durations.push_back(std::chrono::duration_cast<acc_clock_duration>(stop-start));
+        prev_durations.push_back(
+            std::chrono::duration_cast<acc_clock_duration>(stop-start)
+        );
     } else {
-        throw std::runtime_error("BenchMark_AccumulatingClock: clock_stop error clock not ticking");
+        throw std::runtime_error(
+            "BenchMark_AccumulatingClock: clock_stop error clock not ticking"
+        );
     }
 }
 

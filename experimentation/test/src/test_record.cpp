@@ -46,22 +46,22 @@ public:
         }
     }
 
-    template <template <typename> typename M>
+    template <template <typename> typename TMatrix>
     void TestRecordOutputJsonFPGMRES(std::string file_name) {
 
-        GenericLinearSystem<M> gen_lin_sys(A, b);
-        TypedLinearSystem<M, double> typ_lin_sys(&gen_lin_sys);
+        GenericLinearSystem<TMatrix> gen_lin_sys(A, b);
+        TypedLinearSystem<TMatrix, double> typ_lin_sys(&gen_lin_sys);
 
         Solve_Group_Precond_Specs sg_precond_specs("none");
-        PrecondArgPkg<M, double> precond_arg_pkg;
+        PrecondArgPkg<TMatrix, double> precond_arg_pkg;
 
-        std::shared_ptr<FP_GMRES_IR_Solve<M, double>> solve_ptr;
-        solve_ptr = std::make_shared<FP_GMRES_IR_Solve<M, double>>(
+        std::shared_ptr<FP_GMRES_IR_Solve<TMatrix, double>> solve_ptr;
+        solve_ptr = std::make_shared<FP_GMRES_IR_Solve<TMatrix, double>>(
             &typ_lin_sys, u_dbl, solve_args, precond_arg_pkg
         );
 
-        Experiment_Data<GenericIterativeSolve, M> data(
-            execute_solve<GenericIterativeSolve, M>(solve_ptr, false)
+        Experiment_Data<GenericIterativeSolve, TMatrix> data(
+            execute_solve<GenericIterativeSolve, TMatrix>(solve_ptr, false)
         );
 
         record_FPGMRES_data_json(
@@ -117,21 +117,21 @@ public:
 
     }
 
-    template <template <typename> typename M>
+    template <template <typename> typename TMatrix>
     void TestRecordOutputJsonMPGMRES(std::string file_name) {
 
-        GenericLinearSystem<M> gen_lin_sys(A, b);
+        GenericLinearSystem<TMatrix> gen_lin_sys(A, b);
 
         Solve_Group_Precond_Specs sg_precond_specs("none");
-        PrecondArgPkg<M, double> precond_arg_pkg;
+        PrecondArgPkg<TMatrix, double> precond_arg_pkg;
 
-        std::shared_ptr<MP_GMRES_IR_Solve<M>> solve_ptr;
-        solve_ptr = std::make_shared<SimpleConstantThreshold<M>>(
+        std::shared_ptr<MP_GMRES_IR_Solve<TMatrix>> solve_ptr;
+        solve_ptr = std::make_shared<SimpleConstantThreshold<TMatrix>>(
             &gen_lin_sys, solve_args
         );
 
-        Experiment_Data<MP_GMRES_IR_Solve, M> data(
-            execute_solve<MP_GMRES_IR_Solve, M>(solve_ptr, false)
+        Experiment_Data<MP_GMRES_IR_Solve, TMatrix> data(
+            execute_solve<MP_GMRES_IR_Solve, TMatrix>(solve_ptr, false)
         );
 
         record_MPGMRES_data_json(

@@ -23,14 +23,19 @@ TEST_F(Benchmark_ILUPreconditioner, Double_ILU0_Preconditioner_BENCHMARK) {
 
 }
 
-TEST_F(Benchmark_ILUPreconditioner, Double_ILUT_10e_4_20_Preconditioner_BENCHMARK) {
+TEST_F(
+    Benchmark_ILUPreconditioner,
+    Double_ILUT_10e_4_20_Preconditioner_BENCHMARK
+) {
 
     std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<double> &)> execute_func = [this] (
         Benchmark_AccumClock &clock, NoFillMatrixSparse<double> &A
     ) {
 
         clock.clock_start();
-        ILUPreconditioner<NoFillMatrixSparse, double> ilu(A, 1e-4, 20, pivot_ilu);
+        ILUPreconditioner<NoFillMatrixSparse, double> ilu(
+            A, 1e-4, 20, pivot_ilu
+        );
         clock.clock_stop();
 
     };
@@ -42,14 +47,19 @@ TEST_F(Benchmark_ILUPreconditioner, Double_ILUT_10e_4_20_Preconditioner_BENCHMAR
 
 }
 
-TEST_F(Benchmark_ILUPreconditioner, Double_ILUT_10e_6_20_Preconditioner_BENCHMARK) {
+TEST_F(
+    Benchmark_ILUPreconditioner,
+    Double_ILUT_10e_6_20_Preconditioner_BENCHMARK
+) {
 
     std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<double> &)> execute_func = [this] (
         Benchmark_AccumClock &clock, NoFillMatrixSparse<double> &A
     ) {
 
         clock.clock_start();
-        ILUPreconditioner<NoFillMatrixSparse, double> ilu(A, 1e-6, 20, pivot_ilu);
+        ILUPreconditioner<NoFillMatrixSparse, double> ilu(
+            A, 1e-6, 20, pivot_ilu
+        );
         clock.clock_stop();
 
     };
