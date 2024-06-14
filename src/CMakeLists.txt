@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 3.27)
+cmake_minimum_required(VERSION ${CMAKE_VERSION})
 
-project(precision-cascade)
+project(precision-cascade LANGUAGES CXX CUDA)
 
 add_library(
     precision-cascade-gpu_kernels

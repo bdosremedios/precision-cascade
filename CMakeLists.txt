@@ -1,4 +1,6 @@
-cmake_minimum_required(VERSION 3.27)
+SET(CMAKE_VERSION 3.22)
+
+cmake_minimum_required(VERSION ${CMAKE_VERSION})
 
 project(precision-cascade LANGUAGES CXX CUDA)
 

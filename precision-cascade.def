@@ -1,5 +1,5 @@
 Bootstrap: docker
-From: ubuntu
+From: nvcr.io/nvidia/nvhpc:24.5-devel-cuda_multi-ubuntu22.04
 
 %setup
     mkdir ${APPTAINER_ROOTFS}/precision-cascade
@@ -12,10 +12,16 @@ From: ubuntu
     ./scripts/ ./precision-cascade/scripts/
     ./src/ ./precision-cascade/src/
     ./test/ ./precision-cascade/test/
-    ./CMakeLists.txt
+    ./CMakeLists.txt ./precision-cascade/CMakeLists.txt
 
 %post
+
     apt-get -y update
-    apt-get -y install build-essential
-    apt-get -y install cmake
+    apt-get -y upgrade build-essential
+    apt-get -y upgrade cmake
+
+    cd precision-cascade
+    mkdir build
+    cd build
+    cmake ..
 

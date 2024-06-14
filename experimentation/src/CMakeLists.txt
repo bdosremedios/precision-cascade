@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 3.27)
+cmake_minimum_required(VERSION ${CMAKE_VERSION})
 
-project(precision-cascade LANGUAGES CUDA CXX)
+project(precision-cascade LANGUAGES CXX CUDA)
 
 add_compile_definitions(_SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING=1)
 
