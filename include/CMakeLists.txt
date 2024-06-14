@@ -14,7 +14,11 @@ if(WIN32)
     target_link_options(precision-cascade-constants PUBLIC "/NODEFAULTLIB:LIBCMT")
 endif()
 
-set_property(TARGET precision-cascade-headers PROPERTY CUDA_ARCHITECTURES 80)
+set_property(
+    TARGET precision-cascade-headers
+    PROPERTY CUDA_ARCHITECTURES
+    ${PROJECT_CUDA_ARCH_REAL} ${PROJECT_CUDA_ARCH_VRTL}
+)
 
 target_include_directories(
     precision-cascade-headers

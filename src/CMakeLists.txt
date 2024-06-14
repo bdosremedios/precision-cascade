@@ -51,7 +51,11 @@ elseif(UNIX)
     )
 endif()
 
-set_property(TARGET precision-cascade-gpu_kernels PROPERTY CUDA_ARCHITECTURES 80)
+set_property(
+    TARGET precision-cascade-gpu_kernels
+    PROPERTY CUDA_ARCHITECTURES
+    ${PROJECT_CUDA_ARCH_REAL} ${PROJECT_CUDA_ARCH_VRTL}
+)
 
 add_library(
     precision-cascade-constants
@@ -69,7 +73,11 @@ target_link_libraries(
     precision-cascade-headers
 )
 
-set_property(TARGET precision-cascade-constants PROPERTY CUDA_ARCHITECTURES 80)
+set_property(
+    TARGET precision-cascade-constants
+    PROPERTY CUDA_ARCHITECTURES
+    ${PROJECT_CUDA_ARCH_REAL} ${PROJECT_CUDA_ARCH_VRTL}
+)
 
 add_library(
     precision-cascade-tools
@@ -103,7 +111,11 @@ elseif(UNIX)
     )
 endif()
 
-set_property(TARGET precision-cascade-tools PROPERTY CUDA_ARCHITECTURES 80)
+set_property(
+    TARGET precision-cascade-tools
+    PROPERTY CUDA_ARCHITECTURES
+    ${PROJECT_CUDA_ARCH_REAL} ${PROJECT_CUDA_ARCH_VRTL}
+)
 
 add_library(
     precision-cascade
@@ -155,4 +167,8 @@ elseif(UNIX)
     )
 endif()
 
-set_property(TARGET precision-cascade PROPERTY CUDA_ARCHITECTURES 80)
+set_property(
+    TARGET precision-cascade
+    PROPERTY CUDA_ARCHITECTURES
+    ${PROJECT_CUDA_ARCH_REAL} ${PROJECT_CUDA_ARCH_VRTL}
+)

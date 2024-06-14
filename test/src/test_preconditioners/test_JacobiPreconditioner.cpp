@@ -35,7 +35,7 @@ public:
         ASSERT_VECTOR_NEAR(
             test_vec,
             target_vec,
-            4*A.get_max_mag_elem().get_scalar()*Tol<double>::roundoff_T()
+            target_vec.get_max_mag_elem().get_scalar()*Tol<double>::roundoff_T()
         );
 
     }
