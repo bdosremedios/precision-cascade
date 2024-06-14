@@ -1,0 +1,21 @@
+Bootstrap: docker
+From: ubuntu
+
+%setup
+    mkdir ${APPTAINER_ROOTFS}/precision-cascade
+
+%files
+    ./benchmark/ ./precision-cascade/benchmark/
+    ./experimentation/ ./precision-cascade/experimentation/
+    ./include/ ./precision-cascade/include/
+    ./lib/ ./precision-cascade/lib/
+    ./scripts/ ./precision-cascade/scripts/
+    ./src/ ./precision-cascade/src/
+    ./test/ ./precision-cascade/test/
+    ./CMakeLists.txt
+
+%post
+    apt-get -y update
+    apt-get -y install build-essential
+    apt-get -y install cmake
+

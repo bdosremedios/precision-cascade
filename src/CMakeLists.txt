@@ -2,19 +2,6 @@ cmake_minimum_required(VERSION 3.27)
 
 project(precision-cascade)
 
-find_package(CUDAToolkit)
-enable_language(CUDA)
-
-if(WIN32)
-    set (CMAKE_EXE_LINKER_FLAGS, "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:LIBCMT")
-endif()
-
-set (CMAKE_CXX_STANDARD 20)
-set (CMAKE_CXX_STANDARD_REQUIRED ON)
-
-set (CMAKE_CUDA_STANDARD 20)
-set (CMAKE_CUDA_STANDARD_REQUIRED ON)
-
 add_library(
     precision-cascade-gpu_kernels
     STATIC
@@ -26,7 +13,11 @@ add_library(
 )
 
 if(WIN32)
-    target_link_options(precision-cascade-gpu_kernels PUBLIC "/NODEFAULTLIB:LIBCMT")
+    target_link_options(
+        precision-cascade-gpu_kernels
+        PUBLIC
+        "/NODEFAULTLIB:LIBCMT"
+    )
 endif()
 
 target_link_libraries(
@@ -35,21 +26,12 @@ target_link_libraries(
     precision-cascade-headers
 )
 
-if(WIN32)
-    target_link_libraries(
-        precision-cascade-gpu_kernels
-        PUBLIC
-        "$ENV{CUDA_PATH}/lib/x64/cuda.lib"
-        "$ENV{CUDA_PATH}/lib/x64/cublas.lib"
-    )
-elseif(UNIX)
-    target_link_libraries(
-        precision-cascade-gpu_kernels
-        PUBLIC
-        "/usr/local/cuda/lib64/libcudart.so"
-        "/usr/local/cuda/lib64/libcublas.so"
-    )
-endif()
+target_link_libraries(
+    precision-cascade-gpu_kernels
+    PUBLIC
+    CUDA::cudart
+    CUDA::cublas
+)
 
 set_property(
     TARGET precision-cascade-gpu_kernels
@@ -64,7 +46,11 @@ add_library(
 )
 
 if(WIN32)
-    target_link_options(precision-cascade-constants PUBLIC "/NODEFAULTLIB:LIBCMT")
+    target_link_options(
+        precision-cascade-constants
+        PUBLIC
+        "/NODEFAULTLIB:LIBCMT"
+    )
 endif()
 
 target_link_libraries(
@@ -93,23 +79,13 @@ target_link_libraries(
     precision-cascade-headers
 )
 
-if(WIN32)
-    target_link_libraries(
-        precision-cascade-tools
-        PUBLIC
-        "$ENV{CUDA_PATH}/lib/x64/cuda.lib"
-        "$ENV{CUDA_PATH}/lib/x64/cublas.lib"
-        "$ENV{CUDA_PATH}/lib/x64/cusparse.lib"
-    )
-elseif(UNIX)
-    target_link_libraries(
-        precision-cascade-tools
-        PUBLIC
-        "/usr/local/cuda/lib64/libcudart.so"
-        "/usr/local/cuda/lib64/libcublas.so"
-        "/usr/local/cuda/lib64/libcusparse.so"
-    )
-endif()
+target_link_libraries(
+    precision-cascade-tools
+    PUBLIC
+    CUDA::cudart
+    CUDA::cublas
+    CUDA::cusparse
+)
 
 set_property(
     TARGET precision-cascade-tools
@@ -137,7 +113,11 @@ add_library(
 )
 
 if(WIN32)
-    target_link_options(precision-cascade PUBLIC "/NODEFAULTLIB:LIBCMT")
+    target_link_options(
+        precision-cascade
+        PUBLIC
+        "/NODEFAULTLIB:LIBCMT"
+    )
 endif()
 
 target_link_libraries(
@@ -149,23 +129,13 @@ target_link_libraries(
     precision-cascade-tools
 )
 
-if(WIN32)
-    target_link_libraries(
-        precision-cascade
-        PUBLIC
-        "$ENV{CUDA_PATH}/lib/x64/cuda.lib"
-        "$ENV{CUDA_PATH}/lib/x64/cublas.lib"
-        "$ENV{CUDA_PATH}/lib/x64/cusparse.lib"
-    )
-elseif(UNIX)
-    target_link_libraries(
-        precision-cascade
-        PUBLIC
-        "/usr/local/cuda/lib64/libcudart.so"
-        "/usr/local/cuda/lib64/libcublas.so"
-        "/usr/local/cuda/lib64/libcusparse.so"
-    )
-endif()
+target_link_libraries(
+    precision-cascade
+    PUBLIC
+    CUDA::cudart
+    CUDA::cublas
+    CUDA::cusparse
+)
 
 set_property(
     TARGET precision-cascade

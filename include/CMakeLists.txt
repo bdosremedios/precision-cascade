@@ -2,16 +2,14 @@ cmake_minimum_required(VERSION 3.27)
 
 project(precision-cascade LANGUAGES CXX CUDA)
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-set(CMAKE_CUDA_STANDARD 20)
-set(CMAKE_CUDA_STANDARD_REQUIRED ON)
-
 add_library(precision-cascade-headers INTERFACE)
 
 if(WIN32)
-    target_link_options(precision-cascade-headers INTERFACE "/NODEFAULTLIB:LIBCMT")
+    target_link_options(
+        precision-cascade-headers
+        INTERFACE
+        "/NODEFAULTLIB:LIBCMT"
+    )
 endif()
 
 set_property(
