@@ -67,11 +67,14 @@ public:
         std::string label_formatted = (
             (label == "") ? "" : (" " + label)
         );
-        std::cout << "[Benchmark" << label_formatted << "] "
-                  << "runs: " << benchmark_clock.get_count() << " | "
-                  << "avg: " << benchmark_clock.get_avg() << " | "
-                  << "median: " << benchmark_clock.get_median() << " | "
-                  << "total: " << benchmark_clock.get_total()
+        std::cout << "[Benchmark" << label_formatted << "] runs: "
+                  << std::to_string(benchmark_clock.get_count())
+                  << " | avg: "
+                  << std::to_string(benchmark_clock.get_avg().count())
+                  << " | median: "
+                  << std::to_string(benchmark_clock.get_median().count())
+                  << " | total: "
+                  << std::to_string(benchmark_clock.get_total().count())
                   << std::endl;
 
     }

@@ -1,6 +1,7 @@
 #ifndef BENCHMARK_TOOLS_H
 #define BENCHMARK_TOOLS_H
 
+#include <vector>
 #include <chrono>
 
 class Benchmark_AccumClock

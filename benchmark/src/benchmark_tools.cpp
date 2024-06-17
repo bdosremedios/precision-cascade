@@ -1,5 +1,6 @@
 #include "benchmark_tools.h"
 
+#include <stdexcept>
 #include <algorithm>
 
 void Benchmark_AccumClock::clock_start() {
