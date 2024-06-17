@@ -302,10 +302,8 @@ TMatrix<TPrecision> read_matrixMTX(
 
         } catch (std::invalid_argument e) {
             throw std::runtime_error(
-                std::format(
-                    "read_matrixMTX: Invalid entry in file entry: {}", 
-                    entry
-                )
+                "read_matrixMTX: Invalid entry in file entry: " + 
+                std::to_string(entry)
             );
         }
 

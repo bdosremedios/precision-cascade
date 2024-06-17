@@ -105,15 +105,9 @@ int main(int argc, char **argv) {
     }
 
     if (filter_include == "") {
-        testing::GTEST_FLAG(filter) = std::format(
-            "*:-{}",
-            filter_exclude
-        );
+        testing::GTEST_FLAG(filter) = "*:-" + filter_exclude;
     } else {
-        testing::GTEST_FLAG(filter) = std::format(
-            "{}:-{}",
-            filter_include, filter_exclude
-        );
+        testing::GTEST_FLAG(filter) = filter_include + ":-" + filter_exclude;
     }
 
     // Check if should show plots

@@ -284,6 +284,15 @@ public:
 
     }
 
+    void TestPrintAndInfoString() {
+        Vector<double> test_vec(
+            TestBase::bundle,
+            {1., 2., 3., 4.}
+        );
+        std::cout << test_vec.get_vector_string() << std::endl;
+        std::cout << test_vec.get_info_string() << std::endl;
+    }
+
     void TestConstruction() {
 
         Vector<double> test_vec_0(TestBase::bundle, 0);
@@ -981,6 +990,10 @@ TEST_F(Vector_Test, TestNonZeros) {
     TestNonZeros<__half>();
     TestNonZeros<float>();
     TestNonZeros<double>();
+}
+
+TEST_F(Vector_Test, TestPrintAndInfoString) {
+    TestPrintAndInfoString();
 }
 
 TEST_F(Vector_Test, TestConstruction) {

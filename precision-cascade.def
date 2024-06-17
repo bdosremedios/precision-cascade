@@ -3,25 +3,38 @@ From: nvcr.io/nvidia/nvhpc:24.5-devel-cuda_multi-ubuntu22.04
 
 %setup
     mkdir ${APPTAINER_ROOTFS}/precision-cascade
-
-%files
-    ./benchmark/ ./precision-cascade/benchmark/
-    ./experimentation/ ./precision-cascade/experimentation/
-    ./include/ ./precision-cascade/include/
-    ./lib/ ./precision-cascade/lib/
-    ./scripts/ ./precision-cascade/scripts/
-    ./src/ ./precision-cascade/src/
-    ./test/ ./precision-cascade/test/
-    ./CMakeLists.txt ./precision-cascade/CMakeLists.txt
+    cp -r ./benchmark/ ${APPTAINER_ROOTFS}/precision-cascade/benchmark/
+    cp -r ./experimentation/ ${APPTAINER_ROOTFS}/precision-cascade/experimentation/
+    cp -r ./include/ ${APPTAINER_ROOTFS}/precision-cascade/include/
+    cp -r ./lib/ ${APPTAINER_ROOTFS}/precision-cascade/lib/
+    cp -r ./scripts/ ${APPTAINER_ROOTFS}/precision-cascade/scripts/
+    cp -r ./src/ ${APPTAINER_ROOTFS}/precision-cascade/src/
+    cp -r ./test/ ${APPTAINER_ROOTFS}/precision-cascade/test/
+    cp ./CMakeLists.txt ${APPTAINER_ROOTFS}/precision-cascade/CMakeLists.txt
 
 %post
 
     apt-get -y update
-    apt-get -y upgrade build-essential
-    apt-get -y upgrade cmake
+    apt-get -y install build-essential
+
+    apt-get -y remove cmake
+    apt-get -y install wget unzip
+    mkdir ./temp
+    cd ./temp
+    wget https://github.com/Kitware/CMake/releases/download/v3.29.5/cmake-3.29.5.tar.gz
+    tar -xvf cmake-3.29.5.tar.gz
+    cd cmake-3.29.5
+    ./configure -- -DCMAKE_USE_OPENSSL=OFF
+    make
+    make install
+    cd ../..
+
+    cmake --version
+    g++ --version
+    nvcc --version
 
     cd precision-cascade
     mkdir build
     cd build
     cmake ..
-
+    make

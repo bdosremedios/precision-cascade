@@ -65,17 +65,13 @@ public:
         }
 
         std::string label_formatted = (
-            (label == "") ? "" : std::format(" {}", label)
+            (label == "") ? "" : (" " + label)
         );
-        std::cout << std::format(
-                        "[Benchmark{}] runs: {} | avg: {} | median: {} "
-                        "| total: {}",
-                        label_formatted,
-                        benchmark_clock.get_count(),
-                        benchmark_clock.get_avg(),
-                        benchmark_clock.get_median(),
-                        benchmark_clock.get_total()
-                     )
+        std::cout << "[Benchmark" << label_formatted << "] "
+                  << "runs: " << benchmark_clock.get_count() << " | "
+                  << "avg: " << benchmark_clock.get_avg() << " | "
+                  << "median: " << benchmark_clock.get_median() << " | "
+                  << "total: " << benchmark_clock.get_total()
                   << std::endl;
 
     }
@@ -96,10 +92,9 @@ public:
 
         if (!(f_out.is_open())) {
             throw std::runtime_error(
-                std::format(
-                    "basic_matrix_func_benchmark: {} did not open",
-                    file_path.string()
-                )
+                "basic_matrix_func_benchmark: " +
+                file_path.string() +
+                " did not open"
             );
         }
 
@@ -123,10 +118,10 @@ public:
                 n_runs,
                 test_func,
                 curr_clock,
-                label + std::format("_{}", m)
+                label + "_" + std::to_string(m)
             );
 
-            f_out << std::format("{},{}", m, curr_clock.get_median().count())
+            f_out << m << "," << curr_clock.get_median().count()
                   << std::endl; 
 
         }

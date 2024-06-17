@@ -9,7 +9,6 @@
 
 #include <functional>
 #include <string>
-#include <format>
 
 static bool *print_errors;
 

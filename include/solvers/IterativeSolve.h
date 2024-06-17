@@ -8,7 +8,6 @@
 #include <vector>
 #include <string>
 #include <cmath>
-#include <format>
 #include <algorithm>
 #include <iostream>
 #include <iomanip>
@@ -202,14 +201,13 @@ public:
     }
 
     std::string get_info_string() {
-        return std::format(
-            "Initiated: {} | Converged: {} | Current iter: {} | "
-            "Current rel-res: {:.3g}",
-            initiated,
-            converged,
-            curr_iter,
-            get_relres()
-        );
+        std::stringstream acc_strm;
+        acc_strm << std::setprecision(3);
+        acc_strm << "Initiated: " << initiated << " | "
+                 << "Converged: " << converged << " | "
+                 << "Current iter: " << curr_iter << " | "
+                 << "Current rel-res: " << get_relres();
+        return acc_strm.str();
     }
 
     // Rudimentarily plot relative residual

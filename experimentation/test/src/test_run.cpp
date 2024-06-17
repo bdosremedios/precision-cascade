@@ -174,13 +174,10 @@ public:
                 ) {
 
                     std::string experiment_id(
-                        std::format(
-                            "{}_{}_{}_{}",
-                            matrix_str,
-                            solver_id,
-                            solve_group.precond_specs.get_spec_string(),
-                            exp_iter
-                        )
+                        matrix_str + "_" +
+                        solver_id + "_" +
+                        solve_group.precond_specs.get_spec_string() + "_" +
+                        std::to_string(exp_iter)
                     );
                     fs::path file_path = (
                         solve_group_dir /

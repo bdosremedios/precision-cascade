@@ -12,14 +12,15 @@
 #include <fstream>
 #include <filesystem>
 #include <string>
-#include <format>
 #include <chrono>
 
 namespace fs = std::filesystem;
 
 std::string vector_to_jsonarray_str(std::vector<double> vec, int padding_level);
 
-std::string matrix_to_jsonarray_str(MatrixDense<double> mat, int padding_level);
+// std::string matrix_to_jsonarray_str(MatrixDense<double> mat, int padding_level);
+
+std::string bool_to_string(bool b);
 
 template <template <typename> typename TMatrix>
 void record_basic_solver_data(
@@ -28,25 +29,22 @@ void record_basic_solver_data(
     const std::shared_ptr<GenericIterativeSolve<TMatrix>> &solver_ptr,
     const Experiment_Clock &clock
 ) {
-    file_out << std::format("\t\"id\" : \"{}\",\n", ID);
-    file_out << std::format(
-        "\t\"solver_class\" : \"{}\",\n", typeid(*solver_ptr).name()
-    );
-    file_out << std::format(
-        "\t\"initiated\" : \"{}\",\n", solver_ptr->check_initiated()
-    );
-    file_out << std::format(
-        "\t\"converged\" : \"{}\",\n", solver_ptr->check_converged()
-    );
-    file_out << std::format(
-        "\t\"terminated\" : \"{}\",\n", solver_ptr->check_terminated()
-    );
-    file_out << std::format(
-        "\t\"iteration\" : {},\n", solver_ptr->get_iteration()
-    );
-    file_out << std::format(
-        "\t\"elapsed_time_ms\" : {},\n", clock.get_elapsed_time_ms()
-    );
+    file_out << "\t\"id\" : \"" << ID << "\",\n";
+    file_out << "\t\"solver_class\" : \"" << typeid(*solver_ptr).name()
+             << "\",\n";
+    file_out << "\t\"initiated\" : \""
+             << bool_to_string(solver_ptr->check_initiated())
+             << "\",\n";
+    file_out << "\t\"converged\" : \""
+             << bool_to_string(solver_ptr->check_converged())
+             << "\",\n";
+    file_out << "\t\"terminated\" : \""
+             << bool_to_string(solver_ptr->check_terminated())
+             << "\",\n";
+    file_out << "\t\"iteration\" : " << solver_ptr->get_iteration()
+             << ",\n";
+    file_out << "\t\"elapsed_time_ms\" : " << clock.get_elapsed_time_ms()
+             << ",\n";
 }
 
 template <template <typename> typename TMatrix, typename TPrecision>
@@ -55,18 +53,13 @@ void record_precond_data(
     const PrecondArgPkg<TMatrix, TPrecision> arg_precond_arg_pkg,
     const std::string precond_specs_str
 ) {
-    file_out << std::format(
-        "\t\"precond_left\" : \"{}\",\n",
-        typeid(*arg_precond_arg_pkg.left_precond).name()
-    );
-    file_out << std::format(
-        "\t\"precond_right\" : \"{}\",\n",
-        typeid(*arg_precond_arg_pkg.right_precond).name()
-    );
-    file_out << std::format(
-        "\t\"precond_specs\" : \"{}\",\n",
-        precond_specs_str
-    );
+    file_out << "\t\"precond_left\" : \""
+             << typeid(*arg_precond_arg_pkg.left_precond).name()
+             << "\",\n";
+    file_out << "\t\"precond_right\" : \""
+             << typeid(*arg_precond_arg_pkg.right_precond).name()
+             << "\",\n";
+    file_out << "\t\"precond_specs\" : \"" << precond_specs_str << "\",\n";
 }
 
 template <template <typename> typename TMatrix>
@@ -75,10 +68,12 @@ void record_residual_solver_data(
     const std::shared_ptr<GenericIterativeSolve<TMatrix>> &solver_ptr,
     const int padding
 ) {
-    file_out << std::format(
-        "\t\"res_norm_history\" : {}\n",
-        vector_to_jsonarray_str(solver_ptr->get_res_norm_history(), padding)
-    );
+    file_out << "\t\"res_norm_history\" : "
+             << vector_to_jsonarray_str(
+                    solver_ptr->get_res_norm_history(),
+                    padding
+                )
+             << "\n";
 }
 
 template <template <typename> typename TMatrix, typename TPrecision>
@@ -92,7 +87,7 @@ void record_FPGMRES_data_json(
 ) {
 
     fs::path save_path(save_dir / fs::path(file_name + ".json"));
-    logger.info(std::format("Save data to: {}", save_path.string()));
+    logger.info("Save data to: {}" + save_path.string());
     
     std::ofstream file_out;
     file_out.open(save_path, std::ofstream::out);
@@ -135,7 +130,7 @@ void record_MPGMRES_data_json(
 ) {
 
     fs::path save_path(save_dir / fs::path(file_name + ".json"));
-    logger.info(std::format("Save data to: {}", save_path.string()));
+    logger.info("Save data to: {}" + save_path.string());
     
     std::ofstream file_out;
     file_out.open(save_path, std::ofstream::out);
@@ -147,14 +142,12 @@ void record_MPGMRES_data_json(
         record_basic_solver_data<TMatrix>(
             file_out, file_name, data.solver_ptr, data.clock
         );
-        file_out << std::format(
-            "\t\"hlf_sgl_cascade_change\" : \"{}\",\n",
-            data.solver_ptr->get_hlf_sgl_cascade_change()
-        );
-        file_out << std::format(
-            "\t\"sgl_dbl_cascade_change\" : \"{}\",\n",
-            data.solver_ptr->get_sgl_dbl_cascade_change()
-        );
+        file_out << "\t\"hlf_sgl_cascade_change\" : "
+                 << data.solver_ptr->get_hlf_sgl_cascade_change()
+                 << ",\n";
+        file_out << "\t\"sgl_dbl_cascade_change\" : "
+                 << data.solver_ptr->get_sgl_dbl_cascade_change()
+                 << ",\n";
         record_precond_data<TMatrix, double>(
             file_out, arg_precond_arg_pkg, precond_specs_str
         );

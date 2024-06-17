@@ -62,19 +62,19 @@ __global__ void scalar_sgl_kernels::cast_to_double(
     scalar_dest[tid] = static_cast<double>(scalar_src[tid]);
 }
 
-__global__ void scalar_hlf_kernels::scalar_abs(half *scalar) {
+__global__ void scalar_hlf_kernels::scalar_abs(__half *scalar) {
     int tid = (blockIdx.x * blockDim.x) + threadIdx.x;
     scalar[tid] = __habs(scalar[tid]);
 }
 
-__global__ void scalar_hlf_kernels::scalar_sqrt(half *scalar) {
+__global__ void scalar_hlf_kernels::scalar_sqrt(__half *scalar) {
     int tid = (blockIdx.x * blockDim.x) + threadIdx.x;
     scalar[tid] = hsqrt(scalar[tid]);
 }
 
 __global__ void scalar_hlf_kernels::scalar_recip(__half *scalar) {
     int tid = (blockIdx.x * blockDim.x) + threadIdx.x;
-    scalar[tid] = CUDART_ONE_FP16/(scalar[tid]);
+    scalar[tid] = __ushort_as_half((unsigned short)0x3C00U)/(scalar[tid]);
 }
 
 __global__ void scalar_hlf_kernels::cast_to_float(

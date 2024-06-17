@@ -16,11 +16,12 @@
 
 #include <stdexcept>
 #include <cstdlib>
+#include <iomanip>
+#include <sstream>
+#include <string>
 #include <initializer_list>
 #include <cmath>
 #include <random>
-#include <string>
-#include <format>
 
 template <typename TPrecision>
 class MatrixDense
@@ -367,44 +368,38 @@ public:
 
         copy_data_to_ptr(h_mat, m_rows, n_cols);
 
-        std::string acc;
+        std::stringstream acc_strm;
+        acc_strm << std::setprecision(8);
         for (int i=0; i<m_rows-1; ++i) {
             for (int j=0; j<n_cols-1; ++j) {
-                acc += std::format(
-                    "{:.8g} ", static_cast<double>(h_mat[i+j*m_rows])
-                );
+                acc_strm << static_cast<double>(h_mat[i+j*m_rows]) << " ";
             }
-            acc += std::format(
-                "{:.8g}\n", static_cast<double>(h_mat[i+(n_cols-1)*m_rows])
-            );
+            acc_strm << static_cast<double>(h_mat[i+(n_cols-1)*m_rows]) << "\n";
         }
         for (int j=0; j<n_cols-1; ++j) {
-            acc += std::format(
-                "{:.8g} ", static_cast<double>(h_mat[(m_rows-1)+j*m_rows])
-            );
+            acc_strm << static_cast<double>(h_mat[(m_rows-1)+j*m_rows]) << " ";
         }
-        acc += std::format(
-            "{:.6g}", static_cast<double>(h_mat[(m_rows-1)+(n_cols-1)*m_rows])
-        );
+        acc_strm << static_cast<double>(h_mat[(m_rows-1)+(n_cols-1)*m_rows]);
 
         free(h_mat);
 
-        return acc;
+        return acc_strm.str();
     
     }
 
     std::string get_info_string() const {
         int non_zeros_count = non_zeros();
-        return std::format(
-            "Rows: {} | Cols: {} | Non-zeroes: {} | Fill ratio: {:.3g} | "
-            "Max magnitude: {:.3g}",
-            m_rows,
-            n_cols,
-            non_zeros_count,
-            static_cast<double>(non_zeros_count) /
-            static_cast<double>(rows()*cols()),
-            static_cast<double>(get_max_mag_elem().get_scalar())
-        );
+        std::stringstream acc_strm;
+        acc_strm << std::setprecision(3);
+        acc_strm << "Rows: " << m_rows << " | "
+                 << "Cols: " << n_cols << " | "
+                 << "Non-zeroes: " << non_zeros_count << " | "
+                 << "Fill ratio: "
+                 << (static_cast<double>(non_zeros_count) /
+                     static_cast<double>(m_rows*n_cols)) << " | "
+                 << "Max magnitude: "
+                 << static_cast<double>(get_max_mag_elem().get_scalar());
+        return acc_strm.str();
     }
 
     // Static Matrix Creation

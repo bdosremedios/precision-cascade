@@ -11,9 +11,10 @@
 #include "types/GeneralMatrix/GeneralMatrix_gpu_kernels.cuh"
 
 #include <cmath>
+#include <iomanip>
+#include <sstream>
 #include <random>
 #include <vector>
-#include <format>
 
 template <typename TPrecision>
 class NoFillMatrixSparse
@@ -634,50 +635,55 @@ public:
             m_rows, n_cols, nnz
         );
 
-        std::string col_offsets_str = "[";
+        std::stringstream col_offsets_strm;
+        col_offsets_strm << "[";
         if (n_cols > 0) {
             for (int i=0; i<n_cols; ++i) {
-                col_offsets_str += std::format("{}, ", h_col_offsets[i]);
+                col_offsets_strm << h_col_offsets[i] << ", ";
             }
-            col_offsets_str += std::format("{}", h_col_offsets[n_cols]);
+            col_offsets_strm << h_col_offsets[n_cols];
         }
-        col_offsets_str += "]";
+        col_offsets_strm << "]";
 
-        std::string row_indices_str = "[";
-        std::string val_str = "[";
+        std::stringstream row_indices_strm;
+        row_indices_strm << "[";
+        std::stringstream val_strm;
+        val_strm << std::setprecision(8) << "[";
         if (nnz > 0) {
             for (int i=0; i<nnz-1; ++i) {
-                row_indices_str += std::format("{}, ", h_row_indices[i]);
-                val_str += std::format(
-                    "{:.6g}, ",
-                    static_cast<double>(h_vals[i])
-                );
+                row_indices_strm << h_row_indices[i] << ", ";
+                val_strm << static_cast<double>(h_vals[i]) << ", ";
             }
-            row_indices_str += std::format("{}", h_row_indices[nnz-1]);
-            val_str += std::format("{:.6g}", static_cast<double>(h_vals[nnz-1]));
+            row_indices_strm << h_row_indices[nnz-1];
+            val_strm << static_cast<double>(h_vals[nnz-1]);
         }
-        row_indices_str += "]";
-        val_str += "]";
+        row_indices_strm << "]";
+        val_strm << "]";
 
         free(h_col_offsets);
         free(h_row_indices);
         free(h_vals);
 
-        return col_offsets_str + "\n" + row_indices_str + "\n" + val_str;
+        return(
+            col_offsets_strm.str() + "\n" +
+            row_indices_strm.str() + "\n" +
+            val_strm.str()
+        );
 
     }
 
     std::string get_info_string() const {
-
-        return std::format(
-            "Rows: {} | Cols: {} | Non-zeroes: {} | Fill ratio: {:.3g} | "
-            "Max magnitude: {:.3g}",
-            m_rows,
-            n_cols,
-            nnz,
-            static_cast<double>(nnz)/static_cast<double>(m_rows*n_cols),
-            static_cast<double>(get_max_mag_elem().get_scalar())
-        );
+        std::stringstream acc_strm;
+        acc_strm << std::setprecision(3);
+        acc_strm << "Rows: " << m_rows << " | "
+                << "Cols: " << n_cols << " | "
+                << "Non-zeroes: " << nnz << " | "
+                << "Fill ratio: "
+                << (static_cast<double>(nnz) /
+                    static_cast<double>(m_rows*n_cols)) << " | "
+                << "Max magnitude: "
+                << static_cast<double>(get_max_mag_elem().get_scalar());
+        return acc_strm.str();
 
     }
 

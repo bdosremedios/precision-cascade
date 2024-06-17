@@ -69,7 +69,8 @@ int main(int argc, char *argv[]) {
     );
 
     experiment_logger.info(
-        std::format("Start numerical experiment: {}", argv[0]));
+        "Start numerical experiment: " + static_cast<std::string>(argv[0])
+    );
     experiment_logger.info(
         "Data directory for experiment matrices: " +
         data_dir_path.string()
@@ -88,10 +89,7 @@ int main(int argc, char *argv[]) {
     // Find candidate experimental spec files in input directory (all jsons)
     std::vector<fs::path> candidate_exp_specs;
     experiment_logger.info(
-        std::format(
-            "Searching {} for experimental spec files",
-            input_dir_path.string()
-        )
+        "Searching {} for experimental spec files" + input_dir_path.string()
     );
     for (auto curr = begin(dir_iter); curr != end(dir_iter); ++curr) {
         if (curr->path().extension() == ".json") {
@@ -99,10 +97,8 @@ int main(int argc, char *argv[]) {
         }
     }
     experiment_logger.info(
-        std::format(
-            "Found {} experimental spec files",
-            candidate_exp_specs.size()
-        )
+        "Found {} experimental spec files" +
+        std::to_string(candidate_exp_specs.size())
     );
 
     // Extract and validate found experimental specs
@@ -119,11 +115,10 @@ int main(int argc, char *argv[]) {
             valid_exp_specs.push_back(loaded_exp_spec);
         } catch (std::runtime_error e) {
             experiment_logger.warn(
-                std::format(
-                    "Failed validation for: {} with runtime_error {}",
-                    cand_exp_spec_path.filename().string(),
-                    e.what()
-                )
+                "Failed validation for: " +
+                cand_exp_spec_path.filename().string() +
+                " with runtime_error " +
+                e.what()
             );
             experiment_logger.warn(
                 "Skipping: " + cand_exp_spec_path.filename().string()
@@ -131,11 +126,10 @@ int main(int argc, char *argv[]) {
         }
     }
     experiment_logger.info(
-        std::format(
-            "Completed validation: {} passed | {} fail",
-            valid_exp_specs.size(),
-            candidate_exp_specs.size()-valid_exp_specs.size()
-        )
+        "Completed validation: " + std::to_string(valid_exp_specs.size()) + 
+        " passed | " +
+        std::to_string(candidate_exp_specs.size()-valid_exp_specs.size()) +
+         " fail"
     );
 
     // Set-up cublas context
@@ -154,11 +148,8 @@ int main(int argc, char *argv[]) {
             );
         } catch (std::runtime_error e) {
             experiment_logger.warn(
-                std::format(
-                    "Failed running of for: {} with runtime_error {}",
-                    exp_spec.id,
-                    e.what()
-                )
+                "Failed running of for: " + exp_spec.id +
+                " with runtime_error " + e.what()
             );
         }
     }

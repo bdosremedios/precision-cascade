@@ -12,11 +12,13 @@
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
 
-#include <stdexcept>
 #include <cstdlib>
+#include <stdexcept>
+#include <iomanip>
+#include <sstream>
 #include <vector>
-#include <random>
 #include <initializer_list>
+#include <random>
 
 template <typename TPrecision>
 class Vector
@@ -411,28 +413,30 @@ public:
 
         copy_data_to_ptr(h_vec, m_rows);
 
-        std::string acc;
+        std::stringstream acc_strm;
+        acc_strm << std::setprecision(8);
         for (int i=0; i<m_rows-1; ++i) {
-            acc += std::format("{:.8g}\n", static_cast<double>(h_vec[i]));
+            acc_strm << static_cast<double>(h_vec[i]) << "\n";
         }
-        acc += std::format("{:.8g}", static_cast<double>(h_vec[m_rows-1]));
+        acc_strm << static_cast<double>(h_vec[m_rows-1]);
 
         free(h_vec);
 
-        return acc;
+        return acc_strm.str();
     
     }
     std::string get_info_string() const {
         int non_zeros_count = non_zeros();
-        return std::format(
-            "Rows: {} | Non-zeroes: {} | Fill ratio: {:.3g} | Max magnitude: "
-            "{:.3g}",
-            m_rows,
-            non_zeros_count,
-            static_cast<double>(non_zeros_count) /
-            static_cast<double>(rows()*cols()),
-            static_cast<double>(get_max_mag_elem().get_scalar())
-        );
+        std::stringstream acc_strm;
+        acc_strm << std::setprecision(3);
+        acc_strm << "Rows: " << m_rows << " | "
+                << "Non-zeroes: " << non_zeros_count << " | "
+                << "Fill ratio: "
+                << (static_cast<double>(non_zeros_count) /
+                    static_cast<double>(rows()*cols())) << " | "
+                << "Max magnitude: "
+                << static_cast<double>(get_max_mag_elem().get_scalar());
+        return acc_strm.str();
     }
 
     bool operator==(const Vector<TPrecision> &other) const {

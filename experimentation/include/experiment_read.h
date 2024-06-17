@@ -7,7 +7,6 @@
 
 #include <filesystem>
 #include <fstream>
-#include <format>
 #include <string>
 #include <vector>
 #include <unordered_set>

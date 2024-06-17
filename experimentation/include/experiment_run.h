@@ -16,7 +16,7 @@
 #include <cublas_v2.h>
 
 #include <filesystem>
-#include <format>
+#include <sstream>
 #include <string>
 #include <utility>
 
@@ -36,7 +36,7 @@ GenericLinearSystem<TMatrix> load_lin_sys(
 
     fs::path matrix_path = input_dir / fs::path(matrix_name);
 
-    logger.info(std::format("Loading: {}", matrix_path.string()));
+    logger.info("Loading: "+matrix_path.string());
 
     TMatrix<double> A(cu_handles);
     if (matrix_path.extension() == ".mtx") {
@@ -48,7 +48,7 @@ GenericLinearSystem<TMatrix> load_lin_sys(
     }
 
     A.normalize_magnitude();
-    logger.info(std::format("Matrix info: {}", A.get_info_string()));
+    logger.info("Matrix info: " + A.get_info_string());
 
     Vector<double> b(A*Vector<double>::Random(cu_handles, A.cols()));
 
@@ -89,12 +89,13 @@ void run_record_FPGMRES_solve(
     bool show_plots,
     Experiment_Log logger
 ) {
-    std::string solve_experiment_id = std::format(
-        "{}_{}_{}_{}", matrix_name, solve_name, precond_name, exp_iter
+    std::string solve_experiment_id = (
+        matrix_name + "_" +
+        solve_name + "_" +
+        precond_name + "_" +
+        std::to_string(exp_iter)
     );
-    logger.info(
-        std::format("Running solve experiment: {}", solve_experiment_id)
-    );
+    logger.info("Running solve experiment: " + solve_experiment_id);
     Experiment_Data<GenericIterativeSolve, TMatrix> data = (
         execute_solve<GenericIterativeSolve, TMatrix>(
             arg_solver_ptr,
@@ -124,12 +125,13 @@ void run_record_MPGMRES_solve(
     bool show_plots,
     Experiment_Log logger
 ) {
-    std::string solve_experiment_id = std::format(
-        "{}_{}_{}_{}", matrix_name, solve_name, precond_name, exp_iter
+    std::string solve_experiment_id = (
+        matrix_name + "_" +
+        solve_name + "_" +
+        precond_name + "_" +
+        std::to_string(exp_iter)
     );
-    logger.info(
-        std::format("Running solve experiment: {}", solve_experiment_id)
-    );
+    logger.info("Running solve experiment: " + solve_experiment_id);
     Experiment_Data<MP_GMRES_IR_Solve, TMatrix> data = (
         execute_solve<MP_GMRES_IR_Solve, TMatrix>(
             arg_solver_ptr,
@@ -165,12 +167,7 @@ void run_solve_group(
         solve_group.id + "_logger", solve_group_dir /
         fs::path(solve_group.id + ".log"), false
     );
-    logger.info(
-        std::format(
-            "Solve info: {}",
-            solve_group.solver_args.get_info_string()
-        )
-    );
+    logger.info("Solve info: " + solve_group.solver_args.get_info_string());
 
     bool show_plots = false;
 
@@ -218,16 +215,13 @@ void run_solve_group(
                 );
                 precond_args_dbl = PrecondArgPkg<TMatrix, double>(ilu0);
             } else if (solve_group.precond_specs.name == "ilutp") {
-                std::string ilutp_str = std::format(
-                    "ILUTP({:.3g}, {})",
-                    solve_group.precond_specs.ilutp_tau,
-                    solve_group.precond_specs.ilutp_p
-                );
+                std::stringstream ilutp_strm;
+                ilutp_strm << std::setprecision(3);
+                ilutp_strm << "ILUTP("
+                           << solve_group.precond_specs.ilutp_tau << ", "
+                           << solve_group.precond_specs.ilutp_p << ")";
                 logger.info(
-                    std::format(
-                        "Preconditioner: {} starting computation",
-                        ilutp_str
-                    )
+                    "Preconditioner: {} starting computation" + ilutp_strm.str()
                 );
                 std::shared_ptr<ILUPreconditioner<TMatrix, double>> ilutp = (
                     std::make_shared<ILUPreconditioner<TMatrix, double>>(
@@ -238,10 +232,7 @@ void run_solve_group(
                     )
                 );
                 logger.info(
-                    std::format(
-                        "Preconditioner: {} finished computation",
-                        ilutp_str
-                    )
+                    "Preconditioner: {} finished computation" + ilutp_strm.str()
                 );
                 logger.info(
                     "Preconditioner: L info: "+ilutp->get_L().get_info_string()
@@ -255,11 +246,8 @@ void run_solve_group(
                 precond_args_dbl = PrecondArgPkg<TMatrix, double>(ilutp);
             } else {
                 throw std::runtime_error(
-                    std::format(
-                        "run_solve_group: invalid precond_specs encountered in "
-                        "\"{}\"",
-                        solve_group.id
-                    )
+                    "run_solve_group: invalid precond_specs encountered in "
+                    "\"" + solve_group.id + "\""
                 ); 
             }
             
@@ -365,11 +353,8 @@ void run_solve_group(
 
                 } else {
                     throw std::runtime_error(
-                        std::format(
-                            "run_solve_group: invalid solver id encountered "
-                            "\"{}\"",
-                            solve_group.id
-                        )
+                        "run_solve_group: invalid solver id encountered "
+                        "\"" + solve_group.id + "\""
                     ); 
                 }
 

@@ -28,12 +28,10 @@ private:
                     } else {
                         free(h_mat);
                         throw std::runtime_error(
-                            std::format(
-                                "JacobiPreconditioner: zero in "
-                                "construct_dense_jacobi encountered at "
-                                "({}, {})",
-                                i, j
-                            )
+                            "JacobiPreconditioner: zero in "
+                            "construct_dense_jacobi encountered at "
+                            "(" + std::to_string(i) + ", " +
+                            std::to_string(j) + ")"
                         );
                     }
                 } else {
@@ -109,11 +107,10 @@ private:
                 free(h_row_indices);
                 free(h_vals);
                 throw std::runtime_error(
-                    std::format(
-                        "JacobiPreconditioner: zero in "
-                        "construct_sparse_jacobi encountered at ({}, {})",
-                        j, j
-                    )
+                    "JacobiPreconditioner: zero in "
+                    "construct_sparse_jacobi encountered at "
+                    "(" + std::to_string(j) + ", " +
+                    std::to_string(j) + ")"
                 );
             }
 

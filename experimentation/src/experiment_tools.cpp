@@ -3,7 +3,7 @@
 void check_dir_exists(fs::path dir) {
     if (!fs::exists(dir)) {
         throw std::runtime_error(
-            std::format("Directory {} does not exist", dir.string())
+            "Directory " + dir.string() + " does not exist"
         );
     }
 }
@@ -41,19 +41,13 @@ Solve_Group::Solve_Group(
     for (std::string solver_id : solvers_to_use) {
         if (valid_solvers.count(solver_id) == 0) {
             throw std::runtime_error(
-                std::format(
-                    "Solve_Group: invalid solver encountered in "
-                    "solvers_to_use \"{}\"",
-                    solver_id
-                )
+                "Solve_Group: invalid solver encountered in solvers_to_use "
+                "\"" + solver_id + "\""
             );
         } else if (solvers_seen.count(solver_id) == 1) {
             throw std::runtime_error(
-                std::format(
-                    "Solve_Group: repeated solver encountered in "
-                    "solvers_to_use \"{}\"",
-                    solver_id
-                )
+                "Solve_Group: repeated solver encountered in solvers_to_use "
+                "\"" + solver_id + "\""
             );
         } else {
             solvers_seen.insert(solver_id);
@@ -61,18 +55,13 @@ Solve_Group::Solve_Group(
     }
     if (!((matrix_type == "dense") || (matrix_type == "sparse"))) {
         throw std::runtime_error(
-            std::format(
-                "Solve_Group: invalid matrix_type \"{}\"",
-                matrix_type
-            )
+            "Solve_Group: invalid matrix_type \"" + matrix_type + "\""
         );
     }
     if (experiment_iterations <= 0) {
         throw std::runtime_error(
-            std::format(
-                "Solve_Group: invalid experiment_iterations \"{}\"",
-                experiment_iterations
-            )
+            "Solve_Group: invalid experiment_iterations \"" +
+            std::to_string(experiment_iterations) + "\""
         );
     }
     if (
@@ -86,7 +75,7 @@ Solve_Group::Solve_Group(
     }
     if (matrices_to_test.size() == 0) {
         throw std::runtime_error(
-            std::format("Solve_Group: empty matrices_to_test")
+            "Solve_Group: empty matrices_to_test"
         );
     }
     for (std::string mat_file_name : matrices_to_test) {
@@ -96,10 +85,8 @@ Solve_Group::Solve_Group(
               (file_path.extension() == ".csv"))
         ) {
             throw std::runtime_error(
-                std::format(
-                    "Solve_Group: invalid matrix in matrices_to_test \"{}\"",
-                    mat_file_name
-                )
+                "Solve_Group: invalid matrix in matrices_to_test \"" +
+                mat_file_name + "\""
             );
         }
     }
@@ -144,5 +131,5 @@ int Experiment_Clock::get_elapsed_time_ms() const {
 }
 
 std::string Experiment_Clock::get_info_string() const {
-    return std::format("Elapsed time (ms): {}", get_elapsed_time_ms());
+    return "Elapsed time (ms): " + std::to_string(get_elapsed_time_ms());
 }

@@ -6,11 +6,8 @@ int extract_integer(json::iterator member) {
         return *member;
     } else {
         throw std::runtime_error(
-            std::format(
-                "extract_solve_group: extract_integer invalid value for "
-                "key \"{}\"",
-                member.key()
-            )
+            "extract_solve_group: extract_integer invalid value for key "
+            "\"" + member.key() + "\""
         );
     }
 
@@ -25,22 +22,17 @@ std::vector<std::string> extract_solvers_to_use(json::iterator member) {
                 solvers_to_use.push_back(*it);
             } else {
                 throw std::runtime_error(
-                    std::format(
-                        "extract_solve_group: extract_solvers_to_use invalid "
-                        "solver or repeat solver \"{}\"",
-                        member.key()
-                    )
+                    "extract_solve_group: extract_solvers_to_use invalid "
+                    "solver or repeat solver "
+                    "\"" + member.key() + "\""
                 );
             }
         }
         return solvers_to_use;
     } else {
         throw std::runtime_error(
-            std::format(
-                "extract_solve_group: extract_solvers_to_use invalid value "
-                "for key \"{}\"",
-                member.key()
-            )
+            "extract_solve_group: extract_solvers_to_use invalid value for key "
+            "\"" + member.key() + "\""
         );
     }
 
@@ -52,11 +44,8 @@ std::string extract_matrix_type(json::iterator member) {
         return *member;
     } else {
         throw std::runtime_error(
-            std::format(
-                "extract_solve_group: extract_matrix_type invalid value "
-                "for key \"{}\"",
-                member.key()
-            )
+            "extract_solve_group: extract_matrix_type invalid value for key"
+            "\"" + member.key() + "\""
         );
     }
 
@@ -125,11 +114,8 @@ double extract_double(json::iterator member) {
         return *member;
     } else {
         throw std::runtime_error(
-            std::format(
-                "extract_solve_group: extract_double invalid value for "
-                "key \"{}\"",
-                member.key()
-            )
+            "extract_solve_group: extract_double invalid value for key "
+            "\"" + member.key() + "\""
         );
     }
 
@@ -145,11 +131,8 @@ std::vector<std::string> extract_string_vector(json::iterator member) {
                 matrix_names.push_back(*it);
             } else {
                 throw std::runtime_error(
-                    std::format(
-                        "extract_solve_group: extract_string_vector in id "
-                        "\"{}\" non string member",
-                        member.key()
-                    )
+                    "extract_solve_group: extract_string_vector in id "
+                    "\"" + member.key() + "\" non string member"
                 );
             }
         }
@@ -158,11 +141,8 @@ std::vector<std::string> extract_string_vector(json::iterator member) {
 
     } else {
         throw std::runtime_error(
-            std::format(
-                "extract_solve_group: extract_string_vector invalid value "
-                "for key \"{}\"",
-                member.key()
-            )
+            "extract_solve_group: extract_string_vector invalid value for key "
+            "\"" + member.key() + "\""
         );
     }
 
@@ -203,12 +183,8 @@ Solve_Group check_and_extract_solve_group(std::string id, json cand_obj) {
             matrices_to_test = extract_string_vector(it);
         } else {
             throw std::runtime_error(
-                std::format(
-                    "extract_solve_group: in solve group id \"{}\" invalid "
-                    "key \"{}\"",
-                    id,
-                    it.key()
-                )
+                "extract_solve_group: in solve group id "
+                "\"" + id + "\" invalid key \"" + it.key() + "\""
             );
         }
         ++member_count;
@@ -227,11 +203,8 @@ Solve_Group check_and_extract_solve_group(std::string id, json cand_obj) {
         (matrices_to_test.size() == 0)
     ) {
         throw std::runtime_error(
-            std::format(
-                "extract_solve_group: incorrect members for solve group "
-                "id \"{}\"",
-                id
-            )
+            "extract_solve_group: incorrect members for solve group id "
+            "\"" + id + "\""
         );
     }
 
@@ -268,12 +241,8 @@ Experiment_Specification parse_experiment_spec(fs::path exp_spec_path) {
         exp_spec_json = json::parse(exp_spec_stream);
     } catch (json::parse_error e) {
         throw std::runtime_error(
-            std::format(
-                "parse_experiment_spec: error in json::parse of experiment "
-                "specification id \"{}\" - {}",
-                exp_spec_id,
-                e.what()
-            )
+            "parse_experiment_spec: error in json::parse of experiment "
+            "specification id \"" + exp_spec_id + "\" - " + e.what()
         );
     }
 
@@ -293,11 +262,8 @@ Experiment_Specification parse_experiment_spec(fs::path exp_spec_path) {
         } else {
 
             throw std::runtime_error(
-                std::format(
-                    "parse_experiment_spec: solve group with id \"{}\" is not "
-                    "a json object",
-                    iter.key()
-                )
+                "parse_experiment_spec: solve group with id \"" + iter.key() +
+                "\" is not a json object"
             );
 
         }

@@ -3,8 +3,8 @@
 
 #include "tools/arg_pkgs/SolveArgPkg.h"
 
-#include <format>
 #include <filesystem>
+#include <sstream>
 #include <string>
 #include <vector>
 #include <unordered_set>
@@ -35,16 +35,19 @@ struct Solve_Group_Precond_Specs {
 
     std::string get_spec_string() const {
         if ((ilutp_tau == -1.0) && (ilutp_p == -1)) {
-            return std::format("{}_NA_NA", name);
+            return name + "_NA_NA";
         } else {
-            std::string ilutp_tau_str = std::format("{:.3e}", ilutp_tau);
+            std::stringstream ilutp_tau_strm;
+            ilutp_tau_strm << std::setprecision(3);
+            ilutp_tau_strm << ilutp_tau;
+            std::string ilutp_tau_str = ilutp_tau_strm.str();
             for (int i=0; i<ilutp_tau_str.size(); ++i) {
                 if (ilutp_tau_str[i] == '.') {
                     ilutp_tau_str.erase(i, 1);
                     --i;
                 }
             }
-            return std::format("{}_{}_{}", name, ilutp_tau_str, ilutp_p);
+            return name + "_" + ilutp_tau_str + "_" + std::to_string(ilutp_p);
         }
     }
 
@@ -155,11 +158,7 @@ public:
     Experiment_Data & operator=(const Experiment_Data &other) = default;
 
     std::string get_info_string() const {
-        return std::format(
-            "{} | {}",
-            clock.get_info_string(),
-            solver_ptr->get_info_string()
-        );
+        return clock.get_info_string() + " | " + solver_ptr->get_info_string();
     }
 
 };

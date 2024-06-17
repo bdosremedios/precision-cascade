@@ -4,7 +4,6 @@
 #include "../../types/types.h"
 
 #include <string>
-#include <format>
 
 class SolveArgPkg
 {
@@ -54,11 +53,10 @@ public:
     {};
 
     std::string get_info_string() const {
-        return std::format(
-            "Max iter: {} | Max inner iter: {} | Target rel-res: {}",
-            max_iter,
-            max_inner_iter,
-            target_rel_res
+        return(
+            "Max iter: " + std::to_string(max_iter) + " | "
+            "Max inner iter: " + std::to_string(max_inner_iter) + " | "
+            "Target rel-res: " + std::to_string(target_rel_res)
         );
     }
 
