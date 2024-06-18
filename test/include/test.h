@@ -65,14 +65,9 @@ public:
 
     #endif
 
-    const fs::path data_dir = (
-        fs::current_path() /
-        fs::path("..") /
-        fs::path("test") /
-        fs::path("data") 
-    );
-    const fs::path read_matrix_dir = data_dir / fs::path("read_matrices");
-    const fs::path solve_matrix_dir = data_dir / fs::path("solve_matrices");
+    static fs::path data_dir;
+    static fs::path read_matrix_dir;
+    static fs::path solve_matrix_dir;
 
     SolveArgPkg default_args;
     static bool *show_plots;

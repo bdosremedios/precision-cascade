@@ -3,11 +3,39 @@
 #include <gtest/gtest.h>
 
 #include <iostream>
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 bool *TestExperimentBase::print_errors = new bool;
 cuHandleBundle *TestExperimentBase::cu_handles_ptr = new cuHandleBundle();
+fs::path TestExperimentBase::test_exp_data_dir;
+fs::path TestExperimentBase::test_json_dir;
+fs::path TestExperimentBase::test_data_dir;
+fs::path TestExperimentBase::test_output_dir;
 
 int main(int argc, char **argv) {
+
+    #ifdef WIN32
+        std::cout << fs::canonical("/proc/self/exe") << std::endl;
+    #else
+        TestExperimentBase::test_exp_data_dir = (
+            fs::canonical("/proc/self/exe").parent_path() /
+            fs::path("data")
+        );
+        TestExperimentBase::test_json_dir = (
+            TestExperimentBase::test_exp_data_dir /
+            fs::path("test_jsons")
+        );
+        TestExperimentBase::test_data_dir = (
+            TestExperimentBase::test_exp_data_dir /
+            fs::path("test_data")
+        );
+        TestExperimentBase::test_output_dir = (
+            TestExperimentBase::test_exp_data_dir /
+            fs::path("test_output")
+        );
+    #endif
 
     testing::InitGoogleTest();
 

@@ -20,14 +20,11 @@ protected:
 
     const int n_runs = 5;
     bool prototyping_speed_up = false;
-    const fs::path data_dir = (
-        fs::current_path() / fs::path("..") /
-        fs::path("benchmark") / fs::path("data")
-    );
 
 public:
 
     static cuHandleBundle bundle;
+    static fs::path data_dir;
 
     int dense_start = (prototyping_speed_up) ? 1024 : 2500;
     int dense_stop = 20001;

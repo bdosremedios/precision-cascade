@@ -13,12 +13,29 @@
 #include <string>
 #include <iostream>
 
-
 bool *TestBase::show_plots = new bool;
 bool *TestBase::print_errors = new bool;
 cuHandleBundle TestBase::bundle;
+fs::path TestBase::data_dir;
+fs::path TestBase::read_matrix_dir;
+fs::path TestBase::solve_matrix_dir;
 
 int main(int argc, char **argv) {
+
+    #ifdef WIN32
+        std::cout << fs::canonical("/proc/self/exe") << std::endl;
+    #else
+        TestBase::data_dir = (
+            fs::canonical("/proc/self/exe").parent_path() /
+            fs::path("data")
+        );
+        TestBase::read_matrix_dir = (
+            TestBase::data_dir / fs::path("read_matrices")
+        );
+        TestBase::solve_matrix_dir = (
+            TestBase::data_dir / fs::path("solve_matrices")
+        );
+    #endif
 
     testing::InitGoogleTest();
 
