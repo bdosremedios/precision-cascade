@@ -15,14 +15,17 @@ cp ./test/data/solve_matrices/* ./install/test/data/solve_matrices
 
 mkdir -p ./install/benchmark
 mkdir -p ./install/benchmark/data
-cp ./benchmark/data/* ./install/benchmark/data
 
 mkdir -p ./install/experimentation
 mkdir -p ./install/experimentation/main
 mkdir -p ./install/experimentation/test
 mkdir -p ./install/experimentation/test/data
 mkdir -p ./install/experimentation/test/data/test_data
+cp ./experimentation/test/data/test_data/* \
+   ./install/experimentation/test/data/test_data
 mkdir -p ./install/experimentation/test/data/test_jsons
+cp ./experimentation/test/data/test_jsons/* \
+   ./install/experimentation/test/data/test_jsons
 mkdir -p ./install/experimentation/test/data/test_output
 
 cd build
