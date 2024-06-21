@@ -1,0 +1,33 @@
+Bootstrap: localimage
+From: ../container/precision-cascade-base.sif
+
+%setup
+
+    SOURCE_REPO_DIR=".."
+    APPTAINER_REPO_DIR="${APPTAINER_ROOTFS}/precision-cascade"
+
+    mkdir "${APPTAINER_REPO_DIR}"
+    cp -r "${SOURCE_REPO_DIR}/benchmark/" "${APPTAINER_REPO_DIR}/benchmark/"
+    cp -r "${SOURCE_REPO_DIR}/experimentation/" "${APPTAINER_REPO_DIR}/experimentation/"
+    cp -r "${SOURCE_REPO_DIR}/include/" "${APPTAINER_REPO_DIR}/include/"
+    cp -r "${SOURCE_REPO_DIR}/lib/" "${APPTAINER_REPO_DIR}/lib/"
+    cp -r "${SOURCE_REPO_DIR}/scripts/" "${APPTAINER_REPO_DIR}/scripts/"
+    cp -r "${SOURCE_REPO_DIR}/src/" "${APPTAINER_REPO_DIR}/src/"
+    cp -r "${SOURCE_REPO_DIR}/test/" "${APPTAINER_REPO_DIR}/test/"
+    cp "${SOURCE_REPO_DIR}/CMakeLists.txt" "${APPTAINER_REPO_DIR}/CMakeLists.txt"
+
+%post
+
+    REPO_DIR="/precision-cascade"
+    echo "export REPO_DIR=\"${REPO_DIR}\"" >> $APPTAINER_ENVIRONMENT
+
+    cd "${REPO_DIR}"
+
+    chmod u+x ./scripts/installation_scripts/install_linux.sh
+    ./scripts/installation_scripts/install_linux.sh
+
+%apprun test
+    "${REPO_DIR}/install/test/test"
+
+%apprun test-experiment
+    "${REPO_DIR}/install/experimentation/test/test_experiment"
