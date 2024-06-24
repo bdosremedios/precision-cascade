@@ -3,4 +3,4 @@
 cd "$(dirname "$0")"
 
 ./clean-build-install-dir.sh
-./clean-data-dir.sh
+./clean-host-data-dir.sh
