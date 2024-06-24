@@ -23,8 +23,8 @@ From: ../container/precision-cascade-base.sif
 
     cd "${REPO_DIR}"
 
-    chmod u+x ./scripts/installation_scripts/install_linux.sh
-    ./scripts/installation_scripts/install_linux.sh
+    chmod u+x ./scripts/install/linux/install.sh
+    ./scripts/install/linux/install.sh
 
 %apprun test
     "${REPO_DIR}/install/test/test"

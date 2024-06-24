@@ -3,7 +3,7 @@
 cd "$(dirname "$0")"
 cd ../../..
 
-./scripts/install/general/gen-build-install-dir-structure.sh
+./scripts/install/general/gen-build-install-dir.sh
 
 cd build
 cmake ..

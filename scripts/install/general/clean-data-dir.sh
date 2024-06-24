@@ -3,5 +3,4 @@
 cd "$(dirname "$0")"
 cd ../../..
 
-rm -r build
-rm -r install
+if [[ -e data ]]; then rm -r data; fi
