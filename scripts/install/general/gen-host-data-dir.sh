@@ -5,10 +5,6 @@ cd ../../..
 
 mkdir -p host_data
 
-mkdir -p host_data/benchmark
-mkdir -p host_data/benchmark/data
+cd host_data
 
-mkdir -p host_data/experiment
-mkdir -p host_data/experiment/data
-mkdir -p host_data/experiment/input
-mkdir -p host_data/experiment/output
+../scripts/install/general/helper/gen-app-internal-io-structure.sh

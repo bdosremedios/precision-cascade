@@ -6,22 +6,23 @@ cd ../../..
 mkdir -p build
 mkdir -p install
 
-mkdir -p ./install/test
-mkdir -p ./install/test/data
-mkdir -p ./install/test/data/read_matrices
-cp ./test/data/read_matrices/* ./install/test/data/read_matrices
-mkdir -p ./install/test/data/solve_matrices
-cp ./test/data/solve_matrices/* ./install/test/data/solve_matrices
+cd install
 
-mkdir -p ./install/benchmark
+mkdir -p ./test
+mkdir -p ./test/data
+mkdir -p ./test/data/read_matrices
+cp ../test/data/read_matrices/* ./test/data/read_matrices
+mkdir -p ./test/data/solve_matrices
+cp ../test/data/solve_matrices/* ./test/data/solve_matrices
 
-mkdir -p ./install/experimentation
-mkdir -p ./install/experimentation/test
-mkdir -p ./install/experimentation/test/data
-mkdir -p ./install/experimentation/test/data/test_data
-cp ./experimentation/test/data/test_data/* \
-   ./install/experimentation/test/data/test_data
-mkdir -p ./install/experimentation/test/data/test_jsons
-cp ./experimentation/test/data/test_jsons/* \
-   ./install/experimentation/test/data/test_jsons
-mkdir -p ./install/experimentation/test/data/test_output
+../scripts/install/general/helper/gen-app-internal-io-structure.sh
+
+mkdir -p ./experimentation/test
+mkdir -p ./experimentation/test/data
+mkdir -p ./experimentation/test/data/test_data
+cp ../experimentation/test/data/test_data/* \
+   ./experimentation/test/data/test_data
+mkdir -p ./experimentation/test/data/test_jsons
+cp ../experimentation/test/data/test_jsons/* \
+   ./experimentation/test/data/test_jsons
+mkdir -p ./experimentation/test/data/test_output

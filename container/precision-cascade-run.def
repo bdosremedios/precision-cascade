@@ -31,3 +31,6 @@ From: ../container/precision-cascade-base.sif
 
 %apprun test-experiment
     "${REPO_DIR}/install/experimentation/test/test_experiment"
+
+%apprun benchmark
+    "${REPO_DIR}/install/benchmark/benchmark"

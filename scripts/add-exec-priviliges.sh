@@ -2,6 +2,7 @@
 
 cd "$(dirname "$0")"
 
+chmod u+x ./install/general/gen-app-internal-io-structure.sh
 chmod u+x ./install/general/gen-build-install-dir.sh
 chmod u+x ./install/general/gen-host-data-dir.sh
 chmod u+x ./install/general/clean-build-install-dir.sh

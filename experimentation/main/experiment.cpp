@@ -16,53 +16,65 @@ namespace fs = std::filesystem;
 
 int main(int argc, char *argv[]) {
 
+    fs::path data_dir_path;
+    fs::path input_dir_path;
+    fs::path output_dir_path;
+
     if (
         (argc == 2) &&
         ((std::string(argv[1]) == "--help") || (std::string(argv[1]) == "-h"))
     ) {
+
         std::cout << "---- Entry point of precision-cascade experimentation ---"
                      "-"
                   << std::endl;
-        std::cout << "Use with command \"<executable path> <data dir> <input "
-                     "exp spec dir> <output exp data dir>\""
+        std::cout << "REQUIRES: \"matrix_data\", \"input_specs\", and "
+                     "\"output_data\" directories in same directory as "
+                     "executable"
                   << std::endl;
-        std::cout << "- <executable path> is the path of the compiled "
-                     "test_experiment executable"
+        std::cout << "- \"matrix_data\" is the directory of the data matrix "
+                     "csv and mtx files"
                   << std::endl;
-        std::cout << "- <data dir> is the directory of the data matrix csv and "
-                     "mtx files"
-                  << std::endl;
-        std::cout << "- <input exp spec dir> is the directory experimental "
+        std::cout << "- \"input_specs\" is the directory experimental "
                      "spec json files to run"
                   << std::endl;
-        std::cout << "- <output exp data dir> is the directory to store "
+        std::cout << "- \"output_data\" is the directory to store output "
                      "experimental data in"
                   << std::endl;
         return EXIT_SUCCESS;
-    } else if (argc == 4) {
-        if (!fs::is_directory(argv[1])) {
-            std::cerr << "Invalid data directory"
+
+    } else {
+
+        // Assumes data directories are in the same directory as executable
+        #ifdef WIN32
+            std::cout << fs::canonical("/proc/self/exe") << std::endl;
+        #else
+            fs::path exe_dir_path(
+                fs::canonical("/proc/self/exe").parent_path()
+            );
+            data_dir_path = exe_dir_path / fs::path("matrix_data");
+            input_dir_path = exe_dir_path / fs::path("input_specs");
+            output_dir_path = exe_dir_path / fs::path("output_data");
+        #endif
+
+        // Check existence of directories
+        if (!fs::is_directory(data_dir_path)) {
+            std::cerr << "Invalid matrix data directory"
                       << std::endl;
             return EXIT_FAILURE;
         }
-        if (!fs::is_directory(argv[2])) {
+        if (!fs::is_directory(input_dir_path)) {
             std::cerr << "Invalid input experimental spec directory"
                       << std::endl;
             return EXIT_FAILURE;
         }
-        if (!fs::is_directory(argv[3])) {
+        if (!fs::is_directory(output_dir_path)) {
             std::cerr << "Invalid output experimental data directory"
                       << std::endl;
             return EXIT_FAILURE;
         }
-    } else {
-        std::cerr << "Invalid arguments for "+std::string(argv[0]) << std::endl;
-        return EXIT_FAILURE;
-    }
 
-    fs::path data_dir_path(argv[1]);
-    fs::path input_dir_path(argv[2]);
-    fs::path output_dir_path(argv[3]);
+    }
 
     Experiment_Log experiment_logger(
         "experiment", output_dir_path / fs::path("experiment.log"), true

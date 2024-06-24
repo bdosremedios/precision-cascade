@@ -1,6 +1,4 @@
-/data/
+/host_data/
 /build/
 /install/
-out
-.vs
 *.sif
