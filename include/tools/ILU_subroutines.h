@@ -40,6 +40,12 @@ using DropRulePFunc = std::function<void (
 )>;
 
 template <typename TPrecision>
+using HandleZeroBreakdownFunc = std::function<TPrecision (
+    int col_ind,
+    int pivot_ind
+)>;
+
+template <typename TPrecision>
 struct SparseMatDescrPtrs {
     int *col_offsets;
     int *row_indices;
@@ -141,7 +147,8 @@ int find_pivot_loc_in_perm_map(
     int m_dim,
     TPrecision *new_U_col,
     int *row_permutation_map,
-    bool *row_finished
+    bool *row_finished,
+    HandleZeroBreakdownFunc<TPrecision> handle_breakdown
 ) {
 
     int ret_val = col_ind;
@@ -157,11 +164,11 @@ int find_pivot_loc_in_perm_map(
         }
     }
 
+    // Handle pivot breakdown according to given function
     if (new_U_col[row_permutation_map[ret_val]] == static_cast<TPrecision>(0.)) {
-        throw std::runtime_error(
-            "find_pivot_loc_in_perm_map: zero pivot encountered at (" +
-            std::to_string(row_permutation_map[ret_val]) + ", " +
-            std::to_string(col_ind) + ")"
+        new_U_col[row_permutation_map[ret_val]] = handle_breakdown(
+            col_ind,
+            ret_val
         );
     }
 
@@ -229,6 +236,7 @@ void left_looking_col_elim_delay_perm(
     DropRuleTauFunc<TPrecision> drop_rule_tau_U,
     DropRuleTauFunc<TPrecision> drop_rule_tau_L,
     DropRulePFunc<TPrecision> drop_rule_p,
+    HandleZeroBreakdownFunc<TPrecision> handle_breakdown,
     int m_dim,
     SparseMatDescrPtrs<TPrecision> h_A,
     SparseMatDescrPtrs<TPrecision> h_U,
@@ -257,7 +265,8 @@ void left_looking_col_elim_delay_perm(
             m_dim,
             new_U_col,
             row_permutation_map,
-            row_finished
+            row_finished,
+            handle_breakdown
         );
     } catch (std::runtime_error e) {
         free(new_U_col);
@@ -381,6 +390,7 @@ ILUTriplet<TMatrix, TPrecision> sparse_construct_drop_rule_ILU(
     DropRuleTauFunc<TPrecision> drop_rule_tau_U,
     DropRuleTauFunc<TPrecision> drop_rule_tau_L,
     DropRulePFunc<TPrecision> drop_rule_p,
+    HandleZeroBreakdownFunc<TPrecision> handle_breakdown,
     int max_output_nnz,
     const NoFillMatrixSparse<TPrecision> &A
 ) {
@@ -443,6 +453,7 @@ ILUTriplet<TMatrix, TPrecision> sparse_construct_drop_rule_ILU(
                 drop_rule_tau_U,
                 drop_rule_tau_L,
                 drop_rule_p,
+                handle_breakdown,
                 m_dim,
                 h_A, h_U, h_L,
                 row_permutation_map,
@@ -575,11 +586,22 @@ ILUTriplet<TMatrix, TPrecision> construct_square_ILU_0(
         [](int col_ind, int pivot_ind, TPrecision *col_ptr, int m_dim) { ; }
     );
 
+    HandleZeroBreakdownFunc<TPrecision> handle_breakdown = (
+        [](int col_ind, int pivot_ind) -> TPrecision {
+            throw std::runtime_error(
+                "construct_square_ILU_0: zero pivot encountered at (" +
+                std::to_string(pivot_ind) + ", " +
+                std::to_string(col_ind) + ")"
+            );
+        }
+    );
+
     return sparse_construct_drop_rule_ILU<TMatrix ,TPrecision>(
         false,
         drop_rule_tau_U,
         drop_rule_tau_L,
         drop_rule_p,
+        handle_breakdown,
         A.non_zeros(),
         A
     );
@@ -596,8 +618,8 @@ TPrecision get_largest_magnitude_in_col(
         offset < col_offsets[col_ind+1];
         ++offset
     ) {
-        if (std::abs(vals[offset]) > largest_mag) {
-            largest_mag = std::abs(vals[offset]);
+        if (abs_ns::abs(vals[offset]) > largest_mag) {
+            largest_mag = abs_ns::abs(vals[offset]);
         }
     }
     return largest_mag;
@@ -636,13 +658,13 @@ ILUTriplet<TMatrix, TPrecision> construct_square_ILUTP(
 
     DropRuleTauFunc<TPrecision> drop_rule_tau_U = (
         [&col_inf_norm, tau](TPrecision val, int _, int col) -> bool {
-            return std::abs(val) <= tau*col_inf_norm[col];
+            return abs_ns::abs(val) <= tau*col_inf_norm[col];
         }
     );
 
     DropRuleTauFunc<TPrecision> drop_rule_tau_L = (
         [tau](TPrecision val, int _, int col) -> bool {
-            return std::abs(val) <= tau;
+            return abs_ns::abs(val) <= tau;
         }
     );
 
@@ -668,11 +690,19 @@ ILUTriplet<TMatrix, TPrecision> construct_square_ILUTP(
 
     };
 
+    // Use (Li, 2011) strategy of tau*col_inf_norm injection for zero pivot
+    HandleZeroBreakdownFunc<TPrecision> handle_breakdown = (
+        [&col_inf_norm, tau](int col_ind, int pivot_ind) -> TPrecision {
+            return tau*col_inf_norm[col_ind];
+        }
+    );
+
     return sparse_construct_drop_rule_ILU<TMatrix, TPrecision>(
         to_pivot,
         drop_rule_tau_U,
         drop_rule_tau_L,
         drop_rule_p,
+        handle_breakdown,
         p*A.cols(),
         A
     );

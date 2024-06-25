@@ -101,7 +101,7 @@ int main(int argc, char *argv[]) {
     // Find candidate experimental spec files in input directory (all jsons)
     std::vector<fs::path> candidate_exp_specs;
     experiment_logger.info(
-        "Searching {} for experimental spec files" + input_dir_path.string()
+        "Searching " + input_dir_path.string() + " for experimental spec files"
     );
     for (auto curr = begin(dir_iter); curr != end(dir_iter); ++curr) {
         if (curr->path().extension() == ".json") {
@@ -109,8 +109,8 @@ int main(int argc, char *argv[]) {
         }
     }
     experiment_logger.info(
-        "Found {} experimental spec files" +
-        std::to_string(candidate_exp_specs.size())
+        "Found " + std::to_string(candidate_exp_specs.size()) +
+        " experimental spec files"
     );
 
     // Extract and validate found experimental specs

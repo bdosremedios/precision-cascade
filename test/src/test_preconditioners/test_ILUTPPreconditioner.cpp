@@ -218,6 +218,28 @@ public:
     }
 
     template <template <typename> typename TMatrix>
+    void TestILUT_Pivoted_HandleBreakdown() {
+
+        // Test that using a completely dense matrix one just gets a pivoted LU
+        constexpr int n(4);
+        TMatrix<double> A(
+            TestBase::bundle,
+            {{5., 0, 0, 3.},
+             {0, 5., 0, 0.},
+             {0, 0, 5., 0.},
+             {0, 0, 0, 0}}
+        );
+        ILUPreconditioner<TMatrix, double> ilu_precond(A, 1e-4, n, true);
+
+        ASSERT_NEAR(
+            ilu_precond.get_U().get_elem(3, 3).get_scalar(),
+            3e-4,
+            Tol<double>::roundoff()
+        );
+    
+    }
+
+    template <template <typename> typename TMatrix>
     void TestKeepPLargest(bool pivot) {
 
         // Test that 0 tau (not applying drop rule tau) and p entries just
@@ -321,6 +343,11 @@ TEST_F(ILUTP_Test, TestILUTDroppingLimits_Pivoted_PRECONDITIONER) {
 TEST_F(ILUTP_Test, TestMatchesDenseLU_Pivoted_PRECONDITIONER) {
     TestMatchesDenseLU_Pivoted<MatrixDense>();
     TestMatchesDenseLU_Pivoted<NoFillMatrixSparse>();
+}
+
+TEST_F(ILUTP_Test, TestILUT_Pivoted_HandleBreakdown_PRECONDITIONER) {
+    TestILUT_Pivoted_HandleBreakdown<MatrixDense>();
+    TestILUT_Pivoted_HandleBreakdown<NoFillMatrixSparse>();
 }
 
 TEST_F(ILUTP_Test, TestKeepPLargest_PRECONDITIONER) {
