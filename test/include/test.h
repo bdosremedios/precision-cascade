@@ -12,11 +12,9 @@
 #include "gtest/gtest.h"
 
 #if defined(WIN32) && defined(_DEBUG)
-
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
-
 #endif
 
 #include <memory>

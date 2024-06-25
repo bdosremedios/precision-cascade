@@ -12,6 +12,10 @@
 #include <cmath>
 #include <string>
 
+#ifdef WIN32
+#include <libloaderapi.h>
+#endif
+
 namespace fs = std::filesystem;
 
 int main(int argc, char *argv[]) {
@@ -46,16 +50,17 @@ int main(int argc, char *argv[]) {
     } else {
 
         // Assumes data directories are in the same directory as executable
+        fs::path exe_dir_path;
         #ifdef WIN32
-            std::cout << fs::canonical("/proc/self/exe") << std::endl;
+            CHAR path[MAX_PATH];
+            GetModuleFileNameA(NULL, path, MAX_PATH);
+            exe_dir_path = fs::path(path).parent_path();
         #else
-            fs::path exe_dir_path(
-                fs::canonical("/proc/self/exe").parent_path()
-            );
-            data_dir_path = exe_dir_path / fs::path("matrix_data");
-            input_dir_path = exe_dir_path / fs::path("input_specs");
-            output_dir_path = exe_dir_path / fs::path("output_data");
+            exe_dir_path = fs::canonical("/proc/self/exe").parent_path();
         #endif
+        data_dir_path = exe_dir_path / fs::path("matrix_data");
+        input_dir_path = exe_dir_path / fs::path("input_specs");
+        output_dir_path = exe_dir_path / fs::path("output_data");
 
         // Check existence of directories
         if (!fs::is_directory(data_dir_path)) {

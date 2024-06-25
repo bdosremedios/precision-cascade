@@ -167,7 +167,8 @@ public:
         test_vec.set_slice(0, 2, slice_size_2);
         ASSERT_VECTOR_EQ(test_vec, target_vec_2);
 
-        Vector<double> slice_size_1(TestBase::bundle, {1});
+        std::initializer_list<double> single_item_init_list {1};
+        Vector<double> slice_size_1(TestBase::bundle, single_item_init_list);
         Vector<double> target_vec_3(TestBase::bundle, {1, 2, 2, 3, 0, 1});
         Vector<double> target_vec_4(TestBase::bundle, {1, 2, 2, 3, 1, 1});
 
