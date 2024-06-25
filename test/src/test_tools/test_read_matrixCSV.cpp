@@ -1,6 +1,5 @@
 #include "test.h"
 
-#include "tools/DenseConverter.h"
 #include "tools/read_matrix.h"
 
 // General matrix read tests
@@ -194,10 +193,10 @@ public:
         TMatrix<TPrecision> test_precise(read_matrixCSV<TMatrix, TPrecision>(
             TestBase::bundle, precise_file
         ));
-        DenseConverter<TMatrix, TPrecision> converter;
+
         ASSERT_MATRIX_NEAR(
             test_precise,
-            converter.convert_matrix(target_precise),
+            TMatrix<TPrecision>(target_precise),
             static_cast<TPrecision>(Tol<TPrecision>::roundoff())
         );
 
@@ -213,15 +212,15 @@ public:
             static_cast<TPrecision>(1.5) *
             static_cast<TPrecision>(Tol<TPrecision>::roundoff())
         );
-        DenseConverter<TMatrix, TPrecision> converter;
+
         TMatrix<TPrecision> miss_precise_up(
-            converter.convert_matrix(
+            TMatrix<TPrecision>(
                 target_precise +
                 MatrixDense<TPrecision>::Ones(TestBase::bundle, 2, 2)*eps
             )
         );
         TMatrix<TPrecision> miss_precise_down(
-            converter.convert_matrix(
+            TMatrix<TPrecision>(
                 target_precise -
                 MatrixDense<TPrecision>::Ones(TestBase::bundle, 2, 2)*eps
             )

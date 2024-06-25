@@ -3,7 +3,6 @@
 
 #include "tools/cuHandleBundle.h"
 #include "types/types.h"
-#include "tools/DenseConverter.h"
 
 #include <cassert>
 #include <filesystem>
@@ -13,6 +12,77 @@
 #include <memory>
 
 namespace fs = std::filesystem;
+
+namespace
+{
+
+template <template <typename> typename TMatrix, typename TPrecision>
+class DenseConverter
+{
+public:
+
+    DenseConverter() = default;
+
+    TMatrix<TPrecision> convert_matrix(
+        MatrixDense<TPrecision> mat
+    ) const {
+        std::runtime_error(
+            "DenseConverter: reached unimplemented default convert_matrix "
+            "implementation"
+        );
+    }
+
+};
+
+template <typename TPrecision>
+class DenseConverter<MatrixDense, TPrecision>
+{
+public:
+
+    MatrixDense<TPrecision> convert_matrix(
+        MatrixDense<TPrecision> mat
+    ) const {
+        return mat;
+    }
+
+};
+
+template <typename TPrecision>
+class DenseConverter<Vector, TPrecision>
+{
+public:
+
+    Vector<TPrecision> convert_matrix(
+        MatrixDense<TPrecision> mat
+    ) const {
+
+        if (mat.cols() != 1) {
+            throw std::runtime_error(
+                "DenseConverter<Vector, TPrecision>: invalid csv for "
+                "conversion in convert_matrix"
+            );
+        }
+
+        return Vector<TPrecision>(mat.get_col(0));
+
+    }
+
+};
+
+template <typename TPrecision>
+class DenseConverter<NoFillMatrixSparse, TPrecision>
+{
+public:
+
+    NoFillMatrixSparse<TPrecision> convert_matrix(
+        MatrixDense<TPrecision> mat
+    ) const {
+        return NoFillMatrixSparse<TPrecision>(mat);
+    }
+
+};
+    
+}
 
 template <template <typename> typename TMatrix, typename TPrecision>
 TMatrix<TPrecision> read_matrixCSV(
@@ -39,7 +109,7 @@ TMatrix<TPrecision> read_matrixCSV(
 
     // Scan file getting m_rows and n_cols and ensuring rectangular nature
     while (std::getline(file_in, line_string)) {
-        
+
         ++m_rows;
         line_stream.clear();
         line_stream << line_string;
