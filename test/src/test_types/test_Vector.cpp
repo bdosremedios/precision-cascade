@@ -153,24 +153,58 @@ public:
     void TestSetSlice() {
 
         constexpr int m(6);
-        Vector<double> test_vec(Vector<double>::Zero(TestBase::bundle, m));
+        Vector<TPrecision> test_vec(
+            Vector<TPrecision>::Zero(TestBase::bundle, m)
+        );
 
-        Vector<double> slice_size_3(TestBase::bundle, {1, 2, 3});
-        Vector<double> target_vec_1(TestBase::bundle, {0, 1, 2, 3, 0, 0});
+        Vector<TPrecision> slice_size_3(
+            TestBase::bundle,
+            {static_cast<TPrecision>(1), static_cast<TPrecision>(2),
+             static_cast<TPrecision>(3)}
+        );
+        Vector<TPrecision> target_vec_1(
+            TestBase::bundle,
+            {static_cast<TPrecision>(0), static_cast<TPrecision>(1),
+             static_cast<TPrecision>(2), static_cast<TPrecision>(3),
+             static_cast<TPrecision>(0), static_cast<TPrecision>(0)}
+        );
 
         test_vec.set_slice(1, 3, slice_size_3);
         ASSERT_VECTOR_EQ(test_vec, target_vec_1);
 
-        Vector<double> slice_size_2(TestBase::bundle, {1, 2});
-        Vector<double> target_vec_2(TestBase::bundle, {1, 2, 2, 3, 0, 0});
+        Vector<TPrecision> slice_size_2(
+            TestBase::bundle,
+            {static_cast<TPrecision>(1), static_cast<TPrecision>(2)}
+        );
+        Vector<TPrecision> target_vec_2(
+            TestBase::bundle,
+            {static_cast<TPrecision>(1), static_cast<TPrecision>(2),
+             static_cast<TPrecision>(2), static_cast<TPrecision>(3),
+             static_cast<TPrecision>(0), static_cast<TPrecision>(0)}
+        );
 
         test_vec.set_slice(0, 2, slice_size_2);
         ASSERT_VECTOR_EQ(test_vec, target_vec_2);
 
-        std::initializer_list<double> single_item_init_list {1};
-        Vector<double> slice_size_1(TestBase::bundle, single_item_init_list);
-        Vector<double> target_vec_3(TestBase::bundle, {1, 2, 2, 3, 0, 1});
-        Vector<double> target_vec_4(TestBase::bundle, {1, 2, 2, 3, 1, 1});
+        std::initializer_list<TPrecision> single_item_init_list {
+            static_cast<TPrecision>(1)
+        };
+        Vector<TPrecision> slice_size_1(
+            TestBase::bundle,
+            single_item_init_list
+        );
+        Vector<TPrecision> target_vec_3(
+            TestBase::bundle,
+            {static_cast<TPrecision>(1), static_cast<TPrecision>(2),
+             static_cast<TPrecision>(2), static_cast<TPrecision>(3),
+             static_cast<TPrecision>(0), static_cast<TPrecision>(1)}
+        );
+        Vector<TPrecision> target_vec_4(
+            TestBase::bundle,
+            {static_cast<TPrecision>(1), static_cast<TPrecision>(2),
+             static_cast<TPrecision>(2), static_cast<TPrecision>(3),
+             static_cast<TPrecision>(1), static_cast<TPrecision>(1)}
+        );
 
         test_vec.set_slice(5, 1, slice_size_1);
         ASSERT_VECTOR_EQ(test_vec, target_vec_3);
@@ -178,13 +212,23 @@ public:
         test_vec.set_slice(4, 1, slice_size_1);
         ASSERT_VECTOR_EQ(test_vec, target_vec_4);
 
-        Vector<double> slice_size_6(TestBase::bundle, {2, 3, 4, 5, 6, 7});
-        Vector<double> target_vec_5(TestBase::bundle, {2, 3, 4, 5, 6, 7});
+        Vector<TPrecision> slice_size_6(
+            TestBase::bundle,
+            {static_cast<TPrecision>(2), static_cast<TPrecision>(3),
+             static_cast<TPrecision>(4), static_cast<TPrecision>(5),
+             static_cast<TPrecision>(6), static_cast<TPrecision>(7)}
+        );
+        Vector<TPrecision> target_vec_5(
+            TestBase::bundle,
+            {static_cast<TPrecision>(2), static_cast<TPrecision>(3),
+             static_cast<TPrecision>(4), static_cast<TPrecision>(5),
+             static_cast<TPrecision>(6), static_cast<TPrecision>(7)}
+        );
 
         test_vec.set_slice(0, 6, slice_size_6);
         ASSERT_VECTOR_EQ(test_vec, target_vec_5);
 
-        Vector<double> slice_size_0(TestBase::bundle, 0);
+        Vector<TPrecision> slice_size_0(TestBase::bundle, 0);
 
         test_vec.set_slice(0, 0, slice_size_0);
         ASSERT_VECTOR_EQ(test_vec, target_vec_5);
