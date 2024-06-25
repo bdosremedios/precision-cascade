@@ -15,7 +15,7 @@ cp ../test/data/read_matrices/* ./test/data/read_matrices
 mkdir -p ./test/data/solve_matrices
 cp ../test/data/solve_matrices/* ./test/data/solve_matrices
 
-../scripts/install/general/helper/gen-app-internal-io-structure.sh
+../scripts/install/linux/helper/gen-app-internal-io-structure.sh
 
 mkdir -p ./experimentation/test
 mkdir -p ./experimentation/test/data

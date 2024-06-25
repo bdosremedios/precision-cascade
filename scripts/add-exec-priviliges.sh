@@ -2,11 +2,11 @@
 
 cd "$(dirname "$0")"
 
-chmod u+x ./install/general/helper/gen-app-internal-io-structure.sh
-chmod u+x ./install/general/gen-build-install-dir.sh
-chmod u+x ./install/general/gen-host-data-dir.sh
-chmod u+x ./install/general/clean-build-install-dir.sh
-chmod u+x ./install/general/clean-host-data-dir.sh
+chmod u+x ./install/linux/helper/gen-app-internal-io-structure.sh
+chmod u+x ./install/linux/gen-build-install-dir.sh
+chmod u+x ./install/linux/gen-host-data-dir.sh
+chmod u+x ./install/linux/clean-build-install-dir.sh
+chmod u+x ./install/linux/clean-host-data-dir.sh
 
 chmod u+x ./install/linux/install.sh
 

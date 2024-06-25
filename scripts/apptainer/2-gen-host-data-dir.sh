@@ -2,4 +2,4 @@
 
 cd "$(dirname "$0")"
 
-../install/general/gen-host-data-dir.sh
+../install/linux/gen-host-data-dir.sh
