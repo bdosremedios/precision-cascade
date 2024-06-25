@@ -63,7 +63,7 @@ public:
             );
         }
 
-        return Vector<TPrecision>(mat.get_col(0));
+        return Vector<TPrecision>(mat.get_col(0).copy_to_vec());
 
     }
 

@@ -116,7 +116,9 @@ public:
         );
 
         // Test MatrixDense cast/access for block 0, 0, 3, 4
-        MatrixDense<TPrecision> mat_0_0_3_4(mat.get_block(0, 0, 3, 4));
+        MatrixDense<TPrecision> mat_0_0_3_4(
+            mat.get_block(0, 0, 3, 4).copy_to_mat()
+        );
         MatrixDense<TPrecision> test_0_0_3_4(
             TestBase::bundle,
             {{static_cast<TPrecision>(1), static_cast<TPrecision>(2),
@@ -129,7 +131,9 @@ public:
         ASSERT_MATRIX_EQ(mat_0_0_3_4, test_0_0_3_4);
 
         // Test MatrixDense cast/access for block 1, 2, 3, 1
-        MatrixDense<TPrecision> mat_1_2_3_1(mat.get_block(1, 2, 3, 1));
+        MatrixDense<TPrecision> mat_1_2_3_1(
+            mat.get_block(1, 2, 3, 1).copy_to_mat()
+        );
         MatrixDense<TPrecision> test_1_2_3_1(
             TestBase::bundle,
             {{static_cast<TPrecision>(8)},
@@ -139,7 +143,9 @@ public:
         ASSERT_MATRIX_EQ(mat_1_2_3_1, test_1_2_3_1);
 
         // Test MatrixDense cast/access for block 1, 2, 3, 3
-        MatrixDense<TPrecision> mat_1_2_3_3(mat.get_block(1, 2, 3, 3));
+        MatrixDense<TPrecision> mat_1_2_3_3(
+            mat.get_block(1, 2, 3, 3).copy_to_mat()
+        );
         MatrixDense<TPrecision> test_1_2_3_3(
             TestBase::bundle,
             {{static_cast<TPrecision>(8), static_cast<TPrecision>(9),
@@ -199,12 +205,6 @@ public:
              static_cast<TPrecision>(11)}
         );
         ASSERT_VECTOR_EQ(vec_col_2, test_vec_col_2);
-
-        Vector<TPrecision> vec_col_0_direct(mat.get_col(0));
-        ASSERT_VECTOR_EQ(vec_col_0_direct, test_vec_col_0);
-
-        Vector<TPrecision> vec_col_2_direct(mat.get_col(2));
-        ASSERT_VECTOR_EQ(vec_col_2_direct, test_vec_col_2);
 
     }
 

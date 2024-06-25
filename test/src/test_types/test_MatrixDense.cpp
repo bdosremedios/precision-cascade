@@ -412,7 +412,9 @@ public:
         );
 
         // Test MatrixDense cast/access for block 0, 0, 3, 4
-        MatrixDense<TPrecision> mat_0_0_3_4(mat.get_block(0, 0, 3, 4));
+        MatrixDense<TPrecision> mat_0_0_3_4(
+            mat.get_block(0, 0, 3, 4).copy_to_mat()
+        );
         MatrixDense<TPrecision> test_0_0_3_4(
             TestBase::bundle,
             {{static_cast<TPrecision>(1), static_cast<TPrecision>(2),
@@ -425,7 +427,9 @@ public:
         ASSERT_MATRIX_EQ(mat_0_0_3_4, test_0_0_3_4);
 
         // Test MatrixDense cast/access for block 1, 2, 3, 1
-        MatrixDense<TPrecision> mat_1_2_3_1(mat.get_block(1, 2, 3, 1));
+        MatrixDense<TPrecision> mat_1_2_3_1(
+            mat.get_block(1, 2, 3, 1).copy_to_mat()
+        );
         MatrixDense<TPrecision> test_1_2_3_1(
             TestBase::bundle,
             {{static_cast<TPrecision>(8)},
@@ -620,9 +624,9 @@ public:
              {static_cast<TPrecision>(3), static_cast<TPrecision>(2),
               static_cast<TPrecision>(1)}}
         );
-        Vector<TPrecision> mat_0(mat.get_col(0));
-        Vector<TPrecision> mat_1(mat.get_col(1));
-        Vector<TPrecision> mat_2(mat.get_col(2));
+        Vector<TPrecision> mat_0(mat.get_col(0).copy_to_vec());
+        Vector<TPrecision> mat_1(mat.get_col(1).copy_to_vec());
+        Vector<TPrecision> mat_2(mat.get_col(2).copy_to_vec());
 
         Vector<TPrecision> vec_2_0_1(
             TestBase::bundle,
@@ -714,9 +718,9 @@ public:
         MatrixDense<TPrecision> mat(MatrixDense<TPrecision>::Random(
             TestBase::bundle, 4, 3
         ));
-        Vector<TPrecision> mat_0(mat.get_col(0));
-        Vector<TPrecision> mat_1(mat.get_col(1));
-        Vector<TPrecision> mat_2(mat.get_col(2));
+        Vector<TPrecision> mat_0(mat.get_col(0).copy_to_vec());
+        Vector<TPrecision> mat_1(mat.get_col(1).copy_to_vec());
+        Vector<TPrecision> mat_2(mat.get_col(2).copy_to_vec());
 
         Vector<TPrecision> vec_2_0_1(
             TestBase::bundle,
@@ -978,9 +982,9 @@ public:
               static_cast<TPrecision>(2), static_cast<TPrecision>(3)}}
         );
         MatrixDense<TPrecision> trans_mat = mat.transpose();
-        Vector<TPrecision> mat_r0(trans_mat.get_col(0));
-        Vector<TPrecision> mat_r1(trans_mat.get_col(1));
-        Vector<TPrecision> mat_r2(trans_mat.get_col(2));
+        Vector<TPrecision> mat_r0(trans_mat.get_col(0).copy_to_vec());
+        Vector<TPrecision> mat_r1(trans_mat.get_col(1).copy_to_vec());
+        Vector<TPrecision> mat_r2(trans_mat.get_col(2).copy_to_vec());
 
         Vector<TPrecision> vec_3_1_0_0(
             TestBase::bundle,
@@ -1129,9 +1133,9 @@ public:
             TestBase::bundle, 3, 4
         ));
         MatrixDense<TPrecision> trans_mat = mat.transpose();
-        Vector<TPrecision> mat_r0(trans_mat.get_col(0));
-        Vector<TPrecision> mat_r1(trans_mat.get_col(1));
-        Vector<TPrecision> mat_r2(trans_mat.get_col(2));
+        Vector<TPrecision> mat_r0(trans_mat.get_col(0).copy_to_vec());
+        Vector<TPrecision> mat_r1(trans_mat.get_col(1).copy_to_vec());
+        Vector<TPrecision> mat_r2(trans_mat.get_col(2).copy_to_vec());
 
         Vector<TPrecision> vec_3_1_0_0(
             TestBase::bundle,

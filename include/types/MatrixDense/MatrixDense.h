@@ -1,5 +1,3 @@
-#include "types/Vector/Vector.h"
-
 #ifndef MATRIX_DENSE_H
 #define MATRIX_DENSE_H
 
@@ -7,6 +5,7 @@
 #include "tools/cuHandleBundle.h"
 #include "tools/abs.h"
 #include "types/Scalar/Scalar.h"
+#include "types/Vector/Vector.h"
 #include "types/MatrixSparse/NoFillMatrixSparse.h"
 #include "MatrixDense_gpu_kernels.cuh"
 #include "types/GeneralMatrix/GeneralMatrix_gpu_kernels.cuh"
@@ -243,14 +242,6 @@ public:
                 ).copy_to_mat()
             );
         }
-    }
-
-    MatrixDense(const MatrixDense<TPrecision>::Block &block) {
-        *this = block.copy_to_mat();
-    }
-
-    MatrixDense(const typename NoFillMatrixSparse<TPrecision>::Block &block) {
-        *this = block.copy_to_mat();
     }
 
     const Scalar<TPrecision> get_elem(int row, int col) const {

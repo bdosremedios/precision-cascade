@@ -1,11 +1,10 @@
-#include "types/Vector/Vector.h"
-
 #ifndef NOFILLMATRIXSPARSE_H
 #define NOFILLMATRIXSPARSE_H
 
 #include "tools/cuda_check.h"
 #include "tools/cuHandleBundle.h"
 #include "types/Scalar/Scalar.h"
+#include "types/Vector/Vector.h"
 #include "types/MatrixDense/MatrixDense.h"
 #include "NoFillMatrixSparse_gpu_kernels.cuh"
 #include "types/GeneralMatrix/GeneralMatrix_gpu_kernels.cuh"

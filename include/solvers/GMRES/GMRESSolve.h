@@ -148,7 +148,9 @@ protected:
         int curr_kry_idx = curr_kry_dim-1;
 
         // Generate next basis vector base
-        next_q = apply_precond_A(Q_kry_basis.get_col(curr_kry_idx));
+        next_q = apply_precond_A(
+            Q_kry_basis.get_col(curr_kry_idx).copy_to_vec()
+        );
 
         // Orthogonalize new basis vector with CGS2
         Vector<TPrecision> first_ortho(
@@ -193,10 +195,18 @@ protected:
             curr_kry_idx+1, curr_kry_idx, SCALAR_ZERO<TPrecision>::get()
         );
 
-        Vector<TPrecision> H_Q_col_k(H_Q.get_col(curr_kry_idx));
-        Vector<TPrecision> H_Q_col_kp1(H_Q.get_col(curr_kry_idx+1));
-        H_Q.get_col(curr_kry_idx).set_from_vec(H_Q_col_k*c + H_Q_col_kp1*minus_s);
-        H_Q.get_col(curr_kry_idx+1).set_from_vec(H_Q_col_kp1*c - H_Q_col_k*minus_s);
+        Vector<TPrecision> H_Q_col_k(
+            H_Q.get_col(curr_kry_idx).copy_to_vec()
+        );
+        Vector<TPrecision> H_Q_col_kp1(
+            H_Q.get_col(curr_kry_idx+1).copy_to_vec()
+        );
+        H_Q.get_col(curr_kry_idx).set_from_vec(
+            H_Q_col_k*c + H_Q_col_kp1*minus_s
+        );
+        H_Q.get_col(curr_kry_idx+1).set_from_vec(
+            H_Q_col_kp1*c - H_Q_col_k*minus_s
+        );
 
     }
 

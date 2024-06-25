@@ -167,14 +167,6 @@ public:
 
     }
 
-    Vector(const typename MatrixDense<TPrecision>::Col &col) {
-        *this = col.copy_to_vec();
-    }
-
-    Vector(const typename NoFillMatrixSparse<TPrecision>::Col &col) {
-        *this = col.copy_to_vec();
-    }
-
     virtual ~Vector() { check_cuda_error(cudaFree(d_vec)); }
 
     Vector<TPrecision> & operator=(const Vector<TPrecision> &other) {
