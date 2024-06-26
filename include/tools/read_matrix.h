@@ -13,8 +13,9 @@
 
 namespace fs = std::filesystem;
 
-namespace
-{
+namespace cascade {
+
+namespace {
 
 template <template <typename> typename TMatrix, typename TPrecision>
 class DenseConverter
@@ -409,6 +410,8 @@ TMatrix<TPrecision> read_matrixMTX(
 
     return mat;
 
+}
+    
 }
 
 #endif

@@ -4,6 +4,8 @@
 #include <cusparse.h>
 #include <cuda_fp16.h>
 
+namespace cascade {
+
 template <typename TPrecision>
 __global__ void nofillmatrixsparse_kernels::update_pivot(
     int pivot_offset, int *d_row_indices, TPrecision *d_vals, TPrecision *x_soln
@@ -83,3 +85,5 @@ template __global__ void nofillmatrixsparse_kernels::upptri_update_remaining_col
 template __global__ void nofillmatrixsparse_kernels::upptri_update_remaining_col<double>(
     int, int, int *, double *, double *
 );
+
+}

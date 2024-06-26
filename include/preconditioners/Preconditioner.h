@@ -3,6 +3,8 @@
 
 #include "../types/types.h"
 
+namespace cascade {
+
 template <template <typename> typename TMatrix, typename TPrecision>
 class Preconditioner
 {
@@ -20,5 +22,7 @@ public:
     virtual Preconditioner<TMatrix, __half> * cast_hlf_ptr() const = 0;
 
 };
+
+}
 
 #endif

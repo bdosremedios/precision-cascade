@@ -16,6 +16,8 @@
 
 namespace fs = std::filesystem;
 
+using namespace cascade;
+
 std::string vector_to_jsonarray_str(std::vector<double> vec, int padding_level);
 
 // std::string matrix_to_jsonarray_str(MatrixDense<double> mat, int padding_level);

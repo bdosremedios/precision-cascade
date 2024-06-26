@@ -4,7 +4,7 @@
 #include <cuda_runtime.h>
 #include <cuda_fp16.h>
 
-namespace scalar_dbl_kernels
+namespace cascade::scalar_dbl_kernels
 {
     __global__ void scalar_abs(double *scalar);
     __global__ void scalar_sqrt(double *scalar); 
@@ -14,7 +14,7 @@ namespace scalar_dbl_kernels
 
 }
 
-namespace scalar_sgl_kernels
+namespace cascade::scalar_sgl_kernels
 {
     __global__ void scalar_abs(float *scalar);
     __global__ void scalar_sqrt(float *scalar); 
@@ -24,7 +24,7 @@ namespace scalar_sgl_kernels
 
 }
 
-namespace scalar_hlf_kernels
+namespace cascade::scalar_hlf_kernels
 {
     __global__ void scalar_abs(__half *scalar);
     __global__ void scalar_sqrt(__half *scalar); 

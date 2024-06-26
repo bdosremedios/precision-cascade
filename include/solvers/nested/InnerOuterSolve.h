@@ -3,6 +3,8 @@
 
 #include "../IterativeSolve.h"
 
+namespace cascade {
+
 template <template <typename> typename TMatrix>
 class InnerOuterSolve: public GenericIterativeSolve<TMatrix>
 {
@@ -62,5 +64,7 @@ public:
     };
 
 };
+
+}
 
 #endif

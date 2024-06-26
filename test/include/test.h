@@ -22,6 +22,8 @@
 #include <filesystem>
 #include <cmath>
 
+using namespace cascade;
+
 namespace fs = std::filesystem;
 
 class TestBase: public testing::Test

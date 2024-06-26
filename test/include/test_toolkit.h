@@ -6,6 +6,8 @@
 
 #include <cmath>
 
+using namespace cascade;
+
 template <template <typename> typename TMatrix, typename TPrecision>
 TPrecision mat_max_mag(const TMatrix<TPrecision> &A) {
 

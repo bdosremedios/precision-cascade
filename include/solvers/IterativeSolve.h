@@ -12,6 +12,8 @@
 #include <iostream>
 #include <iomanip>
 
+namespace cascade {
+
 template <template <typename> typename TMatrix>
 class GenericIterativeSolve
 {
@@ -365,5 +367,7 @@ public:
     Vector<TPrecision> get_typed_soln() const { return typed_soln; };
 
 };
+
+}
 
 #endif

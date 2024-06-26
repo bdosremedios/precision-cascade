@@ -5,6 +5,8 @@
 #include "MatrixDense/MatrixDense.h"
 #include "MatrixSparse/NoFillMatrixSparse.h"
 
+namespace cascade {
+
 // https://stackoverflow.com/questions/38630445/stdis-same-equivalent-for-unspecialised-template-types
 template <template <typename> typename, template<typename...> typename> 
 struct is_same_template : std::false_type{};
@@ -28,6 +30,8 @@ void assert_valid_type_or_vec() {
          (is_same_template<M, Vector>::value)),
         "M argument must be type NoFillMatrixSparse or MatrixDense or Vector"
     );
+}
+
 }
 
 #endif

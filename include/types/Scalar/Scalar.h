@@ -11,6 +11,8 @@
 
 #include <stdexcept>
 
+namespace cascade {
+
 template <typename TPrecision> class Vector;
 template <typename TPrecision> class MatrixDense;
 template <typename TPrecision> class NoFillMatrixSparse;
@@ -134,5 +136,7 @@ class SCALAR_MINUS_ONE
 public:
     static Scalar<TPrecision> get();
 };
+
+}
 
 #endif

@@ -5,6 +5,8 @@
 
 #include <string>
 
+namespace cascade {
+
 class SolveArgPkg
 {
 public:
@@ -61,5 +63,7 @@ public:
     }
 
 };
+
+}
 
 #endif

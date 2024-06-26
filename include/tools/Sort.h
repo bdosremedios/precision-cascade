@@ -1,11 +1,9 @@
 #ifndef SORT_H
 #define SORT_H
 
-namespace sort
-{
+namespace cascade::sort {
 
-namespace
-{
+namespace {
 
 template <typename T>
 int select_median_ind(int i, int j, int k, T *arr) {

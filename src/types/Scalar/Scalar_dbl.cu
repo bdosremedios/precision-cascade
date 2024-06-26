@@ -4,6 +4,8 @@
 #include <cuda_runtime.h>
 #include <cuda_fp16.h>
 
+namespace cascade {
+
 template Scalar<double> Scalar<double>::operator+(
     const Scalar<double> &
 ) const;
@@ -104,4 +106,6 @@ Scalar<float> Scalar<double>::to_float() const {
 template <>
 Scalar<double> Scalar<double>::to_double() const {
     return Scalar<double>(*this);
+}
+
 }

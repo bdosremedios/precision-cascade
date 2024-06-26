@@ -15,6 +15,8 @@
 #include <random>
 #include <vector>
 
+namespace cascade {
+
 template <typename TPrecision>
 class NoFillMatrixSparse
 {
@@ -1387,5 +1389,7 @@ public:
     };
 
 };
+
+}
 
 #endif

@@ -3,6 +3,8 @@
 
 #include "../IterativeSolve.h"
 
+namespace cascade {
+
 template <template <typename> typename TMatrix, typename TPrecision>
 class GMRESSolve: public TypedIterativeSolve<TMatrix, TPrecision>
 {
@@ -302,5 +304,7 @@ public:
     ) = delete;
 
 };
+
+}
 
 #endif

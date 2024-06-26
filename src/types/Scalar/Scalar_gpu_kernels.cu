@@ -4,6 +4,8 @@
 #include <cuda_fp16.h>
 #include <math_constants.h>
 
+namespace cascade {
+
 __global__ void scalar_dbl_kernels::scalar_abs(double *scalar) {
     int tid = (blockIdx.x * blockDim.x) + threadIdx.x;
     scalar[tid] = fabs(scalar[tid]);
@@ -89,4 +91,6 @@ __global__ void scalar_hlf_kernels::cast_to_double(
 ) {
     int tid = (blockIdx.x * blockDim.x) + threadIdx.x;
     scalar_dest[tid] = static_cast<double>(scalar_src[tid]);
+}
+
 }

@@ -5,6 +5,8 @@
 #include <cusparse.h>
 #include <cuda_fp16.h>
 
+namespace cascade {
+
 template <>
 NoFillMatrixSparse<__half>::NoFillMatrixSparse(
     const MatrixDense<__half> &source_mat
@@ -278,5 +280,7 @@ NoFillMatrixSparse<double> NoFillMatrixSparse<__half>::to_double() const {
     }
 
     return created_mat;
+
+}
 
 }

@@ -3,6 +3,8 @@
 
 #include "../IterativeSolve.h"
 
+namespace cascade {
+
 template <template <typename> typename TMatrix, typename TPrecision>
 class JacobiSolve: public TypedIterativeSolve<TMatrix, TPrecision>
 {
@@ -125,5 +127,7 @@ public:
     ) = delete;
 
 };
+
+}
 
 #endif

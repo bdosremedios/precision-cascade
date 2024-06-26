@@ -7,6 +7,8 @@
 #include <cublas_v2.h>
 #include <cusparse.h>
 
+namespace cascade {
+
 class cuHandleBundle
 {
 private:
@@ -36,5 +38,7 @@ public:
     bool operator==(const cuHandleBundle &) const;
 
 };
+    
+}
 
 #endif

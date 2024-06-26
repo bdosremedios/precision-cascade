@@ -8,6 +8,8 @@
 
 #include <memory>
 
+namespace cascade {
+
 template <template <typename> typename TMatrix, typename TPrecision>
 class PrecondArgPkg
 {
@@ -67,5 +69,7 @@ public:
     }
 
 };
+
+}
 
 #endif

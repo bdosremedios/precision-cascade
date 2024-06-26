@@ -22,6 +22,8 @@
 #include <cmath>
 #include <random>
 
+namespace cascade {
+
 template <typename TPrecision>
 class MatrixDense
 {
@@ -896,5 +898,7 @@ public:
     };
 
 };
+
+}
 
 #endif

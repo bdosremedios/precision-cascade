@@ -5,8 +5,7 @@
 
 #include <stdexcept>
 
-namespace abs_ns
-{
+namespace cascade::abs_ns {
 
     template <typename TPrecision>
     TPrecision abs(const TPrecision &val) {

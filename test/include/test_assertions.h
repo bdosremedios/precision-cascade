@@ -10,6 +10,8 @@
 #include <functional>
 #include <string>
 
+using namespace cascade;
+
 static bool *print_errors;
 
 #define CHECK_FUNC_HAS_RUNTIME_ERROR(to_print, func) \

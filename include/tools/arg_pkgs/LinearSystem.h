@@ -4,6 +4,8 @@
 #include "tools/cuHandleBundle.h"
 #include "types/types.h"
 
+namespace cascade {
+
 template <template <typename> typename TMatrix>
 class GenericLinearSystem
 {
@@ -204,5 +206,7 @@ public:
     }
 
 };
+
+}
 
 #endif

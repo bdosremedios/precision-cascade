@@ -3,6 +3,8 @@
 
 #include "MatrixInversePreconditioner.h"
 
+namespace cascade {
+
 template <template <typename> typename TMatrix, typename TPrecision>
 class JacobiPreconditioner:
     public MatrixInversePreconditioner<TMatrix, TPrecision>
@@ -152,5 +154,7 @@ public:
     {}
 
 };
+
+}
 
 #endif

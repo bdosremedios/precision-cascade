@@ -11,6 +11,8 @@
 
 namespace fs = std::filesystem;
 
+using namespace cascade;
+
 void check_dir_exists(fs::path dir);
 
 struct Solve_Group_Precond_Specs {

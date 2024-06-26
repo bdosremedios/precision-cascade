@@ -1,10 +1,10 @@
 #include "tools/cuHandleBundle.h"
 
-cublasHandle_t cuHandleBundle::cublas_handle;
+cublasHandle_t cascade::cuHandleBundle::cublas_handle;
 
-cusparseHandle_t cuHandleBundle::cusparse_handle;
+cusparseHandle_t cascade::cuHandleBundle::cusparse_handle;
 
-void cuHandleBundle::create() {
+void cascade::cuHandleBundle::create() {
     check_cublas_status(cublasCreate(&cublas_handle));
     check_cublas_status(
         cublasSetPointerMode(
@@ -21,20 +21,20 @@ void cuHandleBundle::create() {
     );
 }
 
-void cuHandleBundle::destroy() {
+void cascade::cuHandleBundle::destroy() {
     check_cublas_status(cublasDestroy(cublas_handle));
     check_cusparse_status(cusparseDestroy(cusparse_handle));
 }
 
-cublasHandle_t cuHandleBundle::get_cublas_handle() const {
+cublasHandle_t cascade::cuHandleBundle::get_cublas_handle() const {
     return cublas_handle;
 }
 
-cusparseHandle_t cuHandleBundle::get_cusparse_handle() const {
+cusparseHandle_t cascade::cuHandleBundle::get_cusparse_handle() const {
     return cusparse_handle;
 }
 
-bool cuHandleBundle::operator==(const cuHandleBundle &other) const {
+bool cascade::cuHandleBundle::operator==(const cuHandleBundle &other) const {
     return (
         (cublas_handle == other.cublas_handle) &&
         (cusparse_handle == other.cusparse_handle)

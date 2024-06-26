@@ -5,6 +5,8 @@
 #include <cusparse.h>
 #include <cuda_fp16.h>
 
+namespace cascade {
+
 template <>
 NoFillMatrixSparse<double>::NoFillMatrixSparse(
     const MatrixDense<double> &source_mat
@@ -274,4 +276,6 @@ NoFillMatrixSparse<float> NoFillMatrixSparse<double>::to_float() const {
 template <>
 NoFillMatrixSparse<double> NoFillMatrixSparse<double>::to_double() const {
     return NoFillMatrixSparse<double>(*this);
+}
+
 }

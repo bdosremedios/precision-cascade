@@ -6,8 +6,7 @@
 #include <vector>
 #include <utility>
 
-namespace heap
-{
+namespace cascade::heap {
 
 template <typename TPrecision>
 struct ColValInfo

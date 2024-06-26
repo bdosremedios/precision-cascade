@@ -3,6 +3,8 @@
 
 #include "Preconditioner.h"
 
+namespace cascade {
+
 template <template <typename> typename TMatrix, typename TPrecision>
 class NoPreconditioner:
     public Preconditioner<TMatrix, TPrecision>
@@ -37,5 +39,7 @@ public:
     }
 
 };
+
+}
 
 #endif

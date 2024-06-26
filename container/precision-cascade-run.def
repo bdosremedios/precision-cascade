@@ -3,18 +3,18 @@ From: ../container/precision-cascade-base.sif
 
 %setup
 
-    SOURCE_REPO_DIR=".."
-    APPTAINER_REPO_DIR="${APPTAINER_ROOTFS}/precision-cascade"
+    SRC_REPO_DIR=".."
+    APPTR_REPO_DIR="${APPTAINER_ROOTFS}/precision-cascade"
 
-    mkdir "${APPTAINER_REPO_DIR}"
-    cp -r "${SOURCE_REPO_DIR}/benchmark/" "${APPTAINER_REPO_DIR}/benchmark/"
-    cp -r "${SOURCE_REPO_DIR}/experimentation/" "${APPTAINER_REPO_DIR}/experimentation/"
-    cp -r "${SOURCE_REPO_DIR}/include/" "${APPTAINER_REPO_DIR}/include/"
-    cp -r "${SOURCE_REPO_DIR}/lib/" "${APPTAINER_REPO_DIR}/lib/"
-    cp -r "${SOURCE_REPO_DIR}/scripts/" "${APPTAINER_REPO_DIR}/scripts/"
-    cp -r "${SOURCE_REPO_DIR}/src/" "${APPTAINER_REPO_DIR}/src/"
-    cp -r "${SOURCE_REPO_DIR}/test/" "${APPTAINER_REPO_DIR}/test/"
-    cp "${SOURCE_REPO_DIR}/CMakeLists.txt" "${APPTAINER_REPO_DIR}/CMakeLists.txt"
+    mkdir "${APPTR_REPO_DIR}"
+    cp -r "${SRC_REPO_DIR}/benchmark/" "${APPTR_REPO_DIR}/benchmark/"
+    cp -r "${SRC_REPO_DIR}/experimentation/" "${APPTR_REPO_DIR}/experimentation/"
+    cp -r "${SRC_REPO_DIR}/include/" "${APPTR_REPO_DIR}/include/"
+    cp -r "${SRC_REPO_DIR}/lib/" "${APPTR_REPO_DIR}/lib/"
+    cp -r "${SRC_REPO_DIR}/scripts/" "${APPTR_REPO_DIR}/scripts/"
+    cp -r "${SRC_REPO_DIR}/src/" "${APPTR_REPO_DIR}/src/"
+    cp -r "${SRC_REPO_DIR}/test/" "${APPTR_REPO_DIR}/test/"
+    cp "${SRC_REPO_DIR}/CMakeLists.txt" "${APPTR_REPO_DIR}/CMakeLists.txt"
 
 %post
 

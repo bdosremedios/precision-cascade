@@ -5,6 +5,8 @@
 #include <cublas_v2.h>
 #include <cuda_fp16.h>
 
+namespace cascade {
+
 template <>
 MatrixDense<__half> MatrixDense<__half>::operator*(
     const Scalar<__half> &scalar
@@ -360,5 +362,7 @@ MatrixDense<double> MatrixDense<__half>::to_double() const {
     }
 
     return created_mat;
+
+}
 
 }

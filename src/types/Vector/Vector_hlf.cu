@@ -4,6 +4,8 @@
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
 
+namespace cascade {
+
 template <>
 Vector<__half> Vector<__half>::operator*(
     const Scalar<__half> &scalar
@@ -245,5 +247,7 @@ Vector<double> Vector<__half>::to_double() const {
     }
 
     return created_vec;
+
+}
 
 }

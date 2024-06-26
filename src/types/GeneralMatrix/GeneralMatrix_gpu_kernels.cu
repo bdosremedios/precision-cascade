@@ -1,6 +1,6 @@
 #include "types/GeneralMatrix/GeneralMatrix_gpu_kernels.cuh"
 
-__global__ void generalmatrix_dbl_kernels::cast_to_half(
+__global__ void cascade::generalmatrix_dbl_kernels::cast_to_half(
     double *mat_src, __half *mat_dest, int m
 ) {
     int tid = (blockIdx.x * blockDim.x) + threadIdx.x;
@@ -9,7 +9,7 @@ __global__ void generalmatrix_dbl_kernels::cast_to_half(
     }
 }
 
-__global__ void generalmatrix_dbl_kernels::cast_to_float(
+__global__ void cascade::generalmatrix_dbl_kernels::cast_to_float(
     double *mat_src, float *mat_dest, int m
 ) {
     int tid = (blockIdx.x * blockDim.x) + threadIdx.x;
@@ -18,7 +18,7 @@ __global__ void generalmatrix_dbl_kernels::cast_to_float(
     }
 }
 
-__global__ void generalmatrix_sgl_kernels::cast_to_half(
+__global__ void cascade::generalmatrix_sgl_kernels::cast_to_half(
     float *mat_src, __half *mat_dest, int m
 ) {
     int tid = (blockIdx.x * blockDim.x) + threadIdx.x;
@@ -27,7 +27,7 @@ __global__ void generalmatrix_sgl_kernels::cast_to_half(
     }
 }
 
-__global__ void generalmatrix_sgl_kernels::cast_to_double(
+__global__ void cascade::generalmatrix_sgl_kernels::cast_to_double(
     float *mat_src, double *mat_dest, int m
 ) {
     int tid = (blockIdx.x * blockDim.x) + threadIdx.x;
@@ -36,7 +36,7 @@ __global__ void generalmatrix_sgl_kernels::cast_to_double(
     }
 }
 
-__global__ void generalmatrix_hlf_kernels::cast_to_float(
+__global__ void cascade::generalmatrix_hlf_kernels::cast_to_float(
     __half *mat_src, float *mat_dest, int m
 ) {
     int tid = (blockIdx.x * blockDim.x) + threadIdx.x;
@@ -45,7 +45,7 @@ __global__ void generalmatrix_hlf_kernels::cast_to_float(
     }
 }
 
-__global__ void generalmatrix_hlf_kernels::cast_to_double(
+__global__ void cascade::generalmatrix_hlf_kernels::cast_to_double(
     __half *mat_src, double *mat_dest, int m
 ) {
     int tid = (blockIdx.x * blockDim.x) + threadIdx.x;

@@ -22,6 +22,8 @@
 
 namespace fs = std::filesystem;
 
+using namespace cascade;
+
 static const double u_hlf = std::pow(2, -10);
 static const double u_sgl = std::pow(2, -23);
 static const double u_dbl = std::pow(2, -52);

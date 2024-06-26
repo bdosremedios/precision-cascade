@@ -6,6 +6,8 @@
 
 #include <cuda_fp16.h>
 
+namespace cascade {
+
 template <template <typename> typename TMatrix>
 class MP_GMRES_IR_Solve: public IterativeRefinement<TMatrix>
 {
@@ -394,5 +396,7 @@ protected:
     }
 
 };
+
+}
 
 #endif

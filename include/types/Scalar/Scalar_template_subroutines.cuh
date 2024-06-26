@@ -6,6 +6,8 @@
 
 #include <cuda_runtime.h>
 
+namespace cascade {
+
 template <typename TPrecision>
 __global__ void scalar_add(
     TPrecision *scalar_1, TPrecision *scalar_2, TPrecision *result
@@ -132,6 +134,8 @@ bool Scalar<TPrecision>::operator==(const Scalar<TPrecision> &other) const {
 
         return result;
     }
+}
+
 }
 
 #endif

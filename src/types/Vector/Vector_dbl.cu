@@ -6,6 +6,8 @@
 
 #include <cmath>
 
+namespace cascade {
+
 template <>
 Vector<double> Vector<double>::operator*(
     const Scalar<double> &scalar
@@ -244,4 +246,6 @@ Vector<float> Vector<double>::to_float() const {
 template <>
 Vector<double> Vector<double>::to_double() const {
     return Vector<double>(*this);
+}
+
 }

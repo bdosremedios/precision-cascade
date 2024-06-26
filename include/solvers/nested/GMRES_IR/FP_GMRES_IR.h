@@ -4,6 +4,8 @@
 #include "../IterativeRefinement.h"
 #include "../../GMRES/GMRESSolve.h"
 
+namespace cascade {
+
 template <template <typename> typename TMatrix, typename TPrecision>
 class FP_GMRES_IR_Solve: public IterativeRefinement<TMatrix>
 {
@@ -66,5 +68,7 @@ public:
     ) = delete;
 
 };
+
+}
 
 #endif

@@ -20,6 +20,8 @@
 #include <initializer_list>
 #include <random>
 
+namespace cascade {
+
 template <typename TPrecision>
 class Vector
 {
@@ -509,5 +511,7 @@ public:
     }
 
 };
+
+}
 
 #endif

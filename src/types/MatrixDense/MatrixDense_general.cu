@@ -5,6 +5,8 @@
 #include <cublas_v2.h>
 #include <cuda_fp16.h>
 
+namespace cascade {
+
 template <typename TPrecision>
 Vector<TPrecision> MatrixDense<TPrecision>::back_sub(
     const Vector<TPrecision> &arg_rhs
@@ -145,3 +147,5 @@ template Vector<float> MatrixDense<float>::frwd_sub(
 template Vector<double> MatrixDense<double>::frwd_sub(
     const Vector<double> &arg_rhs
 ) const;
+
+}

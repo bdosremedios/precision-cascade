@@ -4,6 +4,8 @@
 #include <cublas_v2.h>
 #include <cuda_fp16.h>
 
+namespace cascade {
+
 __global__ void vector_dbl_kernels::cast_to_half(
     double *vec_src, __half *vec_dest, int m
 ) {
@@ -56,4 +58,6 @@ __global__ void vector_hlf_kernels::cast_to_double(
     if (tid < m) {
         scalar_dest[tid] = static_cast<double>(scalar_src[tid]);
     }
+}
+
 }

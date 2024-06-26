@@ -5,6 +5,8 @@
 #include <cublas_v2.h>
 #include <cuda_fp16.h>
 
+namespace cascade {
+
 template <typename TPrecision>
 __global__ void matrixdense_kernels::upptri_blk_solve_warp(
     const TPrecision *U, int m_rows, int diag_offset, TPrecision *x_soln
@@ -179,3 +181,5 @@ template __global__ void matrixdense_kernels::lowtri_rect_update_warp<float>(
 template __global__ void matrixdense_kernels::lowtri_rect_update_warp<double>(
     const double *, int , int , double *
 );
+
+}

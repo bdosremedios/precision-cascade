@@ -4,6 +4,8 @@
 #include "Preconditioner.h"
 #include "tools/ILU_subroutines.h"
 
+namespace cascade {
+
 template <template <typename> typename TMatrix, typename TPrecision>
 class ILUPreconditioner: public Preconditioner<TMatrix, TPrecision>
 {
@@ -152,5 +154,7 @@ public:
     }
 
 };
+    
+}
 
 #endif

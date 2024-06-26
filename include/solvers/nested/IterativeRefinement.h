@@ -3,6 +3,8 @@
 
 #include "InnerOuterSolve.h"
 
+namespace cascade {
+
 template <template <typename> typename TMatrix>
 class IterativeRefinement: public InnerOuterSolve<TMatrix>
 {
@@ -52,5 +54,7 @@ public:
     );
 
 };
+
+}
 
 #endif

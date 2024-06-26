@@ -5,6 +5,8 @@
 #include <cusparse.h>
 #include <cuda_fp16.h>
 
+namespace cascade {
+
 template <typename TPrecision>
 Vector<TPrecision> NoFillMatrixSparse<TPrecision>::back_sub(
     const Vector<TPrecision> &arg_rhs
@@ -148,3 +150,5 @@ template Vector<float> NoFillMatrixSparse<float>::frwd_sub(
 template Vector<double> NoFillMatrixSparse<double>::frwd_sub(
     const Vector<double> &
 ) const;
+
+}

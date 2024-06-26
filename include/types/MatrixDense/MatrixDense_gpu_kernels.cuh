@@ -4,7 +4,7 @@
 #include <cuda_runtime.h>
 #include <cuda_fp16.h>
 
-namespace matrixdense_kernels
+namespace cascade::matrixdense_kernels
 {
 
     template <typename TPrecision>

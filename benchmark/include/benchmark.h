@@ -14,6 +14,8 @@
 
 namespace fs = std::filesystem;
 
+using namespace cascade;
+
 class BenchmarkBase: public testing::Test
 {
 protected:

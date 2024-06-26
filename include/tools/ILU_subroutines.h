@@ -11,8 +11,7 @@
 #include <unordered_set>
 #include <functional>
 
-namespace ilu_subrtns
-{
+namespace cascade::ilu_subrtns {
 
 template <template <typename> typename TMatrix, typename TPrecision>
 struct ILUTriplet {
