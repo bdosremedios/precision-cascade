@@ -2,7 +2,6 @@
 
 #include "tools/read_matrix.h"
 
-// All type vector read tests
 class read_vectorCSV_Test: public TestBase
 {
 public:

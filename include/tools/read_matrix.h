@@ -10,6 +10,8 @@
 #include <sstream>
 #include <string>
 #include <memory>
+#include <stdlib.h>
+#include <time.h>
 
 namespace fs = std::filesystem;
 
@@ -17,7 +19,7 @@ namespace cascade {
 
 namespace helper {
 
-std::ifstream open_ifstream(fs::path path);
+std::ifstream open_ifstream(fs::path path, fs::path correct_extension);
 
 void scan_csv_dim(fs::path path, int *m_rows_ptr, int *n_cols_ptr);
 
@@ -26,7 +28,7 @@ void scan_csv_vals(
     fs::path path, TPrecision *mat_ptr, int m_rows, int n_cols
 ) {
 
-    std::ifstream file_in = open_ifstream(path);
+    std::ifstream file_in = open_ifstream(path, fs::path(".csv"));
 
     std::string temp_str;
     TPrecision temp_num;
@@ -139,23 +141,7 @@ TMatrix<TPrecision> read_matrixMTX(
     const cuHandleBundle &cu_handles, fs::path const &path
 ) {
 
-    // Open given file
-    std::ifstream file_in;
-    file_in.open(path);
-
-    // Ensure path is a matrix market mtx
-    if (path.extension() != fs::path(".mtx")) {
-        throw std::runtime_error(
-            "read_matrixMTX: non .mtx file given: " + path.string()
-        );
-    }
-
-    // Ensure read success
-    if (!file_in.is_open()) {
-        throw std::runtime_error(
-            "read_matrixMTX: failed to read: " + path.string()
-        );
-    }
+    std::ifstream file_in = helper::open_ifstream(path, fs::path(".mtx"));
 
     std::string line_str;
     std::string line_str_portion;
@@ -368,7 +354,31 @@ TMatrix<TPrecision> read_matrixMTX(
     return mat;
 
 }
+
+template <typename TPrecision>
+Vector<TPrecision> read_vectorMTX(
+    const cuHandleBundle &cu_handles,
+    fs::path const &path,
+    std::string selection
+) {
+
+    NoFillMatrixSparse<TPrecision> mat(
+        read_matrixMTX<NoFillMatrixSparse, TPrecision>(cu_handles, path)
+    );
     
+    if (selection == "first") {
+        return mat.get_col(0).copy_to_vec();
+    } else if (selection == "random") {
+        srand(time(NULL));
+        return mat.get_col(rand() % mat.cols()).copy_to_vec();
+    } else {
+        throw std::runtime_error(
+            "read_vectorMTX: invalid selection " + selection
+        );
+    }
+
+}
+
 }
 
 #endif

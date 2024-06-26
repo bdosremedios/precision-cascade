@@ -1,9 +1,18 @@
 #include "tools/read_matrix.h"
 
-std::ifstream cascade::helper::open_ifstream(fs::path path) {
+std::ifstream cascade::helper::open_ifstream(
+    fs::path path, fs::path correct_extension
+) {
 
     std::ifstream file_in;
     file_in.open(path);
+
+    if (path.extension() != correct_extension) {
+        throw std::runtime_error(
+            "open_ifstream: incorrect file given: " +
+            correct_extension.string()
+        );
+    }
 
     if (!file_in.is_open()) {
         throw std::runtime_error(
@@ -19,7 +28,7 @@ void cascade::helper::scan_csv_dim(
     fs::path path, int *m_rows_ptr, int *n_cols_ptr
 ) {
 
-    std::ifstream file_in = open_ifstream(path);
+    std::ifstream file_in = open_ifstream(path, fs::path(".csv"));
 
     int m_rows = 0;
     int n_cols = 0;

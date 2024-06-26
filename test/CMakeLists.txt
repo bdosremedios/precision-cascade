@@ -15,6 +15,7 @@ set(
     TEST_TOOLS_CPPS
     src/test_tools/test_read_vectorCSV.cpp
     src/test_tools/test_read_matrixCSV.cpp
+    src/test_tools/test_read_vectorMTX.cpp
     src/test_tools/test_read_matrixMTX.cpp
     src/test_tools/test_Heap.cpp
     src/test_tools/test_Sort.cpp
