@@ -128,7 +128,7 @@ public:
         TMatrix<double> A(read_matrixCSV<TMatrix, double>(
             TestBase::bundle, solve_matrix_dir / fs::path("conv_diff_64_A.csv")
         ));
-        Vector<double> b(read_matrixCSV<Vector, double>(
+        Vector<double> b(read_vectorCSV<double>(
             TestBase::bundle, solve_matrix_dir / fs::path("conv_diff_64_b.csv")
         ));
 
@@ -136,7 +136,7 @@ public:
         TypedLinearSystem<TMatrix, TPrecision> typed_lin_sys(&gen_lin_sys);
 
         SolveArgPkg args;
-        Vector<TPrecision> typed_soln(read_matrixCSV<Vector, TPrecision>(
+        Vector<TPrecision> typed_soln(read_vectorCSV<TPrecision>(
             TestBase::bundle, solve_matrix_dir / fs::path("conv_diff_64_x.csv")
         ));
         Vector<double> init_guess(Vector<double>::Ones(TestBase::bundle, n));
@@ -217,10 +217,10 @@ public:
         TMatrix<double> A(read_matrixCSV<TMatrix, double>(
             TestBase::bundle, solve_matrix_dir / fs::path("conv_diff_64_A.csv")
         ));
-        Vector<double> b(read_matrixCSV<Vector, double>(
+        Vector<double> b(read_vectorCSV<double>(
             TestBase::bundle, solve_matrix_dir / fs::path("conv_diff_64_b.csv")
         ));
-        Vector<TPrecision> typed_soln(read_matrixCSV<Vector, TPrecision>(
+        Vector<TPrecision> typed_soln(read_vectorCSV<TPrecision>(
             TestBase::bundle, solve_matrix_dir / fs::path("conv_diff_64_x.csv")
         ));
 

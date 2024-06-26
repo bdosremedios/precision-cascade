@@ -85,64 +85,24 @@ public:
     
 }
 
-template <template <typename> typename TMatrix, typename TPrecision>
-TMatrix<TPrecision> read_matrixCSV(
-    const cuHandleBundle &cu_handles, fs::path const &path
+namespace helper {
+
+std::ifstream open_ifstream(fs::path path);
+
+void scan_csv_dim(fs::path path, int *m_rows_ptr, int *n_cols_ptr);
+
+template <typename TPrecision>
+void scan_csv_vals(
+    fs::path path, TPrecision *mat_ptr, int m_rows, int n_cols
 ) {
 
-    // Open given file
-    std::ifstream file_in;
-    file_in.open(path);
+    std::ifstream file_in = open_ifstream(path);
 
-    // Ensure read success
-    if (!file_in.is_open()) {
-        throw std::runtime_error(
-            "read_matrixCSV: failed to read: " + path.string()
-        );
-    }
-    
-    int m_rows = 0;
-    int n_cols = 0;
+    std::string temp_str;
+    TPrecision temp_num;
     std::string line_string;
     std::stringstream line_stream;
-    bool is_first_line = true;
-    std::string temp_str;
 
-    // Scan file getting m_rows and n_cols and ensuring rectangular nature
-    while (std::getline(file_in, line_string)) {
-
-        ++m_rows;
-        line_stream.clear();
-        line_stream << line_string;
-
-        if (is_first_line) {
-            // Iterate over first row to get number of columns
-            while (std::getline(line_stream, temp_str, ',')) { ++n_cols; }
-            is_first_line = false;
-        } else {
-            // Ensure subsequent rows meet col count of first column
-            int col_count = 0;
-            while (std::getline(line_stream, temp_str, ',')) { ++col_count; }
-            if (col_count != n_cols) {
-                throw std::runtime_error(
-                    "read_matrixCSV: error in: " + path.string() + "\n"
-                    "row " + std::to_string(m_rows) +
-                    " does not meet column size of " + std::to_string(n_cols)
-                );
-            }
-        }
-    
-    }
-
-    // Read entries into matrix
-    file_in.clear();
-    file_in.seekg(0, std::ios_base::beg);
-
-    TPrecision *h_mat = static_cast<TPrecision *>(
-        malloc(m_rows*n_cols*sizeof(TPrecision))
-    );
-
-    TPrecision temp_number;
     int row = 0;
     while (std::getline(file_in, line_string)) {
 
@@ -151,29 +111,96 @@ TMatrix<TPrecision> read_matrixCSV(
 
         int col = 0;
         while (std::getline(line_stream, temp_str, ',')) {
+
             try {
-                temp_number = static_cast<TPrecision>(stod(temp_str));
+                temp_num = static_cast<TPrecision>(stod(temp_str));
             } catch (std::invalid_argument e) {
-                free(h_mat);
                 throw std::runtime_error(
-                    "read_matrixCSV: error in: " + path.string() + "\n"
+                    "scan_csv_vals: error in: " + path.string() + "\n"
                     "Invalid argument in file, failed to convert to numeric"
                 );
             }
-            h_mat[row+col*m_rows] = temp_number;
+
+            if ((0 <= row) && (row < m_rows) && (0 <= col) && (col < n_cols)) {
+                mat_ptr[row+col*m_rows] = temp_num;
+            } else {
+                throw std::runtime_error(
+                    "scan_csv_vals: error in: " + path.string() + "\n"
+                    "Invalid row or col encountered"
+                );
+            }
+
             col++;
+
         }
+
         row++;
 
+    }
+
+}
+    
+}
+
+template <template <typename> typename TMatrix, typename TPrecision>
+TMatrix<TPrecision> read_matrixCSV(
+    const cuHandleBundle &cu_handles, fs::path const path
+) {
+
+    int m_rows;
+    int n_cols;
+    helper::scan_csv_dim(path, &m_rows, &n_cols);
+
+    TPrecision *h_mat = static_cast<TPrecision *>(
+        malloc(m_rows*n_cols*sizeof(TPrecision))
+    );
+
+    try {
+        helper::scan_csv_vals(path, h_mat, m_rows, n_cols);
+    } catch (std::runtime_error e) {
+        free(h_mat);
+        throw e;
     }
 
     MatrixDense<TPrecision> mat(cu_handles, h_mat, m_rows, n_cols);
 
     free(h_mat);
 
-    DenseConverter<TMatrix, TPrecision> converter;
+    return TMatrix<TPrecision>(mat);
 
-    return converter.convert_matrix(mat);
+}
+
+template <typename TPrecision>
+Vector<TPrecision> read_vectorCSV(
+    const cuHandleBundle &cu_handles, fs::path const path
+) {
+
+    int m_rows;
+    int n_cols;
+    helper::scan_csv_dim(path, &m_rows, &n_cols);
+
+    if (n_cols != 1) {
+        throw std::runtime_error (
+            "read_vectorCSV: invalid csv for vector since does not have 1 col"
+        );
+    }
+
+    TPrecision *h_vec = static_cast<TPrecision *>(
+        malloc(m_rows*sizeof(TPrecision))
+    );
+
+    try {
+        helper::scan_csv_vals(path, h_vec, m_rows, 1);
+    } catch (std::runtime_error e) {
+        free(h_vec);
+        throw e;
+    }
+
+    Vector<TPrecision> vec(cu_handles, h_vec, m_rows);
+
+    free(h_vec);
+
+    return vec;
 
 }
 

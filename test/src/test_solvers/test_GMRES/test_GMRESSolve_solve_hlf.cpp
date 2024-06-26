@@ -16,7 +16,7 @@ public:
         TMatrix<double> A(read_matrixCSV<TMatrix, double>(
             TestBase::bundle, A_file_path
         ));
-        Vector<double> b(read_matrixCSV<Vector, double>(
+        Vector<double> b(read_vectorCSV<double>(
             TestBase::bundle, b_file_path
         ));
 
@@ -46,7 +46,7 @@ public:
         TMatrix<double> A(read_matrixCSV<TMatrix, double>(
             TestBase::bundle, solve_matrix_dir / fs::path("conv_diff_64_A.csv")
         ));
-        Vector<double> b(read_matrixCSV<Vector, double>(
+        Vector<double> b(read_vectorCSV<double>(
             TestBase::bundle, solve_matrix_dir / fs::path("conv_diff_64_b.csv")
         ));
 

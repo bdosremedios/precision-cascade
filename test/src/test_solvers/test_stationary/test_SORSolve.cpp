@@ -20,7 +20,7 @@ public:
         TMatrix<double> A(read_matrixCSV<TMatrix, double>(
             TestBase::bundle, A_file_path
         ));
-        Vector<double> b(read_matrixCSV<Vector, double>(
+        Vector<double> b(read_vectorCSV<double>(
             TestBase::bundle, b_file_path
         ));
 
@@ -58,7 +58,7 @@ public:
         TMatrix<double> A(read_matrixCSV<TMatrix, double>(
             TestBase::bundle, A_file_path
         ));
-        Vector<double> b(read_matrixCSV<Vector, double>(
+        Vector<double> b(read_vectorCSV<double>(
             TestBase::bundle, b_file_path
         ));
 

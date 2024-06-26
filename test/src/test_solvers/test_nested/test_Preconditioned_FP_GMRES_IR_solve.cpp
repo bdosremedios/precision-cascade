@@ -31,7 +31,7 @@ public:
         );
         TMatrix<double> Asqr = read_matrixCSV<TMatrix, double>(
             TestBase::bundle, Asqr_path);
-        Vector<double> b = read_matrixCSV<Vector, double>(
+        Vector<double> b = read_vectorCSV<double>(
             TestBase::bundle, b_path
         );
         TMatrix<double> Ainv = read_matrixCSV<TMatrix, double>(
@@ -113,7 +113,7 @@ public:
         TMatrix<double> A = read_matrixCSV<TMatrix, double>(
             TestBase::bundle, A_file_path
         );
-        Vector<double> b = read_matrixCSV<Vector, double>(
+        Vector<double> b = read_vectorCSV<double>(
             TestBase::bundle, b_file_path
         );
 

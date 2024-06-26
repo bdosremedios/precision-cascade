@@ -17,7 +17,7 @@ public:
         TMatrix<double> A(read_matrixCSV<TMatrix, double>(
             TestBase::bundle, A_file_path
         ));
-        Vector<double> b(read_matrixCSV<Vector, double>(
+        Vector<double> b(read_vectorCSV<double>(
             TestBase::bundle, b_file_path
         ));
 
@@ -39,7 +39,7 @@ public:
         if (check_3_iter) { EXPECT_EQ(gmres_solve.get_iteration(), 3); }
 
         // Check that matches MATLAB gmres solution close within conv_tol_dbl
-        Vector<double> x_test(read_matrixCSV<Vector, double>(
+        Vector<double> x_test(read_vectorCSV<double>(
             TestBase::bundle, x_file_path
         ));
         EXPECT_LE(

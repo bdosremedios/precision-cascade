@@ -70,6 +70,7 @@ add_library(
     STATIC
     tools/cuda_check.cu
     tools/cuHandleBundle.cu
+    tools/read_matrix.cpp
     tools/abs.cpp
 )
 

@@ -1793,10 +1793,10 @@ public:
         TMatrix<TPrecision> U_tri(read_matrixCSV<TMatrix, TPrecision>(
                 TestBase::bundle, solve_matrix_dir / fs::path("U_tri_90.csv")
         ));
-        Vector<TPrecision> x_tri(read_matrixCSV<Vector, TPrecision>(
+        Vector<TPrecision> x_tri(read_vectorCSV<TPrecision>(
             TestBase::bundle, solve_matrix_dir / fs::path("x_tri_90.csv")
         ));
-        Vector<TPrecision> Ub_tri(read_matrixCSV<Vector, TPrecision>(
+        Vector<TPrecision> Ub_tri(read_vectorCSV<TPrecision>(
             TestBase::bundle, solve_matrix_dir / fs::path("Ub_tri_90.csv")
         ));
     
@@ -1873,10 +1873,10 @@ public:
         TMatrix<TPrecision> L_tri(read_matrixCSV<TMatrix, TPrecision>(
             TestBase::bundle, solve_matrix_dir / fs::path("L_tri_90.csv")
         ));
-        Vector<TPrecision> x_tri(read_matrixCSV<Vector, TPrecision>(
+        Vector<TPrecision> x_tri(read_vectorCSV<TPrecision>(
             TestBase::bundle, solve_matrix_dir / fs::path("x_tri_90.csv")
         ));
-        Vector<TPrecision> Lb_tri(read_matrixCSV<Vector, TPrecision>(
+        Vector<TPrecision> Lb_tri(read_vectorCSV<TPrecision>(
             TestBase::bundle, solve_matrix_dir / fs::path("Lb_tri_90.csv")
         ));
 

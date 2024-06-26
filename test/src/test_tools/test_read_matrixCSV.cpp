@@ -236,47 +236,6 @@ public:
 
 };
 
-// All type vector read tests
-class read_matrixCSV_Vector_Test: public TestBase
-{
-public:
-
-    template <typename TPrecision>
-    void ReadVector() {
-
-        Vector<TPrecision> target(TestBase::bundle, {1, 2, 3, 4, 5, 6});
-
-        fs::path vector_file(read_matrix_dir / fs::path("vector.csv"));
-        Vector<TPrecision> test(read_matrixCSV<Vector, TPrecision>(
-            TestBase::bundle, vector_file
-        ));
-
-        ASSERT_VECTOR_NEAR(
-            test,
-            target,
-            static_cast<TPrecision>(Tol<TPrecision>::roundoff())
-        );
-
-    }
-
-};
-
-TEST_F(read_matrixCSV_Vector_Test, ReadDoubleVector) { ReadVector<double>(); }
-TEST_F(read_matrixCSV_Vector_Test, ReadSingleVector) { ReadVector<float>(); }
-TEST_F(read_matrixCSV_Vector_Test, ReadHalfVector) { ReadVector<__half>(); }
-
-TEST_F(read_matrixCSV_Vector_Test, FailOnMatrix) {    
-    fs::path mat(read_matrix_dir / fs::path("square1.csv"));
-    CHECK_FUNC_HAS_RUNTIME_ERROR(
-        print_errors,
-        [=]() {
-            Vector<double> test(read_matrixCSV<Vector, double>(
-                TestBase::bundle, mat
-            ));
-        }
-    );
-}
-
 // Double type matrix read tests
 class read_matrixCSV_Double_Test:
     public read_matrixCSV_TPrecision_Test<double>

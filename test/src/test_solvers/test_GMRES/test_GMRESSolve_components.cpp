@@ -59,7 +59,7 @@ public:
         TMatrix<double> A(read_matrixCSV<TMatrix, double>(
             TestBase::bundle, solve_matrix_dir / fs::path("A_5_toy.csv")
         ));
-        Vector<double> b(read_matrixCSV<Vector, double>(
+        Vector<double> b(read_vectorCSV<double>(
             TestBase::bundle, solve_matrix_dir / fs::path("b_5_toy.csv")
         ));
 
@@ -180,7 +180,7 @@ public:
         TMatrix<double> A(read_matrixCSV<TMatrix, double>(
             TestBase::bundle, solve_matrix_dir / fs::path("A_5_toy.csv")
         ));
-        Vector<double> b(read_matrixCSV<Vector, double>(
+        Vector<double> b(read_vectorCSV<double>(
             TestBase::bundle, solve_matrix_dir / fs::path("b_5_toy.csv")
         ));
 
@@ -266,7 +266,7 @@ public:
             TestBase::bundle,
             solve_matrix_dir / fs::path("A_7_dummy_backsub.csv")
         ));
-        Vector<double> b(read_matrixCSV<Vector, double>(
+        Vector<double> b(read_vectorCSV<double>(
             TestBase::bundle,
             solve_matrix_dir / fs::path("b_7_dummy_backsub.csv")
         ));
@@ -307,7 +307,7 @@ public:
             );
             
             // Load test solution
-            Vector<double> test_soln(read_matrixCSV<Vector, double>(
+            Vector<double> test_soln(read_vectorCSV<double>(
                 TestBase::bundle,
                 solve_matrix_dir / fs::path(
                     "x_" + std::to_string(kry_dim) + "_backsub.csv"
@@ -340,7 +340,7 @@ public:
         TMatrix<double> A(read_matrixCSV<TMatrix, double>(
             TestBase::bundle, solve_matrix_dir / fs::path("A_5_easysoln.csv")
         ));
-        Vector<double> b(read_matrixCSV<Vector, double>(
+        Vector<double> b(read_vectorCSV<double>(
             TestBase::bundle, solve_matrix_dir / fs::path("b_5_easysoln.csv")
         ));
 
@@ -384,7 +384,7 @@ public:
         TMatrix<double> A(read_matrixCSV<TMatrix, double>(
             TestBase::bundle, solve_matrix_dir / fs::path("A_5_easysoln.csv")
         ));
-        Vector<double> b(read_matrixCSV<Vector, double>(
+        Vector<double> b(read_vectorCSV<double>(
             TestBase::bundle, solve_matrix_dir / fs::path("b_5_easysoln.csv")
         ));
 
@@ -430,7 +430,7 @@ public:
         TMatrix<double> A(read_matrixCSV<TMatrix, double>(
             TestBase::bundle, solve_matrix_dir / fs::path("A_5_easysoln.csv")
         ));
-        Vector<double> b(read_matrixCSV<Vector, double>(
+        Vector<double> b(read_vectorCSV<double>(
             TestBase::bundle, solve_matrix_dir / fs::path("b_5_easysoln.csv")
         ));
 
