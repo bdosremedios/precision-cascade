@@ -13,7 +13,7 @@
 #include <string>
 
 #ifdef WIN32
-#include <libloaderapi.h>
+#include <windows.h>
 #endif
 
 namespace fs = std::filesystem;
