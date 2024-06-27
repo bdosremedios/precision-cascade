@@ -32,7 +32,7 @@ void run_experimental_spec(
             run_solve_group<MatrixDense>(
                 cu_handles, solve_group, data_dir, exp_spec_dir, logger
             );
-        } if (solve_group.matrix_type == "sparse") {
+        } else if (solve_group.matrix_type == "sparse") {
             run_solve_group<NoFillMatrixSparse>(
                 cu_handles, solve_group, data_dir, exp_spec_dir, logger
             );

@@ -263,7 +263,7 @@ public:
             for (std::string solver_id : solve_group.solvers_to_use) {
                 for (
                     int exp_iter=0;
-                    exp_iter<solve_group.experiment_iterations;
+                    exp_iter < solve_group.experiment_iterations;
                     ++exp_iter
                 ) {
 

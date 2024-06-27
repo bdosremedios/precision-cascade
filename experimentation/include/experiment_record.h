@@ -80,7 +80,7 @@ void record_residual_solver_data(
 
 template <template <typename> typename TMatrix, typename TPrecision>
 void record_FPGMRES_data_json(
-    const Experiment_Data<GenericIterativeSolve, TMatrix> &data,
+    const Solve_Data<GenericIterativeSolve, TMatrix> &data,
     const PrecondArgPkg<TMatrix, TPrecision> arg_precond_arg_pkg,
     const std::string precond_specs_str,
     const std::string file_name,
@@ -123,7 +123,7 @@ void record_FPGMRES_data_json(
 
 template <template <typename> typename TMatrix>
 void record_MPGMRES_data_json(
-    const Experiment_Data<MP_GMRES_IR_Solve, TMatrix> &data,
+    const Solve_Data<MP_GMRES_IR_Solve, TMatrix> &data,
     const PrecondArgPkg<TMatrix, double> arg_precond_arg_pkg,
     const std::string precond_specs_str,
     const std::string file_name,

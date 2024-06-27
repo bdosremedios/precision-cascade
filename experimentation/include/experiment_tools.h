@@ -142,22 +142,22 @@ template <
     template <template <typename> typename> typename TSolver,
     template <typename> typename TMatrix
 >
-struct Experiment_Data
+struct Solve_Data
 {
 public:
     
     Experiment_Clock clock;
     std::shared_ptr<TSolver<TMatrix>> solver_ptr;
 
-    Experiment_Data(
+    Solve_Data(
         Experiment_Clock arg_clock,
         std::shared_ptr<TSolver<TMatrix>> arg_solver_ptr
     ):
         clock(arg_clock), solver_ptr(arg_solver_ptr) 
     {}
 
-    Experiment_Data(const Experiment_Data &other) = default;
-    Experiment_Data & operator=(const Experiment_Data &other) = default;
+    Solve_Data(const Solve_Data &other) = default;
+    Solve_Data & operator=(const Solve_Data &other) = default;
 
     std::string get_info_string() const {
         return clock.get_info_string() + " | " + solver_ptr->get_info_string();

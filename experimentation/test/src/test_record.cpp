@@ -60,7 +60,7 @@ public:
             &typ_lin_sys, u_dbl, solve_args, precond_arg_pkg
         );
 
-        Experiment_Data<GenericIterativeSolve, TMatrix> data(
+        Solve_Data<GenericIterativeSolve, TMatrix> data(
             execute_solve<GenericIterativeSolve, TMatrix>(solve_ptr, false)
         );
 
@@ -130,7 +130,7 @@ public:
             &gen_lin_sys, solve_args
         );
 
-        Experiment_Data<MP_GMRES_IR_Solve, TMatrix> data(
+        Solve_Data<MP_GMRES_IR_Solve, TMatrix> data(
             execute_solve<MP_GMRES_IR_Solve, TMatrix>(solve_ptr, false)
         );
 

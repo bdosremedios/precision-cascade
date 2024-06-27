@@ -87,7 +87,7 @@ template <
     template <template <typename> typename> typename TSolver,
     template <typename> typename TMatrix
 >
-Experiment_Data<TSolver, TMatrix> execute_solve(
+Solve_Data<TSolver, TMatrix> execute_solve(
     std::shared_ptr<TSolver<TMatrix>> arg_solver_ptr,
     bool show_plots
 ) {
@@ -98,7 +98,7 @@ Experiment_Data<TSolver, TMatrix> execute_solve(
     if (show_plots) { arg_solver_ptr->view_relres_plot("log"); }
     exp_clock.stop_clock_experiment();
 
-    return Experiment_Data<TSolver, TMatrix>(exp_clock, arg_solver_ptr);
+    return Solve_Data<TSolver, TMatrix>(exp_clock, arg_solver_ptr);
 
 }
 
@@ -121,7 +121,7 @@ void run_record_FPGMRES_solve(
         std::to_string(exp_iter)
     );
     logger.info("Running solve experiment: " + solve_experiment_id);
-    Experiment_Data<GenericIterativeSolve, TMatrix> data = (
+    Solve_Data<GenericIterativeSolve, TMatrix> data = (
         execute_solve<GenericIterativeSolve, TMatrix>(
             arg_solver_ptr,
             show_plots
@@ -157,7 +157,7 @@ void run_record_MPGMRES_solve(
         std::to_string(exp_iter)
     );
     logger.info("Running solve experiment: " + solve_experiment_id);
-    Experiment_Data<MP_GMRES_IR_Solve, TMatrix> data = (
+    Solve_Data<MP_GMRES_IR_Solve, TMatrix> data = (
         execute_solve<MP_GMRES_IR_Solve, TMatrix>(
             arg_solver_ptr,
             show_plots
