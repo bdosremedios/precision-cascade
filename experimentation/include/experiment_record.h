@@ -89,7 +89,7 @@ void record_FPGMRES_data_json(
 ) {
 
     fs::path save_path(save_dir / fs::path(file_name + ".json"));
-    logger.info("Save data to: {}" + save_path.string());
+    logger.info("Save data to: " + save_path.string());
     
     std::ofstream file_out;
     file_out.open(save_path, std::ofstream::out);
@@ -132,7 +132,7 @@ void record_MPGMRES_data_json(
 ) {
 
     fs::path save_path(save_dir / fs::path(file_name + ".json"));
-    logger.info("Save data to: {}" + save_path.string());
+    logger.info("Save data to: " + save_path.string());
     
     std::ofstream file_out;
     file_out.open(save_path, std::ofstream::out);
