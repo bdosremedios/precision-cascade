@@ -49,10 +49,33 @@ GenericLinearSystem<TMatrix> load_lin_sys(
         throw std::runtime_error("load_lin_sys: invalid extension");
     }
 
-    A.normalize_magnitude();
+    Scalar<double> A_max_mag = A.get_max_mag_elem();
+    A /= A_max_mag;
     logger.info("Matrix info: " + A.get_info_string());
 
-    Vector<double> b(A*Vector<double>::Random(cu_handles, A.cols()));
+    // Search for a rhs and if none is found generate one randomly
+    fs::path potential_b_path(
+        input_dir /
+        fs::path(
+            matrix_path.stem().string() + "_b" +
+            matrix_path.extension().string()
+        )
+    );
+    Vector<double> b(cu_handles);
+    if (fs::exists(potential_b_path)) {
+        if (potential_b_path.extension() == ".mtx") {
+            b = read_vectorMTX<double>(cu_handles, potential_b_path, "random");
+        } else if (potential_b_path.extension() == ".csv") {
+            b = read_vectorCSV<double>(cu_handles, potential_b_path);
+        } else {
+            throw std::runtime_error(
+                "load_lin_sys: invalid extension found on potential_b_path file"
+            );
+        }
+        b /= A_max_mag;
+    } else {
+        b = A*Vector<double>::Random(cu_handles, A.cols());
+    }
 
     return GenericLinearSystem<TMatrix>(A, b);
 

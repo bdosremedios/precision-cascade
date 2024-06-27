@@ -351,7 +351,7 @@ TMatrix<TPrecision> read_matrixMTX(
     free(h_row_indices);
     free(h_vals);
 
-    return mat;
+    return TMatrix<TPrecision>(mat);
 
 }
 
