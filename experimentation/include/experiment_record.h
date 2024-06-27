@@ -20,8 +20,6 @@ using namespace cascade;
 
 std::string vector_to_jsonarray_str(std::vector<double> vec, int padding_level);
 
-// std::string matrix_to_jsonarray_str(MatrixDense<double> mat, int padding_level);
-
 std::string bool_to_string(bool b);
 
 template <template <typename> typename TMatrix>
@@ -78,6 +76,14 @@ void record_residual_solver_data(
              << "\n";
 }
 
+std::ofstream open_file_ofstream(
+    std::string file_name, fs::path save_dir, Experiment_Log logger
+);
+
+void start_json(std::ofstream &file_out);
+
+void end_json(std::ofstream &file_out);
+
 template <template <typename> typename TMatrix, typename TPrecision>
 void record_FPGMRES_data_json(
     const Solve_Data<GenericIterativeSolve, TMatrix> &data,
@@ -87,37 +93,22 @@ void record_FPGMRES_data_json(
     const fs::path save_dir,
     Experiment_Log logger
 ) {
-
-    fs::path save_path(save_dir / fs::path(file_name + ".json"));
-    logger.info("Save data to: " + save_path.string());
     
-    std::ofstream file_out;
-    file_out.open(save_path, std::ofstream::out);
+    std::ofstream file_out = open_file_ofstream(file_name, save_dir, logger);
 
-    if (file_out.is_open()) {
+    start_json(file_out);
 
-        file_out << "{\n";
+    record_basic_solver_data<TMatrix>(
+        file_out, file_name, data.solver_ptr, data.clock
+    );
+    record_precond_data<TMatrix, TPrecision>(
+        file_out, arg_precond_arg_pkg, precond_specs_str
+    );
+    record_residual_solver_data<TMatrix>(
+        file_out, data.solver_ptr, 0
+    );
 
-        record_basic_solver_data<TMatrix>(
-            file_out, file_name, data.solver_ptr, data.clock
-        );
-        record_precond_data<TMatrix, TPrecision>(
-            file_out, arg_precond_arg_pkg, precond_specs_str
-        );
-        record_residual_solver_data<TMatrix>(
-            file_out, data.solver_ptr, 0
-        );
-
-        file_out << "}";
-
-        file_out.close();
-
-    } else {
-        throw std::runtime_error(
-            "record_experimental_data_json: Failed to open for write: " +
-            save_path.string()
-        );
-    }
+    end_json(file_out);
 
 }
 
@@ -131,42 +122,27 @@ void record_MPGMRES_data_json(
     Experiment_Log logger
 ) {
 
-    fs::path save_path(save_dir / fs::path(file_name + ".json"));
-    logger.info("Save data to: " + save_path.string());
-    
-    std::ofstream file_out;
-    file_out.open(save_path, std::ofstream::out);
+    std::ofstream file_out = open_file_ofstream(file_name, save_dir, logger);
 
-    if (file_out.is_open()) {
+    start_json(file_out);
 
-        file_out << "{\n";
+    record_basic_solver_data<TMatrix>(
+        file_out, file_name, data.solver_ptr, data.clock
+    );
+    file_out << "\t\"hlf_sgl_cascade_change\" : "
+                << data.solver_ptr->get_hlf_sgl_cascade_change()
+                << ",\n";
+    file_out << "\t\"sgl_dbl_cascade_change\" : "
+                << data.solver_ptr->get_sgl_dbl_cascade_change()
+                << ",\n";
+    record_precond_data<TMatrix, double>(
+        file_out, arg_precond_arg_pkg, precond_specs_str
+    );
+    record_residual_solver_data<TMatrix>(
+        file_out, data.solver_ptr, 0
+    );
 
-        record_basic_solver_data<TMatrix>(
-            file_out, file_name, data.solver_ptr, data.clock
-        );
-        file_out << "\t\"hlf_sgl_cascade_change\" : "
-                 << data.solver_ptr->get_hlf_sgl_cascade_change()
-                 << ",\n";
-        file_out << "\t\"sgl_dbl_cascade_change\" : "
-                 << data.solver_ptr->get_sgl_dbl_cascade_change()
-                 << ",\n";
-        record_precond_data<TMatrix, double>(
-            file_out, arg_precond_arg_pkg, precond_specs_str
-        );
-        record_residual_solver_data<TMatrix>(
-            file_out, data.solver_ptr, 0
-        );
-
-        file_out << "}";
-
-        file_out.close();
-
-    } else {
-        throw std::runtime_error(
-            "record_MPGMRES_experimental_data_json: Failed to open for "
-            "write: " + save_path.string()
-        );
-    }
+    end_json(file_out);
 
 }
 

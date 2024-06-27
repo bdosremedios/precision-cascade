@@ -24,3 +24,35 @@ std::string bool_to_string(bool b) {
         return "false";
     }
 }
+
+std::ofstream open_file_ofstream(
+    std::string file_name,
+    fs::path save_dir,
+    Experiment_Log logger
+) {
+    
+    fs::path save_path(save_dir / fs::path(file_name + ".json"));
+    logger.info("Save data to: " + save_path.string());
+    
+    std::ofstream file_out;
+    file_out.open(save_path, std::ofstream::out);
+
+    if (!file_out.is_open()) {
+        throw std::runtime_error(
+            "open_file_ofstream: Failed to open for write: " +
+            save_path.string()
+        );
+    }
+
+    return file_out;
+
+}
+
+void start_json(std::ofstream &file_out) {
+    file_out << "{\n";
+}
+
+void end_json(std::ofstream &file_out) {
+    file_out << "}";
+    file_out.close();
+}
