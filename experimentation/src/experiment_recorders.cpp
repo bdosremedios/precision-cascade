@@ -25,7 +25,7 @@ std::string bool_to_string(bool b) {
     }
 }
 
-std::ofstream open_file_ofstream(
+std::ofstream open_json_ofstream(
     std::string file_name,
     fs::path save_dir,
     Experiment_Log logger

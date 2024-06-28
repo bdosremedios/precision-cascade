@@ -22,21 +22,13 @@ using json = nlohmann::json;
 
 class TestRecord: public TestExperimentBase
 {
-public:
+private:
 
     SolveArgPkg solve_args;
     MatrixDense<double> A = MatrixDense<double>(cuHandleBundle());
     Vector<double> b = Vector<double>(cuHandleBundle());
     const double u_dbl = std::pow(2, -52);
     Experiment_Log logger;
-
-    TestRecord() {
-        A = MatrixDense<double>::Random(*cu_handles_ptr, 16, 16);
-        b = A*Vector<double>::Random(*cu_handles_ptr, 16);
-        logger = Experiment_Log();
-    }
-
-    ~TestRecord() {}
 
     std::string bool_to_string(bool b) {
         if (b) {
@@ -45,6 +37,16 @@ public:
             return "false";
         }
     }
+
+public:
+
+    TestRecord() {
+        A = MatrixDense<double>::Random(*cu_handles_ptr, 16, 16);
+        b = A*Vector<double>::Random(*cu_handles_ptr, 16);
+        logger = Experiment_Log();
+    }
+
+    ~TestRecord() {}
 
     template <template <typename> typename TMatrix>
     void TestRecordOutputJsonFPGMRES(std::string file_name) {

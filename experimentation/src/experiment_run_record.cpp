@@ -38,7 +38,8 @@ void run_record_experimental_spec(
             );
         } else {
             throw std::runtime_error(
-                "run_experimental_spec error invalid Solve_Group matrix type"
+                "run_record_experimental_spec: error invalid Solve_Group "
+                "matrix type"
             );
         }
     }

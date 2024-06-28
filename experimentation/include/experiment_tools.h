@@ -1,9 +1,13 @@
 #ifndef EXPERIMENT_TOOLS_H
 #define EXPERIMENT_TOOLS_H
 
+#include "experiment_log.h"
+
+#include "tools/arg_pkgs/PrecondArgPkg.h"
 #include "tools/arg_pkgs/SolveArgPkg.h"
 
 #include <filesystem>
+#include <fstream>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -141,10 +145,13 @@ public:
 struct Timed_Experiment_Data
 {
 public:
-    
+
+    std::string id;
     Experiment_Clock clock;
 
-    Timed_Experiment_Data(Experiment_Clock arg_clock): clock(arg_clock) {}
+    Timed_Experiment_Data(std::string id, Experiment_Clock arg_clock):
+        clock(arg_clock)
+    {}
 
     Timed_Experiment_Data(
         const Timed_Experiment_Data &other
@@ -155,6 +162,79 @@ public:
     ) = default;
 
     virtual std::string get_info_string() const = 0;
+
+};
+
+template <template <typename> typename TMatrix>
+struct Precond_Data:
+    public Timed_Experiment_Data
+{
+private:
+
+    void record_precond_data(std::ofstream &file_out) const {
+        file_out << "\t\"id\" : \"" << id << "\",\n";
+        file_out << "\t\"precond_left\" : \""
+                 << typeid(*precond_arg_pkg_dbl.left_precond).name()
+                 << "\",\n";
+        file_out << "\t\"precond_right\" : \""
+                 << typeid(*precond_arg_pkg_dbl.right_precond).name()
+                 << "\",\n";
+        file_out << "\t\"precond_specs\" : \""
+                 << precond_specs.get_spec_string()
+                 << "\"\n";
+    }
+
+public:
+
+    Solve_Group_Precond_Specs precond_specs;
+    PrecondArgPkg<TMatrix, double> precond_arg_pkg_dbl;
+
+    Precond_Data(
+        std::string arg_precond_id,
+        Experiment_Clock arg_clock,
+        Solve_Group_Precond_Specs arg_precond_specs,
+        PrecondArgPkg<TMatrix, double> arg_precond_arg_pkg_dbl
+    ):
+        Timed_Experiment_Data(arg_precond_id, arg_clock),
+        precond_specs(arg_precond_specs),
+        precond_arg_pkg_dbl(arg_precond_arg_pkg_dbl)
+    {}
+
+    std::string get_info_string() const override {
+        return (
+            clock.get_info_string() + " | " + precond_specs.get_spec_string()
+        );
+    }
+
+    void record_json(
+        std::string file_name,
+        fs::path output_data_dir,
+        Experiment_Log logger
+    ) const {
+    
+        fs::path save_path(output_data_dir / fs::path(file_name + ".json"));
+        logger.info("Save data to: " + save_path.string());
+        
+        std::ofstream file_out;
+        file_out.open(save_path, std::ofstream::out);
+
+        if (!file_out.is_open()) {
+            throw std::runtime_error(
+                "open_file_ofstream: Failed to open for write: " +
+                save_path.string()
+            );
+        }
+
+        // start_json(file_out);
+        file_out << "{\n";
+
+        record_precond_data(file_out);
+
+        // end_json(file_out);
+        file_out << "}";
+        file_out.close();
+
+    }
 
 };
 
@@ -170,10 +250,12 @@ public:
     std::shared_ptr<TSolver<TMatrix>> solver_ptr;
 
     Solve_Data(
+        std::string arg_solver_id,
         Experiment_Clock arg_clock,
         std::shared_ptr<TSolver<TMatrix>> arg_solver_ptr
     ):
-        Timed_Experiment_Data(arg_clock), solver_ptr(arg_solver_ptr) 
+        Timed_Experiment_Data(arg_solver_id, arg_clock),
+        solver_ptr(arg_solver_ptr) 
     {}
 
     std::string get_info_string() const {

@@ -83,6 +83,86 @@ GenericLinearSystem<TMatrix> load_lin_sys(
 
 void create_or_clear_directory(fs::path dir, Experiment_Log logger);
 
+template <template <typename> typename TMatrix>
+Precond_Data<TMatrix> calc_preconditioner(
+    const GenericLinearSystem<TMatrix> &gen_lin_sys,
+    Solve_Group_Precond_Specs precond_specs,
+    Experiment_Log logger
+) {
+
+    Experiment_Clock exp_clock;
+
+    PrecondArgPkg<TMatrix, double> precond_args_dbl;
+
+    logger.info("Start Precond Calc: " + precond_specs.get_spec_string());
+
+    if (precond_specs.name == "none") {
+
+        exp_clock.start_clock_experiment();
+        precond_args_dbl = PrecondArgPkg<TMatrix, double>(
+            std::make_shared<NoPreconditioner<TMatrix, double>>()
+        );
+        exp_clock.stop_clock_experiment();
+
+    } else if (precond_specs.name == "jacobi") {
+
+        exp_clock.start_clock_experiment();
+        precond_args_dbl = PrecondArgPkg<TMatrix, double>(
+            std::make_shared<JacobiPreconditioner<TMatrix, double>>(
+                gen_lin_sys.get_A()
+            )
+        );
+        exp_clock.stop_clock_experiment();
+
+    } else if (precond_specs.name == "ilu0") {
+
+        exp_clock.start_clock_experiment();
+        std::shared_ptr<ILUPreconditioner<TMatrix, double>> ilu0 = (
+            std::make_shared<ILUPreconditioner<TMatrix, double>>(
+                gen_lin_sys.get_A()
+            )
+        );
+        exp_clock.stop_clock_experiment();
+
+        logger.info("Precond: L info: " + ilu0->get_L().get_info_string());
+        logger.info("Precond: U info: " + ilu0->get_U().get_info_string());
+        precond_args_dbl = PrecondArgPkg<TMatrix, double>(ilu0);
+
+    } else if (precond_specs.name == "ilutp") {
+
+        exp_clock.start_clock_experiment();
+        std::shared_ptr<ILUPreconditioner<TMatrix, double>> ilutp = (
+            std::make_shared<ILUPreconditioner<TMatrix, double>>(
+                gen_lin_sys.get_A(),
+                precond_specs.ilutp_tau,
+                precond_specs.ilutp_p,
+                true
+            )
+        );
+        exp_clock.stop_clock_experiment();
+
+        logger.info("Precond: L info: " + ilutp->get_L().get_info_string());
+        logger.info("Precond: U info: " + ilutp->get_U().get_info_string());
+        logger.info("Precond: P info: " + ilutp->get_P().get_info_string());
+        precond_args_dbl = PrecondArgPkg<TMatrix, double>(ilutp);
+
+    } else {
+        throw std::runtime_error(
+            "calc_preconditioner: invalid precond_specs encountered"
+        );
+    }
+
+    logger.info("Finished Precond Calc");
+
+    return Precond_Data<TMatrix>(
+        precond_specs.get_spec_string(),
+        exp_clock,
+        precond_specs,
+        precond_args_dbl
+    );
+
+}
+
 template <
     template <template <typename> typename> typename TSolver,
     template <typename> typename TMatrix
@@ -98,7 +178,7 @@ Solve_Data<TSolver, TMatrix> execute_solve(
     if (show_plots) { arg_solver_ptr->view_relres_plot("log"); }
     exp_clock.stop_clock_experiment();
 
-    return Solve_Data<TSolver, TMatrix>(exp_clock, arg_solver_ptr);
+    return Solve_Data<TSolver, TMatrix>("", exp_clock, arg_solver_ptr);
 
 }
 
@@ -148,95 +228,35 @@ void run_record_MPGMRES_solve(
 
 template <template <typename> typename TMatrix>
 void run_record_solversuite_experiment(
-    GenericLinearSystem<TMatrix> &gen_lin_sys,
+    const GenericLinearSystem<TMatrix> &gen_lin_sys,
     Solve_Group solve_group,
     fs::path output_data_dir,
     Experiment_Log logger
 ) {
 
     // Determine preconditioning
-    PrecondArgPkg<TMatrix, double> precond_args_dbl;
-    if (solve_group.precond_specs.name == "none") {
-        logger.info("Preconditioner: NoPreconditioner");
-        precond_args_dbl = PrecondArgPkg<TMatrix, double>(
-            std::make_shared<NoPreconditioner<TMatrix, double>>()
-        );
-    } else if (solve_group.precond_specs.name == "jacobi") {
-        logger.info("Preconditioner: JacobiPreconditioner");
-        precond_args_dbl = PrecondArgPkg<TMatrix, double>(
-            std::make_shared<JacobiPreconditioner<TMatrix, double>>(
-                gen_lin_sys.get_A()
-            )
-        );
-    } else if (solve_group.precond_specs.name == "ilu0") {
-        logger.info("Preconditioner: ILU(0) starting computation");
-        std::shared_ptr<ILUPreconditioner<TMatrix, double>> ilu0 = (
-            std::make_shared<ILUPreconditioner<TMatrix, double>>(
-                gen_lin_sys.get_A()
-            )
-        );
-        logger.info("Preconditioner: ILU(0) finished computation");
-        logger.info(
-            "Preconditioner: L info: " +
-            ilu0->get_L().get_info_string()
-        );
-        logger.info(
-            "Preconditioner: U info: " +
-            ilu0->get_U().get_info_string()
-        );
-        precond_args_dbl = PrecondArgPkg<TMatrix, double>(ilu0);
-    } else if (solve_group.precond_specs.name == "ilutp") {
-        std::stringstream ilutp_strm;
-        ilutp_strm << std::setprecision(3);
-        ilutp_strm << "ILUTP("
-                    << solve_group.precond_specs.ilutp_tau << ", "
-                    << solve_group.precond_specs.ilutp_p << ")";
-        logger.info(
-            "Preconditioner: {} starting computation" + ilutp_strm.str()
-        );
-        std::shared_ptr<ILUPreconditioner<TMatrix, double>> ilutp = (
-            std::make_shared<ILUPreconditioner<TMatrix, double>>(
-                gen_lin_sys.get_A(),
-                solve_group.precond_specs.ilutp_tau,
-                solve_group.precond_specs.ilutp_p,
-                true
-            )
-        );
-        logger.info(
-            "Preconditioner: {} finished computation" + ilutp_strm.str()
-        );
-        logger.info(
-            "Preconditioner: L info: "+ilutp->get_L().get_info_string()
-        );
-        logger.info(
-            "Preconditioner: U info: "+ilutp->get_U().get_info_string()
-        );
-        logger.info(
-            "Preconditioner: P info: "+ilutp->get_P().get_info_string()
-        );
-        precond_args_dbl = PrecondArgPkg<TMatrix, double>(ilutp);
-    } else {
-        throw std::runtime_error(
-            "run_solve_group: invalid precond_specs encountered in "
-            "\"" + solve_group.id + "\""
-        ); 
-    }
-    
+    Precond_Data<TMatrix> precond_data = calc_preconditioner<TMatrix>(
+        gen_lin_sys, solve_group.precond_specs, logger
+    );
+    precond_data.record_json("preconditioner", output_data_dir, logger);
+
     // Run solves
     for (std::string solver_id : solve_group.solvers_to_use) {
 
         if (solver_id == "FP16") {
 
             PrecondArgPkg<TMatrix, __half> * precond_args_hlf_ptr = (
-                precond_args_dbl.cast_hlf_ptr()
+                precond_data.precond_arg_pkg_dbl.cast_hlf_ptr()
             );
             TypedLinearSystem<TMatrix, __half> lin_sys_hlf(
                 &gen_lin_sys
             );
             run_record_FPGMRES_solve<TMatrix, __half>(
                 std::make_shared<FP_GMRES_IR_Solve<TMatrix, __half>>(
-                    &lin_sys_hlf, u_hlf,
-                    solve_group.solver_args, *precond_args_hlf_ptr
+                    &lin_sys_hlf,
+                    u_hlf,
+                    solve_group.solver_args,
+                    *precond_args_hlf_ptr
                 ),
                 *precond_args_hlf_ptr,
                 solver_id,
@@ -248,15 +268,17 @@ void run_record_solversuite_experiment(
         } else if (solver_id == "FP32") {
 
             PrecondArgPkg<TMatrix, float> * precond_args_sgl_ptr = (
-                precond_args_dbl.cast_sgl_ptr()
+                precond_data.precond_arg_pkg_dbl.cast_sgl_ptr()
             );
             TypedLinearSystem<TMatrix, float> lin_sys_sgl(
                 &gen_lin_sys
             );
             run_record_FPGMRES_solve<TMatrix, float>(
                 std::make_shared<FP_GMRES_IR_Solve<TMatrix, float>>(
-                    &lin_sys_sgl, u_sgl,
-                    solve_group.solver_args, *precond_args_sgl_ptr
+                    &lin_sys_sgl,
+                    u_sgl,
+                    solve_group.solver_args,
+                    *precond_args_sgl_ptr
                 ),
                 *precond_args_sgl_ptr,
                 solver_id,
@@ -272,10 +294,12 @@ void run_record_solversuite_experiment(
             );
             run_record_FPGMRES_solve<TMatrix, double>(
                 std::make_shared<FP_GMRES_IR_Solve<TMatrix, double>>(
-                    &lin_sys_dbl, u_dbl,
-                    solve_group.solver_args, precond_args_dbl
+                    &lin_sys_dbl,
+                    u_dbl,
+                    solve_group.solver_args,
+                    precond_data.precond_arg_pkg_dbl
                 ),
-                precond_args_dbl,
+                precond_data.precond_arg_pkg_dbl,
                 solver_id,
                 output_data_dir,
                 logger
@@ -286,9 +310,10 @@ void run_record_solversuite_experiment(
             run_record_MPGMRES_solve<TMatrix>(
                 std::make_shared<SimpleConstantThreshold<TMatrix>>(
                     &gen_lin_sys,
-                    solve_group.solver_args, precond_args_dbl
+                    solve_group.solver_args,
+                    precond_data.precond_arg_pkg_dbl
                 ),
-                precond_args_dbl,
+                precond_data.precond_arg_pkg_dbl,
                 solver_id,
                 output_data_dir,
                 logger
@@ -299,9 +324,10 @@ void run_record_solversuite_experiment(
             run_record_MPGMRES_solve<TMatrix>(
                 std::make_shared<RestartCount<TMatrix>>(
                     &gen_lin_sys,
-                    solve_group.solver_args, precond_args_dbl
+                    solve_group.solver_args,
+                    precond_data.precond_arg_pkg_dbl
                 ),
-                precond_args_dbl,
+                precond_data.precond_arg_pkg_dbl,
                 solver_id,
                 output_data_dir,
                 logger

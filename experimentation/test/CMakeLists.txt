@@ -20,6 +20,7 @@ set(
     src/test_read.cpp
     src/test_recorders.cpp
     src/test_run_record.cpp
+    src/test_tools.cpp
 )
 
 add_executable(

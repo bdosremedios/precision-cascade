@@ -45,20 +45,6 @@ void record_basic_solver_data(
              << ",\n";
 }
 
-template <template <typename> typename TMatrix, typename TPrecision>
-void record_precond_data(
-    std::ofstream &file_out,
-    const PrecondArgPkg<TMatrix, TPrecision> arg_precond_arg_pkg,
-    const std::string precond_specs_str
-) {
-    file_out << "\t\"precond_left\" : \""
-             << typeid(*arg_precond_arg_pkg.left_precond).name()
-             << "\",\n";
-    file_out << "\t\"precond_right\" : \""
-             << typeid(*arg_precond_arg_pkg.right_precond).name()
-             << "\",\n";
-    file_out << "\t\"precond_specs\" : \"" << precond_specs_str << "\",\n";
-}
 
 std::string vector_to_jsonarray_str(std::vector<double> vec, int padding_level);
 
@@ -76,7 +62,7 @@ void record_residual_solver_data(
              << "\n";
 }
 
-std::ofstream open_file_ofstream(
+std::ofstream open_json_ofstream(
     std::string file_name, fs::path save_dir, Experiment_Log logger
 );
 
@@ -84,13 +70,27 @@ void start_json(std::ofstream &file_out);
 
 void end_json(std::ofstream &file_out);
 
-template <template <typename> typename TMatrix, typename TPrecision>
-void record_Precond_data_json(
-    PrecondArgPkg<TMatrix, TPrecision> arg_precond_arg_pkg,
-    Experiment_Log logger
-) {
+// template <template <typename> typename TMatrix, typename TPrecision>
+// void record_Precond_data_json(
+//     const PrecondArgPkg<TMatrix, TPrecision> &arg_precond_arg_pkg,
+//     std::string precond_id,
+//     fs::path save_dir,
+//     Experiment_Log logger
+// ) {
+    
+//     std::ofstream file_out = open_json_ofstream(
+//         "preconditioner", save_dir, logger
+//     );
 
-}
+//     start_json(file_out);
+
+//     record_precond_data<TMatrix, TPrecision>(
+//         file_out, arg_precond_arg_pkg, precond_id
+//     );
+
+//     end_json(file_out);
+
+// }
 
 template <template <typename> typename TMatrix, typename TPrecision>
 void record_FPGMRES_data_json(
@@ -101,16 +101,13 @@ void record_FPGMRES_data_json(
     Experiment_Log logger
 ) {
     
-    std::ofstream file_out = open_file_ofstream(file_name, save_dir, logger);
+    std::ofstream file_out = open_json_ofstream(file_name, save_dir, logger);
 
     start_json(file_out);
 
     record_basic_solver_data<TMatrix>(
         file_out, file_name, data.solver_ptr, data.clock
     );
-    // record_precond_data<TMatrix, TPrecision>(
-    //     file_out, arg_precond_arg_pkg, precond_specs_str
-    // );
     record_residual_solver_data<TMatrix>(
         file_out, data.solver_ptr, 0
     );
@@ -128,7 +125,7 @@ void record_MPGMRES_data_json(
     Experiment_Log logger
 ) {
 
-    std::ofstream file_out = open_file_ofstream(file_name, save_dir, logger);
+    std::ofstream file_out = open_json_ofstream(file_name, save_dir, logger);
 
     start_json(file_out);
 
@@ -141,9 +138,6 @@ void record_MPGMRES_data_json(
     file_out << "\t\"sgl_dbl_cascade_change\" : "
                 << data.solver_ptr->get_sgl_dbl_cascade_change()
                 << ",\n";
-    // record_precond_data<TMatrix, double>(
-    //     file_out, arg_precond_arg_pkg, precond_specs_str
-    // );
     record_residual_solver_data<TMatrix>(
         file_out, data.solver_ptr, 0
     );

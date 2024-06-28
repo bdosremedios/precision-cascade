@@ -306,36 +306,6 @@ public:
                             )
                         );
                     }
-                    // ASSERT_TRUE(
-                    //     contains_strings(
-                    //         loaded_file["precond_left"],
-                    //         std::vector<std::string>(
-                    //             {get_type_str(solver_id),
-                    //              get_mat_type_str(solve_group.matrix_type),
-                    //              get_left_precond(
-                    //                 solver_id,
-                    //                 solve_group.precond_specs
-                    //              )}
-                    //         )
-                    //     )
-                    // );
-                    // ASSERT_TRUE(
-                    //     contains_strings(
-                    //         loaded_file["precond_right"],
-                    //         std::vector<std::string>(
-                    //             {get_type_str(solver_id),
-                    //              get_mat_type_str(solve_group.matrix_type),
-                    //              get_right_precond(
-                    //                 solver_id,
-                    //                 solve_group.precond_specs
-                    //              )}
-                    //         )
-                    //     )
-                    // );
-                    // ASSERT_EQ(
-                    //     loaded_file["precond_specs"],
-                    //     solve_group.precond_specs.get_spec_string()
-                    // );
             
                     ASSERT_EQ(loaded_file["initiated"], "true");
                     ASSERT_EQ(loaded_file["terminated"], "true");
