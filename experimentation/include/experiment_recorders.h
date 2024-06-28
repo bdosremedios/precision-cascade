@@ -18,8 +18,6 @@ namespace fs = std::filesystem;
 
 using namespace cascade;
 
-std::string vector_to_jsonarray_str(std::vector<double> vec, int padding_level);
-
 std::string bool_to_string(bool b);
 
 template <template <typename> typename TMatrix>
@@ -62,6 +60,8 @@ void record_precond_data(
     file_out << "\t\"precond_specs\" : \"" << precond_specs_str << "\",\n";
 }
 
+std::string vector_to_jsonarray_str(std::vector<double> vec, int padding_level);
+
 template <template <typename> typename TMatrix>
 void record_residual_solver_data(
     std::ofstream &file_out,
@@ -85,10 +85,17 @@ void start_json(std::ofstream &file_out);
 void end_json(std::ofstream &file_out);
 
 template <template <typename> typename TMatrix, typename TPrecision>
+void record_Precond_data_json(
+    PrecondArgPkg<TMatrix, TPrecision> arg_precond_arg_pkg,
+    Experiment_Log logger
+) {
+
+}
+
+template <template <typename> typename TMatrix, typename TPrecision>
 void record_FPGMRES_data_json(
     const Solve_Data<GenericIterativeSolve, TMatrix> &data,
     const PrecondArgPkg<TMatrix, TPrecision> arg_precond_arg_pkg,
-    const std::string precond_specs_str,
     const std::string file_name,
     const fs::path save_dir,
     Experiment_Log logger
@@ -101,9 +108,9 @@ void record_FPGMRES_data_json(
     record_basic_solver_data<TMatrix>(
         file_out, file_name, data.solver_ptr, data.clock
     );
-    record_precond_data<TMatrix, TPrecision>(
-        file_out, arg_precond_arg_pkg, precond_specs_str
-    );
+    // record_precond_data<TMatrix, TPrecision>(
+    //     file_out, arg_precond_arg_pkg, precond_specs_str
+    // );
     record_residual_solver_data<TMatrix>(
         file_out, data.solver_ptr, 0
     );
@@ -116,7 +123,6 @@ template <template <typename> typename TMatrix>
 void record_MPGMRES_data_json(
     const Solve_Data<MP_GMRES_IR_Solve, TMatrix> &data,
     const PrecondArgPkg<TMatrix, double> arg_precond_arg_pkg,
-    const std::string precond_specs_str,
     const std::string file_name,
     const fs::path save_dir,
     Experiment_Log logger
@@ -135,9 +141,9 @@ void record_MPGMRES_data_json(
     file_out << "\t\"sgl_dbl_cascade_change\" : "
                 << data.solver_ptr->get_sgl_dbl_cascade_change()
                 << ",\n";
-    record_precond_data<TMatrix, double>(
-        file_out, arg_precond_arg_pkg, precond_specs_str
-    );
+    // record_precond_data<TMatrix, double>(
+    //     file_out, arg_precond_arg_pkg, precond_specs_str
+    // );
     record_residual_solver_data<TMatrix>(
         file_out, data.solver_ptr, 0
     );

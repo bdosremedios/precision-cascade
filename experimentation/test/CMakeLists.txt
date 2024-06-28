@@ -18,8 +18,8 @@ target_include_directories(
 set(
     EXPERIMENTATION_TEST_SUITES
     src/test_read.cpp
-    src/test_run.cpp
-    src/test_record.cpp
+    src/test_recorders.cpp
+    src/test_run_record.cpp
 )
 
 add_executable(

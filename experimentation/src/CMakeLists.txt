@@ -9,8 +9,8 @@ set(
     experiment_log.cpp
     experiment_tools.cpp
     experiment_read.cpp
-    experiment_record.cpp
-    experiment_run.cpp
+    experiment_recorders.cpp
+    experiment_run_record.cpp
 )
 
 add_library(

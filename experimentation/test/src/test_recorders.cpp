@@ -1,7 +1,7 @@
 #include "test_experiment.h"
 
-#include "experiment_run.h"
-#include "experiment_record.h"
+#include "experiment_recorders.h"
+#include "experiment_run_record.h"
 
 #include "tools/cuHandleBundle.h"
 #include "types/types.h"
@@ -65,8 +65,11 @@ public:
         );
 
         record_FPGMRES_data_json(
-            data, precond_arg_pkg, sg_precond_specs.get_spec_string(),
-            file_name, test_output_dir, logger
+            data,
+            precond_arg_pkg,
+            file_name,
+            test_output_dir,
+            logger
         );
 
         fs::path file_path = test_output_dir / fs::path(file_name + ".json");
@@ -91,19 +94,6 @@ public:
         ASSERT_EQ(
             loaded_file["elapsed_time_ms"],
             data.clock.get_elapsed_time_ms()
-        );
-
-        ASSERT_EQ(
-            loaded_file["precond_left"],
-            typeid(*precond_arg_pkg.left_precond).name()
-        );
-        ASSERT_EQ(
-            loaded_file["precond_right"],
-            typeid(*precond_arg_pkg.right_precond).name()
-        );
-        ASSERT_EQ(
-            loaded_file["precond_specs"],
-            sg_precond_specs.get_spec_string()
         );
 
         std::vector<double> res_norm_history = (
@@ -135,8 +125,11 @@ public:
         );
 
         record_MPGMRES_data_json(
-            data, precond_arg_pkg, sg_precond_specs.get_spec_string(),
-            file_name, test_output_dir, logger
+            data,
+            precond_arg_pkg,
+            file_name,
+            test_output_dir,
+            logger
         );
 
         fs::path file_path = test_output_dir / fs::path(file_name + ".json");
@@ -161,19 +154,6 @@ public:
         ASSERT_EQ(
             loaded_file["elapsed_time_ms"],
             data.clock.get_elapsed_time_ms()
-        );
-
-        ASSERT_EQ(
-            loaded_file["precond_left"],
-            typeid(*precond_arg_pkg.left_precond).name()
-        );
-        ASSERT_EQ(
-            loaded_file["precond_right"],
-            typeid(*precond_arg_pkg.right_precond).name()
-        );
-        ASSERT_EQ(
-            loaded_file["precond_specs"],
-            sg_precond_specs.get_spec_string()
         );
 
         std::vector<double> res_norm_history = (

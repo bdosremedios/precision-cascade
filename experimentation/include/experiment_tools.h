@@ -138,26 +138,43 @@ public:
 
 };
 
-template <
-    template <template <typename> typename> typename TSolver,
-    template <typename> typename TMatrix
->
-struct Solve_Data
+struct Timed_Experiment_Data
 {
 public:
     
     Experiment_Clock clock;
+
+    Timed_Experiment_Data(Experiment_Clock arg_clock): clock(arg_clock) {}
+
+    Timed_Experiment_Data(
+        const Timed_Experiment_Data &other
+    ) = default;
+
+    Timed_Experiment_Data & operator=(
+        const Timed_Experiment_Data &other
+    ) = default;
+
+    virtual std::string get_info_string() const = 0;
+
+};
+
+template <
+    template <template <typename> typename> typename TSolver,
+    template <typename> typename TMatrix
+>
+struct Solve_Data:
+    public Timed_Experiment_Data
+{
+public:
+
     std::shared_ptr<TSolver<TMatrix>> solver_ptr;
 
     Solve_Data(
         Experiment_Clock arg_clock,
         std::shared_ptr<TSolver<TMatrix>> arg_solver_ptr
     ):
-        clock(arg_clock), solver_ptr(arg_solver_ptr) 
+        Timed_Experiment_Data(arg_clock), solver_ptr(arg_solver_ptr) 
     {}
-
-    Solve_Data(const Solve_Data &other) = default;
-    Solve_Data & operator=(const Solve_Data &other) = default;
 
     std::string get_info_string() const {
         return clock.get_info_string() + " | " + solver_ptr->get_info_string();

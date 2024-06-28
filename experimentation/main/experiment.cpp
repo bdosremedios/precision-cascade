@@ -1,6 +1,6 @@
 #include "experiment_log.h"
 #include "experiment_tools.h"
-#include "experiment_run.h"
+#include "experiment_run_record.h"
 
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
@@ -156,7 +156,7 @@ int main(int argc, char *argv[]) {
     // Run valid experimental specs
     for (Experiment_Specification exp_spec : valid_exp_specs) {
         try {
-            run_experimental_spec(
+            run_record_experimental_spec(
                 cu_handles,
                 exp_spec,
                 data_dir_path,

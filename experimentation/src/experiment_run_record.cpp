@@ -1,4 +1,4 @@
-#include "experiment_run.h"
+#include "experiment_run_record.h"
 
 void create_or_clear_directory(fs::path dir, Experiment_Log logger) {
 
@@ -14,27 +14,27 @@ void create_or_clear_directory(fs::path dir, Experiment_Log logger) {
 
 }
 
-void run_experimental_spec(
+void run_record_experimental_spec(
     const cuHandleBundle &cu_handles,
     Experiment_Specification exp_spec,
-    fs::path data_dir,
-    fs::path output_dir,
+    fs::path matrix_data_dir,
+    fs::path output_data_dir,
     Experiment_Log logger
 ) {
 
     logger.info("Running experiment spec: "+exp_spec.id);
 
-    fs::path exp_spec_dir = output_dir / fs::path(exp_spec.id);
+    fs::path exp_spec_dir = output_data_dir / fs::path(exp_spec.id);
     create_or_clear_directory(exp_spec_dir, logger);
 
     for (Solve_Group solve_group : exp_spec.solve_groups) {
         if (solve_group.matrix_type == "dense") {
-            run_solve_group<MatrixDense>(
-                cu_handles, solve_group, data_dir, exp_spec_dir, logger
+            run_record_solve_group<MatrixDense>(
+                cu_handles, solve_group, matrix_data_dir, exp_spec_dir, logger
             );
         } else if (solve_group.matrix_type == "sparse") {
-            run_solve_group<NoFillMatrixSparse>(
-                cu_handles, solve_group, data_dir, exp_spec_dir, logger
+            run_record_solve_group<NoFillMatrixSparse>(
+                cu_handles, solve_group, matrix_data_dir, exp_spec_dir, logger
             );
         } else {
             throw std::runtime_error(
