@@ -142,7 +142,7 @@ public:
     ~TestTools() {}
 
     template <template <typename> typename TMatrix>
-    void TestRecordOutputJsonPrecond() {
+    void TestRecordOutputJsonPrecond(std::string tag) {
         
         Solve_Group_Precond_Specs none_precond_specs("none");
 
@@ -152,12 +152,16 @@ public:
         none_clock.stop_clock_experiment();
 
         Precond_Data<TMatrix> none_data(
-            "none_id", none_clock, none_precond_specs, none_precond_arg_pkg
+            "none_id_" + tag,
+            none_clock,
+            none_precond_specs,
+            none_precond_arg_pkg
         );
-        none_data.record_json("none_file", test_output_dir, logger);
+        std::string none_file_name = "none_file_" + tag;
+        none_data.record_json(none_file_name, test_output_dir, logger);
 
         ASSERT_MATCH_PRECOND_DATA(
-            test_output_dir / fs::path("none_file.json"),
+            test_output_dir / fs::path(none_file_name + ".json"),
             none_data
         );
         
@@ -173,15 +177,16 @@ public:
         jacobi_clock.stop_clock_experiment();
 
         Precond_Data<TMatrix> jacobi_data(
-            "jacobi_id",
+            "jacobi_id_" + tag,
             jacobi_clock,
             jacobi_precond_specs,
             jacobi_precond_arg_pkg
         );
-        jacobi_data.record_json("jacobi_file", test_output_dir, logger);
+        std::string jacobi_file_name = "jacobi_file_" + tag;
+        jacobi_data.record_json(jacobi_file_name, test_output_dir, logger);
 
         ASSERT_MATCH_PRECOND_DATA(
-            test_output_dir / fs::path("jacobi_file.json"),
+            test_output_dir / fs::path(jacobi_file_name + ".json"),
             jacobi_data
         );
         
@@ -197,15 +202,16 @@ public:
         ilu0_clock.stop_clock_experiment();
 
         Precond_Data<TMatrix> ilu0_data(
-            "ilu0_id",
+            "ilu0_id_" + tag,
             ilu0_clock,
             ilu0_precond_specs,
             ilu0_precond_arg_pkg
         );
-        ilu0_data.record_json("ilu0_file", test_output_dir, logger);
+        std::string ilu0_file_name = "ilu0_file_" + tag;
+        ilu0_data.record_json(ilu0_file_name, test_output_dir, logger);
 
         ASSERT_MATCH_PRECOND_DATA(
-            test_output_dir / fs::path("ilu0_file.json"),
+            test_output_dir / fs::path(ilu0_file_name + ".json"),
             ilu0_data
         );
         
@@ -226,15 +232,16 @@ public:
         ilutp_clock.stop_clock_experiment();
 
         Precond_Data<TMatrix> ilutp_data(
-            "ilutp_id",
+            "ilutp_id_" + tag,
             ilutp_clock,
             ilutp_precond_specs,
             ilutp_precond_arg_pkg
         );
-        ilutp_data.record_json("ilutp_file", test_output_dir, logger);
+        std::string ilutp_file_name = "ilutp_file_" + tag;
+        ilutp_data.record_json(ilutp_file_name, test_output_dir, logger);
 
         ASSERT_MATCH_PRECOND_DATA(
-            test_output_dir / fs::path("ilutp_file.json"),
+            test_output_dir / fs::path(ilutp_file_name + ".json"),
             ilutp_data
         );
 
@@ -243,6 +250,6 @@ public:
 };
 
 TEST_F(TestTools, TestRecordOutputJsonPrecond) {
-    TestRecordOutputJsonPrecond<MatrixDense>();
-    TestRecordOutputJsonPrecond<NoFillMatrixSparse>();
+    TestRecordOutputJsonPrecond<MatrixDense>("dense");
+    TestRecordOutputJsonPrecond<NoFillMatrixSparse>("sparse");
 }
