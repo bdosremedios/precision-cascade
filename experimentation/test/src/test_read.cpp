@@ -6,7 +6,7 @@ class TestRead: public TestExperimentBase {};
 
 TEST_F(TestRead, TestCorrectSingleEntryJson) {
 
-    Experiment_Specification test_spec = parse_experiment_spec(
+    Experiment_Spec test_spec = parse_experiment_spec(
         test_json_dir / fs::path("good_spec_single.json")
     );
 
@@ -24,7 +24,7 @@ TEST_F(TestRead, TestCorrectSingleEntryJson) {
     ASSERT_EQ(test_spec.solve_groups[0].solver_args.target_rel_res, 1e-10);
     ASSERT_EQ(
         test_spec.solve_groups[0].precond_specs,
-        Solve_Group_Precond_Specs("none")
+        Preconditioner_Spec("none")
     );
     ASSERT_EQ(test_spec.solve_groups[0].matrices_to_test.size(), 3);
     ASSERT_EQ(test_spec.solve_groups[0].matrices_to_test[0], "494_bus.csv");
@@ -35,7 +35,7 @@ TEST_F(TestRead, TestCorrectSingleEntryJson) {
 
 TEST_F(TestRead, TestCorrectILUTPJson) {
 
-    Experiment_Specification test_spec = parse_experiment_spec(
+    Experiment_Spec test_spec = parse_experiment_spec(
         test_json_dir / fs::path("good_spec_ILUTP.json")
     );
 
@@ -53,7 +53,7 @@ TEST_F(TestRead, TestCorrectILUTPJson) {
     ASSERT_EQ(test_spec.solve_groups[0].solver_args.target_rel_res, 1e-10);
     ASSERT_EQ(
         test_spec.solve_groups[0].precond_specs,
-        Solve_Group_Precond_Specs("ilutp", 1e-6, 21)
+        Preconditioner_Spec("ilutp", 1e-6, 21)
     );
     ASSERT_EQ(test_spec.solve_groups[0].matrices_to_test.size(), 3);
     ASSERT_EQ(test_spec.solve_groups[0].matrices_to_test[0], "494_bus.csv");
@@ -64,7 +64,7 @@ TEST_F(TestRead, TestCorrectILUTPJson) {
 
 TEST_F(TestRead, TestCorrectMultipleEntryJson) {
 
-    Experiment_Specification test_spec = parse_experiment_spec(
+    Experiment_Spec test_spec = parse_experiment_spec(
         test_json_dir / fs::path("good_spec_multi.json")
     );
 
@@ -83,7 +83,7 @@ TEST_F(TestRead, TestCorrectMultipleEntryJson) {
     ASSERT_EQ(test_spec.solve_groups[0].solver_args.target_rel_res, 1e-10);
     ASSERT_EQ(
         test_spec.solve_groups[0].precond_specs,
-        Solve_Group_Precond_Specs("none")
+        Preconditioner_Spec("none")
     );
     ASSERT_EQ(test_spec.solve_groups[0].matrices_to_test.size(), 3);
     ASSERT_EQ(test_spec.solve_groups[0].matrices_to_test[0], "494_bus.csv");
@@ -102,7 +102,7 @@ TEST_F(TestRead, TestCorrectMultipleEntryJson) {
     ASSERT_EQ(test_spec.solve_groups[1].solver_args.target_rel_res, 3.5);
     ASSERT_EQ(
         test_spec.solve_groups[1].precond_specs,
-        Solve_Group_Precond_Specs("ilu0")
+        Preconditioner_Spec("ilu0")
     );
     ASSERT_EQ(test_spec.solve_groups[1].matrices_to_test.size(), 1);
     ASSERT_EQ(test_spec.solve_groups[1].matrices_to_test[0], "494_bus.csv");
@@ -117,7 +117,7 @@ TEST_F(TestRead, TestCorrectMultipleEntryJson) {
     ASSERT_EQ(test_spec.solve_groups[2].solver_args.target_rel_res, 1e-10);
     ASSERT_EQ(
         test_spec.solve_groups[2].precond_specs,
-        Solve_Group_Precond_Specs("none")
+        Preconditioner_Spec("none")
     );
     ASSERT_EQ(test_spec.solve_groups[2].matrices_to_test.size(), 2);
     ASSERT_EQ(test_spec.solve_groups[2].matrices_to_test[0], "662_bus.csv");

@@ -1,5 +1,5 @@
-#ifndef CUBLAS_CHECK
-#define CUBLAS_CHECK
+#ifndef CUDA_CHECK_H
+#define CUDA_CHECK_H
 
 #include <cuda_runtime.h>
 #include <cublas_v2.h>

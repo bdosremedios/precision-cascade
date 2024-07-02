@@ -51,13 +51,13 @@ std::string extract_matrix_type(json::iterator member) {
 
 }
 
-Solve_Group_Precond_Specs extract_solve_group_precond_specs(
+Preconditioner_Spec extract_solve_group_precond_specs(
     json::iterator member
 ) {
 
     if (member->is_string()) {
 
-        return Solve_Group_Precond_Specs(*member);
+        return Preconditioner_Spec(*member);
 
     } else if (member->is_array()) {
 
@@ -97,7 +97,7 @@ Solve_Group_Precond_Specs extract_solve_group_precond_specs(
                 "many values in array"
             );
         }
-        return Solve_Group_Precond_Specs(name, ilutp_tau, ilutp_p);
+        return Preconditioner_Spec(name, ilutp_tau, ilutp_p);
 
     } else {
         throw std::runtime_error(
@@ -157,7 +157,7 @@ Solve_Group check_and_extract_solve_group(std::string id, json cand_obj) {
     int solver_max_outer_iterations = -1;
     int solver_max_inner_iterations = -1;
     double solver_target_relres = -1.;
-    Solve_Group_Precond_Specs precond_specs;
+    Preconditioner_Spec precond_specs;
     std::vector<std::string> matrices_to_test;
     for (
         json::iterator it = cand_obj.begin();
@@ -222,7 +222,7 @@ Solve_Group check_and_extract_solve_group(std::string id, json cand_obj) {
 
 }
 
-Experiment_Specification parse_experiment_spec(fs::path exp_spec_path) {
+Experiment_Spec parse_experiment_spec(fs::path exp_spec_path) {
 
     std::ifstream exp_spec_stream(exp_spec_path);
 
@@ -234,7 +234,7 @@ Experiment_Specification parse_experiment_spec(fs::path exp_spec_path) {
     }
     
     std::string exp_spec_id = exp_spec_path.stem().string();
-    Experiment_Specification exp_spec = Experiment_Specification(exp_spec_id);
+    Experiment_Spec exp_spec = Experiment_Spec(exp_spec_id);
 
     json exp_spec_json;
     try {

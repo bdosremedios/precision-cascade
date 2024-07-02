@@ -4,17 +4,6 @@ project(precision-cascade LANGUAGES CXX CUDA)
 
 add_compile_definitions(_SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING=1)
 
-add_library(
-    experimentation_test_headers
-    INTERFACE
-)
-
-target_include_directories(
-    experimentation_test_headers
-    INTERFACE
-    include
-)
-
 set(
     EXPERIMENTATION_TEST_SUITES
     src/test_read.cpp
@@ -32,9 +21,14 @@ add_executable(
 target_link_libraries(
     test_experiment
     PUBLIC
-    experiment_lib
-    experimentation_test_headers
+    experiment-lib
     test_headers
     precision-cascade
     gtest_main
+)
+
+target_include_directories(
+    test_experiment
+    PUBLIC
+    include
 )

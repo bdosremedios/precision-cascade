@@ -6,11 +6,9 @@
 #include "spdlog/sinks/stdout_sinks.h"
 
 #include <memory>
-#include <vector>
 #include <string>
 #include <filesystem>
 #include <fstream>
-#include <cstdio>
 
 namespace fs = std::filesystem;
 

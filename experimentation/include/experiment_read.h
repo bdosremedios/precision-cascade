@@ -1,7 +1,7 @@
 #ifndef EXPERIMENT_READ_H
 #define EXPERIMENT_READ_H
 
-#include "experiment_tools.h"
+#include "exp_spec/exp_spec.h"
 
 #include <nlohmann/json.hpp>
 
@@ -17,7 +17,7 @@ using json = nlohmann::json;
 int extract_integer(json::iterator member);
 std::vector<std::string> extract_solvers_to_use(json::iterator member);
 std::string extract_matrix_type(json::iterator member);
-Solve_Group_Precond_Specs extract_solve_group_precond_specs(
+Preconditioner_Spec extract_solve_group_precond_specs(
     json::iterator member
 );
 double extract_double(json::iterator member);
@@ -25,6 +25,6 @@ std::vector<std::string> extract_string_vector(json::iterator member);
 
 Solve_Group extract_solve_group(std::string id, json cand_obj);
 
-Experiment_Specification parse_experiment_spec(fs::path exp_spec_path);
+Experiment_Spec parse_experiment_spec(fs::path exp_spec_path);
 
 #endif

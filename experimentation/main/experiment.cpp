@@ -1,4 +1,4 @@
-#include "experiment_log.h"
+#include "exp_tools/Experiment_Log.h"
 #include "experiment_tools.h"
 #include "experiment_run_record.h"
 
@@ -119,14 +119,14 @@ int main(int argc, char *argv[]) {
     );
 
     // Extract and validate found experimental specs
-    std::vector<Experiment_Specification> valid_exp_specs;
+    std::vector<Experiment_Spec> valid_exp_specs;
     experiment_logger.info("Validating experimental spec files");
     for (fs::path cand_exp_spec_path : candidate_exp_specs) {
         try {
             experiment_logger.info(
                 "Validating: " + cand_exp_spec_path.filename().string()
             );
-            Experiment_Specification loaded_exp_spec = parse_experiment_spec(
+            Experiment_Spec loaded_exp_spec = parse_experiment_spec(
                 cand_exp_spec_path
             );
             valid_exp_specs.push_back(loaded_exp_spec);
@@ -154,7 +154,7 @@ int main(int argc, char *argv[]) {
     cu_handles.create();
 
     // Run valid experimental specs
-    for (Experiment_Specification exp_spec : valid_exp_specs) {
+    for (Experiment_Spec exp_spec : valid_exp_specs) {
         try {
             run_record_experimental_spec(
                 cu_handles,

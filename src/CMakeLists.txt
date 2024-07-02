@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION ${CMAKE_VERSION})
 project(precision-cascade LANGUAGES CXX CUDA)
 
 add_library(
-    precision-cascade-gpu_kernels
+    precision-cascade-gpu-kernels
     STATIC
     types/Scalar/Scalar_gpu_kernels.cu
     types/Vector/Vector_gpu_kernels.cu
@@ -14,27 +14,20 @@ add_library(
 
 if(WIN32)
     target_link_options(
-        precision-cascade-gpu_kernels
+        precision-cascade-gpu-kernels
         PUBLIC
         "/NODEFAULTLIB:LIBCMT"
     )
 endif()
 
 target_link_libraries(
-    precision-cascade-gpu_kernels
+    precision-cascade-gpu-kernels
     PUBLIC
     precision-cascade-headers
 )
 
-target_link_libraries(
-    precision-cascade-gpu_kernels
-    PUBLIC
-    CUDA::cudart
-    CUDA::cublas
-)
-
 set_property(
-    TARGET precision-cascade-gpu_kernels
+    TARGET precision-cascade-gpu-kernels
     PROPERTY CUDA_ARCHITECTURES
     ${PROJECT_CUDA_ARCH_REAL} ${PROJECT_CUDA_ARCH_VRTL}
 )
@@ -80,14 +73,6 @@ target_link_libraries(
     precision-cascade-headers
 )
 
-target_link_libraries(
-    precision-cascade-tools
-    PUBLIC
-    CUDA::cudart
-    CUDA::cublas
-    CUDA::cusparse
-)
-
 set_property(
     TARGET precision-cascade-tools
     PROPERTY CUDA_ARCHITECTURES
@@ -125,17 +110,9 @@ target_link_libraries(
     precision-cascade
     PUBLIC
     precision-cascade-headers
-    precision-cascade-gpu_kernels
+    precision-cascade-gpu-kernels
     precision-cascade-constants
     precision-cascade-tools
-)
-
-target_link_libraries(
-    precision-cascade
-    PUBLIC
-    CUDA::cudart
-    CUDA::cublas
-    CUDA::cusparse
 )
 
 set_property(

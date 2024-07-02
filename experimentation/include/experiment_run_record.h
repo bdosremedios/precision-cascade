@@ -1,9 +1,9 @@
 #ifndef EXPERIMENT_RUN_H
 #define EXPERIMENT_RUN_H
 
-#include "experiment_log.h"
 #include "experiment_read.h"
-#include "experiment_recorders.h"
+#include "exp_record/exp_record.h"
+#include "exp_tools/exp_tools.h"
 
 #include "tools/cuHandleBundle.h"
 #include "types/types.h"
@@ -84,9 +84,9 @@ GenericLinearSystem<TMatrix> load_lin_sys(
 void create_or_clear_directory(fs::path dir, Experiment_Log logger);
 
 template <template <typename> typename TMatrix>
-Precond_Data<TMatrix> calc_preconditioner(
+Preconditioner_Data<TMatrix> calc_preconditioner(
     const GenericLinearSystem<TMatrix> &gen_lin_sys,
-    Solve_Group_Precond_Specs precond_specs,
+    Preconditioner_Spec precond_specs,
     Experiment_Log logger
 ) {
 
@@ -154,7 +154,7 @@ Precond_Data<TMatrix> calc_preconditioner(
 
     logger.info("Finished Precond Calc");
 
-    return Precond_Data<TMatrix>(
+    return Preconditioner_Data<TMatrix>(
         precond_specs.get_spec_string(),
         exp_clock,
         precond_specs,
@@ -228,7 +228,7 @@ void run_record_solversuite_experiment(
 ) {
 
     // Determine preconditioning
-    Precond_Data<TMatrix> precond_data = calc_preconditioner<TMatrix>(
+    Preconditioner_Data<TMatrix> precond_data = calc_preconditioner<TMatrix>(
         gen_lin_sys, solve_group.precond_specs, logger
     );
     precond_data.record_json("preconditioner", output_data_dir, logger);
@@ -238,14 +238,14 @@ void run_record_solversuite_experiment(
 
         if (solver_id == "FP16") {
 
-            PrecondArgPkg<TMatrix, __half> * precond_args_hlf_ptr = (
+            cascade::PrecondArgPkg<TMatrix, __half> * precond_args_hlf_ptr = (
                 precond_data.precond_arg_pkg_dbl.cast_hlf_ptr()
             );
-            TypedLinearSystem<TMatrix, __half> lin_sys_hlf(
+            cascade::TypedLinearSystem<TMatrix, __half> lin_sys_hlf(
                 &gen_lin_sys
             );
             run_record_FPGMRES_solve<TMatrix, __half>(
-                std::make_shared<FP_GMRES_IR_Solve<TMatrix, __half>>(
+                std::make_shared<cascade::FP_GMRES_IR_Solve<TMatrix, __half>>(
                     &lin_sys_hlf,
                     u_hlf,
                     solve_group.solver_args,
@@ -260,14 +260,14 @@ void run_record_solversuite_experiment(
 
         } else if (solver_id == "FP32") {
 
-            PrecondArgPkg<TMatrix, float> * precond_args_sgl_ptr = (
+            cascade::PrecondArgPkg<TMatrix, float> * precond_args_sgl_ptr = (
                 precond_data.precond_arg_pkg_dbl.cast_sgl_ptr()
             );
-            TypedLinearSystem<TMatrix, float> lin_sys_sgl(
+            cascade::TypedLinearSystem<TMatrix, float> lin_sys_sgl(
                 &gen_lin_sys
             );
             run_record_FPGMRES_solve<TMatrix, float>(
-                std::make_shared<FP_GMRES_IR_Solve<TMatrix, float>>(
+                std::make_shared<cascade::FP_GMRES_IR_Solve<TMatrix, float>>(
                     &lin_sys_sgl,
                     u_sgl,
                     solve_group.solver_args,
@@ -282,11 +282,11 @@ void run_record_solversuite_experiment(
 
         } else if (solver_id == "FP64") {
 
-            TypedLinearSystem<TMatrix, double> lin_sys_dbl(
+            cascade::TypedLinearSystem<TMatrix, double> lin_sys_dbl(
                 &gen_lin_sys
             );
             run_record_FPGMRES_solve<TMatrix, double>(
-                std::make_shared<FP_GMRES_IR_Solve<TMatrix, double>>(
+                std::make_shared<cascade::FP_GMRES_IR_Solve<TMatrix, double>>(
                     &lin_sys_dbl,
                     u_dbl,
                     solve_group.solver_args,
@@ -301,7 +301,7 @@ void run_record_solversuite_experiment(
         } else if (solver_id == "SimpleConstantThreshold") {
 
             run_record_MPGMRES_solve<TMatrix>(
-                std::make_shared<SimpleConstantThreshold<TMatrix>>(
+                std::make_shared<cascade::SimpleConstantThreshold<TMatrix>>(
                     &gen_lin_sys,
                     solve_group.solver_args,
                     precond_data.precond_arg_pkg_dbl
@@ -315,7 +315,7 @@ void run_record_solversuite_experiment(
         } else if (solver_id == "RestartCount") {
 
             run_record_MPGMRES_solve<TMatrix>(
-                std::make_shared<RestartCount<TMatrix>>(
+                std::make_shared<cascade::RestartCount<TMatrix>>(
                     &gen_lin_sys,
                     solve_group.solver_args,
                     precond_data.precond_arg_pkg_dbl
@@ -394,7 +394,7 @@ void run_record_solve_group(
 
 void run_record_experimental_spec(
     const cuHandleBundle &cu_handles,
-    Experiment_Specification exp_spec,
+    Experiment_Spec exp_spec,
     fs::path matrix_data_dir,
     fs::path output_data_dir,
     Experiment_Log logger

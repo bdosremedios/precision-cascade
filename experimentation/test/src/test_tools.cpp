@@ -1,12 +1,15 @@
 #include "test_experiment.h"
 
-#include "experiment_recorders.h"
-#include "experiment_run_record.h"
-#include "experiment_log.h"
+#include "exp_record/exp_record.h"
+#include "exp_spec/exp_spec.h"
 
 #include "tools/TypeIdentity.h"
 
+#include <nlohmann/json.hpp>
+
 #include <cuda_fp16.h>
+
+using json = nlohmann::json;
 
 class TestTools: public TestExperimentBase
 {
@@ -69,7 +72,7 @@ private:
 
     }
 
-    std::string get_left_precond(Solve_Group_Precond_Specs precond_specs) {
+    std::string get_left_precond(Preconditioner_Spec precond_specs) {
 
         if (precond_specs.name == "none") {
             return "NoPreconditioner";
@@ -87,14 +90,14 @@ private:
 
     }
 
-    std::string get_right_precond(Solve_Group_Precond_Specs precond_specs) {
+    std::string get_right_precond(Preconditioner_Spec precond_specs) {
         return "NoPreconditioner";
 
     }
 
     template <template <typename> typename TMatrix>
     void ASSERT_MATCH_PRECOND_DATA(
-        fs::path json_file, Precond_Data<TMatrix> precond_data
+        fs::path json_file, Preconditioner_Data<TMatrix> precond_data
     ) {
 
         std::ifstream file_in(json_file);
@@ -144,14 +147,14 @@ public:
     template <template <typename> typename TMatrix>
     void TestRecordOutputJsonPrecond(std::string tag) {
         
-        Solve_Group_Precond_Specs none_precond_specs("none");
+        Preconditioner_Spec none_precond_specs("none");
 
         Experiment_Clock none_clock;
         none_clock.start_clock_experiment();
         PrecondArgPkg<TMatrix, double> none_precond_arg_pkg;
         none_clock.stop_clock_experiment();
 
-        Precond_Data<TMatrix> none_data(
+        Preconditioner_Data<TMatrix> none_data(
             "none_id_" + tag,
             none_clock,
             none_precond_specs,
@@ -165,7 +168,7 @@ public:
             none_data
         );
         
-        Solve_Group_Precond_Specs jacobi_precond_specs("jacobi");
+        Preconditioner_Spec jacobi_precond_specs("jacobi");
 
         Experiment_Clock jacobi_clock;
         jacobi_clock.start_clock_experiment();
@@ -176,7 +179,7 @@ public:
         );
         jacobi_clock.stop_clock_experiment();
 
-        Precond_Data<TMatrix> jacobi_data(
+        Preconditioner_Data<TMatrix> jacobi_data(
             "jacobi_id_" + tag,
             jacobi_clock,
             jacobi_precond_specs,
@@ -190,7 +193,7 @@ public:
             jacobi_data
         );
         
-        Solve_Group_Precond_Specs ilu0_precond_specs("ilu0");
+        Preconditioner_Spec ilu0_precond_specs("ilu0");
 
         Experiment_Clock ilu0_clock;
         ilu0_clock.start_clock_experiment();
@@ -201,7 +204,7 @@ public:
         );
         ilu0_clock.stop_clock_experiment();
 
-        Precond_Data<TMatrix> ilu0_data(
+        Preconditioner_Data<TMatrix> ilu0_data(
             "ilu0_id_" + tag,
             ilu0_clock,
             ilu0_precond_specs,
@@ -215,7 +218,7 @@ public:
             ilu0_data
         );
         
-        Solve_Group_Precond_Specs ilutp_precond_specs(
+        Preconditioner_Spec ilutp_precond_specs(
             "ilutp", 1e-4, 50
         );
 
@@ -231,7 +234,7 @@ public:
         );
         ilutp_clock.stop_clock_experiment();
 
-        Precond_Data<TMatrix> ilutp_data(
+        Preconditioner_Data<TMatrix> ilutp_data(
             "ilutp_id_" + tag,
             ilutp_clock,
             ilutp_precond_specs,

@@ -1,6 +1,5 @@
 #include "test_experiment.h"
 
-#include "experiment_recorders.h"
 #include "experiment_run_record.h"
 
 #include "tools/cuHandleBundle.h"
@@ -52,7 +51,7 @@ public:
         GenericLinearSystem<TMatrix> gen_lin_sys(A, b);
         TypedLinearSystem<TMatrix, double> typ_lin_sys(&gen_lin_sys);
 
-        Solve_Group_Precond_Specs sg_precond_specs("none");
+        Preconditioner_Spec sg_precond_specs("none");
         PrecondArgPkg<TMatrix, double> precond_arg_pkg;
 
         std::shared_ptr<FP_GMRES_IR_Solve<TMatrix, double>> solve_ptr;
@@ -107,7 +106,7 @@ public:
 
         GenericLinearSystem<TMatrix> gen_lin_sys(A, b);
 
-        Solve_Group_Precond_Specs sg_precond_specs("none");
+        Preconditioner_Spec sg_precond_specs("none");
         PrecondArgPkg<TMatrix, double> precond_arg_pkg;
 
         std::shared_ptr<MP_GMRES_IR_Solve<TMatrix>> solve_ptr;

@@ -58,7 +58,7 @@ private:
 
     std::string get_left_precond(
         std::string solver_id,
-        Solve_Group_Precond_Specs precond_specs
+        Preconditioner_Spec precond_specs
     ) {
 
         std::string type_str = get_type_str(solver_id);
@@ -86,7 +86,7 @@ private:
 
     std::string get_right_precond(
         std::string solver_id,
-        Solve_Group_Precond_Specs precond_specs
+        Preconditioner_Spec precond_specs
     ) {
         return "NoPreconditioner";
 
@@ -317,7 +317,7 @@ public:
     }
 
     template <template <typename> typename TMatrix>
-    void Test_Run_Experiment_Specification(Experiment_Specification exp_spec) {
+    void Test_Run_Experiment_Spec(Experiment_Spec exp_spec) {
 
         run_record_experimental_spec(
             *TestExperimentBase::cu_handles_ptr,
@@ -391,7 +391,7 @@ TEST_F(TestRun, Test_AllSolvers_Run_Solve_Group) {
             {"FP16", "FP32", "FP64", "SimpleConstantThreshold", "RestartCount"}
         ),
         "dense", 3, 10, 4, 1e-4,
-        Solve_Group_Precond_Specs("none"),
+        Preconditioner_Spec("none"),
         std::vector<std::string>({"easy_4_4.csv", "easy_5_5.csv"})
     );
 
@@ -403,7 +403,7 @@ TEST_F(TestRun, Test_AllSolvers_Run_Solve_Group) {
             {"FP16", "FP32", "FP64", "SimpleConstantThreshold", "RestartCount"}
         ),
         "sparse", 3, 10, 4, 1e-4,
-        Solve_Group_Precond_Specs("none"),
+        Preconditioner_Spec("none"),
         std::vector<std::string>({"easy_4_4.csv", "easy_5_5.csv"})
     );
 
@@ -413,14 +413,14 @@ TEST_F(TestRun, Test_AllSolvers_Run_Solve_Group) {
 
 TEST_F(TestRun, Test_AllPreconditioners_Run_Solve_Group) {
 
-    std::vector<Solve_Group_Precond_Specs> precond_spec_vec {
-        Solve_Group_Precond_Specs("none"),
-        Solve_Group_Precond_Specs("jacobi"),
-        Solve_Group_Precond_Specs("ilu0"),
-        Solve_Group_Precond_Specs("ilutp", 1e-4, 20)
+    std::vector<Preconditioner_Spec> precond_spec_vec {
+        Preconditioner_Spec("none"),
+        Preconditioner_Spec("jacobi"),
+        Preconditioner_Spec("ilu0"),
+        Preconditioner_Spec("ilutp", 1e-4, 20)
     };
 
-    for (Solve_Group_Precond_Specs precond_specs : precond_spec_vec) {
+    for (Preconditioner_Spec precond_specs : precond_spec_vec) {
 
         Solve_Group solve_group_dense(
             "allpreconditioners_dense_"+precond_specs.name,
@@ -452,7 +452,7 @@ TEST_F(TestRun, Test_Mix_Run_Solve_Group) {
         "mixsolvers_dense",
         std::vector<std::string>({"FP64", "FP16", "SimpleConstantThreshold"}),
         "dense", 3, 10, 4, 1e-4,
-        Solve_Group_Precond_Specs("none"),
+        Preconditioner_Spec("none"),
         std::vector<std::string>({"easy_4_4.csv", "easy_5_5.csv"})
     );
 
@@ -462,7 +462,7 @@ TEST_F(TestRun, Test_Mix_Run_Solve_Group) {
         "mixsolvers_sparse",
         std::vector<std::string>({"FP64", "FP16", "SimpleConstantThreshold"}),
         "sparse", 3, 10, 4, 1e-4,
-        Solve_Group_Precond_Specs("none"),
+        Preconditioner_Spec("none"),
         std::vector<std::string>({"easy_4_4.csv", "easy_5_5.csv"})
     );
 

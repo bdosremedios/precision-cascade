@@ -27,6 +27,7 @@ target_include_directories(
 target_link_libraries(
     precision-cascade-headers
     INTERFACE
-    precision-cascade-gpu_kernels
-    precision-cascade-constants
+    CUDA::cudart
+    CUDA::cublas
+    CUDA::cusparse
 )

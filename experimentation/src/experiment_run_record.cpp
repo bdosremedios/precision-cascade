@@ -16,7 +16,7 @@ void create_or_clear_directory(fs::path dir, Experiment_Log logger) {
 
 void run_record_experimental_spec(
     const cuHandleBundle &cu_handles,
-    Experiment_Specification exp_spec,
+    Experiment_Spec exp_spec,
     fs::path matrix_data_dir,
     fs::path output_data_dir,
     Experiment_Log logger
