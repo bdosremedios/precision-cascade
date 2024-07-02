@@ -28,59 +28,6 @@ static const double u_hlf = std::pow(2, -10);
 static const double u_sgl = std::pow(2, -23);
 static const double u_dbl = std::pow(2, -52);
 
-template <template <typename> typename TMatrix>
-GenericLinearSystem<TMatrix> load_lin_sys(
-    const cuHandleBundle &cu_handles,
-    fs::path input_dir,
-    std::string matrix_name,
-    Experiment_Log logger
-) {
-
-    fs::path matrix_path = input_dir / fs::path(matrix_name);
-
-    logger.info("Loading: "+matrix_path.string());
-
-    TMatrix<double> A(cu_handles);
-    if (matrix_path.extension() == ".mtx") {
-        A = read_matrixMTX<TMatrix, double>(cu_handles, matrix_path);
-    } else if (matrix_path.extension() == ".csv") {
-        A = read_matrixCSV<TMatrix, double>(cu_handles, matrix_path);
-    } else {
-        throw std::runtime_error("load_lin_sys: invalid extension");
-    }
-
-    Scalar<double> A_max_mag = A.get_max_mag_elem();
-    A /= A_max_mag;
-    logger.info("Matrix info: " + A.get_info_string());
-
-    // Search for a rhs and if none is found generate one randomly
-    fs::path potential_b_path(
-        input_dir /
-        fs::path(
-            matrix_path.stem().string() + "_b" +
-            matrix_path.extension().string()
-        )
-    );
-    Vector<double> b(cu_handles);
-    if (fs::exists(potential_b_path)) {
-        if (potential_b_path.extension() == ".mtx") {
-            b = read_vectorMTX<double>(cu_handles, potential_b_path, "random");
-        } else if (potential_b_path.extension() == ".csv") {
-            b = read_vectorCSV<double>(cu_handles, potential_b_path);
-        } else {
-            throw std::runtime_error(
-                "load_lin_sys: invalid extension found on potential_b_path file"
-            );
-        }
-        b /= A_max_mag;
-    } else {
-        b = A*Vector<double>::Random(cu_handles, A.cols());
-    }
-
-    return GenericLinearSystem<TMatrix>(A, b);
-
-}
-
 void create_or_clear_directory(fs::path dir, Experiment_Log logger);
 
 template <template <typename> typename TMatrix>
