@@ -1,12 +1,11 @@
-#ifndef EXPERIMENT_READ_H
-#define EXPERIMENT_READ_H
+#ifndef EXP_READ_H
+#define EXP_READ_H
 
 #include "exp_spec/exp_spec.h"
 
 #include <nlohmann/json.hpp>
 
 #include <filesystem>
-#include <fstream>
 #include <string>
 #include <vector>
 #include <unordered_set>
