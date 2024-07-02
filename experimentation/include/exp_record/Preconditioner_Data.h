@@ -29,7 +29,9 @@ private:
                  << "\",\n";
         file_out << "\t\"precond_specs\" : \""
                  << precond_specs.get_spec_string()
-                 << "\"\n";
+                 << "\",\n";
+        file_out << "\t\"elapsed_time_ms\" : " << clock.get_elapsed_time_ms()
+                 << "\n";
     }
 
 public:

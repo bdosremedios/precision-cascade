@@ -7,9 +7,8 @@ add_compile_definitions(_SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING=1)
 set(
     EXPERIMENTATION_TEST_SUITES
     src/test_read.cpp
-    src/test_recorders.cpp
     src/test_run_record.cpp
-    src/test_tools.cpp
+    src/test_exp_record.cpp
 )
 
 add_executable(

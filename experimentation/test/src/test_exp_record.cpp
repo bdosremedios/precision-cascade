@@ -1,7 +1,8 @@
 #include "test_experiment.h"
 
-#include "exp_record/exp_record.h"
 #include "exp_spec/exp_spec.h"
+#include "exp_record/exp_record.h"
+#include "experiment_run_record.h"
 
 #include "tools/TypeIdentity.h"
 
@@ -11,11 +12,14 @@
 
 using json = nlohmann::json;
 
-class TestTools: public TestExperimentBase
+class Test_Experiment_Record: public TestExperimentBase
 {
 private:
 
     MatrixDense<double> A = MatrixDense<double>(cuHandleBundle());
+    Vector<double> b = Vector<double>(cuHandleBundle());
+    const double u_dbl = std::pow(2, -52);
+    SolveArgPkg solve_args;
     Experiment_Log logger;
 
     bool contains_strings(
@@ -27,6 +31,13 @@ private:
             }
         }
         return true;
+    }
+
+    std::string get_tag(TMatrixIdentity<MatrixDense> _) {
+        return "dense";
+    }
+    std::string get_tag(TMatrixIdentity<NoFillMatrixSparse> _) {
+        return "sparse";
     }
 
     std::string get_type_str(TypeIdentity<__half> _) {
@@ -95,6 +106,10 @@ private:
 
     }
 
+    std::string bool_to_string(bool b) {
+        return (b) ? "true" : "false";
+    }
+
     template <template <typename> typename TMatrix>
     void ASSERT_MATCH_PRECOND_DATA(
         fs::path json_file, Preconditioner_Data<TMatrix> precond_data
@@ -130,6 +145,10 @@ private:
             loaded_file["precond_specs"],
             precond_data.precond_specs.get_spec_string()
         );
+        ASSERT_EQ(
+            loaded_file["elapsed_time_ms"],
+            precond_data.clock.get_elapsed_time_ms()
+        );
 
         file_in.close();
 
@@ -137,15 +156,18 @@ private:
 
 public:
 
-    TestTools() {
+    Test_Experiment_Record() {
         A = MatrixDense<double>::Random(*cu_handles_ptr, 16, 16);
+        b = A*Vector<double>::Random(*cu_handles_ptr, 16);
         logger = Experiment_Log();
     }
 
-    ~TestTools() {}
+    ~Test_Experiment_Record() {}
 
     template <template <typename> typename TMatrix>
-    void TestRecordOutputJsonPrecond(std::string tag) {
+    void TestRecordOutputJsonPrecond() {
+
+        std::string tag = get_tag(TMatrixIdentity<TMatrix>());
         
         Preconditioner_Spec none_precond_specs("none");
 
@@ -155,12 +177,12 @@ public:
         none_clock.stop_clock_experiment();
 
         Preconditioner_Data<TMatrix> none_data(
-            "none_id_" + tag,
+            "none_" + tag + "_id",
             none_clock,
             none_precond_specs,
             none_precond_arg_pkg
         );
-        std::string none_file_name = "none_file_" + tag;
+        std::string none_file_name = "none_" + tag + "_file";
         none_data.record_json(none_file_name, test_output_dir, logger);
 
         ASSERT_MATCH_PRECOND_DATA(
@@ -180,12 +202,12 @@ public:
         jacobi_clock.stop_clock_experiment();
 
         Preconditioner_Data<TMatrix> jacobi_data(
-            "jacobi_id_" + tag,
+            "jacobi_" + tag + "_id",
             jacobi_clock,
             jacobi_precond_specs,
             jacobi_precond_arg_pkg
         );
-        std::string jacobi_file_name = "jacobi_file_" + tag;
+        std::string jacobi_file_name = "jacobi_" + tag + "_file";
         jacobi_data.record_json(jacobi_file_name, test_output_dir, logger);
 
         ASSERT_MATCH_PRECOND_DATA(
@@ -205,12 +227,12 @@ public:
         ilu0_clock.stop_clock_experiment();
 
         Preconditioner_Data<TMatrix> ilu0_data(
-            "ilu0_id_" + tag,
+            "ilu0_" + tag + "_id",
             ilu0_clock,
             ilu0_precond_specs,
             ilu0_precond_arg_pkg
         );
-        std::string ilu0_file_name = "ilu0_file_" + tag;
+        std::string ilu0_file_name = "ilu0_" + tag + "_file";
         ilu0_data.record_json(ilu0_file_name, test_output_dir, logger);
 
         ASSERT_MATCH_PRECOND_DATA(
@@ -235,12 +257,12 @@ public:
         ilutp_clock.stop_clock_experiment();
 
         Preconditioner_Data<TMatrix> ilutp_data(
-            "ilutp_id_" + tag,
+            "ilutp_" + tag + "_id",
             ilutp_clock,
             ilutp_precond_specs,
             ilutp_precond_arg_pkg
         );
-        std::string ilutp_file_name = "ilutp_file_" + tag;
+        std::string ilutp_file_name = "ilutp_" + tag + "_file";
         ilutp_data.record_json(ilutp_file_name, test_output_dir, logger);
 
         ASSERT_MATCH_PRECOND_DATA(
@@ -250,9 +272,128 @@ public:
 
     }
 
+    template <template <typename> typename TMatrix>
+    void TestRecordOutputJsonFPGMRES() {
+
+        std::string tag = get_tag(TMatrixIdentity<TMatrix>());
+        std::string id = "fpgmres_" + tag + "_id";
+        std::string file_name = "fpgmres_" + tag + "_file";
+
+        GenericLinearSystem<TMatrix> gen_lin_sys(A, b);
+        TypedLinearSystem<TMatrix, double> typ_lin_sys(&gen_lin_sys);
+
+        std::shared_ptr<FP_GMRES_IR_Solve<TMatrix, double>> solve_ptr;
+        solve_ptr = std::make_shared<FP_GMRES_IR_Solve<TMatrix, double>>(
+            &typ_lin_sys, u_dbl, solve_args
+        );
+
+        Solve_Data<GenericIterativeSolve, TMatrix> data(
+            execute_solve<GenericIterativeSolve, TMatrix>(id, solve_ptr, false)
+        );
+        data.record_json(file_name, test_output_dir, logger);
+
+        fs::path file_path = test_output_dir / fs::path(file_name + ".json");
+        std::ifstream file_in(file_path);
+
+        json loaded_file = json::parse(file_in);
+        ASSERT_EQ(loaded_file["id"], id);
+        ASSERT_EQ(loaded_file["solver_class"], typeid(*solve_ptr).name());
+        ASSERT_EQ(
+            loaded_file["initiated"],
+            bool_to_string(solve_ptr->check_initiated())
+        );
+        ASSERT_EQ(
+            loaded_file["converged"],
+            bool_to_string(solve_ptr->check_converged())
+        );
+        ASSERT_EQ(
+            loaded_file["terminated"],
+            bool_to_string(solve_ptr->check_terminated())
+        );
+        ASSERT_EQ(loaded_file["iteration"], solve_ptr->get_iteration());
+        ASSERT_EQ(
+            loaded_file["elapsed_time_ms"],
+            data.clock.get_elapsed_time_ms()
+        );
+
+        std::vector<double> res_norm_history = (
+            solve_ptr->get_res_norm_history()
+        );
+        for (int i=0; i<res_norm_history.size(); ++i) {
+            ASSERT_EQ(loaded_file["res_norm_history"][i], res_norm_history[i]);
+        }
+
+        file_in.close();
+
+    }
+
+    template <template <typename> typename TMatrix>
+    void TestRecordOutputJsonMPGMRES() {
+
+        std::string tag = get_tag(TMatrixIdentity<TMatrix>());
+        std::string id = "mpgmres_" + tag + "_id";
+        std::string file_name = "mpgmres_" + tag + "_file";
+
+        GenericLinearSystem<TMatrix> gen_lin_sys(A, b);
+
+        std::shared_ptr<MP_GMRES_IR_Solve<TMatrix>> solve_ptr;
+        solve_ptr = std::make_shared<SimpleConstantThreshold<TMatrix>>(
+            &gen_lin_sys, solve_args
+        );
+
+        Solve_Data<MP_GMRES_IR_Solve, TMatrix> data(
+            execute_solve<MP_GMRES_IR_Solve, TMatrix>(id, solve_ptr, false)
+        );
+        data.record_json(file_name, test_output_dir, logger);
+
+        fs::path file_path = test_output_dir / fs::path(file_name + ".json");
+        std::ifstream file_in(file_path);
+
+        json loaded_file = json::parse(file_in);
+        ASSERT_EQ(loaded_file["id"], id);
+        ASSERT_EQ(loaded_file["solver_class"], typeid(*solve_ptr).name());
+        ASSERT_EQ(
+            loaded_file["initiated"],
+            bool_to_string(solve_ptr->check_initiated())
+        );
+        ASSERT_EQ(
+            loaded_file["converged"],
+            bool_to_string(solve_ptr->check_converged())
+        );
+        ASSERT_EQ(
+            loaded_file["terminated"],
+            bool_to_string(solve_ptr->check_terminated())
+        );
+        ASSERT_EQ(loaded_file["iteration"], solve_ptr->get_iteration());
+        ASSERT_EQ(
+            loaded_file["elapsed_time_ms"],
+            data.clock.get_elapsed_time_ms()
+        );
+
+        std::vector<double> res_norm_history = (
+            solve_ptr->get_res_norm_history()
+        );
+        for (int i=0; i<res_norm_history.size(); ++i) {
+            ASSERT_EQ(loaded_file["res_norm_history"][i], res_norm_history[i]);
+        }
+
+        file_in.close();
+
+    }
+
 };
 
-TEST_F(TestTools, TestRecordOutputJsonPrecond) {
-    TestRecordOutputJsonPrecond<MatrixDense>("dense");
-    TestRecordOutputJsonPrecond<NoFillMatrixSparse>("sparse");
+TEST_F(Test_Experiment_Record, TestRecordOutputJsonPrecond) {
+    TestRecordOutputJsonPrecond<MatrixDense>();
+    TestRecordOutputJsonPrecond<NoFillMatrixSparse>();
+}
+
+TEST_F(Test_Experiment_Record, TestRecordOutputJsonFPGMRES) {
+    TestRecordOutputJsonFPGMRES<MatrixDense>();
+    TestRecordOutputJsonFPGMRES<NoFillMatrixSparse>();
+}
+
+TEST_F(Test_Experiment_Record, TestRecordOutputJsonMPGMRES) {
+    TestRecordOutputJsonMPGMRES<MatrixDense>();
+    TestRecordOutputJsonMPGMRES<NoFillMatrixSparse>();
 }
