@@ -31,11 +31,7 @@ private:
     Experiment_Log logger;
 
     std::string bool_to_string(bool b) {
-        if (b) {
-            return "true";
-        } else {
-            return "false";
-        }
+        return (b) ? "true" : "false";
     }
 
 public:
@@ -49,7 +45,9 @@ public:
     ~TestRecord() {}
 
     template <template <typename> typename TMatrix>
-    void TestRecordOutputJsonFPGMRES(std::string file_name) {
+    void TestRecordOutputJsonFPGMRES(
+        std::string id, std::string file_name
+    ) {
 
         GenericLinearSystem<TMatrix> gen_lin_sys(A, b);
         TypedLinearSystem<TMatrix, double> typ_lin_sys(&gen_lin_sys);
@@ -63,22 +61,15 @@ public:
         );
 
         Solve_Data<GenericIterativeSolve, TMatrix> data(
-            execute_solve<GenericIterativeSolve, TMatrix>(solve_ptr, false)
+            execute_solve<GenericIterativeSolve, TMatrix>(id, solve_ptr, false)
         );
-
-        record_FPGMRES_data_json(
-            data,
-            precond_arg_pkg,
-            file_name,
-            test_output_dir,
-            logger
-        );
+        data.record_json(file_name, test_output_dir, logger);
 
         fs::path file_path = test_output_dir / fs::path(file_name + ".json");
         std::ifstream file_in(file_path);
 
         json loaded_file = json::parse(file_in);
-        ASSERT_EQ(loaded_file["id"], file_name);
+        ASSERT_EQ(loaded_file["id"], id);
         ASSERT_EQ(loaded_file["solver_class"], typeid(*solve_ptr).name());
         ASSERT_EQ(
             loaded_file["initiated"],
@@ -110,7 +101,9 @@ public:
     }
 
     template <template <typename> typename TMatrix>
-    void TestRecordOutputJsonMPGMRES(std::string file_name) {
+    void TestRecordOutputJsonMPGMRES(
+        std::string id, std::string file_name
+    ) {
 
         GenericLinearSystem<TMatrix> gen_lin_sys(A, b);
 
@@ -123,22 +116,15 @@ public:
         );
 
         Solve_Data<MP_GMRES_IR_Solve, TMatrix> data(
-            execute_solve<MP_GMRES_IR_Solve, TMatrix>(solve_ptr, false)
+            execute_solve<MP_GMRES_IR_Solve, TMatrix>(id, solve_ptr, false)
         );
-
-        record_MPGMRES_data_json(
-            data,
-            precond_arg_pkg,
-            file_name,
-            test_output_dir,
-            logger
-        );
+        data.record_json(file_name, test_output_dir, logger);
 
         fs::path file_path = test_output_dir / fs::path(file_name + ".json");
         std::ifstream file_in(file_path);
 
         json loaded_file = json::parse(file_in);
-        ASSERT_EQ(loaded_file["id"], file_name);
+        ASSERT_EQ(loaded_file["id"], id);
         ASSERT_EQ(loaded_file["solver_class"], typeid(*solve_ptr).name());
         ASSERT_EQ(
             loaded_file["initiated"],
@@ -172,11 +158,19 @@ public:
 };
 
 TEST_F(TestRecord, TestRecordOutputJsonFPGMRES) {
-    TestRecordOutputJsonFPGMRES<MatrixDense>("FPGMRESTestRecord_Dense");
-    TestRecordOutputJsonFPGMRES<NoFillMatrixSparse>("FPGMRESTestRecord_Sparse");
+    TestRecordOutputJsonFPGMRES<MatrixDense>(
+        "fpgmres_id_dense", "FPGMRESTestRecord_Dense"
+    );
+    TestRecordOutputJsonFPGMRES<NoFillMatrixSparse>(
+        "fpgmres_id_sparse", "FPGMRESTestRecord_Sparse"
+    );
 }
 
 TEST_F(TestRecord, TestRecordOutputJsonMPGMRES) {
-    TestRecordOutputJsonMPGMRES<MatrixDense>("MPGMRESTestRecord_Dense");
-    TestRecordOutputJsonMPGMRES<NoFillMatrixSparse>("MPGMRESTestRecord_Sparse");
+    TestRecordOutputJsonMPGMRES<MatrixDense>(
+        "mpgmres_id_dense", "MPGMRESTestRecord_Dense"
+    );
+    TestRecordOutputJsonMPGMRES<NoFillMatrixSparse>(
+        "mpgmres_id_sparse", "MPGMRESTestRecord_Sparse"
+    );
 }
