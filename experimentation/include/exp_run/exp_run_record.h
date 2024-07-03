@@ -1,5 +1,5 @@
-#ifndef EXPERIMENT_RUN_H
-#define EXPERIMENT_RUN_H
+#ifndef EXP_RUN_RECORD_H
+#define EXP_RUN_RECORD_H
 
 #include "exp_read/exp_read.h"
 #include "exp_data/exp_data.h"

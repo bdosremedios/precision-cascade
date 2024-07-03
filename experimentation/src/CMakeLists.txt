@@ -21,6 +21,7 @@ set(
 
 set(
     EXPERIMENT_SPECIFICATION_CPPS
+    exp_spec/Preconditioner_Spec.cpp
     exp_spec/Solve_Group.cpp
     exp_spec/Experiment_Spec.cpp
 )

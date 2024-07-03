@@ -428,7 +428,19 @@ TEST_F(TestRead, TestBadJsonSolveGroupMemberValues) {
         [this]() -> void {
             parse_experiment_spec(
                 test_json_dir /
-                fs::path("bad_solve_group_arg_solver_arg_pkg_badrelres.json")
+                fs::path("bad_solve_group_arg_solver_arg_pkg_badrelres_type"
+                         ".json")
+            );
+        }
+    );
+
+    CHECK_FUNC_HAS_RUNTIME_ERROR(
+        print_errors,
+        [this]() -> void {
+            parse_experiment_spec(
+                test_json_dir /
+                fs::path("bad_solve_group_arg_solver_arg_pkg_badrelres_value"
+                         ".json")
             );
         }
     );

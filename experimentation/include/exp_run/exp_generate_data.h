@@ -1,5 +1,5 @@
-#ifndef EXP_RUN_H
-#define EXP_RUN_H
+#ifndef EXP_GENERATE_DATA_H
+#define EXP_GENERATE_DATA_H
 
 #include "exp_data/exp_data.h"
 #include "exp_tools/exp_tools.h"

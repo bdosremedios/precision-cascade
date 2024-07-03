@@ -23,7 +23,7 @@ using json = nlohmann::json;
 int extract_integer(json::iterator member);
 std::vector<std::string> extract_solvers_to_use(json::iterator member);
 std::string extract_matrix_type(json::iterator member);
-Preconditioner_Spec extract_solve_group_precond_specs(
+Preconditioner_Spec extract_preconditioner_spec(
     json::iterator member
 );
 double extract_double(json::iterator member);

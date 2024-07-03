@@ -4,10 +4,6 @@
 
 namespace fs = std::filesystem;
 
-const std::unordered_set<std::string> Solve_Group::valid_preconditioner_ids {
-    "none", "jacobi", "ilu0", "ilutp"
-};
-
 const std::unordered_set<std::string> Solve_Group::valid_fp_solver_ids {
     "FP16", "FP32", "FP64"
 };

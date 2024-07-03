@@ -53,7 +53,7 @@ std::string extract_matrix_type(json::iterator member) {
 
 }
 
-Preconditioner_Spec extract_solve_group_precond_specs(
+Preconditioner_Spec extract_preconditioner_spec(
     json::iterator member
 ) {
 
@@ -67,11 +67,11 @@ Preconditioner_Spec extract_solve_group_precond_specs(
         std::string name;
         double ilutp_tau;
         double ilutp_p;
-        if (it != member->end() && it->is_string() && (*it == "ilutp")) {
+        if (it != member->end() && it->is_string()) {
             name = *it;
         } else {
             throw std::runtime_error(
-                "extract_solve_group: extract_solve_group_precond_specs "
+                "extract_solve_group: extract_preconditioner_spec "
                 "invalid array in key precond_specs"
             );
         }
@@ -80,7 +80,7 @@ Preconditioner_Spec extract_solve_group_precond_specs(
             ilutp_tau = *it;
         } else {
             throw std::runtime_error(
-                "extract_solve_group: extract_solve_group_precond_specs "
+                "extract_solve_group: extract_preconditioner_spec "
                 "invalid array in key precond_specs"
             );
         }
@@ -89,13 +89,13 @@ Preconditioner_Spec extract_solve_group_precond_specs(
             ilutp_p = *it;
         } else {
             throw std::runtime_error(
-                "extract_solve_group: extract_solve_group_precond_specs "
+                "extract_solve_group: extract_preconditioner_spec "
                 "invalid array in key precond_specs"
             );
         }
         if (++it != member->end()) {
             throw std::runtime_error(
-                "extract_solve_group: extract_solve_group_precond_specs too "
+                "extract_solve_group: extract_preconditioner_spec too "
                 "many values in array"
             );
         }
@@ -103,7 +103,7 @@ Preconditioner_Spec extract_solve_group_precond_specs(
 
     } else {
         throw std::runtime_error(
-            "extract_solve_group: extract_solve_group_precond_specs invalid "
+            "extract_solve_group: extract_preconditioner_spec invalid "
             "value for key precond_specs"
         );
     }
@@ -180,7 +180,7 @@ Solve_Group check_and_extract_solve_group(std::string id, json cand_obj) {
         } else if (it.key() == "solver_target_relres") {
             solver_target_relres = extract_double(it);
         } else if (it.key() == "precond_specs") {
-            precond_specs = extract_solve_group_precond_specs(it);
+            precond_specs = extract_preconditioner_spec(it);
         } else if (it.key() == "matrices_to_test") {
             matrices_to_test = extract_string_vector(it);
         } else {

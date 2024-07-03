@@ -37,7 +37,7 @@
         "matrix_type": "dense",
         "solver_max_outer_iterations": 4,
         "solver_max_inner_iterations": 10,
-        "solver_target_relres": 0,
+        "solver_target_relres": -0.1,
         "precond_specs": "none",
         "matrices_to_test": [
             "685_bus.csv"

@@ -6,14 +6,14 @@ add_compile_definitions(_SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING=1)
 
 set(
     EXPERIMENTATION_TEST_SUITES
-    src/test_run_record.cpp
+    src/test_exp_data.cpp
     src/test_exp_read.cpp
-    src/test_exp_record.cpp
+    src/test_exp_run.cpp
 )
 
 add_executable(
     test_experiment
-    src/test_experiment.cpp
+    main/test_experiment.cpp
     ${EXPERIMENTATION_TEST_SUITES}
 )
 

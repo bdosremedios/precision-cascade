@@ -2,8 +2,6 @@
 
 #include "exp_run/exp_run_record.h"
 
-#include <map>
-
 class TestRun: public TestExperimentBase
 {
 private:
