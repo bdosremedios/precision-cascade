@@ -11,7 +11,7 @@
 
 namespace fs = std::filesystem;
 
-class TestExperimentBase: public testing::Test
+class Test_Experiment_Base: public testing::Test
 {
 public:
 

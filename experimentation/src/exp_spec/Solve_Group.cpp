@@ -67,8 +67,8 @@ Solve_Group::Solve_Group(
         );
     }
     if (
-        (arg_solver_max_outer_iterations < 0) ||
-        (arg_solver_max_inner_iterations < 0) ||
+        (arg_solver_max_outer_iterations <= 0) ||
+        (arg_solver_max_inner_iterations <= 0) ||
         (arg_solver_target_relres < 0.)
     ) {
         throw std::runtime_error(

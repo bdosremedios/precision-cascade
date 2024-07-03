@@ -2,7 +2,7 @@
 
 #include "exp_run/exp_run_record.h"
 
-class TestRun: public TestExperimentBase
+class Test_Experiment_Run: public Test_Experiment_Base
 {
 private:
 
@@ -105,31 +105,31 @@ public:
 
     Experiment_Log logger;
 
-    TestRun() {
+    Test_Experiment_Run() {
         logger = Experiment_Log();
     }
 
-    ~TestRun() {}
+    ~Test_Experiment_Run() {}
 
     template <template <typename> typename TMatrix>
     void Test_Load_Lin_Sys(std::string matrix_name) {
 
         GenericLinearSystem<TMatrix> gen_lin_sys = load_lin_sys<TMatrix>(
-            *TestExperimentBase::cu_handles_ptr,
+            *Test_Experiment_Base::cu_handles_ptr,
             test_data_dir,
             matrix_name,
             logger
         );
 
         fs::path matrix_path(test_data_dir / fs::path(matrix_name));
-        TMatrix<double> target_A(*TestExperimentBase::cu_handles_ptr);
+        TMatrix<double> target_A(*Test_Experiment_Base::cu_handles_ptr);
         if (matrix_path.extension() == ".mtx") {
             target_A = read_matrixMTX<TMatrix, double>(
-                *TestExperimentBase::cu_handles_ptr, matrix_path
+                *Test_Experiment_Base::cu_handles_ptr, matrix_path
             );
         } else if (matrix_path.extension() == ".csv") {
             target_A = read_matrixCSV<TMatrix, double>(
-                *TestExperimentBase::cu_handles_ptr, matrix_path
+                *Test_Experiment_Base::cu_handles_ptr, matrix_path
             );
         } else {
             FAIL();
@@ -155,21 +155,21 @@ public:
     void Test_Load_Lin_Sys_w_RHS(std::string matrix_name) {
 
         GenericLinearSystem<TMatrix> gen_lin_sys = load_lin_sys<TMatrix>(
-            *TestExperimentBase::cu_handles_ptr,
+            *Test_Experiment_Base::cu_handles_ptr,
             test_data_dir,
             matrix_name,
             logger
         );
 
         fs::path matrix_path(test_data_dir / fs::path(matrix_name));
-        TMatrix<double> target_A(*TestExperimentBase::cu_handles_ptr);
+        TMatrix<double> target_A(*Test_Experiment_Base::cu_handles_ptr);
         if (matrix_path.extension() == fs::path(".mtx")) {
             target_A = read_matrixMTX<TMatrix, double>(
-                *TestExperimentBase::cu_handles_ptr, matrix_path
+                *Test_Experiment_Base::cu_handles_ptr, matrix_path
             );
         } else if (matrix_path.extension() == fs::path(".csv")) {
             target_A = read_matrixCSV<TMatrix, double>(
-                *TestExperimentBase::cu_handles_ptr, matrix_path
+                *Test_Experiment_Base::cu_handles_ptr, matrix_path
             );
         } else {
             FAIL();
@@ -200,7 +200,7 @@ public:
         if (matrix_path_b.extension() == fs::path(".mtx")) {
 
             TMatrix<double> target_b(read_matrixMTX<TMatrix, double>(
-                *TestExperimentBase::cu_handles_ptr, matrix_path_b
+                *Test_Experiment_Base::cu_handles_ptr, matrix_path_b
             ));
             target_b /= A_max_mag;
             bool matches_one_col = false;
@@ -215,7 +215,7 @@ public:
         } else if (matrix_path_b.extension() == fs::path(".csv")) {
 
             Vector<double> target_b(read_vectorCSV<double>(
-                *TestExperimentBase::cu_handles_ptr, matrix_path_b
+                *Test_Experiment_Base::cu_handles_ptr, matrix_path_b
             ));
             target_b /= A_max_mag;
             ASSERT_EQ(gen_lin_sys.get_b(), target_b);
@@ -232,7 +232,7 @@ public:
         auto test_func = [matrix_name, this]() -> void {
             GenericLinearSystem<TMatrix> gen_lin_sys = (
                 load_lin_sys<TMatrix>(
-                    *TestExperimentBase::cu_handles_ptr,
+                    *Test_Experiment_Base::cu_handles_ptr,
                     test_data_dir,
                     matrix_name,
                     logger
@@ -247,7 +247,7 @@ public:
     void Test_Run_Solve_Group(Solve_Group solve_group) {
 
         run_record_solve_group<TMatrix>(
-            *TestExperimentBase::cu_handles_ptr,
+            *Test_Experiment_Base::cu_handles_ptr,
             solve_group,
             test_data_dir,
             test_output_dir,
@@ -318,7 +318,7 @@ public:
     void Test_Run_Experiment_Spec(Experiment_Spec exp_spec) {
 
         run_record_experimental_spec(
-            *TestExperimentBase::cu_handles_ptr,
+            *Test_Experiment_Base::cu_handles_ptr,
             exp_spec,
             test_data_dir,
             test_output_dir,
@@ -329,7 +329,7 @@ public:
 
 };
 
-TEST_F(TestRun, Test_Load_Lin_Sys) {
+TEST_F(Test_Experiment_Run, Test_Load_Lin_Sys) {
 
     Test_Load_Lin_Sys<MatrixDense>("easy_4_4.csv");
     Test_Load_Lin_Sys<NoFillMatrixSparse>("easy_4_4.csv");
@@ -339,7 +339,7 @@ TEST_F(TestRun, Test_Load_Lin_Sys) {
     
 }
 
-TEST_F(TestRun, Test_Load_Lin_Sys_w_RHS) {
+TEST_F(Test_Experiment_Run, Test_Load_Lin_Sys_w_RHS) {
 
     Test_Load_Lin_Sys_w_RHS<MatrixDense>("paired_mat.csv");
     Test_Load_Lin_Sys_w_RHS<NoFillMatrixSparse>("paired_mat.csv");
@@ -349,7 +349,7 @@ TEST_F(TestRun, Test_Load_Lin_Sys_w_RHS) {
     
 }
 
-TEST_F(TestRun, Test_Mismatch_Load_Lin_Sys_w_RHS) {
+TEST_F(Test_Experiment_Run, Test_Mismatch_Load_Lin_Sys_w_RHS) {
 
     Test_Mismatch_Load_Lin_Sys_w_RHS<MatrixDense>(
         "bad_paired_mat_small.csv"
@@ -381,7 +381,7 @@ TEST_F(TestRun, Test_Mismatch_Load_Lin_Sys_w_RHS) {
     
 }
 
-TEST_F(TestRun, Test_AllSolvers_Run_Solve_Group) {
+TEST_F(Test_Experiment_Run, Test_AllSolvers_Run_Solve_Group) {
 
     Solve_Group solve_group_dense(
         "allsolvers_dense",
@@ -409,7 +409,7 @@ TEST_F(TestRun, Test_AllSolvers_Run_Solve_Group) {
 
 }
 
-TEST_F(TestRun, Test_AllPreconditioners_Run_Solve_Group) {
+TEST_F(Test_Experiment_Run, Test_AllPreconditioners_Run_Solve_Group) {
 
     std::vector<Preconditioner_Spec> precond_spec_vec {
         Preconditioner_Spec("none"),
@@ -444,7 +444,7 @@ TEST_F(TestRun, Test_AllPreconditioners_Run_Solve_Group) {
 
 }
 
-TEST_F(TestRun, Test_Mix_Run_Solve_Group) {
+TEST_F(Test_Experiment_Run, Test_Mix_Run_Solve_Group) {
 
     Solve_Group solve_group_dense(
         "mixsolvers_dense",

@@ -2,9 +2,9 @@
 
 #include "exp_read/exp_read.h"
 
-class TestRead: public TestExperimentBase {};
+class Test_Experiment_Read: public Test_Experiment_Base {};
 
-TEST_F(TestRead, TestCorrectSingleEntryJson) {
+TEST_F(Test_Experiment_Read, TestCorrectSingleEntryJson) {
 
     Experiment_Spec test_spec = parse_experiment_spec(
         test_json_dir / fs::path("good_spec_single.json")
@@ -33,7 +33,7 @@ TEST_F(TestRead, TestCorrectSingleEntryJson) {
 
 }
 
-TEST_F(TestRead, TestCorrectILUTPJson) {
+TEST_F(Test_Experiment_Read, TestCorrectILUTPJson) {
 
     Experiment_Spec test_spec = parse_experiment_spec(
         test_json_dir / fs::path("good_spec_ILUTP.json")
@@ -62,7 +62,7 @@ TEST_F(TestRead, TestCorrectILUTPJson) {
 
 }
 
-TEST_F(TestRead, TestCorrectMultipleEntryJson) {
+TEST_F(Test_Experiment_Read, TestCorrectMultipleEntryJson) {
 
     Experiment_Spec test_spec = parse_experiment_spec(
         test_json_dir / fs::path("good_spec_multi.json")
@@ -125,7 +125,7 @@ TEST_F(TestRead, TestCorrectMultipleEntryJson) {
 
 }
 
-TEST_F(TestRead, TestBadJsonParse) {
+TEST_F(Test_Experiment_Read, TestBadJsonParse) {
 
     CHECK_FUNC_HAS_RUNTIME_ERROR(
         print_errors,
@@ -159,7 +159,7 @@ TEST_F(TestRead, TestBadJsonParse) {
 
 }
 
-TEST_F(TestRead, TestBadJsonSolveGroupMembers) {
+TEST_F(Test_Experiment_Read, TestBadJsonSolveGroupMembers) {
 
     CHECK_FUNC_HAS_RUNTIME_ERROR(
         print_errors,
@@ -213,7 +213,7 @@ TEST_F(TestRead, TestBadJsonSolveGroupMembers) {
 
 }
 
-TEST_F(TestRead, TestBadJsonSolveGroupMemberValues) {
+TEST_F(Test_Experiment_Read, TestBadJsonSolveGroupMemberValues) {
 
     CHECK_FUNC_HAS_RUNTIME_ERROR(
         print_errors,

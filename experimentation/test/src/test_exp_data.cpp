@@ -12,7 +12,7 @@
 
 using json = nlohmann::json;
 
-class Test_Experiment_Record: public TestExperimentBase
+class Test_Experiment_Record: public Test_Experiment_Base
 {
 private:
 

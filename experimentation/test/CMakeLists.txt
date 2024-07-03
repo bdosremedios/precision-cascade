@@ -9,6 +9,7 @@ set(
     src/test_exp_data.cpp
     src/test_exp_read.cpp
     src/test_exp_run.cpp
+    src/test_exp_spec.cpp
 )
 
 add_executable(

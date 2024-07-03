@@ -38,6 +38,16 @@ public:
         name(arg_name), ilutp_tau(arg_ilutp_tau), ilutp_p(arg_ilutp_p)
     {
         check_name_validity(name);
+        if (arg_name != "ilutp") {
+            throw std::runtime_error(
+                "Preconditioner_Spec: 3 arg constructor only usable for ilutp"
+            );
+        }
+        if ((arg_ilutp_tau < 0.) || (arg_ilutp_p < 1)) {
+            throw std::runtime_error(
+                "Preconditioner_Spec: invalid ilutp number args"
+            );
+        }
     }
 
     bool is_default() const {
