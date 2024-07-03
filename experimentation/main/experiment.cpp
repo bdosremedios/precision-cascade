@@ -149,7 +149,7 @@ int main(int argc, char *argv[]) {
     );
 
     // Set-up cublas context
-    cuHandleBundle cu_handles;
+    cascade::cuHandleBundle cu_handles;
     cu_handles.create();
 
     // Run valid experimental specs

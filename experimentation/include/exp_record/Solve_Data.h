@@ -93,6 +93,8 @@ public:
 
     std::shared_ptr<TSolver<TMatrix>> solver_ptr;
 
+    Solve_Data(): Timed_Experiment_Data(), solver_ptr(nullptr) {}
+
     Solve_Data(
         std::string arg_solver_id,
         Experiment_Clock arg_clock,
@@ -101,6 +103,16 @@ public:
         Timed_Experiment_Data(arg_solver_id, arg_clock),
         solver_ptr(arg_solver_ptr) 
     {}
+
+    ~Solve_Data() = default;
+
+    Solve_Data(const Solve_Data &other) = delete;
+
+    void operator=(const Solve_Data &other) {
+        id = other.id;
+        clock = other.clock;
+        solver_ptr = other.solver_ptr;
+    }
 
     std::string get_info_string() const override {
         return clock.get_info_string() + " | " + solver_ptr->get_info_string();

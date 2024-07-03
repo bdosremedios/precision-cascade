@@ -27,6 +27,8 @@ public:
     std::string id;
     Experiment_Clock clock;
 
+    Timed_Experiment_Data(): id("") {}
+
     Timed_Experiment_Data(std::string arg_id, Experiment_Clock arg_clock):
         id(arg_id), clock(arg_clock)
     {}

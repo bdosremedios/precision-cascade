@@ -19,7 +19,9 @@ struct Solve_Group {
     const Preconditioner_Spec precond_specs;
     const std::vector<std::string> matrices_to_test;
 
-    static const std::unordered_set<std::string> valid_solvers;
+    static const std::unordered_set<std::string> valid_preconditioner_ids;
+    static const std::unordered_set<std::string> valid_fp_solver_ids;
+    static const std::unordered_set<std::string> valid_mp_solver_ids;
 
     Solve_Group(
         std::string arg_id,

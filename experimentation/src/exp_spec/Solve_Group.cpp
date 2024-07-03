@@ -4,8 +4,16 @@
 
 namespace fs = std::filesystem;
 
-const std::unordered_set<std::string> Solve_Group::valid_solvers {
-    "FP16", "FP32", "FP64", "SimpleConstantThreshold", "RestartCount"
+const std::unordered_set<std::string> Solve_Group::valid_preconditioner_ids {
+    "none", "jacobi", "ilu0", "ilutp"
+};
+
+const std::unordered_set<std::string> Solve_Group::valid_fp_solver_ids {
+    "FP16", "FP32", "FP64"
+};
+
+const std::unordered_set<std::string> Solve_Group::valid_mp_solver_ids {
+    "SimpleConstantThreshold", "RestartCount"
 };
 
 Solve_Group::Solve_Group(
@@ -31,11 +39,13 @@ Solve_Group::Solve_Group(
     precond_specs(arg_precond_specs),
     matrices_to_test(arg_matrices_to_test)
 {
-
     // Check validity of solve_group parameters
     std::unordered_set<std::string> solvers_seen;
     for (std::string solver_id : solvers_to_use) {
-        if (valid_solvers.count(solver_id) == 0) {
+        if (
+            (valid_fp_solver_ids.count(solver_id) == 0) &&
+            (valid_mp_solver_ids.count(solver_id) == 0)
+        ) {
             throw std::runtime_error(
                 "Solve_Group: invalid solver encountered in solvers_to_use "
                 "\"" + solver_id + "\""

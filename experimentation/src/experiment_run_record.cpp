@@ -15,7 +15,7 @@ void create_or_clear_directory(fs::path dir, Experiment_Log logger) {
 }
 
 void run_record_experimental_spec(
-    const cuHandleBundle &cu_handles,
+    const cascade::cuHandleBundle &cu_handles,
     Experiment_Spec exp_spec,
     fs::path matrix_data_dir,
     fs::path output_data_dir,
@@ -28,20 +28,28 @@ void run_record_experimental_spec(
     create_or_clear_directory(exp_spec_dir, logger);
 
     for (Solve_Group solve_group : exp_spec.solve_groups) {
+
         if (solve_group.matrix_type == "dense") {
-            run_record_solve_group<MatrixDense>(
+
+            run_record_solve_group<cascade::MatrixDense>(
                 cu_handles, solve_group, matrix_data_dir, exp_spec_dir, logger
             );
+
         } else if (solve_group.matrix_type == "sparse") {
-            run_record_solve_group<NoFillMatrixSparse>(
+
+            run_record_solve_group<cascade::NoFillMatrixSparse>(
                 cu_handles, solve_group, matrix_data_dir, exp_spec_dir, logger
             );
+
         } else {
+
             throw std::runtime_error(
                 "run_record_experimental_spec: error invalid Solve_Group "
                 "matrix type"
             );
+
         }
+
     }
 
 }
