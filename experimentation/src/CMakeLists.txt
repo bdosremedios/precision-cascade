@@ -38,7 +38,6 @@ add_library(
     ${EXPERIMENT_RUN_CPPS}
     ${EXPERIMENT_SPECIFICATION_CPPS}
     ${EXPERIMENT_TOOLS_CPPS}
-    experiment_run_record.cpp
 )
 
 target_link_libraries(

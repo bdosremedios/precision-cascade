@@ -1,8 +1,8 @@
 #include "test_experiment.h"
 
 #include "exp_spec/exp_spec.h"
-#include "exp_record/exp_record.h"
-#include "experiment_run_record.h"
+#include "exp_data/exp_data.h"
+#include "exp_run/exp_run_record.h"
 
 #include "tools/TypeIdentity.h"
 
