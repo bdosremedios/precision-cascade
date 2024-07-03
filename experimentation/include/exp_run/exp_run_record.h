@@ -2,9 +2,9 @@
 #define EXPERIMENT_RUN_H
 
 #include "exp_read/exp_read.h"
-#include "exp_run/exp_run.h"
-#include "exp_record/exp_record.h"
+#include "exp_data/exp_data.h"
 #include "exp_tools/exp_tools.h"
+#include "exp_generate_data.h"
 
 #include "tools/cuHandleBundle.h"
 #include "solvers/IterativeSolve.h"
