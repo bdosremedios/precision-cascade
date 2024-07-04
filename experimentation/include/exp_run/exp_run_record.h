@@ -46,6 +46,7 @@ void run_record_fpgmres_solve(
             std::make_shared<cascade::FP_GMRES_IR_Solve<TMatrix, __half>>(
                 &lin_sys_hlf, u_hlf, solve_arg_pkg, *precond_args_hlf_ptr
             ),
+            logger,
             false
         );
         delete precond_args_hlf_ptr;
@@ -61,6 +62,7 @@ void run_record_fpgmres_solve(
             std::make_shared<cascade::FP_GMRES_IR_Solve<TMatrix, float>>(
                 &lin_sys_sgl, u_sgl, solve_arg_pkg, *precond_args_sgl_ptr
             ),
+            logger,
             false
         );
         delete precond_args_sgl_ptr;
@@ -73,6 +75,7 @@ void run_record_fpgmres_solve(
             std::make_shared<cascade::FP_GMRES_IR_Solve<TMatrix, double>>(
                 &lin_sys_dbl, u_dbl, solve_arg_pkg, precond_arg_pkg_dbl
             ),
+            logger,
             false
         );
 
@@ -129,7 +132,7 @@ void run_record_mpgmres_solve(
     }
 
     data = execute_solve<cascade::MP_GMRES_IR_Solve, TMatrix>(
-        solver_id, solver_ptr, false
+        solver_id, solver_ptr, logger, false
     );
 
     logger.info(data.get_info_string());
@@ -153,8 +156,6 @@ void run_record_solversuite_experiment(
 
     // Run solves
     for (std::string solver_id : solve_group.solvers_to_use) {
-
-        logger.info("Running solve experiment: " + solver_id);
 
         if (Solve_Group::valid_fp_solver_ids.count(solver_id) == 1) {
 
@@ -200,17 +201,24 @@ void run_record_solve_group(
     Experiment_Log outer_logger
 ) {
 
-    outer_logger.info("Running solve group: "+solve_group.id);
-
     fs::path solve_group_dir = output_data_dir / fs::path(solve_group.id);
     create_or_clear_directory(solve_group_dir, outer_logger);
 
     Experiment_Log solve_group_logger(
-        solve_group.id + "_logger", solve_group_dir /
-        fs::path(solve_group.id + ".log"), false
+        solve_group.id + "_logger",
+        solve_group_dir / fs::path("log.log"),
+        false
+    );
+    outer_logger.info("Start Solve_Group: " + solve_group.id);
+    solve_group_logger.info("Start Solve_Group: " + solve_group.id);
+
+    solve_group_logger.info(
+        "Solve_Group solve args: " +
+        solve_group.solver_args.get_info_string()
     );
     solve_group_logger.info(
-        "Solve info: " + solve_group.solver_args.get_info_string()
+        "Solve_Group precond args: " +
+        solve_group.precond_specs.get_info_string()
     );
 
     // Iterate over matrices and iterations per matrix
@@ -220,6 +228,10 @@ void run_record_solve_group(
             solve_group_dir / fs::path(matrix_file).stem()
         );
         create_or_clear_directory(matrix_output_data_dir, solve_group_logger);
+
+        solve_group_logger.info(
+            "Start matrix experimentation: " + matrix_file
+        );
         
         int total_iters = solve_group.experiment_iterations;
         for (int exp_iter = 0; exp_iter < total_iters; ++exp_iter) {
@@ -229,10 +241,21 @@ void run_record_solve_group(
             );
             create_or_clear_directory(iter_output_data_dir, solve_group_logger);
 
+            solve_group_logger.info(
+                "Start iteration: " + std::to_string(exp_iter)
+            );
+
+            Experiment_Log iter_logger(
+                (solve_group.id + "_" + matrix_file + "_" +
+                 std::to_string(exp_iter) + "_logger"),
+                iter_output_data_dir / fs::path("log.log"),
+                false
+            );
+
             // Load linear system, generating b to solve
             cascade::GenericLinearSystem<TMatrix> gen_lin_sys = (
                 load_lin_sys<TMatrix>(
-                    cu_handles, matrix_data_dir, matrix_file, solve_group_logger
+                    cu_handles, matrix_data_dir, matrix_file, iter_logger
                 )
             );
 
@@ -240,12 +263,24 @@ void run_record_solve_group(
                 gen_lin_sys,
                 solve_group,
                 iter_output_data_dir,
-                solve_group_logger
+                iter_logger
+            );
+
+            solve_group_logger.info(
+                "Finish iteration: " + std::to_string(exp_iter)
             );
 
         }
 
+        solve_group_logger.info(
+            "Finish matrix experimentation: " + matrix_file
+        );
+
     }
+
+    outer_logger.info("Finish Solve_Group: " + solve_group.id);
+    solve_group_logger.info("Finish Solve_Group: " + solve_group.id);
+
 }
 
 void run_record_experimental_spec(

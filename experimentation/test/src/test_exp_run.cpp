@@ -235,7 +235,7 @@ public:
         fpgmres16_clock.start_clock_experiment();
         Solve_Data<GenericIterativeSolve, TMatrix> fpgmres16_solve_data(
             execute_solve<GenericIterativeSolve, TMatrix>(
-                "fp16_id", fpgmres16_ptr, false
+                "fp16_id", fpgmres16_ptr, logger, false
             )
         );
         fpgmres16_clock.stop_clock_experiment();
@@ -264,7 +264,7 @@ public:
         fpgmres32_clock.start_clock_experiment();
         Solve_Data<GenericIterativeSolve, TMatrix> fpgmres32_solve_data(
             execute_solve<GenericIterativeSolve, TMatrix>(
-                "fp32_id", fpgmres32_ptr, false
+                "fp32_id", fpgmres32_ptr, logger, false
             )
         );
         fpgmres32_clock.stop_clock_experiment();
@@ -293,7 +293,7 @@ public:
         fpgmres64_clock.start_clock_experiment();
         Solve_Data<GenericIterativeSolve, TMatrix> fpgmres64_solve_data(
             execute_solve<GenericIterativeSolve, TMatrix>(
-                "fp64_id", fpgmres64_ptr, false
+                "fp64_id", fpgmres64_ptr, logger, false
             )
         );
         fpgmres64_clock.stop_clock_experiment();
@@ -334,7 +334,7 @@ public:
         sct_mpgmres_clock.start_clock_experiment();
         Solve_Data<GenericIterativeSolve, TMatrix> sct_mpgmres_solve_data(
             execute_solve<GenericIterativeSolve, TMatrix>(
-                "id_sct_mpgmres", sct_mpgmres_ptr, false
+                "id_sct_mpgmres", sct_mpgmres_ptr, logger, false
             )
         );
         sct_mpgmres_clock.stop_clock_experiment();
@@ -362,7 +362,7 @@ public:
         rc_mpgmres_clock.start_clock_experiment();
         Solve_Data<GenericIterativeSolve, TMatrix> rc_mpgmres_solve_data(
             execute_solve<GenericIterativeSolve, TMatrix>(
-                "id_rc_mpgmres", rc_mpgmres_ptr, false
+                "id_rc_mpgmres", rc_mpgmres_ptr, logger, false
             )
         );
         rc_mpgmres_clock.stop_clock_experiment();

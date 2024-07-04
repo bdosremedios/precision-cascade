@@ -43,7 +43,7 @@ cascade::GenericLinearSystem<TMatrix> load_lin_sys(
 
     fs::path matrix_path = input_dir / fs::path(matrix_name);
 
-    logger.info("Loading: "+matrix_path.string());
+    logger.info("Load linear system from: " + matrix_path.string());
 
     TMatrix<double> A(cu_handles);
     if (matrix_path.extension() == ".mtx") {
@@ -56,7 +56,7 @@ cascade::GenericLinearSystem<TMatrix> load_lin_sys(
 
     cascade::Scalar<double> A_max_mag = A.get_max_mag_elem();
     A /= A_max_mag;
-    logger.info("Matrix info: " + A.get_info_string());
+    logger.info("A matrix info: " + A.get_info_string());
 
     // Search for a rhs and if none is found generate one randomly
     fs::path potential_b_path(
@@ -85,6 +85,7 @@ cascade::GenericLinearSystem<TMatrix> load_lin_sys(
     } else {
         b = A*cascade::Vector<double>::Random(cu_handles, A.cols());
     }
+    logger.info("b vector info: " + b.get_info_string());
 
     return cascade::GenericLinearSystem<TMatrix>(A, b);
 

@@ -420,7 +420,9 @@ public:
         );
 
         Solve_Data<GenericIterativeSolve, TMatrix> data(
-            execute_solve<GenericIterativeSolve, TMatrix>(id, solve_ptr, false)
+            execute_solve<GenericIterativeSolve, TMatrix>(
+                id, solve_ptr, logger, false
+            )
         );
         data.record_json(file_name, test_output_dir, logger);
 
@@ -474,7 +476,9 @@ public:
         );
 
         Solve_Data<MP_GMRES_IR_Solve, TMatrix> data(
-            execute_solve<MP_GMRES_IR_Solve, TMatrix>(id, solve_ptr, false)
+            execute_solve<MP_GMRES_IR_Solve, TMatrix>(
+                id, solve_ptr, logger, false
+            )
         );
         data.record_json(file_name, test_output_dir, logger);
 

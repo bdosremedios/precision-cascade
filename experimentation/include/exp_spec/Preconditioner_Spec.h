@@ -89,6 +89,16 @@ public:
             return name + "_" + ilutp_tau_str + "_" + std::to_string(ilutp_p);
         }
     }
+    
+    std::string get_info_string() const {
+        return (
+            "Name: " + name + " | " +
+            "ILUTP Tau: " +
+            ((ilutp_tau != -1.0) ? std::to_string(ilutp_tau) : "N/A") + " | " +
+            "ILUTP P Non-zeros: " +
+            ((ilutp_p != -1) ? std::to_string(ilutp_p) : "N/A")
+        );
+    }
 
 };
 

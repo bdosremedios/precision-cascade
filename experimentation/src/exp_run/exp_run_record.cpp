@@ -3,10 +3,10 @@
 void create_or_clear_directory(fs::path dir, Experiment_Log logger) {
 
     if (!fs::exists(dir)) {
-        logger.info("Creating directory: "+dir.string());
+        logger.info("Create dir: "+dir.string());
         fs::create_directory(dir);
     } else {
-        logger.info("Clearing directory: "+dir.string());
+        logger.info("Clear dir: "+dir.string());
         for (auto member : fs::directory_iterator(dir)) {
             fs::remove_all(member);
         }
@@ -22,7 +22,7 @@ void run_record_experimental_spec(
     Experiment_Log logger
 ) {
 
-    logger.info("Running experiment spec: "+exp_spec.id);
+    logger.info("Start Experiment_Spec: " + exp_spec.id);
 
     fs::path exp_spec_dir = output_data_dir / fs::path(exp_spec.id);
     create_or_clear_directory(exp_spec_dir, logger);

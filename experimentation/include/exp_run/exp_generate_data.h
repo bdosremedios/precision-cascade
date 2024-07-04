@@ -22,7 +22,9 @@ Preconditioner_Data<TMatrix> calc_preconditioner(
 
     cascade::PrecondArgPkg<TMatrix, double> precond_args_dbl;
 
-    logger.info("Start Precond Calc: " + precond_specs.get_spec_string());
+    logger.info(
+        "Start calc_preconditioner: " + precond_specs.get_spec_string()
+    );
 
     if (precond_specs.name == "none") {
 
@@ -52,8 +54,12 @@ Preconditioner_Data<TMatrix> calc_preconditioner(
         );
         exp_clock.stop_clock_experiment();
 
-        logger.info("Precond: L info: " + ilu0->get_L().get_info_string());
-        logger.info("Precond: U info: " + ilu0->get_U().get_info_string());
+        logger.info(
+            "ILUPreconditioner: L info: " + ilu0->get_L().get_info_string()
+        );
+        logger.info(
+            "ILUPreconditioner: U info: " + ilu0->get_U().get_info_string()
+        );
         precond_args_dbl = cascade::PrecondArgPkg<TMatrix, double>(ilu0);
 
     } else if (precond_specs.name == "ilutp") {
@@ -69,9 +75,15 @@ Preconditioner_Data<TMatrix> calc_preconditioner(
         );
         exp_clock.stop_clock_experiment();
 
-        logger.info("Precond: L info: " + ilutp->get_L().get_info_string());
-        logger.info("Precond: U info: " + ilutp->get_U().get_info_string());
-        logger.info("Precond: P info: " + ilutp->get_P().get_info_string());
+        logger.info(
+            "ILUPreconditioner: L info: " + ilutp->get_L().get_info_string()
+        );
+        logger.info(
+            "ILUPreconditioner: U info: " + ilutp->get_U().get_info_string()
+        );
+        logger.info(
+            "ILUPreconditioner: P info: " + ilutp->get_P().get_info_string()
+        );
         precond_args_dbl = cascade::PrecondArgPkg<TMatrix, double>(ilutp);
 
     } else {
@@ -80,7 +92,9 @@ Preconditioner_Data<TMatrix> calc_preconditioner(
         );
     }
 
-    logger.info("Finished Precond Calc");
+    logger.info(
+        "Finish calc_preconditioner: " + precond_specs.get_spec_string()
+    );
 
     return Preconditioner_Data<TMatrix>(
         precond_specs.get_spec_string(),
@@ -96,10 +110,13 @@ template <
     template <typename> typename TMatrix
 >
 Solve_Data<TSolver, TMatrix> execute_solve(
-    std::string data_id,
+    std::string solver_id,
     std::shared_ptr<TSolver<TMatrix>> arg_solver_ptr,
+    Experiment_Log logger,
     bool show_plots
 ) {
+
+    logger.info("Start execute_solve: " + solver_id);
 
     Experiment_Clock exp_clock;
     exp_clock.start_clock_experiment();
@@ -107,7 +124,9 @@ Solve_Data<TSolver, TMatrix> execute_solve(
     if (show_plots) { arg_solver_ptr->view_relres_plot("log"); }
     exp_clock.stop_clock_experiment();
 
-    return Solve_Data<TSolver, TMatrix>(data_id, exp_clock, arg_solver_ptr);
+    logger.info("Finish execute_solve: " + solver_id);
+
+    return Solve_Data<TSolver, TMatrix>(solver_id, exp_clock, arg_solver_ptr);
 
 }
 
