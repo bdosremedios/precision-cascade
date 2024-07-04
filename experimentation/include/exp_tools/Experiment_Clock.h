@@ -13,6 +13,7 @@ private:
     std::chrono::time_point<std::chrono::steady_clock> stop;
     std::chrono::milliseconds time_ms;
     bool clock_ticking = false;
+    bool completed = false;
 
 public:
 
@@ -30,6 +31,7 @@ public:
         stop = other.stop;
         time_ms = other.time_ms;
         clock_ticking = other.clock_ticking;
+        completed = other.completed;
     }
 
     void start_clock_experiment();
@@ -37,6 +39,8 @@ public:
     void stop_clock_experiment();
 
     int get_elapsed_time_ms() const;
+
+    bool check_completed() const;
 
     std::string get_info_string() const;
 

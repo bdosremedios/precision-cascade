@@ -12,7 +12,7 @@
 
 using json = nlohmann::json;
 
-class Test_Experiment_Record: public Test_Experiment_Base
+class Test_Experiment_Data: public Test_Experiment_Base
 {
 private:
 
@@ -156,13 +156,145 @@ private:
 
 public:
 
-    Test_Experiment_Record() {
+    Test_Experiment_Data() {
         A = MatrixDense<double>::Random(*cu_handles_ptr, 16, 16);
         b = A*Vector<double>::Random(*cu_handles_ptr, 16);
         logger = Experiment_Log();
     }
 
-    ~Test_Experiment_Record() {}
+    ~Test_Experiment_Data() {}
+
+    template <template <typename> typename TMatrix>
+    void Test_Load_Lin_Sys(std::string matrix_name) {
+
+        GenericLinearSystem<TMatrix> gen_lin_sys = load_lin_sys<TMatrix>(
+            *Test_Experiment_Base::cu_handles_ptr,
+            test_data_dir,
+            matrix_name,
+            logger
+        );
+
+        fs::path matrix_path(test_data_dir / fs::path(matrix_name));
+        TMatrix<double> target_A(*Test_Experiment_Base::cu_handles_ptr);
+        if (matrix_path.extension() == ".mtx") {
+            target_A = read_matrixMTX<TMatrix, double>(
+                *Test_Experiment_Base::cu_handles_ptr, matrix_path
+            );
+        } else if (matrix_path.extension() == ".csv") {
+            target_A = read_matrixCSV<TMatrix, double>(
+                *Test_Experiment_Base::cu_handles_ptr, matrix_path
+            );
+        } else {
+            FAIL();
+        }
+        target_A.normalize_magnitude();
+
+        ASSERT_EQ(gen_lin_sys.get_A().rows(), target_A.rows());
+        ASSERT_EQ(gen_lin_sys.get_A().cols(), target_A.cols());
+        for (int j=0; j<target_A.cols(); ++j) {
+            for (int i=0; i<target_A.rows(); ++i) {
+                ASSERT_EQ(
+                    gen_lin_sys.get_A().get_elem(i, j),
+                    target_A.get_elem(i, j)
+                );
+            }
+        }
+    
+        ASSERT_EQ(gen_lin_sys.get_b().rows(), target_A.rows());
+
+    }
+
+    template <template <typename> typename TMatrix>
+    void Test_Load_Lin_Sys_w_RHS(std::string matrix_name) {
+
+        GenericLinearSystem<TMatrix> gen_lin_sys = load_lin_sys<TMatrix>(
+            *Test_Experiment_Base::cu_handles_ptr,
+            test_data_dir,
+            matrix_name,
+            logger
+        );
+
+        fs::path matrix_path(test_data_dir / fs::path(matrix_name));
+        TMatrix<double> target_A(*Test_Experiment_Base::cu_handles_ptr);
+        if (matrix_path.extension() == fs::path(".mtx")) {
+            target_A = read_matrixMTX<TMatrix, double>(
+                *Test_Experiment_Base::cu_handles_ptr, matrix_path
+            );
+        } else if (matrix_path.extension() == fs::path(".csv")) {
+            target_A = read_matrixCSV<TMatrix, double>(
+                *Test_Experiment_Base::cu_handles_ptr, matrix_path
+            );
+        } else {
+            FAIL();
+        }
+        Scalar<double> A_max_mag = target_A.get_max_mag_elem();
+        target_A.normalize_magnitude();
+
+        ASSERT_EQ(gen_lin_sys.get_A().rows(), target_A.rows());
+        ASSERT_EQ(gen_lin_sys.get_A().cols(), target_A.cols());
+        for (int j=0; j<target_A.cols(); ++j) {
+            for (int i=0; i<target_A.rows(); ++i) {
+                ASSERT_EQ(
+                    gen_lin_sys.get_A().get_elem(i, j),
+                    target_A.get_elem(i, j)
+                );
+            }
+        }
+    
+        ASSERT_EQ(gen_lin_sys.get_b().rows(), target_A.rows());
+
+        fs::path matrix_path_b = (
+            test_data_dir /
+            fs::path(
+                matrix_path.stem().string() + "_b" +
+                matrix_path.extension().string()
+            )
+        );
+        if (matrix_path_b.extension() == fs::path(".mtx")) {
+
+            TMatrix<double> target_b(read_matrixMTX<TMatrix, double>(
+                *Test_Experiment_Base::cu_handles_ptr, matrix_path_b
+            ));
+            target_b /= A_max_mag;
+            bool matches_one_col = false;
+            for (int j=0; j<target_b.cols(); ++j) {
+                matches_one_col = (
+                    matches_one_col ||
+                    (gen_lin_sys.get_b() == target_b.get_col(j).copy_to_vec())
+                );
+            }
+            ASSERT_TRUE(matches_one_col);
+
+        } else if (matrix_path_b.extension() == fs::path(".csv")) {
+
+            Vector<double> target_b(read_vectorCSV<double>(
+                *Test_Experiment_Base::cu_handles_ptr, matrix_path_b
+            ));
+            target_b /= A_max_mag;
+            ASSERT_EQ(gen_lin_sys.get_b(), target_b);
+
+        } else {
+            FAIL();
+        }
+
+    }
+
+    template <template <typename> typename TMatrix>
+    void Test_Mismatch_Load_Lin_Sys_w_RHS(std::string matrix_name) {
+
+        auto test_func = [matrix_name, this]() -> void {
+            GenericLinearSystem<TMatrix> gen_lin_sys = (
+                load_lin_sys<TMatrix>(
+                    *Test_Experiment_Base::cu_handles_ptr,
+                    test_data_dir,
+                    matrix_name,
+                    logger
+                )
+            );
+        };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, test_func);
+
+    }
 
     template <template <typename> typename TMatrix>
     void TestRecordOutputJsonPrecond() {
@@ -383,17 +515,69 @@ public:
 
 };
 
-TEST_F(Test_Experiment_Record, TestRecordOutputJsonPrecond) {
+TEST_F(Test_Experiment_Data, Test_Load_Lin_Sys) {
+
+    Test_Load_Lin_Sys<MatrixDense>("easy_4_4.csv");
+    Test_Load_Lin_Sys<NoFillMatrixSparse>("easy_4_4.csv");
+
+    Test_Load_Lin_Sys<MatrixDense>("easy_4_4.mtx");
+    Test_Load_Lin_Sys<NoFillMatrixSparse>("easy_4_4.mtx");
+    
+}
+
+TEST_F(Test_Experiment_Data, Test_Load_Lin_Sys_w_RHS) {
+
+    Test_Load_Lin_Sys_w_RHS<MatrixDense>("paired_mat.csv");
+    Test_Load_Lin_Sys_w_RHS<NoFillMatrixSparse>("paired_mat.csv");
+
+    Test_Load_Lin_Sys_w_RHS<MatrixDense>("paired_mat.mtx");
+    Test_Load_Lin_Sys_w_RHS<NoFillMatrixSparse>("paired_mat.mtx");
+    
+}
+
+TEST_F(Test_Experiment_Data, Test_Mismatch_Load_Lin_Sys_w_RHS) {
+
+    Test_Mismatch_Load_Lin_Sys_w_RHS<MatrixDense>(
+        "bad_paired_mat_small.csv"
+    );
+    Test_Mismatch_Load_Lin_Sys_w_RHS<NoFillMatrixSparse>(
+        "bad_paired_mat_small.csv"
+    );
+
+    Test_Mismatch_Load_Lin_Sys_w_RHS<MatrixDense>(
+        "bad_paired_mat_small.mtx"
+    );
+    Test_Mismatch_Load_Lin_Sys_w_RHS<NoFillMatrixSparse>(
+        "bad_paired_mat_small.mtx"
+    );
+
+    Test_Mismatch_Load_Lin_Sys_w_RHS<MatrixDense>(
+        "bad_paired_mat_big.csv"
+    );
+    Test_Mismatch_Load_Lin_Sys_w_RHS<NoFillMatrixSparse>(
+        "bad_paired_mat_big.csv"
+    );
+
+    Test_Mismatch_Load_Lin_Sys_w_RHS<MatrixDense>(
+        "bad_paired_mat_big.mtx"
+    );
+    Test_Mismatch_Load_Lin_Sys_w_RHS<NoFillMatrixSparse>(
+        "bad_paired_mat_big.mtx"
+    );
+    
+}
+
+TEST_F(Test_Experiment_Data, TestRecordOutputJsonPrecond) {
     TestRecordOutputJsonPrecond<MatrixDense>();
     TestRecordOutputJsonPrecond<NoFillMatrixSparse>();
 }
 
-TEST_F(Test_Experiment_Record, TestRecordOutputJsonFPGMRES) {
+TEST_F(Test_Experiment_Data, TestRecordOutputJsonFPGMRES) {
     TestRecordOutputJsonFPGMRES<MatrixDense>();
     TestRecordOutputJsonFPGMRES<NoFillMatrixSparse>();
 }
 
-TEST_F(Test_Experiment_Record, TestRecordOutputJsonMPGMRES) {
+TEST_F(Test_Experiment_Data, TestRecordOutputJsonMPGMRES) {
     TestRecordOutputJsonMPGMRES<MatrixDense>();
     TestRecordOutputJsonMPGMRES<NoFillMatrixSparse>();
 }

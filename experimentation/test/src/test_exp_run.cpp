@@ -112,139 +112,276 @@ public:
     ~Test_Experiment_Run() {}
 
     template <template <typename> typename TMatrix>
-    void Test_Load_Lin_Sys(std::string matrix_name) {
+    void Test_Calc_Preconditioner() {
 
-        GenericLinearSystem<TMatrix> gen_lin_sys = load_lin_sys<TMatrix>(
-            *Test_Experiment_Base::cu_handles_ptr,
-            test_data_dir,
-            matrix_name,
-            logger
+        GenericLinearSystem<TMatrix> gen_lin_sys(
+            TMatrix<double>(MatrixDense<double>::Random(
+                *Test_Experiment_Base::cu_handles_ptr, 16, 16
+            )),
+            Vector<double>::Random(*Test_Experiment_Base::cu_handles_ptr, 16)
         );
 
-        fs::path matrix_path(test_data_dir / fs::path(matrix_name));
-        TMatrix<double> target_A(*Test_Experiment_Base::cu_handles_ptr);
-        if (matrix_path.extension() == ".mtx") {
-            target_A = read_matrixMTX<TMatrix, double>(
-                *Test_Experiment_Base::cu_handles_ptr, matrix_path
-            );
-        } else if (matrix_path.extension() == ".csv") {
-            target_A = read_matrixCSV<TMatrix, double>(
-                *Test_Experiment_Base::cu_handles_ptr, matrix_path
-            );
-        } else {
-            FAIL();
-        }
-        target_A.normalize_magnitude();
+        Preconditioner_Spec precond_spec_none("none");
+        Preconditioner_Data<TMatrix> none_data = calc_preconditioner<TMatrix>(
+            gen_lin_sys, precond_spec_none, logger
+        );
+        ASSERT_EQ(none_data.id, precond_spec_none.get_spec_string());
+        ASSERT_TRUE(none_data.clock.check_completed());
+        ASSERT_EQ(
+            typeid(*none_data.precond_arg_pkg_dbl.left_precond).name(),
+            typeid(NoPreconditioner<TMatrix, double>).name()
+        );
+        ASSERT_EQ(
+            typeid(*none_data.precond_arg_pkg_dbl.right_precond).name(),
+            typeid(NoPreconditioner<TMatrix, double>).name()
+        );
 
-        ASSERT_EQ(gen_lin_sys.get_A().rows(), target_A.rows());
-        ASSERT_EQ(gen_lin_sys.get_A().cols(), target_A.cols());
-        for (int j=0; j<target_A.cols(); ++j) {
-            for (int i=0; i<target_A.rows(); ++i) {
-                ASSERT_EQ(
-                    gen_lin_sys.get_A().get_elem(i, j),
-                    target_A.get_elem(i, j)
-                );
-            }
-        }
-    
-        ASSERT_EQ(gen_lin_sys.get_b().rows(), target_A.rows());
+        Preconditioner_Spec precond_spec_jacobi("jacobi");
+        Preconditioner_Data<TMatrix> jacobi_data = calc_preconditioner<TMatrix>(
+            gen_lin_sys, precond_spec_jacobi, logger
+        );
+        ASSERT_EQ(jacobi_data.id, precond_spec_jacobi.get_spec_string());
+        ASSERT_TRUE(jacobi_data.clock.check_completed());
+        JacobiPreconditioner<TMatrix, double> jacobi_precond(
+            gen_lin_sys.get_A()
+        );
+        ASSERT_EQ(
+            typeid(*jacobi_data.precond_arg_pkg_dbl.left_precond).name(),
+            typeid(jacobi_precond).name()
+        );
+        ASSERT_VECTOR_NEAR(
+            jacobi_data.precond_arg_pkg_dbl.left_precond->action_inv_M(
+                gen_lin_sys.get_b()
+            ),
+            jacobi_precond.action_inv_M(gen_lin_sys.get_b()),
+            u_dbl
+        );
+        ASSERT_EQ(
+            typeid(*jacobi_data.precond_arg_pkg_dbl.right_precond).name(),
+            typeid(NoPreconditioner<TMatrix, double>).name()
+        );
+
+        Preconditioner_Spec precond_spec_ilu0("ilu0");
+        Preconditioner_Data<TMatrix> ilu0_data = calc_preconditioner<TMatrix>(
+            gen_lin_sys, precond_spec_ilu0, logger
+        );
+        ASSERT_EQ(ilu0_data.id, precond_spec_ilu0.get_spec_string());
+        ASSERT_TRUE(ilu0_data.clock.check_completed());
+        ILUPreconditioner<TMatrix, double> ilu0_precond(gen_lin_sys.get_A());
+        ASSERT_EQ(
+            typeid(*ilu0_data.precond_arg_pkg_dbl.left_precond).name(),
+            typeid(ilu0_precond).name()
+        );
+        ASSERT_VECTOR_NEAR(
+            ilu0_data.precond_arg_pkg_dbl.left_precond->action_inv_M(
+                gen_lin_sys.get_b()
+            ),
+            ilu0_precond.action_inv_M(gen_lin_sys.get_b()),
+            u_dbl
+        );
+        ASSERT_EQ(
+            typeid(*ilu0_data.precond_arg_pkg_dbl.right_precond).name(),
+            typeid(NoPreconditioner<TMatrix, double>).name()
+        );
+
+        Preconditioner_Spec precond_spec_ilutp("ilutp", 0.1, 10);
+        Preconditioner_Data<TMatrix> ilutp_data = calc_preconditioner<TMatrix>(
+            gen_lin_sys, precond_spec_ilutp, logger
+        );
+        ASSERT_EQ(ilutp_data.id, precond_spec_ilutp.get_spec_string());
+        ASSERT_TRUE(ilutp_data.clock.check_completed());
+        ILUPreconditioner<TMatrix, double> ilutp_precond(
+            gen_lin_sys.get_A(), 0.1, 10, true
+        );
+        ASSERT_EQ(
+            typeid(*ilutp_data.precond_arg_pkg_dbl.left_precond).name(),
+            typeid(ilutp_precond).name()
+        );
+        ASSERT_VECTOR_NEAR(
+            ilutp_data.precond_arg_pkg_dbl.left_precond->action_inv_M(
+                gen_lin_sys.get_b()
+            ),
+            ilutp_precond.action_inv_M(gen_lin_sys.get_b()),
+            u_dbl
+        );
+        ASSERT_EQ(
+            typeid(*ilutp_data.precond_arg_pkg_dbl.right_precond).name(),
+            typeid(NoPreconditioner<TMatrix, double>).name()
+        );
 
     }
 
     template <template <typename> typename TMatrix>
-    void Test_Load_Lin_Sys_w_RHS(std::string matrix_name) {
+    void Test_Execute_FP_GMRES_IR_Solve() {
 
-        GenericLinearSystem<TMatrix> gen_lin_sys = load_lin_sys<TMatrix>(
-            *Test_Experiment_Base::cu_handles_ptr,
-            test_data_dir,
-            matrix_name,
-            logger
+        GenericLinearSystem<TMatrix> gen_lin_sys(
+            TMatrix<double>(MatrixDense<double>::Random(
+                *Test_Experiment_Base::cu_handles_ptr, 16, 16
+            )),
+            Vector<double>::Random(*Test_Experiment_Base::cu_handles_ptr, 16)
         );
+        SolveArgPkg solver_args(10, 10, 0.05);
 
-        fs::path matrix_path(test_data_dir / fs::path(matrix_name));
-        TMatrix<double> target_A(*Test_Experiment_Base::cu_handles_ptr);
-        if (matrix_path.extension() == fs::path(".mtx")) {
-            target_A = read_matrixMTX<TMatrix, double>(
-                *Test_Experiment_Base::cu_handles_ptr, matrix_path
-            );
-        } else if (matrix_path.extension() == fs::path(".csv")) {
-            target_A = read_matrixCSV<TMatrix, double>(
-                *Test_Experiment_Base::cu_handles_ptr, matrix_path
-            );
-        } else {
-            FAIL();
-        }
-        Scalar<double> A_max_mag = target_A.get_max_mag_elem();
-        target_A.normalize_magnitude();
-
-        ASSERT_EQ(gen_lin_sys.get_A().rows(), target_A.rows());
-        ASSERT_EQ(gen_lin_sys.get_A().cols(), target_A.cols());
-        for (int j=0; j<target_A.cols(); ++j) {
-            for (int i=0; i<target_A.rows(); ++i) {
-                ASSERT_EQ(
-                    gen_lin_sys.get_A().get_elem(i, j),
-                    target_A.get_elem(i, j)
-                );
-            }
-        }
-    
-        ASSERT_EQ(gen_lin_sys.get_b().rows(), target_A.rows());
-
-        fs::path matrix_path_b = (
-            test_data_dir /
-            fs::path(
-                matrix_path.stem().string() + "_b" +
-                matrix_path.extension().string()
+        TypedLinearSystem<TMatrix, __half> typed_lin_sys_hlf(&gen_lin_sys);
+        std::shared_ptr<FP_GMRES_IR_Solve<TMatrix, __half>> fpgmres16_ptr(
+            std::make_shared<FP_GMRES_IR_Solve<TMatrix, __half>>(
+                &typed_lin_sys_hlf, u_hlf, solver_args
             )
         );
-        if (matrix_path_b.extension() == fs::path(".mtx")) {
+        ASSERT_FALSE(fpgmres16_ptr->check_initiated());
+        ASSERT_FALSE(fpgmres16_ptr->check_terminated());
 
-            TMatrix<double> target_b(read_matrixMTX<TMatrix, double>(
-                *Test_Experiment_Base::cu_handles_ptr, matrix_path_b
-            ));
-            target_b /= A_max_mag;
-            bool matches_one_col = false;
-            for (int j=0; j<target_b.cols(); ++j) {
-                matches_one_col = (
-                    matches_one_col ||
-                    (gen_lin_sys.get_b() == target_b.get_col(j).copy_to_vec())
-                );
-            }
-            ASSERT_TRUE(matches_one_col);
+        Experiment_Clock fpgmres16_clock;
+        fpgmres16_clock.start_clock_experiment();
+        Solve_Data<GenericIterativeSolve, TMatrix> fpgmres16_solve_data(
+            execute_solve<GenericIterativeSolve, TMatrix>(
+                "fp16_id", fpgmres16_ptr, false
+            )
+        );
+        fpgmres16_clock.stop_clock_experiment();
 
-        } else if (matrix_path_b.extension() == fs::path(".csv")) {
+        ASSERT_EQ(fpgmres16_solve_data.id, "fp16_id");
+        ASSERT_TRUE(fpgmres16_solve_data.clock.check_completed());
+        ASSERT_NEAR(
+            fpgmres16_clock.get_elapsed_time_ms(),
+            fpgmres16_solve_data.clock.get_elapsed_time_ms(),
+            1
+        );
+        ASSERT_EQ(fpgmres16_ptr, fpgmres16_solve_data.solver_ptr);
+        ASSERT_TRUE(fpgmres16_solve_data.solver_ptr->check_initiated());
+        ASSERT_TRUE(fpgmres16_solve_data.solver_ptr->check_terminated());
 
-            Vector<double> target_b(read_vectorCSV<double>(
-                *Test_Experiment_Base::cu_handles_ptr, matrix_path_b
-            ));
-            target_b /= A_max_mag;
-            ASSERT_EQ(gen_lin_sys.get_b(), target_b);
+        TypedLinearSystem<TMatrix, float> typed_lin_sys_sgl(&gen_lin_sys);
+        std::shared_ptr<FP_GMRES_IR_Solve<TMatrix, float>> fpgmres32_ptr(
+            std::make_shared<FP_GMRES_IR_Solve<TMatrix, float>>(
+                &typed_lin_sys_sgl, u_sgl, solver_args
+            )
+        );
+        ASSERT_FALSE(fpgmres32_ptr->check_initiated());
+        ASSERT_FALSE(fpgmres32_ptr->check_terminated());
 
-        } else {
-            FAIL();
-        }
+        Experiment_Clock fpgmres32_clock;
+        fpgmres32_clock.start_clock_experiment();
+        Solve_Data<GenericIterativeSolve, TMatrix> fpgmres32_solve_data(
+            execute_solve<GenericIterativeSolve, TMatrix>(
+                "fp32_id", fpgmres32_ptr, false
+            )
+        );
+        fpgmres32_clock.stop_clock_experiment();
+
+        ASSERT_EQ(fpgmres32_solve_data.id, "fp32_id");
+        ASSERT_TRUE(fpgmres32_solve_data.clock.check_completed());
+        ASSERT_NEAR(
+            fpgmres32_clock.get_elapsed_time_ms(),
+            fpgmres32_solve_data.clock.get_elapsed_time_ms(),
+            1
+        );
+        ASSERT_EQ(fpgmres32_ptr, fpgmres32_solve_data.solver_ptr);
+        ASSERT_TRUE(fpgmres32_solve_data.solver_ptr->check_initiated());
+        ASSERT_TRUE(fpgmres32_solve_data.solver_ptr->check_terminated());
+
+        TypedLinearSystem<TMatrix, double> typed_lin_sys_dbl(&gen_lin_sys);
+        std::shared_ptr<FP_GMRES_IR_Solve<TMatrix, double>> fpgmres64_ptr(
+            std::make_shared<FP_GMRES_IR_Solve<TMatrix, double>>(
+                &typed_lin_sys_dbl, u_dbl, solver_args
+            )
+        );
+        ASSERT_FALSE(fpgmres64_ptr->check_initiated());
+        ASSERT_FALSE(fpgmres64_ptr->check_terminated());
+
+        Experiment_Clock fpgmres64_clock;
+        fpgmres64_clock.start_clock_experiment();
+        Solve_Data<GenericIterativeSolve, TMatrix> fpgmres64_solve_data(
+            execute_solve<GenericIterativeSolve, TMatrix>(
+                "fp64_id", fpgmres64_ptr, false
+            )
+        );
+        fpgmres64_clock.stop_clock_experiment();
+
+        ASSERT_EQ(fpgmres64_solve_data.id, "fp64_id");
+        ASSERT_TRUE(fpgmres64_solve_data.clock.check_completed());
+        ASSERT_NEAR(
+            fpgmres64_clock.get_elapsed_time_ms(),
+            fpgmres64_solve_data.clock.get_elapsed_time_ms(),
+            1
+        );
+        ASSERT_EQ(fpgmres64_ptr, fpgmres64_solve_data.solver_ptr);
+        ASSERT_TRUE(fpgmres64_solve_data.solver_ptr->check_initiated());
+        ASSERT_TRUE(fpgmres64_solve_data.solver_ptr->check_terminated());
 
     }
 
     template <template <typename> typename TMatrix>
-    void Test_Mismatch_Load_Lin_Sys_w_RHS(std::string matrix_name) {
+    void Test_Execute_MP_GMRES_IR_Solve() {
 
-        auto test_func = [matrix_name, this]() -> void {
-            GenericLinearSystem<TMatrix> gen_lin_sys = (
-                load_lin_sys<TMatrix>(
-                    *Test_Experiment_Base::cu_handles_ptr,
-                    test_data_dir,
-                    matrix_name,
-                    logger
-                )
-            );
-        };
-        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, test_func);
+        GenericLinearSystem<TMatrix> gen_lin_sys(
+            TMatrix<double>(MatrixDense<double>::Random(
+                *Test_Experiment_Base::cu_handles_ptr, 16, 16
+            )),
+            Vector<double>::Random(*Test_Experiment_Base::cu_handles_ptr, 16)
+        );
+        SolveArgPkg solver_args(10, 10, 0.05);
+
+        std::shared_ptr<SimpleConstantThreshold<TMatrix>> sct_mpgmres_ptr(
+            std::make_shared<SimpleConstantThreshold<TMatrix>>(
+                &gen_lin_sys, solver_args
+            )
+        );
+        ASSERT_FALSE(sct_mpgmres_ptr->check_initiated());
+        ASSERT_FALSE(sct_mpgmres_ptr->check_terminated());
+
+        Experiment_Clock sct_mpgmres_clock;
+        sct_mpgmres_clock.start_clock_experiment();
+        Solve_Data<GenericIterativeSolve, TMatrix> sct_mpgmres_solve_data(
+            execute_solve<GenericIterativeSolve, TMatrix>(
+                "id_sct_mpgmres", sct_mpgmres_ptr, false
+            )
+        );
+        sct_mpgmres_clock.stop_clock_experiment();
+
+        ASSERT_EQ(sct_mpgmres_solve_data.id, "id_sct_mpgmres");
+        ASSERT_TRUE(sct_mpgmres_solve_data.clock.check_completed());
+        ASSERT_NEAR(
+            sct_mpgmres_clock.get_elapsed_time_ms(),
+            sct_mpgmres_solve_data.clock.get_elapsed_time_ms(),
+            1
+        );
+        ASSERT_EQ(sct_mpgmres_ptr, sct_mpgmres_solve_data.solver_ptr);
+        ASSERT_TRUE(sct_mpgmres_solve_data.solver_ptr->check_initiated());
+        ASSERT_TRUE(sct_mpgmres_solve_data.solver_ptr->check_terminated());
+
+        std::shared_ptr<RestartCount<TMatrix>> rc_mpgmres_ptr(
+            std::make_shared<RestartCount<TMatrix>>(
+                &gen_lin_sys, solver_args
+            )
+        );
+        ASSERT_FALSE(rc_mpgmres_ptr->check_initiated());
+        ASSERT_FALSE(rc_mpgmres_ptr->check_terminated());
+
+        Experiment_Clock rc_mpgmres_clock;
+        rc_mpgmres_clock.start_clock_experiment();
+        Solve_Data<GenericIterativeSolve, TMatrix> rc_mpgmres_solve_data(
+            execute_solve<GenericIterativeSolve, TMatrix>(
+                "id_rc_mpgmres", rc_mpgmres_ptr, false
+            )
+        );
+        rc_mpgmres_clock.stop_clock_experiment();
+
+        ASSERT_EQ(rc_mpgmres_solve_data.id, "id_rc_mpgmres");
+        ASSERT_TRUE(rc_mpgmres_solve_data.clock.check_completed());
+        ASSERT_NEAR(
+            rc_mpgmres_clock.get_elapsed_time_ms(),
+            rc_mpgmres_solve_data.clock.get_elapsed_time_ms(),
+            1
+        );
+        ASSERT_EQ(rc_mpgmres_ptr, rc_mpgmres_solve_data.solver_ptr);
+        ASSERT_TRUE(rc_mpgmres_solve_data.solver_ptr->check_initiated());
+        ASSERT_TRUE(rc_mpgmres_solve_data.solver_ptr->check_terminated());
 
     }
 
     template <template <typename> typename TMatrix>
-    void Test_Run_Solve_Group(Solve_Group solve_group) {
+    void Test_Run_Record_Solve_Group(Solve_Group solve_group) {
 
         run_record_solve_group<TMatrix>(
             *Test_Experiment_Base::cu_handles_ptr,
@@ -315,7 +452,7 @@ public:
     }
 
     template <template <typename> typename TMatrix>
-    void Test_Run_Experiment_Spec(Experiment_Spec exp_spec) {
+    void Test_Run_Record_Experiment_Spec(Experiment_Spec exp_spec) {
 
         run_record_experimental_spec(
             *Test_Experiment_Base::cu_handles_ptr,
@@ -329,56 +466,19 @@ public:
 
 };
 
-TEST_F(Test_Experiment_Run, Test_Load_Lin_Sys) {
-
-    Test_Load_Lin_Sys<MatrixDense>("easy_4_4.csv");
-    Test_Load_Lin_Sys<NoFillMatrixSparse>("easy_4_4.csv");
-
-    Test_Load_Lin_Sys<MatrixDense>("easy_4_4.mtx");
-    Test_Load_Lin_Sys<NoFillMatrixSparse>("easy_4_4.mtx");
-    
+TEST_F(Test_Experiment_Run, Test_Calc_Preconditioner) {
+    Test_Calc_Preconditioner<MatrixDense>();
+    Test_Calc_Preconditioner<NoFillMatrixSparse>();
 }
 
-TEST_F(Test_Experiment_Run, Test_Load_Lin_Sys_w_RHS) {
-
-    Test_Load_Lin_Sys_w_RHS<MatrixDense>("paired_mat.csv");
-    Test_Load_Lin_Sys_w_RHS<NoFillMatrixSparse>("paired_mat.csv");
-
-    Test_Load_Lin_Sys_w_RHS<MatrixDense>("paired_mat.mtx");
-    Test_Load_Lin_Sys_w_RHS<NoFillMatrixSparse>("paired_mat.mtx");
-    
+TEST_F(Test_Experiment_Run, Test_Execute_FP_GMRES_IR_Solve) {
+    Test_Execute_FP_GMRES_IR_Solve<MatrixDense>();
+    Test_Execute_FP_GMRES_IR_Solve<NoFillMatrixSparse>();
 }
 
-TEST_F(Test_Experiment_Run, Test_Mismatch_Load_Lin_Sys_w_RHS) {
-
-    Test_Mismatch_Load_Lin_Sys_w_RHS<MatrixDense>(
-        "bad_paired_mat_small.csv"
-    );
-    Test_Mismatch_Load_Lin_Sys_w_RHS<NoFillMatrixSparse>(
-        "bad_paired_mat_small.csv"
-    );
-
-    Test_Mismatch_Load_Lin_Sys_w_RHS<MatrixDense>(
-        "bad_paired_mat_small.mtx"
-    );
-    Test_Mismatch_Load_Lin_Sys_w_RHS<NoFillMatrixSparse>(
-        "bad_paired_mat_small.mtx"
-    );
-
-    Test_Mismatch_Load_Lin_Sys_w_RHS<MatrixDense>(
-        "bad_paired_mat_big.csv"
-    );
-    Test_Mismatch_Load_Lin_Sys_w_RHS<NoFillMatrixSparse>(
-        "bad_paired_mat_big.csv"
-    );
-
-    Test_Mismatch_Load_Lin_Sys_w_RHS<MatrixDense>(
-        "bad_paired_mat_big.mtx"
-    );
-    Test_Mismatch_Load_Lin_Sys_w_RHS<NoFillMatrixSparse>(
-        "bad_paired_mat_big.mtx"
-    );
-    
+TEST_F(Test_Experiment_Run, Test_Execute_MP_GMRES_IR_Solve) {
+    Test_Execute_MP_GMRES_IR_Solve<MatrixDense>();
+    Test_Execute_MP_GMRES_IR_Solve<NoFillMatrixSparse>();
 }
 
 TEST_F(Test_Experiment_Run, Test_AllSolvers_Run_Solve_Group) {
@@ -393,7 +493,7 @@ TEST_F(Test_Experiment_Run, Test_AllSolvers_Run_Solve_Group) {
         std::vector<std::string>({"easy_4_4.csv", "easy_5_5.csv"})
     );
 
-    Test_Run_Solve_Group<MatrixDense>(solve_group_dense);
+    Test_Run_Record_Solve_Group<MatrixDense>(solve_group_dense);
 
     Solve_Group solve_group_sparse(
         "allsolvers_sparse",
@@ -405,7 +505,7 @@ TEST_F(Test_Experiment_Run, Test_AllSolvers_Run_Solve_Group) {
         std::vector<std::string>({"easy_4_4.csv", "easy_5_5.csv"})
     );
 
-    Test_Run_Solve_Group<NoFillMatrixSparse>(solve_group_sparse);
+    Test_Run_Record_Solve_Group<NoFillMatrixSparse>(solve_group_sparse);
 
 }
 
@@ -428,7 +528,7 @@ TEST_F(Test_Experiment_Run, Test_AllPreconditioners_Run_Solve_Group) {
             std::vector<std::string>({"easy_4_4.csv", "easy_5_5.csv"})
         );
 
-        Test_Run_Solve_Group<MatrixDense>(solve_group_dense);
+        Test_Run_Record_Solve_Group<MatrixDense>(solve_group_dense);
 
         Solve_Group solve_group_sparse(
             "allpreconditioners_sparse_"+precond_specs.name,
@@ -438,7 +538,7 @@ TEST_F(Test_Experiment_Run, Test_AllPreconditioners_Run_Solve_Group) {
             std::vector<std::string>({"easy_4_4.csv", "easy_5_5.csv"})
         );
 
-        Test_Run_Solve_Group<NoFillMatrixSparse>(solve_group_sparse);
+        Test_Run_Record_Solve_Group<NoFillMatrixSparse>(solve_group_sparse);
 
     }
 
@@ -454,7 +554,7 @@ TEST_F(Test_Experiment_Run, Test_Mix_Run_Solve_Group) {
         std::vector<std::string>({"easy_4_4.csv", "easy_5_5.csv"})
     );
 
-    Test_Run_Solve_Group<MatrixDense>(solve_group_dense);
+    Test_Run_Record_Solve_Group<MatrixDense>(solve_group_dense);
 
     Solve_Group solve_group_sparse(
         "mixsolvers_sparse",
@@ -464,6 +564,6 @@ TEST_F(Test_Experiment_Run, Test_Mix_Run_Solve_Group) {
         std::vector<std::string>({"easy_4_4.csv", "easy_5_5.csv"})
     );
 
-    Test_Run_Solve_Group<NoFillMatrixSparse>(solve_group_sparse);
+    Test_Run_Record_Solve_Group<NoFillMatrixSparse>(solve_group_sparse);
 
 }

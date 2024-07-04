@@ -106,7 +106,9 @@ public:
 
     ~Solve_Data() = default;
 
-    Solve_Data(const Solve_Data &other) = delete;
+    Solve_Data(const Solve_Data &other) {
+        *this = other;
+    }
 
     void operator=(const Solve_Data &other) {
         id = other.id;

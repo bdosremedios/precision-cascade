@@ -10,6 +10,7 @@ set(
     src/test_exp_read.cpp
     src/test_exp_run.cpp
     src/test_exp_spec.cpp
+    src/test_exp_tools.cpp
 )
 
 add_executable(
