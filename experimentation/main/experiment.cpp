@@ -1,14 +1,10 @@
 #include "exp_tools/Experiment_Log.h"
 #include "exp_run/exp_run_record.h"
 
-#include <cuda_runtime.h>
-#include <cublas_v2.h>
+#include "tools/cuHandleBundle.h"
 
-#include <memory>
 #include <filesystem>
 #include <iostream>
-#include <sstream>
-#include <cmath>
 #include <string>
 
 #ifdef WIN32
@@ -145,7 +141,7 @@ int main(int argc, char *argv[]) {
         "Completed validation: " + std::to_string(valid_exp_specs.size()) + 
         " passed | " +
         std::to_string(candidate_exp_specs.size()-valid_exp_specs.size()) +
-         " fail"
+        " fail"
     );
 
     // Set-up cublas context
