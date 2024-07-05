@@ -29,6 +29,9 @@ From: ../container/precision-cascade-base.sif
 %apprun test
     "${REPO_DIR}/install/test/test"
 
+%apprun test-rlt
+    "${REPO_DIR}/install/test/test" -rlt
+
 %apprun test-experiment
     "${REPO_DIR}/install/experimentation/test/test_experiment"
 
