@@ -1,6 +1,9 @@
 #!/bin/bash
 
 cd "$(dirname "$0")"
+
+./helper/check-nvidia-arg.sh $1 || exit 1
+
 cd ../../container
 
-apptainer run --nvccli --app test-rlt precision-cascade-run.sif
+apptainer run $1 --app test-rlt precision-cascade-run.sif

@@ -1,6 +1,9 @@
 #!/bin/bash
 
 cd "$(dirname "$0")"
+
+./helper/check-nvidia-arg.sh $1 || exit 1
+
 cd ../../container
 
 HOST_DATA_DIR="../host_data/experimentation/matrix_data"
@@ -20,7 +23,7 @@ if [[ -e $HOST_DATA_DIR && -e $HOST_INPUT_DIR && -e $HOST_OUTPUT_DIR ]]; then
     echo "Binding matrix_data --bind $BIND_DATA"
     echo "Binding input_specs --bind $BIND_INPUT"
     echo "Binding output_data --bind $BIND_OUTPUT"
-    apptainer run --nvccli \
+    apptainer run $1 \
         --bind "$BIND_DATA,$BIND_INPUT,$BIND_OUTPUT" \
         --app experiment \
         precision-cascade-run.sif
