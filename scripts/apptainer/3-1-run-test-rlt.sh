@@ -6,4 +6,4 @@ cd "$(dirname "$0")"
 
 cd ../../container
 
-apptainer run $1 --app test-rlt precision-cascade-run.sif
+apptainer run $1 --writable-tmpfs --app test-rlt precision-cascade-run.sif

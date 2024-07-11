@@ -23,7 +23,7 @@ if [[ -e $HOST_DATA_DIR && -e $HOST_INPUT_DIR && -e $HOST_OUTPUT_DIR ]]; then
     echo "Binding matrix_data --bind $BIND_DATA"
     echo "Binding input_specs --bind $BIND_INPUT"
     echo "Binding output_data --bind $BIND_OUTPUT"
-    apptainer run $1 \
+    apptainer run $1 --writable-tmpfs \
         --bind "$BIND_DATA,$BIND_INPUT,$BIND_OUTPUT" \
         --app experiment \
         precision-cascade-run.sif

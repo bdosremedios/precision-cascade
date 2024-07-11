@@ -13,7 +13,7 @@ BIND_OUTPUT="$HOST_OUTPUT_DIR:$CONTR_OUTPUT_DIR"
 if [[ -e $HOST_OUTPUT_DIR ]]; then
     echo "Running benchmark in container"
     echo "Binding output_data --bind $BIND_OUTPUT"
-    apptainer run $1 \
+    apptainer run $1 --writable-tmpfs \
         --bind $BIND_OUTPUT \
         --app benchmark \
         precision-cascade-run.sif
