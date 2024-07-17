@@ -1,84 +1,110 @@
 #include "benchmark_GMRES.h"
 
-#include "tools/arg_pkgs/LinearSystem.h"
-#include "tools/arg_pkgs/SolveArgPkg.h"
-#include "solvers/GMRES/GMRESSolve.h"
-
-TEST_F(Benchmark_GMRES, GMRESSolve_BENCHMARK) {
+TEST_F(Benchmark_GMRES, GMRESSolve_Double_BENCHMARK) {
 
     std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<double> &)> execute_func = [this] (
         Benchmark_AccumClock &clock, NoFillMatrixSparse<double> &A
     ) {
-
-        Vector<double> x_soln = Vector<double>::Random(
-            BenchmarkBase::bundle, A.rows()
-        );
-
-        GenericLinearSystem<NoFillMatrixSparse> gen_lin_sys(A, A*x_soln);
-        TypedLinearSystem<NoFillMatrixSparse, double> typed_lin_sys(
-            &gen_lin_sys
-        );
-        SolveArgPkg args(
-            gmressolve_iters, SolveArgPkg::default_max_inner_iter, 0
-        );
-
-        clock.clock_start();
-        GMRESSolve gmres(&typed_lin_sys, 0., args);
-        gmres.solve();
-        clock.clock_stop();
-
+        execute_GMRES<double>(clock, A);
     };
 
     benchmark_exec_func<NoFillMatrixSparse, double>(
         sparse_start, sparse_stop, sparse_incr,
-        make_norm_A, execute_func, "gmressolve"
+        make_norm_A, execute_func, "gmressolve_dbl"
     );
 
 }
 
-TEST_F(Benchmark_GMRES, GetExtrapolationData) {
+TEST_F(Benchmark_GMRES, GMRESSolve_Single_BENCHMARK) {
 
-    std::function<MatrixDense<double> (int, int)> make_A_m_n = [this] (
+    std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<double> &)> execute_func = [this] (
+        Benchmark_AccumClock &clock, NoFillMatrixSparse<double> &A
+    ) {
+        execute_GMRES<float>(clock, A);
+    };
+
+    benchmark_exec_func<NoFillMatrixSparse, double>(
+        sparse_start, sparse_stop, sparse_incr,
+        make_norm_A, execute_func, "gmressolve_sgl"
+    );
+
+}
+
+TEST_F(Benchmark_GMRES, GMRESSolve_Half_BENCHMARK) {
+
+    std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<double> &)> execute_func = [this] (
+        Benchmark_AccumClock &clock, NoFillMatrixSparse<double> &A
+    ) {
+        execute_GMRES<__half>(clock, A);
+    };
+
+    benchmark_exec_func<NoFillMatrixSparse, double>(
+        sparse_start, sparse_stop, sparse_incr,
+        make_norm_A, execute_func, "gmressolve_hlf"
+    );
+
+}
+
+TEST_F(Benchmark_GMRES, GetExtrapolationData_Double) {
+
+    std::function<MatrixDense<double> (int, int)> make_A_wrapper = [this] (
         int m, int n
     ) -> MatrixDense<double> {
-        return MatrixDense<double>::Random(
-            BenchmarkBase::bundle, m, dense_subset_cols+2
-        );
+        return make_extrap_A<double>(m, n);
     };
 
     std::function<void (Benchmark_AccumClock &, MatrixDense<double> &)> execute_func = [this] (
         Benchmark_AccumClock &clock, MatrixDense<double> &A
     ) {
-
-        Vector<double> vec_m = Vector<double>::Random(
-            BenchmarkBase::bundle, A.rows()
-        );
-        Vector<double> vec_n = Vector<double>::Random(
-            BenchmarkBase::bundle, A.cols()
-        );
-        MatrixDense<double> square_small_UT_A(
-            MatrixDense<double>::Random_UT(
-                BenchmarkBase::bundle, dense_subset_cols, dense_subset_cols
-            )
-        );
-        Vector<double> small_b = Vector<double>::Random(
-            BenchmarkBase::bundle, dense_subset_cols
-        );
-
-        clock.clock_start();
-        A.transpose_prod_subset_cols(0, dense_subset_cols, vec_m);
-        A.mult_subset_cols(0, dense_subset_cols, small_b);
-        A.transpose_prod_subset_cols(0, dense_subset_cols, vec_m);
-        A.mult_subset_cols(0, dense_subset_cols, small_b);
-        square_small_UT_A.back_sub(small_b);
-        clock.clock_stop();
-
+        gmres_extrap_data_exec_func<double>(clock, A);
     };
 
     benchmark_exec_func<MatrixDense, double>(
         sparse_start, sparse_stop, sparse_incr,
-        make_A_m_n, execute_func, "gmressolveextrapdata"
+        make_A_wrapper, execute_func, "gmressolveextrapdata_dbl"
     );
 
+
+}
+
+TEST_F(Benchmark_GMRES, GetExtrapolationData_Single) {
+
+    std::function<MatrixDense<float> (int, int)> make_A_wrapper = [this] (
+        int m, int n
+    ) -> MatrixDense<float> {
+        return make_extrap_A<float>(m, n);
+    };
+
+    std::function<void (Benchmark_AccumClock &, MatrixDense<float> &)> execute_func = [this] (
+        Benchmark_AccumClock &clock, MatrixDense<float> &A
+    ) {
+        gmres_extrap_data_exec_func<float>(clock, A);
+    };
+
+    benchmark_exec_func<MatrixDense, float>(
+        sparse_start, sparse_stop, sparse_incr,
+        make_A_wrapper, execute_func, "gmressolveextrapdata_sgl"
+    );
+
+}
+
+TEST_F(Benchmark_GMRES, GetExtrapolationData_Half) {
+
+    std::function<MatrixDense<__half> (int, int)> make_A_wrapper = [this] (
+        int m, int n
+    ) -> MatrixDense<__half> {
+        return make_extrap_A<__half>(m, n);
+    };
+
+    std::function<void (Benchmark_AccumClock &, MatrixDense<__half> &)> execute_func = [this] (
+        Benchmark_AccumClock &clock, MatrixDense<__half> &A
+    ) {
+        gmres_extrap_data_exec_func<__half>(clock, A);
+    };
+
+    benchmark_exec_func<MatrixDense, __half>(
+        sparse_start, sparse_stop, sparse_incr,
+        make_A_wrapper, execute_func, "gmressolveextrapdata_hlf"
+    );
 
 }

@@ -41,9 +41,9 @@ public:
     );
 
     int ilu_start = (prototyping_speed_up) ? 1024 : 10000;
-    int ilu_stop = 80001;
+    int ilu_stop = 100001;
     int ilu_incr = (
-        (prototyping_speed_up) ? (sparse_stop-sparse_start) : 10000
+        (prototyping_speed_up) ? (sparse_stop-sparse_start) : 12500
     );
 
     const bool pivot_ilu = false;
