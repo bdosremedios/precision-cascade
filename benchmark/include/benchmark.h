@@ -46,11 +46,15 @@ public:
         (prototyping_speed_up) ? (sparse_stop-sparse_start) : 12500
     );
 
-    const bool pivot_ilu = false;
-    const int gmressolve_iters = 200;
-    const int nested_outer_iter = (prototyping_speed_up) ? 5 : 300;
-    const int nested_inner_iter = gmressolve_iters;
-    const int dense_subset_cols = gmressolve_iters;
+    const bool pivot_ilu = true;
+
+    const int sparse_col_non_zeros = 200;
+    const int run_fast_tests_count = 200;
+    const int dense_subset_cols = 200;
+
+    const int gmres_iters = 200;
+    const int nested_gmres_outer_iters = (prototyping_speed_up) ? 5 : 300;
+    const int nested_gmres_inner_iters = gmres_iters;
 
     void benchmark_n_runs(
         int n,

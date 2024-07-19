@@ -6,18 +6,18 @@
 #include <fstream>
 #include <cmath>
 
-class NoFillMatrixSparse_Benchmark: public Benchmark_Sparse {};
+class Benchmark_NoFillMatrixSparse: public Benchmark_Sparse {};
 
-TEST_F(NoFillMatrixSparse_Benchmark, MatrixVectorMult_Double_BENCHMARK) {
+TEST_F(Benchmark_NoFillMatrixSparse, MatrixVectorMult_Double_BENCHMARK) {
 
-    std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<double> &)> execute_func = [] (
+    std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<double> &)> execute_func = [this] (
         Benchmark_AccumClock &clock, NoFillMatrixSparse<double> &A
     ) {
         Vector<double> b = Vector<double>::Random(
             BenchmarkBase::bundle, A.rows()
         );
         clock.clock_start();
-        A*b;
+        for (int k=0; k<run_fast_tests_count; ++k) { A*b; }
         clock.clock_stop();
     };
 
@@ -28,16 +28,16 @@ TEST_F(NoFillMatrixSparse_Benchmark, MatrixVectorMult_Double_BENCHMARK) {
 
 }
 
-TEST_F(NoFillMatrixSparse_Benchmark, MatrixVectorMult_Single_BENCHMARK) {
+TEST_F(Benchmark_NoFillMatrixSparse, MatrixVectorMult_Single_BENCHMARK) {
 
-    std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<float> &)> execute_func = [] (
+    std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<float> &)> execute_func = [this] (
         Benchmark_AccumClock &clock, NoFillMatrixSparse<float> &A
     ) {
         Vector<float> b = Vector<float>::Random(
             BenchmarkBase::bundle, A.rows()
         );
         clock.clock_start();
-        A*b;
+        for (int k=0; k<run_fast_tests_count; ++k) { A*b; }
         clock.clock_stop();
     };
 
@@ -48,16 +48,16 @@ TEST_F(NoFillMatrixSparse_Benchmark, MatrixVectorMult_Single_BENCHMARK) {
 
 }
 
-TEST_F(NoFillMatrixSparse_Benchmark, MatrixVectorMult_Half_BENCHMARK) {
+TEST_F(Benchmark_NoFillMatrixSparse, MatrixVectorMult_Half_BENCHMARK) {
 
-    std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<__half> &)> execute_func = [] (
+    std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<__half> &)> execute_func = [this] (
         Benchmark_AccumClock &clock, NoFillMatrixSparse<__half> &A
     ) {
         Vector<__half> b = Vector<__half>::Random(
             BenchmarkBase::bundle, A.rows()
         );
         clock.clock_start();
-        A*b;
+        for (int k=0; k<run_fast_tests_count; ++k) { A*b; }
         clock.clock_stop();
     };
 
@@ -68,16 +68,16 @@ TEST_F(NoFillMatrixSparse_Benchmark, MatrixVectorMult_Half_BENCHMARK) {
 
 }
 
-TEST_F(NoFillMatrixSparse_Benchmark, TransposeMatrixVectorMult_Double_BENCHMARK) {
+TEST_F(Benchmark_NoFillMatrixSparse, TransposeMatrixVectorMult_Double_BENCHMARK) {
 
-    std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<double> &)> execute_func = [] (
+    std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<double> &)> execute_func = [this] (
         Benchmark_AccumClock &clock, NoFillMatrixSparse<double> &A
     ) {
         Vector<double> b = Vector<double>::Random(
             BenchmarkBase::bundle, A.rows()
         );
         clock.clock_start();
-        A.transpose_prod(b);
+        for (int k=0; k<run_fast_tests_count; ++k) { A.transpose_prod(b); }
         clock.clock_stop();
     };
 
@@ -88,16 +88,16 @@ TEST_F(NoFillMatrixSparse_Benchmark, TransposeMatrixVectorMult_Double_BENCHMARK)
 
 }
 
-TEST_F(NoFillMatrixSparse_Benchmark, TransposeMatrixVectorMult_Single_BENCHMARK) {
+TEST_F(Benchmark_NoFillMatrixSparse, TransposeMatrixVectorMult_Single_BENCHMARK) {
 
-    std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<float> &)> execute_func = [] (
+    std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<float> &)> execute_func = [this] (
         Benchmark_AccumClock &clock, NoFillMatrixSparse<float> &A
     ) {
         Vector<float> b = Vector<float>::Random(
             BenchmarkBase::bundle, A.rows()
         );
         clock.clock_start();
-        A.transpose_prod(b);
+        for (int k=0; k<run_fast_tests_count; ++k) { A.transpose_prod(b); }
         clock.clock_stop();
     };
 
@@ -108,16 +108,16 @@ TEST_F(NoFillMatrixSparse_Benchmark, TransposeMatrixVectorMult_Single_BENCHMARK)
 
 }
 
-TEST_F(NoFillMatrixSparse_Benchmark, TransposeMatrixVectorMult_Half_BENCHMARK) {
+TEST_F(Benchmark_NoFillMatrixSparse, TransposeMatrixVectorMult_Half_BENCHMARK) {
 
-    std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<__half> &)> execute_func = [] (
+    std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<__half> &)> execute_func = [this] (
         Benchmark_AccumClock &clock, NoFillMatrixSparse<__half> &A
     ) {
         Vector<__half> b = Vector<__half>::Random(
             BenchmarkBase::bundle, A.rows()
         );
         clock.clock_start();
-        A.transpose_prod(b);
+        for (int k=0; k<run_fast_tests_count; ++k) { A.transpose_prod(b); }
         clock.clock_stop();
     };
 
@@ -128,7 +128,7 @@ TEST_F(NoFillMatrixSparse_Benchmark, TransposeMatrixVectorMult_Half_BENCHMARK) {
 
 }
 
-TEST_F(NoFillMatrixSparse_Benchmark, ForwardSubstitution_Double_BENCHMARK) {
+TEST_F(Benchmark_NoFillMatrixSparse, ForwardSubstitution_Double_BENCHMARK) {
 
     std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<double> &)> execute_func = [] (
         Benchmark_AccumClock &clock, NoFillMatrixSparse<double> &A
@@ -149,7 +149,7 @@ TEST_F(NoFillMatrixSparse_Benchmark, ForwardSubstitution_Double_BENCHMARK) {
 
 }
 
-TEST_F(NoFillMatrixSparse_Benchmark, ForwardSubstitution_Single_BENCHMARK) {
+TEST_F(Benchmark_NoFillMatrixSparse, ForwardSubstitution_Single_BENCHMARK) {
 
     std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<float> &)> execute_func = [] (
         Benchmark_AccumClock &clock, NoFillMatrixSparse<float> &A
@@ -170,7 +170,7 @@ TEST_F(NoFillMatrixSparse_Benchmark, ForwardSubstitution_Single_BENCHMARK) {
 
 }
 
-TEST_F(NoFillMatrixSparse_Benchmark, ForwardSubstitution_Half_BENCHMARK) {
+TEST_F(Benchmark_NoFillMatrixSparse, ForwardSubstitution_Half_BENCHMARK) {
 
     std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<__half> &)> execute_func = [] (
         Benchmark_AccumClock &clock, NoFillMatrixSparse<__half> &A
@@ -191,7 +191,7 @@ TEST_F(NoFillMatrixSparse_Benchmark, ForwardSubstitution_Half_BENCHMARK) {
 
 }
 
-TEST_F(NoFillMatrixSparse_Benchmark, BackwardSubstitution_Double_BENCHMARK) {
+TEST_F(Benchmark_NoFillMatrixSparse, BackwardSubstitution_Double_BENCHMARK) {
 
     std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<double> &)> execute_func = [] (
         Benchmark_AccumClock &clock, NoFillMatrixSparse<double> &A
@@ -212,7 +212,7 @@ TEST_F(NoFillMatrixSparse_Benchmark, BackwardSubstitution_Double_BENCHMARK) {
 
 }
 
-TEST_F(NoFillMatrixSparse_Benchmark, BackwardSubstitution_Single_BENCHMARK) {
+TEST_F(Benchmark_NoFillMatrixSparse, BackwardSubstitution_Single_BENCHMARK) {
 
     std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<float> &)> execute_func = [] (
         Benchmark_AccumClock &clock, NoFillMatrixSparse<float> &A
@@ -233,7 +233,7 @@ TEST_F(NoFillMatrixSparse_Benchmark, BackwardSubstitution_Single_BENCHMARK) {
 
 }
 
-TEST_F(NoFillMatrixSparse_Benchmark, BackwardSubstitution_Half_BENCHMARK) {
+TEST_F(Benchmark_NoFillMatrixSparse, BackwardSubstitution_Half_BENCHMARK) {
 
     std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<__half> &)> execute_func = [] (
         Benchmark_AccumClock &clock, NoFillMatrixSparse<__half> &A

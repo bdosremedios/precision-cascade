@@ -1,77 +1,19 @@
-#include "benchmark_Matrix.h"
+#include "benchmark_Dense.h"
 
 #include "types/types.h"
 
-class MatrixDense_Benchmark: public Benchmark_Matrix
-{
-public:
+class Benchmark_MatrixDense: public Benchmark_Dense {};
 
-    std::function<MatrixDense<double> (int, int)> make_A_dbl = [this] (
-        int m, int n
-    ) -> MatrixDense<double> {
-        return MatrixDense<double>::Random(BenchmarkBase::bundle, m, m);
-    };
+TEST_F(Benchmark_MatrixDense, MatrixVectorMult_Double_BENCHMARK) {
 
-    std::function<MatrixDense<float> (int, int)> make_A_sgl = [this] (
-        int m, int n
-    ) -> MatrixDense<float> {
-        return MatrixDense<float>::Random(BenchmarkBase::bundle, m, m);
-    };
-
-    std::function<MatrixDense<__half> (int, int)> make_A_hlf = [this] (
-        int m, int n
-    ) -> MatrixDense<__half> {
-        return MatrixDense<__half>::Random(BenchmarkBase::bundle, m, m);
-    };
-
-    std::function<MatrixDense<double> (int, int)> make_low_tri_A_dbl = [this] (
-        int m, int n
-    ) -> MatrixDense<double> {
-        return MatrixDense<double>::Random_LT(BenchmarkBase::bundle, m, m);
-    };
-
-    std::function<MatrixDense<float> (int, int)> make_low_tri_A_sgl = [this] (
-        int m, int n
-    ) -> MatrixDense<float> {
-        return MatrixDense<float>::Random_LT(BenchmarkBase::bundle, m, m);
-    };
-
-    std::function<MatrixDense<__half> (int, int)> make_low_tri_A_hlf = [this] (
-        int m, int n
-    ) -> MatrixDense<__half> {
-        return MatrixDense<__half>::Random_LT(BenchmarkBase::bundle, m, m);
-    };
-    
-    std::function<MatrixDense<double> (int, int)> make_upp_tri_A_dbl = [this] (
-        int m, int n
-    ) -> MatrixDense<double> {
-        return MatrixDense<double>::Random_UT(BenchmarkBase::bundle, m, m);
-    };
-    
-    std::function<MatrixDense<float> (int, int)> make_upp_tri_A_sgl = [this] (
-        int m, int n
-    ) -> MatrixDense<float> {
-        return MatrixDense<float>::Random_UT(BenchmarkBase::bundle, m, m);
-    };
-    
-    std::function<MatrixDense<__half> (int, int)> make_upp_tri_A_hlf = [this] (
-        int m, int n
-    ) -> MatrixDense<__half> {
-        return MatrixDense<__half>::Random_UT(BenchmarkBase::bundle, m, m);
-    };
-
-};
-
-TEST_F(MatrixDense_Benchmark, MatrixVectorMult_Double_BENCHMARK) {
-
-    std::function<void (Benchmark_AccumClock &, MatrixDense<double> &)> execute_func = [] (
+    std::function<void (Benchmark_AccumClock &, MatrixDense<double> &)> execute_func = [this] (
         Benchmark_AccumClock &clock, MatrixDense<double> &A
     ) {
         Vector<double> b = Vector<double>::Random(
             BenchmarkBase::bundle, A.rows()
         );
         clock.clock_start();
-        A*b;
+        for (int k=0; k<run_fast_tests_count; ++k) { A*b; }
         clock.clock_stop();
     };
 
@@ -82,16 +24,16 @@ TEST_F(MatrixDense_Benchmark, MatrixVectorMult_Double_BENCHMARK) {
 
 }
 
-TEST_F(MatrixDense_Benchmark, MatrixVectorMult_Single_BENCHMARK) {
+TEST_F(Benchmark_MatrixDense, MatrixVectorMult_Single_BENCHMARK) {
 
-    std::function<void (Benchmark_AccumClock &, MatrixDense<float> &)> execute_func = [] (
+    std::function<void (Benchmark_AccumClock &, MatrixDense<float> &)> execute_func = [this] (
         Benchmark_AccumClock &clock, MatrixDense<float> &A
     ) {
         Vector<float> b = Vector<float>::Random(
             BenchmarkBase::bundle, A.rows()
         );
         clock.clock_start();
-        A*b;
+        for (int k=0; k<run_fast_tests_count; ++k) { A*b; }
         clock.clock_stop();
     };
 
@@ -102,16 +44,16 @@ TEST_F(MatrixDense_Benchmark, MatrixVectorMult_Single_BENCHMARK) {
 
 }
 
-TEST_F(MatrixDense_Benchmark, MatrixVectorMult_Half_BENCHMARK) {
+TEST_F(Benchmark_MatrixDense, MatrixVectorMult_Half_BENCHMARK) {
 
-    std::function<void (Benchmark_AccumClock &, MatrixDense<__half> &)> execute_func = [] (
+    std::function<void (Benchmark_AccumClock &, MatrixDense<__half> &)> execute_func = [this] (
         Benchmark_AccumClock &clock, MatrixDense<__half> &A
     ) {
         Vector<__half> b = Vector<__half>::Random(
             BenchmarkBase::bundle, A.rows()
         );
         clock.clock_start();
-        A*b;
+        for (int k=0; k<run_fast_tests_count; ++k) { A*b; }
         clock.clock_stop();
     };
 
@@ -122,16 +64,16 @@ TEST_F(MatrixDense_Benchmark, MatrixVectorMult_Half_BENCHMARK) {
 
 }
 
-TEST_F(MatrixDense_Benchmark, TransposeMatrixVectorMult_Double_BENCHMARK) {
+TEST_F(Benchmark_MatrixDense, TransposeMatrixVectorMult_Double_BENCHMARK) {
 
-    std::function<void (Benchmark_AccumClock &, MatrixDense<double> &)> execute_func = [] (
+    std::function<void (Benchmark_AccumClock &, MatrixDense<double> &)> execute_func = [this] (
         Benchmark_AccumClock &clock, MatrixDense<double> &A
     ) {
         Vector<double> b = Vector<double>::Random(
             BenchmarkBase::bundle, A.rows()
         );
         clock.clock_start();
-        A.transpose_prod(b);
+        for (int k=0; k<run_fast_tests_count; ++k) { A.transpose_prod(b); }
         clock.clock_stop();
     };
 
@@ -142,16 +84,16 @@ TEST_F(MatrixDense_Benchmark, TransposeMatrixVectorMult_Double_BENCHMARK) {
 
 }
 
-TEST_F(MatrixDense_Benchmark, TransposeMatrixVectorMult_Single_BENCHMARK) {
+TEST_F(Benchmark_MatrixDense, TransposeMatrixVectorMult_Single_BENCHMARK) {
 
-    std::function<void (Benchmark_AccumClock &, MatrixDense<float> &)> execute_func = [] (
+    std::function<void (Benchmark_AccumClock &, MatrixDense<float> &)> execute_func = [this] (
         Benchmark_AccumClock &clock, MatrixDense<float> &A
     ) {
         Vector<float> b = Vector<float>::Random(
             BenchmarkBase::bundle, A.rows()
         );
         clock.clock_start();
-        A.transpose_prod(b);
+        for (int k=0; k<run_fast_tests_count; ++k) { A.transpose_prod(b); }
         clock.clock_stop();
     };
 
@@ -162,16 +104,16 @@ TEST_F(MatrixDense_Benchmark, TransposeMatrixVectorMult_Single_BENCHMARK) {
 
 }
 
-TEST_F(MatrixDense_Benchmark, TransposeMatrixVectorMult_Half_BENCHMARK) {
+TEST_F(Benchmark_MatrixDense, TransposeMatrixVectorMult_Half_BENCHMARK) {
 
-    std::function<void (Benchmark_AccumClock &, MatrixDense<__half> &)> execute_func = [] (
+    std::function<void (Benchmark_AccumClock &, MatrixDense<__half> &)> execute_func = [this] (
         Benchmark_AccumClock &clock, MatrixDense<__half> &A
     ) {
         Vector<__half> b = Vector<__half>::Random(
             BenchmarkBase::bundle, A.rows()
         );
         clock.clock_start();
-        A.transpose_prod(b);
+        for (int k=0; k<run_fast_tests_count; ++k) { A.transpose_prod(b); }
         clock.clock_stop();
     };
 
@@ -182,14 +124,16 @@ TEST_F(MatrixDense_Benchmark, TransposeMatrixVectorMult_Half_BENCHMARK) {
 
 }
 
-TEST_F(MatrixDense_Benchmark, SubsetcolsMatrixVectorMult_Double_BENCHMARK) {
+TEST_F(Benchmark_MatrixDense, SubsetcolsMatrixVectorMult_Double_BENCHMARK) {
 
     std::function<void (Benchmark_AccumClock &, MatrixDense<double> &)> execute_func = [this] (
         Benchmark_AccumClock &clock, MatrixDense<double> &A
     ) {
         Vector<double> b = Vector<double>::Random(BenchmarkBase::bundle, dense_subset_cols);
         clock.clock_start();
-        A.mult_subset_cols(0, dense_subset_cols, b);
+        for (int k=0; k<run_fast_tests_count; ++k) {
+            A.mult_subset_cols(0, dense_subset_cols, b);
+        }
         clock.clock_stop();
     };
 
@@ -200,14 +144,16 @@ TEST_F(MatrixDense_Benchmark, SubsetcolsMatrixVectorMult_Double_BENCHMARK) {
 
 }
 
-TEST_F(MatrixDense_Benchmark, SubsetcolsMatrixVectorMult_Single_BENCHMARK) {
+TEST_F(Benchmark_MatrixDense, SubsetcolsMatrixVectorMult_Single_BENCHMARK) {
 
     std::function<void (Benchmark_AccumClock &, MatrixDense<float> &)> execute_func = [this] (
         Benchmark_AccumClock &clock, MatrixDense<float> &A
     ) {
         Vector<float> b = Vector<float>::Random(BenchmarkBase::bundle, dense_subset_cols);
         clock.clock_start();
-        A.mult_subset_cols(0, dense_subset_cols, b);
+        for (int k=0; k<run_fast_tests_count; ++k) {
+            A.mult_subset_cols(0, dense_subset_cols, b);
+        }
         clock.clock_stop();
     };
 
@@ -218,14 +164,16 @@ TEST_F(MatrixDense_Benchmark, SubsetcolsMatrixVectorMult_Single_BENCHMARK) {
 
 }
 
-TEST_F(MatrixDense_Benchmark, SubsetcolsMatrixVectorMult_Half_BENCHMARK) {
+TEST_F(Benchmark_MatrixDense, SubsetcolsMatrixVectorMult_Half_BENCHMARK) {
 
     std::function<void (Benchmark_AccumClock &, MatrixDense<__half> &)> execute_func = [this] (
         Benchmark_AccumClock &clock, MatrixDense<__half> &A
     ) {
         Vector<__half> b = Vector<__half>::Random(BenchmarkBase::bundle, dense_subset_cols);
         clock.clock_start();
-        A.mult_subset_cols(0, dense_subset_cols, b);
+        for (int k=0; k<run_fast_tests_count; ++k) {
+            A.mult_subset_cols(0, dense_subset_cols, b);
+        }
         clock.clock_stop();
     };
 
@@ -236,14 +184,16 @@ TEST_F(MatrixDense_Benchmark, SubsetcolsMatrixVectorMult_Half_BENCHMARK) {
 
 }
 
-TEST_F(MatrixDense_Benchmark, SubsetcolsTransposeMatrixVectorMult_Double_BENCHMARK) {
+TEST_F(Benchmark_MatrixDense, SubsetcolsTransposeMatrixVectorMult_Double_BENCHMARK) {
 
     std::function<void (Benchmark_AccumClock &, MatrixDense<double> &)> execute_func = [this] (
         Benchmark_AccumClock &clock, MatrixDense<double> &A
     ) {
         Vector<double> b = Vector<double>::Random(BenchmarkBase::bundle, A.rows());
         clock.clock_start();
-        A.transpose_prod_subset_cols(0, dense_subset_cols, b);
+        for (int k=0; k<run_fast_tests_count; ++k) {
+            A.transpose_prod_subset_cols(0, dense_subset_cols, b);
+        }
         clock.clock_stop();
     };
 
@@ -254,14 +204,16 @@ TEST_F(MatrixDense_Benchmark, SubsetcolsTransposeMatrixVectorMult_Double_BENCHMA
 
 }
 
-TEST_F(MatrixDense_Benchmark, SubsetcolsTransposeMatrixVectorMult_Single_BENCHMARK) {
+TEST_F(Benchmark_MatrixDense, SubsetcolsTransposeMatrixVectorMult_Single_BENCHMARK) {
 
     std::function<void (Benchmark_AccumClock &, MatrixDense<float> &)> execute_func = [this] (
         Benchmark_AccumClock &clock, MatrixDense<float> &A
     ) {
         Vector<float> b = Vector<float>::Random(BenchmarkBase::bundle, A.rows());
         clock.clock_start();
-        A.transpose_prod_subset_cols(0, dense_subset_cols, b);
+        for (int k=0; k<run_fast_tests_count; ++k) {
+            A.transpose_prod_subset_cols(0, dense_subset_cols, b);
+        }
         clock.clock_stop();
     };
 
@@ -272,14 +224,16 @@ TEST_F(MatrixDense_Benchmark, SubsetcolsTransposeMatrixVectorMult_Single_BENCHMA
 
 }
 
-TEST_F(MatrixDense_Benchmark, SubsetcolsTransposeMatrixVectorMult_Half_BENCHMARK) {
+TEST_F(Benchmark_MatrixDense, SubsetcolsTransposeMatrixVectorMult_Half_BENCHMARK) {
 
     std::function<void (Benchmark_AccumClock &, MatrixDense<__half> &)> execute_func = [this] (
         Benchmark_AccumClock &clock, MatrixDense<__half> &A
     ) {
         Vector<__half> b = Vector<__half>::Random(BenchmarkBase::bundle, A.rows());
         clock.clock_start();
-        A.transpose_prod_subset_cols(0, dense_subset_cols, b);
+        for (int k=0; k<run_fast_tests_count; ++k) {
+            A.transpose_prod_subset_cols(0, dense_subset_cols, b);
+        }
         clock.clock_stop();
     };
 
@@ -290,7 +244,7 @@ TEST_F(MatrixDense_Benchmark, SubsetcolsTransposeMatrixVectorMult_Half_BENCHMARK
 
 }
 
-TEST_F(MatrixDense_Benchmark, ForwardSubstitution_Double_BENCHMARK) {
+TEST_F(Benchmark_MatrixDense, ForwardSubstitution_Double_BENCHMARK) {
 
     std::function<void (Benchmark_AccumClock &, MatrixDense<double> &)> execute_func = [] (
         Benchmark_AccumClock &clock, MatrixDense<double> &A
@@ -311,7 +265,7 @@ TEST_F(MatrixDense_Benchmark, ForwardSubstitution_Double_BENCHMARK) {
 
 
 
-TEST_F(MatrixDense_Benchmark, ForwardSubstitution_Single_BENCHMARK) {
+TEST_F(Benchmark_MatrixDense, ForwardSubstitution_Single_BENCHMARK) {
 
     std::function<void (Benchmark_AccumClock &, MatrixDense<float> &)> execute_func = [] (
         Benchmark_AccumClock &clock, MatrixDense<float> &A
@@ -330,7 +284,7 @@ TEST_F(MatrixDense_Benchmark, ForwardSubstitution_Single_BENCHMARK) {
 
 }
 
-TEST_F(MatrixDense_Benchmark, ForwardSubstitution_Half_BENCHMARK) {
+TEST_F(Benchmark_MatrixDense, ForwardSubstitution_Half_BENCHMARK) {
 
     std::function<void (Benchmark_AccumClock &, MatrixDense<__half> &)> execute_func = [] (
         Benchmark_AccumClock &clock, MatrixDense<__half> &A
@@ -349,7 +303,7 @@ TEST_F(MatrixDense_Benchmark, ForwardSubstitution_Half_BENCHMARK) {
 
 }
 
-TEST_F(MatrixDense_Benchmark, BackwardSubstitution_Double_BENCHMARK) {
+TEST_F(Benchmark_MatrixDense, BackwardSubstitution_Double_BENCHMARK) {
 
     std::function<void (Benchmark_AccumClock &, MatrixDense<double> &)> execute_func = [] (
         Benchmark_AccumClock &clock, MatrixDense<double> &A
@@ -368,7 +322,7 @@ TEST_F(MatrixDense_Benchmark, BackwardSubstitution_Double_BENCHMARK) {
 
 }
 
-TEST_F(MatrixDense_Benchmark, BackwardSubstitution_Single_BENCHMARK) {
+TEST_F(Benchmark_MatrixDense, BackwardSubstitution_Single_BENCHMARK) {
 
     std::function<void (Benchmark_AccumClock &, MatrixDense<float> &)> execute_func = [] (
         Benchmark_AccumClock &clock, MatrixDense<float> &A
@@ -387,7 +341,7 @@ TEST_F(MatrixDense_Benchmark, BackwardSubstitution_Single_BENCHMARK) {
 
 }
 
-TEST_F(MatrixDense_Benchmark, BackwardSubstitution_Half_BENCHMARK) {
+TEST_F(Benchmark_MatrixDense, BackwardSubstitution_Half_BENCHMARK) {
 
     std::function<void (Benchmark_AccumClock &, MatrixDense<__half> &)> execute_func = [] (
         Benchmark_AccumClock &clock, MatrixDense<__half> &A

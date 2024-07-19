@@ -20,7 +20,7 @@ TEST_F(Benchmark_Precond_FP_GMRES_IR, ILU0_FP_GMRES_IR_BENCHMARK) {
 
         GenericLinearSystem<NoFillMatrixSparse> gen_lin_sys(A, A*x_soln);
         TypedLinearSystem<NoFillMatrixSparse, double> typed_lin_sys(&gen_lin_sys);
-        SolveArgPkg args(nested_outer_iter, nested_inner_iter, 0.);
+        SolveArgPkg args(nested_gmres_outer_iters, nested_gmres_inner_iters, 0.);
 
         clock.clock_start();
         PrecondArgPkg<NoFillMatrixSparse, double> precond_args(

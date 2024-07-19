@@ -24,7 +24,7 @@ public:
         TypedLinearSystem<NoFillMatrixSparse, TPrecision> typed_lin_sys(
             &gen_lin_sys
         );
-        SolveArgPkg args(nested_outer_iter, nested_inner_iter, 0.);
+        SolveArgPkg args(nested_gmres_outer_iters, nested_gmres_inner_iters, 0.);
 
         clock.clock_start();
         FP_GMRES_IR_Solve<NoFillMatrixSparse, TPrecision> fp_restarted_gmres(

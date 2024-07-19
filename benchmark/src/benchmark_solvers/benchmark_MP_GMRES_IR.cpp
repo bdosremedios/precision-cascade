@@ -17,7 +17,7 @@ TEST_F(Benchmark_MP_GMRES_IR_Sparse, MP_GMRES_IR_RestartCount_BENCHMARK) {
         );
 
         GenericLinearSystem<NoFillMatrixSparse> gen_lin_sys(A, A*x_soln);
-        SolveArgPkg args(nested_outer_iter, nested_inner_iter, 0.);
+        SolveArgPkg args(nested_gmres_outer_iters, nested_gmres_inner_iters, 0.);
 
         clock.clock_start();
         RestartCount<NoFillMatrixSparse> mp_restarted_gmres(
@@ -49,7 +49,7 @@ TEST_F(
         );
 
         GenericLinearSystem<NoFillMatrixSparse> gen_lin_sys(A, A*x_soln);
-        SolveArgPkg args(nested_outer_iter, nested_inner_iter, 0.);
+        SolveArgPkg args(nested_gmres_outer_iters, nested_gmres_inner_iters, 0.);
 
         clock.clock_start();
         SimpleConstantThreshold<NoFillMatrixSparse> mp_restarted_gmres(

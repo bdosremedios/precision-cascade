@@ -9,10 +9,6 @@
 
 class Benchmark_GMRES: public BenchmarkBase
 {
-private:
-
-    const double nested_col_non_zeros = 200.;
-
 public:
 
     std::function<NoFillMatrixSparse<double> (int, int)> make_norm_A = [this] (
@@ -20,8 +16,9 @@ public:
     ) -> NoFillMatrixSparse<double> {
         NoFillMatrixSparse<double> mat = NoFillMatrixSparse<double>::Random(
             BenchmarkBase::bundle, m, m,
-            (nested_col_non_zeros/static_cast<double>(m) > 1) ?
-            1 : nested_col_non_zeros/static_cast<double>(m)
+            (static_cast<double>(sparse_col_non_zeros)/static_cast<double>(m) > 1) ?
+            1 :
+            static_cast<double>(sparse_col_non_zeros)/static_cast<double>(m)
         );
         mat.normalize_magnitude();
         return mat;
@@ -41,7 +38,7 @@ public:
             &gen_lin_sys
         );
         SolveArgPkg args(
-            gmressolve_iters, SolveArgPkg::default_max_inner_iter, 0
+            gmres_iters, SolveArgPkg::default_max_inner_iter, 0
         );
 
         clock.clock_start();
@@ -73,21 +70,21 @@ public:
         );
         MatrixDense<TPrecision> square_small_UT_A(
             MatrixDense<TPrecision>::Random_UT(
-                BenchmarkBase::bundle, gmressolve_iters, gmressolve_iters
+                BenchmarkBase::bundle, gmres_iters, gmres_iters
             )
         );
         Vector<TPrecision> small_b = Vector<TPrecision>::Random(
-            BenchmarkBase::bundle, gmressolve_iters
+            BenchmarkBase::bundle, gmres_iters
         );
         Scalar<TPrecision> scalar(static_cast<TPrecision>(2.));
 
         clock.clock_start();
 
         // Dominant orthogonalization calculation operations
-        A.transpose_prod_subset_cols(0, gmressolve_iters, vec_m);
-        vec_m - A.mult_subset_cols(0, gmressolve_iters, small_b);
-        A.transpose_prod_subset_cols(0, gmressolve_iters, vec_m);
-        vec_m - A.mult_subset_cols(0, gmressolve_iters, small_b);
+        A.transpose_prod_subset_cols(0, gmres_iters, vec_m);
+        vec_m - A.mult_subset_cols(0, gmres_iters, small_b);
+        A.transpose_prod_subset_cols(0, gmres_iters, vec_m);
+        vec_m - A.mult_subset_cols(0, gmres_iters, small_b);
 
         // Dominant QR factorization update calculation operations
         square_small_UT_A.transpose_prod(small_b);
