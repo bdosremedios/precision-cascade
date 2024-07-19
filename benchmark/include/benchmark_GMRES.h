@@ -80,19 +80,23 @@ public:
 
         clock.clock_start();
 
-        // Dominant orthogonalization calculation operations
-        A.transpose_prod_subset_cols(0, gmres_iters, vec_m);
-        vec_m - A.mult_subset_cols(0, gmres_iters, small_b);
-        A.transpose_prod_subset_cols(0, gmres_iters, vec_m);
-        vec_m - A.mult_subset_cols(0, gmres_iters, small_b);
+        for (int k=0; k<gmres_iters; k++) {
 
-        // Dominant QR factorization update calculation operations
-        square_small_UT_A.transpose_prod(small_b);
-        small_b*scalar + small_b*scalar;
-        small_b*scalar - small_b*scalar;
+            // Dominant orthogonalization calculation operations
+            A.transpose_prod_subset_cols(0, gmres_iters, vec_m);
+            vec_m - A.mult_subset_cols(0, gmres_iters, small_b);
+            A.transpose_prod_subset_cols(0, gmres_iters, vec_m);
+            vec_m - A.mult_subset_cols(0, gmres_iters, small_b);
 
-        // Dominant update x calculation operations
-        square_small_UT_A.back_sub(small_b);
+            // Dominant QR factorization update calculation operations
+            square_small_UT_A.transpose_prod(small_b);
+            small_b*scalar + small_b*scalar;
+            small_b*scalar - small_b*scalar;
+
+            // Dominant update x calculation operations
+            square_small_UT_A.back_sub(small_b);
+
+        }
 
         clock.clock_stop();
 
