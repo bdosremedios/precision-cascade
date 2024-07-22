@@ -17,8 +17,7 @@ TEST_F(Benchmark_ILUPreconditioner, Double_ILU0_Preconditioner_BENCHMARK) {
     };
 
     benchmark_exec_func<NoFillMatrixSparse>(
-        ilu_start, ilu_stop, ilu_incr,
-        make_A_dbl, execute_func, "ilu0_precond_dbl"
+        ilu_dims, make_A_dbl, execute_func, "ilu0_precond_dbl"
     );
 
 }
@@ -41,8 +40,7 @@ TEST_F(
     };
 
     benchmark_exec_func<NoFillMatrixSparse>(
-        ilu_start, ilu_stop, ilu_incr,
-        make_A_dbl, execute_func, "ilutp_em4_20_precond_dbl"
+        ilu_dims, make_A_dbl, execute_func, "ilutp_em4_20_precond_dbl"
     );
 
 }
@@ -65,8 +63,7 @@ TEST_F(
     };
 
     benchmark_exec_func<NoFillMatrixSparse>(
-        ilu_start, ilu_stop, ilu_incr,
-        make_A_dbl, execute_func, "ilutp_em6_20_precond_dbl"
+        ilu_dims, make_A_dbl, execute_func, "ilutp_em6_20_precond_dbl"
     );
 
 }

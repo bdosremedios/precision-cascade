@@ -22,8 +22,7 @@ TEST_F(Benchmark_NoFillMatrixSparse, MatrixVectorMult_Double_BENCHMARK) {
     };
 
     benchmark_exec_func<NoFillMatrixSparse, double>(
-        sparse_start, sparse_stop, sparse_incr,
-        make_A_dbl, execute_func, "matsparse_mv_dbl"
+        sparse_dims, make_A_dbl, execute_func, "matsparse_mv_dbl"
     );
 
 }
@@ -42,8 +41,7 @@ TEST_F(Benchmark_NoFillMatrixSparse, MatrixVectorMult_Single_BENCHMARK) {
     };
 
     benchmark_exec_func<NoFillMatrixSparse, float>(
-        sparse_start, sparse_stop, sparse_incr,
-        make_A_sgl, execute_func, "matsparse_mv_sgl"
+        sparse_dims, make_A_sgl, execute_func, "matsparse_mv_sgl"
     );
 
 }
@@ -62,8 +60,7 @@ TEST_F(Benchmark_NoFillMatrixSparse, MatrixVectorMult_Half_BENCHMARK) {
     };
 
     benchmark_exec_func<NoFillMatrixSparse, __half>(
-        sparse_start, sparse_stop, sparse_incr,
-        make_A_hlf, execute_func, "matsparse_mv_hlf"
+        sparse_dims, make_A_hlf, execute_func, "matsparse_mv_hlf"
     );
 
 }
@@ -82,8 +79,7 @@ TEST_F(Benchmark_NoFillMatrixSparse, TransposeMatrixVectorMult_Double_BENCHMARK)
     };
 
     benchmark_exec_func<NoFillMatrixSparse, double>(
-        sparse_start, sparse_stop, sparse_incr,
-        make_A_dbl, execute_func, "matsparse_tmv_dbl"
+        sparse_dims, make_A_dbl, execute_func, "matsparse_tmv_dbl"
     );
 
 }
@@ -102,8 +98,7 @@ TEST_F(Benchmark_NoFillMatrixSparse, TransposeMatrixVectorMult_Single_BENCHMARK)
     };
 
     benchmark_exec_func<NoFillMatrixSparse, float>(
-        sparse_start, sparse_stop, sparse_incr,
-        make_A_sgl, execute_func, "matsparse_tmv_sgl"
+        sparse_dims, make_A_sgl, execute_func, "matsparse_tmv_sgl"
     );
 
 }
@@ -122,8 +117,7 @@ TEST_F(Benchmark_NoFillMatrixSparse, TransposeMatrixVectorMult_Half_BENCHMARK) {
     };
 
     benchmark_exec_func<NoFillMatrixSparse, __half>(
-        sparse_start, sparse_stop, sparse_incr,
-        make_A_hlf, execute_func, "matsparse_tmv_hlf"
+        sparse_dims, make_A_hlf, execute_func, "matsparse_tmv_hlf"
     );
 
 }
@@ -143,8 +137,7 @@ TEST_F(Benchmark_NoFillMatrixSparse, ForwardSubstitution_Double_BENCHMARK) {
     };
 
     benchmark_exec_func<NoFillMatrixSparse, double>(
-        sparse_start, sparse_stop, sparse_incr,
-        make_low_tri_A_dbl, execute_func, "matsparse_frwdsub_dbl"
+        sparse_dims, make_low_tri_A_dbl, execute_func, "matsparse_frwdsub_dbl"
     );
 
 }
@@ -164,8 +157,7 @@ TEST_F(Benchmark_NoFillMatrixSparse, ForwardSubstitution_Single_BENCHMARK) {
     };
 
     benchmark_exec_func<NoFillMatrixSparse, float>(
-        sparse_start, sparse_stop, sparse_incr,
-        make_low_tri_A_sgl, execute_func, "matsparse_frwdsub_sgl"
+        sparse_dims, make_low_tri_A_sgl, execute_func, "matsparse_frwdsub_sgl"
     );
 
 }
@@ -185,8 +177,7 @@ TEST_F(Benchmark_NoFillMatrixSparse, ForwardSubstitution_Half_BENCHMARK) {
     };
 
     benchmark_exec_func<NoFillMatrixSparse, __half>(
-        sparse_start, sparse_stop, sparse_incr,
-        make_low_tri_A_hlf, execute_func, "matsparse_frwdsub_hlf"
+        sparse_dims, make_low_tri_A_hlf, execute_func, "matsparse_frwdsub_hlf"
     );
 
 }
@@ -206,8 +197,7 @@ TEST_F(Benchmark_NoFillMatrixSparse, BackwardSubstitution_Double_BENCHMARK) {
     };
 
     benchmark_exec_func<NoFillMatrixSparse, double>(
-        sparse_start, sparse_stop, sparse_incr,
-        make_upp_tri_A_dbl, execute_func, "matsparse_backsub_dbl"
+        sparse_dims, make_upp_tri_A_dbl, execute_func, "matsparse_backsub_dbl"
     );
 
 }
@@ -227,8 +217,7 @@ TEST_F(Benchmark_NoFillMatrixSparse, BackwardSubstitution_Single_BENCHMARK) {
     };
 
     benchmark_exec_func<NoFillMatrixSparse, float>(
-        sparse_start, sparse_stop, sparse_incr,
-        make_upp_tri_A_sgl, execute_func, "matsparse_backsub_sgl"
+        sparse_dims, make_upp_tri_A_sgl, execute_func, "matsparse_backsub_sgl"
     );
 
 }
@@ -248,8 +237,7 @@ TEST_F(Benchmark_NoFillMatrixSparse, BackwardSubstitution_Half_BENCHMARK) {
     };
 
     benchmark_exec_func<NoFillMatrixSparse, __half>(
-        sparse_start, sparse_stop, sparse_incr,
-        make_upp_tri_A_hlf, execute_func, "matsparse_backsub_hlf"
+        sparse_dims, make_upp_tri_A_hlf, execute_func, "matsparse_backsub_hlf"
     );
 
 }

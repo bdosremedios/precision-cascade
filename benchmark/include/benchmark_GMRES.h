@@ -14,14 +14,23 @@ public:
     std::function<NoFillMatrixSparse<double> (int, int)> make_norm_A = [this] (
         int m, int n
     ) -> NoFillMatrixSparse<double> {
+
+        if (m != n) {
+            throw std::runtime_error(
+                "make_norm_A: require square dimensions"
+            );
+        }
+
         NoFillMatrixSparse<double> mat = NoFillMatrixSparse<double>::Random(
             BenchmarkBase::bundle, m, m,
-            (static_cast<double>(sparse_col_non_zeros)/static_cast<double>(m) > 1) ?
+            (sqrt(static_cast<double>(m))/static_cast<double>(m) > 1) ?
             1 :
-            static_cast<double>(sparse_col_non_zeros)/static_cast<double>(m)
+            sqrt(static_cast<double>(m))/static_cast<double>(m)
         );
         mat.normalize_magnitude();
+
         return mat;
+
     };
 
     template <typename TPrecision>
@@ -52,9 +61,17 @@ public:
 
     template <typename TPrecision>
     MatrixDense<TPrecision> make_extrap_A(int m, int n) {
+
+        if (m != n) {
+            throw std::runtime_error(
+                "make_extrap_A: require square dimensions"
+            );
+        }
+
         return MatrixDense<TPrecision>::Random(
             BenchmarkBase::bundle, m, dense_subset_cols+2
         );
+
     }
 
     template <typename TPrecision>

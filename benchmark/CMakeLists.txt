@@ -26,7 +26,7 @@ target_include_directories(
 
 set(
     BENCHMARK_SUITE_CPPS
-    src/benchmark_types/benchmark_MatrixDense.cpp
+    # src/benchmark_types/benchmark_MatrixDense.cpp
     src/benchmark_types/benchmark_NoFillMatrixSparse.cpp
     src/benchmark_solvers/benchmark_GMRES.cpp
     src/benchmark_solvers/benchmark_FP_GMRES_IR.cpp

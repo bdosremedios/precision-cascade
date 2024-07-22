@@ -9,8 +9,7 @@ TEST_F(Benchmark_GMRES, GMRESSolve_Double_BENCHMARK) {
     };
 
     benchmark_exec_func<NoFillMatrixSparse, double>(
-        sparse_start, sparse_stop, sparse_incr,
-        make_norm_A, execute_func, "gmressolve_dbl"
+        sparse_dims, make_norm_A, execute_func, "gmressolve_dbl"
     );
 
 }
@@ -24,8 +23,7 @@ TEST_F(Benchmark_GMRES, GMRESSolve_Single_BENCHMARK) {
     };
 
     benchmark_exec_func<NoFillMatrixSparse, double>(
-        sparse_start, sparse_stop, sparse_incr,
-        make_norm_A, execute_func, "gmressolve_sgl"
+        sparse_dims, make_norm_A, execute_func, "gmressolve_sgl"
     );
 
 }
@@ -39,8 +37,7 @@ TEST_F(Benchmark_GMRES, GMRESSolve_Half_BENCHMARK) {
     };
 
     benchmark_exec_func<NoFillMatrixSparse, double>(
-        sparse_start, sparse_stop, sparse_incr,
-        make_norm_A, execute_func, "gmressolve_hlf"
+        sparse_dims, make_norm_A, execute_func, "gmressolve_hlf"
     );
 
 }
@@ -60,8 +57,7 @@ TEST_F(Benchmark_GMRES, GetExtrapolationData_Double) {
     };
 
     benchmark_exec_func<MatrixDense, double>(
-        sparse_start, sparse_stop, sparse_incr,
-        make_A_wrapper, execute_func, "gmressolveextrapdata_dbl"
+        sparse_dims, make_A_wrapper, execute_func, "gmressolveextrapdata_dbl"
     );
 
 
@@ -82,8 +78,7 @@ TEST_F(Benchmark_GMRES, GetExtrapolationData_Single) {
     };
 
     benchmark_exec_func<MatrixDense, float>(
-        sparse_start, sparse_stop, sparse_incr,
-        make_A_wrapper, execute_func, "gmressolveextrapdata_sgl"
+        sparse_dims, make_A_wrapper, execute_func, "gmressolveextrapdata_sgl"
     );
 
 }
@@ -103,8 +98,7 @@ TEST_F(Benchmark_GMRES, GetExtrapolationData_Half) {
     };
 
     benchmark_exec_func<MatrixDense, __half>(
-        sparse_start, sparse_stop, sparse_incr,
-        make_A_wrapper, execute_func, "gmressolveextrapdata_hlf"
+        sparse_dims, make_A_wrapper, execute_func, "gmressolveextrapdata_hlf"
     );
 
 }

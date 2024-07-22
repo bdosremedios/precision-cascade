@@ -11,6 +11,8 @@
 #include <filesystem>
 #include <fstream>
 #include <functional>
+#include <cmath>
+#include <vector>
 
 namespace fs = std::filesystem;
 
@@ -20,7 +22,7 @@ class BenchmarkBase: public testing::Test
 {
 protected:
 
-    const int n_runs = 5;
+    const int n_runs = 7;
     bool prototyping_speed_up = false;
 
 public:
@@ -28,33 +30,39 @@ public:
     static cuHandleBundle bundle;
     static fs::path data_dir;
 
-    int dense_start = (prototyping_speed_up) ? 1024 : 2500;
-    int dense_stop = 20001;
-    int dense_incr = (
-        (prototyping_speed_up) ? (dense_stop-dense_start) : 2500
+    std::vector<int> dense_dims = (
+        (prototyping_speed_up) ?
+        std::vector<int>({1024}) :
+        std::vector<int>({
+            2500, 5000, 7500, 10000, 12500, 15000, 17500, 20000
+        })
     );
 
-    int sparse_start = (prototyping_speed_up) ? 1024 : 25000;
-    int sparse_stop = 200001;
-    int sparse_incr = (
-        (prototyping_speed_up) ? (sparse_stop-sparse_start) : 25000
+    std::vector<int> sparse_dims = (
+        (prototyping_speed_up) ?
+        std::vector<int>({1024}) :
+        std::vector<int>({
+            2154, 50991, 80708, 105655, 127930, 148406, 167554, 185664
+        })
     );
 
-    int ilu_start = (prototyping_speed_up) ? 1024 : 10000;
-    int ilu_stop = 100001;
-    int ilu_incr = (
-        (prototyping_speed_up) ? (sparse_stop-sparse_start) : 12500
+    std::vector<int> ilu_dims = (
+        (prototyping_speed_up) ?
+        std::vector<int>({1024}) :
+        std::vector<int>({
+            2154, 20536, 32228, 42069, 50864, 58954, 66522, 73681
+        })
     );
 
     const bool pivot_ilu = true;
 
-    const int sparse_col_non_zeros = 200;
+    // const int sparse_col_non_zeros = 200;
     const int run_fast_tests_count = 200;
     const int dense_subset_cols = 200;
 
     const int gmres_iters = 200;
-    const int nested_gmres_outer_iters = (prototyping_speed_up) ? 5 : 300;
     const int nested_gmres_inner_iters = gmres_iters;
+    const int nested_gmres_outer_iters = (prototyping_speed_up) ? 5 : 300;
 
     void benchmark_n_runs(
         int n,
@@ -84,9 +92,7 @@ public:
 
     template <template <typename> typename TMatrix, typename TPrecision>
     void benchmark_exec_func(
-        int m_start_incl,
-        int m_stop_excl,
-        int m_incr,
+        std::vector<int> m_dimensions,
         std::function<TMatrix<TPrecision> (int, int)> make_A,
         std::function<void (Benchmark_AccumClock &, TMatrix<TPrecision> &)> exec_func,
         std::string label
@@ -104,12 +110,7 @@ public:
             );
         }
 
-        std::vector<int> exp_m_values;
-        for (int m = m_start_incl; m < m_stop_excl; m += m_incr) {
-            exp_m_values.push_back(m);
-        }
-
-        for (int m : exp_m_values) {
+        for (int m : m_dimensions) {
 
             Benchmark_AccumClock curr_clock;
 

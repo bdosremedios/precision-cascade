@@ -18,8 +18,7 @@ TEST_F(Benchmark_MatrixDense, MatrixVectorMult_Double_BENCHMARK) {
     };
 
     benchmark_exec_func<MatrixDense, double>(
-        dense_start, dense_stop, dense_incr,
-        make_A_dbl, execute_func, "matdense_mv_dbl"
+        dense_dims, make_A_dbl, execute_func, "matdense_mv_dbl"
     );
 
 }
@@ -38,8 +37,7 @@ TEST_F(Benchmark_MatrixDense, MatrixVectorMult_Single_BENCHMARK) {
     };
 
     benchmark_exec_func<MatrixDense, float>(
-        dense_start, dense_stop, dense_incr,
-        make_A_sgl, execute_func, "matdense_mv_sgl"
+        dense_dims, make_A_sgl, execute_func, "matdense_mv_sgl"
     );
 
 }
@@ -58,8 +56,7 @@ TEST_F(Benchmark_MatrixDense, MatrixVectorMult_Half_BENCHMARK) {
     };
 
     benchmark_exec_func<MatrixDense, __half>(
-        dense_start, dense_stop, dense_incr,
-        make_A_hlf, execute_func, "matdense_mv_hlf"
+        dense_dims, make_A_hlf, execute_func, "matdense_mv_hlf"
     );
 
 }
@@ -78,8 +75,7 @@ TEST_F(Benchmark_MatrixDense, TransposeMatrixVectorMult_Double_BENCHMARK) {
     };
 
     benchmark_exec_func<MatrixDense, double>(
-        dense_start, dense_stop, dense_incr,
-        make_A_dbl, execute_func, "matdense_tmv_dbl"
+        dense_dims, make_A_dbl, execute_func, "matdense_tmv_dbl"
     );
 
 }
@@ -98,8 +94,7 @@ TEST_F(Benchmark_MatrixDense, TransposeMatrixVectorMult_Single_BENCHMARK) {
     };
 
     benchmark_exec_func<MatrixDense, float>(
-        dense_start, dense_stop, dense_incr,
-        make_A_sgl, execute_func, "matdense_tmv_sgl"
+        dense_dims, make_A_sgl, execute_func, "matdense_tmv_sgl"
     );
 
 }
@@ -118,8 +113,7 @@ TEST_F(Benchmark_MatrixDense, TransposeMatrixVectorMult_Half_BENCHMARK) {
     };
 
     benchmark_exec_func<MatrixDense, __half>(
-        dense_start, dense_stop, dense_incr,
-        make_A_hlf, execute_func, "matdense_tmv_hlf"
+        dense_dims, make_A_hlf, execute_func, "matdense_tmv_hlf"
     );
 
 }
@@ -138,8 +132,7 @@ TEST_F(Benchmark_MatrixDense, SubsetcolsMatrixVectorMult_Double_BENCHMARK) {
     };
 
     benchmark_exec_func<MatrixDense, double>(
-        dense_start, dense_stop, dense_incr,
-        make_A_dbl, execute_func, "matdense_subsetcolsmv_dbl"
+        dense_dims, make_A_dbl, execute_func, "matdense_subsetcolsmv_dbl"
     );
 
 }
@@ -158,8 +151,7 @@ TEST_F(Benchmark_MatrixDense, SubsetcolsMatrixVectorMult_Single_BENCHMARK) {
     };
 
     benchmark_exec_func<MatrixDense, float>(
-        dense_start, dense_stop, dense_incr,
-        make_A_sgl, execute_func, "matdense_subsetcolsmv_sgl"
+        dense_dims, make_A_sgl, execute_func, "matdense_subsetcolsmv_sgl"
     );
 
 }
@@ -178,8 +170,7 @@ TEST_F(Benchmark_MatrixDense, SubsetcolsMatrixVectorMult_Half_BENCHMARK) {
     };
 
     benchmark_exec_func<MatrixDense, __half>(
-        dense_start, dense_stop, dense_incr,
-        make_A_hlf, execute_func, "matdense_subsetcolsmv_hlf"
+        dense_dims, make_A_hlf, execute_func, "matdense_subsetcolsmv_hlf"
     );
 
 }
@@ -198,8 +189,7 @@ TEST_F(Benchmark_MatrixDense, SubsetcolsTransposeMatrixVectorMult_Double_BENCHMA
     };
 
     benchmark_exec_func<MatrixDense, double>(
-        dense_start, dense_stop, dense_incr,
-        make_A_dbl, execute_func, "matdense_subsetcolstmv_dbl"
+        dense_dims, make_A_dbl, execute_func, "matdense_subsetcolstmv_dbl"
     );
 
 }
@@ -218,8 +208,7 @@ TEST_F(Benchmark_MatrixDense, SubsetcolsTransposeMatrixVectorMult_Single_BENCHMA
     };
 
     benchmark_exec_func<MatrixDense, float>(
-        dense_start, dense_stop, dense_incr,
-        make_A_sgl, execute_func, "matdense_subsetcolstmv_sgl"
+        dense_dims, make_A_sgl, execute_func, "matdense_subsetcolstmv_sgl"
     );
 
 }
@@ -238,8 +227,7 @@ TEST_F(Benchmark_MatrixDense, SubsetcolsTransposeMatrixVectorMult_Half_BENCHMARK
     };
 
     benchmark_exec_func<MatrixDense, __half>(
-        dense_start, dense_stop, dense_incr,
-        make_A_hlf, execute_func, "matdense_subsetcolstmv_hlf"
+        dense_dims, make_A_hlf, execute_func, "matdense_subsetcolstmv_hlf"
     );
 
 }
@@ -257,8 +245,7 @@ TEST_F(Benchmark_MatrixDense, ForwardSubstitution_Double_BENCHMARK) {
     };
 
     benchmark_exec_func<MatrixDense, double>(
-        dense_start, dense_stop, dense_incr,
-        make_low_tri_A_dbl, execute_func, "matdense_frwdsub_dbl"
+        dense_dims, make_low_tri_A_dbl, execute_func, "matdense_frwdsub_dbl"
     );
 
 }
@@ -278,8 +265,7 @@ TEST_F(Benchmark_MatrixDense, ForwardSubstitution_Single_BENCHMARK) {
     };
 
     benchmark_exec_func<MatrixDense, float>(
-        dense_start, dense_stop, dense_incr,
-        make_low_tri_A_sgl, execute_func, "matdense_frwdsub_sgl"
+        dense_dims, make_low_tri_A_sgl, execute_func, "matdense_frwdsub_sgl"
     );
 
 }
@@ -297,8 +283,7 @@ TEST_F(Benchmark_MatrixDense, ForwardSubstitution_Half_BENCHMARK) {
     };
 
     benchmark_exec_func<MatrixDense, __half>(
-        dense_start, dense_stop, dense_incr,
-        make_low_tri_A_hlf, execute_func, "matdense_frwdsub_hlf"
+        dense_dims, make_low_tri_A_hlf, execute_func, "matdense_frwdsub_hlf"
     );
 
 }
@@ -316,8 +301,7 @@ TEST_F(Benchmark_MatrixDense, BackwardSubstitution_Double_BENCHMARK) {
     };
 
     benchmark_exec_func<MatrixDense, double>(
-        dense_start, dense_stop, dense_incr,
-        make_upp_tri_A_dbl, execute_func, "matdense_backsub_dbl"
+        dense_dims, make_upp_tri_A_dbl, execute_func, "matdense_backsub_dbl"
     );
 
 }
@@ -335,8 +319,7 @@ TEST_F(Benchmark_MatrixDense, BackwardSubstitution_Single_BENCHMARK) {
     };
 
     benchmark_exec_func<MatrixDense, float>(
-        dense_start, dense_stop, dense_incr,
-        make_upp_tri_A_sgl, execute_func, "matdense_backsub_sgl"
+        dense_dims, make_upp_tri_A_sgl, execute_func, "matdense_backsub_sgl"
     );
 
 }
@@ -354,8 +337,7 @@ TEST_F(Benchmark_MatrixDense, BackwardSubstitution_Half_BENCHMARK) {
     };
 
     benchmark_exec_func<MatrixDense, __half>(
-        dense_start, dense_stop, dense_incr,
-        make_upp_tri_A_hlf, execute_func, "matdense_backsub_hlf"
+        dense_dims, make_upp_tri_A_hlf, execute_func, "matdense_backsub_hlf"
     );
 
 }

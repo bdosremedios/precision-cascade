@@ -9,8 +9,7 @@ TEST_F(Benchmark_FP_GMRES_IR, FP_GMRES_IR_Double_BENCHMARK) {
     };
 
     benchmark_exec_func<NoFillMatrixSparse>(
-        sparse_start, sparse_stop, sparse_incr,
-        make_norm_A, execute_func, "fp_gmres_ir_dbl"
+        sparse_dims, make_norm_A, execute_func, "fp_gmres_ir_dbl"
     );
 
 }
@@ -24,8 +23,7 @@ TEST_F(Benchmark_FP_GMRES_IR, FP_GMRES_IR_Single_BENCHMARK) {
     };
 
     benchmark_exec_func<NoFillMatrixSparse>(
-        sparse_start, sparse_stop, sparse_incr,
-        make_norm_A, execute_func, "fp_gmres_ir_sgl"
+        sparse_dims, make_norm_A, execute_func, "fp_gmres_ir_sgl"
     );
 
 }
@@ -39,8 +37,7 @@ TEST_F(Benchmark_FP_GMRES_IR, FP_GMRES_IR_Half_BENCHMARK) {
     };
 
     benchmark_exec_func<NoFillMatrixSparse>(
-        sparse_start, sparse_stop, sparse_incr,
-        make_norm_A, execute_func, "fp_gmres_ir_hlf"
+        sparse_dims, make_norm_A, execute_func, "fp_gmres_ir_hlf"
     );
 
 }

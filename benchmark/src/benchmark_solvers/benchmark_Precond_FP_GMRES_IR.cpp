@@ -35,8 +35,7 @@ TEST_F(Benchmark_Precond_FP_GMRES_IR, ILU0_FP_GMRES_IR_BENCHMARK) {
     };
 
     benchmark_exec_func<NoFillMatrixSparse>(
-        ilu_start, ilu_stop, ilu_incr,
-        make_norm_A, execute_func, "ilu0_fp_gmres_ir"
+        ilu_dims, make_norm_A, execute_func, "ilu0_fp_gmres_ir"
     );
 
 }

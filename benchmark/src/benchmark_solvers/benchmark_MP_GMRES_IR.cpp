@@ -9,8 +9,7 @@ TEST_F(Benchmark_MP_GMRES_IR, MP_GMRES_IR_RestartCount_BENCHMARK) {
     };
 
     benchmark_exec_func<NoFillMatrixSparse, double>(
-        sparse_start, sparse_stop, sparse_incr,
-        make_norm_A, execute_func, "restart_count"
+        sparse_dims, make_norm_A, execute_func, "restart_count"
     );
 
 }
@@ -27,8 +26,7 @@ TEST_F(
     };
 
     benchmark_exec_func<NoFillMatrixSparse, double>(
-        sparse_start, sparse_stop, sparse_incr,
-        make_norm_A, execute_func, "simple_constant_threshold"
+        sparse_dims, make_norm_A, execute_func, "simple_constant_threshold"
     );
 
 }

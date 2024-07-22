@@ -34,8 +34,7 @@ TEST_F(Benchmark_Precond_MP_GMRES_IR, ILU0_MP_GMRES_IR_BENCHMARK) {
     };
 
     benchmark_exec_func<NoFillMatrixSparse>(
-        ilu_start, ilu_stop, ilu_incr,
-        make_norm_A, execute_func, "ilu0_simple_constant_threshold"
+        ilu_dims, make_norm_A, execute_func, "ilu0_simple_constant_threshold"
     );
 
 }

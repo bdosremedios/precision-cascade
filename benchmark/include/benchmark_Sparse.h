@@ -12,12 +12,20 @@ public:
     std::function<NoFillMatrixSparse<double> (int, int)> make_A_dbl = [this] (
         int m, int n
     ) -> NoFillMatrixSparse<double> {
+
+        if (m != n) {
+            throw std::runtime_error(
+                "make_A_dbl: require square dimensions"
+            );
+        }
+
         return NoFillMatrixSparse<double>::Random(
             BenchmarkBase::bundle, m, m,
-            ((static_cast<double>(sparse_col_non_zeros)/static_cast<double>(m) > 1) ?
+            ((sqrt(static_cast<double>(m))/static_cast<double>(m) > 1) ?
              1 :
-             static_cast<double>(sparse_col_non_zeros)/static_cast<double>(m))
+             sqrt(static_cast<double>(m))/static_cast<double>(m))
         );
+
     };
 
     std::function<NoFillMatrixSparse<float> (int, int)> make_A_sgl = [this] (
@@ -35,12 +43,20 @@ public:
     std::function<NoFillMatrixSparse<double> (int, int)> make_low_tri_A_dbl = [this] (
         int m, int n
     ) -> NoFillMatrixSparse<double> {
+
+        if (m != n) {
+            throw std::runtime_error(
+                "make_low_tri_A_dbl: require square dimensions"
+            );
+        }
+
         return NoFillMatrixSparse<double>::Random_LT(
             BenchmarkBase::bundle, m, m,
-            (static_cast<double>(sparse_col_non_zeros)/static_cast<double>(m) > 1) ?
+            (sqrt(static_cast<double>(m))/static_cast<double>(m) > 1) ?
             1 :
-            static_cast<double>(sparse_col_non_zeros)/static_cast<double>(m)
+            sqrt(static_cast<double>(m))/static_cast<double>(m)
         );
+
     };
 
     std::function<NoFillMatrixSparse<float> (int, int)> make_low_tri_A_sgl = [this] (
@@ -58,12 +74,20 @@ public:
     std::function<NoFillMatrixSparse<double> (int, int)> make_upp_tri_A_dbl = [this] (
         int m, int n
     ) -> NoFillMatrixSparse<double> {
+
+        if (m != n) {
+            throw std::runtime_error(
+                "make_upp_tri_A_dbl: require square dimensions"
+            );
+        }
+
         return NoFillMatrixSparse<double>::Random_UT(
             BenchmarkBase::bundle, m, m,
-            (static_cast<double>(sparse_col_non_zeros)/static_cast<double>(m) > 1) ?
+            (sqrt(static_cast<double>(m))/static_cast<double>(m) > 1) ?
             1 :
-            static_cast<double>(sparse_col_non_zeros)/static_cast<double>(m)
+            sqrt(static_cast<double>(m))/static_cast<double>(m)
         );
+
     };
 
     std::function<NoFillMatrixSparse<float> (int, int)> make_upp_tri_A_sgl = [this] (
