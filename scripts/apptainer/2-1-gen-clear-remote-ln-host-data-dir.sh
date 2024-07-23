@@ -20,8 +20,5 @@ if [[ -d host_data/benchmark ]]; then rm -r host_data/benchmark; fi
 if [[ -d host_data/experimentation ]]; then rm -r host_data/experimentation; fi
 cd host_data
 
-pwd
-ls
-
 ln -s "$REMOTE_DATA_DIR/benchmark/" benchmark
 ln -s "$REMOTE_DATA_DIR/experimentation/" experimentation

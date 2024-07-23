@@ -26,7 +26,7 @@ TEST_F(Benchmark_Precond_FP_GMRES_IR, ILU0_FP_GMRES_IR_BENCHMARK) {
         PrecondArgPkg<NoFillMatrixSparse, double> precond_args(
             std::make_shared<ILUPreconditioner<NoFillMatrixSparse, double>>(A)
         );
-        FP_GMRES_IR_Solve fp_restarted_gmres(
+        FP_GMRES_IR_Solve<NoFillMatrixSparse, double> fp_restarted_gmres(
             &typed_lin_sys, 0., args, precond_args
         );
         fp_restarted_gmres.solve();
@@ -34,7 +34,7 @@ TEST_F(Benchmark_Precond_FP_GMRES_IR, ILU0_FP_GMRES_IR_BENCHMARK) {
 
     };
 
-    benchmark_exec_func<NoFillMatrixSparse>(
+    benchmark_exec_func<NoFillMatrixSparse, double>(
         ilu_dims, make_norm_A, execute_func, "ilu0_fp_gmres_ir"
     );
 

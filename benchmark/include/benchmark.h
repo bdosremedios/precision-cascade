@@ -23,7 +23,7 @@ class BenchmarkBase: public testing::Test
 protected:
 
     const int n_runs = 7;
-    bool prototyping_speed_up = false;
+    bool prototyping_speed_up = true;
 
 public:
 
@@ -56,7 +56,6 @@ public:
 
     const bool pivot_ilu = true;
 
-    // const int sparse_col_non_zeros = 200;
     const int run_fast_tests_count = 200;
     const int dense_subset_cols = 200;
 
@@ -78,6 +77,7 @@ public:
         std::string label_formatted = (
             (label == "") ? "" : (" " + label)
         );
+
         std::cout << "[Benchmark" << label_formatted << "] runs: "
                   << std::to_string(benchmark_clock.get_count())
                   << " | avg: "
@@ -110,6 +110,8 @@ public:
             );
         }
 
+        f_out << "dim,med,avg,tot,min,max" << std::endl; 
+
         for (int m : m_dimensions) {
 
             Benchmark_AccumClock curr_clock;
@@ -128,7 +130,12 @@ public:
                 label + "_" + std::to_string(m)
             );
 
-            f_out << m << "," << curr_clock.get_median().count()
+            f_out << m << ","
+                  << curr_clock.get_median().count() << ","
+                  << curr_clock.get_avg().count() << ","
+                  << curr_clock.get_total().count() << ","
+                  << curr_clock.get_min().count() << ","
+                  << curr_clock.get_max().count()
                   << std::endl; 
 
         }

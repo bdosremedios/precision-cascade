@@ -51,3 +51,19 @@ Benchmark_AccumClock::acc_clock_duration Benchmark_AccumClock::get_total() {
     for (acc_clock_duration dur : prev_durations) { total += dur; }
     return total;
 }
+
+Benchmark_AccumClock::acc_clock_duration Benchmark_AccumClock::get_min() {
+    acc_clock_duration min_val(prev_durations[0]);
+    for (acc_clock_duration dur : prev_durations) {
+        if (dur < min_val) { min_val = dur; }
+    }
+    return min_val;
+}
+
+Benchmark_AccumClock::acc_clock_duration Benchmark_AccumClock::get_max() {
+    acc_clock_duration max_val(prev_durations[0]);
+    for (acc_clock_duration dur : prev_durations) {
+        if (dur > max_val) { max_val = dur; }
+    }
+    return max_val;
+}

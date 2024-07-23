@@ -29,6 +29,8 @@ public:
     acc_clock_duration get_avg();
     acc_clock_duration get_median();
     acc_clock_duration get_total();
+    acc_clock_duration get_min();
+    acc_clock_duration get_max();
 
 };
 
