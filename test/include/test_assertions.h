@@ -228,9 +228,9 @@ void _ASSERT_MATRIX_SAMESPARSITY(
 
     for (int i=0; i<target.rows(); ++i) {
         for (int j=0; j<target.cols(); ++j) {
-            if (std::abs(target.get_elem(i, j).get_scalar()) <= zero_tol) {
+            if (abs_ns::abs(target.get_elem(i, j).get_scalar()) <= zero_tol) {
                 ASSERT_LE(
-                    std::abs(test.get_elem(i, j).get_scalar()),
+                    abs_ns::abs(test.get_elem(i, j).get_scalar()),
                     zero_tol
                 );
             }

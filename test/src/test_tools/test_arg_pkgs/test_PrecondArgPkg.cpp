@@ -126,40 +126,42 @@ public:
     template <template <typename> typename TMatrix>
     void TestCastPtrs() {
 
-        constexpr int n(12);
+        TMatrix<double> A_inv(read_matrixCSV<TMatrix, double>(
+            TestBase::bundle,
+            solve_matrix_dir / fs::path("Ainv_inv_45.csv")
+        ));
+        int n(A_inv.cols());
 
-        TMatrix<double> A(
-            CommonMatRandomInterface<TMatrix, double>::rand_matrix(
-                TestBase::bundle, n, n
-            )
+        MatrixInversePreconditioner<TMatrix, double> mat_inv_dbl(A_inv);
+        MatrixInversePreconditioner<TMatrix, float> mat_inv_sgl(
+            A_inv.template cast<float>()
         );
-
-        ILUPreconditioner<TMatrix, double> ilu_precond_dbl(A);
-        ILUPreconditioner<TMatrix, float> ilu_precond_sgl(
-            A.template cast<float>()
-        );
-        ILUPreconditioner<TMatrix, __half> ilu_precond_hlf(
-            A.template cast<__half>()
+        MatrixInversePreconditioner<TMatrix, __half> mat_inv_hlf(
+            A_inv.template cast<__half>()
         );
 
         PrecondArgPkg<TMatrix, double> args_dbl(
-            std::make_shared<ILUPreconditioner<TMatrix, double>>(A),
-            std::make_shared<ILUPreconditioner<TMatrix, double>>(A)
+            std::make_shared<MatrixInversePreconditioner<TMatrix, double>>(
+                A_inv
+            ),
+            std::make_shared<MatrixInversePreconditioner<TMatrix, double>>(
+                A_inv
+            )
         );
         PrecondArgPkg<TMatrix, float> args_sgl(
-            std::make_shared<ILUPreconditioner<TMatrix, float>>(
-                A.template cast<float>()
+            std::make_shared<MatrixInversePreconditioner<TMatrix, float>>(
+                A_inv.template cast<float>()
             ),
-            std::make_shared<ILUPreconditioner<TMatrix, float>>(
-                A.template cast<float>()
+            std::make_shared<MatrixInversePreconditioner<TMatrix, float>>(
+                A_inv.template cast<float>()
             )
         );
         PrecondArgPkg<TMatrix, __half> args_hlf(
-            std::make_shared<ILUPreconditioner<TMatrix, __half>>(
-                A.template cast<__half>()
+            std::make_shared<MatrixInversePreconditioner<TMatrix, __half>>(
+                A_inv.template cast<__half>()
             ),
-            std::make_shared<ILUPreconditioner<TMatrix, __half>>(
-                A.template cast<__half>()
+            std::make_shared<MatrixInversePreconditioner<TMatrix, __half>>(
+                A_inv.template cast<__half>()
             )
         );
 
@@ -183,39 +185,45 @@ public:
             args_dbl.cast_hlf_ptr()
         );
 
-        ILUPreconditioner<TMatrix, double> * target_cast_dbl_dbl = (
-            ilu_precond_dbl.cast_dbl_ptr()
+        MatrixInversePreconditioner<TMatrix, double> * target_cast_dbl_dbl = (
+            mat_inv_dbl.cast_dbl_ptr()
         );
-        ILUPreconditioner<TMatrix, float> * target_cast_dbl_sgl = (
-            ilu_precond_dbl.cast_sgl_ptr()
+        MatrixInversePreconditioner<TMatrix, float> * target_cast_dbl_sgl = (
+            mat_inv_dbl.cast_sgl_ptr()
         );
-        ILUPreconditioner<TMatrix, __half> * target_cast_dbl_hlf = (
-            ilu_precond_dbl.cast_hlf_ptr()
+        MatrixInversePreconditioner<TMatrix, __half> * target_cast_dbl_hlf = (
+            mat_inv_dbl.cast_hlf_ptr()
         );
 
-        ASSERT_VECTOR_EQ(
+        ASSERT_VECTOR_NEAR(
             test_cast_dbl_dbl->left_precond->action_inv_M(test_vec_dbl),
-            target_cast_dbl_dbl->action_inv_M(test_vec_dbl)
+            target_cast_dbl_dbl->action_inv_M(test_vec_dbl),
+            Tol<double>::roundoff_T()
         );
-        ASSERT_VECTOR_EQ(
+        ASSERT_VECTOR_NEAR(
             test_cast_dbl_dbl->right_precond->action_inv_M(test_vec_dbl),
-            target_cast_dbl_dbl->action_inv_M(test_vec_dbl)
+            target_cast_dbl_dbl->action_inv_M(test_vec_dbl),
+            Tol<double>::roundoff_T()
         );
-        ASSERT_VECTOR_EQ(
+        ASSERT_VECTOR_NEAR(
             test_cast_dbl_sgl->left_precond->action_inv_M(test_vec_sgl),
-            target_cast_dbl_sgl->action_inv_M(test_vec_sgl)
+            target_cast_dbl_sgl->action_inv_M(test_vec_sgl),
+            Tol<float>::roundoff_T()
         );
-        ASSERT_VECTOR_EQ(
+        ASSERT_VECTOR_NEAR(
             test_cast_dbl_sgl->right_precond->action_inv_M(test_vec_sgl),
-            target_cast_dbl_sgl->action_inv_M(test_vec_sgl)
+            target_cast_dbl_sgl->action_inv_M(test_vec_sgl),
+            Tol<float>::roundoff_T()
         );
-        ASSERT_VECTOR_EQ(
+        ASSERT_VECTOR_NEAR(
             test_cast_dbl_hlf->left_precond->action_inv_M(test_vec_hlf),
-            target_cast_dbl_hlf->action_inv_M(test_vec_hlf)
+            target_cast_dbl_hlf->action_inv_M(test_vec_hlf),
+            Tol<__half>::roundoff_T()
         );
-        ASSERT_VECTOR_EQ(
+        ASSERT_VECTOR_NEAR(
             test_cast_dbl_hlf->right_precond->action_inv_M(test_vec_hlf),
-            target_cast_dbl_hlf->action_inv_M(test_vec_hlf)
+            target_cast_dbl_hlf->action_inv_M(test_vec_hlf),
+            Tol<__half>::roundoff_T()
         );
 
         delete test_cast_dbl_dbl;
@@ -236,39 +244,45 @@ public:
             args_sgl.cast_hlf_ptr()
         );
 
-        ILUPreconditioner<TMatrix, double> * target_cast_sgl_dbl = (
-            ilu_precond_sgl.cast_dbl_ptr()
+        MatrixInversePreconditioner<TMatrix, double> * target_cast_sgl_dbl = (
+            mat_inv_sgl.cast_dbl_ptr()
         );
-        ILUPreconditioner<TMatrix, float> * target_cast_sgl_sgl = (
-            ilu_precond_sgl.cast_sgl_ptr()
+        MatrixInversePreconditioner<TMatrix, float> * target_cast_sgl_sgl = (
+            mat_inv_sgl.cast_sgl_ptr()
         );
-        ILUPreconditioner<TMatrix, __half> * target_cast_sgl_hlf = (
-            ilu_precond_sgl.cast_hlf_ptr()
+        MatrixInversePreconditioner<TMatrix, __half> * target_cast_sgl_hlf = (
+            mat_inv_sgl.cast_hlf_ptr()
         );
 
-        ASSERT_VECTOR_EQ(
+        ASSERT_VECTOR_NEAR(
             test_cast_sgl_dbl->left_precond->action_inv_M(test_vec_dbl),
-            target_cast_sgl_dbl->action_inv_M(test_vec_dbl)
+            target_cast_sgl_dbl->action_inv_M(test_vec_dbl),
+            Tol<double>::roundoff_T()
         );
-        ASSERT_VECTOR_EQ(
+        ASSERT_VECTOR_NEAR(
             test_cast_sgl_dbl->right_precond->action_inv_M(test_vec_dbl),
-            target_cast_sgl_dbl->action_inv_M(test_vec_dbl)
+            target_cast_sgl_dbl->action_inv_M(test_vec_dbl),
+            Tol<double>::roundoff_T()
         );
-        ASSERT_VECTOR_EQ(
+        ASSERT_VECTOR_NEAR(
             test_cast_sgl_sgl->left_precond->action_inv_M(test_vec_sgl),
-            target_cast_sgl_sgl->action_inv_M(test_vec_sgl)
+            target_cast_sgl_sgl->action_inv_M(test_vec_sgl),
+            Tol<float>::roundoff_T()
         );
-        ASSERT_VECTOR_EQ(
+        ASSERT_VECTOR_NEAR(
             test_cast_sgl_sgl->right_precond->action_inv_M(test_vec_sgl),
-            target_cast_sgl_sgl->action_inv_M(test_vec_sgl)
+            target_cast_sgl_sgl->action_inv_M(test_vec_sgl),
+            Tol<float>::roundoff_T()
         );
-        ASSERT_VECTOR_EQ(
+        ASSERT_VECTOR_NEAR(
             test_cast_sgl_hlf->left_precond->action_inv_M(test_vec_hlf),
-            target_cast_sgl_hlf->action_inv_M(test_vec_hlf)
+            target_cast_sgl_hlf->action_inv_M(test_vec_hlf),
+            Tol<__half>::roundoff_T()
         );
-        ASSERT_VECTOR_EQ(
+        ASSERT_VECTOR_NEAR(
             test_cast_sgl_hlf->right_precond->action_inv_M(test_vec_hlf),
-            target_cast_sgl_hlf->action_inv_M(test_vec_hlf)
+            target_cast_sgl_hlf->action_inv_M(test_vec_hlf),
+            Tol<__half>::roundoff_T()
         );
 
         delete test_cast_sgl_dbl;
@@ -289,39 +303,45 @@ public:
             args_hlf.cast_hlf_ptr()
         );
 
-        ILUPreconditioner<TMatrix, double> * target_cast_hlf_dbl = (
-            ilu_precond_hlf.cast_dbl_ptr()
+        MatrixInversePreconditioner<TMatrix, double> * target_cast_hlf_dbl = (
+            mat_inv_hlf.cast_dbl_ptr()
         );
-        ILUPreconditioner<TMatrix, float> * target_cast_hlf_sgl = (
-            ilu_precond_hlf.cast_sgl_ptr()
+        MatrixInversePreconditioner<TMatrix, float> * target_cast_hlf_sgl = (
+            mat_inv_hlf.cast_sgl_ptr()
         );
-        ILUPreconditioner<TMatrix, __half> * target_cast_hlf_hlf = (
-            ilu_precond_hlf.cast_hlf_ptr()
+        MatrixInversePreconditioner<TMatrix, __half> * target_cast_hlf_hlf = (
+            mat_inv_hlf.cast_hlf_ptr()
         );
 
-        ASSERT_VECTOR_EQ(
+        ASSERT_VECTOR_NEAR(
             test_cast_hlf_dbl->left_precond->action_inv_M(test_vec_dbl),
-            target_cast_hlf_dbl->action_inv_M(test_vec_dbl)
+            target_cast_hlf_dbl->action_inv_M(test_vec_dbl),
+            Tol<double>::roundoff_T()
         );
-        ASSERT_VECTOR_EQ(
+        ASSERT_VECTOR_NEAR(
             test_cast_hlf_dbl->right_precond->action_inv_M(test_vec_dbl),
-            target_cast_hlf_dbl->action_inv_M(test_vec_dbl)
+            target_cast_hlf_dbl->action_inv_M(test_vec_dbl),
+            Tol<double>::roundoff_T()
         );
-        ASSERT_VECTOR_EQ(
+        ASSERT_VECTOR_NEAR(
             test_cast_hlf_sgl->left_precond->action_inv_M(test_vec_sgl),
-            target_cast_hlf_sgl->action_inv_M(test_vec_sgl)
+            target_cast_hlf_sgl->action_inv_M(test_vec_sgl),
+            Tol<float>::roundoff_T()
         );
-        ASSERT_VECTOR_EQ(
+        ASSERT_VECTOR_NEAR(
             test_cast_hlf_sgl->right_precond->action_inv_M(test_vec_sgl),
-            target_cast_hlf_sgl->action_inv_M(test_vec_sgl)
+            target_cast_hlf_sgl->action_inv_M(test_vec_sgl),
+            Tol<float>::roundoff_T()
         );
-        ASSERT_VECTOR_EQ(
+        ASSERT_VECTOR_NEAR(
             test_cast_hlf_hlf->left_precond->action_inv_M(test_vec_hlf),
-            target_cast_hlf_hlf->action_inv_M(test_vec_hlf)
+            target_cast_hlf_hlf->action_inv_M(test_vec_hlf),
+            Tol<__half>::roundoff_T()
         );
-        ASSERT_VECTOR_EQ(
+        ASSERT_VECTOR_NEAR(
             test_cast_hlf_hlf->right_precond->action_inv_M(test_vec_hlf),
-            target_cast_hlf_hlf->action_inv_M(test_vec_hlf)
+            target_cast_hlf_hlf->action_inv_M(test_vec_hlf),
+            Tol<__half>::roundoff_T()
         );
 
         delete test_cast_hlf_dbl;

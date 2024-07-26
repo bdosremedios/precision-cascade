@@ -758,9 +758,11 @@ public:
             );
         }
         ASSERT_NEAR(
-            static_cast<double>(vec_1_dot_r.dot(vec_2_dot_r).get_scalar()),
-            static_cast<double>(acc),
-            2.*std::abs(10.*Tol<TPrecision>::gamma(10))
+            vec_1_dot_r.dot(vec_2_dot_r).get_scalar(),
+            acc,
+            (static_cast<TPrecision>(2.) *
+             static_cast<TPrecision>(10.) *
+             Tol<TPrecision>::gamma_T(10))
         );
 
     }

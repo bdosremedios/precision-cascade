@@ -3,6 +3,7 @@
 
 #include "tools/cuda_check.h"
 #include "tools/cuHandleBundle.h"
+#include "tools/abs.h"
 #include "types/Scalar/Scalar.h"
 #include "types/Vector/Vector.h"
 #include "types/MatrixDense/MatrixDense.h"
@@ -1047,9 +1048,7 @@ public:
 
         TPrecision max_mag = static_cast<TPrecision>(0);
         for (int i=0; i<nnz; ++i) {
-            TPrecision temp = static_cast<TPrecision>(
-                std::abs(static_cast<double>(h_vals[i]))
-            );
+            TPrecision temp = abs_ns::abs(h_vals[i]);
             if (max_mag < temp) {
                 max_mag = temp;
             }

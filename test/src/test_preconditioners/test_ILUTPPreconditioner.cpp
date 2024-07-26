@@ -142,7 +142,7 @@ public:
                         Scalar<double> a_ij = A.get_elem(i, j);
                         Scalar<double> a_ij_abs = A.get_elem(i, j);
                         a_ij_abs.abs();
-                        if (a_ij_abs.get_scalar() > std::abs(max_mag_val)) {
+                        if (a_ij_abs.get_scalar() > abs_ns::abs(max_mag_val)) {
                             max_mag_val = a_ij.get_scalar();
                             max_i = i;
                         }

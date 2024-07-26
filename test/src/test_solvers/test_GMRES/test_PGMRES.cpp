@@ -82,7 +82,7 @@ public:
             pgmres_solve_inverse_of_identity.view_relres_plot("log");
         }
 
-        double error_coeff = std::abs(
+        double error_coeff = abs_ns::abs(
             (MatrixDense<double>(A).norm() *
              pgmres_solve_default.get_typed_soln().norm()
             ).get_scalar()
