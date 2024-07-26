@@ -3,6 +3,7 @@
 #include "preconditioners/implemented_preconditioners.h"
 
 #include <cmath>
+#include <unordered_set>
 
 class ILUTP_Test: public TestBase
 {
@@ -12,10 +13,10 @@ public:
     void TestEquivalentILUTNoDropAndDenseILU0() {
 
         // Test ILU(0) and ILUT(0, n) [No Dropping] Give the same dense decomp
-        constexpr int n(8);
         TMatrix<double> A(read_matrixCSV<TMatrix, double>(
             TestBase::bundle, solve_matrix_dir / fs::path("ilu_A.csv")
         ));
+        int n(A.rows());
         ILUPreconditioner<TMatrix, double> ilu0(A);
         ILUPreconditioner<TMatrix, double> ilut0(A, 0., n, false);
         ASSERT_MATRIX_EQ(ilut0.get_U(), ilu0.get_U());
@@ -26,10 +27,10 @@ public:
     template <template <typename> typename TMatrix>
     void TestILUTDropping(bool pivot) {
 
-        constexpr int n(8);
         TMatrix<double> A(read_matrixCSV<TMatrix, double>(
             TestBase::bundle, solve_matrix_dir / fs::path("ilu_sparse_A.csv")
         ));
+        int n(A.rows());
 
         // Check multiple rising thresholds ensuring that each ilu is closer
         // to the matrix and that all have correct form for L and U
@@ -53,45 +54,48 @@ public:
 
         // Test that each lower threshold is better than the higher one w.r.t
         // Frobenius norm
+        MatrixDense<double> ilut_R_1e4(
+            (MatrixDense<double>(ilut1e_4.get_P())*
+             MatrixDense<double>(A)) -
+            (MatrixDense<double>(ilut1e_4.get_L())*
+             MatrixDense<double>(ilut1e_4.get_U()))
+        );
+        MatrixDense<double> ilut_R_1e3(
+            (MatrixDense<double>(ilut1e_3.get_P())*
+             MatrixDense<double>(A)) -
+            (MatrixDense<double>(ilut1e_3.get_L())*
+             MatrixDense<double>(ilut1e_3.get_U()))
+        );
+        MatrixDense<double> ilut_R_1e2(
+            (MatrixDense<double>(ilut1e_2.get_P())*
+             MatrixDense<double>(A)) -
+            (MatrixDense<double>(ilut1e_2.get_L())*
+             MatrixDense<double>(ilut1e_2.get_U()))
+        );
+        MatrixDense<double> ilut_R_1e1(
+            (MatrixDense<double>(ilut1e_1.get_P())*
+             MatrixDense<double>(A)) -
+            (MatrixDense<double>(ilut1e_1.get_L())*
+             MatrixDense<double>(ilut1e_1.get_U()))
+        );
+        MatrixDense<double> ilut_R_1e0(
+            (MatrixDense<double>(ilut1e_0.get_P())*
+             MatrixDense<double>(A)) -
+            (MatrixDense<double>(ilut1e_0.get_L())*
+             MatrixDense<double>(ilut1e_0.get_U()))
+        );
+
         EXPECT_LE(
-            (MatrixDense<double>(A) -
-             MatrixDense<double>(ilut1e_4.get_L()) *
-             MatrixDense<double>(ilut1e_4.get_U())
-            ).norm().get_scalar(),
-            (MatrixDense<double>(A) -
-             MatrixDense<double>(ilut1e_3.get_L()) *
-             MatrixDense<double>(ilut1e_3.get_U())
-            ).norm().get_scalar()
+            ilut_R_1e4.norm().get_scalar(), ilut_R_1e3.norm().get_scalar()
         );
         EXPECT_LE(
-            (MatrixDense<double>(A)-
-             MatrixDense<double>(ilut1e_3.get_L()) *
-             MatrixDense<double>(ilut1e_3.get_U())
-            ).norm().get_scalar(),
-            (MatrixDense<double>(A)-
-             MatrixDense<double>(ilut1e_2.get_L()) *
-             MatrixDense<double>(ilut1e_2.get_U())
-            ).norm().get_scalar()
+            ilut_R_1e3.norm().get_scalar(), ilut_R_1e2.norm().get_scalar()
         );
         EXPECT_LE(
-            (MatrixDense<double>(A)-
-             MatrixDense<double>(ilut1e_2.get_L()) *
-             MatrixDense<double>(ilut1e_2.get_U())
-            ).norm().get_scalar(),
-            (MatrixDense<double>(A)-
-             MatrixDense<double>(ilut1e_1.get_L()) *
-             MatrixDense<double>(ilut1e_1.get_U())
-            ).norm().get_scalar()
+            ilut_R_1e2.norm().get_scalar(), ilut_R_1e1.norm().get_scalar()
         );
         EXPECT_LE(
-            (MatrixDense<double>(A)-
-             MatrixDense<double>(ilut1e_1.get_L()) *
-             MatrixDense<double>(ilut1e_1.get_U())
-            ).norm().get_scalar(),
-            (MatrixDense<double>(A)-
-             MatrixDense<double>(ilut1e_0.get_L()) *
-             MatrixDense<double>(ilut1e_0.get_U())
-            ).norm().get_scalar()
+            ilut_R_1e1.norm().get_scalar(), ilut_R_1e0.norm().get_scalar()
         );
 
         // Test that each smaller threshold has more non zeroes
@@ -105,18 +109,6 @@ public:
         EXPECT_GE(ilut1e_2.get_L().non_zeros(), ilut1e_1.get_L().non_zeros());
         EXPECT_GE(ilut1e_1.get_L().non_zeros(), ilut1e_0.get_L().non_zeros());
 
-        std::cout << ilut1e_4.get_U().non_zeros() << " "
-                  << ilut1e_3.get_U().non_zeros() << " "
-                  << ilut1e_2.get_U().non_zeros() << " "
-                  << ilut1e_1.get_U().non_zeros() << " "
-                  << ilut1e_0.get_U().non_zeros() << std::endl;
-
-        std::cout << ilut1e_4.get_L().non_zeros() << " "
-                  << ilut1e_3.get_L().non_zeros() << " "
-                  << ilut1e_2.get_L().non_zeros() << " "
-                  << ilut1e_1.get_L().non_zeros() << " "
-                  << ilut1e_0.get_L().non_zeros() << std::endl;
-
     }
 
     template <template <typename> typename TMatrix>
@@ -124,10 +116,10 @@ public:
 
         // Test that max dropping just gives the diagonal since
         // everything else gets dropped
-        constexpr int n(8);
         TMatrix<double> A(read_matrixCSV<TMatrix, double>(
             TestBase::bundle, solve_matrix_dir / fs::path("ilu_sparse_A.csv")
         ));
+        int n(A.rows());
         ILUPreconditioner<TMatrix, double> ilu_all_drop(A, DBL_MAX, n, pivot);
 
         ASSERT_MATRIX_LOWTRI(ilu_all_drop.get_L(), Tol<double>::roundoff());
@@ -135,6 +127,7 @@ public:
         ASSERT_MATRIX_UPPTRI(ilu_all_drop.get_L(), Tol<double>::roundoff());
         ASSERT_MATRIX_UPPTRI(ilu_all_drop.get_U(), Tol<double>::roundoff());
 
+        std::unordered_set<int> pivots_so_far;
         for (int j=0; j<n; ++j) {
             ASSERT_NEAR(
                 ilu_all_drop.get_L().get_elem(j, j).get_scalar(),
@@ -143,14 +136,19 @@ public:
             );
             if (pivot) {
                 double max_mag_val = 0.;
+                int max_i = -1;
                 for (int i=0; i<n ; ++i) {
-                    Scalar<double> a_ij = A.get_elem(i, j);
-                    Scalar<double> a_ij_abs = A.get_elem(i, j);
-                    a_ij_abs.abs();
-                    if (a_ij_abs.get_scalar() > std::abs(max_mag_val)) {
-                        max_mag_val = a_ij.get_scalar();
+                    if (pivots_so_far.count(i) == 0) {
+                        Scalar<double> a_ij = A.get_elem(i, j);
+                        Scalar<double> a_ij_abs = A.get_elem(i, j);
+                        a_ij_abs.abs();
+                        if (a_ij_abs.get_scalar() > std::abs(max_mag_val)) {
+                            max_mag_val = a_ij.get_scalar();
+                            max_i = i;
+                        }
                     }
                 }
+                pivots_so_far.insert(max_i);
                 ASSERT_NEAR(
                     ilu_all_drop.get_U().get_elem(j, j).get_scalar(),
                     max_mag_val,
@@ -171,10 +169,10 @@ public:
     void TestMatchesDenseLU_Pivoted() {
 
         // Test that using a completely dense matrix one just gets a pivoted LU
-        constexpr int n(8);
         TMatrix<double> A(read_matrixCSV<TMatrix, double>(
             TestBase::bundle, solve_matrix_dir / fs::path("ilu_A.csv")
         ));
+        int n(A.rows());
         ILUPreconditioner<TMatrix, double> ilu_precond(A, 0., n, true);
         TMatrix<double> test(
             MatrixDense<double>(ilu_precond.get_L()) *
@@ -244,10 +242,10 @@ public:
 
         // Test that 0 tau (not applying drop rule tau) and p entries just
         // leads to p largest being retained
-        constexpr int n(8);
         TMatrix<double> A(read_matrixCSV<TMatrix, double>(
             TestBase::bundle, solve_matrix_dir / fs::path("ilu_A.csv")
         ));
+        int n(A.rows());
         ILUPreconditioner<TMatrix, double> ilu_keep_8(A, 0., 8, pivot);
         ILUPreconditioner<TMatrix, double> ilu_keep_7(A, 0., 7, pivot);
         ILUPreconditioner<TMatrix, double> ilu_keep_6(A, 0., 6, pivot);

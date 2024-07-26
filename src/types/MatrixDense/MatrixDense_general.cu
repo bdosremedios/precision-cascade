@@ -24,20 +24,18 @@ Vector<TPrecision> MatrixDense<TPrecision>::back_sub(
     }
 
     Vector<TPrecision> soln(arg_rhs);
-
-    TPrecision *d_soln = soln.d_vec;
     
     int n_blk = std::ceil(
         static_cast<float>(m_rows) /
-        genmat_gpu_const::WARPSIZE
+        static_cast<float>(genmat_gpu_const::WARPSIZE)
     );
 
     for (int i=n_blk-1; i>=0; --i) {
 
-        matrixdense_kernels::upptri_blk_solve_warp<TPrecision>
-            <<<1, genmat_gpu_const::WARPSIZE>>>
+        matrixdense_kernels::upptri_blk_solve_warp
+            <TPrecision><<<1, genmat_gpu_const::WARPSIZE>>>
         (
-            d_mat, m_rows, i*genmat_gpu_const::WARPSIZE, d_soln
+            d_mat, m_rows, i*genmat_gpu_const::WARPSIZE, soln.d_vec
         );
         check_kernel_launch(
             cudaGetLastError(),
@@ -48,10 +46,9 @@ Vector<TPrecision> MatrixDense<TPrecision>::back_sub(
 
         if (i > 0) {
             matrixdense_kernels::upptri_rect_update_warp
-                <TPrecision>
-                <<<i, genmat_gpu_const::WARPSIZE>>>
+                <TPrecision><<<i, genmat_gpu_const::WARPSIZE>>>
             (
-                d_mat, m_rows, i*genmat_gpu_const::WARPSIZE, d_soln
+                d_mat, m_rows, i*genmat_gpu_const::WARPSIZE, soln.d_vec
             );
             check_kernel_launch(
                 cudaGetLastError(),
@@ -99,7 +96,7 @@ Vector<TPrecision> MatrixDense<TPrecision>::frwd_sub(
 
     int n_blk = std::ceil(
         static_cast<float>(m_rows) /
-        genmat_gpu_const::WARPSIZE
+        static_cast<float>(genmat_gpu_const::WARPSIZE)
     );
 
     for (int i=0; i<n_blk; ++i) {

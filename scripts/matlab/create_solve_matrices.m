@@ -7,7 +7,6 @@ A_5_toy = [1, 0.1, 0.1, 0.1, 0.1;
            0.2, 0.2, 3, 0.3, 0.3;
            0.3, 0.3, 0.3, 4, 0.4;
            0.4, 0.4, 0.4, 0.4, 5];
-A_5_toy = A_5_toy/10;
 b_5_toy = [3;2;4;2;2];
 writematrix(A_5_toy, "solve_matrices\\A_5_toy.csv");
 writematrix(b_5_toy, "solve_matrices\\b_5_toy.csv");
@@ -25,19 +24,18 @@ writematrix(b_5_easysoln, "solve_matrices\\b_5_easysoln.csv");
 
 % Create backsubstitution test with matrices to test backsub in GMRES
 % specifically (Well-conditioned A for testing)
-A_7_backsub = randn(7, 7) + 100*diag(ones(7, 1), 0);
-A_7_backsub = A_7_backsub/100;
-b_7_backsub = randn(7, 1);
+A_7_backsub = generate_well_cond_rand_matrix(7, 10);
+b_7_backsub = A_7_backsub*randn(7, 1);
 rho = norm(b_7_backsub);
 [Q_7_backsub, R_7_backsub] = qr(A_7_backsub);
 Q_8_backsub = [Q_7_backsub, zeros(7, 1);
                zeros(1, 7), 1];
 R_8_backsub = [R_7_backsub;
                zeros(1, 7)];
-writematrix(full(A_7_backsub), "solve_matrices\\A_7_dummy_backsub.csv");
-writematrix(full(b_7_backsub), "solve_matrices\\b_7_dummy_backsub.csv");
-writematrix(full(Q_8_backsub), "solve_matrices\\Q_8_backsub.csv");
-writematrix(full(R_8_backsub), "solve_matrices\\R_8_backsub.csv");
+writematrix(A_7_backsub, "solve_matrices\\A_7_dummy_backsub.csv");
+writematrix(b_7_backsub, "solve_matrices\\b_7_dummy_backsub.csv");
+writematrix(Q_8_backsub, "solve_matrices\\Q_8_backsub.csv");
+writematrix(R_8_backsub, "solve_matrices\\R_8_backsub.csv");
 rho_e1 = zeros(7, 1);
 rho_e1(1) = rho;
 x_1 = R_8_backsub(1:1, 1:1) \ (Q_8_backsub(1:1, 1:1)'*rho_e1(1:1));
@@ -55,43 +53,80 @@ writematrix(x_5, "solve_matrices\\x_5_backsub.csv");
 writematrix(x_6, "solve_matrices\\x_6_backsub.csv");
 writematrix(x_7, "solve_matrices\\x_7_backsub.csv");
 
-fprintf("GMRES QR Triag. Solve Test Condition Number A: %0.5g\n", cond(A_7_backsub));
-fprintf("GMRES QR Triag. Solve Test Condition Number R: %0.5g\n", cond(R_8_backsub(1:7, 1:7)));
+fprintf( ...
+    "GMRES QR Triag. Solve Test Condition Number A: %0.5g\n", ...
+    cond(A_7_backsub) ...
+);
+fprintf( ...
+    "GMRES QR Triag. Solve Test Condition Number R: %0.5g\n", ...
+    cond(R_8_backsub(1:7, 1:7)) ...
+);
 
 % End-to-end matrices
 convergence_tolerance_double = 1e-10;
 
 % Create 64x64 convection diffusion with rhs sin(x)cos(y)
-[A_convdiff64, b_convdiff64] = generate_conv_diff_rhs_sinxcosy(8, 0.1, 0.1);
+[A_convdiff64, b_convdiff64] = generate_conv_diff_rhs_sinxcosy( ...
+    8, 0.5, 0.5 ...
+);
 x_convdiff64 = gmres( ...
     A_convdiff64, b_convdiff64, ...
     [], convergence_tolerance_double, 64 ...
 );
 writematrix(full(A_convdiff64), "solve_matrices\\conv_diff_64_A.csv");
-writematrix(full(A_convdiff64*A_convdiff64), "solve_matrices\\conv_diff_64_Asqr.csv");
+writematrix( ...
+    full(A_convdiff64*A_convdiff64), ...
+    "solve_matrices\\conv_diff_64_Asqr.csv" ...
+);
 writematrix(full(b_convdiff64), "solve_matrices\\conv_diff_64_b.csv");
 writematrix(full(x_convdiff64), "solve_matrices\\conv_diff_64_x.csv");
 
+fprintf( ...
+    "Conv-Diff 64x64 Condition Number A: %0.5g\n", ...
+    condest(A_convdiff64) ...
+);
+
 % Create 256x256 convection diffusion with rhs sin(x)cos(y)
-[A_convdiff256, b_convdiff256] = generate_conv_diff_rhs_sinxcosy(16, 0.1, 0.1);
+[A_convdiff256, b_convdiff256] = generate_conv_diff_rhs_sinxcosy( ...
+    16, 0.5, 0.5 ...
+);
 x_convdiff256 = gmres( ...
     A_convdiff256, b_convdiff256, ...
     [], convergence_tolerance_double, 256 ...
 );
 writematrix(full(A_convdiff256), "solve_matrices\\conv_diff_256_A.csv");
-writematrix(full(A_convdiff256*A_convdiff256), "solve_matrices\\conv_diff_256_Asqr.csv");
+writematrix( ...
+    full(A_convdiff256*A_convdiff256), ...
+    "solve_matrices\\conv_diff_256_Asqr.csv" ...
+);
 writematrix(full(b_convdiff256), "solve_matrices\\conv_diff_256_b.csv");
 writematrix(full(x_convdiff256), "solve_matrices\\conv_diff_256_x.csv");
 
+fprintf( ...
+    "Conv-Diff 256x256 Condition Number A: %0.5g\n", ...
+    condest(A_convdiff256) ...
+);
+
 % Create 1024x1024 convection diffusion with rhs sin(x)cos(y)
-[A_convdiff1024, b_convdiff1024] = generate_conv_diff_rhs_sinxcosy(32, 0.1, 0.1);
+[A_convdiff1024, b_convdiff1024] = generate_conv_diff_rhs_sinxcosy( ...
+    32, 0.5, 0.5 ...
+);
 x_convdiff1024 = gmres( ...
-    A_convdiff1024, b_convdiff1024, [], convergence_tolerance_double, 1024 ...
+    A_convdiff1024, b_convdiff1024, ...
+    [], convergence_tolerance_double, 1024 ...
 );
 writematrix(full(A_convdiff1024), "solve_matrices\\conv_diff_1024_A.csv");
-writematrix(full(A_convdiff1024*A_convdiff1024), "solve_matrices\\conv_diff_1024_Asqr.csv");
+writematrix( ...
+    full(A_convdiff1024*A_convdiff1024), ...
+    "solve_matrices\\conv_diff_1024_Asqr.csv" ...
+);
 writematrix(full(b_convdiff1024), "solve_matrices\\conv_diff_1024_b.csv");
 writematrix(full(x_convdiff1024), "solve_matrices\\conv_diff_1024_x.csv");
+
+fprintf( ...
+    "Conv-Diff 1024x1024 Condition Number A: %0.5g\n", ...
+    condest(A_convdiff1024) ...
+);
 
 % Create Matrix random which should converge slowest
 A_20_rand = randn(20, 20);
@@ -105,9 +140,11 @@ writematrix(A_20_rand, "solve_matrices\\A_20_rand.csv");
 writematrix(b_20_rand, "solve_matrices\\b_20_rand.csv");
 writematrix(x_20_rand, "solve_matrices\\x_20_rand.csv");
 
+fprintf("Slow 20x20 Condition Number A: %0.5g\n", cond(A_20_rand));
+
 % Create saddle Matrix which should converge in roughly 3 steps
 % ensure well-conditioning
-A_saddle = diag(abs(randn(10, 1)+1));
+A_saddle = diag(abs(randn(10, 1)+10));
 B_saddle = randn(2, 10);
 saddle = [A_saddle, B_saddle'; B_saddle, zeros(2, 2)];
 pre_cond = [A_saddle, zeros(10, 2);
@@ -131,9 +168,11 @@ writematrix(b_saddle, "solve_matrices\\b_25_saddle.csv");
 writematrix(x_saddle, "solve_matrices\\x_25_saddle.csv");
 writematrix(inv_pre_cond, "solve_matrices\\A_25_invprecond_saddle.csv");
 
+fprintf("Saddle Condition Number A: %0.5g\n", cond(saddle));
+fprintf("Precond Saddle Condition Number A: %0.5g\n", cond(A_3eigs));
+
 % Create lower/upper triangular to check substitution solve
-A_2_temp = 2*(rand(90, 90)-0.5);
-A_2_temp = A_2_temp + 15*diag(diag(A_2_temp)./abs(diag(A_2_temp)));
+A_2_temp = generate_well_cond_rand_matrix(90, 15);
 U_tri_90 = triu(A_2_temp);
 x_90 = 2*(randi(2, 90, 1)-1.5);
 Ub_90 = U_tri_90*x_90;
@@ -144,12 +183,13 @@ L_tri_90 = tril(A_2_temp);
 Lb_90 = L_tri_90*x_90;
 writematrix(L_tri_90, "solve_matrices\\L_tri_90.csv");
 writematrix(Lb_90, "solve_matrices\\Lb_tri_90.csv");
+
 fprintf("Triag. Solve Test Condition Number A: %0.5g\n", cond(A_2_temp));
 fprintf("Triag. Solve Test Condition Number U: %0.5g\n", cond(U_tri_90));
 fprintf("Triag. Solve Test Condition Number L: %0.5g\n", cond(L_tri_90));
 
 % Create Matrix and Inverse to test inverse preconditioner
-A_inv_test = randn(45, 45);
+A_inv_test = generate_well_cond_rand_matrix(45, 10);
 Asqr_inv_test = A_inv_test*A_inv_test;
 Ainv_inv_test = inv(A_inv_test);
 b_inv_test = randn(45, 1);
@@ -158,8 +198,30 @@ writematrix(Asqr_inv_test, "solve_matrices\\Asqr_inv_45.csv");
 writematrix(Ainv_inv_test, "solve_matrices\\Ainv_inv_45.csv");
 writematrix(b_inv_test, "solve_matrices\\b_inv_45.csv");
 
+fprintf( ...
+    "Precond Test Condition Number A: %0.5g\n", ...
+    cond(A_inv_test) ...
+);
+fprintf( ...
+    "Precond Test Condition Number A^2: %0.5g\n", ...
+    cond(Asqr_inv_test) ...
+);
+fprintf( ...
+    "Precond Test Condition Number A^(-1): %0.5g\n", ...
+    cond(Ainv_inv_test) ...
+);
+fprintf( ...
+    "Precond Test Condition Number A^(-1)*A: %0.5g\n", ...
+    cond(Ainv_inv_test*A_inv_test) ...
+);
+fprintf( ...
+    "Precond Test Condition Number A^(-1)*A*A*A^(-1): %0.5g\n", ...
+    cond(Ainv_inv_test*A_inv_test*A_inv_test*Ainv_inv_test) ...
+);
+
 % Create ILU and sparse ILU and pivoted and non-pivoted version
-ilu_A = randn(8, 8);
+ilu_n = 64;
+ilu_A = generate_well_cond_rand_matrix(ilu_n, 10);
 [ilu_L, ilu_U] = ilu(sparse(ilu_A));
 writematrix(ilu_A, "solve_matrices\\ilu_A.csv");
 writematrix(full(ilu_L), "solve_matrices\\ilu_L.csv");
@@ -171,25 +233,21 @@ writematrix(full(ilu_L_pivot), "solve_matrices\\ilu_L_pivot.csv");
 writematrix(full(ilu_U_pivot), "solve_matrices\\ilu_U_pivot.csv");
 writematrix(full(ilu_P_pivot), "solve_matrices\\ilu_P_pivot.csv");
 
-ilu_sparse_A = randn(8, 8);
-for i=1:8 % Ensure sparsity
-    rand_indices = randi(8, 4, 1);
-    while(size(unique(rand_indices)) ~= 4)
-        rand_indices = randi(8, 4, 1);
-    end
-    for ind=1:4
-        j = rand_indices(ind);
-        if (i ~= j)
-            ilu_sparse_A(i, j) = 0;
-        end
-    end
-end
-for i=1:8 % Ensure diagonal dominance
-    ilu_sparse_A(i, i) = 4*(ilu_sparse_A(i, i)+sign(ilu_sparse_A(i, i))*1);
-    ilu_sparse_A(i, :) = 1/4*ilu_sparse_A(i, :);
-end
+fprintf("ILU Test Condition Number Dense A: %g\n", condest(ilu_A));
+fprintf("ILU Test Condition Number Dense L: %g\n", condest(ilu_L));
+fprintf("ILU Test Condition Number Dense U: %g\n", condest(ilu_U));
+fprintf( ...
+    "ILU Test Condition Number Dense Pivot L: %g\n", ...
+    condest(ilu_L_pivot) ...
+);
+fprintf( ...
+    "ILU Test Condition Number Dense Pivot U: %g\n", ...
+    condest(ilu_U_pivot) ...
+);
+
+ilu_sparse_A = generate_well_cond_sparse_rand_matrix(ilu_n, 5);
 [ilu_sparse_L, ilu_sparse_U] = ilu(sparse(ilu_sparse_A));
-writematrix(ilu_sparse_A, "solve_matrices\\ilu_sparse_A.csv");
+writematrix(full(ilu_sparse_A), "solve_matrices\\ilu_sparse_A.csv");
 writematrix(full(ilu_sparse_L), "solve_matrices\\ilu_sparse_L.csv");
 writematrix(full(ilu_sparse_U), "solve_matrices\\ilu_sparse_U.csv");
 [ilu_sparse_L_pivot, ilu_sparse_U_pivot, ilu_sparse_P_pivot] = ilu(sparse(ilu_sparse_A), options);
@@ -197,15 +255,44 @@ writematrix(full(ilu_sparse_L_pivot), "solve_matrices\\ilu_sparse_L_pivot.csv");
 writematrix(full(ilu_sparse_U_pivot), "solve_matrices\\ilu_sparse_U_pivot.csv");
 writematrix(full(ilu_sparse_P_pivot), "solve_matrices\\ilu_sparse_P_pivot.csv");
 
-fprintf("Sparse ILU Test Condition Number A: %g\n", cond(ilu_sparse_A));
+options4.type = "ilutp"; options4.droptol = 1e-4;
+[ilu_L_4, ilu_U_4] = ilu(ilu_sparse_A, options4);
+fprintf("ILU error 4: %g\n", norm(full(ilu_L_4*ilu_U_4-ilu_sparse_A)));
 
-tic
-gmres(A_convdiff1024, b_convdiff1024, 1024, 1e-10, 1024);
-toc
+options3.type = "ilutp"; options3.droptol = 1e-3;
+[ilu_L_3, ilu_U_3] = ilu(ilu_sparse_A, options3);
+fprintf("ILU error 3: %g\n", norm(full(ilu_L_3*ilu_U_3-ilu_sparse_A)));
 
-tic
-gmres(full(A_convdiff1024), b_convdiff1024, 1024, 1e-10, 1024);
-toc
+options2.type = "ilutp"; options2.droptol = 1e-2;
+[ilu_L_2, ilu_U_2] = ilu(ilu_sparse_A, options2);
+fprintf("ILU error 2: %g\n", norm(full(ilu_L_2*ilu_U_2-ilu_sparse_A)));
+
+options1.type = "ilutp"; options1.droptol = 1e-1;
+[ilu_L_1, ilu_U_1] = ilu(ilu_sparse_A, options1);
+fprintf("ILU error 1: %g\n", norm(full(ilu_L_1*ilu_U_1-ilu_sparse_A)));
+
+options0.type = "ilutp"; options0.droptol = 0.25;
+[ilu_L_0, ilu_U_0] = ilu(ilu_sparse_A, options0);
+fprintf("ILU error 0: %g\n", norm(full(ilu_L_0*ilu_U_0-ilu_sparse_A)));
+
+fprintf("ILU Test Condition Number Sparse A: %g\n", condest(ilu_sparse_A));
+fprintf("ILU Test Condition Number Sparse L: %g\n", condest(ilu_sparse_L));
+fprintf("ILU Test Condition Number Sparse U: %g\n", condest(ilu_sparse_U));
+fprintf("ILU Test Condition Number Sparse Pivot L: %g\n", condest(ilu_sparse_L_pivot));
+fprintf("ILU Test Condition Number Sparse Pivot U: %g\n", condest(ilu_sparse_U_pivot));
+
+function A = generate_well_cond_rand_matrix(n, diag_coeff_offset)
+    A = randn(n, n);
+    A = A + diag(diag_coeff_offset*diag(A)./abs(diag(A)));
+end
+
+function A = generate_well_cond_sparse_rand_matrix(n, diag_coeff_offset)
+    A = sprandn(n, n, sqrt(n)/n);
+    % Ensure non-zero diag and add offset
+    d = randn(n, 1);
+    d = (d+diag_coeff_offset*d./abs(d));
+    A = spdiags(d, 0, A);
+end
 
 function [A, b] = generate_conv_diff_rhs_sinxcosy(n, sigma, tau)
 

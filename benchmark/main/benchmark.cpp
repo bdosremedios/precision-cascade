@@ -2,6 +2,10 @@
 
 #include "benchmark.h"
 
+#ifdef WIN32
+#include <windows.h>
+#endif
+
 cuHandleBundle BenchmarkBase::bundle;
 fs::path BenchmarkBase::data_dir;
 
@@ -26,7 +30,11 @@ int main(int argc, char *argv[]) {
 
         // Assumes output_data is in the same directory as executable
         #ifdef WIN32
-            std::cout << fs::canonical("/proc/self/exe") << std::endl;
+            CHAR path[MAX_PATH];
+            GetModuleFileNameA(NULL, path, MAX_PATH);
+            BenchmarkBase::data_dir = (
+                fs::path(path).parent_path() / fs::path("output_data")
+            );
         #else
             BenchmarkBase::data_dir = (
                 fs::canonical("/proc/self/exe").parent_path() /

@@ -111,7 +111,9 @@ TPrecision * get_new_U_col_from_left_look(
 
         // Skip if no effect from U
         if (effecting_U_val != static_cast<TPrecision>(0.)) {
+
             for (int offset_L=col_beg_L; offset_L<col_end_L; ++offset_L) {
+
                 int row_L = h_L.row_indices[offset_L];
                 // Don't apply to own pivot row
                 if (row_L != pivot_row_hist[k]) {
@@ -121,7 +123,9 @@ TPrecision * get_new_U_col_from_left_look(
                         new_col_U[row_L] -= val_L*effecting_U_val;
                     }
                 }
+
             }
+
         }
     
     }
@@ -480,7 +484,7 @@ ILUTriplet<TMatrix, TPrecision> sparse_construct_drop_rule_ILU(
 
     }
 
-    // Create permutation dict such that every access where it should be
+    // Create permutation dict such that every access locates to correct row
     int *row_permutation_dict = static_cast<int *>(malloc(m_dim*sizeof(int)));
     for (int i=0; i<m_dim; ++i) {
         row_permutation_dict[row_permutation_map[i]] = i;

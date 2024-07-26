@@ -1802,6 +1802,8 @@ public:
     
         Vector<TPrecision> test_soln(U_tri.back_sub(Ub_tri));
 
+        Vector<TPrecision> vec(test_soln-x_tri);
+
         ASSERT_VECTOR_NEAR(
             test_soln,
             x_tri,
@@ -1819,27 +1821,47 @@ public:
         srand(time(NULL));
         const int n((rand() % 100)+100);
 
-        MatrixDense<TPrecision> temp(
-            CommonMatRandomInterface<TMatrix, TPrecision>::rand_matrix(
-                TestBase::bundle, n, n
+        TMatrix<TPrecision> U_tri(
+            NoFillMatrixSparse<double>::Random_UT(
+                TestBase::bundle,
+                n, n, 1.
+            ).template cast<TPrecision>()
+        );
+
+        Vector<TPrecision> x_tri(
+            Vector<TPrecision>::Random(TestBase::bundle, n)
+        );
+
+        Vector<TPrecision> Ub_tri(U_tri*x_tri);
+    
+        Vector<TPrecision> test_soln(U_tri.back_sub(Ub_tri));
+
+        Vector<TPrecision> vec(test_soln-x_tri);
+
+        ASSERT_VECTOR_NEAR(
+            test_soln,
+            x_tri,
+            Tol<TPrecision>::substitution_tol_T(
+                approx_U_tri_cond_number_upbound, n
             )
         );
-    
-        Scalar<TPrecision> scale_coeff(static_cast<TPrecision>(30.));
-        for (int i=0; i<n; ++i) {
-            Scalar<TPrecision> u_i_i = temp.get_elem(i, i);
-            Scalar<TPrecision> abs_u_i_i = u_i_i;
-            abs_u_i_i.abs();
-            temp.set_elem(i, i, (u_i_i/abs_u_i_i)*scale_coeff+u_i_i); 
-        }
 
-        for (int i=0; i<n; ++i) {
-            for (int j=0; j<i; ++j) {
-                temp.set_elem(i, j, SCALAR_ZERO<TPrecision>::get()); 
-            }
-        }
+    }
 
-        TMatrix<TPrecision> U_tri(temp);
+    template <typename TPrecision>
+    void TestRandomSparseBackwardSubstitution() {
+
+        const double approx_U_tri_cond_number_upbound(2.3);
+        srand(time(NULL));
+        const int n((rand() % 100)+100);
+
+        TMatrix<TPrecision> U_tri(
+            NoFillMatrixSparse<double>::Random_UT(
+                TestBase::bundle,
+                n, n,
+                sqrt(static_cast<double>(n))/static_cast<double>(n)
+            ).template cast<TPrecision>()
+        );
 
         Vector<TPrecision> x_tri(TestBase::bundle, n);
         for (int i=0; i<n; ++i) { 
@@ -1853,6 +1875,8 @@ public:
         Vector<TPrecision> Ub_tri(U_tri*x_tri);
     
         Vector<TPrecision> test_soln(U_tri.back_sub(Ub_tri));
+
+        Vector<TPrecision> vec(test_soln-x_tri);
 
         ASSERT_VECTOR_NEAR(
             test_soln,
@@ -1881,6 +1905,8 @@ public:
         ));
 
         Vector<TPrecision> test_soln(L_tri.frwd_sub(Lb_tri));
+
+        Vector<TPrecision> vec(test_soln-x_tri);
 
         ASSERT_VECTOR_NEAR(
             test_soln,
@@ -1933,6 +1959,8 @@ public:
         Vector<TPrecision> Lb_tri(L_tri*x_tri);
     
         Vector<TPrecision> test_soln(L_tri.frwd_sub(Lb_tri));
+
+        Vector<TPrecision> vec(test_soln-x_tri);
 
         ASSERT_VECTOR_NEAR(
             test_soln,

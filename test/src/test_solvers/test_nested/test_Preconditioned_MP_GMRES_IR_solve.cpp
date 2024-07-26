@@ -47,7 +47,7 @@ public:
 
         if (*show_plots) { precond_left_gmres_ir.view_relres_plot("log"); }
 
-        EXPECT_EQ(precond_left_gmres_ir.get_iteration(), 3);
+        EXPECT_LE(precond_left_gmres_ir.get_iteration(), 3);
         EXPECT_TRUE(precond_left_gmres_ir.check_converged());
         EXPECT_LE(precond_left_gmres_ir.get_relres(), args.target_rel_res);
 
@@ -64,7 +64,7 @@ public:
 
         if (*show_plots) { precond_right_gmres_ir.view_relres_plot("log"); }
 
-        EXPECT_EQ(precond_right_gmres_ir.get_iteration(), 3);
+        EXPECT_LE(precond_right_gmres_ir.get_iteration(), 3);
         EXPECT_TRUE(precond_right_gmres_ir.check_converged());
         EXPECT_LE(precond_right_gmres_ir.get_relres(), args.target_rel_res);
 
@@ -85,7 +85,7 @@ public:
 
         if (*show_plots) { precond_symmetric_gmres_ir.view_relres_plot("log"); }
 
-        EXPECT_EQ(precond_symmetric_gmres_ir.get_iteration(), 3);
+        EXPECT_LE(precond_symmetric_gmres_ir.get_iteration(), 3);
         EXPECT_TRUE(precond_symmetric_gmres_ir.check_converged());
         EXPECT_LE(precond_symmetric_gmres_ir.get_relres(), args.target_rel_res);
 

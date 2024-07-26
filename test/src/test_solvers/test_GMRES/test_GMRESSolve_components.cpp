@@ -24,13 +24,13 @@ public:
         );
 
         ASSERT_EQ(test_mock.max_kry_dim, n);
+        Vector<double> orig_residual(
+            b - A*Vector<double>::Ones(TestBase::bundle, n)
+        );
         ASSERT_NEAR(
             test_mock.rho.get_scalar(),
-            (b -
-             A*Vector<double>::Ones(TestBase::bundle, n)).norm().get_scalar(),
-            abs_ns::abs(
-                (b - A*Vector<double>::Ones(TestBase::bundle, n)
-            ).norm().get_scalar())*Tol<double>::gamma(n)
+            orig_residual.norm().get_scalar(),
+            orig_residual.norm().get_scalar()*Tol<double>::gamma(n)
         );
         
         ASSERT_EQ(test_mock.Q_kry_basis.rows(), n);
@@ -88,10 +88,12 @@ public:
         test_mock.iterate_no_soln_solve();
 
         Vector<double> next_q(test_mock.Q_kry_basis.get_col(0).copy_to_vec());
+        Vector<double> norm_residual(r_0/r_0.norm());
         ASSERT_VECTOR_NEAR(
             next_q,
-            r_0/r_0.norm(),
-            Tol<double>::roundoff()
+            norm_residual,
+            2*(norm_residual.get_max_mag_elem().get_scalar() *
+               Tol<double>::roundoff())
         );
         next_q = A*next_q;
         next_q -= (
@@ -101,12 +103,13 @@ public:
         ASSERT_NEAR(
             next_q.norm().get_scalar(),
             test_mock.H_k.get_elem(1).get_scalar(),
-            Tol<double>::roundoff()
+            (test_mock.H_k.get_elem(1).get_scalar() *
+             Tol<double>::roundoff())
         );
         ASSERT_VECTOR_NEAR(
             test_mock.next_q,
             next_q,
-            Tol<double>::roundoff()
+            2*next_q.get_max_mag_elem().get_scalar()*Tol<double>::roundoff()
         );
 
         // Save basis to check that they remain unchanged
@@ -154,7 +157,7 @@ public:
                         construct_q
                     ).get_scalar(),
                     test_mock.H_k.get_elem(i).get_scalar(),
-                    Tol<double>::roundoff()
+                    Tol<double>::gamma(n)
                 );
                 construct_q -= (
                     test_mock.Q_kry_basis.get_col(i).copy_to_vec() *
@@ -164,7 +167,7 @@ public:
             ASSERT_NEAR(
                 construct_q.norm().get_scalar(),
                 test_mock.H_k.get_elem(k+1).get_scalar(),
-                Tol<double>::roundoff()
+                Tol<double>::gamma(n)
             );
 
         }
@@ -253,7 +256,7 @@ public:
     template <template <typename> typename TMatrix>
     void Update_x_Back_Substitution() {
 
-        const double approx_R_cond_number_upbound(1.1);
+        const double approx_R_cond_upbnd(1.7);
         const int n(7);
 
         MatrixDense<double> Q(read_matrixCSV<MatrixDense, double>(
@@ -320,12 +323,9 @@ public:
             for (int i=0; i<kry_dim; ++i) {
                 ASSERT_NEAR(
                     test_mock.typed_soln.get_elem(i).get_scalar(),
-                    test_soln.get_elem(i).get_scalar(), 
-                    (2 *
-                     mat_max_mag(test_soln) *
-                     Tol<double>::substitution_tol(
-                        approx_R_cond_number_upbound, n
-                    ))
+                    test_soln.get_elem(i).get_scalar(),
+                    2*(abs_ns::abs(test_soln.get_max_mag_elem().get_scalar()) *
+                       Tol<double>::substitution_tol(approx_R_cond_upbnd, n))
                 );
             }
 

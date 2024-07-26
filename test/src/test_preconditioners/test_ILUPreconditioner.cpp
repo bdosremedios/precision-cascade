@@ -63,10 +63,10 @@ public:
     template<template <typename> typename TMatrix>
     void TestApplyInverseM() {
 
-        constexpr int n(8);
         TMatrix<double> A(read_matrixCSV<TMatrix, double>(
             TestBase::bundle, solve_matrix_dir / fs::path("ilu_A.csv")
         ));
+        int n(A.rows());
         ILUPreconditioner<TMatrix, double> ilu(A); // Make dense LU
 
         // Test matching ILU to MATLAB for the dense matrix
@@ -84,10 +84,10 @@ public:
     void TestApplyInverseM_Pivoted() {
 
         // Test that using a completely dense matrix one just gets a LU
-        constexpr int n(8);
         TMatrix<double> A(read_matrixCSV<TMatrix, double>(
             TestBase::bundle, solve_matrix_dir / fs::path("ilu_A.csv")
         ));
+        int n(A.rows());
         ILUPreconditioner<TMatrix, double> ilu(A);
         
         // Test matching ILU to MATLAB for the dense matrix

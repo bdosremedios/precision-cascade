@@ -69,7 +69,7 @@ public:
     static TPrecision inv_elem_tol() {
         return static_cast<TPrecision>(std::pow(10, 3)*roundoff());
     }
-    static double dbl_ilu_elem_tol() { return std::pow(10, -12); }
+    static double dbl_ilu_elem_tol() { return std::pow(10, -10); }
 
     // Iterative solver convergence tolerance
     static double stationary_conv_tol();

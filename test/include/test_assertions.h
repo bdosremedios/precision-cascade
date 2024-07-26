@@ -300,10 +300,9 @@ void _ASSERT_MATRIX_LOWTRI(
 
     for (int i=0; i<test.rows(); ++i) {
         for (int j=i+1; j<test.cols(); ++j) {
-            ASSERT_NEAR(
+            ASSERT_EQ(
                 test.get_elem(i, j).get_scalar(),
-                static_cast<TPrecision>(0),
-                tol
+                static_cast<TPrecision>(0)
             );
         }
     }
@@ -326,10 +325,9 @@ void _ASSERT_MATRIX_UPPTRI(
 
     for (int i=0; i<test.rows(); ++i) {
         for (int j=0; j<i; ++j) {
-            ASSERT_NEAR(
+            ASSERT_EQ(
                 test.get_elem(i, j).get_scalar(),
-                static_cast<TPrecision>(0),
-                tol
+                static_cast<TPrecision>(0)
             );
         }
     }

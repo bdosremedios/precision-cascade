@@ -10,7 +10,6 @@ public:
     void TestMatchesDenseLU() {
 
         // Test that using a completely dense matrix one just gets LU
-        constexpr int n(8);
         TMatrix<double> A(read_matrixCSV<TMatrix, double>(
             TestBase::bundle, solve_matrix_dir / fs::path("ilu_A.csv")
         ));
@@ -37,6 +36,17 @@ public:
             )
         );
 
+        double norm_diff = (
+            (MatrixDense<double>(L) * MatrixDense<double>(U) -
+             MatrixDense<double>(A)).norm().get_scalar()
+        );
+        ASSERT_NEAR(
+            (MatrixDense<double>(ilu_precond.get_L()) *
+             MatrixDense<double>(ilu_precond.get_U()) -
+             MatrixDense<double>(A)).norm().get_scalar(),
+            norm_diff,
+            1e-10
+        );
         ASSERT_MATRIX_NEAR(
             ilu_precond.get_L(),
             L,
@@ -54,11 +64,20 @@ public:
     void TestMatchesSparseILU0() {
 
         // Test sparsity matches zero pattern for ILU0 on sparse A
-        constexpr int n(8);
         TMatrix<double> A(read_matrixCSV<TMatrix, double>(
             TestBase::bundle, solve_matrix_dir / fs::path("ilu_sparse_A.csv")
         ));
         ILUPreconditioner<TMatrix, double> ilu_precond(A);
+
+        ASSERT_MATRIX_SAMESPARSITY(
+            ilu_precond.get_L(), A, Tol<double>::roundoff()
+        );
+        ASSERT_MATRIX_SAMESPARSITY(
+            ilu_precond.get_U(), A, Tol<double>::roundoff()
+        );
+
+        ASSERT_MATRIX_LOWTRI(ilu_precond.get_L(), Tol<double>::roundoff());
+        ASSERT_MATRIX_UPPTRI(ilu_precond.get_U(), Tol<double>::roundoff());
 
         TMatrix<double> L(read_matrixCSV<TMatrix, double>(
             TestBase::bundle, solve_matrix_dir / fs::path("ilu_sparse_L.csv")
@@ -67,12 +86,17 @@ public:
             TestBase::bundle, solve_matrix_dir / fs::path("ilu_sparse_U.csv")
         ));
 
-        ASSERT_MATRIX_SAMESPARSITY(L, A, Tol<double>::roundoff());
-        ASSERT_MATRIX_SAMESPARSITY(U, A, Tol<double>::roundoff());
-
-        ASSERT_MATRIX_LOWTRI(ilu_precond.get_L(), Tol<double>::roundoff());
-        ASSERT_MATRIX_UPPTRI(ilu_precond.get_U(), Tol<double>::roundoff());
-
+        double norm_diff = (
+            (MatrixDense<double>(L) * MatrixDense<double>(U) -
+             MatrixDense<double>(A)).norm().get_scalar()
+        );
+        ASSERT_NEAR(
+            (MatrixDense<double>(ilu_precond.get_L()) *
+             MatrixDense<double>(ilu_precond.get_U()) -
+             MatrixDense<double>(A)).norm().get_scalar(),
+            norm_diff,
+            1e-10
+        );
         ASSERT_MATRIX_NEAR(
             ilu_precond.get_L(), L, Tol<double>::dbl_ilu_elem_tol()
         );
