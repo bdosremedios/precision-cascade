@@ -22,8 +22,8 @@ class BenchmarkBase: public testing::Test
 {
 protected:
 
-    const int n_runs = 7;
-    bool prototyping_speed_up = true;
+    bool prototyping_speed_up = false;
+    const int n_runs = (prototyping_speed_up) ? 1 : 7;
 
 public:
 
@@ -59,7 +59,7 @@ public:
     const int run_fast_tests_count = 200;
     const int dense_subset_cols = 200;
 
-    const int gmres_iters = 200;
+    const int gmres_iters = (prototyping_speed_up) ? 5 : 200;
     const int nested_gmres_inner_iters = gmres_iters;
     const int nested_gmres_outer_iters = (prototyping_speed_up) ? 5 : 300;
 
