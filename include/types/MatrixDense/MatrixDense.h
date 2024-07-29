@@ -62,6 +62,10 @@ private:
         return to_double();
     }
 
+    static inline double enlarge_random_double(double val) {
+        return val + val/abs_ns::abs(val);
+    }
+
 public:
 
     class Block; class Col; // Forward declaration of nested classes
@@ -470,14 +474,16 @@ public:
 
     }
 
-    // Needed for testing (don't need to optimize performance)
+    // Generate a well conditioned pseudo-random matrix with
+    // coefficient added to diagonal to avoid illconditioned (don't need to
+    // optimize performance)
     static MatrixDense<TPrecision> Random(
         const cuHandleBundle &arg_cu_handles, int arg_m, int arg_n
     ) {
 
         std::random_device rd;
         std::mt19937 gen(rd());
-        std::uniform_real_distribution<double> dist(-1., 1.);
+        std::normal_distribution<double> dist(0., 1.);
 
         TPrecision *h_mat = static_cast<TPrecision *>(
             malloc(arg_m*arg_n*sizeof(TPrecision))
@@ -485,9 +491,17 @@ public:
         
         for (int j=0; j<arg_n; ++j) {
             for (int i=0; i<arg_m; ++i) {
-                h_mat[i+j*arg_m] = static_cast<TPrecision>(dist(gen)); 
+                if (i != j) {
+                    h_mat[i+j*arg_m] = static_cast<TPrecision>(0.1*dist(gen));
+                }
             }
         }
+        for (int k=0; k<std::min(arg_n, arg_m); ++k) {
+            h_mat[k+k*arg_m] = static_cast<TPrecision>(
+                enlarge_random_double(0.1*dist(gen))
+            );
+        }
+
         MatrixDense<TPrecision> created_mat(
             arg_cu_handles, h_mat, arg_m, arg_n
         );
@@ -498,34 +512,34 @@ public:
     
     }
 
-    // Needed for testing (don't need to optimize performance)
+    // Generate a well conditioned pseudo-random upper triangular matrix with
+    // coefficient added to diagonal to avoid illconditioned (don't need to
+    // optimize performance)
     static MatrixDense<TPrecision> Random_UT(
         const cuHandleBundle &arg_cu_handles, int arg_m, int arg_n
     ) {
 
         std::random_device rd;
         std::mt19937 gen(rd());
-        std::uniform_real_distribution<double> dist(-1., 1.);
+        std::normal_distribution<double> dist(0., 1.);
 
         TPrecision *h_mat = static_cast<TPrecision *>(
             malloc(arg_m*arg_n*sizeof(TPrecision))
         );
-        
+
         for (int j=0; j<arg_n; ++j) {
             for (int i=0; i<arg_m; ++i) {
-                if (i <= j) {
-                    h_mat[i+j*arg_m] = static_cast<TPrecision>(dist(gen));
-                    if (i == j) { // Re-roll out of zeros on the diagonal
-                        while(h_mat[i+j*arg_m] == static_cast<TPrecision>(0.)) {
-                            h_mat[i+j*arg_m] = static_cast<TPrecision>(
-                                dist(gen)
-                            );
-                        }
-                    }
-                } else {
-                    h_mat[i+j*arg_m] = static_cast<TPrecision>(0.);
+                if (i < j) {
+                    h_mat[i+j*arg_m] = static_cast<TPrecision>(0.1*dist(gen));
+                } else if (i > j) {
+                    h_mat[i+j*arg_m] = static_cast<TPrecision>(0.); 
                 }
             }
+        }
+        for (int k=0; k<std::min(arg_n, arg_m); ++k) {
+            h_mat[k+k*arg_m] = static_cast<TPrecision>(
+                enlarge_random_double(0.1*dist(gen))
+            );
         }
 
         MatrixDense<TPrecision> created_mat(
@@ -538,35 +552,36 @@ public:
     
     }
 
-    // Needed for testing (don't need to optimize performance)
+    // Generate a well conditioned pseudo-random lower triangular matrix with
+    // coefficient added to diagonal to avoid illconditioned (don't need to
+    // optimize performance)
     static MatrixDense<TPrecision> Random_LT(
         const cuHandleBundle &arg_cu_handles, int arg_m, int arg_n
     ) {
 
         std::random_device rd;
         std::mt19937 gen(rd());
-        std::uniform_real_distribution<double> dist(-1., 1.);
+        std::normal_distribution<double> dist(0., 1.);
 
         TPrecision *h_mat = static_cast<TPrecision *>(
             malloc(arg_m*arg_n*sizeof(TPrecision))
         );
-        
+
         for (int j=0; j<arg_n; ++j) {
             for (int i=0; i<arg_m; ++i) {
-                if (i >= j) {
-                    h_mat[i+j*arg_m] = static_cast<TPrecision>(dist(gen));
-                    if (i == j) { // Re-roll out of zeros on the diagonal
-                        while(h_mat[i+j*arg_m] == static_cast<TPrecision>(0.)) {
-                            h_mat[i+j*arg_m] = static_cast<TPrecision>(
-                                dist(gen)
-                            );
-                        }
-                    }
-                } else {
+                if (i < j) {
                     h_mat[i+j*arg_m] = static_cast<TPrecision>(0.);
+                } else if (i > j) {
+                    h_mat[i+j*arg_m] = static_cast<TPrecision>(0.1*dist(gen)); 
                 }
             }
         }
+        for (int k=0; k<std::min(arg_n, arg_m); ++k) {
+            h_mat[k+k*arg_m] = static_cast<TPrecision>(
+                enlarge_random_double(0.1*dist(gen))
+            );
+        }
+
         MatrixDense<TPrecision> created_mat(
             arg_cu_handles, h_mat, arg_m, arg_n
         );

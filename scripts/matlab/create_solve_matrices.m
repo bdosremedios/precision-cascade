@@ -271,7 +271,7 @@ options1.type = "ilutp"; options1.droptol = 1e-1;
 [ilu_L_1, ilu_U_1] = ilu(ilu_sparse_A, options1);
 fprintf("ILU error 1: %g\n", norm(full(ilu_L_1*ilu_U_1-ilu_sparse_A)));
 
-options0.type = "ilutp"; options0.droptol = 0.25;
+options0.type = "ilutp"; options0.droptol = 1e0;
 [ilu_L_0, ilu_U_0] = ilu(ilu_sparse_A, options0);
 fprintf("ILU error 0: %g\n", norm(full(ilu_L_0*ilu_U_0-ilu_sparse_A)));
 

@@ -1676,11 +1676,17 @@ TEST_F(MatrixDense_Substitution_Test, TestForwardSubstitution) {
     TestForwardSubstitution<double>();
 }
 
-// TEST_F(MatrixDense_Substitution_Test, TestRandomForwardSubstitution) {
-//     TestRandomForwardSubstitution<__half>();
-//     TestRandomForwardSubstitution<float>();
-//     TestRandomForwardSubstitution<double>();
-// }
+TEST_F(MatrixDense_Substitution_Test, TestRandomForwardSubstitution) {
+    TestRandomForwardSubstitution<__half>();
+    TestRandomForwardSubstitution<float>();
+    TestRandomForwardSubstitution<double>();
+}
+
+TEST_F(MatrixDense_Substitution_Test, TestRandomSparseForwardSubstitution) {
+    TestRandomSparseForwardSubstitution<__half>();
+    TestRandomSparseForwardSubstitution<float>();
+    TestRandomSparseForwardSubstitution<double>();
+}
 
 TEST_F(MatrixDense_Substitution_Test, TestBackwardSubstitution) {
     TestBackwardSubstitution<__half>();
@@ -1688,14 +1694,14 @@ TEST_F(MatrixDense_Substitution_Test, TestBackwardSubstitution) {
     TestBackwardSubstitution<double>();
 }
 
-// TEST_F(MatrixDense_Substitution_Test, TestRandomBackwardSubstitution) {
-//     TestRandomBackwardSubstitution<__half>();
-//     TestRandomBackwardSubstitution<float>();
-//     TestRandomBackwardSubstitution<double>();
-// }
+TEST_F(MatrixDense_Substitution_Test, TestRandomBackwardSubstitution) {
+    TestRandomBackwardSubstitution<__half>();
+    TestRandomBackwardSubstitution<float>();
+    TestRandomBackwardSubstitution<double>();
+}
 
-// TEST_F(MatrixDense_Substitution_Test, TestRandomSparseBackwardSubstitution) {
-//     TestRandomSparseBackwardSubstitution<__half>();
-//     TestRandomSparseBackwardSubstitution<float>();
-//     TestRandomSparseBackwardSubstitution<double>();
-// }
+TEST_F(MatrixDense_Substitution_Test, TestRandomSparseBackwardSubstitution) {
+    TestRandomSparseBackwardSubstitution<__half>();
+    TestRandomSparseBackwardSubstitution<float>();
+    TestRandomSparseBackwardSubstitution<double>();
+}

@@ -204,6 +204,10 @@ private:
 
     }
 
+    static inline double enlarge_random_double(double val) {
+        return val + val/abs_ns::abs(val);
+    }
+
 public:
 
     class Block; class Col; // Forward declaration of nested classes
@@ -795,6 +799,9 @@ public:
 
     }
 
+    // Generate a well conditioned pseudo-random matrix with
+    // coefficient added to diagonal to avoid illconditioned (don't need to
+    // optimize performance)
     static NoFillMatrixSparse<TPrecision> Random(
         const cuHandleBundle &arg_cu_handles,
         int arg_m_rows,
@@ -810,7 +817,7 @@ public:
         
         std::random_device rd;
         std::mt19937 gen(rd());
-        std::uniform_real_distribution<double> val_dist(-1., 1.);
+        std::normal_distribution<double> val_dist(0., 1.);
         std::uniform_real_distribution<double> fill_prob_dist(0., 1.);
 
         int *h_col_offsets = static_cast<int *>(
@@ -823,26 +830,26 @@ public:
         for (int j=0; j<arg_n_cols; ++j) {
             h_col_offsets[j] = curr_nnz;
             for (int i=0; i<arg_m_rows; ++i) {
-                // Enforce diagonal is non-zero for sake of non-singularity
+
+                TPrecision val = static_cast<TPrecision>(0.);
+
                 if (i == j) {
-                    TPrecision val = val_dist(gen);
-                    while (val == static_cast<TPrecision>(0.)) {
-                        val = val_dist(gen);
-                    }
-                    h_vec_row_indices.push_back(i);
-                    h_vec_vals.push_back(val);
-                    ++curr_nnz;
+                    val = static_cast<TPrecision>(
+                        enlarge_random_double(0.1*val_dist(gen))
+                    );
                 } else if (
                     (fill_prob != 0.) &&
                     (fill_prob_dist(gen) <= fill_prob)
                 ) {
-                    TPrecision val = val_dist(gen);
-                    if (val != static_cast<TPrecision>(0.)) {
-                        h_vec_row_indices.push_back(i);
-                        h_vec_vals.push_back(val);
-                        ++curr_nnz;
-                    }
+                    val = static_cast<TPrecision>(0.1*val_dist(gen));
                 }
+
+                if (val != static_cast<TPrecision>(0.)) {
+                    h_vec_row_indices.push_back(i);
+                    h_vec_vals.push_back(val);
+                    ++curr_nnz;
+                }
+
             }
         }
         h_col_offsets[arg_n_cols] = curr_nnz;
@@ -868,6 +875,9 @@ public:
 
     }
 
+    // Generate a well conditioned pseudo-random upper triangular matrix with
+    // coefficient added to diagonal to avoid illconditioned (don't need to
+    // optimize performance)
     static NoFillMatrixSparse<TPrecision> Random_UT(
         const cuHandleBundle &arg_cu_handles,
         int arg_m_rows,
@@ -883,7 +893,7 @@ public:
         
         std::random_device rd;
         std::mt19937 gen(rd());
-        std::uniform_real_distribution<double> val_dist(-1., 1.);
+        std::normal_distribution<double> val_dist(0., 1.);
         std::uniform_real_distribution<double> fill_prob_dist(0., 1.);
 
         int *h_col_offsets = static_cast<int *>(malloc((arg_n_cols+1)*sizeof(int)));
@@ -894,23 +904,26 @@ public:
         for (int j=0; j<arg_n_cols; ++j) {
             h_col_offsets[j] = curr_nnz;
             for (int i=0; ((i <= j) && (i < arg_m_rows)); ++i) {
-                // Enforce diagonal is non-zero for sake of non-singularity
+
+                TPrecision val = static_cast<TPrecision>(0.);
+
                 if (i == j) {
-                    TPrecision val = val_dist(gen);
-                    while (val == static_cast<TPrecision>(0.)) {
-                        val = val_dist(gen);
-                    }
+                    val = static_cast<TPrecision>(
+                        enlarge_random_double(0.1*val_dist(gen))
+                    );
+                } else if (
+                    (fill_prob != 0.) &&
+                    (fill_prob_dist(gen) <= fill_prob)
+                ) {
+                    val = static_cast<TPrecision>(0.1*val_dist(gen));
+                }
+
+                if (val != static_cast<TPrecision>(0.)) {
                     h_vec_row_indices.push_back(i);
                     h_vec_vals.push_back(val);
                     ++curr_nnz;
-                } else if ((fill_prob != 0.) && (fill_prob_dist(gen) <= fill_prob)) {
-                    TPrecision val = val_dist(gen);
-                    if (val != static_cast<TPrecision>(0.)) {
-                        h_vec_row_indices.push_back(i);
-                        h_vec_vals.push_back(val);
-                        ++curr_nnz;
-                    }
                 }
+
             }
         }
         h_col_offsets[arg_n_cols] = curr_nnz;
@@ -936,6 +949,9 @@ public:
 
     }
 
+    // Generate a well conditioned pseudo-random lower triangular matrix with
+    // coefficient added to diagonal to avoid illconditioned (don't need to
+    // optimize performance)
     static NoFillMatrixSparse<TPrecision> Random_LT(
         const cuHandleBundle &arg_cu_handles,
         int arg_m_rows,
@@ -951,7 +967,7 @@ public:
         
         std::random_device rd;
         std::mt19937 gen(rd());
-        std::uniform_real_distribution<double> val_dist(-1., 1.);
+        std::normal_distribution<double> val_dist(0., 1.);
         std::uniform_real_distribution<double> fill_prob_dist(0., 1.);
 
         int *h_col_offsets = static_cast<int *>(
@@ -964,26 +980,26 @@ public:
         for (int j=0; j<arg_n_cols; ++j) {
             h_col_offsets[j] = curr_nnz;
             for (int i=j; i<arg_m_rows; ++i) {
-                // Enforce diagonal is non-zero for sake of non-singularity
+
+                TPrecision val = static_cast<TPrecision>(0.);
+
                 if (i == j) {
-                    TPrecision val = val_dist(gen);
-                    while (val == static_cast<TPrecision>(0.)) {
-                        val = val_dist(gen);
-                    }
-                    h_vec_row_indices.push_back(i);
-                    h_vec_vals.push_back(val);
-                    ++curr_nnz;
+                    val = static_cast<TPrecision>(
+                        enlarge_random_double(0.1*val_dist(gen))
+                    );
                 } else if (
                     (fill_prob != 0.) &&
                     (fill_prob_dist(gen) <= fill_prob)
                 ) {
-                    TPrecision val = val_dist(gen);
-                    if (val != static_cast<TPrecision>(0.)) {
-                        h_vec_row_indices.push_back(i);
-                        h_vec_vals.push_back(val);
-                        ++curr_nnz;
-                    }
+                    val = static_cast<TPrecision>(0.1*val_dist(gen));
                 }
+
+                if (val != static_cast<TPrecision>(0.)) {
+                    h_vec_row_indices.push_back(i);
+                    h_vec_vals.push_back(val);
+                    ++curr_nnz;
+                }
+
             }
         }
         h_col_offsets[arg_n_cols] = curr_nnz;

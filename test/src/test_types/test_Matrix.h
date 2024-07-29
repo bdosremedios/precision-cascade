@@ -1785,113 +1785,8 @@ class Matrix_Substitution_Test: public TestBase
 public:
 
     template <typename TPrecision>
-    void TestBackwardSubstitution() {
-
-        const double approx_U_tri_cond_number_upbound(2.5);
-        constexpr int n(90);
-
-        TMatrix<TPrecision> U_tri(read_matrixCSV<TMatrix, TPrecision>(
-                TestBase::bundle, solve_matrix_dir / fs::path("U_tri_90.csv")
-        ));
-        Vector<TPrecision> x_tri(read_vectorCSV<TPrecision>(
-            TestBase::bundle, solve_matrix_dir / fs::path("x_tri_90.csv")
-        ));
-        Vector<TPrecision> Ub_tri(read_vectorCSV<TPrecision>(
-            TestBase::bundle, solve_matrix_dir / fs::path("Ub_tri_90.csv")
-        ));
-    
-        Vector<TPrecision> test_soln(U_tri.back_sub(Ub_tri));
-
-        Vector<TPrecision> vec(test_soln-x_tri);
-
-        ASSERT_VECTOR_NEAR(
-            test_soln,
-            x_tri,
-            Tol<TPrecision>::substitution_tol_T(
-                approx_U_tri_cond_number_upbound, 90
-            )
-        );
-
-    }
-    
-    template <typename TPrecision>
-    void TestRandomBackwardSubstitution() {
-
-        const double approx_U_tri_cond_number_upbound(2.3);
-        srand(time(NULL));
-        const int n((rand() % 100)+100);
-
-        TMatrix<TPrecision> U_tri(
-            NoFillMatrixSparse<double>::Random_UT(
-                TestBase::bundle,
-                n, n, 1.
-            ).template cast<TPrecision>()
-        );
-
-        Vector<TPrecision> x_tri(
-            Vector<TPrecision>::Random(TestBase::bundle, n)
-        );
-
-        Vector<TPrecision> Ub_tri(U_tri*x_tri);
-    
-        Vector<TPrecision> test_soln(U_tri.back_sub(Ub_tri));
-
-        Vector<TPrecision> vec(test_soln-x_tri);
-
-        ASSERT_VECTOR_NEAR(
-            test_soln,
-            x_tri,
-            Tol<TPrecision>::substitution_tol_T(
-                approx_U_tri_cond_number_upbound, n
-            )
-        );
-
-    }
-
-    template <typename TPrecision>
-    void TestRandomSparseBackwardSubstitution() {
-
-        const double approx_U_tri_cond_number_upbound(2.3);
-        srand(time(NULL));
-        const int n((rand() % 100)+100);
-
-        TMatrix<TPrecision> U_tri(
-            NoFillMatrixSparse<double>::Random_UT(
-                TestBase::bundle,
-                n, n,
-                sqrt(static_cast<double>(n))/static_cast<double>(n)
-            ).template cast<TPrecision>()
-        );
-
-        Vector<TPrecision> x_tri(TestBase::bundle, n);
-        for (int i=0; i<n; ++i) { 
-            if ((rand() % 100) < 50) {
-                x_tri.set_elem(i, SCALAR_ONE<TPrecision>::get());
-            } else {
-                x_tri.set_elem(i, SCALAR_MINUS_ONE<TPrecision>::get());
-            }
-        }
-
-        Vector<TPrecision> Ub_tri(U_tri*x_tri);
-    
-        Vector<TPrecision> test_soln(U_tri.back_sub(Ub_tri));
-
-        Vector<TPrecision> vec(test_soln-x_tri);
-
-        ASSERT_VECTOR_NEAR(
-            test_soln,
-            x_tri,
-            Tol<TPrecision>::substitution_tol_T(
-                approx_U_tri_cond_number_upbound, n
-            )
-        );
-
-    }
-
-    template <typename TPrecision>
     void TestForwardSubstitution() {
 
-        const double approx_L_tri_cond_number_upbound(2.5);
         const int n(90);
 
         TMatrix<TPrecision> L_tri(read_matrixCSV<TMatrix, TPrecision>(
@@ -1906,14 +1801,10 @@ public:
 
         Vector<TPrecision> test_soln(L_tri.frwd_sub(Lb_tri));
 
-        Vector<TPrecision> vec(test_soln-x_tri);
-
         ASSERT_VECTOR_NEAR(
             test_soln,
             x_tri,
-            Tol<TPrecision>::substitution_tol_T(
-                approx_L_tri_cond_number_upbound, 90
-            )
+            x_tri.get_max_mag_elem().get_scalar()*Tol<TPrecision>::gamma_T(n)
         );
 
     }
@@ -1921,53 +1812,129 @@ public:
     template <typename TPrecision>
     void TestRandomForwardSubstitution() {
 
-        const double approx_L_tri_cond_number_upbound(2.3);
         srand(time(NULL));
         const int n(100 + (rand() % 100));
 
-        MatrixDense<TPrecision> temp(
-            CommonMatRandomInterface<TMatrix, TPrecision>::rand_matrix(
-                TestBase::bundle, n, n
-            )
+        TMatrix<TPrecision> L_tri(
+            MatrixDense<TPrecision>::Random_LT(TestBase::bundle, n, n)
         );
 
-        Scalar<TPrecision> scale_coeff(static_cast<TPrecision>(30.));
-        for (int i=0; i<n; ++i) {
-            Scalar<TPrecision> l_i_i = temp.get_elem(i, i);
-            Scalar<TPrecision> abs_l_i_i = l_i_i;
-            abs_l_i_i.abs();
-            temp.set_elem(i, i, (l_i_i/abs_l_i_i)*scale_coeff+l_i_i);
-        }
-
-        for (int i=0; i<n; ++i) {
-            for (int j=i+1; j<n; ++j) {
-                temp.set_elem(i, j, SCALAR_ZERO<TPrecision>::get()); 
-            }
-        }
-
-        TMatrix<TPrecision> L_tri(temp);
-
-        Vector<TPrecision> x_tri(TestBase::bundle, n);
-        for (int i=0; i<n; ++i) { 
-            if ((rand() % 100) < 50) {
-                x_tri.set_elem(i, SCALAR_ONE<TPrecision>::get());
-            } else {
-                x_tri.set_elem(i, SCALAR_MINUS_ONE<TPrecision>::get());
-            }
-        }
-
+        Vector<TPrecision> x_tri(
+            Vector<TPrecision>::Random(TestBase::bundle, n)
+        );
         Vector<TPrecision> Lb_tri(L_tri*x_tri);
-    
-        Vector<TPrecision> test_soln(L_tri.frwd_sub(Lb_tri));
 
-        Vector<TPrecision> vec(test_soln-x_tri);
+        Vector<TPrecision> test_soln(L_tri.frwd_sub(Lb_tri));
 
         ASSERT_VECTOR_NEAR(
             test_soln,
             x_tri,
-            Tol<TPrecision>::substitution_tol_T(
-                approx_L_tri_cond_number_upbound, n
-            )
+            x_tri.get_max_mag_elem().get_scalar()*Tol<TPrecision>::gamma_T(n)
+        );
+
+    }
+
+    template <typename TPrecision>
+    void TestRandomSparseForwardSubstitution() {
+
+        srand(time(NULL));
+        const int n((rand() % 100)+100);
+
+        TMatrix<TPrecision> L_tri(
+            NoFillMatrixSparse<double>::Random_LT(
+                TestBase::bundle,
+                n, n,
+                sqrt(static_cast<double>(n))/static_cast<double>(n)
+            ).template cast<TPrecision>()
+        );
+        Vector<TPrecision> x_tri(
+            Vector<TPrecision>::Random(TestBase::bundle, n)
+        );
+        Vector<TPrecision> Lb_tri(L_tri*x_tri);
+
+        Vector<TPrecision> test_soln(L_tri.frwd_sub(Lb_tri));
+
+        ASSERT_VECTOR_NEAR(
+            test_soln,
+            x_tri,
+            x_tri.get_max_mag_elem().get_scalar()*Tol<TPrecision>::gamma_T(n)
+        );
+
+    }
+
+    template <typename TPrecision>
+    void TestBackwardSubstitution() {
+
+        constexpr int n(90);
+
+        TMatrix<TPrecision> U_tri(read_matrixCSV<TMatrix, TPrecision>(
+                TestBase::bundle, solve_matrix_dir / fs::path("U_tri_90.csv")
+        ));
+        Vector<TPrecision> x_tri(read_vectorCSV<TPrecision>(
+            TestBase::bundle, solve_matrix_dir / fs::path("x_tri_90.csv")
+        ));
+        Vector<TPrecision> Ub_tri(read_vectorCSV<TPrecision>(
+            TestBase::bundle, solve_matrix_dir / fs::path("Ub_tri_90.csv")
+        ));
+    
+        Vector<TPrecision> test_soln(U_tri.back_sub(Ub_tri));
+
+        ASSERT_VECTOR_NEAR(
+            test_soln,
+            x_tri,
+            x_tri.get_max_mag_elem().get_scalar()*Tol<TPrecision>::gamma_T(n)
+        );
+
+    }
+    
+    template <typename TPrecision>
+    void TestRandomBackwardSubstitution() {
+
+        srand(time(NULL));
+        const int n((rand() % 100)+100);
+
+        TMatrix<TPrecision> U_tri(
+            MatrixDense<TPrecision>::Random_UT(TestBase::bundle, n, n)
+        );
+        Vector<TPrecision> x_tri(
+            Vector<TPrecision>::Random(TestBase::bundle, n)
+        );
+        Vector<TPrecision> Ub_tri(U_tri*x_tri);
+    
+        Vector<TPrecision> test_soln(U_tri.back_sub(Ub_tri));
+
+        ASSERT_VECTOR_NEAR(
+            test_soln,
+            x_tri,
+            x_tri.get_max_mag_elem().get_scalar()*Tol<TPrecision>::gamma_T(n)
+        );
+
+    }
+
+    template <typename TPrecision>
+    void TestRandomSparseBackwardSubstitution() {
+
+        srand(time(NULL));
+        const int n((rand() % 100)+100);
+
+        TMatrix<TPrecision> U_tri(
+            NoFillMatrixSparse<double>::Random_UT(
+                TestBase::bundle,
+                n, n,
+                sqrt(static_cast<double>(n))/static_cast<double>(n)
+            ).template cast<TPrecision>()
+        );
+        Vector<TPrecision> x_tri(
+            Vector<TPrecision>::Random(TestBase::bundle, n)
+        );
+        Vector<TPrecision> Ub_tri(U_tri*x_tri);
+
+        Vector<TPrecision> test_soln(U_tri.back_sub(Ub_tri));
+
+        ASSERT_VECTOR_NEAR(
+            test_soln,
+            x_tri,
+            x_tri.get_max_mag_elem().get_scalar()*Tol<TPrecision>::gamma_T(n)
         );
 
     }
