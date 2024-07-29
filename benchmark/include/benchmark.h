@@ -20,12 +20,10 @@ using namespace cascade;
 
 class BenchmarkBase: public testing::Test
 {
-protected:
-
-    bool prototyping_speed_up = false;
-    const int n_runs = (prototyping_speed_up) ? 1 : 7;
-
 public:
+
+    static bool prototyping_speed_up;
+    const int n_runs = (prototyping_speed_up) ? 2 : 7;
 
     static cuHandleBundle bundle;
     static fs::path data_dir;

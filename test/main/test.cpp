@@ -173,9 +173,9 @@ int main(int argc, char **argv) {
     int return_status = RUN_ALL_TESTS();
     TestBase::bundle.destroy();
 
-    // Free dynamically allocated test variables
-    free(TestBase::show_plots);
-    free(TestBase::print_errors);
+    // Delete dynamically allocated test variables
+    delete TestBase::show_plots;
+    delete TestBase::print_errors;
 
     return return_status;
 
