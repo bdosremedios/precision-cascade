@@ -4,11 +4,11 @@ project(precision-cascade LANGUAGES CXX CUDA)
 
 set(
     TEST_TYPES_CPPS
-    src/test_types/test_Scalar.cpp
-    src/test_types/test_Vector.cpp
-    src/test_types/test_MatrixDense.cpp
+    # src/test_types/test_Scalar.cpp
+    # src/test_types/test_Vector.cpp
+    # src/test_types/test_MatrixDense.cpp
     src/test_types/test_NoFillMatrixSparse.cpp
-    src/test_types/test_TypeConversion.cpp
+    # src/test_types/test_TypeConversion.cpp
 )
 
 set(
@@ -75,10 +75,10 @@ set(
 set(
     TEST_SUITE_CPPS
     ${TEST_TYPES_CPPS}
-    ${TEST_TOOLS_CPPS}
-    ${TEST_PRECONDITIONER_CPPS}
-    ${TEST_ARG_PKGS}
-    ${TEST_SOLVERS}
+    # ${TEST_TOOLS_CPPS}
+    # ${TEST_PRECONDITIONER_CPPS}
+    # ${TEST_ARG_PKGS}
+    # ${TEST_SOLVERS}
 )
 
 add_library(

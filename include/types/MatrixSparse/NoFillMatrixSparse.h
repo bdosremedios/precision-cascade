@@ -10,6 +10,7 @@
 #include "NoFillMatrixSparse_gpu_kernels.cuh"
 #include "types/GeneralMatrix/GeneralMatrix_gpu_kernels.cuh"
 
+#include <iostream>
 #include <cmath>
 #include <iomanip>
 #include <sstream>
@@ -29,38 +30,38 @@ private:
     int m_rows = 0;
     int n_cols = 0;
     int nnz = 0;
-    int *d_col_offsets = nullptr;
-    int *d_row_indices = nullptr;
-    TPrecision *d_vals = nullptr;
+    int *d_row_offsets = nullptr;
+    int *d_col_indices = nullptr;
+    TPrecision *d_values = nullptr;
 
-    size_t mem_size_col_offsets() const {
-        return (n_cols+1)*sizeof(int);
+    size_t mem_size_row_offsets() const {
+        return (m_rows+1)*sizeof(int);
     }
 
-    size_t mem_size_row_indices() const {
+    size_t mem_size_col_indices() const {
         return nnz*sizeof(int);
     }
 
-    size_t mem_size_vals() const {
+    size_t mem_size_values() const {
         return nnz*sizeof(TPrecision);
     }
 
-    void allocate_d_col_offsets() {
-        check_cuda_error(cudaMalloc(&d_col_offsets, mem_size_col_offsets()));
+    void allocate_d_row_offsets() {
+        check_cuda_error(cudaMalloc(&d_row_offsets, mem_size_row_offsets()));
     }
 
-    void allocate_d_row_indices() {
-        check_cuda_error(cudaMalloc(&d_row_indices, mem_size_row_indices()));
+    void allocate_d_col_indices() {
+        check_cuda_error(cudaMalloc(&d_col_indices, mem_size_col_indices()));
     }
 
-    void allocate_d_vals() {
-        check_cuda_error(cudaMalloc(&d_vals, mem_size_vals()));
+    void allocate_d_values() {
+        check_cuda_error(cudaMalloc(&d_values, mem_size_values()));
     }
 
     void allocate_d_mem() {
-        allocate_d_col_offsets();
-        allocate_d_row_indices();
-        allocate_d_vals();
+        allocate_d_row_offsets();
+        allocate_d_col_indices();
+        allocate_d_values();
     }
 
     int binary_search_for_target_index(
@@ -108,6 +109,139 @@ private:
         return to_double();
     }
 
+    void set_data_from_csc(
+        int *arg_col_offsets, int *arg_row_indices, TPrecision *arg_values,
+        int arg_m_rows, int arg_n_cols, int arg_nnz
+    ) {
+
+        if (
+            (arg_m_rows != m_rows) || (arg_n_cols != n_cols) || (arg_nnz != nnz)
+        ) {
+            throw std::runtime_error(
+                "set_data_from_csc: mismatch in dimensions"
+            );
+        }
+
+        int *h_row_offsets = static_cast<int *>(malloc(mem_size_row_offsets()));
+        int *h_col_indices = static_cast<int *>(malloc(mem_size_col_indices()));
+        TPrecision *h_values = static_cast<TPrecision *>(
+            malloc(mem_size_values())
+        );
+
+        // Calculate row offsets
+        for (int j=0; j<(m_rows+1); ++j) { h_row_offsets[j] = 0; }
+        for (int k=0; k<nnz; ++k) { ++h_row_offsets[arg_row_indices[k]+1]; }
+        for (int j=1; j<(m_rows+1); ++j) {
+            h_row_offsets[j] += h_row_offsets[j-1];
+        }
+
+        // Fill in column by column col index and value data, with quick offset
+        // calculation by using a tracking of the size of a row currently
+        // added at any given time
+        int row;
+        TPrecision val;
+        std::vector<int> curr_row_count(m_rows, 0);
+        for (int j=0; j<n_cols; ++j) {
+            for (
+                int offset = arg_col_offsets[j];
+                offset < arg_col_offsets[j+1];
+                ++offset
+            ) {
+
+                row = arg_row_indices[offset];
+                val = arg_values[offset];
+                
+                int new_offset = h_row_offsets[row] + curr_row_count[row];
+
+                h_col_indices[new_offset] = j;
+                h_values[new_offset] = val;
+
+                ++curr_row_count[row];
+
+            }
+        }
+
+        check_cuda_error(cudaMemcpy(
+            d_row_offsets,
+            h_row_offsets,
+            mem_size_row_offsets(),
+            cudaMemcpyHostToDevice
+        ));
+
+        if (nnz > 0) {
+
+            check_cuda_error(cudaMemcpy(
+                d_col_indices,
+                h_col_indices,
+                mem_size_col_indices(),
+                cudaMemcpyHostToDevice
+            ));
+
+            check_cuda_error(cudaMemcpy(
+                d_values,
+                h_values,
+                mem_size_values(),
+                cudaMemcpyHostToDevice
+            ));
+
+        }
+
+        free(h_row_offsets);
+        free(h_col_indices);
+        free(h_values);
+
+    }
+
+    void copy_data_to_csr(
+        int *h_row_offsets, int *h_col_indices, TPrecision *h_values,
+        int target_m_rows, int target_n_cols, int target_nnz
+    ) const {
+
+        if (target_m_rows != m_rows) {
+            throw std::runtime_error(
+                "NoFillMatrixSparse: invalid target_m_rows dim for "
+                "copy_data_to_csr"
+            );
+        }
+        if (target_n_cols != n_cols) {
+            throw std::runtime_error(
+                "NoFillMatrixSparse: invalid target_n_cols dim for "
+                "copy_data_to_csr"
+            );
+        }
+        if (target_nnz != nnz) {
+            throw std::runtime_error(
+                "NoFillMatrixSparse: invalid target_nnz dim for "
+                "copy_data_to_csr"
+            );
+        }
+
+        if (n_cols > 0) {
+            check_cuda_error(cudaMemcpy(
+                h_row_offsets,
+                d_row_offsets,
+                mem_size_row_offsets(),
+                cudaMemcpyDeviceToHost
+            ));
+        }
+
+        if (nnz > 0) {
+            check_cuda_error(cudaMemcpy(
+                h_col_indices,
+                d_col_indices,
+                mem_size_col_indices(),
+                cudaMemcpyDeviceToHost
+            ));
+            check_cuda_error(cudaMemcpy(
+                h_values,
+                d_values,
+                mem_size_values(),
+                cudaMemcpyDeviceToHost
+            ));
+        }
+
+    }
+
     /* Private constructor creating load space for arg_nnz non-zeros but
        without instantiation for use with known sized val array but not known
        values on construction */
@@ -144,7 +278,7 @@ private:
 
         int *h_col_offsets = static_cast<int *>(malloc(mem_size_col_offsets()));
         std::vector<int> vec_row_indices;
-        std::vector<TPrecision> vec_vals;
+        std::vector<TPrecision> vec_values;
 
         int nnz_count_so_far = 0;
         for (int j=0; j<n_cols; ++j) {
@@ -163,7 +297,7 @@ private:
                 val = h_rolling_col[i];
                 if (val != static_cast<TPrecision>(0.)) {
                     vec_row_indices.push_back(i);
-                    vec_vals.push_back(val);
+                    vec_values.push_back(val);
                     ++nnz_count_so_far;
                 }
             }
@@ -174,29 +308,16 @@ private:
 
         allocate_d_mem();
 
-        check_cuda_error(cudaMemcpy(
-            d_col_offsets,
-            h_col_offsets,
-            mem_size_col_offsets(),
-            cudaMemcpyHostToDevice
-        ));
-
         if (nnz > 0) {
-
-            check_cuda_error(cudaMemcpy(
-                d_row_indices,
-                &vec_row_indices[0],
-                mem_size_row_indices(),
-                cudaMemcpyHostToDevice
-            ));
-
-            check_cuda_error(cudaMemcpy(
-                d_vals,
-                &vec_vals[0],
-                mem_size_vals(),
-                cudaMemcpyHostToDevice
-            ));
-
+            set_data_from_csc(
+                h_col_offsets, &vec_row_indices[0], &vec_values[0],
+                m_rows, n_cols, nnz
+            );
+        } else {
+            set_data_from_csc(
+                h_col_offsets, nullptr, nullptr,
+                m_rows, n_cols, nnz
+            );
         }
 
         free(h_rolling_col);
@@ -236,15 +357,14 @@ public:
 
         allocate_d_mem();
 
-        int *h_col_offsets = static_cast<int *>(malloc(mem_size_col_offsets()));
-        for (int i=0; i<n_cols+1; ++i) { h_col_offsets[i] = 0; }
+        std::vector<int> h_row_offsets_vec(m_rows+1, 0);
+
         check_cuda_error(cudaMemcpy(
-            d_col_offsets,
-            h_col_offsets,
-            mem_size_col_offsets(),
+            d_row_offsets,
+            &h_row_offsets_vec[0],
+            mem_size_row_offsets(),
             cudaMemcpyHostToDevice
         ));
-        free(h_col_offsets);
 
     }
 
@@ -261,7 +381,7 @@ public:
         n_cols((li.size() == 0) ? 0 : std::cbegin(li)->size())
     {
 
-        int *h_col_offsets = static_cast<int *>(malloc(mem_size_col_offsets()));
+        int *h_col_offsets = static_cast<int *>(malloc((n_cols+1)*sizeof(int)));
         std::vector<int> vec_row_indices;
         std::vector<TPrecision> vec_values;
 
@@ -307,41 +427,21 @@ public:
         h_col_offsets[n_cols] = next_col_offset;
         nnz = vec_values.size();
 
-        /* Set remaining host vectors to values to load, and load column
-           offsets, row indices, and values into gpu memory */
         allocate_d_mem();
-        int *h_row_indices = static_cast<int *>(malloc(mem_size_row_indices()));
-        TPrecision *h_vals = static_cast<TPrecision *>(malloc(mem_size_vals()));
-        for (int i=0; i<nnz; ++i) { h_row_indices[i] = vec_row_indices[i]; }
-        for (int i=0; i<nnz; ++i) { h_vals[i] = vec_values[i]; }
-
-        if (n_cols > 0) {
-            check_cuda_error(cudaMemcpy(
-                d_col_offsets,
-                h_col_offsets,
-                mem_size_col_offsets(),
-                cudaMemcpyHostToDevice 
-            ));
-        }
 
         if (nnz > 0) {
-            check_cuda_error(cudaMemcpy(
-                d_row_indices,
-                h_row_indices,
-                mem_size_row_indices(),
-                cudaMemcpyHostToDevice 
-            ));
-            check_cuda_error(cudaMemcpy(
-                d_vals,
-                h_vals,
-                mem_size_vals(),
-                cudaMemcpyHostToDevice 
-            ));
+            set_data_from_csc(
+                h_col_offsets, &vec_row_indices[0], &vec_values[0],
+                m_rows, n_cols, nnz
+            );
+        } else {
+            set_data_from_csc(
+                h_col_offsets, nullptr, nullptr,
+                m_rows, n_cols, nnz
+            );
         }
 
         free(h_col_offsets);
-        free(h_row_indices);
-        free(h_vals);
 
     }
 
@@ -350,9 +450,9 @@ public:
     }
 
     ~NoFillMatrixSparse() {
-        check_cuda_error(cudaFree(d_col_offsets));
-        check_cuda_error(cudaFree(d_row_indices));
-        check_cuda_error(cudaFree(d_vals));
+        check_cuda_error(cudaFree(d_row_offsets));
+        check_cuda_error(cudaFree(d_col_indices));
+        check_cuda_error(cudaFree(d_values));
     }
 
     NoFillMatrixSparse & operator=(const NoFillMatrixSparse &other) {
@@ -360,42 +460,42 @@ public:
         if (this != &other) {
 
             cu_handles = other.cu_handles;
-            m_rows = other.m_rows;
+            n_cols = other.n_cols;
 
-            if (n_cols != other.n_cols) {
-                check_cuda_error(cudaFree(d_col_offsets));
-                n_cols = other.n_cols;
-                allocate_d_col_offsets();
+            if (m_rows != other.m_rows) {
+                check_cuda_error(cudaFree(d_row_offsets));
+                m_rows = other.m_rows;
+                allocate_d_row_offsets();
             }
 
-            if (n_cols > 0) {
+            if (m_rows > 0) {
                 check_cuda_error(cudaMemcpy(
-                    d_col_offsets,
-                    other.d_col_offsets,
-                    mem_size_col_offsets(),
+                    d_row_offsets,
+                    other.d_row_offsets,
+                    mem_size_row_offsets(),
                     cudaMemcpyDeviceToDevice
                 ));
             }
 
             if (nnz != other.nnz) {
-                check_cuda_error(cudaFree(d_row_indices));
-                check_cuda_error(cudaFree(d_vals));
+                check_cuda_error(cudaFree(d_col_indices));
+                check_cuda_error(cudaFree(d_values));
                 nnz = other.nnz;
-                allocate_d_row_indices();
-                allocate_d_vals();
+                allocate_d_col_indices();
+                allocate_d_values();
             }
 
             if (nnz > 0) {
                 check_cuda_error(cudaMemcpy(
-                    d_row_indices,
-                    other.d_row_indices,
-                    mem_size_row_indices(),
+                    d_col_indices,
+                    other.d_col_indices,
+                    mem_size_col_indices(),
                     cudaMemcpyDeviceToDevice
                 ));
                 check_cuda_error(cudaMemcpy(
-                    d_vals,
-                    other.d_vals,
-                    mem_size_vals(),
+                    d_values,
+                    other.d_values,
+                    mem_size_values(),
                     cudaMemcpyDeviceToDevice
                 ));
             }
@@ -406,7 +506,7 @@ public:
 
     }
 
-    NoFillMatrixSparse(const MatrixDense<TPrecision> &source_mat);
+    // NoFillMatrixSparse(const MatrixDense<TPrecision> &source_mat);
 
     /* Dynamic Memory Constructor (assumes outer code handles dynamic memory
        properly) */
@@ -446,34 +546,17 @@ public:
 
         allocate_d_mem();
 
-        if (n_cols > 0) {
-            check_cuda_error(cudaMemcpy(
-                d_col_offsets,
-                h_col_offsets,
-                mem_size_col_offsets(),
-                cudaMemcpyHostToDevice
-            ));
-        }
-
-        if (nnz > 0) {
-            check_cuda_error(cudaMemcpy(
-                d_row_indices,
-                h_row_indices,
-                mem_size_row_indices(),
-                cudaMemcpyHostToDevice
-            ));
-            check_cuda_error(cudaMemcpy(
-                d_vals,
-                h_vals,
-                mem_size_vals(),
-                cudaMemcpyHostToDevice
-            ));
-        }
+        set_data_from_csc(
+            h_col_offsets, h_row_indices, h_vals,
+            source_m_rows, source_n_cols, source_nnz
+        );
 
     }
 
     void copy_data_to_ptr(
-        int *h_col_offsets, int *h_row_indices, TPrecision *h_vals,
+        int *arg_h_col_offsets,
+        int *arg_h_row_indices,
+        TPrecision *arg_h_values,
         int target_m_rows, int target_n_cols, int target_nnz
     ) const {
 
@@ -496,29 +579,53 @@ public:
             );
         }
 
-        if (n_cols > 0) {
-            check_cuda_error(cudaMemcpy(
-                h_col_offsets,
-                d_col_offsets,
-                mem_size_col_offsets(),
-                cudaMemcpyDeviceToHost
-            ));
+        int *h_row_offsets = static_cast<int *>(malloc(mem_size_row_offsets()));
+        int *h_col_indices = static_cast<int *>(malloc(mem_size_col_indices()));
+        TPrecision *h_values = static_cast<TPrecision *>(
+            malloc(mem_size_values())
+        );
+
+        copy_data_to_csr(
+            h_row_offsets, h_col_indices, h_values,
+            m_rows, n_cols, nnz
+        );
+
+        // Calculate col offsets
+        for (int j=0; j<(n_cols+1); ++j) { arg_h_col_offsets[j] = 0; }
+        for (int k=0; k<nnz; ++k) { ++arg_h_col_offsets[h_col_indices[k]+1]; }
+        for (int j=1; j<(n_cols+1); ++j) {
+            arg_h_col_offsets[j] += arg_h_col_offsets[j-1];
         }
 
-        if (nnz > 0) {
-            check_cuda_error(cudaMemcpy(
-                h_row_indices,
-                d_row_indices,
-                mem_size_row_indices(),
-                cudaMemcpyDeviceToHost
-            ));
-            check_cuda_error(cudaMemcpy(
-                h_vals,
-                d_vals,
-                mem_size_vals(),
-                cudaMemcpyDeviceToHost
-            ));
+        // Fill in row by row row index and value data, with quick offset
+        // calculation by using a tracking of the size of a col currently
+        // added at any given time
+        int col;
+        TPrecision val;
+        std::vector<int> curr_col_count(n_cols, 0);
+        for (int i=0; i<m_rows; ++i) {
+            for (
+                int offset = h_row_offsets[i];
+                offset < h_row_offsets[i+1];
+                ++offset
+            ) {
+
+                col = h_col_indices[offset];
+                val = h_values[offset];
+                
+                int new_offset = arg_h_col_offsets[col] + curr_col_count[col];
+
+                arg_h_row_indices[new_offset] = i;
+                arg_h_values[new_offset] = val;
+
+                ++curr_col_count[col];
+
+            }
         }
+
+        free(h_row_offsets);
+        free(h_col_indices);
+        free(h_values);
 
     }
 
@@ -536,44 +643,44 @@ public:
         }
 
         // Get column offset and column size
-        int col_offset_L;
-        int col_offset_R;
+        int row_offset_L;
+        int row_offset_R;
         check_cuda_error(cudaMemcpy(
-            &col_offset_L,
-            d_col_offsets+col,
+            &row_offset_L,
+            d_row_offsets+row,
             sizeof(int),
             cudaMemcpyDeviceToHost
         ));
         check_cuda_error(cudaMemcpy(
-            &col_offset_R,
-            d_col_offsets+col+1,
+            &row_offset_R,
+            d_row_offsets+row+1,
             sizeof(int),
             cudaMemcpyDeviceToHost
         ));
-        size_t col_nnz_size = col_offset_R-col_offset_L;
+        size_t row_nnz_size = row_offset_R-row_offset_L;
 
         // Find if row index is non-zero and find location in val array
-        int *h_row_indices_for_col = static_cast<int *>(
-            malloc(col_nnz_size*sizeof(int))
+        int *h_col_indices_for_row = static_cast<int *>(
+            malloc(row_nnz_size*sizeof(int))
         );
-        if (col_nnz_size > 0) {
+        if (row_nnz_size > 0) {
             check_cuda_error(cudaMemcpy(
-                h_row_indices_for_col,
-                d_row_indices+col_offset_L,
-                col_nnz_size*sizeof(int),
+                h_col_indices_for_row,
+                d_col_indices+row_offset_L,
+                row_nnz_size*sizeof(int),
                 cudaMemcpyDeviceToHost
             ));
         }
-        int row_ind_offset = binary_search_for_target_index(
-            row, h_row_indices_for_col, 0, col_nnz_size
+        int col_ind_offset = binary_search_for_target_index(
+            col, h_col_indices_for_row, 0, row_nnz_size
         );
-        free(h_row_indices_for_col);
+        free(h_col_indices_for_row);
 
-        if (row_ind_offset != -1) {
+        if (col_ind_offset != -1) {
             Scalar<TPrecision> elem;
             check_cuda_error(cudaMemcpy(
                 elem.d_scalar,
-                d_vals+col_offset_L+row_ind_offset,
+                d_values+row_offset_L+col_ind_offset,
                 sizeof(TPrecision),
                 cudaMemcpyDeviceToDevice
             ));
@@ -584,46 +691,46 @@ public:
 
     }
 
-    Col get_col(int col) const {
+    // Col get_col(int col) const {
 
-        if ((col < 0) || (col >= n_cols)) {
-            throw std::runtime_error(
-                "NoFillMatrixSparse: invalid col access in get_col"
-            );
-        }
+    //     if ((col < 0) || (col >= n_cols)) {
+    //         throw std::runtime_error(
+    //             "NoFillMatrixSparse: invalid col access in get_col"
+    //         );
+    //     }
 
-        return Col(this, col);
+    //     return Col(this, col);
 
-    }
+    // }
 
-    Block get_block(
-        int start_row, int start_col, int block_rows, int block_cols
-    ) const {
+    // Block get_block(
+    //     int start_row, int start_col, int block_rows, int block_cols
+    // ) const {
 
-        if ((start_row < 0) || (start_row >= m_rows)) {
-            throw std::runtime_error(
-                "NoFillMatrixSparse: invalid starting row in block"
-            );
-        }
-        if ((start_col < 0) || (start_col >= n_cols)) {
-            throw std::runtime_error(
-                "NoFillMatrixSparse: invalid starting col in block"
-            );
-        }
-        if ((block_rows < 0) || (start_row+block_rows > m_rows)) {
-            throw std::runtime_error(
-                "NoFillMatrixSparse: invalid number of rows in block"
-            );
-        }
-        if ((block_cols < 0) || (start_col+block_cols > n_cols)) {
-            throw std::runtime_error(
-                "NoFillMatrixSparse: invalid number of cols in block"
-            );
-        }
+    //     if ((start_row < 0) || (start_row >= m_rows)) {
+    //         throw std::runtime_error(
+    //             "NoFillMatrixSparse: invalid starting row in block"
+    //         );
+    //     }
+    //     if ((start_col < 0) || (start_col >= n_cols)) {
+    //         throw std::runtime_error(
+    //             "NoFillMatrixSparse: invalid starting col in block"
+    //         );
+    //     }
+    //     if ((block_rows < 0) || (start_row+block_rows > m_rows)) {
+    //         throw std::runtime_error(
+    //             "NoFillMatrixSparse: invalid number of rows in block"
+    //         );
+    //     }
+    //     if ((block_cols < 0) || (start_col+block_cols > n_cols)) {
+    //         throw std::runtime_error(
+    //             "NoFillMatrixSparse: invalid number of cols in block"
+    //         );
+    //     }
 
-        return Block(this, start_row, start_col, block_rows, block_cols);
+    //     return Block(this, start_row, start_col, block_rows, block_cols);
 
-    }
+    // }
 
     cuHandleBundle get_cu_handles() const { return cu_handles; }
     int rows() const { return m_rows; }
@@ -632,9 +739,11 @@ public:
 
     std::string get_matrix_string() const {
 
-        int *h_col_offsets = static_cast<int *>(malloc(mem_size_col_offsets()));
-        int *h_row_indices = static_cast<int *>(malloc(mem_size_row_indices()));
-        TPrecision *h_vals = static_cast<TPrecision *>(malloc(mem_size_vals()));
+        int *h_col_offsets = static_cast<int *>(malloc((n_cols+1)*sizeof(int)));
+        int *h_row_indices = static_cast<int *>(malloc(nnz*sizeof(int)));
+        TPrecision *h_vals = static_cast<TPrecision *>(
+            malloc(nnz*sizeof(TPrecision))
+        );
 
         copy_data_to_ptr(
             h_col_offsets, h_row_indices, h_vals,
@@ -1025,383 +1134,385 @@ public:
 
     }
 
-    template <typename Cast_TPrecision>
-    NoFillMatrixSparse<Cast_TPrecision> cast() const {
-        return cast(TypeIdentity<Cast_TPrecision>());
-    }
+    // template <typename Cast_TPrecision>
+    // NoFillMatrixSparse<Cast_TPrecision> cast() const {
+    //     return cast(TypeIdentity<Cast_TPrecision>());
+    // }
 
-    NoFillMatrixSparse<TPrecision> operator*(
-        const Scalar<TPrecision> &scalar
-    ) const;
-    NoFillMatrixSparse<TPrecision> operator/(
-        const Scalar<TPrecision> &scalar
-    ) const {
-        Scalar<TPrecision> temp(scalar);
-        return operator*(temp.reciprocol());
-    }
+    // NoFillMatrixSparse<TPrecision> operator*(
+    //     const Scalar<TPrecision> &scalar
+    // ) const;
+    // NoFillMatrixSparse<TPrecision> operator/(
+    //     const Scalar<TPrecision> &scalar
+    // ) const {
+    //     Scalar<TPrecision> temp(scalar);
+    //     return operator*(temp.reciprocol());
+    // }
     
-    NoFillMatrixSparse<TPrecision> & operator*=(
-        const Scalar<TPrecision> &scalar
-    );
-    NoFillMatrixSparse<TPrecision> & operator/=(
-        const Scalar<TPrecision> &scalar
-    ) {
-        Scalar<TPrecision> temp(scalar);
-        return operator*=(temp.reciprocol());
-    }
+    // NoFillMatrixSparse<TPrecision> & operator*=(
+    //     const Scalar<TPrecision> &scalar
+    // );
+    // NoFillMatrixSparse<TPrecision> & operator/=(
+    //     const Scalar<TPrecision> &scalar
+    // ) {
+    //     Scalar<TPrecision> temp(scalar);
+    //     return operator*=(temp.reciprocol());
+    // }
 
     Scalar<TPrecision> get_max_mag_elem() const {
 
-        TPrecision *h_vals = static_cast<TPrecision *>(malloc(mem_size_vals()));
+        TPrecision *h_values = static_cast<TPrecision *>(
+            malloc(mem_size_values())
+        );
         if (nnz > 0) {
             check_cuda_error(cudaMemcpy(
-                h_vals,
-                d_vals,
-                mem_size_vals(),
+                h_values,
+                d_values,
+                mem_size_values(),
                 cudaMemcpyDeviceToHost
             ));
         }
 
         TPrecision max_mag = static_cast<TPrecision>(0);
         for (int i=0; i<nnz; ++i) {
-            TPrecision temp = abs_ns::abs(h_vals[i]);
+            TPrecision temp = abs_ns::abs(h_values[i]);
             if (max_mag < temp) {
                 max_mag = temp;
             }
         }
 
-        free(h_vals);
+        free(h_values);
 
         return Scalar<TPrecision>(max_mag);
 
     }
 
-    void normalize_magnitude() {
-        *this /= get_max_mag_elem();
-    }
+    // void normalize_magnitude() {
+    //     *this /= get_max_mag_elem();
+    // }
 
-    Vector<TPrecision> operator*(const Vector<TPrecision> &vec) const;
+    // Vector<TPrecision> operator*(const Vector<TPrecision> &vec) const;
 
-    Vector<TPrecision> transpose_prod(const Vector<TPrecision> &vec) const;
+    // Vector<TPrecision> transpose_prod(const Vector<TPrecision> &vec) const;
 
-    NoFillMatrixSparse<TPrecision> transpose() const {
+    // NoFillMatrixSparse<TPrecision> transpose() const {
 
-        int *curr_h_col_offsets = static_cast<int *>(
-            malloc(mem_size_col_offsets())
-        );
-        int *curr_h_row_indices = static_cast<int *>(
-            malloc(mem_size_row_indices())
-        );
-        TPrecision *curr_h_vals = static_cast<TPrecision *>(
-            malloc(mem_size_vals())
-        );
+    //     int *curr_h_col_offsets = static_cast<int *>(
+    //         malloc(mem_size_col_offsets())
+    //     );
+    //     int *curr_h_row_indices = static_cast<int *>(
+    //         malloc(mem_size_row_indices())
+    //     );
+    //     TPrecision *curr_h_vals = static_cast<TPrecision *>(
+    //         malloc(mem_size_vals())
+    //     );
 
-        copy_data_to_ptr(
-            curr_h_col_offsets, curr_h_row_indices, curr_h_vals,
-            m_rows, n_cols, nnz
-        );
+    //     copy_data_to_ptr(
+    //         curr_h_col_offsets, curr_h_row_indices, curr_h_vals,
+    //         m_rows, n_cols, nnz
+    //     );
 
-        int *trans_h_col_offsets = static_cast<int *>(
-            malloc((m_rows+1)*sizeof(int))
-        );
-        int *trans_h_row_indices = static_cast<int *>(
-            malloc(mem_size_row_indices())
-        );
-        TPrecision *trans_h_vals = static_cast<TPrecision *>(
-            malloc(mem_size_vals())
-        );
+    //     int *trans_h_col_offsets = static_cast<int *>(
+    //         malloc((m_rows+1)*sizeof(int))
+    //     );
+    //     int *trans_h_row_indices = static_cast<int *>(
+    //         malloc(mem_size_row_indices())
+    //     );
+    //     TPrecision *trans_h_vals = static_cast<TPrecision *>(
+    //         malloc(mem_size_vals())
+    //     );
 
-        for (int j=0; j<m_rows+1; ++j) {
-            trans_h_col_offsets[j] = 0;
-        }
-        for (int k=0; k<nnz; ++k) {
-            ++trans_h_col_offsets[curr_h_row_indices[k]+1];
-        }
-        for (int j=1; j<m_rows+1; ++j) {
-            trans_h_col_offsets[j] += trans_h_col_offsets[j-1];
-        }
+    //     for (int j=0; j<m_rows+1; ++j) {
+    //         trans_h_col_offsets[j] = 0;
+    //     }
+    //     for (int k=0; k<nnz; ++k) {
+    //         ++trans_h_col_offsets[curr_h_row_indices[k]+1];
+    //     }
+    //     for (int j=1; j<m_rows+1; ++j) {
+    //         trans_h_col_offsets[j] += trans_h_col_offsets[j-1];
+    //     }
 
-        int *trans_col_count = static_cast<int *>(malloc(m_rows*sizeof(int)));
-        for (int j=0; j<m_rows; ++j) {
-            trans_col_count[j] = 0;
-        }
+    //     int *trans_col_count = static_cast<int *>(malloc(m_rows*sizeof(int)));
+    //     for (int j=0; j<m_rows; ++j) {
+    //         trans_col_count[j] = 0;
+    //     }
 
-        int curr_col_ind = 0;
-        for (int k=0; k<nnz; ++k) {
+    //     int curr_col_ind = 0;
+    //     for (int k=0; k<nnz; ++k) {
 
-            // Ensure we are we have the correct current column index
-            while (
-                (curr_col_ind < n_cols-1) &&
-                (k >= curr_h_col_offsets[curr_col_ind+1])
-            ) {
-                ++curr_col_ind;
-            }
-            int curr_row_ind = curr_h_row_indices[k];
-            TPrecision curr_val = curr_h_vals[k];
+    //         // Ensure we are we have the correct current column index
+    //         while (
+    //             (curr_col_ind < n_cols-1) &&
+    //             (k >= curr_h_col_offsets[curr_col_ind+1])
+    //         ) {
+    //             ++curr_col_ind;
+    //         }
+    //         int curr_row_ind = curr_h_row_indices[k];
+    //         TPrecision curr_val = curr_h_vals[k];
 
-            int trans_k_location = (
-                trans_h_col_offsets[curr_row_ind] +
-                trans_col_count[curr_row_ind]
-            );
-            trans_h_row_indices[trans_k_location] = curr_col_ind;
-            trans_h_vals[trans_k_location] = curr_val;
+    //         int trans_k_location = (
+    //             trans_h_col_offsets[curr_row_ind] +
+    //             trans_col_count[curr_row_ind]
+    //         );
+    //         trans_h_row_indices[trans_k_location] = curr_col_ind;
+    //         trans_h_vals[trans_k_location] = curr_val;
 
-            ++trans_col_count[curr_row_ind];
+    //         ++trans_col_count[curr_row_ind];
 
-        }
+    //     }
 
-        free(trans_col_count);
+    //     free(trans_col_count);
 
-        free(curr_h_col_offsets);
-        free(curr_h_row_indices);
-        free(curr_h_vals);
+    //     free(curr_h_col_offsets);
+    //     free(curr_h_row_indices);
+    //     free(curr_h_vals);
 
-        NoFillMatrixSparse<TPrecision> created_mat(
-            cu_handles,
-            trans_h_col_offsets, trans_h_row_indices, trans_h_vals,
-            n_cols, m_rows, nnz
-        );
+    //     NoFillMatrixSparse<TPrecision> created_mat(
+    //         cu_handles,
+    //         trans_h_col_offsets, trans_h_row_indices, trans_h_vals,
+    //         n_cols, m_rows, nnz
+    //     );
 
-        free(trans_h_col_offsets);
-        free(trans_h_row_indices);
-        free(trans_h_vals);
+    //     free(trans_h_col_offsets);
+    //     free(trans_h_row_indices);
+    //     free(trans_h_vals);
 
-        return created_mat;
+    //     return created_mat;
 
-    }
+    // }
 
-    Vector<TPrecision> back_sub(const Vector<TPrecision> &arg_rhs) const;
-    Vector<TPrecision> frwd_sub(const Vector<TPrecision> &arg_rhs) const;
+    // Vector<TPrecision> back_sub(const Vector<TPrecision> &arg_rhs) const;
+    // Vector<TPrecision> frwd_sub(const Vector<TPrecision> &arg_rhs) const;
 
-    /* Nested lightweight wrapper class representing matrix column and
-       assignment/elem access
-       Requires: cast to Vector<TPrecision> */
-    class Col
-    {
-    private:
+    // /* Nested lightweight wrapper class representing matrix column and
+    //    assignment/elem access
+    //    Requires: cast to Vector<TPrecision> */
+    // class Col
+    // {
+    // private:
 
-        friend NoFillMatrixSparse<TPrecision>;
+    //     friend NoFillMatrixSparse<TPrecision>;
 
-        const int m_rows;
-        const int col_idx;
-        const NoFillMatrixSparse<TPrecision> *associated_mat_ptr;
+    //     const int m_rows;
+    //     const int col_idx;
+    //     const NoFillMatrixSparse<TPrecision> *associated_mat_ptr;
 
-        Col(
-            const NoFillMatrixSparse<TPrecision> *arg_associated_mat_ptr,
-            int arg_col_idx
-        ):
-            associated_mat_ptr(arg_associated_mat_ptr),
-            col_idx(arg_col_idx),
-            m_rows(arg_associated_mat_ptr->m_rows)
-        {}
+    //     Col(
+    //         const NoFillMatrixSparse<TPrecision> *arg_associated_mat_ptr,
+    //         int arg_col_idx
+    //     ):
+    //         associated_mat_ptr(arg_associated_mat_ptr),
+    //         col_idx(arg_col_idx),
+    //         m_rows(arg_associated_mat_ptr->m_rows)
+    //     {}
 
-    public:
+    // public:
 
-        Col(const NoFillMatrixSparse<TPrecision>::Col &other):
-            Col(other.associated_mat_ptr, other.col_idx)
-        {}
+    //     Col(const NoFillMatrixSparse<TPrecision>::Col &other):
+    //         Col(other.associated_mat_ptr, other.col_idx)
+    //     {}
 
-        Scalar<TPrecision> get_elem(int arg_row) {
+    //     Scalar<TPrecision> get_elem(int arg_row) {
 
-            if ((arg_row < 0) || (arg_row >= m_rows)) {
-                throw std::runtime_error(
-                    "NoFillMatrixSparse::Col: invalid row access in get_elem"
-                );
-            }
+    //         if ((arg_row < 0) || (arg_row >= m_rows)) {
+    //             throw std::runtime_error(
+    //                 "NoFillMatrixSparse::Col: invalid row access in get_elem"
+    //             );
+    //         }
 
-            return associated_mat_ptr->get_elem(arg_row, col_idx);
+    //         return associated_mat_ptr->get_elem(arg_row, col_idx);
 
-        }
+    //     }
 
-        Vector<TPrecision> copy_to_vec() const {
+    //     Vector<TPrecision> copy_to_vec() const {
 
-            TPrecision *h_vec = static_cast<TPrecision*>(
-                malloc(m_rows*sizeof(TPrecision))
-            );
+    //         TPrecision *h_vec = static_cast<TPrecision*>(
+    //             malloc(m_rows*sizeof(TPrecision))
+    //         );
 
-            for (int i=0; i<m_rows; ++i) {
-                h_vec[i] = static_cast<TPrecision>(0.);
-            }
+    //         for (int i=0; i<m_rows; ++i) {
+    //             h_vec[i] = static_cast<TPrecision>(0.);
+    //         }
 
-            // Get column offset and column size
-            int col_offset_L;
-            int col_offset_R;
-            check_cuda_error(cudaMemcpy(
-                &col_offset_L,
-                associated_mat_ptr->d_col_offsets + col_idx,
-                sizeof(int),
-                cudaMemcpyDeviceToHost
-            ));
-            check_cuda_error(cudaMemcpy(
-                &col_offset_R,
-                associated_mat_ptr->d_col_offsets + col_idx + 1,
-                sizeof(int),
-                cudaMemcpyDeviceToHost
-            ));
-            size_t col_nnz_size = col_offset_R-col_offset_L;
+    //         // Get column offset and column size
+    //         int col_offset_L;
+    //         int col_offset_R;
+    //         check_cuda_error(cudaMemcpy(
+    //             &col_offset_L,
+    //             associated_mat_ptr->d_col_offsets + col_idx,
+    //             sizeof(int),
+    //             cudaMemcpyDeviceToHost
+    //         ));
+    //         check_cuda_error(cudaMemcpy(
+    //             &col_offset_R,
+    //             associated_mat_ptr->d_col_offsets + col_idx + 1,
+    //             sizeof(int),
+    //             cudaMemcpyDeviceToHost
+    //         ));
+    //         size_t col_nnz_size = col_offset_R-col_offset_L;
 
-            int *h_row_indices = static_cast<int *>(
-                malloc(col_nnz_size*sizeof(int))
-            );
-            TPrecision *h_vals = static_cast<TPrecision *>(
-                malloc(col_nnz_size*sizeof(TPrecision))
-            );
-            if (col_nnz_size > 0) {
-                check_cuda_error(cudaMemcpy(
-                    h_row_indices,
-                    associated_mat_ptr->d_row_indices + col_offset_L,
-                    col_nnz_size*sizeof(int),
-                    cudaMemcpyDeviceToHost
-                ));
-                check_cuda_error(cudaMemcpy(
-                    h_vals,
-                    associated_mat_ptr->d_vals + col_offset_L,
-                    col_nnz_size*sizeof(TPrecision),
-                    cudaMemcpyDeviceToHost
-                ));
-            }
+    //         int *h_row_indices = static_cast<int *>(
+    //             malloc(col_nnz_size*sizeof(int))
+    //         );
+    //         TPrecision *h_vals = static_cast<TPrecision *>(
+    //             malloc(col_nnz_size*sizeof(TPrecision))
+    //         );
+    //         if (col_nnz_size > 0) {
+    //             check_cuda_error(cudaMemcpy(
+    //                 h_row_indices,
+    //                 associated_mat_ptr->d_row_indices + col_offset_L,
+    //                 col_nnz_size*sizeof(int),
+    //                 cudaMemcpyDeviceToHost
+    //             ));
+    //             check_cuda_error(cudaMemcpy(
+    //                 h_vals,
+    //                 associated_mat_ptr->d_vals + col_offset_L,
+    //                 col_nnz_size*sizeof(TPrecision),
+    //                 cudaMemcpyDeviceToHost
+    //             ));
+    //         }
 
-            for (int i=0; i<col_nnz_size; ++i) {
-                h_vec[h_row_indices[i]] = h_vals[i];
-            }
+    //         for (int i=0; i<col_nnz_size; ++i) {
+    //             h_vec[h_row_indices[i]] = h_vals[i];
+    //         }
 
-            Vector<TPrecision> created_vec(
-                associated_mat_ptr->cu_handles, h_vec, m_rows
-            );
+    //         Vector<TPrecision> created_vec(
+    //             associated_mat_ptr->cu_handles, h_vec, m_rows
+    //         );
 
-            free(h_vec);
-            free(h_row_indices);
-            free(h_vals);
+    //         free(h_vec);
+    //         free(h_row_indices);
+    //         free(h_vals);
 
-            return created_vec;
+    //         return created_vec;
 
-        }
+    //     }
 
-    };
+    // };
 
-    /* Nested lightweight wrapper class representing matrix block and elem
-       access
-       Requires: cast to MatrixDense<T> */
-    class Block
-    {
-    private:
+    // /* Nested lightweight wrapper class representing matrix block and elem
+    //    access
+    //    Requires: cast to MatrixDense<T> */
+    // class Block
+    // {
+    // private:
 
-        friend NoFillMatrixSparse<TPrecision>;
+    //     friend NoFillMatrixSparse<TPrecision>;
 
-        const int row_idx_start;
-        const int col_idx_start;
-        const int m_rows;
-        const int n_cols;
-        const NoFillMatrixSparse<TPrecision> *associated_mat_ptr;
+    //     const int row_idx_start;
+    //     const int col_idx_start;
+    //     const int m_rows;
+    //     const int n_cols;
+    //     const NoFillMatrixSparse<TPrecision> *associated_mat_ptr;
 
-        Block(
-            const NoFillMatrixSparse<TPrecision> *arg_associated_mat_ptr,
-            int arg_row_idx_start, int arg_col_idx_start,
-            int arg_m_rows, int arg_n_cols
-        ):
-            associated_mat_ptr(arg_associated_mat_ptr),
-            row_idx_start(arg_row_idx_start), col_idx_start(arg_col_idx_start),
-            m_rows(arg_m_rows), n_cols(arg_n_cols)
-        {}
+    //     Block(
+    //         const NoFillMatrixSparse<TPrecision> *arg_associated_mat_ptr,
+    //         int arg_row_idx_start, int arg_col_idx_start,
+    //         int arg_m_rows, int arg_n_cols
+    //     ):
+    //         associated_mat_ptr(arg_associated_mat_ptr),
+    //         row_idx_start(arg_row_idx_start), col_idx_start(arg_col_idx_start),
+    //         m_rows(arg_m_rows), n_cols(arg_n_cols)
+    //     {}
     
-    public:
+    // public:
 
-        Block(const NoFillMatrixSparse<TPrecision>::Block &other):
-            Block(
-                other.associated_mat_ptr,
-                other.row_idx_start, other.col_idx_start,
-                other.m_rows, other.n_cols
-            )
-        {}
+    //     Block(const NoFillMatrixSparse<TPrecision>::Block &other):
+    //         Block(
+    //             other.associated_mat_ptr,
+    //             other.row_idx_start, other.col_idx_start,
+    //             other.m_rows, other.n_cols
+    //         )
+    //     {}
 
-        MatrixDense<TPrecision> copy_to_mat() const {
+    //     MatrixDense<TPrecision> copy_to_mat() const {
 
-            TPrecision *h_mat = static_cast<TPrecision *>(
-                malloc(m_rows*n_cols*sizeof(TPrecision))
-            );
-            for (int i=0; i<m_rows*n_cols; ++i) {
-                h_mat[i] = static_cast<TPrecision>(0.);
-            }
+    //         TPrecision *h_mat = static_cast<TPrecision *>(
+    //             malloc(m_rows*n_cols*sizeof(TPrecision))
+    //         );
+    //         for (int i=0; i<m_rows*n_cols; ++i) {
+    //             h_mat[i] = static_cast<TPrecision>(0.);
+    //         }
 
-            int *h_col_offsets = static_cast<int *>(
-                malloc((associated_mat_ptr->n_cols+1)*sizeof(int))
-            );
-            int *h_row_indices = static_cast<int *>(
-                malloc(associated_mat_ptr->nnz*sizeof(int))
-            );
-            TPrecision *h_vals = static_cast<TPrecision *>(
-                malloc(associated_mat_ptr->nnz*sizeof(TPrecision))
-            );
-            associated_mat_ptr->copy_data_to_ptr(
-                h_col_offsets,
-                h_row_indices,
-                h_vals,
-                associated_mat_ptr->m_rows,
-                associated_mat_ptr->n_cols,
-                associated_mat_ptr->nnz
-            );
+    //         int *h_col_offsets = static_cast<int *>(
+    //             malloc((associated_mat_ptr->n_cols+1)*sizeof(int))
+    //         );
+    //         int *h_row_indices = static_cast<int *>(
+    //             malloc(associated_mat_ptr->nnz*sizeof(int))
+    //         );
+    //         TPrecision *h_vals = static_cast<TPrecision *>(
+    //             malloc(associated_mat_ptr->nnz*sizeof(TPrecision))
+    //         );
+    //         associated_mat_ptr->copy_data_to_ptr(
+    //             h_col_offsets,
+    //             h_row_indices,
+    //             h_vals,
+    //             associated_mat_ptr->m_rows,
+    //             associated_mat_ptr->n_cols,
+    //             associated_mat_ptr->nnz
+    //         );
 
-            // Copy column by column 1D slices relevant to matrix
-            for (int j=0; j<n_cols; ++j) {
+    //         // Copy column by column 1D slices relevant to matrix
+    //         for (int j=0; j<n_cols; ++j) {
 
-                /* Get offsets of row indices/values for corresponding offseted
-                   column of block */
-                int col_offset_L = h_col_offsets[col_idx_start + j];
-                int col_offset_R = h_col_offsets[col_idx_start + j + 1];
-                int col_size_nnz = col_offset_R-col_offset_L;
+    //             /* Get offsets of row indices/values for corresponding offseted
+    //                column of block */
+    //             int col_offset_L = h_col_offsets[col_idx_start + j];
+    //             int col_offset_R = h_col_offsets[col_idx_start + j + 1];
+    //             int col_size_nnz = col_offset_R-col_offset_L;
 
-                // Load values into h_mat if they are within the block rows
-                int cand_row_ind;
-                for (int i=0; i<col_size_nnz; ++i) {
-                    cand_row_ind = h_row_indices[col_offset_L+i];
-                    if (
-                        (row_idx_start <= cand_row_ind) &&
-                        (cand_row_ind < row_idx_start + m_rows)
-                    ) {
-                        h_mat[(cand_row_ind-row_idx_start)+j*m_rows] = (
-                            h_vals[col_offset_L+i]
-                        );
-                    }
-                }
+    //             // Load values into h_mat if they are within the block rows
+    //             int cand_row_ind;
+    //             for (int i=0; i<col_size_nnz; ++i) {
+    //                 cand_row_ind = h_row_indices[col_offset_L+i];
+    //                 if (
+    //                     (row_idx_start <= cand_row_ind) &&
+    //                     (cand_row_ind < row_idx_start + m_rows)
+    //                 ) {
+    //                     h_mat[(cand_row_ind-row_idx_start)+j*m_rows] = (
+    //                         h_vals[col_offset_L+i]
+    //                     );
+    //                 }
+    //             }
 
-            }
+    //         }
 
-            MatrixDense<TPrecision> created_mat(
-                associated_mat_ptr->cu_handles,
-                h_mat,
-                m_rows,
-                n_cols
-            );
+    //         MatrixDense<TPrecision> created_mat(
+    //             associated_mat_ptr->cu_handles,
+    //             h_mat,
+    //             m_rows,
+    //             n_cols
+    //         );
 
-            free(h_mat);
-            free(h_col_offsets);
-            free(h_row_indices);
-            free(h_vals);
+    //         free(h_mat);
+    //         free(h_col_offsets);
+    //         free(h_row_indices);
+    //         free(h_vals);
 
-            return created_mat;
+    //         return created_mat;
 
-        }
+    //     }
 
-        Scalar<TPrecision> get_elem(int row, int col) {
+    //     Scalar<TPrecision> get_elem(int row, int col) {
 
-            if ((row < 0) || (row >= m_rows)) {
-                throw std::runtime_error(
-                    "NoFillMatrixSparse::Block: invalid row access in get_elem"
-                );
-            }
-            if ((col < 0) || (col >= n_cols)) {
-                throw std::runtime_error(
-                    "NoFillMatrixSparse::Block: invalid col access in get_elem"
-                );
-            }
+    //         if ((row < 0) || (row >= m_rows)) {
+    //             throw std::runtime_error(
+    //                 "NoFillMatrixSparse::Block: invalid row access in get_elem"
+    //             );
+    //         }
+    //         if ((col < 0) || (col >= n_cols)) {
+    //             throw std::runtime_error(
+    //                 "NoFillMatrixSparse::Block: invalid col access in get_elem"
+    //             );
+    //         }
 
-            return associated_mat_ptr->get_elem(
-                row_idx_start+row, col_idx_start+col
-            );
+    //         return associated_mat_ptr->get_elem(
+    //             row_idx_start+row, col_idx_start+col
+    //         );
 
-        }
+    //     }
 
-    };
+    // };
 
 };
 

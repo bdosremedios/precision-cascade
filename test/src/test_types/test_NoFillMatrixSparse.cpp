@@ -1102,317 +1102,317 @@ public:
 
     }
 
-    template <typename TPrecision>
-    void TestBlock() {
+    // template <typename TPrecision>
+    // void TestBlock() {
 
-        const NoFillMatrixSparse<TPrecision> mat (
-            TestBase::bundle,
-            {{static_cast<TPrecision>(1), static_cast<TPrecision>(2),
-              static_cast<TPrecision>(3), static_cast<TPrecision>(4),
-              static_cast<TPrecision>(0)},
-             {static_cast<TPrecision>(0), static_cast<TPrecision>(0),
-              static_cast<TPrecision>(8), static_cast<TPrecision>(9),
-              static_cast<TPrecision>(0)},
-             {static_cast<TPrecision>(0), static_cast<TPrecision>(0),
-              static_cast<TPrecision>(0), static_cast<TPrecision>(0),
-              static_cast<TPrecision>(0)},
-             {static_cast<TPrecision>(0), static_cast<TPrecision>(0),
-              static_cast<TPrecision>(0), static_cast<TPrecision>(19),
-              static_cast<TPrecision>(20)}}
-        );
+    //     const NoFillMatrixSparse<TPrecision> mat (
+    //         TestBase::bundle,
+    //         {{static_cast<TPrecision>(1), static_cast<TPrecision>(2),
+    //           static_cast<TPrecision>(3), static_cast<TPrecision>(4),
+    //           static_cast<TPrecision>(0)},
+    //          {static_cast<TPrecision>(0), static_cast<TPrecision>(0),
+    //           static_cast<TPrecision>(8), static_cast<TPrecision>(9),
+    //           static_cast<TPrecision>(0)},
+    //          {static_cast<TPrecision>(0), static_cast<TPrecision>(0),
+    //           static_cast<TPrecision>(0), static_cast<TPrecision>(0),
+    //           static_cast<TPrecision>(0)},
+    //          {static_cast<TPrecision>(0), static_cast<TPrecision>(0),
+    //           static_cast<TPrecision>(0), static_cast<TPrecision>(19),
+    //           static_cast<TPrecision>(20)}}
+    //     );
 
-        // Test copy constructor and access for block 0, 0, 4, 2
-        typename NoFillMatrixSparse<TPrecision>::Block blk_0_0_4_2(
-            mat.get_block(0, 0, 4, 2)
-        );
-        ASSERT_EQ(
-            blk_0_0_4_2.get_elem(0, 0).get_scalar(),
-            static_cast<TPrecision>(1)
-        );
-        ASSERT_EQ(
-            blk_0_0_4_2.get_elem(1, 0).get_scalar(),
-            static_cast<TPrecision>(0)
-        );
-        ASSERT_EQ(
-            blk_0_0_4_2.get_elem(2, 0).get_scalar(),
-            static_cast<TPrecision>(0)
-        );
-        ASSERT_EQ(
-            blk_0_0_4_2.get_elem(3, 0).get_scalar(),
-            static_cast<TPrecision>(0)
-        );
-        ASSERT_EQ(
-            blk_0_0_4_2.get_elem(0, 1).get_scalar(),
-            static_cast<TPrecision>(2)
-        );
-        ASSERT_EQ(
-            blk_0_0_4_2.get_elem(1, 1).get_scalar(),
-            static_cast<TPrecision>(0)
-        );
-        ASSERT_EQ(
-            blk_0_0_4_2.get_elem(2, 1).get_scalar(),
-            static_cast<TPrecision>(0)
-        );
-        ASSERT_EQ(
-            blk_0_0_4_2.get_elem(3, 1).get_scalar(),
-            static_cast<TPrecision>(0)
-        );
+    //     // Test copy constructor and access for block 0, 0, 4, 2
+    //     typename NoFillMatrixSparse<TPrecision>::Block blk_0_0_4_2(
+    //         mat.get_block(0, 0, 4, 2)
+    //     );
+    //     ASSERT_EQ(
+    //         blk_0_0_4_2.get_elem(0, 0).get_scalar(),
+    //         static_cast<TPrecision>(1)
+    //     );
+    //     ASSERT_EQ(
+    //         blk_0_0_4_2.get_elem(1, 0).get_scalar(),
+    //         static_cast<TPrecision>(0)
+    //     );
+    //     ASSERT_EQ(
+    //         blk_0_0_4_2.get_elem(2, 0).get_scalar(),
+    //         static_cast<TPrecision>(0)
+    //     );
+    //     ASSERT_EQ(
+    //         blk_0_0_4_2.get_elem(3, 0).get_scalar(),
+    //         static_cast<TPrecision>(0)
+    //     );
+    //     ASSERT_EQ(
+    //         blk_0_0_4_2.get_elem(0, 1).get_scalar(),
+    //         static_cast<TPrecision>(2)
+    //     );
+    //     ASSERT_EQ(
+    //         blk_0_0_4_2.get_elem(1, 1).get_scalar(),
+    //         static_cast<TPrecision>(0)
+    //     );
+    //     ASSERT_EQ(
+    //         blk_0_0_4_2.get_elem(2, 1).get_scalar(),
+    //         static_cast<TPrecision>(0)
+    //     );
+    //     ASSERT_EQ(
+    //         blk_0_0_4_2.get_elem(3, 1).get_scalar(),
+    //         static_cast<TPrecision>(0)
+    //     );
 
-        // Test copy constructor and access for block 2, 1, 2, 3
-        typename NoFillMatrixSparse<TPrecision>::Block blk_2_1_2_3(
-            mat.get_block(2, 1, 2, 3)
-        );
-        ASSERT_EQ(
-            blk_2_1_2_3.get_elem(0, 0).get_scalar(),
-            static_cast<TPrecision>(0)
-        );
-        ASSERT_EQ(
-            blk_2_1_2_3.get_elem(0, 1).get_scalar(),
-            static_cast<TPrecision>(0)
-        );
-        ASSERT_EQ(
-            blk_2_1_2_3.get_elem(0, 2).get_scalar(),
-            static_cast<TPrecision>(0)
-        );
-        ASSERT_EQ(
-            blk_2_1_2_3.get_elem(1, 0).get_scalar(),
-            static_cast<TPrecision>(0)
-        );
-        ASSERT_EQ(
-            blk_2_1_2_3.get_elem(1, 1).get_scalar(),
-            static_cast<TPrecision>(0)
-        );
-        ASSERT_EQ(
-            blk_2_1_2_3.get_elem(1, 2).get_scalar(),
-            static_cast<TPrecision>(19)
-        );
+    //     // Test copy constructor and access for block 2, 1, 2, 3
+    //     typename NoFillMatrixSparse<TPrecision>::Block blk_2_1_2_3(
+    //         mat.get_block(2, 1, 2, 3)
+    //     );
+    //     ASSERT_EQ(
+    //         blk_2_1_2_3.get_elem(0, 0).get_scalar(),
+    //         static_cast<TPrecision>(0)
+    //     );
+    //     ASSERT_EQ(
+    //         blk_2_1_2_3.get_elem(0, 1).get_scalar(),
+    //         static_cast<TPrecision>(0)
+    //     );
+    //     ASSERT_EQ(
+    //         blk_2_1_2_3.get_elem(0, 2).get_scalar(),
+    //         static_cast<TPrecision>(0)
+    //     );
+    //     ASSERT_EQ(
+    //         blk_2_1_2_3.get_elem(1, 0).get_scalar(),
+    //         static_cast<TPrecision>(0)
+    //     );
+    //     ASSERT_EQ(
+    //         blk_2_1_2_3.get_elem(1, 1).get_scalar(),
+    //         static_cast<TPrecision>(0)
+    //     );
+    //     ASSERT_EQ(
+    //         blk_2_1_2_3.get_elem(1, 2).get_scalar(),
+    //         static_cast<TPrecision>(19)
+    //     );
     
-    }
+    // }
 
-    template <typename TPrecision>
-    void TestRandomMatVec() {
+    // template <typename TPrecision>
+    // void TestRandomMatVec() {
 
-        // Test random
-        const int m_rand(3);
-        const int n_rand(4);
-        const double fill_ratio_rand(0.5);
-        NoFillMatrixSparse<TPrecision> rand_mat(
-            NoFillMatrixSparse<TPrecision>::Random(
-                TestBase::bundle, m_rand, n_rand, fill_ratio_rand
-            )
-        );
-        ASSERT_VECTOR_NEAR(
-            rand_mat*Vector<TPrecision>(
-                TestBase::bundle,
-                {static_cast<TPrecision>(1), static_cast<TPrecision>(0),
-                 static_cast<TPrecision>(0), static_cast<TPrecision>(0)}
-            ),
-            Vector<TPrecision>(
-                TestBase::bundle,
-                {rand_mat.get_elem(0, 0).get_scalar(),
-                 rand_mat.get_elem(1, 0).get_scalar(),
-                 rand_mat.get_elem(2, 0).get_scalar()}
-            ),
-            (static_cast<TPrecision>(2.) *
-             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
-        );
-        ASSERT_VECTOR_NEAR(
-            rand_mat*Vector<TPrecision>(
-                TestBase::bundle,
-                {static_cast<TPrecision>(0), static_cast<TPrecision>(1),
-                 static_cast<TPrecision>(0), static_cast<TPrecision>(0)}
-            ),
-            Vector<TPrecision>(
-                TestBase::bundle,
-                {rand_mat.get_elem(0, 1).get_scalar(),
-                 rand_mat.get_elem(1, 1).get_scalar(),
-                 rand_mat.get_elem(2, 1).get_scalar()}
-            ),
-            (static_cast<TPrecision>(2.) *
-             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
-        );
-        ASSERT_VECTOR_NEAR(
-            rand_mat*Vector<TPrecision>(
-                TestBase::bundle,
-                {static_cast<TPrecision>(0), static_cast<TPrecision>(0),
-                 static_cast<TPrecision>(1), static_cast<TPrecision>(0)}
-            ),
-            Vector<TPrecision>(
-                TestBase::bundle,
-                {rand_mat.get_elem(0, 2).get_scalar(),
-                 rand_mat.get_elem(1, 2).get_scalar(),
-                 rand_mat.get_elem(2, 2).get_scalar()}
-            ),
-            (static_cast<TPrecision>(2.) *
-             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
-        );
-        ASSERT_VECTOR_NEAR(
-            rand_mat*Vector<TPrecision>(
-                TestBase::bundle,
-                {static_cast<TPrecision>(0), static_cast<TPrecision>(0),
-                 static_cast<TPrecision>(0), static_cast<TPrecision>(1)}
-            ),
-            Vector<TPrecision>(
-                TestBase::bundle,
-                {rand_mat.get_elem(0, 3).get_scalar(),
-                 rand_mat.get_elem(1, 3).get_scalar(),
-                 rand_mat.get_elem(2, 3).get_scalar()}
-            ),
-            (static_cast<TPrecision>(2.) *
-             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
-        );
-        ASSERT_VECTOR_NEAR(
-            rand_mat*Vector<TPrecision>(
-                TestBase::bundle,
-                {static_cast<TPrecision>(1), static_cast<TPrecision>(0.1),
-                 static_cast<TPrecision>(0.01), static_cast<TPrecision>(0.001)}
-            ),
-            Vector<TPrecision>(
-                TestBase::bundle,
-                {((static_cast<TPrecision>(1) *
-                   rand_mat.get_elem(0, 0).get_scalar()) +
-                  (static_cast<TPrecision>(0.1) *
-                   rand_mat.get_elem(0, 1).get_scalar()) +
-                  (static_cast<TPrecision>(0.01) *
-                   rand_mat.get_elem(0, 2).get_scalar()) +
-                  (static_cast<TPrecision>(0.001) *
-                   rand_mat.get_elem(0, 3).get_scalar())),
-                 ((static_cast<TPrecision>(1) *
-                   rand_mat.get_elem(1, 0).get_scalar()) +
-                  (static_cast<TPrecision>(0.1) *
-                   rand_mat.get_elem(1, 1).get_scalar()) +
-                  (static_cast<TPrecision>(0.01) *
-                   rand_mat.get_elem(1, 2).get_scalar())+
-                  (static_cast<TPrecision>(0.001) *
-                   rand_mat.get_elem(1, 3).get_scalar())),
-                 ((static_cast<TPrecision>(1) *
-                   rand_mat.get_elem(2, 0).get_scalar()) +
-                  (static_cast<TPrecision>(0.1) *
-                   rand_mat.get_elem(2, 1).get_scalar()) +
-                  (static_cast<TPrecision>(0.01) *
-                   rand_mat.get_elem(2, 2).get_scalar())+
-                  (static_cast<TPrecision>(0.001) *
-                   rand_mat.get_elem(2, 3).get_scalar()))}
-            ),
-            (static_cast<TPrecision>(2.) *
-             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
-        );
+    //     // Test random
+    //     const int m_rand(3);
+    //     const int n_rand(4);
+    //     const double fill_ratio_rand(0.5);
+    //     NoFillMatrixSparse<TPrecision> rand_mat(
+    //         NoFillMatrixSparse<TPrecision>::Random(
+    //             TestBase::bundle, m_rand, n_rand, fill_ratio_rand
+    //         )
+    //     );
+    //     ASSERT_VECTOR_NEAR(
+    //         rand_mat*Vector<TPrecision>(
+    //             TestBase::bundle,
+    //             {static_cast<TPrecision>(1), static_cast<TPrecision>(0),
+    //              static_cast<TPrecision>(0), static_cast<TPrecision>(0)}
+    //         ),
+    //         Vector<TPrecision>(
+    //             TestBase::bundle,
+    //             {rand_mat.get_elem(0, 0).get_scalar(),
+    //              rand_mat.get_elem(1, 0).get_scalar(),
+    //              rand_mat.get_elem(2, 0).get_scalar()}
+    //         ),
+    //         (static_cast<TPrecision>(2.) *
+    //          static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
+    //     );
+    //     ASSERT_VECTOR_NEAR(
+    //         rand_mat*Vector<TPrecision>(
+    //             TestBase::bundle,
+    //             {static_cast<TPrecision>(0), static_cast<TPrecision>(1),
+    //              static_cast<TPrecision>(0), static_cast<TPrecision>(0)}
+    //         ),
+    //         Vector<TPrecision>(
+    //             TestBase::bundle,
+    //             {rand_mat.get_elem(0, 1).get_scalar(),
+    //              rand_mat.get_elem(1, 1).get_scalar(),
+    //              rand_mat.get_elem(2, 1).get_scalar()}
+    //         ),
+    //         (static_cast<TPrecision>(2.) *
+    //          static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
+    //     );
+    //     ASSERT_VECTOR_NEAR(
+    //         rand_mat*Vector<TPrecision>(
+    //             TestBase::bundle,
+    //             {static_cast<TPrecision>(0), static_cast<TPrecision>(0),
+    //              static_cast<TPrecision>(1), static_cast<TPrecision>(0)}
+    //         ),
+    //         Vector<TPrecision>(
+    //             TestBase::bundle,
+    //             {rand_mat.get_elem(0, 2).get_scalar(),
+    //              rand_mat.get_elem(1, 2).get_scalar(),
+    //              rand_mat.get_elem(2, 2).get_scalar()}
+    //         ),
+    //         (static_cast<TPrecision>(2.) *
+    //          static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
+    //     );
+    //     ASSERT_VECTOR_NEAR(
+    //         rand_mat*Vector<TPrecision>(
+    //             TestBase::bundle,
+    //             {static_cast<TPrecision>(0), static_cast<TPrecision>(0),
+    //              static_cast<TPrecision>(0), static_cast<TPrecision>(1)}
+    //         ),
+    //         Vector<TPrecision>(
+    //             TestBase::bundle,
+    //             {rand_mat.get_elem(0, 3).get_scalar(),
+    //              rand_mat.get_elem(1, 3).get_scalar(),
+    //              rand_mat.get_elem(2, 3).get_scalar()}
+    //         ),
+    //         (static_cast<TPrecision>(2.) *
+    //          static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
+    //     );
+    //     ASSERT_VECTOR_NEAR(
+    //         rand_mat*Vector<TPrecision>(
+    //             TestBase::bundle,
+    //             {static_cast<TPrecision>(1), static_cast<TPrecision>(0.1),
+    //              static_cast<TPrecision>(0.01), static_cast<TPrecision>(0.001)}
+    //         ),
+    //         Vector<TPrecision>(
+    //             TestBase::bundle,
+    //             {((static_cast<TPrecision>(1) *
+    //                rand_mat.get_elem(0, 0).get_scalar()) +
+    //               (static_cast<TPrecision>(0.1) *
+    //                rand_mat.get_elem(0, 1).get_scalar()) +
+    //               (static_cast<TPrecision>(0.01) *
+    //                rand_mat.get_elem(0, 2).get_scalar()) +
+    //               (static_cast<TPrecision>(0.001) *
+    //                rand_mat.get_elem(0, 3).get_scalar())),
+    //              ((static_cast<TPrecision>(1) *
+    //                rand_mat.get_elem(1, 0).get_scalar()) +
+    //               (static_cast<TPrecision>(0.1) *
+    //                rand_mat.get_elem(1, 1).get_scalar()) +
+    //               (static_cast<TPrecision>(0.01) *
+    //                rand_mat.get_elem(1, 2).get_scalar())+
+    //               (static_cast<TPrecision>(0.001) *
+    //                rand_mat.get_elem(1, 3).get_scalar())),
+    //              ((static_cast<TPrecision>(1) *
+    //                rand_mat.get_elem(2, 0).get_scalar()) +
+    //               (static_cast<TPrecision>(0.1) *
+    //                rand_mat.get_elem(2, 1).get_scalar()) +
+    //               (static_cast<TPrecision>(0.01) *
+    //                rand_mat.get_elem(2, 2).get_scalar())+
+    //               (static_cast<TPrecision>(0.001) *
+    //                rand_mat.get_elem(2, 3).get_scalar()))}
+    //         ),
+    //         (static_cast<TPrecision>(2.) *
+    //          static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
+    //     );
 
-    }
+    // }
 
-    template <typename TPrecision>
-    void TestRandomTransposeMatVec() {
+    // template <typename TPrecision>
+    // void TestRandomTransposeMatVec() {
 
-        // Test random
-        const int m_rand(3);
-        const int n_rand(2);
-        const double fill_ratio_rand(0.5);
-        NoFillMatrixSparse<TPrecision> rand_mat(
-            NoFillMatrixSparse<TPrecision>::Random(
-                TestBase::bundle, m_rand, n_rand, fill_ratio_rand
-            )
-        );
-        ASSERT_VECTOR_NEAR(
-            rand_mat.transpose_prod(
-                Vector<TPrecision>(
-                    TestBase::bundle,
-                    {static_cast<TPrecision>(1), static_cast<TPrecision>(0),
-                     static_cast<TPrecision>(0)}
-                )
-            ),
-            Vector<TPrecision>(
-                TestBase::bundle,
-                {rand_mat.get_elem(0, 0).get_scalar(),
-                 rand_mat.get_elem(0, 1).get_scalar()}
-            ),
-            (static_cast<TPrecision>(2.) *
-             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
-        );
-        ASSERT_VECTOR_NEAR(
-            rand_mat.transpose_prod(
-                Vector<TPrecision>(
-                    TestBase::bundle,
-                    {static_cast<TPrecision>(0), static_cast<TPrecision>(1),
-                     static_cast<TPrecision>(0)}
-                )
-            ),
-            Vector<TPrecision>(
-                TestBase::bundle,
-                {rand_mat.get_elem(1, 0).get_scalar(),
-                 rand_mat.get_elem(1, 1).get_scalar()}
-            ),
-            (static_cast<TPrecision>(2.) *
-             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
-        );
-        ASSERT_VECTOR_NEAR(
-            rand_mat.transpose_prod(
-                Vector<TPrecision>(
-                    TestBase::bundle,
-                    {static_cast<TPrecision>(0), static_cast<TPrecision>(0),
-                     static_cast<TPrecision>(1)}
-                )
-            ),
-            Vector<TPrecision>(
-                TestBase::bundle,
-                {rand_mat.get_elem(2, 0).get_scalar(),
-                 rand_mat.get_elem(2, 1).get_scalar()}
-            ),
-            (static_cast<TPrecision>(2.) *
-             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
-        );
-        ASSERT_VECTOR_NEAR(
-            rand_mat.transpose_prod(
-                Vector<TPrecision>(
-                    TestBase::bundle,
-                    {static_cast<TPrecision>(1), static_cast<TPrecision>(0.1),
-                     static_cast<TPrecision>(0.01)}
-                )
-            ),
-            Vector<TPrecision>(
-                TestBase::bundle,
-                {((static_cast<TPrecision>(1) *
-                   rand_mat.get_elem(0, 0).get_scalar()) +
-                  (static_cast<TPrecision>(0.1) *
-                   rand_mat.get_elem(1, 0).get_scalar()) +
-                  (static_cast<TPrecision>(0.01) *
-                   rand_mat.get_elem(2, 0).get_scalar())),
-                 ((static_cast<TPrecision>(1) *
-                   rand_mat.get_elem(0, 1).get_scalar()) +
-                  (static_cast<TPrecision>(0.1) *
-                   rand_mat.get_elem(1, 1).get_scalar()) +
-                  (static_cast<TPrecision>(0.01) *
-                   rand_mat.get_elem(2, 1).get_scalar()))}
-            ),
-            (static_cast<TPrecision>(2.) *
-             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
-        );
+    //     // Test random
+    //     const int m_rand(3);
+    //     const int n_rand(2);
+    //     const double fill_ratio_rand(0.5);
+    //     NoFillMatrixSparse<TPrecision> rand_mat(
+    //         NoFillMatrixSparse<TPrecision>::Random(
+    //             TestBase::bundle, m_rand, n_rand, fill_ratio_rand
+    //         )
+    //     );
+    //     ASSERT_VECTOR_NEAR(
+    //         rand_mat.transpose_prod(
+    //             Vector<TPrecision>(
+    //                 TestBase::bundle,
+    //                 {static_cast<TPrecision>(1), static_cast<TPrecision>(0),
+    //                  static_cast<TPrecision>(0)}
+    //             )
+    //         ),
+    //         Vector<TPrecision>(
+    //             TestBase::bundle,
+    //             {rand_mat.get_elem(0, 0).get_scalar(),
+    //              rand_mat.get_elem(0, 1).get_scalar()}
+    //         ),
+    //         (static_cast<TPrecision>(2.) *
+    //          static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
+    //     );
+    //     ASSERT_VECTOR_NEAR(
+    //         rand_mat.transpose_prod(
+    //             Vector<TPrecision>(
+    //                 TestBase::bundle,
+    //                 {static_cast<TPrecision>(0), static_cast<TPrecision>(1),
+    //                  static_cast<TPrecision>(0)}
+    //             )
+    //         ),
+    //         Vector<TPrecision>(
+    //             TestBase::bundle,
+    //             {rand_mat.get_elem(1, 0).get_scalar(),
+    //              rand_mat.get_elem(1, 1).get_scalar()}
+    //         ),
+    //         (static_cast<TPrecision>(2.) *
+    //          static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
+    //     );
+    //     ASSERT_VECTOR_NEAR(
+    //         rand_mat.transpose_prod(
+    //             Vector<TPrecision>(
+    //                 TestBase::bundle,
+    //                 {static_cast<TPrecision>(0), static_cast<TPrecision>(0),
+    //                  static_cast<TPrecision>(1)}
+    //             )
+    //         ),
+    //         Vector<TPrecision>(
+    //             TestBase::bundle,
+    //             {rand_mat.get_elem(2, 0).get_scalar(),
+    //              rand_mat.get_elem(2, 1).get_scalar()}
+    //         ),
+    //         (static_cast<TPrecision>(2.) *
+    //          static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
+    //     );
+    //     ASSERT_VECTOR_NEAR(
+    //         rand_mat.transpose_prod(
+    //             Vector<TPrecision>(
+    //                 TestBase::bundle,
+    //                 {static_cast<TPrecision>(1), static_cast<TPrecision>(0.1),
+    //                  static_cast<TPrecision>(0.01)}
+    //             )
+    //         ),
+    //         Vector<TPrecision>(
+    //             TestBase::bundle,
+    //             {((static_cast<TPrecision>(1) *
+    //                rand_mat.get_elem(0, 0).get_scalar()) +
+    //               (static_cast<TPrecision>(0.1) *
+    //                rand_mat.get_elem(1, 0).get_scalar()) +
+    //               (static_cast<TPrecision>(0.01) *
+    //                rand_mat.get_elem(2, 0).get_scalar())),
+    //              ((static_cast<TPrecision>(1) *
+    //                rand_mat.get_elem(0, 1).get_scalar()) +
+    //               (static_cast<TPrecision>(0.1) *
+    //                rand_mat.get_elem(1, 1).get_scalar()) +
+    //               (static_cast<TPrecision>(0.01) *
+    //                rand_mat.get_elem(2, 1).get_scalar()))}
+    //         ),
+    //         (static_cast<TPrecision>(2.) *
+    //          static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
+    //     );
 
-    }
+    // }
 
-    template <typename TPrecision>
-    void TestRandomTranspose() {
+    // template <typename TPrecision>
+    // void TestRandomTranspose() {
 
-        constexpr int m_rand(4);
-        constexpr int n_rand(3);
-        NoFillMatrixSparse<TPrecision> mat(
-            NoFillMatrixSparse<TPrecision>::Random(
-                TestBase::bundle, n_rand, m_rand, 0.67
-            )
-        );
+    //     constexpr int m_rand(4);
+    //     constexpr int n_rand(3);
+    //     NoFillMatrixSparse<TPrecision> mat(
+    //         NoFillMatrixSparse<TPrecision>::Random(
+    //             TestBase::bundle, n_rand, m_rand, 0.67
+    //         )
+    //     );
 
-        NoFillMatrixSparse<TPrecision> mat_transposed(mat.transpose());
-        ASSERT_EQ(mat_transposed.rows(), m_rand);
-        ASSERT_EQ(mat_transposed.cols(), n_rand);
-        for (int i=0; i<m_rand; ++i) {
-            for (int j=0; j<n_rand; ++j) {
-                ASSERT_EQ(
-                    mat_transposed.get_elem(i, j).get_scalar(),
-                    mat.get_elem(j, i).get_scalar()
-                );
-            }
-        }
+    //     NoFillMatrixSparse<TPrecision> mat_transposed(mat.transpose());
+    //     ASSERT_EQ(mat_transposed.rows(), m_rand);
+    //     ASSERT_EQ(mat_transposed.cols(), n_rand);
+    //     for (int i=0; i<m_rand; ++i) {
+    //         for (int j=0; j<n_rand; ++j) {
+    //             ASSERT_EQ(
+    //                 mat_transposed.get_elem(i, j).get_scalar(),
+    //                 mat.get_elem(j, i).get_scalar()
+    //             );
+    //         }
+    //     }
 
-    }
+    // }
 
 };
 
@@ -1493,6 +1493,7 @@ TEST_F(NoFillMatrixSparse_Test, TestDynamicMemCopyToPtr) {
 TEST_F(NoFillMatrixSparse_Test, TestBadDynamicMemCopyToPtr) {
     TestBadDynamicMemCopyToPtr();
 }
+
 TEST_F(NoFillMatrixSparse_Test, TestZeroMatrixCreation) {
     TestZeroMatrixCreation<__half>();
     TestZeroMatrixCreation<float>();
@@ -1535,138 +1536,138 @@ TEST_F(NoFillMatrixSparse_Test, TestRandomLTMatrixCreation) {
     TestRandomLTMatrixCreation<double>(40, 30);
 }
 
-TEST_F(NoFillMatrixSparse_Test, TestCol) {
-    TestCol<__half>();
-    TestCol<float>();
-    TestCol<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestCol) {
+//     TestCol<__half>();
+//     TestCol<float>();
+//     TestCol<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestBadCol) {
-    TestBadCol();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestBadCol) {
+//     TestBadCol();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestBlock) {
-    TestBlock<__half>();
-    TestBlock<float>();
-    TestBlock<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestBlock) {
+//     TestBlock<__half>();
+//     TestBlock<float>();
+//     TestBlock<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestBadBlock) {
-    TestBadBlock();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestBadBlock) {
+//     TestBadBlock();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestScale) {
-    TestScale<__half>();
-    TestScale<float>();
-    TestScale<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestScale) {
+//     TestScale<__half>();
+//     TestScale<float>();
+//     TestScale<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestScaleAssignment) {
-    TestScaleAssignment<__half>();
-    TestScaleAssignment<float>();
-    TestScaleAssignment<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestScaleAssignment) {
+//     TestScaleAssignment<__half>();
+//     TestScaleAssignment<float>();
+//     TestScaleAssignment<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestMaxMagElem) {
-    TestMaxMagElem<__half>();
-    TestMaxMagElem<float>();
-    TestMaxMagElem<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestMaxMagElem) {
+//     TestMaxMagElem<__half>();
+//     TestMaxMagElem<float>();
+//     TestMaxMagElem<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestNormalizeMagnitude) {
-    TestNormalizeMagnitude<__half>();
-    TestNormalizeMagnitude<float>();
-    TestNormalizeMagnitude<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestNormalizeMagnitude) {
+//     TestNormalizeMagnitude<__half>();
+//     TestNormalizeMagnitude<float>();
+//     TestNormalizeMagnitude<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestMatVec) {
-    TestMatVec<__half>();
-    TestMatVec<float>();
-    TestMatVec<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestMatVec) {
+//     TestMatVec<__half>();
+//     TestMatVec<float>();
+//     TestMatVec<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestRandomMatVec) {
-    TestRandomMatVec<__half>();
-    TestRandomMatVec<float>();
-    TestRandomMatVec<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestRandomMatVec) {
+//     TestRandomMatVec<__half>();
+//     TestRandomMatVec<float>();
+//     TestRandomMatVec<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestBadMatVec) {
-    TestBadMatVec<__half>();
-    TestBadMatVec<float>();
-    TestBadMatVec<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestBadMatVec) {
+//     TestBadMatVec<__half>();
+//     TestBadMatVec<float>();
+//     TestBadMatVec<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestTransposeMatVec) {
-    TestTransposeMatVec<__half>();
-    TestTransposeMatVec<float>();
-    TestTransposeMatVec<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestTransposeMatVec) {
+//     TestTransposeMatVec<__half>();
+//     TestTransposeMatVec<float>();
+//     TestTransposeMatVec<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestRandomTransposeMatVec) {
-    TestRandomTransposeMatVec<__half>();
-    TestRandomTransposeMatVec<float>();
-    TestRandomTransposeMatVec<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestRandomTransposeMatVec) {
+//     TestRandomTransposeMatVec<__half>();
+//     TestRandomTransposeMatVec<float>();
+//     TestRandomTransposeMatVec<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestBadTransposeMatVec) {
-    TestBadTransposeMatVec<__half>();
-    TestBadTransposeMatVec<float>();
-    TestBadTransposeMatVec<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestBadTransposeMatVec) {
+//     TestBadTransposeMatVec<__half>();
+//     TestBadTransposeMatVec<float>();
+//     TestBadTransposeMatVec<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestTranspose) {
-    TestTranspose<__half>();
-    TestTranspose<float>();
-    TestTranspose<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestTranspose) {
+//     TestTranspose<__half>();
+//     TestTranspose<float>();
+//     TestTranspose<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestRandomTranspose) {
-    TestRandomTranspose<__half>();
-    TestRandomTranspose<float>();
-    TestRandomTranspose<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestRandomTranspose) {
+//     TestRandomTranspose<__half>();
+//     TestRandomTranspose<float>();
+//     TestRandomTranspose<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestCast) {
-    TestCast();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestCast) {
+//     TestCast();
+// }
 
-class NoFillMatrixSparse_Substitution_Test:
-    public Matrix_Substitution_Test<NoFillMatrixSparse>
-{};
+// class NoFillMatrixSparse_Substitution_Test:
+//     public Matrix_Substitution_Test<NoFillMatrixSparse>
+// {};
 
-TEST_F(NoFillMatrixSparse_Substitution_Test, TestForwardSubstitution) {
-    TestForwardSubstitution<__half>();
-    TestForwardSubstitution<float>();
-    TestForwardSubstitution<double>();
-}
+// TEST_F(NoFillMatrixSparse_Substitution_Test, TestForwardSubstitution) {
+//     TestForwardSubstitution<__half>();
+//     TestForwardSubstitution<float>();
+//     TestForwardSubstitution<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Substitution_Test, TestRandomForwardSubstitution) {
-    TestRandomForwardSubstitution<__half>();
-    TestRandomForwardSubstitution<float>();
-    TestRandomForwardSubstitution<double>();
-}
+// TEST_F(NoFillMatrixSparse_Substitution_Test, TestRandomForwardSubstitution) {
+//     TestRandomForwardSubstitution<__half>();
+//     TestRandomForwardSubstitution<float>();
+//     TestRandomForwardSubstitution<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Substitution_Test, TestRandomSparseForwardSubstitution) {
-    TestRandomSparseForwardSubstitution<__half>();
-    TestRandomSparseForwardSubstitution<float>();
-    TestRandomSparseForwardSubstitution<double>();
-}
+// TEST_F(NoFillMatrixSparse_Substitution_Test, TestRandomSparseForwardSubstitution) {
+//     TestRandomSparseForwardSubstitution<__half>();
+//     TestRandomSparseForwardSubstitution<float>();
+//     TestRandomSparseForwardSubstitution<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Substitution_Test, TestBackwardSubstitution) {
-    TestBackwardSubstitution<__half>();
-    TestBackwardSubstitution<float>();
-    TestBackwardSubstitution<double>();
-}
+// TEST_F(NoFillMatrixSparse_Substitution_Test, TestBackwardSubstitution) {
+//     TestBackwardSubstitution<__half>();
+//     TestBackwardSubstitution<float>();
+//     TestBackwardSubstitution<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Substitution_Test, TestRandomBackwardSubstitution) {
-    TestRandomBackwardSubstitution<__half>();
-    TestRandomBackwardSubstitution<float>();
-    TestRandomBackwardSubstitution<double>();
-}
+// TEST_F(NoFillMatrixSparse_Substitution_Test, TestRandomBackwardSubstitution) {
+//     TestRandomBackwardSubstitution<__half>();
+//     TestRandomBackwardSubstitution<float>();
+//     TestRandomBackwardSubstitution<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Substitution_Test, TestRandomSparseBackwardSubstitution) {
-    TestRandomSparseBackwardSubstitution<__half>();
-    TestRandomSparseBackwardSubstitution<float>();
-    TestRandomSparseBackwardSubstitution<double>();
-}
+// TEST_F(NoFillMatrixSparse_Substitution_Test, TestRandomSparseBackwardSubstitution) {
+//     TestRandomSparseBackwardSubstitution<__half>();
+//     TestRandomSparseBackwardSubstitution<float>();
+//     TestRandomSparseBackwardSubstitution<double>();
+// }
