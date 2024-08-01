@@ -102,9 +102,7 @@ public:
 
         if (!(f_out.is_open())) {
             throw std::runtime_error(
-                "basic_matrix_func_benchmark: " +
-                file_path.string() +
-                " did not open"
+                "benchmark_n_runs: " + file_path.string() + " did not open"
             );
         }
 
