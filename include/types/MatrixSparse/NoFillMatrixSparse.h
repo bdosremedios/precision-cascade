@@ -281,7 +281,7 @@ private:
             malloc(col_mem_size)
         );
 
-        int *h_col_offsets = static_cast<int *>(malloc(mem_size_col_offsets()));
+        int *h_col_offsets = static_cast<int *>(malloc((n_cols+1)*sizeof(int)));
         std::vector<int> vec_row_indices;
         std::vector<TPrecision> vec_values;
 
@@ -511,7 +511,7 @@ public:
 
     }
 
-    // NoFillMatrixSparse(const MatrixDense<TPrecision> &source_mat);
+    NoFillMatrixSparse(const MatrixDense<TPrecision> &source_mat);
 
     /* Dynamic Memory Constructor (assumes outer code handles dynamic memory
        properly) */
@@ -1144,25 +1144,25 @@ public:
         return cast(TypeIdentity<Cast_TPrecision>());
     }
 
-    // NoFillMatrixSparse<TPrecision> operator*(
-    //     const Scalar<TPrecision> &scalar
-    // ) const;
-    // NoFillMatrixSparse<TPrecision> operator/(
-    //     const Scalar<TPrecision> &scalar
-    // ) const {
-    //     Scalar<TPrecision> temp(scalar);
-    //     return operator*(temp.reciprocol());
-    // }
+    NoFillMatrixSparse<TPrecision> operator*(
+        const Scalar<TPrecision> &scalar
+    ) const;
+    NoFillMatrixSparse<TPrecision> operator/(
+        const Scalar<TPrecision> &scalar
+    ) const {
+        Scalar<TPrecision> temp(scalar);
+        return operator*(temp.reciprocol());
+    }
     
-    // NoFillMatrixSparse<TPrecision> & operator*=(
-    //     const Scalar<TPrecision> &scalar
-    // );
-    // NoFillMatrixSparse<TPrecision> & operator/=(
-    //     const Scalar<TPrecision> &scalar
-    // ) {
-    //     Scalar<TPrecision> temp(scalar);
-    //     return operator*=(temp.reciprocol());
-    // }
+    NoFillMatrixSparse<TPrecision> & operator*=(
+        const Scalar<TPrecision> &scalar
+    );
+    NoFillMatrixSparse<TPrecision> & operator/=(
+        const Scalar<TPrecision> &scalar
+    ) {
+        Scalar<TPrecision> temp(scalar);
+        return operator*=(temp.reciprocol());
+    }
 
     Scalar<TPrecision> get_max_mag_elem() const {
 
@@ -1192,13 +1192,13 @@ public:
 
     }
 
-    // void normalize_magnitude() {
-    //     *this /= get_max_mag_elem();
-    // }
+    void normalize_magnitude() {
+        *this /= get_max_mag_elem();
+    }
 
-    // Vector<TPrecision> operator*(const Vector<TPrecision> &vec) const;
+    Vector<TPrecision> operator*(const Vector<TPrecision> &vec) const;
 
-    // Vector<TPrecision> transpose_prod(const Vector<TPrecision> &vec) const;
+    Vector<TPrecision> transpose_prod(const Vector<TPrecision> &vec) const;
 
     // Use fact that transpose of CSR matrix is same arrays used as CSC
     NoFillMatrixSparse<TPrecision> transpose() const {
@@ -1232,8 +1232,8 @@ public:
 
     }
 
-    // Vector<TPrecision> back_sub(const Vector<TPrecision> &arg_rhs) const;
-    // Vector<TPrecision> frwd_sub(const Vector<TPrecision> &arg_rhs) const;
+    Vector<TPrecision> back_sub(const Vector<TPrecision> &arg_rhs) const;
+    Vector<TPrecision> frwd_sub(const Vector<TPrecision> &arg_rhs) const;
 
     /* Nested lightweight wrapper class representing matrix column and
        assignment/elem access
@@ -1263,7 +1263,7 @@ public:
             Col(other.associated_mat_ptr, other.col_idx)
         {}
 
-        Scalar<TPrecision> get_elem(int arg_row) {
+        Scalar<TPrecision> get_elem(int arg_row) const {
 
             if ((arg_row < 0) || (arg_row >= m_rows)) {
                 throw std::runtime_error(
@@ -1400,7 +1400,7 @@ public:
 
         }
 
-        Scalar<TPrecision> get_elem(int row, int col) {
+        Scalar<TPrecision> get_elem(int row, int col) const {
 
             if ((row < 0) || (row >= m_rows)) {
                 throw std::runtime_error(

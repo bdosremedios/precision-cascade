@@ -1,5 +1,7 @@
 #include "test.h"
 
+#include "types/GeneralMatrix/GeneralMatrix_gpu_constants.cuh"
+
 template <template <typename> typename TMatrix>
 class Matrix_Test: public TestBase
 {
@@ -1863,6 +1865,41 @@ public:
     }
 
     template <typename TPrecision>
+    void TestMultiBlockRandomForwardSubstitution() {
+
+        srand(time(NULL));
+        const int n(
+            genmat_gpu_const::MAXTHREADSPERBLOCK + (rand() % 100) + 100
+        );
+
+        TMatrix<TPrecision> L_tri(
+            NoFillMatrixSparse<double>::Random_LT(
+                TestBase::bundle,
+                n, n,
+                sqrt(static_cast<double>(n))/static_cast<double>(n)
+            ).template cast<TPrecision>()
+        );
+        Vector<TPrecision> x_tri(
+            Vector<TPrecision>::Random(TestBase::bundle, n)
+        );
+        Vector<TPrecision> Lb_tri(L_tri*x_tri);
+
+        Vector<TPrecision> test_soln(L_tri.frwd_sub(Lb_tri));
+
+        TPrecision min_tol = Tol<TPrecision>::gamma_T(n);
+        if (abs_ns::abs(min_tol) > static_cast<TPrecision>(0.1)) {
+            min_tol = 0.2;
+        }
+
+        ASSERT_VECTOR_NEAR(
+            test_soln,
+            x_tri,
+            x_tri.get_max_mag_elem().get_scalar()*min_tol
+        );
+
+    }
+
+    template <typename TPrecision>
     void TestBackwardSubstitution() {
 
         constexpr int n(90);
@@ -1935,6 +1972,37 @@ public:
             test_soln,
             x_tri,
             x_tri.get_max_mag_elem().get_scalar()*Tol<TPrecision>::gamma_T(n)
+        );
+
+    }
+
+    template <typename TPrecision>
+    void TestMultiBlockRandomBackwardSubstitution() {
+
+        srand(time(NULL));
+        const int n(
+            genmat_gpu_const::MAXTHREADSPERBLOCK + (rand() % 100) + 100
+        );
+
+        TMatrix<TPrecision> U_tri(
+            MatrixDense<TPrecision>::Random_UT(TestBase::bundle, n, n)
+        );
+        Vector<TPrecision> x_tri(
+            Vector<TPrecision>::Random(TestBase::bundle, n)
+        );
+        Vector<TPrecision> Ub_tri(U_tri*x_tri);
+    
+        Vector<TPrecision> test_soln(U_tri.back_sub(Ub_tri));
+
+        TPrecision min_tol = Tol<TPrecision>::gamma_T(n);
+        if (abs_ns::abs(min_tol) > static_cast<TPrecision>(0.1)) {
+            min_tol = 0.2;
+        }
+
+        ASSERT_VECTOR_NEAR(
+            test_soln,
+            x_tri,
+            x_tri.get_max_mag_elem().get_scalar()*min_tol
         );
 
     }

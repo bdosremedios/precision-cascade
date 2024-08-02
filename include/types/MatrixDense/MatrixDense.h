@@ -726,7 +726,7 @@ public:
             Col(other.associated_mat_ptr, other.col_idx)
         {}
 
-        Scalar<TPrecision> get_elem(int arg_row) {
+        Scalar<TPrecision> get_elem(int arg_row) const {
 
             if ((arg_row < 0) || (arg_row >= m_rows)) {
                 throw std::runtime_error(
@@ -738,7 +738,7 @@ public:
 
         }
 
-        void set_from_vec(const Vector<TPrecision> &vec) const {
+        void set_from_vec(const Vector<TPrecision> &vec) {
 
             if (vec.rows() != m_rows) {
                 throw std::runtime_error(
@@ -815,7 +815,7 @@ public:
             )
         {}
 
-        void set_from_vec(const Vector<TPrecision> &vec) const {
+        void set_from_vec(const Vector<TPrecision> &vec) {
 
             if (n_cols != 1) {
                 throw std::runtime_error(
@@ -843,7 +843,7 @@ public:
 
         }
 
-        void set_from_mat(const MatrixDense<TPrecision> &mat) const {
+        void set_from_mat(const MatrixDense<TPrecision> &mat) {
 
             if ((m_rows != mat.rows()) || (n_cols != mat.cols())) {
                 throw std::runtime_error(
@@ -891,7 +891,7 @@ public:
 
         }
 
-        Scalar<TPrecision> get_elem(int row, int col) {
+        Scalar<TPrecision> get_elem(int row, int col) const {
 
             if ((row < 0) || (row >= m_rows)) {
                 throw std::runtime_error(

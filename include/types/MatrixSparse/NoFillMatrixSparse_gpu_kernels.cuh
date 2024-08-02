@@ -5,27 +5,29 @@
 
 namespace cascade::nofillmatrixsparse_kernels {
 
-template <typename T>
-__global__ void update_pivot(
-    int pivot_offset, int *d_row_indices, T *d_vals, T *x_soln
+template <typename TPrecision>
+__global__ void update_row_pivot(
+    int row, int pivot_offset, TPrecision *d_vals, TPrecision *x_soln
 );
 
-template <typename T>
-__global__ void lowtri_update_remaining_col(
-    int col_start_offset,
-    int col_size,
-    int *d_row_indices,
-    T *d_vals,
-    T *x_soln
+template <typename TPrecision>
+__global__ void upptri_update_right_of_pivot(
+    int row,
+    int row_start_offset,
+    int row_elem_count,
+    int *d_col_indices,
+    TPrecision *d_values,
+    TPrecision *x_soln
 );
 
-template <typename T>
-__global__ void upptri_update_remaining_col(
-    int col_start_offset,
-    int col_size,
-    int *d_row_indices,
-    T *d_vals,
-    T *x_soln
+template <typename TPrecision>
+__global__ void lowtri_update_left_of_pivot(
+    int row,
+    int row_start_offset,
+    int row_elem_count,
+    int *d_col_indices,
+    TPrecision *d_values,
+    TPrecision *x_soln
 );
 
 }
