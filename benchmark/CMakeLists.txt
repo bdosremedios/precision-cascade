@@ -34,7 +34,7 @@ set(
     # src/benchmark_solvers/benchmark_MP_GMRES_IR.cpp
     # src/benchmark_preconditioners/benchmark_ILUPreconditioner.cpp
     src/benchmark_solvers/benchmark_Precond_FP_GMRES_IR.cpp
-    # src/benchmark_solvers/benchmark_Precond_MP_GMRES_IR.cpp
+    src/benchmark_solvers/benchmark_Precond_MP_GMRES_IR.cpp
 )
 
 add_executable(
