@@ -338,6 +338,33 @@ private:
 
     }
 
+    template <typename WPrecision>
+    void deep_copy_trsv_preprocess(
+        const NoFillMatrixSparse<WPrecision> &other
+    ) {
+
+        trsv_level_set_cnt = other.trsv_level_set_cnt;
+
+        // Free current level set preprocessing and deep copy other matrix's
+        for (int *d_lvl_set_ptr : trsv_level_set_ptrs) {
+            check_cuda_error(cudaFree(d_lvl_set_ptr));
+        };
+        trsv_level_set_ptrs.resize(other.trsv_level_set_ptrs.size());
+        for (int k=0; k < other.trsv_level_set_ptrs.size(); ++k) {
+            check_cuda_error(cudaMalloc(
+                &(trsv_level_set_ptrs[k]),
+                trsv_level_set_cnt[k]*sizeof(int)
+            ));
+            check_cuda_error(cudaMemcpy(
+                trsv_level_set_ptrs[k],
+                other.trsv_level_set_ptrs[k],
+                trsv_level_set_cnt[k]*sizeof(int),
+                cudaMemcpyDeviceToDevice
+            ));
+        }
+
+    }
+
     static inline double enlarge_random_double(double val) {
         return val + val/abs_ns::abs(val);
     }
@@ -531,6 +558,8 @@ public:
                     cudaMemcpyDeviceToDevice
                 ));
             }
+
+            deep_copy_trsv_preprocess(other);
 
         }
 

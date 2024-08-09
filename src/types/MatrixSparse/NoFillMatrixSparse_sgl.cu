@@ -225,6 +225,8 @@ NoFillMatrixSparse<__half> NoFillMatrixSparse<float>::to_half() const {
 
     }
 
+    created_mat.deep_copy_trsv_preprocess(*this);
+
     return created_mat;
 
 }
@@ -273,6 +275,8 @@ NoFillMatrixSparse<double> NoFillMatrixSparse<float>::to_double() const {
         );
 
     }
+
+    created_mat.deep_copy_trsv_preprocess(*this);
 
     return created_mat;
 

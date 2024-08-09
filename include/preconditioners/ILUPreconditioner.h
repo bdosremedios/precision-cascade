@@ -68,6 +68,7 @@ public:
         );
         L = ret.L; U = ret.U; P = ret.P;
     }
+
     ILUPreconditioner(const NoFillMatrixSparse<TPrecision> &A):
         m(A.rows())
     {
@@ -77,6 +78,8 @@ public:
             )
         );
         L = ret.L; U = ret.U; P = ret.P;
+        L.preprocess_trsv(false);
+        U.preprocess_trsv(true);
     }
 
     /* ILUT(tau, p), constructors tau threshold to drop and p number of entries
@@ -96,6 +99,7 @@ public:
         );
         L = ret.L; U = ret.U; P = ret.P;
     }
+
     ILUPreconditioner(
         const NoFillMatrixSparse<TPrecision> &A,
         const TPrecision &tau,
@@ -110,6 +114,8 @@ public:
             )
         );
         L = ret.L; U = ret.U; P = ret.P;
+        L.preprocess_trsv(false);
+        U.preprocess_trsv(true);
     }
 
     TMatrix<TPrecision> get_L() const { return L; }
