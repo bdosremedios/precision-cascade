@@ -99,13 +99,6 @@ void NoFillMatrixSparse<TPrecision>::preprocess_trsv(bool is_upptri) {
 
     }
 
-    // for (std::vector<int> lvl_set : trsv_level_sets) {
-    //     for (int a : lvl_set) {
-    //         std::cout << a << " ";
-    //     }
-    //     std::cout << lvl_set.size() << std::endl;
-    // }
-
 }
 
 template void NoFillMatrixSparse<__half>::preprocess_trsv(bool);
@@ -114,7 +107,7 @@ template void NoFillMatrixSparse<double>::preprocess_trsv(bool);
 
 template <typename TPrecision>
 void NoFillMatrixSparse<TPrecision>::slow_back_sub(
-    Vector<TPrecision> &soln
+    Vector<TPrecision> &soln_rhs
 ) const {
 
     int *h_row_offsets = static_cast<int *>(malloc(mem_size_row_offsets()));
@@ -141,7 +134,7 @@ void NoFillMatrixSparse<TPrecision>::slow_back_sub(
                 <<<NBLOCKS, genmat_gpu_const::MAXTHREADSPERBLOCK>>>
             (
                 i, h_row_offsets[i], row_elem_count,
-                d_col_indices, d_values, soln.d_vec
+                d_col_indices, d_values, soln_rhs.d_vec
             );
             check_kernel_launch(
                 cudaGetLastError(),
@@ -156,7 +149,7 @@ void NoFillMatrixSparse<TPrecision>::slow_back_sub(
 
         // Update solution with row pivot
         nofillmatrixsparse_kernels::update_row_pivot<TPrecision><<<1, 1>>>(
-            i, h_row_offsets[i], d_values, soln.d_vec
+            i, h_row_offsets[i], d_values, soln_rhs.d_vec
         );
         check_kernel_launch(
             cudaGetLastError(),
@@ -181,12 +174,12 @@ template void NoFillMatrixSparse<double>::slow_back_sub(
     Vector<double> &
 ) const;
 
-// Somewhat sync-free back sub algorithm inspired by (Liu et al., 2017)
-// https://doi.org/10.1002/cpe.4244 but with iterative launches to ensure
-// lack of deadlock across blocks
+// Level set parallel version of back sub with 1 warp assigned to each component
+// in each level set, made to be robust against nvidia archicteture changes
+// since those could effect sync free algorithms
 template <typename TPrecision>
 void NoFillMatrixSparse<TPrecision>::fast_back_sub(
-    Vector<TPrecision> &soln
+    Vector<TPrecision> &soln_rhs
 ) const {
 
     for (int k=0; k < trsv_level_set_cnt.size(); ++k) {
@@ -196,7 +189,7 @@ void NoFillMatrixSparse<TPrecision>::fast_back_sub(
             <TPrecision>
             <<<lvl_set_size, genmat_gpu_const::WARPSIZE>>>
         (
-            trsv_level_set_ptrs[k], soln.d_vec,
+            trsv_level_set_ptrs[k], soln_rhs.d_vec,
             d_row_offsets, d_col_indices, d_values
         );
         check_kernel_launch(
@@ -251,13 +244,9 @@ template Vector<double> NoFillMatrixSparse<double>::back_sub(
 ) const;
 
 template <typename TPrecision>
-Vector<TPrecision> NoFillMatrixSparse<TPrecision>::frwd_sub(
-    const Vector<TPrecision> &arg_rhs
+void NoFillMatrixSparse<TPrecision>::slow_frwd_sub(
+    Vector<TPrecision> &soln_rhs
 ) const {
-
-    check_trsv_dims(arg_rhs);
-
-    Vector<TPrecision> soln(arg_rhs);
 
     int *h_row_offsets = static_cast<int *>(malloc(mem_size_row_offsets()));
 
@@ -283,7 +272,7 @@ Vector<TPrecision> NoFillMatrixSparse<TPrecision>::frwd_sub(
                 <<<NBLOCKS, genmat_gpu_const::MAXTHREADSPERBLOCK>>>
             (
                 i, h_row_offsets[i], row_elem_count,
-                d_col_indices, d_values, soln.d_vec
+                d_col_indices, d_values, soln_rhs.d_vec
             );
             check_kernel_launch(
                 cudaGetLastError(),
@@ -298,7 +287,7 @@ Vector<TPrecision> NoFillMatrixSparse<TPrecision>::frwd_sub(
 
         // Update solution with row pivot
         nofillmatrixsparse_kernels::update_row_pivot<TPrecision><<<1, 1>>>(
-            i, h_row_offsets[i+1]-1, d_values, soln.d_vec
+            i, h_row_offsets[i+1]-1, d_values, soln_rhs.d_vec
         );
         check_kernel_launch(
             cudaGetLastError(),
@@ -310,6 +299,73 @@ Vector<TPrecision> NoFillMatrixSparse<TPrecision>::frwd_sub(
     }
 
     free(h_row_offsets);
+
+}
+
+template void NoFillMatrixSparse<__half>::slow_frwd_sub(
+    Vector<__half> &
+) const;
+template void NoFillMatrixSparse<float>::slow_frwd_sub(
+    Vector<float> &
+) const;
+template void NoFillMatrixSparse<double>::slow_frwd_sub(
+    Vector<double> &
+) const;
+
+// Level set parallel version of frwd sub with 1 warp assigned to each component
+// in each level set, made to be robust against nvidia archicteture changes
+// since those could effect sync free algorithms
+template <typename TPrecision>
+void NoFillMatrixSparse<TPrecision>::fast_frwd_sub(
+    Vector<TPrecision> &soln_rhs
+) const {
+
+    for (int k=0; k < trsv_level_set_cnt.size(); ++k) {
+
+        int lvl_set_size = trsv_level_set_cnt[k];
+        nofillmatrixsparse_kernels::fast_frwd_sub_solve_level_set
+            <TPrecision>
+            <<<lvl_set_size, genmat_gpu_const::WARPSIZE>>>
+        (
+            trsv_level_set_ptrs[k], soln_rhs.d_vec,
+            d_row_offsets, d_col_indices, d_values
+        );
+        check_kernel_launch(
+            cudaGetLastError(),
+            "NoFillMatrixSparse<TPrecision>::fast_frwd_sub",
+            "nofillmatrixsparse_kernels::fast_frwd_sub_solve_level_set"
+            "<TPrecision><<<lvl_set_size, genmat_gpu_const::WARPSIZE>>>",
+            lvl_set_size, genmat_gpu_const::WARPSIZE
+        );
+
+    }
+
+}
+
+template void NoFillMatrixSparse<__half>::fast_frwd_sub(
+    Vector<__half> &
+) const;
+template void NoFillMatrixSparse<float>::fast_frwd_sub(
+    Vector<float> &
+) const;
+template void NoFillMatrixSparse<double>::fast_frwd_sub(
+    Vector<double> &
+) const;
+
+template <typename TPrecision>
+Vector<TPrecision> NoFillMatrixSparse<TPrecision>::frwd_sub(
+    const Vector<TPrecision> &arg_rhs
+) const {
+
+    check_trsv_dims(arg_rhs);
+
+    Vector<TPrecision> soln(arg_rhs);
+
+    if (get_has_fast_trsv()) {
+        fast_frwd_sub(soln);
+    } else {
+        slow_frwd_sub(soln);
+    }
 
     return soln;
 
