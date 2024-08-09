@@ -8,11 +8,114 @@
 namespace cascade {
 
 template <typename TPrecision>
-Vector<TPrecision> NoFillMatrixSparse<TPrecision>::back_sub(
-    const Vector<TPrecision> &arg_rhs
-) const {
+void NoFillMatrixSparse<TPrecision>::preprocess_trsv(bool is_upptri) {
 
-    Vector<TPrecision> soln(arg_rhs);
+    if (!trsv_level_set_cnt.empty() || !trsv_level_set_ptrs.empty()) {
+        throw std::runtime_error(
+            "NoFillMatrixSparse<TPrecision>::preprocess_trsv encountered non-"
+            "empty"
+        );
+    }
+
+    std::vector<int> row_level_set(m_rows, -1);
+    std::vector<std::vector<int>> trsv_level_sets;
+
+    int *h_row_offsets = static_cast<int *>(
+        malloc(mem_size_row_offsets())
+    );
+    int *h_col_indices = static_cast<int *>(
+        malloc(mem_size_col_indices())
+    );
+
+    check_cuda_error(cudaMemcpy(
+        h_row_offsets,
+        d_row_offsets,
+        mem_size_row_offsets(),
+        cudaMemcpyDeviceToHost
+    ));
+    check_cuda_error(cudaMemcpy(
+        h_col_indices,
+        d_col_indices,
+        mem_size_col_indices(),
+        cudaMemcpyDeviceToHost
+    ));
+
+    int start = 0;
+    int end = m_rows;
+    int iter = 1;
+    if (is_upptri) {
+        start = m_rows-1;
+        end = -1;
+        iter = -1;
+    }
+
+    for (int i=start; i != end; i += iter) {
+
+        int max_relying_level_set = -1;
+        for (
+            int offset = h_row_offsets[i];
+            offset < h_row_offsets[i+1];
+            ++offset
+        ) {
+            int j = h_col_indices[offset];
+            if (max_relying_level_set < row_level_set[j]) {
+                max_relying_level_set = row_level_set[j];
+            }
+        }
+
+        int level_set = max_relying_level_set + 1;
+        row_level_set[i] = level_set;
+        if (trsv_level_sets.size() == level_set) {
+            trsv_level_sets.push_back(std::vector<int>({i}));
+        } else {
+            trsv_level_sets[level_set].push_back(i);
+        }
+
+    }
+
+    free(h_row_offsets);
+    free(h_col_indices);
+    
+    trsv_level_set_cnt.resize(trsv_level_sets.size());
+    trsv_level_set_ptrs.resize(trsv_level_sets.size());
+    for (int k=0; k < trsv_level_sets.size(); ++k) {
+
+        trsv_level_set_cnt[k] = trsv_level_sets[k].size();
+
+        int *d_lvl_set_ptr = nullptr;
+        int *h_lvl_set_ptr = &(trsv_level_sets[k][0]);
+
+        check_cuda_error(cudaMalloc(
+            &d_lvl_set_ptr, trsv_level_set_cnt[k]*sizeof(int)
+        ));
+        trsv_level_set_ptrs[k] = d_lvl_set_ptr;
+
+        check_cuda_error(cudaMemcpy(
+            trsv_level_set_ptrs[k],
+            h_lvl_set_ptr,
+            trsv_level_set_cnt[k]*sizeof(int),
+            cudaMemcpyHostToDevice
+        ));
+
+    }
+
+    // for (std::vector<int> lvl_set : trsv_level_sets) {
+    //     for (int a : lvl_set) {
+    //         std::cout << a << " ";
+    //     }
+    //     std::cout << lvl_set.size() << std::endl;
+    // }
+
+}
+
+template void NoFillMatrixSparse<__half>::preprocess_trsv(bool);
+template void NoFillMatrixSparse<float>::preprocess_trsv(bool);
+template void NoFillMatrixSparse<double>::preprocess_trsv(bool);
+
+template <typename TPrecision>
+void NoFillMatrixSparse<TPrecision>::slow_back_sub(
+    Vector<TPrecision> &soln
+) const {
 
     int *h_row_offsets = static_cast<int *>(malloc(mem_size_row_offsets()));
 
@@ -66,6 +169,73 @@ Vector<TPrecision> NoFillMatrixSparse<TPrecision>::back_sub(
 
     free(h_row_offsets);
 
+}
+
+template void NoFillMatrixSparse<__half>::slow_back_sub(
+    Vector<__half> &
+) const;
+template void NoFillMatrixSparse<float>::slow_back_sub(
+    Vector<float> &
+) const;
+template void NoFillMatrixSparse<double>::slow_back_sub(
+    Vector<double> &
+) const;
+
+// Somewhat sync-free back sub algorithm inspired by (Liu et al., 2017)
+// https://doi.org/10.1002/cpe.4244 but with iterative launches to ensure
+// lack of deadlock across blocks
+template <typename TPrecision>
+void NoFillMatrixSparse<TPrecision>::fast_back_sub(
+    Vector<TPrecision> &soln
+) const {
+
+    for (int k=0; k < trsv_level_set_cnt.size(); ++k) {
+
+        int lvl_set_size = trsv_level_set_cnt[k];
+        nofillmatrixsparse_kernels::fast_back_sub_solve_level_set
+            <TPrecision>
+            <<<lvl_set_size, genmat_gpu_const::WARPSIZE>>>
+        (
+            trsv_level_set_ptrs[k], soln.d_vec,
+            d_row_offsets, d_col_indices, d_values
+        );
+        check_kernel_launch(
+            cudaGetLastError(),
+            "NoFillMatrixSparse<TPrecision>::fast_back_sub",
+            "nofillmatrixsparse_kernels::fast_back_sub_solve_level_set"
+            "<TPrecision><<<lvl_set_size, genmat_gpu_const::WARPSIZE>>>",
+            lvl_set_size, genmat_gpu_const::WARPSIZE
+        );
+
+    }
+
+}
+
+template void NoFillMatrixSparse<__half>::fast_back_sub(
+    Vector<__half> &
+) const;
+template void NoFillMatrixSparse<float>::fast_back_sub(
+    Vector<float> &
+) const;
+template void NoFillMatrixSparse<double>::fast_back_sub(
+    Vector<double> &
+) const;
+
+template <typename TPrecision>
+Vector<TPrecision> NoFillMatrixSparse<TPrecision>::back_sub(
+    const Vector<TPrecision> &arg_rhs
+) const {
+
+    check_trsv_dims(arg_rhs);
+
+    Vector<TPrecision> soln(arg_rhs);
+
+    if (get_has_fast_trsv()) {
+        fast_back_sub(soln);
+    } else {
+        slow_back_sub(soln);
+    }
+
     return soln;
 
 }
@@ -84,6 +254,8 @@ template <typename TPrecision>
 Vector<TPrecision> NoFillMatrixSparse<TPrecision>::frwd_sub(
     const Vector<TPrecision> &arg_rhs
 ) const {
+
+    check_trsv_dims(arg_rhs);
 
     Vector<TPrecision> soln(arg_rhs);
 

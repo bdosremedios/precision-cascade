@@ -30,11 +30,6 @@ public:
         right_precond(arg_right_precond)
     {};
 
-    ~PrecondArgPkg() {
-        left_precond.reset();
-        right_precond.reset();
-    }
-
     PrecondArgPkg<TMatrix, double> * cast_dbl_ptr() const {
         return new PrecondArgPkg<TMatrix, double>(
             std::shared_ptr<Preconditioner<TMatrix, double>>(

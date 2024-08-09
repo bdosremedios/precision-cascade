@@ -15,8 +15,7 @@ protected:
     using TypedIterativeSolve<TMatrix, TPrecision>::typed_soln;
     using TypedIterativeSolve<TMatrix, TPrecision>::max_iter;
 
-    std::shared_ptr<Preconditioner<TMatrix, TPrecision>> left_precond_ptr;
-    std::shared_ptr<Preconditioner<TMatrix, TPrecision>> right_precond_ptr;
+    const PrecondArgPkg<TMatrix, TPrecision> precond_arg_pkg;
 
     MatrixDense<TPrecision> Q_kry_basis = MatrixDense<TPrecision>(
         cuHandleBundle()
@@ -41,7 +40,7 @@ protected:
 
     void check_compatibility() const {
         if (
-            !left_precond_ptr->check_compatibility_left(
+            !precond_arg_pkg.left_precond->check_compatibility_left(
                 typed_lin_sys_ptr->get_m()
             )
         ) {
@@ -50,7 +49,7 @@ protected:
             );
         }
         if (
-            !right_precond_ptr->check_compatibility_right(
+            !precond_arg_pkg.right_precond->check_compatibility_right(
                 typed_lin_sys_ptr->get_n()
             )
         ) {
@@ -61,15 +60,21 @@ protected:
     }
 
     Vector<TPrecision> apply_left_precond_A(const Vector<TPrecision> &vec) {
-        return left_precond_ptr->action_inv_M(typed_lin_sys_ptr->get_A_typed()*vec);
+        return precond_arg_pkg.left_precond->action_inv_M(
+            typed_lin_sys_ptr->get_A_typed()*vec
+        );
     }
 
     Vector<TPrecision> apply_precond_A(const Vector<TPrecision> &vec) {
-        return apply_left_precond_A(right_precond_ptr->action_inv_M(vec));
+        return apply_left_precond_A(
+            precond_arg_pkg.right_precond->action_inv_M(vec)
+        );
     }
 
     Vector<TPrecision> get_precond_b() {
-        return left_precond_ptr->action_inv_M(typed_lin_sys_ptr->get_b_typed());
+        return precond_arg_pkg.left_precond->action_inv_M(
+            typed_lin_sys_ptr->get_b_typed()
+        );
     }
 
     Vector<TPrecision> calc_precond_residual(const Vector<TPrecision> &soln) {
@@ -239,7 +244,7 @@ protected:
         // Update typed_soln adjusting with right preconditioning
         typed_soln = (
             init_guess_typed +
-            right_precond_ptr->action_inv_M(
+            precond_arg_pkg.right_precond->action_inv_M(
                 Q_kry_basis.mult_subset_cols(0, curr_kry_dim, y)
             )
         );
@@ -277,21 +282,20 @@ public:
     GMRESSolve(
         const TypedLinearSystem_Intf<TMatrix, TPrecision> * const arg_typed_lin_sys_ptr,
         double arg_basis_zero_tol,
-        const SolveArgPkg &solve_arg_pkg,
-        const PrecondArgPkg<TMatrix, TPrecision> precond_arg_pkg = (
+        const SolveArgPkg &arg_solve_arg_pkg,
+        const PrecondArgPkg<TMatrix, TPrecision> &arg_precond_arg_pkg = (
             PrecondArgPkg<TMatrix, TPrecision>()
         )
     ):
         basis_zero_tol(arg_basis_zero_tol),
-        left_precond_ptr(precond_arg_pkg.left_precond),
-        right_precond_ptr(precond_arg_pkg.right_precond),
+        precond_arg_pkg(arg_precond_arg_pkg),
         TypedIterativeSolve<TMatrix, TPrecision>::TypedIterativeSolve(
-            arg_typed_lin_sys_ptr, solve_arg_pkg
+            arg_typed_lin_sys_ptr, arg_solve_arg_pkg
         )
     {
         max_iter = (
-            (solve_arg_pkg.check_default_max_iter()) ?
-            typed_lin_sys_ptr->get_m() : solve_arg_pkg.max_iter
+            (arg_solve_arg_pkg.check_default_max_iter()) ?
+            typed_lin_sys_ptr->get_m() : arg_solve_arg_pkg.max_iter
         );
         initializeGMRES();
     }

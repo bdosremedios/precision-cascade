@@ -89,6 +89,7 @@ public:
     Vector(const cuHandleBundle &arg_cu_handles, int arg_m):
         Vector(arg_cu_handles, arg_m, 1)
     {}
+
     Vector(const cuHandleBundle &arg_cu_handles):
         Vector(arg_cu_handles, 0)
     {}

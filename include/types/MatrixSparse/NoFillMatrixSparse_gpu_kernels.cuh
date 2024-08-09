@@ -6,6 +6,12 @@
 namespace cascade::nofillmatrixsparse_kernels {
 
 template <typename TPrecision>
+__global__ void fast_back_sub_solve_level_set(
+    int *d_level_set, TPrecision *d_soln,
+    int *d_row_offsets, int *d_col_indices, TPrecision *d_values
+);
+
+template <typename TPrecision>
 __global__ void update_row_pivot(
     int row, int pivot_offset, TPrecision *d_vals, TPrecision *x_soln
 );

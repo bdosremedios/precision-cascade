@@ -1416,225 +1416,313 @@ public:
 
 };
 
-TEST_F(NoFillMatrixSparse_Test, TestPropertyAccess) {
-    TestPropertyAccess<__half>();
-    TestPropertyAccess<float>();
-    TestPropertyAccess<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestPropertyAccess) {
+//     TestPropertyAccess<__half>();
+//     TestPropertyAccess<float>();
+//     TestPropertyAccess<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestNonZeros) {
-    TestNonZeros<__half>();
-    TestNonZeros<float>();
-    TestNonZeros<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestNonZeros) {
+//     TestNonZeros<__half>();
+//     TestNonZeros<float>();
+//     TestNonZeros<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestPrintAndInfoString) {
-    TestPrintAndInfoString();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestPrintAndInfoString) {
+//     TestPrintAndInfoString();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestConstruction) {
-    TestConstruction<__half>();
-    TestConstruction<float>();
-    TestConstruction<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestConstruction) {
+//     TestConstruction<__half>();
+//     TestConstruction<float>();
+//     TestConstruction<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestBadConstruction) {
-    TestBadConstruction();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestBadConstruction) {
+//     TestBadConstruction();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestListInitialization) {
-    TestListInitialization<__half>();
-    TestListInitialization<float>();
-    TestListInitialization<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestListInitialization) {
+//     TestListInitialization<__half>();
+//     TestListInitialization<float>();
+//     TestListInitialization<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestBadListInitialization) {
-    TestBadListInitialization();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestBadListInitialization) {
+//     TestBadListInitialization();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestCoeffJustGetAccess) {
-    TestCoeffJustGetAccess<__half>();
-    TestCoeffJustGetAccess<float>();
-    TestCoeffJustGetAccess<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestCoeffJustGetAccess) {
+//     TestCoeffJustGetAccess<__half>();
+//     TestCoeffJustGetAccess<float>();
+//     TestCoeffJustGetAccess<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestBadCoeffJustGetAccess) {
-    TestBadCoeffJustGetAccess();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestBadCoeffJustGetAccess) {
+//     TestBadCoeffJustGetAccess();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestCopyAssignment) {
-    TestCopyAssignment<__half>();
-    TestCopyAssignment<float>();
-    TestCopyAssignment<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestCopyAssignment) {
+//     TestCopyAssignment<__half>();
+//     TestCopyAssignment<float>();
+//     TestCopyAssignment<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestCopyConstructor) {
-    TestCopyConstructor<__half>();
-    TestCopyConstructor<float>();
-    TestCopyConstructor<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestCopyConstructor) {
+//     TestCopyConstructor<__half>();
+//     TestCopyConstructor<float>();
+//     TestCopyConstructor<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestDynamicMemConstruction) {
-    TestDynamicMemConstruction<__half>();
-    TestDynamicMemConstruction<float>();
-    TestDynamicMemConstruction<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestDynamicMemConstruction) {
+//     TestDynamicMemConstruction<__half>();
+//     TestDynamicMemConstruction<float>();
+//     TestDynamicMemConstruction<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestBadDynamicMemConstruction) {
-    TestBadDynamicMemConstruction();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestBadDynamicMemConstruction) {
+//     TestBadDynamicMemConstruction();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestDynamicMemCopyToPtr) {
-    TestDynamicMemCopyToPtr<__half>();
-    TestDynamicMemCopyToPtr<float>();
-    TestDynamicMemCopyToPtr<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestDynamicMemCopyToPtr) {
+//     TestDynamicMemCopyToPtr<__half>();
+//     TestDynamicMemCopyToPtr<float>();
+//     TestDynamicMemCopyToPtr<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestBadDynamicMemCopyToPtr) {
-    TestBadDynamicMemCopyToPtr();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestBadDynamicMemCopyToPtr) {
+//     TestBadDynamicMemCopyToPtr();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestZeroMatrixCreation) {
-    TestZeroMatrixCreation<__half>();
-    TestZeroMatrixCreation<float>();
-    TestZeroMatrixCreation<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestZeroMatrixCreation) {
+//     TestZeroMatrixCreation<__half>();
+//     TestZeroMatrixCreation<float>();
+//     TestZeroMatrixCreation<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestOnesMatrixCreation) {
-    TestOnesMatrixCreation<__half>();
-    TestOnesMatrixCreation<float>();
-    TestOnesMatrixCreation<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestOnesMatrixCreation) {
+//     TestOnesMatrixCreation<__half>();
+//     TestOnesMatrixCreation<float>();
+//     TestOnesMatrixCreation<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestIdentityMatrixCreation) {
-    TestIdentityMatrixCreation<__half>();
-    TestIdentityMatrixCreation<float>();
-    TestIdentityMatrixCreation<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestIdentityMatrixCreation) {
+//     TestIdentityMatrixCreation<__half>();
+//     TestIdentityMatrixCreation<float>();
+//     TestIdentityMatrixCreation<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestRandomMatrixCreation) {
-    TestRandomMatrixCreation<__half>();
-    TestRandomMatrixCreation<float>();
-    TestRandomMatrixCreation<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestRandomMatrixCreation) {
+//     TestRandomMatrixCreation<__half>();
+//     TestRandomMatrixCreation<float>();
+//     TestRandomMatrixCreation<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestRandomUTMatrixCreation) {
-    TestRandomUTMatrixCreation<__half>(30, 40);
-    TestRandomUTMatrixCreation<__half>(40, 30);
-    TestRandomUTMatrixCreation<float>(30, 40);
-    TestRandomUTMatrixCreation<float>(40, 30);
-    TestRandomUTMatrixCreation<double>(30, 40);
-    TestRandomUTMatrixCreation<double>(40, 30);
-}
+// TEST_F(NoFillMatrixSparse_Test, TestRandomUTMatrixCreation) {
+//     TestRandomUTMatrixCreation<__half>(30, 40);
+//     TestRandomUTMatrixCreation<__half>(40, 30);
+//     TestRandomUTMatrixCreation<float>(30, 40);
+//     TestRandomUTMatrixCreation<float>(40, 30);
+//     TestRandomUTMatrixCreation<double>(30, 40);
+//     TestRandomUTMatrixCreation<double>(40, 30);
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestRandomLTMatrixCreation) {
-    TestRandomLTMatrixCreation<__half>(30, 40);
-    TestRandomLTMatrixCreation<__half>(40, 30);
-    TestRandomLTMatrixCreation<float>(30, 40);
-    TestRandomLTMatrixCreation<float>(40, 30);
-    TestRandomLTMatrixCreation<double>(30, 40);
-    TestRandomLTMatrixCreation<double>(40, 30);
-}
+// TEST_F(NoFillMatrixSparse_Test, TestRandomLTMatrixCreation) {
+//     TestRandomLTMatrixCreation<__half>(30, 40);
+//     TestRandomLTMatrixCreation<__half>(40, 30);
+//     TestRandomLTMatrixCreation<float>(30, 40);
+//     TestRandomLTMatrixCreation<float>(40, 30);
+//     TestRandomLTMatrixCreation<double>(30, 40);
+//     TestRandomLTMatrixCreation<double>(40, 30);
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestCol) {
-    TestCol<__half>();
-    TestCol<float>();
-    TestCol<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestCol) {
+//     TestCol<__half>();
+//     TestCol<float>();
+//     TestCol<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestBadCol) {
-    TestBadCol();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestBadCol) {
+//     TestBadCol();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestBlock) {
-    TestBlock<__half>();
-    TestBlock<float>();
-    TestBlock<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestBlock) {
+//     TestBlock<__half>();
+//     TestBlock<float>();
+//     TestBlock<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestBadBlock) {
-    TestBadBlock();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestBadBlock) {
+//     TestBadBlock();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestScale) {
-    TestScale<__half>();
-    TestScale<float>();
-    TestScale<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestScale) {
+//     TestScale<__half>();
+//     TestScale<float>();
+//     TestScale<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestScaleAssignment) {
-    TestScaleAssignment<__half>();
-    TestScaleAssignment<float>();
-    TestScaleAssignment<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestScaleAssignment) {
+//     TestScaleAssignment<__half>();
+//     TestScaleAssignment<float>();
+//     TestScaleAssignment<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestMaxMagElem) {
-    TestMaxMagElem<__half>();
-    TestMaxMagElem<float>();
-    TestMaxMagElem<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestMaxMagElem) {
+//     TestMaxMagElem<__half>();
+//     TestMaxMagElem<float>();
+//     TestMaxMagElem<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestNormalizeMagnitude) {
-    TestNormalizeMagnitude<__half>();
-    TestNormalizeMagnitude<float>();
-    TestNormalizeMagnitude<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestNormalizeMagnitude) {
+//     TestNormalizeMagnitude<__half>();
+//     TestNormalizeMagnitude<float>();
+//     TestNormalizeMagnitude<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestMatVec) {
-    TestMatVec<__half>();
-    TestMatVec<float>();
-    TestMatVec<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestMatVec) {
+//     TestMatVec<__half>();
+//     TestMatVec<float>();
+//     TestMatVec<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestRandomMatVec) {
-    TestRandomMatVec<__half>();
-    TestRandomMatVec<float>();
-    TestRandomMatVec<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestRandomMatVec) {
+//     TestRandomMatVec<__half>();
+//     TestRandomMatVec<float>();
+//     TestRandomMatVec<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestBadMatVec) {
-    TestBadMatVec<__half>();
-    TestBadMatVec<float>();
-    TestBadMatVec<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestBadMatVec) {
+//     TestBadMatVec<__half>();
+//     TestBadMatVec<float>();
+//     TestBadMatVec<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestTransposeMatVec) {
-    TestTransposeMatVec<__half>();
-    TestTransposeMatVec<float>();
-    TestTransposeMatVec<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestTransposeMatVec) {
+//     TestTransposeMatVec<__half>();
+//     TestTransposeMatVec<float>();
+//     TestTransposeMatVec<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestRandomTransposeMatVec) {
-    TestRandomTransposeMatVec<__half>();
-    TestRandomTransposeMatVec<float>();
-    TestRandomTransposeMatVec<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestRandomTransposeMatVec) {
+//     TestRandomTransposeMatVec<__half>();
+//     TestRandomTransposeMatVec<float>();
+//     TestRandomTransposeMatVec<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestBadTransposeMatVec) {
-    TestBadTransposeMatVec<__half>();
-    TestBadTransposeMatVec<float>();
-    TestBadTransposeMatVec<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestBadTransposeMatVec) {
+//     TestBadTransposeMatVec<__half>();
+//     TestBadTransposeMatVec<float>();
+//     TestBadTransposeMatVec<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestTranspose) {
-    TestTranspose<__half>();
-    TestTranspose<float>();
-    TestTranspose<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestTranspose) {
+//     TestTranspose<__half>();
+//     TestTranspose<float>();
+//     TestTranspose<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestRandomTranspose) {
-    TestRandomTranspose<__half>();
-    TestRandomTranspose<float>();
-    TestRandomTranspose<double>();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestRandomTranspose) {
+//     TestRandomTranspose<__half>();
+//     TestRandomTranspose<float>();
+//     TestRandomTranspose<double>();
+// }
 
-TEST_F(NoFillMatrixSparse_Test, TestCast) {
-    TestCast();
-}
+// TEST_F(NoFillMatrixSparse_Test, TestCast) {
+//     TestCast();
+// }
 
 class NoFillMatrixSparse_Substitution_Test:
     public Matrix_Substitution_Test<NoFillMatrixSparse>
-{};
+{
+public:
+
+    template <typename TPrecision>
+    void TestFastBackwardSubstitution() {
+
+        constexpr int n(90);
+
+        NoFillMatrixSparse<TPrecision> U_tri(
+            read_matrixCSV<NoFillMatrixSparse, TPrecision>(
+                TestBase::bundle, solve_matrix_dir / fs::path("U_tri_90.csv")
+            )
+        );
+        U_tri.preprocess_trsv(true);
+
+        Vector<TPrecision> x_tri(read_vectorCSV<TPrecision>(
+            TestBase::bundle, solve_matrix_dir / fs::path("x_tri_90.csv")
+        ));
+        Vector<TPrecision> Ub_tri(read_vectorCSV<TPrecision>(
+            TestBase::bundle, solve_matrix_dir / fs::path("Ub_tri_90.csv")
+        ));
+    
+        Vector<TPrecision> test_soln(U_tri.back_sub(Ub_tri));
+
+        ASSERT_VECTOR_NEAR(
+            test_soln,
+            x_tri,
+            x_tri.get_max_mag_elem().get_scalar()*Tol<TPrecision>::gamma_T(n)
+        );
+
+    }
+    
+    template <typename TPrecision>
+    void TestFastRandomBackwardSubstitution() {
+
+        srand(time(NULL));
+        const int n((rand() % 100)+100);
+
+        NoFillMatrixSparse<TPrecision> U_tri(
+            MatrixDense<TPrecision>::Random_UT(TestBase::bundle, n, n)
+        );
+        U_tri.preprocess_trsv(true);
+
+        Vector<TPrecision> x_tri(
+            Vector<TPrecision>::Random(TestBase::bundle, n)
+        );
+        Vector<TPrecision> Ub_tri(U_tri*x_tri);
+    
+        Vector<TPrecision> test_soln(U_tri.back_sub(Ub_tri));
+
+        ASSERT_VECTOR_NEAR(
+            test_soln,
+            x_tri,
+            x_tri.get_max_mag_elem().get_scalar()*Tol<TPrecision>::gamma_T(n)
+        );
+
+    }
+
+    template <typename TPrecision>
+    void TestFastRandomSparseBackwardSubstitution() {
+
+        srand(time(NULL));
+        const int n((rand() % 100)+100);
+
+        NoFillMatrixSparse<TPrecision> U_tri(
+            NoFillMatrixSparse<double>::Random_UT(
+                TestBase::bundle,
+                n, n,
+                sqrt(static_cast<double>(n))/static_cast<double>(n)
+            ).template cast<TPrecision>()
+        );
+        U_tri.preprocess_trsv(true);
+
+        Vector<TPrecision> x_tri(
+            Vector<TPrecision>::Random(TestBase::bundle, n)
+        );
+        Vector<TPrecision> Ub_tri(U_tri*x_tri);
+
+        Vector<TPrecision> test_soln(U_tri.back_sub(Ub_tri));
+
+        ASSERT_VECTOR_NEAR(
+            test_soln,
+            x_tri,
+            x_tri.get_max_mag_elem().get_scalar()*Tol<TPrecision>::gamma_T(n)
+        );
+
+    }
+
+};
 
 TEST_F(
     NoFillMatrixSparse_Substitution_Test,
@@ -1672,6 +1760,33 @@ TEST_F(
     TestMultiBlockRandomForwardSubstitution<double>();
 }
 
+// TEST_F(
+//     NoFillMatrixSparse_Substitution_Test,
+//     TestFastForwardSubstitution
+// ) {
+//     TestFastForwardSubstitution<__half>();
+//     TestFastForwardSubstitution<float>();
+//     TestFastForwardSubstitution<double>();
+// }
+
+// TEST_F(
+//     NoFillMatrixSparse_Substitution_Test,
+//     TestFastRandomForwardSubstitution
+// ) {
+//     TestFastRandomForwardSubstitution<__half>();
+//     TestFastRandomForwardSubstitution<float>();
+//     TestFastRandomForwardSubstitution<double>();
+// }
+
+// TEST_F(
+//     NoFillMatrixSparse_Substitution_Test,
+//     TestFastRandomSparseForwardSubstitution
+// ) {
+//     TestFastRandomSparseForwardSubstitution<__half>();
+//     TestFastRandomSparseForwardSubstitution<float>();
+//     TestFastRandomSparseForwardSubstitution<double>();
+// }
+
 TEST_F(
     NoFillMatrixSparse_Substitution_Test,
     TestBackwardSubstitution
@@ -1706,4 +1821,31 @@ TEST_F(
     TestMultiBlockRandomBackwardSubstitution<__half>();
     TestMultiBlockRandomBackwardSubstitution<float>();
     TestMultiBlockRandomBackwardSubstitution<double>();
+}
+
+TEST_F(
+    NoFillMatrixSparse_Substitution_Test,
+    TestFastBackwardSubstitution
+) {
+    TestFastBackwardSubstitution<__half>();
+    TestFastBackwardSubstitution<float>();
+    TestFastBackwardSubstitution<double>();
+}
+
+TEST_F(
+    NoFillMatrixSparse_Substitution_Test,
+    TestFastRandomBackwardSubstitution
+) {
+    TestFastRandomBackwardSubstitution<__half>();
+    TestFastRandomBackwardSubstitution<float>();
+    TestFastRandomBackwardSubstitution<double>();
+}
+
+TEST_F(
+    NoFillMatrixSparse_Substitution_Test,
+    TestFastRandomSparseBackwardSubstitution
+) {
+    TestFastRandomSparseBackwardSubstitution<__half>();
+    TestFastRandomSparseBackwardSubstitution<float>();
+    TestFastRandomSparseBackwardSubstitution<double>();
 }

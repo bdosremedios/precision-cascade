@@ -8,6 +8,7 @@
 #include "types/Vector/Vector.h"
 #include "types/MatrixDense/MatrixDense.h"
 #include "NoFillMatrixSparse_gpu_kernels.cuh"
+#include "types/GeneralMatrix/GeneralMatrix_gpu_constants.cuh"
 #include "types/GeneralMatrix/GeneralMatrix_gpu_kernels.cuh"
 
 #include <iostream>
@@ -39,6 +40,9 @@ private:
     int *d_col_indices = nullptr;
     TPrecision *d_values = nullptr;
 
+    std::vector<int> trsv_level_set_cnt;
+    std::vector<int *> trsv_level_set_ptrs;
+
     size_t mem_size_row_offsets() const {
         return (m_rows+1)*sizeof(int);
     }
@@ -49,6 +53,10 @@ private:
 
     size_t mem_size_values() const {
         return nnz*sizeof(TPrecision);
+    }
+
+    size_t mem_size_trsv_preprocess() const {
+        return m_rows*sizeof(int);
     }
 
     void allocate_d_row_offsets() {
@@ -334,6 +342,22 @@ private:
         return val + val/abs_ns::abs(val);
     }
 
+    void check_trsv_dims(const Vector<TPrecision> &soln_rhs) const {
+
+        if ((m_rows != n_cols) || (soln_rhs.rows() != m_rows)) {
+            throw std::runtime_error(
+                "NoFillMatrixSparse: incorrect dimensions for trsv"
+            );
+        }
+
+    }
+
+    void slow_back_sub(Vector<TPrecision> &soln_rhs) const;
+    void fast_back_sub(Vector<TPrecision> &soln_rhs) const;
+
+    void slow_frwd_sub(Vector<TPrecision> &soln_rhs) const;
+    void fast_frwd_sub(Vector<TPrecision> &soln_rhs) const;
+
 public:
 
     class Block; class Col; // Forward declaration of nested classes
@@ -458,6 +482,9 @@ public:
         check_cuda_error(cudaFree(d_row_offsets));
         check_cuda_error(cudaFree(d_col_indices));
         check_cuda_error(cudaFree(d_values));
+        for (int *d_lvl_set_ptr: trsv_level_set_ptrs) {
+            check_cuda_error(cudaFree(d_lvl_set_ptr));
+        }
     }
 
     NoFillMatrixSparse & operator=(const NoFillMatrixSparse &other) {
@@ -1231,6 +1258,17 @@ public:
         return created_mat;
 
     }
+
+    bool get_has_fast_trsv() const {
+        return !(
+            trsv_level_set_cnt.empty() ||
+            trsv_level_set_ptrs.empty()
+        );
+    }
+
+    // Get count of things that can be solved before needing to wait for
+    // components in block to be solved
+    void preprocess_trsv(bool is_upptri);
 
     Vector<TPrecision> back_sub(const Vector<TPrecision> &arg_rhs) const;
     Vector<TPrecision> frwd_sub(const Vector<TPrecision> &arg_rhs) const;
