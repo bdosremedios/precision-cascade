@@ -182,6 +182,123 @@ TEST_F(Benchmark_NoFillMatrixSparse, ForwardSubstitution_Half_BENCHMARK) {
 
 }
 
+TEST_F(Benchmark_NoFillMatrixSparse, FastForwardSubstitution_Double_BENCHMARK) {
+
+    std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<double> &)> execute_func = [] (
+        Benchmark_AccumClock &clock, NoFillMatrixSparse<double> &A
+    ) {
+        Vector<double> x = Vector<double>::Random(
+            BenchmarkBase::bundle, A.rows()
+        );
+        Vector<double> b = A*x;
+        A.clear_preprocess_trsv();
+        A.preprocess_trsv(false);
+        clock.clock_start();
+        A.frwd_sub(b);
+        clock.clock_stop();
+    };
+
+    benchmark_exec_func<NoFillMatrixSparse, double>(
+        sparse_dims, make_low_tri_A_dbl, execute_func, "matsparse_fastfrwdsub_dbl"
+    );
+
+}
+
+TEST_F(Benchmark_NoFillMatrixSparse, FastForwardSubstitution_Single_BENCHMARK) {
+
+    std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<float> &)> execute_func = [] (
+        Benchmark_AccumClock &clock, NoFillMatrixSparse<float> &A
+    ) {
+        Vector<float> x = Vector<float>::Random(
+            BenchmarkBase::bundle, A.rows()
+        );
+        Vector<float> b = A*x;
+        A.clear_preprocess_trsv();
+        A.preprocess_trsv(false);
+        clock.clock_start();
+        A.frwd_sub(b);
+        clock.clock_stop();
+    };
+
+    benchmark_exec_func<NoFillMatrixSparse, float>(
+        sparse_dims, make_low_tri_A_sgl, execute_func, "matsparse_fastfrwdsub_sgl"
+    );
+
+}
+
+TEST_F(Benchmark_NoFillMatrixSparse, FastForwardSubstitution_Half_BENCHMARK) {
+
+    std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<__half> &)> execute_func = [] (
+        Benchmark_AccumClock &clock, NoFillMatrixSparse<__half> &A
+    ) {
+        Vector<__half> x = Vector<__half>::Random(
+            BenchmarkBase::bundle, A.rows()
+        );
+        Vector<__half> b = A*x;
+        A.clear_preprocess_trsv();
+        A.preprocess_trsv(false);
+        clock.clock_start();
+        A.frwd_sub(b);
+        clock.clock_stop();
+    };
+
+    benchmark_exec_func<NoFillMatrixSparse, __half>(
+        sparse_dims, make_low_tri_A_hlf, execute_func, "matsparse_fastfrwdsub_hlf"
+    );
+
+}
+
+TEST_F(Benchmark_NoFillMatrixSparse, LowtriPreprocess_Double_BENCHMARK) {
+
+    std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<double> &)> execute_func = [] (
+        Benchmark_AccumClock &clock, NoFillMatrixSparse<double> &A
+    ) {
+        A.clear_preprocess_trsv();
+        clock.clock_start();
+        A.preprocess_trsv(false);
+        clock.clock_stop();
+    };
+
+    benchmark_exec_func<NoFillMatrixSparse, double>(
+        sparse_dims, make_low_tri_A_dbl, execute_func, "matsparse_frwdtrsvpreprocess_dbl"
+    );
+
+}
+
+TEST_F(Benchmark_NoFillMatrixSparse, LowtriPreprocess_Single_BENCHMARK) {
+
+    std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<float> &)> execute_func = [] (
+        Benchmark_AccumClock &clock, NoFillMatrixSparse<float> &A
+    ) {
+        A.clear_preprocess_trsv();
+        clock.clock_start();
+        A.preprocess_trsv(false);
+        clock.clock_stop();
+    };
+
+    benchmark_exec_func<NoFillMatrixSparse, float>(
+        sparse_dims, make_low_tri_A_sgl, execute_func, "matsparse_frwdtrsvpreprocess_sgl"
+    );
+
+}
+
+TEST_F(Benchmark_NoFillMatrixSparse, LowtriPreprocess_Half_BENCHMARK) {
+
+    std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<__half> &)> execute_func = [] (
+        Benchmark_AccumClock &clock, NoFillMatrixSparse<__half> &A
+    ) {
+        A.clear_preprocess_trsv();
+        clock.clock_start();
+        A.preprocess_trsv(false);
+        clock.clock_stop();
+    };
+
+    benchmark_exec_func<NoFillMatrixSparse, __half>(
+        sparse_dims, make_low_tri_A_hlf, execute_func, "matsparse_frwdtrsvpreprocess_hlf"
+    );
+
+}
+
 TEST_F(Benchmark_NoFillMatrixSparse, BackwardSubstitution_Double_BENCHMARK) {
 
     std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<double> &)> execute_func = [] (
@@ -238,6 +355,123 @@ TEST_F(Benchmark_NoFillMatrixSparse, BackwardSubstitution_Half_BENCHMARK) {
 
     benchmark_exec_func<NoFillMatrixSparse, __half>(
         sparse_dims, make_upp_tri_A_hlf, execute_func, "matsparse_backsub_hlf"
+    );
+
+}
+
+TEST_F(Benchmark_NoFillMatrixSparse, FastBackwardSubstitution_Double_BENCHMARK) {
+
+    std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<double> &)> execute_func = [] (
+        Benchmark_AccumClock &clock, NoFillMatrixSparse<double> &A
+    ) {
+        Vector<double> x = Vector<double>::Random(
+            BenchmarkBase::bundle, A.rows()
+        );
+        Vector<double> b = A*x;
+        A.clear_preprocess_trsv();
+        A.preprocess_trsv(true);
+        clock.clock_start();
+        A.back_sub(b);
+        clock.clock_stop();
+    };
+
+    benchmark_exec_func<NoFillMatrixSparse, double>(
+        sparse_dims, make_upp_tri_A_dbl, execute_func, "matsparse_fastbacksub_dbl"
+    );
+
+}
+
+TEST_F(Benchmark_NoFillMatrixSparse, FastBackwardSubstitution_Single_BENCHMARK) {
+
+    std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<float> &)> execute_func = [] (
+        Benchmark_AccumClock &clock, NoFillMatrixSparse<float> &A
+    ) {
+        Vector<float> x = Vector<float>::Random(
+            BenchmarkBase::bundle, A.rows()
+        );
+        Vector<float> b = A*x;
+        A.clear_preprocess_trsv();
+        A.preprocess_trsv(true);
+        clock.clock_start();
+        A.back_sub(b);
+        clock.clock_stop();
+    };
+
+    benchmark_exec_func<NoFillMatrixSparse, float>(
+        sparse_dims, make_upp_tri_A_sgl, execute_func, "matsparse_fastbacksub_sgl"
+    );
+
+}
+
+TEST_F(Benchmark_NoFillMatrixSparse, FastBackwardSubstitution_Half_BENCHMARK) {
+
+    std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<__half> &)> execute_func = [] (
+        Benchmark_AccumClock &clock, NoFillMatrixSparse<__half> &A
+    ) {
+        Vector<__half> x = Vector<__half>::Random(
+            BenchmarkBase::bundle, A.rows()
+        );
+        Vector<__half> b = A*x;
+        A.clear_preprocess_trsv();
+        A.preprocess_trsv(true);
+        clock.clock_start();
+        A.back_sub(b);
+        clock.clock_stop();
+    };
+
+    benchmark_exec_func<NoFillMatrixSparse, __half>(
+        sparse_dims, make_upp_tri_A_hlf, execute_func, "matsparse_fastbacksub_hlf"
+    );
+
+}
+
+TEST_F(Benchmark_NoFillMatrixSparse, UpptriPreprocess_Double_BENCHMARK) {
+
+    std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<double> &)> execute_func = [] (
+        Benchmark_AccumClock &clock, NoFillMatrixSparse<double> &A
+    ) {
+        A.clear_preprocess_trsv();
+        clock.clock_start();
+        A.preprocess_trsv(true);
+        clock.clock_stop();
+    };
+
+    benchmark_exec_func<NoFillMatrixSparse, double>(
+        sparse_dims, make_upp_tri_A_dbl, execute_func, "matsparse_backtrsvpreprocess_dbl"
+    );
+
+}
+
+TEST_F(Benchmark_NoFillMatrixSparse, UpptriPreprocess_Single_BENCHMARK) {
+
+    std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<float> &)> execute_func = [] (
+        Benchmark_AccumClock &clock, NoFillMatrixSparse<float> &A
+    ) {
+        A.clear_preprocess_trsv();
+        clock.clock_start();
+        A.preprocess_trsv(true);
+        clock.clock_stop();
+    };
+
+    benchmark_exec_func<NoFillMatrixSparse, float>(
+        sparse_dims, make_upp_tri_A_sgl, execute_func, "matsparse_backtrsvpreprocess_sgl"
+    );
+
+}
+
+TEST_F(Benchmark_NoFillMatrixSparse, UpptriPreprocess_Half_BENCHMARK) {
+
+    std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<__half> &)> execute_func = [] (
+        Benchmark_AccumClock &clock, NoFillMatrixSparse<__half> &A
+    ) {
+        A.clear_preprocess_trsv();
+        clock.clock_start();
+        A.preprocess_trsv(true);
+        clock.clock_stop();
+    };
+
+    benchmark_exec_func<NoFillMatrixSparse, __half>(
+        sparse_dims, make_upp_tri_A_hlf, execute_func, "matsparse_backtrsvpreprocess_hlf"
     );
 
 }

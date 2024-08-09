@@ -338,18 +338,25 @@ private:
 
     }
 
+    void delete_trsv_preprocess() {
+        trsv_level_set_cnt.resize(0);
+        for (int *d_lvl_set_ptr : trsv_level_set_ptrs) {
+            check_cuda_error(cudaFree(d_lvl_set_ptr));
+        };
+        trsv_level_set_ptrs.resize(0);
+    }
+
     template <typename WPrecision>
     void deep_copy_trsv_preprocess(
         const NoFillMatrixSparse<WPrecision> &other
     ) {
 
-        trsv_level_set_cnt = other.trsv_level_set_cnt;
-
         // Free current level set preprocessing and deep copy other matrix's
-        for (int *d_lvl_set_ptr : trsv_level_set_ptrs) {
-            check_cuda_error(cudaFree(d_lvl_set_ptr));
-        };
+        delete_trsv_preprocess();
+
+        trsv_level_set_cnt = other.trsv_level_set_cnt;
         trsv_level_set_ptrs.resize(other.trsv_level_set_ptrs.size());
+
         for (int k=0; k < other.trsv_level_set_ptrs.size(); ++k) {
             check_cuda_error(cudaMalloc(
                 &(trsv_level_set_ptrs[k]),
@@ -1298,6 +1305,9 @@ public:
     // Get count of things that can be solved before needing to wait for
     // components in block to be solved
     void preprocess_trsv(bool is_upptri);
+
+    // Allow deletion of preprocess for testing
+    void clear_preprocess_trsv() { delete_trsv_preprocess(); }
 
     Vector<TPrecision> back_sub(const Vector<TPrecision> &arg_rhs) const;
     Vector<TPrecision> frwd_sub(const Vector<TPrecision> &arg_rhs) const;
