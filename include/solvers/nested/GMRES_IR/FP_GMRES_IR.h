@@ -33,7 +33,11 @@ protected:
 
     void initialize_inner_outer_solver() override { set_inner_solve(); }
     void outer_iterate_setup() override { set_inner_solve(); }
-    void derived_generic_reset() override { set_inner_solve(); }
+
+    void derived_generic_reset() override {
+        InnerOuterSolve<TMatrix>::derived_generic_reset();
+        set_inner_solve();
+    }
     
 public:
 
@@ -54,7 +58,6 @@ public:
             arg_solve_arg_pkg
         ),
         mutrhs_innerlinsys_ptr(arg_outer_typed_lin_sys_ptr, this->curr_res)
-
     {
         initialize_inner_outer_solver();
     }

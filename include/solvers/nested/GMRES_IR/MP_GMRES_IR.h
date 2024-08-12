@@ -279,6 +279,7 @@ protected:
 
     void initialize_inner_outer_solver() override {
         // Initialize inner outer solver in lowest precision __half phase
+        cascade_phase = INIT_PHASE;
         setup_inner_solve<__half>();
     }
 
@@ -296,6 +297,7 @@ protected:
     }
 
     void derived_generic_reset() override {
+        InnerOuterSolve<TMatrix>::derived_generic_reset();
         cascade_phase = INIT_PHASE;
         initialize_inner_outer_solver();
     }
@@ -312,7 +314,6 @@ public:
         IterativeRefinement<TMatrix>(arg_gen_lin_sys_ptr, arg_solve_arg_pkg),
         orig_inner_precond_arg_pkg_dbl(arg_inner_precond_arg_pkg_dbl)
     {
-        cascade_phase = INIT_PHASE;
         initialize_inner_outer_solver();
     }
 
