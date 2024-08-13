@@ -27,7 +27,7 @@ TEST_F(Benchmark_Precond_MP_GMRES_IR, ILU0_MP_GMRES_IR_BENCHMARK) {
         PrecondArgPkg<NoFillMatrixSparse, double> precond_args(
             std::make_shared<ILUPreconditioner<NoFillMatrixSparse, double>>(A)
         );
-        SimpleConstantThreshold<NoFillMatrixSparse> mp_restarted_gmres(
+        OuterRestartCount<NoFillMatrixSparse> mp_restarted_gmres(
             &gen_lin_sys, args, precond_args
         );
         mp_restarted_gmres.solve();
@@ -36,7 +36,7 @@ TEST_F(Benchmark_Precond_MP_GMRES_IR, ILU0_MP_GMRES_IR_BENCHMARK) {
     };
 
     benchmark_exec_func<NoFillMatrixSparse>(
-        ilu_dims, make_norm_A, execute_func, "ilu0_simple_constant_threshold"
+        ilu_dims, make_norm_A, execute_func, "ilu0_outer_restart_count"
     );
 
 }

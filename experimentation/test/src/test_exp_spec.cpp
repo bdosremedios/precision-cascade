@@ -74,7 +74,7 @@ public:
 
         Solve_Group solve_group(
             "id1",
-            std::vector<std::string>({"FP32", "SimpleConstantThreshold"}),
+            std::vector<std::string>({"FP32", "RelativeResidualThreshold"}),
             "dense",
             15,
             23,
@@ -87,7 +87,7 @@ public:
         ASSERT_EQ(solve_group.id, "id1");
         ASSERT_EQ(
             solve_group.solvers_to_use,
-            std::vector<std::string>({"FP32", "SimpleConstantThreshold"})
+            std::vector<std::string>({"FP32", "RelativeResidualThreshold"})
         );
         ASSERT_EQ(solve_group.matrix_type, "dense");
         ASSERT_EQ(solve_group.experiment_iterations, 15);
@@ -102,7 +102,7 @@ public:
 
         Solve_Group solve_group_2(
             "adsfhjl",
-            std::vector<std::string>({"RestartCount", "FP16", "FP64"}),
+            std::vector<std::string>({"OuterRestartCount", "FP16", "FP64"}),
             "sparse",
             12,
             5,
@@ -115,7 +115,7 @@ public:
         ASSERT_EQ(solve_group_2.id, "adsfhjl");
         ASSERT_EQ(
             solve_group_2.solvers_to_use,
-            std::vector<std::string>({"RestartCount", "FP16", "FP64"})
+            std::vector<std::string>({"OuterRestartCount", "FP16", "FP64"})
         );
         ASSERT_EQ(solve_group_2.matrix_type, "sparse");
         ASSERT_EQ(solve_group_2.experiment_iterations, 12);
@@ -143,7 +143,7 @@ public:
                 Solve_Group solve_group(
                     "id1",
                     std::vector<std::string>(
-                        {"FP32", "SimpleConstantThreshold", "bad"}
+                        {"FP32", "RelativeResidualThreshold", "bad"}
                     ),
                     "dense",
                     15,
@@ -163,7 +163,7 @@ public:
                 Solve_Group solve_group(
                     "id1",
                     std::vector<std::string>(
-                        {"FP32", "SimpleConstantThreshold", "FP32"}
+                        {"FP32", "RelativeResidualThreshold", "FP32"}
                     ),
                     "dense",
                     15,
@@ -183,7 +183,7 @@ public:
                 Solve_Group solve_group(
                     "id1",
                     std::vector<std::string>(
-                        {"FP32", "SimpleConstantThreshold"}
+                        {"FP32", "RelativeResidualThreshold"}
                     ),
                     "bad",
                     15,
@@ -203,7 +203,7 @@ public:
                 Solve_Group solve_group(
                     "id1",
                     std::vector<std::string>(
-                        {"FP32", "SimpleConstantThreshold"}
+                        {"FP32", "RelativeResidualThreshold"}
                     ),
                     "dense",
                     0,
@@ -223,7 +223,7 @@ public:
                 Solve_Group solve_group(
                     "id1",
                     std::vector<std::string>(
-                        {"FP32", "SimpleConstantThreshold"}
+                        {"FP32", "RelativeResidualThreshold"}
                     ),
                     "dense",
                     15,
@@ -243,7 +243,7 @@ public:
                 Solve_Group solve_group(
                     "id1",
                     std::vector<std::string>(
-                        {"FP32", "SimpleConstantThreshold"}
+                        {"FP32", "RelativeResidualThreshold"}
                     ),
                     "dense",
                     15,
@@ -263,7 +263,7 @@ public:
                 Solve_Group solve_group(
                     "id1",
                     std::vector<std::string>(
-                        {"FP32", "SimpleConstantThreshold"}
+                        {"FP32", "RelativeResidualThreshold"}
                     ),
                     "dense",
                     15,
@@ -283,7 +283,7 @@ public:
                 Solve_Group solve_group(
                     "id1",
                     std::vector<std::string>(
-                        {"FP32", "SimpleConstantThreshold"}
+                        {"FP32", "RelativeResidualThreshold"}
                     ),
                     "dense",
                     15,
@@ -303,7 +303,7 @@ public:
                 Solve_Group solve_group(
                     "id1",
                     std::vector<std::string>(
-                        {"FP32", "SimpleConstantThreshold"}
+                        {"FP32", "RelativeResidualThreshold"}
                     ),
                     "dense",
                     15,
@@ -323,7 +323,7 @@ public:
                 Solve_Group solve_group(
                     "id1",
                     std::vector<std::string>(
-                        {"FP32", "SimpleConstantThreshold"}
+                        {"FP32", "RelativeResidualThreshold"}
                     ),
                     "dense",
                     15,

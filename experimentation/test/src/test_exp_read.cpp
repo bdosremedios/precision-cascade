@@ -17,7 +17,7 @@ TEST_F(Test_Experiment_Read, TestCorrectSingleEntryJson) {
     ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[0], "FP16");
     ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[1], "FP32");
     ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[2], "FP64");
-    ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[3], "RestartCount");
+    ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[3], "OuterRestartCount");
     ASSERT_EQ(test_spec.solve_groups[0].matrix_type, "dense");
     ASSERT_EQ(test_spec.solve_groups[0].solver_args.max_iter, 10);
     ASSERT_EQ(test_spec.solve_groups[0].solver_args.max_inner_iter, 3);
@@ -46,7 +46,7 @@ TEST_F(Test_Experiment_Read, TestCorrectILUTPJson) {
     ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[0], "FP16");
     ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[1], "FP32");
     ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[2], "FP64");
-    ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[3], "RestartCount");
+    ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[3], "OuterRestartCount");
     ASSERT_EQ(test_spec.solve_groups[0].matrix_type, "dense");
     ASSERT_EQ(test_spec.solve_groups[0].solver_args.max_iter, 10);
     ASSERT_EQ(test_spec.solve_groups[0].solver_args.max_inner_iter, 3);
@@ -76,7 +76,7 @@ TEST_F(Test_Experiment_Read, TestCorrectMultipleEntryJson) {
     ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[0], "FP16");
     ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[1], "FP32");
     ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[2], "FP64");
-    ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[3], "RestartCount");
+    ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[3], "OuterRestartCount");
     ASSERT_EQ(test_spec.solve_groups[0].matrix_type, "dense");
     ASSERT_EQ(test_spec.solve_groups[0].solver_args.max_iter, 10);
     ASSERT_EQ(test_spec.solve_groups[0].solver_args.max_inner_iter, 3);
@@ -95,7 +95,7 @@ TEST_F(Test_Experiment_Read, TestCorrectMultipleEntryJson) {
     ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[0], "FP16");
     ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[1], "FP32");
     ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[2], "FP64");
-    ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[3], "RestartCount");
+    ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[3], "OuterRestartCount");
     ASSERT_EQ(test_spec.solve_groups[1].matrix_type, "sparse");
     ASSERT_EQ(test_spec.solve_groups[1].solver_args.max_iter, 4);
     ASSERT_EQ(test_spec.solve_groups[1].solver_args.max_inner_iter, 4);
@@ -110,7 +110,7 @@ TEST_F(Test_Experiment_Read, TestCorrectMultipleEntryJson) {
     ASSERT_EQ(test_spec.solve_groups[2].id, "c");
     ASSERT_EQ(test_spec.solve_groups[2].experiment_iterations, 3);
     ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[2], "FP64");
-    ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[3], "RestartCount");
+    ASSERT_EQ(test_spec.solve_groups[0].solvers_to_use[3], "OuterRestartCount");
     ASSERT_EQ(test_spec.solve_groups[2].matrix_type, "dense");
     ASSERT_EQ(test_spec.solve_groups[2].solver_args.max_iter, 10);
     ASSERT_EQ(test_spec.solve_groups[2].solver_args.max_inner_iter, 3);

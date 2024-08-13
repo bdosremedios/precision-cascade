@@ -517,7 +517,7 @@ public:
         GenericLinearSystem<TMatrix> gen_lin_sys(A, b);
 
         std::shared_ptr<MP_GMRES_IR_Solve<TMatrix>> solve_ptr;
-        solve_ptr = std::make_shared<SimpleConstantThreshold<TMatrix>>(
+        solve_ptr = std::make_shared<OuterRestartCount<TMatrix>>(
             &gen_lin_sys, solve_args
         );
 

@@ -2,7 +2,7 @@
     "solve_group_1": {
         "experiment_iterations": 3,
         "solvers_to_use": [
-            "FP16", "FP32", "FP64", "RestartCount"
+            "FP16", "FP32", "FP64", "OuterRestartCount"
         ],
         "matrix_type": "dense",
         "solver_max_outer_iterations": 10,
@@ -30,7 +30,7 @@
     "solve_group_3": {
         "experiment_iterations": 1,
         "solvers_to_use": [
-            "FP16", "FP32", "FP64", "RestartCount"
+            "FP16", "FP32", "FP64", "OuterRestartCount"
         ],
         "matrix_type": "dense",
         "solver_max_outer_iterations": 4,

@@ -44,10 +44,14 @@ private:
             (solver_id == "FP64")
         ) {
             return "FP_GMRES_IR_Solve";
-        } else if (solver_id == "SimpleConstantThreshold") {
-            return "SimpleConstantThreshold";
-        } else if (solver_id == "RestartCount") {
-            return "RestartCount";
+        } else if (solver_id == "RelativeResidualThreshold") {
+            return "RelativeResidualThreshold";
+        } else if (solver_id == "OuterRestartCount") {
+            return "OuterRestartCount";
+        } else if (solver_id == "CheckStagnation") {
+            return "CheckStagnation";
+        } else if (solver_id == "ProjectThresholdAfterStagnation") {
+            return "ProjectThresholdAfterStagnation";
         } else {
             throw std::runtime_error("get_solver_str: no matching solver_id");
         }
@@ -322,61 +326,61 @@ public:
         );
         SolveArgPkg solver_args(10, 10, 0.05);
 
-        std::shared_ptr<SimpleConstantThreshold<TMatrix>> sct_mpgmres_ptr(
-            std::make_shared<SimpleConstantThreshold<TMatrix>>(
+        std::shared_ptr<RelativeResidualThreshold<TMatrix>> rrt_mpgmres_ptr(
+            std::make_shared<RelativeResidualThreshold<TMatrix>>(
                 &gen_lin_sys, solver_args
             )
         );
-        ASSERT_FALSE(sct_mpgmres_ptr->check_initiated());
-        ASSERT_FALSE(sct_mpgmres_ptr->check_terminated());
+        ASSERT_FALSE(rrt_mpgmres_ptr->check_initiated());
+        ASSERT_FALSE(rrt_mpgmres_ptr->check_terminated());
 
-        Experiment_Clock sct_mpgmres_clock;
-        sct_mpgmres_clock.start_clock_experiment();
-        Solve_Data<InnerOuterSolve, TMatrix> sct_mpgmres_solve_data(
+        Experiment_Clock rrt_mpgmres_clock;
+        rrt_mpgmres_clock.start_clock_experiment();
+        Solve_Data<InnerOuterSolve, TMatrix> rrt_mpgmres_solve_data(
             execute_solve<InnerOuterSolve, TMatrix>(
-                "id_sct_mpgmres", sct_mpgmres_ptr, logger, false
+                "id_rrt_mpgmres", rrt_mpgmres_ptr, logger, false
             )
         );
-        sct_mpgmres_clock.stop_clock_experiment();
+        rrt_mpgmres_clock.stop_clock_experiment();
 
-        ASSERT_EQ(sct_mpgmres_solve_data.id, "id_sct_mpgmres");
-        ASSERT_TRUE(sct_mpgmres_solve_data.clock.check_completed());
+        ASSERT_EQ(rrt_mpgmres_solve_data.id, "id_rrt_mpgmres");
+        ASSERT_TRUE(rrt_mpgmres_solve_data.clock.check_completed());
         ASSERT_NEAR(
-            sct_mpgmres_clock.get_elapsed_time_ms(),
-            sct_mpgmres_solve_data.clock.get_elapsed_time_ms(),
+            rrt_mpgmres_clock.get_elapsed_time_ms(),
+            rrt_mpgmres_solve_data.clock.get_elapsed_time_ms(),
             1
         );
-        ASSERT_EQ(sct_mpgmres_ptr, sct_mpgmres_solve_data.solver_ptr);
-        ASSERT_TRUE(sct_mpgmres_solve_data.solver_ptr->check_initiated());
-        ASSERT_TRUE(sct_mpgmres_solve_data.solver_ptr->check_terminated());
+        ASSERT_EQ(rrt_mpgmres_ptr, rrt_mpgmres_solve_data.solver_ptr);
+        ASSERT_TRUE(rrt_mpgmres_solve_data.solver_ptr->check_initiated());
+        ASSERT_TRUE(rrt_mpgmres_solve_data.solver_ptr->check_terminated());
 
-        std::shared_ptr<RestartCount<TMatrix>> rc_mpgmres_ptr(
-            std::make_shared<RestartCount<TMatrix>>(
+        std::shared_ptr<OuterRestartCount<TMatrix>> orc_mpgmres_ptr(
+            std::make_shared<OuterRestartCount<TMatrix>>(
                 &gen_lin_sys, solver_args
             )
         );
-        ASSERT_FALSE(rc_mpgmres_ptr->check_initiated());
-        ASSERT_FALSE(rc_mpgmres_ptr->check_terminated());
+        ASSERT_FALSE(orc_mpgmres_ptr->check_initiated());
+        ASSERT_FALSE(orc_mpgmres_ptr->check_terminated());
 
-        Experiment_Clock rc_mpgmres_clock;
-        rc_mpgmres_clock.start_clock_experiment();
-        Solve_Data<InnerOuterSolve, TMatrix> rc_mpgmres_solve_data(
+        Experiment_Clock orc_mpgmres_clock;
+        orc_mpgmres_clock.start_clock_experiment();
+        Solve_Data<InnerOuterSolve, TMatrix> orc_mpgmres_solve_data(
             execute_solve<InnerOuterSolve, TMatrix>(
-                "id_rc_mpgmres", rc_mpgmres_ptr, logger, false
+                "id_orc_mpgmres", orc_mpgmres_ptr, logger, false
             )
         );
-        rc_mpgmres_clock.stop_clock_experiment();
+        orc_mpgmres_clock.stop_clock_experiment();
 
-        ASSERT_EQ(rc_mpgmres_solve_data.id, "id_rc_mpgmres");
-        ASSERT_TRUE(rc_mpgmres_solve_data.clock.check_completed());
+        ASSERT_EQ(orc_mpgmres_solve_data.id, "id_orc_mpgmres");
+        ASSERT_TRUE(orc_mpgmres_solve_data.clock.check_completed());
         ASSERT_NEAR(
-            rc_mpgmres_clock.get_elapsed_time_ms(),
-            rc_mpgmres_solve_data.clock.get_elapsed_time_ms(),
+            orc_mpgmres_clock.get_elapsed_time_ms(),
+            orc_mpgmres_solve_data.clock.get_elapsed_time_ms(),
             1
         );
-        ASSERT_EQ(rc_mpgmres_ptr, rc_mpgmres_solve_data.solver_ptr);
-        ASSERT_TRUE(rc_mpgmres_solve_data.solver_ptr->check_initiated());
-        ASSERT_TRUE(rc_mpgmres_solve_data.solver_ptr->check_terminated());
+        ASSERT_EQ(orc_mpgmres_ptr, orc_mpgmres_solve_data.solver_ptr);
+        ASSERT_TRUE(orc_mpgmres_solve_data.solver_ptr->check_initiated());
+        ASSERT_TRUE(orc_mpgmres_solve_data.solver_ptr->check_terminated());
 
     }
 
@@ -486,7 +490,8 @@ TEST_F(Test_Experiment_Run, Test_AllSolvers_Run_Solve_Group) {
     Solve_Group solve_group_dense(
         "allsolvers_dense",
         std::vector<std::string>(
-            {"FP16", "FP32", "FP64", "SimpleConstantThreshold", "RestartCount"}
+            {"FP16", "FP32", "FP64",
+             "RelativeResidualThreshold", "OuterRestartCount"}
         ),
         "dense", 3, 10, 4, 1e-4,
         Preconditioner_Spec("none"),
@@ -498,7 +503,11 @@ TEST_F(Test_Experiment_Run, Test_AllSolvers_Run_Solve_Group) {
     Solve_Group solve_group_sparse(
         "allsolvers_sparse",
         std::vector<std::string>(
-            {"FP16", "FP32", "FP64", "SimpleConstantThreshold", "RestartCount"}
+            {"FP16", "FP32", "FP64",
+             "RelativeResidualThreshold",
+             "OuterRestartCount",
+             "CheckStagnation",
+             "ProjectThresholdAfterStagnation"}
         ),
         "sparse", 3, 10, 4, 1e-4,
         Preconditioner_Spec("none"),
@@ -522,7 +531,9 @@ TEST_F(Test_Experiment_Run, Test_AllPreconditioners_Run_Solve_Group) {
 
         Solve_Group solve_group_dense(
             "allpreconditioners_dense_"+precond_specs.name,
-            std::vector<std::string>({"FP16", "FP32", "FP64", "RestartCount"}),
+            std::vector<std::string>(
+                {"FP16", "FP32", "FP64", "OuterRestartCount"}
+            ),
             "dense", 3, 10, 4, 1e-4,
             precond_specs,
             std::vector<std::string>({"easy_4_4.csv", "easy_5_5.csv"})
@@ -532,7 +543,9 @@ TEST_F(Test_Experiment_Run, Test_AllPreconditioners_Run_Solve_Group) {
 
         Solve_Group solve_group_sparse(
             "allpreconditioners_sparse_"+precond_specs.name,
-            std::vector<std::string>({"FP16", "FP32", "FP64", "RestartCount"}),
+            std::vector<std::string>(
+                {"FP16", "FP32", "FP64", "OuterRestartCount"}
+            ),
             "sparse", 3, 10, 4, 1e-4,
             precond_specs,
             std::vector<std::string>({"easy_4_4.csv", "easy_5_5.csv"})
@@ -548,7 +561,9 @@ TEST_F(Test_Experiment_Run, Test_Mix_Run_Solve_Group) {
 
     Solve_Group solve_group_dense(
         "mixsolvers_dense",
-        std::vector<std::string>({"FP64", "FP16", "SimpleConstantThreshold"}),
+        std::vector<std::string>(
+            {"FP64", "FP16", "RelativeResidualThreshold"}
+        ),
         "dense", 3, 10, 4, 1e-4,
         Preconditioner_Spec("none"),
         std::vector<std::string>({"easy_4_4.csv", "easy_5_5.csv"})
@@ -558,7 +573,9 @@ TEST_F(Test_Experiment_Run, Test_Mix_Run_Solve_Group) {
 
     Solve_Group solve_group_sparse(
         "mixsolvers_sparse",
-        std::vector<std::string>({"FP64", "FP16", "SimpleConstantThreshold"}),
+        std::vector<std::string>(
+            {"FP64", "FP16", "RelativeResidualThreshold"}
+        ),
         "sparse", 3, 10, 4, 1e-4,
         Preconditioner_Spec("none"),
         std::vector<std::string>({"easy_4_4.csv", "easy_5_5.csv"})

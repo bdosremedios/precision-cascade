@@ -106,18 +106,34 @@ void run_record_mpgmres_solve(
     Solve_Data<cascade::MP_GMRES_IR_Solve, TMatrix> data;
     std::shared_ptr<cascade::MP_GMRES_IR_Solve<TMatrix>> solver_ptr;
     
-    if (solver_id == "SimpleConstantThreshold") {
+    if (solver_id == "OuterRestartCount") {
 
         solver_ptr = (
-            std::make_shared<cascade::SimpleConstantThreshold<TMatrix>>(
+            std::make_shared<cascade::OuterRestartCount<TMatrix>>(
                 &gen_lin_sys, solve_arg_pkg, precond_arg_pkg_dbl
             )
         );
 
-    } else if (solver_id == "RestartCount") {
+    } else if (solver_id == "RelativeResidualThreshold") {
 
         solver_ptr = (
-            std::make_shared<cascade::RestartCount<TMatrix>>(
+            std::make_shared<cascade::RelativeResidualThreshold<TMatrix>>(
+                &gen_lin_sys, solve_arg_pkg, precond_arg_pkg_dbl
+            )
+        );
+    
+    } else if (solver_id == "CheckStagnation") {
+
+        solver_ptr = (
+            std::make_shared<cascade::CheckStagnation<TMatrix>>(
+                &gen_lin_sys, solve_arg_pkg, precond_arg_pkg_dbl
+            )
+        );
+    
+    } else if (solver_id == "ProjectThresholdAfterStagnation") {
+
+        solver_ptr = (
+            std::make_shared<cascade::ProjectThresholdAfterStagnation<TMatrix>>(
                 &gen_lin_sys, solve_arg_pkg, precond_arg_pkg_dbl
             )
         );

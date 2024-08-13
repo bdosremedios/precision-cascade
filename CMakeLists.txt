@@ -49,10 +49,10 @@ endif()
 
 if(BUILD_BENCHMARK)
     message(STATUS "Building benchmark...")
-    # add_subdirectory(benchmark)
+    add_subdirectory(benchmark)
 endif()
 
 if(BUILD_EXPERIMENTATION)
     message(STATUS "Building experiment...")
-    # add_subdirectory(experimentation)
+    add_subdirectory(experimentation)
 endif()

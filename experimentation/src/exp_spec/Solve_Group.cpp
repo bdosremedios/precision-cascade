@@ -9,7 +9,10 @@ const std::unordered_set<std::string> Solve_Group::valid_fp_solver_ids {
 };
 
 const std::unordered_set<std::string> Solve_Group::valid_mp_solver_ids {
-    "SimpleConstantThreshold", "RestartCount"
+    "OuterRestartCount",
+    "RelativeResidualThreshold",
+    "CheckStagnation",
+    "ProjectThresholdAfterStagnation"
 };
 
 Solve_Group::Solve_Group(
