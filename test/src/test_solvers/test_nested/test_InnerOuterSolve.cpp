@@ -20,7 +20,7 @@ public:
         InnerOuterSolve_Mock<TMatrix> solver(soln_add, &gen_lin_sys, args);
 
         ASSERT_TRUE(solver.init_inner_outer_hit);
-        ASSERT_EQ(solver.get_inner_res_norm_hist().size(), 0);
+        ASSERT_EQ(solver.get_inner_res_norm_history().size(), 0);
 
     }
 
@@ -44,8 +44,8 @@ public:
 
         ASSERT_EQ(solver.outer_iterate_setup_hit_count, 1);
         ASSERT_EQ(solver.outer_iterate_complete_hit_count, 1);
-        ASSERT_EQ(solver.get_inner_res_norm_hist().size(), 1);
-        ASSERT_EQ(solver.get_inner_res_norm_hist()[0].size(), 4);
+        ASSERT_EQ(solver.get_inner_res_norm_history().size(), 1);
+        ASSERT_EQ(solver.get_inner_res_norm_history()[0].size(), 4);
         ASSERT_EQ(solver.get_inner_iterations().size(), 1);
         ASSERT_EQ(solver.get_inner_iterations()[0], 3);
 
@@ -68,9 +68,9 @@ public:
 
         ASSERT_EQ(solver.outer_iterate_setup_hit_count, 5);
         ASSERT_EQ(solver.outer_iterate_complete_hit_count, 5);
-        ASSERT_EQ(solver.get_inner_res_norm_hist().size(), 5);
+        ASSERT_EQ(solver.get_inner_res_norm_history().size(), 5);
         for (int i=0; i<5; ++i) {
-            ASSERT_EQ(solver.get_inner_res_norm_hist()[i].size(), 4);
+            ASSERT_EQ(solver.get_inner_res_norm_history()[i].size(), 4);
         }
         ASSERT_EQ(solver.get_inner_iterations().size(), 5);
         for (int i=0; i<5; ++i) {
@@ -106,11 +106,11 @@ public:
         ASSERT_EQ(solver.outer_iterate_setup_hit_count, 5);
         ASSERT_EQ(solver.outer_iterate_complete_hit_count, 5);
 
-        ASSERT_EQ(solver.get_inner_res_norm_hist().size(), 5);
+        ASSERT_EQ(solver.get_inner_res_norm_history().size(), 5);
         for (int i=0; i<4; ++i) {
-            ASSERT_EQ(solver.get_inner_res_norm_hist()[i].size(), 4);
+            ASSERT_EQ(solver.get_inner_res_norm_history()[i].size(), 4);
         }
-        ASSERT_EQ(solver.get_inner_res_norm_hist()[4].size(), 3);
+        ASSERT_EQ(solver.get_inner_res_norm_history()[4].size(), 3);
 
         ASSERT_EQ(solver.get_inner_iterations().size(), 5);
         for (int i=0; i<4; ++i) {
@@ -136,7 +136,7 @@ public:
         solver.solve();
         solver.reset();
 
-        ASSERT_EQ(solver.get_inner_res_norm_hist().size(), 0);
+        ASSERT_EQ(solver.get_inner_res_norm_history().size(), 0);
         ASSERT_EQ(solver.get_inner_iterations().size(), 0);
 
     }

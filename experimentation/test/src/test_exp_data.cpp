@@ -453,6 +453,10 @@ public:
         std::vector<int> inner_iterations = (
             solve_ptr->get_inner_iterations()
         );
+        ASSERT_EQ(
+            loaded_file["inner_iterations"].size(),
+            inner_iterations.size()
+        );
         for (int i=0; i<inner_iterations.size(); ++i) {
             ASSERT_EQ(
                 loaded_file["inner_iterations"][i],
@@ -468,11 +472,35 @@ public:
         std::vector<double> outer_res_norm_history = (
             solve_ptr->get_res_norm_history()
         );
+        ASSERT_EQ(
+            loaded_file["outer_res_norm_history"].size(),
+            outer_res_norm_history.size()
+        );
         for (int i=0; i<outer_res_norm_history.size(); ++i) {
             ASSERT_EQ(
                 loaded_file["outer_res_norm_history"][i],
                 outer_res_norm_history[i]
             );
+        }
+
+        std::vector<std::vector<double>> inner_res_norm_history = (
+            solve_ptr->get_inner_res_norm_history()
+        );
+        ASSERT_EQ(
+            loaded_file["inner_res_norm_history"].size(),
+            inner_res_norm_history.size()
+        );
+        for (int i=0; i<inner_res_norm_history.size(); ++i) {
+            for (int j=0; j<inner_res_norm_history[i].size(); ++j) {
+            ASSERT_EQ(
+                loaded_file["inner_res_norm_history"][i].size(),
+                inner_res_norm_history[i].size()
+            );
+                ASSERT_EQ(
+                    loaded_file["inner_res_norm_history"][i][j],
+                    inner_res_norm_history[i][j]
+                );
+            }
         }
 
         file_in.close();
@@ -527,6 +555,10 @@ public:
         std::vector<int> inner_iterations = (
             solve_ptr->get_inner_iterations()
         );
+        ASSERT_EQ(
+            loaded_file["inner_iterations"].size(),
+            inner_iterations.size()
+        );
         for (int i=0; i<inner_iterations.size(); ++i) {
             ASSERT_EQ(
                 loaded_file["inner_iterations"][i],
@@ -542,11 +574,35 @@ public:
         std::vector<double> outer_res_norm_history = (
             solve_ptr->get_res_norm_history()
         );
+        ASSERT_EQ(
+            loaded_file["outer_res_norm_history"].size(),
+            outer_res_norm_history.size()
+        );
         for (int i=0; i<outer_res_norm_history.size(); ++i) {
             ASSERT_EQ(
                 loaded_file["outer_res_norm_history"][i],
                 outer_res_norm_history[i]
             );
+        }
+
+        std::vector<std::vector<double>> inner_res_norm_history = (
+            solve_ptr->get_inner_res_norm_history()
+        );
+        ASSERT_EQ(
+            loaded_file["inner_res_norm_history"].size(),
+            inner_res_norm_history.size()
+        );
+        for (int i=0; i<inner_res_norm_history.size(); ++i) {
+            ASSERT_EQ(
+                loaded_file["inner_res_norm_history"][i].size(),
+                inner_res_norm_history[i].size()
+            );
+            for (int j=0; j<inner_res_norm_history[i].size(); ++j) {
+                ASSERT_EQ(
+                    loaded_file["inner_res_norm_history"][i][j],
+                    inner_res_norm_history[i][j]
+                );
+            }
         }
 
         file_in.close();

@@ -97,7 +97,7 @@ private:
         file_out << "\t\"inner_res_norm_history\" : [\n";
 
         std::vector<std::vector<double>> inner_res_norm_history(
-            solver_ptr->get_inner_res_norm_hist()
+            solver_ptr->get_inner_res_norm_history()
         );
         for (int i=0; i<inner_res_norm_history.size()-1; ++i) {
             file_out << dbl_vector_to_jsonarray_str(

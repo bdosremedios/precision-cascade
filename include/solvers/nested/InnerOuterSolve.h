@@ -11,7 +11,7 @@ class InnerOuterSolve: public GenericIterativeSolve<TMatrix>
 protected:
 
     int max_inner_iter; // mutable to allow setting by derived solvers
-    std::vector<std::vector<double>> inner_res_norm_hist;
+    std::vector<std::vector<double>> inner_res_norm_history;
     std::vector<int> inner_iterations;
     SolveArgPkg inner_solve_arg_pkg;
     std::shared_ptr<GenericIterativeSolve<TMatrix>> inner_solver;
@@ -19,13 +19,13 @@ protected:
     void iterate() override {
         outer_iterate_setup();
         inner_solver->solve();
-        inner_res_norm_hist.push_back(inner_solver->get_res_norm_history());
+        inner_res_norm_history.push_back(inner_solver->get_res_norm_history());
         inner_iterations.push_back(inner_solver->get_iteration());
         outer_iterate_complete();
     };
 
     void derived_generic_reset() override {
-        inner_res_norm_hist.clear();
+        inner_res_norm_history.clear();
         inner_iterations.clear();
     }
 
@@ -35,7 +35,7 @@ protected:
     // Specify inner_solver for outer_iterate_calc and setup
     virtual void outer_iterate_setup() = 0;
 
-    // Update generic_soln and inner_res_norm_hist according to derived
+    // Update generic_soln and inner_res_norm_history according to derived
     virtual void outer_iterate_complete() = 0;
 
 public:
@@ -67,8 +67,8 @@ public:
         const SolveArgPkg &&
     );
 
-    std::vector<std::vector<double>> get_inner_res_norm_hist() const {
-        return inner_res_norm_hist;
+    std::vector<std::vector<double>> get_inner_res_norm_history() const {
+        return inner_res_norm_history;
     };
 
     std::vector<int> get_inner_iterations() const {
