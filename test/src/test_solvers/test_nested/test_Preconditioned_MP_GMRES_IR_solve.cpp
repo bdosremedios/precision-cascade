@@ -40,7 +40,7 @@ public:
                 Ainv
             )
         );
-        SimpleConstantThreshold<TMatrix> precond_left_gmres_ir(
+        RelativeResidualThreshold<TMatrix> precond_left_gmres_ir(
             &gen_lin_sys, args, precond_left_args
         );
         precond_left_gmres_ir.solve();
@@ -57,7 +57,7 @@ public:
                 Ainv
             )
         );
-        SimpleConstantThreshold<TMatrix> precond_right_gmres_ir(
+        RelativeResidualThreshold<TMatrix> precond_right_gmres_ir(
             &gen_lin_sys, args, precond_right_args
         );
         precond_right_gmres_ir.solve();
@@ -78,7 +78,7 @@ public:
         );
         GenericLinearSystem<TMatrix> gen_lin_sys_Asqr(Asqr, b);
 
-        SimpleConstantThreshold<TMatrix> precond_symmetric_gmres_ir(
+        RelativeResidualThreshold<TMatrix> precond_symmetric_gmres_ir(
             &gen_lin_sys_Asqr, args, precond_symmetric_args
         );
         precond_symmetric_gmres_ir.solve();
@@ -111,11 +111,11 @@ public:
 
         GenericLinearSystem<TMatrix> gen_lin_sys(A, b);
 
-        RestartCount<TMatrix> gmres_ir(&gen_lin_sys, args);
+        OuterRestartCount<TMatrix> gmres_ir(&gen_lin_sys, args);
         gmres_ir.solve();
 
         PrecondArgPkg<TMatrix, double> precond_left_args(ilu_ptr);
-        RestartCount<TMatrix> precond_left_gmres_ir(
+        OuterRestartCount<TMatrix> precond_left_gmres_ir(
             &gen_lin_sys, args, precond_left_args
         );
         precond_left_gmres_ir.solve();
@@ -133,7 +133,7 @@ public:
             std::make_shared<NoPreconditioner<TMatrix, double>>(),
             ilu_ptr
         );
-        RestartCount<TMatrix> precond_right_gmres_ir(
+        OuterRestartCount<TMatrix> precond_right_gmres_ir(
             &gen_lin_sys, args, precond_right_args
         );
         precond_right_gmres_ir.solve();

@@ -43,68 +43,152 @@ public:
 
 };
 
-TEST_F(MP_GMRES_IR_SolveTest, SimpleConstantThreshold_SolveConvDiff64_SOLVER) {
+TEST_F(MP_GMRES_IR_SolveTest, OuterRestartCount_SolveConvDiff64_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
 
-    SolveTest<SimpleConstantThreshold, MatrixDense>(A_path, b_path);
-    SolveTest<SimpleConstantThreshold, NoFillMatrixSparse>(A_path, b_path);
+    SolveTest<OuterRestartCount, MatrixDense>(A_path, b_path);
+    SolveTest<OuterRestartCount, NoFillMatrixSparse>(A_path, b_path);
 
 }
 
-TEST_F(MP_GMRES_IR_SolveTest, SimpleConstantThreshold_SolveConvDiff256_SOLVER) {
+TEST_F(MP_GMRES_IR_SolveTest, OuterRestartCount_SolveConvDiff256_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_256_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_256_b.csv"));
 
-    SolveTest<SimpleConstantThreshold, MatrixDense>(A_path, b_path);
-    SolveTest<SimpleConstantThreshold, NoFillMatrixSparse>(A_path, b_path);
+    SolveTest<OuterRestartCount, MatrixDense>(A_path, b_path);
+    SolveTest<OuterRestartCount, NoFillMatrixSparse>(A_path, b_path);
 
 }
 
 TEST_F(
     MP_GMRES_IR_SolveTest,
-    SimpleConstantThreshold_SolveConvDiff1024_LONGRUNTIME_SOLVER
+    OuterRestartCount_SolveConvDiff1024_LONGRUNTIME_SOLVER
 ) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_1024_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_1024_b.csv"));
 
-    SolveTest<SimpleConstantThreshold, MatrixDense>(A_path, b_path);
-    SolveTest<SimpleConstantThreshold, NoFillMatrixSparse>(A_path, b_path);
-
-}
-
-TEST_F(MP_GMRES_IR_SolveTest, RestartCount_SolveConvDiff64_SOLVER) {
-
-    fs::path A_path(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
-    fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
-
-    SolveTest<RestartCount, MatrixDense>(A_path, b_path);
-    SolveTest<RestartCount, NoFillMatrixSparse>(A_path, b_path);
-
-}
-
-TEST_F(MP_GMRES_IR_SolveTest, RestartCount_SolveConvDiff256_SOLVER) {
-
-    fs::path A_path(solve_matrix_dir / fs::path("conv_diff_256_A.csv"));
-    fs::path b_path(solve_matrix_dir / fs::path("conv_diff_256_b.csv"));
-
-    SolveTest<RestartCount, MatrixDense>(A_path, b_path);
-    SolveTest<RestartCount, NoFillMatrixSparse>(A_path, b_path);
+    SolveTest<OuterRestartCount, MatrixDense>(A_path, b_path);
+    SolveTest<OuterRestartCount, NoFillMatrixSparse>(A_path, b_path);
 
 }
 
 TEST_F(
     MP_GMRES_IR_SolveTest,
-    RestartCount_SolveConvDiff1024_LONGRUNTIME_SOLVER
+    RelativeResidualThreshold_SolveConvDiff64_SOLVER
+) {
+
+    fs::path A_path(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
+    fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
+
+    SolveTest<RelativeResidualThreshold, MatrixDense>(A_path, b_path);
+    SolveTest<RelativeResidualThreshold, NoFillMatrixSparse>(A_path, b_path);
+
+}
+
+TEST_F(
+    MP_GMRES_IR_SolveTest,
+    RelativeResidualThreshold_SolveConvDiff256_SOLVER
+) {
+
+    fs::path A_path(solve_matrix_dir / fs::path("conv_diff_256_A.csv"));
+    fs::path b_path(solve_matrix_dir / fs::path("conv_diff_256_b.csv"));
+
+    SolveTest<RelativeResidualThreshold, MatrixDense>(A_path, b_path);
+    SolveTest<RelativeResidualThreshold, NoFillMatrixSparse>(A_path, b_path);
+
+}
+
+TEST_F(
+    MP_GMRES_IR_SolveTest,
+    RelativeResidualThreshold_SolveConvDiff1024_LONGRUNTIME_SOLVER
 ) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_1024_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_1024_b.csv"));
 
-    SolveTest<RestartCount, MatrixDense>(A_path, b_path);
-    SolveTest<RestartCount, NoFillMatrixSparse>(A_path, b_path);
+    SolveTest<RelativeResidualThreshold, MatrixDense>(A_path, b_path);
+    SolveTest<RelativeResidualThreshold, NoFillMatrixSparse>(A_path, b_path);
+
+}
+
+TEST_F(
+    MP_GMRES_IR_SolveTest,
+    CheckStagnation_SolveConvDiff64_SOLVER
+) {
+
+    fs::path A_path(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
+    fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
+
+    SolveTest<CheckStagnation, MatrixDense>(A_path, b_path);
+    SolveTest<CheckStagnation, NoFillMatrixSparse>(A_path, b_path);
+
+}
+
+TEST_F(
+    MP_GMRES_IR_SolveTest,
+    CheckStagnation_SolveConvDiff256_SOLVER
+) {
+
+    fs::path A_path(solve_matrix_dir / fs::path("conv_diff_256_A.csv"));
+    fs::path b_path(solve_matrix_dir / fs::path("conv_diff_256_b.csv"));
+
+    SolveTest<CheckStagnation, MatrixDense>(A_path, b_path);
+    SolveTest<CheckStagnation, NoFillMatrixSparse>(A_path, b_path);
+
+}
+
+TEST_F(
+    MP_GMRES_IR_SolveTest,
+    CheckStagnation_SolveConvDiff1024_LONGRUNTIME_SOLVER
+) {
+
+    fs::path A_path(solve_matrix_dir / fs::path("conv_diff_1024_A.csv"));
+    fs::path b_path(solve_matrix_dir / fs::path("conv_diff_1024_b.csv"));
+
+    SolveTest<CheckStagnation, MatrixDense>(A_path, b_path);
+    SolveTest<CheckStagnation, NoFillMatrixSparse>(A_path, b_path);
+
+}
+
+TEST_F(
+    MP_GMRES_IR_SolveTest,
+    ProjectThresholdAfterStagnation_SolveConvDiff64_SOLVER
+) {
+
+    fs::path A_path(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
+    fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
+
+    SolveTest<ProjectThresholdAfterStagnation, MatrixDense>(A_path, b_path);
+    SolveTest<ProjectThresholdAfterStagnation, NoFillMatrixSparse>(A_path, b_path);
+
+}
+
+TEST_F(
+    MP_GMRES_IR_SolveTest,
+    ProjectThresholdAfterStagnation_SolveConvDiff256_SOLVER
+) {
+
+    fs::path A_path(solve_matrix_dir / fs::path("conv_diff_256_A.csv"));
+    fs::path b_path(solve_matrix_dir / fs::path("conv_diff_256_b.csv"));
+
+    SolveTest<ProjectThresholdAfterStagnation, MatrixDense>(A_path, b_path);
+    SolveTest<ProjectThresholdAfterStagnation, NoFillMatrixSparse>(A_path, b_path);
+
+}
+
+TEST_F(
+    MP_GMRES_IR_SolveTest,
+    ProjectThresholdAfterStagnation_SolveConvDiff1024_LONGRUNTIME_SOLVER
+) {
+
+    fs::path A_path(solve_matrix_dir / fs::path("conv_diff_1024_A.csv"));
+    fs::path b_path(solve_matrix_dir / fs::path("conv_diff_1024_b.csv"));
+
+    SolveTest<ProjectThresholdAfterStagnation, MatrixDense>(A_path, b_path);
+    SolveTest<ProjectThresholdAfterStagnation, NoFillMatrixSparse>(A_path, b_path);
 
 }

@@ -277,13 +277,13 @@ protected:
        convergence progress */
     virtual int determine_next_phase() = 0;
 
-    void initialize_inner_outer_solver() override {
+    virtual void initialize_inner_outer_solver() override {
         // Initialize inner outer solver in lowest precision __half phase
         cascade_phase = INIT_PHASE;
         setup_inner_solve<__half>();
     }
 
-    void outer_iterate_setup() override {
+    virtual void outer_iterate_setup() override {
         // Specify inner_solver for outer_iterate_calc and setup
         int next_phase = determine_next_phase();
         if ((cascade_phase == HLF_PHASE) && (next_phase == SGL_PHASE)) {
@@ -296,7 +296,7 @@ protected:
         choose_phase_solver();
     }
 
-    void derived_generic_reset() override {
+    virtual void derived_generic_reset() override {
         InnerOuterSolve<TMatrix>::derived_generic_reset();
         cascade_phase = INIT_PHASE;
         initialize_inner_outer_solver();
@@ -333,52 +333,17 @@ public:
 
 };
 
+// Set solver to spend quarter of iterations in half phase a quarter in single
+// phase and half time in double
 template <template <typename> typename TMatrix>
-class SimpleConstantThreshold : public MP_GMRES_IR_Solve<TMatrix>
+class OuterRestartCount: public MP_GMRES_IR_Solve<TMatrix>
 {
 protected:
 
-    const double tol_hlf = pow(10, -02);
-    const double tol_sgl = pow(10, -05);
-    const double tol_dbl = pow(10, -10);
+    const int hlf_iters;
+    const int sgl_iters;
 
-    using MP_GMRES_IR_Solve<TMatrix>::MP_GMRES_IR_Solve;
-
-    int determine_next_phase() override {
-        if (this->cascade_phase == this->HLF_PHASE) {
-            if ((this->get_relres() <= tol_hlf)) {
-                return this->SGL_PHASE;
-            } else {
-                return this->cascade_phase;
-            }
-        } else if (this->cascade_phase == this->SGL_PHASE) {
-            if ((this->get_relres() <= tol_sgl)) {
-                return this->DBL_PHASE;
-            } else {
-                return this->cascade_phase;
-            }
-        } else {
-            return this->DBL_PHASE;
-        }
-    }
-
-};
-
-template <template <typename> typename TMatrix>
-class RestartCount: public MP_GMRES_IR_Solve<TMatrix>
-{
-protected:
-
-    int hlf_iters = 4; // Set time spent in half iteration to min number
-                       // of iter needed to save cost of cast as long as were
-                       // guaranteed 1 MV product
-    int sgl_iters = 2; // Set time spend in single iteration to min number
-                       // of iter needed to save cost of cast as long as were
-                       // guaranteed 1 MV product
-
-    using MP_GMRES_IR_Solve<TMatrix>::MP_GMRES_IR_Solve;
-
-    int determine_next_phase() override {
+    virtual int determine_next_phase() override {
         if (this->cascade_phase == this->HLF_PHASE) {
             if (this->get_iteration() > hlf_iters) {
                 return this->SGL_PHASE;
@@ -395,6 +360,162 @@ protected:
             return this->DBL_PHASE;
         }
     }
+
+public:
+
+    OuterRestartCount(
+        const GenericLinearSystem<TMatrix> * const arg_gen_lin_sys_ptr,
+        const SolveArgPkg &arg_solve_arg_pkg,
+        const PrecondArgPkg<TMatrix, double> arg_inner_precond_arg_pkg_dbl = (
+            PrecondArgPkg<TMatrix, double>()
+        )
+    ):
+        MP_GMRES_IR_Solve<TMatrix>(
+            arg_gen_lin_sys_ptr,
+            arg_solve_arg_pkg,
+            arg_inner_precond_arg_pkg_dbl
+        ),
+        hlf_iters(arg_solve_arg_pkg.max_iter/4),
+        sgl_iters(arg_solve_arg_pkg.max_iter/4)
+    {}
+
+};
+
+
+// Set solver to change phase when relative residual reaches an order of
+// magnitude above roundoff
+template <template <typename> typename TMatrix>
+class RelativeResidualThreshold : public MP_GMRES_IR_Solve<TMatrix>
+{
+protected:
+
+    const double tol_hlf = 10.*std::pow(2., -10);
+    const double tol_sgl = 10.*std::pow(2., -23);
+
+    virtual int determine_next_phase() override {
+        if (this->cascade_phase == this->HLF_PHASE) {
+            if (this->get_relres() <= tol_hlf) {
+                return this->SGL_PHASE;
+            } else {
+                return this->cascade_phase;
+            }
+        } else if (this->cascade_phase == this->SGL_PHASE) {
+            if (this->get_relres() <= tol_sgl) {
+                return this->DBL_PHASE;
+            } else {
+                return this->cascade_phase;
+            }
+        } else {
+            return this->DBL_PHASE;
+        }
+    }
+
+public:
+
+    using MP_GMRES_IR_Solve<TMatrix>::MP_GMRES_IR_Solve;
+
+};
+
+// Set solver to check for stagnation where the average change in elements
+// is of order of being in a ball 2x times the size of roundoff
+template <template <typename> typename TMatrix>
+class CheckStagnation: public MP_GMRES_IR_Solve<TMatrix>
+{
+protected:
+
+    virtual int determine_next_phase() override {
+
+        int size = this->res_norm_history.size();
+        double rel_diff;
+
+        if (size < 2) {
+            return this->INIT_PHASE;
+        } else {
+            rel_diff = (
+                (this->res_norm_history[size-1] -
+                 this->res_norm_history[size-2]) /
+                this->res_norm_history[size-2]
+            );
+        }
+        
+        if (this->cascade_phase == this->HLF_PHASE) {
+            if (rel_diff <= 2.*this->u_hlf) {
+                return this->SGL_PHASE;
+            } else {
+                return this->cascade_phase;
+            }
+        } else if (this->cascade_phase == this->SGL_PHASE) {
+            if (rel_diff <= 2.*this->u_sgl) {
+                return this->DBL_PHASE;
+            } else {
+                return this->cascade_phase;
+            }
+        } else {
+            return this->DBL_PHASE;
+        }
+
+    }
+
+public:
+
+    using MP_GMRES_IR_Solve<TMatrix>::MP_GMRES_IR_Solve;
+
+};
+
+// Set solver to check for stagnation in first phase the average change in
+// elements approximately the size of being within a ball 2x times the size of
+// roundoff and guess next stagnation as constant threshold of residual at first
+// phase change scaled by the expected roundoff change of half to float
+template <template <typename> typename TMatrix>
+class ProjectThresholdAfterStagnation: public MP_GMRES_IR_Solve<TMatrix>
+{
+protected:
+
+    double projected_sgl_threshold;
+
+    virtual int determine_next_phase() override {
+
+        int size = this->res_norm_history.size();
+        double rel_diff;
+
+        if (size < 2) {
+            return this->INIT_PHASE;
+        } else {
+            rel_diff = (
+                (this->res_norm_history[size-1] -
+                 this->res_norm_history[size-2]) /
+                this->res_norm_history[size-2]
+            );
+        }
+        
+        if (this->cascade_phase == this->HLF_PHASE) {
+
+            if (rel_diff <= 2.*this->u_hlf) {
+                projected_sgl_threshold = (
+                    this->get_relres() * this->u_sgl / this->u_hlf
+                );
+                return this->SGL_PHASE;
+            } else {
+                return this->cascade_phase;
+            }
+
+        } else if (this->cascade_phase == this->SGL_PHASE) {
+
+            if (this->get_relres() <= projected_sgl_threshold) {
+                return this->DBL_PHASE;
+            } else {
+                return this->cascade_phase;
+            }
+
+        } else {
+            return this->DBL_PHASE;
+        }
+
+    }
+
+public:
+
+    using MP_GMRES_IR_Solve<TMatrix>::MP_GMRES_IR_Solve;
 
 };
 
