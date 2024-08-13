@@ -16,10 +16,6 @@ protected:
         // inner_solver under iterative refinement
         this->generic_soln += this->inner_solver->get_generic_soln();
 
-        this->inner_res_norm_hist.push_back(
-            this->inner_solver->get_res_norm_history()
-        );
-
     }
 
     Vector<double> make_inner_IR_guess(

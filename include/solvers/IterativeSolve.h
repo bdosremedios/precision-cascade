@@ -49,10 +49,7 @@ private:
 
         res_norm_history.clear();
         res_costheta_history.clear();
-        curr_res = (
-            gen_lin_sys_ptr->get_b() -
-            gen_lin_sys_ptr->get_A()*init_guess
-        );
+        curr_res = calc_residual(init_guess);
         curr_res_norm = curr_res.norm();
         res_norm_history.push_back(curr_res_norm.get_scalar());
         res_costheta_history.push_back(0.);
@@ -62,10 +59,7 @@ private:
     void update_residual() {
 
         last_res = curr_res;
-        curr_res = (
-            gen_lin_sys_ptr->get_b() -
-            gen_lin_sys_ptr->get_A()*generic_soln
-        );
+        curr_res = calc_residual(generic_soln);
         curr_res_norm = curr_res.norm();
         res_norm_history.push_back(curr_res_norm.get_scalar());
         res_costheta_history.push_back(
@@ -117,7 +111,14 @@ protected:
     }
 
     virtual void iterate() = 0;
+
     virtual void derived_generic_reset() = 0;
+
+    virtual Vector<double> calc_residual(
+        const Vector<double> &arg_x
+    ) const {
+        return gen_lin_sys_ptr->get_b() - gen_lin_sys_ptr->get_A()*arg_x;
+    }
 
     Vector<double> make_guess(
         const GenericLinearSystem<TMatrix> * const arg_gen_lin_sys_ptr
@@ -320,7 +321,14 @@ protected:
     Vector<TPrecision> typed_soln = Vector<TPrecision>(cuHandleBundle());
 
     virtual void typed_iterate() = 0;
+
     virtual void derived_typed_reset() = 0;
+
+    virtual Vector<double> calc_residual(
+        const Vector<double> &arg_x
+    ) const override {
+        return typed_lin_sys_ptr->get_b() - typed_lin_sys_ptr->get_A()*arg_x;
+    }
 
     // Perform iteration updating typed_soln and then using that to
     // update generic_soln()

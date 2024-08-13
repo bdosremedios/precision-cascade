@@ -3,7 +3,7 @@
 
 #include "Timed_Experiment_Data.h"
 
-#include "solvers/IterativeSolve.h"
+#include "solvers/nested/GMRES_IR/FP_GMRES_IR.h"
 #include "solvers/nested/GMRES_IR/MP_GMRES_IR.h"
 
 template <
@@ -19,7 +19,7 @@ private:
         return (b) ? "true" : "false";
     }
 
-    std::string vector_to_jsonarray_str(
+    std::string dbl_vector_to_jsonarray_str(
         std::vector<double> vec, int padding_level
     ) const {
 
@@ -40,36 +40,85 @@ private:
 
     }
 
+    std::string int_vector_to_jsonarray_str(
+        std::vector<int> vec, int padding_level
+    ) const {
+
+        std::stringstream strm_to_write;
+
+        for (int i=0; i<padding_level; ++i) {
+            strm_to_write << "\t";
+        }
+
+        strm_to_write << "[";
+        for (int i=0; i<vec.size()-1; ++i) {
+            strm_to_write << vec[i] << ", ";
+        }
+        strm_to_write << vec[vec.size()-1] << "]";
+
+        return strm_to_write.str();
+
+    }
+
     void record_basic_solver_data(std::ofstream &file_out) const {
         file_out << "\t\"id\" : \"" << id << "\",\n";
-        file_out << "\t\"solver_class\" : \"" << typeid(*solver_ptr).name()
-                << "\",\n";
+        file_out << "\t\"solver_class\" : \""
+                 << typeid(*solver_ptr).name()
+                 << "\",\n";
         file_out << "\t\"initiated\" : \""
-                << bool_to_string(solver_ptr->check_initiated())
-                << "\",\n";
+                 << bool_to_string(solver_ptr->check_initiated())
+                 << "\",\n";
         file_out << "\t\"converged\" : \""
-                << bool_to_string(solver_ptr->check_converged())
-                << "\",\n";
+                 << bool_to_string(solver_ptr->check_converged())
+                 << "\",\n";
         file_out << "\t\"terminated\" : \""
-                << bool_to_string(solver_ptr->check_terminated())
-                << "\",\n";
-        file_out << "\t\"iteration\" : " << solver_ptr->get_iteration()
-                << ",\n";
+                 << bool_to_string(solver_ptr->check_terminated())
+                 << "\",\n";
+        file_out << "\t\"outer_iterations\" : "
+                 << solver_ptr->get_iteration()
+                 << ",\n";
+        file_out << "\t\"inner_iterations\" : "
+                 << int_vector_to_jsonarray_str(
+                        solver_ptr->get_inner_iterations(), 0
+                    )
+                 << ",\n";
         file_out << "\t\"elapsed_time_ms\" : " << clock.get_elapsed_time_ms()
                 << ",\n";
     }
 
     void record_residual_solver_data(std::ofstream &file_out) const {
-        file_out << "\t\"res_norm_history\" : "
-                 << vector_to_jsonarray_str(
+
+        file_out << "\t\"outer_res_norm_history\" : "
+                 << dbl_vector_to_jsonarray_str(
                         solver_ptr->get_res_norm_history(), 0
                     )
+                 << ",\n";
+
+        file_out << "\t\"inner_res_norm_history\" : [\n";
+
+        std::vector<std::vector<double>> inner_res_norm_history(
+            solver_ptr->get_inner_res_norm_hist()
+        );
+        for (int i=0; i<inner_res_norm_history.size()-1; ++i) {
+            file_out << dbl_vector_to_jsonarray_str(
+                            inner_res_norm_history[i],
+                            2
+                        )
+                     << ",\n";
+        }
+        file_out << dbl_vector_to_jsonarray_str(
+                        inner_res_norm_history[inner_res_norm_history.size()-1],
+                        2
+                    )
                  << "\n";
+
+        file_out << "\t]\n";
+
     }
 
     void record_solver_data(
         std::ofstream &file_out,
-        const std::shared_ptr<cascade::GenericIterativeSolve<TMatrix>> &solver_ptr
+        const std::shared_ptr<cascade::InnerOuterSolve<TMatrix>> &solver_ptr
     ) const {
         record_basic_solver_data(file_out);
         record_residual_solver_data(file_out);

@@ -419,8 +419,8 @@ public:
             &typ_lin_sys, u_dbl, solve_args
         );
 
-        Solve_Data<GenericIterativeSolve, TMatrix> data(
-            execute_solve<GenericIterativeSolve, TMatrix>(
+        Solve_Data<InnerOuterSolve, TMatrix> data(
+            execute_solve<InnerOuterSolve, TMatrix>(
                 id, solve_ptr, logger, false
             )
         );
@@ -444,17 +444,35 @@ public:
             loaded_file["terminated"],
             bool_to_string(solve_ptr->check_terminated())
         );
-        ASSERT_EQ(loaded_file["iteration"], solve_ptr->get_iteration());
+
+        ASSERT_EQ(
+            loaded_file["outer_iterations"],
+            solve_ptr->get_iteration()
+        );
+        
+        std::vector<int> inner_iterations = (
+            solve_ptr->get_inner_iterations()
+        );
+        for (int i=0; i<inner_iterations.size(); ++i) {
+            ASSERT_EQ(
+                loaded_file["inner_iterations"][i],
+                inner_iterations[i]
+            );
+        }
+
         ASSERT_EQ(
             loaded_file["elapsed_time_ms"],
             data.clock.get_elapsed_time_ms()
         );
 
-        std::vector<double> res_norm_history = (
+        std::vector<double> outer_res_norm_history = (
             solve_ptr->get_res_norm_history()
         );
-        for (int i=0; i<res_norm_history.size(); ++i) {
-            ASSERT_EQ(loaded_file["res_norm_history"][i], res_norm_history[i]);
+        for (int i=0; i<outer_res_norm_history.size(); ++i) {
+            ASSERT_EQ(
+                loaded_file["outer_res_norm_history"][i],
+                outer_res_norm_history[i]
+            );
         }
 
         file_in.close();
@@ -500,17 +518,35 @@ public:
             loaded_file["terminated"],
             bool_to_string(solve_ptr->check_terminated())
         );
-        ASSERT_EQ(loaded_file["iteration"], solve_ptr->get_iteration());
+
+        ASSERT_EQ(
+            loaded_file["outer_iterations"],
+            solve_ptr->get_iteration()
+        );
+        
+        std::vector<int> inner_iterations = (
+            solve_ptr->get_inner_iterations()
+        );
+        for (int i=0; i<inner_iterations.size(); ++i) {
+            ASSERT_EQ(
+                loaded_file["inner_iterations"][i],
+                inner_iterations[i]
+            );
+        }
+
         ASSERT_EQ(
             loaded_file["elapsed_time_ms"],
             data.clock.get_elapsed_time_ms()
         );
 
-        std::vector<double> res_norm_history = (
+        std::vector<double> outer_res_norm_history = (
             solve_ptr->get_res_norm_history()
         );
-        for (int i=0; i<res_norm_history.size(); ++i) {
-            ASSERT_EQ(loaded_file["res_norm_history"][i], res_norm_history[i]);
+        for (int i=0; i<outer_res_norm_history.size(); ++i) {
+            ASSERT_EQ(
+                loaded_file["outer_res_norm_history"][i],
+                outer_res_norm_history[i]
+            );
         }
 
         file_in.close();

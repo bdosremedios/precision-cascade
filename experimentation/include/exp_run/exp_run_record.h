@@ -33,7 +33,7 @@ void run_record_fpgmres_solve(
     Experiment_Log logger
 ) {
 
-    Solve_Data<cascade::GenericIterativeSolve, TMatrix> data;
+    Solve_Data<cascade::InnerOuterSolve, TMatrix> data;
 
     if (solver_id == "FP16") {
 
@@ -41,7 +41,7 @@ void run_record_fpgmres_solve(
             precond_arg_pkg_dbl.cast_hlf_ptr()
         );
         cascade::TypedLinearSystem<TMatrix, __half> lin_sys_hlf(&gen_lin_sys);
-        data = execute_solve<cascade::GenericIterativeSolve, TMatrix>(
+        data = execute_solve<cascade::InnerOuterSolve, TMatrix>(
             solver_id,
             std::make_shared<cascade::FP_GMRES_IR_Solve<TMatrix, __half>>(
                 &lin_sys_hlf, u_hlf, solve_arg_pkg, *precond_args_hlf_ptr
@@ -57,7 +57,7 @@ void run_record_fpgmres_solve(
             precond_arg_pkg_dbl.cast_sgl_ptr()
         );
         cascade::TypedLinearSystem<TMatrix, float> lin_sys_sgl(&gen_lin_sys);
-        data = execute_solve<cascade::GenericIterativeSolve, TMatrix>(
+        data = execute_solve<cascade::InnerOuterSolve, TMatrix>(
             solver_id,
             std::make_shared<cascade::FP_GMRES_IR_Solve<TMatrix, float>>(
                 &lin_sys_sgl, u_sgl, solve_arg_pkg, *precond_args_sgl_ptr
@@ -70,7 +70,7 @@ void run_record_fpgmres_solve(
     } else if (solver_id == "FP64") {
 
         cascade::TypedLinearSystem<TMatrix, double> lin_sys_dbl(&gen_lin_sys);
-        data = execute_solve<cascade::GenericIterativeSolve, TMatrix>(
+        data = execute_solve<cascade::InnerOuterSolve, TMatrix>(
             solver_id,
             std::make_shared<cascade::FP_GMRES_IR_Solve<TMatrix, double>>(
                 &lin_sys_dbl, u_dbl, solve_arg_pkg, precond_arg_pkg_dbl

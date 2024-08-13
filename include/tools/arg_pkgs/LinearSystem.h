@@ -131,7 +131,7 @@ public:
     const TMatrix<TPrecision> &get_A_typed() const override {
         return A_typed;
     }
-    const Vector<TPrecision> &get_b_typed() const override {
+    virtual const Vector<TPrecision> &get_b_typed() const override {
         return b_typed;
     }
 
@@ -151,10 +151,10 @@ public:
         TypedLinearSystem_Intf<TMatrix, double>(arg_gen_lin_sys_ptr)
     {}
 
-    const TMatrix<double> &get_A_typed() const override {
+    virtual const TMatrix<double> &get_A_typed() const override {
         return this->gen_lin_sys_ptr->get_A();
     }
-    const Vector<double> &get_b_typed() const override {
+    virtual const Vector<double> &get_b_typed() const override {
         return this->gen_lin_sys_ptr->get_b();
     }
 
@@ -184,13 +184,13 @@ public:
         additional_rhs_typed(arg_additional_rhs.template cast<TPrecision>())
     {}
 
-    const Vector<double> &get_b() const override {
+    virtual const Vector<double> &get_b() const override {
         return additional_rhs;
     }
-    const TMatrix<TPrecision> &get_A_typed() const override {
+    virtual const TMatrix<TPrecision> &get_A_typed() const override {
         return orig_typed_lin_sys_ptr->get_A_typed();
     }
-    const Vector<TPrecision> &get_b_typed() const override {
+    virtual const Vector<TPrecision> &get_b_typed() const override {
         return additional_rhs_typed;
     }
 

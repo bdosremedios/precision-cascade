@@ -233,8 +233,8 @@ public:
 
         Experiment_Clock fpgmres16_clock;
         fpgmres16_clock.start_clock_experiment();
-        Solve_Data<GenericIterativeSolve, TMatrix> fpgmres16_solve_data(
-            execute_solve<GenericIterativeSolve, TMatrix>(
+        Solve_Data<InnerOuterSolve, TMatrix> fpgmres16_solve_data(
+            execute_solve<InnerOuterSolve, TMatrix>(
                 "fp16_id", fpgmres16_ptr, logger, false
             )
         );
@@ -262,8 +262,8 @@ public:
 
         Experiment_Clock fpgmres32_clock;
         fpgmres32_clock.start_clock_experiment();
-        Solve_Data<GenericIterativeSolve, TMatrix> fpgmres32_solve_data(
-            execute_solve<GenericIterativeSolve, TMatrix>(
+        Solve_Data<InnerOuterSolve, TMatrix> fpgmres32_solve_data(
+            execute_solve<InnerOuterSolve, TMatrix>(
                 "fp32_id", fpgmres32_ptr, logger, false
             )
         );
@@ -291,8 +291,8 @@ public:
 
         Experiment_Clock fpgmres64_clock;
         fpgmres64_clock.start_clock_experiment();
-        Solve_Data<GenericIterativeSolve, TMatrix> fpgmres64_solve_data(
-            execute_solve<GenericIterativeSolve, TMatrix>(
+        Solve_Data<InnerOuterSolve, TMatrix> fpgmres64_solve_data(
+            execute_solve<InnerOuterSolve, TMatrix>(
                 "fp64_id", fpgmres64_ptr, logger, false
             )
         );
@@ -332,8 +332,8 @@ public:
 
         Experiment_Clock sct_mpgmres_clock;
         sct_mpgmres_clock.start_clock_experiment();
-        Solve_Data<GenericIterativeSolve, TMatrix> sct_mpgmres_solve_data(
-            execute_solve<GenericIterativeSolve, TMatrix>(
+        Solve_Data<InnerOuterSolve, TMatrix> sct_mpgmres_solve_data(
+            execute_solve<InnerOuterSolve, TMatrix>(
                 "id_sct_mpgmres", sct_mpgmres_ptr, logger, false
             )
         );
@@ -360,8 +360,8 @@ public:
 
         Experiment_Clock rc_mpgmres_clock;
         rc_mpgmres_clock.start_clock_experiment();
-        Solve_Data<GenericIterativeSolve, TMatrix> rc_mpgmres_solve_data(
-            execute_solve<GenericIterativeSolve, TMatrix>(
+        Solve_Data<InnerOuterSolve, TMatrix> rc_mpgmres_solve_data(
+            execute_solve<InnerOuterSolve, TMatrix>(
                 "id_rc_mpgmres", rc_mpgmres_ptr, logger, false
             )
         );
