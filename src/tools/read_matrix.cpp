@@ -70,3 +70,10 @@ void cascade::helper::scan_csv_dim(
     *n_cols_ptr = n_cols;
 
 }
+
+bool cascade::helper::no_whitespace(std::string &str) {
+    for (auto iter = str.cbegin(); iter != str.cend(); ++iter) {
+        if (std::isspace(*iter)) { return false; }
+    }
+    return true;
+};

@@ -92,7 +92,7 @@ public:
         fs::path vector_file(read_matrix_dir / fs::path("vector2.mtx"));
 
         Vector<TPrecision> test(read_vectorMTX<TPrecision>(
-            TestBase::bundle, vector_file, "first"
+            TestBase::bundle, vector_file, "random"
         ));
 
         NoFillMatrixSparse<TPrecision> target_mat(

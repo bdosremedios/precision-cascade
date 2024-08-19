@@ -71,6 +71,258 @@ void scan_csv_vals(
     }
 
 }
+
+bool no_whitespace(std::string &str);
+
+template <typename TPrecision>
+NoFillMatrixSparse<TPrecision> read_coord_body_MTX(
+    std::ifstream &file_in,
+    std::stringstream &line_in,
+    const cuHandleBundle &cu_handles,
+    bool symmetric
+) {
+
+    std::string line_str;
+    std::string line_str_portion;
+
+    // Read matrix dimensions and initiate data storage
+    int m_rows;
+    int n_cols;
+    int entries;
+    std::string mtx_dim_error(
+        "read_coord_body_MTX: matrix dimensions incorrect to expected format"
+    );
+    try {
+        if (
+            !std::getline(line_in, line_str_portion, ' ') ||
+            !no_whitespace(line_str_portion)
+        ) {
+            throw std::invalid_argument("");
+        }
+        m_rows = stoi(line_str_portion);
+        if (
+            !std::getline(line_in, line_str_portion, ' ') ||
+            !no_whitespace(line_str_portion)
+        ) {
+            throw std::invalid_argument("");
+        }
+        n_cols = stoi(line_str_portion);
+        if (
+            !std::getline(line_in, line_str_portion) ||
+            !no_whitespace(line_str_portion)
+        ) {
+            throw std::invalid_argument("");
+        }
+        entries = stoi(line_str_portion);
+        if ((m_rows < 0) || (n_cols < 0) || (entries < 0)) {
+            throw std::invalid_argument("");
+        }
+    } catch (std::invalid_argument e) {
+        throw std::runtime_error(mtx_dim_error);
+    }
+
+    int total_nnz = 0;
+    std::vector<std::vector<int>> vec_row_indices(n_cols);
+    std::vector<std::vector<TPrecision>> vec_vals(n_cols);
+
+    // Load data and check validity
+    int last_i = -1;
+    int last_j = -1;
+    for (int entry=0; entry<entries; ++entry) {
+
+        try {
+
+            std::getline(file_in, line_str);
+            line_in.clear();
+            line_in << line_str;
+
+            if (
+                !std::getline(line_in, line_str_portion, ' ') ||
+                !no_whitespace(line_str_portion)
+            ) {
+                throw std::invalid_argument("");
+            }
+            int i = stoi(line_str_portion)-1; // 1-indexing correction
+            if (
+                !std::getline(line_in, line_str_portion, ' ') ||
+                !no_whitespace(line_str_portion)
+            ) {
+                throw std::invalid_argument("");
+            }
+            int j = stoi(line_str_portion)-1; // 1-indexing correction
+            if (
+                !std::getline(line_in, line_str_portion) ||
+                !no_whitespace(line_str_portion)
+            ) {
+                throw std::invalid_argument("");
+            }
+            TPrecision val = static_cast<TPrecision>(stod(line_str_portion));
+
+            // Check validity of entry values
+            if (
+                (j == last_j) &&
+                ((i <= last_i) || (i < 0) || (i >= m_rows))
+            ) {
+                throw std::runtime_error(
+                    "read_coord_body_MTX: invalid row order encountered"
+                );
+            } else if ((j < last_j) || (j < 0) || (j >= n_cols)) {
+                throw std::runtime_error(
+                    "read_coord_body_MTX: invalid column encountered"
+                );
+            } else if ((i < 0) || (i >= m_rows)) {
+                throw std::runtime_error(
+                    "read_coord_body_MTX: invalid row encountered"
+                );
+            } else if (symmetric && (j > i)) {
+                throw std::runtime_error(
+                    "read_coord_body_MTX: above diagonal entry in symmetric"
+                );
+            }
+            last_i = i;
+            last_j = j;
+
+            if (val != static_cast<TPrecision>(0.)) {
+
+                vec_row_indices[j].push_back(i);
+                vec_vals[j].push_back(val);
+                ++total_nnz;
+
+                if (symmetric && (i > j)) {
+                    vec_row_indices[i].push_back(j);
+                    vec_vals[i].push_back(val);
+                    ++total_nnz;
+                }
+
+            }
+
+        } catch (std::invalid_argument e) {
+            throw std::runtime_error(
+                "read_coord_body_MTX: Invalid entry in file entry: " + 
+                std::to_string(entry)
+            );
+        }
+
+    }
+
+    int curr_nnz = 0;
+    int *h_col_offsets = static_cast<int *>(malloc((n_cols+1)*sizeof(int)));
+    int *h_row_indices = static_cast<int *>(malloc(total_nnz*sizeof(int)));
+    TPrecision *h_vals = static_cast<TPrecision *>(
+        malloc(total_nnz*sizeof(TPrecision))
+    );
+
+    for (int j=0; j<n_cols; ++j) {
+        h_col_offsets[j] = curr_nnz;
+        for (int i=0; i<vec_row_indices[j].size(); ++i) {
+            h_row_indices[curr_nnz+i] = vec_row_indices[j][i];
+            h_vals[curr_nnz+i] = vec_vals[j][i];
+        }
+        curr_nnz += vec_row_indices[j].size();
+    }
+    assert(curr_nnz == total_nnz);
+    h_col_offsets[n_cols] = curr_nnz;
+
+    NoFillMatrixSparse<TPrecision> mat(
+        cu_handles,
+        h_col_offsets, h_row_indices, h_vals,
+        m_rows, n_cols, total_nnz
+    );
+
+    free(h_col_offsets);
+    free(h_row_indices);
+    free(h_vals);
+
+    return mat;
+
+}
+
+template <typename TPrecision>
+MatrixDense<TPrecision> read_array_body_MTX(
+    std::ifstream &file_in,
+    std::stringstream &line_in,
+    const cuHandleBundle &cu_handles
+) {
+
+    std::string line_str;
+    std::string line_str_portion;
+
+    // Read matrix dimensions and initiate data storage
+    int m_rows;
+    int n_cols;
+    std::string mtx_dim_error(
+        "read_array_body_MTX: matrix dimensions incorrect to expected format"
+    );
+
+    try {
+        if (
+            !std::getline(line_in, line_str_portion, ' ') ||
+            !no_whitespace(line_str_portion)
+        ) {
+            throw std::invalid_argument("");
+        }
+        m_rows = stoi(line_str_portion);
+        if (
+            !std::getline(line_in, line_str_portion) ||
+            !no_whitespace(line_str_portion)
+        ) {
+            throw std::invalid_argument("");
+        }
+        n_cols = stoi(line_str_portion);
+        if ((m_rows < 0) || (n_cols < 0)) {
+            throw std::invalid_argument("");
+        }
+    } catch (std::invalid_argument e) {
+        throw std::runtime_error(mtx_dim_error);
+    }
+
+    int expected_nnz = m_rows*n_cols;
+    TPrecision *h_mat = static_cast<TPrecision *>(
+        malloc(expected_nnz*sizeof(TPrecision))
+    );
+
+    // Load data and check validity
+    for (int entry=0; entry<expected_nnz; ++entry) {
+
+        try {
+
+            std::getline(file_in, line_str);
+            line_in.clear();
+            line_in << line_str;
+
+            if (
+                !std::getline(line_in, line_str_portion) ||
+                !no_whitespace(line_str_portion)
+            ) {
+                throw std::invalid_argument("");
+            }
+            h_mat[entry] = static_cast<TPrecision>(stod(line_str_portion));
+
+        } catch (std::invalid_argument e) {
+
+            throw std::runtime_error(
+                "read_array_body_MTX: Invalid entry in file entry: " + 
+                std::to_string(entry)
+            );
+
+        }
+
+    }
+
+    std::getline(file_in, line_str);
+    if ((line_str != "") || std::getline(file_in, line_str)) {
+        throw std::runtime_error(
+            "read_array_body_MTX: Invalid entry in file entry: too many entries"
+        );
+    }
+
+    MatrixDense<TPrecision> mat(cu_handles, h_mat, m_rows, n_cols);
+
+    free(h_mat);
+
+    return mat;
+
+}
     
 }
 
@@ -147,13 +399,6 @@ TMatrix<TPrecision> read_matrixMTX(
     std::string line_str_portion;
     std::stringstream line_in;
 
-    auto no_whitespace = [](std::string &str) -> bool {
-        for (auto iter = str.cbegin(); iter != str.cend(); ++iter) {
-            if (std::isspace(*iter)) { return false; }
-        }
-        return true;
-    };
-
     // Read first line to affirm format and get symmetry
     std::string first_line_error(
         "read_matrixMTX: first line incorrect to expected format"
@@ -161,24 +406,30 @@ TMatrix<TPrecision> read_matrixMTX(
     std::getline(file_in, line_str);
     line_in.clear();
     line_in << line_str;
+
     if (
         !(std::getline(line_in, line_str_portion, ' ')) ||
         (line_str_portion != "%%MatrixMarket")
     ) {
         throw std::runtime_error(first_line_error+" %%MatrixMarket");
     }
+
     if (
         !(std::getline(line_in, line_str_portion, ' ')) ||
         (line_str_portion != "matrix")
     ) {
         throw std::runtime_error(first_line_error+" matrix");
     }
+
     if (
         !(std::getline(line_in, line_str_portion, ' ')) ||
-        (line_str_portion != "coordinate")
+        ((line_str_portion != "coordinate") &&
+         (line_str_portion != "array"))
     ) {
-        throw std::runtime_error(first_line_error+" coordinate");
+        throw std::runtime_error(first_line_error+" coordinate or array");
     }
+    bool coord_format = (line_str_portion == "coordinate");
+
     if (
         !(std::getline(line_in, line_str_portion, ' ')) ||
         (line_str_portion != "real")
@@ -191,7 +442,7 @@ TMatrix<TPrecision> read_matrixMTX(
     std::getline(line_in, line_str_portion);
     if (line_str_portion == "general") {
         symmetric = false;
-    } else if (line_str_portion == "symmetric") {
+    } else if ((line_str_portion == "symmetric") && coord_format) {
         symmetric = true;
     } else {
         throw std::runtime_error(first_line_error);
@@ -203,155 +454,19 @@ TMatrix<TPrecision> read_matrixMTX(
     line_in.clear();
     line_in << line_str;
 
-    // Read matrix dimensions and initiate data storage
-    int m_rows;
-    int n_cols;
-    int entries;
-    std::string mtx_dim_error(
-        "read_matrixMTX: matrix dimensions incorrect to expected format"
-    );
-    try {
-        if (
-            !std::getline(line_in, line_str_portion, ' ') ||
-            !no_whitespace(line_str_portion)
-        ) {
-            throw std::invalid_argument("");
-        }
-        m_rows = stoi(line_str_portion);
-        if (
-            !std::getline(line_in, line_str_portion, ' ') ||
-            !no_whitespace(line_str_portion)
-        ) {
-            throw std::invalid_argument("");
-        }
-        n_cols = stoi(line_str_portion);
-        if (
-            !std::getline(line_in, line_str_portion) ||
-            !no_whitespace(line_str_portion)
-        ) {
-            throw std::invalid_argument("");
-        }
-        entries = stoi(line_str_portion);
-        if ((m_rows < 0) || (n_cols < 0) || (entries < 0)) {
-            throw std::invalid_argument("");
-        }
-    } catch (std::invalid_argument e) {
-        throw std::runtime_error(mtx_dim_error);
+    if (coord_format) {
+        return TMatrix<TPrecision>(
+            helper::read_coord_body_MTX<TPrecision>(
+                file_in, line_in, cu_handles, symmetric
+            )
+        );
+    } else {
+        return TMatrix<TPrecision>( 
+            helper::read_array_body_MTX<TPrecision>(
+                file_in, line_in, cu_handles
+            )
+        );
     }
-
-    int total_nnz = 0;
-    std::vector<std::vector<int>> vec_row_indices(n_cols);
-    std::vector<std::vector<TPrecision>> vec_vals(n_cols);
-
-    // Load data and check validity
-    int last_i = -1;
-    int last_j = -1;
-    for (int entry=0; entry<entries; ++entry) {
-
-        try {
-
-            std::getline(file_in, line_str);
-            line_in.clear();
-            line_in << line_str;
-
-            if (
-                !std::getline(line_in, line_str_portion, ' ') ||
-                !no_whitespace(line_str_portion)
-            ) {
-                throw std::invalid_argument("");
-            }
-            int i = stoi(line_str_portion)-1; // 1-indexing correction
-            if (
-                !std::getline(line_in, line_str_portion, ' ') ||
-                !no_whitespace(line_str_portion)
-            ) {
-                throw std::invalid_argument("");
-            }
-            int j = stoi(line_str_portion)-1; // 1-indexing correction
-            if (
-                !std::getline(line_in, line_str_portion) ||
-                !no_whitespace(line_str_portion)
-            ) {
-                throw std::invalid_argument("");
-            }
-            TPrecision val = static_cast<TPrecision>(stod(line_str_portion));
-
-            // Check validity of entry values
-            if (
-                (j == last_j) &&
-                ((i <= last_i) || (i < 0) || (i >= m_rows))
-            ) {
-                throw std::runtime_error(
-                    "read_matrixMTX: invalid row order encountered"
-                );
-            } else if ((j < last_j) || (j < 0) || (j >= n_cols)) {
-                throw std::runtime_error(
-                    "read_matrixMTX: invalid column encountered"
-                );
-            } else if ((i < 0) || (i >= m_rows)) {
-                throw std::runtime_error(
-                    "read_matrixMTX: invalid row encountered"
-                );
-            } else if (symmetric && (j > i)) {
-                throw std::runtime_error(
-                    "read_matrixMTX: above diagonal entry in symmetric"
-                );
-            }
-            last_i = i;
-            last_j = j;
-
-            if (val != static_cast<TPrecision>(0.)) {
-
-                vec_row_indices[j].push_back(i);
-                vec_vals[j].push_back(val);
-                ++total_nnz;
-
-                if (symmetric && (i > j)) {
-                    vec_row_indices[i].push_back(j);
-                    vec_vals[i].push_back(val);
-                    ++total_nnz;
-                }
-
-            }
-
-        } catch (std::invalid_argument e) {
-            throw std::runtime_error(
-                "read_matrixMTX: Invalid entry in file entry: " + 
-                std::to_string(entry)
-            );
-        }
-
-    }
-
-    int curr_nnz = 0;
-    int *h_col_offsets = static_cast<int *>(malloc((n_cols+1)*sizeof(int)));
-    int *h_row_indices = static_cast<int *>(malloc(total_nnz*sizeof(int)));
-    TPrecision *h_vals = static_cast<TPrecision *>(
-        malloc(total_nnz*sizeof(TPrecision))
-    );
-
-    for (int j=0; j<n_cols; ++j) {
-        h_col_offsets[j] = curr_nnz;
-        for (int i=0; i<vec_row_indices[j].size(); ++i) {
-            h_row_indices[curr_nnz+i] = vec_row_indices[j][i];
-            h_vals[curr_nnz+i] = vec_vals[j][i];
-        }
-        curr_nnz += vec_row_indices[j].size();
-    }
-    assert(curr_nnz == total_nnz);
-    h_col_offsets[n_cols] = curr_nnz;
-
-    NoFillMatrixSparse<TPrecision> mat(
-        cu_handles,
-        h_col_offsets, h_row_indices, h_vals,
-        m_rows, n_cols, total_nnz
-    );
-
-    free(h_col_offsets);
-    free(h_row_indices);
-    free(h_vals);
-
-    return TMatrix<TPrecision>(mat);
 
 }
 

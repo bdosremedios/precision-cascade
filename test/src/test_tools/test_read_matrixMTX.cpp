@@ -10,19 +10,29 @@ public:
     template <template <typename> typename TMatrix, typename TPrecision>
     void ReadEmptyMatrix() {
 
-        fs::path empty_file(read_matrix_dir / fs::path("empty.mtx"));
+        fs::path empty_file(read_matrix_dir / fs::path("empty_coord.mtx"));
         TMatrix<double> test_empty(read_matrixMTX<TMatrix, double>(
             TestBase::bundle, empty_file
         ));
         ASSERT_EQ(test_empty.rows(), 0);
         ASSERT_EQ(test_empty.cols(), 0);
 
+        fs::path empty_arr_file(read_matrix_dir / fs::path("empty_array.mtx"));
+        TMatrix<double> test_empty_arr(read_matrixMTX<TMatrix, double>(
+            TestBase::bundle, empty_arr_file
+        ));
+        ASSERT_EQ(test_empty_arr.rows(), 0);
+        ASSERT_EQ(test_empty_arr.cols(), 0);
+
     }
 
     template <template <typename> typename TMatrix, typename TPrecision>
     void ReadSimpleGeneral() {
 
-        fs::path file_square(read_matrix_dir / fs::path("square.mtx"));
+        fs::path file_square(read_matrix_dir / fs::path("square_coord.mtx"));
+        fs::path file_square_arr(
+            read_matrix_dir / fs::path("square_array.mtx")
+        );
         TMatrix<TPrecision> target_square(
             TestBase::bundle,
             {{static_cast<TPrecision>(1), static_cast<TPrecision>(4),
@@ -36,8 +46,13 @@ public:
             TestBase::bundle, file_square
         ));
         ASSERT_MATRIX_EQ(test_square, target_square);
+        TMatrix<TPrecision> test_square_arr(read_matrixMTX<TMatrix, TPrecision>(
+            TestBase::bundle, file_square_arr
+        ));
+        ASSERT_MATRIX_EQ(test_square_arr, target_square);
 
-        fs::path file_tall(read_matrix_dir / fs::path("tall.mtx"));
+        fs::path file_tall(read_matrix_dir / fs::path("tall_coord.mtx"));
+        fs::path file_tall_arr(read_matrix_dir / fs::path("tall_array.mtx"));
         TMatrix<TPrecision> target_tall(
             TestBase::bundle,
             {{static_cast<TPrecision>(1), static_cast<TPrecision>(5)},
@@ -49,8 +64,13 @@ public:
             TestBase::bundle, file_tall
         ));
         ASSERT_MATRIX_EQ(test_tall, target_tall);
+        TMatrix<TPrecision> test_tall_arr(read_matrixMTX<TMatrix, TPrecision>(
+            TestBase::bundle, file_tall_arr
+        ));
+        ASSERT_MATRIX_EQ(test_tall_arr, target_tall);
 
-        fs::path file_wide(read_matrix_dir / fs::path("wide.mtx"));
+        fs::path file_wide(read_matrix_dir / fs::path("wide_coord.mtx"));
+        fs::path file_wide_arr(read_matrix_dir / fs::path("wide_array.mtx"));
         TMatrix<TPrecision> target_wide(
             TestBase::bundle,
             {{static_cast<TPrecision>(1), static_cast<TPrecision>(3),
@@ -64,6 +84,10 @@ public:
             TestBase::bundle, file_wide
         ));
         ASSERT_MATRIX_EQ(test_wide, target_wide);
+        TMatrix<TPrecision> test_wide_arr(read_matrixMTX<TMatrix, TPrecision>(
+            TestBase::bundle, file_wide_arr
+        ));
+        ASSERT_MATRIX_EQ(test_wide_arr, target_wide);
 
     }
 
@@ -300,19 +324,53 @@ public:
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, bad_matrixdim8);
 
+        auto bad_arraydim1 = [this]() {
+            read_matrixMTX<TMatrix, double>(
+                TestBase::bundle,
+                read_matrix_dir / fs::path("bad_arraydim1.mtx")
+            );
+        };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, bad_arraydim1);
+        auto bad_arraydim2 = [this]() {
+            read_matrixMTX<TMatrix, double>(
+                TestBase::bundle,
+                read_matrix_dir / fs::path("bad_arraydim2.mtx")
+            );
+        };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, bad_arraydim2);
+        auto bad_arraydim3 = [this]() {
+            read_matrixMTX<TMatrix, double>(
+                TestBase::bundle,
+                read_matrix_dir / fs::path("bad_arraydim3.mtx")
+            );
+        };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, bad_arraydim3);
+        auto bad_arraydim4 = [this]() {
+            read_matrixMTX<TMatrix, double>(
+                TestBase::bundle,
+                read_matrix_dir / fs::path("bad_arraydim4.mtx")
+            );
+        };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, bad_arraydim4);
+
         auto bad_matrixentry1 = [this]() {
-            read_matrixMTX<TMatrix, double>(TestBase::bundle, read_matrix_dir / fs::path("bad_matrixentry1.mtx"));
+            read_matrixMTX<TMatrix, double>(
+                TestBase::bundle, read_matrix_dir /
+                fs::path("bad_matrixentry1.mtx")
+            );
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, bad_matrixentry1);
         auto bad_matrixentry2 = [this]() {
             read_matrixMTX<TMatrix, double>(
-                TestBase::bundle, read_matrix_dir / fs::path("bad_matrixentry2.mtx")
+                TestBase::bundle, read_matrix_dir /
+                fs::path("bad_matrixentry2.mtx")
             );
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, bad_matrixentry2);
         auto bad_matrixentry3 = [this]() {
             read_matrixMTX<TMatrix, double>(
-                TestBase::bundle, read_matrix_dir / fs::path("bad_matrixentry3.mtx")
+                TestBase::bundle, read_matrix_dir /
+                fs::path("bad_matrixentry3.mtx")
             );
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, bad_matrixentry3);
@@ -359,6 +417,28 @@ public:
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, bad_matrixentry9);
 
+        auto bad_arrayentry1 = [this]() {
+            read_matrixMTX<TMatrix, double>(
+                TestBase::bundle, read_matrix_dir /
+                fs::path("bad_arrayentry1.mtx")
+            );
+        };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, bad_arrayentry1);
+        auto bad_arrayentry2 = [this]() {
+            read_matrixMTX<TMatrix, double>(
+                TestBase::bundle, read_matrix_dir /
+                fs::path("bad_arrayentry2.mtx")
+            );
+        };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, bad_arrayentry2);
+        auto bad_arrayentry3 = [this]() {
+            read_matrixMTX<TMatrix, double>(
+                TestBase::bundle, read_matrix_dir /
+                fs::path("bad_arrayentry3.mtx")
+            );
+        };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, bad_arrayentry3);
+
         auto bad_wrongorder1 = [this]() {
             read_matrixMTX<TMatrix, double>(
                 TestBase::bundle,
@@ -381,6 +461,14 @@ public:
             );
         };
         CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, bad_symmetricinvalidentry);
+
+        auto bad_symmetricarray = [this]() {
+            read_matrixMTX<TMatrix, double>(
+                TestBase::bundle,
+                read_matrix_dir / fs::path("bad_symmetric_array.mtx")
+            );
+        };
+        CHECK_FUNC_HAS_RUNTIME_ERROR(print_errors, bad_symmetricarray);
 
     }
 
@@ -436,11 +524,20 @@ TEST_F(read_matrixMTX_Test, ReadPreciseGeneral_Double) {
     );
 
     ReadPreciseGeneral(
-        read_matrix_dir / fs::path("double_precise.mtx"),
+        read_matrix_dir / fs::path("double_precise_coord.mtx"),
         mat
     );
     ReadPreciseGeneral(
-        read_matrix_dir / fs::path("double_precise.mtx"),
+        read_matrix_dir / fs::path("double_precise_coord.mtx"),
+        NoFillMatrixSparse<double>(mat)
+    );
+
+    ReadPreciseGeneral(
+        read_matrix_dir / fs::path("double_precise_array.mtx"),
+        mat
+    );
+    ReadPreciseGeneral(
+        read_matrix_dir / fs::path("double_precise_array.mtx"),
         NoFillMatrixSparse<double>(mat)
     );
 
@@ -495,11 +592,20 @@ TEST_F(read_matrixMTX_Test, ReadPreciseGeneral_Single) {
     );
 
     ReadPreciseGeneral(
-        read_matrix_dir / fs::path("single_precise.mtx"),
+        read_matrix_dir / fs::path("single_precise_coord.mtx"),
         mat
     );
     ReadPreciseGeneral(
-        read_matrix_dir / fs::path("single_precise.mtx"),
+        read_matrix_dir / fs::path("single_precise_coord.mtx"),
+        NoFillMatrixSparse<float>(mat)
+    );
+
+    ReadPreciseGeneral(
+        read_matrix_dir / fs::path("single_precise_array.mtx"),
+        mat
+    );
+    ReadPreciseGeneral(
+        read_matrix_dir / fs::path("single_precise_array.mtx"),
         NoFillMatrixSparse<float>(mat)
     );
 
@@ -545,11 +651,20 @@ TEST_F(read_matrixMTX_Test, ReadPreciseGeneral_Half) {
     );
 
     ReadPreciseGeneral(
-        read_matrix_dir / fs::path("half_precise.mtx"),
+        read_matrix_dir / fs::path("half_precise_coord.mtx"),
         mat
     );
     ReadPreciseGeneral(
-        read_matrix_dir / fs::path("half_precise.mtx"),
+        read_matrix_dir / fs::path("half_precise_coord.mtx"),
+        NoFillMatrixSparse<__half>(mat)
+    );
+
+    ReadPreciseGeneral(
+        read_matrix_dir / fs::path("half_precise_array.mtx"),
+        mat
+    );
+    ReadPreciseGeneral(
+        read_matrix_dir / fs::path("half_precise_array.mtx"),
         NoFillMatrixSparse<__half>(mat)
     );
 

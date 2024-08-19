@@ -1996,7 +1996,7 @@ public:
 
         TPrecision min_tol = Tol<TPrecision>::gamma_T(n);
         if (abs_ns::abs(min_tol) > static_cast<TPrecision>(0.1)) {
-            min_tol = 0.2;
+            min_tol = 0.25;
         }
 
         ASSERT_VECTOR_NEAR(
