@@ -312,7 +312,7 @@ MatrixDense<TPrecision> read_array_body_MTX(
     std::getline(file_in, line_str);
     if ((line_str != "") || std::getline(file_in, line_str)) {
         throw std::runtime_error(
-            "read_array_body_MTX: Invalid entry in file entry: too many entries"
+            "read_array_body_MTX: Invalid end of file"
         );
     }
 
