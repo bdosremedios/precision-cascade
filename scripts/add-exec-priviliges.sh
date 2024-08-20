@@ -10,6 +10,7 @@ chmod u+x ./install/linux/clean-host-data-dir.sh
 
 chmod u+x ./install/linux/install.sh
 
+chmod u+x ./apptainer/helper/nvidia-arg-help.sh
 chmod u+x ./apptainer/helper/check-nvidia-arg.sh
 chmod u+x ./apptainer/0-build-base.sh
 chmod u+x ./apptainer/1-build-run.sh
