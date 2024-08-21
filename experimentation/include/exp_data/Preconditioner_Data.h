@@ -3,8 +3,9 @@
 
 #include "Timed_Experiment_Data.h"
 
-#include "exp_tools/Experiment_Log.h"
 #include "exp_spec/Preconditioner_Spec.h"
+#include "exp_tools/Experiment_Log.h"
+#include "exp_tools/write_json.h"
 
 #include "tools/arg_pkgs/PrecondArgPkg.h"
 
@@ -60,15 +61,15 @@ public:
         std::string file_name, fs::path output_data_dir, Experiment_Log logger
     ) const override {
 
-        std::ofstream file_out = open_json_ofstream(
+        std::ofstream file_out = write_json::open_json_ofstream(
             file_name, output_data_dir, logger
         );
 
-        start_json(file_out);
+        write_json::start_json(file_out);
 
         record_precond_data(file_out);
 
-        end_json(file_out);
+        write_json::end_json(file_out);
 
     }
 

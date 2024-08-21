@@ -237,6 +237,10 @@ void run_record_solve_group(
         solve_group.precond_specs.get_info_string()
     );
 
+    solve_group.record_json(
+        "solve_group_specs", solve_group_dir, solve_group_logger
+    );
+
     // Iterate over matrices and iterations per matrix
     for (std::string matrix_file : solve_group.matrices_to_test) {
 

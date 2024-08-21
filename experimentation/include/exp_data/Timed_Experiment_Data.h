@@ -3,6 +3,7 @@
 
 #include "exp_tools/Experiment_Clock.h"
 #include "exp_tools/Experiment_Log.h"
+#include "exp_tools/write_json.h"
 
 #include <filesystem>
 #include <fstream>
@@ -12,16 +13,6 @@ namespace fs = std::filesystem;
 
 struct Timed_Experiment_Data
 {
-protected:
-    
-    std::ofstream open_json_ofstream(
-        std::string file_name, fs::path save_dir, Experiment_Log logger
-    ) const;
-
-    void start_json(std::ofstream &file_out) const;
-
-    void end_json(std::ofstream &file_out) const;
-
 public:
 
     std::string id;

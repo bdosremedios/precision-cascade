@@ -5,11 +5,6 @@ project(precision-cascade LANGUAGES CXX CUDA)
 add_compile_definitions(_SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING=1)
 
 set(
-    EXPERIMENT_DATA_CPPS
-    exp_data/Timed_Experiment_Data.cpp
-)
-
-set(
     EXPERIMENT_RUN_CPPS
     exp_run/exp_run_record.cpp
 )
@@ -30,11 +25,11 @@ set(
     EXPERIMENT_TOOLS_CPPS
     exp_tools/Experiment_Clock.cpp
     exp_tools/Experiment_Log.cpp
+    exp_tools/write_json.cpp
 )
 
 add_library(
     experiment-lib
-    ${EXPERIMENT_DATA_CPPS}
     ${EXPERIMENT_READ_CPPS}
     ${EXPERIMENT_RUN_CPPS}
     ${EXPERIMENT_SPECIFICATION_CPPS}

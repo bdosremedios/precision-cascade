@@ -12,16 +12,37 @@ public:
 
     void Test_Experiment_Clock_Basic_Run() {
 
-        const int time_ms = 150;
         Experiment_Clock clock;
+
+        const int delay_error = 15;
+
+        const int first_elapse_1 = 10;
 
         ASSERT_FALSE(clock.check_completed());
         clock.start_clock_experiment();
         ASSERT_FALSE(clock.check_completed());
-        std::this_thread::sleep_for(std::chrono::milliseconds(time_ms));
+        std::this_thread::sleep_for(std::chrono::milliseconds(first_elapse_1));
         clock.stop_clock_experiment();
         ASSERT_TRUE(clock.check_completed());
-        ASSERT_NEAR(clock.get_elapsed_time_ms(), time_ms, 1);
+        ASSERT_NEAR(clock.get_elapsed_time_ms(), first_elapse_1, delay_error);
+
+        const int first_elapse_2 = 300;
+
+        clock.start_clock_experiment();
+        ASSERT_FALSE(clock.check_completed());
+        std::this_thread::sleep_for(std::chrono::milliseconds(first_elapse_2));
+        clock.stop_clock_experiment();
+        ASSERT_TRUE(clock.check_completed());
+        ASSERT_NEAR(clock.get_elapsed_time_ms(), first_elapse_2, delay_error);
+
+        const int first_elapse_3 = 150;
+
+        clock.start_clock_experiment();
+        ASSERT_FALSE(clock.check_completed());
+        std::this_thread::sleep_for(std::chrono::milliseconds(first_elapse_3));
+        clock.stop_clock_experiment();
+        ASSERT_TRUE(clock.check_completed());
+        ASSERT_NEAR(clock.get_elapsed_time_ms(), first_elapse_3, delay_error);
 
     }
 

@@ -3,6 +3,8 @@
 
 #include "Timed_Experiment_Data.h"
 
+#include "exp_tools/write_json.h"
+
 #include "solvers/nested/GMRES_IR/FP_GMRES_IR.h"
 #include "solvers/nested/GMRES_IR/MP_GMRES_IR.h"
 
@@ -15,81 +17,36 @@ struct Solve_Data:
 {
 private:
 
-    std::string bool_to_string(bool b) const {
-        return (b) ? "true" : "false";
-    }
-
-    std::string dbl_vector_to_jsonarray_str(
-        std::vector<double> vec, int padding_level
-    ) const {
-
-        std::stringstream strm_to_write;
-        strm_to_write << std::setprecision(17);
-
-        for (int i=0; i<padding_level; ++i) {
-            strm_to_write << "\t";
-        }
-
-        strm_to_write << "[";
-        for (int i=0; i<vec.size()-1; ++i) {
-            strm_to_write << vec[i] << ", ";
-        }
-        strm_to_write << vec[vec.size()-1] << "]";
-
-        return strm_to_write.str();
-
-    }
-
-    std::string int_vector_to_jsonarray_str(
-        std::vector<int> vec, int padding_level
-    ) const {
-
-        std::stringstream strm_to_write;
-
-        for (int i=0; i<padding_level; ++i) {
-            strm_to_write << "\t";
-        }
-
-        strm_to_write << "[";
-        for (int i=0; i<vec.size()-1; ++i) {
-            strm_to_write << vec[i] << ", ";
-        }
-        strm_to_write << vec[vec.size()-1] << "]";
-
-        return strm_to_write.str();
-
-    }
-
     void record_basic_solver_data(std::ofstream &file_out) const {
         file_out << "\t\"id\" : \"" << id << "\",\n";
         file_out << "\t\"solver_class\" : \""
                  << typeid(*solver_ptr).name()
                  << "\",\n";
         file_out << "\t\"initiated\" : \""
-                 << bool_to_string(solver_ptr->check_initiated())
+                 << write_json::bool_to_string(solver_ptr->check_initiated())
                  << "\",\n";
         file_out << "\t\"converged\" : \""
-                 << bool_to_string(solver_ptr->check_converged())
+                 << write_json::bool_to_string(solver_ptr->check_converged())
                  << "\",\n";
         file_out << "\t\"terminated\" : \""
-                 << bool_to_string(solver_ptr->check_terminated())
+                 << write_json::bool_to_string(solver_ptr->check_terminated())
                  << "\",\n";
         file_out << "\t\"outer_iterations\" : "
                  << solver_ptr->get_iteration()
                  << ",\n";
         file_out << "\t\"inner_iterations\" : "
-                 << int_vector_to_jsonarray_str(
+                 << write_json::int_vector_to_jsonarray_str(
                         solver_ptr->get_inner_iterations(), 0
                     )
                  << ",\n";
         file_out << "\t\"elapsed_time_ms\" : " << clock.get_elapsed_time_ms()
-                << ",\n";
+                 << ",\n";
     }
 
     void record_residual_solver_data(std::ofstream &file_out) const {
 
         file_out << "\t\"outer_res_norm_history\" : "
-                 << dbl_vector_to_jsonarray_str(
+                 << write_json::dbl_vector_to_jsonarray_str(
                         solver_ptr->get_res_norm_history(), 0
                     )
                  << ",\n";
@@ -100,13 +57,13 @@ private:
             solver_ptr->get_inner_res_norm_history()
         );
         for (int i=0; i<inner_res_norm_history.size()-1; ++i) {
-            file_out << dbl_vector_to_jsonarray_str(
+            file_out << write_json::dbl_vector_to_jsonarray_str(
                             inner_res_norm_history[i],
                             2
                         )
                      << ",\n";
         }
-        file_out << dbl_vector_to_jsonarray_str(
+        file_out << write_json::dbl_vector_to_jsonarray_str(
                         inner_res_norm_history[inner_res_norm_history.size()-1],
                         2
                     )
@@ -175,15 +132,15 @@ public:
         Experiment_Log logger
     ) const override {
 
-        std::ofstream file_out = open_json_ofstream(
+        std::ofstream file_out = write_json::open_json_ofstream(
             file_name, output_data_dir, logger
         );
 
-        start_json(file_out);
+        write_json::start_json(file_out);
 
         record_solver_data(file_out, solver_ptr);
 
-        end_json(file_out);
+        write_json::end_json(file_out);
 
     }
 
