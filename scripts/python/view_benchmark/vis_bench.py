@@ -32,18 +32,16 @@ def load_tri_sparse_data(data_dir, fname):
     data_x, data_y = load_benchmark_csv_us(data_dir, fname)
     return 0.5*(data_x**1.5), data_y
 
-def plot_data(ax, data_dir, li_tup_fname_label, load_data_func, disable_y=False):
+def plot_data(ax, data_dir, li_tup_fname_fmt_label, load_data_func, disable_y=False):
     
-    for fname, label, clridx in li_tup_fname_label:
+    for fname, label, clridx, fmt in li_tup_fname_fmt_label:
 
         data_x, data_y = load_data_func(data_dir, fname)
 
         ax.plot(
-            data_x, data_y,
+            data_x, data_y, fmt,
             label=label,
-            color=cat20extract[clridx],
-            marker=".",
-            linestyle="-"
+            color=cat20extract[clridx]
         )
 
     ax.set_xlabel("Relevant Non-Zeros")
