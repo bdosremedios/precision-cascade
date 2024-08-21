@@ -11,7 +11,7 @@
 namespace cascade {
 
 template <template <typename> typename TMatrix, typename TPrecision>
-class PrecondArgPkg
+struct PrecondArgPkg
 {
 public:
 

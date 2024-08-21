@@ -7,7 +7,7 @@
 
 namespace cascade {
 
-class SolveArgPkg
+struct SolveArgPkg
 {
 public:
 
