@@ -26,15 +26,16 @@ target_include_directories(
 
 set(
     BENCHMARK_SUITE_CPPS
-    src/benchmark_CUDA/benchmark_spmv.cu
-    src/benchmark_types/benchmark_MatrixDense.cpp
-    src/benchmark_types/benchmark_NoFillMatrixSparse.cpp
-    src/benchmark_solvers/benchmark_GMRES.cpp
-    src/benchmark_solvers/benchmark_FP_GMRES_IR.cpp
-    src/benchmark_solvers/benchmark_MP_GMRES_IR.cpp
-    src/benchmark_preconditioners/benchmark_ILUPreconditioner.cpp
-    src/benchmark_solvers/benchmark_Precond_FP_GMRES_IR.cpp
-    src/benchmark_solvers/benchmark_Precond_MP_GMRES_IR.cpp
+    # src/benchmark_CUDA/benchmark_spmv.cu
+    # src/benchmark_types/benchmark_MatrixDense.cpp
+    # src/benchmark_types/benchmark_NoFillMatrixSparse.cpp
+    # src/benchmark_solvers/benchmark_GMRES.cpp
+    # src/benchmark_solvers/benchmark_FP_GMRES_IR.cpp
+    src/benchmark_solvers/benchmark_FP_GMRES_IR_2.cpp
+    # src/benchmark_solvers/benchmark_MP_GMRES_IR.cpp
+    # src/benchmark_preconditioners/benchmark_ILUPreconditioner.cpp
+    # src/benchmark_solvers/benchmark_Precond_FP_GMRES_IR.cpp
+    # src/benchmark_solvers/benchmark_Precond_MP_GMRES_IR.cpp
 )
 
 add_executable(
