@@ -7,6 +7,21 @@
 #include "tools/arg_pkgs/SolveArgPkg.h"
 #include "solvers/GMRES/GMRESSolve.h"
 
+template <template <typename> typename TMatrix, typename TPrecision>
+class NoProgressGMRESSolve: public cascade::GMRESSolve<TMatrix, TPrecision>
+{
+public:
+
+    using cascade::GMRESSolve<TMatrix, TPrecision>::GMRESSolve;
+
+    // Remove any progress towards solution
+    void update_x_minimizing_res() override {
+        GMRESSolve<TMatrix, TPrecision>::update_x_minimizing_res();
+        this->typed_soln = this->init_guess_typed;
+    }
+
+};
+
 class Benchmark_GMRES: public BenchmarkBase
 {
 public:
@@ -51,11 +66,12 @@ public:
         );
 
         clock.clock_start();
-        GMRESSolve<NoFillMatrixSparse, TPrecision> gmres(
+        NoProgressGMRESSolve<NoFillMatrixSparse, TPrecision> gmres(
             &typed_lin_sys, 0., args
         );
         gmres.solve();
         clock.clock_stop();
+        std::cout << gmres.get_info_string() << std::endl;
 
     }
 

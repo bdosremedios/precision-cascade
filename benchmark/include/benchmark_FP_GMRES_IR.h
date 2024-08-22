@@ -7,6 +7,20 @@
 #include "tools/arg_pkgs/SolveArgPkg.h"
 #include "solvers/nested/GMRES_IR/FP_GMRES_IR.h"
 
+template <template <typename> typename TMatrix, typename TPrecision>
+class NoProgress_FP_GMRES_IR: public cascade::FP_GMRES_IR_Solve<TMatrix, TPrecision>
+{
+public:
+
+    using cascade::FP_GMRES_IR_Solve<TMatrix, TPrecision>::FP_GMRES_IR_Solve;
+
+    // Remove any progress towards solution
+    void outer_iterate_complete() override {
+        this->generic_soln = this->init_guess;
+    }
+
+};
+
 class Benchmark_FP_GMRES_IR: public Benchmark_Nested_GMRES
 {
 public:
@@ -27,12 +41,12 @@ public:
         SolveArgPkg args(nested_gmres_outer_iters, nested_gmres_inner_iters, 0.);
 
         clock.clock_start();
-        FP_GMRES_IR_Solve<NoFillMatrixSparse, TPrecision> fp_restarted_gmres(
+        NoProgress_FP_GMRES_IR<NoFillMatrixSparse, TPrecision> fp_restarted_gmres(
             &typed_lin_sys, 0., args
         );
         fp_restarted_gmres.solve();
         clock.clock_stop();
-        fp_restarted_gmres.get_info_string();
+        std::cout << fp_restarted_gmres.get_info_string() << std::endl;
         std::cout << "Inner iterations: [";
         for (int i=0; i<fp_restarted_gmres.get_inner_iterations().size()-1; ++i) {
             std::cout << fp_restarted_gmres.get_inner_iterations()[i] << " ";
@@ -41,6 +55,14 @@ public:
                         fp_restarted_gmres.get_inner_iterations().size()-1
                      ]
                   << "]" << std::endl;
+        // std::cout << "Res norm history: [";
+        // for (int i=0; i<fp_restarted_gmres.get_res_norm_history().size()-1; ++i) {
+        //     std::cout << fp_restarted_gmres.get_res_norm_history()[i] << " ";
+        // }
+        // std::cout << fp_restarted_gmres.get_res_norm_history()[
+        //                 fp_restarted_gmres.get_res_norm_history().size()-1
+        //              ]
+        //           << "]" << std::endl;
 
     };
 

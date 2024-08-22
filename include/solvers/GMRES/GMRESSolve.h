@@ -217,7 +217,8 @@ protected:
 
     }
 
-    void update_x_minimizing_res() {
+    // Virtual for benchmarking override
+    virtual void update_x_minimizing_res() {
 
         // Calculate rhs to solve
         Vector<TPrecision> rho_e1(

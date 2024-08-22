@@ -18,7 +18,7 @@ __global__ void scalar_dbl_kernels::scalar_sqrt(double *scalar) {
 
 __global__ void scalar_dbl_kernels::scalar_recip(double *scalar) {
     int tid = (blockIdx.x * blockDim.x) + threadIdx.x;
-    scalar[tid] = CUDART_ONE/(scalar[tid]);
+    scalar[tid] = __drcp_rn(scalar[tid]);
 }
 
 __global__ void scalar_dbl_kernels::cast_to_half(
@@ -47,7 +47,7 @@ __global__ void scalar_sgl_kernels::scalar_sqrt(float *scalar) {
 
 __global__ void scalar_sgl_kernels::scalar_recip(float *scalar) {
     int tid = (blockIdx.x * blockDim.x) + threadIdx.x;
-    scalar[tid] = CUDART_ONE_F/(scalar[tid]);
+    scalar[tid] = __frcp_rn(scalar[tid]);
 }
 
 __global__ void scalar_sgl_kernels::cast_to_half(
@@ -76,7 +76,7 @@ __global__ void scalar_hlf_kernels::scalar_sqrt(__half *scalar) {
 
 __global__ void scalar_hlf_kernels::scalar_recip(__half *scalar) {
     int tid = (blockIdx.x * blockDim.x) + threadIdx.x;
-    scalar[tid] = __ushort_as_half((unsigned short)0x3C00U)/(scalar[tid]);
+    scalar[tid] = hrcp(scalar[tid]);
 }
 
 __global__ void scalar_hlf_kernels::cast_to_float(

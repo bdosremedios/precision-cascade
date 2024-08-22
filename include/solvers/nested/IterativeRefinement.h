@@ -10,7 +10,7 @@ class IterativeRefinement: public InnerOuterSolve<TMatrix>
 {
 protected:
 
-    void outer_iterate_complete() override {
+    virtual void outer_iterate_complete() override {
 
         // Add error back to generic_soln since that is solution of the
         // inner_solver under iterative refinement
