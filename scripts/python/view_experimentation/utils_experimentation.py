@@ -15,7 +15,27 @@ def check_dir(dir):
 
     if not os.path.isdir(dir):
         raise RuntimeError(f"Directory {dir} does not exist")
+    
+class Solver_ID_Info:
 
+    fp_ids = {"FP64", "FP32", "FP16"}
+    
+    mp_ids = {
+        "OuterRestartCount",
+        "RelativeResidualThreshold",
+        "CheckStagnation",
+        "ProjectThresholdAfterStagnation"
+    }
+
+    solver_color_fmt_dict = {
+        "FP64": (cat20[0], ",-"),
+        "FP32": (cat20[2], ",-"),
+        "FP16": (cat20[4], ",-"),
+        "OuterRestartCount": (cat20[6], ",-"),
+        "RelativeResidualThreshold": (cat20[8], ",-"),
+        "CheckStagnation": (cat20[10], ",-"),
+        "ProjectThresholdAfterStagnation": (cat20[12], ",-")
+    }
 
 class Individual_Experiment_Data:
 
@@ -50,6 +70,18 @@ class Individual_Experiment_Data:
 
     def plot_res_data(self, ax, color, fmt):
 
+        if self.id in Solver_ID_Info.mp_ids:
+            ax.axvline(
+                self.experiment_data["hlf_sgl_cascade_change"],
+                linestyle=":",
+                color=color
+            )
+            ax.axvline(
+                self.experiment_data["sgl_dbl_cascade_change"],
+                linestyle="--",
+                color=color
+            )
+
         return ax.plot(
             np.arange(0, self.experiment_data["outer_iterations"]+1, 1),
             self.rel_res_history,
@@ -58,16 +90,6 @@ class Individual_Experiment_Data:
         )
 
 class Solver_Experiment_Data:
-
-    solver_plot_var = {
-        "FP64": (cat20[0], ",-"),
-        "FP32": (cat20[2], ",-"),
-        "FP16": (cat20[4], ",-"),
-        "OuterRestartCount": (cat20[6], ",-"),
-        "RelativeResidualThreshold": (cat20[8], ",-"),
-        "CheckStagnation": (cat20[10], ",-"),
-        "ProjectThresholdAfterStagnation": (cat20[12], ",-")
-    }
 
     def __init__(self, id, json_list):
 
@@ -84,7 +106,7 @@ class Solver_Experiment_Data:
         first_to_label=True
         for experiment_data in self.experiment_data:
             lines = experiment_data.plot_res_data(
-                ax, *(self.solver_plot_var[self.id])
+                ax, *(Solver_ID_Info.solver_color_fmt_dict[self.id])
             )
             if first_to_label:
                 first_to_label = False
@@ -118,10 +140,17 @@ class Matrix_Experiment_Data:
                 Solver_Experiment_Data(solver_id, json_list)
             )
 
-    def plot_res_data(self, ax):
+    def plot_fp_res_data(self, ax):
 
         for solver_data in self.solver_data:
-            solver_data.plot_res_data(ax)
+            if (solver_data.id in Solver_ID_Info.fp_ids):
+                solver_data.plot_res_data(ax)
+
+    def plot_mp_res_data(self, ax):
+
+        for solver_data in self.solver_data:
+            if (solver_data.id in Solver_ID_Info.mp_ids):
+                solver_data.plot_res_data(ax)
 
 class Solve_Group_Data:
 
@@ -135,32 +164,39 @@ class Solve_Group_Data:
         for matrix_id in self.solve_group_spec_data["matrix_ids"]:
 
             # Check matrices and iteration structures exist correctly
-            matrix_str = matrix_id.replace(".mtx", "").replace(".csv", "")
-            matrix_dir = os.path.join(solve_group_dir, matrix_str)
+            matrix_dir = os.path.join(solve_group_dir, matrix_id)
             check_dir(matrix_dir)
 
             self.matrix_experiment_data.append(
                 Matrix_Experiment_Data(
-                    matrix_str,
+                    matrix_id,
                     matrix_dir,
                     self.solve_group_spec_data["experiment_iterations"],
                     self.solve_group_spec_data["solver_ids"]
                 )
             )
     
-    def plot_data(self):
+    def display_data(self):
 
         for matrix_experiment_data in self.matrix_experiment_data:
 
-            fig, ax = plt.subplots()
+            fig, axs = plt.subplots(1, 2, figsize=(10, 4.8), sharey=True)
 
-            matrix_experiment_data.plot_res_data(ax)
+            matrix_experiment_data.plot_fp_res_data(axs[0])
+            axs[0].set_title("Fixed Precision Convergence")
 
-            ax.set_xlabel("Iterations")
-            ax.set_ylabel("Relative Residual")
-            ax.set_title(matrix_experiment_data.id)
-            ax.semilogy()
-            ax.grid()
-            ax.legend()
+            matrix_experiment_data.plot_mp_res_data(axs[1])
+            axs[1].set_title("Mixed Precision Convergence")
+
+            axs[0].set_ylabel("$\\frac{|| b-Ax_{i}||_{2}}{||b-Ax_{0}||_{2}}$")
+
+            for ax in axs:
+                ax.set_xlabel("Outer Iterations")
+                ax.semilogy()
+                ax.grid()
+                ax.legend()
+
+            fig.suptitle(matrix_experiment_data.id)
+            fig.tight_layout()
 
             plt.show()
