@@ -46,23 +46,8 @@ public:
         );
         fp_restarted_gmres.solve();
         clock.clock_stop();
-        std::cout << fp_restarted_gmres.get_info_string() << std::endl;
-        std::cout << "Inner iterations: [";
-        for (int i=0; i<fp_restarted_gmres.get_inner_iterations().size()-1; ++i) {
-            std::cout << fp_restarted_gmres.get_inner_iterations()[i] << " ";
-        }
-        std::cout << fp_restarted_gmres.get_inner_iterations()[
-                        fp_restarted_gmres.get_inner_iterations().size()-1
-                     ]
-                  << "]" << std::endl;
-        // std::cout << "Res norm history: [";
-        // for (int i=0; i<fp_restarted_gmres.get_res_norm_history().size()-1; ++i) {
-        //     std::cout << fp_restarted_gmres.get_res_norm_history()[i] << " ";
-        // }
-        // std::cout << fp_restarted_gmres.get_res_norm_history()[
-        //                 fp_restarted_gmres.get_res_norm_history().size()-1
-        //              ]
-        //           << "]" << std::endl;
+
+        ASSERT_EQ(fp_restarted_gmres.get_iteration(), nested_gmres_outer_iters);
 
     };
 

@@ -5,7 +5,7 @@ TEST_F(Benchmark_MP_GMRES_IR, MP_GMRES_IR_OuterRestartCount_BENCHMARK) {
     std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<double> &)> execute_func = [this] (
         Benchmark_AccumClock &clock, NoFillMatrixSparse<double> &A
     ) {
-        execute_mp_gmres_ir<OuterRestartCount>(clock, A);
+        execute_mp_gmres_ir<NoProgress_OuterRestartCount>(clock, A);
     };
 
     benchmark_exec_func<NoFillMatrixSparse, double>(
@@ -22,7 +22,7 @@ TEST_F(
     std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<double> &)> execute_func = [this] (
         Benchmark_AccumClock &clock, NoFillMatrixSparse<double> &A
     ) {
-        execute_mp_gmres_ir<RelativeResidualThreshold>(clock, A);
+        execute_mp_gmres_ir<NoProgress_RelativeResidualThreshold>(clock, A);
     };
 
     benchmark_exec_func<NoFillMatrixSparse, double>(
@@ -39,7 +39,7 @@ TEST_F(
     std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<double> &)> execute_func = [this] (
         Benchmark_AccumClock &clock, NoFillMatrixSparse<double> &A
     ) {
-        execute_mp_gmres_ir<CheckStagnation>(clock, A);
+        execute_mp_gmres_ir<NoProgress_CheckStagnation>(clock, A);
     };
 
     benchmark_exec_func<NoFillMatrixSparse, double>(
@@ -56,7 +56,7 @@ TEST_F(
     std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<double> &)> execute_func = [this] (
         Benchmark_AccumClock &clock, NoFillMatrixSparse<double> &A
     ) {
-        execute_mp_gmres_ir<ProjectThresholdAfterStagnation>(clock, A);
+        execute_mp_gmres_ir<NoProgress_ProjectThresholdAfterStagnation>(clock, A);
     };
 
     benchmark_exec_func<NoFillMatrixSparse, double>(

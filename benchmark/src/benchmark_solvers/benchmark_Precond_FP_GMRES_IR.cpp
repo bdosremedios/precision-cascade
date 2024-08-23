@@ -1,4 +1,4 @@
-#include "benchmark_Nested_GMRES.h"
+#include "benchmark_FP_GMRES_IR.h"
 
 #include "tools/arg_pkgs/LinearSystem.h"
 #include "tools/arg_pkgs/SolveArgPkg.h"
@@ -8,7 +8,7 @@
 
 #include "tools/read_matrix.h"
 
-class Benchmark_Precond_FP_GMRES_IR: public Benchmark_Nested_GMRES {};
+class Benchmark_Precond_FP_GMRES_IR: public Benchmark_FP_GMRES_IR {};
 
 TEST_F(Benchmark_Precond_FP_GMRES_IR, ILU0_FP_GMRES_IR_BENCHMARK) {
 
@@ -32,11 +32,13 @@ TEST_F(Benchmark_Precond_FP_GMRES_IR, ILU0_FP_GMRES_IR_BENCHMARK) {
         PrecondArgPkg<NoFillMatrixSparse, double> precond_args(
             std::make_shared<ILUPreconditioner<NoFillMatrixSparse, double>>(A)
         );
-        FP_GMRES_IR_Solve<NoFillMatrixSparse, double> fp_restarted_gmres(
+        NoProgress_FP_GMRES_IR<NoFillMatrixSparse, double> fp_restarted_gmres(
             &typed_lin_sys, 0., args, precond_args
         );
         fp_restarted_gmres.solve();
         clock.clock_stop();
+
+        ASSERT_EQ(fp_restarted_gmres.get_iteration(), nested_gmres_outer_iters);
 
     };
 

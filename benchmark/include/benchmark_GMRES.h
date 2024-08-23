@@ -71,7 +71,8 @@ public:
         );
         gmres.solve();
         clock.clock_stop();
-        std::cout << gmres.get_info_string() << std::endl;
+
+        ASSERT_EQ(gmres.get_iteration(), gmres_iters);
 
     }
 

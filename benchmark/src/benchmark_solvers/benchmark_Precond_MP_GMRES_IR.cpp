@@ -1,4 +1,4 @@
-#include "benchmark_Nested_GMRES.h"
+#include "benchmark_MP_GMRES_IR.h"
 
 #include "tools/arg_pkgs/LinearSystem.h"
 #include "tools/arg_pkgs/SolveArgPkg.h"
@@ -27,11 +27,13 @@ TEST_F(Benchmark_Precond_MP_GMRES_IR, ILU0_MP_GMRES_IR_BENCHMARK) {
         PrecondArgPkg<NoFillMatrixSparse, double> precond_args(
             std::make_shared<ILUPreconditioner<NoFillMatrixSparse, double>>(A)
         );
-        OuterRestartCount<NoFillMatrixSparse> mp_restarted_gmres(
+        NoProgress_OuterRestartCount<NoFillMatrixSparse> mp_restarted_gmres(
             &gen_lin_sys, args, precond_args
         );
         mp_restarted_gmres.solve();
         clock.clock_stop();
+
+        ASSERT_EQ(mp_restarted_gmres.get_iteration(), nested_gmres_outer_iters);
 
     };
 
