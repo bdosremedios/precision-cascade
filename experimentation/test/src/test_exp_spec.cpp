@@ -56,6 +56,21 @@ public:
             );
         }
 
+        ASSERT_EQ(
+            loaded_file["matrix_ids"].size(),
+            sgroup.matrices_to_test.size()
+        );
+        for (int i=0; i<sgroup.matrices_to_test.size(); ++i) {
+
+            std::string matrix_id = (
+                fs::path(sgroup.matrices_to_test[i]).stem().string()
+            );
+            
+            ASSERT_EQ(loaded_file["matrix_ids"][i], matrix_id);
+
+        }
+
+
         file_in.close();
         
     }
