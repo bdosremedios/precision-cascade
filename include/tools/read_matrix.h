@@ -432,9 +432,10 @@ TMatrix<TPrecision> read_matrixMTX(
 
     if (
         !(std::getline(line_in, line_str_portion, ' ')) ||
-        (line_str_portion != "real")
+        ((line_str_portion != "real") &&
+         (line_str_portion != "integer"))
     ) {
-        throw std::runtime_error(first_line_error+" real");
+        throw std::runtime_error(first_line_error+" real or integer");
     }
 
     // Read symmetry of mtx
