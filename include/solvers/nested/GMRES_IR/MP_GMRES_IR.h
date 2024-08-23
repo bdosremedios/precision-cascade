@@ -426,12 +426,12 @@ protected:
     virtual int determine_next_phase() override {
 
         int size = this->res_norm_history.size();
-        double rel_diff;
+        double relative_progress;
 
         if (size < 2) {
             return this->INIT_PHASE;
         } else {
-            rel_diff = (
+            relative_progress = -1.*(
                 (this->res_norm_history[size-1] -
                  this->res_norm_history[size-2]) /
                 this->res_norm_history[size-2]
@@ -439,16 +439,16 @@ protected:
         }
         
         if (this->cascade_phase == this->HLF_PHASE) {
-            if (rel_diff <= 2.*this->u_hlf) {
-                return this->SGL_PHASE;
-            } else {
+            if (relative_progress > 2.*this->u_hlf) {
                 return this->cascade_phase;
+            } else {
+                return this->SGL_PHASE;
             }
         } else if (this->cascade_phase == this->SGL_PHASE) {
-            if (rel_diff <= 2.*this->u_sgl) {
-                return this->DBL_PHASE;
-            } else {
+            if (relative_progress > 2.*this->u_sgl) {
                 return this->cascade_phase;
+            } else {
+                return this->DBL_PHASE;
             }
         } else {
             return this->DBL_PHASE;
@@ -476,12 +476,12 @@ protected:
     virtual int determine_next_phase() override {
 
         int size = this->res_norm_history.size();
-        double rel_diff;
+        double relative_progress;
 
         if (size < 2) {
             return this->INIT_PHASE;
         } else {
-            rel_diff = (
+            relative_progress = -1.*(
                 (this->res_norm_history[size-1] -
                  this->res_norm_history[size-2]) /
                 this->res_norm_history[size-2]
@@ -490,13 +490,13 @@ protected:
         
         if (this->cascade_phase == this->HLF_PHASE) {
 
-            if (rel_diff <= 2.*this->u_hlf) {
+            if (relative_progress > 2.*this->u_hlf) {
+                return this->cascade_phase;
+            } else {
                 projected_sgl_threshold = (
-                    this->get_relres() * this->u_sgl / this->u_hlf
+                    this->get_relres() * 10.*(this->u_sgl/this->u_hlf)
                 );
                 return this->SGL_PHASE;
-            } else {
-                return this->cascade_phase;
             }
 
         } else if (this->cascade_phase == this->SGL_PHASE) {
