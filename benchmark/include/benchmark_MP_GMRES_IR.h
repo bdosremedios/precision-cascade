@@ -18,6 +18,10 @@ public:
     // Remove any progress towards solution
     void outer_iterate_complete() override {
         this->generic_soln = this->init_guess;
+        ASSERT_EQ(
+            this->inner_solver->get_iteration(),
+            this->inner_solve_arg_pkg.max_iter
+        );
     }
 
 };
@@ -33,6 +37,10 @@ public:
     // Remove any progress towards solution
     void outer_iterate_complete() override {
         this->generic_soln = this->init_guess;
+        ASSERT_EQ(
+            this->inner_solver->get_iteration(),
+            this->inner_solve_arg_pkg.max_iter
+        );
     }
 
 };
@@ -48,6 +56,10 @@ public:
     // Remove any progress towards solution
     void outer_iterate_complete() override {
         this->generic_soln = this->init_guess;
+        ASSERT_EQ(
+            this->inner_solver->get_iteration(),
+            this->inner_solve_arg_pkg.max_iter
+        );
     }
 
 };
@@ -63,6 +75,10 @@ public:
     // Remove any progress towards solution
     void outer_iterate_complete() override {
         this->generic_soln = this->init_guess;
+        ASSERT_EQ(
+            this->inner_solver->get_iteration(),
+            this->inner_solve_arg_pkg.max_iter
+        );
     }
 
 };

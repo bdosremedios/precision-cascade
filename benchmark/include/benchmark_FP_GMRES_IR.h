@@ -14,9 +14,14 @@ public:
 
     using cascade::FP_GMRES_IR_Solve<TMatrix, TPrecision>::FP_GMRES_IR_Solve;
 
-    // Remove any progress towards solution
+    // Remove any progress towards solution and check inner iterations
+    // were maximized
     void outer_iterate_complete() override {
         this->generic_soln = this->init_guess;
+        ASSERT_EQ(
+            this->inner_solver->get_iteration(),
+            this->inner_solve_arg_pkg.max_iter
+        );
     }
 
 };
