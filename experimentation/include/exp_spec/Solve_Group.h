@@ -66,8 +66,14 @@ struct Solve_Group {
         file_out << "\t\"solver_ids\" : "
                  << write_json::str_vector_to_jsonarray_str(solvers_to_use, 0)
                  << ",\n";
+
+        // Remove file extensions from ids before adding
+        std::vector<std::string> matrix_ids;
+        for (std::string matrix_file : matrices_to_test) {
+            matrix_ids.push_back(fs::path(matrix_file).stem().string());
+        }
         file_out << "\t\"matrix_ids\" : "
-                 << write_json::str_vector_to_jsonarray_str(matrices_to_test, 0)
+                 << write_json::str_vector_to_jsonarray_str(matrix_ids, 0)
                  << "\n";
 
         write_json::end_json(file_out);

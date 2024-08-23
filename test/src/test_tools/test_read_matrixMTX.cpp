@@ -133,6 +133,34 @@ public:
     }
 
     template <template <typename> typename TMatrix, typename TPrecision>
+    void ReadInteger() {
+
+        fs::path file_square_integer(
+            read_matrix_dir / fs::path("square_coord_integer.mtx"));
+        fs::path file_square_integer_arr(
+            read_matrix_dir / fs::path("square_array_integer.mtx")
+        );
+        TMatrix<TPrecision> target_square(
+            TestBase::bundle,
+            {{static_cast<TPrecision>(1), static_cast<TPrecision>(4),
+              static_cast<TPrecision>(7)},
+             {static_cast<TPrecision>(2), static_cast<TPrecision>(5),
+              static_cast<TPrecision>(8)},
+             {static_cast<TPrecision>(3), static_cast<TPrecision>(6),
+              static_cast<TPrecision>(9)}}
+        );
+        TMatrix<TPrecision> test_square(read_matrixMTX<TMatrix, TPrecision>(
+            TestBase::bundle, file_square_integer
+        ));
+        ASSERT_MATRIX_EQ(test_square, target_square);
+        TMatrix<TPrecision> test_square_arr(read_matrixMTX<TMatrix, TPrecision>(
+            TestBase::bundle, file_square_integer_arr
+        ));
+        ASSERT_MATRIX_EQ(test_square_arr, target_square);
+
+    }
+
+    template <template <typename> typename TMatrix, typename TPrecision>
     void ReadPreciseGeneral(fs::path mtx_path, TMatrix<TPrecision> target) {
 
         Scalar<TPrecision> permutation(
@@ -499,6 +527,15 @@ TEST_F(read_matrixMTX_Test, ReadSimpleSymmetric) {
     ReadSimpleSymmetric<NoFillMatrixSparse, float>();
     ReadSimpleSymmetric<MatrixDense, double>();
     ReadSimpleSymmetric<NoFillMatrixSparse, double>();
+}
+
+TEST_F(read_matrixMTX_Test, ReadInteger) {
+    ReadInteger<MatrixDense, __half>();
+    ReadInteger<NoFillMatrixSparse, __half>();
+    ReadInteger<MatrixDense, float>();
+    ReadInteger<NoFillMatrixSparse, float>();
+    ReadInteger<MatrixDense, double>();
+    ReadInteger<NoFillMatrixSparse, double>();
 }
 
 TEST_F(read_matrixMTX_Test, ReadPreciseGeneral_Double) {
