@@ -88,7 +88,7 @@ class Benchmark_VP_GMRES_IR: public Benchmark_Nested_GMRES
 public:
 
     template <template <template <typename> typename> typename TSolver>
-    void execute_mp_gmres_ir(
+    void execute_vp_gmres_ir(
         Benchmark_AccumClock &clock, NoFillMatrixSparse<double> &A
     ) {
 
@@ -102,13 +102,13 @@ public:
         );
 
         clock.clock_start();
-        TSolver<NoFillMatrixSparse> mp_restarted_gmres(
+        TSolver<NoFillMatrixSparse> vp_restarted_gmres(
             &gen_lin_sys, args
         );
-        mp_restarted_gmres.solve();
+        vp_restarted_gmres.solve();
         clock.clock_stop();
 
-        ASSERT_EQ(mp_restarted_gmres.get_iteration(), nested_gmres_outer_iters);
+        ASSERT_EQ(vp_restarted_gmres.get_iteration(), nested_gmres_outer_iters);
 
     };
 

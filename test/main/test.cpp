@@ -54,7 +54,7 @@ int main(int argc, char **argv) {
     std::string filter_include = "";
     std::string filter_exclude = "";
 
-    // Check if should run exclusively MPGMRES tests
+    // Check if should run exclusively VPGMRES tests
     bool only_vp_gmres = false;
     for (int i=0; i<argc; ++i) {
         if (
