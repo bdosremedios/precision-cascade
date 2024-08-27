@@ -3,3 +3,5 @@
 /install/
 *.sif
 __pycache__
+/.vscode/
+CMakeSettings.json
