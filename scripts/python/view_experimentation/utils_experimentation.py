@@ -1,9 +1,12 @@
 import os
+import re
 import json
 
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+
+from IPython.display import display
 
 from bokeh.palettes import Category20
 
@@ -23,7 +26,7 @@ class Solver_ID_Info:
 
     fp_ids = {"FP64", "FP32", "FP16"}
     
-    mp_ids = {
+    vp_ids = {
         "OuterRestartCount",
         "RelativeResidualThreshold",
         "CheckStagnation",
@@ -42,13 +45,24 @@ class Solver_ID_Info:
 
 class Individual_Experiment_Data:
 
+    nan_r = r"(-nan|nan|-inf|inf)"
+
     def __scrub_nan(self, s):
-        return s.replace("-nan", "NaN").replace("nan", "NaN")
+        return re.sub(self.nan_r, "NaN", s)
+        # return s.replace("-nan", "NaN").replace("nan", "NaN")
 
     def __init__(self, json_path):
 
         file_in = open(json_path, "r")
-        self.experiment_data = json.loads(self.__scrub_nan(file_in.read()))
+
+        try:
+            self.experiment_data = json.loads(self.__scrub_nan(file_in.read()))
+        except json.JSONDecodeError as e:
+            raise RuntimeError(
+                "Read JSON error in " + json_path + " at " +
+                f"line: {e.lineno} col: {e.colno}"
+            )
+
 
         self.id = self.experiment_data["id"]
 
@@ -73,7 +87,7 @@ class Individual_Experiment_Data:
 
     def plot_res_data(self, ax, color, fmt):
 
-        if self.id in Solver_ID_Info.mp_ids:
+        if self.id in Solver_ID_Info.vp_ids:
             ax.axvline(
                 self.experiment_data["hlf_sgl_cascade_change"]-1,
                 linestyle=":",
@@ -195,6 +209,17 @@ class Matrix_Experiment_Data:
             ]
         )
 
+        df = df.astype(
+            {
+                "Solver ID": 'string',
+                "Iteration": 'int32',
+                "Relative Residual": 'float64',
+                "Elapsed Time (ms)": 'int32',
+                "Relative Error": 'float64',
+                "Relative Time": 'float64'
+            }
+        )
+
         return df
 
     def plot_fp_res_data(self, ax):
@@ -203,10 +228,10 @@ class Matrix_Experiment_Data:
             if (solver_data.id in Solver_ID_Info.fp_ids):
                 solver_data.plot_res_data(ax)
 
-    def plot_mp_res_data(self, ax):
+    def plot_vp_res_data(self, ax):
 
         for solver_data in self.solver_data:
-            if (solver_data.id in Solver_ID_Info.mp_ids):
+            if (solver_data.id in Solver_ID_Info.vp_ids):
                 solver_data.plot_res_data(ax)
 
 class Solve_Group_Data:
@@ -242,8 +267,8 @@ class Solve_Group_Data:
             matrix_experiment_data.plot_fp_res_data(axs[0])
             axs[0].set_title("Fixed Precision Convergence")
 
-            matrix_experiment_data.plot_mp_res_data(axs[1])
-            axs[1].set_title("Mixed Precision Convergence")
+            matrix_experiment_data.plot_vp_res_data(axs[1])
+            axs[1].set_title("Variable Precision Convergence")
 
             axs[0].set_ylabel("$\\frac{|| b-Ax_{i}||_{2}}{||b-Ax_{0}||_{2}}$")
 
