@@ -55,20 +55,20 @@ int main(int argc, char **argv) {
     std::string filter_exclude = "";
 
     // Check if should run exclusively MPGMRES tests
-    bool only_mp_gmres = false;
+    bool only_vp_gmres = false;
     for (int i=0; i<argc; ++i) {
         if (
-            (std::string(argv[i]) == "--mpgmres") ||
-            (std::string(argv[i]) == "-mp")
+            (std::string(argv[i]) == "--vpgmres") ||
+            (std::string(argv[i]) == "-vp")
         ) {
-            only_mp_gmres = true;
+            only_vp_gmres = true;
         }
     }
-    if (only_mp_gmres) {
-        std::cout << "Running exclusively MP_GMRES_IR_Solve related tests..."
+    if (only_vp_gmres) {
+        std::cout << "Running exclusively VP_GMRES_IR_Solve related tests..."
                   << std::endl;
         if (filter_include != "") { filter_include += ":"; }
-        filter_include += "*MP_GMRES_IR*";
+        filter_include += "*VP_GMRES_IR*";
     } else {
         std::cout << "Running all tests..." << std::endl;
     }

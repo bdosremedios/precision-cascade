@@ -1,11 +1,11 @@
-#ifndef BENCHMARK_MP_GMRES_IR_H
-#define BENCHMARK_MP_GMRES_IR_H
+#ifndef BENCHMARK_VP_GMRES_IR_H
+#define BENCHMARK_VP_GMRES_IR_H
 
 #include "benchmark_Nested_GMRES.h"
 
 #include "tools/arg_pkgs/LinearSystem.h"
 #include "tools/arg_pkgs/SolveArgPkg.h"
-#include "solvers/nested/GMRES_IR/MP_GMRES_IR.h"
+#include "solvers/nested/GMRES_IR/VP_GMRES_IR.h"
 
 template <template <typename> typename TMatrix>
 class NoProgress_OuterRestartCount:
@@ -83,7 +83,7 @@ public:
 
 };
 
-class Benchmark_MP_GMRES_IR: public Benchmark_Nested_GMRES
+class Benchmark_VP_GMRES_IR: public Benchmark_Nested_GMRES
 {
 public:
 

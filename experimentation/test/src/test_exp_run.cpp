@@ -316,7 +316,7 @@ public:
     }
 
     template <template <typename> typename TMatrix>
-    void Test_Execute_MP_GMRES_IR_Solve() {
+    void Test_Execute_VP_GMRES_IR_Solve() {
 
         GenericLinearSystem<TMatrix> gen_lin_sys(
             TMatrix<double>(MatrixDense<double>::Random(
@@ -326,61 +326,61 @@ public:
         );
         SolveArgPkg solver_args(10, 10, 0.05);
 
-        std::shared_ptr<RelativeResidualThreshold<TMatrix>> rrt_mpgmres_ptr(
+        std::shared_ptr<RelativeResidualThreshold<TMatrix>> rrt_vpgmres_ptr(
             std::make_shared<RelativeResidualThreshold<TMatrix>>(
                 &gen_lin_sys, solver_args
             )
         );
-        ASSERT_FALSE(rrt_mpgmres_ptr->check_initiated());
-        ASSERT_FALSE(rrt_mpgmres_ptr->check_terminated());
+        ASSERT_FALSE(rrt_vpgmres_ptr->check_initiated());
+        ASSERT_FALSE(rrt_vpgmres_ptr->check_terminated());
 
-        Experiment_Clock rrt_mpgmres_clock;
-        rrt_mpgmres_clock.start_clock_experiment();
-        Solve_Data<InnerOuterSolve, TMatrix> rrt_mpgmres_solve_data(
+        Experiment_Clock rrt_vpgmres_clock;
+        rrt_vpgmres_clock.start_clock_experiment();
+        Solve_Data<InnerOuterSolve, TMatrix> rrt_vpgmres_solve_data(
             execute_solve<InnerOuterSolve, TMatrix>(
-                "id_rrt_mpgmres", rrt_mpgmres_ptr, logger, false
+                "id_rrt_vpgmres", rrt_vpgmres_ptr, logger, false
             )
         );
-        rrt_mpgmres_clock.stop_clock_experiment();
+        rrt_vpgmres_clock.stop_clock_experiment();
 
-        ASSERT_EQ(rrt_mpgmres_solve_data.id, "id_rrt_mpgmres");
-        ASSERT_TRUE(rrt_mpgmres_solve_data.clock.check_completed());
+        ASSERT_EQ(rrt_vpgmres_solve_data.id, "id_rrt_vpgmres");
+        ASSERT_TRUE(rrt_vpgmres_solve_data.clock.check_completed());
         ASSERT_NEAR(
-            rrt_mpgmres_clock.get_elapsed_time_ms(),
-            rrt_mpgmres_solve_data.clock.get_elapsed_time_ms(),
+            rrt_vpgmres_clock.get_elapsed_time_ms(),
+            rrt_vpgmres_solve_data.clock.get_elapsed_time_ms(),
             1
         );
-        ASSERT_EQ(rrt_mpgmres_ptr, rrt_mpgmres_solve_data.solver_ptr);
-        ASSERT_TRUE(rrt_mpgmres_solve_data.solver_ptr->check_initiated());
-        ASSERT_TRUE(rrt_mpgmres_solve_data.solver_ptr->check_terminated());
+        ASSERT_EQ(rrt_vpgmres_ptr, rrt_vpgmres_solve_data.solver_ptr);
+        ASSERT_TRUE(rrt_vpgmres_solve_data.solver_ptr->check_initiated());
+        ASSERT_TRUE(rrt_vpgmres_solve_data.solver_ptr->check_terminated());
 
-        std::shared_ptr<OuterRestartCount<TMatrix>> orc_mpgmres_ptr(
+        std::shared_ptr<OuterRestartCount<TMatrix>> orc_vpgmres_ptr(
             std::make_shared<OuterRestartCount<TMatrix>>(
                 &gen_lin_sys, solver_args
             )
         );
-        ASSERT_FALSE(orc_mpgmres_ptr->check_initiated());
-        ASSERT_FALSE(orc_mpgmres_ptr->check_terminated());
+        ASSERT_FALSE(orc_vpgmres_ptr->check_initiated());
+        ASSERT_FALSE(orc_vpgmres_ptr->check_terminated());
 
-        Experiment_Clock orc_mpgmres_clock;
-        orc_mpgmres_clock.start_clock_experiment();
-        Solve_Data<InnerOuterSolve, TMatrix> orc_mpgmres_solve_data(
+        Experiment_Clock orc_vpgmres_clock;
+        orc_vpgmres_clock.start_clock_experiment();
+        Solve_Data<InnerOuterSolve, TMatrix> orc_vpgmres_solve_data(
             execute_solve<InnerOuterSolve, TMatrix>(
-                "id_orc_mpgmres", orc_mpgmres_ptr, logger, false
+                "id_orc_vpgmres", orc_vpgmres_ptr, logger, false
             )
         );
-        orc_mpgmres_clock.stop_clock_experiment();
+        orc_vpgmres_clock.stop_clock_experiment();
 
-        ASSERT_EQ(orc_mpgmres_solve_data.id, "id_orc_mpgmres");
-        ASSERT_TRUE(orc_mpgmres_solve_data.clock.check_completed());
+        ASSERT_EQ(orc_vpgmres_solve_data.id, "id_orc_vpgmres");
+        ASSERT_TRUE(orc_vpgmres_solve_data.clock.check_completed());
         ASSERT_NEAR(
-            orc_mpgmres_clock.get_elapsed_time_ms(),
-            orc_mpgmres_solve_data.clock.get_elapsed_time_ms(),
+            orc_vpgmres_clock.get_elapsed_time_ms(),
+            orc_vpgmres_solve_data.clock.get_elapsed_time_ms(),
             1
         );
-        ASSERT_EQ(orc_mpgmres_ptr, orc_mpgmres_solve_data.solver_ptr);
-        ASSERT_TRUE(orc_mpgmres_solve_data.solver_ptr->check_initiated());
-        ASSERT_TRUE(orc_mpgmres_solve_data.solver_ptr->check_terminated());
+        ASSERT_EQ(orc_vpgmres_ptr, orc_vpgmres_solve_data.solver_ptr);
+        ASSERT_TRUE(orc_vpgmres_solve_data.solver_ptr->check_initiated());
+        ASSERT_TRUE(orc_vpgmres_solve_data.solver_ptr->check_terminated());
 
     }
 
@@ -480,9 +480,9 @@ TEST_F(Test_Experiment_Run, Test_Execute_FP_GMRES_IR_Solve) {
     Test_Execute_FP_GMRES_IR_Solve<NoFillMatrixSparse>();
 }
 
-TEST_F(Test_Experiment_Run, Test_Execute_MP_GMRES_IR_Solve) {
-    Test_Execute_MP_GMRES_IR_Solve<MatrixDense>();
-    Test_Execute_MP_GMRES_IR_Solve<NoFillMatrixSparse>();
+TEST_F(Test_Experiment_Run, Test_Execute_VP_GMRES_IR_Solve) {
+    Test_Execute_VP_GMRES_IR_Solve<MatrixDense>();
+    Test_Execute_VP_GMRES_IR_Solve<NoFillMatrixSparse>();
 }
 
 TEST_F(Test_Experiment_Run, Test_AllSolvers_Run_Solve_Group) {

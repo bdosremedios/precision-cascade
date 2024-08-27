@@ -1,6 +1,6 @@
-#include "benchmark_MP_GMRES_IR.h"
+#include "benchmark_VP_GMRES_IR.h"
 
-TEST_F(Benchmark_MP_GMRES_IR, MP_GMRES_IR_OuterRestartCount_BENCHMARK) {
+TEST_F(Benchmark_VP_GMRES_IR, VP_GMRES_IR_OuterRestartCount_BENCHMARK) {
     
     std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<double> &)> execute_func = [this] (
         Benchmark_AccumClock &clock, NoFillMatrixSparse<double> &A
@@ -15,8 +15,8 @@ TEST_F(Benchmark_MP_GMRES_IR, MP_GMRES_IR_OuterRestartCount_BENCHMARK) {
 }
 
 TEST_F(
-    Benchmark_MP_GMRES_IR,
-    MP_GMRES_IR_RelativeResidualThreshold_BENCHMARK
+    Benchmark_VP_GMRES_IR,
+    VP_GMRES_IR_RelativeResidualThreshold_BENCHMARK
 ) {
 
     std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<double> &)> execute_func = [this] (
@@ -32,8 +32,8 @@ TEST_F(
 }
 
 TEST_F(
-    Benchmark_MP_GMRES_IR,
-    MP_GMRES_IR_CheckStagnation_BENCHMARK
+    Benchmark_VP_GMRES_IR,
+    VP_GMRES_IR_CheckStagnation_BENCHMARK
 ) {
 
     std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<double> &)> execute_func = [this] (
@@ -49,8 +49,8 @@ TEST_F(
 }
 
 TEST_F(
-    Benchmark_MP_GMRES_IR,
-    MP_GMRES_IR_ProjectThresholdAfterStagnation_BENCHMARK
+    Benchmark_VP_GMRES_IR,
+    VP_GMRES_IR_ProjectThresholdAfterStagnation_BENCHMARK
 ) {
 
     std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<double> &)> execute_func = [this] (

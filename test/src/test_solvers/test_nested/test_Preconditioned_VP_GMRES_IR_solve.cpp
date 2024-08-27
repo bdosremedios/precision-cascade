@@ -1,8 +1,8 @@
 #include "test.h"
 
-#include "solvers/nested/GMRES_IR/MP_GMRES_IR.h"
+#include "solvers/nested/GMRES_IR/VP_GMRES_IR.h"
 
-class Preconditioned_MP_GMRES_IR_Test: public TestBase
+class Preconditioned_VP_GMRES_IR_Test: public TestBase
 {
 public:
 
@@ -151,14 +151,14 @@ public:
 
 };
 
-TEST_F(Preconditioned_MP_GMRES_IR_Test, SolveMinimumIterTest_SOLVER) {
+TEST_F(Preconditioned_VP_GMRES_IR_Test, SolveMinimumIterTest_SOLVER) {
     
     PreconditionedMinimumIterTest<MatrixDense>(solve_args);
     PreconditionedMinimumIterTest<NoFillMatrixSparse>(solve_args);
 
 }
 
-TEST_F(Preconditioned_MP_GMRES_IR_Test, SolveConvDiff256_SOLVER) {
+TEST_F(Preconditioned_VP_GMRES_IR_Test, SolveConvDiff256_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_256_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_256_b.csv"));
@@ -168,7 +168,7 @@ TEST_F(Preconditioned_MP_GMRES_IR_Test, SolveConvDiff256_SOLVER) {
 
 }
 
-TEST_F(Preconditioned_MP_GMRES_IR_Test, SolveConvDiff1024_LONGRUNTIME_SOLVER) {
+TEST_F(Preconditioned_VP_GMRES_IR_Test, SolveConvDiff1024_LONGRUNTIME_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_1024_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_1024_b.csv"));

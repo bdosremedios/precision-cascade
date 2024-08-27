@@ -508,21 +508,21 @@ public:
     }
 
     template <template <typename> typename TMatrix>
-    void TestRecordOutputJsonMPGMRES() {
+    void TestRecordOutputJsonVPGMRES() {
 
         std::string tag = get_tag(TMatrixIdentity<TMatrix>());
-        std::string id = "mpgmres_" + tag + "_id";
-        std::string file_name = "mpgmres_" + tag + "_file";
+        std::string id = "vpgmres_" + tag + "_id";
+        std::string file_name = "vpgmres_" + tag + "_file";
 
         GenericLinearSystem<TMatrix> gen_lin_sys(A, b);
 
-        std::shared_ptr<MP_GMRES_IR_Solve<TMatrix>> solve_ptr;
+        std::shared_ptr<VP_GMRES_IR_Solve<TMatrix>> solve_ptr;
         solve_ptr = std::make_shared<OuterRestartCount<TMatrix>>(
             &gen_lin_sys, solve_args
         );
 
-        Solve_Data<MP_GMRES_IR_Solve, TMatrix> data(
-            execute_solve<MP_GMRES_IR_Solve, TMatrix>(
+        Solve_Data<VP_GMRES_IR_Solve, TMatrix> data(
+            execute_solve<VP_GMRES_IR_Solve, TMatrix>(
                 id, solve_ptr, logger, false
             )
         );
@@ -673,7 +673,7 @@ TEST_F(Test_Experiment_Data, TestRecordOutputJsonFPGMRES) {
     TestRecordOutputJsonFPGMRES<NoFillMatrixSparse>();
 }
 
-TEST_F(Test_Experiment_Data, TestRecordOutputJsonMPGMRES) {
-    TestRecordOutputJsonMPGMRES<MatrixDense>();
-    TestRecordOutputJsonMPGMRES<NoFillMatrixSparse>();
+TEST_F(Test_Experiment_Data, TestRecordOutputJsonVPGMRES) {
+    TestRecordOutputJsonVPGMRES<MatrixDense>();
+    TestRecordOutputJsonVPGMRES<NoFillMatrixSparse>();
 }
