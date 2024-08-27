@@ -300,6 +300,7 @@ MatrixDense<TPrecision> read_array_body_MTX(
 
         } catch (std::invalid_argument e) {
 
+            free(h_mat);
             throw std::runtime_error(
                 "read_array_body_MTX: Invalid entry in file entry: " + 
                 std::to_string(entry)
@@ -311,9 +312,12 @@ MatrixDense<TPrecision> read_array_body_MTX(
 
     std::getline(file_in, line_str);
     if ((line_str != "") || std::getline(file_in, line_str)) {
+
+        free(h_mat);
         throw std::runtime_error(
             "read_array_body_MTX: Invalid end of file"
         );
+
     }
 
     MatrixDense<TPrecision> mat(cu_handles, h_mat, m_rows, n_cols);

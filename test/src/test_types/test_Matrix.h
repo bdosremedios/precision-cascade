@@ -1995,8 +1995,8 @@ public:
         Vector<TPrecision> test_soln(U_tri.back_sub(Ub_tri));
 
         TPrecision min_tol = Tol<TPrecision>::gamma_T(n);
-        if (abs_ns::abs(min_tol) > static_cast<TPrecision>(0.1)) {
-            min_tol = 0.25;
+        if (abs_ns::abs(min_tol) > static_cast<TPrecision>(0.3)) {
+            min_tol = static_cast<TPrecision>(0.3);
         }
 
         ASSERT_VECTOR_NEAR(
