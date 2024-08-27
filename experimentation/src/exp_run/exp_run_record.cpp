@@ -1,17 +1,12 @@
 #include "exp_run/exp_run_record.h"
 
-void create_or_clear_directory(fs::path dir, Experiment_Log logger) {
-
+void create_directory_if_nexists(fs::path dir, Experiment_Log logger) {
     if (!fs::exists(dir)) {
         logger.info("Create dir: "+dir.string());
         fs::create_directory(dir);
     } else {
-        logger.info("Clear dir: "+dir.string());
-        for (auto member : fs::directory_iterator(dir)) {
-            fs::remove_all(member);
-        }
+        logger.info("Directory " + dir.string() + " exists, adding to dir");
     }
-
 }
 
 void run_record_experimental_spec(
@@ -25,7 +20,7 @@ void run_record_experimental_spec(
     logger.info("Start Experiment_Spec: " + exp_spec.id);
 
     fs::path exp_spec_dir = output_data_dir / fs::path(exp_spec.id);
-    create_or_clear_directory(exp_spec_dir, logger);
+    create_directory_if_nexists(exp_spec_dir, logger);
 
     for (Solve_Group solve_group : exp_spec.solve_groups) {
 

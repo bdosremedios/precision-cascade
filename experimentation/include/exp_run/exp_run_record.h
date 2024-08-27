@@ -21,7 +21,7 @@ static const double u_hlf = std::pow(2, -10);
 static const double u_sgl = std::pow(2, -23);
 static const double u_dbl = std::pow(2, -52);
 
-void create_or_clear_directory(fs::path dir, Experiment_Log logger);
+void create_directory_if_nexists(fs::path dir, Experiment_Log logger);
 
 template <template <typename> typename TMatrix>
 void run_record_fpgmres_solve(
@@ -218,7 +218,7 @@ void run_record_solve_group(
 ) {
 
     fs::path solve_group_dir = output_data_dir / fs::path(solve_group.id);
-    create_or_clear_directory(solve_group_dir, outer_logger);
+    create_directory_if_nexists(solve_group_dir, outer_logger);
 
     Experiment_Log solve_group_logger(
         solve_group.id + "_logger",
@@ -247,7 +247,7 @@ void run_record_solve_group(
         fs::path matrix_output_data_dir = (
             solve_group_dir / fs::path(matrix_file).stem()
         );
-        create_or_clear_directory(matrix_output_data_dir, solve_group_logger);
+        create_directory_if_nexists(matrix_output_data_dir, solve_group_logger);
 
         solve_group_logger.info(
             "Start matrix experimentation: " + matrix_file
@@ -259,7 +259,9 @@ void run_record_solve_group(
             fs::path iter_output_data_dir = (
                 matrix_output_data_dir / fs::path(std::to_string(exp_iter))
             );
-            create_or_clear_directory(iter_output_data_dir, solve_group_logger);
+            create_directory_if_nexists(
+                iter_output_data_dir, solve_group_logger
+            );
 
             solve_group_logger.info(
                 "Start iteration: " + std::to_string(exp_iter)
