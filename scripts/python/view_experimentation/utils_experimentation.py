@@ -1,7 +1,10 @@
-import json
 import os
+import json
+
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
+
 from bokeh.palettes import Category20
 
 cat20 = Category20[20]
@@ -72,13 +75,13 @@ class Individual_Experiment_Data:
 
         if self.id in Solver_ID_Info.mp_ids:
             ax.axvline(
-                self.experiment_data["hlf_sgl_cascade_change"],
+                self.experiment_data["hlf_sgl_cascade_change"]-1,
                 linestyle=":",
                 color=color
             )
             ax.axvline(
-                self.experiment_data["sgl_dbl_cascade_change"],
-                linestyle="--",
+                self.experiment_data["sgl_dbl_cascade_change"]-1,
+                linestyle="-.",
                 color=color
             )
 
@@ -88,6 +91,13 @@ class Individual_Experiment_Data:
             fmt,
             color=color
         )
+    
+    def get_data_list(self):
+        return [
+            self.experiment_data["outer_iterations"],
+            self.rel_res_history[-1],
+            self.experiment_data["elapsed_time_ms"]
+        ]
 
 class Solver_Experiment_Data:
 
@@ -111,6 +121,21 @@ class Solver_Experiment_Data:
             if first_to_label:
                 first_to_label = False
                 lines[0].set_label(self.id)
+    
+    def generate_df_row_med(self):
+
+        arr = []
+        for experiment_data in self.experiment_data:
+            arr.append(experiment_data.get_data_list())
+        arr = np.array(arr)
+
+        return [
+            self.id,
+            np.median(arr[:, 0]),
+            np.median(arr[:, 1]),
+            np.median(arr[:, 2])
+        ]
+
 
 class Matrix_Experiment_Data:
 
@@ -139,6 +164,38 @@ class Matrix_Experiment_Data:
             self.solver_data.append(
                 Solver_Experiment_Data(solver_id, json_list)
             )
+    
+    def generate_df_table(self):
+
+        fp64_idx = -1
+        for i in range(len(self.solver_data)):
+            if self.solver_data[i].id == "FP64":
+                fp64_idx = i
+        if fp64_idx == -1:
+            raise RuntimeError("Missing FP64")
+
+
+        in_order_data = []
+        for solver_data in self.solver_data:
+            in_order_data.append(solver_data.generate_df_row_med())
+
+        for row in in_order_data:
+            row.append(row[2]/in_order_data[fp64_idx][2])
+            row.append(row[3]/in_order_data[fp64_idx][3])
+
+        df = pd.DataFrame(
+            in_order_data,
+            columns=[
+                "Solver ID",
+                "Iteration",
+                "Relative Residual",
+                "Elapsed Time (ms)",
+                "Relative Error",
+                "Relative Time"
+            ]
+        )
+
+        return df
 
     def plot_fp_res_data(self, ax):
 
@@ -200,3 +257,5 @@ class Solve_Group_Data:
             fig.tight_layout()
 
             plt.show()
+
+            display(matrix_experiment_data.generate_df_table())
