@@ -63,7 +63,7 @@ TEST_F(
         sparse_dims,
         make_norm_A,
         execute_func,
-        "project_threshold_after_stagnation"
+        "threshold_to_stagnation"
     );
 
 }
