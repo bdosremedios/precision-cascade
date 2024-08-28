@@ -50,13 +50,13 @@ TEST_F(
 
 TEST_F(
     Benchmark_VP_GMRES_IR,
-    VP_GMRES_IR_ProjectThresholdAfterStagnation_BENCHMARK
+    VP_GMRES_IR_ThresholdToStagnation_BENCHMARK
 ) {
 
     std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<double> &)> execute_func = [this] (
         Benchmark_AccumClock &clock, NoFillMatrixSparse<double> &A
     ) {
-        execute_vp_gmres_ir<NoProgress_ProjectThresholdAfterStagnation>(clock, A);
+        execute_vp_gmres_ir<NoProgress_ThresholdToStagnation>(clock, A);
     };
 
     benchmark_exec_func<NoFillMatrixSparse, double>(

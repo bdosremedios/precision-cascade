@@ -65,12 +65,12 @@ public:
 };
 
 template <template <typename> typename TMatrix>
-class NoProgress_ProjectThresholdAfterStagnation:
-    public cascade::ProjectThresholdAfterStagnation<TMatrix>
+class NoProgress_ThresholdToStagnation:
+    public cascade::ThresholdToStagnation<TMatrix>
 {
 public:
 
-    using cascade::ProjectThresholdAfterStagnation<TMatrix>::ProjectThresholdAfterStagnation;
+    using cascade::ThresholdToStagnation<TMatrix>::ThresholdToStagnation;
 
     // Remove any progress towards solution
     void outer_iterate_complete() override {

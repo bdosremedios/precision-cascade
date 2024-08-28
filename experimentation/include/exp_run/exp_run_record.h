@@ -130,10 +130,10 @@ void run_record_vpgmres_solve(
             )
         );
     
-    } else if (solver_id == "ProjectThresholdAfterStagnation") {
+    } else if (solver_id == "ThresholdToStagnation") {
 
         solver_ptr = (
-            std::make_shared<cascade::ProjectThresholdAfterStagnation<TMatrix>>(
+            std::make_shared<cascade::ThresholdToStagnation<TMatrix>>(
                 &gen_lin_sys, solve_arg_pkg, precond_arg_pkg_dbl
             )
         );

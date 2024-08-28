@@ -333,8 +333,8 @@ public:
 
 };
 
-// Set solver to spend quarter of iterations in half phase a quarter in single
-// phase and half time in double
+// Set solver to spend 20% in half phase and 40% in single phase and half time
+// in double
 template <template <typename> typename TMatrix>
 class OuterRestartCount: public VP_GMRES_IR_Solve<TMatrix>
 {
@@ -344,18 +344,23 @@ protected:
     const int sgl_iters;
 
     virtual int determine_next_phase() override {
+
         if (this->cascade_phase == this->HLF_PHASE) {
+
             if (this->get_iteration() > hlf_iters) {
                 return this->SGL_PHASE;
             } else {
                 return this->cascade_phase;
             }
+
         } else if (this->cascade_phase == this->SGL_PHASE) {
+
             if (this->get_iteration() > hlf_iters+sgl_iters) {
                 return this->DBL_PHASE;
             } else {
                 return this->cascade_phase;
             }
+
         } else {
             return this->DBL_PHASE;
         }
@@ -375,8 +380,8 @@ public:
             arg_solve_arg_pkg,
             arg_inner_precond_arg_pkg_dbl
         ),
-        hlf_iters(arg_solve_arg_pkg.max_iter/4),
-        sgl_iters(arg_solve_arg_pkg.max_iter/4)
+        hlf_iters(arg_solve_arg_pkg.max_iter/5),
+        sgl_iters(arg_solve_arg_pkg.max_iter*2/5)
     {}
 
 };
@@ -393,18 +398,23 @@ protected:
     const double tol_sgl = 10.*std::pow(2., -23);
 
     virtual int determine_next_phase() override {
+
         if (this->cascade_phase == this->HLF_PHASE) {
+
             if (this->get_relres() <= tol_hlf) {
                 return this->SGL_PHASE;
             } else {
                 return this->cascade_phase;
             }
+
         } else if (this->cascade_phase == this->SGL_PHASE) {
+
             if (this->get_relres() <= tol_sgl) {
                 return this->DBL_PHASE;
             } else {
                 return this->cascade_phase;
             }
+
         } else {
             return this->DBL_PHASE;
         }
@@ -462,49 +472,45 @@ public:
 
 };
 
-// Set solver to check for stagnation in first phase the average change in
-// elements approximately the size of being within a ball 2x times the size of
-// roundoff and guess next stagnation as constant threshold of residual at first
-// phase change scaled by the expected roundoff change of half to float
+// Set solver to use threshold for the first phase to partially mitigate risk
+// of long time spend in low speed half cascade phase, then convert to
+// stagnation check on the more bundled single phase to squeeze as much time
+// out of that phase as possible
 template <template <typename> typename TMatrix>
-class ProjectThresholdAfterStagnation: public VP_GMRES_IR_Solve<TMatrix>
+class ThresholdToStagnation: public VP_GMRES_IR_Solve<TMatrix>
 {
 protected:
 
-    double projected_sgl_threshold;
+    const double tol_hlf = 10.*std::pow(2., -10);
 
     virtual int determine_next_phase() override {
-
-        int size = this->res_norm_history.size();
-        double relative_progress;
-
-        if (size < 2) {
-            return this->INIT_PHASE;
-        } else {
-            relative_progress = -1.*(
-                (this->res_norm_history[size-1] -
-                 this->res_norm_history[size-2]) /
-                this->res_norm_history[size-2]
-            );
-        }
         
         if (this->cascade_phase == this->HLF_PHASE) {
-
-            if (relative_progress > 2.*this->u_hlf) {
-                return this->cascade_phase;
-            } else {
-                projected_sgl_threshold = (
-                    this->get_relres() * 10.*(this->u_sgl/this->u_hlf)
-                );
+    
+            if (this->get_relres() <= tol_hlf) {
                 return this->SGL_PHASE;
+            } else {
+                return this->cascade_phase;
             }
-
+    
         } else if (this->cascade_phase == this->SGL_PHASE) {
 
-            if (this->get_relres() <= projected_sgl_threshold) {
-                return this->DBL_PHASE;
-            } else {
+            int size = this->res_norm_history.size();
+            double relative_progress;
+            if (size < 2) {
                 return this->cascade_phase;
+            } else {
+                relative_progress = -1.*(
+                    (this->res_norm_history[size-1] -
+                    this->res_norm_history[size-2]) /
+                    this->res_norm_history[size-2]
+                );
+            }
+
+            if (relative_progress > 2.*this->u_sgl) {
+                return this->cascade_phase;
+            } else {
+                return this->DBL_PHASE;
             }
 
         } else {

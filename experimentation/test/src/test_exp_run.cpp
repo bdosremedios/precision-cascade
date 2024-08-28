@@ -50,8 +50,8 @@ private:
             return "OuterRestartCount";
         } else if (solver_id == "CheckStagnation") {
             return "CheckStagnation";
-        } else if (solver_id == "ProjectThresholdAfterStagnation") {
-            return "ProjectThresholdAfterStagnation";
+        } else if (solver_id == "ThresholdToStagnation") {
+            return "ThresholdToStagnation";
         } else {
             throw std::runtime_error("get_solver_str: no matching solver_id");
         }
@@ -507,7 +507,7 @@ TEST_F(Test_Experiment_Run, Test_AllSolvers_Run_Solve_Group) {
              "RelativeResidualThreshold",
              "OuterRestartCount",
              "CheckStagnation",
-             "ProjectThresholdAfterStagnation"}
+             "ThresholdToStagnation"}
         ),
         "sparse", 3, 10, 4, 1e-4,
         Preconditioner_Spec("none"),
