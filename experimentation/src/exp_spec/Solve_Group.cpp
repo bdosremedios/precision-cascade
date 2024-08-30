@@ -8,7 +8,7 @@ const std::unordered_set<std::string> Solve_Group::valid_fp_solver_ids {
     "FP16", "FP32", "FP64"
 };
 
-const std::unordered_set<std::string> Solve_Group::valid_vp_solver_ids {
+const std::unordered_set<std::string> Solve_Group::valid_ap_solver_ids {
     "OuterRestartCount",
     "RelativeResidualThreshold",
     "CheckStagnation",
@@ -43,7 +43,7 @@ Solve_Group::Solve_Group(
     for (std::string solver_id : solvers_to_use) {
         if (
             (valid_fp_solver_ids.count(solver_id) == 0) &&
-            (valid_vp_solver_ids.count(solver_id) == 0)
+            (valid_ap_solver_ids.count(solver_id) == 0)
         ) {
             throw std::runtime_error(
                 "Solve_Group: invalid solver encountered in solvers_to_use "

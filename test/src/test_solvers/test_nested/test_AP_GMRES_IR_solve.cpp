@@ -1,8 +1,8 @@
 #include "test.h"
 
-#include "solvers/nested/GMRES_IR/VP_GMRES_IR.h"
+#include "solvers/nested/GMRES_IR/AP_GMRES_IR.h"
 
-class VP_GMRES_IR_SolveTest: public TestBase
+class AP_GMRES_IR_Solve_Test: public TestBase
 {
 public:
 
@@ -11,7 +11,7 @@ public:
     );
 
     template <
-        template <template <typename> typename> typename VP_GMRES_Impl,
+        template <template <typename> typename> typename AP_GMRES_Impl,
         template <typename> typename TMatrix
     >
     void SolveTest(
@@ -27,15 +27,15 @@ public:
         ));
 
         GenericLinearSystem<TMatrix> lin_sys(A, b);
-        VP_GMRES_Impl<TMatrix> vp_gmres_ir_solve(&lin_sys, dbl_GMRES_IR_args);
+        AP_GMRES_Impl<TMatrix> ap_gmres_ir_solve(&lin_sys, dbl_GMRES_IR_args);
 
-        vp_gmres_ir_solve.solve();
+        ap_gmres_ir_solve.solve();
 
-        if (*show_plots) { vp_gmres_ir_solve.view_relres_plot("log"); }
+        if (*show_plots) { ap_gmres_ir_solve.view_relres_plot("log"); }
 
-        EXPECT_TRUE(vp_gmres_ir_solve.check_converged());
+        EXPECT_TRUE(ap_gmres_ir_solve.check_converged());
         EXPECT_LE(
-            vp_gmres_ir_solve.get_relres(),
+            ap_gmres_ir_solve.get_relres(),
             Tol<double>::nested_krylov_conv_tol()
         );
 
@@ -43,7 +43,7 @@ public:
 
 };
 
-TEST_F(VP_GMRES_IR_SolveTest, OuterRestartCount_SolveConvDiff64_SOLVER) {
+TEST_F(AP_GMRES_IR_Solve_Test, OuterRestartCount_SolveConvDiff64_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_64_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_64_b.csv"));
@@ -53,7 +53,7 @@ TEST_F(VP_GMRES_IR_SolveTest, OuterRestartCount_SolveConvDiff64_SOLVER) {
 
 }
 
-TEST_F(VP_GMRES_IR_SolveTest, OuterRestartCount_SolveConvDiff256_SOLVER) {
+TEST_F(AP_GMRES_IR_Solve_Test, OuterRestartCount_SolveConvDiff256_SOLVER) {
 
     fs::path A_path(solve_matrix_dir / fs::path("conv_diff_256_A.csv"));
     fs::path b_path(solve_matrix_dir / fs::path("conv_diff_256_b.csv"));
@@ -64,7 +64,7 @@ TEST_F(VP_GMRES_IR_SolveTest, OuterRestartCount_SolveConvDiff256_SOLVER) {
 }
 
 TEST_F(
-    VP_GMRES_IR_SolveTest,
+    AP_GMRES_IR_Solve_Test,
     OuterRestartCount_SolveConvDiff1024_LONGRUNTIME_SOLVER
 ) {
 
@@ -77,7 +77,7 @@ TEST_F(
 }
 
 TEST_F(
-    VP_GMRES_IR_SolveTest,
+    AP_GMRES_IR_Solve_Test,
     RelativeResidualThreshold_SolveConvDiff64_SOLVER
 ) {
 
@@ -90,7 +90,7 @@ TEST_F(
 }
 
 TEST_F(
-    VP_GMRES_IR_SolveTest,
+    AP_GMRES_IR_Solve_Test,
     RelativeResidualThreshold_SolveConvDiff256_SOLVER
 ) {
 
@@ -103,7 +103,7 @@ TEST_F(
 }
 
 TEST_F(
-    VP_GMRES_IR_SolveTest,
+    AP_GMRES_IR_Solve_Test,
     RelativeResidualThreshold_SolveConvDiff1024_LONGRUNTIME_SOLVER
 ) {
 
@@ -116,7 +116,7 @@ TEST_F(
 }
 
 TEST_F(
-    VP_GMRES_IR_SolveTest,
+    AP_GMRES_IR_Solve_Test,
     CheckStagnation_SolveConvDiff64_SOLVER
 ) {
 
@@ -129,7 +129,7 @@ TEST_F(
 }
 
 TEST_F(
-    VP_GMRES_IR_SolveTest,
+    AP_GMRES_IR_Solve_Test,
     CheckStagnation_SolveConvDiff256_SOLVER
 ) {
 
@@ -142,7 +142,7 @@ TEST_F(
 }
 
 TEST_F(
-    VP_GMRES_IR_SolveTest,
+    AP_GMRES_IR_Solve_Test,
     CheckStagnation_SolveConvDiff1024_LONGRUNTIME_SOLVER
 ) {
 
@@ -155,7 +155,7 @@ TEST_F(
 }
 
 TEST_F(
-    VP_GMRES_IR_SolveTest,
+    AP_GMRES_IR_Solve_Test,
     ThresholdToStagnation_SolveConvDiff64_SOLVER
 ) {
 
@@ -168,7 +168,7 @@ TEST_F(
 }
 
 TEST_F(
-    VP_GMRES_IR_SolveTest,
+    AP_GMRES_IR_Solve_Test,
     ThresholdToStagnation_SolveConvDiff256_SOLVER
 ) {
 
@@ -181,7 +181,7 @@ TEST_F(
 }
 
 TEST_F(
-    VP_GMRES_IR_SolveTest,
+    AP_GMRES_IR_Solve_Test,
     ThresholdToStagnation_SolveConvDiff1024_LONGRUNTIME_SOLVER
 ) {
 

@@ -30,7 +30,7 @@ class Solver_ID_Info:
         "OuterRestartCount",
         "RelativeResidualThreshold",
         "CheckStagnation",
-        "ProjectThresholdAfterStagnation"
+        "ThresholdToStagnation"
     }
 
     solver_color_fmt_dict = {
@@ -40,7 +40,7 @@ class Solver_ID_Info:
         "OuterRestartCount": (cat20[6], ",-"),
         "RelativeResidualThreshold": (cat20[8], ",-"),
         "CheckStagnation": (cat20[10], ",-"),
-        "ProjectThresholdAfterStagnation": (cat20[12], ",-")
+        "ThresholdToStagnation": (cat20[12], ",-")
     }
 
 class Individual_Experiment_Data:
@@ -254,7 +254,7 @@ class Matrix_Experiment_Data:
             columns=[
                 "Solver ID",
                 "Inner Iterations",
-                "Tol Iteration Hit",
+                "1e-10 Inner Iteration",
                 "Relative Residual",
                 "Elapsed Time (ms)",
                 "Relative Error",
@@ -266,7 +266,7 @@ class Matrix_Experiment_Data:
             {
                 "Solver ID": 'string',
                 "Inner Iterations": 'int32',
-                "Tol Iteration Hit": 'int32',
+                "1e-10 Inner Iteration": 'int32',
                 "Relative Residual": 'float64',
                 "Elapsed Time (ms)": 'int32',
                 "Relative Error": 'float64',
@@ -322,7 +322,7 @@ class Solve_Group_Data:
             axs[0].set_title("Fixed Precision Convergence")
 
             matrix_experiment_data.plot_vp_res_data(axs[1])
-            axs[1].set_title("Variable Precision Convergence")
+            axs[1].set_title("Adaptive Precision Convergence")
 
             axs[0].set_ylabel("$\\frac{|| b-Ax_{i}||_{2}}{||b-Ax_{0}||_{2}}$")
 

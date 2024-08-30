@@ -1,5 +1,5 @@
-#ifndef VP_GMRES_IR_SOLVE_H
-#define VP_GMRES_IR_SOLVE_H
+#ifndef AP_GMRES_IR_SOLVE_H
+#define AP_GMRES_IR_SOLVE_H
 
 #include "../IterativeRefinement.h"
 #include "../../GMRES/GMRESSolve.h"
@@ -9,7 +9,7 @@
 namespace cascade {
 
 template <template <typename> typename TMatrix>
-class VP_GMRES_IR_Solve: public IterativeRefinement<TMatrix>
+class AP_GMRES_IR_Solve: public IterativeRefinement<TMatrix>
 {
 private:
 
@@ -137,7 +137,7 @@ private:
             } else {
                 delete_ptrs();
                 throw std::runtime_error(
-                    "VP_GMRES_IR_Solve: mismatching ptrs in "
+                    "AP_GMRES_IR_Solve: mismatching ptrs in "
                     "setup_systems<__half>"
                 );
             }
@@ -162,7 +162,7 @@ private:
             } else {
                 delete_ptrs();
                 throw std::runtime_error(
-                    "VP_GMRES_IR_Solve: mismatching ptrs in "
+                    "AP_GMRES_IR_Solve: mismatching ptrs in "
                     "setup_systems<float>"
                 );
             }
@@ -186,14 +186,14 @@ private:
             } else {
                 delete_ptrs();
                 throw std::runtime_error(
-                    "VP_GMRES_IR_Solve: mismatching ptrs in "
+                    "AP_GMRES_IR_Solve: mismatching ptrs in "
                     "setup_systems<double>"
                 );
             }
 
         } else {
             throw std::runtime_error(
-                "VP_GMRES_IR_Solve: Invalid TPrecision used in "
+                "AP_GMRES_IR_Solve: Invalid TPrecision used in "
                 "setup_systems<TPrecision>"
             );
         }
@@ -235,7 +235,7 @@ private:
 
         } else {
             throw std::runtime_error(
-                "VP_GMRES_IR_Solve: Invalid TPrecision used in "
+                "AP_GMRES_IR_Solve: Invalid TPrecision used in "
                 "setup_inner_solve<TPrecision>"
             );
         }
@@ -252,7 +252,7 @@ private:
             setup_inner_solve<double>();
         } else {
             throw std::runtime_error(
-                "VP_GMRES_IR_Solve: Invalid cascade_phase in VP_GMRES_IR_Solver"
+                "AP_GMRES_IR_Solve: Invalid cascade_phase in AP_GMRES_IR_Solver"
             );
         }
 
@@ -304,7 +304,7 @@ protected:
     
 public:
 
-    VP_GMRES_IR_Solve(
+    AP_GMRES_IR_Solve(
         const GenericLinearSystem<TMatrix> * const arg_gen_lin_sys_ptr,
         const SolveArgPkg &arg_solve_arg_pkg,
         const PrecondArgPkg<TMatrix, double> arg_inner_precond_arg_pkg_dbl = (
@@ -317,12 +317,12 @@ public:
         initialize_inner_outer_solver();
     }
 
-    ~VP_GMRES_IR_Solve() {
+    ~AP_GMRES_IR_Solve() {
         delete_ptrs();
     }
 
     // Forbid rvalue instantiation
-    VP_GMRES_IR_Solve(
+    AP_GMRES_IR_Solve(
         const GenericLinearSystem<TMatrix> * const,
         const SolveArgPkg &&,
         const PrecondArgPkg<TMatrix, double>
@@ -336,7 +336,7 @@ public:
 // Set solver to spend 20% in half phase and 40% in single phase and half time
 // in double
 template <template <typename> typename TMatrix>
-class OuterRestartCount: public VP_GMRES_IR_Solve<TMatrix>
+class OuterRestartCount: public AP_GMRES_IR_Solve<TMatrix>
 {
 protected:
 
@@ -375,7 +375,7 @@ public:
             PrecondArgPkg<TMatrix, double>()
         )
     ):
-        VP_GMRES_IR_Solve<TMatrix>(
+        AP_GMRES_IR_Solve<TMatrix>(
             arg_gen_lin_sys_ptr,
             arg_solve_arg_pkg,
             arg_inner_precond_arg_pkg_dbl
@@ -390,7 +390,7 @@ public:
 // Set solver to change phase when relative residual reaches an order of
 // magnitude above roundoff
 template <template <typename> typename TMatrix>
-class RelativeResidualThreshold : public VP_GMRES_IR_Solve<TMatrix>
+class RelativeResidualThreshold : public AP_GMRES_IR_Solve<TMatrix>
 {
 protected:
 
@@ -422,14 +422,14 @@ protected:
 
 public:
 
-    using VP_GMRES_IR_Solve<TMatrix>::VP_GMRES_IR_Solve;
+    using AP_GMRES_IR_Solve<TMatrix>::AP_GMRES_IR_Solve;
 
 };
 
 // Set solver to check for stagnation where the average change in elements
 // is of order of being in a ball 2x times the size of roundoff
 template <template <typename> typename TMatrix>
-class CheckStagnation: public VP_GMRES_IR_Solve<TMatrix>
+class CheckStagnation: public AP_GMRES_IR_Solve<TMatrix>
 {
 protected:
 
@@ -468,7 +468,7 @@ protected:
 
 public:
 
-    using VP_GMRES_IR_Solve<TMatrix>::VP_GMRES_IR_Solve;
+    using AP_GMRES_IR_Solve<TMatrix>::AP_GMRES_IR_Solve;
 
 };
 
@@ -477,7 +477,7 @@ public:
 // stagnation check on the more bundled single phase to squeeze as much time
 // out of that phase as possible
 template <template <typename> typename TMatrix>
-class ThresholdToStagnation: public VP_GMRES_IR_Solve<TMatrix>
+class ThresholdToStagnation: public AP_GMRES_IR_Solve<TMatrix>
 {
 protected:
 
@@ -521,7 +521,7 @@ protected:
 
 public:
 
-    using VP_GMRES_IR_Solve<TMatrix>::VP_GMRES_IR_Solve;
+    using AP_GMRES_IR_Solve<TMatrix>::AP_GMRES_IR_Solve;
 
 };
 

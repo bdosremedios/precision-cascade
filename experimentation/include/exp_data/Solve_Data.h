@@ -6,7 +6,7 @@
 #include "exp_tools/write_json.h"
 
 #include "solvers/nested/GMRES_IR/FP_GMRES_IR.h"
-#include "solvers/nested/GMRES_IR/VP_GMRES_IR.h"
+#include "solvers/nested/GMRES_IR/AP_GMRES_IR.h"
 
 template <
     template <template <typename> typename> typename TSolver,
@@ -83,7 +83,7 @@ private:
 
     void record_solver_data(
         std::ofstream &file_out,
-        const std::shared_ptr<cascade::VP_GMRES_IR_Solve<TMatrix>> &solver_ptr
+        const std::shared_ptr<cascade::AP_GMRES_IR_Solve<TMatrix>> &solver_ptr
     ) const {
         record_basic_solver_data(file_out);
         file_out << "\t\"hlf_sgl_cascade_change\" : "
