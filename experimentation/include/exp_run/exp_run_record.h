@@ -8,7 +8,7 @@
 
 #include "tools/cuHandleBundle.h"
 #include "solvers/IterativeSolve.h"
-#include "solvers/nested/GMRES_IR/AP_GMRES_IR.h"
+#include "solvers/nested/GMRES_IR/VP_GMRES_IR.h"
 #include "solvers/nested/GMRES_IR/FP_GMRES_IR.h"
 
 #include <cmath>
@@ -94,7 +94,7 @@ void run_record_fpgmres_solve(
 }
 
 template <template <typename> typename TMatrix>
-void run_record_apgmres_solve(
+void run_record_vpgmres_solve(
     std::string solver_id,
     const cascade::GenericLinearSystem<TMatrix> &gen_lin_sys,
     cascade::SolveArgPkg solve_arg_pkg,
@@ -103,8 +103,8 @@ void run_record_apgmres_solve(
     Experiment_Log logger
 ) {
 
-    Solve_Data<cascade::AP_GMRES_IR_Solve, TMatrix> data;
-    std::shared_ptr<cascade::AP_GMRES_IR_Solve<TMatrix>> solver_ptr;
+    Solve_Data<cascade::VP_GMRES_IR_Solve, TMatrix> data;
+    std::shared_ptr<cascade::VP_GMRES_IR_Solve<TMatrix>> solver_ptr;
     
     if (solver_id == "OuterRestartCount") {
 
@@ -141,13 +141,13 @@ void run_record_apgmres_solve(
     } else {
 
         std::runtime_error(
-            "run_record_apgmres_solve: invalid mixed precision solver_id "
+            "run_record_vpgmres_solve: invalid mixed precision solver_id "
             "encountered"
         );
 
     }
 
-    data = execute_solve<cascade::AP_GMRES_IR_Solve, TMatrix>(
+    data = execute_solve<cascade::VP_GMRES_IR_Solve, TMatrix>(
         solver_id, solver_ptr, logger, false
     );
 
@@ -184,9 +184,9 @@ void run_record_solversuite_experiment(
                 logger
             );
 
-        } else if (Solve_Group::valid_ap_solver_ids.count(solver_id) == 1) {
+        } else if (Solve_Group::valid_vp_solver_ids.count(solver_id) == 1) {
 
-            run_record_apgmres_solve(
+            run_record_vpgmres_solve(
                 solver_id,
                 gen_lin_sys,
                 solve_group.solver_args,

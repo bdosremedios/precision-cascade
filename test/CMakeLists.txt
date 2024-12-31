@@ -60,9 +60,9 @@ set(
     src/test_solvers/test_nested/test_InnerOuterSolve.cpp
     src/test_solvers/test_nested/test_FP_GMRES_IR_solve.cpp
     src/test_solvers/test_nested/test_Preconditioned_FP_GMRES_IR_solve.cpp
-    src/test_solvers/test_nested/test_AP_GMRES_IR_component.cpp
-    src/test_solvers/test_nested/test_AP_GMRES_IR_solve.cpp
-    src/test_solvers/test_nested/test_Preconditioned_AP_GMRES_IR_solve.cpp
+    src/test_solvers/test_nested/test_VP_GMRES_IR_component.cpp
+    src/test_solvers/test_nested/test_VP_GMRES_IR_solve.cpp
+    src/test_solvers/test_nested/test_Preconditioned_VP_GMRES_IR_solve.cpp
 )
 
 set(

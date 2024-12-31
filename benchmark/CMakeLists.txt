@@ -31,10 +31,10 @@ set(
     src/benchmark_types/benchmark_NoFillMatrixSparse.cpp
     src/benchmark_solvers/benchmark_GMRES.cpp
     src/benchmark_solvers/benchmark_FP_GMRES_IR.cpp
-    src/benchmark_solvers/benchmark_AP_GMRES_IR.cpp
+    src/benchmark_solvers/benchmark_VP_GMRES_IR.cpp
     src/benchmark_preconditioners/benchmark_ILUPreconditioner.cpp
     src/benchmark_solvers/benchmark_Precond_FP_GMRES_IR.cpp
-    src/benchmark_solvers/benchmark_Precond_AP_GMRES_IR.cpp
+    src/benchmark_solvers/benchmark_Precond_VP_GMRES_IR.cpp
 )
 
 add_executable(

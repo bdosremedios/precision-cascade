@@ -322,7 +322,7 @@ class Solve_Group_Data:
             axs[0].set_title("Fixed Precision Convergence")
 
             matrix_experiment_data.plot_vp_res_data(axs[1])
-            axs[1].set_title("Adaptive Precision Convergence")
+            axs[1].set_title("Variable Precision Convergence")
 
             axs[0].set_ylabel("$\\frac{|| b-Ax_{i}||_{2}}{||b-Ax_{0}||_{2}}$")
 

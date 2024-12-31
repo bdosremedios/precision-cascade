@@ -1,6 +1,7 @@
 import os
 import numpy as np
 import matplotlib.pyplot as plt
+from typing import Callable
 from bokeh.palettes import Category20
 
 cat20extract = Category20[20]
@@ -50,7 +51,7 @@ def plot_data(
     ax: plt.Axes,
     data_dir: str,
     li_tup_fname_fmt_label: list[tuple[str, str, int, str]],
-    load_data_func: function,
+    load_data_func: Callable,
     disable_y: bool = False
 ) -> None:
     

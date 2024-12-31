@@ -1,14 +1,14 @@
-#include "benchmark_AP_GMRES_IR.h"
+#include "benchmark_VP_GMRES_IR.h"
 
 #include "tools/arg_pkgs/LinearSystem.h"
 #include "tools/arg_pkgs/SolveArgPkg.h"
 #include "tools/arg_pkgs/PrecondArgPkg.h"
 #include "preconditioners/ILUPreconditioner.h"
-#include "solvers/nested/GMRES_IR/AP_GMRES_IR.h"
+#include "solvers/nested/GMRES_IR/VP_GMRES_IR.h"
 
-class Benchmark_Precond_AP_GMRES_IR: public Benchmark_Nested_GMRES {};
+class Benchmark_Precond_VP_GMRES_IR: public Benchmark_Nested_GMRES {};
 
-TEST_F(Benchmark_Precond_AP_GMRES_IR, ILU0_AP_GMRES_IR_BENCHMARK) {
+TEST_F(Benchmark_Precond_VP_GMRES_IR, ILU0_VP_GMRES_IR_BENCHMARK) {
 
     std::function<void (Benchmark_AccumClock &, NoFillMatrixSparse<double> &)> execute_func = [this] (
         Benchmark_AccumClock &clock, NoFillMatrixSparse<double> &A
@@ -27,13 +27,13 @@ TEST_F(Benchmark_Precond_AP_GMRES_IR, ILU0_AP_GMRES_IR_BENCHMARK) {
         PrecondArgPkg<NoFillMatrixSparse, double> precond_args(
             std::make_shared<ILUPreconditioner<NoFillMatrixSparse, double>>(A)
         );
-        NoProgress_OuterRestartCount<NoFillMatrixSparse> ap_restarted_gmres(
+        NoProgress_OuterRestartCount<NoFillMatrixSparse> vp_restarted_gmres(
             &gen_lin_sys, args, precond_args
         );
-        ap_restarted_gmres.solve();
+        vp_restarted_gmres.solve();
         clock.clock_stop();
 
-        ASSERT_EQ(ap_restarted_gmres.get_iteration(), nested_gmres_outer_iters);
+        ASSERT_EQ(vp_restarted_gmres.get_iteration(), nested_gmres_outer_iters);
 
     };
 

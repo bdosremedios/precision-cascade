@@ -54,21 +54,21 @@ int main(int argc, char **argv) {
     std::string filter_include = "";
     std::string filter_exclude = "";
 
-    // Check if should run exclusively APGMRES tests
-    bool only_ap_gmres = false;
+    // Check if should run exclusively VPGMRES tests
+    bool only_vp_gmres = false;
     for (int i=0; i<argc; ++i) {
         if (
-            (std::string(argv[i]) == "--apgmres") ||
-            (std::string(argv[i]) == "-ap")
+            (std::string(argv[i]) == "--vpgmres") ||
+            (std::string(argv[i]) == "-vp")
         ) {
-            only_ap_gmres = true;
+            only_vp_gmres = true;
         }
     }
-    if (only_ap_gmres) {
-        std::cout << "Running exclusively AP_GMRES_IR_Solve related tests..."
+    if (only_vp_gmres) {
+        std::cout << "Running exclusively VP_GMRES_IR_Solve related tests..."
                   << std::endl;
         if (filter_include != "") { filter_include += ":"; }
-        filter_include += "*AP_GMRES_IR*";
+        filter_include += "*VP_GMRES_IR*";
     } else {
         std::cout << "Running all tests..." << std::endl;
     }

@@ -1,8 +1,8 @@
-#include "test_AP_GMRES_IR_component.h"
+#include "test_VP_GMRES_IR_component.h"
 
 #include <cuda_fp16.h>
 
-class AP_GMRES_IR_Component_Test: public TestBase
+class VP_GMRES_IR_Component_Test: public TestBase
 {
 public:
 
@@ -13,12 +13,12 @@ public:
             TMatrix<double>(TestBase::bundle, 2, 2),
             Vector<double>(TestBase::bundle, 2, 1)
         );
-        AP_GMRES_IR_Solve_TestingMock<TMatrix> dense_mock(
+        VP_GMRES_IR_Solve_TestingMock<TMatrix> dense_mock(
             &gen_lin_sys, default_args
         );
         EXPECT_EQ(
             dense_mock.cascade_phase,
-            AP_GMRES_IR_Solve_TestingMock<TMatrix>::INIT_PHASE
+            VP_GMRES_IR_Solve_TestingMock<TMatrix>::INIT_PHASE
         );
 
     }
@@ -32,12 +32,12 @@ public:
             ),
             Vector<double>::Random(TestBase::bundle, 2, 1)
         );
-        AP_GMRES_IR_Solve_TestingMock<TMatrix> test_mock(
+        VP_GMRES_IR_Solve_TestingMock<TMatrix> test_mock(
             &gen_lin_sys, default_args
         );
 
         test_mock.set_phase_to_use = (
-            AP_GMRES_IR_Solve_TestingMock<TMatrix>::HLF_PHASE
+            VP_GMRES_IR_Solve_TestingMock<TMatrix>::HLF_PHASE
         );
         test_mock.outer_iterate_setup();
 
@@ -48,7 +48,7 @@ public:
         ASSERT_EQ(typeid(*test_mock.inner_solver), typeid(type_test_half));
 
         test_mock.set_phase_to_use = (
-            AP_GMRES_IR_Solve_TestingMock<TMatrix>::SGL_PHASE
+            VP_GMRES_IR_Solve_TestingMock<TMatrix>::SGL_PHASE
         );
         test_mock.outer_iterate_setup();
 
@@ -59,7 +59,7 @@ public:
         ASSERT_EQ(typeid(*test_mock.inner_solver), typeid(type_test_single));
 
         test_mock.set_phase_to_use = (
-            AP_GMRES_IR_Solve_TestingMock<TMatrix>::DBL_PHASE
+            VP_GMRES_IR_Solve_TestingMock<TMatrix>::DBL_PHASE
         );
         test_mock.outer_iterate_setup();
 
@@ -81,7 +81,7 @@ public:
             ),
             Vector<double>::Random(TestBase::bundle, 2, 1)
         );
-        AP_GMRES_IR_Solve_TestingMock<TMatrix> test_mock(
+        VP_GMRES_IR_Solve_TestingMock<TMatrix> test_mock(
             &gen_lin_sys, default_args
         );
 
@@ -92,7 +92,7 @@ public:
         ASSERT_EQ(typeid(*test_mock.inner_solver), typeid(type_test_half));
 
         test_mock.set_phase_to_use = (
-            AP_GMRES_IR_Solve_TestingMock<TMatrix>::SGL_PHASE
+            VP_GMRES_IR_Solve_TestingMock<TMatrix>::SGL_PHASE
         );
         test_mock.outer_iterate_setup();
 
@@ -109,17 +109,17 @@ public:
 
 };
 
-TEST_F(AP_GMRES_IR_Component_Test, Test_Constructor_SOLVER) {
+TEST_F(VP_GMRES_IR_Component_Test, Test_Constructor_SOLVER) {
     TestConstructor<MatrixDense>();
     TestConstructor<NoFillMatrixSparse>();
 }
 
-TEST_F(AP_GMRES_IR_Component_Test, Test_SetCorrectPhaseSolvers_SOLVER) {
+TEST_F(VP_GMRES_IR_Component_Test, Test_SetCorrectPhaseSolvers_SOLVER) {
     TestOuterIterateCorrectSolvers<MatrixDense>();
     TestOuterIterateCorrectSolvers<NoFillMatrixSparse>();
 }
 
-TEST_F(AP_GMRES_IR_Component_Test, Test_Reset_SOLVER) {
+TEST_F(VP_GMRES_IR_Component_Test, Test_Reset_SOLVER) {
     TestReset<MatrixDense>();
     TestReset<NoFillMatrixSparse>();
 }
