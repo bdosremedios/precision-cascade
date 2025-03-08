@@ -144,7 +144,7 @@ private:
 
         } else if (std::is_same<TPrecision, float>::value) {
 
-            if (hlf_ptrs_instantiated() && sgl_ptrs_empty()) {
+            if (sgl_ptrs_empty()) {
                 delete_hlf_ptrs();
                 innerlinsys_sgl_ptr = (
                     new TypedLinearSystem<TMatrix, float>(this->gen_lin_sys_ptr)
@@ -169,7 +169,7 @@ private:
 
         } else if (std::is_same<TPrecision, double>::value) {
 
-            if (sgl_ptrs_instantiated() && dbl_ptrs_empty()) {
+            if (dbl_ptrs_empty()) {
                 delete_sgl_ptrs();
                 innerlinsys_dbl_ptr = (
                     new TypedLinearSystem<TMatrix, double>(
@@ -267,7 +267,7 @@ protected:
     const static int HLF_PHASE = 0;
     const static int SGL_PHASE = 1;
     const static int DBL_PHASE = 2;
-    inline const static int INIT_PHASE = HLF_PHASE;
+    const int INIT_PHASE;
 
     int cascade_phase;
     int hlf_sgl_cascade_change = -1;
@@ -280,7 +280,14 @@ protected:
     virtual void initialize_inner_outer_solver() override {
         // Initialize inner outer solver in lowest precision __half phase
         cascade_phase = INIT_PHASE;
-        setup_inner_solve<__half>();
+        switch (cascade_phase) {
+            case HLF_PHASE:
+                setup_inner_solve<__half>(); break;
+            case SGL_PHASE:
+                setup_inner_solve<float>(); break;
+            case DBL_PHASE:
+                setup_inner_solve<double>(); break;
+        }
     }
 
     virtual void outer_iterate_setup() override {
@@ -309,10 +316,12 @@ public:
         const SolveArgPkg &arg_solve_arg_pkg,
         const PrecondArgPkg<TMatrix, double> arg_inner_precond_arg_pkg_dbl = (
             PrecondArgPkg<TMatrix, double>()
-        )
+        ),
+        int arg_init_phase = VP_GMRES_IR_Solve::HLF_PHASE
     ):
         IterativeRefinement<TMatrix>(arg_gen_lin_sys_ptr, arg_solve_arg_pkg),
-        orig_inner_precond_arg_pkg_dbl(arg_inner_precond_arg_pkg_dbl)
+        orig_inner_precond_arg_pkg_dbl(arg_inner_precond_arg_pkg_dbl),
+        INIT_PHASE(arg_init_phase)
     {
         initialize_inner_outer_solver();
     }
@@ -333,7 +342,7 @@ public:
 
 };
 
-// Set solver to spend 20% in half phase and 40% in single phase and half time
+// Set solver to spend 20% in half phase and 40% in single phase and 40% time
 // in double
 template <template <typename> typename TMatrix>
 class OuterRestartCount: public VP_GMRES_IR_Solve<TMatrix>
@@ -373,15 +382,41 @@ public:
         const SolveArgPkg &arg_solve_arg_pkg,
         const PrecondArgPkg<TMatrix, double> arg_inner_precond_arg_pkg_dbl = (
             PrecondArgPkg<TMatrix, double>()
-        )
+        ),
+        int arg_init_phase = VP_GMRES_IR_Solve<TMatrix>::HLF_PHASE
     ):
         VP_GMRES_IR_Solve<TMatrix>(
             arg_gen_lin_sys_ptr,
             arg_solve_arg_pkg,
-            arg_inner_precond_arg_pkg_dbl
+            arg_inner_precond_arg_pkg_dbl,
+            arg_init_phase
         ),
         hlf_iters(arg_solve_arg_pkg.max_iter/5),
         sgl_iters(arg_solve_arg_pkg.max_iter*2/5)
+    {}
+
+};
+
+
+// Set solver to 60% in single phase and 40% time in double
+template <template <typename> typename TMatrix>
+class SD_OuterRestartCount: public OuterRestartCount<TMatrix>
+{
+public:
+
+    SD_OuterRestartCount(
+        const GenericLinearSystem<TMatrix> * const arg_gen_lin_sys_ptr,
+        const SolveArgPkg &arg_solve_arg_pkg,
+        const PrecondArgPkg<TMatrix, double> arg_inner_precond_arg_pkg_dbl = (
+            PrecondArgPkg<TMatrix, double>()
+        )
+    ):
+        OuterRestartCount<TMatrix>(
+            arg_gen_lin_sys_ptr,
+            arg_solve_arg_pkg,
+            arg_inner_precond_arg_pkg_dbl,
+            VP_GMRES_IR_Solve<TMatrix>::SGL_PHASE
+        )
     {}
 
 };
@@ -423,6 +458,28 @@ protected:
 public:
 
     using VP_GMRES_IR_Solve<TMatrix>::VP_GMRES_IR_Solve;
+
+};
+
+template <template <typename> typename TMatrix>
+class SD_RelativeResidualThreshold: public RelativeResidualThreshold<TMatrix>
+{
+public:
+
+    SD_RelativeResidualThreshold(
+        const GenericLinearSystem<TMatrix> * const arg_gen_lin_sys_ptr,
+        const SolveArgPkg &arg_solve_arg_pkg,
+        const PrecondArgPkg<TMatrix, double> arg_inner_precond_arg_pkg_dbl = (
+            PrecondArgPkg<TMatrix, double>()
+        )
+    ):
+    RelativeResidualThreshold<TMatrix>(
+            arg_gen_lin_sys_ptr,
+            arg_solve_arg_pkg,
+            arg_inner_precond_arg_pkg_dbl,
+            VP_GMRES_IR_Solve<TMatrix>::SGL_PHASE
+        )
+    {}
 
 };
 
@@ -469,6 +526,28 @@ protected:
 public:
 
     using VP_GMRES_IR_Solve<TMatrix>::VP_GMRES_IR_Solve;
+
+};
+
+template <template <typename> typename TMatrix>
+class SD_CheckStagnation: public CheckStagnation<TMatrix>
+{
+public:
+
+    SD_CheckStagnation(
+        const GenericLinearSystem<TMatrix> * const arg_gen_lin_sys_ptr,
+        const SolveArgPkg &arg_solve_arg_pkg,
+        const PrecondArgPkg<TMatrix, double> arg_inner_precond_arg_pkg_dbl = (
+            PrecondArgPkg<TMatrix, double>()
+        )
+    ):
+    CheckStagnation<TMatrix>(
+            arg_gen_lin_sys_ptr,
+            arg_solve_arg_pkg,
+            arg_inner_precond_arg_pkg_dbl,
+            VP_GMRES_IR_Solve<TMatrix>::SGL_PHASE
+        )
+    {}
 
 };
 

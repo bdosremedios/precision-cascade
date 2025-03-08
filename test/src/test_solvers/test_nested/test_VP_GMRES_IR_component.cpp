@@ -18,7 +18,7 @@ public:
         );
         EXPECT_EQ(
             dense_mock.cascade_phase,
-            VP_GMRES_IR_Solve_TestingMock<TMatrix>::INIT_PHASE
+            VP_GMRES_IR_Solve_TestingMock<TMatrix>::HLF_PHASE
         );
 
     }
