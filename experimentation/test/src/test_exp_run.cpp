@@ -52,6 +52,12 @@ private:
             return "CheckStagnation";
         } else if (solver_id == "ThresholdToStagnation") {
             return "ThresholdToStagnation";
+        } else if (solver_id == "SD_RelativeResidualThreshold") {
+            return "SD_RelativeResidualThreshold";
+        } else if (solver_id == "SD_OuterRestartCount") {
+            return "SD_OuterRestartCount";
+        } else if (solver_id == "SD_CheckStagnation") {
+            return "SD_CheckStagnation";
         } else {
             throw std::runtime_error("get_solver_str: no matching solver_id");
         }
@@ -491,7 +497,13 @@ TEST_F(Test_Experiment_Run, Test_AllSolvers_Run_Solve_Group) {
         "allsolvers_dense",
         std::vector<std::string>(
             {"FP16", "FP32", "FP64",
-             "RelativeResidualThreshold", "OuterRestartCount"}
+             "RelativeResidualThreshold",
+             "OuterRestartCount",
+             "CheckStagnation",
+             "ThresholdToStagnation",
+             "SD_RelativeResidualThreshold",
+             "SD_OuterRestartCount",
+             "SD_CheckStagnation",}
         ),
         "dense", 3, 10, 4, 1e-4,
         Preconditioner_Spec("none"),
@@ -507,7 +519,10 @@ TEST_F(Test_Experiment_Run, Test_AllSolvers_Run_Solve_Group) {
              "RelativeResidualThreshold",
              "OuterRestartCount",
              "CheckStagnation",
-             "ThresholdToStagnation"}
+             "ThresholdToStagnation",
+             "SD_RelativeResidualThreshold",
+             "SD_OuterRestartCount",
+             "SD_CheckStagnation",}
         ),
         "sparse", 3, 10, 4, 1e-4,
         Preconditioner_Spec("none"),

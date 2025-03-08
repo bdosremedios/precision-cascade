@@ -12,7 +12,10 @@ const std::unordered_set<std::string> Solve_Group::valid_vp_solver_ids {
     "OuterRestartCount",
     "RelativeResidualThreshold",
     "CheckStagnation",
-    "ThresholdToStagnation"
+    "ThresholdToStagnation",
+    "SD_OuterRestartCount",
+    "SD_RelativeResidualThreshold",
+    "SD_CheckStagnation"
 };
 
 Solve_Group::Solve_Group(

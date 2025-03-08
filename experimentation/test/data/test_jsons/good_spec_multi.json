@@ -18,7 +18,14 @@
     "b": {
         "experiment_iterations": 1,
         "solvers_to_use": [
-            "FP16", "FP32", "FP64", "OuterRestartCount"
+            "FP16", "FP32", "FP64",
+            "OuterRestartCount",
+            "RelativeResidualThreshold",
+            "CheckStagnation",
+            "ThresholdToStagnation",
+            "SD_OuterRestartCount",
+            "SD_RelativeResidualThreshold",
+            "SD_CheckStagnation"
         ],
         "matrix_type": "sparse",
         "solver_max_outer_iterations": 4,

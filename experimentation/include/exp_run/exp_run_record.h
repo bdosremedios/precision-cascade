@@ -137,6 +137,30 @@ void run_record_vpgmres_solve(
                 &gen_lin_sys, solve_arg_pkg, precond_arg_pkg_dbl
             )
         );
+    
+    } else if (solver_id == "SD_OuterRestartCount") {
+
+        solver_ptr = (
+            std::make_shared<cascade::SD_OuterRestartCount<TMatrix>>(
+                &gen_lin_sys, solve_arg_pkg, precond_arg_pkg_dbl
+            )
+        );
+    
+    } else if (solver_id == "SD_RelativeResidualThreshold") {
+
+        solver_ptr = (
+            std::make_shared<cascade::SD_RelativeResidualThreshold<TMatrix>>(
+                &gen_lin_sys, solve_arg_pkg, precond_arg_pkg_dbl
+            )
+        );
+    
+    } else if (solver_id == "SD_CheckStagnation") {
+
+        solver_ptr = (
+            std::make_shared<cascade::SD_CheckStagnation<TMatrix>>(
+                &gen_lin_sys, solve_arg_pkg, precond_arg_pkg_dbl
+            )
+        );
 
     } else {
 
