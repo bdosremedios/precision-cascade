@@ -84,7 +84,6 @@ class Individual_Experiment_Data:
                 f"line: {e.lineno} col: {e.colno}"
             )
 
-
         self.id = self.experiment_data["id"]
         self.json_path = json_path
 
