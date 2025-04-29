@@ -290,7 +290,9 @@ class Matrix_Experiment_Data:
 
 class Solve_Group_Data:
 
-    def __init__(self, solve_group_dir: str):
+    def __init__(self, solve_group_dir: str, analysis_save_dir: str = None):
+
+        self.analysis_save_dir = analysis_save_dir
 
         json_path = os.path.join(solve_group_dir, "solve_group_specs.json")
         check_file(json_path)
@@ -332,9 +334,18 @@ class Solve_Group_Data:
                 ax.grid()
                 ax.legend()
 
-            fig.suptitle(matrix_experiment_data.id)
+            unique_id = (
+                f"{matrix_experiment_data.id}-{self.solve_group_spec_data['id']}"
+            )
+
+            fig.suptitle(unique_id)
             fig.tight_layout()
 
-            plt.show()
+            if not self.analysis_save_dir is None:
+                plt.savefig(
+                    os.path.join(self.analysis_save_dir, unique_id+".pdf"),
+                    format="pdf"
+                )
 
+            plt.show()
             display(matrix_experiment_data.generate_df_table())
