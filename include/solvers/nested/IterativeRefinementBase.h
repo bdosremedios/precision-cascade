@@ -23,12 +23,12 @@ protected:
         // If an inner iteration failed by getting a nan results, simulate a
         // stagnated spin where no movement was made that took up the time of
         // iteration and do not update the solution
-        std::vector<double> spin_vec = inner_solver->get_res_norm_history();
+        std::vector<double> spin_vec = this->inner_solver->get_res_norm_history();
         for (int i=1; i<spin_vec.size(); i++) {
             spin_vec[i] = spin_vec[0];
         }
-        inner_res_norm_history.push_back(spin_vec);
-        inner_iterations.push_back(inner_solver->get_iteration());
+        this->inner_res_norm_history.push_back(spin_vec);
+        this->inner_iterations.push_back(this->inner_solver->get_iteration());
 
     }
 

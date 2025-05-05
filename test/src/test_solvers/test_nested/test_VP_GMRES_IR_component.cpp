@@ -16,10 +16,7 @@ public:
         VP_GMRES_IR_Solve_TestingMock<TMatrix> dense_mock(
             &gen_lin_sys, default_args
         );
-        EXPECT_EQ(
-            dense_mock.cascade_phase,
-            VP_GMRES_IR_Solve_TestingMock<TMatrix>::HLF_PHASE
-        );
+        EXPECT_TRUE(dense_mock.is_in_half_phase());
 
     }
 

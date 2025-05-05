@@ -25,6 +25,10 @@ public:
 
     int determine_next_phase() override { return set_phase_to_use; }
 
+    bool is_in_half_phase() const {
+        return this->cascade_phase == VP_GMRES_IR_Solve<TMatrix>::HLF_PHASE;
+    }
+
 };
 
 #endif
