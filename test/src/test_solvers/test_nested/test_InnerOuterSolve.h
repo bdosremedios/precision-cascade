@@ -56,6 +56,8 @@ public:
 
     using InnerOuterSolve<TMatrix>::iterate;
 
+    void deal_with_nan_inner_solve() override {};
+
     void initialize_inner_outer_solver() override {
         init_inner_outer_hit = true;
         this->inner_solver = std::make_shared<InnerSolver_Mock<TMatrix>>(

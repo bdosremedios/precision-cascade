@@ -27,7 +27,7 @@ public:
         SolveArgPkg args;
         args.target_rel_res = Tol<double>::krylov_conv_tol();
         GMRESSolve<TMatrix, double> gmres_solve(
-            &typed_lin_sys, Tol<double>::roundoff(), args
+            &typed_lin_sys, args
         );
 
         gmres_solve.solve();

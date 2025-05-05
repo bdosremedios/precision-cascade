@@ -1,7 +1,7 @@
 #ifndef VP_GMRES_IR_SOLVE_H
 #define VP_GMRES_IR_SOLVE_H
 
-#include "../IterativeRefinement.h"
+#include "../IterativeRefinementBase.h"
 #include "../../GMRES/GMRESSolve.h"
 
 #include <cuda_fp16.h>
@@ -9,7 +9,7 @@
 namespace cascade {
 
 template <template <typename> typename TMatrix>
-class VP_GMRES_IR_Solve: public IterativeRefinement<TMatrix>
+class VP_GMRES_IR_Solve: public IterativeRefinementBase<TMatrix>
 {
 private:
 
@@ -210,7 +210,6 @@ private:
 
             this->inner_solver = std::make_shared<GMRESSolve<TMatrix, __half>>(
                 mutrhs_innerlinsys_hlf_ptr,
-                u_hlf,
                 this->inner_solve_arg_pkg,
                 *this->inner_precond_arg_pkg_hlf_ptr
             );
@@ -219,7 +218,6 @@ private:
 
             this->inner_solver = std::make_shared<GMRESSolve<TMatrix, float>>(
                 mutrhs_innerlinsys_sgl_ptr,
-                u_sgl,
                 this->inner_solve_arg_pkg,
                 *this->inner_precond_arg_pkg_sgl_ptr
             );
@@ -228,7 +226,6 @@ private:
 
             this->inner_solver = std::make_shared<GMRESSolve<TMatrix, double>>(
                 mutrhs_innerlinsys_dbl_ptr,
-                u_dbl,
                 this->inner_solve_arg_pkg,
                 orig_inner_precond_arg_pkg_dbl
             );
@@ -319,7 +316,7 @@ public:
         ),
         int arg_init_phase = VP_GMRES_IR_Solve::HLF_PHASE
     ):
-        IterativeRefinement<TMatrix>(arg_gen_lin_sys_ptr, arg_solve_arg_pkg),
+        IterativeRefinementBase<TMatrix>(arg_gen_lin_sys_ptr, arg_solve_arg_pkg),
         orig_inner_precond_arg_pkg_dbl(arg_inner_precond_arg_pkg_dbl),
         INIT_PHASE(arg_init_phase)
     {

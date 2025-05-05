@@ -67,7 +67,7 @@ public:
 
         clock.clock_start();
         NoProgressGMRESSolve<NoFillMatrixSparse, TPrecision> gmres(
-            &typed_lin_sys, 0., args
+            &typed_lin_sys, args
         );
         gmres.solve();
         clock.clock_stop();

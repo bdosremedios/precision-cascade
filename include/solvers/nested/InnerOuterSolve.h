@@ -19,9 +19,13 @@ protected:
     void iterate() override {
         outer_iterate_setup();
         inner_solver->solve();
-        inner_res_norm_history.push_back(inner_solver->get_res_norm_history());
-        inner_iterations.push_back(inner_solver->get_iteration());
-        outer_iterate_complete();
+        if (!std::isnan(inner_solver->get_relres())) {
+            inner_res_norm_history.push_back(inner_solver->get_res_norm_history());
+            inner_iterations.push_back(inner_solver->get_iteration());
+            outer_iterate_complete();
+        } else {
+            deal_with_nan_inner_solve();
+        }
     };
 
     void derived_generic_reset() override {
@@ -37,6 +41,9 @@ protected:
 
     // Update generic_soln and inner_res_norm_history according to derived
     virtual void outer_iterate_complete() = 0;
+
+    // Special case of nan result inner solve
+    virtual void deal_with_nan_inner_solve() = 0;
 
 public:
 

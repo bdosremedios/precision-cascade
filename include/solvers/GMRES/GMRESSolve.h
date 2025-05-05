@@ -35,7 +35,6 @@ protected:
 
     int curr_kry_dim;
     int max_kry_dim;
-    double basis_zero_tol;
     Scalar<TPrecision> rho;
 
     void check_compatibility() const {
@@ -114,7 +113,7 @@ protected:
         /* Initialize next vector q as initial residual and mark as terminated
            if lucky break */
         next_q = r_0;
-        if (static_cast<double>(next_q.norm().get_scalar()) <= basis_zero_tol) {
+        if (next_q.norm() == SCALAR_ZERO<TPrecision>::get()) {
             this->terminated = true;
         }
 
@@ -254,7 +253,7 @@ protected:
 
     void check_termination() {
         int k = curr_kry_dim-1;
-        if (static_cast<double>(H_k.get_elem(k+1).get_scalar()) <= basis_zero_tol) {
+        if (H_k.get_elem(k+1) == SCALAR_ZERO<TPrecision>::get()) {
             this->terminated = true;
         }
     }
@@ -266,9 +265,9 @@ protected:
             if (curr_kry_dim < max_kry_dim) {
                 update_subspace_k();
                 update_nextq_and_Hkplus1();
+                check_termination();
                 update_QR_fact();
                 update_x_minimizing_res();
-                check_termination();
             }
         }
     }
@@ -282,13 +281,11 @@ public:
 
     GMRESSolve(
         const TypedLinearSystem_Intf<TMatrix, TPrecision> * const arg_typed_lin_sys_ptr,
-        double arg_basis_zero_tol,
         const SolveArgPkg &arg_solve_arg_pkg,
         const PrecondArgPkg<TMatrix, TPrecision> &arg_precond_arg_pkg = (
             PrecondArgPkg<TMatrix, TPrecision>()
         )
     ):
-        basis_zero_tol(arg_basis_zero_tol),
         precond_arg_pkg(arg_precond_arg_pkg),
         TypedIterativeSolve<TMatrix, TPrecision>::TypedIterativeSolve(
             arg_typed_lin_sys_ptr, arg_solve_arg_pkg
@@ -303,7 +300,7 @@ public:
 
     // Forbid rvalue instantiation
     GMRESSolve(
-        const TypedLinearSystem_Intf<TMatrix, TPrecision> * const, double,
+        const TypedLinearSystem_Intf<TMatrix, TPrecision> * const,
         const SolveArgPkg &&,
         const PrecondArgPkg<TMatrix, TPrecision>
     ) = delete;

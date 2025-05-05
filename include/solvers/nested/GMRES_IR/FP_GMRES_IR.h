@@ -1,13 +1,13 @@
 #ifndef FP_GMRES_IR_SOLVE_H
 #define FP_GMRES_IR_SOLVE_H
 
-#include "../IterativeRefinement.h"
+#include "../IterativeRefinementBase.h"
 #include "../../GMRES/GMRESSolve.h"
 
 namespace cascade {
 
 template <template <typename> typename TMatrix, typename TPrecision>
-class FP_GMRES_IR_Solve: public IterativeRefinement<TMatrix>
+class FP_GMRES_IR_Solve: public IterativeRefinementBase<TMatrix>
 {
 private:
 
@@ -17,7 +17,6 @@ private:
 
         this->inner_solver = std::make_shared<GMRESSolve<TMatrix, TPrecision>>(
             &mutrhs_innerlinsys_ptr,
-            basis_zero_tol,
             this->inner_solve_arg_pkg,
             inner_precond_arg_pkg
         );
@@ -41,7 +40,7 @@ protected:
     
 public:
 
-    using IterativeRefinement<TMatrix>::gen_lin_sys_ptr;
+    using IterativeRefinementBase<TMatrix>::gen_lin_sys_ptr;
 
     FP_GMRES_IR_Solve(
         const TypedLinearSystem<TMatrix, TPrecision> * const arg_outer_typed_lin_sys_ptr,
@@ -53,7 +52,7 @@ public:
     ):
         basis_zero_tol(arg_basis_zero_tol),
         inner_precond_arg_pkg(arg_inner_precond_arg_pkg),
-        IterativeRefinement<TMatrix>(
+        IterativeRefinementBase<TMatrix>(
             arg_outer_typed_lin_sys_ptr->get_gen_lin_sys_ptr(),
             arg_solve_arg_pkg
         ),

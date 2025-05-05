@@ -58,6 +58,7 @@ set(
 set(
     TEST_NESTED_SOLVERS
     src/test_solvers/test_nested/test_InnerOuterSolve.cpp
+    src/test_solvers/test_nested/test_IterativeRefinementBase.cpp
     src/test_solvers/test_nested/test_FP_GMRES_IR_solve.cpp
     src/test_solvers/test_nested/test_Preconditioned_FP_GMRES_IR_solve.cpp
     src/test_solvers/test_nested/test_VP_GMRES_IR_component.cpp

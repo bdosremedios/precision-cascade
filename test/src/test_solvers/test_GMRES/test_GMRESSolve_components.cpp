@@ -20,7 +20,7 @@ public:
         TypedLinearSystem<TMatrix, double> typed_lin_sys(&gen_lin_sys);
 
         GMRESSolveTestingMock<TMatrix, double> test_mock(
-            &typed_lin_sys, Tol<double>::roundoff(), default_args
+            &typed_lin_sys, default_args
         );
 
         ASSERT_EQ(test_mock.max_kry_dim, n);
@@ -67,7 +67,7 @@ public:
         TypedLinearSystem<TMatrix, double> typed_lin_sys(&gen_lin_sys);
 
         GMRESSolveTestingMock<TMatrix, double> test_mock(
-            &typed_lin_sys, Tol<double>::roundoff(), default_args
+            &typed_lin_sys, default_args
         );
 
         // Manually instantiate initial guess
@@ -191,7 +191,7 @@ public:
         TypedLinearSystem<TMatrix, double> typed_lin_sys(&gen_lin_sys);
 
         GMRESSolveTestingMock<TMatrix, double> test_mock(
-            &typed_lin_sys, Tol<double>::roundoff(), default_args
+            &typed_lin_sys, default_args
         );
 
         // Manually instantiate initial guess
@@ -283,7 +283,7 @@ public:
         args.init_guess = x_0;
 
         GMRESSolveTestingMock<TMatrix, double> test_mock(
-            &typed_lin_sys, Tol<double>::roundoff(), args
+            &typed_lin_sys, args
         );
 
         // Set test_mock krylov basis to the identity to have typed_soln be
@@ -354,7 +354,7 @@ public:
         args.init_guess = soln;
 
         GMRESSolveTestingMock<TMatrix, double> test_mock(
-            &typed_lin_sys, Tol<double>::roundoff(), args
+            &typed_lin_sys, args
         );
 
         // Attempt to update subspace and Hessenberg
@@ -398,7 +398,7 @@ public:
         args.init_guess = soln;
 
         GMRESSolveTestingMock<TMatrix, double> test_mock(
-            &typed_lin_sys, Tol<double>::roundoff(), args
+            &typed_lin_sys, args
         );
 
         // Attempt to update subspace and convergence twice
@@ -445,7 +445,7 @@ public:
         args.target_rel_res = Tol<double>::krylov_conv_tol();
 
         GMRESSolveTestingMock<TMatrix, double> test_mock(
-            &typed_lin_sys, Tol<double>::roundoff(), args
+            &typed_lin_sys, args
         );
 
         // Attempt to update and solve through solve of LinearSolve
@@ -490,7 +490,7 @@ public:
         args.target_rel_res = Tol<double>::krylov_conv_tol();
 
         GMRESSolve<TMatrix, double> gmres_solve(
-            &typed_lin_sys, Tol<double>::roundoff(), args
+            &typed_lin_sys, args
         );
 
         gmres_solve.solve();
@@ -520,7 +520,7 @@ public:
         args.target_rel_res = Tol<double>::krylov_conv_tol();
 
         GMRESSolveTestingMock<TMatrix, double> test_mock(
-            &typed_lin_sys, Tol<double>::roundoff(), args
+            &typed_lin_sys, args
         );
 
         test_mock.solve();
@@ -568,7 +568,7 @@ public:
         TypedLinearSystem<TMatrix, double> typed_lin_sys_n(&gen_lin_sys_n);
 
         GMRESSolveTestingMock<TMatrix, double> test_mock_n(
-            &typed_lin_sys_n, Tol<double>::roundoff(), default_args
+            &typed_lin_sys_n, default_args
         );
         ASSERT_EQ(test_mock_n.max_iter, n);
 
@@ -584,7 +584,7 @@ public:
         TypedLinearSystem<TMatrix, double> typed_lin_sys_m(&gen_lin_sys_m);
 
         GMRESSolveTestingMock<TMatrix, double> test_mock_m(
-            &typed_lin_sys_m, Tol<double>::roundoff(), default_args
+            &typed_lin_sys_m, default_args
         );
         ASSERT_EQ(test_mock_m.max_iter, m);
 
@@ -603,7 +603,7 @@ public:
         SolveArgPkg non_default_args;
         non_default_args.max_iter = non_default_iter;
         GMRESSolveTestingMock<TMatrix, double> test_mock_o(
-            &typed_lin_sys_o, Tol<double>::roundoff(), non_default_args
+            &typed_lin_sys_o, non_default_args
         );
         ASSERT_EQ(test_mock_o.max_iter, non_default_iter);
 
@@ -628,7 +628,7 @@ public:
             TypedLinearSystem<TMatrix, double> typed_lin_sys_n(&gen_lin_sys_n);
 
             GMRESSolveTestingMock<TMatrix, double> test_mock_n(
-                &typed_lin_sys_n, Tol<double>::roundoff(), args
+                &typed_lin_sys_n, args
             );
 
         };

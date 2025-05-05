@@ -46,7 +46,7 @@ public:
         TypedLinearSystem<TMatrix, double> typed_lin_sys(&gen_lin_sys);
 
         GMRESSolve<TMatrix, double> pgmres_solve_default(
-            &typed_lin_sys, Tol<double>::roundoff(), dbl_manual_args
+            &typed_lin_sys, dbl_manual_args
         );
 
         PrecondArgPkg<TMatrix, double> noprecond(
@@ -54,7 +54,7 @@ public:
             std::make_shared<NoPreconditioner<TMatrix, double>>()
         );
         GMRESSolve<TMatrix, double> pgmres_solve_explicit_noprecond(
-            &typed_lin_sys, Tol<double>::roundoff(), dbl_manual_args, noprecond
+            &typed_lin_sys, dbl_manual_args, noprecond
         );
 
         PrecondArgPkg<TMatrix, double> identity(
@@ -66,7 +66,7 @@ public:
             )
         );
         GMRESSolve<TMatrix, double> pgmres_solve_inverse_of_identity(
-            &typed_lin_sys, Tol<double>::roundoff(), dbl_manual_args, identity
+            &typed_lin_sys, dbl_manual_args, identity
         );
 
         pgmres_solve_default.solve();
@@ -137,7 +137,7 @@ public:
             )
         );
         GMRESSolve<TMatrix, TPrecision> precond_left_gmres(
-            &typed_lin_sys, Tol<TPrecision>::roundoff(), args, precond_left_args
+            &typed_lin_sys, args, precond_left_args
         );
         precond_left_gmres.solve();
 
@@ -154,8 +154,7 @@ public:
             )
         );
         GMRESSolve<TMatrix, TPrecision> precond_right_gmres(
-            &typed_lin_sys, Tol<TPrecision>::roundoff(),
-            args, precond_right_args
+            &typed_lin_sys, args, precond_right_args
         );
         precond_right_gmres.solve();
 
@@ -179,8 +178,7 @@ public:
         );
 
         GMRESSolve<TMatrix, TPrecision> precond_symmetric_gmres(
-            &typed_lin_sys_Asqr, Tol<TPrecision>::roundoff(),
-            args, precond_symmetric_args
+            &typed_lin_sys_Asqr, args, precond_symmetric_args
         );
         precond_symmetric_gmres.solve();
 
@@ -220,14 +218,13 @@ public:
         TypedLinearSystem<TMatrix, TPrecision> typed_lin_sys(&gen_lin_sys);
 
         GMRESSolve<TMatrix, TPrecision> gmres(
-            &typed_lin_sys, Tol<TPrecision>::roundoff(), args
+            &typed_lin_sys, args
         );
         gmres.solve();
 
         PrecondArgPkg<TMatrix, TPrecision> precond_left_args(ilu_ptr);
         GMRESSolve<TMatrix, TPrecision> precond_left_gmres(
-            &typed_lin_sys, Tol<TPrecision>::roundoff(),
-            args, precond_left_args
+            &typed_lin_sys, args, precond_left_args
         );
         precond_left_gmres.solve();
 
@@ -241,8 +238,7 @@ public:
             std::make_shared<NoPreconditioner<TMatrix, TPrecision>>(), ilu_ptr
         );
         GMRESSolve<TMatrix, TPrecision> precond_right_gmres(
-            &typed_lin_sys, Tol<TPrecision>::roundoff(),
-            args, precond_right_args
+            &typed_lin_sys, args, precond_right_args
         );
         precond_right_gmres.solve();
 

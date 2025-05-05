@@ -26,7 +26,7 @@ public:
         SolveArgPkg args;
         args.target_rel_res = Tol<__half>::krylov_conv_tol();
         GMRESSolve<TMatrix, __half> gmres_solve(
-            &typed_lin_sys, Tol<__half>::roundoff(), args
+            &typed_lin_sys, args
         );
 
         gmres_solve.solve();
@@ -57,7 +57,7 @@ public:
         SolveArgPkg args;
         args.target_rel_res = Tol<__half>::krylov_conv_tol();
         GMRESSolve<TMatrix, __half> gmres_solve_succeed(
-            &typed_lin_sys, Tol<__half>::roundoff(), args
+            &typed_lin_sys, args
         );
 
         gmres_solve_succeed.solve();
@@ -73,7 +73,7 @@ public:
         SolveArgPkg fail_args;
         fail_args.target_rel_res = 0.1*Tol<__half>::roundoff();
         GMRESSolve<TMatrix, __half> gmres_solve_fail(
-            &typed_lin_sys, Tol<__half>::roundoff(), fail_args
+            &typed_lin_sys, fail_args
         );
 
         gmres_solve_fail.solve();

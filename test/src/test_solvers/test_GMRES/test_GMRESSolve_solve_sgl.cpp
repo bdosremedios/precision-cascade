@@ -26,7 +26,7 @@ public:
         SolveArgPkg args;
         args.target_rel_res = Tol<float>::krylov_conv_tol();
         GMRESSolve<TMatrix, float> gmres_solve(
-            &typed_lin_sys, Tol<float>::roundoff(), args
+            &typed_lin_sys, args
         );
 
         gmres_solve.solve();
@@ -57,7 +57,7 @@ public:
         SolveArgPkg args;
         args.target_rel_res = Tol<float>::krylov_conv_tol();
         GMRESSolve<TMatrix, float> gmres_solve_succeed(
-            &typed_lin_sys, Tol<float>::roundoff(), args
+            &typed_lin_sys, args
         );
 
         gmres_solve_succeed.solve();
@@ -73,7 +73,7 @@ public:
         SolveArgPkg fail_args;
         fail_args.target_rel_res = 0.1*Tol<float>::roundoff();
         GMRESSolve<TMatrix, float> gmres_solve_fail(
-            &typed_lin_sys, Tol<float>::roundoff(), fail_args
+            &typed_lin_sys, fail_args
         );
 
         gmres_solve_fail.solve();

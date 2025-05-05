@@ -1,12 +1,12 @@
-#ifndef ITERATIVEREFINEMENT_H
-#define ITERATIVEREFINEMENT_H
+#ifndef ITERATIVEREFINEMENTBASE_H
+#define ITERATIVEREFINEMENTBASE_H
 
 #include "InnerOuterSolve.h"
 
 namespace cascade {
 
 template <template <typename> typename TMatrix>
-class IterativeRefinement: public InnerOuterSolve<TMatrix>
+class IterativeRefinementBase: public InnerOuterSolve<TMatrix>
 {
 protected:
 
@@ -15,6 +15,20 @@ protected:
         // Add error back to generic_soln since that is solution of the
         // inner_solver under iterative refinement
         this->generic_soln += this->inner_solver->get_generic_soln();
+
+    }
+
+    virtual void deal_with_nan_inner_solve() override {
+
+        // If an inner iteration failed by getting a nan results, simulate a
+        // stagnated spin where no movement was made that took up the time of
+        // iteration and do not update the solution
+        std::vector<double> spin_vec = inner_solver->get_res_norm_history();
+        for (int i=1; i<spin_vec.size(); i++) {
+            spin_vec[i] = spin_vec[0];
+        }
+        inner_res_norm_history.push_back(spin_vec);
+        inner_iterations.push_back(inner_solver->get_iteration());
 
     }
 
@@ -30,7 +44,7 @@ protected:
 
 public:
 
-    IterativeRefinement(
+    IterativeRefinementBase(
         const GenericLinearSystem<TMatrix> * const arg_gen_lin_sys,
         const SolveArgPkg &arg_pkg
     ):
@@ -44,7 +58,7 @@ public:
     }
 
     // Forbid rvalue instantiation
-    IterativeRefinement(
+    IterativeRefinementBase(
         const GenericLinearSystem<TMatrix> * const,
         const SolveArgPkg &&
     );

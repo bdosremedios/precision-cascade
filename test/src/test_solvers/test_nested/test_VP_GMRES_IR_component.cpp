@@ -43,7 +43,7 @@ public:
 
         TypedLinearSystem<TMatrix, __half> lin_sys_typ_hlf(&gen_lin_sys);
         GMRESSolve<TMatrix, __half> type_test_half(
-            &lin_sys_typ_hlf, 1., default_args
+            &lin_sys_typ_hlf, default_args
         );
         ASSERT_EQ(typeid(*test_mock.inner_solver), typeid(type_test_half));
 
@@ -54,7 +54,7 @@ public:
 
         TypedLinearSystem<TMatrix, float> lin_sys_typ_sgl(&gen_lin_sys);
         GMRESSolve<TMatrix, float> type_test_single(
-            &lin_sys_typ_sgl, 1., default_args
+            &lin_sys_typ_sgl, default_args
         );
         ASSERT_EQ(typeid(*test_mock.inner_solver), typeid(type_test_single));
 
@@ -65,7 +65,7 @@ public:
 
         TypedLinearSystem<TMatrix, double> lin_sys_typ_dbl(&gen_lin_sys);
         GMRESSolve<TMatrix, double> type_test_double(
-            &lin_sys_typ_dbl, 1., default_args
+            &lin_sys_typ_dbl, default_args
         );
         ASSERT_EQ(typeid(*test_mock.inner_solver), typeid(type_test_double));
 
@@ -87,7 +87,7 @@ public:
 
         TypedLinearSystem<TMatrix, __half> lin_sys_typ_hlf(&gen_lin_sys);
         GMRESSolve<TMatrix, __half> type_test_half(
-            &lin_sys_typ_hlf, 1., default_args
+            &lin_sys_typ_hlf, default_args
         );
         ASSERT_EQ(typeid(*test_mock.inner_solver), typeid(type_test_half));
 
@@ -98,7 +98,7 @@ public:
 
         TypedLinearSystem<TMatrix, float> lin_sys_typ_sgl(&gen_lin_sys);
         GMRESSolve<TMatrix, float> type_test_single(
-            &lin_sys_typ_sgl, 1., default_args
+            &lin_sys_typ_sgl, default_args
         );
         ASSERT_EQ(typeid(*test_mock.inner_solver), typeid(type_test_single));
 
