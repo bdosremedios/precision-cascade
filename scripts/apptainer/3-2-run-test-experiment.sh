@@ -7,4 +7,11 @@ cd "$(dirname "$0")"
 
 cd ../../container
 
-apptainer run $1 --writable-tmpfs --app test-experiment precision-cascade-run.sif
+HOST_EXPERIMENTATION_TEST_DATA_DIR="../experimentation/test/data"
+CONTR_EXPERIMENTATION_TEST_DATA_DIR="/precision-cascade/install/experimentation/test/data"
+BIND_EXPERIMENTATION_TEST_DATA="$HOST_EXPERIMENTATION_TEST_DATA_DIR:$CONTR_EXPERIMENTATION_TEST_DATA_DIR"
+
+apptainer run $1 --writable-tmpfs \
+    --bind $BIND_EXPERIMENTATION_TEST_DATA \
+    --app test-experiment \
+    precision-cascade-run.sif
