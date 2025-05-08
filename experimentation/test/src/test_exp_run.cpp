@@ -50,8 +50,8 @@ private:
             return "OuterRestartCount";
         } else if (solver_id == "CheckStagnation") {
             return "CheckStagnation";
-        } else if (solver_id == "ThresholdToStagnation") {
-            return "ThresholdToStagnation";
+        } else if (solver_id == "StagnationToThreshold") {
+            return "StagnationToThreshold";
         } else if (solver_id == "SD_RelativeResidualThreshold") {
             return "SD_RelativeResidualThreshold";
         } else if (solver_id == "SD_OuterRestartCount") {
@@ -500,7 +500,7 @@ TEST_F(Test_Experiment_Run, Test_AllSolvers_Run_Solve_Group) {
              "RelativeResidualThreshold",
              "OuterRestartCount",
              "CheckStagnation",
-             "ThresholdToStagnation",
+             "StagnationToThreshold",
              "SD_RelativeResidualThreshold",
              "SD_OuterRestartCount",
              "SD_CheckStagnation",}
@@ -519,7 +519,7 @@ TEST_F(Test_Experiment_Run, Test_AllSolvers_Run_Solve_Group) {
              "RelativeResidualThreshold",
              "OuterRestartCount",
              "CheckStagnation",
-             "ThresholdToStagnation",
+             "StagnationToThreshold",
              "SD_RelativeResidualThreshold",
              "SD_OuterRestartCount",
              "SD_CheckStagnation",}

@@ -553,26 +553,19 @@ public:
 // stagnation check on the more bundled single phase to squeeze as much time
 // out of that phase as possible
 template <template <typename> typename TMatrix>
-class ThresholdToStagnation: public VP_GMRES_IR_Solve<TMatrix>
+class StagnationToThreshold: public VP_GMRES_IR_Solve<TMatrix>
 {
 protected:
 
-    const double tol_hlf = 10.*std::pow(2., -10);
+    const double tol_sgl = 10.*std::pow(2., -23);
 
     virtual int determine_next_phase() override {
         
         if (this->cascade_phase == this->HLF_PHASE) {
-    
-            if (this->get_relres() <= tol_hlf) {
-                return this->SGL_PHASE;
-            } else {
-                return this->cascade_phase;
-            }
-    
-        } else if (this->cascade_phase == this->SGL_PHASE) {
 
             int size = this->res_norm_history.size();
             double relative_progress;
+
             if (size < 2) {
                 return this->cascade_phase;
             } else {
@@ -583,10 +576,18 @@ protected:
                 );
             }
 
-            if (relative_progress > 2.*this->u_sgl) {
+            if (relative_progress > 2.*this->u_hlf) {
                 return this->cascade_phase;
             } else {
+                return this->SGL_PHASE;
+            }
+    
+        } else if (this->cascade_phase == this->SGL_PHASE) {
+
+            if (this->get_relres() <= tol_sgl) {
                 return this->DBL_PHASE;
+            } else {
+                return this->cascade_phase;
             }
 
         } else {

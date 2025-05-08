@@ -22,7 +22,7 @@
             "OuterRestartCount",
             "RelativeResidualThreshold",
             "CheckStagnation",
-            "ThresholdToStagnation",
+            "StagnationToThreshold",
             "SD_OuterRestartCount",
             "SD_RelativeResidualThreshold",
             "SD_CheckStagnation"
