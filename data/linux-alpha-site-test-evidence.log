@@ -1,6 +1,6 @@
-Command: .\install\test\test.exe -rlt -sp
+Command: ./install/test/test -rlt -sp
 
-In debug checking memory allocations
+Skip debug not checking memory allocations
 Running all tests...
 Running preconditioner tests...
 Running solver tests...
@@ -12,7 +12,7 @@ Note: Google Test filter = *:-
 [----------] Global test environment set-up.
 [----------] 14 tests from Scalar_Test
 [ RUN      ] Scalar_Test.TestGetSet
-[       OK ] Scalar_Test.TestGetSet (1 ms)
+[       OK ] Scalar_Test.TestGetSet (0 ms)
 [ RUN      ] Scalar_Test.TestConstruction
 [       OK ] Scalar_Test.TestConstruction (0 ms)
 [ RUN      ] Scalar_Test.TestCopyAssignment
@@ -20,15 +20,15 @@ Note: Google Test filter = *:-
 [ RUN      ] Scalar_Test.TestCopyConstruction
 [       OK ] Scalar_Test.TestCopyConstruction (0 ms)
 [ RUN      ] Scalar_Test.TestAddSub
-[       OK ] Scalar_Test.TestAddSub (2 ms)
+[       OK ] Scalar_Test.TestAddSub (3 ms)
 [ RUN      ] Scalar_Test.TestAddSubAssignment
 [       OK ] Scalar_Test.TestAddSubAssignment (1 ms)
 [ RUN      ] Scalar_Test.TestMultDiv
-[       OK ] Scalar_Test.TestMultDiv (2 ms)
+[       OK ] Scalar_Test.TestMultDiv (3 ms)
 [ RUN      ] Scalar_Test.TestMultDivAssignment
 [       OK ] Scalar_Test.TestMultDivAssignment (1 ms)
 [ RUN      ] Scalar_Test.TestBooleanEqual
-[       OK ] Scalar_Test.TestBooleanEqual (0 ms)
+[       OK ] Scalar_Test.TestBooleanEqual (1 ms)
 [ RUN      ] Scalar_Test.TestAbs
 [       OK ] Scalar_Test.TestAbs (1 ms)
 [ RUN      ] Scalar_Test.TestSqrt
@@ -38,38 +38,26 @@ Note: Google Test filter = *:-
 [ RUN      ] Scalar_Test.TestCast
 [       OK ] Scalar_Test.TestCast (0 ms)
 [ RUN      ] Scalar_Test.TestBadCast
-0 bytes in 0 Free Blocks.
-56 bytes in 1 Normal Blocks.
-0 bytes in 0 CRT Blocks.
-0 bytes in 0 Ignore Blocks.
-0 bytes in 0 Client Blocks.
-Largest number used: 0 bytes.
-Total allocations: 265 bytes.
-Dumping objects ->
-{14316} normal block at 0x000001510B010E10, 56 bytes long.
- Data: <        P       > 20 F5 D8 CE F6 7F 00 00 50 02 00 00 CD CD CD CD 
-Object dump complete.
-LIKELY FALSE POSITIVE: 56 byte normal block leak likely caused by GoogleTest
 [       OK ] Scalar_Test.TestBadCast (0 ms)
-[----------] 14 tests from Scalar_Test (15 ms total)
+[----------] 14 tests from Scalar_Test (18 ms total)
 
 [----------] 26 tests from Vector_Test
 [ RUN      ] Vector_Test.TestElementAccess
-[       OK ] Vector_Test.TestElementAccess (10 ms)
+[       OK ] Vector_Test.TestElementAccess (15 ms)
 [ RUN      ] Vector_Test.TestBadElementAccess
 [       OK ] Vector_Test.TestBadElementAccess (0 ms)
 [ RUN      ] Vector_Test.TestGetSlice
-[       OK ] Vector_Test.TestGetSlice (10 ms)
+[       OK ] Vector_Test.TestGetSlice (12 ms)
 [ RUN      ] Vector_Test.TestBadGetSlice
 [       OK ] Vector_Test.TestBadGetSlice (0 ms)
 [ RUN      ] Vector_Test.TestSetSlice
-[       OK ] Vector_Test.TestSetSlice (9 ms)
+[       OK ] Vector_Test.TestSetSlice (16 ms)
 [ RUN      ] Vector_Test.TestBadSetSlice
-[       OK ] Vector_Test.TestBadSetSlice (1 ms)
+[       OK ] Vector_Test.TestBadSetSlice (2 ms)
 [ RUN      ] Vector_Test.TestPropertyMethods
 [       OK ] Vector_Test.TestPropertyMethods (1 ms)
 [ RUN      ] Vector_Test.TestNonZeros
-[       OK ] Vector_Test.TestNonZeros (1 ms)
+[       OK ] Vector_Test.TestNonZeros (2 ms)
 [ RUN      ] Vector_Test.TestPrintAndInfoString
 1
 2
@@ -82,40 +70,40 @@ Rows: 4 | Non-zeroes: 4 | Fill ratio: 1 | Max magnitude: 4
 [ RUN      ] Vector_Test.TestListInitialization
 [       OK ] Vector_Test.TestListInitialization (1 ms)
 [ RUN      ] Vector_Test.TestDynamicMemConstruction
-[       OK ] Vector_Test.TestDynamicMemConstruction (2 ms)
+[       OK ] Vector_Test.TestDynamicMemConstruction (3 ms)
 [ RUN      ] Vector_Test.TestDynamicMemCopyToPtr
 [       OK ] Vector_Test.TestDynamicMemCopyToPtr (1 ms)
 [ RUN      ] Vector_Test.TestBadDynamicMemCopyToPtr
 [       OK ] Vector_Test.TestBadDynamicMemCopyToPtr (0 ms)
 [ RUN      ] Vector_Test.TestCopyAssignment
-[       OK ] Vector_Test.TestCopyAssignment (5 ms)
+[       OK ] Vector_Test.TestCopyAssignment (10 ms)
 [ RUN      ] Vector_Test.TestCopyConstruction
 [       OK ] Vector_Test.TestCopyConstruction (1 ms)
 [ RUN      ] Vector_Test.TestStaticCreation
-[       OK ] Vector_Test.TestStaticCreation (11 ms)
+[       OK ] Vector_Test.TestStaticCreation (12 ms)
 [ RUN      ] Vector_Test.TestScale
-[       OK ] Vector_Test.TestScale (3 ms)
+[       OK ] Vector_Test.TestScale (6 ms)
 [ RUN      ] Vector_Test.TestScaleAssignment
-[       OK ] Vector_Test.TestScaleAssignment (2 ms)
+[       OK ] Vector_Test.TestScaleAssignment (4 ms)
 [ RUN      ] Vector_Test.TestAddSub
-[       OK ] Vector_Test.TestAddSub (2 ms)
+[       OK ] Vector_Test.TestAddSub (4 ms)
 [ RUN      ] Vector_Test.TestAddSubAssignment
-[       OK ] Vector_Test.TestAddSubAssignment (4 ms)
+[       OK ] Vector_Test.TestAddSubAssignment (5 ms)
 [ RUN      ] Vector_Test.TestDot
-[       OK ] Vector_Test.TestDot (4 ms)
+[       OK ] Vector_Test.TestDot (10 ms)
 [ RUN      ] Vector_Test.TestNorm
-[       OK ] Vector_Test.TestNorm (2 ms)
+[       OK ] Vector_Test.TestNorm (7 ms)
 [ RUN      ] Vector_Test.TestCast
-[       OK ] Vector_Test.TestCast (21 ms)
+[       OK ] Vector_Test.TestCast (30 ms)
 [ RUN      ] Vector_Test.TestBadVecVecOps
 [       OK ] Vector_Test.TestBadVecVecOps (1 ms)
 [ RUN      ] Vector_Test.TestBooleanEqual
-[       OK ] Vector_Test.TestBooleanEqual (0 ms)
-[----------] 26 tests from Vector_Test (105 ms total)
+[       OK ] Vector_Test.TestBooleanEqual (1 ms)
+[----------] 26 tests from Vector_Test (157 ms total)
 
 [----------] 51 tests from MatrixDense_Test
 [ RUN      ] MatrixDense_Test.TestCoeffAccess
-[       OK ] MatrixDense_Test.TestCoeffAccess (189 ms)
+[       OK ] MatrixDense_Test.TestCoeffAccess (299 ms)
 [ RUN      ] MatrixDense_Test.TestBadCoeffAccess
 [       OK ] MatrixDense_Test.TestBadCoeffAccess (0 ms)
 [ RUN      ] MatrixDense_Test.TestPropertyAccess
@@ -125,7 +113,7 @@ Rows: 4 | Non-zeroes: 4 | Fill ratio: 1 | Max magnitude: 4
 [ RUN      ] MatrixDense_Test.TestBadConstruction
 [       OK ] MatrixDense_Test.TestBadConstruction (0 ms)
 [ RUN      ] MatrixDense_Test.TestListInitialization
-[       OK ] MatrixDense_Test.TestListInitialization (3 ms)
+[       OK ] MatrixDense_Test.TestListInitialization (4 ms)
 [ RUN      ] MatrixDense_Test.TestBadListInitialization
 [       OK ] MatrixDense_Test.TestBadListInitialization (0 ms)
 [ RUN      ] MatrixDense_Test.TestNonZeros
@@ -137,105 +125,105 @@ Rows: 4 | Non-zeroes: 4 | Fill ratio: 1 | Max magnitude: 4
 Rows: 3 | Cols: 3 | Non-zeroes: 6 | Fill ratio: 0.667 | Max magnitude: 9
 [       OK ] MatrixDense_Test.TestPrintAndInfoString (0 ms)
 [ RUN      ] MatrixDense_Test.TestCopyAssignment
-[       OK ] MatrixDense_Test.TestCopyAssignment (11 ms)
+[       OK ] MatrixDense_Test.TestCopyAssignment (18 ms)
 [ RUN      ] MatrixDense_Test.TestCopyConstructor
 [       OK ] MatrixDense_Test.TestCopyConstructor (1 ms)
 [ RUN      ] MatrixDense_Test.TestDynamicMemConstruction
-[       OK ] MatrixDense_Test.TestDynamicMemConstruction (4 ms)
+[       OK ] MatrixDense_Test.TestDynamicMemConstruction (6 ms)
 [ RUN      ] MatrixDense_Test.TestBadDynamicMemConstruction
 [       OK ] MatrixDense_Test.TestBadDynamicMemConstruction (0 ms)
 [ RUN      ] MatrixDense_Test.TestDynamicMemCopyToPtr
-[       OK ] MatrixDense_Test.TestDynamicMemCopyToPtr (2 ms)
+[       OK ] MatrixDense_Test.TestDynamicMemCopyToPtr (4 ms)
 [ RUN      ] MatrixDense_Test.TestBadDynamicMemCopyToPtr
 [       OK ] MatrixDense_Test.TestBadDynamicMemCopyToPtr (0 ms)
 [ RUN      ] MatrixDense_Test.TestZeroMatrixCreation
-[       OK ] MatrixDense_Test.TestZeroMatrixCreation (31 ms)
+[       OK ] MatrixDense_Test.TestZeroMatrixCreation (50 ms)
 [ RUN      ] MatrixDense_Test.TestOnesMatrixCreation
-[       OK ] MatrixDense_Test.TestOnesMatrixCreation (50 ms)
+[       OK ] MatrixDense_Test.TestOnesMatrixCreation (79 ms)
 [ RUN      ] MatrixDense_Test.TestIdentityMatrixCreation
-[       OK ] MatrixDense_Test.TestIdentityMatrixCreation (378 ms)
+[       OK ] MatrixDense_Test.TestIdentityMatrixCreation (616 ms)
 [ RUN      ] MatrixDense_Test.TestRandomMatrixCreation
-[       OK ] MatrixDense_Test.TestRandomMatrixCreation (297 ms)
+[       OK ] MatrixDense_Test.TestRandomMatrixCreation (597 ms)
 [ RUN      ] MatrixDense_Test.TestRandomUTMatrixCreation
-[       OK ] MatrixDense_Test.TestRandomUTMatrixCreation (225 ms)
+[       OK ] MatrixDense_Test.TestRandomUTMatrixCreation (451 ms)
 [ RUN      ] MatrixDense_Test.TestRandomLTMatrixCreation
-[       OK ] MatrixDense_Test.TestRandomLTMatrixCreation (233 ms)
+[       OK ] MatrixDense_Test.TestRandomLTMatrixCreation (447 ms)
 [ RUN      ] MatrixDense_Test.TestCol
-[       OK ] MatrixDense_Test.TestCol (5 ms)
+[       OK ] MatrixDense_Test.TestCol (2 ms)
 [ RUN      ] MatrixDense_Test.TestBadCol
 [       OK ] MatrixDense_Test.TestBadCol (0 ms)
 [ RUN      ] MatrixDense_Test.TestBlock
-[       OK ] MatrixDense_Test.TestBlock (19 ms)
+[       OK ] MatrixDense_Test.TestBlock (31 ms)
 [ RUN      ] MatrixDense_Test.TestBadBlock
 [       OK ] MatrixDense_Test.TestBadBlock (0 ms)
 [ RUN      ] MatrixDense_Test.TestScale
-[       OK ] MatrixDense_Test.TestScale (6 ms)
+[       OK ] MatrixDense_Test.TestScale (9 ms)
 [ RUN      ] MatrixDense_Test.TestScaleAssignment
-[       OK ] MatrixDense_Test.TestScaleAssignment (6 ms)
+[       OK ] MatrixDense_Test.TestScaleAssignment (9 ms)
 [ RUN      ] MatrixDense_Test.TestMaxMagElem
-[       OK ] MatrixDense_Test.TestMaxMagElem (0 ms)
+[       OK ] MatrixDense_Test.TestMaxMagElem (1 ms)
 [ RUN      ] MatrixDense_Test.TestNormalizeMagnitude
-[       OK ] MatrixDense_Test.TestNormalizeMagnitude (7 ms)
+[       OK ] MatrixDense_Test.TestNormalizeMagnitude (10 ms)
 [ RUN      ] MatrixDense_Test.TestMatVec
-[       OK ] MatrixDense_Test.TestMatVec (74 ms)
+[       OK ] MatrixDense_Test.TestMatVec (189 ms)
 [ RUN      ] MatrixDense_Test.TestRandomMatVec
-[       OK ] MatrixDense_Test.TestRandomMatVec (9 ms)
+[       OK ] MatrixDense_Test.TestRandomMatVec (12 ms)
 [ RUN      ] MatrixDense_Test.TestBadMatVec
 [       OK ] MatrixDense_Test.TestBadMatVec (0 ms)
 [ RUN      ] MatrixDense_Test.TestSubsetcolsMatVec
-[       OK ] MatrixDense_Test.TestSubsetcolsMatVec (17 ms)
+[       OK ] MatrixDense_Test.TestSubsetcolsMatVec (36 ms)
 [ RUN      ] MatrixDense_Test.TestRandomSubsetcolsMatVec
-[       OK ] MatrixDense_Test.TestRandomSubsetcolsMatVec (12 ms)
+[       OK ] MatrixDense_Test.TestRandomSubsetcolsMatVec (18 ms)
 [ RUN      ] MatrixDense_Test.TestLimitRandomSubsetcolsMatVec
-[       OK ] MatrixDense_Test.TestLimitRandomSubsetcolsMatVec (3 ms)
+[       OK ] MatrixDense_Test.TestLimitRandomSubsetcolsMatVec (5 ms)
 [ RUN      ] MatrixDense_Test.TestBadSubsetcolsMatVec
 [       OK ] MatrixDense_Test.TestBadSubsetcolsMatVec (1 ms)
 [ RUN      ] MatrixDense_Test.TestTransposeMatVec
-[       OK ] MatrixDense_Test.TestTransposeMatVec (5 ms)
+[       OK ] MatrixDense_Test.TestTransposeMatVec (7 ms)
 [ RUN      ] MatrixDense_Test.TestRandomTransposeMatVec
-[       OK ] MatrixDense_Test.TestRandomTransposeMatVec (4 ms)
+[       OK ] MatrixDense_Test.TestRandomTransposeMatVec (6 ms)
 [ RUN      ] MatrixDense_Test.TestBadTransposeMatVec
 [       OK ] MatrixDense_Test.TestBadTransposeMatVec (0 ms)
 [ RUN      ] MatrixDense_Test.TestSubsetcolsTransposeMatVec
-[       OK ] MatrixDense_Test.TestSubsetcolsTransposeMatVec (24 ms)
+[       OK ] MatrixDense_Test.TestSubsetcolsTransposeMatVec (27 ms)
 [ RUN      ] MatrixDense_Test.TestRandomSubsetcolsTransposeMatVec
-[       OK ] MatrixDense_Test.TestRandomSubsetcolsTransposeMatVec (18 ms)
+[       OK ] MatrixDense_Test.TestRandomSubsetcolsTransposeMatVec (20 ms)
 [ RUN      ] MatrixDense_Test.TestLimitRandomSubsetcolsTransposeMatVec
-[       OK ] MatrixDense_Test.TestLimitRandomSubsetcolsTransposeMatVec (2 ms)
+[       OK ] MatrixDense_Test.TestLimitRandomSubsetcolsTransposeMatVec (3 ms)
 [ RUN      ] MatrixDense_Test.TestBadSubsetcolsTransposeMatVec
 [       OK ] MatrixDense_Test.TestBadSubsetcolsTransposeMatVec (1 ms)
 [ RUN      ] MatrixDense_Test.TestTranspose
-[       OK ] MatrixDense_Test.TestTranspose (12 ms)
+[       OK ] MatrixDense_Test.TestTranspose (19 ms)
 [ RUN      ] MatrixDense_Test.TestRandomTranspose
-[       OK ] MatrixDense_Test.TestRandomTranspose (2 ms)
+[       OK ] MatrixDense_Test.TestRandomTranspose (5 ms)
 [ RUN      ] MatrixDense_Test.TestMatMat
-[       OK ] MatrixDense_Test.TestMatMat (9 ms)
+[       OK ] MatrixDense_Test.TestMatMat (21 ms)
 [ RUN      ] MatrixDense_Test.TestBadMatMat
 [       OK ] MatrixDense_Test.TestBadMatMat (0 ms)
 [ RUN      ] MatrixDense_Test.TestAddSub
-[       OK ] MatrixDense_Test.TestAddSub (14 ms)
+[       OK ] MatrixDense_Test.TestAddSub (30 ms)
 [ RUN      ] MatrixDense_Test.TestBadAddSub
-[       OK ] MatrixDense_Test.TestBadAddSub (1 ms)
+[       OK ] MatrixDense_Test.TestBadAddSub (3 ms)
 [ RUN      ] MatrixDense_Test.TestNorm
-[       OK ] MatrixDense_Test.TestNorm (0 ms)
+[       OK ] MatrixDense_Test.TestNorm (1 ms)
 [ RUN      ] MatrixDense_Test.TestCast
-[       OK ] MatrixDense_Test.TestCast (152 ms)
-[----------] 51 tests from MatrixDense_Test (1853 ms total)
+[       OK ] MatrixDense_Test.TestCast (329 ms)
+[----------] 51 tests from MatrixDense_Test (3390 ms total)
 
 [----------] 6 tests from MatrixDense_Substitution_Test
 [ RUN      ] MatrixDense_Substitution_Test.TestForwardSubstitution
-[       OK ] MatrixDense_Substitution_Test.TestForwardSubstitution (63 ms)
+[       OK ] MatrixDense_Substitution_Test.TestForwardSubstitution (47 ms)
 [ RUN      ] MatrixDense_Substitution_Test.TestRandomForwardSubstitution
-[       OK ] MatrixDense_Substitution_Test.TestRandomForwardSubstitution (47 ms)
+[       OK ] MatrixDense_Substitution_Test.TestRandomForwardSubstitution (81 ms)
 [ RUN      ] MatrixDense_Substitution_Test.TestRandomSparseForwardSubstitution
-[       OK ] MatrixDense_Substitution_Test.TestRandomSparseForwardSubstitution (42 ms)
+[       OK ] MatrixDense_Substitution_Test.TestRandomSparseForwardSubstitution (47 ms)
 [ RUN      ] MatrixDense_Substitution_Test.TestBackwardSubstitution
-[       OK ] MatrixDense_Substitution_Test.TestBackwardSubstitution (63 ms)
+[       OK ] MatrixDense_Substitution_Test.TestBackwardSubstitution (41 ms)
 [ RUN      ] MatrixDense_Substitution_Test.TestRandomBackwardSubstitution
-[       OK ] MatrixDense_Substitution_Test.TestRandomBackwardSubstitution (42 ms)
+[       OK ] MatrixDense_Substitution_Test.TestRandomBackwardSubstitution (69 ms)
 [ RUN      ] MatrixDense_Substitution_Test.TestRandomSparseBackwardSubstitution
-[       OK ] MatrixDense_Substitution_Test.TestRandomSparseBackwardSubstitution (42 ms)
-[----------] 6 tests from MatrixDense_Substitution_Test (302 ms total)
+[       OK ] MatrixDense_Substitution_Test.TestRandomSparseBackwardSubstitution (68 ms)
+[----------] 6 tests from MatrixDense_Substitution_Test (355 ms total)
 
 [----------] 38 tests from NoFillMatrixSparse_Test
 [ RUN      ] NoFillMatrixSparse_Test.TestPropertyAccess
@@ -253,225 +241,225 @@ Rows: 3 | Cols: 3 | Non-zeroes: 6 | Fill ratio: 0.667 | Max magnitude: 9
 [ RUN      ] NoFillMatrixSparse_Test.TestBadConstruction
 [       OK ] NoFillMatrixSparse_Test.TestBadConstruction (0 ms)
 [ RUN      ] NoFillMatrixSparse_Test.TestListInitialization
-[       OK ] NoFillMatrixSparse_Test.TestListInitialization (5 ms)
+[       OK ] NoFillMatrixSparse_Test.TestListInitialization (13 ms)
 [ RUN      ] NoFillMatrixSparse_Test.TestBadListInitialization
 [       OK ] NoFillMatrixSparse_Test.TestBadListInitialization (0 ms)
 [ RUN      ] NoFillMatrixSparse_Test.TestCoeffJustGetAccess
-[       OK ] NoFillMatrixSparse_Test.TestCoeffJustGetAccess (26 ms)
+[       OK ] NoFillMatrixSparse_Test.TestCoeffJustGetAccess (49 ms)
 [ RUN      ] NoFillMatrixSparse_Test.TestBadCoeffJustGetAccess
 [       OK ] NoFillMatrixSparse_Test.TestBadCoeffJustGetAccess (0 ms)
 [ RUN      ] NoFillMatrixSparse_Test.TestCopyAssignment
-[       OK ] NoFillMatrixSparse_Test.TestCopyAssignment (21 ms)
+[       OK ] NoFillMatrixSparse_Test.TestCopyAssignment (36 ms)
 [ RUN      ] NoFillMatrixSparse_Test.TestCopyConstructor
-[       OK ] NoFillMatrixSparse_Test.TestCopyConstructor (2 ms)
+[       OK ] NoFillMatrixSparse_Test.TestCopyConstructor (3 ms)
 [ RUN      ] NoFillMatrixSparse_Test.TestDynamicMemConstruction
-[       OK ] NoFillMatrixSparse_Test.TestDynamicMemConstruction (1 ms)
+[       OK ] NoFillMatrixSparse_Test.TestDynamicMemConstruction (2 ms)
 [ RUN      ] NoFillMatrixSparse_Test.TestBadDynamicMemConstruction
 [       OK ] NoFillMatrixSparse_Test.TestBadDynamicMemConstruction (0 ms)
 [ RUN      ] NoFillMatrixSparse_Test.TestDynamicMemCopyToPtr
-[       OK ] NoFillMatrixSparse_Test.TestDynamicMemCopyToPtr (0 ms)
+[       OK ] NoFillMatrixSparse_Test.TestDynamicMemCopyToPtr (1 ms)
 [ RUN      ] NoFillMatrixSparse_Test.TestBadDynamicMemCopyToPtr
 [       OK ] NoFillMatrixSparse_Test.TestBadDynamicMemCopyToPtr (0 ms)
 [ RUN      ] NoFillMatrixSparse_Test.TestZeroMatrixCreation
-[       OK ] NoFillMatrixSparse_Test.TestZeroMatrixCreation (43 ms)
+[       OK ] NoFillMatrixSparse_Test.TestZeroMatrixCreation (79 ms)
 [ RUN      ] NoFillMatrixSparse_Test.TestOnesMatrixCreation
-[       OK ] NoFillMatrixSparse_Test.TestOnesMatrixCreation (88 ms)
+[       OK ] NoFillMatrixSparse_Test.TestOnesMatrixCreation (172 ms)
 [ RUN      ] NoFillMatrixSparse_Test.TestIdentityMatrixCreation
-[       OK ] NoFillMatrixSparse_Test.TestIdentityMatrixCreation (668 ms)
+[       OK ] NoFillMatrixSparse_Test.TestIdentityMatrixCreation (1202 ms)
 [ RUN      ] NoFillMatrixSparse_Test.TestRandomMatrixCreation
-[       OK ] NoFillMatrixSparse_Test.TestRandomMatrixCreation (1676 ms)
+[       OK ] NoFillMatrixSparse_Test.TestRandomMatrixCreation (3494 ms)
 [ RUN      ] NoFillMatrixSparse_Test.TestRandomUTMatrixCreation
-[       OK ] NoFillMatrixSparse_Test.TestRandomUTMatrixCreation (2849 ms)
+[       OK ] NoFillMatrixSparse_Test.TestRandomUTMatrixCreation (5593 ms)
 [ RUN      ] NoFillMatrixSparse_Test.TestRandomLTMatrixCreation
-[       OK ] NoFillMatrixSparse_Test.TestRandomLTMatrixCreation (3266 ms)
+[       OK ] NoFillMatrixSparse_Test.TestRandomLTMatrixCreation (5578 ms)
 [ RUN      ] NoFillMatrixSparse_Test.TestCol
-[       OK ] NoFillMatrixSparse_Test.TestCol (7 ms)
+[       OK ] NoFillMatrixSparse_Test.TestCol (12 ms)
 [ RUN      ] NoFillMatrixSparse_Test.TestBadCol
 [       OK ] NoFillMatrixSparse_Test.TestBadCol (0 ms)
 [ RUN      ] NoFillMatrixSparse_Test.TestBlock
-[       OK ] NoFillMatrixSparse_Test.TestBlock (4 ms)
+[       OK ] NoFillMatrixSparse_Test.TestBlock (6 ms)
 [ RUN      ] NoFillMatrixSparse_Test.TestBadBlock
 [       OK ] NoFillMatrixSparse_Test.TestBadBlock (1 ms)
 [ RUN      ] NoFillMatrixSparse_Test.TestScale
-[       OK ] NoFillMatrixSparse_Test.TestScale (13 ms)
+[       OK ] NoFillMatrixSparse_Test.TestScale (23 ms)
 [ RUN      ] NoFillMatrixSparse_Test.TestScaleAssignment
-[       OK ] NoFillMatrixSparse_Test.TestScaleAssignment (13 ms)
+[       OK ] NoFillMatrixSparse_Test.TestScaleAssignment (23 ms)
 [ RUN      ] NoFillMatrixSparse_Test.TestMaxMagElem
 [       OK ] NoFillMatrixSparse_Test.TestMaxMagElem (1 ms)
 [ RUN      ] NoFillMatrixSparse_Test.TestNormalizeMagnitude
-[       OK ] NoFillMatrixSparse_Test.TestNormalizeMagnitude (15 ms)
+[       OK ] NoFillMatrixSparse_Test.TestNormalizeMagnitude (25 ms)
 [ RUN      ] NoFillMatrixSparse_Test.TestMatVec
-[       OK ] NoFillMatrixSparse_Test.TestMatVec (10 ms)
+[       OK ] NoFillMatrixSparse_Test.TestMatVec (28 ms)
 [ RUN      ] NoFillMatrixSparse_Test.TestRandomMatVec
-[       OK ] NoFillMatrixSparse_Test.TestRandomMatVec (15 ms)
+[       OK ] NoFillMatrixSparse_Test.TestRandomMatVec (21 ms)
 [ RUN      ] NoFillMatrixSparse_Test.TestBadMatVec
 [       OK ] NoFillMatrixSparse_Test.TestBadMatVec (1 ms)
 [ RUN      ] NoFillMatrixSparse_Test.TestTransposeMatVec
-[       OK ] NoFillMatrixSparse_Test.TestTransposeMatVec (6 ms)
+[       OK ] NoFillMatrixSparse_Test.TestTransposeMatVec (10 ms)
 [ RUN      ] NoFillMatrixSparse_Test.TestRandomTransposeMatVec
-[       OK ] NoFillMatrixSparse_Test.TestRandomTransposeMatVec (8 ms)
+[       OK ] NoFillMatrixSparse_Test.TestRandomTransposeMatVec (11 ms)
 [ RUN      ] NoFillMatrixSparse_Test.TestBadTransposeMatVec
 [       OK ] NoFillMatrixSparse_Test.TestBadTransposeMatVec (1 ms)
 [ RUN      ] NoFillMatrixSparse_Test.TestTranspose
-[       OK ] NoFillMatrixSparse_Test.TestTranspose (30 ms)
+[       OK ] NoFillMatrixSparse_Test.TestTranspose (47 ms)
 [ RUN      ] NoFillMatrixSparse_Test.TestRandomTranspose
-[       OK ] NoFillMatrixSparse_Test.TestRandomTranspose (9 ms)
+[       OK ] NoFillMatrixSparse_Test.TestRandomTranspose (12 ms)
 [ RUN      ] NoFillMatrixSparse_Test.TestCast
-[       OK ] NoFillMatrixSparse_Test.TestCast (431 ms)
-[----------] 38 tests from NoFillMatrixSparse_Test (9227 ms total)
+[       OK ] NoFillMatrixSparse_Test.TestCast (736 ms)
+[----------] 38 tests from NoFillMatrixSparse_Test (17196 ms total)
 
 [----------] 14 tests from NoFillMatrixSparse_Substitution_Test
 [ RUN      ] NoFillMatrixSparse_Substitution_Test.TestForwardSubstitution
-[       OK ] NoFillMatrixSparse_Substitution_Test.TestForwardSubstitution (97 ms)
+[       OK ] NoFillMatrixSparse_Substitution_Test.TestForwardSubstitution (71 ms)
 [ RUN      ] NoFillMatrixSparse_Substitution_Test.TestRandomForwardSubstitution
-[       OK ] NoFillMatrixSparse_Substitution_Test.TestRandomForwardSubstitution (54 ms)
+[       OK ] NoFillMatrixSparse_Substitution_Test.TestRandomForwardSubstitution (90 ms)
 [ RUN      ] NoFillMatrixSparse_Substitution_Test.TestRandomSparseForwardSubstitution
-[       OK ] NoFillMatrixSparse_Substitution_Test.TestRandomSparseForwardSubstitution (48 ms)
+[       OK ] NoFillMatrixSparse_Substitution_Test.TestRandomSparseForwardSubstitution (80 ms)
 [ RUN      ] NoFillMatrixSparse_Substitution_Test.TestMultiBlockRandomForwardSubstitution
-[       OK ] NoFillMatrixSparse_Substitution_Test.TestMultiBlockRandomForwardSubstitution (519 ms)
+[       OK ] NoFillMatrixSparse_Substitution_Test.TestMultiBlockRandomForwardSubstitution (742 ms)
 [ RUN      ] NoFillMatrixSparse_Substitution_Test.TestFastForwardSubstitution
-[       OK ] NoFillMatrixSparse_Substitution_Test.TestFastForwardSubstitution (98 ms)
+[       OK ] NoFillMatrixSparse_Substitution_Test.TestFastForwardSubstitution (65 ms)
 [ RUN      ] NoFillMatrixSparse_Substitution_Test.TestFastRandomForwardSubstitution
-[       OK ] NoFillMatrixSparse_Substitution_Test.TestFastRandomForwardSubstitution (56 ms)
+[       OK ] NoFillMatrixSparse_Substitution_Test.TestFastRandomForwardSubstitution (116 ms)
 [ RUN      ] NoFillMatrixSparse_Substitution_Test.TestFastRandomSparseForwardSubstitution
-[       OK ] NoFillMatrixSparse_Substitution_Test.TestFastRandomSparseForwardSubstitution (38 ms)
+[       OK ] NoFillMatrixSparse_Substitution_Test.TestFastRandomSparseForwardSubstitution (138 ms)
 [ RUN      ] NoFillMatrixSparse_Substitution_Test.TestBackwardSubstitution
-[       OK ] NoFillMatrixSparse_Substitution_Test.TestBackwardSubstitution (94 ms)
+[       OK ] NoFillMatrixSparse_Substitution_Test.TestBackwardSubstitution (80 ms)
 [ RUN      ] NoFillMatrixSparse_Substitution_Test.TestRandomBackwardSubstitution
-[       OK ] NoFillMatrixSparse_Substitution_Test.TestRandomBackwardSubstitution (59 ms)
+[       OK ] NoFillMatrixSparse_Substitution_Test.TestRandomBackwardSubstitution (105 ms)
 [ RUN      ] NoFillMatrixSparse_Substitution_Test.TestRandomSparseBackwardSubstitution
-[       OK ] NoFillMatrixSparse_Substitution_Test.TestRandomSparseBackwardSubstitution (41 ms)
+[       OK ] NoFillMatrixSparse_Substitution_Test.TestRandomSparseBackwardSubstitution (91 ms)
 [ RUN      ] NoFillMatrixSparse_Substitution_Test.TestMultiBlockRandomBackwardSubstitution
-[       OK ] NoFillMatrixSparse_Substitution_Test.TestMultiBlockRandomBackwardSubstitution (915 ms)
+[       OK ] NoFillMatrixSparse_Substitution_Test.TestMultiBlockRandomBackwardSubstitution (1036 ms)
 [ RUN      ] NoFillMatrixSparse_Substitution_Test.TestFastBackwardSubstitution
-[       OK ] NoFillMatrixSparse_Substitution_Test.TestFastBackwardSubstitution (84 ms)
+[       OK ] NoFillMatrixSparse_Substitution_Test.TestFastBackwardSubstitution (77 ms)
 [ RUN      ] NoFillMatrixSparse_Substitution_Test.TestFastRandomBackwardSubstitution
-[       OK ] NoFillMatrixSparse_Substitution_Test.TestFastRandomBackwardSubstitution (50 ms)
+[       OK ] NoFillMatrixSparse_Substitution_Test.TestFastRandomBackwardSubstitution (91 ms)
 [ RUN      ] NoFillMatrixSparse_Substitution_Test.TestFastRandomSparseBackwardSubstitution
-[       OK ] NoFillMatrixSparse_Substitution_Test.TestFastRandomSparseBackwardSubstitution (32 ms)
-[----------] 14 tests from NoFillMatrixSparse_Substitution_Test (2192 ms total)
+[       OK ] NoFillMatrixSparse_Substitution_Test.TestFastRandomSparseBackwardSubstitution (66 ms)
+[----------] 14 tests from NoFillMatrixSparse_Substitution_Test (2854 ms total)
 
 [----------] 8 tests from TypeConversion_Test
 [ RUN      ] TypeConversion_Test.TestDenseToNoFillSparse
-[       OK ] TypeConversion_Test.TestDenseToNoFillSparse (5 ms)
+[       OK ] TypeConversion_Test.TestDenseToNoFillSparse (9 ms)
 [ RUN      ] TypeConversion_Test.TestDenseToNoFillSparse_LONGRUNTIME
-[       OK ] TypeConversion_Test.TestDenseToNoFillSparse_LONGRUNTIME (6694 ms)
+[       OK ] TypeConversion_Test.TestDenseToNoFillSparse_LONGRUNTIME (13513 ms)
 [ RUN      ] TypeConversion_Test.TestNoFillSparseToDense
-[       OK ] TypeConversion_Test.TestNoFillSparseToDense (5 ms)
+[       OK ] TypeConversion_Test.TestNoFillSparseToDense (11 ms)
 [ RUN      ] TypeConversion_Test.TestNoFillSparseBlockToDense
-[       OK ] TypeConversion_Test.TestNoFillSparseBlockToDense (16 ms)
+[       OK ] TypeConversion_Test.TestNoFillSparseBlockToDense (26 ms)
 [ RUN      ] TypeConversion_Test.TestMatrixDenseColToVector
-[       OK ] TypeConversion_Test.TestMatrixDenseColToVector (2 ms)
+[       OK ] TypeConversion_Test.TestMatrixDenseColToVector (3 ms)
 [ RUN      ] TypeConversion_Test.TestNoFillSparseColToVector
-[       OK ] TypeConversion_Test.TestNoFillSparseColToVector (3 ms)
+[       OK ] TypeConversion_Test.TestNoFillSparseColToVector (6 ms)
 [ RUN      ] TypeConversion_Test.TestVectorToMatrixDenseCol
 [       OK ] TypeConversion_Test.TestVectorToMatrixDenseCol (3 ms)
 [ RUN      ] TypeConversion_Test.TestBadVectorToMatrixDenseCol
 [       OK ] TypeConversion_Test.TestBadVectorToMatrixDenseCol (0 ms)
-[----------] 8 tests from TypeConversion_Test (6734 ms total)
+[----------] 8 tests from TypeConversion_Test (13573 ms total)
 
 [----------] 4 tests from read_vectorCSV_Test
 [ RUN      ] read_vectorCSV_Test.ReadDoubleVector
-[       OK ] read_vectorCSV_Test.ReadDoubleVector (0 ms)
+[       OK ] read_vectorCSV_Test.ReadDoubleVector (1 ms)
 [ RUN      ] read_vectorCSV_Test.ReadSingleVector
 [       OK ] read_vectorCSV_Test.ReadSingleVector (0 ms)
 [ RUN      ] read_vectorCSV_Test.ReadHalfVector
 [       OK ] read_vectorCSV_Test.ReadHalfVector (0 ms)
 [ RUN      ] read_vectorCSV_Test.FailOnMatrix
 [       OK ] read_vectorCSV_Test.FailOnMatrix (0 ms)
-[----------] 4 tests from read_vectorCSV_Test (2 ms total)
+[----------] 4 tests from read_vectorCSV_Test (3 ms total)
 
 [----------] 2 tests from read_matrixCSV_General_Test
 [ RUN      ] read_matrixCSV_General_Test.ReadEmptyMatrix
 [       OK ] read_matrixCSV_General_Test.ReadEmptyMatrix (0 ms)
 [ RUN      ] read_matrixCSV_General_Test.ReadBadFiles
 [       OK ] read_matrixCSV_General_Test.ReadBadFiles (0 ms)
-[----------] 2 tests from read_matrixCSV_General_Test (1 ms total)
+[----------] 2 tests from read_matrixCSV_General_Test (0 ms total)
 
 [----------] 6 tests from read_matrixCSV_Double_Test
 [ RUN      ] read_matrixCSV_Double_Test.ReadSquareMatrix
-[       OK ] read_matrixCSV_Double_Test.ReadSquareMatrix (11 ms)
+[       OK ] read_matrixCSV_Double_Test.ReadSquareMatrix (16 ms)
 [ RUN      ] read_matrixCSV_Double_Test.ReadWideTallMatrix
-[       OK ] read_matrixCSV_Double_Test.ReadWideTallMatrix (6 ms)
+[       OK ] read_matrixCSV_Double_Test.ReadWideTallMatrix (9 ms)
 [ RUN      ] read_matrixCSV_Double_Test.ReadPreciseMatrix
-[       OK ] read_matrixCSV_Double_Test.ReadPreciseMatrix (1 ms)
+[       OK ] read_matrixCSV_Double_Test.ReadPreciseMatrix (2 ms)
 [ RUN      ] read_matrixCSV_Double_Test.ReadDifferentThanPreciseMatrix
-[       OK ] read_matrixCSV_Double_Test.ReadDifferentThanPreciseMatrix (3 ms)
+[       OK ] read_matrixCSV_Double_Test.ReadDifferentThanPreciseMatrix (5 ms)
 [ RUN      ] read_matrixCSV_Double_Test.ReadPreciseMatrixDoubleLimit
-[       OK ] read_matrixCSV_Double_Test.ReadPreciseMatrixDoubleLimit (1 ms)
+[       OK ] read_matrixCSV_Double_Test.ReadPreciseMatrixDoubleLimit (2 ms)
 [ RUN      ] read_matrixCSV_Double_Test.ReadDifferentThanPreciseMatrixDoubleLimit
-[       OK ] read_matrixCSV_Double_Test.ReadDifferentThanPreciseMatrixDoubleLimit (3 ms)
-[----------] 6 tests from read_matrixCSV_Double_Test (28 ms total)
+[       OK ] read_matrixCSV_Double_Test.ReadDifferentThanPreciseMatrixDoubleLimit (6 ms)
+[----------] 6 tests from read_matrixCSV_Double_Test (43 ms total)
 
 [----------] 4 tests from read_matrixCSV_Single_Test
 [ RUN      ] read_matrixCSV_Single_Test.ReadSquareMatrix
-[       OK ] read_matrixCSV_Single_Test.ReadSquareMatrix (10 ms)
+[       OK ] read_matrixCSV_Single_Test.ReadSquareMatrix (18 ms)
 [ RUN      ] read_matrixCSV_Single_Test.ReadWideTallMatrix
-[       OK ] read_matrixCSV_Single_Test.ReadWideTallMatrix (6 ms)
+[       OK ] read_matrixCSV_Single_Test.ReadWideTallMatrix (10 ms)
 [ RUN      ] read_matrixCSV_Single_Test.ReadPreciseMatrix
-[       OK ] read_matrixCSV_Single_Test.ReadPreciseMatrix (1 ms)
+[       OK ] read_matrixCSV_Single_Test.ReadPreciseMatrix (2 ms)
 [ RUN      ] read_matrixCSV_Single_Test.ReadDifferentThanPreciseMatrix
-[       OK ] read_matrixCSV_Single_Test.ReadDifferentThanPreciseMatrix (3 ms)
-[----------] 4 tests from read_matrixCSV_Single_Test (22 ms total)
+[       OK ] read_matrixCSV_Single_Test.ReadDifferentThanPreciseMatrix (6 ms)
+[----------] 4 tests from read_matrixCSV_Single_Test (37 ms total)
 
 [----------] 4 tests from read_matrixCSV_Half_Test
 [ RUN      ] read_matrixCSV_Half_Test.ReadSquareMatrix
-[       OK ] read_matrixCSV_Half_Test.ReadSquareMatrix (11 ms)
+[       OK ] read_matrixCSV_Half_Test.ReadSquareMatrix (18 ms)
 [ RUN      ] read_matrixCSV_Half_Test.ReadWideTallMatrix
-[       OK ] read_matrixCSV_Half_Test.ReadWideTallMatrix (6 ms)
+[       OK ] read_matrixCSV_Half_Test.ReadWideTallMatrix (10 ms)
 [ RUN      ] read_matrixCSV_Half_Test.ReadPreciseMatrix
-[       OK ] read_matrixCSV_Half_Test.ReadPreciseMatrix (1 ms)
+[       OK ] read_matrixCSV_Half_Test.ReadPreciseMatrix (2 ms)
 [ RUN      ] read_matrixCSV_Half_Test.ReadDifferentThanPreciseMatrix
-[       OK ] read_matrixCSV_Half_Test.ReadDifferentThanPreciseMatrix (3 ms)
-[----------] 4 tests from read_matrixCSV_Half_Test (23 ms total)
+[       OK ] read_matrixCSV_Half_Test.ReadDifferentThanPreciseMatrix (5 ms)
+[----------] 4 tests from read_matrixCSV_Half_Test (36 ms total)
 
 [----------] 10 tests from read_vectorMTX_Test
 [ RUN      ] read_vectorMTX_Test.ReadFirstSparseVector
-[       OK ] read_vectorMTX_Test.ReadFirstSparseVector (3 ms)
+[       OK ] read_vectorMTX_Test.ReadFirstSparseVector (5 ms)
 [ RUN      ] read_vectorMTX_Test.ReadFirstDenseVector
-[       OK ] read_vectorMTX_Test.ReadFirstDenseVector (4 ms)
+[       OK ] read_vectorMTX_Test.ReadFirstDenseVector (7 ms)
 [ RUN      ] read_vectorMTX_Test.ReadRandomSparseVector
-[       OK ] read_vectorMTX_Test.ReadRandomSparseVector (8 ms)
+[       OK ] read_vectorMTX_Test.ReadRandomSparseVector (11 ms)
 [ RUN      ] read_vectorMTX_Test.ReadRandomDenseVector
-[       OK ] read_vectorMTX_Test.ReadRandomDenseVector (6 ms)
+[       OK ] read_vectorMTX_Test.ReadRandomDenseVector (7 ms)
 [ RUN      ] read_vectorMTX_Test.ReadSingleArrayVector
-[       OK ] read_vectorMTX_Test.ReadSingleArrayVector (3 ms)
+[       OK ] read_vectorMTX_Test.ReadSingleArrayVector (6 ms)
 [ RUN      ] read_vectorMTX_Test.ReadFirstArrayVector
-[       OK ] read_vectorMTX_Test.ReadFirstArrayVector (7 ms)
+[       OK ] read_vectorMTX_Test.ReadFirstArrayVector (12 ms)
 [ RUN      ] read_vectorMTX_Test.ReadRandomArrayVector
-[       OK ] read_vectorMTX_Test.ReadRandomArrayVector (7 ms)
+[       OK ] read_vectorMTX_Test.ReadRandomArrayVector (8 ms)
 [ RUN      ] read_vectorMTX_Test.ReadFirstIntegerVector
-[       OK ] read_vectorMTX_Test.ReadFirstIntegerVector (15 ms)
+[       OK ] read_vectorMTX_Test.ReadFirstIntegerVector (19 ms)
 [ RUN      ] read_vectorMTX_Test.ReadRandomIntegerVector
-[       OK ] read_vectorMTX_Test.ReadRandomIntegerVector (16 ms)
+[       OK ] read_vectorMTX_Test.ReadRandomIntegerVector (28 ms)
 [ RUN      ] read_vectorMTX_Test.FailOnBadSelection
 [       OK ] read_vectorMTX_Test.FailOnBadSelection (0 ms)
-[----------] 10 tests from read_vectorMTX_Test (75 ms total)
+[----------] 10 tests from read_vectorMTX_Test (108 ms total)
 
 [----------] 11 tests from read_matrixMTX_Test
 [ RUN      ] read_matrixMTX_Test.ReadEmptyMatrix
-[       OK ] read_matrixMTX_Test.ReadEmptyMatrix (1 ms)
+[       OK ] read_matrixMTX_Test.ReadEmptyMatrix (0 ms)
 [ RUN      ] read_matrixMTX_Test.ReadSimpleGeneral
-[       OK ] read_matrixMTX_Test.ReadSimpleGeneral (58 ms)
+[       OK ] read_matrixMTX_Test.ReadSimpleGeneral (83 ms)
 [ RUN      ] read_matrixMTX_Test.ReadSimpleSymmetric
-[       OK ] read_matrixMTX_Test.ReadSimpleSymmetric (49 ms)
+[       OK ] read_matrixMTX_Test.ReadSimpleSymmetric (75 ms)
 [ RUN      ] read_matrixMTX_Test.ReadInteger
-[       OK ] read_matrixMTX_Test.ReadInteger (19 ms)
+[       OK ] read_matrixMTX_Test.ReadInteger (30 ms)
 [ RUN      ] read_matrixMTX_Test.ReadPreciseGeneral_Double
-[       OK ] read_matrixMTX_Test.ReadPreciseGeneral_Double (34 ms)
+[       OK ] read_matrixMTX_Test.ReadPreciseGeneral_Double (48 ms)
 [ RUN      ] read_matrixMTX_Test.ReadPreciseSymmetric_Double
-[       OK ] read_matrixMTX_Test.ReadPreciseSymmetric_Double (15 ms)
+[       OK ] read_matrixMTX_Test.ReadPreciseSymmetric_Double (25 ms)
 [ RUN      ] read_matrixMTX_Test.ReadPreciseGeneral_Single
-[       OK ] read_matrixMTX_Test.ReadPreciseGeneral_Single (31 ms)
+[       OK ] read_matrixMTX_Test.ReadPreciseGeneral_Single (48 ms)
 [ RUN      ] read_matrixMTX_Test.ReadPreciseSymmetric_Single
-[       OK ] read_matrixMTX_Test.ReadPreciseSymmetric_Single (15 ms)
+[       OK ] read_matrixMTX_Test.ReadPreciseSymmetric_Single (24 ms)
 [ RUN      ] read_matrixMTX_Test.ReadPreciseGeneral_Half
-[       OK ] read_matrixMTX_Test.ReadPreciseGeneral_Half (33 ms)
+[       OK ] read_matrixMTX_Test.ReadPreciseGeneral_Half (48 ms)
 [ RUN      ] read_matrixMTX_Test.ReadPreciseSymmetric_Half
-[       OK ] read_matrixMTX_Test.ReadPreciseSymmetric_Half (17 ms)
+[       OK ] read_matrixMTX_Test.ReadPreciseSymmetric_Half (32 ms)
 [ RUN      ] read_matrixMTX_Test.BadReadMTX
-[       OK ] read_matrixMTX_Test.BadReadMTX (6 ms)
-[----------] 11 tests from read_matrixMTX_Test (283 ms total)
+[       OK ] read_matrixMTX_Test.BadReadMTX (1 ms)
+[----------] 11 tests from read_matrixMTX_Test (420 ms total)
 
 [----------] 4 tests from PSizeHeap_Test
 [ RUN      ] PSizeHeap_Test.FilledHeap
@@ -505,103 +493,103 @@ Rows: 3 | Cols: 3 | Non-zeroes: 6 | Fill ratio: 0.667 | Max magnitude: 9
 
 [----------] 2 tests from NoPreconditioner_Test
 [ RUN      ] NoPreconditioner_Test.TestNoPreconditioner_PRECONDITIONER
-[       OK ] NoPreconditioner_Test.TestNoPreconditioner_PRECONDITIONER (11 ms)
+[       OK ] NoPreconditioner_Test.TestNoPreconditioner_PRECONDITIONER (21 ms)
 [ RUN      ] NoPreconditioner_Test.TestNoPreconditionerCast_PRECONDITIONER
-[       OK ] NoPreconditioner_Test.TestNoPreconditionerCast_PRECONDITIONER (113 ms)
-[----------] 2 tests from NoPreconditioner_Test (125 ms total)
+[       OK ] NoPreconditioner_Test.TestNoPreconditionerCast_PRECONDITIONER (196 ms)
+[----------] 2 tests from NoPreconditioner_Test (218 ms total)
 
 [----------] 2 tests from MatrixInversePreconditioner_Test
 [ RUN      ] MatrixInversePreconditioner_Test.TestMatrixInversePreconditioner_PRECONDITIONER
-[       OK ] MatrixInversePreconditioner_Test.TestMatrixInversePreconditioner_PRECONDITIONER (36 ms)
+[       OK ] MatrixInversePreconditioner_Test.TestMatrixInversePreconditioner_PRECONDITIONER (19 ms)
 [ RUN      ] MatrixInversePreconditioner_Test.TestMatrixInverseCast_PRECONDITIONER
-[       OK ] MatrixInversePreconditioner_Test.TestMatrixInverseCast_PRECONDITIONER (110 ms)
-[----------] 2 tests from MatrixInversePreconditioner_Test (146 ms total)
+[       OK ] MatrixInversePreconditioner_Test.TestMatrixInverseCast_PRECONDITIONER (140 ms)
+[----------] 2 tests from MatrixInversePreconditioner_Test (159 ms total)
 
 [----------] 1 test from JacobiPreconditioner_Test
 [ RUN      ] JacobiPreconditioner_Test.TestJacobiPreconditioner_PRECONDITIONER
-[       OK ] JacobiPreconditioner_Test.TestJacobiPreconditioner_PRECONDITIONER (37 ms)
-[----------] 1 test from JacobiPreconditioner_Test (37 ms total)
+[       OK ] JacobiPreconditioner_Test.TestJacobiPreconditioner_PRECONDITIONER (31 ms)
+[----------] 1 test from JacobiPreconditioner_Test (31 ms total)
 
 [----------] 7 tests from ILUPreconditioner_Test
 [ RUN      ] ILUPreconditioner_Test.TestSquareCheck_PRECONDITIONER
 [       OK ] ILUPreconditioner_Test.TestSquareCheck_PRECONDITIONER (0 ms)
 [ RUN      ] ILUPreconditioner_Test.TestCompatibilityCheck_PRECONDITIONER
-[       OK ] ILUPreconditioner_Test.TestCompatibilityCheck_PRECONDITIONER (2 ms)
+[       OK ] ILUPreconditioner_Test.TestCompatibilityCheck_PRECONDITIONER (3 ms)
 [ RUN      ] ILUPreconditioner_Test.TestZeroDiagonalEntries_PRECONDITIONER
-[       OK ] ILUPreconditioner_Test.TestZeroDiagonalEntries_PRECONDITIONER (1 ms)
+[       OK ] ILUPreconditioner_Test.TestZeroDiagonalEntries_PRECONDITIONER (2 ms)
 [ RUN      ] ILUPreconditioner_Test.TestApplyInverseM_PRECONDITIONER
-[       OK ] ILUPreconditioner_Test.TestApplyInverseM_PRECONDITIONER (53 ms)
+[       OK ] ILUPreconditioner_Test.TestApplyInverseM_PRECONDITIONER (37 ms)
 [ RUN      ] ILUPreconditioner_Test.TestApplyInverseM_Pivoted_PRECONDITIONER
-[       OK ] ILUPreconditioner_Test.TestApplyInverseM_Pivoted_PRECONDITIONER (54 ms)
+[       OK ] ILUPreconditioner_Test.TestApplyInverseM_Pivoted_PRECONDITIONER (36 ms)
 [ RUN      ] ILUPreconditioner_Test.TestILUPremadeErrorChecks_PRECONDITIONER
 [       OK ] ILUPreconditioner_Test.TestILUPremadeErrorChecks_PRECONDITIONER (2 ms)
 [ RUN      ] ILUPreconditioner_Test.TestILUPreconditionerCast_PRECONDITIONER
-[       OK ] ILUPreconditioner_Test.TestILUPreconditionerCast_PRECONDITIONER (56 ms)
-[----------] 7 tests from ILUPreconditioner_Test (172 ms total)
+[       OK ] ILUPreconditioner_Test.TestILUPreconditionerCast_PRECONDITIONER (60 ms)
+[----------] 7 tests from ILUPreconditioner_Test (143 ms total)
 
 [----------] 2 tests from ILU0_Test
 [ RUN      ] ILU0_Test.TestMatchesDenseLU_PRECONDITIONER
-[       OK ] ILU0_Test.TestMatchesDenseLU_PRECONDITIONER (5660 ms)
+[       OK ] ILU0_Test.TestMatchesDenseLU_PRECONDITIONER (8967 ms)
 [ RUN      ] ILU0_Test.TestMatchesSparseILU0_PRECONDITIONER
-[       OK ] ILU0_Test.TestMatchesSparseILU0_PRECONDITIONER (5319 ms)
-[----------] 2 tests from ILU0_Test (10980 ms total)
+[       OK ] ILU0_Test.TestMatchesSparseILU0_PRECONDITIONER (8919 ms)
+[----------] 2 tests from ILU0_Test (17887 ms total)
 
 [----------] 9 tests from ILUTP_Test
 [ RUN      ] ILUTP_Test.TestEquivalentILUTNoDropAndDenseILU0_PRECONDITIONER
-[       OK ] ILUTP_Test.TestEquivalentILUTNoDropAndDenseILU0_PRECONDITIONER (2426 ms)
+[       OK ] ILUTP_Test.TestEquivalentILUTNoDropAndDenseILU0_PRECONDITIONER (3950 ms)
 [ RUN      ] ILUTP_Test.TestILUTDropping_PRECONDITIONER
-[       OK ] ILUTP_Test.TestILUTDropping_PRECONDITIONER (2971 ms)
+[       OK ] ILUTP_Test.TestILUTDropping_PRECONDITIONER (4936 ms)
 [ RUN      ] ILUTP_Test.TestILUTDropping_Pivoted_PRECONDITIONER
-[       OK ] ILUTP_Test.TestILUTDropping_Pivoted_PRECONDITIONER (2917 ms)
+[       OK ] ILUTP_Test.TestILUTDropping_Pivoted_PRECONDITIONER (4900 ms)
 [ RUN      ] ILUTP_Test.TestILUTDroppingLimits_PRECONDITIONER
-[       OK ] ILUTP_Test.TestILUTDroppingLimits_PRECONDITIONER (1203 ms)
+[       OK ] ILUTP_Test.TestILUTDroppingLimits_PRECONDITIONER (2038 ms)
 [ RUN      ] ILUTP_Test.TestILUTDroppingLimits_Pivoted_PRECONDITIONER
-[       OK ] ILUTP_Test.TestILUTDroppingLimits_Pivoted_PRECONDITIONER (1827 ms)
+[       OK ] ILUTP_Test.TestILUTDroppingLimits_Pivoted_PRECONDITIONER (2930 ms)
 [ RUN      ] ILUTP_Test.TestMatchesDenseLU_Pivoted_PRECONDITIONER
-[       OK ] ILUTP_Test.TestMatchesDenseLU_Pivoted_PRECONDITIONER (6610 ms)
+[       OK ] ILUTP_Test.TestMatchesDenseLU_Pivoted_PRECONDITIONER (11000 ms)
 [ RUN      ] ILUTP_Test.TestILUT_Pivoted_HandleBreakdown_PRECONDITIONER
-[       OK ] ILUTP_Test.TestILUT_Pivoted_HandleBreakdown_PRECONDITIONER (2 ms)
+[       OK ] ILUTP_Test.TestILUT_Pivoted_HandleBreakdown_PRECONDITIONER (9 ms)
 [ RUN      ] ILUTP_Test.TestKeepPLargest_PRECONDITIONER
-[       OK ] ILUTP_Test.TestKeepPLargest_PRECONDITIONER (7208 ms)
+[       OK ] ILUTP_Test.TestKeepPLargest_PRECONDITIONER (10784 ms)
 [ RUN      ] ILUTP_Test.TestKeepPLargest_Pivoted_PRECONDITIONER
-[       OK ] ILUTP_Test.TestKeepPLargest_Pivoted_PRECONDITIONER (6888 ms)
-[----------] 9 tests from ILUTP_Test (32057 ms total)
+[       OK ] ILUTP_Test.TestKeepPLargest_Pivoted_PRECONDITIONER (10903 ms)
+[----------] 9 tests from ILUTP_Test (51456 ms total)
 
 [----------] 3 tests from GenericLinearSystem_Test
 [ RUN      ] GenericLinearSystem_Test.TestConstructor
-[       OK ] GenericLinearSystem_Test.TestConstructor (502 ms)
+[       OK ] GenericLinearSystem_Test.TestConstructor (895 ms)
 [ RUN      ] GenericLinearSystem_Test.TestBadEmptyMatrix
 [       OK ] GenericLinearSystem_Test.TestBadEmptyMatrix (0 ms)
 [ RUN      ] GenericLinearSystem_Test.TestBadMismatchb
 [       OK ] GenericLinearSystem_Test.TestBadMismatchb (1 ms)
-[----------] 3 tests from GenericLinearSystem_Test (503 ms total)
+[----------] 3 tests from GenericLinearSystem_Test (897 ms total)
 
 [----------] 12 tests from TypedLinearSystem_Test
 [ RUN      ] TypedLinearSystem_Test.TestConstructor_Half
-[       OK ] TypedLinearSystem_Test.TestConstructor_Half (983 ms)
+[       OK ] TypedLinearSystem_Test.TestConstructor_Half (1666 ms)
 [ RUN      ] TypedLinearSystem_Test.TestConstructor_Single
-[       OK ] TypedLinearSystem_Test.TestConstructor_Single (964 ms)
+[       OK ] TypedLinearSystem_Test.TestConstructor_Single (1613 ms)
 [ RUN      ] TypedLinearSystem_Test.TestConstructor_Double
-[       OK ] TypedLinearSystem_Test.TestConstructor_Double (959 ms)
+[       OK ] TypedLinearSystem_Test.TestConstructor_Double (1634 ms)
 [ RUN      ] TypedLinearSystem_Test.TestTypedMutAddlRHSConstructor_Half
-[       OK ] TypedLinearSystem_Test.TestTypedMutAddlRHSConstructor_Half (967 ms)
+[       OK ] TypedLinearSystem_Test.TestTypedMutAddlRHSConstructor_Half (1707 ms)
 [ RUN      ] TypedLinearSystem_Test.TestTypedMutAddlRHSConstructor_Single
-[       OK ] TypedLinearSystem_Test.TestTypedMutAddlRHSConstructor_Single (953 ms)
+[       OK ] TypedLinearSystem_Test.TestTypedMutAddlRHSConstructor_Single (1791 ms)
 [ RUN      ] TypedLinearSystem_Test.TestTypedMutAddlRHSConstructor_Double
-[       OK ] TypedLinearSystem_Test.TestTypedMutAddlRHSConstructor_Double (962 ms)
+[       OK ] TypedLinearSystem_Test.TestTypedMutAddlRHSConstructor_Double (1714 ms)
 [ RUN      ] TypedLinearSystem_Test.TestMutAddlRHSSetRHS_Half
-[       OK ] TypedLinearSystem_Test.TestMutAddlRHSSetRHS_Half (954 ms)
+[       OK ] TypedLinearSystem_Test.TestMutAddlRHSSetRHS_Half (1675 ms)
 [ RUN      ] TypedLinearSystem_Test.TestMutAddlRHSSetRHS_Single
-[       OK ] TypedLinearSystem_Test.TestMutAddlRHSSetRHS_Single (953 ms)
+[       OK ] TypedLinearSystem_Test.TestMutAddlRHSSetRHS_Single (1651 ms)
 [ RUN      ] TypedLinearSystem_Test.TestMutAddlRHSSetRHS_Double
-[       OK ] TypedLinearSystem_Test.TestMutAddlRHSSetRHS_Double (939 ms)
+[       OK ] TypedLinearSystem_Test.TestMutAddlRHSSetRHS_Double (1674 ms)
 [ RUN      ] TypedLinearSystem_Test.TestTypedMutAddlRHSBadMismatchSetRHS_Half
-[       OK ] TypedLinearSystem_Test.TestTypedMutAddlRHSBadMismatchSetRHS_Half (2 ms)
+[       OK ] TypedLinearSystem_Test.TestTypedMutAddlRHSBadMismatchSetRHS_Half (1 ms)
 [ RUN      ] TypedLinearSystem_Test.TestTypedMutAddlRHSBadMismatchSetRHS_Single
-[       OK ] TypedLinearSystem_Test.TestTypedMutAddlRHSBadMismatchSetRHS_Single (2 ms)
+[       OK ] TypedLinearSystem_Test.TestTypedMutAddlRHSBadMismatchSetRHS_Single (1 ms)
 [ RUN      ] TypedLinearSystem_Test.TestTypedMutAddlRHSBadMismatchSetRHS_Double
 [       OK ] TypedLinearSystem_Test.TestTypedMutAddlRHSBadMismatchSetRHS_Double (1 ms)
-[----------] 12 tests from TypedLinearSystem_Test (8645 ms total)
+[----------] 12 tests from TypedLinearSystem_Test (15135 ms total)
 
 [----------] 2 tests from SolveArgPkg_Test
 [ RUN      ] SolveArgPkg_Test.TestDefaultConstructionAndChecks
@@ -612,24 +600,24 @@ Rows: 3 | Cols: 3 | Non-zeroes: 6 | Fill ratio: 0.667 | Max magnitude: 9
 
 [----------] 5 tests from PrecondArgPkg_Test
 [ RUN      ] PrecondArgPkg_Test.TestDefaultConstruction_PRECONDITIONER
-[       OK ] PrecondArgPkg_Test.TestDefaultConstruction_PRECONDITIONER (23 ms)
+[       OK ] PrecondArgPkg_Test.TestDefaultConstruction_PRECONDITIONER (43 ms)
 [ RUN      ] PrecondArgPkg_Test.TestLeftPreconditionerSet_PRECONDITIONER
-[       OK ] PrecondArgPkg_Test.TestLeftPreconditionerSet_PRECONDITIONER (11 ms)
+[       OK ] PrecondArgPkg_Test.TestLeftPreconditionerSet_PRECONDITIONER (20 ms)
 [ RUN      ] PrecondArgPkg_Test.TestRightPreconditionerSet_PRECONDITIONER
-[       OK ] PrecondArgPkg_Test.TestRightPreconditionerSet_PRECONDITIONER (13 ms)
+[       OK ] PrecondArgPkg_Test.TestRightPreconditionerSet_PRECONDITIONER (21 ms)
 [ RUN      ] PrecondArgPkg_Test.TestBothPreconditionerSet_PRECONDITIONER
-[       OK ] PrecondArgPkg_Test.TestBothPreconditionerSet_PRECONDITIONER (22 ms)
+[       OK ] PrecondArgPkg_Test.TestBothPreconditionerSet_PRECONDITIONER (33 ms)
 [ RUN      ] PrecondArgPkg_Test.TestCastPtrs_PRECONDITIONER
-[       OK ] PrecondArgPkg_Test.TestCastPtrs_PRECONDITIONER (168 ms)
-[----------] 5 tests from PrecondArgPkg_Test (239 ms total)
+[       OK ] PrecondArgPkg_Test.TestCastPtrs_PRECONDITIONER (303 ms)
+[----------] 5 tests from PrecondArgPkg_Test (424 ms total)
 
 [----------] 11 tests from TypedIterativeSolve_Test
 [ RUN      ] TypedIterativeSolve_Test.TestConstructors_Half_SOLVER
-[       OK ] TypedIterativeSolve_Test.TestConstructors_Half_SOLVER (14 ms)
+[       OK ] TypedIterativeSolve_Test.TestConstructors_Half_SOLVER (24 ms)
 [ RUN      ] TypedIterativeSolve_Test.TestConstructors_Single_SOLVER
-[       OK ] TypedIterativeSolve_Test.TestConstructors_Single_SOLVER (13 ms)
+[       OK ] TypedIterativeSolve_Test.TestConstructors_Single_SOLVER (24 ms)
 [ RUN      ] TypedIterativeSolve_Test.TestConstructors_Double_SOLVER
-[       OK ] TypedIterativeSolve_Test.TestConstructors_Double_SOLVER (15 ms)
+[       OK ] TypedIterativeSolve_Test.TestConstructors_Double_SOLVER (23 ms)
 [ RUN      ] TypedIterativeSolve_Test.TestSolveAndRelres_Half_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ---
@@ -663,7 +651,7 @@ Display of Relative Residual L-2 Norm:
   *
 0.000649 ---
 Iter: 0   Iter: 1
-[       OK ] TypedIterativeSolve_Test.TestSolveAndRelres_Half_SOLVER (49 ms)
+[       OK ] TypedIterativeSolve_Test.TestSolveAndRelres_Half_SOLVER (85 ms)
 [ RUN      ] TypedIterativeSolve_Test.TestSolveAndRelres_Single_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ---
@@ -697,7 +685,7 @@ Display of Relative Residual L-2 Norm:
   *
 7.43e-08 ---
 Iter: 0   Iter: 1
-[       OK ] TypedIterativeSolve_Test.TestSolveAndRelres_Single_SOLVER (50 ms)
+[       OK ] TypedIterativeSolve_Test.TestSolveAndRelres_Single_SOLVER (87 ms)
 [ RUN      ] TypedIterativeSolve_Test.TestSolveAndRelres_Double_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ---
@@ -731,18 +719,18 @@ Display of Relative Residual L-2 Norm:
   *
 2.23e-11 ---
 Iter: 0   Iter: 1
-[       OK ] TypedIterativeSolve_Test.TestSolveAndRelres_Double_SOLVER (47 ms)
+[       OK ] TypedIterativeSolve_Test.TestSolveAndRelres_Double_SOLVER (79 ms)
 [ RUN      ] TypedIterativeSolve_Test.TestReset_Half_SOLVER
-[       OK ] TypedIterativeSolve_Test.TestReset_Half_SOLVER (117 ms)
+[       OK ] TypedIterativeSolve_Test.TestReset_Half_SOLVER (188 ms)
 [ RUN      ] TypedIterativeSolve_Test.TestReset_Single_SOLVER
-[       OK ] TypedIterativeSolve_Test.TestReset_Single_SOLVER (106 ms)
+[       OK ] TypedIterativeSolve_Test.TestReset_Single_SOLVER (172 ms)
 [ RUN      ] TypedIterativeSolve_Test.TestReset_Double_SOLVER
-[       OK ] TypedIterativeSolve_Test.TestReset_Double_SOLVER (31 ms)
+[       OK ] TypedIterativeSolve_Test.TestReset_Double_SOLVER (53 ms)
 [ RUN      ] TypedIterativeSolve_Test.TestErrorMismatchedCols_SOLVER
 [       OK ] TypedIterativeSolve_Test.TestErrorMismatchedCols_SOLVER (0 ms)
 [ RUN      ] TypedIterativeSolve_Test.TestErrorNonSquare_SOLVER
 [       OK ] TypedIterativeSolve_Test.TestErrorNonSquare_SOLVER (0 ms)
-[----------] 11 tests from TypedIterativeSolve_Test (448 ms total)
+[----------] 11 tests from TypedIterativeSolve_Test (741 ms total)
 
 [----------] 8 tests from Jacobi_Test
 [ RUN      ] Jacobi_Test.DivergeBeyondCapabilities_Single_SOLVER
@@ -778,7 +766,7 @@ Display of Relative Residual L-2 Norm:
                                                                        
 1.19e-08 ------------------------------------------------------------------
 Iter: 0                                                            Iter: 400
-[       OK ] Jacobi_Test.DivergeBeyondCapabilities_Single_SOLVER (372 ms)
+[       OK ] Jacobi_Test.DivergeBeyondCapabilities_Single_SOLVER (544 ms)
 [ RUN      ] Jacobi_Test.SolveConvDiff64_Half_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ------------------------------------
@@ -812,7 +800,7 @@ Display of Relative Residual L-2 Norm:
                                  *****
 0.0499 ---------------------------------
 Iter: 0                           Iter: 36
-[       OK ] Jacobi_Test.SolveConvDiff64_Half_SOLVER (42 ms)
+[       OK ] Jacobi_Test.SolveConvDiff64_Half_SOLVER (79 ms)
 [ RUN      ] Jacobi_Test.SolveConvDiff256_Half_LONGRUNTIME_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ---------------------------------------------------------------------
@@ -846,7 +834,7 @@ Display of Relative Residual L-2 Norm:
                                                         ***************
 0.0497 ------------------------------------------------------------------
 Iter: 0                                                            Iter: 79
-[       OK ] Jacobi_Test.SolveConvDiff256_Half_LONGRUNTIME_SOLVER (195 ms)
+[       OK ] Jacobi_Test.SolveConvDiff256_Half_LONGRUNTIME_SOLVER (217 ms)
 [ RUN      ] Jacobi_Test.DivergeBeyondCapabilities_Half_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ---------------------------------------------------------------------
@@ -880,7 +868,7 @@ Display of Relative Residual L-2 Norm:
                                                                        
 9.77e-05 ------------------------------------------------------------------
 Iter: 0                                                            Iter: 400
-[       OK ] Jacobi_Test.DivergeBeyondCapabilities_Half_SOLVER (338 ms)
+[       OK ] Jacobi_Test.DivergeBeyondCapabilities_Half_SOLVER (469 ms)
 [ RUN      ] Jacobi_Test.SolveConvDiff64_Single_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ---------------------------------------------------------------------
@@ -914,7 +902,7 @@ Display of Relative Residual L-2 Norm:
                                                                 *******
 4.83e-06 ------------------------------------------------------------------
 Iter: 0                                                            Iter: 216
-[       OK ] Jacobi_Test.SolveConvDiff64_Single_SOLVER (178 ms)
+[       OK ] Jacobi_Test.SolveConvDiff64_Single_SOLVER (224 ms)
 [ RUN      ] Jacobi_Test.SolveConvDiff256_Single_LONGRUNTIME_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ---------------------------------------------------------------------
@@ -948,7 +936,7 @@ Display of Relative Residual L-2 Norm:
                                                                ********
 4.95e-06 ------------------------------------------------------------------
 Iter: 0                                                            Iter: 897
-[       OK ] Jacobi_Test.SolveConvDiff256_Single_LONGRUNTIME_SOLVER (790 ms)
+[       OK ] Jacobi_Test.SolveConvDiff256_Single_LONGRUNTIME_SOLVER (1019 ms)
 [ RUN      ] Jacobi_Test.SolveConvDiff64_Double_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ---------------------------------------------------------------------
@@ -982,7 +970,7 @@ Display of Relative Residual L-2 Norm:
                                                                  ******
 9.56e-11 ------------------------------------------------------------------
 Iter: 0                                                            Iter: 428
-[       OK ] Jacobi_Test.SolveConvDiff64_Double_SOLVER (296 ms)
+[       OK ] Jacobi_Test.SolveConvDiff64_Double_SOLVER (364 ms)
 [ RUN      ] Jacobi_Test.SolveConvDiff256_Double_LONGRUNTIME_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ---------------------------------------------------------------------
@@ -1016,8 +1004,8 @@ Display of Relative Residual L-2 Norm:
                                                                 *******
 9.98e-11 ------------------------------------------------------------------
 Iter: 0                                                            Iter: 1875
-[       OK ] Jacobi_Test.SolveConvDiff256_Double_LONGRUNTIME_SOLVER (1372 ms)
-[----------] 8 tests from Jacobi_Test (3587 ms total)
+[       OK ] Jacobi_Test.SolveConvDiff256_Double_LONGRUNTIME_SOLVER (1643 ms)
+[----------] 8 tests from Jacobi_Test (4562 ms total)
 
 [----------] 8 tests from GaussSeidel_Test
 [ RUN      ] GaussSeidel_Test.SolveConvDiff64_Half_SOLVER
@@ -1053,7 +1041,7 @@ Display of Relative Residual L-2 Norm:
                    ***
 0.0454 -----------------
 Iter: 0           Iter: 20
-[       OK ] GaussSeidel_Test.SolveConvDiff64_Half_SOLVER (42 ms)
+[       OK ] GaussSeidel_Test.SolveConvDiff64_Half_SOLVER (41 ms)
 [ RUN      ] GaussSeidel_Test.SolveConvDiff256_Half_LONGRUNTIME_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ---------------------------------------
@@ -1087,7 +1075,7 @@ Display of Relative Residual L-2 Norm:
                                **********
 0.0493 ------------------------------------
 Iter: 0                              Iter: 39
-[       OK ] GaussSeidel_Test.SolveConvDiff256_Half_LONGRUNTIME_SOLVER (237 ms)
+[       OK ] GaussSeidel_Test.SolveConvDiff256_Half_LONGRUNTIME_SOLVER (231 ms)
 [ RUN      ] GaussSeidel_Test.DivergeBeyondCapabilities_Half_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ---------------------------------------------------------------------
@@ -1121,7 +1109,7 @@ Display of Relative Residual L-2 Norm:
                                                                        
 9.77e-05 ------------------------------------------------------------------
 Iter: 0                                                            Iter: 300
-[       OK ] GaussSeidel_Test.DivergeBeyondCapabilities_Half_SOLVER (499 ms)
+[       OK ] GaussSeidel_Test.DivergeBeyondCapabilities_Half_SOLVER (613 ms)
 [ RUN      ] GaussSeidel_Test.SolveConvDiff64_Single_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ---------------------------------------------------------------------
@@ -1155,7 +1143,7 @@ Display of Relative Residual L-2 Norm:
                                                                 *******
 4.82e-06 ------------------------------------------------------------------
 Iter: 0                                                            Iter: 110
-[       OK ] GaussSeidel_Test.SolveConvDiff64_Single_SOLVER (184 ms)
+[       OK ] GaussSeidel_Test.SolveConvDiff64_Single_SOLVER (201 ms)
 [ RUN      ] GaussSeidel_Test.SolveConvDiff256_Single_LONGRUNTIME_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ---------------------------------------------------------------------
@@ -1189,7 +1177,7 @@ Display of Relative Residual L-2 Norm:
                                                                ********
 4.99e-06 ------------------------------------------------------------------
 Iter: 0                                                            Iter: 451
-[       OK ] GaussSeidel_Test.SolveConvDiff256_Single_LONGRUNTIME_SOLVER (2069 ms)
+[       OK ] GaussSeidel_Test.SolveConvDiff256_Single_LONGRUNTIME_SOLVER (2109 ms)
 [ RUN      ] GaussSeidel_Test.DivergeBeyondCapabilities_Single_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ---------------------------------------------------------------------
@@ -1223,7 +1211,7 @@ Display of Relative Residual L-2 Norm:
                                                                        
 1.19e-08 ------------------------------------------------------------------
 Iter: 0                                                            Iter: 300
-[       OK ] GaussSeidel_Test.DivergeBeyondCapabilities_Single_SOLVER (520 ms)
+[       OK ] GaussSeidel_Test.DivergeBeyondCapabilities_Single_SOLVER (561 ms)
 [ RUN      ] GaussSeidel_Test.SolveConvDiff64_Double_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ---------------------------------------------------------------------
@@ -1257,7 +1245,7 @@ Display of Relative Residual L-2 Norm:
                                                                  ******
 9.51e-11 ------------------------------------------------------------------
 Iter: 0                                                            Iter: 216
-[       OK ] GaussSeidel_Test.SolveConvDiff64_Double_SOLVER (345 ms)
+[       OK ] GaussSeidel_Test.SolveConvDiff64_Double_SOLVER (371 ms)
 [ RUN      ] GaussSeidel_Test.SolveConvDiff256_Double_LONGRUNTIME_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ---------------------------------------------------------------------
@@ -1291,8 +1279,8 @@ Display of Relative Residual L-2 Norm:
                                                                 *******
 9.85e-11 ------------------------------------------------------------------
 Iter: 0                                                            Iter: 941
-[       OK ] GaussSeidel_Test.SolveConvDiff256_Double_LONGRUNTIME_SOLVER (4640 ms)
-[----------] 8 tests from GaussSeidel_Test (8542 ms total)
+[       OK ] GaussSeidel_Test.SolveConvDiff256_Double_LONGRUNTIME_SOLVER (4935 ms)
+[----------] 8 tests from GaussSeidel_Test (9065 ms total)
 
 [----------] 8 tests from SOR_Test
 [ RUN      ] SOR_Test.SolveConvDiff64_Half_SOLVER
@@ -1398,7 +1386,7 @@ Display of Relative Residual L-2 Norm:
                        **
 0.0403 --------------------
 Iter: 0              Iter: 23
-[       OK ] SOR_Test.SolveConvDiff64_Half_SOLVER (96 ms)
+[       OK ] SOR_Test.SolveConvDiff64_Half_SOLVER (88 ms)
 [ RUN      ] SOR_Test.SolveConvDiff256_Half_LONGRUNTIME_SOLVER
 Testing w=1.25
 Display of Relative Residual L-2 Norm: 
@@ -1502,7 +1490,7 @@ Display of Relative Residual L-2 Norm:
                           **
 0.0489 -----------------------
 Iter: 0                 Iter: 26
-[       OK ] SOR_Test.SolveConvDiff256_Half_LONGRUNTIME_SOLVER (432 ms)
+[       OK ] SOR_Test.SolveConvDiff256_Half_LONGRUNTIME_SOLVER (334 ms)
 [ RUN      ] SOR_Test.DivergeBeyondCapabilities_Half_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ---------------------------------------------------------------------
@@ -1600,7 +1588,7 @@ Display of Relative Residual L-2 Norm:
                                                                        
 9.77e-05 ------------------------------------------------------------------
 Iter: 0                                                            Iter: 300
-[       OK ] SOR_Test.DivergeBeyondCapabilities_Half_SOLVER (1542 ms)
+[       OK ] SOR_Test.DivergeBeyondCapabilities_Half_SOLVER (1564 ms)
 [ RUN      ] SOR_Test.SolveConvDiff64_Single_SOLVER
 Testing w=1.25
 Display of Relative Residual L-2 Norm: 
@@ -1704,7 +1692,7 @@ Display of Relative Residual L-2 Norm:
                                                        *****
 4.73e-06 -------------------------------------------------------
 Iter: 0                                                 Iter: 58
-[       OK ] SOR_Test.SolveConvDiff64_Single_SOLVER (275 ms)
+[       OK ] SOR_Test.SolveConvDiff64_Single_SOLVER (258 ms)
 [ RUN      ] SOR_Test.SolveConvDiff256_Single_LONGRUNTIME_SOLVER
 Testing w=1.25
 Display of Relative Residual L-2 Norm: 
@@ -1808,7 +1796,7 @@ Display of Relative Residual L-2 Norm:
                                                            *****
 4.63e-06 -----------------------------------------------------------
 Iter: 0                                                     Iter: 62
-[       OK ] SOR_Test.SolveConvDiff256_Single_LONGRUNTIME_SOLVER (2160 ms)
+[       OK ] SOR_Test.SolveConvDiff256_Single_LONGRUNTIME_SOLVER (2387 ms)
 [ RUN      ] SOR_Test.DivergeBeyondCapabilities_Single_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ---------------------------------------------------------------------
@@ -1906,7 +1894,7 @@ Display of Relative Residual L-2 Norm:
                                                                        
 1.19e-08 ------------------------------------------------------------------
 Iter: 0                                                            Iter: 300
-[       OK ] SOR_Test.DivergeBeyondCapabilities_Single_SOLVER (1476 ms)
+[       OK ] SOR_Test.DivergeBeyondCapabilities_Single_SOLVER (1555 ms)
 [ RUN      ] SOR_Test.SolveConvDiff64_Double_SOLVER
 Testing w=1.25
 Display of Relative Residual L-2 Norm: 
@@ -2010,7 +1998,7 @@ Display of Relative Residual L-2 Norm:
                                                                   *****
 7.89e-11 ------------------------------------------------------------------
 Iter: 0                                                            Iter: 98
-[       OK ] SOR_Test.SolveConvDiff64_Double_SOLVER (469 ms)
+[       OK ] SOR_Test.SolveConvDiff64_Double_SOLVER (513 ms)
 [ RUN      ] SOR_Test.SolveConvDiff256_Double_LONGRUNTIME_SOLVER
 Testing w=1.25
 Display of Relative Residual L-2 Norm: 
@@ -2114,69 +2102,69 @@ Display of Relative Residual L-2 Norm:
                                                                   *****
 9.61e-11 ------------------------------------------------------------------
 Iter: 0                                                            Iter: 101
-[       OK ] SOR_Test.SolveConvDiff256_Double_LONGRUNTIME_SOLVER (4571 ms)
-[----------] 8 tests from SOR_Test (11024 ms total)
+[       OK ] SOR_Test.SolveConvDiff256_Double_LONGRUNTIME_SOLVER (5149 ms)
+[----------] 8 tests from SOR_Test (11852 ms total)
 
 [----------] 12 tests from GMRESSolve_Component_Test
 [ RUN      ] GMRESSolve_Component_Test.CheckConstruction5x5_SOLVER
-[       OK ] GMRESSolve_Component_Test.CheckConstruction5x5_SOLVER (17 ms)
+[       OK ] GMRESSolve_Component_Test.CheckConstruction5x5_SOLVER (24 ms)
 [ RUN      ] GMRESSolve_Component_Test.CheckConstruction64x64_SOLVER
-[       OK ] GMRESSolve_Component_Test.CheckConstruction64x64_SOLVER (1721 ms)
+[       OK ] GMRESSolve_Component_Test.CheckConstruction64x64_SOLVER (3286 ms)
 [ RUN      ] GMRESSolve_Component_Test.CheckCorrectDefaultMaxIter_SOLVER
-[       OK ] GMRESSolve_Component_Test.CheckCorrectDefaultMaxIter_SOLVER (7 ms)
+[       OK ] GMRESSolve_Component_Test.CheckCorrectDefaultMaxIter_SOLVER (9 ms)
 [ RUN      ] GMRESSolve_Component_Test.CheckErrorExceedDimension_SOLVER
 [       OK ] GMRESSolve_Component_Test.CheckErrorExceedDimension_SOLVER (1 ms)
 [ RUN      ] GMRESSolve_Component_Test.KrylovInitAndUpdate_SOLVER
-[       OK ] GMRESSolve_Component_Test.KrylovInitAndUpdate_SOLVER (29 ms)
+[       OK ] GMRESSolve_Component_Test.KrylovInitAndUpdate_SOLVER (49 ms)
 [ RUN      ] GMRESSolve_Component_Test.H_QR_Update_SOLVER
-[       OK ] GMRESSolve_Component_Test.H_QR_Update_SOLVER (56 ms)
+[       OK ] GMRESSolve_Component_Test.H_QR_Update_SOLVER (102 ms)
 [ RUN      ] GMRESSolve_Component_Test.Update_x_Back_Substitution_SOLVER
-[       OK ] GMRESSolve_Component_Test.Update_x_Back_Substitution_SOLVER (22 ms)
+[       OK ] GMRESSolve_Component_Test.Update_x_Back_Substitution_SOLVER (24 ms)
 [ RUN      ] GMRESSolve_Component_Test.KrylovLuckyBreakFirstIter_SOLVER
-[       OK ] GMRESSolve_Component_Test.KrylovLuckyBreakFirstIter_SOLVER (8 ms)
+[       OK ] GMRESSolve_Component_Test.KrylovLuckyBreakFirstIter_SOLVER (15 ms)
 [ RUN      ] GMRESSolve_Component_Test.KrylovLuckyBreakLaterIter_SOLVER
-[       OK ] GMRESSolve_Component_Test.KrylovLuckyBreakLaterIter_SOLVER (10 ms)
+[       OK ] GMRESSolve_Component_Test.KrylovLuckyBreakLaterIter_SOLVER (14 ms)
 [ RUN      ] GMRESSolve_Component_Test.KrylovLuckyBreakThroughSolve_SOLVER
-[       OK ] GMRESSolve_Component_Test.KrylovLuckyBreakThroughSolve_SOLVER (10 ms)
+[       OK ] GMRESSolve_Component_Test.KrylovLuckyBreakThroughSolve_SOLVER (15 ms)
 [ RUN      ] GMRESSolve_Component_Test.Solve_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 --------------------
- *********            
-          *****       
-               **     
-                 *    
-                  *   
+ ********             
+         ******       
+               ****   
+                   ** 
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                     *
+5.27e-16 -----------------
+Iter: 0           Iter: 20
+Display of Relative Residual L-2 Norm: 
+1 --------------------
+ ********             
+         ****         
+             ***      
+                ***   
                    *  
                     * 
                       
                       
                       
                       
-                     *
-4.28e-16 -----------------
-Iter: 0           Iter: 20
-Display of Relative Residual L-2 Norm: 
-1 --------------------
- ******               
-       ****           
-           *****      
-                **    
-                  **  
-                    * 
-                      
-                      
-                      
-                      
                       
                      *
-5.85e-16 -----------------
+2.71e-16 -----------------
 Iter: 0           Iter: 20
-[       OK ] GMRESSolve_Component_Test.Solve_SOLVER (89 ms)
+[       OK ] GMRESSolve_Component_Test.Solve_SOLVER (108 ms)
 [ RUN      ] GMRESSolve_Component_Test.Reset_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 --------------------
- ********             
-         *****        
+ *********            
+          ****        
               ****    
                   *** 
                       
@@ -2187,7 +2175,7 @@ Display of Relative Residual L-2 Norm:
                       
                       
                      *
-3.54e-16 -----------------
+4.22e-16 -----------------
 Iter: 0           Iter: 20
 Display of Relative Residual L-2 Norm: 
 1 ---
@@ -2207,8 +2195,8 @@ Display of Relative Residual L-2 Norm:
 Iter: 0   Iter: 0
 Display of Relative Residual L-2 Norm: 
 1 --------------------
- ********             
-         *****        
+ *********            
+          ****        
               ****    
                   *** 
                       
@@ -2219,15 +2207,15 @@ Display of Relative Residual L-2 Norm:
                       
                       
                      *
-3.54e-16 -----------------
+4.22e-16 -----------------
 Iter: 0           Iter: 20
 Display of Relative Residual L-2 Norm: 
 1 --------------------
- ******               
-       ******         
+ *******              
+        *****         
              ****     
-                 ***  
-                      
+                 **   
+                   *  
                     * 
                       
                       
@@ -2235,7 +2223,7 @@ Display of Relative Residual L-2 Norm:
                       
                       
                      *
-4.36e-16 -----------------
+6.62e-16 -----------------
 Iter: 0           Iter: 20
 Display of Relative Residual L-2 Norm: 
 1 ---
@@ -2255,11 +2243,11 @@ Display of Relative Residual L-2 Norm:
 Iter: 0   Iter: 0
 Display of Relative Residual L-2 Norm: 
 1 --------------------
- ******               
-       ******         
+ *******              
+        *****         
              ****     
-                 ***  
-                      
+                 **   
+                   *  
                     * 
                       
                       
@@ -2267,10 +2255,10 @@ Display of Relative Residual L-2 Norm:
                       
                       
                      *
-4.36e-16 -----------------
+6.62e-16 -----------------
 Iter: 0           Iter: 20
-[       OK ] GMRESSolve_Component_Test.Reset_SOLVER (364 ms)
-[----------] 12 tests from GMRESSolve_Component_Test (2340 ms total)
+[       OK ] GMRESSolve_Component_Test.Reset_SOLVER (625 ms)
+[----------] 12 tests from GMRESSolve_Component_Test (4279 ms total)
 
 [----------] 6 tests from GMRESSolve_Solve_HLF_Test
 [ RUN      ] GMRESSolve_Solve_HLF_Test.SolveConvDiff64_SOLVER
@@ -2306,7 +2294,7 @@ Display of Relative Residual L-2 Norm:
          *
 0.0423 -----
 Iter: 0   Iter: 8
-[       OK ] GMRESSolve_Solve_HLF_Test.SolveConvDiff64_SOLVER (43 ms)
+[       OK ] GMRESSolve_Solve_HLF_Test.SolveConvDiff64_SOLVER (38 ms)
 [ RUN      ] GMRESSolve_Solve_HLF_Test.SolveConvDiff256_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 -----------
@@ -2340,7 +2328,7 @@ Display of Relative Residual L-2 Norm:
             *
 0.0496 --------
 Iter: 0   Iter: 11
-[       OK ] GMRESSolve_Solve_HLF_Test.SolveConvDiff256_SOLVER (132 ms)
+[       OK ] GMRESSolve_Solve_HLF_Test.SolveConvDiff256_SOLVER (91 ms)
 [ RUN      ] GMRESSolve_Solve_HLF_Test.SolveConvDiff1024_LONGRUNTIME_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ---------------
@@ -2374,7 +2362,7 @@ Display of Relative Residual L-2 Norm:
              ****
 0.0494 ------------
 Iter: 0      Iter: 15
-[       OK ] GMRESSolve_Solve_HLF_Test.SolveConvDiff1024_LONGRUNTIME_SOLVER (1191 ms)
+[       OK ] GMRESSolve_Solve_HLF_Test.SolveConvDiff1024_LONGRUNTIME_SOLVER (316 ms)
 [ RUN      ] GMRESSolve_Solve_HLF_Test.SolveConvDiff20Rand_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 -------------------
@@ -2408,7 +2396,7 @@ Display of Relative Residual L-2 Norm:
                     *
 0.0254 ----------------
 Iter: 0          Iter: 19
-[       OK ] GMRESSolve_Solve_HLF_Test.SolveConvDiff20Rand_SOLVER (101 ms)
+[       OK ] GMRESSolve_Solve_HLF_Test.SolveConvDiff20Rand_SOLVER (91 ms)
 [ RUN      ] GMRESSolve_Solve_HLF_Test.SolveConvDiff3Eigs_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ---
@@ -2442,7 +2430,7 @@ Display of Relative Residual L-2 Norm:
     *
 0.00099 ---
 Iter: 0   Iter: 3
-[       OK ] GMRESSolve_Solve_HLF_Test.SolveConvDiff3Eigs_SOLVER (21 ms)
+[       OK ] GMRESSolve_Solve_HLF_Test.SolveConvDiff3Eigs_SOLVER (15 ms)
 [ RUN      ] GMRESSolve_Solve_HLF_Test.DivergeBeyondCapabilities_Half_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 --------
@@ -2508,8 +2496,8 @@ Display of Relative Residual L-2 Norm:
                                                                   
 9.77e-05 -------------------------------------------------------------
 Iter: 0                                                       Iter: 64
-[       OK ] GMRESSolve_Solve_HLF_Test.DivergeBeyondCapabilities_Half_SOLVER (380 ms)
-[----------] 6 tests from GMRESSolve_Solve_HLF_Test (1871 ms total)
+[       OK ] GMRESSolve_Solve_HLF_Test.DivergeBeyondCapabilities_Half_SOLVER (371 ms)
+[----------] 6 tests from GMRESSolve_Solve_HLF_Test (924 ms total)
 
 [----------] 6 tests from GMRESSolve_Solve_SGL_Test
 [ RUN      ] GMRESSolve_Solve_SGL_Test.SolveConvDiff64_SOLVER
@@ -2545,7 +2533,7 @@ Display of Relative Residual L-2 Norm:
                     *
 1.6e-06 ----------------
 Iter: 0          Iter: 19
-[       OK ] GMRESSolve_Solve_SGL_Test.SolveConvDiff64_SOLVER (83 ms)
+[       OK ] GMRESSolve_Solve_SGL_Test.SolveConvDiff64_SOLVER (70 ms)
 [ RUN      ] GMRESSolve_Solve_SGL_Test.SolveConvDiff256_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ------------------------------------
@@ -2579,7 +2567,7 @@ Display of Relative Residual L-2 Norm:
                                    ***
 3.51e-06 ---------------------------------
 Iter: 0                           Iter: 36
-[       OK ] GMRESSolve_Solve_SGL_Test.SolveConvDiff256_SOLVER (223 ms)
+[       OK ] GMRESSolve_Solve_SGL_Test.SolveConvDiff256_SOLVER (164 ms)
 [ RUN      ] GMRESSolve_Solve_SGL_Test.SolveConvDiff1024_LONGRUNTIME_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ---------------------------------------------------------------------
@@ -2613,7 +2601,7 @@ Display of Relative Residual L-2 Norm:
                                                                  ******
 4.13e-06 ------------------------------------------------------------------
 Iter: 0                                                            Iter: 69
-[       OK ] GMRESSolve_Solve_SGL_Test.SolveConvDiff1024_LONGRUNTIME_SOLVER (1295 ms)
+[       OK ] GMRESSolve_Solve_SGL_Test.SolveConvDiff1024_LONGRUNTIME_SOLVER (560 ms)
 [ RUN      ] GMRESSolve_Solve_SGL_Test.SolveConvDiff20Rand_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 --------------------
@@ -2647,7 +2635,7 @@ Display of Relative Residual L-2 Norm:
                      *
 1.38e-07 -----------------
 Iter: 0           Iter: 20
-[       OK ] GMRESSolve_Solve_SGL_Test.SolveConvDiff20Rand_SOLVER (90 ms)
+[       OK ] GMRESSolve_Solve_SGL_Test.SolveConvDiff20Rand_SOLVER (116 ms)
 [ RUN      ] GMRESSolve_Solve_SGL_Test.SolveConvDiff3Eigs_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ---
@@ -2681,7 +2669,7 @@ Display of Relative Residual L-2 Norm:
     *
 7.26e-08 ---
 Iter: 0   Iter: 3
-[       OK ] GMRESSolve_Solve_SGL_Test.SolveConvDiff3Eigs_SOLVER (15 ms)
+[       OK ] GMRESSolve_Solve_SGL_Test.SolveConvDiff3Eigs_SOLVER (11 ms)
 [ RUN      ] GMRESSolve_Solve_SGL_Test.DivergeBeyondCapabilities_Single_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 -------------------
@@ -2747,8 +2735,8 @@ Display of Relative Residual L-2 Norm:
                                                                   
 1.19e-08 -------------------------------------------------------------
 Iter: 0                                                       Iter: 64
-[       OK ] GMRESSolve_Solve_SGL_Test.DivergeBeyondCapabilities_Single_SOLVER (383 ms)
-[----------] 6 tests from GMRESSolve_Solve_SGL_Test (2092 ms total)
+[       OK ] GMRESSolve_Solve_SGL_Test.DivergeBeyondCapabilities_Single_SOLVER (322 ms)
+[----------] 6 tests from GMRESSolve_Solve_SGL_Test (1247 ms total)
 
 [----------] 5 tests from GMRESSolve_Solve_DBL_Test
 [ RUN      ] GMRESSolve_Solve_DBL_Test.SolveConvDiff64_SOLVER
@@ -2784,7 +2772,7 @@ Display of Relative Residual L-2 Norm:
                            **
 2.58e-11 ------------------------
 Iter: 0                  Iter: 27
-[       OK ] GMRESSolve_Solve_DBL_Test.SolveConvDiff64_SOLVER (125 ms)
+[       OK ] GMRESSolve_Solve_DBL_Test.SolveConvDiff64_SOLVER (114 ms)
 [ RUN      ] GMRESSolve_Solve_DBL_Test.SolveConvDiff256_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 -------------------------------------------------------
@@ -2818,7 +2806,7 @@ Display of Relative Residual L-2 Norm:
                                                      ****
 7.41e-11 ----------------------------------------------------
 Iter: 0                                              Iter: 55
-[       OK ] GMRESSolve_Solve_DBL_Test.SolveConvDiff256_SOLVER (330 ms)
+[       OK ] GMRESSolve_Solve_DBL_Test.SolveConvDiff256_SOLVER (319 ms)
 [ RUN      ] GMRESSolve_Solve_DBL_Test.SolveConvDiff1024_LONGRUNTIME_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ---------------------------------------------------------------------
@@ -2852,7 +2840,7 @@ Display of Relative Residual L-2 Norm:
                                                                     ***
 9.41e-11 ------------------------------------------------------------------
 Iter: 0                                                            Iter: 108
-[       OK ] GMRESSolve_Solve_DBL_Test.SolveConvDiff1024_LONGRUNTIME_SOLVER (1548 ms)
+[       OK ] GMRESSolve_Solve_DBL_Test.SolveConvDiff1024_LONGRUNTIME_SOLVER (816 ms)
 [ RUN      ] GMRESSolve_Solve_DBL_Test.SolveConvDiff20Rand_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 --------------------
@@ -2886,7 +2874,7 @@ Display of Relative Residual L-2 Norm:
                      *
 3.65e-16 -----------------
 Iter: 0           Iter: 20
-[       OK ] GMRESSolve_Solve_DBL_Test.SolveConvDiff20Rand_SOLVER (84 ms)
+[       OK ] GMRESSolve_Solve_DBL_Test.SolveConvDiff20Rand_SOLVER (77 ms)
 [ RUN      ] GMRESSolve_Solve_DBL_Test.SolveConvDiff3Eigs_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ---
@@ -2920,8 +2908,8 @@ Display of Relative Residual L-2 Norm:
     *
 2.49e-16 ---
 Iter: 0   Iter: 3
-[       OK ] GMRESSolve_Solve_DBL_Test.SolveConvDiff3Eigs_SOLVER (15 ms)
-[----------] 5 tests from GMRESSolve_Solve_DBL_Test (2105 ms total)
+[       OK ] GMRESSolve_Solve_DBL_Test.SolveConvDiff3Eigs_SOLVER (13 ms)
+[----------] 5 tests from GMRESSolve_Solve_DBL_Test (1342 ms total)
 
 [----------] 10 tests from PGMRES_Solve_Test
 [ RUN      ] PGMRES_Solve_Test.TestDefAndNoPreconditioningMatchesIdentity_SOLVER
@@ -3021,7 +3009,7 @@ Display of Relative Residual L-2 Norm:
                                               *
 3.66e-16 ------------------------------------------
 Iter: 0                                    Iter: 45
-[       OK ] PGMRES_Solve_Test.TestDefAndNoPreconditioningMatchesIdentity_SOLVER (607 ms)
+[       OK ] PGMRES_Solve_Test.TestDefAndNoPreconditioningMatchesIdentity_SOLVER (553 ms)
 [ RUN      ] PGMRES_Solve_Test.SolveSingleIter_Double_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ---
@@ -3119,7 +3107,7 @@ Display of Relative Residual L-2 Norm:
   *
 4.18e-15 ---
 Iter: 0   Iter: 1
-[       OK ] PGMRES_Solve_Test.SolveSingleIter_Double_SOLVER (59 ms)
+[       OK ] PGMRES_Solve_Test.SolveSingleIter_Double_SOLVER (24 ms)
 [ RUN      ] PGMRES_Solve_Test.SolveConvDiff256_Double_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 -------------------------
@@ -3185,7 +3173,7 @@ Display of Relative Residual L-2 Norm:
                          **
 4.69e-11 ----------------------
 Iter: 0                Iter: 25
-[       OK ] PGMRES_Solve_Test.SolveConvDiff256_Double_SOLVER (721 ms)
+[       OK ] PGMRES_Solve_Test.SolveConvDiff256_Double_SOLVER (549 ms)
 [ RUN      ] PGMRES_Solve_Test.SolveConvDiff1024_Double_LONGRUNTIME_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ----------------------------------------------
@@ -3251,7 +3239,7 @@ Display of Relative Residual L-2 Norm:
                                             ***
 8.67e-11 ------------------------------------------
 Iter: 0                                    Iter: 45
-[       OK ] PGMRES_Solve_Test.SolveConvDiff1024_Double_LONGRUNTIME_SOLVER (3494 ms)
+[       OK ] PGMRES_Solve_Test.SolveConvDiff1024_Double_LONGRUNTIME_SOLVER (1550 ms)
 [ RUN      ] PGMRES_Solve_Test.SolveSingleIter_Single_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ---
@@ -3349,7 +3337,7 @@ Display of Relative Residual L-2 Norm:
   *
 1.52e-07 ---
 Iter: 0   Iter: 1
-[       OK ] PGMRES_Solve_Test.SolveSingleIter_Single_SOLVER (60 ms)
+[       OK ] PGMRES_Solve_Test.SolveSingleIter_Single_SOLVER (20 ms)
 [ RUN      ] PGMRES_Solve_Test.SolveConvDiff256_Single_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ----------------
@@ -3415,7 +3403,7 @@ Display of Relative Residual L-2 Norm:
                  *
 1.97e-06 -------------
 Iter: 0       Iter: 16
-[       OK ] PGMRES_Solve_Test.SolveConvDiff256_Single_SOLVER (468 ms)
+[       OK ] PGMRES_Solve_Test.SolveConvDiff256_Single_SOLVER (325 ms)
 [ RUN      ] PGMRES_Solve_Test.SolveConvDiff1024_Single_LONGRUNTIME_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ----------------------------
@@ -3481,7 +3469,7 @@ Display of Relative Residual L-2 Norm:
                             **
 2.67e-06 -------------------------
 Iter: 0                   Iter: 28
-[       OK ] PGMRES_Solve_Test.SolveConvDiff1024_Single_LONGRUNTIME_SOLVER (2836 ms)
+[       OK ] PGMRES_Solve_Test.SolveConvDiff1024_Single_LONGRUNTIME_SOLVER (1129 ms)
 [ RUN      ] PGMRES_Solve_Test.SolveSingleIter_Half_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ---
@@ -3579,7 +3567,7 @@ Display of Relative Residual L-2 Norm:
   *
 0.000657 ---
 Iter: 0   Iter: 1
-[       OK ] PGMRES_Solve_Test.SolveSingleIter_Half_SOLVER (59 ms)
+[       OK ] PGMRES_Solve_Test.SolveSingleIter_Half_SOLVER (23 ms)
 [ RUN      ] PGMRES_Solve_Test.SolveConvDiff256_Half_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ------
@@ -3645,7 +3633,7 @@ Display of Relative Residual L-2 Norm:
       *
 0.0423 ---
 Iter: 0   Iter: 5
-[       OK ] PGMRES_Solve_Test.SolveConvDiff256_Half_SOLVER (317 ms)
+[       OK ] PGMRES_Solve_Test.SolveConvDiff256_Half_SOLVER (124 ms)
 [ RUN      ] PGMRES_Solve_Test.SolveConvDiff1024_Half_LONGRUNTIME_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ------
@@ -3711,32 +3699,32 @@ Display of Relative Residual L-2 Norm:
      **
 0.0485 ---
 Iter: 0   Iter: 5
-[       OK ] PGMRES_Solve_Test.SolveConvDiff1024_Half_LONGRUNTIME_SOLVER (3295 ms)
-[----------] 10 tests from PGMRES_Solve_Test (11921 ms total)
+[       OK ] PGMRES_Solve_Test.SolveConvDiff1024_Half_LONGRUNTIME_SOLVER (447 ms)
+[----------] 10 tests from PGMRES_Solve_Test (4749 ms total)
 
 [----------] 5 tests from Test_InnerOuterSolve
 [ RUN      ] Test_InnerOuterSolve.Test_Initialization
 [       OK ] Test_InnerOuterSolve.Test_Initialization (2 ms)
 [ RUN      ] Test_InnerOuterSolve.Test_Iterate
-[       OK ] Test_InnerOuterSolve.Test_Iterate (5 ms)
+[       OK ] Test_InnerOuterSolve.Test_Iterate (4 ms)
 [ RUN      ] Test_InnerOuterSolve.Test_Solve
-[       OK ] Test_InnerOuterSolve.Test_Solve (19 ms)
+[       OK ] Test_InnerOuterSolve.Test_Solve (16 ms)
 [ RUN      ] Test_InnerOuterSolve.Test_SolveEarlyEnd
 [       OK ] Test_InnerOuterSolve.Test_SolveEarlyEnd (17 ms)
 [ RUN      ] Test_InnerOuterSolve.Test_Reset
-[       OK ] Test_InnerOuterSolve.Test_Reset (21 ms)
-[----------] 5 tests from Test_InnerOuterSolve (67 ms total)
+[       OK ] Test_InnerOuterSolve.Test_Reset (17 ms)
+[----------] 5 tests from Test_InnerOuterSolve (58 ms total)
 
 [----------] 4 tests from Test_IterativeRefinementBase
 [ RUN      ] Test_IterativeRefinementBase.Test_Initialization
-[       OK ] Test_IterativeRefinementBase.Test_Initialization (3 ms)
+[       OK ] Test_IterativeRefinementBase.Test_Initialization (2 ms)
 [ RUN      ] Test_IterativeRefinementBase.Test_Iterate
-[       OK ] Test_IterativeRefinementBase.Test_Iterate (6 ms)
+[       OK ] Test_IterativeRefinementBase.Test_Iterate (4 ms)
 [ RUN      ] Test_IterativeRefinementBase.Test_Solve
-[       OK ] Test_IterativeRefinementBase.Test_Solve (10 ms)
+[       OK ] Test_IterativeRefinementBase.Test_Solve (7 ms)
 [ RUN      ] Test_IterativeRefinementBase.Test_NaN
-[       OK ] Test_IterativeRefinementBase.Test_NaN (8 ms)
-[----------] 4 tests from Test_IterativeRefinementBase (28 ms total)
+[       OK ] Test_IterativeRefinementBase.Test_NaN (7 ms)
+[----------] 4 tests from Test_IterativeRefinementBase (21 ms total)
 
 [----------] 9 tests from FP_GMRES_IR_Test
 [ RUN      ] FP_GMRES_IR_Test.SolveConvDiff64_Double_SOLVER
@@ -3772,7 +3760,7 @@ Display of Relative Residual L-2 Norm:
          *
 2e-11 -----
 Iter: 0   Iter: 8
-[       OK ] FP_GMRES_IR_Test.SolveConvDiff64_Double_SOLVER (336 ms)
+[       OK ] FP_GMRES_IR_Test.SolveConvDiff64_Double_SOLVER (269 ms)
 [ RUN      ] FP_GMRES_IR_Test.SolveConvDiff256_Double_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ------------------
@@ -3806,7 +3794,7 @@ Display of Relative Residual L-2 Norm:
                   **
 3.27e-11 ---------------
 Iter: 0         Iter: 18
-[       OK ] FP_GMRES_IR_Test.SolveConvDiff256_Double_SOLVER (821 ms)
+[       OK ] FP_GMRES_IR_Test.SolveConvDiff256_Double_SOLVER (611 ms)
 [ RUN      ] FP_GMRES_IR_Test.SolveConvDiff1024_Double_LONGRUNTIME_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 -------------------------------------------------------------------
@@ -3840,7 +3828,7 @@ Display of Relative Residual L-2 Norm:
                                                                ******
 8.99e-11 ----------------------------------------------------------------
 Iter: 0                                                          Iter: 67
-[       OK ] FP_GMRES_IR_Test.SolveConvDiff1024_Double_LONGRUNTIME_SOLVER (3545 ms)
+[       OK ] FP_GMRES_IR_Test.SolveConvDiff1024_Double_LONGRUNTIME_SOLVER (2584 ms)
 [ RUN      ] FP_GMRES_IR_Test.SolveConvDiff64_Single_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ----
@@ -3874,7 +3862,7 @@ Display of Relative Residual L-2 Norm:
      *
 2.07e-06 ---
 Iter: 0   Iter: 4
-[       OK ] FP_GMRES_IR_Test.SolveConvDiff64_Single_SOLVER (153 ms)
+[       OK ] FP_GMRES_IR_Test.SolveConvDiff64_Single_SOLVER (121 ms)
 [ RUN      ] FP_GMRES_IR_Test.SolveConvDiff256_Single_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ----------
@@ -3908,7 +3896,7 @@ Display of Relative Residual L-2 Norm:
            *
 1.76e-06 -------
 Iter: 0   Iter: 10
-[       OK ] FP_GMRES_IR_Test.SolveConvDiff256_Single_SOLVER (436 ms)
+[       OK ] FP_GMRES_IR_Test.SolveConvDiff256_Single_SOLVER (314 ms)
 [ RUN      ] FP_GMRES_IR_Test.SolveConvDiff1024_Single_LONGRUNTIME_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ----------------------------------
@@ -3942,7 +3930,7 @@ Display of Relative Residual L-2 Norm:
                                 ****
 4.53e-06 -------------------------------
 Iter: 0                         Iter: 34
-[       OK ] FP_GMRES_IR_Test.SolveConvDiff1024_Single_LONGRUNTIME_SOLVER (2187 ms)
+[       OK ] FP_GMRES_IR_Test.SolveConvDiff1024_Single_LONGRUNTIME_SOLVER (1275 ms)
 [ RUN      ] FP_GMRES_IR_Test.SolveConvDiff64_Half_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ---
@@ -3976,7 +3964,7 @@ Display of Relative Residual L-2 Norm:
   *
 0.043 ---
 Iter: 0   Iter: 1
-[       OK ] FP_GMRES_IR_Test.SolveConvDiff64_Half_SOLVER (41 ms)
+[       OK ] FP_GMRES_IR_Test.SolveConvDiff64_Half_SOLVER (32 ms)
 [ RUN      ] FP_GMRES_IR_Test.SolveConvDiff256_Half_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ---
@@ -4010,7 +3998,7 @@ Display of Relative Residual L-2 Norm:
    *
 0.0158 ---
 Iter: 0   Iter: 2
-[       OK ] FP_GMRES_IR_Test.SolveConvDiff256_Half_SOLVER (145 ms)
+[       OK ] FP_GMRES_IR_Test.SolveConvDiff256_Half_SOLVER (83 ms)
 [ RUN      ] FP_GMRES_IR_Test.SolveConvDiff1024_Half_LONGRUNTIME_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ---
@@ -4044,8 +4032,8 @@ Display of Relative Residual L-2 Norm:
    *
 0.0378 ---
 Iter: 0   Iter: 2
-[       OK ] FP_GMRES_IR_Test.SolveConvDiff1024_Half_LONGRUNTIME_SOLVER (954 ms)
-[----------] 9 tests from FP_GMRES_IR_Test (8622 ms total)
+[       OK ] FP_GMRES_IR_Test.SolveConvDiff1024_Half_LONGRUNTIME_SOLVER (189 ms)
+[----------] 9 tests from FP_GMRES_IR_Test (5482 ms total)
 
 [----------] 9 tests from Preconditioned_FP_GMRES_IR_Test
 [ RUN      ] Preconditioned_FP_GMRES_IR_Test.SolveSingleIterTest_Double_SOLVER
@@ -4145,7 +4133,7 @@ Display of Relative Residual L-2 Norm:
   *
 4.19e-15 ---
 Iter: 0   Iter: 1
-[       OK ] Preconditioned_FP_GMRES_IR_Test.SolveSingleIterTest_Double_SOLVER (74 ms)
+[       OK ] Preconditioned_FP_GMRES_IR_Test.SolveSingleIterTest_Double_SOLVER (36 ms)
 [ RUN      ] Preconditioned_FP_GMRES_IR_Test.SolveConvDiff256_Double_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ----
@@ -4211,7 +4199,7 @@ Display of Relative Residual L-2 Norm:
      *
 9.56e-11 ---
 Iter: 0   Iter: 4
-[       OK ] Preconditioned_FP_GMRES_IR_Test.SolveConvDiff256_Double_SOLVER (1317 ms)
+[       OK ] Preconditioned_FP_GMRES_IR_Test.SolveConvDiff256_Double_SOLVER (1130 ms)
 [ RUN      ] Preconditioned_FP_GMRES_IR_Test.SolveConvDiff1024_Double_LONGRUNTIME_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 -----------
@@ -4277,7 +4265,7 @@ Display of Relative Residual L-2 Norm:
             *
 1.42e-11 --------
 Iter: 0   Iter: 11
-[       OK ] Preconditioned_FP_GMRES_IR_Test.SolveConvDiff1024_Double_LONGRUNTIME_SOLVER (5913 ms)
+[       OK ] Preconditioned_FP_GMRES_IR_Test.SolveConvDiff1024_Double_LONGRUNTIME_SOLVER (4701 ms)
 [ RUN      ] Preconditioned_FP_GMRES_IR_Test.SolveSingleIterTest_Single_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ---
@@ -4375,7 +4363,7 @@ Display of Relative Residual L-2 Norm:
   *
 1.55e-07 ---
 Iter: 0   Iter: 1
-[       OK ] Preconditioned_FP_GMRES_IR_Test.SolveSingleIterTest_Single_SOLVER (73 ms)
+[       OK ] Preconditioned_FP_GMRES_IR_Test.SolveSingleIterTest_Single_SOLVER (30 ms)
 [ RUN      ] Preconditioned_FP_GMRES_IR_Test.SolveConvDiff256_Single_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ---
@@ -4441,7 +4429,7 @@ Display of Relative Residual L-2 Norm:
     *
 1.7e-08 ---
 Iter: 0   Iter: 3
-[       OK ] Preconditioned_FP_GMRES_IR_Test.SolveConvDiff256_Single_SOLVER (744 ms)
+[       OK ] Preconditioned_FP_GMRES_IR_Test.SolveConvDiff256_Single_SOLVER (625 ms)
 [ RUN      ] Preconditioned_FP_GMRES_IR_Test.SolveConvDiff1024_Single_LONGRUNTIME_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 -----
@@ -4507,7 +4495,7 @@ Display of Relative Residual L-2 Norm:
       *
 2.72e-06 ---
 Iter: 0   Iter: 5
-[       OK ] Preconditioned_FP_GMRES_IR_Test.SolveConvDiff1024_Single_LONGRUNTIME_SOLVER (3201 ms)
+[       OK ] Preconditioned_FP_GMRES_IR_Test.SolveConvDiff1024_Single_LONGRUNTIME_SOLVER (2091 ms)
 [ RUN      ] Preconditioned_FP_GMRES_IR_Test.SolveSingleIterTest_Half_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ---
@@ -4605,7 +4593,7 @@ Display of Relative Residual L-2 Norm:
   *
 0.000646 ---
 Iter: 0   Iter: 1
-[       OK ] Preconditioned_FP_GMRES_IR_Test.SolveSingleIterTest_Half_SOLVER (74 ms)
+[       OK ] Preconditioned_FP_GMRES_IR_Test.SolveSingleIterTest_Half_SOLVER (34 ms)
 [ RUN      ] Preconditioned_FP_GMRES_IR_Test.SolveConvDiff256_Half_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ---
@@ -4671,7 +4659,7 @@ Display of Relative Residual L-2 Norm:
   *
 0.0423 ---
 Iter: 0   Iter: 1
-[       OK ] Preconditioned_FP_GMRES_IR_Test.SolveConvDiff256_Half_SOLVER (343 ms)
+[       OK ] Preconditioned_FP_GMRES_IR_Test.SolveConvDiff256_Half_SOLVER (153 ms)
 [ RUN      ] Preconditioned_FP_GMRES_IR_Test.HalfConvergenceTest_ConvDiff1024_LONGRUNTIME_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ---
@@ -4737,17 +4725,17 @@ Display of Relative Residual L-2 Norm:
   *
 0.0488 ---
 Iter: 0   Iter: 1
-[       OK ] Preconditioned_FP_GMRES_IR_Test.HalfConvergenceTest_ConvDiff1024_LONGRUNTIME_SOLVER (2355 ms)
-[----------] 9 tests from Preconditioned_FP_GMRES_IR_Test (14098 ms total)
+[       OK ] Preconditioned_FP_GMRES_IR_Test.HalfConvergenceTest_ConvDiff1024_LONGRUNTIME_SOLVER (367 ms)
+[----------] 9 tests from Preconditioned_FP_GMRES_IR_Test (9171 ms total)
 
 [----------] 3 tests from VP_GMRES_IR_Component_Test
 [ RUN      ] VP_GMRES_IR_Component_Test.Test_Constructor_SOLVER
-[       OK ] VP_GMRES_IR_Component_Test.Test_Constructor_SOLVER (3 ms)
+[       OK ] VP_GMRES_IR_Component_Test.Test_Constructor_SOLVER (14 ms)
 [ RUN      ] VP_GMRES_IR_Component_Test.Test_SetCorrectPhaseSolvers_SOLVER
-[       OK ] VP_GMRES_IR_Component_Test.Test_SetCorrectPhaseSolvers_SOLVER (13 ms)
+[       OK ] VP_GMRES_IR_Component_Test.Test_SetCorrectPhaseSolvers_SOLVER (10 ms)
 [ RUN      ] VP_GMRES_IR_Component_Test.Test_Reset_SOLVER
-[       OK ] VP_GMRES_IR_Component_Test.Test_Reset_SOLVER (11 ms)
-[----------] 3 tests from VP_GMRES_IR_Component_Test (27 ms total)
+[       OK ] VP_GMRES_IR_Component_Test.Test_Reset_SOLVER (8 ms)
+[----------] 3 tests from VP_GMRES_IR_Component_Test (33 ms total)
 
 [----------] 21 tests from VP_GMRES_IR_Solve_Test
 [ RUN      ] VP_GMRES_IR_Solve_Test.OuterRestartCount_SolveConvDiff64_SOLVER
@@ -4783,7 +4771,7 @@ Display of Relative Residual L-2 Norm:
                      *
 7.22e-12 -----------------
 Iter: 0           Iter: 20
-[       OK ] VP_GMRES_IR_Solve_Test.OuterRestartCount_SolveConvDiff64_SOLVER (414 ms)
+[       OK ] VP_GMRES_IR_Solve_Test.OuterRestartCount_SolveConvDiff64_SOLVER (310 ms)
 [ RUN      ] VP_GMRES_IR_Solve_Test.OuterRestartCount_SolveConvDiff256_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 -------------------------
@@ -4817,7 +4805,7 @@ Display of Relative Residual L-2 Norm:
                          **
 5.54e-11 ----------------------
 Iter: 0                Iter: 25
-[       OK ] VP_GMRES_IR_Solve_Test.OuterRestartCount_SolveConvDiff256_SOLVER (866 ms)
+[       OK ] VP_GMRES_IR_Solve_Test.OuterRestartCount_SolveConvDiff256_SOLVER (697 ms)
 [ RUN      ] VP_GMRES_IR_Solve_Test.OuterRestartCount_SolveConvDiff1024_LONGRUNTIME_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 -----------------------------------------------------------
@@ -4851,7 +4839,7 @@ Display of Relative Residual L-2 Norm:
                                                                ******
 7.67e-11 ----------------------------------------------------------------
 Iter: 0                                                          Iter: 67
-[       OK ] VP_GMRES_IR_Solve_Test.OuterRestartCount_SolveConvDiff1024_LONGRUNTIME_SOLVER (3444 ms)
+[       OK ] VP_GMRES_IR_Solve_Test.OuterRestartCount_SolveConvDiff1024_LONGRUNTIME_SOLVER (2398 ms)
 [ RUN      ] VP_GMRES_IR_Solve_Test.SD_OuterRestartCount_SolveConvDiff64_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 --------
@@ -4885,7 +4873,7 @@ Display of Relative Residual L-2 Norm:
          *
 2e-11 -----
 Iter: 0   Iter: 8
-[       OK ] VP_GMRES_IR_Solve_Test.SD_OuterRestartCount_SolveConvDiff64_SOLVER (301 ms)
+[       OK ] VP_GMRES_IR_Solve_Test.SD_OuterRestartCount_SolveConvDiff64_SOLVER (250 ms)
 [ RUN      ] VP_GMRES_IR_Solve_Test.SD_OuterRestartCount_SolveConvDiff256_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 -----------------
@@ -4919,7 +4907,7 @@ Display of Relative Residual L-2 Norm:
                   **
 3.34e-11 ---------------
 Iter: 0         Iter: 18
-[       OK ] VP_GMRES_IR_Solve_Test.SD_OuterRestartCount_SolveConvDiff256_SOLVER (716 ms)
+[       OK ] VP_GMRES_IR_Solve_Test.SD_OuterRestartCount_SolveConvDiff256_SOLVER (580 ms)
 [ RUN      ] VP_GMRES_IR_Solve_Test.SD_OuterRestartCount_SolveConvDiff1024_LONGRUNTIME_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 -------------------------------------------------------------------
@@ -4953,7 +4941,7 @@ Display of Relative Residual L-2 Norm:
                                                                  ******
 8.99e-11 ------------------------------------------------------------------
 Iter: 0                                                            Iter: 70
-[       OK ] VP_GMRES_IR_Solve_Test.SD_OuterRestartCount_SolveConvDiff1024_LONGRUNTIME_SOLVER (3616 ms)
+[       OK ] VP_GMRES_IR_Solve_Test.SD_OuterRestartCount_SolveConvDiff1024_LONGRUNTIME_SOLVER (2642 ms)
 [ RUN      ] VP_GMRES_IR_Solve_Test.RelativeResidualThreshold_SolveConvDiff64_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 --------
@@ -4987,7 +4975,7 @@ Display of Relative Residual L-2 Norm:
          *
 5.55e-12 -----
 Iter: 0   Iter: 8
-[       OK ] VP_GMRES_IR_Solve_Test.RelativeResidualThreshold_SolveConvDiff64_SOLVER (310 ms)
+[       OK ] VP_GMRES_IR_Solve_Test.RelativeResidualThreshold_SolveConvDiff64_SOLVER (260 ms)
 [ RUN      ] VP_GMRES_IR_Solve_Test.RelativeResidualThreshold_SolveConvDiff256_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 -------------------
@@ -5021,7 +5009,7 @@ Display of Relative Residual L-2 Norm:
                    **
 7.03e-11 ----------------
 Iter: 0          Iter: 19
-[       OK ] VP_GMRES_IR_Solve_Test.RelativeResidualThreshold_SolveConvDiff256_SOLVER (814 ms)
+[       OK ] VP_GMRES_IR_Solve_Test.RelativeResidualThreshold_SolveConvDiff256_SOLVER (745 ms)
 [ RUN      ] VP_GMRES_IR_Solve_Test.RelativeResidualThreshold_SolveConvDiff1024_LONGRUNTIME_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 -----------------------------------------------------------
@@ -5055,7 +5043,7 @@ Display of Relative Residual L-2 Norm:
                                                              ******
 7.52e-11 --------------------------------------------------------------
 Iter: 0                                                        Iter: 65
-[       OK ] VP_GMRES_IR_Solve_Test.RelativeResidualThreshold_SolveConvDiff1024_LONGRUNTIME_SOLVER (3350 ms)
+[       OK ] VP_GMRES_IR_Solve_Test.RelativeResidualThreshold_SolveConvDiff1024_LONGRUNTIME_SOLVER (2390 ms)
 [ RUN      ] VP_GMRES_IR_Solve_Test.SD_RelativeResidualThreshold_SolveConvDiff64_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 --------
@@ -5089,7 +5077,7 @@ Display of Relative Residual L-2 Norm:
          *
 2e-11 -----
 Iter: 0   Iter: 8
-[       OK ] VP_GMRES_IR_Solve_Test.SD_RelativeResidualThreshold_SolveConvDiff64_SOLVER (299 ms)
+[       OK ] VP_GMRES_IR_Solve_Test.SD_RelativeResidualThreshold_SolveConvDiff64_SOLVER (275 ms)
 [ RUN      ] VP_GMRES_IR_Solve_Test.SD_RelativeResidualThreshold_SolveConvDiff256_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 -----------------
@@ -5123,7 +5111,7 @@ Display of Relative Residual L-2 Norm:
                   **
 3.34e-11 ---------------
 Iter: 0         Iter: 18
-[       OK ] VP_GMRES_IR_Solve_Test.SD_RelativeResidualThreshold_SolveConvDiff256_SOLVER (727 ms)
+[       OK ] VP_GMRES_IR_Solve_Test.SD_RelativeResidualThreshold_SolveConvDiff256_SOLVER (616 ms)
 [ RUN      ] VP_GMRES_IR_Solve_Test.SD_RelativeResidualThreshold_SolveConvDiff1024_LONGRUNTIME_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 -------------------------------------------------------------------
@@ -5157,7 +5145,7 @@ Display of Relative Residual L-2 Norm:
                                                                  ******
 8.99e-11 ------------------------------------------------------------------
 Iter: 0                                                            Iter: 70
-[       OK ] VP_GMRES_IR_Solve_Test.SD_RelativeResidualThreshold_SolveConvDiff1024_LONGRUNTIME_SOLVER (3567 ms)
+[       OK ] VP_GMRES_IR_Solve_Test.SD_RelativeResidualThreshold_SolveConvDiff1024_LONGRUNTIME_SOLVER (2654 ms)
 [ RUN      ] VP_GMRES_IR_Solve_Test.CheckStagnation_SolveConvDiff64_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ---------
@@ -5191,7 +5179,7 @@ Display of Relative Residual L-2 Norm:
           *
 7.22e-12 ------
 Iter: 0   Iter: 9
-[       OK ] VP_GMRES_IR_Solve_Test.CheckStagnation_SolveConvDiff64_SOLVER (317 ms)
+[       OK ] VP_GMRES_IR_Solve_Test.CheckStagnation_SolveConvDiff64_SOLVER (257 ms)
 [ RUN      ] VP_GMRES_IR_Solve_Test.CheckStagnation_SolveConvDiff256_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 --------------------
@@ -5225,7 +5213,7 @@ Display of Relative Residual L-2 Norm:
                     **
 5.54e-11 -----------------
 Iter: 0           Iter: 20
-[       OK ] VP_GMRES_IR_Solve_Test.CheckStagnation_SolveConvDiff256_SOLVER (812 ms)
+[       OK ] VP_GMRES_IR_Solve_Test.CheckStagnation_SolveConvDiff256_SOLVER (656 ms)
 [ RUN      ] VP_GMRES_IR_Solve_Test.CheckStagnation_SolveConvDiff1024_LONGRUNTIME_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ----------------------------------------------------------------
@@ -5259,7 +5247,7 @@ Display of Relative Residual L-2 Norm:
                                                               *****
 7.3e-11 --------------------------------------------------------------
 Iter: 0                                                        Iter: 65
-[       OK ] VP_GMRES_IR_Solve_Test.CheckStagnation_SolveConvDiff1024_LONGRUNTIME_SOLVER (3587 ms)
+[       OK ] VP_GMRES_IR_Solve_Test.CheckStagnation_SolveConvDiff1024_LONGRUNTIME_SOLVER (2447 ms)
 [ RUN      ] VP_GMRES_IR_Solve_Test.SD_CheckStagnation_SolveConvDiff64_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 --------
@@ -5293,7 +5281,7 @@ Display of Relative Residual L-2 Norm:
          *
 2e-11 -----
 Iter: 0   Iter: 8
-[       OK ] VP_GMRES_IR_Solve_Test.SD_CheckStagnation_SolveConvDiff64_SOLVER (318 ms)
+[       OK ] VP_GMRES_IR_Solve_Test.SD_CheckStagnation_SolveConvDiff64_SOLVER (258 ms)
 [ RUN      ] VP_GMRES_IR_Solve_Test.SD_CheckStagnation_SolveConvDiff256_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 -----------------
@@ -5327,7 +5315,7 @@ Display of Relative Residual L-2 Norm:
                   **
 3.34e-11 ---------------
 Iter: 0         Iter: 18
-[       OK ] VP_GMRES_IR_Solve_Test.SD_CheckStagnation_SolveConvDiff256_SOLVER (742 ms)
+[       OK ] VP_GMRES_IR_Solve_Test.SD_CheckStagnation_SolveConvDiff256_SOLVER (619 ms)
 [ RUN      ] VP_GMRES_IR_Solve_Test.SD_CheckStagnation_SolveConvDiff1024_LONGRUNTIME_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 -------------------------------------------------------------------
@@ -5361,7 +5349,7 @@ Display of Relative Residual L-2 Norm:
                                                                  ******
 8.99e-11 ------------------------------------------------------------------
 Iter: 0                                                            Iter: 70
-[       OK ] VP_GMRES_IR_Solve_Test.SD_CheckStagnation_SolveConvDiff1024_LONGRUNTIME_SOLVER (3578 ms)
+[       OK ] VP_GMRES_IR_Solve_Test.SD_CheckStagnation_SolveConvDiff1024_LONGRUNTIME_SOLVER (2530 ms)
 [ RUN      ] VP_GMRES_IR_Solve_Test.StagnationToThreshold_SolveConvDiff64_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ---------
@@ -5395,7 +5383,7 @@ Display of Relative Residual L-2 Norm:
           *
 7.22e-12 ------
 Iter: 0   Iter: 9
-[       OK ] VP_GMRES_IR_Solve_Test.StagnationToThreshold_SolveConvDiff64_SOLVER (333 ms)
+[       OK ] VP_GMRES_IR_Solve_Test.StagnationToThreshold_SolveConvDiff64_SOLVER (327 ms)
 [ RUN      ] VP_GMRES_IR_Solve_Test.StagnationToThreshold_SolveConvDiff256_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 --------------------
@@ -5429,7 +5417,7 @@ Display of Relative Residual L-2 Norm:
                     **
 5.54e-11 -----------------
 Iter: 0           Iter: 20
-[       OK ] VP_GMRES_IR_Solve_Test.StagnationToThreshold_SolveConvDiff256_SOLVER (849 ms)
+[       OK ] VP_GMRES_IR_Solve_Test.StagnationToThreshold_SolveConvDiff256_SOLVER (699 ms)
 [ RUN      ] VP_GMRES_IR_Solve_Test.StagnationToThreshold_SolveConvDiff1024_LONGRUNTIME_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ----------------------------------------------------------------
@@ -5463,8 +5451,8 @@ Display of Relative Residual L-2 Norm:
                                                               *****
 7.28e-11 --------------------------------------------------------------
 Iter: 0                                                        Iter: 65
-[       OK ] VP_GMRES_IR_Solve_Test.StagnationToThreshold_SolveConvDiff1024_LONGRUNTIME_SOLVER (3575 ms)
-[----------] 21 tests from VP_GMRES_IR_Solve_Test (32548 ms total)
+[       OK ] VP_GMRES_IR_Solve_Test.StagnationToThreshold_SolveConvDiff1024_LONGRUNTIME_SOLVER (2467 ms)
+[----------] 21 tests from VP_GMRES_IR_Solve_Test (24087 ms total)
 
 [----------] 3 tests from Preconditioned_VP_GMRES_IR_Test
 [ RUN      ] Preconditioned_VP_GMRES_IR_Test.SolveMinimumIterTest_SOLVER
@@ -5564,7 +5552,7 @@ Display of Relative Residual L-2 Norm:
     *
 3.97e-18 ---
 Iter: 0   Iter: 3
-[       OK ] Preconditioned_VP_GMRES_IR_Test.SolveMinimumIterTest_SOLVER (323 ms)
+[       OK ] Preconditioned_VP_GMRES_IR_Test.SolveMinimumIterTest_SOLVER (227 ms)
 [ RUN      ] Preconditioned_VP_GMRES_IR_Test.SolveConvDiff256_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ------------------
@@ -5630,7 +5618,7 @@ Display of Relative Residual L-2 Norm:
                    *
 1.13e-12 ---------------
 Iter: 0         Iter: 18
-[       OK ] Preconditioned_VP_GMRES_IR_Test.SolveConvDiff256_SOLVER (1645 ms)
+[       OK ] Preconditioned_VP_GMRES_IR_Test.SolveConvDiff256_SOLVER (1418 ms)
 [ RUN      ] Preconditioned_VP_GMRES_IR_Test.SolveConvDiff1024_LONGRUNTIME_SOLVER
 Display of Relative Residual L-2 Norm: 
 1 ---------------------
@@ -5696,212 +5684,212 @@ Display of Relative Residual L-2 Norm:
                       *
 4.93e-11 ------------------
 Iter: 0            Iter: 21
-[       OK ] Preconditioned_VP_GMRES_IR_Test.SolveConvDiff1024_LONGRUNTIME_SOLVER (5842 ms)
-[----------] 3 tests from Preconditioned_VP_GMRES_IR_Test (7811 ms total)
+[       OK ] Preconditioned_VP_GMRES_IR_Test.SolveConvDiff1024_LONGRUNTIME_SOLVER (4462 ms)
+[----------] 3 tests from Preconditioned_VP_GMRES_IR_Test (6109 ms total)
 
 [----------] Global test environment tear-down
-[==========] 383 tests from 42 test suites ran. (180921 ms total)
+[==========] 383 tests from 42 test suites ran. (208280 ms total)
 [  PASSED  ] 383 tests.
 
-Command: .\install\experimentation\test\test_experiment.exe
+Command: ./install/experimentation/test/test_experiment
 
 Not printing expected errors...
 [==========] Running 24 tests from 5 test suites.
 [----------] Global test environment set-up.
 [----------] 6 tests from Test_Experiment_Data
 [ RUN      ] Test_Experiment_Data.Test_Load_Lin_Sys
-[05/08/25 10:36:30] [info] Load linear system from: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_data\easy_4_4.csv
-[05/08/25 10:36:30] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 5 | Fill ratio: 0.312 | Max magnitude: 1
-[05/08/25 10:36:30] [info] b vector info: Rows: 4 | Non-zeroes: 4 | Fill ratio: 1 | Max magnitude: 0.67
-[05/08/25 10:36:30] [info] Load linear system from: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_data\easy_4_4.csv
-[05/08/25 10:36:30] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 5 | Fill ratio: 0.312 | Max magnitude: 1
-[05/08/25 10:36:30] [info] b vector info: Rows: 4 | Non-zeroes: 4 | Fill ratio: 1 | Max magnitude: 0.948
-[05/08/25 10:36:30] [info] Load linear system from: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_data\easy_4_4.mtx
-[05/08/25 10:36:30] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 5 | Fill ratio: 0.312 | Max magnitude: 1
-[05/08/25 10:36:30] [info] b vector info: Rows: 4 | Non-zeroes: 4 | Fill ratio: 1 | Max magnitude: 0.981
-[05/08/25 10:36:30] [info] Load linear system from: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_data\easy_4_4.mtx
-[05/08/25 10:36:30] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 5 | Fill ratio: 0.312 | Max magnitude: 1
-[05/08/25 10:36:30] [info] b vector info: Rows: 4 | Non-zeroes: 4 | Fill ratio: 1 | Max magnitude: 0.955
+[05/08/25 10:46:51] [info] Load linear system from: /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_data/easy_4_4.csv
+[05/08/25 10:46:51] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 5 | Fill ratio: 0.312 | Max magnitude: 1
+[05/08/25 10:46:51] [info] b vector info: Rows: 4 | Non-zeroes: 4 | Fill ratio: 1 | Max magnitude: 0.689
+[05/08/25 10:46:51] [info] Load linear system from: /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_data/easy_4_4.csv
+[05/08/25 10:46:51] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 5 | Fill ratio: 0.312 | Max magnitude: 1
+[05/08/25 10:46:51] [info] b vector info: Rows: 4 | Non-zeroes: 4 | Fill ratio: 1 | Max magnitude: 0.756
+[05/08/25 10:46:51] [info] Load linear system from: /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_data/easy_4_4.mtx
+[05/08/25 10:46:51] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 5 | Fill ratio: 0.312 | Max magnitude: 1
+[05/08/25 10:46:51] [info] b vector info: Rows: 4 | Non-zeroes: 4 | Fill ratio: 1 | Max magnitude: 0.916
+[05/08/25 10:46:51] [info] Load linear system from: /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_data/easy_4_4.mtx
+[05/08/25 10:46:51] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 5 | Fill ratio: 0.312 | Max magnitude: 1
+[05/08/25 10:46:51] [info] b vector info: Rows: 4 | Non-zeroes: 4 | Fill ratio: 1 | Max magnitude: 0.679
 [       OK ] Test_Experiment_Data.Test_Load_Lin_Sys (55 ms)
 [ RUN      ] Test_Experiment_Data.Test_Load_Lin_Sys_w_RHS
-[05/08/25 10:36:30] [info] Load linear system from: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_data\paired_mat.csv
-[05/08/25 10:36:30] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 7 | Fill ratio: 0.438 | Max magnitude: 1
-[05/08/25 10:36:30] [info] b vector info: Rows: 4 | Non-zeroes: 4 | Fill ratio: 1 | Max magnitude: 2.25
-[05/08/25 10:36:30] [info] Load linear system from: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_data\paired_mat.csv
-[05/08/25 10:36:30] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 7 | Fill ratio: 0.438 | Max magnitude: 1
-[05/08/25 10:36:30] [info] b vector info: Rows: 4 | Non-zeroes: 4 | Fill ratio: 1 | Max magnitude: 2.25
-[05/08/25 10:36:30] [info] Load linear system from: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_data\paired_mat.mtx
-[05/08/25 10:36:30] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 4 | Fill ratio: 0.25 | Max magnitude: 1
-[05/08/25 10:36:30] [info] b vector info: Rows: 4 | Non-zeroes: 1 | Fill ratio: 0.25 | Max magnitude: 1
-[05/08/25 10:36:30] [info] Load linear system from: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_data\paired_mat.mtx
-[05/08/25 10:36:30] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 4 | Fill ratio: 0.25 | Max magnitude: 1
-[05/08/25 10:36:30] [info] b vector info: Rows: 4 | Non-zeroes: 1 | Fill ratio: 0.25 | Max magnitude: 1
-[       OK ] Test_Experiment_Data.Test_Load_Lin_Sys_w_RHS (31 ms)
+[05/08/25 10:46:51] [info] Load linear system from: /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_data/paired_mat.csv
+[05/08/25 10:46:51] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 7 | Fill ratio: 0.438 | Max magnitude: 1
+[05/08/25 10:46:51] [info] b vector info: Rows: 4 | Non-zeroes: 4 | Fill ratio: 1 | Max magnitude: 2.25
+[05/08/25 10:46:51] [info] Load linear system from: /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_data/paired_mat.csv
+[05/08/25 10:46:51] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 7 | Fill ratio: 0.438 | Max magnitude: 1
+[05/08/25 10:46:51] [info] b vector info: Rows: 4 | Non-zeroes: 4 | Fill ratio: 1 | Max magnitude: 2.25
+[05/08/25 10:46:51] [info] Load linear system from: /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_data/paired_mat.mtx
+[05/08/25 10:46:51] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 4 | Fill ratio: 0.25 | Max magnitude: 1
+[05/08/25 10:46:51] [info] b vector info: Rows: 4 | Non-zeroes: 1 | Fill ratio: 0.25 | Max magnitude: 0.75
+[05/08/25 10:46:51] [info] Load linear system from: /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_data/paired_mat.mtx
+[05/08/25 10:46:51] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 4 | Fill ratio: 0.25 | Max magnitude: 1
+[05/08/25 10:46:51] [info] b vector info: Rows: 4 | Non-zeroes: 1 | Fill ratio: 0.25 | Max magnitude: 0.75
+[       OK ] Test_Experiment_Data.Test_Load_Lin_Sys_w_RHS (19 ms)
 [ RUN      ] Test_Experiment_Data.Test_Mismatch_Load_Lin_Sys_w_RHS
-[05/08/25 10:36:30] [info] Load linear system from: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_data\bad_paired_mat_small.csv
-[05/08/25 10:36:30] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 7 | Fill ratio: 0.438 | Max magnitude: 1
-[05/08/25 10:36:30] [info] b vector info: Rows: 3 | Non-zeroes: 3 | Fill ratio: 1 | Max magnitude: 2.25
-[05/08/25 10:36:30] [info] Load linear system from: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_data\bad_paired_mat_small.csv
-[05/08/25 10:36:30] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 7 | Fill ratio: 0.438 | Max magnitude: 1
-[05/08/25 10:36:30] [info] b vector info: Rows: 3 | Non-zeroes: 3 | Fill ratio: 1 | Max magnitude: 2.25
-[05/08/25 10:36:30] [info] Load linear system from: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_data\bad_paired_mat_small.mtx
-[05/08/25 10:36:30] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 4 | Fill ratio: 0.25 | Max magnitude: 1
-[05/08/25 10:36:30] [info] b vector info: Rows: 3 | Non-zeroes: 0 | Fill ratio: 0 | Max magnitude: 0
-[05/08/25 10:36:30] [info] Load linear system from: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_data\bad_paired_mat_small.mtx
-[05/08/25 10:36:30] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 4 | Fill ratio: 0.25 | Max magnitude: 1
-[05/08/25 10:36:30] [info] b vector info: Rows: 3 | Non-zeroes: 0 | Fill ratio: 0 | Max magnitude: 0
-[05/08/25 10:36:30] [info] Load linear system from: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_data\bad_paired_mat_big.csv
-[05/08/25 10:36:30] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 7 | Fill ratio: 0.438 | Max magnitude: 1
-[05/08/25 10:36:30] [info] b vector info: Rows: 5 | Non-zeroes: 5 | Fill ratio: 1 | Max magnitude: 2.25
-[05/08/25 10:36:30] [info] Load linear system from: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_data\bad_paired_mat_big.csv
-[05/08/25 10:36:30] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 7 | Fill ratio: 0.438 | Max magnitude: 1
-[05/08/25 10:36:30] [info] b vector info: Rows: 5 | Non-zeroes: 5 | Fill ratio: 1 | Max magnitude: 2.25
-[05/08/25 10:36:30] [info] Load linear system from: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_data\bad_paired_mat_big.mtx
-[05/08/25 10:36:30] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 4 | Fill ratio: 0.25 | Max magnitude: 1
-[05/08/25 10:36:30] [info] b vector info: Rows: 5 | Non-zeroes: 0 | Fill ratio: 0 | Max magnitude: 0
-[05/08/25 10:36:30] [info] Load linear system from: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_data\bad_paired_mat_big.mtx
-[05/08/25 10:36:30] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 4 | Fill ratio: 0.25 | Max magnitude: 1
-[05/08/25 10:36:30] [info] b vector info: Rows: 5 | Non-zeroes: 0 | Fill ratio: 0 | Max magnitude: 0
-[       OK ] Test_Experiment_Data.Test_Mismatch_Load_Lin_Sys_w_RHS (25 ms)
+[05/08/25 10:46:51] [info] Load linear system from: /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_data/bad_paired_mat_small.csv
+[05/08/25 10:46:51] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 7 | Fill ratio: 0.438 | Max magnitude: 1
+[05/08/25 10:46:51] [info] b vector info: Rows: 3 | Non-zeroes: 3 | Fill ratio: 1 | Max magnitude: 2.25
+[05/08/25 10:46:51] [info] Load linear system from: /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_data/bad_paired_mat_small.csv
+[05/08/25 10:46:51] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 7 | Fill ratio: 0.438 | Max magnitude: 1
+[05/08/25 10:46:51] [info] b vector info: Rows: 3 | Non-zeroes: 3 | Fill ratio: 1 | Max magnitude: 2.25
+[05/08/25 10:46:51] [info] Load linear system from: /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_data/bad_paired_mat_small.mtx
+[05/08/25 10:46:51] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 4 | Fill ratio: 0.25 | Max magnitude: 1
+[05/08/25 10:46:51] [info] b vector info: Rows: 3 | Non-zeroes: 1 | Fill ratio: 0.333 | Max magnitude: 0.75
+[05/08/25 10:46:51] [info] Load linear system from: /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_data/bad_paired_mat_small.mtx
+[05/08/25 10:46:51] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 4 | Fill ratio: 0.25 | Max magnitude: 1
+[05/08/25 10:46:51] [info] b vector info: Rows: 3 | Non-zeroes: 1 | Fill ratio: 0.333 | Max magnitude: 0.75
+[05/08/25 10:46:51] [info] Load linear system from: /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_data/bad_paired_mat_big.csv
+[05/08/25 10:46:51] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 7 | Fill ratio: 0.438 | Max magnitude: 1
+[05/08/25 10:46:51] [info] b vector info: Rows: 5 | Non-zeroes: 5 | Fill ratio: 1 | Max magnitude: 2.25
+[05/08/25 10:46:51] [info] Load linear system from: /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_data/bad_paired_mat_big.csv
+[05/08/25 10:46:51] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 7 | Fill ratio: 0.438 | Max magnitude: 1
+[05/08/25 10:46:51] [info] b vector info: Rows: 5 | Non-zeroes: 5 | Fill ratio: 1 | Max magnitude: 2.25
+[05/08/25 10:46:51] [info] Load linear system from: /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_data/bad_paired_mat_big.mtx
+[05/08/25 10:46:51] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 4 | Fill ratio: 0.25 | Max magnitude: 1
+[05/08/25 10:46:51] [info] b vector info: Rows: 5 | Non-zeroes: 1 | Fill ratio: 0.2 | Max magnitude: 0.75
+[05/08/25 10:46:51] [info] Load linear system from: /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_data/bad_paired_mat_big.mtx
+[05/08/25 10:46:51] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 4 | Fill ratio: 0.25 | Max magnitude: 1
+[05/08/25 10:46:51] [info] b vector info: Rows: 5 | Non-zeroes: 1 | Fill ratio: 0.2 | Max magnitude: 0.75
+[       OK ] Test_Experiment_Data.Test_Mismatch_Load_Lin_Sys_w_RHS (9 ms)
 [ RUN      ] Test_Experiment_Data.TestRecordOutputJsonPrecond
-[05/08/25 10:36:30] [info] Save data to: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\none_dense_file.json
-[05/08/25 10:36:30] [info] Save data to: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\jacobi_dense_file.json
-[05/08/25 10:36:30] [info] Save data to: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\ilu0_dense_file.json
-[05/08/25 10:36:30] [info] Save data to: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\ilutp_dense_file.json
-[05/08/25 10:36:30] [info] Save data to: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\none_sparse_file.json
-[05/08/25 10:36:30] [info] Save data to: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\jacobi_sparse_file.json
-[05/08/25 10:36:30] [info] Save data to: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\ilu0_sparse_file.json
-[05/08/25 10:36:30] [info] Save data to: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\ilutp_sparse_file.json
-[       OK ] Test_Experiment_Data.TestRecordOutputJsonPrecond (70 ms)
+[05/08/25 10:46:51] [info] Save data to: /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_output/none_dense_file.json
+[05/08/25 10:46:51] [info] Save data to: /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_output/jacobi_dense_file.json
+[05/08/25 10:46:51] [info] Save data to: /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_output/ilu0_dense_file.json
+[05/08/25 10:46:51] [info] Save data to: /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_output/ilutp_dense_file.json
+[05/08/25 10:46:51] [info] Save data to: /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_output/none_sparse_file.json
+[05/08/25 10:46:51] [info] Save data to: /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_output/jacobi_sparse_file.json
+[05/08/25 10:46:51] [info] Save data to: /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_output/ilu0_sparse_file.json
+[05/08/25 10:46:51] [info] Save data to: /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_output/ilutp_sparse_file.json
+[       OK ] Test_Experiment_Data.TestRecordOutputJsonPrecond (11 ms)
 [ RUN      ] Test_Experiment_Data.TestRecordOutputJsonFPGMRES
-[05/08/25 10:36:30] [info] Start execute_solve: fpgmres_dense_id
-[05/08/25 10:36:30] [info] Finish execute_solve: fpgmres_dense_id
-[05/08/25 10:36:30] [info] Save data to: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\fpgmres_dense_file.json
-[05/08/25 10:36:30] [info] Start execute_solve: fpgmres_sparse_id
-[05/08/25 10:36:30] [info] Finish execute_solve: fpgmres_sparse_id
-[05/08/25 10:36:30] [info] Save data to: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\fpgmres_sparse_file.json
-[       OK ] Test_Experiment_Data.TestRecordOutputJsonFPGMRES (107 ms)
+[05/08/25 10:46:51] [info] Start execute_solve: fpgmres_dense_id
+[05/08/25 10:46:51] [info] Finish execute_solve: fpgmres_dense_id
+[05/08/25 10:46:51] [info] Save data to: /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_output/fpgmres_dense_file.json
+[05/08/25 10:46:51] [info] Start execute_solve: fpgmres_sparse_id
+[05/08/25 10:46:51] [info] Finish execute_solve: fpgmres_sparse_id
+[05/08/25 10:46:51] [info] Save data to: /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_output/fpgmres_sparse_file.json
+[       OK ] Test_Experiment_Data.TestRecordOutputJsonFPGMRES (84 ms)
 [ RUN      ] Test_Experiment_Data.TestRecordOutputJsonVPGMRES
-[05/08/25 10:36:30] [info] Start execute_solve: vpgmres_dense_id
-[05/08/25 10:36:30] [info] Finish execute_solve: vpgmres_dense_id
-[05/08/25 10:36:30] [info] Save data to: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\vpgmres_dense_file.json
-[05/08/25 10:36:30] [info] Start execute_solve: vpgmres_sparse_id
-[05/08/25 10:36:30] [info] Finish execute_solve: vpgmres_sparse_id
-[05/08/25 10:36:30] [info] Save data to: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\vpgmres_sparse_file.json
-[       OK ] Test_Experiment_Data.TestRecordOutputJsonVPGMRES (255 ms)
-[----------] 6 tests from Test_Experiment_Data (546 ms total)
+[05/08/25 10:46:51] [info] Start execute_solve: vpgmres_dense_id
+[05/08/25 10:46:51] [info] Finish execute_solve: vpgmres_dense_id
+[05/08/25 10:46:51] [info] Save data to: /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_output/vpgmres_dense_file.json
+[05/08/25 10:46:51] [info] Start execute_solve: vpgmres_sparse_id
+[05/08/25 10:46:51] [info] Finish execute_solve: vpgmres_sparse_id
+[05/08/25 10:46:51] [info] Save data to: /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_output/vpgmres_sparse_file.json
+[       OK ] Test_Experiment_Data.TestRecordOutputJsonVPGMRES (250 ms)
+[----------] 6 tests from Test_Experiment_Data (430 ms total)
 
 [----------] 6 tests from Test_Experiment_Read
 [ RUN      ] Test_Experiment_Read.TestCorrectSingleEntryJson
-[       OK ] Test_Experiment_Read.TestCorrectSingleEntryJson (1 ms)
+[       OK ] Test_Experiment_Read.TestCorrectSingleEntryJson (0 ms)
 [ RUN      ] Test_Experiment_Read.TestCorrectILUTPJson
 [       OK ] Test_Experiment_Read.TestCorrectILUTPJson (0 ms)
 [ RUN      ] Test_Experiment_Read.TestCorrectMultipleEntryJson
-[       OK ] Test_Experiment_Read.TestCorrectMultipleEntryJson (10 ms)
+[       OK ] Test_Experiment_Read.TestCorrectMultipleEntryJson (0 ms)
 [ RUN      ] Test_Experiment_Read.TestBadJsonParse
-[       OK ] Test_Experiment_Read.TestBadJsonParse (10 ms)
+[       OK ] Test_Experiment_Read.TestBadJsonParse (0 ms)
 [ RUN      ] Test_Experiment_Read.TestBadJsonSolveGroupMembers
-[       OK ] Test_Experiment_Read.TestBadJsonSolveGroupMembers (26 ms)
+[       OK ] Test_Experiment_Read.TestBadJsonSolveGroupMembers (0 ms)
 [ RUN      ] Test_Experiment_Read.TestBadJsonSolveGroupMemberValues
-[       OK ] Test_Experiment_Read.TestBadJsonSolveGroupMemberValues (104 ms)
-[----------] 6 tests from Test_Experiment_Read (154 ms total)
+[       OK ] Test_Experiment_Read.TestBadJsonSolveGroupMemberValues (0 ms)
+[----------] 6 tests from Test_Experiment_Read (1 ms total)
 
 [----------] 6 tests from Test_Experiment_Run
 [ RUN      ] Test_Experiment_Run.Test_Calc_Preconditioner
-[05/08/25 10:36:30] [info] Start calc_preconditioner: none_NA_NA
-[05/08/25 10:36:30] [info] Finish calc_preconditioner: none_NA_NA
-[05/08/25 10:36:30] [info] Start calc_preconditioner: jacobi_NA_NA
-[05/08/25 10:36:30] [info] Finish calc_preconditioner: jacobi_NA_NA
-[05/08/25 10:36:30] [info] Start calc_preconditioner: ilu0_NA_NA
-[05/08/25 10:36:30] [info] ILUPreconditioner: L info: Rows: 16 | Cols: 16 | Non-zeroes: 136 | Fill ratio: 0.531 | Max magnitude: 1
-[05/08/25 10:36:30] [info] ILUPreconditioner: U info: Rows: 16 | Cols: 16 | Non-zeroes: 136 | Fill ratio: 0.531 | Max magnitude: 1.18
-[05/08/25 10:36:30] [info] Finish calc_preconditioner: ilu0_NA_NA
-[05/08/25 10:36:30] [info] Start calc_preconditioner: ilutp_01_10
-[05/08/25 10:36:30] [info] ILUPreconditioner: L info: Rows: 16 | Cols: 16 | Non-zeroes: 55 | Fill ratio: 0.215 | Max magnitude: 1
-[05/08/25 10:36:30] [info] ILUPreconditioner: U info: Rows: 16 | Cols: 16 | Non-zeroes: 55 | Fill ratio: 0.215 | Max magnitude: 1.19
-[05/08/25 10:36:30] [info] ILUPreconditioner: P info: Rows: 16 | Cols: 16 | Non-zeroes: 16 | Fill ratio: 0.0625 | Max magnitude: 1
-[05/08/25 10:36:30] [info] Finish calc_preconditioner: ilutp_01_10
-[05/08/25 10:36:30] [info] Start calc_preconditioner: none_NA_NA
-[05/08/25 10:36:30] [info] Finish calc_preconditioner: none_NA_NA
-[05/08/25 10:36:30] [info] Start calc_preconditioner: jacobi_NA_NA
-[05/08/25 10:36:30] [info] Finish calc_preconditioner: jacobi_NA_NA
-[05/08/25 10:36:30] [info] Start calc_preconditioner: ilu0_NA_NA
-[05/08/25 10:36:30] [info] ILUPreconditioner: L info: Rows: 16 | Cols: 16 | Non-zeroes: 136 | Fill ratio: 0.531 | Max magnitude: 1
-[05/08/25 10:36:30] [info] ILUPreconditioner: U info: Rows: 16 | Cols: 16 | Non-zeroes: 136 | Fill ratio: 0.531 | Max magnitude: 1.29
-[05/08/25 10:36:30] [info] Finish calc_preconditioner: ilu0_NA_NA
-[05/08/25 10:36:30] [info] Start calc_preconditioner: ilutp_01_10
-[05/08/25 10:36:30] [info] ILUPreconditioner: L info: Rows: 16 | Cols: 16 | Non-zeroes: 46 | Fill ratio: 0.18 | Max magnitude: 1
-[05/08/25 10:36:30] [info] ILUPreconditioner: U info: Rows: 16 | Cols: 16 | Non-zeroes: 44 | Fill ratio: 0.172 | Max magnitude: 1.25
-[05/08/25 10:36:30] [info] ILUPreconditioner: P info: Rows: 16 | Cols: 16 | Non-zeroes: 16 | Fill ratio: 0.0625 | Max magnitude: 1
-[05/08/25 10:36:30] [info] Finish calc_preconditioner: ilutp_01_10
-[       OK ] Test_Experiment_Run.Test_Calc_Preconditioner (23 ms)
+[05/08/25 10:46:51] [info] Start calc_preconditioner: none_NA_NA
+[05/08/25 10:46:51] [info] Finish calc_preconditioner: none_NA_NA
+[05/08/25 10:46:51] [info] Start calc_preconditioner: jacobi_NA_NA
+[05/08/25 10:46:51] [info] Finish calc_preconditioner: jacobi_NA_NA
+[05/08/25 10:46:51] [info] Start calc_preconditioner: ilu0_NA_NA
+[05/08/25 10:46:51] [info] ILUPreconditioner: L info: Rows: 16 | Cols: 16 | Non-zeroes: 136 | Fill ratio: 0.531 | Max magnitude: 1
+[05/08/25 10:46:51] [info] ILUPreconditioner: U info: Rows: 16 | Cols: 16 | Non-zeroes: 136 | Fill ratio: 0.531 | Max magnitude: 1.22
+[05/08/25 10:46:51] [info] Finish calc_preconditioner: ilu0_NA_NA
+[05/08/25 10:46:51] [info] Start calc_preconditioner: ilutp_01_10
+[05/08/25 10:46:51] [info] ILUPreconditioner: L info: Rows: 16 | Cols: 16 | Non-zeroes: 60 | Fill ratio: 0.234 | Max magnitude: 1
+[05/08/25 10:46:51] [info] ILUPreconditioner: U info: Rows: 16 | Cols: 16 | Non-zeroes: 59 | Fill ratio: 0.23 | Max magnitude: 1.18
+[05/08/25 10:46:51] [info] ILUPreconditioner: P info: Rows: 16 | Cols: 16 | Non-zeroes: 16 | Fill ratio: 0.0625 | Max magnitude: 1
+[05/08/25 10:46:51] [info] Finish calc_preconditioner: ilutp_01_10
+[05/08/25 10:46:51] [info] Start calc_preconditioner: none_NA_NA
+[05/08/25 10:46:51] [info] Finish calc_preconditioner: none_NA_NA
+[05/08/25 10:46:51] [info] Start calc_preconditioner: jacobi_NA_NA
+[05/08/25 10:46:51] [info] Finish calc_preconditioner: jacobi_NA_NA
+[05/08/25 10:46:51] [info] Start calc_preconditioner: ilu0_NA_NA
+[05/08/25 10:46:51] [info] ILUPreconditioner: L info: Rows: 16 | Cols: 16 | Non-zeroes: 136 | Fill ratio: 0.531 | Max magnitude: 1
+[05/08/25 10:46:51] [info] ILUPreconditioner: U info: Rows: 16 | Cols: 16 | Non-zeroes: 136 | Fill ratio: 0.531 | Max magnitude: 1.22
+[05/08/25 10:46:51] [info] Finish calc_preconditioner: ilu0_NA_NA
+[05/08/25 10:46:51] [info] Start calc_preconditioner: ilutp_01_10
+[05/08/25 10:46:51] [info] ILUPreconditioner: L info: Rows: 16 | Cols: 16 | Non-zeroes: 42 | Fill ratio: 0.164 | Max magnitude: 1
+[05/08/25 10:46:51] [info] ILUPreconditioner: U info: Rows: 16 | Cols: 16 | Non-zeroes: 54 | Fill ratio: 0.211 | Max magnitude: 1.21
+[05/08/25 10:46:51] [info] ILUPreconditioner: P info: Rows: 16 | Cols: 16 | Non-zeroes: 16 | Fill ratio: 0.0625 | Max magnitude: 1
+[05/08/25 10:46:51] [info] Finish calc_preconditioner: ilutp_01_10
+[       OK ] Test_Experiment_Run.Test_Calc_Preconditioner (35 ms)
 [ RUN      ] Test_Experiment_Run.Test_Execute_FP_GMRES_IR_Solve
-[05/08/25 10:36:31] [info] Start execute_solve: fp16_id
-[05/08/25 10:36:31] [info] Finish execute_solve: fp16_id
-[05/08/25 10:36:31] [info] Start execute_solve: fp32_id
-[05/08/25 10:36:31] [info] Finish execute_solve: fp32_id
-[05/08/25 10:36:31] [info] Start execute_solve: fp64_id
-[05/08/25 10:36:31] [info] Finish execute_solve: fp64_id
-[05/08/25 10:36:31] [info] Start execute_solve: fp16_id
-[05/08/25 10:36:31] [info] Finish execute_solve: fp16_id
-[05/08/25 10:36:31] [info] Start execute_solve: fp32_id
-[05/08/25 10:36:31] [info] Finish execute_solve: fp32_id
-[05/08/25 10:36:31] [info] Start execute_solve: fp64_id
-[05/08/25 10:36:31] [info] Finish execute_solve: fp64_id
-[       OK ] Test_Experiment_Run.Test_Execute_FP_GMRES_IR_Solve (126 ms)
+[05/08/25 10:46:51] [info] Start execute_solve: fp16_id
+[05/08/25 10:46:51] [info] Finish execute_solve: fp16_id
+[05/08/25 10:46:51] [info] Start execute_solve: fp32_id
+[05/08/25 10:46:51] [info] Finish execute_solve: fp32_id
+[05/08/25 10:46:51] [info] Start execute_solve: fp64_id
+[05/08/25 10:46:51] [info] Finish execute_solve: fp64_id
+[05/08/25 10:46:51] [info] Start execute_solve: fp16_id
+[05/08/25 10:46:51] [info] Finish execute_solve: fp16_id
+[05/08/25 10:46:51] [info] Start execute_solve: fp32_id
+[05/08/25 10:46:51] [info] Finish execute_solve: fp32_id
+[05/08/25 10:46:51] [info] Start execute_solve: fp64_id
+[05/08/25 10:46:51] [info] Finish execute_solve: fp64_id
+[       OK ] Test_Experiment_Run.Test_Execute_FP_GMRES_IR_Solve (98 ms)
 [ RUN      ] Test_Experiment_Run.Test_Execute_VP_GMRES_IR_Solve
-[05/08/25 10:36:31] [info] Start execute_solve: id_rrt_vpgmres
-[05/08/25 10:36:31] [info] Finish execute_solve: id_rrt_vpgmres
-[05/08/25 10:36:31] [info] Start execute_solve: id_orc_vpgmres
-[05/08/25 10:36:31] [info] Finish execute_solve: id_orc_vpgmres
-[05/08/25 10:36:31] [info] Start execute_solve: id_rrt_vpgmres
-[05/08/25 10:36:31] [info] Finish execute_solve: id_rrt_vpgmres
-[05/08/25 10:36:31] [info] Start execute_solve: id_orc_vpgmres
-[05/08/25 10:36:31] [info] Finish execute_solve: id_orc_vpgmres
-[       OK ] Test_Experiment_Run.Test_Execute_VP_GMRES_IR_Solve (76 ms)
+[05/08/25 10:46:51] [info] Start execute_solve: id_rrt_vpgmres
+[05/08/25 10:46:51] [info] Finish execute_solve: id_rrt_vpgmres
+[05/08/25 10:46:51] [info] Start execute_solve: id_orc_vpgmres
+[05/08/25 10:46:51] [info] Finish execute_solve: id_orc_vpgmres
+[05/08/25 10:46:51] [info] Start execute_solve: id_rrt_vpgmres
+[05/08/25 10:46:51] [info] Finish execute_solve: id_rrt_vpgmres
+[05/08/25 10:46:51] [info] Start execute_solve: id_orc_vpgmres
+[05/08/25 10:46:51] [info] Finish execute_solve: id_orc_vpgmres
+[       OK ] Test_Experiment_Run.Test_Execute_VP_GMRES_IR_Solve (69 ms)
 [ RUN      ] Test_Experiment_Run.Test_AllSolvers_Run_Solve_Group
-[05/08/25 10:36:31] [info] Directory C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\allsolvers_dense exists, adding to dir
-[05/08/25 10:36:31] [info] Start Solve_Group: allsolvers_dense
-[05/08/25 10:36:32] [info] Finish Solve_Group: allsolvers_dense
-[05/08/25 10:36:32] [info] Directory C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\allsolvers_sparse exists, adding to dir
-[05/08/25 10:36:32] [info] Start Solve_Group: allsolvers_sparse
-[05/08/25 10:36:34] [info] Finish Solve_Group: allsolvers_sparse
-[       OK ] Test_Experiment_Run.Test_AllSolvers_Run_Solve_Group (2939 ms)
+[05/08/25 10:46:51] [info] Directory /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_output/allsolvers_dense exists, adding to dir
+[05/08/25 10:46:51] [info] Start Solve_Group: allsolvers_dense
+[05/08/25 10:46:52] [info] Finish Solve_Group: allsolvers_dense
+[05/08/25 10:46:52] [info] Directory /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_output/allsolvers_sparse exists, adding to dir
+[05/08/25 10:46:52] [info] Start Solve_Group: allsolvers_sparse
+[05/08/25 10:46:53] [info] Finish Solve_Group: allsolvers_sparse
+[       OK ] Test_Experiment_Run.Test_AllSolvers_Run_Solve_Group (2078 ms)
 [ RUN      ] Test_Experiment_Run.Test_AllPreconditioners_Run_Solve_Group
-[05/08/25 10:36:34] [info] Directory C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\allpreconditioners_dense_none exists, adding to dir
-[05/08/25 10:36:34] [info] Start Solve_Group: allpreconditioners_dense_none
-[05/08/25 10:36:34] [info] Finish Solve_Group: allpreconditioners_dense_none
-[05/08/25 10:36:34] [info] Directory C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\allpreconditioners_sparse_none exists, adding to dir
-[05/08/25 10:36:34] [info] Start Solve_Group: allpreconditioners_sparse_none
-[05/08/25 10:36:35] [info] Finish Solve_Group: allpreconditioners_sparse_none
-[05/08/25 10:36:35] [info] Directory C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\allpreconditioners_dense_jacobi exists, adding to dir
-[05/08/25 10:36:35] [info] Start Solve_Group: allpreconditioners_dense_jacobi
-[05/08/25 10:36:35] [info] Finish Solve_Group: allpreconditioners_dense_jacobi
-[05/08/25 10:36:35] [info] Directory C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\allpreconditioners_sparse_jacobi exists, adding to dir
-[05/08/25 10:36:35] [info] Start Solve_Group: allpreconditioners_sparse_jacobi
-[05/08/25 10:36:36] [info] Finish Solve_Group: allpreconditioners_sparse_jacobi
-[05/08/25 10:36:36] [info] Directory C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\allpreconditioners_dense_ilu0 exists, adding to dir
-[05/08/25 10:36:36] [info] Start Solve_Group: allpreconditioners_dense_ilu0
-[05/08/25 10:36:36] [info] Finish Solve_Group: allpreconditioners_dense_ilu0
-[05/08/25 10:36:36] [info] Directory C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\allpreconditioners_sparse_ilu0 exists, adding to dir
-[05/08/25 10:36:36] [info] Start Solve_Group: allpreconditioners_sparse_ilu0
-[05/08/25 10:36:37] [info] Finish Solve_Group: allpreconditioners_sparse_ilu0
-[05/08/25 10:36:37] [info] Directory C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\allpreconditioners_dense_ilutp exists, adding to dir
-[05/08/25 10:36:37] [info] Start Solve_Group: allpreconditioners_dense_ilutp
-[05/08/25 10:36:37] [info] Finish Solve_Group: allpreconditioners_dense_ilutp
-[05/08/25 10:36:37] [info] Directory C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\allpreconditioners_sparse_ilutp exists, adding to dir
-[05/08/25 10:36:37] [info] Start Solve_Group: allpreconditioners_sparse_ilutp
-[05/08/25 10:36:37] [info] Finish Solve_Group: allpreconditioners_sparse_ilutp
-[       OK ] Test_Experiment_Run.Test_AllPreconditioners_Run_Solve_Group (3861 ms)
+[05/08/25 10:46:53] [info] Directory /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_output/allpreconditioners_dense_none exists, adding to dir
+[05/08/25 10:46:53] [info] Start Solve_Group: allpreconditioners_dense_none
+[05/08/25 10:46:54] [info] Finish Solve_Group: allpreconditioners_dense_none
+[05/08/25 10:46:54] [info] Directory /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_output/allpreconditioners_sparse_none exists, adding to dir
+[05/08/25 10:46:54] [info] Start Solve_Group: allpreconditioners_sparse_none
+[05/08/25 10:46:54] [info] Finish Solve_Group: allpreconditioners_sparse_none
+[05/08/25 10:46:54] [info] Directory /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_output/allpreconditioners_dense_jacobi exists, adding to dir
+[05/08/25 10:46:54] [info] Start Solve_Group: allpreconditioners_dense_jacobi
+[05/08/25 10:46:55] [info] Finish Solve_Group: allpreconditioners_dense_jacobi
+[05/08/25 10:46:55] [info] Directory /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_output/allpreconditioners_sparse_jacobi exists, adding to dir
+[05/08/25 10:46:55] [info] Start Solve_Group: allpreconditioners_sparse_jacobi
+[05/08/25 10:46:55] [info] Finish Solve_Group: allpreconditioners_sparse_jacobi
+[05/08/25 10:46:55] [info] Directory /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_output/allpreconditioners_dense_ilu0 exists, adding to dir
+[05/08/25 10:46:55] [info] Start Solve_Group: allpreconditioners_dense_ilu0
+[05/08/25 10:46:55] [info] Finish Solve_Group: allpreconditioners_dense_ilu0
+[05/08/25 10:46:55] [info] Directory /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_output/allpreconditioners_sparse_ilu0 exists, adding to dir
+[05/08/25 10:46:55] [info] Start Solve_Group: allpreconditioners_sparse_ilu0
+[05/08/25 10:46:55] [info] Finish Solve_Group: allpreconditioners_sparse_ilu0
+[05/08/25 10:46:55] [info] Directory /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_output/allpreconditioners_dense_ilutp exists, adding to dir
+[05/08/25 10:46:55] [info] Start Solve_Group: allpreconditioners_dense_ilutp
+[05/08/25 10:46:56] [info] Finish Solve_Group: allpreconditioners_dense_ilutp
+[05/08/25 10:46:56] [info] Directory /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_output/allpreconditioners_sparse_ilutp exists, adding to dir
+[05/08/25 10:46:56] [info] Start Solve_Group: allpreconditioners_sparse_ilutp
+[05/08/25 10:46:56] [info] Finish Solve_Group: allpreconditioners_sparse_ilutp
+[       OK ] Test_Experiment_Run.Test_AllPreconditioners_Run_Solve_Group (2767 ms)
 [ RUN      ] Test_Experiment_Run.Test_Mix_Run_Solve_Group
-[05/08/25 10:36:38] [info] Directory C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\mixsolvers_dense exists, adding to dir
-[05/08/25 10:36:38] [info] Start Solve_Group: mixsolvers_dense
-[05/08/25 10:36:38] [info] Finish Solve_Group: mixsolvers_dense
-[05/08/25 10:36:38] [info] Directory C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\mixsolvers_sparse exists, adding to dir
-[05/08/25 10:36:38] [info] Start Solve_Group: mixsolvers_sparse
-[05/08/25 10:36:38] [info] Finish Solve_Group: mixsolvers_sparse
-[       OK ] Test_Experiment_Run.Test_Mix_Run_Solve_Group (982 ms)
-[----------] 6 tests from Test_Experiment_Run (8011 ms total)
+[05/08/25 10:46:56] [info] Directory /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_output/mixsolvers_dense exists, adding to dir
+[05/08/25 10:46:56] [info] Start Solve_Group: mixsolvers_dense
+[05/08/25 10:46:57] [info] Finish Solve_Group: mixsolvers_dense
+[05/08/25 10:46:57] [info] Directory /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_output/mixsolvers_sparse exists, adding to dir
+[05/08/25 10:46:57] [info] Start Solve_Group: mixsolvers_sparse
+[05/08/25 10:46:57] [info] Finish Solve_Group: mixsolvers_sparse
+[       OK ] Test_Experiment_Run.Test_Mix_Run_Solve_Group (641 ms)
+[----------] 6 tests from Test_Experiment_Run (5690 ms total)
 
 [----------] 5 tests from Test_Experiment_Spec
 [ RUN      ] Test_Experiment_Spec.Test_Preconditioner_Spec_Basic_Construct
@@ -5911,261 +5899,261 @@ Not printing expected errors...
 [ RUN      ] Test_Experiment_Spec.Test_Solve_Group_Basic_Construct
 [       OK ] Test_Experiment_Spec.Test_Solve_Group_Basic_Construct (0 ms)
 [ RUN      ] Test_Experiment_Spec.Test_Solve_Group_Write_Json
-[05/08/25 10:36:38] [info] Save data to: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\solve_group_1.json
-[05/08/25 10:36:38] [info] Save data to: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\solve_group_2.json
-[       OK ] Test_Experiment_Spec.Test_Solve_Group_Write_Json (17 ms)
+[05/08/25 10:46:57] [info] Save data to: /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_output/solve_group_1.json
+[05/08/25 10:46:57] [info] Save data to: /home/unix-dosre/dev/precision-cascade/install/experimentation/test/data/test_output/solve_group_2.json
+[       OK ] Test_Experiment_Spec.Test_Solve_Group_Write_Json (0 ms)
 [ RUN      ] Test_Experiment_Spec.Test_Solve_Group_Bad
 [       OK ] Test_Experiment_Spec.Test_Solve_Group_Bad (0 ms)
-[----------] 5 tests from Test_Experiment_Spec (18 ms total)
+[----------] 5 tests from Test_Experiment_Spec (0 ms total)
 
 [----------] 1 test from Test_Experiment_Tools
 [ RUN      ] Test_Experiment_Tools.Test_Experiment_Clock_Basic_Run
-[       OK ] Test_Experiment_Tools.Test_Experiment_Clock_Basic_Run (479 ms)
-[----------] 1 test from Test_Experiment_Tools (479 ms total)
+[       OK ] Test_Experiment_Tools.Test_Experiment_Clock_Basic_Run (460 ms)
+[----------] 1 test from Test_Experiment_Tools (460 ms total)
 
 [----------] Global test environment tear-down
-[==========] 24 tests from 5 test suites ran. (9211 ms total)
+[==========] 24 tests from 5 test suites ran. (6583 ms total)
 [  PASSED  ] 24 tests.
 
-Command: .\install\benchmark\benchmark.exe -p
+Command: ./install/benchmark/benchmark -p
 
 Running with fast prototyping settings...
 [==========] Running 69 tests from 9 test suites.
 [----------] Global test environment set-up.
 [----------] 12 tests from Benchmark_SPMV
 [ RUN      ] Benchmark_SPMV.Benchmark_CSC_MV_dbl
-[Benchmark csc_mv_dbl_1024] runs: 2 | avg: 8824 | median: 10367 | total: 17648
-[       OK ] Benchmark_SPMV.Benchmark_CSC_MV_dbl (51 ms)
+[Benchmark csc_mv_dbl_1024] runs: 2 | avg: 12796 | median: 15914 | total: 25592
+[       OK ] Benchmark_SPMV.Benchmark_CSC_MV_dbl (36 ms)
 [ RUN      ] Benchmark_SPMV.Benchmark_CSC_MV_sgl
-[Benchmark csc_mv_sgl_1024] runs: 2 | avg: 6607 | median: 6708 | total: 13214
-[       OK ] Benchmark_SPMV.Benchmark_CSC_MV_sgl (45 ms)
+[Benchmark csc_mv_sgl_1024] runs: 2 | avg: 10208 | median: 10453 | total: 20416
+[       OK ] Benchmark_SPMV.Benchmark_CSC_MV_sgl (30 ms)
 [ RUN      ] Benchmark_SPMV.Benchmark_CSC_MV_hlf
-[Benchmark csc_mv_hlf_1024] runs: 2 | avg: 33284 | median: 33403 | total: 66569
-[       OK ] Benchmark_SPMV.Benchmark_CSC_MV_hlf (232 ms)
+[Benchmark csc_mv_hlf_1024] runs: 2 | avg: 28771 | median: 28804 | total: 57542
+[       OK ] Benchmark_SPMV.Benchmark_CSC_MV_hlf (68 ms)
 [ RUN      ] Benchmark_SPMV.Benchmark_CSC_TMV_dbl
-[Benchmark csc_tmv_dbl_1024] runs: 2 | avg: 7619 | median: 7886 | total: 15238
-[       OK ] Benchmark_SPMV.Benchmark_CSC_TMV_dbl (47 ms)
+[Benchmark csc_tmv_dbl_1024] runs: 2 | avg: 9416 | median: 9481 | total: 18832
+[       OK ] Benchmark_SPMV.Benchmark_CSC_TMV_dbl (29 ms)
 [ RUN      ] Benchmark_SPMV.Benchmark_CSC_TMV_sgl
-[Benchmark csc_tmv_sgl_1024] runs: 2 | avg: 6616 | median: 6916 | total: 13233
-[       OK ] Benchmark_SPMV.Benchmark_CSC_TMV_sgl (46 ms)
+[Benchmark csc_tmv_sgl_1024] runs: 2 | avg: 8995 | median: 9003 | total: 17990
+[       OK ] Benchmark_SPMV.Benchmark_CSC_TMV_sgl (28 ms)
 [ RUN      ] Benchmark_SPMV.Benchmark_CSC_TMV_hlf
-[Benchmark csc_tmv_hlf_1024] runs: 2 | avg: 6947 | median: 7133 | total: 13894
-[       OK ] Benchmark_SPMV.Benchmark_CSC_TMV_hlf (168 ms)
+[Benchmark csc_tmv_hlf_1024] runs: 2 | avg: 9769 | median: 10602 | total: 19539
+[       OK ] Benchmark_SPMV.Benchmark_CSC_TMV_hlf (31 ms)
 [ RUN      ] Benchmark_SPMV.Benchmark_CSR_MV_dbl
-[Benchmark csr_mv_dbl_1024] runs: 2 | avg: 6464 | median: 6606 | total: 12928
-[       OK ] Benchmark_SPMV.Benchmark_CSR_MV_dbl (43 ms)
+[Benchmark csr_mv_dbl_1024] runs: 2 | avg: 9583 | median: 9621 | total: 19166
+[       OK ] Benchmark_SPMV.Benchmark_CSR_MV_dbl (30 ms)
 [ RUN      ] Benchmark_SPMV.Benchmark_CSR_MV_sgl
-[Benchmark csr_mv_sgl_1024] runs: 2 | avg: 6900 | median: 7003 | total: 13800
-[       OK ] Benchmark_SPMV.Benchmark_CSR_MV_sgl (45 ms)
+[Benchmark csr_mv_sgl_1024] runs: 2 | avg: 9582 | median: 9752 | total: 19165
+[       OK ] Benchmark_SPMV.Benchmark_CSR_MV_sgl (30 ms)
 [ RUN      ] Benchmark_SPMV.Benchmark_CSR_MV_hlf
-[Benchmark csr_mv_hlf_1024] runs: 2 | avg: 7583 | median: 7652 | total: 15167
-[       OK ] Benchmark_SPMV.Benchmark_CSR_MV_hlf (168 ms)
+[Benchmark csr_mv_hlf_1024] runs: 2 | avg: 10235 | median: 10354 | total: 20470
+[       OK ] Benchmark_SPMV.Benchmark_CSR_MV_hlf (32 ms)
 [ RUN      ] Benchmark_SPMV.Benchmark_CSR_TMV_dbl
-[Benchmark csr_tmv_dbl_1024] runs: 2 | avg: 6886 | median: 7189 | total: 13773
-[       OK ] Benchmark_SPMV.Benchmark_CSR_TMV_dbl (44 ms)
+[Benchmark csr_tmv_dbl_1024] runs: 2 | avg: 10932 | median: 11169 | total: 21865
+[       OK ] Benchmark_SPMV.Benchmark_CSR_TMV_dbl (33 ms)
 [ RUN      ] Benchmark_SPMV.Benchmark_CSR_TMV_sgl
-[Benchmark csr_tmv_sgl_1024] runs: 2 | avg: 6844 | median: 7055 | total: 13689
-[       OK ] Benchmark_SPMV.Benchmark_CSR_TMV_sgl (44 ms)
+[Benchmark csr_tmv_sgl_1024] runs: 2 | avg: 10324 | median: 10396 | total: 20649
+[       OK ] Benchmark_SPMV.Benchmark_CSR_TMV_sgl (32 ms)
 [ RUN      ] Benchmark_SPMV.Benchmark_CSR_TMV_hlf
-[Benchmark csr_tmv_hlf_1024] runs: 2 | avg: 32469 | median: 32878 | total: 64938
-[       OK ] Benchmark_SPMV.Benchmark_CSR_TMV_hlf (211 ms)
-[----------] 12 tests from Benchmark_SPMV (1150 ms total)
+[Benchmark csr_tmv_hlf_1024] runs: 2 | avg: 30759 | median: 30768 | total: 61518
+[       OK ] Benchmark_SPMV.Benchmark_CSR_TMV_hlf (72 ms)
+[----------] 12 tests from Benchmark_SPMV (458 ms total)
 
 [----------] 18 tests from Benchmark_MatrixDense
 [ RUN      ] Benchmark_MatrixDense.MatrixVectorMult_Double_BENCHMARK
-[Benchmark matdense_mv_dbl_1024] runs: 2 | avg: 36128 | median: 45620 | total: 72257
-[       OK ] Benchmark_MatrixDense.MatrixVectorMult_Double_BENCHMARK (135 ms)
+[Benchmark matdense_mv_dbl_1024] runs: 2 | avg: 46916 | median: 64260 | total: 93833
+[       OK ] Benchmark_MatrixDense.MatrixVectorMult_Double_BENCHMARK (119 ms)
 [ RUN      ] Benchmark_MatrixDense.MatrixVectorMult_Single_BENCHMARK
-[Benchmark matdense_mv_sgl_1024] runs: 2 | avg: 26447 | median: 38530 | total: 52894
-[       OK ] Benchmark_MatrixDense.MatrixVectorMult_Single_BENCHMARK (114 ms)
+[Benchmark matdense_mv_sgl_1024] runs: 2 | avg: 37589 | median: 61495 | total: 75178
+[       OK ] Benchmark_MatrixDense.MatrixVectorMult_Single_BENCHMARK (102 ms)
 [ RUN      ] Benchmark_MatrixDense.MatrixVectorMult_Half_BENCHMARK
-[Benchmark matdense_mv_hlf_1024] runs: 2 | avg: 29388 | median: 40593 | total: 58777
-[       OK ] Benchmark_MatrixDense.MatrixVectorMult_Half_BENCHMARK (117 ms)
+[Benchmark matdense_mv_hlf_1024] runs: 2 | avg: 43683 | median: 74264 | total: 87367
+[       OK ] Benchmark_MatrixDense.MatrixVectorMult_Half_BENCHMARK (116 ms)
 [ RUN      ] Benchmark_MatrixDense.TransposeMatrixVectorMult_Double_BENCHMARK
-[Benchmark matdense_tmv_dbl_1024] runs: 2 | avg: 23911 | median: 24097 | total: 47823
-[       OK ] Benchmark_MatrixDense.TransposeMatrixVectorMult_Double_BENCHMARK (105 ms)
+[Benchmark matdense_tmv_dbl_1024] runs: 2 | avg: 28077 | median: 32093 | total: 56154
+[       OK ] Benchmark_MatrixDense.TransposeMatrixVectorMult_Double_BENCHMARK (82 ms)
 [ RUN      ] Benchmark_MatrixDense.TransposeMatrixVectorMult_Single_BENCHMARK
-[Benchmark matdense_tmv_sgl_1024] runs: 2 | avg: 10434 | median: 10631 | total: 20869
-[       OK ] Benchmark_MatrixDense.TransposeMatrixVectorMult_Single_BENCHMARK (83 ms)
+[Benchmark matdense_tmv_sgl_1024] runs: 2 | avg: 12809 | median: 12841 | total: 25618
+[       OK ] Benchmark_MatrixDense.TransposeMatrixVectorMult_Single_BENCHMARK (52 ms)
 [ RUN      ] Benchmark_MatrixDense.TransposeMatrixVectorMult_Half_BENCHMARK
-[Benchmark matdense_tmv_hlf_1024] runs: 2 | avg: 7395 | median: 7749 | total: 14791
-[       OK ] Benchmark_MatrixDense.TransposeMatrixVectorMult_Half_BENCHMARK (74 ms)
+[Benchmark matdense_tmv_hlf_1024] runs: 2 | avg: 11003 | median: 12246 | total: 22007
+[       OK ] Benchmark_MatrixDense.TransposeMatrixVectorMult_Half_BENCHMARK (45 ms)
 [ RUN      ] Benchmark_MatrixDense.SubsetcolsMatrixVectorMult_Double_BENCHMARK
-[Benchmark matdense_subsetcolsmv_dbl_1024] runs: 2 | avg: 10667 | median: 10708 | total: 21334
-[       OK ] Benchmark_MatrixDense.SubsetcolsMatrixVectorMult_Double_BENCHMARK (79 ms)
+[Benchmark matdense_subsetcolsmv_dbl_1024] runs: 2 | avg: 9867 | median: 9942 | total: 19734
+[       OK ] Benchmark_MatrixDense.SubsetcolsMatrixVectorMult_Double_BENCHMARK (45 ms)
 [ RUN      ] Benchmark_MatrixDense.SubsetcolsMatrixVectorMult_Single_BENCHMARK
-[Benchmark matdense_subsetcolsmv_sgl_1024] runs: 2 | avg: 9823 | median: 10095 | total: 19646
-[       OK ] Benchmark_MatrixDense.SubsetcolsMatrixVectorMult_Single_BENCHMARK (78 ms)
+[Benchmark matdense_subsetcolsmv_sgl_1024] runs: 2 | avg: 8405 | median: 8789 | total: 16810
+[       OK ] Benchmark_MatrixDense.SubsetcolsMatrixVectorMult_Single_BENCHMARK (41 ms)
 [ RUN      ] Benchmark_MatrixDense.SubsetcolsMatrixVectorMult_Half_BENCHMARK
-[Benchmark matdense_subsetcolsmv_hlf_1024] runs: 2 | avg: 15084 | median: 15277 | total: 30168
-[       OK ] Benchmark_MatrixDense.SubsetcolsMatrixVectorMult_Half_BENCHMARK (89 ms)
+[Benchmark matdense_subsetcolsmv_hlf_1024] runs: 2 | avg: 8868 | median: 9053 | total: 17736
+[       OK ] Benchmark_MatrixDense.SubsetcolsMatrixVectorMult_Half_BENCHMARK (40 ms)
 [ RUN      ] Benchmark_MatrixDense.SubsetcolsTransposeMatrixVectorMult_Double_BENCHMARK
-[Benchmark matdense_subsetcolstmv_dbl_1024] runs: 2 | avg: 10830 | median: 10841 | total: 21660
-[       OK ] Benchmark_MatrixDense.SubsetcolsTransposeMatrixVectorMult_Double_BENCHMARK (80 ms)
+[Benchmark matdense_subsetcolstmv_dbl_1024] runs: 2 | avg: 9129 | median: 9145 | total: 18258
+[       OK ] Benchmark_MatrixDense.SubsetcolsTransposeMatrixVectorMult_Double_BENCHMARK (40 ms)
 [ RUN      ] Benchmark_MatrixDense.SubsetcolsTransposeMatrixVectorMult_Single_BENCHMARK
-[Benchmark matdense_subsetcolstmv_sgl_1024] runs: 2 | avg: 9911 | median: 9994 | total: 19823
-[       OK ] Benchmark_MatrixDense.SubsetcolsTransposeMatrixVectorMult_Single_BENCHMARK (79 ms)
+[Benchmark matdense_subsetcolstmv_sgl_1024] runs: 2 | avg: 8098 | median: 8517 | total: 16197
+[       OK ] Benchmark_MatrixDense.SubsetcolsTransposeMatrixVectorMult_Single_BENCHMARK (39 ms)
 [ RUN      ] Benchmark_MatrixDense.SubsetcolsTransposeMatrixVectorMult_Half_BENCHMARK
-[Benchmark matdense_subsetcolstmv_hlf_1024] runs: 2 | avg: 11402 | median: 11472 | total: 22805
-[       OK ] Benchmark_MatrixDense.SubsetcolsTransposeMatrixVectorMult_Half_BENCHMARK (85 ms)
+[Benchmark matdense_subsetcolstmv_hlf_1024] runs: 2 | avg: 7771 | median: 7886 | total: 15542
+[       OK ] Benchmark_MatrixDense.SubsetcolsTransposeMatrixVectorMult_Half_BENCHMARK (38 ms)
 [ RUN      ] Benchmark_MatrixDense.ForwardSubstitution_Double_BENCHMARK
-[Benchmark matdense_frwdsub_dbl_1024] runs: 2 | avg: 1878 | median: 2144 | total: 3756
-[       OK ] Benchmark_MatrixDense.ForwardSubstitution_Double_BENCHMARK (36 ms)
+[Benchmark matdense_frwdsub_dbl_1024] runs: 2 | avg: 1927 | median: 2030 | total: 3854
+[       OK ] Benchmark_MatrixDense.ForwardSubstitution_Double_BENCHMARK (20 ms)
 [ RUN      ] Benchmark_MatrixDense.ForwardSubstitution_Single_BENCHMARK
-[Benchmark matdense_frwdsub_sgl_1024] runs: 2 | avg: 1164 | median: 1196 | total: 2329
-[       OK ] Benchmark_MatrixDense.ForwardSubstitution_Single_BENCHMARK (36 ms)
+[Benchmark matdense_frwdsub_sgl_1024] runs: 2 | avg: 1319 | median: 1377 | total: 2639
+[       OK ] Benchmark_MatrixDense.ForwardSubstitution_Single_BENCHMARK (17 ms)
 [ RUN      ] Benchmark_MatrixDense.ForwardSubstitution_Half_BENCHMARK
-[Benchmark matdense_frwdsub_hlf_1024] runs: 2 | avg: 962 | median: 987 | total: 1925
-[       OK ] Benchmark_MatrixDense.ForwardSubstitution_Half_BENCHMARK (35 ms)
+[Benchmark matdense_frwdsub_hlf_1024] runs: 2 | avg: 1096 | median: 1179 | total: 2193
+[       OK ] Benchmark_MatrixDense.ForwardSubstitution_Half_BENCHMARK (16 ms)
 [ RUN      ] Benchmark_MatrixDense.BackwardSubstitution_Double_BENCHMARK
-[Benchmark matdense_backsub_dbl_1024] runs: 2 | avg: 1602 | median: 1634 | total: 3205
-[       OK ] Benchmark_MatrixDense.BackwardSubstitution_Double_BENCHMARK (35 ms)
+[Benchmark matdense_backsub_dbl_1024] runs: 2 | avg: 1817 | median: 1837 | total: 3634
+[       OK ] Benchmark_MatrixDense.BackwardSubstitution_Double_BENCHMARK (17 ms)
 [ RUN      ] Benchmark_MatrixDense.BackwardSubstitution_Single_BENCHMARK
-[Benchmark matdense_backsub_sgl_1024] runs: 2 | avg: 1047 | median: 1090 | total: 2095
-[       OK ] Benchmark_MatrixDense.BackwardSubstitution_Single_BENCHMARK (36 ms)
+[Benchmark matdense_backsub_sgl_1024] runs: 2 | avg: 1199 | median: 1252 | total: 2399
+[       OK ] Benchmark_MatrixDense.BackwardSubstitution_Single_BENCHMARK (15 ms)
 [ RUN      ] Benchmark_MatrixDense.BackwardSubstitution_Half_BENCHMARK
-[Benchmark matdense_backsub_hlf_1024] runs: 2 | avg: 1002 | median: 1116 | total: 2004
-[       OK ] Benchmark_MatrixDense.BackwardSubstitution_Half_BENCHMARK (34 ms)
-[----------] 18 tests from Benchmark_MatrixDense (1340 ms total)
+[Benchmark matdense_backsub_hlf_1024] runs: 2 | avg: 1338 | median: 1675 | total: 2676
+[       OK ] Benchmark_MatrixDense.BackwardSubstitution_Half_BENCHMARK (16 ms)
+[----------] 18 tests from Benchmark_MatrixDense (870 ms total)
 
 [----------] 24 tests from Benchmark_NoFillMatrixSparse
 [ RUN      ] Benchmark_NoFillMatrixSparse.MatrixVectorMult_Double_BENCHMARK
-[Benchmark matsparse_mv_dbl_1024] runs: 2 | avg: 9789 | median: 9810 | total: 19578
-[       OK ] Benchmark_NoFillMatrixSparse.MatrixVectorMult_Double_BENCHMARK (49 ms)
+[Benchmark matsparse_mv_dbl_1024] runs: 2 | avg: 9251 | median: 9543 | total: 18502
+[       OK ] Benchmark_NoFillMatrixSparse.MatrixVectorMult_Double_BENCHMARK (29 ms)
 [ RUN      ] Benchmark_NoFillMatrixSparse.MatrixVectorMult_Single_BENCHMARK
-[Benchmark matsparse_mv_sgl_1024] runs: 2 | avg: 9037 | median: 9152 | total: 18075
-[       OK ] Benchmark_NoFillMatrixSparse.MatrixVectorMult_Single_BENCHMARK (48 ms)
+[Benchmark matsparse_mv_sgl_1024] runs: 2 | avg: 8750 | median: 8805 | total: 17500
+[       OK ] Benchmark_NoFillMatrixSparse.MatrixVectorMult_Single_BENCHMARK (28 ms)
 [ RUN      ] Benchmark_NoFillMatrixSparse.MatrixVectorMult_Half_BENCHMARK
-[Benchmark matsparse_mv_hlf_1024] runs: 2 | avg: 8891 | median: 9035 | total: 17783
-[       OK ] Benchmark_NoFillMatrixSparse.MatrixVectorMult_Half_BENCHMARK (47 ms)
+[Benchmark matsparse_mv_hlf_1024] runs: 2 | avg: 8844 | median: 9060 | total: 17689
+[       OK ] Benchmark_NoFillMatrixSparse.MatrixVectorMult_Half_BENCHMARK (28 ms)
 [ RUN      ] Benchmark_NoFillMatrixSparse.TransposeMatrixVectorMult_Double_BENCHMARK
-[Benchmark matsparse_tmv_dbl_1024] runs: 2 | avg: 9956 | median: 9983 | total: 19912
-[       OK ] Benchmark_NoFillMatrixSparse.TransposeMatrixVectorMult_Double_BENCHMARK (50 ms)
+[Benchmark matsparse_tmv_dbl_1024] runs: 2 | avg: 9384 | median: 9397 | total: 18769
+[       OK ] Benchmark_NoFillMatrixSparse.TransposeMatrixVectorMult_Double_BENCHMARK (29 ms)
 [ RUN      ] Benchmark_NoFillMatrixSparse.TransposeMatrixVectorMult_Single_BENCHMARK
-[Benchmark matsparse_tmv_sgl_1024] runs: 2 | avg: 9574 | median: 10096 | total: 19148
-[       OK ] Benchmark_NoFillMatrixSparse.TransposeMatrixVectorMult_Single_BENCHMARK (49 ms)
+[Benchmark matsparse_tmv_sgl_1024] runs: 2 | avg: 10680 | median: 11804 | total: 21361
+[       OK ] Benchmark_NoFillMatrixSparse.TransposeMatrixVectorMult_Single_BENCHMARK (32 ms)
 [ RUN      ] Benchmark_NoFillMatrixSparse.TransposeMatrixVectorMult_Half_BENCHMARK
-[Benchmark matsparse_tmv_hlf_1024] runs: 2 | avg: 22659 | median: 23316 | total: 45318
-[       OK ] Benchmark_NoFillMatrixSparse.TransposeMatrixVectorMult_Half_BENCHMARK (75 ms)
+[Benchmark matsparse_tmv_hlf_1024] runs: 2 | avg: 29247 | median: 29451 | total: 58495
+[       OK ] Benchmark_NoFillMatrixSparse.TransposeMatrixVectorMult_Half_BENCHMARK (70 ms)
 [ RUN      ] Benchmark_NoFillMatrixSparse.ForwardSubstitution_Double_BENCHMARK
-[Benchmark matsparse_frwdsub_dbl_1024] runs: 2 | avg: 17965 | median: 18404 | total: 35931
-[       OK ] Benchmark_NoFillMatrixSparse.ForwardSubstitution_Double_BENCHMARK (51 ms)
+[Benchmark matsparse_frwdsub_dbl_1024] runs: 2 | avg: 21220 | median: 22444 | total: 42441
+[       OK ] Benchmark_NoFillMatrixSparse.ForwardSubstitution_Double_BENCHMARK (48 ms)
 [ RUN      ] Benchmark_NoFillMatrixSparse.ForwardSubstitution_Single_BENCHMARK
-[Benchmark matsparse_frwdsub_sgl_1024] runs: 2 | avg: 16827 | median: 16954 | total: 33655
-[       OK ] Benchmark_NoFillMatrixSparse.ForwardSubstitution_Single_BENCHMARK (49 ms)
+[Benchmark matsparse_frwdsub_sgl_1024] runs: 2 | avg: 16686 | median: 17551 | total: 33373
+[       OK ] Benchmark_NoFillMatrixSparse.ForwardSubstitution_Single_BENCHMARK (39 ms)
 [ RUN      ] Benchmark_NoFillMatrixSparse.ForwardSubstitution_Half_BENCHMARK
-[Benchmark matsparse_frwdsub_hlf_1024] runs: 2 | avg: 18264 | median: 19177 | total: 36529
-[       OK ] Benchmark_NoFillMatrixSparse.ForwardSubstitution_Half_BENCHMARK (53 ms)
+[Benchmark matsparse_frwdsub_hlf_1024] runs: 2 | avg: 17793 | median: 19022 | total: 35587
+[       OK ] Benchmark_NoFillMatrixSparse.ForwardSubstitution_Half_BENCHMARK (41 ms)
 [ RUN      ] Benchmark_NoFillMatrixSparse.FastForwardSubstitution_Double_BENCHMARK
-[Benchmark matsparse_fastfrwdsub_dbl_1024] runs: 2 | avg: 862 | median: 1028 | total: 1724
-[       OK ] Benchmark_NoFillMatrixSparse.FastForwardSubstitution_Double_BENCHMARK (21 ms)
+[Benchmark matsparse_fastfrwdsub_dbl_1024] runs: 2 | avg: 748 | median: 806 | total: 1496
+[       OK ] Benchmark_NoFillMatrixSparse.FastForwardSubstitution_Double_BENCHMARK (11 ms)
 [ RUN      ] Benchmark_NoFillMatrixSparse.FastForwardSubstitution_Single_BENCHMARK
-[Benchmark matsparse_fastfrwdsub_sgl_1024] runs: 2 | avg: 644 | median: 731 | total: 1288
-[       OK ] Benchmark_NoFillMatrixSparse.FastForwardSubstitution_Single_BENCHMARK (21 ms)
+[Benchmark matsparse_fastfrwdsub_sgl_1024] runs: 2 | avg: 1674 | median: 1771 | total: 3348
+[       OK ] Benchmark_NoFillMatrixSparse.FastForwardSubstitution_Single_BENCHMARK (14 ms)
 [ RUN      ] Benchmark_NoFillMatrixSparse.FastForwardSubstitution_Half_BENCHMARK
-[Benchmark matsparse_fastfrwdsub_hlf_1024] runs: 2 | avg: 628 | median: 648 | total: 1257
-[       OK ] Benchmark_NoFillMatrixSparse.FastForwardSubstitution_Half_BENCHMARK (19 ms)
+[Benchmark matsparse_fastfrwdsub_hlf_1024] runs: 2 | avg: 1551 | median: 1596 | total: 3103
+[       OK ] Benchmark_NoFillMatrixSparse.FastForwardSubstitution_Half_BENCHMARK (13 ms)
 [ RUN      ] Benchmark_NoFillMatrixSparse.LowtriPreprocess_Double_BENCHMARK
-[Benchmark matsparse_frwdtrsvpreprocess_dbl_1024] runs: 2 | avg: 1382 | median: 1383 | total: 2764
-[       OK ] Benchmark_NoFillMatrixSparse.LowtriPreprocess_Double_BENCHMARK (19 ms)
+[Benchmark matsparse_frwdtrsvpreprocess_dbl_1024] runs: 2 | avg: 2017 | median: 2020 | total: 4035
+[       OK ] Benchmark_NoFillMatrixSparse.LowtriPreprocess_Double_BENCHMARK (10 ms)
 [ RUN      ] Benchmark_NoFillMatrixSparse.LowtriPreprocess_Single_BENCHMARK
-[Benchmark matsparse_frwdtrsvpreprocess_sgl_1024] runs: 2 | avg: 1239 | median: 1263 | total: 2479
-[       OK ] Benchmark_NoFillMatrixSparse.LowtriPreprocess_Single_BENCHMARK (20 ms)
+[Benchmark matsparse_frwdtrsvpreprocess_sgl_1024] runs: 2 | avg: 2317 | median: 2421 | total: 4635
+[       OK ] Benchmark_NoFillMatrixSparse.LowtriPreprocess_Single_BENCHMARK (10 ms)
 [ RUN      ] Benchmark_NoFillMatrixSparse.LowtriPreprocess_Half_BENCHMARK
-[Benchmark matsparse_frwdtrsvpreprocess_hlf_1024] runs: 2 | avg: 1592 | median: 2049 | total: 3184
-[       OK ] Benchmark_NoFillMatrixSparse.LowtriPreprocess_Half_BENCHMARK (19 ms)
+[Benchmark matsparse_frwdtrsvpreprocess_hlf_1024] runs: 2 | avg: 2204 | median: 2292 | total: 4408
+[       OK ] Benchmark_NoFillMatrixSparse.LowtriPreprocess_Half_BENCHMARK (10 ms)
 [ RUN      ] Benchmark_NoFillMatrixSparse.BackwardSubstitution_Double_BENCHMARK
-[Benchmark matsparse_backsub_dbl_1024] runs: 2 | avg: 20581 | median: 20745 | total: 41162
-[       OK ] Benchmark_NoFillMatrixSparse.BackwardSubstitution_Double_BENCHMARK (58 ms)
+[Benchmark matsparse_backsub_dbl_1024] runs: 2 | avg: 30916 | median: 41643 | total: 61832
+[       OK ] Benchmark_NoFillMatrixSparse.BackwardSubstitution_Double_BENCHMARK (68 ms)
 [ RUN      ] Benchmark_NoFillMatrixSparse.BackwardSubstitution_Single_BENCHMARK
-[Benchmark matsparse_backsub_sgl_1024] runs: 2 | avg: 18270 | median: 18778 | total: 36540
-[       OK ] Benchmark_NoFillMatrixSparse.BackwardSubstitution_Single_BENCHMARK (53 ms)
+[Benchmark matsparse_backsub_sgl_1024] runs: 2 | avg: 18267 | median: 18696 | total: 36534
+[       OK ] Benchmark_NoFillMatrixSparse.BackwardSubstitution_Single_BENCHMARK (43 ms)
 [ RUN      ] Benchmark_NoFillMatrixSparse.BackwardSubstitution_Half_BENCHMARK
-[Benchmark matsparse_backsub_hlf_1024] runs: 2 | avg: 19811 | median: 19999 | total: 39622
-[       OK ] Benchmark_NoFillMatrixSparse.BackwardSubstitution_Half_BENCHMARK (56 ms)
+[Benchmark matsparse_backsub_hlf_1024] runs: 2 | avg: 16846 | median: 16882 | total: 33693
+[       OK ] Benchmark_NoFillMatrixSparse.BackwardSubstitution_Half_BENCHMARK (40 ms)
 [ RUN      ] Benchmark_NoFillMatrixSparse.FastBackwardSubstitution_Double_BENCHMARK
-[Benchmark matsparse_fastbacksub_dbl_1024] runs: 2 | avg: 1011 | median: 1269 | total: 2023
-[       OK ] Benchmark_NoFillMatrixSparse.FastBackwardSubstitution_Double_BENCHMARK (22 ms)
+[Benchmark matsparse_fastbacksub_dbl_1024] runs: 2 | avg: 619 | median: 648 | total: 1238
+[       OK ] Benchmark_NoFillMatrixSparse.FastBackwardSubstitution_Double_BENCHMARK (10 ms)
 [ RUN      ] Benchmark_NoFillMatrixSparse.FastBackwardSubstitution_Single_BENCHMARK
-[Benchmark matsparse_fastbacksub_sgl_1024] runs: 2 | avg: 697 | median: 769 | total: 1394
-[       OK ] Benchmark_NoFillMatrixSparse.FastBackwardSubstitution_Single_BENCHMARK (20 ms)
+[Benchmark matsparse_fastbacksub_sgl_1024] runs: 2 | avg: 797 | median: 827 | total: 1594
+[       OK ] Benchmark_NoFillMatrixSparse.FastBackwardSubstitution_Single_BENCHMARK (11 ms)
 [ RUN      ] Benchmark_NoFillMatrixSparse.FastBackwardSubstitution_Half_BENCHMARK
-[Benchmark matsparse_fastbacksub_hlf_1024] runs: 2 | avg: 567 | median: 617 | total: 1134
-[       OK ] Benchmark_NoFillMatrixSparse.FastBackwardSubstitution_Half_BENCHMARK (20 ms)
+[Benchmark matsparse_fastbacksub_hlf_1024] runs: 2 | avg: 727 | median: 807 | total: 1455
+[       OK ] Benchmark_NoFillMatrixSparse.FastBackwardSubstitution_Half_BENCHMARK (11 ms)
 [ RUN      ] Benchmark_NoFillMatrixSparse.UpptriPreprocess_Double_BENCHMARK
-[Benchmark matsparse_backtrsvpreprocess_dbl_1024] runs: 2 | avg: 1405 | median: 1827 | total: 2811
-[       OK ] Benchmark_NoFillMatrixSparse.UpptriPreprocess_Double_BENCHMARK (19 ms)
+[Benchmark matsparse_backtrsvpreprocess_dbl_1024] runs: 2 | avg: 1909 | median: 1921 | total: 3818
+[       OK ] Benchmark_NoFillMatrixSparse.UpptriPreprocess_Double_BENCHMARK (9 ms)
 [ RUN      ] Benchmark_NoFillMatrixSparse.UpptriPreprocess_Single_BENCHMARK
-[Benchmark matsparse_backtrsvpreprocess_sgl_1024] runs: 2 | avg: 1029 | median: 1054 | total: 2059
-[       OK ] Benchmark_NoFillMatrixSparse.UpptriPreprocess_Single_BENCHMARK (18 ms)
+[Benchmark matsparse_backtrsvpreprocess_sgl_1024] runs: 2 | avg: 2238 | median: 2280 | total: 4477
+[       OK ] Benchmark_NoFillMatrixSparse.UpptriPreprocess_Single_BENCHMARK (10 ms)
 [ RUN      ] Benchmark_NoFillMatrixSparse.UpptriPreprocess_Half_BENCHMARK
-[Benchmark matsparse_backtrsvpreprocess_hlf_1024] runs: 2 | avg: 941 | median: 957 | total: 1883
-[       OK ] Benchmark_NoFillMatrixSparse.UpptriPreprocess_Half_BENCHMARK (18 ms)
-[----------] 24 tests from Benchmark_NoFillMatrixSparse (887 ms total)
+[Benchmark matsparse_backtrsvpreprocess_hlf_1024] runs: 2 | avg: 1474 | median: 1519 | total: 2949
+[       OK ] Benchmark_NoFillMatrixSparse.UpptriPreprocess_Half_BENCHMARK (9 ms)
+[----------] 24 tests from Benchmark_NoFillMatrixSparse (634 ms total)
 
 [----------] 6 tests from Benchmark_GMRES
 [ RUN      ] Benchmark_GMRES.GMRESSolve_Double_BENCHMARK
-[Benchmark gmressolve_dbl_1024] runs: 2 | avg: 12549 | median: 14523 | total: 25099
-[       OK ] Benchmark_GMRES.GMRESSolve_Double_BENCHMARK (57 ms)
+[Benchmark gmressolve_dbl_1024] runs: 2 | avg: 13883 | median: 17629 | total: 27767
+[       OK ] Benchmark_GMRES.GMRESSolve_Double_BENCHMARK (40 ms)
 [ RUN      ] Benchmark_GMRES.GMRESSolve_Single_BENCHMARK
-[Benchmark gmressolve_sgl_1024] runs: 2 | avg: 13186 | median: 15400 | total: 26373
-[       OK ] Benchmark_GMRES.GMRESSolve_Single_BENCHMARK (60 ms)
+[Benchmark gmressolve_sgl_1024] runs: 2 | avg: 15045 | median: 21297 | total: 30090
+[       OK ] Benchmark_GMRES.GMRESSolve_Single_BENCHMARK (43 ms)
 [ RUN      ] Benchmark_GMRES.GMRESSolve_Half_BENCHMARK
-[Benchmark gmressolve_hlf_1024] runs: 2 | avg: 11576 | median: 12634 | total: 23153
-[       OK ] Benchmark_GMRES.GMRESSolve_Half_BENCHMARK (54 ms)
+[Benchmark gmressolve_hlf_1024] runs: 2 | avg: 10858 | median: 12325 | total: 21716
+[       OK ] Benchmark_GMRES.GMRESSolve_Half_BENCHMARK (34 ms)
 [ RUN      ] Benchmark_GMRES.GetExtrapolationData_Double
-[Benchmark gmressolveextrapdata_dbl_1024] runs: 2 | avg: 2735 | median: 2930 | total: 5471
-[       OK ] Benchmark_GMRES.GetExtrapolationData_Double (18 ms)
+[Benchmark gmressolveextrapdata_dbl_1024] runs: 2 | avg: 2149 | median: 2228 | total: 4298
+[       OK ] Benchmark_GMRES.GetExtrapolationData_Double (10 ms)
 [ RUN      ] Benchmark_GMRES.GetExtrapolationData_Single
-[Benchmark gmressolveextrapdata_sgl_1024] runs: 2 | avg: 2613 | median: 2651 | total: 5226
-[       OK ] Benchmark_GMRES.GetExtrapolationData_Single (17 ms)
+[Benchmark gmressolveextrapdata_sgl_1024] runs: 2 | avg: 2026 | median: 2067 | total: 4052
+[       OK ] Benchmark_GMRES.GetExtrapolationData_Single (8 ms)
 [ RUN      ] Benchmark_GMRES.GetExtrapolationData_Half
-[Benchmark gmressolveextrapdata_hlf_1024] runs: 2 | avg: 4075 | median: 4774 | total: 8150
-[       OK ] Benchmark_GMRES.GetExtrapolationData_Half (29 ms)
-[----------] 6 tests from Benchmark_GMRES (238 ms total)
+[Benchmark gmressolveextrapdata_hlf_1024] runs: 2 | avg: 3016 | median: 3227 | total: 6032
+[       OK ] Benchmark_GMRES.GetExtrapolationData_Half (11 ms)
+[----------] 6 tests from Benchmark_GMRES (149 ms total)
 
 [----------] 3 tests from Benchmark_FP_GMRES_IR
 [ RUN      ] Benchmark_FP_GMRES_IR.FP_GMRES_IR_Double_BENCHMARK
-[Benchmark fp_gmres_ir_dbl_1024] runs: 2 | avg: 58217 | median: 61685 | total: 116435
-[       OK ] Benchmark_FP_GMRES_IR.FP_GMRES_IR_Double_BENCHMARK (149 ms)
+[Benchmark fp_gmres_ir_dbl_1024] runs: 2 | avg: 52170 | median: 52453 | total: 104340
+[       OK ] Benchmark_FP_GMRES_IR.FP_GMRES_IR_Double_BENCHMARK (116 ms)
 [ RUN      ] Benchmark_FP_GMRES_IR.FP_GMRES_IR_Single_BENCHMARK
-[Benchmark fp_gmres_ir_sgl_1024] runs: 2 | avg: 56494 | median: 56536 | total: 112989
-[       OK ] Benchmark_FP_GMRES_IR.FP_GMRES_IR_Single_BENCHMARK (145 ms)
+[Benchmark fp_gmres_ir_sgl_1024] runs: 2 | avg: 47652 | median: 48026 | total: 95305
+[       OK ] Benchmark_FP_GMRES_IR.FP_GMRES_IR_Single_BENCHMARK (107 ms)
 [ RUN      ] Benchmark_FP_GMRES_IR.FP_GMRES_IR_Half_BENCHMARK
-[Benchmark fp_gmres_ir_hlf_1024] runs: 2 | avg: 62180 | median: 62698 | total: 124360
-[       OK ] Benchmark_FP_GMRES_IR.FP_GMRES_IR_Half_BENCHMARK (157 ms)
-[----------] 3 tests from Benchmark_FP_GMRES_IR (452 ms total)
+[Benchmark fp_gmres_ir_hlf_1024] runs: 2 | avg: 52404 | median: 53450 | total: 104808
+[       OK ] Benchmark_FP_GMRES_IR.FP_GMRES_IR_Half_BENCHMARK (116 ms)
+[----------] 3 tests from Benchmark_FP_GMRES_IR (340 ms total)
 
 [----------] 1 test from Benchmark_VP_GMRES_IR
 [ RUN      ] Benchmark_VP_GMRES_IR.VP_GMRES_IR_OuterRestartCount_BENCHMARK
-[Benchmark outer_restart_count_1024] runs: 2 | avg: 60780 | median: 60789 | total: 121561
-[       OK ] Benchmark_VP_GMRES_IR.VP_GMRES_IR_OuterRestartCount_BENCHMARK (153 ms)
-[----------] 1 test from Benchmark_VP_GMRES_IR (153 ms total)
+[Benchmark outer_restart_count_1024] runs: 2 | avg: 53755 | median: 55886 | total: 107510
+[       OK ] Benchmark_VP_GMRES_IR.VP_GMRES_IR_OuterRestartCount_BENCHMARK (119 ms)
+[----------] 1 test from Benchmark_VP_GMRES_IR (119 ms total)
 
 [----------] 3 tests from Benchmark_ILUPreconditioner
 [ RUN      ] Benchmark_ILUPreconditioner.Double_ILU0_Preconditioner_BENCHMARK
-[Benchmark ilu0_precond_dbl_1024] runs: 2 | avg: 129688 | median: 131058 | total: 259376
-[       OK ] Benchmark_ILUPreconditioner.Double_ILU0_Preconditioner_BENCHMARK (291 ms)
+[Benchmark ilu0_precond_dbl_1024] runs: 2 | avg: 20912 | median: 21625 | total: 41825
+[       OK ] Benchmark_ILUPreconditioner.Double_ILU0_Preconditioner_BENCHMARK (53 ms)
 [ RUN      ] Benchmark_ILUPreconditioner.Double_ILUT_10e_4_20_Preconditioner_BENCHMARK
-[Benchmark ilutp_em4_20_precond_dbl_1024] runs: 2 | avg: 115777 | median: 115992 | total: 231554
-[       OK ] Benchmark_ILUPreconditioner.Double_ILUT_10e_4_20_Preconditioner_BENCHMARK (263 ms)
+[Benchmark ilutp_em4_20_precond_dbl_1024] runs: 2 | avg: 33984 | median: 34039 | total: 67969
+[       OK ] Benchmark_ILUPreconditioner.Double_ILUT_10e_4_20_Preconditioner_BENCHMARK (79 ms)
 [ RUN      ] Benchmark_ILUPreconditioner.Double_ILUT_10e_6_20_Preconditioner_BENCHMARK
-[Benchmark ilutp_em6_20_precond_dbl_1024] runs: 2 | avg: 123031 | median: 123242 | total: 246062
-[       OK ] Benchmark_ILUPreconditioner.Double_ILUT_10e_6_20_Preconditioner_BENCHMARK (278 ms)
-[----------] 3 tests from Benchmark_ILUPreconditioner (832 ms total)
+[Benchmark ilutp_em6_20_precond_dbl_1024] runs: 2 | avg: 33946 | median: 35745 | total: 67892
+[       OK ] Benchmark_ILUPreconditioner.Double_ILUT_10e_6_20_Preconditioner_BENCHMARK (79 ms)
+[----------] 3 tests from Benchmark_ILUPreconditioner (212 ms total)
 
 [----------] 1 test from Benchmark_Precond_FP_GMRES_IR
 [ RUN      ] Benchmark_Precond_FP_GMRES_IR.ILU0_FP_GMRES_IR_BENCHMARK
-[Benchmark ilu0_fp_gmres_ir_1024] runs: 2 | avg: 248173 | median: 251713 | total: 496346
-[       OK ] Benchmark_Precond_FP_GMRES_IR.ILU0_FP_GMRES_IR_BENCHMARK (530 ms)
-[----------] 1 test from Benchmark_Precond_FP_GMRES_IR (530 ms total)
+[Benchmark ilu0_fp_gmres_ir_1024] runs: 2 | avg: 121275 | median: 125066 | total: 242551
+[       OK ] Benchmark_Precond_FP_GMRES_IR.ILU0_FP_GMRES_IR_BENCHMARK (255 ms)
+[----------] 1 test from Benchmark_Precond_FP_GMRES_IR (255 ms total)
 
 [----------] 1 test from Benchmark_Precond_VP_GMRES_IR
 [ RUN      ] Benchmark_Precond_VP_GMRES_IR.ILU0_VP_GMRES_IR_BENCHMARK
-[Benchmark ilu0_outer_restart_count_1024] runs: 2 | avg: 232681 | median: 233538 | total: 465363
-[       OK ] Benchmark_Precond_VP_GMRES_IR.ILU0_VP_GMRES_IR_BENCHMARK (498 ms)
-[----------] 1 test from Benchmark_Precond_VP_GMRES_IR (498 ms total)
+[Benchmark ilu0_outer_restart_count_1024] runs: 2 | avg: 126998 | median: 128430 | total: 253996
+[       OK ] Benchmark_Precond_VP_GMRES_IR.ILU0_VP_GMRES_IR_BENCHMARK (267 ms)
+[----------] 1 test from Benchmark_Precond_VP_GMRES_IR (267 ms total)
 
 [----------] Global test environment tear-down
-[==========] 69 tests from 9 test suites ran. (6085 ms total)
+[==========] 69 tests from 9 test suites ran. (3308 ms total)
 [  PASSED  ] 69 tests.
