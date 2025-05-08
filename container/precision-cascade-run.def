@@ -27,10 +27,10 @@ From: ../container/precision-cascade-base.sif
     ./scripts/install/linux/install.sh
 
 %apprun test
-    "${REPO_DIR}/install/test/test"
+    "${REPO_DIR}/install/test/test" -sp
 
 %apprun test-rlt
-    "${REPO_DIR}/install/test/test" -rlt
+    "${REPO_DIR}/install/test/test" -rlt -sp
 
 %apprun test-experiment
     "${REPO_DIR}/install/experimentation/test/test_experiment"
