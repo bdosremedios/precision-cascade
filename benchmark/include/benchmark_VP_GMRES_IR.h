@@ -26,63 +26,6 @@ public:
 
 };
 
-template <template <typename> typename TMatrix>
-class NoProgress_RelativeResidualThreshold:
-    public cascade::RelativeResidualThreshold<TMatrix>
-{
-public:
-
-    using cascade::RelativeResidualThreshold<TMatrix>::RelativeResidualThreshold;
-
-    // Remove any progress towards solution
-    void outer_iterate_complete() override {
-        this->generic_soln = this->init_guess;
-        ASSERT_EQ(
-            this->inner_solver->get_iteration(),
-            this->inner_solve_arg_pkg.max_iter
-        );
-    }
-
-};
-
-template <template <typename> typename TMatrix>
-class NoProgress_CheckStagnation:
-    public cascade::CheckStagnation<TMatrix>
-{
-public:
-
-    using cascade::CheckStagnation<TMatrix>::CheckStagnation;
-
-    // Remove any progress towards solution
-    void outer_iterate_complete() override {
-        this->generic_soln = this->init_guess;
-        ASSERT_EQ(
-            this->inner_solver->get_iteration(),
-            this->inner_solve_arg_pkg.max_iter
-        );
-    }
-
-};
-
-template <template <typename> typename TMatrix>
-class NoProgress_StagnationToThreshold:
-    public cascade::StagnationToThreshold<TMatrix>
-{
-public:
-
-    using cascade::StagnationToThreshold<TMatrix>::StagnationToThreshold;
-
-    // Remove any progress towards solution
-    void outer_iterate_complete() override {
-        this->generic_soln = this->init_guess;
-        ASSERT_EQ(
-            this->inner_solver->get_iteration(),
-            this->inner_solve_arg_pkg.max_iter
-        );
-    }
-
-};
-
 class Benchmark_VP_GMRES_IR: public Benchmark_Nested_GMRES
 {
 public:
