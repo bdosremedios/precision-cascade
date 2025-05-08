@@ -1,3 +1,5 @@
+Command: .\install\test\test.exe -rlt -sp
+
 In debug checking memory allocations
 Running all tests...
 Running preconditioner tests...
@@ -5700,3 +5702,470 @@ Iter: 0            Iter: 21
 [----------] Global test environment tear-down
 [==========] 383 tests from 42 test suites ran. (180921 ms total)
 [  PASSED  ] 383 tests.
+
+Command: .\install\benchmark\benchmark.exe -p
+
+Running with fast prototyping settings...
+[==========] Running 69 tests from 9 test suites.
+[----------] Global test environment set-up.
+[----------] 12 tests from Benchmark_SPMV
+[ RUN      ] Benchmark_SPMV.Benchmark_CSC_MV_dbl
+[Benchmark csc_mv_dbl_1024] runs: 2 | avg: 8824 | median: 10367 | total: 17648
+[       OK ] Benchmark_SPMV.Benchmark_CSC_MV_dbl (51 ms)
+[ RUN      ] Benchmark_SPMV.Benchmark_CSC_MV_sgl
+[Benchmark csc_mv_sgl_1024] runs: 2 | avg: 6607 | median: 6708 | total: 13214
+[       OK ] Benchmark_SPMV.Benchmark_CSC_MV_sgl (45 ms)
+[ RUN      ] Benchmark_SPMV.Benchmark_CSC_MV_hlf
+[Benchmark csc_mv_hlf_1024] runs: 2 | avg: 33284 | median: 33403 | total: 66569
+[       OK ] Benchmark_SPMV.Benchmark_CSC_MV_hlf (232 ms)
+[ RUN      ] Benchmark_SPMV.Benchmark_CSC_TMV_dbl
+[Benchmark csc_tmv_dbl_1024] runs: 2 | avg: 7619 | median: 7886 | total: 15238
+[       OK ] Benchmark_SPMV.Benchmark_CSC_TMV_dbl (47 ms)
+[ RUN      ] Benchmark_SPMV.Benchmark_CSC_TMV_sgl
+[Benchmark csc_tmv_sgl_1024] runs: 2 | avg: 6616 | median: 6916 | total: 13233
+[       OK ] Benchmark_SPMV.Benchmark_CSC_TMV_sgl (46 ms)
+[ RUN      ] Benchmark_SPMV.Benchmark_CSC_TMV_hlf
+[Benchmark csc_tmv_hlf_1024] runs: 2 | avg: 6947 | median: 7133 | total: 13894
+[       OK ] Benchmark_SPMV.Benchmark_CSC_TMV_hlf (168 ms)
+[ RUN      ] Benchmark_SPMV.Benchmark_CSR_MV_dbl
+[Benchmark csr_mv_dbl_1024] runs: 2 | avg: 6464 | median: 6606 | total: 12928
+[       OK ] Benchmark_SPMV.Benchmark_CSR_MV_dbl (43 ms)
+[ RUN      ] Benchmark_SPMV.Benchmark_CSR_MV_sgl
+[Benchmark csr_mv_sgl_1024] runs: 2 | avg: 6900 | median: 7003 | total: 13800
+[       OK ] Benchmark_SPMV.Benchmark_CSR_MV_sgl (45 ms)
+[ RUN      ] Benchmark_SPMV.Benchmark_CSR_MV_hlf
+[Benchmark csr_mv_hlf_1024] runs: 2 | avg: 7583 | median: 7652 | total: 15167
+[       OK ] Benchmark_SPMV.Benchmark_CSR_MV_hlf (168 ms)
+[ RUN      ] Benchmark_SPMV.Benchmark_CSR_TMV_dbl
+[Benchmark csr_tmv_dbl_1024] runs: 2 | avg: 6886 | median: 7189 | total: 13773
+[       OK ] Benchmark_SPMV.Benchmark_CSR_TMV_dbl (44 ms)
+[ RUN      ] Benchmark_SPMV.Benchmark_CSR_TMV_sgl
+[Benchmark csr_tmv_sgl_1024] runs: 2 | avg: 6844 | median: 7055 | total: 13689
+[       OK ] Benchmark_SPMV.Benchmark_CSR_TMV_sgl (44 ms)
+[ RUN      ] Benchmark_SPMV.Benchmark_CSR_TMV_hlf
+[Benchmark csr_tmv_hlf_1024] runs: 2 | avg: 32469 | median: 32878 | total: 64938
+[       OK ] Benchmark_SPMV.Benchmark_CSR_TMV_hlf (211 ms)
+[----------] 12 tests from Benchmark_SPMV (1150 ms total)
+
+[----------] 18 tests from Benchmark_MatrixDense
+[ RUN      ] Benchmark_MatrixDense.MatrixVectorMult_Double_BENCHMARK
+[Benchmark matdense_mv_dbl_1024] runs: 2 | avg: 36128 | median: 45620 | total: 72257
+[       OK ] Benchmark_MatrixDense.MatrixVectorMult_Double_BENCHMARK (135 ms)
+[ RUN      ] Benchmark_MatrixDense.MatrixVectorMult_Single_BENCHMARK
+[Benchmark matdense_mv_sgl_1024] runs: 2 | avg: 26447 | median: 38530 | total: 52894
+[       OK ] Benchmark_MatrixDense.MatrixVectorMult_Single_BENCHMARK (114 ms)
+[ RUN      ] Benchmark_MatrixDense.MatrixVectorMult_Half_BENCHMARK
+[Benchmark matdense_mv_hlf_1024] runs: 2 | avg: 29388 | median: 40593 | total: 58777
+[       OK ] Benchmark_MatrixDense.MatrixVectorMult_Half_BENCHMARK (117 ms)
+[ RUN      ] Benchmark_MatrixDense.TransposeMatrixVectorMult_Double_BENCHMARK
+[Benchmark matdense_tmv_dbl_1024] runs: 2 | avg: 23911 | median: 24097 | total: 47823
+[       OK ] Benchmark_MatrixDense.TransposeMatrixVectorMult_Double_BENCHMARK (105 ms)
+[ RUN      ] Benchmark_MatrixDense.TransposeMatrixVectorMult_Single_BENCHMARK
+[Benchmark matdense_tmv_sgl_1024] runs: 2 | avg: 10434 | median: 10631 | total: 20869
+[       OK ] Benchmark_MatrixDense.TransposeMatrixVectorMult_Single_BENCHMARK (83 ms)
+[ RUN      ] Benchmark_MatrixDense.TransposeMatrixVectorMult_Half_BENCHMARK
+[Benchmark matdense_tmv_hlf_1024] runs: 2 | avg: 7395 | median: 7749 | total: 14791
+[       OK ] Benchmark_MatrixDense.TransposeMatrixVectorMult_Half_BENCHMARK (74 ms)
+[ RUN      ] Benchmark_MatrixDense.SubsetcolsMatrixVectorMult_Double_BENCHMARK
+[Benchmark matdense_subsetcolsmv_dbl_1024] runs: 2 | avg: 10667 | median: 10708 | total: 21334
+[       OK ] Benchmark_MatrixDense.SubsetcolsMatrixVectorMult_Double_BENCHMARK (79 ms)
+[ RUN      ] Benchmark_MatrixDense.SubsetcolsMatrixVectorMult_Single_BENCHMARK
+[Benchmark matdense_subsetcolsmv_sgl_1024] runs: 2 | avg: 9823 | median: 10095 | total: 19646
+[       OK ] Benchmark_MatrixDense.SubsetcolsMatrixVectorMult_Single_BENCHMARK (78 ms)
+[ RUN      ] Benchmark_MatrixDense.SubsetcolsMatrixVectorMult_Half_BENCHMARK
+[Benchmark matdense_subsetcolsmv_hlf_1024] runs: 2 | avg: 15084 | median: 15277 | total: 30168
+[       OK ] Benchmark_MatrixDense.SubsetcolsMatrixVectorMult_Half_BENCHMARK (89 ms)
+[ RUN      ] Benchmark_MatrixDense.SubsetcolsTransposeMatrixVectorMult_Double_BENCHMARK
+[Benchmark matdense_subsetcolstmv_dbl_1024] runs: 2 | avg: 10830 | median: 10841 | total: 21660
+[       OK ] Benchmark_MatrixDense.SubsetcolsTransposeMatrixVectorMult_Double_BENCHMARK (80 ms)
+[ RUN      ] Benchmark_MatrixDense.SubsetcolsTransposeMatrixVectorMult_Single_BENCHMARK
+[Benchmark matdense_subsetcolstmv_sgl_1024] runs: 2 | avg: 9911 | median: 9994 | total: 19823
+[       OK ] Benchmark_MatrixDense.SubsetcolsTransposeMatrixVectorMult_Single_BENCHMARK (79 ms)
+[ RUN      ] Benchmark_MatrixDense.SubsetcolsTransposeMatrixVectorMult_Half_BENCHMARK
+[Benchmark matdense_subsetcolstmv_hlf_1024] runs: 2 | avg: 11402 | median: 11472 | total: 22805
+[       OK ] Benchmark_MatrixDense.SubsetcolsTransposeMatrixVectorMult_Half_BENCHMARK (85 ms)
+[ RUN      ] Benchmark_MatrixDense.ForwardSubstitution_Double_BENCHMARK
+[Benchmark matdense_frwdsub_dbl_1024] runs: 2 | avg: 1878 | median: 2144 | total: 3756
+[       OK ] Benchmark_MatrixDense.ForwardSubstitution_Double_BENCHMARK (36 ms)
+[ RUN      ] Benchmark_MatrixDense.ForwardSubstitution_Single_BENCHMARK
+[Benchmark matdense_frwdsub_sgl_1024] runs: 2 | avg: 1164 | median: 1196 | total: 2329
+[       OK ] Benchmark_MatrixDense.ForwardSubstitution_Single_BENCHMARK (36 ms)
+[ RUN      ] Benchmark_MatrixDense.ForwardSubstitution_Half_BENCHMARK
+[Benchmark matdense_frwdsub_hlf_1024] runs: 2 | avg: 962 | median: 987 | total: 1925
+[       OK ] Benchmark_MatrixDense.ForwardSubstitution_Half_BENCHMARK (35 ms)
+[ RUN      ] Benchmark_MatrixDense.BackwardSubstitution_Double_BENCHMARK
+[Benchmark matdense_backsub_dbl_1024] runs: 2 | avg: 1602 | median: 1634 | total: 3205
+[       OK ] Benchmark_MatrixDense.BackwardSubstitution_Double_BENCHMARK (35 ms)
+[ RUN      ] Benchmark_MatrixDense.BackwardSubstitution_Single_BENCHMARK
+[Benchmark matdense_backsub_sgl_1024] runs: 2 | avg: 1047 | median: 1090 | total: 2095
+[       OK ] Benchmark_MatrixDense.BackwardSubstitution_Single_BENCHMARK (36 ms)
+[ RUN      ] Benchmark_MatrixDense.BackwardSubstitution_Half_BENCHMARK
+[Benchmark matdense_backsub_hlf_1024] runs: 2 | avg: 1002 | median: 1116 | total: 2004
+[       OK ] Benchmark_MatrixDense.BackwardSubstitution_Half_BENCHMARK (34 ms)
+[----------] 18 tests from Benchmark_MatrixDense (1340 ms total)
+
+[----------] 24 tests from Benchmark_NoFillMatrixSparse
+[ RUN      ] Benchmark_NoFillMatrixSparse.MatrixVectorMult_Double_BENCHMARK
+[Benchmark matsparse_mv_dbl_1024] runs: 2 | avg: 9789 | median: 9810 | total: 19578
+[       OK ] Benchmark_NoFillMatrixSparse.MatrixVectorMult_Double_BENCHMARK (49 ms)
+[ RUN      ] Benchmark_NoFillMatrixSparse.MatrixVectorMult_Single_BENCHMARK
+[Benchmark matsparse_mv_sgl_1024] runs: 2 | avg: 9037 | median: 9152 | total: 18075
+[       OK ] Benchmark_NoFillMatrixSparse.MatrixVectorMult_Single_BENCHMARK (48 ms)
+[ RUN      ] Benchmark_NoFillMatrixSparse.MatrixVectorMult_Half_BENCHMARK
+[Benchmark matsparse_mv_hlf_1024] runs: 2 | avg: 8891 | median: 9035 | total: 17783
+[       OK ] Benchmark_NoFillMatrixSparse.MatrixVectorMult_Half_BENCHMARK (47 ms)
+[ RUN      ] Benchmark_NoFillMatrixSparse.TransposeMatrixVectorMult_Double_BENCHMARK
+[Benchmark matsparse_tmv_dbl_1024] runs: 2 | avg: 9956 | median: 9983 | total: 19912
+[       OK ] Benchmark_NoFillMatrixSparse.TransposeMatrixVectorMult_Double_BENCHMARK (50 ms)
+[ RUN      ] Benchmark_NoFillMatrixSparse.TransposeMatrixVectorMult_Single_BENCHMARK
+[Benchmark matsparse_tmv_sgl_1024] runs: 2 | avg: 9574 | median: 10096 | total: 19148
+[       OK ] Benchmark_NoFillMatrixSparse.TransposeMatrixVectorMult_Single_BENCHMARK (49 ms)
+[ RUN      ] Benchmark_NoFillMatrixSparse.TransposeMatrixVectorMult_Half_BENCHMARK
+[Benchmark matsparse_tmv_hlf_1024] runs: 2 | avg: 22659 | median: 23316 | total: 45318
+[       OK ] Benchmark_NoFillMatrixSparse.TransposeMatrixVectorMult_Half_BENCHMARK (75 ms)
+[ RUN      ] Benchmark_NoFillMatrixSparse.ForwardSubstitution_Double_BENCHMARK
+[Benchmark matsparse_frwdsub_dbl_1024] runs: 2 | avg: 17965 | median: 18404 | total: 35931
+[       OK ] Benchmark_NoFillMatrixSparse.ForwardSubstitution_Double_BENCHMARK (51 ms)
+[ RUN      ] Benchmark_NoFillMatrixSparse.ForwardSubstitution_Single_BENCHMARK
+[Benchmark matsparse_frwdsub_sgl_1024] runs: 2 | avg: 16827 | median: 16954 | total: 33655
+[       OK ] Benchmark_NoFillMatrixSparse.ForwardSubstitution_Single_BENCHMARK (49 ms)
+[ RUN      ] Benchmark_NoFillMatrixSparse.ForwardSubstitution_Half_BENCHMARK
+[Benchmark matsparse_frwdsub_hlf_1024] runs: 2 | avg: 18264 | median: 19177 | total: 36529
+[       OK ] Benchmark_NoFillMatrixSparse.ForwardSubstitution_Half_BENCHMARK (53 ms)
+[ RUN      ] Benchmark_NoFillMatrixSparse.FastForwardSubstitution_Double_BENCHMARK
+[Benchmark matsparse_fastfrwdsub_dbl_1024] runs: 2 | avg: 862 | median: 1028 | total: 1724
+[       OK ] Benchmark_NoFillMatrixSparse.FastForwardSubstitution_Double_BENCHMARK (21 ms)
+[ RUN      ] Benchmark_NoFillMatrixSparse.FastForwardSubstitution_Single_BENCHMARK
+[Benchmark matsparse_fastfrwdsub_sgl_1024] runs: 2 | avg: 644 | median: 731 | total: 1288
+[       OK ] Benchmark_NoFillMatrixSparse.FastForwardSubstitution_Single_BENCHMARK (21 ms)
+[ RUN      ] Benchmark_NoFillMatrixSparse.FastForwardSubstitution_Half_BENCHMARK
+[Benchmark matsparse_fastfrwdsub_hlf_1024] runs: 2 | avg: 628 | median: 648 | total: 1257
+[       OK ] Benchmark_NoFillMatrixSparse.FastForwardSubstitution_Half_BENCHMARK (19 ms)
+[ RUN      ] Benchmark_NoFillMatrixSparse.LowtriPreprocess_Double_BENCHMARK
+[Benchmark matsparse_frwdtrsvpreprocess_dbl_1024] runs: 2 | avg: 1382 | median: 1383 | total: 2764
+[       OK ] Benchmark_NoFillMatrixSparse.LowtriPreprocess_Double_BENCHMARK (19 ms)
+[ RUN      ] Benchmark_NoFillMatrixSparse.LowtriPreprocess_Single_BENCHMARK
+[Benchmark matsparse_frwdtrsvpreprocess_sgl_1024] runs: 2 | avg: 1239 | median: 1263 | total: 2479
+[       OK ] Benchmark_NoFillMatrixSparse.LowtriPreprocess_Single_BENCHMARK (20 ms)
+[ RUN      ] Benchmark_NoFillMatrixSparse.LowtriPreprocess_Half_BENCHMARK
+[Benchmark matsparse_frwdtrsvpreprocess_hlf_1024] runs: 2 | avg: 1592 | median: 2049 | total: 3184
+[       OK ] Benchmark_NoFillMatrixSparse.LowtriPreprocess_Half_BENCHMARK (19 ms)
+[ RUN      ] Benchmark_NoFillMatrixSparse.BackwardSubstitution_Double_BENCHMARK
+[Benchmark matsparse_backsub_dbl_1024] runs: 2 | avg: 20581 | median: 20745 | total: 41162
+[       OK ] Benchmark_NoFillMatrixSparse.BackwardSubstitution_Double_BENCHMARK (58 ms)
+[ RUN      ] Benchmark_NoFillMatrixSparse.BackwardSubstitution_Single_BENCHMARK
+[Benchmark matsparse_backsub_sgl_1024] runs: 2 | avg: 18270 | median: 18778 | total: 36540
+[       OK ] Benchmark_NoFillMatrixSparse.BackwardSubstitution_Single_BENCHMARK (53 ms)
+[ RUN      ] Benchmark_NoFillMatrixSparse.BackwardSubstitution_Half_BENCHMARK
+[Benchmark matsparse_backsub_hlf_1024] runs: 2 | avg: 19811 | median: 19999 | total: 39622
+[       OK ] Benchmark_NoFillMatrixSparse.BackwardSubstitution_Half_BENCHMARK (56 ms)
+[ RUN      ] Benchmark_NoFillMatrixSparse.FastBackwardSubstitution_Double_BENCHMARK
+[Benchmark matsparse_fastbacksub_dbl_1024] runs: 2 | avg: 1011 | median: 1269 | total: 2023
+[       OK ] Benchmark_NoFillMatrixSparse.FastBackwardSubstitution_Double_BENCHMARK (22 ms)
+[ RUN      ] Benchmark_NoFillMatrixSparse.FastBackwardSubstitution_Single_BENCHMARK
+[Benchmark matsparse_fastbacksub_sgl_1024] runs: 2 | avg: 697 | median: 769 | total: 1394
+[       OK ] Benchmark_NoFillMatrixSparse.FastBackwardSubstitution_Single_BENCHMARK (20 ms)
+[ RUN      ] Benchmark_NoFillMatrixSparse.FastBackwardSubstitution_Half_BENCHMARK
+[Benchmark matsparse_fastbacksub_hlf_1024] runs: 2 | avg: 567 | median: 617 | total: 1134
+[       OK ] Benchmark_NoFillMatrixSparse.FastBackwardSubstitution_Half_BENCHMARK (20 ms)
+[ RUN      ] Benchmark_NoFillMatrixSparse.UpptriPreprocess_Double_BENCHMARK
+[Benchmark matsparse_backtrsvpreprocess_dbl_1024] runs: 2 | avg: 1405 | median: 1827 | total: 2811
+[       OK ] Benchmark_NoFillMatrixSparse.UpptriPreprocess_Double_BENCHMARK (19 ms)
+[ RUN      ] Benchmark_NoFillMatrixSparse.UpptriPreprocess_Single_BENCHMARK
+[Benchmark matsparse_backtrsvpreprocess_sgl_1024] runs: 2 | avg: 1029 | median: 1054 | total: 2059
+[       OK ] Benchmark_NoFillMatrixSparse.UpptriPreprocess_Single_BENCHMARK (18 ms)
+[ RUN      ] Benchmark_NoFillMatrixSparse.UpptriPreprocess_Half_BENCHMARK
+[Benchmark matsparse_backtrsvpreprocess_hlf_1024] runs: 2 | avg: 941 | median: 957 | total: 1883
+[       OK ] Benchmark_NoFillMatrixSparse.UpptriPreprocess_Half_BENCHMARK (18 ms)
+[----------] 24 tests from Benchmark_NoFillMatrixSparse (887 ms total)
+
+[----------] 6 tests from Benchmark_GMRES
+[ RUN      ] Benchmark_GMRES.GMRESSolve_Double_BENCHMARK
+[Benchmark gmressolve_dbl_1024] runs: 2 | avg: 12549 | median: 14523 | total: 25099
+[       OK ] Benchmark_GMRES.GMRESSolve_Double_BENCHMARK (57 ms)
+[ RUN      ] Benchmark_GMRES.GMRESSolve_Single_BENCHMARK
+[Benchmark gmressolve_sgl_1024] runs: 2 | avg: 13186 | median: 15400 | total: 26373
+[       OK ] Benchmark_GMRES.GMRESSolve_Single_BENCHMARK (60 ms)
+[ RUN      ] Benchmark_GMRES.GMRESSolve_Half_BENCHMARK
+[Benchmark gmressolve_hlf_1024] runs: 2 | avg: 11576 | median: 12634 | total: 23153
+[       OK ] Benchmark_GMRES.GMRESSolve_Half_BENCHMARK (54 ms)
+[ RUN      ] Benchmark_GMRES.GetExtrapolationData_Double
+[Benchmark gmressolveextrapdata_dbl_1024] runs: 2 | avg: 2735 | median: 2930 | total: 5471
+[       OK ] Benchmark_GMRES.GetExtrapolationData_Double (18 ms)
+[ RUN      ] Benchmark_GMRES.GetExtrapolationData_Single
+[Benchmark gmressolveextrapdata_sgl_1024] runs: 2 | avg: 2613 | median: 2651 | total: 5226
+[       OK ] Benchmark_GMRES.GetExtrapolationData_Single (17 ms)
+[ RUN      ] Benchmark_GMRES.GetExtrapolationData_Half
+[Benchmark gmressolveextrapdata_hlf_1024] runs: 2 | avg: 4075 | median: 4774 | total: 8150
+[       OK ] Benchmark_GMRES.GetExtrapolationData_Half (29 ms)
+[----------] 6 tests from Benchmark_GMRES (238 ms total)
+
+[----------] 3 tests from Benchmark_FP_GMRES_IR
+[ RUN      ] Benchmark_FP_GMRES_IR.FP_GMRES_IR_Double_BENCHMARK
+[Benchmark fp_gmres_ir_dbl_1024] runs: 2 | avg: 58217 | median: 61685 | total: 116435
+[       OK ] Benchmark_FP_GMRES_IR.FP_GMRES_IR_Double_BENCHMARK (149 ms)
+[ RUN      ] Benchmark_FP_GMRES_IR.FP_GMRES_IR_Single_BENCHMARK
+[Benchmark fp_gmres_ir_sgl_1024] runs: 2 | avg: 56494 | median: 56536 | total: 112989
+[       OK ] Benchmark_FP_GMRES_IR.FP_GMRES_IR_Single_BENCHMARK (145 ms)
+[ RUN      ] Benchmark_FP_GMRES_IR.FP_GMRES_IR_Half_BENCHMARK
+[Benchmark fp_gmres_ir_hlf_1024] runs: 2 | avg: 62180 | median: 62698 | total: 124360
+[       OK ] Benchmark_FP_GMRES_IR.FP_GMRES_IR_Half_BENCHMARK (157 ms)
+[----------] 3 tests from Benchmark_FP_GMRES_IR (452 ms total)
+
+[----------] 1 test from Benchmark_VP_GMRES_IR
+[ RUN      ] Benchmark_VP_GMRES_IR.VP_GMRES_IR_OuterRestartCount_BENCHMARK
+[Benchmark outer_restart_count_1024] runs: 2 | avg: 60780 | median: 60789 | total: 121561
+[       OK ] Benchmark_VP_GMRES_IR.VP_GMRES_IR_OuterRestartCount_BENCHMARK (153 ms)
+[----------] 1 test from Benchmark_VP_GMRES_IR (153 ms total)
+
+[----------] 3 tests from Benchmark_ILUPreconditioner
+[ RUN      ] Benchmark_ILUPreconditioner.Double_ILU0_Preconditioner_BENCHMARK
+[Benchmark ilu0_precond_dbl_1024] runs: 2 | avg: 129688 | median: 131058 | total: 259376
+[       OK ] Benchmark_ILUPreconditioner.Double_ILU0_Preconditioner_BENCHMARK (291 ms)
+[ RUN      ] Benchmark_ILUPreconditioner.Double_ILUT_10e_4_20_Preconditioner_BENCHMARK
+[Benchmark ilutp_em4_20_precond_dbl_1024] runs: 2 | avg: 115777 | median: 115992 | total: 231554
+[       OK ] Benchmark_ILUPreconditioner.Double_ILUT_10e_4_20_Preconditioner_BENCHMARK (263 ms)
+[ RUN      ] Benchmark_ILUPreconditioner.Double_ILUT_10e_6_20_Preconditioner_BENCHMARK
+[Benchmark ilutp_em6_20_precond_dbl_1024] runs: 2 | avg: 123031 | median: 123242 | total: 246062
+[       OK ] Benchmark_ILUPreconditioner.Double_ILUT_10e_6_20_Preconditioner_BENCHMARK (278 ms)
+[----------] 3 tests from Benchmark_ILUPreconditioner (832 ms total)
+
+[----------] 1 test from Benchmark_Precond_FP_GMRES_IR
+[ RUN      ] Benchmark_Precond_FP_GMRES_IR.ILU0_FP_GMRES_IR_BENCHMARK
+[Benchmark ilu0_fp_gmres_ir_1024] runs: 2 | avg: 248173 | median: 251713 | total: 496346
+[       OK ] Benchmark_Precond_FP_GMRES_IR.ILU0_FP_GMRES_IR_BENCHMARK (530 ms)
+[----------] 1 test from Benchmark_Precond_FP_GMRES_IR (530 ms total)
+
+[----------] 1 test from Benchmark_Precond_VP_GMRES_IR
+[ RUN      ] Benchmark_Precond_VP_GMRES_IR.ILU0_VP_GMRES_IR_BENCHMARK
+[Benchmark ilu0_outer_restart_count_1024] runs: 2 | avg: 232681 | median: 233538 | total: 465363
+[       OK ] Benchmark_Precond_VP_GMRES_IR.ILU0_VP_GMRES_IR_BENCHMARK (498 ms)
+[----------] 1 test from Benchmark_Precond_VP_GMRES_IR (498 ms total)
+
+[----------] Global test environment tear-down
+[==========] 69 tests from 9 test suites ran. (6085 ms total)
+[  PASSED  ] 69 tests.
+
+Command: .\install\experimentation\test\test_experiment.exe
+
+Not printing expected errors...
+[==========] Running 24 tests from 5 test suites.
+[----------] Global test environment set-up.
+[----------] 6 tests from Test_Experiment_Data
+[ RUN      ] Test_Experiment_Data.Test_Load_Lin_Sys
+[05/08/25 10:36:30] [info] Load linear system from: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_data\easy_4_4.csv
+[05/08/25 10:36:30] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 5 | Fill ratio: 0.312 | Max magnitude: 1
+[05/08/25 10:36:30] [info] b vector info: Rows: 4 | Non-zeroes: 4 | Fill ratio: 1 | Max magnitude: 0.67
+[05/08/25 10:36:30] [info] Load linear system from: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_data\easy_4_4.csv
+[05/08/25 10:36:30] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 5 | Fill ratio: 0.312 | Max magnitude: 1
+[05/08/25 10:36:30] [info] b vector info: Rows: 4 | Non-zeroes: 4 | Fill ratio: 1 | Max magnitude: 0.948
+[05/08/25 10:36:30] [info] Load linear system from: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_data\easy_4_4.mtx
+[05/08/25 10:36:30] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 5 | Fill ratio: 0.312 | Max magnitude: 1
+[05/08/25 10:36:30] [info] b vector info: Rows: 4 | Non-zeroes: 4 | Fill ratio: 1 | Max magnitude: 0.981
+[05/08/25 10:36:30] [info] Load linear system from: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_data\easy_4_4.mtx
+[05/08/25 10:36:30] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 5 | Fill ratio: 0.312 | Max magnitude: 1
+[05/08/25 10:36:30] [info] b vector info: Rows: 4 | Non-zeroes: 4 | Fill ratio: 1 | Max magnitude: 0.955
+[       OK ] Test_Experiment_Data.Test_Load_Lin_Sys (55 ms)
+[ RUN      ] Test_Experiment_Data.Test_Load_Lin_Sys_w_RHS
+[05/08/25 10:36:30] [info] Load linear system from: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_data\paired_mat.csv
+[05/08/25 10:36:30] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 7 | Fill ratio: 0.438 | Max magnitude: 1
+[05/08/25 10:36:30] [info] b vector info: Rows: 4 | Non-zeroes: 4 | Fill ratio: 1 | Max magnitude: 2.25
+[05/08/25 10:36:30] [info] Load linear system from: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_data\paired_mat.csv
+[05/08/25 10:36:30] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 7 | Fill ratio: 0.438 | Max magnitude: 1
+[05/08/25 10:36:30] [info] b vector info: Rows: 4 | Non-zeroes: 4 | Fill ratio: 1 | Max magnitude: 2.25
+[05/08/25 10:36:30] [info] Load linear system from: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_data\paired_mat.mtx
+[05/08/25 10:36:30] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 4 | Fill ratio: 0.25 | Max magnitude: 1
+[05/08/25 10:36:30] [info] b vector info: Rows: 4 | Non-zeroes: 1 | Fill ratio: 0.25 | Max magnitude: 1
+[05/08/25 10:36:30] [info] Load linear system from: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_data\paired_mat.mtx
+[05/08/25 10:36:30] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 4 | Fill ratio: 0.25 | Max magnitude: 1
+[05/08/25 10:36:30] [info] b vector info: Rows: 4 | Non-zeroes: 1 | Fill ratio: 0.25 | Max magnitude: 1
+[       OK ] Test_Experiment_Data.Test_Load_Lin_Sys_w_RHS (31 ms)
+[ RUN      ] Test_Experiment_Data.Test_Mismatch_Load_Lin_Sys_w_RHS
+[05/08/25 10:36:30] [info] Load linear system from: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_data\bad_paired_mat_small.csv
+[05/08/25 10:36:30] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 7 | Fill ratio: 0.438 | Max magnitude: 1
+[05/08/25 10:36:30] [info] b vector info: Rows: 3 | Non-zeroes: 3 | Fill ratio: 1 | Max magnitude: 2.25
+[05/08/25 10:36:30] [info] Load linear system from: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_data\bad_paired_mat_small.csv
+[05/08/25 10:36:30] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 7 | Fill ratio: 0.438 | Max magnitude: 1
+[05/08/25 10:36:30] [info] b vector info: Rows: 3 | Non-zeroes: 3 | Fill ratio: 1 | Max magnitude: 2.25
+[05/08/25 10:36:30] [info] Load linear system from: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_data\bad_paired_mat_small.mtx
+[05/08/25 10:36:30] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 4 | Fill ratio: 0.25 | Max magnitude: 1
+[05/08/25 10:36:30] [info] b vector info: Rows: 3 | Non-zeroes: 0 | Fill ratio: 0 | Max magnitude: 0
+[05/08/25 10:36:30] [info] Load linear system from: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_data\bad_paired_mat_small.mtx
+[05/08/25 10:36:30] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 4 | Fill ratio: 0.25 | Max magnitude: 1
+[05/08/25 10:36:30] [info] b vector info: Rows: 3 | Non-zeroes: 0 | Fill ratio: 0 | Max magnitude: 0
+[05/08/25 10:36:30] [info] Load linear system from: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_data\bad_paired_mat_big.csv
+[05/08/25 10:36:30] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 7 | Fill ratio: 0.438 | Max magnitude: 1
+[05/08/25 10:36:30] [info] b vector info: Rows: 5 | Non-zeroes: 5 | Fill ratio: 1 | Max magnitude: 2.25
+[05/08/25 10:36:30] [info] Load linear system from: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_data\bad_paired_mat_big.csv
+[05/08/25 10:36:30] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 7 | Fill ratio: 0.438 | Max magnitude: 1
+[05/08/25 10:36:30] [info] b vector info: Rows: 5 | Non-zeroes: 5 | Fill ratio: 1 | Max magnitude: 2.25
+[05/08/25 10:36:30] [info] Load linear system from: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_data\bad_paired_mat_big.mtx
+[05/08/25 10:36:30] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 4 | Fill ratio: 0.25 | Max magnitude: 1
+[05/08/25 10:36:30] [info] b vector info: Rows: 5 | Non-zeroes: 0 | Fill ratio: 0 | Max magnitude: 0
+[05/08/25 10:36:30] [info] Load linear system from: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_data\bad_paired_mat_big.mtx
+[05/08/25 10:36:30] [info] A matrix info: Rows: 4 | Cols: 4 | Non-zeroes: 4 | Fill ratio: 0.25 | Max magnitude: 1
+[05/08/25 10:36:30] [info] b vector info: Rows: 5 | Non-zeroes: 0 | Fill ratio: 0 | Max magnitude: 0
+[       OK ] Test_Experiment_Data.Test_Mismatch_Load_Lin_Sys_w_RHS (25 ms)
+[ RUN      ] Test_Experiment_Data.TestRecordOutputJsonPrecond
+[05/08/25 10:36:30] [info] Save data to: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\none_dense_file.json
+[05/08/25 10:36:30] [info] Save data to: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\jacobi_dense_file.json
+[05/08/25 10:36:30] [info] Save data to: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\ilu0_dense_file.json
+[05/08/25 10:36:30] [info] Save data to: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\ilutp_dense_file.json
+[05/08/25 10:36:30] [info] Save data to: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\none_sparse_file.json
+[05/08/25 10:36:30] [info] Save data to: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\jacobi_sparse_file.json
+[05/08/25 10:36:30] [info] Save data to: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\ilu0_sparse_file.json
+[05/08/25 10:36:30] [info] Save data to: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\ilutp_sparse_file.json
+[       OK ] Test_Experiment_Data.TestRecordOutputJsonPrecond (70 ms)
+[ RUN      ] Test_Experiment_Data.TestRecordOutputJsonFPGMRES
+[05/08/25 10:36:30] [info] Start execute_solve: fpgmres_dense_id
+[05/08/25 10:36:30] [info] Finish execute_solve: fpgmres_dense_id
+[05/08/25 10:36:30] [info] Save data to: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\fpgmres_dense_file.json
+[05/08/25 10:36:30] [info] Start execute_solve: fpgmres_sparse_id
+[05/08/25 10:36:30] [info] Finish execute_solve: fpgmres_sparse_id
+[05/08/25 10:36:30] [info] Save data to: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\fpgmres_sparse_file.json
+[       OK ] Test_Experiment_Data.TestRecordOutputJsonFPGMRES (107 ms)
+[ RUN      ] Test_Experiment_Data.TestRecordOutputJsonVPGMRES
+[05/08/25 10:36:30] [info] Start execute_solve: vpgmres_dense_id
+[05/08/25 10:36:30] [info] Finish execute_solve: vpgmres_dense_id
+[05/08/25 10:36:30] [info] Save data to: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\vpgmres_dense_file.json
+[05/08/25 10:36:30] [info] Start execute_solve: vpgmres_sparse_id
+[05/08/25 10:36:30] [info] Finish execute_solve: vpgmres_sparse_id
+[05/08/25 10:36:30] [info] Save data to: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\vpgmres_sparse_file.json
+[       OK ] Test_Experiment_Data.TestRecordOutputJsonVPGMRES (255 ms)
+[----------] 6 tests from Test_Experiment_Data (546 ms total)
+
+[----------] 6 tests from Test_Experiment_Read
+[ RUN      ] Test_Experiment_Read.TestCorrectSingleEntryJson
+[       OK ] Test_Experiment_Read.TestCorrectSingleEntryJson (1 ms)
+[ RUN      ] Test_Experiment_Read.TestCorrectILUTPJson
+[       OK ] Test_Experiment_Read.TestCorrectILUTPJson (0 ms)
+[ RUN      ] Test_Experiment_Read.TestCorrectMultipleEntryJson
+[       OK ] Test_Experiment_Read.TestCorrectMultipleEntryJson (10 ms)
+[ RUN      ] Test_Experiment_Read.TestBadJsonParse
+[       OK ] Test_Experiment_Read.TestBadJsonParse (10 ms)
+[ RUN      ] Test_Experiment_Read.TestBadJsonSolveGroupMembers
+[       OK ] Test_Experiment_Read.TestBadJsonSolveGroupMembers (26 ms)
+[ RUN      ] Test_Experiment_Read.TestBadJsonSolveGroupMemberValues
+[       OK ] Test_Experiment_Read.TestBadJsonSolveGroupMemberValues (104 ms)
+[----------] 6 tests from Test_Experiment_Read (154 ms total)
+
+[----------] 6 tests from Test_Experiment_Run
+[ RUN      ] Test_Experiment_Run.Test_Calc_Preconditioner
+[05/08/25 10:36:30] [info] Start calc_preconditioner: none_NA_NA
+[05/08/25 10:36:30] [info] Finish calc_preconditioner: none_NA_NA
+[05/08/25 10:36:30] [info] Start calc_preconditioner: jacobi_NA_NA
+[05/08/25 10:36:30] [info] Finish calc_preconditioner: jacobi_NA_NA
+[05/08/25 10:36:30] [info] Start calc_preconditioner: ilu0_NA_NA
+[05/08/25 10:36:30] [info] ILUPreconditioner: L info: Rows: 16 | Cols: 16 | Non-zeroes: 136 | Fill ratio: 0.531 | Max magnitude: 1
+[05/08/25 10:36:30] [info] ILUPreconditioner: U info: Rows: 16 | Cols: 16 | Non-zeroes: 136 | Fill ratio: 0.531 | Max magnitude: 1.18
+[05/08/25 10:36:30] [info] Finish calc_preconditioner: ilu0_NA_NA
+[05/08/25 10:36:30] [info] Start calc_preconditioner: ilutp_01_10
+[05/08/25 10:36:30] [info] ILUPreconditioner: L info: Rows: 16 | Cols: 16 | Non-zeroes: 55 | Fill ratio: 0.215 | Max magnitude: 1
+[05/08/25 10:36:30] [info] ILUPreconditioner: U info: Rows: 16 | Cols: 16 | Non-zeroes: 55 | Fill ratio: 0.215 | Max magnitude: 1.19
+[05/08/25 10:36:30] [info] ILUPreconditioner: P info: Rows: 16 | Cols: 16 | Non-zeroes: 16 | Fill ratio: 0.0625 | Max magnitude: 1
+[05/08/25 10:36:30] [info] Finish calc_preconditioner: ilutp_01_10
+[05/08/25 10:36:30] [info] Start calc_preconditioner: none_NA_NA
+[05/08/25 10:36:30] [info] Finish calc_preconditioner: none_NA_NA
+[05/08/25 10:36:30] [info] Start calc_preconditioner: jacobi_NA_NA
+[05/08/25 10:36:30] [info] Finish calc_preconditioner: jacobi_NA_NA
+[05/08/25 10:36:30] [info] Start calc_preconditioner: ilu0_NA_NA
+[05/08/25 10:36:30] [info] ILUPreconditioner: L info: Rows: 16 | Cols: 16 | Non-zeroes: 136 | Fill ratio: 0.531 | Max magnitude: 1
+[05/08/25 10:36:30] [info] ILUPreconditioner: U info: Rows: 16 | Cols: 16 | Non-zeroes: 136 | Fill ratio: 0.531 | Max magnitude: 1.29
+[05/08/25 10:36:30] [info] Finish calc_preconditioner: ilu0_NA_NA
+[05/08/25 10:36:30] [info] Start calc_preconditioner: ilutp_01_10
+[05/08/25 10:36:30] [info] ILUPreconditioner: L info: Rows: 16 | Cols: 16 | Non-zeroes: 46 | Fill ratio: 0.18 | Max magnitude: 1
+[05/08/25 10:36:30] [info] ILUPreconditioner: U info: Rows: 16 | Cols: 16 | Non-zeroes: 44 | Fill ratio: 0.172 | Max magnitude: 1.25
+[05/08/25 10:36:30] [info] ILUPreconditioner: P info: Rows: 16 | Cols: 16 | Non-zeroes: 16 | Fill ratio: 0.0625 | Max magnitude: 1
+[05/08/25 10:36:30] [info] Finish calc_preconditioner: ilutp_01_10
+[       OK ] Test_Experiment_Run.Test_Calc_Preconditioner (23 ms)
+[ RUN      ] Test_Experiment_Run.Test_Execute_FP_GMRES_IR_Solve
+[05/08/25 10:36:31] [info] Start execute_solve: fp16_id
+[05/08/25 10:36:31] [info] Finish execute_solve: fp16_id
+[05/08/25 10:36:31] [info] Start execute_solve: fp32_id
+[05/08/25 10:36:31] [info] Finish execute_solve: fp32_id
+[05/08/25 10:36:31] [info] Start execute_solve: fp64_id
+[05/08/25 10:36:31] [info] Finish execute_solve: fp64_id
+[05/08/25 10:36:31] [info] Start execute_solve: fp16_id
+[05/08/25 10:36:31] [info] Finish execute_solve: fp16_id
+[05/08/25 10:36:31] [info] Start execute_solve: fp32_id
+[05/08/25 10:36:31] [info] Finish execute_solve: fp32_id
+[05/08/25 10:36:31] [info] Start execute_solve: fp64_id
+[05/08/25 10:36:31] [info] Finish execute_solve: fp64_id
+[       OK ] Test_Experiment_Run.Test_Execute_FP_GMRES_IR_Solve (126 ms)
+[ RUN      ] Test_Experiment_Run.Test_Execute_VP_GMRES_IR_Solve
+[05/08/25 10:36:31] [info] Start execute_solve: id_rrt_vpgmres
+[05/08/25 10:36:31] [info] Finish execute_solve: id_rrt_vpgmres
+[05/08/25 10:36:31] [info] Start execute_solve: id_orc_vpgmres
+[05/08/25 10:36:31] [info] Finish execute_solve: id_orc_vpgmres
+[05/08/25 10:36:31] [info] Start execute_solve: id_rrt_vpgmres
+[05/08/25 10:36:31] [info] Finish execute_solve: id_rrt_vpgmres
+[05/08/25 10:36:31] [info] Start execute_solve: id_orc_vpgmres
+[05/08/25 10:36:31] [info] Finish execute_solve: id_orc_vpgmres
+[       OK ] Test_Experiment_Run.Test_Execute_VP_GMRES_IR_Solve (76 ms)
+[ RUN      ] Test_Experiment_Run.Test_AllSolvers_Run_Solve_Group
+[05/08/25 10:36:31] [info] Directory C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\allsolvers_dense exists, adding to dir
+[05/08/25 10:36:31] [info] Start Solve_Group: allsolvers_dense
+[05/08/25 10:36:32] [info] Finish Solve_Group: allsolvers_dense
+[05/08/25 10:36:32] [info] Directory C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\allsolvers_sparse exists, adding to dir
+[05/08/25 10:36:32] [info] Start Solve_Group: allsolvers_sparse
+[05/08/25 10:36:34] [info] Finish Solve_Group: allsolvers_sparse
+[       OK ] Test_Experiment_Run.Test_AllSolvers_Run_Solve_Group (2939 ms)
+[ RUN      ] Test_Experiment_Run.Test_AllPreconditioners_Run_Solve_Group
+[05/08/25 10:36:34] [info] Directory C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\allpreconditioners_dense_none exists, adding to dir
+[05/08/25 10:36:34] [info] Start Solve_Group: allpreconditioners_dense_none
+[05/08/25 10:36:34] [info] Finish Solve_Group: allpreconditioners_dense_none
+[05/08/25 10:36:34] [info] Directory C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\allpreconditioners_sparse_none exists, adding to dir
+[05/08/25 10:36:34] [info] Start Solve_Group: allpreconditioners_sparse_none
+[05/08/25 10:36:35] [info] Finish Solve_Group: allpreconditioners_sparse_none
+[05/08/25 10:36:35] [info] Directory C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\allpreconditioners_dense_jacobi exists, adding to dir
+[05/08/25 10:36:35] [info] Start Solve_Group: allpreconditioners_dense_jacobi
+[05/08/25 10:36:35] [info] Finish Solve_Group: allpreconditioners_dense_jacobi
+[05/08/25 10:36:35] [info] Directory C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\allpreconditioners_sparse_jacobi exists, adding to dir
+[05/08/25 10:36:35] [info] Start Solve_Group: allpreconditioners_sparse_jacobi
+[05/08/25 10:36:36] [info] Finish Solve_Group: allpreconditioners_sparse_jacobi
+[05/08/25 10:36:36] [info] Directory C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\allpreconditioners_dense_ilu0 exists, adding to dir
+[05/08/25 10:36:36] [info] Start Solve_Group: allpreconditioners_dense_ilu0
+[05/08/25 10:36:36] [info] Finish Solve_Group: allpreconditioners_dense_ilu0
+[05/08/25 10:36:36] [info] Directory C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\allpreconditioners_sparse_ilu0 exists, adding to dir
+[05/08/25 10:36:36] [info] Start Solve_Group: allpreconditioners_sparse_ilu0
+[05/08/25 10:36:37] [info] Finish Solve_Group: allpreconditioners_sparse_ilu0
+[05/08/25 10:36:37] [info] Directory C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\allpreconditioners_dense_ilutp exists, adding to dir
+[05/08/25 10:36:37] [info] Start Solve_Group: allpreconditioners_dense_ilutp
+[05/08/25 10:36:37] [info] Finish Solve_Group: allpreconditioners_dense_ilutp
+[05/08/25 10:36:37] [info] Directory C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\allpreconditioners_sparse_ilutp exists, adding to dir
+[05/08/25 10:36:37] [info] Start Solve_Group: allpreconditioners_sparse_ilutp
+[05/08/25 10:36:37] [info] Finish Solve_Group: allpreconditioners_sparse_ilutp
+[       OK ] Test_Experiment_Run.Test_AllPreconditioners_Run_Solve_Group (3861 ms)
+[ RUN      ] Test_Experiment_Run.Test_Mix_Run_Solve_Group
+[05/08/25 10:36:38] [info] Directory C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\mixsolvers_dense exists, adding to dir
+[05/08/25 10:36:38] [info] Start Solve_Group: mixsolvers_dense
+[05/08/25 10:36:38] [info] Finish Solve_Group: mixsolvers_dense
+[05/08/25 10:36:38] [info] Directory C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\mixsolvers_sparse exists, adding to dir
+[05/08/25 10:36:38] [info] Start Solve_Group: mixsolvers_sparse
+[05/08/25 10:36:38] [info] Finish Solve_Group: mixsolvers_sparse
+[       OK ] Test_Experiment_Run.Test_Mix_Run_Solve_Group (982 ms)
+[----------] 6 tests from Test_Experiment_Run (8011 ms total)
+
+[----------] 5 tests from Test_Experiment_Spec
+[ RUN      ] Test_Experiment_Spec.Test_Preconditioner_Spec_Basic_Construct
+[       OK ] Test_Experiment_Spec.Test_Preconditioner_Spec_Basic_Construct (0 ms)
+[ RUN      ] Test_Experiment_Spec.Test_Preconditioner_Spec_Bad
+[       OK ] Test_Experiment_Spec.Test_Preconditioner_Spec_Bad (0 ms)
+[ RUN      ] Test_Experiment_Spec.Test_Solve_Group_Basic_Construct
+[       OK ] Test_Experiment_Spec.Test_Solve_Group_Basic_Construct (0 ms)
+[ RUN      ] Test_Experiment_Spec.Test_Solve_Group_Write_Json
+[05/08/25 10:36:38] [info] Save data to: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\solve_group_1.json
+[05/08/25 10:36:38] [info] Save data to: C:\Users\dosre\dev\precision-cascade\install\experimentation\test\data\test_output\solve_group_2.json
+[       OK ] Test_Experiment_Spec.Test_Solve_Group_Write_Json (17 ms)
+[ RUN      ] Test_Experiment_Spec.Test_Solve_Group_Bad
+[       OK ] Test_Experiment_Spec.Test_Solve_Group_Bad (0 ms)
+[----------] 5 tests from Test_Experiment_Spec (18 ms total)
+
+[----------] 1 test from Test_Experiment_Tools
+[ RUN      ] Test_Experiment_Tools.Test_Experiment_Clock_Basic_Run
+[       OK ] Test_Experiment_Tools.Test_Experiment_Clock_Basic_Run (479 ms)
+[----------] 1 test from Test_Experiment_Tools (479 ms total)
+
+[----------] Global test environment tear-down
+[==========] 24 tests from 5 test suites ran. (9211 ms total)
+[  PASSED  ] 24 tests.
