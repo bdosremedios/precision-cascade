@@ -71,9 +71,11 @@ class Convergence_Experiment:
         self.all_terminated = True
 
         self.convergence_data = []
+        self.outer_convergence_data = []
 
         elapsed_times_ms = []
         inner_iteration_counts = []
+        outer_iteration_counts = []
         final_relress = []
         for file_path in file_paths:
 
@@ -89,12 +91,16 @@ class Convergence_Experiment:
 
                 elapsed_times_ms.append(file_data["elapsed_time_ms"])
                 inner_iteration_counts.append(np.sum(file_data["inner_iterations"]))
+                outer_iteration_counts.append(np.sum(file_data["outer_iterations"]))
 
                 initial_res_norm = file_data["outer_res_norm_history"][0]
                 assert file_data["inner_res_norm_history"][0][0] == initial_res_norm
                 final_relress.append(file_data["outer_res_norm_history"][-1]/initial_res_norm)
                 self.convergence_data.append(
                     np.hstack(file_data["inner_res_norm_history"])/initial_res_norm
+                )
+                self.outer_convergence_data.append(
+                    np.array(file_data["outer_res_norm_history"])/initial_res_norm
                 )
 
         self.total_elapsed_time_ms = np.sum(elapsed_times_ms)
@@ -104,12 +110,33 @@ class Convergence_Experiment:
         self.average_inner_iteration_count = np.mean(inner_iteration_counts)
         self.median_inner_iteration_count = np.median(inner_iteration_counts)
 
+        self.average_outer_iteration_count = np.mean(outer_iteration_counts)
+        self.median_outer_iteration_count = np.median(outer_iteration_counts)
+
         self.average_final_relres = np.mean(final_relress)
         self.median_final_relres = np.median(final_relress)
 
     def plot_convergence_data(self, ax: plt.Axes):
         first = True
         for conv_data in self.convergence_data:
+            if first:
+                ax.plot(
+                    conv_data,
+                    SolverFormatInfo.solver_color_fmt_dict[self.id][1],
+                    color=SolverFormatInfo.solver_color_fmt_dict[self.id][0],
+                    label=self.id
+                )
+                first=False
+            else:
+                ax.plot(
+                    conv_data,
+                    SolverFormatInfo.solver_color_fmt_dict[self.id][1],
+                    color=SolverFormatInfo.solver_color_fmt_dict[self.id][0]
+                )
+
+    def plot_outer_convergence_data(self, ax: plt.Axes):
+        first = True
+        for conv_data in self.outer_convergence_data:
             if first:
                 ax.plot(
                     conv_data,
