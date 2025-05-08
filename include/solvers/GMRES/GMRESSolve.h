@@ -177,17 +177,9 @@ protected:
 
         int curr_kry_idx = curr_kry_dim-1;
 
-        // Initiate next column of QR fact as most recent of H
-        H_R.get_col(curr_kry_idx).set_from_vec(H_k);
-
-        // Apply previous Given's rotations to new column
-        H_R.get_block(0, curr_kry_idx, curr_kry_dim, 1).set_from_vec(
-            H_Q.get_block(
-                0, 0, curr_kry_dim, curr_kry_dim
-            ).copy_to_mat().transpose_prod(
-                H_k.get_slice(0, curr_kry_dim)
-            )
-        );
+        // Initiate next column of QR fact as most recent of H_k with
+        // previous Given's rotations applied
+        H_R.get_col(curr_kry_idx).set_from_vec(H_Q.transpose_prod(H_k));
 
         // Apply the final Given's rotation manually making H_R upper triangular
         Scalar<TPrecision> alpha = H_R.get_elem(curr_kry_idx, curr_kry_idx);
