@@ -46,27 +46,16 @@ private:
     }
 
     void initialize_instantiate_residual() {
-
         res_norm_history.clear();
-        res_costheta_history.clear();
         curr_res = calc_residual(init_guess);
         curr_res_norm = curr_res.norm();
         res_norm_history.push_back(curr_res_norm.get_scalar());
-        res_costheta_history.push_back(0.);
-
     }
 
     void update_residual() {
-
-        last_res = curr_res;
         curr_res = calc_residual(generic_soln);
         curr_res_norm = curr_res.norm();
         res_norm_history.push_back(curr_res_norm.get_scalar());
-        res_costheta_history.push_back(
-            (last_res.dot(curr_res) /
-            (last_res.norm()*curr_res_norm)).get_scalar()
-        );
-
     }
     
 protected:
@@ -81,11 +70,9 @@ protected:
     bool converged;
     bool terminated;
     Vector<double> generic_soln = Vector<double>(cuHandleBundle());
-    Vector<double> last_res = Vector<double>(cuHandleBundle());
     Vector<double> curr_res = Vector<double>(cuHandleBundle());
     Scalar<double> curr_res_norm;
     std::vector<double> res_norm_history;
-    std::vector<double> res_costheta_history;
 
     GenericIterativeSolve(
         const GenericLinearSystem<TMatrix> * const arg_gen_lin_sys_ptr,
@@ -156,9 +143,6 @@ public:
     }
     std::vector<double> get_res_norm_history() const {
         return res_norm_history;
-    };
-    std::vector<double> get_res_costheta_history() const {
-        return res_costheta_history;
     };
     bool check_initiated() const { return initiated; };
     bool check_converged() const { return converged; };

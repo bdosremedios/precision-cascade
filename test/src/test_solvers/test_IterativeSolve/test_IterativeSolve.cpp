@@ -65,12 +65,6 @@ public:
             (b-A*test_mock_no_guess.init_guess).norm().get_scalar(),
             Tol<TPrecision>::gamma(n)
         );
-        EXPECT_EQ(test_mock_no_guess.get_res_costheta_history().size(), 1);
-        EXPECT_NEAR(
-            test_mock_no_guess.get_res_costheta_history()[0],
-            0.,
-            Tol<TPrecision>::gamma(n)
-        );
 
         // Test with initial guess and explicit parameters
         Vector<double> init_guess(Vector<double>::Random(TestBase::bundle, n));
@@ -109,12 +103,6 @@ public:
         EXPECT_NEAR(
             test_mock_guess.get_res_norm_history()[0],
             (b - A*init_guess).norm().get_scalar(),
-            Tol<TPrecision>::gamma(n)
-        );
-        EXPECT_EQ(test_mock_guess.get_res_costheta_history().size(), 1);
-        EXPECT_NEAR(
-            test_mock_guess.get_res_costheta_history()[0],
-            0.,
             Tol<TPrecision>::gamma(n)
         );
 
@@ -190,21 +178,6 @@ public:
              (b-A*init_guess).norm()).get_scalar(),
             Tol<TPrecision>::gamma(n)
         );
-        EXPECT_EQ(test_mock.get_res_costheta_history().size(), 2);
-        EXPECT_NEAR(
-            test_mock.get_res_costheta_history()[0],
-            0.,
-            Tol<TPrecision>::gamma(n)
-        );
-        EXPECT_NEAR(
-            test_mock.get_res_costheta_history()[1],
-            ((b -
-              A*(typed_soln.template cast<double>())).dot(b-A*init_guess) /
-             ((b - A*(typed_soln.template cast<double>())).norm() *
-              (b - A*init_guess).norm())
-            ).get_scalar(),
-            Tol<TPrecision>::gamma(n)
-        );
 
         if (*show_plots) { test_mock.view_relres_plot(); }
 
@@ -254,11 +227,6 @@ public:
             (b - A*test_mock.init_guess).norm().get_scalar()
         };
         EXPECT_EQ(test_mock.get_res_norm_history(), init_res_norm_history);
-        std::vector<double> init_res_costheta_history {0.};
-        EXPECT_EQ(
-            test_mock.get_res_costheta_history(),
-            init_res_costheta_history
-        );
 
     }
 
