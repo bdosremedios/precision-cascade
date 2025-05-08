@@ -23,7 +23,7 @@ class BenchmarkBase: public testing::Test
 public:
 
     static bool prototyping_speed_up;
-    const int n_runs = (prototyping_speed_up) ? 2 : 7;
+    const int n_runs = (prototyping_speed_up) ? 2 : 5;
 
     static cuHandleBundle bundle;
     static fs::path data_dir;
