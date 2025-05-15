@@ -1,4 +1,4 @@
-Command: ./install/test/test.exe -rlt -sp
+Command: ./install/test/test -rlt -sp
 
 In debug checking memory allocations
 Running all tests...
@@ -5703,7 +5703,7 @@ Iter: 0            Iter: 21
 [==========] 383 tests from 42 test suites ran. (169604 ms total)
 [  PASSED  ] 383 tests.
 
-Command: ./install/experimentation/test/test_experiment.exe
+Command: ./install/experimentation/test/test_experiment
 
 Not printing expected errors...
 [==========] Running 24 tests from 5 test suites.
