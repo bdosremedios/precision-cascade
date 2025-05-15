@@ -1,0 +1,76 @@
+\doxysection{Iterative\+Refinement\+Base.\+h}
+\hypertarget{_iterative_refinement_base_8h_source}{}\label{_iterative_refinement_base_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/include/solvers/nested/IterativeRefinementBase.h@{C:/Users/dosre/dev/precision-\/cascade/include/solvers/nested/IterativeRefinementBase.h}}
+\mbox{\hyperlink{_iterative_refinement_base_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ ITERATIVEREFINEMENTBASE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ ITERATIVEREFINEMENTBASE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_inner_outer_solve_8h}{InnerOuterSolve.h}}"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacecascade}{cascade}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix>}
+\DoxyCodeLine{00009\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1_iterative_refinement_base_a7d1f990f4f43204329d401d2cf2ca5aa}{IterativeRefinementBase}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_aed9ed1d37ae889a5241ffa236bacf683}{InnerOuterSolve}}<TMatrix>}
+\DoxyCodeLine{00010\ \{}
+\DoxyCodeLine{00011\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_iterative_refinement_base_ac423ead9a59d40b468558dbbd766ae56}{outer\_iterate\_complete}}()\textcolor{keyword}{\ override\ }\{}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Add\ error\ back\ to\ generic\_soln\ since\ that\ is\ solution\ of\ the}}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ inner\_solver\ under\ iterative\ refinement}}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a0d73c5b3c750a46e0b198b2952547448}{generic\_soln}}\ +=\ this-\/>\mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a89076f801630b485f9631cca7211ccdd}{inner\_solver}}-\/>get\_generic\_soln();}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \ \ \}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_iterative_refinement_base_a93d3b6914cd8a937ab981262f21a43cb}{deal\_with\_nan\_inner\_solve}}()\textcolor{keyword}{\ override\ }\{}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ an\ inner\ iteration\ failed\ by\ getting\ a\ nan\ results,\ simulate\ a}}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ stagnated\ spin\ where\ no\ movement\ was\ made\ that\ took\ up\ the\ time\ of}}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ iteration\ and\ do\ not\ update\ the\ solution}}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ std::vector<double>\ spin\_vec\ =\ this-\/>\mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a89076f801630b485f9631cca7211ccdd}{inner\_solver}}-\/>get\_res\_norm\_history();}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=1;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<spin\_vec.size();\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}++)\ \{}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ spin\_vec[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ =\ spin\_vec[0];}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classcascade_1_1_inner_outer_solve_ab45a2c176d26b8bbd1c995aa201af2aa}{inner\_res\_norm\_history}}.push\_back(spin\_vec);}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classcascade_1_1_inner_outer_solve_ad57cb6dd5269b440cf506c381651a936}{inner\_iterations}}.push\_back(this-\/>\mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a89076f801630b485f9631cca7211ccdd}{inner\_solver}}-\/>get\_iteration());}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \}}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<double>}}\ \mbox{\hyperlink{classcascade_1_1_iterative_refinement_base_a119e7631aded068539a12275cfcdd141}{make\_inner\_IR\_guess}}(}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{GenericLinearSystem<TMatrix>}}\ *\ \textcolor{keyword}{const}\ arg\_gen\_lin\_sys}
+\DoxyCodeLine{00037\ \ \ \ \ )\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Matching\ iterative\ refinement\ algorithm\ should\ be\ zero\ guess}}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_vector_a7da078322ccb03812f330b72cf4ad907}{Vector<double>::Zero}}(}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_gen\_lin\_sys-\/>\mbox{\hyperlink{classcascade_1_1_generic_linear_system_a85d0549e1b2354c846ada0683fa9e3d8}{get\_cu\_handles}}(),}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_gen\_lin\_sys-\/>\mbox{\hyperlink{classcascade_1_1_generic_linear_system_a3cef88ac6edf5abf916d647bf2cc859a}{get\_n}}()}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00043\ \ \ \ \ \}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_iterative_refinement_base_a7d1f990f4f43204329d401d2cf2ca5aa}{IterativeRefinementBase}}(}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{GenericLinearSystem<TMatrix>}}\ *\ \textcolor{keyword}{const}\ arg\_gen\_lin\_sys,}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{SolveArgPkg}}\ \&arg\_pkg}
+\DoxyCodeLine{00050\ \ \ \ \ ):}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_aed9ed1d37ae889a5241ffa236bacf683}{InnerOuterSolve}}<TMatrix>(arg\_gen\_lin\_sys,\ arg\_pkg)}
+\DoxyCodeLine{00052\ \ \ \ \ \{}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Replace\ initial\ guess\ with\ IR\ guess\ of\ zeroes\ for\ existing}}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ inner\_solve\_arg\_pkg}}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a2dc06a4a8950278f0617afd1f77744dd}{inner\_solve\_arg\_pkg}}.init\_guess\ =\ \mbox{\hyperlink{classcascade_1_1_iterative_refinement_base_a119e7631aded068539a12275cfcdd141}{make\_inner\_IR\_guess}}(}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_gen\_lin\_sys}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00058\ \ \ \ \ \}}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{comment}{//\ Forbid\ rvalue\ instantiation}}
+\DoxyCodeLine{00061\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_iterative_refinement_base_aba7498f0ba3d45f2eaac6b2e1deff662}{IterativeRefinementBase}}(}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{GenericLinearSystem<TMatrix>}}\ *\ \textcolor{keyword}{const},}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{SolveArgPkg}}\ \&\&}
+\DoxyCodeLine{00064\ \ \ \ \ );}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \};}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \}}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

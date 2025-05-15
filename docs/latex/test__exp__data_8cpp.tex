@@ -1,0 +1,76 @@
+\doxysection{C\+:/\+Users/dosre/dev/precision-\/cascade/experimentation/test/src/test\+\_\+exp\+\_\+data.cpp File Reference}
+\hypertarget{test__exp__data_8cpp}{}\label{test__exp__data_8cpp}\index{C:/Users/dosre/dev/precision-\/cascade/experimentation/test/src/test\_exp\_data.cpp@{C:/Users/dosre/dev/precision-\/cascade/experimentation/test/src/test\_exp\_data.cpp}}
+{\ttfamily \#include "{}test\+\_\+experiment.\+h"{}}\newline
+{\ttfamily \#include "{}exp\+\_\+spec/exp\+\_\+spec.\+h"{}}\newline
+{\ttfamily \#include "{}exp\+\_\+data/exp\+\_\+data.\+h"{}}\newline
+{\ttfamily \#include "{}exp\+\_\+run/exp\+\_\+run\+\_\+record.\+h"{}}\newline
+{\ttfamily \#include "{}tools/\+Type\+Identity.\+h"{}}\newline
+{\ttfamily \#include $<$nlohmann/json.\+hpp$>$}\newline
+{\ttfamily \#include $<$cuda\+\_\+fp16.\+h$>$}\newline
+Include dependency graph for test\+\_\+exp\+\_\+data.\+cpp\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{test__exp__data_8cpp__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_test___experiment___data}{Test\+\_\+\+Experiment\+\_\+\+Data}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{test__exp__data_8cpp_a01aa1821aae8962cc9c1e5a4ab107f5c}{TEST\+\_\+F}} (\mbox{\hyperlink{class_test___experiment___data}{Test\+\_\+\+Experiment\+\_\+\+Data}}, Test\+\_\+\+Load\+\_\+\+Lin\+\_\+\+Sys)
+\item 
+\mbox{\hyperlink{test__exp__data_8cpp_abb77a99de0f857773762dec47e5ea6de}{TEST\+\_\+F}} (\mbox{\hyperlink{class_test___experiment___data}{Test\+\_\+\+Experiment\+\_\+\+Data}}, Test\+\_\+\+Load\+\_\+\+Lin\+\_\+\+Sys\+\_\+w\+\_\+\+RHS)
+\item 
+\mbox{\hyperlink{test__exp__data_8cpp_a93d32defbda72bb5554f95defb9a2644}{TEST\+\_\+F}} (\mbox{\hyperlink{class_test___experiment___data}{Test\+\_\+\+Experiment\+\_\+\+Data}}, Test\+\_\+\+Mismatch\+\_\+\+Load\+\_\+\+Lin\+\_\+\+Sys\+\_\+w\+\_\+\+RHS)
+\item 
+\mbox{\hyperlink{test__exp__data_8cpp_addccaf8639f72bb3c1e56165e05c0062}{TEST\+\_\+F}} (\mbox{\hyperlink{class_test___experiment___data}{Test\+\_\+\+Experiment\+\_\+\+Data}}, Test\+Record\+Output\+Json\+Precond)
+\item 
+\mbox{\hyperlink{test__exp__data_8cpp_a9580a2e721c8c18357d540c98f146afc}{TEST\+\_\+F}} (\mbox{\hyperlink{class_test___experiment___data}{Test\+\_\+\+Experiment\+\_\+\+Data}}, Test\+Record\+Output\+Json\+FPGMRES)
+\item 
+\mbox{\hyperlink{test__exp__data_8cpp_a19e2cefcd7537a7c5fd350b67fd5bdab}{TEST\+\_\+F}} (\mbox{\hyperlink{class_test___experiment___data}{Test\+\_\+\+Experiment\+\_\+\+Data}}, Test\+Record\+Output\+Json\+VPGMRES)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{test__exp__data_8cpp_a01aa1821aae8962cc9c1e5a4ab107f5c}\index{test\_exp\_data.cpp@{test\_exp\_data.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!test\_exp\_data.cpp@{test\_exp\_data.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [1/6]}}
+{\footnotesize\ttfamily \label{test__exp__data_8cpp_a01aa1821aae8962cc9c1e5a4ab107f5c} 
+TEST\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_test___experiment___data}{Test\+\_\+\+Experiment\+\_\+\+Data}}}]{}{, }\item[{Test\+\_\+\+Load\+\_\+\+Lin\+\_\+\+Sys}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{test__exp__data_8cpp_abb77a99de0f857773762dec47e5ea6de}\index{test\_exp\_data.cpp@{test\_exp\_data.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!test\_exp\_data.cpp@{test\_exp\_data.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [2/6]}}
+{\footnotesize\ttfamily \label{test__exp__data_8cpp_abb77a99de0f857773762dec47e5ea6de} 
+TEST\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_test___experiment___data}{Test\+\_\+\+Experiment\+\_\+\+Data}}}]{}{, }\item[{Test\+\_\+\+Load\+\_\+\+Lin\+\_\+\+Sys\+\_\+w\+\_\+\+RHS}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{test__exp__data_8cpp_a93d32defbda72bb5554f95defb9a2644}\index{test\_exp\_data.cpp@{test\_exp\_data.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!test\_exp\_data.cpp@{test\_exp\_data.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [3/6]}}
+{\footnotesize\ttfamily \label{test__exp__data_8cpp_a93d32defbda72bb5554f95defb9a2644} 
+TEST\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_test___experiment___data}{Test\+\_\+\+Experiment\+\_\+\+Data}}}]{}{, }\item[{Test\+\_\+\+Mismatch\+\_\+\+Load\+\_\+\+Lin\+\_\+\+Sys\+\_\+w\+\_\+\+RHS}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{test__exp__data_8cpp_a9580a2e721c8c18357d540c98f146afc}\index{test\_exp\_data.cpp@{test\_exp\_data.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!test\_exp\_data.cpp@{test\_exp\_data.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [4/6]}}
+{\footnotesize\ttfamily \label{test__exp__data_8cpp_a9580a2e721c8c18357d540c98f146afc} 
+TEST\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_test___experiment___data}{Test\+\_\+\+Experiment\+\_\+\+Data}}}]{}{, }\item[{Test\+Record\+Output\+Json\+FPGMRES}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{test__exp__data_8cpp_addccaf8639f72bb3c1e56165e05c0062}\index{test\_exp\_data.cpp@{test\_exp\_data.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!test\_exp\_data.cpp@{test\_exp\_data.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [5/6]}}
+{\footnotesize\ttfamily \label{test__exp__data_8cpp_addccaf8639f72bb3c1e56165e05c0062} 
+TEST\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_test___experiment___data}{Test\+\_\+\+Experiment\+\_\+\+Data}}}]{}{, }\item[{Test\+Record\+Output\+Json\+Precond}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{test__exp__data_8cpp_a19e2cefcd7537a7c5fd350b67fd5bdab}\index{test\_exp\_data.cpp@{test\_exp\_data.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!test\_exp\_data.cpp@{test\_exp\_data.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [6/6]}}
+{\footnotesize\ttfamily \label{test__exp__data_8cpp_a19e2cefcd7537a7c5fd350b67fd5bdab} 
+TEST\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_test___experiment___data}{Test\+\_\+\+Experiment\+\_\+\+Data}}}]{}{, }\item[{Test\+Record\+Output\+Json\+VPGMRES}]{}{}\end{DoxyParamCaption})}
+

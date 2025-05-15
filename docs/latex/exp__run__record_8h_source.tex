@@ -1,0 +1,346 @@
+\doxysection{exp\+\_\+run\+\_\+record.\+h}
+\hypertarget{exp__run__record_8h_source}{}\label{exp__run__record_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/experimentation/include/exp\_run/exp\_run\_record.h@{C:/Users/dosre/dev/precision-\/cascade/experimentation/include/exp\_run/exp\_run\_record.h}}
+\mbox{\hyperlink{exp__run__record_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ EXP\_RUN\_RECORD\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ EXP\_RUN\_RECORD\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{exp__read_8h}{exp\_read/exp\_read.h}}"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{exp__data_8h}{exp\_data/exp\_data.h}}"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{exp__tools_8h}{exp\_tools/exp\_tools.h}}"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{exp__generate__data_8h}{exp\_generate\_data.h}}"{}}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{cu_handle_bundle_8h}{tools/cuHandleBundle.h}}"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_iterative_solve_8h}{solvers/IterativeSolve.h}}"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_v_p___g_m_r_e_s___i_r_8h}{solvers/nested/GMRES\_IR/VP\_GMRES\_IR.h}}"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_f_p___g_m_r_e_s___i_r_8h}{solvers/nested/GMRES\_IR/FP\_GMRES\_IR.h}}"{}}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <cmath>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ <filesystem>}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{keyword}{namespace\ }fs\ =\ std::filesystem;}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ u\_hlf\ =\ std::pow(2,\ -\/10);}
+\DoxyCodeLine{00021\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ u\_sgl\ =\ std::pow(2,\ -\/23);}
+\DoxyCodeLine{00022\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ u\_dbl\ =\ std::pow(2,\ -\/52);}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{exp__run__record_8h_ac0ad2ebbc468f7a9f3553a491e8fb7a9}{create\_directory\_if\_nexists}}(fs::path\ dir,\ \mbox{\hyperlink{class_experiment___log}{Experiment\_Log}}\ logger);}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix>}
+\DoxyCodeLine{00027\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{exp__run__record_8h_a1a6af6fca8d95b7703273f6c93d7ae8c}{run\_record\_fpgmres\_solve}}(}
+\DoxyCodeLine{00028\ \ \ \ \ std::string\ solver\_id,}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{cascade::GenericLinearSystem<TMatrix>}}\ \&gen\_lin\_sys,}
+\DoxyCodeLine{00030\ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{cascade::SolveArgPkg}}\ solve\_arg\_pkg,}
+\DoxyCodeLine{00031\ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{cascade::PrecondArgPkg<TMatrix,\ double>}}\ precond\_arg\_pkg\_dbl,}
+\DoxyCodeLine{00032\ \ \ \ \ fs::path\ output\_data\_dir,}
+\DoxyCodeLine{00033\ \ \ \ \ \mbox{\hyperlink{class_experiment___log}{Experiment\_Log}}\ logger}
+\DoxyCodeLine{00034\ )\ \{}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \mbox{\hyperlink{struct_solve___data}{Solve\_Data<cascade::InnerOuterSolve,\ TMatrix>}}\ data;}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordflow}{if}\ (solver\_id\ ==\ \textcolor{stringliteral}{"{}FP16"{}})\ \{}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{cascade::PrecondArgPkg<TMatrix,\ \_\_half>}}\ *\ precond\_args\_hlf\_ptr\ =\ (}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ precond\_arg\_pkg\_dbl.\mbox{\hyperlink{structcascade_1_1_precond_arg_pkg_aef6ec15f421a1416c6416331e9a89bda}{cast\_hlf\_ptr}}()}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_typed_linear_system}{cascade::TypedLinearSystem<TMatrix,\ \_\_half>}}\ lin\_sys\_hlf(\&gen\_lin\_sys);}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ data\ =\ \mbox{\hyperlink{exp__generate__data_8h_a31a06c107d715725ccaa0721261c79a9}{execute\_solve<cascade::InnerOuterSolve,\ TMatrix>}}(}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ solver\_id,}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ std::make\_shared<\mbox{\hyperlink{classcascade_1_1_f_p___g_m_r_e_s___i_r___solve}{cascade::FP\_GMRES\_IR\_Solve<TMatrix,\ \_\_half>}}>(}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&lin\_sys\_hlf,\ u\_hlf,\ solve\_arg\_pkg,\ *precond\_args\_hlf\_ptr}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ ),}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ logger,}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{false}}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ precond\_args\_hlf\_ptr;}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (solver\_id\ ==\ \textcolor{stringliteral}{"{}FP32"{}})\ \{}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{cascade::PrecondArgPkg<TMatrix,\ float>}}\ *\ precond\_args\_sgl\_ptr\ =\ (}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ precond\_arg\_pkg\_dbl.\mbox{\hyperlink{structcascade_1_1_precond_arg_pkg_a48fce6e1fac1bfece0497ccf1bef2d4c}{cast\_sgl\_ptr}}()}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_typed_linear_system}{cascade::TypedLinearSystem<TMatrix,\ float>}}\ lin\_sys\_sgl(\&gen\_lin\_sys);}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ data\ =\ \mbox{\hyperlink{exp__generate__data_8h_a31a06c107d715725ccaa0721261c79a9}{execute\_solve<cascade::InnerOuterSolve,\ TMatrix>}}(}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ solver\_id,}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ std::make\_shared<\mbox{\hyperlink{classcascade_1_1_f_p___g_m_r_e_s___i_r___solve}{cascade::FP\_GMRES\_IR\_Solve<TMatrix,\ float>}}>(}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&lin\_sys\_sgl,\ u\_sgl,\ solve\_arg\_pkg,\ *precond\_args\_sgl\_ptr}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ ),}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ logger,}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{false}}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ precond\_args\_sgl\_ptr;}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (solver\_id\ ==\ \textcolor{stringliteral}{"{}FP64"{}})\ \{}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_typed_linear_system}{cascade::TypedLinearSystem<TMatrix,\ double>}}\ lin\_sys\_dbl(\&gen\_lin\_sys);}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ data\ =\ \mbox{\hyperlink{exp__generate__data_8h_a31a06c107d715725ccaa0721261c79a9}{execute\_solve<cascade::InnerOuterSolve,\ TMatrix>}}(}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ solver\_id,}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ std::make\_shared<\mbox{\hyperlink{classcascade_1_1_f_p___g_m_r_e_s___i_r___solve}{cascade::FP\_GMRES\_IR\_Solve<TMatrix,\ double>}}>(}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&lin\_sys\_dbl,\ u\_dbl,\ solve\_arg\_pkg,\ precond\_arg\_pkg\_dbl}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ ),}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ logger,}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{false}}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ std::runtime\_error(}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}run\_record\_fpgmres\_solve:\ invalid\ fixed\ precision\ (FP)\ solver\_id\ "{}}}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}encountered"{}}}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \ \ \ \ \}}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \ \ \ \ logger.\mbox{\hyperlink{class_experiment___log_a033ee25bf73e58f7acfa53a4e4d6dfb4}{info}}(data.\mbox{\hyperlink{struct_solve___data_a734e251ce627d5276900316fd36de5c5}{get\_info\_string}}());}
+\DoxyCodeLine{00092\ \ \ \ \ data.\mbox{\hyperlink{struct_solve___data_a93d7bf4539ee013a4d6bb0e3bea39616}{record\_json}}(solver\_id,\ output\_data\_dir,\ logger);}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \}}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix>}
+\DoxyCodeLine{00097\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{exp__run__record_8h_a7197cc4cf77e6c89b30368932edf50f0}{run\_record\_vpgmres\_solve}}(}
+\DoxyCodeLine{00098\ \ \ \ \ std::string\ solver\_id,}
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{cascade::GenericLinearSystem<TMatrix>}}\ \&gen\_lin\_sys,}
+\DoxyCodeLine{00100\ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{cascade::SolveArgPkg}}\ solve\_arg\_pkg,}
+\DoxyCodeLine{00101\ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{cascade::PrecondArgPkg<TMatrix,\ double>}}\ precond\_arg\_pkg\_dbl,}
+\DoxyCodeLine{00102\ \ \ \ \ fs::path\ output\_data\_dir,}
+\DoxyCodeLine{00103\ \ \ \ \ \mbox{\hyperlink{class_experiment___log}{Experiment\_Log}}\ logger}
+\DoxyCodeLine{00104\ )\ \{}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \ \ \ \ \mbox{\hyperlink{struct_solve___data}{Solve\_Data<cascade::VP\_GMRES\_IR\_Solve,\ TMatrix>}}\ data;}
+\DoxyCodeLine{00107\ \ \ \ \ std::shared\_ptr<cascade::VP\_GMRES\_IR\_Solve<TMatrix>>\ solver\_ptr;}
+\DoxyCodeLine{00108\ \ \ \ \ }
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keywordflow}{if}\ (solver\_id\ ==\ \textcolor{stringliteral}{"{}OuterRestartCount"{}})\ \{}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ solver\_ptr\ =\ (}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ std::make\_shared<cascade::OuterRestartCount<TMatrix>>(}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&gen\_lin\_sys,\ solve\_arg\_pkg,\ precond\_arg\_pkg\_dbl}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (solver\_id\ ==\ \textcolor{stringliteral}{"{}RelativeResidualThreshold"{}})\ \{}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ solver\_ptr\ =\ (}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \ \ \ \ std::make\_shared<cascade::RelativeResidualThreshold<TMatrix>>(}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&gen\_lin\_sys,\ solve\_arg\_pkg,\ precond\_arg\_pkg\_dbl}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00124\ \ \ \ \ }
+\DoxyCodeLine{00125\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (solver\_id\ ==\ \textcolor{stringliteral}{"{}CheckStagnation"{}})\ \{}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ solver\_ptr\ =\ (}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \ \ \ \ std::make\_shared<cascade::CheckStagnation<TMatrix>>(}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&gen\_lin\_sys,\ solve\_arg\_pkg,\ precond\_arg\_pkg\_dbl}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00132\ \ \ \ \ }
+\DoxyCodeLine{00133\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (solver\_id\ ==\ \textcolor{stringliteral}{"{}StagnationToThreshold"{}})\ \{}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ solver\_ptr\ =\ (}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \ \ \ \ std::make\_shared<cascade::StagnationToThreshold<TMatrix>>(}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&gen\_lin\_sys,\ solve\_arg\_pkg,\ precond\_arg\_pkg\_dbl}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00140\ \ \ \ \ }
+\DoxyCodeLine{00141\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (solver\_id\ ==\ \textcolor{stringliteral}{"{}SD\_OuterRestartCount"{}})\ \{}
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ solver\_ptr\ =\ (}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ std::make\_shared<cascade::SD\_OuterRestartCount<TMatrix>>(}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&gen\_lin\_sys,\ solve\_arg\_pkg,\ precond\_arg\_pkg\_dbl}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00148\ \ \ \ \ }
+\DoxyCodeLine{00149\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (solver\_id\ ==\ \textcolor{stringliteral}{"{}SD\_RelativeResidualThreshold"{}})\ \{}
+\DoxyCodeLine{00150\ }
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ solver\_ptr\ =\ (}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ std::make\_shared<cascade::SD\_RelativeResidualThreshold<TMatrix>>(}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&gen\_lin\_sys,\ solve\_arg\_pkg,\ precond\_arg\_pkg\_dbl}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00156\ \ \ \ \ }
+\DoxyCodeLine{00157\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (solver\_id\ ==\ \textcolor{stringliteral}{"{}SD\_CheckStagnation"{}})\ \{}
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ solver\_ptr\ =\ (}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \ \ \ \ std::make\_shared<cascade::SD\_CheckStagnation<TMatrix>>(}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&gen\_lin\_sys,\ solve\_arg\_pkg,\ precond\_arg\_pkg\_dbl}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00164\ }
+\DoxyCodeLine{00165\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00166\ }
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ std::runtime\_error(}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}run\_record\_vpgmres\_solve:\ invalid\ mixed\ precision\ solver\_id\ "{}}}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}encountered"{}}}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00172\ \ \ \ \ \}}
+\DoxyCodeLine{00173\ }
+\DoxyCodeLine{00174\ \ \ \ \ data\ =\ \mbox{\hyperlink{exp__generate__data_8h_a31a06c107d715725ccaa0721261c79a9}{execute\_solve<cascade::VP\_GMRES\_IR\_Solve,\ TMatrix>}}(}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ solver\_id,\ solver\_ptr,\ logger,\ \textcolor{keyword}{false}}
+\DoxyCodeLine{00176\ \ \ \ \ );}
+\DoxyCodeLine{00177\ }
+\DoxyCodeLine{00178\ \ \ \ \ logger.\mbox{\hyperlink{class_experiment___log_a033ee25bf73e58f7acfa53a4e4d6dfb4}{info}}(data.\mbox{\hyperlink{struct_solve___data_a734e251ce627d5276900316fd36de5c5}{get\_info\_string}}());}
+\DoxyCodeLine{00179\ \ \ \ \ data.\mbox{\hyperlink{struct_solve___data_a93d7bf4539ee013a4d6bb0e3bea39616}{record\_json}}(solver\_id,\ output\_data\_dir,\ logger);}
+\DoxyCodeLine{00180\ }
+\DoxyCodeLine{00181\ \}}
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00183\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix>}
+\DoxyCodeLine{00184\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{exp__run__record_8h_a199751f0ff87b39aba16b9b5ef54ca8d}{run\_record\_solversuite\_experiment}}(}
+\DoxyCodeLine{00185\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{cascade::GenericLinearSystem<TMatrix>}}\ \&gen\_lin\_sys,}
+\DoxyCodeLine{00186\ \ \ \ \ \mbox{\hyperlink{struct_solve___group}{Solve\_Group}}\ solve\_group,}
+\DoxyCodeLine{00187\ \ \ \ \ fs::path\ output\_data\_dir,}
+\DoxyCodeLine{00188\ \ \ \ \ \mbox{\hyperlink{class_experiment___log}{Experiment\_Log}}\ logger}
+\DoxyCodeLine{00189\ )\ \{}
+\DoxyCodeLine{00190\ }
+\DoxyCodeLine{00191\ \ \ \ \ \textcolor{comment}{//\ Determine\ preconditioning}}
+\DoxyCodeLine{00192\ \ \ \ \ \mbox{\hyperlink{struct_preconditioner___data}{Preconditioner\_Data<TMatrix>}}\ precond\_data\ =\ \mbox{\hyperlink{exp__generate__data_8h_a7a336dc0bcb641678bd8fa8805a9931b}{calc\_preconditioner<TMatrix>}}(}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ gen\_lin\_sys,\ solve\_group.\mbox{\hyperlink{struct_solve___group_ae5acf7e2a9817ab7488873a290b3e89c}{precond\_specs}},\ logger}
+\DoxyCodeLine{00194\ \ \ \ \ );}
+\DoxyCodeLine{00195\ \ \ \ \ precond\_data.\mbox{\hyperlink{struct_preconditioner___data_ad1a6857103a47f5dbc0323d21dfdb957}{record\_json}}(\textcolor{stringliteral}{"{}preconditioner"{}},\ output\_data\_dir,\ logger);}
+\DoxyCodeLine{00196\ }
+\DoxyCodeLine{00197\ \ \ \ \ \textcolor{comment}{//\ Run\ solves}}
+\DoxyCodeLine{00198\ \ \ \ \ \textcolor{keywordflow}{for}\ (std::string\ solver\_id\ :\ solve\_group.\mbox{\hyperlink{struct_solve___group_a32f39a972fb82ea90955516b7c8ed214}{solvers\_to\_use}})\ \{}
+\DoxyCodeLine{00199\ }
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{struct_solve___group_a5aa44f59f68c30b372cee4a0109163f9}{Solve\_Group::valid\_fp\_solver\_ids}}.count(solver\_id)\ ==\ 1)\ \{}
+\DoxyCodeLine{00201\ }
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{exp__run__record_8h_a1a6af6fca8d95b7703273f6c93d7ae8c}{run\_record\_fpgmres\_solve}}(}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ solver\_id,}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ gen\_lin\_sys,}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ solve\_group.\mbox{\hyperlink{struct_solve___group_a20f3c45ccfd54b25ffba473f2753c7de}{solver\_args}},}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ precond\_data.\mbox{\hyperlink{struct_preconditioner___data_af6fe998a662fe678bb6e982a62927a11}{precond\_arg\_pkg\_dbl}},}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ output\_data\_dir,}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ logger}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00210\ }
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{struct_solve___group_a0dd70f3e9deee69a1aae5dfb3ba6faed}{Solve\_Group::valid\_vp\_solver\_ids}}.count(solver\_id)\ ==\ 1)\ \{}
+\DoxyCodeLine{00212\ }
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{exp__run__record_8h_a7197cc4cf77e6c89b30368932edf50f0}{run\_record\_vpgmres\_solve}}(}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ solver\_id,}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ gen\_lin\_sys,}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ solve\_group.\mbox{\hyperlink{struct_solve___group_a20f3c45ccfd54b25ffba473f2753c7de}{solver\_args}},}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ precond\_data.\mbox{\hyperlink{struct_preconditioner___data_af6fe998a662fe678bb6e982a62927a11}{precond\_arg\_pkg\_dbl}},}
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ output\_data\_dir,}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ logger}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00221\ }
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00223\ }
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}run\_record\_solve\_group\_iteration:\ invalid\ solver\_id\ "{}}}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}encountered\ \(\backslash\)"{}"{}}\ +\ solve\_group.\mbox{\hyperlink{struct_solve___group_a517d13a63d310880ad85f4c6c629d4ee}{id}}\ +\ \textcolor{stringliteral}{"{}\(\backslash\)"{}"{}}}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00228\ }
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00230\ }
+\DoxyCodeLine{00231\ \ \ \ \ \}}
+\DoxyCodeLine{00232\ }
+\DoxyCodeLine{00233\ \}}
+\DoxyCodeLine{00234\ }
+\DoxyCodeLine{00235\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix>}
+\DoxyCodeLine{00236\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{exp__run__record_8h_ad60f56a8949ff99f9ef26562b44fb7a4}{run\_record\_solve\_group}}(}
+\DoxyCodeLine{00237\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cascade::cuHandleBundle}}\ \&cu\_handles,}
+\DoxyCodeLine{00238\ \ \ \ \ \mbox{\hyperlink{struct_solve___group}{Solve\_Group}}\ solve\_group,}
+\DoxyCodeLine{00239\ \ \ \ \ fs::path\ matrix\_data\_dir,}
+\DoxyCodeLine{00240\ \ \ \ \ fs::path\ output\_data\_dir,}
+\DoxyCodeLine{00241\ \ \ \ \ \mbox{\hyperlink{class_experiment___log}{Experiment\_Log}}\ outer\_logger}
+\DoxyCodeLine{00242\ )\ \{}
+\DoxyCodeLine{00243\ }
+\DoxyCodeLine{00244\ \ \ \ \ fs::path\ solve\_group\_dir\ =\ output\_data\_dir\ /\ fs::path(solve\_group.\mbox{\hyperlink{struct_solve___group_a517d13a63d310880ad85f4c6c629d4ee}{id}});}
+\DoxyCodeLine{00245\ \ \ \ \ \mbox{\hyperlink{exp__run__record_8h_ac0ad2ebbc468f7a9f3553a491e8fb7a9}{create\_directory\_if\_nexists}}(solve\_group\_dir,\ outer\_logger);}
+\DoxyCodeLine{00246\ }
+\DoxyCodeLine{00247\ \ \ \ \ \mbox{\hyperlink{class_experiment___log}{Experiment\_Log}}\ solve\_group\_logger(}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ solve\_group.\mbox{\hyperlink{struct_solve___group_a517d13a63d310880ad85f4c6c629d4ee}{id}}\ +\ \textcolor{stringliteral}{"{}\_logger"{}},}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ solve\_group\_dir\ /\ fs::path(\textcolor{stringliteral}{"{}log.log"{}}),}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \textcolor{keyword}{false}}
+\DoxyCodeLine{00251\ \ \ \ \ );}
+\DoxyCodeLine{00252\ \ \ \ \ outer\_logger.\mbox{\hyperlink{class_experiment___log_a033ee25bf73e58f7acfa53a4e4d6dfb4}{info}}(\textcolor{stringliteral}{"{}Start\ Solve\_Group:\ "{}}\ +\ solve\_group.\mbox{\hyperlink{struct_solve___group_a517d13a63d310880ad85f4c6c629d4ee}{id}});}
+\DoxyCodeLine{00253\ \ \ \ \ solve\_group\_logger.\mbox{\hyperlink{class_experiment___log_a033ee25bf73e58f7acfa53a4e4d6dfb4}{info}}(\textcolor{stringliteral}{"{}Start\ Solve\_Group:\ "{}}\ +\ solve\_group.\mbox{\hyperlink{struct_solve___group_a517d13a63d310880ad85f4c6c629d4ee}{id}});}
+\DoxyCodeLine{00254\ }
+\DoxyCodeLine{00255\ \ \ \ \ solve\_group\_logger.\mbox{\hyperlink{class_experiment___log_a033ee25bf73e58f7acfa53a4e4d6dfb4}{info}}(}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Solve\_Group\ solve\ args:\ "{}}\ +}
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ solve\_group.\mbox{\hyperlink{struct_solve___group_a20f3c45ccfd54b25ffba473f2753c7de}{solver\_args}}.\mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_a647c40a06b8e41da1776088be98f4bad}{get\_info\_string}}()}
+\DoxyCodeLine{00258\ \ \ \ \ );}
+\DoxyCodeLine{00259\ \ \ \ \ solve\_group\_logger.\mbox{\hyperlink{class_experiment___log_a033ee25bf73e58f7acfa53a4e4d6dfb4}{info}}(}
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Solve\_Group\ precond\ args:\ "{}}\ +}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ solve\_group.\mbox{\hyperlink{struct_solve___group_ae5acf7e2a9817ab7488873a290b3e89c}{precond\_specs}}.\mbox{\hyperlink{struct_preconditioner___spec_a1fa853a6c5c6c773b56cf92c646be775}{get\_info\_string}}()}
+\DoxyCodeLine{00262\ \ \ \ \ );}
+\DoxyCodeLine{00263\ }
+\DoxyCodeLine{00264\ \ \ \ \ solve\_group.\mbox{\hyperlink{struct_solve___group_a802dbe1cc097d383734c965fe7fbb3c9}{record\_json}}(}
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}solve\_group\_specs"{}},\ solve\_group\_dir,\ solve\_group\_logger}
+\DoxyCodeLine{00266\ \ \ \ \ );}
+\DoxyCodeLine{00267\ }
+\DoxyCodeLine{00268\ \ \ \ \ \textcolor{comment}{//\ Iterate\ over\ matrices\ and\ iterations\ per\ matrix}}
+\DoxyCodeLine{00269\ \ \ \ \ \textcolor{keywordflow}{for}\ (std::string\ matrix\_file\ :\ solve\_group.\mbox{\hyperlink{struct_solve___group_adf3fce33693f987fba82fd5e16809b42}{matrices\_to\_test}})\ \{}
+\DoxyCodeLine{00270\ }
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ fs::path\ matrix\_output\_data\_dir\ =\ (}
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \ \ \ \ solve\_group\_dir\ /\ fs::path(matrix\_file).stem()}
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{exp__run__record_8h_ac0ad2ebbc468f7a9f3553a491e8fb7a9}{create\_directory\_if\_nexists}}(matrix\_output\_data\_dir,\ solve\_group\_logger);}
+\DoxyCodeLine{00275\ }
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ solve\_group\_logger.\mbox{\hyperlink{class_experiment___log_a033ee25bf73e58f7acfa53a4e4d6dfb4}{info}}(}
+\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Start\ matrix\ experimentation:\ "{}}\ +\ matrix\_file}
+\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ total\_iters\ =\ solve\_group.\mbox{\hyperlink{struct_solve___group_a1bab50520e61ddfffb220d0fa44e98a1}{experiment\_iterations}};}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ exp\_iter\ =\ 0;\ exp\_iter\ <\ total\_iters;\ ++exp\_iter)\ \{}
+\DoxyCodeLine{00282\ }
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \ \ \ \ fs::path\ iter\_output\_data\_dir\ =\ (}
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ matrix\_output\_data\_dir\ /\ fs::path(std::to\_string(exp\_iter))}
+\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{exp__run__record_8h_ac0ad2ebbc468f7a9f3553a491e8fb7a9}{create\_directory\_if\_nexists}}(}
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ iter\_output\_data\_dir,\ solve\_group\_logger}
+\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00289\ }
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \ \ \ \ solve\_group\_logger.\mbox{\hyperlink{class_experiment___log_a033ee25bf73e58f7acfa53a4e4d6dfb4}{info}}(}
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Start\ iteration:\ "{}}\ +\ std::to\_string(exp\_iter)}
+\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00293\ }
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_experiment___log}{Experiment\_Log}}\ iter\_logger(}
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (solve\_group.\mbox{\hyperlink{struct_solve___group_a517d13a63d310880ad85f4c6c629d4ee}{id}}\ +\ \textcolor{stringliteral}{"{}\_"{}}\ +\ matrix\_file\ +\ \textcolor{stringliteral}{"{}\_"{}}\ +}
+\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::to\_string(exp\_iter)\ +\ \textcolor{stringliteral}{"{}\_logger"{}}),}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ iter\_output\_data\_dir\ /\ fs::path(\textcolor{stringliteral}{"{}log.log"{}}),}
+\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{false}}
+\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00300\ }
+\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Load\ linear\ system,\ generating\ b\ to\ solve}}
+\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{cascade::GenericLinearSystem<TMatrix>}}\ gen\_lin\_sys\ =\ (}
+\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{exp__read_8h_a7ed8b601c4d247f26032eca531099318}{load\_lin\_sys<TMatrix>}}(}
+\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cu\_handles,\ matrix\_data\_dir,\ matrix\_file,\ iter\_logger}
+\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00307\ }
+\DoxyCodeLine{00308\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{exp__run__record_8h_a199751f0ff87b39aba16b9b5ef54ca8d}{run\_record\_solversuite\_experiment}}(}
+\DoxyCodeLine{00309\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ gen\_lin\_sys,}
+\DoxyCodeLine{00310\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ solve\_group,}
+\DoxyCodeLine{00311\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ iter\_output\_data\_dir,}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ iter\_logger}
+\DoxyCodeLine{00313\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00314\ }
+\DoxyCodeLine{00315\ \ \ \ \ \ \ \ \ \ \ \ \ solve\_group\_logger.\mbox{\hyperlink{class_experiment___log_a033ee25bf73e58f7acfa53a4e4d6dfb4}{info}}(}
+\DoxyCodeLine{00316\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Finish\ iteration:\ "{}}\ +\ std::to\_string(exp\_iter)}
+\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00318\ }
+\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00320\ }
+\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ solve\_group\_logger.\mbox{\hyperlink{class_experiment___log_a033ee25bf73e58f7acfa53a4e4d6dfb4}{info}}(}
+\DoxyCodeLine{00322\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Finish\ matrix\ experimentation:\ "{}}\ +\ matrix\_file}
+\DoxyCodeLine{00323\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00324\ }
+\DoxyCodeLine{00325\ \ \ \ \ \}}
+\DoxyCodeLine{00326\ }
+\DoxyCodeLine{00327\ \ \ \ \ outer\_logger.\mbox{\hyperlink{class_experiment___log_a033ee25bf73e58f7acfa53a4e4d6dfb4}{info}}(\textcolor{stringliteral}{"{}Finish\ Solve\_Group:\ "{}}\ +\ solve\_group.\mbox{\hyperlink{struct_solve___group_a517d13a63d310880ad85f4c6c629d4ee}{id}});}
+\DoxyCodeLine{00328\ \ \ \ \ solve\_group\_logger.\mbox{\hyperlink{class_experiment___log_a033ee25bf73e58f7acfa53a4e4d6dfb4}{info}}(\textcolor{stringliteral}{"{}Finish\ Solve\_Group:\ "{}}\ +\ solve\_group.\mbox{\hyperlink{struct_solve___group_a517d13a63d310880ad85f4c6c629d4ee}{id}});}
+\DoxyCodeLine{00329\ }
+\DoxyCodeLine{00330\ \}}
+\DoxyCodeLine{00331\ }
+\DoxyCodeLine{00332\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{exp__run__record_8h_a625212fbebb3b3a5b662f3a8dd4dea63}{run\_record\_experimental\_spec}}(}
+\DoxyCodeLine{00333\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cascade::cuHandleBundle}}\ \&cu\_handles,}
+\DoxyCodeLine{00334\ \ \ \ \ \mbox{\hyperlink{struct_experiment___spec}{Experiment\_Spec}}\ exp\_spec,}
+\DoxyCodeLine{00335\ \ \ \ \ fs::path\ matrix\_data\_dir,}
+\DoxyCodeLine{00336\ \ \ \ \ fs::path\ output\_data\_dir,}
+\DoxyCodeLine{00337\ \ \ \ \ \mbox{\hyperlink{class_experiment___log}{Experiment\_Log}}\ logger}
+\DoxyCodeLine{00338\ );}
+\DoxyCodeLine{00339\ }
+\DoxyCodeLine{00340\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

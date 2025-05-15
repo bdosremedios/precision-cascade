@@ -1,0 +1,75 @@
+\doxysection{Experiment\+\_\+\+Log Class Reference}
+\hypertarget{class_experiment___log}{}\label{class_experiment___log}\index{Experiment\_Log@{Experiment\_Log}}
+
+
+{\ttfamily \#include $<$Experiment\+\_\+\+Log.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_experiment___log_a6643b26cb894c26da3222b470c47f670}{Experiment\+\_\+\+Log}} ()
+\item 
+\mbox{\hyperlink{class_experiment___log_af5554c60074a1ee20a1e65d7eb2f7ad3}{Experiment\+\_\+\+Log}} (std\+::string logger\+\_\+name, fs\+::path log\+\_\+file, bool print\+\_\+to\+\_\+stdout)
+\item 
+void \mbox{\hyperlink{class_experiment___log_a033ee25bf73e58f7acfa53a4e4d6dfb4}{info}} (std\+::string s)
+\item 
+void \mbox{\hyperlink{class_experiment___log_ad04cecaf30cbea1f678b8c8d6b732be1}{warn}} (std\+::string s)
+\item 
+void \mbox{\hyperlink{class_experiment___log_a88e22e6495da256aa612d786f923e1a4}{critical}} (std\+::string s)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::shared\+\_\+ptr$<$ spdlog\+::logger $>$ \mbox{\hyperlink{class_experiment___log_ae63530425c8f9cbf2ae3ac7bee2cb6c5}{logger}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_experiment___log_a6643b26cb894c26da3222b470c47f670}\index{Experiment\_Log@{Experiment\_Log}!Experiment\_Log@{Experiment\_Log}}
+\index{Experiment\_Log@{Experiment\_Log}!Experiment\_Log@{Experiment\_Log}}
+\doxysubsubsection{\texorpdfstring{Experiment\_Log()}{Experiment\_Log()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{class_experiment___log_a6643b26cb894c26da3222b470c47f670} 
+Experiment\+\_\+\+Log\+::\+Experiment\+\_\+\+Log (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_experiment___log_af5554c60074a1ee20a1e65d7eb2f7ad3}\index{Experiment\_Log@{Experiment\_Log}!Experiment\_Log@{Experiment\_Log}}
+\index{Experiment\_Log@{Experiment\_Log}!Experiment\_Log@{Experiment\_Log}}
+\doxysubsubsection{\texorpdfstring{Experiment\_Log()}{Experiment\_Log()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{class_experiment___log_af5554c60074a1ee20a1e65d7eb2f7ad3} 
+Experiment\+\_\+\+Log\+::\+Experiment\+\_\+\+Log (\begin{DoxyParamCaption}\item[{std\+::string}]{logger\+\_\+name}{, }\item[{fs\+::path}]{log\+\_\+file}{, }\item[{bool}]{print\+\_\+to\+\_\+stdout}{}\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_experiment___log_a88e22e6495da256aa612d786f923e1a4}\index{Experiment\_Log@{Experiment\_Log}!critical@{critical}}
+\index{critical@{critical}!Experiment\_Log@{Experiment\_Log}}
+\doxysubsubsection{\texorpdfstring{critical()}{critical()}}
+{\footnotesize\ttfamily \label{class_experiment___log_a88e22e6495da256aa612d786f923e1a4} 
+void Experiment\+\_\+\+Log\+::critical (\begin{DoxyParamCaption}\item[{std\+::string}]{s}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_experiment___log_a033ee25bf73e58f7acfa53a4e4d6dfb4}\index{Experiment\_Log@{Experiment\_Log}!info@{info}}
+\index{info@{info}!Experiment\_Log@{Experiment\_Log}}
+\doxysubsubsection{\texorpdfstring{info()}{info()}}
+{\footnotesize\ttfamily \label{class_experiment___log_a033ee25bf73e58f7acfa53a4e4d6dfb4} 
+void Experiment\+\_\+\+Log\+::info (\begin{DoxyParamCaption}\item[{std\+::string}]{s}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_experiment___log_ad04cecaf30cbea1f678b8c8d6b732be1}\index{Experiment\_Log@{Experiment\_Log}!warn@{warn}}
+\index{warn@{warn}!Experiment\_Log@{Experiment\_Log}}
+\doxysubsubsection{\texorpdfstring{warn()}{warn()}}
+{\footnotesize\ttfamily \label{class_experiment___log_ad04cecaf30cbea1f678b8c8d6b732be1} 
+void Experiment\+\_\+\+Log\+::warn (\begin{DoxyParamCaption}\item[{std\+::string}]{s}{}\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{class_experiment___log_ae63530425c8f9cbf2ae3ac7bee2cb6c5}\index{Experiment\_Log@{Experiment\_Log}!logger@{logger}}
+\index{logger@{logger}!Experiment\_Log@{Experiment\_Log}}
+\doxysubsubsection{\texorpdfstring{logger}{logger}}
+{\footnotesize\ttfamily \label{class_experiment___log_ae63530425c8f9cbf2ae3ac7bee2cb6c5} 
+std\+::shared\+\_\+ptr$<$spdlog\+::logger$>$ Experiment\+\_\+\+Log\+::logger}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/dosre/dev/precision-\/cascade/experimentation/include/exp\+\_\+tools/\mbox{\hyperlink{_experiment___log_8h}{Experiment\+\_\+\+Log.\+h}}\item 
+C\+:/\+Users/dosre/dev/precision-\/cascade/experimentation/src/exp\+\_\+tools/\mbox{\hyperlink{_experiment___log_8cpp}{Experiment\+\_\+\+Log.\+cpp}}\end{DoxyCompactItemize}

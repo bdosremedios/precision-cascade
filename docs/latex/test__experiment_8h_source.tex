@@ -1,0 +1,33 @@
+\doxysection{test\+\_\+experiment.\+h}
+\hypertarget{test__experiment_8h_source}{}\label{test__experiment_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/experimentation/test/include/test\_experiment.h@{C:/Users/dosre/dev/precision-\/cascade/experimentation/test/include/test\_experiment.h}}
+\mbox{\hyperlink{test__experiment_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ TEST\_EXPERIMENT\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ TEST\_EXPERIMENT\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{test__assertions_8h}{test\_assertions.h}}"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{cu_handle_bundle_8h}{tools/cuHandleBundle.h}}"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <gtest/gtest.h>}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <filesystem>}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{namespace\ }fs\ =\ std::filesystem;}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_test___experiment___base}{Test\_Experiment\_Base}}:\ \textcolor{keyword}{public}\ testing::Test}
+\DoxyCodeLine{00015\ \{}
+\DoxyCodeLine{00016\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ *\mbox{\hyperlink{class_test___experiment___base_a90ef71bf03f252dd5e0c4717166b0cb8}{cu\_handles\_ptr}};}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ *\mbox{\hyperlink{class_test___experiment___base_ae61c53bf29b58be86a68e15967b86e46}{print\_errors}};}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{static}\ fs::path\ \mbox{\hyperlink{class_test___experiment___base_ac917008332e7ce2be0a55125a24a1594}{test\_exp\_data\_dir}};}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{static}\ fs::path\ \mbox{\hyperlink{class_test___experiment___base_aa8c6522402956bc1097e2704665c2744}{test\_json\_dir}};}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{static}\ fs::path\ \mbox{\hyperlink{class_test___experiment___base_ac36be999ef4675df7c7a8667973cbc10}{test\_data\_dir}};}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{static}\ fs::path\ \mbox{\hyperlink{class_test___experiment___base_aeb2755e97255287629b1299d78ec4a50}{test\_output\_dir}};}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \};}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

@@ -1,0 +1,343 @@
+\doxysection{test\+\_\+assertions.\+h}
+\hypertarget{test__assertions_8h_source}{}\label{test__assertions_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/test/include/test\_assertions.h@{C:/Users/dosre/dev/precision-\/cascade/test/include/test\_assertions.h}}
+\mbox{\hyperlink{test__assertions_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ TEST\_ASSERTIONS\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ TEST\_ASSERTIONS\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{cuda__check_8h}{tools/cuda\_check.h}}"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{abs_8h}{tools/abs.h}}"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{types_8h}{types/types.h}}"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}gtest/gtest.h"{}}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <functional>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespacecascade}{cascade}};}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ *print\_errors;}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#define\ CHECK\_FUNC\_HAS\_RUNTIME\_ERROR(to\_print,\ func)\ \(\backslash\)}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\_CHECK\_FUNC\_HAS\_RUNTIME\_ERROR(\ \(\backslash\)}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\ \ \ \ to\_print,\ func,\ \(\backslash\)}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\ \ \ \ \_\_FILE\_\_,\ \_\_LINE\_\_,\ "{}AssertionError\ for\ CHECK\_FUNC\_HAS\_RUNTIME\_ERROR"{}\ \(\backslash\)}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{)}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{test__assertions_8h_ac0a687969f00e4cfdd8474f4ba5ba0a4}{\_CHECK\_FUNC\_HAS\_RUNTIME\_ERROR}}(}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{bool}\ *to\_print,\ std::function<\textcolor{keywordtype}{void}()>\ func,}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file,\ \textcolor{keywordtype}{int}\ line,\ std::string\ message}
+\DoxyCodeLine{00026\ )\ \{}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ testing::ScopedTrace\ scope(file,\ line,\ message);}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ func();}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ FAIL();}
+\DoxyCodeLine{00033\ \ \ \ \ \}\ \textcolor{keywordflow}{catch}\ (std::runtime\_error\ \&\mbox{\hyperlink{create__solve__matrices_8m_a329626dffc42c84371831246a2ddac71}{e}})\ \{}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (*to\_print)\ \{}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \mbox{\hyperlink{create__solve__matrices_8m_a329626dffc42c84371831246a2ddac71}{e}}.what()\ <<\ std::endl;}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00037\ \ \ \ \ \}}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \}}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#define\ ASSERT\_VECTOR\_NEAR(test,\ target,\ tol)\ \(\backslash\)}}
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\_ASSERT\_VECTOR\_NEAR(\ \(\backslash\)}}
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\ \ \ \ test,\ target,\ tol,\ \(\backslash\)}}
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\ \ \ \ \_\_FILE\_\_,\ \_\_LINE\_\_,\ "{}AssertionError\ for\ ASSERT\_VECTOR\_NEAR"{}\ \(\backslash\)}}
+\DoxyCodeLine{00045\ \textcolor{preprocessor}{)}}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00048\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{test__assertions_8h_a86c65c7607518435be9552a7821364ca}{\_ASSERT\_VECTOR\_NEAR}}(}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ \&test,}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ \&target,}
+\DoxyCodeLine{00051\ \ \ \ \ TPrecision\ tol,}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file,\ \textcolor{keywordtype}{int}\ line,\ std::string\ message}
+\DoxyCodeLine{00053\ )\ \{}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ testing::ScopedTrace\ scope(file,\ line,\ message);}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ ASSERT\_EQ(test.\mbox{\hyperlink{classcascade_1_1_vector_a66cff08224d9808fc55bc5b53bdd4fdb}{rows}}(),\ target.\mbox{\hyperlink{classcascade_1_1_vector_a66cff08224d9808fc55bc5b53bdd4fdb}{rows}}());}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<target.\mbox{\hyperlink{classcascade_1_1_vector_a66cff08224d9808fc55bc5b53bdd4fdb}{rows}}();\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ ASSERT\_NEAR(}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ test.\mbox{\hyperlink{classcascade_1_1_vector_a3128648f50666a08c526283fb422f212}{get\_elem}}(\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}).get\_scalar(),}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ target.\mbox{\hyperlink{classcascade_1_1_vector_a3128648f50666a08c526283fb422f212}{get\_elem}}(\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}).get\_scalar(),}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ tol}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00065\ \ \ \ \ \}}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \}}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \textcolor{preprocessor}{\#define\ ASSERT\_VECTOR\_ZERO(test,\ tol)\ \(\backslash\)}}
+\DoxyCodeLine{00070\ \textcolor{preprocessor}{\_ASSERT\_VECTOR\_ZERO(\ \(\backslash\)}}
+\DoxyCodeLine{00071\ \textcolor{preprocessor}{\ \ \ \ test,\ tol,\ \(\backslash\)}}
+\DoxyCodeLine{00072\ \textcolor{preprocessor}{\ \ \ \ \_\_FILE\_\_,\ \_\_LINE\_\_,\ "{}AssertionError\ for\ \_ASSERT\_VECTOR\_ZERO"{}\ \(\backslash\)}}
+\DoxyCodeLine{00073\ \textcolor{preprocessor}{)}}
+\DoxyCodeLine{00074\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00075\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{test__assertions_8h_ab394388c16e70ae37c82ad8937eb80ce}{\_ASSERT\_VECTOR\_ZERO}}(}
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ \&test,}
+\DoxyCodeLine{00077\ \ \ \ \ TPrecision\ tol,}
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file,\ \textcolor{keywordtype}{int}\ line,\ std::string\ message}
+\DoxyCodeLine{00079\ )\ \{}
+\DoxyCodeLine{00080\ \ \ \ \ \mbox{\hyperlink{test__assertions_8h_a86c65c7607518435be9552a7821364ca}{\_ASSERT\_VECTOR\_NEAR}}(}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ test,}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector_a7da078322ccb03812f330b72cf4ad907}{Vector<TPrecision>::Zero}}(}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ test.\mbox{\hyperlink{classcascade_1_1_vector_a20755c576afdbb33ae077b4494c41f0a}{get\_cu\_handles}}(),}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ test.\mbox{\hyperlink{classcascade_1_1_vector_a66cff08224d9808fc55bc5b53bdd4fdb}{rows}}(),}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ test.\mbox{\hyperlink{classcascade_1_1_vector_adee3982ea575f654551665ea77ea69f1}{cols}}()}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ ),}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ tol,}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ file,\ line,\ message}
+\DoxyCodeLine{00089\ \ \ \ \ );}
+\DoxyCodeLine{00090\ \}}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \textcolor{preprocessor}{\#define\ ASSERT\_VECTOR\_EQ(test,\ target)\ \(\backslash\)}}
+\DoxyCodeLine{00093\ \textcolor{preprocessor}{\_ASSERT\_VECTOR\_EQ(\ \(\backslash\)}}
+\DoxyCodeLine{00094\ \textcolor{preprocessor}{\ \ \ \ test,\ target,\ \(\backslash\)}}
+\DoxyCodeLine{00095\ \textcolor{preprocessor}{\ \ \ \ \_\_FILE\_\_,\ \_\_LINE\_\_,\ "{}AssertionError\ for\ ASSERT\_VECTOR\_EQ"{}\ \(\backslash\)}}
+\DoxyCodeLine{00096\ \textcolor{preprocessor}{)}}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00099\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{test__assertions_8h_aa5b40bddf3eb7cc8b835463eb86df0bf}{\_ASSERT\_VECTOR\_EQ}}(}
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ \&test,}
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ \&target,}
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file,\ \textcolor{keywordtype}{int}\ line,\ std::string\ message}
+\DoxyCodeLine{00103\ )\ \{}
+\DoxyCodeLine{00104\ \ \ \ \ \mbox{\hyperlink{test__assertions_8h_a86c65c7607518435be9552a7821364ca}{\_ASSERT\_VECTOR\_NEAR}}(}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ test,\ target,\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(0),\ file,\ line,\ message}
+\DoxyCodeLine{00106\ \ \ \ \ );}
+\DoxyCodeLine{00107\ \}}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \textcolor{preprocessor}{\#define\ ASSERT\_MATRIX\_NEAR(test,\ target,\ tol)\ \(\backslash\)}}
+\DoxyCodeLine{00110\ \textcolor{preprocessor}{\_ASSERT\_MATRIX\_NEAR(\ \(\backslash\)}}
+\DoxyCodeLine{00111\ \textcolor{preprocessor}{\ \ \ \ test,\ target,\ tol,\ \(\backslash\)}}
+\DoxyCodeLine{00112\ \textcolor{preprocessor}{\ \ \ \ \_\_FILE\_\_,\ \_\_LINE\_\_,\ "{}AssertionError\ for\ ASSERT\_MATRIX\_NEAR"{}\ \(\backslash\)}}
+\DoxyCodeLine{00113\ \textcolor{preprocessor}{)}}
+\DoxyCodeLine{00114\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix,\ \textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00115\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{test__assertions_8h_a9f37d8e2f6aba2d9ef3a5db96b6ee03b}{\_ASSERT\_MATRIX\_NEAR}}(}
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{keyword}{const}\ TMatrix<TPrecision>\ \&test,}
+\DoxyCodeLine{00117\ \ \ \ \ \textcolor{keyword}{const}\ TMatrix<TPrecision>\ \&target,}
+\DoxyCodeLine{00118\ \ \ \ \ TPrecision\ tol,}
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file,\ \textcolor{keywordtype}{int}\ line,\ std::string\ message}
+\DoxyCodeLine{00120\ )\ \{}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00122\ \ \ \ \ testing::ScopedTrace\ scope(file,\ line,\ message);}
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ \ \ \ \ ASSERT\_EQ(test.rows(),\ target.rows());}
+\DoxyCodeLine{00125\ \ \ \ \ ASSERT\_EQ(test.cols(),\ target.cols());}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<target.rows();\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ j=0;\ j<target.cols();\ ++j)\ \{}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ ASSERT\_NEAR(}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ test.get\_elem(\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}},\ j).get\_scalar(),}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ target.get\_elem(\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}},\ j).get\_scalar(),}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tol}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00135\ \ \ \ \ \}}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ \}}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ \textcolor{preprocessor}{\#define\ ASSERT\_MATRIX\_LT(test,\ target)\ \(\backslash\)}}
+\DoxyCodeLine{00140\ \textcolor{preprocessor}{\_ASSERT\_MATRIX\_LT(\ \(\backslash\)}}
+\DoxyCodeLine{00141\ \textcolor{preprocessor}{\ \ \ \ test,\ target,\ \(\backslash\)}}
+\DoxyCodeLine{00142\ \textcolor{preprocessor}{\ \ \ \ \_\_FILE\_\_,\ \_\_LINE\_\_,\ "{}AssertionError\ for\ ASSERT\_MATRIX\_LT"{}\ \(\backslash\)}}
+\DoxyCodeLine{00143\ \textcolor{preprocessor}{)}}
+\DoxyCodeLine{00144\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix,\ \textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00145\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{test__assertions_8h_a1147bca9fc4c9798ceb9073e24cf7914}{\_ASSERT\_MATRIX\_LT}}(}
+\DoxyCodeLine{00146\ \ \ \ \ \textcolor{keyword}{const}\ TMatrix<TPrecision>\ \&test,}
+\DoxyCodeLine{00147\ \ \ \ \ \textcolor{keyword}{const}\ TMatrix<TPrecision>\ \&target,}
+\DoxyCodeLine{00148\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file,\ \textcolor{keywordtype}{int}\ line,\ std::string\ message}
+\DoxyCodeLine{00149\ )\ \{}
+\DoxyCodeLine{00150\ }
+\DoxyCodeLine{00151\ \ \ \ \ testing::ScopedTrace\ scope(file,\ line,\ message);}
+\DoxyCodeLine{00152\ }
+\DoxyCodeLine{00153\ \ \ \ \ ASSERT\_EQ(test.rows(),\ target.rows());}
+\DoxyCodeLine{00154\ \ \ \ \ ASSERT\_EQ(test.cols(),\ target.cols());}
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00156\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<target.rows();\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ j=0;\ j<target.cols();\ ++j)\ \{}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ ASSERT\_LT(}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ test.get\_elem(\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}},\ j).get\_scalar(),}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ target.get\_elem(\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}},\ j).get\_scalar()}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00163\ \ \ \ \ \}}
+\DoxyCodeLine{00164\ }
+\DoxyCodeLine{00165\ \}}
+\DoxyCodeLine{00166\ }
+\DoxyCodeLine{00167\ \textcolor{preprocessor}{\#define\ ASSERT\_MATRIX\_GT(test,\ target)\ \(\backslash\)}}
+\DoxyCodeLine{00168\ \textcolor{preprocessor}{\_ASSERT\_MATRIX\_GT(\ \(\backslash\)}}
+\DoxyCodeLine{00169\ \textcolor{preprocessor}{\ \ \ \ test,\ target,\ \(\backslash\)}}
+\DoxyCodeLine{00170\ \textcolor{preprocessor}{\ \ \ \ \_\_FILE\_\_,\ \_\_LINE\_\_,\ "{}AssertionError\ for\ ASSERT\_MATRIX\_GT"{}\ \(\backslash\)}}
+\DoxyCodeLine{00171\ \textcolor{preprocessor}{)}}
+\DoxyCodeLine{00172\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix,\ \textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00173\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{test__assertions_8h_ae8b4e2f34ed53ca0a13bbf6f1a3f93b1}{\_ASSERT\_MATRIX\_GT}}(}
+\DoxyCodeLine{00174\ \ \ \ \ \textcolor{keyword}{const}\ TMatrix<TPrecision>\ \&test,}
+\DoxyCodeLine{00175\ \ \ \ \ \textcolor{keyword}{const}\ TMatrix<TPrecision>\ \&target,}
+\DoxyCodeLine{00176\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file,\ \textcolor{keywordtype}{int}\ line,\ std::string\ message}
+\DoxyCodeLine{00177\ )\ \{}
+\DoxyCodeLine{00178\ }
+\DoxyCodeLine{00179\ \ \ \ \ testing::ScopedTrace\ scope(file,\ line,\ message);}
+\DoxyCodeLine{00180\ }
+\DoxyCodeLine{00181\ \ \ \ \ ASSERT\_EQ(test.rows(),\ target.rows());}
+\DoxyCodeLine{00182\ \ \ \ \ ASSERT\_EQ(test.cols(),\ target.cols());}
+\DoxyCodeLine{00183\ }
+\DoxyCodeLine{00184\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<target.rows();\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ j=0;\ j<target.cols();\ ++j)\ \{}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \ \ \ \ ASSERT\_GT(}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ test.get\_elem(\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}},\ j).get\_scalar(),}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ target.get\_elem(\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}},\ j).get\_scalar()}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00191\ \ \ \ \ \}}
+\DoxyCodeLine{00192\ }
+\DoxyCodeLine{00193\ \}}
+\DoxyCodeLine{00194\ }
+\DoxyCodeLine{00195\ \textcolor{preprocessor}{\#define\ ASSERT\_MATRIX\_EQ(test,\ target)\ \(\backslash\)}}
+\DoxyCodeLine{00196\ \textcolor{preprocessor}{\_ASSERT\_MATRIX\_EQ(\ \(\backslash\)}}
+\DoxyCodeLine{00197\ \textcolor{preprocessor}{\ \ \ \ test,\ target,\ \(\backslash\)}}
+\DoxyCodeLine{00198\ \textcolor{preprocessor}{\ \ \ \ \_\_FILE\_\_,\ \_\_LINE\_\_,\ "{}AssertionError\ for\ ASSERT\_MATRIX\_EQ"{}\ \(\backslash\)}}
+\DoxyCodeLine{00199\ \textcolor{preprocessor}{)}}
+\DoxyCodeLine{00200\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix,\ \textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00201\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{test__assertions_8h_ab60247d4582e0357fe010f146c17e374}{\_ASSERT\_MATRIX\_EQ}}(}
+\DoxyCodeLine{00202\ \ \ \ \ \textcolor{keyword}{const}\ TMatrix<TPrecision>\ \&test,}
+\DoxyCodeLine{00203\ \ \ \ \ \textcolor{keyword}{const}\ TMatrix<TPrecision>\ \&target,}
+\DoxyCodeLine{00204\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file,\ \textcolor{keywordtype}{int}\ line,\ std::string\ message}
+\DoxyCodeLine{00205\ )\ \{}
+\DoxyCodeLine{00206\ \ \ \ \ \mbox{\hyperlink{test__assertions_8h_a9f37d8e2f6aba2d9ef3a5db96b6ee03b}{\_ASSERT\_MATRIX\_NEAR}}(}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ test,\ target,\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(0),\ file,\ line,\ message}
+\DoxyCodeLine{00208\ \ \ \ \ );}
+\DoxyCodeLine{00209\ \}}
+\DoxyCodeLine{00210\ }
+\DoxyCodeLine{00211\ \textcolor{preprocessor}{\#define\ ASSERT\_MATRIX\_SAMESPARSITY(test,\ target,\ zero\_tol)\ \(\backslash\)}}
+\DoxyCodeLine{00212\ \textcolor{preprocessor}{\_ASSERT\_MATRIX\_SAMESPARSITY(\ \(\backslash\)}}
+\DoxyCodeLine{00213\ \textcolor{preprocessor}{\ \ \ \ test,\ target,\ zero\_tol,\ \(\backslash\)}}
+\DoxyCodeLine{00214\ \textcolor{preprocessor}{\ \ \ \ \_\_FILE\_\_,\ \_\_LINE\_\_,\ "{}AssertionError\ for\ ASSERT\_MATRIX\_SAMESPARSITY"{}\ \(\backslash\)}}
+\DoxyCodeLine{00215\ \textcolor{preprocessor}{)}}
+\DoxyCodeLine{00216\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix,\ \textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00217\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{test__assertions_8h_aaa9e5bb91844642dd18cea1b87428f72}{\_ASSERT\_MATRIX\_SAMESPARSITY}}(}
+\DoxyCodeLine{00218\ \ \ \ \ \textcolor{keyword}{const}\ TMatrix<TPrecision>\ \&test,}
+\DoxyCodeLine{00219\ \ \ \ \ \textcolor{keyword}{const}\ TMatrix<TPrecision>\ \&target,}
+\DoxyCodeLine{00220\ \ \ \ \ TPrecision\ zero\_tol,}
+\DoxyCodeLine{00221\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file,\ \textcolor{keywordtype}{int}\ line,\ std::string\ message}
+\DoxyCodeLine{00222\ )\ \{}
+\DoxyCodeLine{00223\ }
+\DoxyCodeLine{00224\ \ \ \ \ testing::ScopedTrace\ scope(file,\ line,\ message);}
+\DoxyCodeLine{00225\ }
+\DoxyCodeLine{00226\ \ \ \ \ ASSERT\_EQ(test.rows(),\ target.rows());}
+\DoxyCodeLine{00227\ \ \ \ \ ASSERT\_EQ(test.cols(),\ target.cols());}
+\DoxyCodeLine{00228\ }
+\DoxyCodeLine{00229\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<target.rows();\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ j=0;\ j<target.cols();\ ++j)\ \{}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{namespacecascade_1_1abs__ns_ab08ce3a88268964a87b50e39d0644268}{abs\_ns::abs}}(target.get\_elem(\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}},\ j).get\_scalar())\ <=\ zero\_tol)\ \{}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ASSERT\_LE(}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_1_1abs__ns_ab08ce3a88268964a87b50e39d0644268}{abs\_ns::abs}}(test.get\_elem(\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}},\ j).get\_scalar()),}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ zero\_tol}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00238\ \ \ \ \ \}}
+\DoxyCodeLine{00239\ }
+\DoxyCodeLine{00240\ \}}
+\DoxyCodeLine{00241\ }
+\DoxyCodeLine{00242\ \textcolor{preprocessor}{\#define\ ASSERT\_MATRIX\_ZERO(test,\ tol)\ \(\backslash\)}}
+\DoxyCodeLine{00243\ \textcolor{preprocessor}{\_ASSERT\_MATRIX\_ZERO(\ \(\backslash\)}}
+\DoxyCodeLine{00244\ \textcolor{preprocessor}{\ \ \ \ test,\ tol,\ \(\backslash\)}}
+\DoxyCodeLine{00245\ \textcolor{preprocessor}{\ \ \ \ \_\_FILE\_\_,\ \_\_LINE\_\_,\ "{}AssertionError\ for\ ASSERT\_MATRIX\_ZERO"{}\ \(\backslash\)}}
+\DoxyCodeLine{00246\ \textcolor{preprocessor}{)}}
+\DoxyCodeLine{00247\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix,\ \textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00248\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{test__assertions_8h_a87ecf761ed08869a2e168c7889893a6d}{\_ASSERT\_MATRIX\_ZERO}}(}
+\DoxyCodeLine{00249\ \ \ \ \ \textcolor{keyword}{const}\ TMatrix<TPrecision>\ \&test,}
+\DoxyCodeLine{00250\ \ \ \ \ TPrecision\ tol,}
+\DoxyCodeLine{00251\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file,\ \textcolor{keywordtype}{int}\ line,\ std::string\ message}
+\DoxyCodeLine{00252\ )\ \{}
+\DoxyCodeLine{00253\ \ \ \ \ \mbox{\hyperlink{test__assertions_8h_a9f37d8e2f6aba2d9ef3a5db96b6ee03b}{\_ASSERT\_MATRIX\_NEAR}}(}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ test,}
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ TMatrix<TPrecision>::Zero(}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \ \ \ \ test.get\_cu\_handles(),}
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \ \ \ \ test.rows(),}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \ \ \ \ test.cols()}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ ),}
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ tol,}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ file,\ line,\ message}
+\DoxyCodeLine{00262\ \ \ \ \ );}
+\DoxyCodeLine{00263\ \}}
+\DoxyCodeLine{00264\ }
+\DoxyCodeLine{00265\ \textcolor{preprocessor}{\#define\ ASSERT\_MATRIX\_IDENTITY(test,\ tol)\ \(\backslash\)}}
+\DoxyCodeLine{00266\ \textcolor{preprocessor}{\_ASSERT\_MATRIX\_IDENTITY(\ \(\backslash\)}}
+\DoxyCodeLine{00267\ \textcolor{preprocessor}{\ \ \ \ test,\ tol,\ \(\backslash\)}}
+\DoxyCodeLine{00268\ \textcolor{preprocessor}{\ \ \ \ \_\_FILE\_\_,\ \_\_LINE\_\_,\ "{}AssertionError\ for\ ASSERT\_MATRIX\_IDENTITY"{}\ \(\backslash\)}}
+\DoxyCodeLine{00269\ \textcolor{preprocessor}{)}}
+\DoxyCodeLine{00270\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix,\ \textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00271\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{test__assertions_8h_abc54ccf8e5de846a219b7767d2ee9275}{\_ASSERT\_MATRIX\_IDENTITY}}(}
+\DoxyCodeLine{00272\ \ \ \ \ \textcolor{keyword}{const}\ TMatrix<TPrecision>\ \&test,}
+\DoxyCodeLine{00273\ \ \ \ \ TPrecision\ tol,}
+\DoxyCodeLine{00274\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file,\ \textcolor{keywordtype}{int}\ line,\ std::string\ message}
+\DoxyCodeLine{00275\ )\ \{}
+\DoxyCodeLine{00276\ \ \ \ \ \mbox{\hyperlink{test__assertions_8h_a9f37d8e2f6aba2d9ef3a5db96b6ee03b}{\_ASSERT\_MATRIX\_NEAR}}(}
+\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ test,}
+\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ TMatrix<TPrecision>::Identity(}
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \ \ \ \ test.get\_cu\_handles(),}
+\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \ \ \ \ test.rows(),}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \ \ \ \ test.cols()}
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ ),}
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ tol,\ file,\ line,\ message}
+\DoxyCodeLine{00284\ \ \ \ \ );}
+\DoxyCodeLine{00285\ \}}
+\DoxyCodeLine{00286\ }
+\DoxyCodeLine{00287\ \textcolor{preprocessor}{\#define\ ASSERT\_MATRIX\_LOWTRI(test,\ tol)\ \(\backslash\)}}
+\DoxyCodeLine{00288\ \textcolor{preprocessor}{\_ASSERT\_MATRIX\_LOWTRI(\ \(\backslash\)}}
+\DoxyCodeLine{00289\ \textcolor{preprocessor}{\ \ \ \ test,\ tol,\ \(\backslash\)}}
+\DoxyCodeLine{00290\ \textcolor{preprocessor}{\ \ \ \ \_\_FILE\_\_,\ \_\_LINE\_\_,\ "{}AssertionError\ for\ ASSERT\_MATRIX\_LOWTRI"{}\ \(\backslash\)}}
+\DoxyCodeLine{00291\ \textcolor{preprocessor}{)}}
+\DoxyCodeLine{00292\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix,\ \textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00293\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{test__assertions_8h_ac5aac93ce55ebb4cc32776eca79de5db}{\_ASSERT\_MATRIX\_LOWTRI}}(}
+\DoxyCodeLine{00294\ \ \ \ \ \textcolor{keyword}{const}\ TMatrix<TPrecision>\ \&test,}
+\DoxyCodeLine{00295\ \ \ \ \ TPrecision\ tol,}
+\DoxyCodeLine{00296\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file,\ \textcolor{keywordtype}{int}\ line,\ std::string\ message}
+\DoxyCodeLine{00297\ )\ \{}
+\DoxyCodeLine{00298\ }
+\DoxyCodeLine{00299\ \ \ \ \ testing::ScopedTrace\ scope(file,\ line,\ message);}
+\DoxyCodeLine{00300\ }
+\DoxyCodeLine{00301\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<test.rows();\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ j=\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}+1;\ j<test.cols();\ ++j)\ \{}
+\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ \ \ \ \ ASSERT\_EQ(}
+\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ test.get\_elem(\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}},\ j).get\_scalar(),}
+\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(0)}
+\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00308\ \ \ \ \ \}}
+\DoxyCodeLine{00309\ }
+\DoxyCodeLine{00310\ \}}
+\DoxyCodeLine{00311\ }
+\DoxyCodeLine{00312\ \textcolor{preprocessor}{\#define\ ASSERT\_MATRIX\_UPPTRI(test,\ tol)\ \(\backslash\)}}
+\DoxyCodeLine{00313\ \textcolor{preprocessor}{\_ASSERT\_MATRIX\_UPPTRI(\ \(\backslash\)}}
+\DoxyCodeLine{00314\ \textcolor{preprocessor}{\ \ \ \ test,\ tol,\ \(\backslash\)}}
+\DoxyCodeLine{00315\ \textcolor{preprocessor}{\ \ \ \ \_\_FILE\_\_,\ \_\_LINE\_\_,\ "{}AssertionError\ for\ ASSERT\_MATRIX\_UPPTRI"{}\ \(\backslash\)}}
+\DoxyCodeLine{00316\ \textcolor{preprocessor}{)}}
+\DoxyCodeLine{00317\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix,\ \textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00318\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{test__assertions_8h_a6d23bc36aaff6f86bb24061df2119d03}{\_ASSERT\_MATRIX\_UPPTRI}}(}
+\DoxyCodeLine{00319\ \ \ \ \ \textcolor{keyword}{const}\ TMatrix<TPrecision>\ \&test,}
+\DoxyCodeLine{00320\ \ \ \ \ TPrecision\ tol,}
+\DoxyCodeLine{00321\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file,\ \textcolor{keywordtype}{int}\ line,\ std::string\ message}
+\DoxyCodeLine{00322\ )\ \{}
+\DoxyCodeLine{00323\ }
+\DoxyCodeLine{00324\ \ \ \ \ testing::ScopedTrace\ scope(file,\ line,\ message);}
+\DoxyCodeLine{00325\ }
+\DoxyCodeLine{00326\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<test.rows();\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00327\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ j=0;\ j<\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}};\ ++j)\ \{}
+\DoxyCodeLine{00328\ \ \ \ \ \ \ \ \ \ \ \ \ ASSERT\_EQ(}
+\DoxyCodeLine{00329\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ test.get\_elem(\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}},\ j).get\_scalar(),}
+\DoxyCodeLine{00330\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(0)}
+\DoxyCodeLine{00331\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00332\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00333\ \ \ \ \ \}}
+\DoxyCodeLine{00334\ }
+\DoxyCodeLine{00335\ \}}
+\DoxyCodeLine{00336\ }
+\DoxyCodeLine{00337\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

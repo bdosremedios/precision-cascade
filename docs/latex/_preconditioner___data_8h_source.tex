@@ -1,0 +1,84 @@
+\doxysection{Preconditioner\+\_\+\+Data.\+h}
+\hypertarget{_preconditioner___data_8h_source}{}\label{_preconditioner___data_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/experimentation/include/exp\_data/Preconditioner\_Data.h@{C:/Users/dosre/dev/precision-\/cascade/experimentation/include/exp\_data/Preconditioner\_Data.h}}
+\mbox{\hyperlink{_preconditioner___data_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ PRECONDITIONER\_DATA\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ PRECONDITIONER\_DATA\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_timed___experiment___data_8h}{Timed\_Experiment\_Data.h}}"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_preconditioner___spec_8h}{exp\_spec/Preconditioner\_Spec.h}}"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_experiment___log_8h}{exp\_tools/Experiment\_Log.h}}"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{write__json_8h}{exp\_tools/write\_json.h}}"{}}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_precond_arg_pkg_8h}{tools/arg\_pkgs/PrecondArgPkg.h}}"{}}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <filesystem>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{namespace\ }fs\ =\ std::filesystem;}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix>}
+\DoxyCodeLine{00018\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_preconditioner___data_aecab2d16b1c4a27f2e60abc078ba7a10}{Preconditioner\_Data}}:}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{public}\ \mbox{\hyperlink{struct_timed___experiment___data_a34a72a60b1823ae1022e831042c94993}{Timed\_Experiment\_Data}}}
+\DoxyCodeLine{00020\ \{}
+\DoxyCodeLine{00021\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{void}\ record\_precond\_data(std::ofstream\ \&file\_out)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ file\_out\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)t\(\backslash\)"{}id\(\backslash\)"{}\ :\ \(\backslash\)"{}"{}}\ <<\ \textcolor{keywordtype}{id}\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)"{},\(\backslash\)n"{}};}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ file\_out\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)t\(\backslash\)"{}precond\_left\(\backslash\)"{}\ :\ \(\backslash\)"{}"{}}}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{keyword}{typeid}(*\mbox{\hyperlink{struct_preconditioner___data_af6fe998a662fe678bb6e982a62927a11}{precond\_arg\_pkg\_dbl}}.left\_precond).\mbox{\hyperlink{convert__mat__to___c_s_v_8m_ab74e6bf80237ddc4109968cedc58c151}{name}}()}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{}\(\backslash\)"{},\(\backslash\)n"{}};}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ file\_out\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)t\(\backslash\)"{}precond\_right\(\backslash\)"{}\ :\ \(\backslash\)"{}"{}}}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{keyword}{typeid}(*\mbox{\hyperlink{struct_preconditioner___data_af6fe998a662fe678bb6e982a62927a11}{precond\_arg\_pkg\_dbl}}.right\_precond).\mbox{\hyperlink{convert__mat__to___c_s_v_8m_ab74e6bf80237ddc4109968cedc58c151}{name}}()}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{}\(\backslash\)"{},\(\backslash\)n"{}};}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ file\_out\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)t\(\backslash\)"{}precond\_specs\(\backslash\)"{}\ :\ \(\backslash\)"{}"{}}}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \mbox{\hyperlink{struct_preconditioner___data_a4fa9c07841fa695ebfcb9fa02b197f2a}{precond\_specs}}.get\_spec\_string()}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{}\(\backslash\)"{},\(\backslash\)n"{}};}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ file\_out\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)t\(\backslash\)"{}elapsed\_time\_ms\(\backslash\)"{}\ :\ "{}}\ <<\ \mbox{\hyperlink{struct_timed___experiment___data_a6588b3058ce7826aacbcc781cfe898ae}{clock}}.get\_elapsed\_time\_ms()}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{00036\ \ \ \ \ \}}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \mbox{\hyperlink{struct_preconditioner___spec}{Preconditioner\_Spec}}\ \mbox{\hyperlink{struct_preconditioner___data_a4fa9c07841fa695ebfcb9fa02b197f2a}{precond\_specs}};}
+\DoxyCodeLine{00041\ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{cascade::PrecondArgPkg<TMatrix,\ double>}}\ \mbox{\hyperlink{struct_preconditioner___data_af6fe998a662fe678bb6e982a62927a11}{precond\_arg\_pkg\_dbl}};}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \mbox{\hyperlink{struct_preconditioner___data_aecab2d16b1c4a27f2e60abc078ba7a10}{Preconditioner\_Data}}(}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ std::string\ arg\_precond\_id,}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_experiment___clock}{Experiment\_Clock}}\ arg\_clock,}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_preconditioner___spec}{Preconditioner\_Spec}}\ arg\_precond\_specs,}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{cascade::PrecondArgPkg<TMatrix,\ double>}}\ arg\_precond\_arg\_pkg\_dbl}
+\DoxyCodeLine{00048\ \ \ \ \ ):}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_timed___experiment___data_a34a72a60b1823ae1022e831042c94993}{Timed\_Experiment\_Data}}(arg\_precond\_id,\ arg\_clock),}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_preconditioner___data_a4fa9c07841fa695ebfcb9fa02b197f2a}{precond\_specs}}(arg\_precond\_specs),}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_preconditioner___data_af6fe998a662fe678bb6e982a62927a11}{precond\_arg\_pkg\_dbl}}(arg\_precond\_arg\_pkg\_dbl)}
+\DoxyCodeLine{00052\ \ \ \ \ \{\}}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ std::string\ \mbox{\hyperlink{struct_preconditioner___data_a3844a24ad89886d9a168bed52fd71b56}{get\_info\_string}}()\textcolor{keyword}{\ const\ override\ }\{}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_timed___experiment___data_a6588b3058ce7826aacbcc781cfe898ae}{clock}}.get\_info\_string()\ +\ \textcolor{stringliteral}{"{}\ |\ "{}}\ +\ \mbox{\hyperlink{struct_preconditioner___data_a4fa9c07841fa695ebfcb9fa02b197f2a}{precond\_specs}}.get\_spec\_string()}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00058\ \ \ \ \ \}}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_preconditioner___data_ad1a6857103a47f5dbc0323d21dfdb957}{record\_json}}(}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ std::string\ file\_name,\ fs::path\ output\_data\_dir,\ \mbox{\hyperlink{class_experiment___log}{Experiment\_Log}}\ logger}
+\DoxyCodeLine{00062\ \ \ \ \ )\textcolor{keyword}{\ const\ override\ }\{}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ std::ofstream\ file\_out\ =\ \mbox{\hyperlink{namespacewrite__json_a036d71555c40b412ce74423de41a8e94}{write\_json::open\_json\_ofstream}}(}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ file\_name,\ output\_data\_dir,\ logger}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacewrite__json_a05c898f4d70f346484014efa15c3ba17}{write\_json::start\_json}}(file\_out);}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ record\_precond\_data(file\_out);}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacewrite__json_a736ebde2c15c1460f6dcee265ed05029}{write\_json::end\_json}}(file\_out);}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ \}}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \};}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

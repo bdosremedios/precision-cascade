@@ -1,0 +1,97 @@
+\doxysection{C\+:/\+Users/dosre/dev/precision-\/cascade/test/src/test\+\_\+preconditioners/test\+\_\+\+ILUTPPreconditioner.cpp File Reference}
+\hypertarget{test___i_l_u_t_p_preconditioner_8cpp}{}\label{test___i_l_u_t_p_preconditioner_8cpp}\index{C:/Users/dosre/dev/precision-\/cascade/test/src/test\_preconditioners/test\_ILUTPPreconditioner.cpp@{C:/Users/dosre/dev/precision-\/cascade/test/src/test\_preconditioners/test\_ILUTPPreconditioner.cpp}}
+{\ttfamily \#include "{}test.\+h"{}}\newline
+{\ttfamily \#include "{}preconditioners/implemented\+\_\+preconditioners.\+h"{}}\newline
+{\ttfamily \#include $<$cmath$>$}\newline
+{\ttfamily \#include $<$unordered\+\_\+set$>$}\newline
+Include dependency graph for test\+\_\+\+ILUTPPreconditioner.\+cpp\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{test___i_l_u_t_p_preconditioner_8cpp__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_i_l_u_t_p___test}{ILUTP\+\_\+\+Test}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{test___i_l_u_t_p_preconditioner_8cpp_a9af8fd3dc616d6a95ba7b11171399090}{TEST\+\_\+F}} (\mbox{\hyperlink{class_i_l_u_t_p___test}{ILUTP\+\_\+\+Test}}, Test\+Equivalent\+ILUTNo\+Drop\+And\+Dense\+ILU0\+\_\+\+PRECONDITIONER)
+\item 
+\mbox{\hyperlink{test___i_l_u_t_p_preconditioner_8cpp_adc4e219a4c5de59eab4cc2d1056ee848}{TEST\+\_\+F}} (\mbox{\hyperlink{class_i_l_u_t_p___test}{ILUTP\+\_\+\+Test}}, Test\+ILUTDropping\+\_\+\+PRECONDITIONER)
+\item 
+\mbox{\hyperlink{test___i_l_u_t_p_preconditioner_8cpp_ac233df7bbe4276cbc5764d3c7cb6c608}{TEST\+\_\+F}} (\mbox{\hyperlink{class_i_l_u_t_p___test}{ILUTP\+\_\+\+Test}}, Test\+ILUTDropping\+\_\+\+Pivoted\+\_\+\+PRECONDITIONER)
+\item 
+\mbox{\hyperlink{test___i_l_u_t_p_preconditioner_8cpp_a7cd02f9a68452d68bb04aa198417b4d9}{TEST\+\_\+F}} (\mbox{\hyperlink{class_i_l_u_t_p___test}{ILUTP\+\_\+\+Test}}, Test\+ILUTDropping\+Limits\+\_\+\+PRECONDITIONER)
+\item 
+\mbox{\hyperlink{test___i_l_u_t_p_preconditioner_8cpp_ae54474906eaeb1a12131bb88ca6f21ea}{TEST\+\_\+F}} (\mbox{\hyperlink{class_i_l_u_t_p___test}{ILUTP\+\_\+\+Test}}, Test\+ILUTDropping\+Limits\+\_\+\+Pivoted\+\_\+\+PRECONDITIONER)
+\item 
+\mbox{\hyperlink{test___i_l_u_t_p_preconditioner_8cpp_a7ea8d2404c7f6d3dcb383b294ee53da2}{TEST\+\_\+F}} (\mbox{\hyperlink{class_i_l_u_t_p___test}{ILUTP\+\_\+\+Test}}, Test\+Matches\+Dense\+LU\+\_\+\+Pivoted\+\_\+\+PRECONDITIONER)
+\item 
+\mbox{\hyperlink{test___i_l_u_t_p_preconditioner_8cpp_aea3d627d62c85c5fda64600678e67dd9}{TEST\+\_\+F}} (\mbox{\hyperlink{class_i_l_u_t_p___test}{ILUTP\+\_\+\+Test}}, Test\+ILUT\+\_\+\+Pivoted\+\_\+\+Handle\+Breakdown\+\_\+\+PRECONDITIONER)
+\item 
+\mbox{\hyperlink{test___i_l_u_t_p_preconditioner_8cpp_ac93c50db2f9f9526dc75c93433786fa6}{TEST\+\_\+F}} (\mbox{\hyperlink{class_i_l_u_t_p___test}{ILUTP\+\_\+\+Test}}, Test\+Keep\+PLargest\+\_\+\+PRECONDITIONER)
+\item 
+\mbox{\hyperlink{test___i_l_u_t_p_preconditioner_8cpp_a670fe4eabcf86227e6c7435e400885cd}{TEST\+\_\+F}} (\mbox{\hyperlink{class_i_l_u_t_p___test}{ILUTP\+\_\+\+Test}}, Test\+Keep\+PLargest\+\_\+\+Pivoted\+\_\+\+PRECONDITIONER)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{test___i_l_u_t_p_preconditioner_8cpp_a9af8fd3dc616d6a95ba7b11171399090}\index{test\_ILUTPPreconditioner.cpp@{test\_ILUTPPreconditioner.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!test\_ILUTPPreconditioner.cpp@{test\_ILUTPPreconditioner.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [1/9]}}
+{\footnotesize\ttfamily \label{test___i_l_u_t_p_preconditioner_8cpp_a9af8fd3dc616d6a95ba7b11171399090} 
+TEST\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_i_l_u_t_p___test}{ILUTP\+\_\+\+Test}}}]{}{, }\item[{Test\+Equivalent\+ILUTNo\+Drop\+And\+Dense\+ILU0\+\_\+\+PRECONDITIONER}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{test___i_l_u_t_p_preconditioner_8cpp_aea3d627d62c85c5fda64600678e67dd9}\index{test\_ILUTPPreconditioner.cpp@{test\_ILUTPPreconditioner.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!test\_ILUTPPreconditioner.cpp@{test\_ILUTPPreconditioner.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [2/9]}}
+{\footnotesize\ttfamily \label{test___i_l_u_t_p_preconditioner_8cpp_aea3d627d62c85c5fda64600678e67dd9} 
+TEST\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_i_l_u_t_p___test}{ILUTP\+\_\+\+Test}}}]{}{, }\item[{Test\+ILUT\+\_\+\+Pivoted\+\_\+\+Handle\+Breakdown\+\_\+\+PRECONDITIONER}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{test___i_l_u_t_p_preconditioner_8cpp_ac233df7bbe4276cbc5764d3c7cb6c608}\index{test\_ILUTPPreconditioner.cpp@{test\_ILUTPPreconditioner.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!test\_ILUTPPreconditioner.cpp@{test\_ILUTPPreconditioner.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [3/9]}}
+{\footnotesize\ttfamily \label{test___i_l_u_t_p_preconditioner_8cpp_ac233df7bbe4276cbc5764d3c7cb6c608} 
+TEST\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_i_l_u_t_p___test}{ILUTP\+\_\+\+Test}}}]{}{, }\item[{Test\+ILUTDropping\+\_\+\+Pivoted\+\_\+\+PRECONDITIONER}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{test___i_l_u_t_p_preconditioner_8cpp_adc4e219a4c5de59eab4cc2d1056ee848}\index{test\_ILUTPPreconditioner.cpp@{test\_ILUTPPreconditioner.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!test\_ILUTPPreconditioner.cpp@{test\_ILUTPPreconditioner.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [4/9]}}
+{\footnotesize\ttfamily \label{test___i_l_u_t_p_preconditioner_8cpp_adc4e219a4c5de59eab4cc2d1056ee848} 
+TEST\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_i_l_u_t_p___test}{ILUTP\+\_\+\+Test}}}]{}{, }\item[{Test\+ILUTDropping\+\_\+\+PRECONDITIONER}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{test___i_l_u_t_p_preconditioner_8cpp_ae54474906eaeb1a12131bb88ca6f21ea}\index{test\_ILUTPPreconditioner.cpp@{test\_ILUTPPreconditioner.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!test\_ILUTPPreconditioner.cpp@{test\_ILUTPPreconditioner.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [5/9]}}
+{\footnotesize\ttfamily \label{test___i_l_u_t_p_preconditioner_8cpp_ae54474906eaeb1a12131bb88ca6f21ea} 
+TEST\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_i_l_u_t_p___test}{ILUTP\+\_\+\+Test}}}]{}{, }\item[{Test\+ILUTDropping\+Limits\+\_\+\+Pivoted\+\_\+\+PRECONDITIONER}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{test___i_l_u_t_p_preconditioner_8cpp_a7cd02f9a68452d68bb04aa198417b4d9}\index{test\_ILUTPPreconditioner.cpp@{test\_ILUTPPreconditioner.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!test\_ILUTPPreconditioner.cpp@{test\_ILUTPPreconditioner.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [6/9]}}
+{\footnotesize\ttfamily \label{test___i_l_u_t_p_preconditioner_8cpp_a7cd02f9a68452d68bb04aa198417b4d9} 
+TEST\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_i_l_u_t_p___test}{ILUTP\+\_\+\+Test}}}]{}{, }\item[{Test\+ILUTDropping\+Limits\+\_\+\+PRECONDITIONER}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{test___i_l_u_t_p_preconditioner_8cpp_a670fe4eabcf86227e6c7435e400885cd}\index{test\_ILUTPPreconditioner.cpp@{test\_ILUTPPreconditioner.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!test\_ILUTPPreconditioner.cpp@{test\_ILUTPPreconditioner.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [7/9]}}
+{\footnotesize\ttfamily \label{test___i_l_u_t_p_preconditioner_8cpp_a670fe4eabcf86227e6c7435e400885cd} 
+TEST\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_i_l_u_t_p___test}{ILUTP\+\_\+\+Test}}}]{}{, }\item[{Test\+Keep\+PLargest\+\_\+\+Pivoted\+\_\+\+PRECONDITIONER}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{test___i_l_u_t_p_preconditioner_8cpp_ac93c50db2f9f9526dc75c93433786fa6}\index{test\_ILUTPPreconditioner.cpp@{test\_ILUTPPreconditioner.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!test\_ILUTPPreconditioner.cpp@{test\_ILUTPPreconditioner.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [8/9]}}
+{\footnotesize\ttfamily \label{test___i_l_u_t_p_preconditioner_8cpp_ac93c50db2f9f9526dc75c93433786fa6} 
+TEST\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_i_l_u_t_p___test}{ILUTP\+\_\+\+Test}}}]{}{, }\item[{Test\+Keep\+PLargest\+\_\+\+PRECONDITIONER}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{test___i_l_u_t_p_preconditioner_8cpp_a7ea8d2404c7f6d3dcb383b294ee53da2}\index{test\_ILUTPPreconditioner.cpp@{test\_ILUTPPreconditioner.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!test\_ILUTPPreconditioner.cpp@{test\_ILUTPPreconditioner.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [9/9]}}
+{\footnotesize\ttfamily \label{test___i_l_u_t_p_preconditioner_8cpp_a7ea8d2404c7f6d3dcb383b294ee53da2} 
+TEST\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_i_l_u_t_p___test}{ILUTP\+\_\+\+Test}}}]{}{, }\item[{Test\+Matches\+Dense\+LU\+\_\+\+Pivoted\+\_\+\+PRECONDITIONER}]{}{}\end{DoxyParamCaption})}
+

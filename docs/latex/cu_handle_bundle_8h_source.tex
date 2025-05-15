@@ -1,0 +1,50 @@
+\doxysection{cu\+Handle\+Bundle.\+h}
+\hypertarget{cu_handle_bundle_8h_source}{}\label{cu_handle_bundle_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/include/tools/cuHandleBundle.h@{C:/Users/dosre/dev/precision-\/cascade/include/tools/cuHandleBundle.h}}
+\mbox{\hyperlink{cu_handle_bundle_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ CUHANDLEBUNDLE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ CUHANDLEBUNDLE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{cuda__check_8h}{cuda\_check.h}}"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <cuda\_runtime.h>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <cublas\_v2.h>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <cusparse.h>}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacecascade}{cascade}}\ \{}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1cu_handle_bundle_aaafa2ca83564ccac0f15d441695efb36}{cuHandleBundle}}}
+\DoxyCodeLine{00013\ \{}
+\DoxyCodeLine{00014\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keyword}{static}\ cublasHandle\_t\ cublas\_handle;}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{static}\ cusparseHandle\_t\ cusparse\_handle;}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle_aaafa2ca83564ccac0f15d441695efb36}{cuHandleBundle}}()\ \{\}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle_a8335797f69542a4afa460fdbf2c835b3}{\string~cuHandleBundle}}()\ \{\}}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle_a38b2ab0a4b208dcd187920c506469c1b}{cuHandleBundle}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle_aaafa2ca83564ccac0f15d441695efb36}{cuHandleBundle}}\ \&)\ \{\}}
+\DoxyCodeLine{00026\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle_aaafa2ca83564ccac0f15d441695efb36}{cuHandleBundle}}\ \&\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle_aedc92249088738d29336c3d98f66fdb0}{operator=}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle_aaafa2ca83564ccac0f15d441695efb36}{cuHandleBundle}}\ \&)\ \{}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00028\ \ \ \ \ \}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle_ae60cf3031292fe83c2293db62f66af29}{create}}();}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle_adf1623cf083498b9bcac119688d95486}{destroy}}();}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ cublasHandle\_t\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle_aa943a61cbc0b1a30aaf33532084d802e}{get\_cublas\_handle}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ cusparseHandle\_t\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle_a36cf739eadba1c777d3f4f2453217362}{get\_cusparse\_handle}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle_a304f670f62a3af1c13758a8fa6342bf6}{operator==}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle_aaafa2ca83564ccac0f15d441695efb36}{cuHandleBundle}}\ \&)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \};}
+\DoxyCodeLine{00041\ \ \ \ \ }
+\DoxyCodeLine{00042\ \}}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

@@ -1,0 +1,310 @@
+\doxysection{GMRESSolve.\+h}
+\hypertarget{_g_m_r_e_s_solve_8h_source}{}\label{_g_m_r_e_s_solve_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/include/solvers/GMRES/GMRESSolve.h@{C:/Users/dosre/dev/precision-\/cascade/include/solvers/GMRES/GMRESSolve.h}}
+\mbox{\hyperlink{_g_m_r_e_s_solve_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ GMRES\_SOLVE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ GMRES\_SOLVE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_iterative_solve_8h}{../IterativeSolve.h}}"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacecascade}{cascade}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix,\ \textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00009\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a937b1a4a6b87b2ab52912ff64741d360}{GMRESSolve}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a14722b6e9f4ffc75f0ff01ce74d9522a}{TypedIterativeSolve}}<TMatrix,\ TPrecision>}
+\DoxyCodeLine{00010\ \{}
+\DoxyCodeLine{00011\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a14722b6e9f4ffc75f0ff01ce74d9522a}{TypedIterativeSolve}}<TMatrix,\ TPrecision>\mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a0b3ac2f20041b20ac6740bc35255038f}{::typed\_lin\_sys\_ptr}};}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a14722b6e9f4ffc75f0ff01ce74d9522a}{TypedIterativeSolve}}<TMatrix,\ TPrecision>\mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a5a6714c87f60e0f88a92e4ee472d8e76}{::init\_guess\_typed}};}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a14722b6e9f4ffc75f0ff01ce74d9522a}{TypedIterativeSolve}}<TMatrix,\ TPrecision>\mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a78f7ec0a1549d8f02aea2f45003967eb}{::typed\_soln}};}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a14722b6e9f4ffc75f0ff01ce74d9522a}{TypedIterativeSolve}}<TMatrix,\ TPrecision>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_aa533db25c700e1ae8eb6a75bd33f43cd}{::max\_iter}};}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{PrecondArgPkg<TMatrix,\ TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a0e9bf61bc9a24b57b1a80a613b78e775}{precond\_arg\_pkg}};}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{MatrixDense<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_aec159a1e115c674a66364b83fc81a48e}{Q\_kry\_basis}}\ =\ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{MatrixDense<TPrecision>}}(}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}()}
+\DoxyCodeLine{00022\ \ \ \ \ );}
+\DoxyCodeLine{00023\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a176d37b9624c1c709f2971489437c3f1}{H\_k}}\ =\ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}(}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}()}
+\DoxyCodeLine{00025\ \ \ \ \ );}
+\DoxyCodeLine{00026\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{MatrixDense<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a523d595b4c8c786e87f6b5a160589262}{H\_Q}}\ =\ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{MatrixDense<TPrecision>}}(}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}()}
+\DoxyCodeLine{00028\ \ \ \ \ );}
+\DoxyCodeLine{00029\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{MatrixDense<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a8cae7f446a9de769946c5432343b3edb}{H\_R}}\ =\ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{MatrixDense<TPrecision>}}(}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}()}
+\DoxyCodeLine{00031\ \ \ \ \ );}
+\DoxyCodeLine{00032\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a0df551e704e9b0a10d9b9d9fdd40fdd4}{next\_q}}\ =\ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}(}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}()}
+\DoxyCodeLine{00034\ \ \ \ \ );}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a258ed521206877ba097c5d2760586db5}{curr\_kry\_dim}};}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_ac54c52a68a98dfb18498f96e86e7baf9}{max\_kry\_dim}};}
+\DoxyCodeLine{00038\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a4b8ed44e4dc379aa9a73fe88f9c08136}{rho}};}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a45db9bbd5ff023c9c7b5fa6d2255f821}{check\_compatibility}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ !\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a0e9bf61bc9a24b57b1a80a613b78e775}{precond\_arg\_pkg}}.left\_precond-\/>check\_compatibility\_left(}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a0b3ac2f20041b20ac6740bc35255038f}{typed\_lin\_sys\_ptr}}-\/>get\_m()}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ )\ \{}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}GMRESSolve:\ Left\ preconditioner\ not\ compatible"{}}}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ !\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a0e9bf61bc9a24b57b1a80a613b78e775}{precond\_arg\_pkg}}.right\_precond-\/>check\_compatibility\_right(}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a0b3ac2f20041b20ac6740bc35255038f}{typed\_lin\_sys\_ptr}}-\/>get\_n()}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ )\ \{}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}GMRESSolve:\ Right\ preconditioner\ not\ compatible"{}}}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00059\ \ \ \ \ \}}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_ac514195f229e7dd0d9999ee11e076fa8}{apply\_left\_precond\_A}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ \&vec)\ \{}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a0e9bf61bc9a24b57b1a80a613b78e775}{precond\_arg\_pkg}}.left\_precond-\/>action\_inv\_M(}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a0b3ac2f20041b20ac6740bc35255038f}{typed\_lin\_sys\_ptr}}-\/>get\_A\_typed()*vec}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00065\ \ \ \ \ \}}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a4bba0ede01cdfcc197d8a374a3e8ddc5}{apply\_precond\_A}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ \&vec)\ \{}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_ac514195f229e7dd0d9999ee11e076fa8}{apply\_left\_precond\_A}}(}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a0e9bf61bc9a24b57b1a80a613b78e775}{precond\_arg\_pkg}}.right\_precond-\/>action\_inv\_M(vec)}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00071\ \ \ \ \ \}}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_adc60235c94be6100a3197aa7af56fb2f}{get\_precond\_b}}()\ \{}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a0e9bf61bc9a24b57b1a80a613b78e775}{precond\_arg\_pkg}}.left\_precond-\/>action\_inv\_M(}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a0b3ac2f20041b20ac6740bc35255038f}{typed\_lin\_sys\_ptr}}-\/>get\_b\_typed()}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00077\ \ \ \ \ \}}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a871e5203750fddbecf271ce8ee439004}{calc\_precond\_residual}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ \&soln)\ \{}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_adc60235c94be6100a3197aa7af56fb2f}{get\_precond\_b}}()\ -\/\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_ac514195f229e7dd0d9999ee11e076fa8}{apply\_left\_precond\_A}}(soln);}
+\DoxyCodeLine{00081\ \ \ \ \ \}}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a74694f2357c91ef664ec6d1833eefd41}{set\_initial\_space}}()\ \{}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a258ed521206877ba097c5d2760586db5}{curr\_kry\_dim}}\ =\ 0;}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ Pre-\/allocate\ all\ possible\ space\ needed\ to\ prevent\ memory}}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ re-\/allocation\ */}}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_aec159a1e115c674a66364b83fc81a48e}{Q\_kry\_basis}}\ =\ \mbox{\hyperlink{classcascade_1_1_matrix_dense_a3aa7327a735cc8cae13592a4f6ff7222}{MatrixDense<TPrecision>::Zero}}(}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a0b3ac2f20041b20ac6740bc35255038f}{typed\_lin\_sys\_ptr}}-\/>get\_cu\_handles(),}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a0b3ac2f20041b20ac6740bc35255038f}{typed\_lin\_sys\_ptr}}-\/>get\_m(),}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_ac54c52a68a98dfb18498f96e86e7baf9}{max\_kry\_dim}}}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a176d37b9624c1c709f2971489437c3f1}{H\_k}}\ =\ \mbox{\hyperlink{classcascade_1_1_vector_a7da078322ccb03812f330b72cf4ad907}{Vector<TPrecision>::Zero}}(}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a0b3ac2f20041b20ac6740bc35255038f}{typed\_lin\_sys\_ptr}}-\/>get\_cu\_handles(),}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_ac54c52a68a98dfb18498f96e86e7baf9}{max\_kry\_dim}}+1}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a523d595b4c8c786e87f6b5a160589262}{H\_Q}}\ =\ \mbox{\hyperlink{classcascade_1_1_matrix_dense_adb0d633847fb1ae6b9dcad8518d2adde}{MatrixDense<TPrecision>::Identity}}(}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a0b3ac2f20041b20ac6740bc35255038f}{typed\_lin\_sys\_ptr}}-\/>get\_cu\_handles(),}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_ac54c52a68a98dfb18498f96e86e7baf9}{max\_kry\_dim}}+1,}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_ac54c52a68a98dfb18498f96e86e7baf9}{max\_kry\_dim}}+1}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a8cae7f446a9de769946c5432343b3edb}{H\_R}}\ =\ \mbox{\hyperlink{classcascade_1_1_matrix_dense_a3aa7327a735cc8cae13592a4f6ff7222}{MatrixDense<TPrecision>::Zero}}(}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a0b3ac2f20041b20ac6740bc35255038f}{typed\_lin\_sys\_ptr}}-\/>get\_cu\_handles(),}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_ac54c52a68a98dfb18498f96e86e7baf9}{max\_kry\_dim}}+1,}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_ac54c52a68a98dfb18498f96e86e7baf9}{max\_kry\_dim}}}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Set\ rho\ as\ initial\ residual\ norm}}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ r\_0(\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a871e5203750fddbecf271ce8ee439004}{calc\_precond\_residual}}(\mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a5a6714c87f60e0f88a92e4ee472d8e76}{init\_guess\_typed}}));}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a4b8ed44e4dc379aa9a73fe88f9c08136}{rho}}\ =\ r\_0.\mbox{\hyperlink{classcascade_1_1_vector_a4f8f80b9cf0016c7bdd22fd4f7d01834}{norm}}();}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ Initialize\ next\ vector\ q\ as\ initial\ residual\ and\ mark\ as\ terminated}}
+\DoxyCodeLine{00114\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ if\ lucky\ break\ */}}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a0df551e704e9b0a10d9b9d9fdd40fdd4}{next\_q}}\ =\ r\_0;}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a0df551e704e9b0a10d9b9d9fdd40fdd4}{next\_q}}.norm()\ ==\ \mbox{\hyperlink{classcascade_1_1_s_c_a_l_a_r___z_e_r_o_a42bda0cc64eb019027b0bdd12dc422fa}{SCALAR\_ZERO<TPrecision>::get}}())\ \{}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_af57186d3571c8fb922a182d26d7912b7}{terminated}}\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ \ \ \ \ \}}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00122\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_aab388e2a624b3ec3d7327d1ba3f36923}{initializeGMRES}}()\ \{}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_aa533db25c700e1ae8eb6a75bd33f43cd}{max\_iter}}\ >\ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a0b3ac2f20041b20ac6740bc35255038f}{typed\_lin\_sys\_ptr}}-\/>get\_m())\ \{}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}GMRESSolve:\ GMRES\ max\_iter\ exceeds\ matrix\ size"{}}}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_ac54c52a68a98dfb18498f96e86e7baf9}{max\_kry\_dim}}\ =\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_aa533db25c700e1ae8eb6a75bd33f43cd}{max\_iter}};}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a45db9bbd5ff023c9c7b5fa6d2255f821}{check\_compatibility}}();}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a74694f2357c91ef664ec6d1833eefd41}{set\_initial\_space}}();}
+\DoxyCodeLine{00131\ \ \ \ \ \}}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a0fd83180e332d7fb9348ef953de11d87}{update\_subspace\_k}}()\ \{}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ curr\_kry\_idx\ =\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a258ed521206877ba097c5d2760586db5}{curr\_kry\_dim}}-\/1;}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ Normalize\ next\ vector\ q\ and\ update\ subspace\ with\ it,\ assume\ that}}
+\DoxyCodeLine{00138\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ checked\ in\ previous\ iteration\ that\ vector\ q\ was\ not\ zero\ vector\ */}}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a258ed521206877ba097c5d2760586db5}{curr\_kry\_dim}}\ ==\ 0)\ \{}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_aec159a1e115c674a66364b83fc81a48e}{Q\_kry\_basis}}.get\_col(0).set\_from\_vec(}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a0df551e704e9b0a10d9b9d9fdd40fdd4}{next\_q}}/\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a0df551e704e9b0a10d9b9d9fdd40fdd4}{next\_q}}.norm()}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_aec159a1e115c674a66364b83fc81a48e}{Q\_kry\_basis}}.get\_col(curr\_kry\_idx+1).set\_from\_vec(}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a0df551e704e9b0a10d9b9d9fdd40fdd4}{next\_q}}/\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a176d37b9624c1c709f2971489437c3f1}{H\_k}}.get\_elem(curr\_kry\_idx+1)}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ ++\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a258ed521206877ba097c5d2760586db5}{curr\_kry\_dim}};}
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00150\ \ \ \ \ \}}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a731cdc7b6464b4f9082f971e21849c25}{update\_nextq\_and\_Hkplus1}}()\ \{}
+\DoxyCodeLine{00153\ }
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ curr\_kry\_idx\ =\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a258ed521206877ba097c5d2760586db5}{curr\_kry\_dim}}-\/1;}
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Generate\ next\ basis\ vector\ base}}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a0df551e704e9b0a10d9b9d9fdd40fdd4}{next\_q}}\ =\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a4bba0ede01cdfcc197d8a374a3e8ddc5}{apply\_precond\_A}}(}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_aec159a1e115c674a66364b83fc81a48e}{Q\_kry\_basis}}.get\_col(curr\_kry\_idx).copy\_to\_vec()}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00160\ }
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Orthogonalize\ new\ basis\ vector\ with\ CGS2}}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ first\_ortho(}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_aec159a1e115c674a66364b83fc81a48e}{Q\_kry\_basis}}.transpose\_prod\_subset\_cols(0,\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a258ed521206877ba097c5d2760586db5}{curr\_kry\_dim}},\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a0df551e704e9b0a10d9b9d9fdd40fdd4}{next\_q}})}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a0df551e704e9b0a10d9b9d9fdd40fdd4}{next\_q}}\ -\/=\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_aec159a1e115c674a66364b83fc81a48e}{Q\_kry\_basis}}.mult\_subset\_cols(0,\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a258ed521206877ba097c5d2760586db5}{curr\_kry\_dim}},\ first\_ortho);}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ second\_ortho(}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_aec159a1e115c674a66364b83fc81a48e}{Q\_kry\_basis}}.transpose\_prod\_subset\_cols(0,\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a258ed521206877ba097c5d2760586db5}{curr\_kry\_dim}},\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a0df551e704e9b0a10d9b9d9fdd40fdd4}{next\_q}})}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a0df551e704e9b0a10d9b9d9fdd40fdd4}{next\_q}}\ -\/=\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_aec159a1e115c674a66364b83fc81a48e}{Q\_kry\_basis}}.mult\_subset\_cols(0,\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a258ed521206877ba097c5d2760586db5}{curr\_kry\_dim}},\ second\_ortho);}
+\DoxyCodeLine{00170\ }
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a176d37b9624c1c709f2971489437c3f1}{H\_k}}.set\_slice(0,\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a258ed521206877ba097c5d2760586db5}{curr\_kry\_dim}},\ first\_ortho\ +\ second\_ortho);}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a176d37b9624c1c709f2971489437c3f1}{H\_k}}.set\_elem(curr\_kry\_idx+1,\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a0df551e704e9b0a10d9b9d9fdd40fdd4}{next\_q}}.norm());}
+\DoxyCodeLine{00173\ }
+\DoxyCodeLine{00174\ \ \ \ \ \}}
+\DoxyCodeLine{00175\ }
+\DoxyCodeLine{00176\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_ac3f70dfee7b3b46c7722e63707919e48}{update\_QR\_fact}}()\ \{}
+\DoxyCodeLine{00177\ }
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ curr\_kry\_idx\ =\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a258ed521206877ba097c5d2760586db5}{curr\_kry\_dim}}-\/1;}
+\DoxyCodeLine{00179\ }
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Initiate\ next\ column\ of\ QR\ fact\ as\ most\ recent\ of\ H\_k\ with}}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ previous\ Given's\ rotations\ applied}}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a8cae7f446a9de769946c5432343b3edb}{H\_R}}.get\_col(curr\_kry\_idx).set\_from\_vec(\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a523d595b4c8c786e87f6b5a160589262}{H\_Q}}.transpose\_prod(\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a176d37b9624c1c709f2971489437c3f1}{H\_k}}));}
+\DoxyCodeLine{00183\ }
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Apply\ the\ final\ Given's\ rotation\ manually\ making\ H\_R\ upper\ triangular}}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<TPrecision>}}\ alpha\ =\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a8cae7f446a9de769946c5432343b3edb}{H\_R}}.get\_elem(curr\_kry\_idx,\ curr\_kry\_idx);}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<TPrecision>}}\ beta\ =\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a8cae7f446a9de769946c5432343b3edb}{H\_R}}.get\_elem(curr\_kry\_idx+1,\ curr\_kry\_idx);}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<TPrecision>}}\ r\ =\ alpha*alpha\ +\ beta*beta;}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ r.\mbox{\hyperlink{classcascade_1_1_scalar_ac569e05f3aeec5771aef6c9c6218f440}{sqrt}}();}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<TPrecision>}}\ c\ =\ alpha/r;}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<TPrecision>}}\ minus\_s\ =\ beta/r;}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a8cae7f446a9de769946c5432343b3edb}{H\_R}}.set\_elem(curr\_kry\_idx,\ curr\_kry\_idx,\ r);}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a8cae7f446a9de769946c5432343b3edb}{H\_R}}.set\_elem(}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \ \ \ \ curr\_kry\_idx+1,\ curr\_kry\_idx,\ \mbox{\hyperlink{classcascade_1_1_s_c_a_l_a_r___z_e_r_o_a42bda0cc64eb019027b0bdd12dc422fa}{SCALAR\_ZERO<TPrecision>::get}}()}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00195\ }
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ H\_Q\_col\_k(}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a523d595b4c8c786e87f6b5a160589262}{H\_Q}}.get\_col(curr\_kry\_idx).copy\_to\_vec()}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ H\_Q\_col\_kp1(}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a523d595b4c8c786e87f6b5a160589262}{H\_Q}}.get\_col(curr\_kry\_idx+1).copy\_to\_vec()}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a523d595b4c8c786e87f6b5a160589262}{H\_Q}}.get\_col(curr\_kry\_idx).set\_from\_vec(}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \ \ \ \ H\_Q\_col\_k*c\ +\ H\_Q\_col\_kp1*minus\_s}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a523d595b4c8c786e87f6b5a160589262}{H\_Q}}.get\_col(curr\_kry\_idx+1).set\_from\_vec(}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \ \ \ \ H\_Q\_col\_kp1*c\ -\/\ H\_Q\_col\_k*minus\_s}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00208\ }
+\DoxyCodeLine{00209\ \ \ \ \ \}}
+\DoxyCodeLine{00210\ }
+\DoxyCodeLine{00211\ \ \ \ \ \textcolor{comment}{//\ Virtual\ for\ benchmarking\ override}}
+\DoxyCodeLine{00212\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_af976146b9da9484fcdfe5b223e70409a}{update\_x\_minimizing\_res}}()\ \{}
+\DoxyCodeLine{00213\ }
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Calculate\ rhs\ to\ solve}}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ \mbox{\hyperlink{create__solve__matrices_8m_ad92146f3c64a51422673e9879294956e}{rho\_e1}}(}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector_a7da078322ccb03812f330b72cf4ad907}{Vector<TPrecision>::Zero}}(}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a0b3ac2f20041b20ac6740bc35255038f}{typed\_lin\_sys\_ptr}}-\/>get\_cu\_handles(),\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a258ed521206877ba097c5d2760586db5}{curr\_kry\_dim}}+1}
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{create__solve__matrices_8m_ad92146f3c64a51422673e9879294956e}{rho\_e1}}.set\_elem(0,\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a4b8ed44e4dc379aa9a73fe88f9c08136}{rho}});}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ rhs(}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a523d595b4c8c786e87f6b5a160589262}{H\_Q}}.get\_block(}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0,\ 0,\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a258ed521206877ba097c5d2760586db5}{curr\_kry\_dim}}+1,\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a258ed521206877ba097c5d2760586db5}{curr\_kry\_dim}}+1}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \ \ \ \ ).copy\_to\_mat().transpose\_prod(}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{create__solve__matrices_8m_ad92146f3c64a51422673e9879294956e}{rho\_e1}}}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00228\ }
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Use\ back\ substitution\ to\ solve}}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ y(}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a8cae7f446a9de769946c5432343b3edb}{H\_R}}.get\_block(0,\ 0,\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a258ed521206877ba097c5d2760586db5}{curr\_kry\_dim}},\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a258ed521206877ba097c5d2760586db5}{curr\_kry\_dim}}).copy\_to\_mat().back\_sub(}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rhs.\mbox{\hyperlink{classcascade_1_1_vector_a2418692236112c0b50e2d7655da7de7c}{get\_slice}}(0,\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a258ed521206877ba097c5d2760586db5}{curr\_kry\_dim}})}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00235\ }
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Update\ typed\_soln\ adjusting\ with\ right\ preconditioning}}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a78f7ec0a1549d8f02aea2f45003967eb}{typed\_soln}}\ =\ (}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a5a6714c87f60e0f88a92e4ee472d8e76}{init\_guess\_typed}}\ +}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a0e9bf61bc9a24b57b1a80a613b78e775}{precond\_arg\_pkg}}.right\_precond-\/>action\_inv\_M(}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_aec159a1e115c674a66364b83fc81a48e}{Q\_kry\_basis}}.mult\_subset\_cols(0,\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a258ed521206877ba097c5d2760586db5}{curr\_kry\_dim}},\ y)}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00243\ }
+\DoxyCodeLine{00244\ \ \ \ \ \}}
+\DoxyCodeLine{00245\ }
+\DoxyCodeLine{00246\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_afc3e2afd35eeb72821c96c25bdca3adf}{check\_termination}}()\ \{}
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ k\ =\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a258ed521206877ba097c5d2760586db5}{curr\_kry\_dim}}-\/1;}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a176d37b9624c1c709f2971489437c3f1}{H\_k}}.get\_elem(k+1)\ ==\ \mbox{\hyperlink{classcascade_1_1_s_c_a_l_a_r___z_e_r_o_a42bda0cc64eb019027b0bdd12dc422fa}{SCALAR\_ZERO<TPrecision>::get}}())\ \{}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_af57186d3571c8fb922a182d26d7912b7}{terminated}}\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00251\ \ \ \ \ \}}
+\DoxyCodeLine{00252\ }
+\DoxyCodeLine{00253\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a35fa9d9e7cc75138677ce7eebb1e1866}{typed\_iterate}}()\textcolor{keyword}{\ override\ }\{}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ Check\ isn't\ terminated\ and\ if\ exceeding\ max\ krylov\ dim,\ if\ is\ just}}
+\DoxyCodeLine{00255\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ do\ nothing\ */}}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_af57186d3571c8fb922a182d26d7912b7}{terminated}})\ \{}
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a258ed521206877ba097c5d2760586db5}{curr\_kry\_dim}}\ <\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_ac54c52a68a98dfb18498f96e86e7baf9}{max\_kry\_dim}})\ \{}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a0fd83180e332d7fb9348ef953de11d87}{update\_subspace\_k}}();}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a731cdc7b6464b4f9082f971e21849c25}{update\_nextq\_and\_Hkplus1}}();}
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_afc3e2afd35eeb72821c96c25bdca3adf}{check\_termination}}();}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_ac3f70dfee7b3b46c7722e63707919e48}{update\_QR\_fact}}();}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_af976146b9da9484fcdfe5b223e70409a}{update\_x\_minimizing\_res}}();}
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00265\ \ \ \ \ \}}
+\DoxyCodeLine{00266\ }
+\DoxyCodeLine{00267\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a02e2113c07c1ddea95e72321bc34fa49}{derived\_typed\_reset}}()\textcolor{keyword}{\ override\ }\{}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Erase\ current\ krylov\ subspace}}
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a74694f2357c91ef664ec6d1833eefd41}{set\_initial\_space}}();}
+\DoxyCodeLine{00270\ \ \ \ \ \}}
+\DoxyCodeLine{00271\ }
+\DoxyCodeLine{00272\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00273\ }
+\DoxyCodeLine{00274\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a937b1a4a6b87b2ab52912ff64741d360}{GMRESSolve}}(}
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf}{TypedLinearSystem\_Intf<TMatrix,\ TPrecision>}}\ *\ \textcolor{keyword}{const}\ arg\_typed\_lin\_sys\_ptr,}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{SolveArgPkg}}\ \&arg\_solve\_arg\_pkg,}
+\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{PrecondArgPkg<TMatrix,\ TPrecision>}}\ \&arg\_precond\_arg\_pkg\ =\ (}
+\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{PrecondArgPkg<TMatrix,\ TPrecision>}}()}
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00280\ \ \ \ \ ):}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a0e9bf61bc9a24b57b1a80a613b78e775}{precond\_arg\_pkg}}(arg\_precond\_arg\_pkg),}
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a14722b6e9f4ffc75f0ff01ce74d9522a}{TypedIterativeSolve}}<TMatrix,\ TPrecision>::\mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a14722b6e9f4ffc75f0ff01ce74d9522a}{TypedIterativeSolve}}(}
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_typed\_lin\_sys\_ptr,\ arg\_solve\_arg\_pkg}
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00285\ \ \ \ \ \{}
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_aa533db25c700e1ae8eb6a75bd33f43cd}{max\_iter}}\ =\ (}
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \ \ \ \ (arg\_solve\_arg\_pkg.\mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_ae50ac6653b9c19a06795256332afc1f2}{check\_default\_max\_iter}}())\ ?}
+\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a0b3ac2f20041b20ac6740bc35255038f}{typed\_lin\_sys\_ptr}}-\/>get\_m()\ :\ arg\_solve\_arg\_pkg.\mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_a4b857259507a3e588cfbfe5b8ab3fb99}{max\_iter}}}
+\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_aab388e2a624b3ec3d7327d1ba3f36923}{initializeGMRES}}();}
+\DoxyCodeLine{00291\ \ \ \ \ \}}
+\DoxyCodeLine{00292\ }
+\DoxyCodeLine{00293\ \ \ \ \ \textcolor{comment}{//\ Forbid\ rvalue\ instantiation}}
+\DoxyCodeLine{00294\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_aeb98d2ed7dbeaad38241c181643624ac}{GMRESSolve}}(}
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf}{TypedLinearSystem\_Intf<TMatrix,\ TPrecision>}}\ *\ \textcolor{keyword}{const},}
+\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{SolveArgPkg}}\ \&\&,}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{PrecondArgPkg<TMatrix,\ TPrecision>}}}
+\DoxyCodeLine{00298\ \ \ \ \ )\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00299\ }
+\DoxyCodeLine{00300\ \};}
+\DoxyCodeLine{00301\ }
+\DoxyCodeLine{00302\ \}}
+\DoxyCodeLine{00303\ }
+\DoxyCodeLine{00304\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

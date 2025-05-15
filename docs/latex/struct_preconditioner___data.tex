@@ -1,0 +1,117 @@
+\doxysection{Preconditioner\+\_\+\+Data\texorpdfstring{$<$}{<} TMatrix \texorpdfstring{$>$}{>} Struct Template Reference}
+\hypertarget{struct_preconditioner___data}{}\label{struct_preconditioner___data}\index{Preconditioner\_Data$<$ TMatrix $>$@{Preconditioner\_Data$<$ TMatrix $>$}}
+
+
+{\ttfamily \#include $<$Preconditioner\+\_\+\+Data.\+h$>$}
+
+
+
+Inheritance diagram for Preconditioner\+\_\+\+Data\texorpdfstring{$<$}{<} TMatrix \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=204pt]{struct_preconditioner___data__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Preconditioner\+\_\+\+Data\texorpdfstring{$<$}{<} TMatrix \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{struct_preconditioner___data__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct_preconditioner___data_aecab2d16b1c4a27f2e60abc078ba7a10}{Preconditioner\+\_\+\+Data}} (std\+::string arg\+\_\+precond\+\_\+id, \mbox{\hyperlink{class_experiment___clock}{Experiment\+\_\+\+Clock}} arg\+\_\+clock, \mbox{\hyperlink{struct_preconditioner___spec}{Preconditioner\+\_\+\+Spec}} arg\+\_\+precond\+\_\+specs, \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{cascade\+::\+Precond\+Arg\+Pkg}}$<$ TMatrix, double $>$ arg\+\_\+precond\+\_\+arg\+\_\+pkg\+\_\+dbl)
+\item 
+std\+::string \mbox{\hyperlink{struct_preconditioner___data_a3844a24ad89886d9a168bed52fd71b56}{get\+\_\+info\+\_\+string}} () const override
+\item 
+void \mbox{\hyperlink{struct_preconditioner___data_ad1a6857103a47f5dbc0323d21dfdb957}{record\+\_\+json}} (std\+::string file\+\_\+name, fs\+::path output\+\_\+data\+\_\+dir, \mbox{\hyperlink{class_experiment___log}{Experiment\+\_\+\+Log}} logger) const override
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{struct_timed___experiment___data}{Timed\+\_\+\+Experiment\+\_\+\+Data}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct_timed___experiment___data_a34a72a60b1823ae1022e831042c94993}{Timed\+\_\+\+Experiment\+\_\+\+Data}} ()
+\item 
+\mbox{\hyperlink{struct_timed___experiment___data_a590e009d56e304f00960797d2511d583}{Timed\+\_\+\+Experiment\+\_\+\+Data}} (std\+::string arg\+\_\+id, \mbox{\hyperlink{class_experiment___clock}{Experiment\+\_\+\+Clock}} arg\+\_\+clock)
+\item 
+\mbox{\hyperlink{struct_timed___experiment___data_a854e9388172eb6934c4dfa7a0d059c91}{Timed\+\_\+\+Experiment\+\_\+\+Data}} (const \mbox{\hyperlink{struct_timed___experiment___data}{Timed\+\_\+\+Experiment\+\_\+\+Data}} \&other)=default
+\item 
+\mbox{\hyperlink{struct_timed___experiment___data}{Timed\+\_\+\+Experiment\+\_\+\+Data}} \& \mbox{\hyperlink{struct_timed___experiment___data_afe97216053898a543d093b9363c32931}{operator=}} (const \mbox{\hyperlink{struct_timed___experiment___data}{Timed\+\_\+\+Experiment\+\_\+\+Data}} \&other)=default
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct_preconditioner___spec}{Preconditioner\+\_\+\+Spec}} \mbox{\hyperlink{struct_preconditioner___data_a4fa9c07841fa695ebfcb9fa02b197f2a}{precond\+\_\+specs}}
+\item 
+\mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{cascade\+::\+Precond\+Arg\+Pkg}}$<$ TMatrix, double $>$ \mbox{\hyperlink{struct_preconditioner___data_af6fe998a662fe678bb6e982a62927a11}{precond\+\_\+arg\+\_\+pkg\+\_\+dbl}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{struct_timed___experiment___data}{Timed\+\_\+\+Experiment\+\_\+\+Data}}}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string \mbox{\hyperlink{struct_timed___experiment___data_a11e8d9245def869e6589129debf3ab35}{id}}
+\item 
+\mbox{\hyperlink{class_experiment___clock}{Experiment\+\_\+\+Clock}} \mbox{\hyperlink{struct_timed___experiment___data_a6588b3058ce7826aacbcc781cfe898ae}{clock}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{struct_preconditioner___data_aecab2d16b1c4a27f2e60abc078ba7a10}\index{Preconditioner\_Data$<$ TMatrix $>$@{Preconditioner\_Data$<$ TMatrix $>$}!Preconditioner\_Data@{Preconditioner\_Data}}
+\index{Preconditioner\_Data@{Preconditioner\_Data}!Preconditioner\_Data$<$ TMatrix $>$@{Preconditioner\_Data$<$ TMatrix $>$}}
+\doxysubsubsection{\texorpdfstring{Preconditioner\_Data()}{Preconditioner\_Data()}}
+{\footnotesize\ttfamily \label{struct_preconditioner___data_aecab2d16b1c4a27f2e60abc078ba7a10} 
+template$<$template$<$ typename $>$ typename TMatrix$>$ \\
+\mbox{\hyperlink{struct_preconditioner___data}{Preconditioner\+\_\+\+Data}}$<$ TMatrix $>$\mbox{\hyperlink{struct_preconditioner___data}{\+::\+Preconditioner\+\_\+\+Data}} (\begin{DoxyParamCaption}\item[{std\+::string}]{arg\+\_\+precond\+\_\+id}{, }\item[{\mbox{\hyperlink{class_experiment___clock}{Experiment\+\_\+\+Clock}}}]{arg\+\_\+clock}{, }\item[{\mbox{\hyperlink{struct_preconditioner___spec}{Preconditioner\+\_\+\+Spec}}}]{arg\+\_\+precond\+\_\+specs}{, }\item[{\mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{cascade\+::\+Precond\+Arg\+Pkg}}$<$ TMatrix, double $>$}]{arg\+\_\+precond\+\_\+arg\+\_\+pkg\+\_\+dbl}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{struct_preconditioner___data_a3844a24ad89886d9a168bed52fd71b56}\index{Preconditioner\_Data$<$ TMatrix $>$@{Preconditioner\_Data$<$ TMatrix $>$}!get\_info\_string@{get\_info\_string}}
+\index{get\_info\_string@{get\_info\_string}!Preconditioner\_Data$<$ TMatrix $>$@{Preconditioner\_Data$<$ TMatrix $>$}}
+\doxysubsubsection{\texorpdfstring{get\_info\_string()}{get\_info\_string()}}
+{\footnotesize\ttfamily \label{struct_preconditioner___data_a3844a24ad89886d9a168bed52fd71b56} 
+template$<$template$<$ typename $>$ typename TMatrix$>$ \\
+std\+::string \mbox{\hyperlink{struct_preconditioner___data}{Preconditioner\+\_\+\+Data}}$<$ TMatrix $>$\+::get\+\_\+info\+\_\+string (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{struct_timed___experiment___data_a6aab397580db33c8bb8ce6527b43cbdd}{Timed\+\_\+\+Experiment\+\_\+\+Data}}.
+
+\Hypertarget{struct_preconditioner___data_ad1a6857103a47f5dbc0323d21dfdb957}\index{Preconditioner\_Data$<$ TMatrix $>$@{Preconditioner\_Data$<$ TMatrix $>$}!record\_json@{record\_json}}
+\index{record\_json@{record\_json}!Preconditioner\_Data$<$ TMatrix $>$@{Preconditioner\_Data$<$ TMatrix $>$}}
+\doxysubsubsection{\texorpdfstring{record\_json()}{record\_json()}}
+{\footnotesize\ttfamily \label{struct_preconditioner___data_ad1a6857103a47f5dbc0323d21dfdb957} 
+template$<$template$<$ typename $>$ typename TMatrix$>$ \\
+void \mbox{\hyperlink{struct_preconditioner___data}{Preconditioner\+\_\+\+Data}}$<$ TMatrix $>$\+::record\+\_\+json (\begin{DoxyParamCaption}\item[{std\+::string}]{file\+\_\+name}{, }\item[{fs\+::path}]{output\+\_\+data\+\_\+dir}{, }\item[{\mbox{\hyperlink{class_experiment___log}{Experiment\+\_\+\+Log}}}]{logger}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{struct_timed___experiment___data_a2ca7a2c797b8fdaef09bec1b166f85b8}{Timed\+\_\+\+Experiment\+\_\+\+Data}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{struct_preconditioner___data_af6fe998a662fe678bb6e982a62927a11}\index{Preconditioner\_Data$<$ TMatrix $>$@{Preconditioner\_Data$<$ TMatrix $>$}!precond\_arg\_pkg\_dbl@{precond\_arg\_pkg\_dbl}}
+\index{precond\_arg\_pkg\_dbl@{precond\_arg\_pkg\_dbl}!Preconditioner\_Data$<$ TMatrix $>$@{Preconditioner\_Data$<$ TMatrix $>$}}
+\doxysubsubsection{\texorpdfstring{precond\_arg\_pkg\_dbl}{precond\_arg\_pkg\_dbl}}
+{\footnotesize\ttfamily \label{struct_preconditioner___data_af6fe998a662fe678bb6e982a62927a11} 
+template$<$template$<$ typename $>$ typename TMatrix$>$ \\
+\mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{cascade\+::\+Precond\+Arg\+Pkg}}$<$TMatrix, double$>$ \mbox{\hyperlink{struct_preconditioner___data}{Preconditioner\+\_\+\+Data}}$<$ TMatrix $>$\+::precond\+\_\+arg\+\_\+pkg\+\_\+dbl}
+
+\Hypertarget{struct_preconditioner___data_a4fa9c07841fa695ebfcb9fa02b197f2a}\index{Preconditioner\_Data$<$ TMatrix $>$@{Preconditioner\_Data$<$ TMatrix $>$}!precond\_specs@{precond\_specs}}
+\index{precond\_specs@{precond\_specs}!Preconditioner\_Data$<$ TMatrix $>$@{Preconditioner\_Data$<$ TMatrix $>$}}
+\doxysubsubsection{\texorpdfstring{precond\_specs}{precond\_specs}}
+{\footnotesize\ttfamily \label{struct_preconditioner___data_a4fa9c07841fa695ebfcb9fa02b197f2a} 
+template$<$template$<$ typename $>$ typename TMatrix$>$ \\
+\mbox{\hyperlink{struct_preconditioner___spec}{Preconditioner\+\_\+\+Spec}} \mbox{\hyperlink{struct_preconditioner___data}{Preconditioner\+\_\+\+Data}}$<$ TMatrix $>$\+::precond\+\_\+specs}
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/dosre/dev/precision-\/cascade/experimentation/include/exp\+\_\+data/\mbox{\hyperlink{_preconditioner___data_8h}{Preconditioner\+\_\+\+Data.\+h}}\end{DoxyCompactItemize}

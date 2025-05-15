@@ -1,0 +1,1511 @@
+\doxysection{No\+Fill\+Matrix\+Sparse.\+h}
+\hypertarget{_no_fill_matrix_sparse_8h_source}{}\label{_no_fill_matrix_sparse_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/include/types/MatrixSparse/NoFillMatrixSparse.h@{C:/Users/dosre/dev/precision-\/cascade/include/types/MatrixSparse/NoFillMatrixSparse.h}}
+\mbox{\hyperlink{_no_fill_matrix_sparse_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ NOFILLMATRIXSPARSE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ NOFILLMATRIXSPARSE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{cuda__check_8h}{tools/cuda\_check.h}}"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{cu_handle_bundle_8h}{tools/cuHandleBundle.h}}"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{abs_8h}{tools/abs.h}}"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_scalar_8h}{types/Scalar/Scalar.h}}"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_vector_8h}{types/Vector/Vector.h}}"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_matrix_dense_8h}{types/MatrixDense/MatrixDense.h}}"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}NoFillMatrixSparse\_gpu\_kernels.cuh"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}types/GeneralMatrix/GeneralMatrix\_gpu\_constants.cuh"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ "{}types/GeneralMatrix/GeneralMatrix\_gpu\_kernels.cuh"{}}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ <cmath>}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ <iomanip>}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ <sstream>}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ <random>}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacecascade}{cascade}}\ \{}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{comment}{//\ Sparse\ matrix\ which\ disallows\ fill\ changes\ or\ invidual\ element\ changes}}
+\DoxyCodeLine{00024\ \textcolor{comment}{//\ and\ assumes\ interfacing\ with\ CSC\ style\ storage\ for\ sake\ of\ intuitive\ uasge.}}
+\DoxyCodeLine{00025\ \textcolor{comment}{//\ Internal\ implementation\ CSR\ due\ to\ quirk\ of\ CUDA\ algorithms\ being\ better}}
+\DoxyCodeLine{00026\ \textcolor{comment}{//\ tuned\ for\ CSR\ over\ CSC,\ however\ no\ CSR\ to\ CSC\ transformation\ is\ allowed}}
+\DoxyCodeLine{00027\ \textcolor{comment}{//\ for\ non\ construction\ methods\ (i.e.\ transform\ between\ CSC/CSR\ is\ allowed\ once)}}
+\DoxyCodeLine{00028\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00029\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse}}}
+\DoxyCodeLine{00030\ \{}
+\DoxyCodeLine{00031\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse}};}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ cu\_handles;}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{int}\ m\_rows\ =\ 0;}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keywordtype}{int}\ n\_cols\ =\ 0;}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{int}\ nnz\ =\ 0;}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{int}\ *d\_row\_offsets\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{int}\ *d\_col\_indices\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00041\ \ \ \ \ TPrecision\ *d\_values\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ std::vector<int>\ trsv\_level\_set\_cnt;}
+\DoxyCodeLine{00044\ \ \ \ \ std::vector<int\ *>\ trsv\_level\_set\_ptrs;}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ mem\_size\_row\_offsets()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (m\_rows+1)*\textcolor{keyword}{sizeof}(int);}
+\DoxyCodeLine{00048\ \ \ \ \ \}}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ mem\_size\_col\_indices()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ nnz*\textcolor{keyword}{sizeof}(int);}
+\DoxyCodeLine{00052\ \ \ \ \ \}}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ mem\_size\_values()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ nnz*\textcolor{keyword}{sizeof}(TPrecision);}
+\DoxyCodeLine{00056\ \ \ \ \ \}}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ mem\_size\_trsv\_preprocess()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ m\_rows*\textcolor{keyword}{sizeof}(int);}
+\DoxyCodeLine{00060\ \ \ \ \ \}}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordtype}{void}\ allocate\_d\_row\_offsets()\ \{}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaMalloc(\&d\_row\_offsets,\ mem\_size\_row\_offsets()));}
+\DoxyCodeLine{00064\ \ \ \ \ \}}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keywordtype}{void}\ allocate\_d\_col\_indices()\ \{}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaMalloc(\&d\_col\_indices,\ mem\_size\_col\_indices()));}
+\DoxyCodeLine{00068\ \ \ \ \ \}}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keywordtype}{void}\ allocate\_d\_values()\ \{}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaMalloc(\&d\_values,\ mem\_size\_values()));}
+\DoxyCodeLine{00072\ \ \ \ \ \}}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keywordtype}{void}\ allocate\_d\_mem()\ \{}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ allocate\_d\_row\_offsets();}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ allocate\_d\_col\_indices();}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ allocate\_d\_values();}
+\DoxyCodeLine{00078\ \ \ \ \ \}}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keywordtype}{int}\ binary\_search\_for\_target\_index(}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ target,\ \textcolor{keywordtype}{int}\ *arr,\ \textcolor{keywordtype}{int}\ start,\ \textcolor{keywordtype}{int}\ end}
+\DoxyCodeLine{00082\ \ \ \ \ )\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (start\ >=\ end)\ \{}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (start\ ==\ (end-\/1))\ \{}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (arr[start]\ ==\ target)\ \{}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ start;}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ cand\_ind\ =\ start+(end-\/start)/2;}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (arr[cand\_ind]\ ==\ target)\ \{}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ cand\_ind;}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (arr[cand\_ind]\ <\ target)\ \{}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ binary\_search\_for\_target\_index(}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ target,\ arr,\ cand\_ind+1,\ end}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ binary\_search\_for\_target\_index(}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ target,\ arr,\ start,\ cand\_ind}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \ \ \ \ \}}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse<\_\_half>}}\ to\_half()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00110\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse<float>}}\ to\_float()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00111\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse<double>}}\ to\_double()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00112\ \ \ \ \ }
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{comment}{//\ Use\ argument\ overload\ for\ type\ specification\ rather\ than\ explicit}}
+\DoxyCodeLine{00114\ \ \ \ \ \textcolor{comment}{//\ specialization\ due\ to\ limitation\ in\ g++}}
+\DoxyCodeLine{00115\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse<\_\_half>}}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a801f509410f4b119f8130b61a1e303c7}{cast}}(TypeIdentity<\_\_half>\ \_)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ to\_half();}
+\DoxyCodeLine{00117\ \ \ \ \ \}}
+\DoxyCodeLine{00118\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse<float>}}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a801f509410f4b119f8130b61a1e303c7}{cast}}(TypeIdentity<float>\ \_)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ to\_float();}
+\DoxyCodeLine{00120\ \ \ \ \ \}}
+\DoxyCodeLine{00121\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse<double>}}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a801f509410f4b119f8130b61a1e303c7}{cast}}(TypeIdentity<double>\ \_)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ to\_double();}
+\DoxyCodeLine{00123\ \ \ \ \ \}}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \ \ \ \ \textcolor{keywordtype}{void}\ set\_data\_from\_csc(}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ *arg\_col\_offsets,\ \textcolor{keywordtype}{int}\ *arg\_row\_indices,\ TPrecision\ *arg\_values,}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ arg\_m\_rows,\ \textcolor{keywordtype}{int}\ arg\_n\_cols,\ \textcolor{keywordtype}{int}\ arg\_nnz}
+\DoxyCodeLine{00128\ \ \ \ \ )\ \{}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ (arg\_m\_rows\ !=\ m\_rows)\ ||\ (arg\_n\_cols\ !=\ n\_cols)\ ||\ (arg\_nnz\ !=\ nnz)}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ )\ \{}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}set\_data\_from\_csc:\ mismatch\ in\ dimensions"{}}}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ *h\_row\_offsets\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(malloc(mem\_size\_row\_offsets()));}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ *h\_col\_indices\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(malloc(mem\_size\_col\_indices()));}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ TPrecision\ *h\_values\ =\ \textcolor{keyword}{static\_cast<}TPrecision\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \ \ \ \ malloc(mem\_size\_values())}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00143\ }
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Calculate\ row\ offsets}}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ j=0;\ j<(m\_rows+1);\ ++j)\ \{\ h\_row\_offsets[j]\ =\ 0;\ \}}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ k=0;\ k<nnz;\ ++k)\ \{\ ++h\_row\_offsets[arg\_row\_indices[k]+1];\ \}}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ j=1;\ j<(m\_rows+1);\ ++j)\ \{}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ h\_row\_offsets[j]\ +=\ h\_row\_offsets[j-\/1];}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00150\ }
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Fill\ in\ column\ by\ column\ col\ index\ and\ value\ data,\ with\ quick\ offset}}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ calculation\ by\ using\ a\ tracking\ of\ the\ size\ of\ a\ row\ currently}}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ added\ at\ any\ given\ time}}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ row;}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ TPrecision\ val;}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ std::vector<int>\ curr\_row\_count(m\_rows,\ 0);}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ j=0;\ j<n\_cols;\ ++j)\ \{}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ offset\ =\ arg\_col\_offsets[j];}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ offset\ <\ arg\_col\_offsets[j+1];}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ++offset}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \ \ \ \ )\ \{}
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ row\ =\ arg\_row\_indices[offset];}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ val\ =\ arg\_values[offset];}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ new\_offset\ =\ h\_row\_offsets[row]\ +\ curr\_row\_count[row];}
+\DoxyCodeLine{00168\ }
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_col\_indices[new\_offset]\ =\ j;}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_values[new\_offset]\ =\ val;}
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ++curr\_row\_count[row];}
+\DoxyCodeLine{00173\ }
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaMemcpy(}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \ \ \ \ d\_row\_offsets,}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \ \ \ \ h\_row\_offsets,}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ mem\_size\_row\_offsets(),}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \ \ \ \ cudaMemcpyHostToDevice}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ ));}
+\DoxyCodeLine{00183\ }
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (nnz\ >\ 0)\ \{}
+\DoxyCodeLine{00185\ }
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaMemcpy(}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ d\_col\_indices,}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_col\_indices,}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mem\_size\_col\_indices(),}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cudaMemcpyHostToDevice}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \ \ \ \ ));}
+\DoxyCodeLine{00192\ }
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaMemcpy(}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ d\_values,}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_values,}
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mem\_size\_values(),}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cudaMemcpyHostToDevice}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \ \ \ \ ));}
+\DoxyCodeLine{00199\ }
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00201\ }
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ free(h\_row\_offsets);}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ free(h\_col\_indices);}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ free(h\_values);}
+\DoxyCodeLine{00205\ }
+\DoxyCodeLine{00206\ \ \ \ \ \}}
+\DoxyCodeLine{00207\ }
+\DoxyCodeLine{00208\ \ \ \ \ \textcolor{keywordtype}{void}\ copy\_data\_to\_csr(}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ *h\_row\_offsets,\ \textcolor{keywordtype}{int}\ *h\_col\_indices,\ TPrecision\ *h\_values,}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ target\_m\_rows,\ \textcolor{keywordtype}{int}\ target\_n\_cols,\ \textcolor{keywordtype}{int}\ target\_nnz}
+\DoxyCodeLine{00211\ \ \ \ \ )\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00212\ }
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (target\_m\_rows\ !=\ m\_rows)\ \{}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}NoFillMatrixSparse:\ invalid\ target\_m\_rows\ dim\ for\ "{}}}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}copy\_data\_to\_csr"{}}}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (target\_n\_cols\ !=\ n\_cols)\ \{}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}NoFillMatrixSparse:\ invalid\ target\_n\_cols\ dim\ for\ "{}}}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}copy\_data\_to\_csr"{}}}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (target\_nnz\ !=\ nnz)\ \{}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}NoFillMatrixSparse:\ invalid\ target\_nnz\ dim\ for\ "{}}}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}copy\_data\_to\_csr"{}}}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00231\ }
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (n\_cols\ >\ 0)\ \{}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaMemcpy(}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_row\_offsets,}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ d\_row\_offsets,}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mem\_size\_row\_offsets(),}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cudaMemcpyDeviceToHost}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \ \ \ \ ));}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00240\ }
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (nnz\ >\ 0)\ \{}
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaMemcpy(}
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_col\_indices,}
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ d\_col\_indices,}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mem\_size\_col\_indices(),}
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cudaMemcpyDeviceToHost}
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \ \ \ \ ));}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaMemcpy(}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_values,}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ d\_values,}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mem\_size\_values(),}
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cudaMemcpyDeviceToHost}
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \ \ \ \ ));}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00255\ }
+\DoxyCodeLine{00256\ \ \ \ \ \}}
+\DoxyCodeLine{00257\ }
+\DoxyCodeLine{00258\ \ \ \ \ \textcolor{comment}{/*\ Private\ constructor\ creating\ load\ space\ for\ arg\_nnz\ non-\/zeros\ but}}
+\DoxyCodeLine{00259\ \textcolor{comment}{\ \ \ \ \ \ \ without\ instantiation\ for\ use\ with\ known\ sized\ val\ array\ but\ not\ known}}
+\DoxyCodeLine{00260\ \textcolor{comment}{\ \ \ \ \ \ \ values\ on\ construction\ */}}
+\DoxyCodeLine{00261\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse}}(}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ cuHandleBundle\ \&arg\_cu\_handles,}
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ arg\_m\_rows,}
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ arg\_n\_cols,}
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ arg\_nnz}
+\DoxyCodeLine{00266\ \ \ \ \ ):}
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ cu\_handles(arg\_cu\_handles),}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ m\_rows(arg\_m\_rows),}
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ n\_cols(arg\_n\_cols),}
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ nnz(arg\_nnz)}
+\DoxyCodeLine{00271\ \ \ \ \ \{}
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ allocate\_d\_mem();}
+\DoxyCodeLine{00273\ \ \ \ \ \}}
+\DoxyCodeLine{00274\ }
+\DoxyCodeLine{00275\ \ \ \ \ \textcolor{comment}{/*\ Private\ constructor\ converting\ MatrixDense\ to\ NoFillMatrixSparse}}
+\DoxyCodeLine{00276\ \textcolor{comment}{\ \ \ \ \ \ \ using\ cuda\ subroutine,\ but\ differing\ on\ specified\ datatype\ for}}
+\DoxyCodeLine{00277\ \textcolor{comment}{\ \ \ \ \ \ \ specialized\ template\ class\ code\ resuse\ */}}
+\DoxyCodeLine{00278\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse}}(}
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ MatrixDense<TPrecision>\ \&source\_mat,\ cudaDataType\ cuda\_data\_type}
+\DoxyCodeLine{00280\ \ \ \ \ ):}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ cu\_handles(source\_mat.\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a53c7790e128457a37837ed1283a83b4e}{get\_cu\_handles}}()),}
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ m\_rows(source\_mat.\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a96073f4b32736ec5a026393401a4adc7}{rows}}()),}
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ n\_cols(source\_mat.\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a82ef73765687020d4e71b8f315184b26}{cols}}()),}
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ nnz(0)}
+\DoxyCodeLine{00285\ \ \ \ \ \{}
+\DoxyCodeLine{00286\ }
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ col\_mem\_size\ =\ m\_rows*\textcolor{keyword}{sizeof}(TPrecision);}
+\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ TPrecision\ *h\_rolling\_col\ =\ \textcolor{keyword}{static\_cast<}TPrecision\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ \ \ \ \ malloc(col\_mem\_size)}
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00291\ }
+\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ *h\_col\_offsets\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(malloc((n\_cols+1)*\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int})));}
+\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ std::vector<int>\ vec\_row\_indices;}
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ std::vector<TPrecision>\ vec\_values;}
+\DoxyCodeLine{00295\ }
+\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ nnz\_count\_so\_far\ =\ 0;}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ j=0;\ j<n\_cols;\ ++j)\ \{}
+\DoxyCodeLine{00298\ }
+\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ \ \ \ \ h\_col\_offsets[j]\ =\ nnz\_count\_so\_far;}
+\DoxyCodeLine{00300\ }
+\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaMemcpy(}
+\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_rolling\_col,}
+\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ source\_mat.d\_mat+j*m\_rows,}
+\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ col\_mem\_size,}
+\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cudaMemcpyDeviceToHost}
+\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \ \ \ \ ));}
+\DoxyCodeLine{00307\ }
+\DoxyCodeLine{00308\ \ \ \ \ \ \ \ \ \ \ \ \ TPrecision\ val;}
+\DoxyCodeLine{00309\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<m\_rows;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00310\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ val\ =\ h\_rolling\_col[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}];}
+\DoxyCodeLine{00311\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (val\ !=\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(0.))\ \{}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ vec\_row\_indices.push\_back(\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}});}
+\DoxyCodeLine{00313\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ vec\_values.push\_back(val);}
+\DoxyCodeLine{00314\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ++nnz\_count\_so\_far;}
+\DoxyCodeLine{00315\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00316\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00317\ }
+\DoxyCodeLine{00318\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ h\_col\_offsets[n\_cols]\ =\ nnz\_count\_so\_far;}
+\DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ nnz\ =\ nnz\_count\_so\_far;}
+\DoxyCodeLine{00321\ }
+\DoxyCodeLine{00322\ \ \ \ \ \ \ \ \ allocate\_d\_mem();}
+\DoxyCodeLine{00323\ }
+\DoxyCodeLine{00324\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (nnz\ >\ 0)\ \{}
+\DoxyCodeLine{00325\ \ \ \ \ \ \ \ \ \ \ \ \ set\_data\_from\_csc(}
+\DoxyCodeLine{00326\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_col\_offsets,\ \&vec\_row\_indices[0],\ \&vec\_values[0],}
+\DoxyCodeLine{00327\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_rows,\ n\_cols,\ nnz}
+\DoxyCodeLine{00328\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00329\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00330\ \ \ \ \ \ \ \ \ \ \ \ \ set\_data\_from\_csc(}
+\DoxyCodeLine{00331\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_col\_offsets,\ \textcolor{keyword}{nullptr},\ \textcolor{keyword}{nullptr},}
+\DoxyCodeLine{00332\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_rows,\ n\_cols,\ nnz}
+\DoxyCodeLine{00333\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00334\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00335\ }
+\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ free(h\_rolling\_col);}
+\DoxyCodeLine{00337\ \ \ \ \ \ \ \ \ free(h\_col\_offsets);}
+\DoxyCodeLine{00338\ }
+\DoxyCodeLine{00339\ \ \ \ \ \}}
+\DoxyCodeLine{00340\ }
+\DoxyCodeLine{00341\ \ \ \ \ \textcolor{keywordtype}{void}\ delete\_trsv\_preprocess()\ \{}
+\DoxyCodeLine{00342\ \ \ \ \ \ \ \ \ trsv\_level\_set\_cnt.resize(0);}
+\DoxyCodeLine{00343\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ *d\_lvl\_set\_ptr\ :\ trsv\_level\_set\_ptrs)\ \{}
+\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaFree(d\_lvl\_set\_ptr));}
+\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ trsv\_level\_set\_ptrs.resize(0);}
+\DoxyCodeLine{00347\ \ \ \ \ \}}
+\DoxyCodeLine{00348\ }
+\DoxyCodeLine{00349\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ WPrecision>}
+\DoxyCodeLine{00350\ \ \ \ \ \textcolor{keywordtype}{void}\ deep\_copy\_trsv\_preprocess(}
+\DoxyCodeLine{00351\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse<WPrecision>}}\ \&other}
+\DoxyCodeLine{00352\ \ \ \ \ )\ \{}
+\DoxyCodeLine{00353\ }
+\DoxyCodeLine{00354\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Free\ current\ level\ set\ preprocessing\ and\ deep\ copy\ other\ matrix's}}
+\DoxyCodeLine{00355\ \ \ \ \ \ \ \ \ delete\_trsv\_preprocess();}
+\DoxyCodeLine{00356\ }
+\DoxyCodeLine{00357\ \ \ \ \ \ \ \ \ trsv\_level\_set\_cnt\ =\ other.trsv\_level\_set\_cnt;}
+\DoxyCodeLine{00358\ \ \ \ \ \ \ \ \ trsv\_level\_set\_ptrs.resize(other.trsv\_level\_set\_ptrs.size());}
+\DoxyCodeLine{00359\ }
+\DoxyCodeLine{00360\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ k=0;\ k\ <\ other.trsv\_level\_set\_ptrs.size();\ ++k)\ \{}
+\DoxyCodeLine{00361\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaMalloc(}
+\DoxyCodeLine{00362\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&(trsv\_level\_set\_ptrs[k]),}
+\DoxyCodeLine{00363\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ trsv\_level\_set\_cnt[k]*\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int})}
+\DoxyCodeLine{00364\ \ \ \ \ \ \ \ \ \ \ \ \ ));}
+\DoxyCodeLine{00365\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaMemcpy(}
+\DoxyCodeLine{00366\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ trsv\_level\_set\_ptrs[k],}
+\DoxyCodeLine{00367\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ other.trsv\_level\_set\_ptrs[k],}
+\DoxyCodeLine{00368\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ trsv\_level\_set\_cnt[k]*\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}),}
+\DoxyCodeLine{00369\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cudaMemcpyDeviceToDevice}
+\DoxyCodeLine{00370\ \ \ \ \ \ \ \ \ \ \ \ \ ));}
+\DoxyCodeLine{00371\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00372\ }
+\DoxyCodeLine{00373\ \ \ \ \ \}}
+\DoxyCodeLine{00374\ }
+\DoxyCodeLine{00375\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{double}\ enlarge\_random\_double(\textcolor{keywordtype}{double}\ val)\ \{}
+\DoxyCodeLine{00376\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ val\ +\ val/\mbox{\hyperlink{namespacecascade_1_1abs__ns_ab08ce3a88268964a87b50e39d0644268}{abs\_ns::abs}}(val);}
+\DoxyCodeLine{00377\ \ \ \ \ \}}
+\DoxyCodeLine{00378\ }
+\DoxyCodeLine{00379\ \ \ \ \ \textcolor{keywordtype}{void}\ check\_trsv\_dims(\textcolor{keyword}{const}\ Vector<TPrecision>\ \&soln\_rhs)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00380\ }
+\DoxyCodeLine{00381\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((m\_rows\ !=\ n\_cols)\ ||\ (soln\_rhs.rows()\ !=\ m\_rows))\ \{}
+\DoxyCodeLine{00382\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00383\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}NoFillMatrixSparse:\ incorrect\ dimensions\ for\ trsv"{}}}
+\DoxyCodeLine{00384\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00385\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00386\ }
+\DoxyCodeLine{00387\ \ \ \ \ \}}
+\DoxyCodeLine{00388\ }
+\DoxyCodeLine{00389\ \ \ \ \ \textcolor{keywordtype}{void}\ slow\_back\_sub(Vector<TPrecision>\ \&soln\_rhs)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00390\ \ \ \ \ \textcolor{keywordtype}{void}\ fast\_back\_sub(Vector<TPrecision>\ \&soln\_rhs)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00391\ }
+\DoxyCodeLine{00392\ \ \ \ \ \textcolor{keywordtype}{void}\ slow\_frwd\_sub(Vector<TPrecision>\ \&soln\_rhs)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00393\ \ \ \ \ \textcolor{keywordtype}{void}\ fast\_frwd\_sub(Vector<TPrecision>\ \&soln\_rhs)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00394\ }
+\DoxyCodeLine{00395\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00396\ }
+\DoxyCodeLine{00397\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_1_1_block}{Block}};\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_1_1_col}{Col}};\ \textcolor{comment}{//\ Forward\ declaration\ of\ nested\ classes}}
+\DoxyCodeLine{00398\ }
+\DoxyCodeLine{00399\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5a1d223482ab64fdcd45feeefa330ad4}{NoFillMatrixSparse}}(}
+\DoxyCodeLine{00400\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ \&arg\_cu\_handles,}
+\DoxyCodeLine{00401\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ arg\_m\_rows,}
+\DoxyCodeLine{00402\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ arg\_n\_cols}
+\DoxyCodeLine{00403\ \ \ \ \ ):}
+\DoxyCodeLine{00404\ \ \ \ \ \ \ \ \ cu\_handles(arg\_cu\_handles),}
+\DoxyCodeLine{00405\ \ \ \ \ \ \ \ \ m\_rows(arg\_m\_rows),}
+\DoxyCodeLine{00406\ \ \ \ \ \ \ \ \ n\_cols(arg\_n\_cols),}
+\DoxyCodeLine{00407\ \ \ \ \ \ \ \ \ nnz(0)}
+\DoxyCodeLine{00408\ \ \ \ \ \{}
+\DoxyCodeLine{00409\ }
+\DoxyCodeLine{00410\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (arg\_m\_rows\ <\ 0)\ \{}
+\DoxyCodeLine{00411\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00412\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}NoFillMatrixSparse:\ invalid\ arg\_m\_rows\ dim\ for\ constructor"{}}}
+\DoxyCodeLine{00413\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00414\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00415\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((arg\_n\_cols\ <\ 0)\ ||\ ((arg\_m\_rows\ ==\ 0)\ \&\&\ (arg\_n\_cols\ !=\ 0)))\ \{}
+\DoxyCodeLine{00416\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00417\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}NoFillMatrixSparse:\ invalid\ arg\_n\_cols\ dim\ for\ constructor"{}}}
+\DoxyCodeLine{00418\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00419\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00420\ }
+\DoxyCodeLine{00421\ \ \ \ \ \ \ \ \ allocate\_d\_mem();}
+\DoxyCodeLine{00422\ }
+\DoxyCodeLine{00423\ \ \ \ \ \ \ \ \ std::vector<int>\ h\_row\_offsets\_vec(m\_rows+1,\ 0);}
+\DoxyCodeLine{00424\ }
+\DoxyCodeLine{00425\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaMemcpy(}
+\DoxyCodeLine{00426\ \ \ \ \ \ \ \ \ \ \ \ \ d\_row\_offsets,}
+\DoxyCodeLine{00427\ \ \ \ \ \ \ \ \ \ \ \ \ \&h\_row\_offsets\_vec[0],}
+\DoxyCodeLine{00428\ \ \ \ \ \ \ \ \ \ \ \ \ mem\_size\_row\_offsets(),}
+\DoxyCodeLine{00429\ \ \ \ \ \ \ \ \ \ \ \ \ cudaMemcpyHostToDevice}
+\DoxyCodeLine{00430\ \ \ \ \ \ \ \ \ ));}
+\DoxyCodeLine{00431\ }
+\DoxyCodeLine{00432\ \ \ \ \ \}}
+\DoxyCodeLine{00433\ }
+\DoxyCodeLine{00434\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_ae51936f139854074601a0e689e28451e}{NoFillMatrixSparse}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ \&arg\_cu\_handles):}
+\DoxyCodeLine{00435\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse}}(arg\_cu\_handles,\ 0,\ 0)}
+\DoxyCodeLine{00436\ \ \ \ \ \{\}}
+\DoxyCodeLine{00437\ }
+\DoxyCodeLine{00438\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_af8a71c0dda8067f0cf410d849fd50e4b}{NoFillMatrixSparse}}(}
+\DoxyCodeLine{00439\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ \&arg\_cu\_handles,}
+\DoxyCodeLine{00440\ \ \ \ \ \ \ \ \ std::initializer\_list<std::initializer\_list<TPrecision>>\ li}
+\DoxyCodeLine{00441\ \ \ \ \ ):}
+\DoxyCodeLine{00442\ \ \ \ \ \ \ \ \ cu\_handles(arg\_cu\_handles),}
+\DoxyCodeLine{00443\ \ \ \ \ \ \ \ \ m\_rows(li.size()),}
+\DoxyCodeLine{00444\ \ \ \ \ \ \ \ \ n\_cols((li.size()\ ==\ 0)\ ?\ 0\ :\ std::cbegin(li)-\/>size())}
+\DoxyCodeLine{00445\ \ \ \ \ \{}
+\DoxyCodeLine{00446\ }
+\DoxyCodeLine{00447\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ *h\_col\_offsets\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(malloc((n\_cols+1)*\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int})));}
+\DoxyCodeLine{00448\ \ \ \ \ \ \ \ \ std::vector<int>\ vec\_row\_indices;}
+\DoxyCodeLine{00449\ \ \ \ \ \ \ \ \ std::vector<TPrecision>\ vec\_values;}
+\DoxyCodeLine{00450\ }
+\DoxyCodeLine{00451\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Capture\ iterators\ for\ each\ row}}
+\DoxyCodeLine{00452\ \ \ \ \ \ \ \ \ std::vector<typename\ std::initializer\_list<TPrecision>::const\_iterator>\ row\_iters;}
+\DoxyCodeLine{00453\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (}
+\DoxyCodeLine{00454\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ curr\_row\ =\ std::cbegin(li);}
+\DoxyCodeLine{00455\ \ \ \ \ \ \ \ \ \ \ \ \ curr\_row\ !=\ std::cend(li);}
+\DoxyCodeLine{00456\ \ \ \ \ \ \ \ \ \ \ \ \ ++curr\_row}
+\DoxyCodeLine{00457\ \ \ \ \ \ \ \ \ )\ \{}
+\DoxyCodeLine{00458\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Check\ all\ row\ iterators\ have\ consistent\ size\ before\ adding}}
+\DoxyCodeLine{00459\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (curr\_row-\/>size()\ ==\ n\_cols)\ \{}
+\DoxyCodeLine{00460\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ row\_iters.push\_back(std::cbegin(*curr\_row));}
+\DoxyCodeLine{00461\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00462\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ free(h\_col\_offsets);}
+\DoxyCodeLine{00463\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00464\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}NoFillMatrixSparse:\ Non-\/consistent\ row\ size\ encounted\ in\ "{}}}
+\DoxyCodeLine{00465\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}initializer\ list"{}}}
+\DoxyCodeLine{00466\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00467\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00468\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00469\ }
+\DoxyCodeLine{00470\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ Roll\ through\ iterators\ repeatedly\ to\ access\ non-\/zero\ elements\ column}}
+\DoxyCodeLine{00471\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ by\ column\ calculating\ offsets\ based\ on\ number\ of\ nnz\ values}}
+\DoxyCodeLine{00472\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ encountered\ */}}
+\DoxyCodeLine{00473\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ next\_col\_offset\ =\ 0;}
+\DoxyCodeLine{00474\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ j=0;\ j<n\_cols;\ ++j)\ \{}
+\DoxyCodeLine{00475\ }
+\DoxyCodeLine{00476\ \ \ \ \ \ \ \ \ \ \ \ \ h\_col\_offsets[j]\ =\ next\_col\_offset;}
+\DoxyCodeLine{00477\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<m\_rows;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00478\ }
+\DoxyCodeLine{00479\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ TPrecision\ val\ =\ *(row\_iters[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]);}
+\DoxyCodeLine{00480\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (val\ !=\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(0.))\ \{}
+\DoxyCodeLine{00481\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ vec\_row\_indices.push\_back(\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}});}
+\DoxyCodeLine{00482\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ vec\_values.push\_back(val);}
+\DoxyCodeLine{00483\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ++next\_col\_offset;}
+\DoxyCodeLine{00484\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00485\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ++row\_iters[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}];}
+\DoxyCodeLine{00486\ }
+\DoxyCodeLine{00487\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00488\ }
+\DoxyCodeLine{00489\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00490\ \ \ \ \ \ \ \ \ h\_col\_offsets[n\_cols]\ =\ next\_col\_offset;}
+\DoxyCodeLine{00491\ \ \ \ \ \ \ \ \ nnz\ =\ vec\_values.size();}
+\DoxyCodeLine{00492\ }
+\DoxyCodeLine{00493\ \ \ \ \ \ \ \ \ allocate\_d\_mem();}
+\DoxyCodeLine{00494\ }
+\DoxyCodeLine{00495\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (nnz\ >\ 0)\ \{}
+\DoxyCodeLine{00496\ \ \ \ \ \ \ \ \ \ \ \ \ set\_data\_from\_csc(}
+\DoxyCodeLine{00497\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_col\_offsets,\ \&vec\_row\_indices[0],\ \&vec\_values[0],}
+\DoxyCodeLine{00498\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_rows,\ n\_cols,\ nnz}
+\DoxyCodeLine{00499\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00500\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00501\ \ \ \ \ \ \ \ \ \ \ \ \ set\_data\_from\_csc(}
+\DoxyCodeLine{00502\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_col\_offsets,\ \textcolor{keyword}{nullptr},\ \textcolor{keyword}{nullptr},}
+\DoxyCodeLine{00503\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_rows,\ n\_cols,\ nnz}
+\DoxyCodeLine{00504\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00505\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00506\ }
+\DoxyCodeLine{00507\ \ \ \ \ \ \ \ \ free(h\_col\_offsets);}
+\DoxyCodeLine{00508\ }
+\DoxyCodeLine{00509\ \ \ \ \ \}}
+\DoxyCodeLine{00510\ }
+\DoxyCodeLine{00511\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a2a0a382e1dc09315f8c615cf4151e88c}{NoFillMatrixSparse}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse}}\ \&other)\ \{}
+\DoxyCodeLine{00512\ \ \ \ \ \ \ \ \ *\textcolor{keyword}{this}\ =\ other;}
+\DoxyCodeLine{00513\ \ \ \ \ \}}
+\DoxyCodeLine{00514\ }
+\DoxyCodeLine{00515\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a4a4ec99b5aa7b0b839a7cd70a079162a}{\string~NoFillMatrixSparse}}()\ \{}
+\DoxyCodeLine{00516\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaFree(d\_row\_offsets));}
+\DoxyCodeLine{00517\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaFree(d\_col\_indices));}
+\DoxyCodeLine{00518\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaFree(d\_values));}
+\DoxyCodeLine{00519\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ *d\_lvl\_set\_ptr:\ trsv\_level\_set\_ptrs)\ \{}
+\DoxyCodeLine{00520\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaFree(d\_lvl\_set\_ptr));}
+\DoxyCodeLine{00521\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00522\ \ \ \ \ \}}
+\DoxyCodeLine{00523\ }
+\DoxyCodeLine{00524\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse}}\ \&\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a843cbceb21d82fdef27d51a3e5a715b8}{operator=}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse}}\ \&other)\ \{}
+\DoxyCodeLine{00525\ }
+\DoxyCodeLine{00526\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{this}\ !=\ \&other)\ \{}
+\DoxyCodeLine{00527\ }
+\DoxyCodeLine{00528\ \ \ \ \ \ \ \ \ \ \ \ \ cu\_handles\ =\ other.cu\_handles;}
+\DoxyCodeLine{00529\ \ \ \ \ \ \ \ \ \ \ \ \ n\_cols\ =\ other.n\_cols;}
+\DoxyCodeLine{00530\ }
+\DoxyCodeLine{00531\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_rows\ !=\ other.m\_rows)\ \{}
+\DoxyCodeLine{00532\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaFree(d\_row\_offsets));}
+\DoxyCodeLine{00533\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_rows\ =\ other.m\_rows;}
+\DoxyCodeLine{00534\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ allocate\_d\_row\_offsets();}
+\DoxyCodeLine{00535\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00536\ }
+\DoxyCodeLine{00537\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_rows\ >\ 0)\ \{}
+\DoxyCodeLine{00538\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaMemcpy(}
+\DoxyCodeLine{00539\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ d\_row\_offsets,}
+\DoxyCodeLine{00540\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ other.d\_row\_offsets,}
+\DoxyCodeLine{00541\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mem\_size\_row\_offsets(),}
+\DoxyCodeLine{00542\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cudaMemcpyDeviceToDevice}
+\DoxyCodeLine{00543\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ));}
+\DoxyCodeLine{00544\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00545\ }
+\DoxyCodeLine{00546\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (nnz\ !=\ other.nnz)\ \{}
+\DoxyCodeLine{00547\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaFree(d\_col\_indices));}
+\DoxyCodeLine{00548\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaFree(d\_values));}
+\DoxyCodeLine{00549\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ nnz\ =\ other.nnz;}
+\DoxyCodeLine{00550\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ allocate\_d\_col\_indices();}
+\DoxyCodeLine{00551\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ allocate\_d\_values();}
+\DoxyCodeLine{00552\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00553\ }
+\DoxyCodeLine{00554\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (nnz\ >\ 0)\ \{}
+\DoxyCodeLine{00555\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaMemcpy(}
+\DoxyCodeLine{00556\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ d\_col\_indices,}
+\DoxyCodeLine{00557\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ other.d\_col\_indices,}
+\DoxyCodeLine{00558\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mem\_size\_col\_indices(),}
+\DoxyCodeLine{00559\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cudaMemcpyDeviceToDevice}
+\DoxyCodeLine{00560\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ));}
+\DoxyCodeLine{00561\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaMemcpy(}
+\DoxyCodeLine{00562\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ d\_values,}
+\DoxyCodeLine{00563\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ other.d\_values,}
+\DoxyCodeLine{00564\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mem\_size\_values(),}
+\DoxyCodeLine{00565\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cudaMemcpyDeviceToDevice}
+\DoxyCodeLine{00566\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ));}
+\DoxyCodeLine{00567\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00568\ }
+\DoxyCodeLine{00569\ \ \ \ \ \ \ \ \ \ \ \ \ deep\_copy\_trsv\_preprocess(other);}
+\DoxyCodeLine{00570\ }
+\DoxyCodeLine{00571\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00572\ }
+\DoxyCodeLine{00573\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00574\ }
+\DoxyCodeLine{00575\ \ \ \ \ \}}
+\DoxyCodeLine{00576\ }
+\DoxyCodeLine{00577\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a547cbf7074f5bf4b12497ea8904d2f62}{NoFillMatrixSparse}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{MatrixDense<TPrecision>}}\ \&source\_mat);}
+\DoxyCodeLine{00578\ }
+\DoxyCodeLine{00579\ \ \ \ \ \textcolor{comment}{/*\ Dynamic\ Memory\ Constructor\ (assumes\ outer\ code\ handles\ dynamic\ memory}}
+\DoxyCodeLine{00580\ \textcolor{comment}{\ \ \ \ \ \ \ properly)\ */}}
+\DoxyCodeLine{00581\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a2b527e172b80bd741208dc7de6976e0b}{NoFillMatrixSparse}}(}
+\DoxyCodeLine{00582\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ \&source\_cu\_handles,}
+\DoxyCodeLine{00583\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ *h\_col\_offsets,}
+\DoxyCodeLine{00584\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ *h\_row\_indices,}
+\DoxyCodeLine{00585\ \ \ \ \ \ \ \ \ TPrecision\ *h\_vals,}
+\DoxyCodeLine{00586\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ source\_m\_rows,}
+\DoxyCodeLine{00587\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ source\_n\_cols,}
+\DoxyCodeLine{00588\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ source\_nnz}
+\DoxyCodeLine{00589\ \ \ \ \ ):}
+\DoxyCodeLine{00590\ \ \ \ \ \ \ \ \ cu\_handles(source\_cu\_handles),}
+\DoxyCodeLine{00591\ \ \ \ \ \ \ \ \ m\_rows(source\_m\_rows),}
+\DoxyCodeLine{00592\ \ \ \ \ \ \ \ \ n\_cols(source\_n\_cols),}
+\DoxyCodeLine{00593\ \ \ \ \ \ \ \ \ nnz(source\_nnz)}
+\DoxyCodeLine{00594\ \ \ \ \ \{}
+\DoxyCodeLine{00595\ }
+\DoxyCodeLine{00596\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (source\_m\_rows\ <\ 0)\ \{}
+\DoxyCodeLine{00597\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00598\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}NoFillMatrixSparse:\ invalid\ source\_m\_rows\ dim\ for\ dynamic\ mem\ "{}}}
+\DoxyCodeLine{00599\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}constructor"{}}}
+\DoxyCodeLine{00600\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00601\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00602\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (source\_n\_cols\ <\ 0)\ \{}
+\DoxyCodeLine{00603\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00604\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}NoFillMatrixSparse:\ invalid\ source\_n\_cols\ dim\ for\ dynamic\ mem\ "{}}}
+\DoxyCodeLine{00605\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}constructor"{}}}
+\DoxyCodeLine{00606\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00607\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00608\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (source\_nnz\ <\ 0)\ \{}
+\DoxyCodeLine{00609\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00610\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}NoFillMatrixSparse:\ invalid\ source\_nnz\ dim\ for\ dynamic\ mem\ "{}}}
+\DoxyCodeLine{00611\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}constructor"{}}}
+\DoxyCodeLine{00612\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00613\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00614\ }
+\DoxyCodeLine{00615\ \ \ \ \ \ \ \ \ allocate\_d\_mem();}
+\DoxyCodeLine{00616\ }
+\DoxyCodeLine{00617\ \ \ \ \ \ \ \ \ set\_data\_from\_csc(}
+\DoxyCodeLine{00618\ \ \ \ \ \ \ \ \ \ \ \ \ h\_col\_offsets,\ h\_row\_indices,\ h\_vals,}
+\DoxyCodeLine{00619\ \ \ \ \ \ \ \ \ \ \ \ \ source\_m\_rows,\ source\_n\_cols,\ source\_nnz}
+\DoxyCodeLine{00620\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00621\ }
+\DoxyCodeLine{00622\ \ \ \ \ \}}
+\DoxyCodeLine{00623\ }
+\DoxyCodeLine{00624\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a3139f91b63d91498caa64f7022d210c6}{copy\_data\_to\_ptr}}(}
+\DoxyCodeLine{00625\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ *arg\_h\_col\_offsets,}
+\DoxyCodeLine{00626\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ *arg\_h\_row\_indices,}
+\DoxyCodeLine{00627\ \ \ \ \ \ \ \ \ TPrecision\ *arg\_h\_values,}
+\DoxyCodeLine{00628\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ target\_m\_rows,\ \textcolor{keywordtype}{int}\ target\_n\_cols,\ \textcolor{keywordtype}{int}\ target\_nnz}
+\DoxyCodeLine{00629\ \ \ \ \ )\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00630\ }
+\DoxyCodeLine{00631\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (target\_m\_rows\ !=\ m\_rows)\ \{}
+\DoxyCodeLine{00632\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00633\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}NoFillMatrixSparse:\ invalid\ target\_m\_rows\ dim\ for\ "{}}}
+\DoxyCodeLine{00634\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}copy\_data\_to\_ptr"{}}}
+\DoxyCodeLine{00635\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00636\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00637\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (target\_n\_cols\ !=\ n\_cols)\ \{}
+\DoxyCodeLine{00638\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00639\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}NoFillMatrixSparse:\ invalid\ target\_n\_cols\ dim\ for\ "{}}}
+\DoxyCodeLine{00640\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}copy\_data\_to\_ptr"{}}}
+\DoxyCodeLine{00641\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00642\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00643\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (target\_nnz\ !=\ nnz)\ \{}
+\DoxyCodeLine{00644\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00645\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}NoFillMatrixSparse:\ invalid\ target\_nnz\ dim\ for\ "{}}}
+\DoxyCodeLine{00646\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}copy\_data\_to\_ptr"{}}}
+\DoxyCodeLine{00647\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00648\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00649\ }
+\DoxyCodeLine{00650\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ *h\_row\_offsets\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(malloc(mem\_size\_row\_offsets()));}
+\DoxyCodeLine{00651\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ *h\_col\_indices\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(malloc(mem\_size\_col\_indices()));}
+\DoxyCodeLine{00652\ \ \ \ \ \ \ \ \ TPrecision\ *h\_values\ =\ \textcolor{keyword}{static\_cast<}TPrecision\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{00653\ \ \ \ \ \ \ \ \ \ \ \ \ malloc(mem\_size\_values())}
+\DoxyCodeLine{00654\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00655\ }
+\DoxyCodeLine{00656\ \ \ \ \ \ \ \ \ copy\_data\_to\_csr(}
+\DoxyCodeLine{00657\ \ \ \ \ \ \ \ \ \ \ \ \ h\_row\_offsets,\ h\_col\_indices,\ h\_values,}
+\DoxyCodeLine{00658\ \ \ \ \ \ \ \ \ \ \ \ \ m\_rows,\ n\_cols,\ nnz}
+\DoxyCodeLine{00659\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00660\ }
+\DoxyCodeLine{00661\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Calculate\ col\ offsets}}
+\DoxyCodeLine{00662\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ j=0;\ j<(n\_cols+1);\ ++j)\ \{\ arg\_h\_col\_offsets[j]\ =\ 0;\ \}}
+\DoxyCodeLine{00663\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ k=0;\ k<nnz;\ ++k)\ \{\ ++arg\_h\_col\_offsets[h\_col\_indices[k]+1];\ \}}
+\DoxyCodeLine{00664\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ j=1;\ j<(n\_cols+1);\ ++j)\ \{}
+\DoxyCodeLine{00665\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_h\_col\_offsets[j]\ +=\ arg\_h\_col\_offsets[j-\/1];}
+\DoxyCodeLine{00666\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00667\ }
+\DoxyCodeLine{00668\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Fill\ in\ row\ by\ row\ row\ index\ and\ value\ data,\ with\ quick\ offset}}
+\DoxyCodeLine{00669\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ calculation\ by\ using\ a\ tracking\ of\ the\ size\ of\ a\ col\ currently}}
+\DoxyCodeLine{00670\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ added\ at\ any\ given\ time}}
+\DoxyCodeLine{00671\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ col;}
+\DoxyCodeLine{00672\ \ \ \ \ \ \ \ \ TPrecision\ val;}
+\DoxyCodeLine{00673\ \ \ \ \ \ \ \ \ std::vector<int>\ curr\_col\_count(n\_cols,\ 0);}
+\DoxyCodeLine{00674\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<m\_rows;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00675\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (}
+\DoxyCodeLine{00676\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ offset\ =\ h\_row\_offsets[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}];}
+\DoxyCodeLine{00677\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ offset\ <\ h\_row\_offsets[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}+1];}
+\DoxyCodeLine{00678\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ++offset}
+\DoxyCodeLine{00679\ \ \ \ \ \ \ \ \ \ \ \ \ )\ \{}
+\DoxyCodeLine{00680\ }
+\DoxyCodeLine{00681\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ col\ =\ h\_col\_indices[offset];}
+\DoxyCodeLine{00682\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ val\ =\ h\_values[offset];}
+\DoxyCodeLine{00683\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00684\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ new\_offset\ =\ arg\_h\_col\_offsets[col]\ +\ curr\_col\_count[col];}
+\DoxyCodeLine{00685\ }
+\DoxyCodeLine{00686\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ arg\_h\_row\_indices[new\_offset]\ =\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}};}
+\DoxyCodeLine{00687\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ arg\_h\_values[new\_offset]\ =\ val;}
+\DoxyCodeLine{00688\ }
+\DoxyCodeLine{00689\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ++curr\_col\_count[col];}
+\DoxyCodeLine{00690\ }
+\DoxyCodeLine{00691\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00692\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00693\ }
+\DoxyCodeLine{00694\ \ \ \ \ \ \ \ \ free(h\_row\_offsets);}
+\DoxyCodeLine{00695\ \ \ \ \ \ \ \ \ free(h\_col\_indices);}
+\DoxyCodeLine{00696\ \ \ \ \ \ \ \ \ free(h\_values);}
+\DoxyCodeLine{00697\ }
+\DoxyCodeLine{00698\ \ \ \ \ \}}
+\DoxyCodeLine{00699\ }
+\DoxyCodeLine{00700\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_ae49e781aa33dc780bb42d5ddce91dfb0}{get\_elem}}(\textcolor{keywordtype}{int}\ row,\ \textcolor{keywordtype}{int}\ col)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00701\ }
+\DoxyCodeLine{00702\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((row\ <\ 0)\ ||\ (row\ >=\ m\_rows))\ \{}
+\DoxyCodeLine{00703\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00704\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}NoFillMatrixSparse:\ invalid\ row\ access\ in\ get\_elem"{}}}
+\DoxyCodeLine{00705\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00706\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00707\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((col\ <\ 0)\ ||\ (col\ >=\ n\_cols))\ \{}
+\DoxyCodeLine{00708\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00709\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}NoFillMatrixSparse:\ invalid\ col\ access\ in\ get\_elem"{}}}
+\DoxyCodeLine{00710\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00711\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00712\ }
+\DoxyCodeLine{00713\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ column\ offset\ and\ column\ size}}
+\DoxyCodeLine{00714\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ row\_offset\_L;}
+\DoxyCodeLine{00715\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ row\_offset\_R;}
+\DoxyCodeLine{00716\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaMemcpy(}
+\DoxyCodeLine{00717\ \ \ \ \ \ \ \ \ \ \ \ \ \&row\_offset\_L,}
+\DoxyCodeLine{00718\ \ \ \ \ \ \ \ \ \ \ \ \ d\_row\_offsets+row,}
+\DoxyCodeLine{00719\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}),}
+\DoxyCodeLine{00720\ \ \ \ \ \ \ \ \ \ \ \ \ cudaMemcpyDeviceToHost}
+\DoxyCodeLine{00721\ \ \ \ \ \ \ \ \ ));}
+\DoxyCodeLine{00722\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaMemcpy(}
+\DoxyCodeLine{00723\ \ \ \ \ \ \ \ \ \ \ \ \ \&row\_offset\_R,}
+\DoxyCodeLine{00724\ \ \ \ \ \ \ \ \ \ \ \ \ d\_row\_offsets+row+1,}
+\DoxyCodeLine{00725\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}),}
+\DoxyCodeLine{00726\ \ \ \ \ \ \ \ \ \ \ \ \ cudaMemcpyDeviceToHost}
+\DoxyCodeLine{00727\ \ \ \ \ \ \ \ \ ));}
+\DoxyCodeLine{00728\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ row\_nnz\_size\ =\ row\_offset\_R-\/row\_offset\_L;}
+\DoxyCodeLine{00729\ }
+\DoxyCodeLine{00730\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Find\ if\ row\ index\ is\ non-\/zero\ and\ find\ location\ in\ val\ array}}
+\DoxyCodeLine{00731\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ *h\_col\_indices\_for\_row\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{00732\ \ \ \ \ \ \ \ \ \ \ \ \ malloc(row\_nnz\_size*\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}))}
+\DoxyCodeLine{00733\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00734\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (row\_nnz\_size\ >\ 0)\ \{}
+\DoxyCodeLine{00735\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaMemcpy(}
+\DoxyCodeLine{00736\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_col\_indices\_for\_row,}
+\DoxyCodeLine{00737\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ d\_col\_indices+row\_offset\_L,}
+\DoxyCodeLine{00738\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ row\_nnz\_size*\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}),}
+\DoxyCodeLine{00739\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cudaMemcpyDeviceToHost}
+\DoxyCodeLine{00740\ \ \ \ \ \ \ \ \ \ \ \ \ ));}
+\DoxyCodeLine{00741\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00742\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ col\_ind\_offset\ =\ binary\_search\_for\_target\_index(}
+\DoxyCodeLine{00743\ \ \ \ \ \ \ \ \ \ \ \ \ col,\ h\_col\_indices\_for\_row,\ 0,\ row\_nnz\_size}
+\DoxyCodeLine{00744\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00745\ \ \ \ \ \ \ \ \ free(h\_col\_indices\_for\_row);}
+\DoxyCodeLine{00746\ }
+\DoxyCodeLine{00747\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (col\_ind\_offset\ !=\ -\/1)\ \{}
+\DoxyCodeLine{00748\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<TPrecision>}}\ elem;}
+\DoxyCodeLine{00749\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaMemcpy(}
+\DoxyCodeLine{00750\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ elem.d\_scalar,}
+\DoxyCodeLine{00751\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ d\_values+row\_offset\_L+col\_ind\_offset,}
+\DoxyCodeLine{00752\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{sizeof}(TPrecision),}
+\DoxyCodeLine{00753\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cudaMemcpyDeviceToDevice}
+\DoxyCodeLine{00754\ \ \ \ \ \ \ \ \ \ \ \ \ ));}
+\DoxyCodeLine{00755\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ elem;}
+\DoxyCodeLine{00756\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00757\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<TPrecision>}}(\textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(0.));}
+\DoxyCodeLine{00758\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00759\ }
+\DoxyCodeLine{00760\ \ \ \ \ \}}
+\DoxyCodeLine{00761\ }
+\DoxyCodeLine{00762\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_1_1_col}{Col}}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a699d948355663fcc24807b84f595fdcc}{get\_col}}(\textcolor{keywordtype}{int}\ col)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00763\ }
+\DoxyCodeLine{00764\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((col\ <\ 0)\ ||\ (col\ >=\ n\_cols))\ \{}
+\DoxyCodeLine{00765\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00766\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}NoFillMatrixSparse:\ invalid\ col\ access\ in\ get\_col"{}}}
+\DoxyCodeLine{00767\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00768\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00769\ }
+\DoxyCodeLine{00770\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_1_1_col}{Col}}(\textcolor{keyword}{this},\ col);}
+\DoxyCodeLine{00771\ }
+\DoxyCodeLine{00772\ \ \ \ \ \}}
+\DoxyCodeLine{00773\ }
+\DoxyCodeLine{00774\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_1_1_block}{Block}}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a67870d16b06421d39235d624a6637f11}{get\_block}}(}
+\DoxyCodeLine{00775\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ start\_row,\ \textcolor{keywordtype}{int}\ start\_col,\ \textcolor{keywordtype}{int}\ block\_rows,\ \textcolor{keywordtype}{int}\ block\_cols}
+\DoxyCodeLine{00776\ \ \ \ \ )\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00777\ }
+\DoxyCodeLine{00778\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((start\_row\ <\ 0)\ ||\ (start\_row\ >=\ m\_rows))\ \{}
+\DoxyCodeLine{00779\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00780\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}NoFillMatrixSparse:\ invalid\ starting\ row\ in\ block"{}}}
+\DoxyCodeLine{00781\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00782\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00783\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((start\_col\ <\ 0)\ ||\ (start\_col\ >=\ n\_cols))\ \{}
+\DoxyCodeLine{00784\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00785\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}NoFillMatrixSparse:\ invalid\ starting\ col\ in\ block"{}}}
+\DoxyCodeLine{00786\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00787\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00788\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((block\_rows\ <\ 0)\ ||\ (start\_row+block\_rows\ >\ m\_rows))\ \{}
+\DoxyCodeLine{00789\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00790\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}NoFillMatrixSparse:\ invalid\ number\ of\ rows\ in\ block"{}}}
+\DoxyCodeLine{00791\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00792\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00793\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((block\_cols\ <\ 0)\ ||\ (start\_col+block\_cols\ >\ n\_cols))\ \{}
+\DoxyCodeLine{00794\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00795\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}NoFillMatrixSparse:\ invalid\ number\ of\ cols\ in\ block"{}}}
+\DoxyCodeLine{00796\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00797\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00798\ }
+\DoxyCodeLine{00799\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_1_1_block}{Block}}(\textcolor{keyword}{this},\ start\_row,\ start\_col,\ block\_rows,\ block\_cols);}
+\DoxyCodeLine{00800\ }
+\DoxyCodeLine{00801\ \ \ \ \ \}}
+\DoxyCodeLine{00802\ }
+\DoxyCodeLine{00803\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a53c7790e128457a37837ed1283a83b4e}{get\_cu\_handles}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ cu\_handles;\ \}}
+\DoxyCodeLine{00804\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a96073f4b32736ec5a026393401a4adc7}{rows}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ m\_rows;\ \}}
+\DoxyCodeLine{00805\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a82ef73765687020d4e71b8f315184b26}{cols}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ n\_cols;\ \}}
+\DoxyCodeLine{00806\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a547921f00f782f506d3066e46b35330b}{non\_zeros}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ nnz;\ \}}
+\DoxyCodeLine{00807\ }
+\DoxyCodeLine{00808\ \ \ \ \ std::string\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a359332e34ba27fa35d5ac02744d1a236}{get\_matrix\_string}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00809\ }
+\DoxyCodeLine{00810\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ *h\_col\_offsets\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(malloc((n\_cols+1)*\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int})));}
+\DoxyCodeLine{00811\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ *h\_row\_indices\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(malloc(nnz*\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int})));}
+\DoxyCodeLine{00812\ \ \ \ \ \ \ \ \ TPrecision\ *h\_vals\ =\ \textcolor{keyword}{static\_cast<}TPrecision\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{00813\ \ \ \ \ \ \ \ \ \ \ \ \ malloc(nnz*\textcolor{keyword}{sizeof}(TPrecision))}
+\DoxyCodeLine{00814\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00815\ }
+\DoxyCodeLine{00816\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a3139f91b63d91498caa64f7022d210c6}{copy\_data\_to\_ptr}}(}
+\DoxyCodeLine{00817\ \ \ \ \ \ \ \ \ \ \ \ \ h\_col\_offsets,\ h\_row\_indices,\ h\_vals,}
+\DoxyCodeLine{00818\ \ \ \ \ \ \ \ \ \ \ \ \ m\_rows,\ n\_cols,\ nnz}
+\DoxyCodeLine{00819\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00820\ }
+\DoxyCodeLine{00821\ \ \ \ \ \ \ \ \ std::stringstream\ col\_offsets\_strm;}
+\DoxyCodeLine{00822\ \ \ \ \ \ \ \ \ col\_offsets\_strm\ <<\ \textcolor{stringliteral}{"{}["{}};}
+\DoxyCodeLine{00823\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (n\_cols\ >\ 0)\ \{}
+\DoxyCodeLine{00824\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<n\_cols;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00825\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ col\_offsets\_strm\ <<\ h\_col\_offsets[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ <<\ \textcolor{stringliteral}{"{},\ "{}};}
+\DoxyCodeLine{00826\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00827\ \ \ \ \ \ \ \ \ \ \ \ \ col\_offsets\_strm\ <<\ h\_col\_offsets[n\_cols];}
+\DoxyCodeLine{00828\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00829\ \ \ \ \ \ \ \ \ col\_offsets\_strm\ <<\ \textcolor{stringliteral}{"{}]"{}};}
+\DoxyCodeLine{00830\ }
+\DoxyCodeLine{00831\ \ \ \ \ \ \ \ \ std::stringstream\ row\_indices\_strm;}
+\DoxyCodeLine{00832\ \ \ \ \ \ \ \ \ row\_indices\_strm\ <<\ \textcolor{stringliteral}{"{}["{}};}
+\DoxyCodeLine{00833\ \ \ \ \ \ \ \ \ std::stringstream\ val\_strm;}
+\DoxyCodeLine{00834\ \ \ \ \ \ \ \ \ val\_strm\ <<\ std::setprecision(8)\ <<\ \textcolor{stringliteral}{"{}["{}};}
+\DoxyCodeLine{00835\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (nnz\ >\ 0)\ \{}
+\DoxyCodeLine{00836\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<nnz-\/1;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00837\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ row\_indices\_strm\ <<\ h\_row\_indices[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ <<\ \textcolor{stringliteral}{"{},\ "{}};}
+\DoxyCodeLine{00838\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ val\_strm\ <<\ static\_cast<double>(h\_vals[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}])\ <<\ \textcolor{stringliteral}{"{},\ "{}};}
+\DoxyCodeLine{00839\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00840\ \ \ \ \ \ \ \ \ \ \ \ \ row\_indices\_strm\ <<\ h\_row\_indices[nnz-\/1];}
+\DoxyCodeLine{00841\ \ \ \ \ \ \ \ \ \ \ \ \ val\_strm\ <<\ static\_cast<double>(h\_vals[nnz-\/1]);}
+\DoxyCodeLine{00842\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00843\ \ \ \ \ \ \ \ \ row\_indices\_strm\ <<\ \textcolor{stringliteral}{"{}]"{}};}
+\DoxyCodeLine{00844\ \ \ \ \ \ \ \ \ val\_strm\ <<\ \textcolor{stringliteral}{"{}]"{}};}
+\DoxyCodeLine{00845\ }
+\DoxyCodeLine{00846\ \ \ \ \ \ \ \ \ free(h\_col\_offsets);}
+\DoxyCodeLine{00847\ \ \ \ \ \ \ \ \ free(h\_row\_indices);}
+\DoxyCodeLine{00848\ \ \ \ \ \ \ \ \ free(h\_vals);}
+\DoxyCodeLine{00849\ }
+\DoxyCodeLine{00850\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}(}
+\DoxyCodeLine{00851\ \ \ \ \ \ \ \ \ \ \ \ \ col\_offsets\_strm.str()\ +\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}}\ +}
+\DoxyCodeLine{00852\ \ \ \ \ \ \ \ \ \ \ \ \ row\_indices\_strm.str()\ +\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}}\ +}
+\DoxyCodeLine{00853\ \ \ \ \ \ \ \ \ \ \ \ \ val\_strm.str()}
+\DoxyCodeLine{00854\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00855\ }
+\DoxyCodeLine{00856\ \ \ \ \ \}}
+\DoxyCodeLine{00857\ }
+\DoxyCodeLine{00858\ \ \ \ \ std::string\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_acc712a597e5586b62f428030f3d72b11}{get\_info\_string}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00859\ \ \ \ \ \ \ \ \ std::stringstream\ acc\_strm;}
+\DoxyCodeLine{00860\ \ \ \ \ \ \ \ \ acc\_strm\ <<\ std::setprecision(3);}
+\DoxyCodeLine{00861\ \ \ \ \ \ \ \ \ acc\_strm\ <<\ \textcolor{stringliteral}{"{}Rows:\ "{}}\ <<\ m\_rows\ <<\ \textcolor{stringliteral}{"{}\ |\ "{}}}
+\DoxyCodeLine{00862\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{}Cols:\ "{}}\ <<\ n\_cols\ <<\ \textcolor{stringliteral}{"{}\ |\ "{}}}
+\DoxyCodeLine{00863\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{}Non-\/zeroes:\ "{}}\ <<\ nnz\ <<\ \textcolor{stringliteral}{"{}\ |\ "{}}}
+\DoxyCodeLine{00864\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{}Fill\ ratio:\ "{}}}
+\DoxyCodeLine{00865\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ (\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{double}\textcolor{keyword}{>}(nnz)\ /}
+\DoxyCodeLine{00866\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{double}\textcolor{keyword}{>}(m\_rows*n\_cols))\ <<\ \textcolor{stringliteral}{"{}\ |\ "{}}}
+\DoxyCodeLine{00867\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{}Max\ magnitude:\ "{}}}
+\DoxyCodeLine{00868\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{double}\textcolor{keyword}{>}(\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_aa17da4df4e2cba95f5eff53ffe6b808d}{get\_max\_mag\_elem}}().get\_scalar());}
+\DoxyCodeLine{00869\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ acc\_strm.str();}
+\DoxyCodeLine{00870\ }
+\DoxyCodeLine{00871\ \ \ \ \ \}}
+\DoxyCodeLine{00872\ }
+\DoxyCodeLine{00873\ \ \ \ \ \textcolor{comment}{//\ Static\ Matrix\ Creation}}
+\DoxyCodeLine{00874\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a24baeedb7f03649f50d346ed5de9ad7b}{Zero}}(}
+\DoxyCodeLine{00875\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ \&arg\_cu\_handles,}
+\DoxyCodeLine{00876\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ arg\_m\_rows,}
+\DoxyCodeLine{00877\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ arg\_n\_cols}
+\DoxyCodeLine{00878\ \ \ \ \ )\ \{}
+\DoxyCodeLine{00879\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse<TPrecision>}}(}
+\DoxyCodeLine{00880\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_cu\_handles,}
+\DoxyCodeLine{00881\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_m\_rows,}
+\DoxyCodeLine{00882\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_n\_cols}
+\DoxyCodeLine{00883\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00884\ \ \ \ \ \}}
+\DoxyCodeLine{00885\ }
+\DoxyCodeLine{00886\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a99eafe27496570e358f93debec8b567f}{Ones}}(}
+\DoxyCodeLine{00887\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ \&arg\_cu\_handles,}
+\DoxyCodeLine{00888\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ arg\_m\_rows,}
+\DoxyCodeLine{00889\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ arg\_n\_cols}
+\DoxyCodeLine{00890\ \ \ \ \ )\ \{}
+\DoxyCodeLine{00891\ }
+\DoxyCodeLine{00892\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ *h\_col\_offsets\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{00893\ \ \ \ \ \ \ \ \ \ \ \ \ malloc((arg\_n\_cols+1)*\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}))}
+\DoxyCodeLine{00894\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00895\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ *h\_row\_indices\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{00896\ \ \ \ \ \ \ \ \ \ \ \ \ malloc(arg\_m\_rows*arg\_n\_cols*\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}))}
+\DoxyCodeLine{00897\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00898\ \ \ \ \ \ \ \ \ TPrecision\ *h\_vals\ =\ \textcolor{keyword}{static\_cast<}TPrecision\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{00899\ \ \ \ \ \ \ \ \ \ \ \ \ malloc(arg\_m\_rows*arg\_n\_cols*\textcolor{keyword}{sizeof}(TPrecision))}
+\DoxyCodeLine{00900\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00901\ }
+\DoxyCodeLine{00902\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<arg\_n\_cols+1;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00903\ \ \ \ \ \ \ \ \ \ \ \ \ h\_col\_offsets[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ =\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}*arg\_m\_rows;}
+\DoxyCodeLine{00904\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00905\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<arg\_m\_rows*arg\_n\_cols;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00906\ \ \ \ \ \ \ \ \ \ \ \ \ h\_row\_indices[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ =\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}\%arg\_m\_rows;}
+\DoxyCodeLine{00907\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00908\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<arg\_m\_rows*arg\_n\_cols;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00909\ \ \ \ \ \ \ \ \ \ \ \ \ h\_vals[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ =\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(1.);}
+\DoxyCodeLine{00910\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00911\ }
+\DoxyCodeLine{00912\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse<TPrecision>}}\ ret\_mat(}
+\DoxyCodeLine{00913\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_cu\_handles,}
+\DoxyCodeLine{00914\ \ \ \ \ \ \ \ \ \ \ \ \ h\_col\_offsets,\ h\_row\_indices,\ h\_vals,}
+\DoxyCodeLine{00915\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_m\_rows,\ arg\_n\_cols,\ arg\_m\_rows*arg\_n\_cols}
+\DoxyCodeLine{00916\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00917\ }
+\DoxyCodeLine{00918\ \ \ \ \ \ \ \ \ free(h\_col\_offsets);}
+\DoxyCodeLine{00919\ \ \ \ \ \ \ \ \ free(h\_row\_indices);}
+\DoxyCodeLine{00920\ \ \ \ \ \ \ \ \ free(h\_vals);}
+\DoxyCodeLine{00921\ }
+\DoxyCodeLine{00922\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ret\_mat;}
+\DoxyCodeLine{00923\ }
+\DoxyCodeLine{00924\ \ \ \ \ \}}
+\DoxyCodeLine{00925\ }
+\DoxyCodeLine{00926\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a89ab618bf0e8556074d2d9e9c725c769}{Identity}}(}
+\DoxyCodeLine{00927\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ \&arg\_cu\_handles,}
+\DoxyCodeLine{00928\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ arg\_m\_rows,}
+\DoxyCodeLine{00929\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ arg\_n\_cols}
+\DoxyCodeLine{00930\ \ \ \ \ )\ \{}
+\DoxyCodeLine{00931\ }
+\DoxyCodeLine{00932\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ smaller\_dim\ =\ std::min(arg\_m\_rows,\ arg\_n\_cols);}
+\DoxyCodeLine{00933\ }
+\DoxyCodeLine{00934\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ *h\_col\_offsets\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{00935\ \ \ \ \ \ \ \ \ \ \ \ \ malloc((arg\_n\_cols+1)*\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}))}
+\DoxyCodeLine{00936\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00937\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ *h\_row\_indices\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{00938\ \ \ \ \ \ \ \ \ \ \ \ \ malloc(smaller\_dim*\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}))}
+\DoxyCodeLine{00939\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00940\ \ \ \ \ \ \ \ \ TPrecision\ *h\_vals\ =\ \textcolor{keyword}{static\_cast<}TPrecision\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{00941\ \ \ \ \ \ \ \ \ \ \ \ \ malloc(smaller\_dim*\textcolor{keyword}{sizeof}(TPrecision))}
+\DoxyCodeLine{00942\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00943\ }
+\DoxyCodeLine{00944\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (arg\_n\_cols\ ==\ smaller\_dim)\ \{}
+\DoxyCodeLine{00945\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<arg\_n\_cols+1;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00946\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_col\_offsets[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ =\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}};}
+\DoxyCodeLine{00947\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00948\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00949\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<smaller\_dim;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00950\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_col\_offsets[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ =\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}};}
+\DoxyCodeLine{00951\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00952\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=smaller\_dim;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<arg\_n\_cols+1;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00953\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_col\_offsets[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ =\ smaller\_dim;}
+\DoxyCodeLine{00954\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00955\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00956\ }
+\DoxyCodeLine{00957\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<smaller\_dim;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00958\ \ \ \ \ \ \ \ \ \ \ \ \ h\_row\_indices[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ =\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}};}
+\DoxyCodeLine{00959\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00960\ \ \ \ \ }
+\DoxyCodeLine{00961\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<smaller\_dim;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00962\ \ \ \ \ \ \ \ \ \ \ \ \ h\_vals[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ =\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(1.);}
+\DoxyCodeLine{00963\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00964\ }
+\DoxyCodeLine{00965\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse<TPrecision>}}\ ret\_mat(}
+\DoxyCodeLine{00966\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_cu\_handles,}
+\DoxyCodeLine{00967\ \ \ \ \ \ \ \ \ \ \ \ \ h\_col\_offsets,\ h\_row\_indices,\ h\_vals,}
+\DoxyCodeLine{00968\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_m\_rows,\ arg\_n\_cols,\ smaller\_dim}
+\DoxyCodeLine{00969\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00970\ }
+\DoxyCodeLine{00971\ \ \ \ \ \ \ \ \ free(h\_col\_offsets);}
+\DoxyCodeLine{00972\ \ \ \ \ \ \ \ \ free(h\_row\_indices);}
+\DoxyCodeLine{00973\ \ \ \ \ \ \ \ \ free(h\_vals);}
+\DoxyCodeLine{00974\ }
+\DoxyCodeLine{00975\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ret\_mat;}
+\DoxyCodeLine{00976\ }
+\DoxyCodeLine{00977\ \ \ \ \ \}}
+\DoxyCodeLine{00978\ }
+\DoxyCodeLine{00979\ \ \ \ \ \textcolor{comment}{//\ Generate\ a\ well\ conditioned\ pseudo-\/random\ matrix\ with}}
+\DoxyCodeLine{00980\ \ \ \ \ \textcolor{comment}{//\ coefficient\ added\ to\ diagonal\ to\ avoid\ illconditioned\ (don't\ need\ to}}
+\DoxyCodeLine{00981\ \ \ \ \ \textcolor{comment}{//\ optimize\ performance)}}
+\DoxyCodeLine{00982\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_ae48661d2f11b5e2affe1bddbb43a8464}{Random}}(}
+\DoxyCodeLine{00983\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ \&arg\_cu\_handles,}
+\DoxyCodeLine{00984\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ arg\_m\_rows,}
+\DoxyCodeLine{00985\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ arg\_n\_cols,}
+\DoxyCodeLine{00986\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ fill\_prob}
+\DoxyCodeLine{00987\ \ \ \ \ )\ \{}
+\DoxyCodeLine{00988\ }
+\DoxyCodeLine{00989\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!((0.\ <=\ fill\_prob)\ \&\&\ (fill\_prob\ <=\ 1.)))\ \{}
+\DoxyCodeLine{00990\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00991\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}NoFillMatrixSparse:\ Random\ invalid\ fill\_prob"{}}}
+\DoxyCodeLine{00992\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00993\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00994\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00995\ \ \ \ \ \ \ \ \ std::random\_device\ rd;}
+\DoxyCodeLine{00996\ \ \ \ \ \ \ \ \ std::mt19937\ gen(rd());}
+\DoxyCodeLine{00997\ \ \ \ \ \ \ \ \ std::normal\_distribution<double>\ val\_dist(0.,\ 1.);}
+\DoxyCodeLine{00998\ \ \ \ \ \ \ \ \ std::uniform\_real\_distribution<double>\ fill\_prob\_dist(0.,\ 1.);}
+\DoxyCodeLine{00999\ }
+\DoxyCodeLine{01000\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ *h\_col\_offsets\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{01001\ \ \ \ \ \ \ \ \ \ \ \ \ malloc((arg\_n\_cols+1)*\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}))}
+\DoxyCodeLine{01002\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{01003\ \ \ \ \ \ \ \ \ std::vector<int>\ h\_vec\_row\_indices;}
+\DoxyCodeLine{01004\ \ \ \ \ \ \ \ \ std::vector<TPrecision>\ h\_vec\_vals;}
+\DoxyCodeLine{01005\ }
+\DoxyCodeLine{01006\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ curr\_nnz\ =\ 0;}
+\DoxyCodeLine{01007\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ j=0;\ j<arg\_n\_cols;\ ++j)\ \{}
+\DoxyCodeLine{01008\ \ \ \ \ \ \ \ \ \ \ \ \ h\_col\_offsets[j]\ =\ curr\_nnz;}
+\DoxyCodeLine{01009\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<arg\_m\_rows;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{01010\ }
+\DoxyCodeLine{01011\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ TPrecision\ val\ =\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(0.);}
+\DoxyCodeLine{01012\ }
+\DoxyCodeLine{01013\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}\ ==\ j)\ \{}
+\DoxyCodeLine{01014\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ val\ =\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(}
+\DoxyCodeLine{01015\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ enlarge\_random\_double(0.1*val\_dist(gen))}
+\DoxyCodeLine{01016\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{01017\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (}
+\DoxyCodeLine{01018\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (fill\_prob\ !=\ 0.)\ \&\&}
+\DoxyCodeLine{01019\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (fill\_prob\_dist(gen)\ <=\ fill\_prob)}
+\DoxyCodeLine{01020\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ )\ \{}
+\DoxyCodeLine{01021\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ val\ =\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(0.1*val\_dist(gen));}
+\DoxyCodeLine{01022\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01023\ }
+\DoxyCodeLine{01024\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (val\ !=\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(0.))\ \{}
+\DoxyCodeLine{01025\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_vec\_row\_indices.push\_back(\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}});}
+\DoxyCodeLine{01026\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_vec\_vals.push\_back(val);}
+\DoxyCodeLine{01027\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ++curr\_nnz;}
+\DoxyCodeLine{01028\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01029\ }
+\DoxyCodeLine{01030\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01031\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01032\ \ \ \ \ \ \ \ \ h\_col\_offsets[arg\_n\_cols]\ =\ curr\_nnz;}
+\DoxyCodeLine{01033\ }
+\DoxyCodeLine{01034\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse<TPrecision>}}\ created\_mat(arg\_cu\_handles);}
+\DoxyCodeLine{01035\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (curr\_nnz\ !=\ 0)\ \{}
+\DoxyCodeLine{01036\ \ \ \ \ \ \ \ \ \ \ \ \ created\_mat\ =\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse<TPrecision>}}(}
+\DoxyCodeLine{01037\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ arg\_cu\_handles,}
+\DoxyCodeLine{01038\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_col\_offsets,\ \&h\_vec\_row\_indices[0],\ \&h\_vec\_vals[0],}
+\DoxyCodeLine{01039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ arg\_m\_rows,\ arg\_n\_cols,\ curr\_nnz}
+\DoxyCodeLine{01040\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{01041\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{01042\ \ \ \ \ \ \ \ \ \ \ \ \ created\_mat\ =\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse<TPrecision>}}(}
+\DoxyCodeLine{01043\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ arg\_cu\_handles,}
+\DoxyCodeLine{01044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ arg\_m\_rows,}
+\DoxyCodeLine{01045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ arg\_n\_cols}
+\DoxyCodeLine{01046\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{01047\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01048\ }
+\DoxyCodeLine{01049\ \ \ \ \ \ \ \ \ free(h\_col\_offsets);}
+\DoxyCodeLine{01050\ }
+\DoxyCodeLine{01051\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ created\_mat;}
+\DoxyCodeLine{01052\ }
+\DoxyCodeLine{01053\ \ \ \ \ \}}
+\DoxyCodeLine{01054\ }
+\DoxyCodeLine{01055\ \ \ \ \ \textcolor{comment}{//\ Generate\ a\ well\ conditioned\ pseudo-\/random\ upper\ triangular\ matrix\ with}}
+\DoxyCodeLine{01056\ \ \ \ \ \textcolor{comment}{//\ coefficient\ added\ to\ diagonal\ to\ avoid\ illconditioned\ (don't\ need\ to}}
+\DoxyCodeLine{01057\ \ \ \ \ \textcolor{comment}{//\ optimize\ performance)}}
+\DoxyCodeLine{01058\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a13be07646a28e10b0d76d4ac0c8f18ff}{Random\_UT}}(}
+\DoxyCodeLine{01059\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ \&arg\_cu\_handles,}
+\DoxyCodeLine{01060\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ arg\_m\_rows,}
+\DoxyCodeLine{01061\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ arg\_n\_cols,}
+\DoxyCodeLine{01062\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ fill\_prob}
+\DoxyCodeLine{01063\ \ \ \ \ )\ \{}
+\DoxyCodeLine{01064\ }
+\DoxyCodeLine{01065\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!((0.\ <=\ fill\_prob)\ \&\&\ (fill\_prob\ <=\ 1.)))\ \{}
+\DoxyCodeLine{01066\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{01067\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}NoFillMatrixSparse:\ Random\ invalid\ fill\_prob"{}}}
+\DoxyCodeLine{01068\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{01069\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01070\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{01071\ \ \ \ \ \ \ \ \ std::random\_device\ rd;}
+\DoxyCodeLine{01072\ \ \ \ \ \ \ \ \ std::mt19937\ gen(rd());}
+\DoxyCodeLine{01073\ \ \ \ \ \ \ \ \ std::normal\_distribution<double>\ val\_dist(0.,\ 1.);}
+\DoxyCodeLine{01074\ \ \ \ \ \ \ \ \ std::uniform\_real\_distribution<double>\ fill\_prob\_dist(0.,\ 1.);}
+\DoxyCodeLine{01075\ }
+\DoxyCodeLine{01076\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ *h\_col\_offsets\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(malloc((arg\_n\_cols+1)*\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int})));}
+\DoxyCodeLine{01077\ \ \ \ \ \ \ \ \ std::vector<int>\ h\_vec\_row\_indices;}
+\DoxyCodeLine{01078\ \ \ \ \ \ \ \ \ std::vector<TPrecision>\ h\_vec\_vals;}
+\DoxyCodeLine{01079\ }
+\DoxyCodeLine{01080\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ curr\_nnz\ =\ 0;}
+\DoxyCodeLine{01081\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ j=0;\ j<arg\_n\_cols;\ ++j)\ \{}
+\DoxyCodeLine{01082\ \ \ \ \ \ \ \ \ \ \ \ \ h\_col\_offsets[j]\ =\ curr\_nnz;}
+\DoxyCodeLine{01083\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ ((\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}\ <=\ j)\ \&\&\ (\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}\ <\ arg\_m\_rows));\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{01084\ }
+\DoxyCodeLine{01085\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ TPrecision\ val\ =\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(0.);}
+\DoxyCodeLine{01086\ }
+\DoxyCodeLine{01087\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}\ ==\ j)\ \{}
+\DoxyCodeLine{01088\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ val\ =\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(}
+\DoxyCodeLine{01089\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ enlarge\_random\_double(0.1*val\_dist(gen))}
+\DoxyCodeLine{01090\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{01091\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (}
+\DoxyCodeLine{01092\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (fill\_prob\ !=\ 0.)\ \&\&}
+\DoxyCodeLine{01093\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (fill\_prob\_dist(gen)\ <=\ fill\_prob)}
+\DoxyCodeLine{01094\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ )\ \{}
+\DoxyCodeLine{01095\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ val\ =\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(0.1*val\_dist(gen));}
+\DoxyCodeLine{01096\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01097\ }
+\DoxyCodeLine{01098\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (val\ !=\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(0.))\ \{}
+\DoxyCodeLine{01099\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_vec\_row\_indices.push\_back(\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}});}
+\DoxyCodeLine{01100\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_vec\_vals.push\_back(val);}
+\DoxyCodeLine{01101\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ++curr\_nnz;}
+\DoxyCodeLine{01102\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01103\ }
+\DoxyCodeLine{01104\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01105\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01106\ \ \ \ \ \ \ \ \ h\_col\_offsets[arg\_n\_cols]\ =\ curr\_nnz;}
+\DoxyCodeLine{01107\ }
+\DoxyCodeLine{01108\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse<TPrecision>}}\ created\_mat(arg\_cu\_handles);}
+\DoxyCodeLine{01109\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (curr\_nnz\ !=\ 0)\ \{}
+\DoxyCodeLine{01110\ \ \ \ \ \ \ \ \ \ \ \ \ created\_mat\ =\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse<TPrecision>}}(}
+\DoxyCodeLine{01111\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ arg\_cu\_handles,}
+\DoxyCodeLine{01112\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_col\_offsets,\ \&h\_vec\_row\_indices[0],\ \&h\_vec\_vals[0],}
+\DoxyCodeLine{01113\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ arg\_m\_rows,\ arg\_n\_cols,\ curr\_nnz}
+\DoxyCodeLine{01114\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{01115\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{01116\ \ \ \ \ \ \ \ \ \ \ \ \ created\_mat\ =\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse<TPrecision>}}(}
+\DoxyCodeLine{01117\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ arg\_cu\_handles,}
+\DoxyCodeLine{01118\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ arg\_m\_rows,}
+\DoxyCodeLine{01119\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ arg\_n\_cols}
+\DoxyCodeLine{01120\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{01121\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01122\ }
+\DoxyCodeLine{01123\ \ \ \ \ \ \ \ \ free(h\_col\_offsets);}
+\DoxyCodeLine{01124\ }
+\DoxyCodeLine{01125\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ created\_mat;}
+\DoxyCodeLine{01126\ }
+\DoxyCodeLine{01127\ \ \ \ \ \}}
+\DoxyCodeLine{01128\ }
+\DoxyCodeLine{01129\ \ \ \ \ \textcolor{comment}{//\ Generate\ a\ well\ conditioned\ pseudo-\/random\ lower\ triangular\ matrix\ with}}
+\DoxyCodeLine{01130\ \ \ \ \ \textcolor{comment}{//\ coefficient\ added\ to\ diagonal\ to\ avoid\ illconditioned\ (don't\ need\ to}}
+\DoxyCodeLine{01131\ \ \ \ \ \textcolor{comment}{//\ optimize\ performance)}}
+\DoxyCodeLine{01132\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a54289b8be0aeabaec036894ab4ee65d1}{Random\_LT}}(}
+\DoxyCodeLine{01133\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ \&arg\_cu\_handles,}
+\DoxyCodeLine{01134\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ arg\_m\_rows,}
+\DoxyCodeLine{01135\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ arg\_n\_cols,}
+\DoxyCodeLine{01136\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ fill\_prob}
+\DoxyCodeLine{01137\ \ \ \ \ )\ \{}
+\DoxyCodeLine{01138\ }
+\DoxyCodeLine{01139\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!((0.\ <=\ fill\_prob)\ \&\&\ (fill\_prob\ <=\ 1.)))\ \{}
+\DoxyCodeLine{01140\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{01141\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}NoFillMatrixSparse:\ Random\ invalid\ fill\_prob"{}}}
+\DoxyCodeLine{01142\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{01143\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01144\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{01145\ \ \ \ \ \ \ \ \ std::random\_device\ rd;}
+\DoxyCodeLine{01146\ \ \ \ \ \ \ \ \ std::mt19937\ gen(rd());}
+\DoxyCodeLine{01147\ \ \ \ \ \ \ \ \ std::normal\_distribution<double>\ val\_dist(0.,\ 1.);}
+\DoxyCodeLine{01148\ \ \ \ \ \ \ \ \ std::uniform\_real\_distribution<double>\ fill\_prob\_dist(0.,\ 1.);}
+\DoxyCodeLine{01149\ }
+\DoxyCodeLine{01150\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ *h\_col\_offsets\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{01151\ \ \ \ \ \ \ \ \ \ \ \ \ malloc((arg\_n\_cols+1)*\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}))}
+\DoxyCodeLine{01152\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{01153\ \ \ \ \ \ \ \ \ std::vector<int>\ h\_vec\_row\_indices;}
+\DoxyCodeLine{01154\ \ \ \ \ \ \ \ \ std::vector<TPrecision>\ h\_vec\_vals;}
+\DoxyCodeLine{01155\ }
+\DoxyCodeLine{01156\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ curr\_nnz\ =\ 0;}
+\DoxyCodeLine{01157\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ j=0;\ j<arg\_n\_cols;\ ++j)\ \{}
+\DoxyCodeLine{01158\ \ \ \ \ \ \ \ \ \ \ \ \ h\_col\_offsets[j]\ =\ curr\_nnz;}
+\DoxyCodeLine{01159\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=j;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<arg\_m\_rows;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{01160\ }
+\DoxyCodeLine{01161\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ TPrecision\ val\ =\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(0.);}
+\DoxyCodeLine{01162\ }
+\DoxyCodeLine{01163\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}\ ==\ j)\ \{}
+\DoxyCodeLine{01164\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ val\ =\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(}
+\DoxyCodeLine{01165\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ enlarge\_random\_double(0.1*val\_dist(gen))}
+\DoxyCodeLine{01166\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{01167\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (}
+\DoxyCodeLine{01168\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (fill\_prob\ !=\ 0.)\ \&\&}
+\DoxyCodeLine{01169\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (fill\_prob\_dist(gen)\ <=\ fill\_prob)}
+\DoxyCodeLine{01170\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ )\ \{}
+\DoxyCodeLine{01171\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ val\ =\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(0.1*val\_dist(gen));}
+\DoxyCodeLine{01172\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01173\ }
+\DoxyCodeLine{01174\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (val\ !=\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(0.))\ \{}
+\DoxyCodeLine{01175\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_vec\_row\_indices.push\_back(\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}});}
+\DoxyCodeLine{01176\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_vec\_vals.push\_back(val);}
+\DoxyCodeLine{01177\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ++curr\_nnz;}
+\DoxyCodeLine{01178\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01179\ }
+\DoxyCodeLine{01180\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01181\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01182\ \ \ \ \ \ \ \ \ h\_col\_offsets[arg\_n\_cols]\ =\ curr\_nnz;}
+\DoxyCodeLine{01183\ }
+\DoxyCodeLine{01184\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse<TPrecision>}}\ created\_mat(arg\_cu\_handles);}
+\DoxyCodeLine{01185\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (curr\_nnz\ !=\ 0)\ \{}
+\DoxyCodeLine{01186\ \ \ \ \ \ \ \ \ \ \ \ \ created\_mat\ =\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse<TPrecision>}}(}
+\DoxyCodeLine{01187\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ arg\_cu\_handles,}
+\DoxyCodeLine{01188\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_col\_offsets,\ \&h\_vec\_row\_indices[0],\ \&h\_vec\_vals[0],}
+\DoxyCodeLine{01189\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ arg\_m\_rows,\ arg\_n\_cols,\ curr\_nnz}
+\DoxyCodeLine{01190\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{01191\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{01192\ \ \ \ \ \ \ \ \ \ \ \ \ created\_mat\ =\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse<TPrecision>}}(}
+\DoxyCodeLine{01193\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ arg\_cu\_handles,}
+\DoxyCodeLine{01194\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ arg\_m\_rows,}
+\DoxyCodeLine{01195\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ arg\_n\_cols}
+\DoxyCodeLine{01196\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{01197\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01198\ }
+\DoxyCodeLine{01199\ \ \ \ \ \ \ \ \ free(h\_col\_offsets);}
+\DoxyCodeLine{01200\ }
+\DoxyCodeLine{01201\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ created\_mat;}
+\DoxyCodeLine{01202\ }
+\DoxyCodeLine{01203\ \ \ \ \ \}}
+\DoxyCodeLine{01204\ }
+\DoxyCodeLine{01205\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Cast\_TPrecision>}
+\DoxyCodeLine{01206\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse<Cast\_TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a801f509410f4b119f8130b61a1e303c7}{cast}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{01207\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a801f509410f4b119f8130b61a1e303c7}{cast}}(\mbox{\hyperlink{structcascade_1_1_type_identity}{TypeIdentity<Cast\_TPrecision>}}());}
+\DoxyCodeLine{01208\ \ \ \ \ \}}
+\DoxyCodeLine{01209\ }
+\DoxyCodeLine{01210\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_acd2e0fe66093276d38bd30d6e3e55401}{operator*}}(}
+\DoxyCodeLine{01211\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<TPrecision>}}\ \&scalar}
+\DoxyCodeLine{01212\ \ \ \ \ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01213\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a80410aa80296a0c72b2cfb478949c5de}{operator/}}(}
+\DoxyCodeLine{01214\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<TPrecision>}}\ \&scalar}
+\DoxyCodeLine{01215\ \ \ \ \ )\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{01216\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<TPrecision>}}\ temp(scalar);}
+\DoxyCodeLine{01217\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_acd2e0fe66093276d38bd30d6e3e55401}{operator*}}(temp.\mbox{\hyperlink{classcascade_1_1_scalar_aeee85d43f02044951bfa1183cf9fdec4}{reciprocol}}());}
+\DoxyCodeLine{01218\ \ \ \ \ \}}
+\DoxyCodeLine{01219\ \ \ \ \ }
+\DoxyCodeLine{01220\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse<TPrecision>}}\ \&\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_ac8c015b939708d1c46c7f5539ce4bb9a}{operator*=}}(}
+\DoxyCodeLine{01221\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<TPrecision>}}\ \&scalar}
+\DoxyCodeLine{01222\ \ \ \ \ );}
+\DoxyCodeLine{01223\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse<TPrecision>}}\ \&\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_acb25cbddf7427e5f5e329f67c12716ed}{operator/=}}(}
+\DoxyCodeLine{01224\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<TPrecision>}}\ \&scalar}
+\DoxyCodeLine{01225\ \ \ \ \ )\ \{}
+\DoxyCodeLine{01226\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<TPrecision>}}\ temp(scalar);}
+\DoxyCodeLine{01227\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_ac8c015b939708d1c46c7f5539ce4bb9a}{operator*=}}(temp.\mbox{\hyperlink{classcascade_1_1_scalar_aeee85d43f02044951bfa1183cf9fdec4}{reciprocol}}());}
+\DoxyCodeLine{01228\ \ \ \ \ \}}
+\DoxyCodeLine{01229\ }
+\DoxyCodeLine{01230\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_aa17da4df4e2cba95f5eff53ffe6b808d}{get\_max\_mag\_elem}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{01231\ }
+\DoxyCodeLine{01232\ \ \ \ \ \ \ \ \ TPrecision\ *h\_values\ =\ \textcolor{keyword}{static\_cast<}TPrecision\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{01233\ \ \ \ \ \ \ \ \ \ \ \ \ malloc(mem\_size\_values())}
+\DoxyCodeLine{01234\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{01235\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (nnz\ >\ 0)\ \{}
+\DoxyCodeLine{01236\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaMemcpy(}
+\DoxyCodeLine{01237\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_values,}
+\DoxyCodeLine{01238\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ d\_values,}
+\DoxyCodeLine{01239\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mem\_size\_values(),}
+\DoxyCodeLine{01240\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cudaMemcpyDeviceToHost}
+\DoxyCodeLine{01241\ \ \ \ \ \ \ \ \ \ \ \ \ ));}
+\DoxyCodeLine{01242\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01243\ }
+\DoxyCodeLine{01244\ \ \ \ \ \ \ \ \ TPrecision\ max\_mag\ =\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(0);}
+\DoxyCodeLine{01245\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<nnz;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{01246\ \ \ \ \ \ \ \ \ \ \ \ \ TPrecision\ temp\ =\ \mbox{\hyperlink{namespacecascade_1_1abs__ns_ab08ce3a88268964a87b50e39d0644268}{abs\_ns::abs}}(h\_values[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]);}
+\DoxyCodeLine{01247\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (max\_mag\ <\ temp)\ \{}
+\DoxyCodeLine{01248\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ max\_mag\ =\ temp;}
+\DoxyCodeLine{01249\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01250\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01251\ }
+\DoxyCodeLine{01252\ \ \ \ \ \ \ \ \ free(h\_values);}
+\DoxyCodeLine{01253\ }
+\DoxyCodeLine{01254\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<TPrecision>}}(max\_mag);}
+\DoxyCodeLine{01255\ }
+\DoxyCodeLine{01256\ \ \ \ \ \}}
+\DoxyCodeLine{01257\ }
+\DoxyCodeLine{01258\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a2f07e12797bd592503f6479924220dd4}{normalize\_magnitude}}()\ \{}
+\DoxyCodeLine{01259\ \ \ \ \ \ \ \ \ *\textcolor{keyword}{this}\ /=\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_aa17da4df4e2cba95f5eff53ffe6b808d}{get\_max\_mag\_elem}}();}
+\DoxyCodeLine{01260\ \ \ \ \ \}}
+\DoxyCodeLine{01261\ }
+\DoxyCodeLine{01262\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a32457929412b564eabbe06ae6ad6de74}{operator*}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ \&vec)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01263\ }
+\DoxyCodeLine{01264\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_aa2901f6ce31aec8e8a14899dfd8bf69c}{transpose\_prod}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ \&vec)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01265\ }
+\DoxyCodeLine{01266\ \ \ \ \ \textcolor{comment}{//\ Use\ fact\ that\ transpose\ of\ CSR\ matrix\ is\ same\ arrays\ used\ as\ CSC}}
+\DoxyCodeLine{01267\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a3286fc11d773c5ca46300ce763262c57}{transpose}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{01268\ }
+\DoxyCodeLine{01269\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ *curr\_h\_row\_offsets\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{01270\ \ \ \ \ \ \ \ \ \ \ \ \ malloc(mem\_size\_row\_offsets())}
+\DoxyCodeLine{01271\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{01272\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ *curr\_h\_col\_indices\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{01273\ \ \ \ \ \ \ \ \ \ \ \ \ malloc(mem\_size\_col\_indices())}
+\DoxyCodeLine{01274\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{01275\ \ \ \ \ \ \ \ \ TPrecision\ *curr\_h\_values\ =\ \textcolor{keyword}{static\_cast<}TPrecision\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{01276\ \ \ \ \ \ \ \ \ \ \ \ \ malloc(mem\_size\_values())}
+\DoxyCodeLine{01277\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{01278\ }
+\DoxyCodeLine{01279\ \ \ \ \ \ \ \ \ copy\_data\_to\_csr(}
+\DoxyCodeLine{01280\ \ \ \ \ \ \ \ \ \ \ \ \ curr\_h\_row\_offsets,\ curr\_h\_col\_indices,\ curr\_h\_values,}
+\DoxyCodeLine{01281\ \ \ \ \ \ \ \ \ \ \ \ \ m\_rows,\ n\_cols,\ nnz}
+\DoxyCodeLine{01282\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{01283\ }
+\DoxyCodeLine{01284\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse<TPrecision>}}\ created\_mat(}
+\DoxyCodeLine{01285\ \ \ \ \ \ \ \ \ \ \ \ \ cu\_handles,}
+\DoxyCodeLine{01286\ \ \ \ \ \ \ \ \ \ \ \ \ curr\_h\_row\_offsets,\ curr\_h\_col\_indices,\ curr\_h\_values,}
+\DoxyCodeLine{01287\ \ \ \ \ \ \ \ \ \ \ \ \ n\_cols,\ m\_rows,\ nnz}
+\DoxyCodeLine{01288\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{01289\ }
+\DoxyCodeLine{01290\ \ \ \ \ \ \ \ \ free(curr\_h\_row\_offsets);}
+\DoxyCodeLine{01291\ \ \ \ \ \ \ \ \ free(curr\_h\_col\_indices);}
+\DoxyCodeLine{01292\ \ \ \ \ \ \ \ \ free(curr\_h\_values);}
+\DoxyCodeLine{01293\ }
+\DoxyCodeLine{01294\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ created\_mat;}
+\DoxyCodeLine{01295\ }
+\DoxyCodeLine{01296\ \ \ \ \ \}}
+\DoxyCodeLine{01297\ }
+\DoxyCodeLine{01298\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_ad4db4e239bb74a62504f60728c0f445b}{get\_has\_fast\_trsv}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{01299\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ !(}
+\DoxyCodeLine{01300\ \ \ \ \ \ \ \ \ \ \ \ \ trsv\_level\_set\_cnt.empty()\ ||}
+\DoxyCodeLine{01301\ \ \ \ \ \ \ \ \ \ \ \ \ trsv\_level\_set\_ptrs.empty()}
+\DoxyCodeLine{01302\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{01303\ \ \ \ \ \}}
+\DoxyCodeLine{01304\ }
+\DoxyCodeLine{01305\ \ \ \ \ \textcolor{comment}{//\ Get\ count\ of\ things\ that\ can\ be\ solved\ before\ needing\ to\ wait\ for}}
+\DoxyCodeLine{01306\ \ \ \ \ \textcolor{comment}{//\ components\ in\ block\ to\ be\ solved}}
+\DoxyCodeLine{01307\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_ad29f4c22db3043f849592ee13b71c0ca}{preprocess\_trsv}}(\textcolor{keywordtype}{bool}\ is\_upptri);}
+\DoxyCodeLine{01308\ }
+\DoxyCodeLine{01309\ \ \ \ \ \textcolor{comment}{//\ Allow\ deletion\ of\ preprocess\ for\ testing}}
+\DoxyCodeLine{01310\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_ab6cb00c13703d4f2796776b8fa864992}{clear\_preprocess\_trsv}}()\ \{\ delete\_trsv\_preprocess();\ \}}
+\DoxyCodeLine{01311\ }
+\DoxyCodeLine{01312\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_acb4b94de1fca1cc3f10fdfc3b3141048}{back\_sub}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ \&arg\_rhs)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01313\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a61f10b38e190f7e3bf38f9efd5f484a6}{frwd\_sub}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ \&arg\_rhs)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01314\ }
+\DoxyCodeLine{01315\ \ \ \ \ \textcolor{comment}{/*\ Nested\ lightweight\ wrapper\ class\ representing\ matrix\ column\ and}}
+\DoxyCodeLine{01316\ \textcolor{comment}{\ \ \ \ \ \ \ assignment/elem\ access}}
+\DoxyCodeLine{01317\ \textcolor{comment}{\ \ \ \ \ \ \ Requires:\ cast\ to\ Vector<TPrecision>\ */}}
+\DoxyCodeLine{01318\ \ \ \ \ \textcolor{keyword}{class\ }Col}
+\DoxyCodeLine{01319\ \ \ \ \ \{}
+\DoxyCodeLine{01320\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{01321\ }
+\DoxyCodeLine{01322\ \ \ \ \ \ \ \ \ \textcolor{keyword}{friend}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse<TPrecision>}};}
+\DoxyCodeLine{01323\ }
+\DoxyCodeLine{01324\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ m\_rows;}
+\DoxyCodeLine{01325\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ col\_idx;}
+\DoxyCodeLine{01326\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse<TPrecision>}}\ *associated\_mat\_ptr;}
+\DoxyCodeLine{01327\ }
+\DoxyCodeLine{01328\ \ \ \ \ \ \ \ \ Col(}
+\DoxyCodeLine{01329\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse<TPrecision>}}\ *arg\_associated\_mat\_ptr,}
+\DoxyCodeLine{01330\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ arg\_col\_idx}
+\DoxyCodeLine{01331\ \ \ \ \ \ \ \ \ ):}
+\DoxyCodeLine{01332\ \ \ \ \ \ \ \ \ \ \ \ \ associated\_mat\_ptr(arg\_associated\_mat\_ptr),}
+\DoxyCodeLine{01333\ \ \ \ \ \ \ \ \ \ \ \ \ col\_idx(arg\_col\_idx),}
+\DoxyCodeLine{01334\ \ \ \ \ \ \ \ \ \ \ \ \ m\_rows(arg\_associated\_mat\_ptr-\/>m\_rows)}
+\DoxyCodeLine{01335\ \ \ \ \ \ \ \ \ \{\}}
+\DoxyCodeLine{01336\ }
+\DoxyCodeLine{01337\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{01338\ }
+\DoxyCodeLine{01339\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_1_1_col_ab5c2da878393e52065d5a38e93603a47}{Col}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_1_1_col}{NoFillMatrixSparse<TPrecision>::Col}}\ \&other):}
+\DoxyCodeLine{01340\ \ \ \ \ \ \ \ \ \ \ \ \ Col(other.associated\_mat\_ptr,\ other.col\_idx)}
+\DoxyCodeLine{01341\ \ \ \ \ \ \ \ \ \{\}}
+\DoxyCodeLine{01342\ }
+\DoxyCodeLine{01343\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_1_1_col_af250298fc19ae826b4585b48d2700747}{get\_elem}}(\textcolor{keywordtype}{int}\ arg\_row)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{01344\ }
+\DoxyCodeLine{01345\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((arg\_row\ <\ 0)\ ||\ (arg\_row\ >=\ m\_rows))\ \{}
+\DoxyCodeLine{01346\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{01347\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}NoFillMatrixSparse::Col:\ invalid\ row\ access\ in\ get\_elem"{}}}
+\DoxyCodeLine{01348\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{01349\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01350\ }
+\DoxyCodeLine{01351\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ associated\_mat\_ptr-\/>get\_elem(arg\_row,\ col\_idx);}
+\DoxyCodeLine{01352\ }
+\DoxyCodeLine{01353\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01354\ }
+\DoxyCodeLine{01355\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_1_1_col_a59dc35abc4927aa5d5f6d4657ba15b8e}{copy\_to\_vec}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{01356\ }
+\DoxyCodeLine{01357\ \ \ \ \ \ \ \ \ \ \ \ \ TPrecision\ *h\_vec\ =\ \textcolor{keyword}{static\_cast<}TPrecision*\textcolor{keyword}{>}(}
+\DoxyCodeLine{01358\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ malloc(m\_rows*\textcolor{keyword}{sizeof}(TPrecision))}
+\DoxyCodeLine{01359\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{01360\ }
+\DoxyCodeLine{01361\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<m\_rows;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{01362\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_vec[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ =\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_1_1_col_af250298fc19ae826b4585b48d2700747}{get\_elem}}(\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}).get\_scalar();}
+\DoxyCodeLine{01363\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01364\ }
+\DoxyCodeLine{01365\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ created\_vec(}
+\DoxyCodeLine{01366\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ associated\_mat\_ptr-\/>cu\_handles,\ h\_vec,\ m\_rows}
+\DoxyCodeLine{01367\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{01368\ }
+\DoxyCodeLine{01369\ \ \ \ \ \ \ \ \ \ \ \ \ free(h\_vec);}
+\DoxyCodeLine{01370\ }
+\DoxyCodeLine{01371\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ created\_vec;}
+\DoxyCodeLine{01372\ }
+\DoxyCodeLine{01373\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01374\ }
+\DoxyCodeLine{01375\ \ \ \ \ \};}
+\DoxyCodeLine{01376\ }
+\DoxyCodeLine{01377\ \ \ \ \ \textcolor{comment}{/*\ Nested\ lightweight\ wrapper\ class\ representing\ matrix\ block\ and\ elem}}
+\DoxyCodeLine{01378\ \textcolor{comment}{\ \ \ \ \ \ \ access}}
+\DoxyCodeLine{01379\ \textcolor{comment}{\ \ \ \ \ \ \ Requires:\ cast\ to\ MatrixDense<T>\ */}}
+\DoxyCodeLine{01380\ \ \ \ \ \textcolor{keyword}{class\ }Block}
+\DoxyCodeLine{01381\ \ \ \ \ \{}
+\DoxyCodeLine{01382\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{01383\ }
+\DoxyCodeLine{01384\ \ \ \ \ \ \ \ \ \textcolor{keyword}{friend}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse<TPrecision>}};}
+\DoxyCodeLine{01385\ }
+\DoxyCodeLine{01386\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ row\_idx\_start;}
+\DoxyCodeLine{01387\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ col\_idx\_start;}
+\DoxyCodeLine{01388\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ m\_rows;}
+\DoxyCodeLine{01389\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ n\_cols;}
+\DoxyCodeLine{01390\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse<TPrecision>}}\ *associated\_mat\_ptr;}
+\DoxyCodeLine{01391\ }
+\DoxyCodeLine{01392\ \ \ \ \ \ \ \ \ Block(}
+\DoxyCodeLine{01393\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse<TPrecision>}}\ *arg\_associated\_mat\_ptr,}
+\DoxyCodeLine{01394\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ arg\_row\_idx\_start,\ \textcolor{keywordtype}{int}\ arg\_col\_idx\_start,}
+\DoxyCodeLine{01395\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ arg\_m\_rows,\ \textcolor{keywordtype}{int}\ arg\_n\_cols}
+\DoxyCodeLine{01396\ \ \ \ \ \ \ \ \ ):}
+\DoxyCodeLine{01397\ \ \ \ \ \ \ \ \ \ \ \ \ associated\_mat\_ptr(arg\_associated\_mat\_ptr),}
+\DoxyCodeLine{01398\ \ \ \ \ \ \ \ \ \ \ \ \ row\_idx\_start(arg\_row\_idx\_start),\ col\_idx\_start(arg\_col\_idx\_start),}
+\DoxyCodeLine{01399\ \ \ \ \ \ \ \ \ \ \ \ \ m\_rows(arg\_m\_rows),\ n\_cols(arg\_n\_cols)}
+\DoxyCodeLine{01400\ \ \ \ \ \ \ \ \ \{\}}
+\DoxyCodeLine{01401\ \ \ \ \ }
+\DoxyCodeLine{01402\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{01403\ }
+\DoxyCodeLine{01404\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_1_1_block_acf9b1ea5af21dd945f3f0961fbd64abb}{Block}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_1_1_block}{NoFillMatrixSparse<TPrecision>::Block}}\ \&other):}
+\DoxyCodeLine{01405\ \ \ \ \ \ \ \ \ \ \ \ \ Block(}
+\DoxyCodeLine{01406\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ other.associated\_mat\_ptr,}
+\DoxyCodeLine{01407\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ other.row\_idx\_start,\ other.col\_idx\_start,}
+\DoxyCodeLine{01408\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ other.m\_rows,\ other.n\_cols}
+\DoxyCodeLine{01409\ \ \ \ \ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{01410\ \ \ \ \ \ \ \ \ \{\}}
+\DoxyCodeLine{01411\ }
+\DoxyCodeLine{01412\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{MatrixDense<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_1_1_block_a0bd9b0f90faf8c035a30846eacbfdd47}{copy\_to\_mat}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{01413\ }
+\DoxyCodeLine{01414\ \ \ \ \ \ \ \ \ \ \ \ \ TPrecision\ *h\_mat\ =\ \textcolor{keyword}{static\_cast<}TPrecision\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{01415\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ malloc(m\_rows*n\_cols*\textcolor{keyword}{sizeof}(TPrecision))}
+\DoxyCodeLine{01416\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{01417\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<m\_rows*n\_cols;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{01418\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_mat[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ =\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(0.);}
+\DoxyCodeLine{01419\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01420\ }
+\DoxyCodeLine{01421\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ *h\_col\_offsets\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{01422\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ malloc((associated\_mat\_ptr-\/>n\_cols+1)*\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}))}
+\DoxyCodeLine{01423\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{01424\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ *h\_row\_indices\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{01425\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ malloc(associated\_mat\_ptr-\/>nnz*\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}))}
+\DoxyCodeLine{01426\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{01427\ \ \ \ \ \ \ \ \ \ \ \ \ TPrecision\ *h\_vals\ =\ \textcolor{keyword}{static\_cast<}TPrecision\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{01428\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ malloc(associated\_mat\_ptr-\/>nnz*\textcolor{keyword}{sizeof}(TPrecision))}
+\DoxyCodeLine{01429\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{01430\ \ \ \ \ \ \ \ \ \ \ \ \ associated\_mat\_ptr-\/>copy\_data\_to\_ptr(}
+\DoxyCodeLine{01431\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_col\_offsets,}
+\DoxyCodeLine{01432\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_row\_indices,}
+\DoxyCodeLine{01433\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_vals,}
+\DoxyCodeLine{01434\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ associated\_mat\_ptr-\/>m\_rows,}
+\DoxyCodeLine{01435\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ associated\_mat\_ptr-\/>n\_cols,}
+\DoxyCodeLine{01436\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ associated\_mat\_ptr-\/>nnz}
+\DoxyCodeLine{01437\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{01438\ }
+\DoxyCodeLine{01439\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Copy\ column\ by\ column\ 1D\ slices\ relevant\ to\ matrix}}
+\DoxyCodeLine{01440\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ j=0;\ j<n\_cols;\ ++j)\ \{}
+\DoxyCodeLine{01441\ }
+\DoxyCodeLine{01442\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ Get\ offsets\ of\ row\ indices/values\ for\ corresponding\ offseted}}
+\DoxyCodeLine{01443\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ column\ of\ block\ */}}
+\DoxyCodeLine{01444\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ col\_offset\_L\ =\ h\_col\_offsets[col\_idx\_start\ +\ j];}
+\DoxyCodeLine{01445\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ col\_offset\_R\ =\ h\_col\_offsets[col\_idx\_start\ +\ j\ +\ 1];}
+\DoxyCodeLine{01446\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ col\_size\_nnz\ =\ col\_offset\_R-\/col\_offset\_L;}
+\DoxyCodeLine{01447\ }
+\DoxyCodeLine{01448\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Load\ values\ into\ h\_mat\ if\ they\ are\ within\ the\ block\ rows}}
+\DoxyCodeLine{01449\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ cand\_row\_ind;}
+\DoxyCodeLine{01450\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<col\_size\_nnz;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{01451\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cand\_row\_ind\ =\ h\_row\_indices[col\_offset\_L+\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}];}
+\DoxyCodeLine{01452\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (}
+\DoxyCodeLine{01453\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (row\_idx\_start\ <=\ cand\_row\_ind)\ \&\&}
+\DoxyCodeLine{01454\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (cand\_row\_ind\ <\ row\_idx\_start\ +\ m\_rows)}
+\DoxyCodeLine{01455\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ )\ \{}
+\DoxyCodeLine{01456\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_mat[(cand\_row\_ind-\/row\_idx\_start)+j*m\_rows]\ =\ (}
+\DoxyCodeLine{01457\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_vals[col\_offset\_L+\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]}
+\DoxyCodeLine{01458\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{01459\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01460\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01461\ }
+\DoxyCodeLine{01462\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01463\ }
+\DoxyCodeLine{01464\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{MatrixDense<TPrecision>}}\ created\_mat(}
+\DoxyCodeLine{01465\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ associated\_mat\_ptr-\/>cu\_handles,}
+\DoxyCodeLine{01466\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_mat,}
+\DoxyCodeLine{01467\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_rows,}
+\DoxyCodeLine{01468\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ n\_cols}
+\DoxyCodeLine{01469\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{01470\ }
+\DoxyCodeLine{01471\ \ \ \ \ \ \ \ \ \ \ \ \ free(h\_mat);}
+\DoxyCodeLine{01472\ \ \ \ \ \ \ \ \ \ \ \ \ free(h\_col\_offsets);}
+\DoxyCodeLine{01473\ \ \ \ \ \ \ \ \ \ \ \ \ free(h\_row\_indices);}
+\DoxyCodeLine{01474\ \ \ \ \ \ \ \ \ \ \ \ \ free(h\_vals);}
+\DoxyCodeLine{01475\ }
+\DoxyCodeLine{01476\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ created\_mat;}
+\DoxyCodeLine{01477\ }
+\DoxyCodeLine{01478\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01479\ }
+\DoxyCodeLine{01480\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_1_1_block_acc625f6dc28cdc7ad7ada537305ca946}{get\_elem}}(\textcolor{keywordtype}{int}\ row,\ \textcolor{keywordtype}{int}\ col)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{01481\ }
+\DoxyCodeLine{01482\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((row\ <\ 0)\ ||\ (row\ >=\ m\_rows))\ \{}
+\DoxyCodeLine{01483\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{01484\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}NoFillMatrixSparse::Block:\ invalid\ row\ access\ in\ get\_elem"{}}}
+\DoxyCodeLine{01485\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{01486\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01487\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((col\ <\ 0)\ ||\ (col\ >=\ n\_cols))\ \{}
+\DoxyCodeLine{01488\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{01489\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}NoFillMatrixSparse::Block:\ invalid\ col\ access\ in\ get\_elem"{}}}
+\DoxyCodeLine{01490\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{01491\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01492\ }
+\DoxyCodeLine{01493\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ associated\_mat\_ptr-\/>get\_elem(}
+\DoxyCodeLine{01494\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ row\_idx\_start+row,\ col\_idx\_start+col}
+\DoxyCodeLine{01495\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{01496\ }
+\DoxyCodeLine{01497\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01498\ }
+\DoxyCodeLine{01499\ \ \ \ \ \};}
+\DoxyCodeLine{01500\ }
+\DoxyCodeLine{01501\ \};}
+\DoxyCodeLine{01502\ }
+\DoxyCodeLine{01503\ \}}
+\DoxyCodeLine{01504\ }
+\DoxyCodeLine{01505\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

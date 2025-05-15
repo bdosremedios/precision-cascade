@@ -1,0 +1,27 @@
+var searchData=
+[
+  ['saddle_0',['saddle',['../create__solve__matrices_8m.html#afb0b31d116785ef6c93fc5530735192f',1,'create_solve_matrices.m']]],
+  ['save_5fdir_1',['save_dir',['../convert__mat__to___c_s_v_8m.html#a13add80719a6702ceb6fef9d0d670f6e',1,'convert_mat_to_CSV.m']]],
+  ['sd_5fvp_5fids_2',['sd_vp_ids',['../classutils__experimentation_1_1_solver_format_info.html#a4ee8f7dc75539f4feefb9d9bc3e97d36',1,'utils_experimentation::SolverFormatInfo']]],
+  ['set_5fphase_5fto_5fuse_3',['set_phase_to_use',['../class_v_p___g_m_r_e_s___i_r___solve___testing_mock.html#af7867485477a430724efe777d02b821d',1,'VP_GMRES_IR_Solve_TestingMock']]],
+  ['sgl_5fdbl_5fcascade_5fchange_4',['sgl_dbl_cascade_change',['../classcascade_1_1_v_p___g_m_r_e_s___i_r___solve.html#ae97834504cd8bc2c1825aae0558d5c49',1,'cascade::VP_GMRES_IR_Solve']]],
+  ['sgl_5fgen_5fargs_5',['sgl_gen_args',['../class_p_g_m_r_e_s___solve___test.html#abea06df519ea7f71c0e909446e1e0bb3',1,'PGMRES_Solve_Test']]],
+  ['sgl_5fgmres_5fir_5fargs_6',['sgl_GMRES_IR_args',['../class_f_p___g_m_r_e_s___i_r___test.html#a254f19e15644f0953208c0ba8f166aea',1,'FP_GMRES_IR_Test::sgl_GMRES_IR_args'],['../class_preconditioned___f_p___g_m_r_e_s___i_r___test.html#a7e580f7209aa039bc6080091d474c996',1,'Preconditioned_FP_GMRES_IR_Test::sgl_GMRES_IR_args']]],
+  ['sgl_5fiters_7',['sgl_iters',['../classcascade_1_1_outer_restart_count.html#a1526ef5ebe62181af5edd072178d1f25',1,'cascade::OuterRestartCount']]],
+  ['sgl_5fmanual_5fargs_8',['sgl_manual_args',['../class_p_g_m_r_e_s___solve___test.html#a087673f77ceee6a325f312cc595a1161',1,'PGMRES_Solve_Test']]],
+  ['sgl_5fphase_9',['SGL_PHASE',['../classcascade_1_1_v_p___g_m_r_e_s___i_r___solve.html#ad4090349f648e6d9c1e974be5a39de60',1,'cascade::VP_GMRES_IR_Solve']]],
+  ['show_5fplots_10',['show_plots',['../class_test_base.html#a6179ef066e2e309121d220ac54bb5bf0',1,'TestBase']]],
+  ['single_5fprecise_11',['single_precise',['../create__read__matrices_8m.html#a7dcbbea2364e1f5f730fb05ef869042a',1,'create_read_matrices.m']]],
+  ['soln_12',['soln',['../class_typed_iterative_solve_testing_mock.html#a3e3ea086483f2c361687806c704d0f09',1,'TypedIterativeSolveTestingMock']]],
+  ['soln_5faddition_13',['soln_addition',['../class_inner_outer_solve___mock.html#a6dc0fa49070c478b140e0965b2ae31af',1,'InnerOuterSolve_Mock::soln_addition'],['../class_iterative_refinement_base___mock.html#a7c24605beab1dc2c9bb91e4427a8b268',1,'IterativeRefinementBase_Mock::soln_addition']]],
+  ['solve_5fargs_14',['solve_args',['../class_preconditioned___v_p___g_m_r_e_s___i_r___test.html#abdea86f702e041432c001050045d8b6e',1,'Preconditioned_VP_GMRES_IR_Test']]],
+  ['solve_5fgroups_15',['solve_groups',['../struct_experiment___spec.html#aa96ffbb31aed0149d3398d3c07972d7d',1,'Experiment_Spec']]],
+  ['solve_5fmatrix_5fdir_16',['solve_matrix_dir',['../class_test_base.html#a69f61918fdc50d7db89ca81b1c4d5258',1,'TestBase']]],
+  ['solver_5fargs_17',['solver_args',['../struct_solve___group.html#a20f3c45ccfd54b25ffba473f2753c7de',1,'Solve_Group']]],
+  ['solver_5fcolor_5ffmt_5fdict_18',['solver_color_fmt_dict',['../classutils__experimentation_1_1_solver_format_info.html#ac9bd9bad65360c5405cd95667ac7b245',1,'utils_experimentation::SolverFormatInfo']]],
+  ['solver_5fptr_19',['solver_ptr',['../struct_solve___data.html#ad73d00a6001bbd6966e8864182ef678f',1,'Solve_Data']]],
+  ['solvers_5fto_5fuse_20',['solvers_to_use',['../struct_solve___group.html#a32f39a972fb82ea90955516b7c8ed214',1,'Solve_Group']]],
+  ['sparse_5fdims_21',['sparse_dims',['../class_benchmark_base.html#a1a0864766c6cce696135d84a03701c14',1,'BenchmarkBase']]],
+  ['square1_22',['square1',['../create__read__matrices_8m.html#a79e104517f3a5fccbfde23cca5e57d1c',1,'create_read_matrices.m']]],
+  ['square2_23',['square2',['../create__read__matrices_8m.html#a0220a719bf06fb52ca6ad5a09f8ce8ad',1,'create_read_matrices.m']]]
+];

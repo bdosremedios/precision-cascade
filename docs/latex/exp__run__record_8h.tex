@@ -1,0 +1,87 @@
+\doxysection{C\+:/\+Users/dosre/dev/precision-\/cascade/experimentation/include/exp\+\_\+run/exp\+\_\+run\+\_\+record.h File Reference}
+\hypertarget{exp__run__record_8h}{}\label{exp__run__record_8h}\index{C:/Users/dosre/dev/precision-\/cascade/experimentation/include/exp\_run/exp\_run\_record.h@{C:/Users/dosre/dev/precision-\/cascade/experimentation/include/exp\_run/exp\_run\_record.h}}
+{\ttfamily \#include "{}exp\+\_\+read/exp\+\_\+read.\+h"{}}\newline
+{\ttfamily \#include "{}exp\+\_\+data/exp\+\_\+data.\+h"{}}\newline
+{\ttfamily \#include "{}exp\+\_\+tools/exp\+\_\+tools.\+h"{}}\newline
+{\ttfamily \#include "{}exp\+\_\+generate\+\_\+data.\+h"{}}\newline
+{\ttfamily \#include "{}tools/cu\+Handle\+Bundle.\+h"{}}\newline
+{\ttfamily \#include "{}solvers/\+Iterative\+Solve.\+h"{}}\newline
+{\ttfamily \#include "{}solvers/nested/\+GMRES\+\_\+\+IR/\+VP\+\_\+\+GMRES\+\_\+\+IR.\+h"{}}\newline
+{\ttfamily \#include "{}solvers/nested/\+GMRES\+\_\+\+IR/\+FP\+\_\+\+GMRES\+\_\+\+IR.\+h"{}}\newline
+{\ttfamily \#include $<$cmath$>$}\newline
+{\ttfamily \#include $<$filesystem$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+Include dependency graph for exp\+\_\+run\+\_\+record.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{exp__run__record_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{exp__run__record_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{exp__run__record_8h_ac0ad2ebbc468f7a9f3553a491e8fb7a9}{create\+\_\+directory\+\_\+if\+\_\+nexists}} (fs\+::path dir, \mbox{\hyperlink{class_experiment___log}{Experiment\+\_\+\+Log}} logger)
+\item 
+{\footnotesize template$<$template$<$ typename $>$ typename TMatrix$>$ }\\void \mbox{\hyperlink{exp__run__record_8h_a1a6af6fca8d95b7703273f6c93d7ae8c}{run\+\_\+record\+\_\+fpgmres\+\_\+solve}} (std\+::string solver\+\_\+id, const \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{cascade\+::\+Generic\+Linear\+System}}$<$ TMatrix $>$ \&gen\+\_\+lin\+\_\+sys, \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{cascade\+::\+Solve\+Arg\+Pkg}} solve\+\_\+arg\+\_\+pkg, \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{cascade\+::\+Precond\+Arg\+Pkg}}$<$ TMatrix, double $>$ precond\+\_\+arg\+\_\+pkg\+\_\+dbl, fs\+::path output\+\_\+data\+\_\+dir, \mbox{\hyperlink{class_experiment___log}{Experiment\+\_\+\+Log}} logger)
+\item 
+{\footnotesize template$<$template$<$ typename $>$ typename TMatrix$>$ }\\void \mbox{\hyperlink{exp__run__record_8h_a7197cc4cf77e6c89b30368932edf50f0}{run\+\_\+record\+\_\+vpgmres\+\_\+solve}} (std\+::string solver\+\_\+id, const \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{cascade\+::\+Generic\+Linear\+System}}$<$ TMatrix $>$ \&gen\+\_\+lin\+\_\+sys, \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{cascade\+::\+Solve\+Arg\+Pkg}} solve\+\_\+arg\+\_\+pkg, \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{cascade\+::\+Precond\+Arg\+Pkg}}$<$ TMatrix, double $>$ precond\+\_\+arg\+\_\+pkg\+\_\+dbl, fs\+::path output\+\_\+data\+\_\+dir, \mbox{\hyperlink{class_experiment___log}{Experiment\+\_\+\+Log}} logger)
+\item 
+{\footnotesize template$<$template$<$ typename $>$ typename TMatrix$>$ }\\void \mbox{\hyperlink{exp__run__record_8h_a199751f0ff87b39aba16b9b5ef54ca8d}{run\+\_\+record\+\_\+solversuite\+\_\+experiment}} (const \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{cascade\+::\+Generic\+Linear\+System}}$<$ TMatrix $>$ \&gen\+\_\+lin\+\_\+sys, \mbox{\hyperlink{struct_solve___group}{Solve\+\_\+\+Group}} solve\+\_\+group, fs\+::path output\+\_\+data\+\_\+dir, \mbox{\hyperlink{class_experiment___log}{Experiment\+\_\+\+Log}} logger)
+\item 
+{\footnotesize template$<$template$<$ typename $>$ typename TMatrix$>$ }\\void \mbox{\hyperlink{exp__run__record_8h_ad60f56a8949ff99f9ef26562b44fb7a4}{run\+\_\+record\+\_\+solve\+\_\+group}} (const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cascade\+::cu\+Handle\+Bundle}} \&cu\+\_\+handles, \mbox{\hyperlink{struct_solve___group}{Solve\+\_\+\+Group}} solve\+\_\+group, fs\+::path matrix\+\_\+data\+\_\+dir, fs\+::path output\+\_\+data\+\_\+dir, \mbox{\hyperlink{class_experiment___log}{Experiment\+\_\+\+Log}} outer\+\_\+logger)
+\item 
+void \mbox{\hyperlink{exp__run__record_8h_a625212fbebb3b3a5b662f3a8dd4dea63}{run\+\_\+record\+\_\+experimental\+\_\+spec}} (const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cascade\+::cu\+Handle\+Bundle}} \&cu\+\_\+handles, \mbox{\hyperlink{struct_experiment___spec}{Experiment\+\_\+\+Spec}} exp\+\_\+spec, fs\+::path matrix\+\_\+data\+\_\+dir, fs\+::path output\+\_\+data\+\_\+dir, \mbox{\hyperlink{class_experiment___log}{Experiment\+\_\+\+Log}} logger)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{exp__run__record_8h_ac0ad2ebbc468f7a9f3553a491e8fb7a9}\index{exp\_run\_record.h@{exp\_run\_record.h}!create\_directory\_if\_nexists@{create\_directory\_if\_nexists}}
+\index{create\_directory\_if\_nexists@{create\_directory\_if\_nexists}!exp\_run\_record.h@{exp\_run\_record.h}}
+\doxysubsubsection{\texorpdfstring{create\_directory\_if\_nexists()}{create\_directory\_if\_nexists()}}
+{\footnotesize\ttfamily \label{exp__run__record_8h_ac0ad2ebbc468f7a9f3553a491e8fb7a9} 
+void create\+\_\+directory\+\_\+if\+\_\+nexists (\begin{DoxyParamCaption}\item[{fs\+::path}]{dir}{, }\item[{\mbox{\hyperlink{class_experiment___log}{Experiment\+\_\+\+Log}}}]{logger}{}\end{DoxyParamCaption})}
+
+\Hypertarget{exp__run__record_8h_a625212fbebb3b3a5b662f3a8dd4dea63}\index{exp\_run\_record.h@{exp\_run\_record.h}!run\_record\_experimental\_spec@{run\_record\_experimental\_spec}}
+\index{run\_record\_experimental\_spec@{run\_record\_experimental\_spec}!exp\_run\_record.h@{exp\_run\_record.h}}
+\doxysubsubsection{\texorpdfstring{run\_record\_experimental\_spec()}{run\_record\_experimental\_spec()}}
+{\footnotesize\ttfamily \label{exp__run__record_8h_a625212fbebb3b3a5b662f3a8dd4dea63} 
+void run\+\_\+record\+\_\+experimental\+\_\+spec (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cascade\+::cu\+Handle\+Bundle}} \&}]{cu\+\_\+handles}{, }\item[{\mbox{\hyperlink{struct_experiment___spec}{Experiment\+\_\+\+Spec}}}]{exp\+\_\+spec}{, }\item[{fs\+::path}]{matrix\+\_\+data\+\_\+dir}{, }\item[{fs\+::path}]{output\+\_\+data\+\_\+dir}{, }\item[{\mbox{\hyperlink{class_experiment___log}{Experiment\+\_\+\+Log}}}]{logger}{}\end{DoxyParamCaption})}
+
+\Hypertarget{exp__run__record_8h_a1a6af6fca8d95b7703273f6c93d7ae8c}\index{exp\_run\_record.h@{exp\_run\_record.h}!run\_record\_fpgmres\_solve@{run\_record\_fpgmres\_solve}}
+\index{run\_record\_fpgmres\_solve@{run\_record\_fpgmres\_solve}!exp\_run\_record.h@{exp\_run\_record.h}}
+\doxysubsubsection{\texorpdfstring{run\_record\_fpgmres\_solve()}{run\_record\_fpgmres\_solve()}}
+{\footnotesize\ttfamily \label{exp__run__record_8h_a1a6af6fca8d95b7703273f6c93d7ae8c} 
+template$<$template$<$ typename $>$ typename TMatrix$>$ \\
+void run\+\_\+record\+\_\+fpgmres\+\_\+solve (\begin{DoxyParamCaption}\item[{std\+::string}]{solver\+\_\+id}{, }\item[{const \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{cascade\+::\+Generic\+Linear\+System}}$<$ TMatrix $>$ \&}]{gen\+\_\+lin\+\_\+sys}{, }\item[{\mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{cascade\+::\+Solve\+Arg\+Pkg}}}]{solve\+\_\+arg\+\_\+pkg}{, }\item[{\mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{cascade\+::\+Precond\+Arg\+Pkg}}$<$ TMatrix, double $>$}]{precond\+\_\+arg\+\_\+pkg\+\_\+dbl}{, }\item[{fs\+::path}]{output\+\_\+data\+\_\+dir}{, }\item[{\mbox{\hyperlink{class_experiment___log}{Experiment\+\_\+\+Log}}}]{logger}{}\end{DoxyParamCaption})}
+
+\Hypertarget{exp__run__record_8h_ad60f56a8949ff99f9ef26562b44fb7a4}\index{exp\_run\_record.h@{exp\_run\_record.h}!run\_record\_solve\_group@{run\_record\_solve\_group}}
+\index{run\_record\_solve\_group@{run\_record\_solve\_group}!exp\_run\_record.h@{exp\_run\_record.h}}
+\doxysubsubsection{\texorpdfstring{run\_record\_solve\_group()}{run\_record\_solve\_group()}}
+{\footnotesize\ttfamily \label{exp__run__record_8h_ad60f56a8949ff99f9ef26562b44fb7a4} 
+template$<$template$<$ typename $>$ typename TMatrix$>$ \\
+void run\+\_\+record\+\_\+solve\+\_\+group (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cascade\+::cu\+Handle\+Bundle}} \&}]{cu\+\_\+handles}{, }\item[{\mbox{\hyperlink{struct_solve___group}{Solve\+\_\+\+Group}}}]{solve\+\_\+group}{, }\item[{fs\+::path}]{matrix\+\_\+data\+\_\+dir}{, }\item[{fs\+::path}]{output\+\_\+data\+\_\+dir}{, }\item[{\mbox{\hyperlink{class_experiment___log}{Experiment\+\_\+\+Log}}}]{outer\+\_\+logger}{}\end{DoxyParamCaption})}
+
+\Hypertarget{exp__run__record_8h_a199751f0ff87b39aba16b9b5ef54ca8d}\index{exp\_run\_record.h@{exp\_run\_record.h}!run\_record\_solversuite\_experiment@{run\_record\_solversuite\_experiment}}
+\index{run\_record\_solversuite\_experiment@{run\_record\_solversuite\_experiment}!exp\_run\_record.h@{exp\_run\_record.h}}
+\doxysubsubsection{\texorpdfstring{run\_record\_solversuite\_experiment()}{run\_record\_solversuite\_experiment()}}
+{\footnotesize\ttfamily \label{exp__run__record_8h_a199751f0ff87b39aba16b9b5ef54ca8d} 
+template$<$template$<$ typename $>$ typename TMatrix$>$ \\
+void run\+\_\+record\+\_\+solversuite\+\_\+experiment (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{cascade\+::\+Generic\+Linear\+System}}$<$ TMatrix $>$ \&}]{gen\+\_\+lin\+\_\+sys}{, }\item[{\mbox{\hyperlink{struct_solve___group}{Solve\+\_\+\+Group}}}]{solve\+\_\+group}{, }\item[{fs\+::path}]{output\+\_\+data\+\_\+dir}{, }\item[{\mbox{\hyperlink{class_experiment___log}{Experiment\+\_\+\+Log}}}]{logger}{}\end{DoxyParamCaption})}
+
+\Hypertarget{exp__run__record_8h_a7197cc4cf77e6c89b30368932edf50f0}\index{exp\_run\_record.h@{exp\_run\_record.h}!run\_record\_vpgmres\_solve@{run\_record\_vpgmres\_solve}}
+\index{run\_record\_vpgmres\_solve@{run\_record\_vpgmres\_solve}!exp\_run\_record.h@{exp\_run\_record.h}}
+\doxysubsubsection{\texorpdfstring{run\_record\_vpgmres\_solve()}{run\_record\_vpgmres\_solve()}}
+{\footnotesize\ttfamily \label{exp__run__record_8h_a7197cc4cf77e6c89b30368932edf50f0} 
+template$<$template$<$ typename $>$ typename TMatrix$>$ \\
+void run\+\_\+record\+\_\+vpgmres\+\_\+solve (\begin{DoxyParamCaption}\item[{std\+::string}]{solver\+\_\+id}{, }\item[{const \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{cascade\+::\+Generic\+Linear\+System}}$<$ TMatrix $>$ \&}]{gen\+\_\+lin\+\_\+sys}{, }\item[{\mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{cascade\+::\+Solve\+Arg\+Pkg}}}]{solve\+\_\+arg\+\_\+pkg}{, }\item[{\mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{cascade\+::\+Precond\+Arg\+Pkg}}$<$ TMatrix, double $>$}]{precond\+\_\+arg\+\_\+pkg\+\_\+dbl}{, }\item[{fs\+::path}]{output\+\_\+data\+\_\+dir}{, }\item[{\mbox{\hyperlink{class_experiment___log}{Experiment\+\_\+\+Log}}}]{logger}{}\end{DoxyParamCaption})}
+

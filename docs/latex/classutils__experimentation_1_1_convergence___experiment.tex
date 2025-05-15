@@ -1,0 +1,188 @@
+\doxysection{utils\+\_\+experimentation.\+Convergence\+\_\+\+Experiment Class Reference}
+\hypertarget{classutils__experimentation_1_1_convergence___experiment}{}\label{classutils__experimentation_1_1_convergence___experiment}\index{utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classutils__experimentation_1_1_convergence___experiment_aebb345afe244c32ccde593e2353d7542}{\+\_\+\+\_\+init\+\_\+\+\_\+}} (self, str solver, List\mbox{[}str\mbox{]} file\+\_\+paths)
+\item 
+\mbox{\hyperlink{classutils__experimentation_1_1_convergence___experiment_a9cb672238f88f19b3bd58e44140dbdd8}{plot\+\_\+convergence\+\_\+data}} (self, plt.\+Axes ax)
+\item 
+\mbox{\hyperlink{classutils__experimentation_1_1_convergence___experiment_ae6b7f560526a648a4a2f30bdf8fe499a}{plot\+\_\+outer\+\_\+convergence\+\_\+data}} (self, plt.\+Axes ax)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{classutils__experimentation_1_1_convergence___experiment_a84543027181ac07a92b1b7f53fa78e34}{all\+\_\+initiated}} = True
+\item 
+bool \mbox{\hyperlink{classutils__experimentation_1_1_convergence___experiment_aed48c84e55e497ad69f653536439dbea}{all\+\_\+converged}} = True
+\item 
+bool \mbox{\hyperlink{classutils__experimentation_1_1_convergence___experiment_a59cee35745a8a6eb9f326a765e08fa04}{all\+\_\+terminated}} = True
+\item 
+list \mbox{\hyperlink{classutils__experimentation_1_1_convergence___experiment_a97c864564ff3b76cdb0fda6dd9339c0e}{convergence\+\_\+data}} = \mbox{[}$\,$\mbox{]}
+\item 
+list \mbox{\hyperlink{classutils__experimentation_1_1_convergence___experiment_a50b496031e1adbe4cbc5e3d169c2a0b5}{outer\+\_\+convergence\+\_\+data}} = \mbox{[}$\,$\mbox{]}
+\item 
+\mbox{\hyperlink{classutils__experimentation_1_1_convergence___experiment_a1469da3681e9ed61d91c7c26441ed089}{id}} = \mbox{\hyperlink{classutils__experimentation_1_1_solver_format_info_a49f97cbf2a8d9ea63efdbc5d16333d8b}{Solver\+Format\+Info.\+add\+\_\+hsd\+\_\+if\+\_\+needed}}(file\+\_\+data\mbox{[}"{}id"{}\mbox{]})
+\item 
+\mbox{\hyperlink{classutils__experimentation_1_1_convergence___experiment_abe16dbda17c2d018a1871a7f348778f4}{total\+\_\+elapsed\+\_\+time\+\_\+ms}} = np.\+sum(elapsed\+\_\+times\+\_\+ms)
+\item 
+\mbox{\hyperlink{classutils__experimentation_1_1_convergence___experiment_a5abc7d135a7b2fdbb664ee5133e32713}{average\+\_\+elapsed\+\_\+time\+\_\+ms}} = np.\+mean(elapsed\+\_\+times\+\_\+ms)
+\item 
+\mbox{\hyperlink{classutils__experimentation_1_1_convergence___experiment_a65a28a96798f4a15e1ac3433c84da490}{median\+\_\+elapsed\+\_\+time\+\_\+ms}} = np.\+median(elapsed\+\_\+times\+\_\+ms)
+\item 
+\mbox{\hyperlink{classutils__experimentation_1_1_convergence___experiment_a04723871a203412733f2026ea1f72df1}{average\+\_\+inner\+\_\+iteration\+\_\+count}} = np.\+mean(inner\+\_\+iteration\+\_\+counts)
+\item 
+\mbox{\hyperlink{classutils__experimentation_1_1_convergence___experiment_a85df5c4feb9e33fbcf4f43dace9775d1}{median\+\_\+inner\+\_\+iteration\+\_\+count}} = np.\+median(inner\+\_\+iteration\+\_\+counts)
+\item 
+\mbox{\hyperlink{classutils__experimentation_1_1_convergence___experiment_af00734483623f349a98994cd05468ffb}{average\+\_\+outer\+\_\+iteration\+\_\+count}} = np.\+mean(outer\+\_\+iteration\+\_\+counts)
+\item 
+\mbox{\hyperlink{classutils__experimentation_1_1_convergence___experiment_a5b40a68ee2778f0bb438fddd3d599e62}{median\+\_\+outer\+\_\+iteration\+\_\+count}} = np.\+median(outer\+\_\+iteration\+\_\+counts)
+\item 
+\mbox{\hyperlink{classutils__experimentation_1_1_convergence___experiment_a8e9fc7898337388d8155b587f9588ed7}{average\+\_\+final\+\_\+relres}} = np.\+mean(final\+\_\+relress)
+\item 
+\mbox{\hyperlink{classutils__experimentation_1_1_convergence___experiment_a890799a251f3011e68c573f4878e2d83}{median\+\_\+final\+\_\+relres}} = np.\+median(final\+\_\+relress)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+str \mbox{\hyperlink{classutils__experimentation_1_1_convergence___experiment_ab2c1f59f7490c1ad911cddc54884c1d8}{nan\+\_\+r}} = r"{}(-\/nan\texorpdfstring{$\vert$}{|}nan\texorpdfstring{$\vert$}{|}-\/inf\texorpdfstring{$\vert$}{|}inf)"{}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+str \mbox{\hyperlink{classutils__experimentation_1_1_convergence___experiment_ac242011bc7fae7cdcd8f02d3ead50f75}{\+\_\+replace\+\_\+nan}} (self, str s)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classutils__experimentation_1_1_convergence___experiment_aebb345afe244c32ccde593e2353d7542}\index{utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}!\_\_init\_\_@{\_\_init\_\_}}
+\index{\_\_init\_\_@{\_\_init\_\_}!utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}}
+\doxysubsubsection{\texorpdfstring{\_\_init\_\_()}{\_\_init\_\_()}}
+{\footnotesize\ttfamily \label{classutils__experimentation_1_1_convergence___experiment_aebb345afe244c32ccde593e2353d7542} 
+utils\+\_\+experimentation.\+Convergence\+\_\+\+Experiment.\+\_\+\+\_\+init\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self}{, }\item[{str}]{solver}{, }\item[{List\mbox{[}str\mbox{]}}]{file\+\_\+paths}{}\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classutils__experimentation_1_1_convergence___experiment_ac242011bc7fae7cdcd8f02d3ead50f75}\index{utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}!\_replace\_nan@{\_replace\_nan}}
+\index{\_replace\_nan@{\_replace\_nan}!utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}}
+\doxysubsubsection{\texorpdfstring{\_replace\_nan()}{\_replace\_nan()}}
+{\footnotesize\ttfamily \label{classutils__experimentation_1_1_convergence___experiment_ac242011bc7fae7cdcd8f02d3ead50f75} 
+ str utils\+\_\+experimentation.\+Convergence\+\_\+\+Experiment.\+\_\+replace\+\_\+nan (\begin{DoxyParamCaption}\item[{}]{self}{, }\item[{str}]{s}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classutils__experimentation_1_1_convergence___experiment_a9cb672238f88f19b3bd58e44140dbdd8}\index{utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}!plot\_convergence\_data@{plot\_convergence\_data}}
+\index{plot\_convergence\_data@{plot\_convergence\_data}!utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}}
+\doxysubsubsection{\texorpdfstring{plot\_convergence\_data()}{plot\_convergence\_data()}}
+{\footnotesize\ttfamily \label{classutils__experimentation_1_1_convergence___experiment_a9cb672238f88f19b3bd58e44140dbdd8} 
+utils\+\_\+experimentation.\+Convergence\+\_\+\+Experiment.\+plot\+\_\+convergence\+\_\+data (\begin{DoxyParamCaption}\item[{}]{self}{, }\item[{plt.\+Axes}]{ax}{}\end{DoxyParamCaption})}
+
+\Hypertarget{classutils__experimentation_1_1_convergence___experiment_ae6b7f560526a648a4a2f30bdf8fe499a}\index{utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}!plot\_outer\_convergence\_data@{plot\_outer\_convergence\_data}}
+\index{plot\_outer\_convergence\_data@{plot\_outer\_convergence\_data}!utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}}
+\doxysubsubsection{\texorpdfstring{plot\_outer\_convergence\_data()}{plot\_outer\_convergence\_data()}}
+{\footnotesize\ttfamily \label{classutils__experimentation_1_1_convergence___experiment_ae6b7f560526a648a4a2f30bdf8fe499a} 
+utils\+\_\+experimentation.\+Convergence\+\_\+\+Experiment.\+plot\+\_\+outer\+\_\+convergence\+\_\+data (\begin{DoxyParamCaption}\item[{}]{self}{, }\item[{plt.\+Axes}]{ax}{}\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classutils__experimentation_1_1_convergence___experiment_aed48c84e55e497ad69f653536439dbea}\index{utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}!all\_converged@{all\_converged}}
+\index{all\_converged@{all\_converged}!utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}}
+\doxysubsubsection{\texorpdfstring{all\_converged}{all\_converged}}
+{\footnotesize\ttfamily \label{classutils__experimentation_1_1_convergence___experiment_aed48c84e55e497ad69f653536439dbea} 
+bool utils\+\_\+experimentation.\+Convergence\+\_\+\+Experiment.\+all\+\_\+converged = True}
+
+\Hypertarget{classutils__experimentation_1_1_convergence___experiment_a84543027181ac07a92b1b7f53fa78e34}\index{utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}!all\_initiated@{all\_initiated}}
+\index{all\_initiated@{all\_initiated}!utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}}
+\doxysubsubsection{\texorpdfstring{all\_initiated}{all\_initiated}}
+{\footnotesize\ttfamily \label{classutils__experimentation_1_1_convergence___experiment_a84543027181ac07a92b1b7f53fa78e34} 
+bool utils\+\_\+experimentation.\+Convergence\+\_\+\+Experiment.\+all\+\_\+initiated = True}
+
+\Hypertarget{classutils__experimentation_1_1_convergence___experiment_a59cee35745a8a6eb9f326a765e08fa04}\index{utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}!all\_terminated@{all\_terminated}}
+\index{all\_terminated@{all\_terminated}!utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}}
+\doxysubsubsection{\texorpdfstring{all\_terminated}{all\_terminated}}
+{\footnotesize\ttfamily \label{classutils__experimentation_1_1_convergence___experiment_a59cee35745a8a6eb9f326a765e08fa04} 
+bool utils\+\_\+experimentation.\+Convergence\+\_\+\+Experiment.\+all\+\_\+terminated = True}
+
+\Hypertarget{classutils__experimentation_1_1_convergence___experiment_a5abc7d135a7b2fdbb664ee5133e32713}\index{utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}!average\_elapsed\_time\_ms@{average\_elapsed\_time\_ms}}
+\index{average\_elapsed\_time\_ms@{average\_elapsed\_time\_ms}!utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}}
+\doxysubsubsection{\texorpdfstring{average\_elapsed\_time\_ms}{average\_elapsed\_time\_ms}}
+{\footnotesize\ttfamily \label{classutils__experimentation_1_1_convergence___experiment_a5abc7d135a7b2fdbb664ee5133e32713} 
+utils\+\_\+experimentation.\+Convergence\+\_\+\+Experiment.\+average\+\_\+elapsed\+\_\+time\+\_\+ms = np.\+mean(elapsed\+\_\+times\+\_\+ms)}
+
+\Hypertarget{classutils__experimentation_1_1_convergence___experiment_a8e9fc7898337388d8155b587f9588ed7}\index{utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}!average\_final\_relres@{average\_final\_relres}}
+\index{average\_final\_relres@{average\_final\_relres}!utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}}
+\doxysubsubsection{\texorpdfstring{average\_final\_relres}{average\_final\_relres}}
+{\footnotesize\ttfamily \label{classutils__experimentation_1_1_convergence___experiment_a8e9fc7898337388d8155b587f9588ed7} 
+utils\+\_\+experimentation.\+Convergence\+\_\+\+Experiment.\+average\+\_\+final\+\_\+relres = np.\+mean(final\+\_\+relress)}
+
+\Hypertarget{classutils__experimentation_1_1_convergence___experiment_a04723871a203412733f2026ea1f72df1}\index{utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}!average\_inner\_iteration\_count@{average\_inner\_iteration\_count}}
+\index{average\_inner\_iteration\_count@{average\_inner\_iteration\_count}!utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}}
+\doxysubsubsection{\texorpdfstring{average\_inner\_iteration\_count}{average\_inner\_iteration\_count}}
+{\footnotesize\ttfamily \label{classutils__experimentation_1_1_convergence___experiment_a04723871a203412733f2026ea1f72df1} 
+utils\+\_\+experimentation.\+Convergence\+\_\+\+Experiment.\+average\+\_\+inner\+\_\+iteration\+\_\+count = np.\+mean(inner\+\_\+iteration\+\_\+counts)}
+
+\Hypertarget{classutils__experimentation_1_1_convergence___experiment_af00734483623f349a98994cd05468ffb}\index{utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}!average\_outer\_iteration\_count@{average\_outer\_iteration\_count}}
+\index{average\_outer\_iteration\_count@{average\_outer\_iteration\_count}!utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}}
+\doxysubsubsection{\texorpdfstring{average\_outer\_iteration\_count}{average\_outer\_iteration\_count}}
+{\footnotesize\ttfamily \label{classutils__experimentation_1_1_convergence___experiment_af00734483623f349a98994cd05468ffb} 
+utils\+\_\+experimentation.\+Convergence\+\_\+\+Experiment.\+average\+\_\+outer\+\_\+iteration\+\_\+count = np.\+mean(outer\+\_\+iteration\+\_\+counts)}
+
+\Hypertarget{classutils__experimentation_1_1_convergence___experiment_a97c864564ff3b76cdb0fda6dd9339c0e}\index{utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}!convergence\_data@{convergence\_data}}
+\index{convergence\_data@{convergence\_data}!utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}}
+\doxysubsubsection{\texorpdfstring{convergence\_data}{convergence\_data}}
+{\footnotesize\ttfamily \label{classutils__experimentation_1_1_convergence___experiment_a97c864564ff3b76cdb0fda6dd9339c0e} 
+list utils\+\_\+experimentation.\+Convergence\+\_\+\+Experiment.\+convergence\+\_\+data = \mbox{[}$\,$\mbox{]}}
+
+\Hypertarget{classutils__experimentation_1_1_convergence___experiment_a1469da3681e9ed61d91c7c26441ed089}\index{utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}!id@{id}}
+\index{id@{id}!utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}}
+\doxysubsubsection{\texorpdfstring{id}{id}}
+{\footnotesize\ttfamily \label{classutils__experimentation_1_1_convergence___experiment_a1469da3681e9ed61d91c7c26441ed089} 
+utils\+\_\+experimentation.\+Convergence\+\_\+\+Experiment.\+id = \mbox{\hyperlink{classutils__experimentation_1_1_solver_format_info_a49f97cbf2a8d9ea63efdbc5d16333d8b}{Solver\+Format\+Info.\+add\+\_\+hsd\+\_\+if\+\_\+needed}}(file\+\_\+data\mbox{[}"{}id"{}\mbox{]})}
+
+\Hypertarget{classutils__experimentation_1_1_convergence___experiment_a65a28a96798f4a15e1ac3433c84da490}\index{utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}!median\_elapsed\_time\_ms@{median\_elapsed\_time\_ms}}
+\index{median\_elapsed\_time\_ms@{median\_elapsed\_time\_ms}!utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}}
+\doxysubsubsection{\texorpdfstring{median\_elapsed\_time\_ms}{median\_elapsed\_time\_ms}}
+{\footnotesize\ttfamily \label{classutils__experimentation_1_1_convergence___experiment_a65a28a96798f4a15e1ac3433c84da490} 
+utils\+\_\+experimentation.\+Convergence\+\_\+\+Experiment.\+median\+\_\+elapsed\+\_\+time\+\_\+ms = np.\+median(elapsed\+\_\+times\+\_\+ms)}
+
+\Hypertarget{classutils__experimentation_1_1_convergence___experiment_a890799a251f3011e68c573f4878e2d83}\index{utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}!median\_final\_relres@{median\_final\_relres}}
+\index{median\_final\_relres@{median\_final\_relres}!utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}}
+\doxysubsubsection{\texorpdfstring{median\_final\_relres}{median\_final\_relres}}
+{\footnotesize\ttfamily \label{classutils__experimentation_1_1_convergence___experiment_a890799a251f3011e68c573f4878e2d83} 
+utils\+\_\+experimentation.\+Convergence\+\_\+\+Experiment.\+median\+\_\+final\+\_\+relres = np.\+median(final\+\_\+relress)}
+
+\Hypertarget{classutils__experimentation_1_1_convergence___experiment_a85df5c4feb9e33fbcf4f43dace9775d1}\index{utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}!median\_inner\_iteration\_count@{median\_inner\_iteration\_count}}
+\index{median\_inner\_iteration\_count@{median\_inner\_iteration\_count}!utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}}
+\doxysubsubsection{\texorpdfstring{median\_inner\_iteration\_count}{median\_inner\_iteration\_count}}
+{\footnotesize\ttfamily \label{classutils__experimentation_1_1_convergence___experiment_a85df5c4feb9e33fbcf4f43dace9775d1} 
+utils\+\_\+experimentation.\+Convergence\+\_\+\+Experiment.\+median\+\_\+inner\+\_\+iteration\+\_\+count = np.\+median(inner\+\_\+iteration\+\_\+counts)}
+
+\Hypertarget{classutils__experimentation_1_1_convergence___experiment_a5b40a68ee2778f0bb438fddd3d599e62}\index{utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}!median\_outer\_iteration\_count@{median\_outer\_iteration\_count}}
+\index{median\_outer\_iteration\_count@{median\_outer\_iteration\_count}!utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}}
+\doxysubsubsection{\texorpdfstring{median\_outer\_iteration\_count}{median\_outer\_iteration\_count}}
+{\footnotesize\ttfamily \label{classutils__experimentation_1_1_convergence___experiment_a5b40a68ee2778f0bb438fddd3d599e62} 
+utils\+\_\+experimentation.\+Convergence\+\_\+\+Experiment.\+median\+\_\+outer\+\_\+iteration\+\_\+count = np.\+median(outer\+\_\+iteration\+\_\+counts)}
+
+\Hypertarget{classutils__experimentation_1_1_convergence___experiment_ab2c1f59f7490c1ad911cddc54884c1d8}\index{utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}!nan\_r@{nan\_r}}
+\index{nan\_r@{nan\_r}!utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}}
+\doxysubsubsection{\texorpdfstring{nan\_r}{nan\_r}}
+{\footnotesize\ttfamily \label{classutils__experimentation_1_1_convergence___experiment_ab2c1f59f7490c1ad911cddc54884c1d8} 
+utils\+\_\+experimentation.\+Convergence\+\_\+\+Experiment.\+nan\+\_\+r = r"{}(-\/nan\texorpdfstring{$\vert$}{|}nan\texorpdfstring{$\vert$}{|}-\/inf\texorpdfstring{$\vert$}{|}inf)"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classutils__experimentation_1_1_convergence___experiment_a50b496031e1adbe4cbc5e3d169c2a0b5}\index{utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}!outer\_convergence\_data@{outer\_convergence\_data}}
+\index{outer\_convergence\_data@{outer\_convergence\_data}!utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}}
+\doxysubsubsection{\texorpdfstring{outer\_convergence\_data}{outer\_convergence\_data}}
+{\footnotesize\ttfamily \label{classutils__experimentation_1_1_convergence___experiment_a50b496031e1adbe4cbc5e3d169c2a0b5} 
+list utils\+\_\+experimentation.\+Convergence\+\_\+\+Experiment.\+outer\+\_\+convergence\+\_\+data = \mbox{[}$\,$\mbox{]}}
+
+\Hypertarget{classutils__experimentation_1_1_convergence___experiment_abe16dbda17c2d018a1871a7f348778f4}\index{utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}!total\_elapsed\_time\_ms@{total\_elapsed\_time\_ms}}
+\index{total\_elapsed\_time\_ms@{total\_elapsed\_time\_ms}!utils\_experimentation.Convergence\_Experiment@{utils\_experimentation.Convergence\_Experiment}}
+\doxysubsubsection{\texorpdfstring{total\_elapsed\_time\_ms}{total\_elapsed\_time\_ms}}
+{\footnotesize\ttfamily \label{classutils__experimentation_1_1_convergence___experiment_abe16dbda17c2d018a1871a7f348778f4} 
+utils\+\_\+experimentation.\+Convergence\+\_\+\+Experiment.\+total\+\_\+elapsed\+\_\+time\+\_\+ms = np.\+sum(elapsed\+\_\+times\+\_\+ms)}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/dosre/dev/precision-\/cascade/scripts/python/view\+\_\+experimentation/\mbox{\hyperlink{utils__experimentation_8py}{utils\+\_\+experimentation.\+py}}\end{DoxyCompactItemize}

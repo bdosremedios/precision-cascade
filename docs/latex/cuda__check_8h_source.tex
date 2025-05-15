@@ -1,0 +1,34 @@
+\doxysection{cuda\+\_\+check.\+h}
+\hypertarget{cuda__check_8h_source}{}\label{cuda__check_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/include/tools/cuda\_check.h@{C:/Users/dosre/dev/precision-\/cascade/include/tools/cuda\_check.h}}
+\mbox{\hyperlink{cuda__check_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ CUDA\_CHECK\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ CUDA\_CHECK\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <cuda\_runtime.h>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <cublas\_v2.h>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <cusparse.h>}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacecascade}{cascade}}\ \{}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaError\_t\ error);}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecascade_a58669c50dd46c33b2be3031c8d1204c3}{check\_kernel\_launch}}(}
+\DoxyCodeLine{00015\ \ \ \ \ cudaError\_t\ error,}
+\DoxyCodeLine{00016\ \ \ \ \ std::string\ function\_name,}
+\DoxyCodeLine{00017\ \ \ \ \ std::string\ kernel\_name,}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordtype}{int}\ n\_blocks,}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{int}\ n\_threads}
+\DoxyCodeLine{00020\ );}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecascade_adf5601c3547abfb7e2b4aa3f1fb99bc9}{check\_cublas\_status}}(cublasStatus\_t\ status);}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecascade_a4352e164c9116b8f38bfd19534dd8390}{check\_cusparse\_status}}(cusparseStatus\_t\ status);}
+\DoxyCodeLine{00025\ \ \ \ \ }
+\DoxyCodeLine{00026\ \}}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

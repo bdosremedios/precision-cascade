@@ -1,0 +1,59 @@
+\doxysection{cascade\+::helper Namespace Reference}
+\hypertarget{namespacecascade_1_1helper}{}\label{namespacecascade_1_1helper}\index{cascade::helper@{cascade::helper}}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::ifstream \mbox{\hyperlink{namespacecascade_1_1helper_a47f438eed728ec7b0f2c7eb3ab91c659}{open\+\_\+ifstream}} (fs\+::path path, fs\+::path correct\+\_\+extension)
+\item 
+void \mbox{\hyperlink{namespacecascade_1_1helper_a3b356b8d769d3c544e99cda42cb58618}{scan\+\_\+csv\+\_\+dim}} (fs\+::path path, int \texorpdfstring{$\ast$}{*}m\+\_\+rows\+\_\+ptr, int \texorpdfstring{$\ast$}{*}n\+\_\+cols\+\_\+ptr)
+\item 
+{\footnotesize template$<$typename TPrecision$>$ }\\void \mbox{\hyperlink{namespacecascade_1_1helper_a8127cede47e1a56f7de2b48d1134d2be}{scan\+\_\+csv\+\_\+vals}} (fs\+::path path, TPrecision \texorpdfstring{$\ast$}{*}mat\+\_\+ptr, int m\+\_\+rows, int n\+\_\+cols)
+\item 
+bool \mbox{\hyperlink{namespacecascade_1_1helper_a1b5c41bda096f68bd966e622aa1c01ba}{no\+\_\+whitespace}} (std\+::string \&str)
+\item 
+{\footnotesize template$<$typename TPrecision$>$ }\\\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$ \mbox{\hyperlink{namespacecascade_1_1helper_a64d92ef9b54c6e4b6a230eca0e652ce4}{read\+\_\+coord\+\_\+body\+\_\+\+MTX}} (std\+::ifstream \&file\+\_\+in, std\+::stringstream \&line\+\_\+in, const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&cu\+\_\+handles, bool symmetric)
+\item 
+{\footnotesize template$<$typename TPrecision$>$ }\\\mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \mbox{\hyperlink{namespacecascade_1_1helper_a2557683de8ae915ccfce0d7b3329fe54}{read\+\_\+array\+\_\+body\+\_\+\+MTX}} (std\+::ifstream \&file\+\_\+in, std\+::stringstream \&line\+\_\+in, const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&cu\+\_\+handles)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{namespacecascade_1_1helper_a1b5c41bda096f68bd966e622aa1c01ba}\index{cascade::helper@{cascade::helper}!no\_whitespace@{no\_whitespace}}
+\index{no\_whitespace@{no\_whitespace}!cascade::helper@{cascade::helper}}
+\doxysubsubsection{\texorpdfstring{no\_whitespace()}{no\_whitespace()}}
+{\footnotesize\ttfamily \label{namespacecascade_1_1helper_a1b5c41bda096f68bd966e622aa1c01ba} 
+bool cascade\+::helper\+::no\+\_\+whitespace (\begin{DoxyParamCaption}\item[{std\+::string \&}]{str}{}\end{DoxyParamCaption})}
+
+\Hypertarget{namespacecascade_1_1helper_a47f438eed728ec7b0f2c7eb3ab91c659}\index{cascade::helper@{cascade::helper}!open\_ifstream@{open\_ifstream}}
+\index{open\_ifstream@{open\_ifstream}!cascade::helper@{cascade::helper}}
+\doxysubsubsection{\texorpdfstring{open\_ifstream()}{open\_ifstream()}}
+{\footnotesize\ttfamily \label{namespacecascade_1_1helper_a47f438eed728ec7b0f2c7eb3ab91c659} 
+std\+::ifstream cascade\+::helper\+::open\+\_\+ifstream (\begin{DoxyParamCaption}\item[{fs\+::path}]{path}{, }\item[{fs\+::path}]{correct\+\_\+extension}{}\end{DoxyParamCaption})}
+
+\Hypertarget{namespacecascade_1_1helper_a2557683de8ae915ccfce0d7b3329fe54}\index{cascade::helper@{cascade::helper}!read\_array\_body\_MTX@{read\_array\_body\_MTX}}
+\index{read\_array\_body\_MTX@{read\_array\_body\_MTX}!cascade::helper@{cascade::helper}}
+\doxysubsubsection{\texorpdfstring{read\_array\_body\_MTX()}{read\_array\_body\_MTX()}}
+{\footnotesize\ttfamily \label{namespacecascade_1_1helper_a2557683de8ae915ccfce0d7b3329fe54} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ cascade\+::helper\+::read\+\_\+array\+\_\+body\+\_\+\+MTX (\begin{DoxyParamCaption}\item[{std\+::ifstream \&}]{file\+\_\+in}{, }\item[{std\+::stringstream \&}]{line\+\_\+in}{, }\item[{const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&}]{cu\+\_\+handles}{}\end{DoxyParamCaption})}
+
+\Hypertarget{namespacecascade_1_1helper_a64d92ef9b54c6e4b6a230eca0e652ce4}\index{cascade::helper@{cascade::helper}!read\_coord\_body\_MTX@{read\_coord\_body\_MTX}}
+\index{read\_coord\_body\_MTX@{read\_coord\_body\_MTX}!cascade::helper@{cascade::helper}}
+\doxysubsubsection{\texorpdfstring{read\_coord\_body\_MTX()}{read\_coord\_body\_MTX()}}
+{\footnotesize\ttfamily \label{namespacecascade_1_1helper_a64d92ef9b54c6e4b6a230eca0e652ce4} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$ cascade\+::helper\+::read\+\_\+coord\+\_\+body\+\_\+\+MTX (\begin{DoxyParamCaption}\item[{std\+::ifstream \&}]{file\+\_\+in}{, }\item[{std\+::stringstream \&}]{line\+\_\+in}{, }\item[{const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&}]{cu\+\_\+handles}{, }\item[{bool}]{symmetric}{}\end{DoxyParamCaption})}
+
+\Hypertarget{namespacecascade_1_1helper_a3b356b8d769d3c544e99cda42cb58618}\index{cascade::helper@{cascade::helper}!scan\_csv\_dim@{scan\_csv\_dim}}
+\index{scan\_csv\_dim@{scan\_csv\_dim}!cascade::helper@{cascade::helper}}
+\doxysubsubsection{\texorpdfstring{scan\_csv\_dim()}{scan\_csv\_dim()}}
+{\footnotesize\ttfamily \label{namespacecascade_1_1helper_a3b356b8d769d3c544e99cda42cb58618} 
+void cascade\+::helper\+::scan\+\_\+csv\+\_\+dim (\begin{DoxyParamCaption}\item[{fs\+::path}]{path}{, }\item[{int \texorpdfstring{$\ast$}{*}}]{m\+\_\+rows\+\_\+ptr}{, }\item[{int \texorpdfstring{$\ast$}{*}}]{n\+\_\+cols\+\_\+ptr}{}\end{DoxyParamCaption})}
+
+\Hypertarget{namespacecascade_1_1helper_a8127cede47e1a56f7de2b48d1134d2be}\index{cascade::helper@{cascade::helper}!scan\_csv\_vals@{scan\_csv\_vals}}
+\index{scan\_csv\_vals@{scan\_csv\_vals}!cascade::helper@{cascade::helper}}
+\doxysubsubsection{\texorpdfstring{scan\_csv\_vals()}{scan\_csv\_vals()}}
+{\footnotesize\ttfamily \label{namespacecascade_1_1helper_a8127cede47e1a56f7de2b48d1134d2be} 
+template$<$typename TPrecision$>$ \\
+void cascade\+::helper\+::scan\+\_\+csv\+\_\+vals (\begin{DoxyParamCaption}\item[{fs\+::path}]{path}{, }\item[{TPrecision \texorpdfstring{$\ast$}{*}}]{mat\+\_\+ptr}{, }\item[{int}]{m\+\_\+rows}{, }\item[{int}]{n\+\_\+cols}{}\end{DoxyParamCaption})}
+

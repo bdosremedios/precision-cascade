@@ -1,0 +1,55 @@
+\doxysection{Experiment\+\_\+\+Clock.\+h}
+\hypertarget{_experiment___clock_8h_source}{}\label{_experiment___clock_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/experimentation/include/exp\_tools/Experiment\_Clock.h@{C:/Users/dosre/dev/precision-\/cascade/experimentation/include/exp\_tools/Experiment\_Clock.h}}
+\mbox{\hyperlink{_experiment___clock_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ EXPERIMENT\_CLOCK\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ EXPERIMENT\_CLOCK\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <chrono>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_experiment___clock_a30141be836411495c66d588e3e00f031}{Experiment\_Clock}}\ }
+\DoxyCodeLine{00008\ \{}
+\DoxyCodeLine{00009\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \ \ \ \ std::chrono::steady\_clock\ clock;}
+\DoxyCodeLine{00012\ \ \ \ \ std::chrono::time\_point<std::chrono::steady\_clock>\ start;}
+\DoxyCodeLine{00013\ \ \ \ \ std::chrono::time\_point<std::chrono::steady\_clock>\ stop;}
+\DoxyCodeLine{00014\ \ \ \ \ std::chrono::milliseconds\ time\_ms;}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keywordtype}{bool}\ clock\_ticking\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keywordtype}{bool}\ completed\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ \mbox{\hyperlink{class_experiment___clock_a30141be836411495c66d588e3e00f031}{Experiment\_Clock}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \mbox{\hyperlink{class_experiment___clock_ada94728d791d17ef60d739a8a96b1216}{\string~Experiment\_Clock}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \mbox{\hyperlink{class_experiment___clock_a8141637a080edfc8b7f4e0ee7cf42aa9}{Experiment\_Clock}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_experiment___clock_a30141be836411495c66d588e3e00f031}{Experiment\_Clock}}\ \&other)\ \{}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ *\textcolor{keyword}{this}\ =\ other;}
+\DoxyCodeLine{00026\ \ \ \ \ \}}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_experiment___clock_a197854e24b0008b2d56bf6ba6bed4a60}{operator=}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_experiment___clock_a30141be836411495c66d588e3e00f031}{Experiment\_Clock}}\ \&other)\ \{}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ clock\ =\ other.clock;}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ start\ =\ other.start;}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ stop\ =\ other.stop;}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ time\_ms\ =\ other.time\_ms;}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ clock\_ticking\ =\ other.clock\_ticking;}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ completed\ =\ other.completed;}
+\DoxyCodeLine{00035\ \ \ \ \ \}}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_experiment___clock_ade199cc94215d4dac68cbe5799b40a90}{start\_clock\_experiment}}();}
+\DoxyCodeLine{00038\ \ \ \ \ }
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_experiment___clock_ad7aa07f9b061c9966574840ff1da5183}{stop\_clock\_experiment}}();}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_experiment___clock_a6ebc6ad2279e869164004b4ae43ca9f4}{get\_elapsed\_time\_ms}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_experiment___clock_a4ad74814efcbd981552dc11beaae18f6}{check\_completed}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ std::string\ \mbox{\hyperlink{class_experiment___clock_a5c3fc0ef25daafb759dfd20722a9acc1}{get\_info\_string}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \};}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

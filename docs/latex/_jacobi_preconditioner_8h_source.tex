@@ -1,0 +1,166 @@
+\doxysection{Jacobi\+Preconditioner.\+h}
+\hypertarget{_jacobi_preconditioner_8h_source}{}\label{_jacobi_preconditioner_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/include/preconditioners/JacobiPreconditioner.h@{C:/Users/dosre/dev/precision-\/cascade/include/preconditioners/JacobiPreconditioner.h}}
+\mbox{\hyperlink{_jacobi_preconditioner_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ JACOBI\_PRECONDITIONER\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ JACOBI\_PRECONDITIONER\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_matrix_inverse_preconditioner_8h}{MatrixInversePreconditioner.h}}"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacecascade}{cascade}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix,\ \textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00009\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1_jacobi_preconditioner_a3576bfb457c90ed2c360e0d9ec0d4052}{JacobiPreconditioner}}:}
+\DoxyCodeLine{00010\ \ \ \ \ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcascade_1_1_matrix_inverse_preconditioner_a2492adfc140f75d613e004b47aeccf8d}{MatrixInversePreconditioner}}<TMatrix,\ TPrecision>}
+\DoxyCodeLine{00011\ \{}
+\DoxyCodeLine{00012\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{MatrixDense<TPrecision>}}\ construct\_dense\_jacobi(}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{MatrixDense<TPrecision>}}\ \textcolor{keyword}{const}\ \&arg\_A}
+\DoxyCodeLine{00016\ \ \ \ \ )\ \{}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ TPrecision\ *\ h\_mat\ =\ \textcolor{keyword}{static\_cast<}TPrecision\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \ \ \ \ malloc(arg\_A.\mbox{\hyperlink{classcascade_1_1_matrix_dense_a346043c3bc51b4d2316e65e5b17f7150}{rows}}()*arg\_A.\mbox{\hyperlink{classcascade_1_1_matrix_dense_acb12c7631dadb6593fa4b4491e509e6a}{cols}}()*\textcolor{keyword}{sizeof}(TPrecision))}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ arg\_A.\mbox{\hyperlink{classcascade_1_1_matrix_dense_afe3bd80931df815af827c19a7e39f4dc}{copy\_data\_to\_ptr}}(h\_mat,\ arg\_A.\mbox{\hyperlink{classcascade_1_1_matrix_dense_a346043c3bc51b4d2316e65e5b17f7150}{rows}}(),\ arg\_A.\mbox{\hyperlink{classcascade_1_1_matrix_dense_acb12c7631dadb6593fa4b4491e509e6a}{cols}}());}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ j=0;\ j<arg\_A.\mbox{\hyperlink{classcascade_1_1_matrix_dense_acb12c7631dadb6593fa4b4491e509e6a}{cols}}();\ ++j)\ \{}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<arg\_A.\mbox{\hyperlink{classcascade_1_1_matrix_dense_a346043c3bc51b4d2316e65e5b17f7150}{rows}}();\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}\ ==\ j)\ \{}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (h\_mat[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}+arg\_A.\mbox{\hyperlink{classcascade_1_1_matrix_dense_a346043c3bc51b4d2316e65e5b17f7150}{rows}}()*j]\ !=\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(0.))\ \{}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_mat[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}+arg\_A.\mbox{\hyperlink{classcascade_1_1_matrix_dense_a346043c3bc51b4d2316e65e5b17f7150}{rows}}()*j]\ =\ (}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(1.)/h\_mat[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}+arg\_A.\mbox{\hyperlink{classcascade_1_1_matrix_dense_a346043c3bc51b4d2316e65e5b17f7150}{rows}}()*j]}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ free(h\_mat);}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}JacobiPreconditioner:\ zero\ in\ "{}}}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}construct\_dense\_jacobi\ encountered\ at\ "{}}}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}("{}}\ +\ std::to\_string(\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ +\ \textcolor{stringliteral}{"{},\ "{}}\ +}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::to\_string(j)\ +\ \textcolor{stringliteral}{"{})"{}}}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_mat[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}+arg\_A.\mbox{\hyperlink{classcascade_1_1_matrix_dense_a346043c3bc51b4d2316e65e5b17f7150}{rows}}()*j]\ =\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(0.);}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{MatrixDense<TPrecision>}}\ ret\_mat(}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_A.\mbox{\hyperlink{classcascade_1_1_matrix_dense_a466c5ec9a5b8b06ec55c5e0af945cb97}{get\_cu\_handles}}(),}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ h\_mat,}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_A.\mbox{\hyperlink{classcascade_1_1_matrix_dense_a346043c3bc51b4d2316e65e5b17f7150}{rows}}(),}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_A.\mbox{\hyperlink{classcascade_1_1_matrix_dense_acb12c7631dadb6593fa4b4491e509e6a}{cols}}()}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ free(h\_mat);}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ret\_mat;}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \}}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{NoFillMatrixSparse<TPrecision>}}\ construct\_sparse\_jacobi(}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{NoFillMatrixSparse<TPrecision>}}\ \textcolor{keyword}{const}\ \&arg\_A}
+\DoxyCodeLine{00060\ \ \ \ \ )\ \{}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ *\ h\_col\_offsets\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ malloc((arg\_A.\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a82ef73765687020d4e71b8f315184b26}{cols}}()+1)*\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}))}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ *\ h\_row\_indices\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ malloc(arg\_A.\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a547921f00f782f506d3066e46b35330b}{non\_zeros}}()*\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}))}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ TPrecision\ *\ h\_vals\ =\ \textcolor{keyword}{static\_cast<}TPrecision\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ malloc(arg\_A.\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a547921f00f782f506d3066e46b35330b}{non\_zeros}}()*\textcolor{keyword}{sizeof}(TPrecision))}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ arg\_A.\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a3139f91b63d91498caa64f7022d210c6}{copy\_data\_to\_ptr}}(}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ h\_col\_offsets,\ h\_row\_indices,\ h\_vals,}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_A.\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a96073f4b32736ec5a026393401a4adc7}{rows}}(),\ arg\_A.\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a82ef73765687020d4e71b8f315184b26}{cols}}(),\ arg\_A.\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a547921f00f782f506d3066e46b35330b}{non\_zeros}}()}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ smaller\_dim\ =\ std::min(arg\_A.\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a96073f4b32736ec5a026393401a4adc7}{rows}}(),\ arg\_A.\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a82ef73765687020d4e71b8f315184b26}{cols}}());}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ *\ new\_h\_col\_offsets\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ malloc((arg\_A.\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a82ef73765687020d4e71b8f315184b26}{cols}}()+1)*\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}))}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ *\ new\_h\_row\_indices\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ malloc(smaller\_dim*\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}))}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ TPrecision\ *\ new\_h\_vals\ =\ \textcolor{keyword}{static\_cast<}TPrecision\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ malloc(smaller\_dim*\textcolor{keyword}{sizeof}(TPrecision))}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ j=0;\ j<smaller\_dim;\ ++j)\ \{}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ new\_h\_col\_offsets[j]\ =\ j;}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ new\_h\_row\_indices[j]\ =\ j;}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \ \ \ \ TPrecision\ diag\_val\ =\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(0.);}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ offset=h\_col\_offsets[j];}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ offset<h\_col\_offsets[j+1];}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ++offset}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \ \ \ \ )\ \{}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (h\_row\_indices[offset]\ ==\ j)\ \{}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ diag\_val\ =\ h\_vals[offset];}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (diag\_val\ !=\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(0.))\ \{}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ new\_h\_vals[j]\ =\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(1.)/diag\_val;}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ free(h\_col\_offsets);}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ free(h\_row\_indices);}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ free(h\_vals);}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}JacobiPreconditioner:\ zero\ in\ "{}}}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}construct\_sparse\_jacobi\ encountered\ at\ "{}}}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}("{}}\ +\ std::to\_string(j)\ +\ \textcolor{stringliteral}{"{},\ "{}}\ +}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::to\_string(j)\ +\ \textcolor{stringliteral}{"{})"{}}}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ j=smaller\_dim;\ j<arg\_A.\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a82ef73765687020d4e71b8f315184b26}{cols}}()+1;\ ++j)\ \{}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ new\_h\_col\_offsets[j]\ =\ smaller\_dim;}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{NoFillMatrixSparse<TPrecision>}}\ ret\_mat(}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_A.\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a53c7790e128457a37837ed1283a83b4e}{get\_cu\_handles}}(),}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \ \ \ \ new\_h\_col\_offsets,\ new\_h\_row\_indices,\ new\_h\_vals,}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_A.\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a96073f4b32736ec5a026393401a4adc7}{rows}}(),\ arg\_A.\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a82ef73765687020d4e71b8f315184b26}{cols}}(),\ smaller\_dim}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ free(h\_col\_offsets);}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ free(h\_row\_indices);}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ free(h\_vals);}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ free(new\_h\_col\_offsets);}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ free(new\_h\_row\_indices);}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ free(new\_h\_vals);}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ret\_mat;}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ \ \ \ \ \}}
+\DoxyCodeLine{00141\ }
+\DoxyCodeLine{00142\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00143\ }
+\DoxyCodeLine{00144\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_jacobi_preconditioner_a3576bfb457c90ed2c360e0d9ec0d4052}{JacobiPreconditioner}}(\mbox{\hyperlink{classcascade_1_1_matrix_dense}{MatrixDense<TPrecision>}}\ \textcolor{keyword}{const}\ \&arg\_A):}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_matrix_inverse_preconditioner_a2492adfc140f75d613e004b47aeccf8d}{MatrixInversePreconditioner}}<\mbox{\hyperlink{classcascade_1_1_matrix_dense}{MatrixDense}},\ TPrecision>(}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ construct\_dense\_jacobi(arg\_A)}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00148\ \ \ \ \ \{\}}
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00150\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_jacobi_preconditioner_aaf807ce38f850c3c92c8577d20f7782f}{JacobiPreconditioner}}(\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{NoFillMatrixSparse<TPrecision>}}\ \textcolor{keyword}{const}\ \&arg\_A):}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_matrix_inverse_preconditioner_a2492adfc140f75d613e004b47aeccf8d}{MatrixInversePreconditioner}}<\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{NoFillMatrixSparse}},\ TPrecision>(}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ construct\_sparse\_jacobi(arg\_A)}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00154\ \ \ \ \ \{\}}
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00156\ \};}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00158\ \}}
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00160\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

@@ -1,0 +1,218 @@
+\doxysection{C\+:/\+Users/dosre/dev/precision-\/cascade/benchmark/src/benchmark\+\_\+types/benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse.cpp File Reference}
+\hypertarget{benchmark___no_fill_matrix_sparse_8cpp}{}\label{benchmark___no_fill_matrix_sparse_8cpp}\index{C:/Users/dosre/dev/precision-\/cascade/benchmark/src/benchmark\_types/benchmark\_NoFillMatrixSparse.cpp@{C:/Users/dosre/dev/precision-\/cascade/benchmark/src/benchmark\_types/benchmark\_NoFillMatrixSparse.cpp}}
+{\ttfamily \#include "{}benchmark\+\_\+\+Sparse.\+h"{}}\newline
+{\ttfamily \#include "{}types/types.\+h"{}}\newline
+{\ttfamily \#include $<$functional$>$}\newline
+{\ttfamily \#include $<$fstream$>$}\newline
+{\ttfamily \#include $<$cmath$>$}\newline
+Include dependency graph for benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse.\+cpp\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{benchmark___no_fill_matrix_sparse_8cpp__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{benchmark___no_fill_matrix_sparse_8cpp_acd7b524a62e32728983a8c98d93ad1aa}{TEST\+\_\+F}} (\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}, Matrix\+Vector\+Mult\+\_\+\+Double\+\_\+\+BENCHMARK)
+\item 
+\mbox{\hyperlink{benchmark___no_fill_matrix_sparse_8cpp_ad016808b815946763eae4fbfa5157419}{TEST\+\_\+F}} (\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}, Matrix\+Vector\+Mult\+\_\+\+Single\+\_\+\+BENCHMARK)
+\item 
+\mbox{\hyperlink{benchmark___no_fill_matrix_sparse_8cpp_af5b41d23faf67eb1158ab935c2b62f72}{TEST\+\_\+F}} (\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}, Matrix\+Vector\+Mult\+\_\+\+Half\+\_\+\+BENCHMARK)
+\item 
+\mbox{\hyperlink{benchmark___no_fill_matrix_sparse_8cpp_ab28761a5c982f459369bf3215941a228}{TEST\+\_\+F}} (\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}, Transpose\+Matrix\+Vector\+Mult\+\_\+\+Double\+\_\+\+BENCHMARK)
+\item 
+\mbox{\hyperlink{benchmark___no_fill_matrix_sparse_8cpp_afd07d3e8834455b5a8c9eed205e2f23a}{TEST\+\_\+F}} (\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}, Transpose\+Matrix\+Vector\+Mult\+\_\+\+Single\+\_\+\+BENCHMARK)
+\item 
+\mbox{\hyperlink{benchmark___no_fill_matrix_sparse_8cpp_a6a8788374badc6b64eced5b621a60751}{TEST\+\_\+F}} (\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}, Transpose\+Matrix\+Vector\+Mult\+\_\+\+Half\+\_\+\+BENCHMARK)
+\item 
+\mbox{\hyperlink{benchmark___no_fill_matrix_sparse_8cpp_ab180dcd2c71ab9e7abb916e90e2ae46a}{TEST\+\_\+F}} (\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}, Forward\+Substitution\+\_\+\+Double\+\_\+\+BENCHMARK)
+\item 
+\mbox{\hyperlink{benchmark___no_fill_matrix_sparse_8cpp_a662d8dc97ed4f8d9aa44b81ac62f8904}{TEST\+\_\+F}} (\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}, Forward\+Substitution\+\_\+\+Single\+\_\+\+BENCHMARK)
+\item 
+\mbox{\hyperlink{benchmark___no_fill_matrix_sparse_8cpp_ada2bbe9c03e025be2383e66962ea8853}{TEST\+\_\+F}} (\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}, Forward\+Substitution\+\_\+\+Half\+\_\+\+BENCHMARK)
+\item 
+\mbox{\hyperlink{benchmark___no_fill_matrix_sparse_8cpp_ada91377bd5a6ede5bd6065627c0ffc6d}{TEST\+\_\+F}} (\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}, Fast\+Forward\+Substitution\+\_\+\+Double\+\_\+\+BENCHMARK)
+\item 
+\mbox{\hyperlink{benchmark___no_fill_matrix_sparse_8cpp_a8049ec64d5579e088443c32e2de46c25}{TEST\+\_\+F}} (\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}, Fast\+Forward\+Substitution\+\_\+\+Single\+\_\+\+BENCHMARK)
+\item 
+\mbox{\hyperlink{benchmark___no_fill_matrix_sparse_8cpp_a88b50a10ba2bc0500142a95093a52eb1}{TEST\+\_\+F}} (\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}, Fast\+Forward\+Substitution\+\_\+\+Half\+\_\+\+BENCHMARK)
+\item 
+\mbox{\hyperlink{benchmark___no_fill_matrix_sparse_8cpp_a3c845c16e190fe5199ae3ab8b55dbd57}{TEST\+\_\+F}} (\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}, Lowtri\+Preprocess\+\_\+\+Double\+\_\+\+BENCHMARK)
+\item 
+\mbox{\hyperlink{benchmark___no_fill_matrix_sparse_8cpp_ae4cea651406e9c4a0e7768bcd7266833}{TEST\+\_\+F}} (\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}, Lowtri\+Preprocess\+\_\+\+Single\+\_\+\+BENCHMARK)
+\item 
+\mbox{\hyperlink{benchmark___no_fill_matrix_sparse_8cpp_a6c74b2982a5c9a357ee89d04d98fd143}{TEST\+\_\+F}} (\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}, Lowtri\+Preprocess\+\_\+\+Half\+\_\+\+BENCHMARK)
+\item 
+\mbox{\hyperlink{benchmark___no_fill_matrix_sparse_8cpp_a6262d134d77b237c7a580c7202a3875f}{TEST\+\_\+F}} (\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}, Backward\+Substitution\+\_\+\+Double\+\_\+\+BENCHMARK)
+\item 
+\mbox{\hyperlink{benchmark___no_fill_matrix_sparse_8cpp_a7f0e4dc23fbc573842c451ec2c31d5f6}{TEST\+\_\+F}} (\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}, Backward\+Substitution\+\_\+\+Single\+\_\+\+BENCHMARK)
+\item 
+\mbox{\hyperlink{benchmark___no_fill_matrix_sparse_8cpp_aa1850e19c1bae9bdd4553dcfd5c7fbb2}{TEST\+\_\+F}} (\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}, Backward\+Substitution\+\_\+\+Half\+\_\+\+BENCHMARK)
+\item 
+\mbox{\hyperlink{benchmark___no_fill_matrix_sparse_8cpp_af755757426cc733eaceb8441d19d3e0f}{TEST\+\_\+F}} (\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}, Fast\+Backward\+Substitution\+\_\+\+Double\+\_\+\+BENCHMARK)
+\item 
+\mbox{\hyperlink{benchmark___no_fill_matrix_sparse_8cpp_ad6b7d553141a7d0c577d798504d3f1b3}{TEST\+\_\+F}} (\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}, Fast\+Backward\+Substitution\+\_\+\+Single\+\_\+\+BENCHMARK)
+\item 
+\mbox{\hyperlink{benchmark___no_fill_matrix_sparse_8cpp_a30fcec11323317a578481af42b518f89}{TEST\+\_\+F}} (\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}, Fast\+Backward\+Substitution\+\_\+\+Half\+\_\+\+BENCHMARK)
+\item 
+\mbox{\hyperlink{benchmark___no_fill_matrix_sparse_8cpp_a62a86f9f5960e3670fd4f5e6bc84e61f}{TEST\+\_\+F}} (\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}, Upptri\+Preprocess\+\_\+\+Double\+\_\+\+BENCHMARK)
+\item 
+\mbox{\hyperlink{benchmark___no_fill_matrix_sparse_8cpp_a28770d2f9f7df3b6d3cc1ed7a1d2da87}{TEST\+\_\+F}} (\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}, Upptri\+Preprocess\+\_\+\+Single\+\_\+\+BENCHMARK)
+\item 
+\mbox{\hyperlink{benchmark___no_fill_matrix_sparse_8cpp_a1e30c579d595aaf9d8a30c5a37b35328}{TEST\+\_\+F}} (\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}, Upptri\+Preprocess\+\_\+\+Half\+\_\+\+BENCHMARK)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{benchmark___no_fill_matrix_sparse_8cpp_a6262d134d77b237c7a580c7202a3875f}\index{benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [1/24]}}
+{\footnotesize\ttfamily \label{benchmark___no_fill_matrix_sparse_8cpp_a6262d134d77b237c7a580c7202a3875f} 
+TEST\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}}]{}{, }\item[{Backward\+Substitution\+\_\+\+Double\+\_\+\+BENCHMARK}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{benchmark___no_fill_matrix_sparse_8cpp_aa1850e19c1bae9bdd4553dcfd5c7fbb2}\index{benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [2/24]}}
+{\footnotesize\ttfamily \label{benchmark___no_fill_matrix_sparse_8cpp_aa1850e19c1bae9bdd4553dcfd5c7fbb2} 
+TEST\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}}]{}{, }\item[{Backward\+Substitution\+\_\+\+Half\+\_\+\+BENCHMARK}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{benchmark___no_fill_matrix_sparse_8cpp_a7f0e4dc23fbc573842c451ec2c31d5f6}\index{benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [3/24]}}
+{\footnotesize\ttfamily \label{benchmark___no_fill_matrix_sparse_8cpp_a7f0e4dc23fbc573842c451ec2c31d5f6} 
+TEST\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}}]{}{, }\item[{Backward\+Substitution\+\_\+\+Single\+\_\+\+BENCHMARK}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{benchmark___no_fill_matrix_sparse_8cpp_af755757426cc733eaceb8441d19d3e0f}\index{benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [4/24]}}
+{\footnotesize\ttfamily \label{benchmark___no_fill_matrix_sparse_8cpp_af755757426cc733eaceb8441d19d3e0f} 
+TEST\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}}]{}{, }\item[{Fast\+Backward\+Substitution\+\_\+\+Double\+\_\+\+BENCHMARK}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{benchmark___no_fill_matrix_sparse_8cpp_a30fcec11323317a578481af42b518f89}\index{benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [5/24]}}
+{\footnotesize\ttfamily \label{benchmark___no_fill_matrix_sparse_8cpp_a30fcec11323317a578481af42b518f89} 
+TEST\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}}]{}{, }\item[{Fast\+Backward\+Substitution\+\_\+\+Half\+\_\+\+BENCHMARK}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{benchmark___no_fill_matrix_sparse_8cpp_ad6b7d553141a7d0c577d798504d3f1b3}\index{benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [6/24]}}
+{\footnotesize\ttfamily \label{benchmark___no_fill_matrix_sparse_8cpp_ad6b7d553141a7d0c577d798504d3f1b3} 
+TEST\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}}]{}{, }\item[{Fast\+Backward\+Substitution\+\_\+\+Single\+\_\+\+BENCHMARK}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{benchmark___no_fill_matrix_sparse_8cpp_ada91377bd5a6ede5bd6065627c0ffc6d}\index{benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [7/24]}}
+{\footnotesize\ttfamily \label{benchmark___no_fill_matrix_sparse_8cpp_ada91377bd5a6ede5bd6065627c0ffc6d} 
+TEST\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}}]{}{, }\item[{Fast\+Forward\+Substitution\+\_\+\+Double\+\_\+\+BENCHMARK}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{benchmark___no_fill_matrix_sparse_8cpp_a88b50a10ba2bc0500142a95093a52eb1}\index{benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [8/24]}}
+{\footnotesize\ttfamily \label{benchmark___no_fill_matrix_sparse_8cpp_a88b50a10ba2bc0500142a95093a52eb1} 
+TEST\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}}]{}{, }\item[{Fast\+Forward\+Substitution\+\_\+\+Half\+\_\+\+BENCHMARK}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{benchmark___no_fill_matrix_sparse_8cpp_a8049ec64d5579e088443c32e2de46c25}\index{benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [9/24]}}
+{\footnotesize\ttfamily \label{benchmark___no_fill_matrix_sparse_8cpp_a8049ec64d5579e088443c32e2de46c25} 
+TEST\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}}]{}{, }\item[{Fast\+Forward\+Substitution\+\_\+\+Single\+\_\+\+BENCHMARK}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{benchmark___no_fill_matrix_sparse_8cpp_ab180dcd2c71ab9e7abb916e90e2ae46a}\index{benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [10/24]}}
+{\footnotesize\ttfamily \label{benchmark___no_fill_matrix_sparse_8cpp_ab180dcd2c71ab9e7abb916e90e2ae46a} 
+TEST\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}}]{}{, }\item[{Forward\+Substitution\+\_\+\+Double\+\_\+\+BENCHMARK}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{benchmark___no_fill_matrix_sparse_8cpp_ada2bbe9c03e025be2383e66962ea8853}\index{benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [11/24]}}
+{\footnotesize\ttfamily \label{benchmark___no_fill_matrix_sparse_8cpp_ada2bbe9c03e025be2383e66962ea8853} 
+TEST\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}}]{}{, }\item[{Forward\+Substitution\+\_\+\+Half\+\_\+\+BENCHMARK}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{benchmark___no_fill_matrix_sparse_8cpp_a662d8dc97ed4f8d9aa44b81ac62f8904}\index{benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [12/24]}}
+{\footnotesize\ttfamily \label{benchmark___no_fill_matrix_sparse_8cpp_a662d8dc97ed4f8d9aa44b81ac62f8904} 
+TEST\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}}]{}{, }\item[{Forward\+Substitution\+\_\+\+Single\+\_\+\+BENCHMARK}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{benchmark___no_fill_matrix_sparse_8cpp_a3c845c16e190fe5199ae3ab8b55dbd57}\index{benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [13/24]}}
+{\footnotesize\ttfamily \label{benchmark___no_fill_matrix_sparse_8cpp_a3c845c16e190fe5199ae3ab8b55dbd57} 
+TEST\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}}]{}{, }\item[{Lowtri\+Preprocess\+\_\+\+Double\+\_\+\+BENCHMARK}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{benchmark___no_fill_matrix_sparse_8cpp_a6c74b2982a5c9a357ee89d04d98fd143}\index{benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [14/24]}}
+{\footnotesize\ttfamily \label{benchmark___no_fill_matrix_sparse_8cpp_a6c74b2982a5c9a357ee89d04d98fd143} 
+TEST\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}}]{}{, }\item[{Lowtri\+Preprocess\+\_\+\+Half\+\_\+\+BENCHMARK}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{benchmark___no_fill_matrix_sparse_8cpp_ae4cea651406e9c4a0e7768bcd7266833}\index{benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [15/24]}}
+{\footnotesize\ttfamily \label{benchmark___no_fill_matrix_sparse_8cpp_ae4cea651406e9c4a0e7768bcd7266833} 
+TEST\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}}]{}{, }\item[{Lowtri\+Preprocess\+\_\+\+Single\+\_\+\+BENCHMARK}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{benchmark___no_fill_matrix_sparse_8cpp_acd7b524a62e32728983a8c98d93ad1aa}\index{benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [16/24]}}
+{\footnotesize\ttfamily \label{benchmark___no_fill_matrix_sparse_8cpp_acd7b524a62e32728983a8c98d93ad1aa} 
+TEST\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}}]{}{, }\item[{Matrix\+Vector\+Mult\+\_\+\+Double\+\_\+\+BENCHMARK}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{benchmark___no_fill_matrix_sparse_8cpp_af5b41d23faf67eb1158ab935c2b62f72}\index{benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [17/24]}}
+{\footnotesize\ttfamily \label{benchmark___no_fill_matrix_sparse_8cpp_af5b41d23faf67eb1158ab935c2b62f72} 
+TEST\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}}]{}{, }\item[{Matrix\+Vector\+Mult\+\_\+\+Half\+\_\+\+BENCHMARK}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{benchmark___no_fill_matrix_sparse_8cpp_ad016808b815946763eae4fbfa5157419}\index{benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [18/24]}}
+{\footnotesize\ttfamily \label{benchmark___no_fill_matrix_sparse_8cpp_ad016808b815946763eae4fbfa5157419} 
+TEST\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}}]{}{, }\item[{Matrix\+Vector\+Mult\+\_\+\+Single\+\_\+\+BENCHMARK}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{benchmark___no_fill_matrix_sparse_8cpp_ab28761a5c982f459369bf3215941a228}\index{benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [19/24]}}
+{\footnotesize\ttfamily \label{benchmark___no_fill_matrix_sparse_8cpp_ab28761a5c982f459369bf3215941a228} 
+TEST\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}}]{}{, }\item[{Transpose\+Matrix\+Vector\+Mult\+\_\+\+Double\+\_\+\+BENCHMARK}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{benchmark___no_fill_matrix_sparse_8cpp_a6a8788374badc6b64eced5b621a60751}\index{benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [20/24]}}
+{\footnotesize\ttfamily \label{benchmark___no_fill_matrix_sparse_8cpp_a6a8788374badc6b64eced5b621a60751} 
+TEST\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}}]{}{, }\item[{Transpose\+Matrix\+Vector\+Mult\+\_\+\+Half\+\_\+\+BENCHMARK}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{benchmark___no_fill_matrix_sparse_8cpp_afd07d3e8834455b5a8c9eed205e2f23a}\index{benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [21/24]}}
+{\footnotesize\ttfamily \label{benchmark___no_fill_matrix_sparse_8cpp_afd07d3e8834455b5a8c9eed205e2f23a} 
+TEST\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}}]{}{, }\item[{Transpose\+Matrix\+Vector\+Mult\+\_\+\+Single\+\_\+\+BENCHMARK}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{benchmark___no_fill_matrix_sparse_8cpp_a62a86f9f5960e3670fd4f5e6bc84e61f}\index{benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [22/24]}}
+{\footnotesize\ttfamily \label{benchmark___no_fill_matrix_sparse_8cpp_a62a86f9f5960e3670fd4f5e6bc84e61f} 
+TEST\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}}]{}{, }\item[{Upptri\+Preprocess\+\_\+\+Double\+\_\+\+BENCHMARK}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{benchmark___no_fill_matrix_sparse_8cpp_a1e30c579d595aaf9d8a30c5a37b35328}\index{benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [23/24]}}
+{\footnotesize\ttfamily \label{benchmark___no_fill_matrix_sparse_8cpp_a1e30c579d595aaf9d8a30c5a37b35328} 
+TEST\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}}]{}{, }\item[{Upptri\+Preprocess\+\_\+\+Half\+\_\+\+BENCHMARK}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{benchmark___no_fill_matrix_sparse_8cpp_a28770d2f9f7df3b6d3cc1ed7a1d2da87}\index{benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}!TEST\_F@{TEST\_F}}
+\index{TEST\_F@{TEST\_F}!benchmark\_NoFillMatrixSparse.cpp@{benchmark\_NoFillMatrixSparse.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_F()}{TEST\_F()}\hspace{0.1cm}{\footnotesize\ttfamily [24/24]}}
+{\footnotesize\ttfamily \label{benchmark___no_fill_matrix_sparse_8cpp_a28770d2f9f7df3b6d3cc1ed7a1d2da87} 
+TEST\+\_\+F (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_benchmark___no_fill_matrix_sparse}{Benchmark\+\_\+\+No\+Fill\+Matrix\+Sparse}}}]{}{, }\item[{Upptri\+Preprocess\+\_\+\+Single\+\_\+\+BENCHMARK}]{}{}\end{DoxyParamCaption})}
+

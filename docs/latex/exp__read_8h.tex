@@ -1,0 +1,122 @@
+\doxysection{C\+:/\+Users/dosre/dev/precision-\/cascade/experimentation/include/exp\+\_\+read/exp\+\_\+read.h File Reference}
+\hypertarget{exp__read_8h}{}\label{exp__read_8h}\index{C:/Users/dosre/dev/precision-\/cascade/experimentation/include/exp\_read/exp\_read.h@{C:/Users/dosre/dev/precision-\/cascade/experimentation/include/exp\_read/exp\_read.h}}
+{\ttfamily \#include "{}exp\+\_\+spec/exp\+\_\+spec.\+h"{}}\newline
+{\ttfamily \#include "{}exp\+\_\+tools/\+Experiment\+\_\+\+Log.\+h"{}}\newline
+{\ttfamily \#include "{}types/types.\+h"{}}\newline
+{\ttfamily \#include "{}tools/cu\+Handle\+Bundle.\+h"{}}\newline
+{\ttfamily \#include "{}tools/read\+\_\+matrix.\+h"{}}\newline
+{\ttfamily \#include "{}tools/arg\+\_\+pkgs/\+Linear\+System.\+h"{}}\newline
+{\ttfamily \#include $<$nlohmann/json.\+hpp$>$}\newline
+{\ttfamily \#include $<$filesystem$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$unordered\+\_\+set$>$}\newline
+Include dependency graph for exp\+\_\+read.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{exp__read_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{exp__read_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+using \mbox{\hyperlink{exp__read_8h_ab701e3ac61a85b337ec5c1abaad6742d}{json}} = nlohmann\+::json
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{exp__read_8h_a0c9b0e74e318a41468370de14b299a38}{extract\+\_\+integer}} (json\+::iterator member)
+\item 
+\mbox{\hyperlink{create__read__matrices_8m_a7ea82552101f041fad7635b3ed036a84}{std\+::vector}}$<$ std\+::string $>$ \mbox{\hyperlink{exp__read_8h_ac7f2d767014fcdab295c315274bb9382}{extract\+\_\+solvers\+\_\+to\+\_\+use}} (json\+::iterator member)
+\item 
+std\+::string \mbox{\hyperlink{exp__read_8h_a3f7e7da41ace39829275ac15f941c26c}{extract\+\_\+matrix\+\_\+type}} (json\+::iterator member)
+\item 
+\mbox{\hyperlink{struct_preconditioner___spec}{Preconditioner\+\_\+\+Spec}} \mbox{\hyperlink{exp__read_8h_a0a758ae72dfd2e84de1c5b6a2d46c159}{extract\+\_\+preconditioner\+\_\+spec}} (json\+::iterator member)
+\item 
+double \mbox{\hyperlink{exp__read_8h_a8e434f9ffff48a7c7df78eea738bd5e4}{extract\+\_\+double}} (json\+::iterator member)
+\item 
+\mbox{\hyperlink{create__read__matrices_8m_a7ea82552101f041fad7635b3ed036a84}{std\+::vector}}$<$ std\+::string $>$ \mbox{\hyperlink{exp__read_8h_ae9da0d78ac27b9a231e2f0e7a029a735}{extract\+\_\+string\+\_\+vector}} (json\+::iterator member)
+\item 
+\mbox{\hyperlink{struct_solve___group}{Solve\+\_\+\+Group}} \mbox{\hyperlink{exp__read_8h_ae245363c7ac838e89df184e9cffc510b}{extract\+\_\+solve\+\_\+group}} (std\+::string id, \mbox{\hyperlink{exp__read_8h_ab701e3ac61a85b337ec5c1abaad6742d}{json}} cand\+\_\+obj)
+\item 
+\mbox{\hyperlink{struct_experiment___spec}{Experiment\+\_\+\+Spec}} \mbox{\hyperlink{exp__read_8h_a14094ecab66d8cbb8bd7873a6bf4ff0e}{parse\+\_\+experiment\+\_\+spec}} (fs\+::path exp\+\_\+spec\+\_\+path)
+\item 
+{\footnotesize template$<$template$<$ typename $>$ typename TMatrix$>$ }\\\mbox{\hyperlink{classcascade_1_1_generic_linear_system}{cascade\+::\+Generic\+Linear\+System}}$<$ TMatrix $>$ \mbox{\hyperlink{exp__read_8h_a7ed8b601c4d247f26032eca531099318}{load\+\_\+lin\+\_\+sys}} (const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cascade\+::cu\+Handle\+Bundle}} \&cu\+\_\+handles, fs\+::path input\+\_\+dir, std\+::string matrix\+\_\+name, \mbox{\hyperlink{class_experiment___log}{Experiment\+\_\+\+Log}} logger)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Typedef Documentation}
+\Hypertarget{exp__read_8h_ab701e3ac61a85b337ec5c1abaad6742d}\index{exp\_read.h@{exp\_read.h}!json@{json}}
+\index{json@{json}!exp\_read.h@{exp\_read.h}}
+\doxysubsubsection{\texorpdfstring{json}{json}}
+{\footnotesize\ttfamily \label{exp__read_8h_ab701e3ac61a85b337ec5c1abaad6742d} 
+using \mbox{\hyperlink{exp__read_8h_ab701e3ac61a85b337ec5c1abaad6742d}{json}} = nlohmann\+::json}
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{exp__read_8h_a8e434f9ffff48a7c7df78eea738bd5e4}\index{exp\_read.h@{exp\_read.h}!extract\_double@{extract\_double}}
+\index{extract\_double@{extract\_double}!exp\_read.h@{exp\_read.h}}
+\doxysubsubsection{\texorpdfstring{extract\_double()}{extract\_double()}}
+{\footnotesize\ttfamily \label{exp__read_8h_a8e434f9ffff48a7c7df78eea738bd5e4} 
+double extract\+\_\+double (\begin{DoxyParamCaption}\item[{json\+::iterator}]{member}{}\end{DoxyParamCaption})}
+
+\Hypertarget{exp__read_8h_a0c9b0e74e318a41468370de14b299a38}\index{exp\_read.h@{exp\_read.h}!extract\_integer@{extract\_integer}}
+\index{extract\_integer@{extract\_integer}!exp\_read.h@{exp\_read.h}}
+\doxysubsubsection{\texorpdfstring{extract\_integer()}{extract\_integer()}}
+{\footnotesize\ttfamily \label{exp__read_8h_a0c9b0e74e318a41468370de14b299a38} 
+int extract\+\_\+integer (\begin{DoxyParamCaption}\item[{json\+::iterator}]{member}{}\end{DoxyParamCaption})}
+
+\Hypertarget{exp__read_8h_a3f7e7da41ace39829275ac15f941c26c}\index{exp\_read.h@{exp\_read.h}!extract\_matrix\_type@{extract\_matrix\_type}}
+\index{extract\_matrix\_type@{extract\_matrix\_type}!exp\_read.h@{exp\_read.h}}
+\doxysubsubsection{\texorpdfstring{extract\_matrix\_type()}{extract\_matrix\_type()}}
+{\footnotesize\ttfamily \label{exp__read_8h_a3f7e7da41ace39829275ac15f941c26c} 
+std\+::string extract\+\_\+matrix\+\_\+type (\begin{DoxyParamCaption}\item[{json\+::iterator}]{member}{}\end{DoxyParamCaption})}
+
+\Hypertarget{exp__read_8h_a0a758ae72dfd2e84de1c5b6a2d46c159}\index{exp\_read.h@{exp\_read.h}!extract\_preconditioner\_spec@{extract\_preconditioner\_spec}}
+\index{extract\_preconditioner\_spec@{extract\_preconditioner\_spec}!exp\_read.h@{exp\_read.h}}
+\doxysubsubsection{\texorpdfstring{extract\_preconditioner\_spec()}{extract\_preconditioner\_spec()}}
+{\footnotesize\ttfamily \label{exp__read_8h_a0a758ae72dfd2e84de1c5b6a2d46c159} 
+\mbox{\hyperlink{struct_preconditioner___spec}{Preconditioner\+\_\+\+Spec}} extract\+\_\+preconditioner\+\_\+spec (\begin{DoxyParamCaption}\item[{json\+::iterator}]{member}{}\end{DoxyParamCaption})}
+
+\Hypertarget{exp__read_8h_ae245363c7ac838e89df184e9cffc510b}\index{exp\_read.h@{exp\_read.h}!extract\_solve\_group@{extract\_solve\_group}}
+\index{extract\_solve\_group@{extract\_solve\_group}!exp\_read.h@{exp\_read.h}}
+\doxysubsubsection{\texorpdfstring{extract\_solve\_group()}{extract\_solve\_group()}}
+{\footnotesize\ttfamily \label{exp__read_8h_ae245363c7ac838e89df184e9cffc510b} 
+\mbox{\hyperlink{struct_solve___group}{Solve\+\_\+\+Group}} extract\+\_\+solve\+\_\+group (\begin{DoxyParamCaption}\item[{std\+::string}]{id}{, }\item[{\mbox{\hyperlink{exp__read_8h_ab701e3ac61a85b337ec5c1abaad6742d}{json}}}]{cand\+\_\+obj}{}\end{DoxyParamCaption})}
+
+\Hypertarget{exp__read_8h_ac7f2d767014fcdab295c315274bb9382}\index{exp\_read.h@{exp\_read.h}!extract\_solvers\_to\_use@{extract\_solvers\_to\_use}}
+\index{extract\_solvers\_to\_use@{extract\_solvers\_to\_use}!exp\_read.h@{exp\_read.h}}
+\doxysubsubsection{\texorpdfstring{extract\_solvers\_to\_use()}{extract\_solvers\_to\_use()}}
+{\footnotesize\ttfamily \label{exp__read_8h_ac7f2d767014fcdab295c315274bb9382} 
+\mbox{\hyperlink{create__read__matrices_8m_a7ea82552101f041fad7635b3ed036a84}{std\+::vector}}$<$ std\+::string $>$ extract\+\_\+solvers\+\_\+to\+\_\+use (\begin{DoxyParamCaption}\item[{json\+::iterator}]{member}{}\end{DoxyParamCaption})}
+
+\Hypertarget{exp__read_8h_ae9da0d78ac27b9a231e2f0e7a029a735}\index{exp\_read.h@{exp\_read.h}!extract\_string\_vector@{extract\_string\_vector}}
+\index{extract\_string\_vector@{extract\_string\_vector}!exp\_read.h@{exp\_read.h}}
+\doxysubsubsection{\texorpdfstring{extract\_string\_vector()}{extract\_string\_vector()}}
+{\footnotesize\ttfamily \label{exp__read_8h_ae9da0d78ac27b9a231e2f0e7a029a735} 
+\mbox{\hyperlink{create__read__matrices_8m_a7ea82552101f041fad7635b3ed036a84}{std\+::vector}}$<$ std\+::string $>$ extract\+\_\+string\+\_\+vector (\begin{DoxyParamCaption}\item[{json\+::iterator}]{member}{}\end{DoxyParamCaption})}
+
+\Hypertarget{exp__read_8h_a7ed8b601c4d247f26032eca531099318}\index{exp\_read.h@{exp\_read.h}!load\_lin\_sys@{load\_lin\_sys}}
+\index{load\_lin\_sys@{load\_lin\_sys}!exp\_read.h@{exp\_read.h}}
+\doxysubsubsection{\texorpdfstring{load\_lin\_sys()}{load\_lin\_sys()}}
+{\footnotesize\ttfamily \label{exp__read_8h_a7ed8b601c4d247f26032eca531099318} 
+template$<$template$<$ typename $>$ typename TMatrix$>$ \\
+\mbox{\hyperlink{classcascade_1_1_generic_linear_system}{cascade\+::\+Generic\+Linear\+System}}$<$ TMatrix $>$ load\+\_\+lin\+\_\+sys (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cascade\+::cu\+Handle\+Bundle}} \&}]{cu\+\_\+handles}{, }\item[{fs\+::path}]{input\+\_\+dir}{, }\item[{std\+::string}]{matrix\+\_\+name}{, }\item[{\mbox{\hyperlink{class_experiment___log}{Experiment\+\_\+\+Log}}}]{logger}{}\end{DoxyParamCaption})}
+
+\Hypertarget{exp__read_8h_a14094ecab66d8cbb8bd7873a6bf4ff0e}\index{exp\_read.h@{exp\_read.h}!parse\_experiment\_spec@{parse\_experiment\_spec}}
+\index{parse\_experiment\_spec@{parse\_experiment\_spec}!exp\_read.h@{exp\_read.h}}
+\doxysubsubsection{\texorpdfstring{parse\_experiment\_spec()}{parse\_experiment\_spec()}}
+{\footnotesize\ttfamily \label{exp__read_8h_a14094ecab66d8cbb8bd7873a6bf4ff0e} 
+\mbox{\hyperlink{struct_experiment___spec}{Experiment\+\_\+\+Spec}} parse\+\_\+experiment\+\_\+spec (\begin{DoxyParamCaption}\item[{fs\+::path}]{exp\+\_\+spec\+\_\+path}{}\end{DoxyParamCaption})}
+

@@ -1,0 +1,218 @@
+\doxysection{Linear\+System.\+h}
+\hypertarget{_linear_system_8h_source}{}\label{_linear_system_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/include/tools/arg\_pkgs/LinearSystem.h@{C:/Users/dosre/dev/precision-\/cascade/include/tools/arg\_pkgs/LinearSystem.h}}
+\mbox{\hyperlink{_linear_system_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ LINEARSYSTEM\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ LINEARSYSTEM\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{cu_handle_bundle_8h}{tools/cuHandleBundle.h}}"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{types_8h}{types/types.h}}"{}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacecascade}{cascade}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix>}
+\DoxyCodeLine{00010\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1_generic_linear_system_a8ac192b2b2f33a9d3ef512c04a07cda3}{GenericLinearSystem}}}
+\DoxyCodeLine{00011\ \{}
+\DoxyCodeLine{00012\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system_abdd9de1e643163e56e2d8feb35ae3148}{m}};}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system_aa26e2b2dd2de3a3e707fd4844dd278c4}{n}};}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system_a312d9d9c557241a968ec336aaab8653d}{nnz}};}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system_a01f6e4035a5b35062d1579cd4712e3d1}{cu\_handles}};}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{const}\ TMatrix<double>\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system_a3a828a28accccc68c83f24032c1780dd}{A}};}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<double>}}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system_af858a55d0a34e02d01df22f12a3fc6a3}{b}};}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_generic_linear_system_a8ac192b2b2f33a9d3ef512c04a07cda3}{GenericLinearSystem}}(}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ TMatrix<double>\ \&arg\_A,}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<double>}}\ \&arg\_b}
+\DoxyCodeLine{00026\ \ \ \ \ ):}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_generic_linear_system_abdd9de1e643163e56e2d8feb35ae3148}{m}}(arg\_A.rows()),}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_generic_linear_system_aa26e2b2dd2de3a3e707fd4844dd278c4}{n}}(arg\_A.cols()),}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_generic_linear_system_a312d9d9c557241a968ec336aaab8653d}{nnz}}(arg\_A.non\_zeros()),}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_generic_linear_system_a01f6e4035a5b35062d1579cd4712e3d1}{cu\_handles}}(arg\_A.\mbox{\hyperlink{classcascade_1_1_generic_linear_system_a85d0549e1b2354c846ada0683fa9e3d8}{get\_cu\_handles}}()),}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_generic_linear_system_a3a828a28accccc68c83f24032c1780dd}{A}}(arg\_A),}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_generic_linear_system_af858a55d0a34e02d01df22f12a3fc6a3}{b}}(arg\_b)}
+\DoxyCodeLine{00033\ \ \ \ \ \{}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((\mbox{\hyperlink{classcascade_1_1_generic_linear_system_abdd9de1e643163e56e2d8feb35ae3148}{m}}\ <\ 1)\ ||\ (\mbox{\hyperlink{classcascade_1_1_generic_linear_system_aa26e2b2dd2de3a3e707fd4844dd278c4}{n}}\ <\ 1))\ \{}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}GenericLinearSystem:\ Empty\ Matrix\ A"{}}}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classcascade_1_1_generic_linear_system_abdd9de1e643163e56e2d8feb35ae3148}{m}}\ !=\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system_af858a55d0a34e02d01df22f12a3fc6a3}{b}}.rows())\ \{}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ throw\ std::runtime\_error(}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}GenericLinearSystem:\ A\ not\ compatible\ with\ b\ for\ linear\ system"{}}}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00044\ \ \ \ \ \}}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keyword}{const}\ TMatrix<double>\ \&\mbox{\hyperlink{classcascade_1_1_generic_linear_system_a4538441ccc8007f1ab651939a430d91c}{get\_A}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system_a3a828a28accccc68c83f24032c1780dd}{A}};}
+\DoxyCodeLine{00050\ \ \ \ \ \}}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<double>}}\ \&\mbox{\hyperlink{classcascade_1_1_generic_linear_system_afd7d44e9c09ccd20e054876275ce27c6}{get\_b}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system_af858a55d0a34e02d01df22f12a3fc6a3}{b}};}
+\DoxyCodeLine{00053\ \ \ \ \ \}}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system_a2cc6857362459dbe59c4f84e2bd7c869}{get\_m}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system_abdd9de1e643163e56e2d8feb35ae3148}{m}};}
+\DoxyCodeLine{00056\ \ \ \ \ \}}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system_a3cef88ac6edf5abf916d647bf2cc859a}{get\_n}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system_aa26e2b2dd2de3a3e707fd4844dd278c4}{n}};}
+\DoxyCodeLine{00059\ \ \ \ \ \}}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system_aab480a6e34cf1ba051d78f7e6150a2cf}{get\_nnz}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system_a312d9d9c557241a968ec336aaab8653d}{nnz}};}
+\DoxyCodeLine{00062\ \ \ \ \ \}}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system_a85d0549e1b2354c846ada0683fa9e3d8}{get\_cu\_handles}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system_a01f6e4035a5b35062d1579cd4712e3d1}{cu\_handles}};}
+\DoxyCodeLine{00065\ \ \ \ \ \}}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \};}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix,\ \textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00070\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_a88d8481086b8e3fb9e4430c2057e7db3}{TypedLinearSystem\_Intf}}}
+\DoxyCodeLine{00071\ \{}
+\DoxyCodeLine{00072\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{GenericLinearSystem<TMatrix>}}\ *\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_a30186543537979cae0bd0a125aecb8a1}{gen\_lin\_sys\_ptr}};}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_a88d8481086b8e3fb9e4430c2057e7db3}{TypedLinearSystem\_Intf}}(}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{GenericLinearSystem<TMatrix>}}\ *\ \textcolor{keyword}{const}\ arg\_gen\_lin\_sys\_ptr}
+\DoxyCodeLine{00080\ \ \ \ \ ):}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_a30186543537979cae0bd0a125aecb8a1}{gen\_lin\_sys\_ptr}}(arg\_gen\_lin\_sys\_ptr)}
+\DoxyCodeLine{00082\ \ \ \ \ \{\}}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{GenericLinearSystem<TMatrix>}}\ *\ \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_a253a6acdf4f0413e0d015d5b9f3ed543}{get\_gen\_lin\_sys\_ptr}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_a30186543537979cae0bd0a125aecb8a1}{gen\_lin\_sys\_ptr}};}
+\DoxyCodeLine{00086\ \ \ \ \ \}}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{comment}{//\ Wrapper\ behavior,\ wrapping\ GenericLinearSystem<TMatrix>\ methods}}
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keyword}{const}\ TMatrix<double>\ \&\mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_ac13bcd3a039bcb38f0d671cc57e03c8a}{get\_A}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_a30186543537979cae0bd0a125aecb8a1}{gen\_lin\_sys\_ptr}}-\/>get\_A();}
+\DoxyCodeLine{00091\ \ \ \ \ \}}
+\DoxyCodeLine{00092\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<double>}}\ \&\mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_ac9a3d2d4fdb399c2623754483ff0e57b}{get\_b}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_a30186543537979cae0bd0a125aecb8a1}{gen\_lin\_sys\_ptr}}-\/>get\_b();}
+\DoxyCodeLine{00094\ \ \ \ \ \}}
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_a33e98c9ec940d3f90f8c1cb1d37fd85b}{get\_m}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_a30186543537979cae0bd0a125aecb8a1}{gen\_lin\_sys\_ptr}}-\/>get\_m();}
+\DoxyCodeLine{00097\ \ \ \ \ \}}
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_a0d01dd7fdf970b6d7cf0e03e6c13a312}{get\_n}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_a30186543537979cae0bd0a125aecb8a1}{gen\_lin\_sys\_ptr}}-\/>get\_n();}
+\DoxyCodeLine{00100\ \ \ \ \ \}}
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_a04fc40610d648d460efc611b8afde06e}{get\_nnz}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_a30186543537979cae0bd0a125aecb8a1}{gen\_lin\_sys\_ptr}}-\/>get\_nnz();}
+\DoxyCodeLine{00103\ \ \ \ \ \}}
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_ac4c6ddc322eb1882704b57b1b3ba9591}{get\_cu\_handles}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_a30186543537979cae0bd0a125aecb8a1}{gen\_lin\_sys\_ptr}}-\/>get\_cu\_handles();}
+\DoxyCodeLine{00106\ \ \ \ \ \}}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ TMatrix<TPrecision>\ \&\mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_aa5ba053905ef5cd4df95a75ac13a0832}{get\_A\_typed}}()\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ \&\mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_a1fdebf5d311c07c4e1c18314ef2d2c52}{get\_b\_typed}}()\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \};}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix,\ \textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00114\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1_typed_linear_system_a7a3dcd39236aa1d1abf030eb5ec221ac}{TypedLinearSystem}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_a88d8481086b8e3fb9e4430c2057e7db3}{TypedLinearSystem\_Intf}}<TMatrix,\ TPrecision>}
+\DoxyCodeLine{00115\ \{}
+\DoxyCodeLine{00116\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{keyword}{const}\ TMatrix<TPrecision>\ A\_typed;}
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ b\_typed;}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_typed_linear_system_a7a3dcd39236aa1d1abf030eb5ec221ac}{TypedLinearSystem}}(}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{GenericLinearSystem<TMatrix>}}\ *\ \textcolor{keyword}{const}\ arg\_gen\_lin\_sys\_ptr}
+\DoxyCodeLine{00125\ \ \ \ \ ):}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_a88d8481086b8e3fb9e4430c2057e7db3}{TypedLinearSystem\_Intf}}<TMatrix,\ TPrecision>(arg\_gen\_lin\_sys\_ptr),}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ A\_typed(this-\/>\mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_a30186543537979cae0bd0a125aecb8a1}{gen\_lin\_sys\_ptr}}-\/>\mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_ac13bcd3a039bcb38f0d671cc57e03c8a}{get\_A}}().template\ cast<TPrecision>()),}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ b\_typed(this-\/>\mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_a30186543537979cae0bd0a125aecb8a1}{gen\_lin\_sys\_ptr}}-\/>\mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_ac9a3d2d4fdb399c2623754483ff0e57b}{get\_b}}().template\ cast<TPrecision>())}
+\DoxyCodeLine{00129\ \ \ \ \ \{\}}
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ \ \ \ \ \textcolor{keyword}{const}\ TMatrix<TPrecision>\ \&\mbox{\hyperlink{classcascade_1_1_typed_linear_system_a697448053f40b7660517b46aed4b212a}{get\_A\_typed}}()\textcolor{keyword}{\ const\ override\ }\{}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ A\_typed;}
+\DoxyCodeLine{00133\ \ \ \ \ \}}
+\DoxyCodeLine{00134\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ \&\mbox{\hyperlink{classcascade_1_1_typed_linear_system_a6d3b6be6d5f6086ed0970548e7bc814f}{get\_b\_typed}}()\textcolor{keyword}{\ const\ override\ }\{}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ b\_typed;}
+\DoxyCodeLine{00136\ \ \ \ \ \}}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00138\ \};}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ \textcolor{comment}{/*\ Partial\ specialization\ with\ double\ to\ remove\ unneccessary\ repeated\ data\ of}}
+\DoxyCodeLine{00141\ \textcolor{comment}{\ \ \ typed\ vector/matrix\ */}}
+\DoxyCodeLine{00142\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix>}
+\DoxyCodeLine{00143\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1_typed_linear_system_3_01_t_matrix_00_01double_01_4_a65d89e93461fe37df0145851d9d4150d}{TypedLinearSystem}}<TMatrix,\ double>:}
+\DoxyCodeLine{00144\ \ \ \ \ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_a88d8481086b8e3fb9e4430c2057e7db3}{TypedLinearSystem\_Intf}}<TMatrix,\ double>}
+\DoxyCodeLine{00145\ \{}
+\DoxyCodeLine{00146\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00148\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_typed_linear_system_3_01_t_matrix_00_01double_01_4_a65d89e93461fe37df0145851d9d4150d}{TypedLinearSystem}}(}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{GenericLinearSystem<TMatrix>}}\ *\ \textcolor{keyword}{const}\ arg\_gen\_lin\_sys\_ptr}
+\DoxyCodeLine{00150\ \ \ \ \ ):}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_a88d8481086b8e3fb9e4430c2057e7db3}{TypedLinearSystem\_Intf}}<TMatrix,\ double>(arg\_gen\_lin\_sys\_ptr)}
+\DoxyCodeLine{00152\ \ \ \ \ \{\}}
+\DoxyCodeLine{00153\ }
+\DoxyCodeLine{00154\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ TMatrix<double>\ \&\mbox{\hyperlink{classcascade_1_1_typed_linear_system_3_01_t_matrix_00_01double_01_4_ae9203edcaaa6c79ebc785f2ef1f5c7fb}{get\_A\_typed}}()\textcolor{keyword}{\ const\ override\ }\{}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ this-\/>\mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_a30186543537979cae0bd0a125aecb8a1}{gen\_lin\_sys\_ptr}}-\/>get\_A();}
+\DoxyCodeLine{00156\ \ \ \ \ \}}
+\DoxyCodeLine{00157\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<double>}}\ \&\mbox{\hyperlink{classcascade_1_1_typed_linear_system_3_01_t_matrix_00_01double_01_4_a72f4bb43fa9a4368ecf77a6449ac8cbf}{get\_b\_typed}}()\textcolor{keyword}{\ const\ override\ }\{}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ this-\/>\mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_a30186543537979cae0bd0a125aecb8a1}{gen\_lin\_sys\_ptr}}-\/>get\_b();}
+\DoxyCodeLine{00159\ \ \ \ \ \}}
+\DoxyCodeLine{00160\ }
+\DoxyCodeLine{00161\ \};}
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix,\ \textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00164\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1_typed_linear_system___mut_addl_r_h_s_a3c4e5da9f0a94f5f2fa07bc2eb29aea3}{TypedLinearSystem\_MutAddlRHS}}:}
+\DoxyCodeLine{00165\ \ \ \ \ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_a88d8481086b8e3fb9e4430c2057e7db3}{TypedLinearSystem\_Intf}}<TMatrix,\ TPrecision>}
+\DoxyCodeLine{00166\ \{}
+\DoxyCodeLine{00167\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00168\ }
+\DoxyCodeLine{00169\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<double>}}\ additional\_rhs;}
+\DoxyCodeLine{00170\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ additional\_rhs\_typed;}
+\DoxyCodeLine{00171\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_typed_linear_system}{TypedLinearSystem<TMatrix,\ TPrecision>}}\ *\ \textcolor{keyword}{const}\ orig\_typed\_lin\_sys\_ptr;}
+\DoxyCodeLine{00172\ }
+\DoxyCodeLine{00173\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00174\ }
+\DoxyCodeLine{00175\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_typed_linear_system___mut_addl_r_h_s_a3c4e5da9f0a94f5f2fa07bc2eb29aea3}{TypedLinearSystem\_MutAddlRHS}}(}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_typed_linear_system}{TypedLinearSystem<TMatrix,\ TPrecision>}}\ *\ \textcolor{keyword}{const}\ arg\_orig\_typed\_lin\_sys\_ptr,}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<double>}}\ \&arg\_additional\_rhs}
+\DoxyCodeLine{00178\ \ \ \ \ ):}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_a88d8481086b8e3fb9e4430c2057e7db3}{TypedLinearSystem\_Intf}}<TMatrix,\ TPrecision>(}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_orig\_typed\_lin\_sys\_ptr-\/>\mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_a253a6acdf4f0413e0d015d5b9f3ed543}{get\_gen\_lin\_sys\_ptr}}()}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ ),}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ orig\_typed\_lin\_sys\_ptr(arg\_orig\_typed\_lin\_sys\_ptr),}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ additional\_rhs(arg\_additional\_rhs),}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ additional\_rhs\_typed(arg\_additional\_rhs.template\ cast<TPrecision>())}
+\DoxyCodeLine{00185\ \ \ \ \ \{\}}
+\DoxyCodeLine{00186\ }
+\DoxyCodeLine{00187\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<double>}}\ \&\mbox{\hyperlink{classcascade_1_1_typed_linear_system___mut_addl_r_h_s_a73d67b8b7f0b0a7c3c9d3009d33e52da}{get\_b}}()\textcolor{keyword}{\ const\ override\ }\{}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ additional\_rhs;}
+\DoxyCodeLine{00189\ \ \ \ \ \}}
+\DoxyCodeLine{00190\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ TMatrix<TPrecision>\ \&\mbox{\hyperlink{classcascade_1_1_typed_linear_system___mut_addl_r_h_s_a874ba60313a2dd85a042eb5c68fffd8d}{get\_A\_typed}}()\textcolor{keyword}{\ const\ override\ }\{}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ orig\_typed\_lin\_sys\_ptr-\/>get\_A\_typed();}
+\DoxyCodeLine{00192\ \ \ \ \ \}}
+\DoxyCodeLine{00193\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ \&\mbox{\hyperlink{classcascade_1_1_typed_linear_system___mut_addl_r_h_s_a15f71e7ad59d60a9385edfc36c01b716}{get\_b\_typed}}()\textcolor{keyword}{\ const\ override\ }\{}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ additional\_rhs\_typed;}
+\DoxyCodeLine{00195\ \ \ \ \ \}}
+\DoxyCodeLine{00196\ }
+\DoxyCodeLine{00197\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_typed_linear_system___mut_addl_r_h_s_a8f9096150c4a611f59125a014ff73633}{set\_rhs}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<double>}}\ \&arg\_rhs)\ \{}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (orig\_typed\_lin\_sys\_ptr-\/>get\_m()\ !=\ arg\_rhs.\mbox{\hyperlink{classcascade_1_1_vector_a66cff08224d9808fc55bc5b53bdd4fdb}{rows}}())\ \{}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}TypedLinearSystem\_MutableAdditionalRHS:\ rhs\ for\ linear\ "{}}}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}system\ in\ set\_rhs\ is\ incompatible"{}}}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ additional\_rhs\ =\ arg\_rhs;}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ additional\_rhs\_typed\ =\ arg\_rhs.template\ cast<TPrecision>();}
+\DoxyCodeLine{00206\ \ \ \ \ \}}
+\DoxyCodeLine{00207\ }
+\DoxyCodeLine{00208\ \};}
+\DoxyCodeLine{00209\ }
+\DoxyCodeLine{00210\ \}}
+\DoxyCodeLine{00211\ }
+\DoxyCodeLine{00212\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

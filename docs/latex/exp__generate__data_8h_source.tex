@@ -1,0 +1,139 @@
+\doxysection{exp\+\_\+generate\+\_\+data.\+h}
+\hypertarget{exp__generate__data_8h_source}{}\label{exp__generate__data_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/experimentation/include/exp\_run/exp\_generate\_data.h@{C:/Users/dosre/dev/precision-\/cascade/experimentation/include/exp\_run/exp\_generate\_data.h}}
+\mbox{\hyperlink{exp__generate__data_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ EXP\_GENERATE\_DATA\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ EXP\_GENERATE\_DATA\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{exp__data_8h}{exp\_data/exp\_data.h}}"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{exp__tools_8h}{exp\_tools/exp\_tools.h}}"{}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_precond_arg_pkg_8h}{tools/arg\_pkgs/PrecondArgPkg.h}}"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_linear_system_8h}{tools/arg\_pkgs/LinearSystem.h}}"{}}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <stdexcept>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix>}
+\DoxyCodeLine{00015\ \mbox{\hyperlink{struct_preconditioner___data}{Preconditioner\_Data<TMatrix>}}\ \mbox{\hyperlink{exp__generate__data_8h_a7a336dc0bcb641678bd8fa8805a9931b}{calc\_preconditioner}}(}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{cascade::GenericLinearSystem<TMatrix>}}\ \&gen\_lin\_sys,}
+\DoxyCodeLine{00017\ \ \ \ \ \mbox{\hyperlink{struct_preconditioner___spec}{Preconditioner\_Spec}}\ precond\_specs,}
+\DoxyCodeLine{00018\ \ \ \ \ \mbox{\hyperlink{class_experiment___log}{Experiment\_Log}}\ logger}
+\DoxyCodeLine{00019\ )\ \{}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ \mbox{\hyperlink{class_experiment___clock}{Experiment\_Clock}}\ exp\_clock;}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{cascade::PrecondArgPkg<TMatrix,\ double>}}\ precond\_args\_dbl;}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ logger.\mbox{\hyperlink{class_experiment___log_a033ee25bf73e58f7acfa53a4e4d6dfb4}{info}}(}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Start\ calc\_preconditioner:\ "{}}\ +\ precond\_specs.\mbox{\hyperlink{struct_preconditioner___spec_ad0abc51d2af541f8dcd8ffcc0905911f}{get\_spec\_string}}()}
+\DoxyCodeLine{00027\ \ \ \ \ );}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordflow}{if}\ (precond\_specs.\mbox{\hyperlink{struct_preconditioner___spec_acadac00ef2fcb1c56be096fc874e608e}{name}}\ ==\ \textcolor{stringliteral}{"{}none"{}})\ \{}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ exp\_clock.\mbox{\hyperlink{class_experiment___clock_ade199cc94215d4dac68cbe5799b40a90}{start\_clock\_experiment}}();}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ precond\_args\_dbl\ =\ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{cascade::PrecondArgPkg<TMatrix,\ double>}}(}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ std::make\_shared<\mbox{\hyperlink{classcascade_1_1_no_preconditioner}{cascade::NoPreconditioner<TMatrix,\ double>}}>()}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ exp\_clock.\mbox{\hyperlink{class_experiment___clock_ad7aa07f9b061c9966574840ff1da5183}{stop\_clock\_experiment}}();}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (precond\_specs.\mbox{\hyperlink{struct_preconditioner___spec_acadac00ef2fcb1c56be096fc874e608e}{name}}\ ==\ \textcolor{stringliteral}{"{}jacobi"{}})\ \{}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ exp\_clock.\mbox{\hyperlink{class_experiment___clock_ade199cc94215d4dac68cbe5799b40a90}{start\_clock\_experiment}}();}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ precond\_args\_dbl\ =\ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{cascade::PrecondArgPkg<TMatrix,\ double>}}(}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ std::make\_shared<\mbox{\hyperlink{classcascade_1_1_jacobi_preconditioner}{cascade::JacobiPreconditioner<TMatrix,\ double>}}>(}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ gen\_lin\_sys.\mbox{\hyperlink{classcascade_1_1_generic_linear_system_a4538441ccc8007f1ab651939a430d91c}{get\_A}}()}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ exp\_clock.\mbox{\hyperlink{class_experiment___clock_ad7aa07f9b061c9966574840ff1da5183}{stop\_clock\_experiment}}();}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (precond\_specs.\mbox{\hyperlink{struct_preconditioner___spec_acadac00ef2fcb1c56be096fc874e608e}{name}}\ ==\ \textcolor{stringliteral}{"{}ilu0"{}})\ \{}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ exp\_clock.\mbox{\hyperlink{class_experiment___clock_ade199cc94215d4dac68cbe5799b40a90}{start\_clock\_experiment}}();}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ std::shared\_ptr<cascade::ILUPreconditioner<TMatrix,\ double>>\ ilu0\ =\ (}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ std::make\_shared<cascade::ILUPreconditioner<TMatrix,\ double>>(}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ gen\_lin\_sys.\mbox{\hyperlink{classcascade_1_1_generic_linear_system_a4538441ccc8007f1ab651939a430d91c}{get\_A}}()}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ exp\_clock.\mbox{\hyperlink{class_experiment___clock_ad7aa07f9b061c9966574840ff1da5183}{stop\_clock\_experiment}}();}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ logger.\mbox{\hyperlink{class_experiment___log_a033ee25bf73e58f7acfa53a4e4d6dfb4}{info}}(}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}ILUPreconditioner:\ L\ info:\ "{}}\ +\ ilu0-\/>get\_L().get\_info\_string()}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ logger.\mbox{\hyperlink{class_experiment___log_a033ee25bf73e58f7acfa53a4e4d6dfb4}{info}}(}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}ILUPreconditioner:\ U\ info:\ "{}}\ +\ ilu0-\/>get\_U().get\_info\_string()}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ precond\_args\_dbl\ =\ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{cascade::PrecondArgPkg<TMatrix,\ double>}}(ilu0);}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (precond\_specs.\mbox{\hyperlink{struct_preconditioner___spec_acadac00ef2fcb1c56be096fc874e608e}{name}}\ ==\ \textcolor{stringliteral}{"{}ilutp"{}})\ \{}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ exp\_clock.\mbox{\hyperlink{class_experiment___clock_ade199cc94215d4dac68cbe5799b40a90}{start\_clock\_experiment}}();}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ std::shared\_ptr<cascade::ILUPreconditioner<TMatrix,\ double>>\ ilutp\ =\ (}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ std::make\_shared<cascade::ILUPreconditioner<TMatrix,\ double>>(}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ gen\_lin\_sys.\mbox{\hyperlink{classcascade_1_1_generic_linear_system_a4538441ccc8007f1ab651939a430d91c}{get\_A}}(),}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ precond\_specs.\mbox{\hyperlink{struct_preconditioner___spec_a075153d5bcda802edf343edfa5a24bfd}{ilutp\_tau}},}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ precond\_specs.\mbox{\hyperlink{struct_preconditioner___spec_a090e8e32a0dc192413f603723148c3a4}{ilutp\_p}},}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{true}}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ exp\_clock.\mbox{\hyperlink{class_experiment___clock_ad7aa07f9b061c9966574840ff1da5183}{stop\_clock\_experiment}}();}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ logger.\mbox{\hyperlink{class_experiment___log_a033ee25bf73e58f7acfa53a4e4d6dfb4}{info}}(}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}ILUPreconditioner:\ L\ info:\ "{}}\ +\ ilutp-\/>get\_L().get\_info\_string()}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ logger.\mbox{\hyperlink{class_experiment___log_a033ee25bf73e58f7acfa53a4e4d6dfb4}{info}}(}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}ILUPreconditioner:\ U\ info:\ "{}}\ +\ ilutp-\/>get\_U().get\_info\_string()}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ logger.\mbox{\hyperlink{class_experiment___log_a033ee25bf73e58f7acfa53a4e4d6dfb4}{info}}(}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}ILUPreconditioner:\ P\ info:\ "{}}\ +\ ilutp-\/>get\_P().get\_info\_string()}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ precond\_args\_dbl\ =\ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{cascade::PrecondArgPkg<TMatrix,\ double>}}(ilutp);}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}calc\_preconditioner:\ invalid\ precond\_specs\ encountered"{}}}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00093\ \ \ \ \ \}}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \ \ \ \ logger.\mbox{\hyperlink{class_experiment___log_a033ee25bf73e58f7acfa53a4e4d6dfb4}{info}}(}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Finish\ calc\_preconditioner:\ "{}}\ +\ precond\_specs.\mbox{\hyperlink{struct_preconditioner___spec_ad0abc51d2af541f8dcd8ffcc0905911f}{get\_spec\_string}}()}
+\DoxyCodeLine{00097\ \ \ \ \ );}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{struct_preconditioner___data}{Preconditioner\_Data<TMatrix>}}(}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ precond\_specs.\mbox{\hyperlink{struct_preconditioner___spec_ad0abc51d2af541f8dcd8ffcc0905911f}{get\_spec\_string}}(),}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ exp\_clock,}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ precond\_specs,}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ precond\_args\_dbl}
+\DoxyCodeLine{00104\ \ \ \ \ );}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \}}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \textcolor{keyword}{template}\ <}
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TSolver,}
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix}
+\DoxyCodeLine{00111\ >}
+\DoxyCodeLine{00112\ \mbox{\hyperlink{struct_solve___data}{Solve\_Data<TSolver,\ TMatrix>}}\ \mbox{\hyperlink{exp__generate__data_8h_a31a06c107d715725ccaa0721261c79a9}{execute\_solve}}(}
+\DoxyCodeLine{00113\ \ \ \ \ std::string\ solver\_id,}
+\DoxyCodeLine{00114\ \ \ \ \ std::shared\_ptr<TSolver<TMatrix>>\ arg\_solver\_ptr,}
+\DoxyCodeLine{00115\ \ \ \ \ \mbox{\hyperlink{class_experiment___log}{Experiment\_Log}}\ logger,}
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{keywordtype}{bool}\ show\_plots}
+\DoxyCodeLine{00117\ )\ \{}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \ \ \ \ logger.\mbox{\hyperlink{class_experiment___log_a033ee25bf73e58f7acfa53a4e4d6dfb4}{info}}(\textcolor{stringliteral}{"{}Start\ execute\_solve:\ "{}}\ +\ solver\_id);}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \ \ \ \ \mbox{\hyperlink{class_experiment___clock}{Experiment\_Clock}}\ exp\_clock;}
+\DoxyCodeLine{00122\ \ \ \ \ exp\_clock.\mbox{\hyperlink{class_experiment___clock_ade199cc94215d4dac68cbe5799b40a90}{start\_clock\_experiment}}();}
+\DoxyCodeLine{00123\ \ \ \ \ arg\_solver\_ptr-\/>solve();}
+\DoxyCodeLine{00124\ \ \ \ \ \textcolor{keywordflow}{if}\ (show\_plots)\ \{\ arg\_solver\_ptr-\/>view\_relres\_plot(\textcolor{stringliteral}{"{}log"{}});\ \}}
+\DoxyCodeLine{00125\ \ \ \ \ exp\_clock.\mbox{\hyperlink{class_experiment___clock_ad7aa07f9b061c9966574840ff1da5183}{stop\_clock\_experiment}}();}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ \ \ \ \ logger.\mbox{\hyperlink{class_experiment___log_a033ee25bf73e58f7acfa53a4e4d6dfb4}{info}}(\textcolor{stringliteral}{"{}Finish\ execute\_solve:\ "{}}\ +\ solver\_id);}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{struct_solve___data}{Solve\_Data<TSolver,\ TMatrix>}}(solver\_id,\ exp\_clock,\ arg\_solver\_ptr);}
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ \}}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

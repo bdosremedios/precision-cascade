@@ -1,0 +1,66 @@
+\doxysection{benchmark\+\_\+\+VP\+\_\+\+GMRES\+\_\+\+IR.\+h}
+\hypertarget{benchmark___v_p___g_m_r_e_s___i_r_8h_source}{}\label{benchmark___v_p___g_m_r_e_s___i_r_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/benchmark/include/benchmark\_VP\_GMRES\_IR.h@{C:/Users/dosre/dev/precision-\/cascade/benchmark/include/benchmark\_VP\_GMRES\_IR.h}}
+\mbox{\hyperlink{benchmark___v_p___g_m_r_e_s___i_r_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ BENCHMARK\_VP\_GMRES\_IR\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ BENCHMARK\_VP\_GMRES\_IR\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{benchmark___nested___g_m_r_e_s_8h}{benchmark\_Nested\_GMRES.h}}"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_linear_system_8h}{tools/arg\_pkgs/LinearSystem.h}}"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_solve_arg_pkg_8h}{tools/arg\_pkgs/SolveArgPkg.h}}"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_v_p___g_m_r_e_s___i_r_8h}{solvers/nested/GMRES\_IR/VP\_GMRES\_IR.h}}"{}}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix>}
+\DoxyCodeLine{00011\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_no_progress___outer_restart_count}{NoProgress\_OuterRestartCount}}:}
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcascade_1_1_outer_restart_count}{cascade::OuterRestartCount}}<TMatrix>}
+\DoxyCodeLine{00013\ \{}
+\DoxyCodeLine{00014\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classcascade_1_1_outer_restart_count}{cascade::OuterRestartCount}}<TMatrix>\mbox{\hyperlink{classcascade_1_1_outer_restart_count_a60a193ec27598072118e4404ced9f329}{::OuterRestartCount}};}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{comment}{//\ Remove\ any\ progress\ towards\ solution}}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_no_progress___outer_restart_count_a76365db62c8a4b7d0e5809d76f8fe464}{outer\_iterate\_complete}}()\textcolor{keyword}{\ override\ }\{}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a0d73c5b3c750a46e0b198b2952547448}{generic\_soln}}\ =\ this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ac743d15e9e6f1077c76394d7a17a6bb3}{init\_guess}};}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ ASSERT\_EQ(}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a89076f801630b485f9631cca7211ccdd}{inner\_solver}}-\/>get\_iteration(),}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>inner\_solve\_arg\_pkg.max\_iter}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00025\ \ \ \ \ \}}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \};}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_benchmark___v_p___g_m_r_e_s___i_r}{Benchmark\_VP\_GMRES\_IR}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_benchmark___nested___g_m_r_e_s}{Benchmark\_Nested\_GMRES}}}
+\DoxyCodeLine{00030\ \{}
+\DoxyCodeLine{00031\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TSolver>}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_benchmark___v_p___g_m_r_e_s___i_r_a8011c4499e5c3523e9a1b36f8eb3a94c}{execute\_vp\_gmres\_ir}}(}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_benchmark___accum_clock}{Benchmark\_AccumClock}}\ \&clock,\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{NoFillMatrixSparse<double>}}\ \&\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}}
+\DoxyCodeLine{00036\ \ \ \ \ )\ \{}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<double>}}\ x\_soln\ =\ \mbox{\hyperlink{classcascade_1_1_vector_a2ff3307e7e428a007e1b7caf8bf9e560}{Vector<double>::Random}}(}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_benchmark_base_aa7bdcad1019b0c4fb742b58a194ad12a}{BenchmarkBase::bundle}},\ \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}.rows()}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{GenericLinearSystem<NoFillMatrixSparse>}}\ gen\_lin\_sys(\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}},\ \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}*x\_soln);}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{SolveArgPkg}}\ args(}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_benchmark_base_a59e0610c2842e95a61ce86960353ccd9}{nested\_gmres\_outer\_iters}},\ \mbox{\hyperlink{class_benchmark_base_aad1cc09fc411f40380b33fbd9cdf2900}{nested\_gmres\_inner\_iters}},\ 0.}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ clock.\mbox{\hyperlink{class_benchmark___accum_clock_a6b5bf927b651c0d9936eb78e1e8aa53b}{clock\_start}}();}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ TSolver<NoFillMatrixSparse>\ vp\_restarted\_gmres(}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ \&gen\_lin\_sys,\ args}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ vp\_restarted\_gmres.solve();}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ clock.\mbox{\hyperlink{class_benchmark___accum_clock_ab14d48a350c1a4e884f09966a91f107e}{clock\_stop}}();}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ ASSERT\_EQ(vp\_restarted\_gmres.get\_iteration(),\ \mbox{\hyperlink{class_benchmark_base_a59e0610c2842e95a61ce86960353ccd9}{nested\_gmres\_outer\_iters}});}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \};}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \};}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

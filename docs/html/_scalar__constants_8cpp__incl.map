@@ -1,0 +1,26 @@
+<map id="C:/Users/dosre/dev/precision&#45;cascade/src/types/Scalar/Scalar_constants.cpp" name="C:/Users/dosre/dev/precision&#45;cascade/src/types/Scalar/Scalar_constants.cpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="58,5,287,64"/>
+<area shape="rect" id="Node000002" href="$_scalar_8h.html" title=" " alt="" coords="338,112,484,139"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="251,62,364,104,362,109,249,67"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,261,116,288"/>
+<area shape="poly" id="edge13_Node000001_Node000004" title=" " alt="" coords="146,66,102,120,81,153,66,187,60,217,60,246,55,246,55,217,61,186,77,150,97,117,141,63"/>
+<area shape="rect" id="Node000003" href="$cuda__check_8h.html" title=" " alt="" coords="660,187,794,213"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="467,137,658,180,656,185,466,142"/>
+<area shape="poly" id="edge9_Node000002_Node000004" title=" " alt="" coords="338,134,268,141,194,152,129,168,105,178,88,189,78,201,71,216,64,247,59,246,66,214,73,198,84,185,102,173,128,163,193,147,267,136,337,129"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="783,261,874,288"/>
+<area shape="poly" id="edge10_Node000002_Node000005" title=" " alt="" coords="485,126,571,131,666,141,751,158,784,170,808,185,818,198,826,214,831,246,826,246,820,215,814,201,804,189,782,175,750,163,665,146,571,136,485,131"/>
+<area shape="rect" id="Node000008" href="$_type_identity_8h.html" title=" " alt="" coords="97,187,232,213"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="369,142,223,184,222,179,367,137"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="256,187,417,213"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="400,141,362,178,358,174,396,137"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="441,187,533,213"/>
+<area shape="poly" id="edge11_Node000002_Node000010" title=" " alt="" coords="426,137,465,174,461,178,423,141"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="557,187,636,213"/>
+<area shape="poly" id="edge12_Node000002_Node000011" title=" " alt="" coords="444,137,551,178,549,183,442,142"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="660,214,647,216,361,248,131,270,131,265,361,243,647,211,659,209"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="746,212,800,250,797,254,743,216"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="592,261,678,288"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="713,216,664,254,661,250,709,212"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="702,261,755,288"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="730,214,731,246,725,246,725,214"/>
+</map>

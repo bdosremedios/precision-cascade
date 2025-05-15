@@ -1,0 +1,137 @@
+\doxysection{test\+\_\+toolkit.\+h}
+\hypertarget{test__toolkit_8h_source}{}\label{test__toolkit_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/test/include/test\_toolkit.h@{C:/Users/dosre/dev/precision-\/cascade/test/include/test\_toolkit.h}}
+\mbox{\hyperlink{test__toolkit_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ TEST\_TOOLKIT\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ TEST\_TOOLKIT\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{abs_8h}{tools/abs.h}}"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{types_8h}{types/types.h}}"{}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <cmath>}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespacecascade}{cascade}};}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix,\ \textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00012\ TPrecision\ \mbox{\hyperlink{test__toolkit_8h_a6aeff71e4e368932f645c35db244acdc}{mat\_max\_mag}}(\textcolor{keyword}{const}\ TMatrix<TPrecision>\ \&\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}})\ \{}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \ \ \ \ TPrecision\ abs\_max\ =\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(0);}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}.rows();\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ j=0;\ j<\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}.cols();\ ++j)\ \{}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{namespacecascade_1_1abs__ns_ab08ce3a88268964a87b50e39d0644268}{abs\_ns::abs}}(\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}.get\_elem(\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}},\ j).get\_scalar())\ >\ abs\_max)\ \{}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ abs\_max\ =\ \mbox{\hyperlink{namespacecascade_1_1abs__ns_ab08ce3a88268964a87b50e39d0644268}{abs\_ns::abs}}(\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}.get\_elem(\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}},\ j).get\_scalar());}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00021\ \ \ \ \ \}}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordflow}{return}\ abs\_max;}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00027\ TPrecision\ \mbox{\hyperlink{test__toolkit_8h_a27dfb67511beecc5dbfccdf6f6b2298a}{min\_1\_mag}}(\textcolor{keyword}{const}\ TPrecision\ \&val)\ \{}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordflow}{return}\ std::max(\mbox{\hyperlink{namespacecascade_1_1abs__ns_ab08ce3a88268964a87b50e39d0644268}{abs\_ns::abs}}(val),\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(1.));}
+\DoxyCodeLine{00029\ \}}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00032\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_tol}{Tol}}}
+\DoxyCodeLine{00033\ \{}
+\DoxyCodeLine{00034\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{comment}{//\ Basic\ error\ tolerance}}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_tol_a0c0bc331a6e6c65a7c125108723a47d6}{roundoff}}();}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{static}\ TPrecision\ \mbox{\hyperlink{class_tol_a112e41b078b657c66fa9e4a02ee67a7d}{roundoff\_T}}()\ \{}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(\mbox{\hyperlink{class_tol_a0c0bc331a6e6c65a7c125108723a47d6}{roundoff}}());}
+\DoxyCodeLine{00040\ \ \ \ \ \}}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_tol_a9e9878ba8add6ff3efa0b0243dcdb53b}{gamma}}(\textcolor{keywordtype}{int}\ n)\ \{}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ n*\mbox{\hyperlink{class_tol_a0c0bc331a6e6c65a7c125108723a47d6}{roundoff}}()/(1-\/n*\mbox{\hyperlink{class_tol_a0c0bc331a6e6c65a7c125108723a47d6}{roundoff}}());\ \textcolor{comment}{//\ 2002\ Higham\ Ch.3}}
+\DoxyCodeLine{00043\ \ \ \ \ \}}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{static}\ TPrecision\ \mbox{\hyperlink{class_tol_ae3e6b2c6ac70ff7b466bbc2af092ef5b}{gamma\_T}}(\textcolor{keywordtype}{int}\ n)\ \{}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(\mbox{\hyperlink{class_tol_a9e9878ba8add6ff3efa0b0243dcdb53b}{gamma}}(n));}
+\DoxyCodeLine{00046\ \ \ \ \ \}}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{comment}{//\ Algorithm\ accumulation\ error\ tolerance}}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_tol_a5e75e5d5d9eb70652a3f7d2e61a8d576}{substitution\_tol}}(\textcolor{keywordtype}{double}\ cond,\ \textcolor{keywordtype}{int}\ n)\ \{}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ cond*\mbox{\hyperlink{class_tol_a9e9878ba8add6ff3efa0b0243dcdb53b}{gamma}}(n)/(1-\/cond*\mbox{\hyperlink{class_tol_a9e9878ba8add6ff3efa0b0243dcdb53b}{gamma}}(n));\ \textcolor{comment}{//\ 2002\ Higham\ Ch.8}}
+\DoxyCodeLine{00051\ \ \ \ \ \}}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{static}\ TPrecision\ \mbox{\hyperlink{class_tol_a98f5f03de564c0f8649a7ff48fe50eb5}{substitution\_tol\_T}}(\textcolor{keywordtype}{double}\ cond,\ \textcolor{keywordtype}{int}\ n)\ \{}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(\mbox{\hyperlink{class_tol_a5e75e5d5d9eb70652a3f7d2e61a8d576}{substitution\_tol}}(cond,\ n));}
+\DoxyCodeLine{00054\ \ \ \ \ \}}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_tol_a85cdef61d55d4baf974071e5a73a6926}{loss\_of\_ortho\_tol}}(\textcolor{keywordtype}{double}\ cond,\ \textcolor{keywordtype}{int}\ n)\ \{\ \textcolor{comment}{//\ 1967\ Giraud}}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ scale\_c\_on\_n\ =\ (}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ 1.74*std::sqrt(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{double}\textcolor{keyword}{>}(n))*(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{double}\textcolor{keyword}{>}(n)+1)}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ scale\_c\_on\_n*cond*\mbox{\hyperlink{class_tol_a0c0bc331a6e6c65a7c125108723a47d6}{roundoff}}();}
+\DoxyCodeLine{00060\ \ \ \ \ \}}
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keyword}{static}\ TPrecision\ \mbox{\hyperlink{class_tol_a0a0b2963075687a198a7f820e1fb7cf5}{loss\_of\_ortho\_tol\_T}}(TPrecision\ cond,\ \textcolor{keywordtype}{int}\ n)\ \{}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(\mbox{\hyperlink{class_tol_a85cdef61d55d4baf974071e5a73a6926}{loss\_of\_ortho\_tol}}(cond,\ n));}
+\DoxyCodeLine{00063\ \ \ \ \ \}}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{comment}{//\ Special\ case\ values}}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_tol_adb0b5e402fb55700e09a2b5d919d8132}{matlab\_dbl\_near}}()\ \{\ \textcolor{keywordflow}{return}\ std::pow(10,\ -\/14);\ \}}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{comment}{//\ Preconditioner\ error\ test\ tolerance}}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keyword}{static}\ TPrecision\ \mbox{\hyperlink{class_tol_a0cd50fdfb68465e74cb6ceb0aa46cef5}{inv\_elem\_tol}}()\ \{}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(std::pow(10,\ 3)*\mbox{\hyperlink{class_tol_a0c0bc331a6e6c65a7c125108723a47d6}{roundoff}}());}
+\DoxyCodeLine{00071\ \ \ \ \ \}}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_tol_a6ad1aa0c3305fc9c34f284c679b27566}{dbl\_ilu\_elem\_tol}}()\ \{\ \textcolor{keywordflow}{return}\ std::pow(10,\ -\/10);\ \}}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{comment}{//\ Iterative\ solver\ convergence\ tolerance}}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_tol_a868e7b71a2de9793e36a3526984cacde}{stationary\_conv\_tol}}();}
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_tol_a0614ab8d3e57c3d340fcdc9853dae00c}{krylov\_conv\_tol}}();}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_tol_ab75579ab32f161db2b3d7a37258daff1}{nested\_krylov\_conv\_tol}}();}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \};}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix,\ \textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00082\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_common_mat_random_interface}{CommonMatRandomInterface}}}
+\DoxyCodeLine{00083\ \{}
+\DoxyCodeLine{00084\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keyword}{static}\ TMatrix<TPrecision>\ \mbox{\hyperlink{class_common_mat_random_interface_a9275763a6e0eddc78add18ddf801cb33}{rand\_matrix}}(}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ cu\_handles,\ \textcolor{keywordtype}{int}\ arg\_m\_rows,\ \textcolor{keywordtype}{int}\ arg\_n\_cols}
+\DoxyCodeLine{00088\ \ \ \ \ )\ \{}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}CommonRandomInterface:\ reached\ unimplemented\ default\ "{}}}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}implementation\ in\ generate\_rand\_matrix"{}}}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00093\ \ \ \ \ \}}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \};}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00098\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_common_mat_random_interface}{CommonMatRandomInterface}}<\mbox{\hyperlink{classcascade_1_1_matrix_dense}{MatrixDense}},\ TPrecision>}
+\DoxyCodeLine{00099\ \{}
+\DoxyCodeLine{00100\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{MatrixDense<TPrecision>}}\ \mbox{\hyperlink{class_common_mat_random_interface_3_01_matrix_dense_00_01_t_precision_01_4_a1865f0d46030c75f43b17263d918d350}{rand\_matrix}}(}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ cu\_handles,\ \textcolor{keywordtype}{int}\ arg\_m\_rows,\ \textcolor{keywordtype}{int}\ arg\_n\_cols}
+\DoxyCodeLine{00104\ \ \ \ \ )\ \{}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_matrix_dense_ac78e0e1c9c4d2194d97d3b6140e99899}{MatrixDense<TPrecision>::Random}}(}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ cu\_handles,\ arg\_m\_rows,\ arg\_n\_cols}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00108\ \ \ \ \ \}}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \};}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00113\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_common_mat_random_interface}{CommonMatRandomInterface}}<\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{NoFillMatrixSparse}},\ TPrecision>}
+\DoxyCodeLine{00114\ \{}
+\DoxyCodeLine{00115\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{double}\ sparse\_fill\_ratio\ =\ 0.67;}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{NoFillMatrixSparse<TPrecision>}}\ \mbox{\hyperlink{class_common_mat_random_interface_3_01_no_fill_matrix_sparse_00_01_t_precision_01_4_a3aa93d686f8dce6dc0d3bed35168210a}{rand\_matrix}}(}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ cu\_handles,\ \textcolor{keywordtype}{int}\ arg\_m\_rows,\ \textcolor{keywordtype}{int}\ arg\_n\_cols}
+\DoxyCodeLine{00123\ \ \ \ \ )\ \{}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_ae48661d2f11b5e2affe1bddbb43a8464}{NoFillMatrixSparse<TPrecision>::Random}}(}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ cu\_handles,\ arg\_m\_rows,\ arg\_n\_cols,\ sparse\_fill\_ratio}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00127\ \ \ \ \ \}}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \};}
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

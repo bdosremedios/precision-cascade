@@ -1,0 +1,723 @@
+\doxysection{ILU\+\_\+subroutines.\+h}
+\hypertarget{_i_l_u__subroutines_8h_source}{}\label{_i_l_u__subroutines_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/include/tools/ILU\_subroutines.h@{C:/Users/dosre/dev/precision-\/cascade/include/tools/ILU\_subroutines.h}}
+\mbox{\hyperlink{_i_l_u__subroutines_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ ILU\_SUBROUTINES\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ ILU\_SUBROUTINES\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{types_8h}{types/types.h}}"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{abs_8h}{tools/abs.h}}"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_sort_8h}{tools/Sort.h}}"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_heap_8h}{tools/Heap.h}}"{}}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <unordered\_set>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <functional>}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacecascade_1_1ilu__subrtns}{cascade::ilu\_subrtns}}\ \{}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix,\ \textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00017\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structcascade_1_1ilu__subrtns_1_1_i_l_u_triplet}{ILUTriplet}}\ \{}
+\DoxyCodeLine{00018\ \ \ \ \ TMatrix<TPrecision>\ \mbox{\hyperlink{structcascade_1_1ilu__subrtns_1_1_i_l_u_triplet_a2d75c9aafbdad28313c4e1e18cf8d466}{L}}\ =\ TMatrix<TPrecision>(\mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}());}
+\DoxyCodeLine{00019\ \ \ \ \ TMatrix<TPrecision>\ \mbox{\hyperlink{structcascade_1_1ilu__subrtns_1_1_i_l_u_triplet_af656b57ab0eab4b9eaf12f235bb7327c}{U}}\ =\ TMatrix<TPrecision>(\mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}());}
+\DoxyCodeLine{00020\ \ \ \ \ TMatrix<TPrecision>\ \mbox{\hyperlink{structcascade_1_1ilu__subrtns_1_1_i_l_u_triplet_a68fa75e8c90773bb258b3106c8b9c5d7}{P}}\ =\ TMatrix<TPrecision>(\mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}());}
+\DoxyCodeLine{00021\ \};}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{keyword}{namespace}}
+\DoxyCodeLine{00024\ \{}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00027\ \textcolor{keyword}{using\ }DropRuleTauFunc\ =\ std::function<bool\ (}
+\DoxyCodeLine{00028\ \ \ \ \ TPrecision\ curr\_val,}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{int}\ row,}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{int}\ col}
+\DoxyCodeLine{00031\ )>;}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00034\ \textcolor{keyword}{using\ }DropRulePFunc\ =\ std::function<void\ (}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{int}\ col\_ind,}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{int}\ pivot\_ind,}
+\DoxyCodeLine{00037\ \ \ \ \ TPrecision\ *col\_ptr,}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{int}\ m\_dim}
+\DoxyCodeLine{00039\ )>;}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00042\ \textcolor{keyword}{using\ }HandleZeroBreakdownFunc\ =\ std::function<TPrecision\ (}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{int}\ col\_ind,}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{int}\ pivot\_ind}
+\DoxyCodeLine{00045\ )>;}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00048\ \textcolor{keyword}{struct\ }SparseMatDescrPtrs\ \{}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordtype}{int}\ *col\_offsets;}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordtype}{int}\ *row\_indices;}
+\DoxyCodeLine{00051\ \ \ \ \ TPrecision\ *vals;}
+\DoxyCodeLine{00052\ \};}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00055\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{NoFillMatrixSparse<TPrecision>}}\ convert\_SparseMatDescrPtrs\_to\_NoFillMatrixSparse(}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ \&arg\_cu\_handles,}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordtype}{int}\ m\_dim,}
+\DoxyCodeLine{00058\ \ \ \ \ SparseMatDescrPtrs<TPrecision>\ mat\_descrp\_ptrs}
+\DoxyCodeLine{00059\ )\ \{}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{NoFillMatrixSparse<TPrecision>}}(}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ arg\_cu\_handles,}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ mat\_descrp\_ptrs.col\_offsets,}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ mat\_descrp\_ptrs.row\_indices,}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ mat\_descrp\_ptrs.vals,}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ m\_dim,}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ m\_dim,}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ mat\_descrp\_ptrs.col\_offsets[m\_dim]}
+\DoxyCodeLine{00068\ \ \ \ \ );}
+\DoxyCodeLine{00069\ \}}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00072\ TPrecision\ *\ get\_new\_U\_col\_from\_left\_look(}
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keywordtype}{int}\ col\_ind,}
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keywordtype}{int}\ m\_dim,}
+\DoxyCodeLine{00075\ \ \ \ \ DropRuleTauFunc<TPrecision>\ drop\_rule\_tau\_U,}
+\DoxyCodeLine{00076\ \ \ \ \ SparseMatDescrPtrs<TPrecision>\ h\_A,}
+\DoxyCodeLine{00077\ \ \ \ \ SparseMatDescrPtrs<TPrecision>\ h\_L,}
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keywordtype}{int}\ *pivot\_row\_hist}
+\DoxyCodeLine{00079\ )\ \{}
+\DoxyCodeLine{00080\ \ \ \ \ }
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{comment}{//\ Instantiate\ new\ dense\ U\ col\ with\ A\ column}}
+\DoxyCodeLine{00082\ \ \ \ \ TPrecision\ *new\_col\_U\ =\ \textcolor{keyword}{static\_cast<}TPrecision\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ malloc(m\_dim*\textcolor{keyword}{sizeof}(TPrecision))}
+\DoxyCodeLine{00084\ \ \ \ \ );}
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<m\_dim;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ new\_col\_U[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ =\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(0.);}
+\DoxyCodeLine{00087\ \ \ \ \ \}}
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keywordtype}{int}\ col\_beg\_A\ =\ h\_A.col\_offsets[col\_ind];}
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keywordtype}{int}\ col\_end\_A\ =\ h\_A.col\_offsets[col\_ind+1];}
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ offset\_A=col\_beg\_A;\ offset\_A<col\_end\_A;\ ++offset\_A)\ \{}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ new\_col\_U[h\_A.row\_indices[offset\_A]]\ =\ h\_A.vals[offset\_A];}
+\DoxyCodeLine{00092\ \ \ \ \ \}}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{comment}{//\ Apply\ effects\ from\ previous\ column\ updates}}
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ k=0;\ k<col\_ind;\ ++k)\ \{}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ col\_beg\_L\ =\ h\_L.col\_offsets[k];}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ col\_end\_L\ =\ h\_L.col\_offsets[k+1];}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \ drop\_rule\_tau\_U(}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ new\_col\_U[pivot\_row\_hist[k]],}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pivot\_row\_hist[k],}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ col\_ind}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ )\ \{}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Drop\ pivot\ U\ if\ matches\ rule}}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \ \ \ \ new\_col\_U[pivot\_row\_hist[k]]\ =\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(0.);}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ TPrecision\ effecting\_U\_val\ =\ new\_col\_U[pivot\_row\_hist[k]];}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Skip\ if\ no\ effect\ from\ U}}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (effecting\_U\_val\ !=\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(0.))\ \{}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ offset\_L=col\_beg\_L;\ offset\_L<col\_end\_L;\ ++offset\_L)\ \{}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ row\_L\ =\ h\_L.row\_indices[offset\_L];}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Don't\ apply\ to\ own\ pivot\ row}}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (row\_L\ !=\ pivot\_row\_hist[k])\ \{}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ TPrecision\ val\_L\ =\ h\_L.vals[offset\_L];}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Skip\ calc\ if\ there's\ no\ L\ mod}}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (val\_L\ !=\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(0.))\ \{}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ new\_col\_U[row\_L]\ -\/=\ val\_L*effecting\_U\_val;}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00130\ \ \ \ \ }
+\DoxyCodeLine{00131\ \ \ \ \ \}}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \ \ \ \ \textcolor{keywordflow}{return}\ new\_col\_U;}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ \}}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00138\ \textcolor{keywordtype}{void}\ single\_elem\_swap(\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}},\ \textcolor{keywordtype}{int}\ j,\ TPrecision\ *vec)\ \{}
+\DoxyCodeLine{00139\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}\ !=\ j)\ \{}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ TPrecision\ temp\ =\ vec[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}];}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ vec[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ =\ vec[j];}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ vec[j]\ =\ temp;}
+\DoxyCodeLine{00143\ \ \ \ \ \}}
+\DoxyCodeLine{00144\ \}}
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00147\ \textcolor{keywordtype}{int}\ find\_pivot\_loc\_in\_perm\_map(}
+\DoxyCodeLine{00148\ \ \ \ \ \textcolor{keywordtype}{int}\ col\_ind,}
+\DoxyCodeLine{00149\ \ \ \ \ \textcolor{keywordtype}{bool}\ to\_pivot,}
+\DoxyCodeLine{00150\ \ \ \ \ \textcolor{keywordtype}{int}\ m\_dim,}
+\DoxyCodeLine{00151\ \ \ \ \ TPrecision\ *new\_U\_col,}
+\DoxyCodeLine{00152\ \ \ \ \ \textcolor{keywordtype}{int}\ *row\_permutation\_map,}
+\DoxyCodeLine{00153\ \ \ \ \ \textcolor{keywordtype}{bool}\ *row\_finished,}
+\DoxyCodeLine{00154\ \ \ \ \ HandleZeroBreakdownFunc<TPrecision>\ handle\_breakdown}
+\DoxyCodeLine{00155\ )\ \{}
+\DoxyCodeLine{00156\ }
+\DoxyCodeLine{00157\ \ \ \ \ \textcolor{keywordtype}{int}\ ret\_val\ =\ col\_ind;}
+\DoxyCodeLine{00158\ \ \ \ \ \textcolor{keywordflow}{if}\ (to\_pivot)\ \{}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<m\_dim;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ !row\_finished[row\_permutation\_map[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]]\ \&\&}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (\mbox{\hyperlink{namespacecascade_1_1abs__ns_ab08ce3a88268964a87b50e39d0644268}{abs\_ns::abs}}(new\_U\_col[row\_permutation\_map[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]])\ >}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_1_1abs__ns_ab08ce3a88268964a87b50e39d0644268}{abs\_ns::abs}}(new\_U\_col[row\_permutation\_map[ret\_val]]))}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \ \ \ \ )\ \{}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ret\_val\ =\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}};}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00168\ \ \ \ \ \}}
+\DoxyCodeLine{00169\ }
+\DoxyCodeLine{00170\ \ \ \ \ \textcolor{comment}{//\ Handle\ pivot\ breakdown\ according\ to\ given\ function}}
+\DoxyCodeLine{00171\ \ \ \ \ \textcolor{keywordflow}{if}\ (new\_U\_col[row\_permutation\_map[ret\_val]]\ ==\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(0.))\ \{}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ new\_U\_col[row\_permutation\_map[ret\_val]]\ =\ handle\_breakdown(}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \ \ \ \ col\_ind,}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ ret\_val}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00176\ \ \ \ \ \}}
+\DoxyCodeLine{00177\ }
+\DoxyCodeLine{00178\ \ \ \ \ \textcolor{keywordflow}{return}\ ret\_val;}
+\DoxyCodeLine{00179\ }
+\DoxyCodeLine{00180\ \}}
+\DoxyCodeLine{00181\ }
+\DoxyCodeLine{00182\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00183\ TPrecision\ *\ get\_new\_L\_col\_from\_zeroing(}
+\DoxyCodeLine{00184\ \ \ \ \ \textcolor{keywordtype}{int}\ col\_ind,}
+\DoxyCodeLine{00185\ \ \ \ \ \textcolor{keywordtype}{int}\ pivot\_ind,}
+\DoxyCodeLine{00186\ \ \ \ \ \textcolor{keywordtype}{int}\ m\_dim,}
+\DoxyCodeLine{00187\ \ \ \ \ TPrecision\ *U\_col,}
+\DoxyCodeLine{00188\ \ \ \ \ \textcolor{keywordtype}{bool}\ *row\_finished}
+\DoxyCodeLine{00189\ )\ \{}
+\DoxyCodeLine{00190\ }
+\DoxyCodeLine{00191\ \ \ \ \ TPrecision\ *new\_L\_col\ =\ \textcolor{keyword}{static\_cast<}TPrecision\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ malloc(m\_dim*\textcolor{keyword}{sizeof}(TPrecision))}
+\DoxyCodeLine{00193\ \ \ \ \ );}
+\DoxyCodeLine{00194\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<m\_dim;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}\ ==\ pivot\_ind)\ \{}
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \ \ \ \ new\_L\_col[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ =\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(1.);}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \ \ \ \ new\_L\_col[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ =\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(0.);}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00200\ \ \ \ \ \}}
+\DoxyCodeLine{00201\ }
+\DoxyCodeLine{00202\ \ \ \ \ TPrecision\ pivot\_val\ =\ U\_col[pivot\_ind];}
+\DoxyCodeLine{00203\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<m\_dim;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!row\_finished[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ \&\&\ (\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}\ !=\ pivot\_ind))\ \{}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \ \ \ \ new\_L\_col[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ =\ U\_col[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]/pivot\_val;}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \ \ \ \ U\_col[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ =\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(0.);}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00208\ \ \ \ \ \}}
+\DoxyCodeLine{00209\ }
+\DoxyCodeLine{00210\ \ \ \ \ \textcolor{keywordflow}{return}\ new\_L\_col;}
+\DoxyCodeLine{00211\ }
+\DoxyCodeLine{00212\ \}}
+\DoxyCodeLine{00213\ }
+\DoxyCodeLine{00214\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00215\ \textcolor{keywordtype}{void}\ update\_SparseMatrixDescrPtrs\_w\_col(}
+\DoxyCodeLine{00216\ \ \ \ \ \textcolor{keywordtype}{int}\ col\_ind,}
+\DoxyCodeLine{00217\ \ \ \ \ \textcolor{keywordtype}{int}\ m\_dim,}
+\DoxyCodeLine{00218\ \ \ \ \ SparseMatDescrPtrs<TPrecision>\ mat\_descrp\_ptrs,}
+\DoxyCodeLine{00219\ \ \ \ \ TPrecision\ *col\_ptr}
+\DoxyCodeLine{00220\ )\ \{}
+\DoxyCodeLine{00221\ }
+\DoxyCodeLine{00222\ \ \ \ \ \textcolor{keywordtype}{int}\ col\_nnz\ =\ 0;}
+\DoxyCodeLine{00223\ \ \ \ \ \textcolor{keywordtype}{int}\ init\_offset\ =\ mat\_descrp\_ptrs.col\_offsets[col\_ind];}
+\DoxyCodeLine{00224\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<m\_dim;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (col\_ptr[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ !=\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(0.))\ \{}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \ \ \ \ mat\_descrp\_ptrs.row\_indices[init\_offset\ +\ col\_nnz]\ =\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}};}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \ \ \ \ mat\_descrp\_ptrs.vals[init\_offset\ +\ col\_nnz]\ =\ col\_ptr[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}];}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \ \ \ \ ++col\_nnz;}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00230\ \ \ \ \ \}}
+\DoxyCodeLine{00231\ \ \ \ \ mat\_descrp\_ptrs.col\_offsets[col\_ind+1]\ =\ init\_offset\ +\ col\_nnz;}
+\DoxyCodeLine{00232\ }
+\DoxyCodeLine{00233\ \}}
+\DoxyCodeLine{00234\ }
+\DoxyCodeLine{00235\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00236\ \textcolor{keywordtype}{void}\ left\_looking\_col\_elim\_delay\_perm(}
+\DoxyCodeLine{00237\ \ \ \ \ \textcolor{keywordtype}{int}\ col\_ind,}
+\DoxyCodeLine{00238\ \ \ \ \ \textcolor{keywordtype}{bool}\ to\_pivot,}
+\DoxyCodeLine{00239\ \ \ \ \ DropRuleTauFunc<TPrecision>\ drop\_rule\_tau\_U,}
+\DoxyCodeLine{00240\ \ \ \ \ DropRuleTauFunc<TPrecision>\ drop\_rule\_tau\_L,}
+\DoxyCodeLine{00241\ \ \ \ \ DropRulePFunc<TPrecision>\ drop\_rule\_p,}
+\DoxyCodeLine{00242\ \ \ \ \ HandleZeroBreakdownFunc<TPrecision>\ handle\_breakdown,}
+\DoxyCodeLine{00243\ \ \ \ \ \textcolor{keywordtype}{int}\ m\_dim,}
+\DoxyCodeLine{00244\ \ \ \ \ SparseMatDescrPtrs<TPrecision>\ h\_A,}
+\DoxyCodeLine{00245\ \ \ \ \ SparseMatDescrPtrs<TPrecision>\ h\_U,}
+\DoxyCodeLine{00246\ \ \ \ \ SparseMatDescrPtrs<TPrecision>\ h\_L,}
+\DoxyCodeLine{00247\ \ \ \ \ \textcolor{keywordtype}{int}\ *row\_permutation\_map,}
+\DoxyCodeLine{00248\ \ \ \ \ \textcolor{keywordtype}{int}\ *pivot\_row\_hist,}
+\DoxyCodeLine{00249\ \ \ \ \ \textcolor{keywordtype}{bool}\ *row\_finished}
+\DoxyCodeLine{00250\ )\ \{\ }
+\DoxyCodeLine{00251\ }
+\DoxyCodeLine{00252\ \ \ \ \ \textcolor{comment}{//\ Determine\ new\ column\ of\ U}}
+\DoxyCodeLine{00253\ \ \ \ \ TPrecision\ *new\_U\_col\ =\ get\_new\_U\_col\_from\_left\_look<TPrecision>(}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ col\_ind,}
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ m\_dim,}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ drop\_rule\_tau\_U,}
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ h\_A,}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ h\_L,}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ pivot\_row\_hist}
+\DoxyCodeLine{00260\ \ \ \ \ );}
+\DoxyCodeLine{00261\ }
+\DoxyCodeLine{00262\ \ \ \ \ \textcolor{comment}{//\ Determine\ pivot\ row}}
+\DoxyCodeLine{00263\ \ \ \ \ \textcolor{keywordtype}{int}\ pivot\_loc;}
+\DoxyCodeLine{00264\ \ \ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ pivot\_loc\ =\ find\_pivot\_loc\_in\_perm\_map<TPrecision>(}
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \ \ \ \ col\_ind,}
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \ \ \ \ to\_pivot,}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \ \ \ \ m\_dim,}
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \ \ \ \ new\_U\_col,}
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \ \ \ \ row\_permutation\_map,}
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \ \ \ \ row\_finished,}
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \ \ \ \ handle\_breakdown}
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00274\ \ \ \ \ \}\ \textcolor{keywordflow}{catch}\ (std::runtime\_error\ \mbox{\hyperlink{create__solve__matrices_8m_a329626dffc42c84371831246a2ddac71}{e}})\ \{}
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ free(new\_U\_col);}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ \mbox{\hyperlink{create__solve__matrices_8m_a329626dffc42c84371831246a2ddac71}{e}};}
+\DoxyCodeLine{00277\ \ \ \ \ \}}
+\DoxyCodeLine{00278\ \ \ \ \ \textcolor{keywordtype}{int}\ pivot\_ind\ =\ row\_permutation\_map[pivot\_loc];}
+\DoxyCodeLine{00279\ \ \ \ \ single\_elem\_swap(col\_ind,\ pivot\_loc,\ row\_permutation\_map);}
+\DoxyCodeLine{00280\ \ \ \ \ pivot\_row\_hist[col\_ind]\ =\ pivot\_ind;}
+\DoxyCodeLine{00281\ \ \ \ \ row\_finished[pivot\_ind]\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00282\ }
+\DoxyCodeLine{00283\ \ \ \ \ \textcolor{comment}{//\ Determine\ new\ column\ of\ L}}
+\DoxyCodeLine{00284\ \ \ \ \ TPrecision\ *new\_L\_col\ =\ get\_new\_L\_col\_from\_zeroing<TPrecision>(}
+\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ col\_ind,}
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ pivot\_ind,}
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ m\_dim,}
+\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ new\_U\_col,}
+\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ row\_finished}
+\DoxyCodeLine{00290\ \ \ \ \ );}
+\DoxyCodeLine{00291\ }
+\DoxyCodeLine{00292\ \ \ \ \ \textcolor{comment}{//\ Apply\ drop\ rules\ to\ new\ columns\ ensuring\ skip\ of\ pivot}}
+\DoxyCodeLine{00293\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<m\_dim;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (}
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \ \ \ \ (\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}\ !=\ pivot\_ind)\ \&\&}
+\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \ \ \ \ drop\_rule\_tau\_U(new\_U\_col[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}],\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}},\ col\_ind)}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ )\ \{}
+\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \ \ \ \ new\_U\_col[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ =\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(0.);}
+\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (}
+\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \ \ \ \ (\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}\ !=\ pivot\_ind)\ \&\&}
+\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \ \ \ \ drop\_rule\_tau\_L(new\_L\_col[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}],\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}},\ col\_ind)}
+\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ )\ \{}
+\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \ \ \ \ new\_L\_col[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ =\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(0.);}
+\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00306\ \ \ \ \ \}}
+\DoxyCodeLine{00307\ \ \ \ \ drop\_rule\_p(col\_ind,\ pivot\_ind,\ new\_U\_col,\ m\_dim);}
+\DoxyCodeLine{00308\ \ \ \ \ drop\_rule\_p(col\_ind,\ pivot\_ind,\ new\_L\_col,\ m\_dim);}
+\DoxyCodeLine{00309\ }
+\DoxyCodeLine{00310\ \ \ \ \ \textcolor{comment}{//\ Update\ h\_U\ and\ h\_L}}
+\DoxyCodeLine{00311\ \ \ \ \ update\_SparseMatrixDescrPtrs\_w\_col<TPrecision>(}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ col\_ind,\ m\_dim,\ h\_U,\ new\_U\_col}
+\DoxyCodeLine{00313\ \ \ \ \ );}
+\DoxyCodeLine{00314\ \ \ \ \ update\_SparseMatrixDescrPtrs\_w\_col<TPrecision>(}
+\DoxyCodeLine{00315\ \ \ \ \ \ \ \ \ col\_ind,\ m\_dim,\ h\_L,\ new\_L\_col}
+\DoxyCodeLine{00316\ \ \ \ \ );}
+\DoxyCodeLine{00317\ }
+\DoxyCodeLine{00318\ \ \ \ \ \textcolor{comment}{//\ Free\ columns}}
+\DoxyCodeLine{00319\ \ \ \ \ free(new\_U\_col);}
+\DoxyCodeLine{00320\ \ \ \ \ free(new\_L\_col);}
+\DoxyCodeLine{00321\ }
+\DoxyCodeLine{00322\ \}}
+\DoxyCodeLine{00323\ }
+\DoxyCodeLine{00324\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00325\ \textcolor{keywordtype}{void}\ exec\_SparseMatrixDescrPtrs\_perm(}
+\DoxyCodeLine{00326\ \ \ \ \ \textcolor{keywordtype}{int}\ m\_dim,}
+\DoxyCodeLine{00327\ \ \ \ \ SparseMatDescrPtrs<TPrecision>\ mat\_descrp\_ptrs,}
+\DoxyCodeLine{00328\ \ \ \ \ \textcolor{keywordtype}{int}\ *row\_permutation\_dict}
+\DoxyCodeLine{00329\ )\ \{}
+\DoxyCodeLine{00330\ }
+\DoxyCodeLine{00331\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ j=0;\ j<m\_dim;\ ++j)\ \{}
+\DoxyCodeLine{00332\ }
+\DoxyCodeLine{00333\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ col\_begin\ =\ mat\_descrp\_ptrs.col\_offsets[j];}
+\DoxyCodeLine{00334\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ col\_end\ =\ mat\_descrp\_ptrs.col\_offsets[j+1];}
+\DoxyCodeLine{00335\ }
+\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ offset\ =\ col\_begin;\ offset\ <\ col\_end;\ ++offset)\ \{}
+\DoxyCodeLine{00337\ \ \ \ \ \ \ \ \ \ \ \ \ mat\_descrp\_ptrs.row\_indices[offset]\ =\ (}
+\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ row\_permutation\_dict[mat\_descrp\_ptrs.row\_indices[offset]]}
+\DoxyCodeLine{00339\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00340\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00341\ }
+\DoxyCodeLine{00342\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_1_1sort_a3abc41c899e4800bceecb1fa37f3799d}{sort::in\_place\_passengered\_sort<int,\ TPrecision>}}(}
+\DoxyCodeLine{00343\ \ \ \ \ \ \ \ \ \ \ \ \ col\_begin,}
+\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ \ \ \ \ col\_end,}
+\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ \ \ \ \ mat\_descrp\_ptrs.row\_indices,}
+\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ \ \ \ \ mat\_descrp\_ptrs.vals}
+\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00348\ }
+\DoxyCodeLine{00349\ \ \ \ \ \}}
+\DoxyCodeLine{00350\ }
+\DoxyCodeLine{00351\ \}}
+\DoxyCodeLine{00352\ }
+\DoxyCodeLine{00353\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00354\ NoFillMatrixSparse<TPrecision>\ form\_permutation\_matrix(}
+\DoxyCodeLine{00355\ \ \ \ \ \textcolor{keyword}{const}\ cuHandleBundle\ \&arg\_cu\_handles,}
+\DoxyCodeLine{00356\ \ \ \ \ \textcolor{keywordtype}{int}\ m\_dim,}
+\DoxyCodeLine{00357\ \ \ \ \ \textcolor{keywordtype}{int}\ *row\_permutation\_map}
+\DoxyCodeLine{00358\ )\ \{}
+\DoxyCodeLine{00359\ }
+\DoxyCodeLine{00360\ \ \ \ \ \textcolor{keywordtype}{int}\ *col\_offsets\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(malloc((m\_dim+1)*\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int})));}
+\DoxyCodeLine{00361\ \ \ \ \ \textcolor{keywordtype}{int}\ *row\_indices\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(malloc(m\_dim*\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int})));}
+\DoxyCodeLine{00362\ \ \ \ \ TPrecision\ *vals\ =\ \textcolor{keyword}{static\_cast<}TPrecision\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{00363\ \ \ \ \ \ \ \ \ malloc(m\_dim*\textcolor{keyword}{sizeof}(TPrecision))}
+\DoxyCodeLine{00364\ \ \ \ \ );}
+\DoxyCodeLine{00365\ }
+\DoxyCodeLine{00366\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<(m\_dim+1);\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00367\ \ \ \ \ \ \ \ \ col\_offsets[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ =\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}};}
+\DoxyCodeLine{00368\ \ \ \ \ \}}
+\DoxyCodeLine{00369\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<m\_dim;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00370\ \ \ \ \ \ \ \ \ row\_indices[row\_permutation\_map[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]]\ =\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}};}
+\DoxyCodeLine{00371\ \ \ \ \ \ \ \ \ vals[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ =\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(1.);}
+\DoxyCodeLine{00372\ \ \ \ \ \}}
+\DoxyCodeLine{00373\ }
+\DoxyCodeLine{00374\ \ \ \ \ NoFillMatrixSparse<TPrecision>\ ret\_val(}
+\DoxyCodeLine{00375\ \ \ \ \ \ \ \ \ arg\_cu\_handles,}
+\DoxyCodeLine{00376\ \ \ \ \ \ \ \ \ col\_offsets,}
+\DoxyCodeLine{00377\ \ \ \ \ \ \ \ \ row\_indices,}
+\DoxyCodeLine{00378\ \ \ \ \ \ \ \ \ vals,}
+\DoxyCodeLine{00379\ \ \ \ \ \ \ \ \ m\_dim,\ m\_dim,\ m\_dim}
+\DoxyCodeLine{00380\ \ \ \ \ );}
+\DoxyCodeLine{00381\ }
+\DoxyCodeLine{00382\ \ \ \ \ free(col\_offsets);}
+\DoxyCodeLine{00383\ \ \ \ \ free(row\_indices);}
+\DoxyCodeLine{00384\ \ \ \ \ free(vals);}
+\DoxyCodeLine{00385\ }
+\DoxyCodeLine{00386\ \ \ \ \ \textcolor{keywordflow}{return}\ ret\_val;}
+\DoxyCodeLine{00387\ }
+\DoxyCodeLine{00388\ \}}
+\DoxyCodeLine{00389\ }
+\DoxyCodeLine{00390\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix,\ \textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00391\ \mbox{\hyperlink{structcascade_1_1ilu__subrtns_1_1_i_l_u_triplet}{ILUTriplet<TMatrix,\ TPrecision>}}\ sparse\_construct\_drop\_rule\_ILU(}
+\DoxyCodeLine{00392\ \ \ \ \ \textcolor{keywordtype}{bool}\ to\_pivot,}
+\DoxyCodeLine{00393\ \ \ \ \ DropRuleTauFunc<TPrecision>\ drop\_rule\_tau\_U,}
+\DoxyCodeLine{00394\ \ \ \ \ DropRuleTauFunc<TPrecision>\ drop\_rule\_tau\_L,}
+\DoxyCodeLine{00395\ \ \ \ \ DropRulePFunc<TPrecision>\ drop\_rule\_p,}
+\DoxyCodeLine{00396\ \ \ \ \ HandleZeroBreakdownFunc<TPrecision>\ handle\_breakdown,}
+\DoxyCodeLine{00397\ \ \ \ \ \textcolor{keywordtype}{int}\ max\_output\_nnz,}
+\DoxyCodeLine{00398\ \ \ \ \ \textcolor{keyword}{const}\ NoFillMatrixSparse<TPrecision>\ \&\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}}
+\DoxyCodeLine{00399\ )\ \{}
+\DoxyCodeLine{00400\ }
+\DoxyCodeLine{00401\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}.rows()\ !=\ \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}.cols())\ \{}
+\DoxyCodeLine{00402\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}Non\ square\ matrix\ A"{}});}
+\DoxyCodeLine{00403\ \ \ \ \ \}}
+\DoxyCodeLine{00404\ }
+\DoxyCodeLine{00405\ \ \ \ \ \textcolor{keywordtype}{int}\ m\_dim\ =\ \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}.rows();}
+\DoxyCodeLine{00406\ \ \ \ \ \textcolor{keywordtype}{int}\ input\_nnz\ =\ \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}.non\_zeros();}
+\DoxyCodeLine{00407\ }
+\DoxyCodeLine{00408\ \ \ \ \ \textcolor{comment}{//\ Load\ data\ of\ A\ into\ host\ memory}}
+\DoxyCodeLine{00409\ \ \ \ \ SparseMatDescrPtrs<TPrecision>\ h\_A;}
+\DoxyCodeLine{00410\ \ \ \ \ h\_A.col\_offsets\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(malloc((m\_dim+1)*\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int})));}
+\DoxyCodeLine{00411\ \ \ \ \ h\_A.row\_indices\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(malloc(input\_nnz*\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int})));}
+\DoxyCodeLine{00412\ \ \ \ \ h\_A.vals\ =\ \textcolor{keyword}{static\_cast<}TPrecision\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{00413\ \ \ \ \ \ \ \ \ malloc(input\_nnz*\textcolor{keyword}{sizeof}(TPrecision))}
+\DoxyCodeLine{00414\ \ \ \ \ );}
+\DoxyCodeLine{00415\ }
+\DoxyCodeLine{00416\ \ \ \ \ \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}.copy\_data\_to\_ptr(}
+\DoxyCodeLine{00417\ \ \ \ \ \ \ \ \ h\_A.col\_offsets,\ h\_A.row\_indices,\ h\_A.vals,}
+\DoxyCodeLine{00418\ \ \ \ \ \ \ \ \ m\_dim,\ m\_dim,\ input\_nnz}
+\DoxyCodeLine{00419\ \ \ \ \ );}
+\DoxyCodeLine{00420\ }
+\DoxyCodeLine{00421\ \ \ \ \ \textcolor{comment}{//\ Instantiate\ storage\ for\ L\ and\ U}}
+\DoxyCodeLine{00422\ \ \ \ \ SparseMatDescrPtrs<TPrecision>\ h\_U;}
+\DoxyCodeLine{00423\ \ \ \ \ h\_U.col\_offsets\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(malloc((m\_dim+1)*\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int})));}
+\DoxyCodeLine{00424\ \ \ \ \ h\_U.col\_offsets[0]\ =\ 0;}
+\DoxyCodeLine{00425\ \ \ \ \ h\_U.row\_indices\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(malloc(max\_output\_nnz*\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int})));}
+\DoxyCodeLine{00426\ \ \ \ \ h\_U.vals\ =\ \textcolor{keyword}{static\_cast<}TPrecision\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{00427\ \ \ \ \ \ \ \ \ malloc(max\_output\_nnz*\textcolor{keyword}{sizeof}(TPrecision))}
+\DoxyCodeLine{00428\ \ \ \ \ );}
+\DoxyCodeLine{00429\ }
+\DoxyCodeLine{00430\ \ \ \ \ SparseMatDescrPtrs<TPrecision>\ h\_L;}
+\DoxyCodeLine{00431\ \ \ \ \ h\_L.col\_offsets\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(malloc((m\_dim+1)*\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int})));}
+\DoxyCodeLine{00432\ \ \ \ \ h\_L.col\_offsets[0]\ =\ 0;}
+\DoxyCodeLine{00433\ \ \ \ \ h\_L.row\_indices\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(malloc(max\_output\_nnz*\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int})));}
+\DoxyCodeLine{00434\ \ \ \ \ h\_L.vals\ =\ \textcolor{keyword}{static\_cast<}TPrecision\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{00435\ \ \ \ \ \ \ \ \ malloc(max\_output\_nnz*\textcolor{keyword}{sizeof}(TPrecision))}
+\DoxyCodeLine{00436\ \ \ \ \ );}
+\DoxyCodeLine{00437\ }
+\DoxyCodeLine{00438\ \ \ \ \ \textcolor{comment}{//\ Instantiate\ trackers\ for\ permutations,\ previous\ pivots,\ and\ for\ completed}}
+\DoxyCodeLine{00439\ \ \ \ \ \textcolor{comment}{//\ rows\ information\ for\ delayed\ permutation}}
+\DoxyCodeLine{00440\ \ \ \ \ \textcolor{keywordtype}{int}\ *row\_permutation\_map\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(malloc(m\_dim*\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int})));}
+\DoxyCodeLine{00441\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<m\_dim;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{\ row\_permutation\_map[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ =\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}};\ \}}
+\DoxyCodeLine{00442\ }
+\DoxyCodeLine{00443\ \ \ \ \ \textcolor{keywordtype}{int}\ *pivot\_row\_hist\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(malloc(m\_dim*\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int})));}
+\DoxyCodeLine{00444\ }
+\DoxyCodeLine{00445\ \ \ \ \ \textcolor{keywordtype}{bool}\ *row\_finished\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{bool}\ *\textcolor{keyword}{>}(malloc(m\_dim*\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{bool})));}
+\DoxyCodeLine{00446\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<m\_dim;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{\ row\_finished[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ =\ \textcolor{keyword}{false};\ \}}
+\DoxyCodeLine{00447\ }
+\DoxyCodeLine{00448\ \ \ \ \ \textcolor{comment}{//\ Eliminate\ columns\ of\ U\ with\ partial\ pivoting\ and\ drop\ rules}}
+\DoxyCodeLine{00449\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ j=0;\ j<m\_dim;\ ++j)\ \{}
+\DoxyCodeLine{00450\ }
+\DoxyCodeLine{00451\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{00452\ }
+\DoxyCodeLine{00453\ \ \ \ \ \ \ \ \ \ \ \ \ left\_looking\_col\_elim\_delay\_perm(}
+\DoxyCodeLine{00454\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ j,}
+\DoxyCodeLine{00455\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ to\_pivot,}
+\DoxyCodeLine{00456\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ drop\_rule\_tau\_U,}
+\DoxyCodeLine{00457\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ drop\_rule\_tau\_L,}
+\DoxyCodeLine{00458\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ drop\_rule\_p,}
+\DoxyCodeLine{00459\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ handle\_breakdown,}
+\DoxyCodeLine{00460\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_dim,}
+\DoxyCodeLine{00461\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\_A,\ h\_U,\ h\_L,}
+\DoxyCodeLine{00462\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ row\_permutation\_map,}
+\DoxyCodeLine{00463\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pivot\_row\_hist,}
+\DoxyCodeLine{00464\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ row\_finished}
+\DoxyCodeLine{00465\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00466\ }
+\DoxyCodeLine{00467\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{catch}\ (std::runtime\_error\ \mbox{\hyperlink{create__solve__matrices_8m_a329626dffc42c84371831246a2ddac71}{e}})\ \{}
+\DoxyCodeLine{00468\ }
+\DoxyCodeLine{00469\ \ \ \ \ \ \ \ \ \ \ \ \ free(h\_A.col\_offsets);}
+\DoxyCodeLine{00470\ \ \ \ \ \ \ \ \ \ \ \ \ free(h\_A.row\_indices);}
+\DoxyCodeLine{00471\ \ \ \ \ \ \ \ \ \ \ \ \ free(h\_A.vals);}
+\DoxyCodeLine{00472\ \ \ \ \ \ \ \ \ \ \ \ \ free(h\_U.col\_offsets);}
+\DoxyCodeLine{00473\ \ \ \ \ \ \ \ \ \ \ \ \ free(h\_U.row\_indices);}
+\DoxyCodeLine{00474\ \ \ \ \ \ \ \ \ \ \ \ \ free(h\_U.vals);}
+\DoxyCodeLine{00475\ \ \ \ \ \ \ \ \ \ \ \ \ free(h\_L.col\_offsets);}
+\DoxyCodeLine{00476\ \ \ \ \ \ \ \ \ \ \ \ \ free(h\_L.row\_indices);}
+\DoxyCodeLine{00477\ \ \ \ \ \ \ \ \ \ \ \ \ free(h\_L.vals);}
+\DoxyCodeLine{00478\ \ \ \ \ \ \ \ \ \ \ \ \ free(row\_permutation\_map);}
+\DoxyCodeLine{00479\ \ \ \ \ \ \ \ \ \ \ \ \ free(pivot\_row\_hist);}
+\DoxyCodeLine{00480\ \ \ \ \ \ \ \ \ \ \ \ \ free(row\_finished);}
+\DoxyCodeLine{00481\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ \mbox{\hyperlink{create__solve__matrices_8m_a329626dffc42c84371831246a2ddac71}{e}};}
+\DoxyCodeLine{00482\ }
+\DoxyCodeLine{00483\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00484\ }
+\DoxyCodeLine{00485\ \ \ \ \ \}}
+\DoxyCodeLine{00486\ }
+\DoxyCodeLine{00487\ \ \ \ \ \textcolor{comment}{//\ Create\ permutation\ dict\ such\ that\ every\ access\ locates\ to\ correct\ row}}
+\DoxyCodeLine{00488\ \ \ \ \ \textcolor{keywordtype}{int}\ *row\_permutation\_dict\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(malloc(m\_dim*\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int})));}
+\DoxyCodeLine{00489\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<m\_dim;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00490\ \ \ \ \ \ \ \ \ row\_permutation\_dict[row\_permutation\_map[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]]\ =\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}};}
+\DoxyCodeLine{00491\ \ \ \ \ \}}
+\DoxyCodeLine{00492\ }
+\DoxyCodeLine{00493\ \ \ \ \ \textcolor{comment}{//\ Execute\ permutations\ from\ elimination}}
+\DoxyCodeLine{00494\ \ \ \ \ exec\_SparseMatrixDescrPtrs\_perm<TPrecision>(}
+\DoxyCodeLine{00495\ \ \ \ \ \ \ \ \ m\_dim,\ h\_L,\ row\_permutation\_dict}
+\DoxyCodeLine{00496\ \ \ \ \ );}
+\DoxyCodeLine{00497\ \ \ \ \ exec\_SparseMatrixDescrPtrs\_perm<TPrecision>(}
+\DoxyCodeLine{00498\ \ \ \ \ \ \ \ \ m\_dim,\ h\_U,\ row\_permutation\_dict}
+\DoxyCodeLine{00499\ \ \ \ \ );}
+\DoxyCodeLine{00500\ }
+\DoxyCodeLine{00501\ \ \ \ \ \textcolor{comment}{//\ Form\ matrices}}
+\DoxyCodeLine{00502\ \ \ \ \ \mbox{\hyperlink{structcascade_1_1ilu__subrtns_1_1_i_l_u_triplet}{ILUTriplet<TMatrix,\ TPrecision>}}\ ret\_val;}
+\DoxyCodeLine{00503\ \ \ \ \ ret\_val.\mbox{\hyperlink{structcascade_1_1ilu__subrtns_1_1_i_l_u_triplet_af656b57ab0eab4b9eaf12f235bb7327c}{U}}\ =\ TMatrix<TPrecision>(}
+\DoxyCodeLine{00504\ \ \ \ \ \ \ \ \ convert\_SparseMatDescrPtrs\_to\_NoFillMatrixSparse(}
+\DoxyCodeLine{00505\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}.get\_cu\_handles(),}
+\DoxyCodeLine{00506\ \ \ \ \ \ \ \ \ \ \ \ \ m\_dim,}
+\DoxyCodeLine{00507\ \ \ \ \ \ \ \ \ \ \ \ \ h\_U}
+\DoxyCodeLine{00508\ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00509\ \ \ \ \ );}
+\DoxyCodeLine{00510\ \ \ \ \ ret\_val.L\ =\ TMatrix<TPrecision>(}
+\DoxyCodeLine{00511\ \ \ \ \ \ \ \ \ convert\_SparseMatDescrPtrs\_to\_NoFillMatrixSparse(}
+\DoxyCodeLine{00512\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}.get\_cu\_handles(),}
+\DoxyCodeLine{00513\ \ \ \ \ \ \ \ \ \ \ \ \ m\_dim,}
+\DoxyCodeLine{00514\ \ \ \ \ \ \ \ \ \ \ \ \ h\_L}
+\DoxyCodeLine{00515\ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00516\ \ \ \ \ );}
+\DoxyCodeLine{00517\ \ \ \ \ ret\_val.P\ =\ TMatrix<TPrecision>(}
+\DoxyCodeLine{00518\ \ \ \ \ \ \ \ \ form\_permutation\_matrix<TPrecision>(}
+\DoxyCodeLine{00519\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}.get\_cu\_handles(),}
+\DoxyCodeLine{00520\ \ \ \ \ \ \ \ \ \ \ \ \ m\_dim,}
+\DoxyCodeLine{00521\ \ \ \ \ \ \ \ \ \ \ \ \ row\_permutation\_map}
+\DoxyCodeLine{00522\ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00523\ \ \ \ \ );}
+\DoxyCodeLine{00524\ }
+\DoxyCodeLine{00525\ \ \ \ \ \textcolor{comment}{//\ Free\ allocated\ memory}}
+\DoxyCodeLine{00526\ \ \ \ \ free(h\_A.col\_offsets);}
+\DoxyCodeLine{00527\ \ \ \ \ free(h\_A.row\_indices);}
+\DoxyCodeLine{00528\ \ \ \ \ free(h\_A.vals);}
+\DoxyCodeLine{00529\ }
+\DoxyCodeLine{00530\ \ \ \ \ free(h\_U.col\_offsets);}
+\DoxyCodeLine{00531\ \ \ \ \ free(h\_U.row\_indices);}
+\DoxyCodeLine{00532\ \ \ \ \ free(h\_U.vals);}
+\DoxyCodeLine{00533\ }
+\DoxyCodeLine{00534\ \ \ \ \ free(h\_L.col\_offsets);}
+\DoxyCodeLine{00535\ \ \ \ \ free(h\_L.row\_indices);}
+\DoxyCodeLine{00536\ \ \ \ \ free(h\_L.vals);}
+\DoxyCodeLine{00537\ }
+\DoxyCodeLine{00538\ \ \ \ \ free(row\_permutation\_map);}
+\DoxyCodeLine{00539\ \ \ \ \ free(row\_permutation\_dict);}
+\DoxyCodeLine{00540\ \ \ \ \ free(pivot\_row\_hist);}
+\DoxyCodeLine{00541\ \ \ \ \ free(row\_finished);}
+\DoxyCodeLine{00542\ }
+\DoxyCodeLine{00543\ \ \ \ \ \textcolor{keywordflow}{return}\ ret\_val;}
+\DoxyCodeLine{00544\ }
+\DoxyCodeLine{00545\ \}}
+\DoxyCodeLine{00546\ }
+\DoxyCodeLine{00547\ \}}
+\DoxyCodeLine{00548\ }
+\DoxyCodeLine{00549\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix,\ \textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00550\ \mbox{\hyperlink{structcascade_1_1ilu__subrtns_1_1_i_l_u_triplet}{ILUTriplet<TMatrix,\ TPrecision>}}\ \mbox{\hyperlink{namespacecascade_1_1ilu__subrtns_a2378e26d8cafc63a96ac26da68ba8af1}{construct\_square\_ILU\_0}}(}
+\DoxyCodeLine{00551\ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{NoFillMatrixSparse<TPrecision>}}\ \&\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}}
+\DoxyCodeLine{00552\ )\ \{}
+\DoxyCodeLine{00553\ }
+\DoxyCodeLine{00554\ \ \ \ \ \textcolor{keywordtype}{int}\ *col\_offsets\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(malloc((\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}.cols()+1)*\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int})));}
+\DoxyCodeLine{00555\ \ \ \ \ \textcolor{keywordtype}{int}\ *row\_indices\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(malloc(\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}.non\_zeros()*\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int})));}
+\DoxyCodeLine{00556\ \ \ \ \ TPrecision\ *vals\ =\ \textcolor{keyword}{static\_cast<}TPrecision\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{00557\ \ \ \ \ \ \ \ \ malloc(\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}.non\_zeros()*\textcolor{keyword}{sizeof}(TPrecision))}
+\DoxyCodeLine{00558\ \ \ \ \ );}
+\DoxyCodeLine{00559\ }
+\DoxyCodeLine{00560\ \ \ \ \ \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}.copy\_data\_to\_ptr(}
+\DoxyCodeLine{00561\ \ \ \ \ \ \ \ \ col\_offsets,\ row\_indices,\ vals,}
+\DoxyCodeLine{00562\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}.rows(),\ \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}.cols(),\ \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}.non\_zeros()}
+\DoxyCodeLine{00563\ \ \ \ \ );}
+\DoxyCodeLine{00564\ }
+\DoxyCodeLine{00565\ \ \ \ \ std::vector<std::unordered\_set<int>>\ A\_sparsity\_map(\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}.cols());}
+\DoxyCodeLine{00566\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ j=0;\ j<\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}.cols();\ ++j)\ \{}
+\DoxyCodeLine{00567\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ offset=col\_offsets[j];\ offset<col\_offsets[j+1];\ ++offset)\ \{}
+\DoxyCodeLine{00568\ \ \ \ \ \ \ \ \ \ \ \ \ A\_sparsity\_map[j].insert(row\_indices[offset]);}
+\DoxyCodeLine{00569\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00570\ \ \ \ \ \}}
+\DoxyCodeLine{00571\ }
+\DoxyCodeLine{00572\ \ \ \ \ free(col\_offsets);}
+\DoxyCodeLine{00573\ \ \ \ \ free(row\_indices);}
+\DoxyCodeLine{00574\ \ \ \ \ free(vals);}
+\DoxyCodeLine{00575\ }
+\DoxyCodeLine{00576\ \ \ \ \ DropRuleTauFunc<TPrecision>\ drop\_rule\_tau\_U\ =\ (}
+\DoxyCodeLine{00577\ \ \ \ \ \ \ \ \ [\&A\_sparsity\_map](TPrecision\ \_,\ \textcolor{keywordtype}{int}\ row,\ \textcolor{keywordtype}{int}\ col)\ -\/>\ \textcolor{keywordtype}{bool}\ \{}
+\DoxyCodeLine{00578\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ !\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{bool}\textcolor{keyword}{>}(A\_sparsity\_map[col].count(row));}
+\DoxyCodeLine{00579\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00580\ \ \ \ \ );}
+\DoxyCodeLine{00581\ }
+\DoxyCodeLine{00582\ \ \ \ \ DropRuleTauFunc<TPrecision>\ drop\_rule\_tau\_L\ =\ (}
+\DoxyCodeLine{00583\ \ \ \ \ \ \ \ \ [\&A\_sparsity\_map](TPrecision\ \_,\ \textcolor{keywordtype}{int}\ row,\ \textcolor{keywordtype}{int}\ col)\ -\/>\ \textcolor{keywordtype}{bool}\ \{}
+\DoxyCodeLine{00584\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ !\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{bool}\textcolor{keyword}{>}(A\_sparsity\_map[col].count(row));}
+\DoxyCodeLine{00585\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00586\ \ \ \ \ );}
+\DoxyCodeLine{00587\ }
+\DoxyCodeLine{00588\ \ \ \ \ DropRulePFunc<TPrecision>\ drop\_rule\_p\ =\ (}
+\DoxyCodeLine{00589\ \ \ \ \ \ \ \ \ [](\textcolor{keywordtype}{int}\ col\_ind,\ \textcolor{keywordtype}{int}\ pivot\_ind,\ TPrecision\ *col\_ptr,\ \textcolor{keywordtype}{int}\ m\_dim)\ \{\ ;\ \}}
+\DoxyCodeLine{00590\ \ \ \ \ );}
+\DoxyCodeLine{00591\ }
+\DoxyCodeLine{00592\ \ \ \ \ HandleZeroBreakdownFunc<TPrecision>\ handle\_breakdown\ =\ (}
+\DoxyCodeLine{00593\ \ \ \ \ \ \ \ \ [](\textcolor{keywordtype}{int}\ col\_ind,\ \textcolor{keywordtype}{int}\ pivot\_ind)\ -\/>\ TPrecision\ \{}
+\DoxyCodeLine{00594\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00595\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}construct\_square\_ILU\_0:\ zero\ pivot\ encountered\ at\ ("{}}\ +}
+\DoxyCodeLine{00596\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::to\_string(pivot\_ind)\ +\ \textcolor{stringliteral}{"{},\ "{}}\ +}
+\DoxyCodeLine{00597\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::to\_string(col\_ind)\ +\ \textcolor{stringliteral}{"{})"{}}}
+\DoxyCodeLine{00598\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00599\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00600\ \ \ \ \ );}
+\DoxyCodeLine{00601\ }
+\DoxyCodeLine{00602\ \ \ \ \ \textcolor{keywordflow}{return}\ sparse\_construct\_drop\_rule\_ILU<TMatrix\ ,TPrecision>(}
+\DoxyCodeLine{00603\ \ \ \ \ \ \ \ \ \textcolor{keyword}{false},}
+\DoxyCodeLine{00604\ \ \ \ \ \ \ \ \ drop\_rule\_tau\_U,}
+\DoxyCodeLine{00605\ \ \ \ \ \ \ \ \ drop\_rule\_tau\_L,}
+\DoxyCodeLine{00606\ \ \ \ \ \ \ \ \ drop\_rule\_p,}
+\DoxyCodeLine{00607\ \ \ \ \ \ \ \ \ handle\_breakdown,}
+\DoxyCodeLine{00608\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}.non\_zeros(),}
+\DoxyCodeLine{00609\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}}
+\DoxyCodeLine{00610\ \ \ \ \ );}
+\DoxyCodeLine{00611\ }
+\DoxyCodeLine{00612\ \}}
+\DoxyCodeLine{00613\ }
+\DoxyCodeLine{00614\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00615\ TPrecision\ \mbox{\hyperlink{namespacecascade_1_1ilu__subrtns_a27cb00a282d74b6016d4d6e0e22928fd}{get\_largest\_magnitude\_in\_col}}(}
+\DoxyCodeLine{00616\ \ \ \ \ \textcolor{keywordtype}{int}\ col\_ind,\ \textcolor{keywordtype}{int}\ *col\_offsets,\ TPrecision\ *vals}
+\DoxyCodeLine{00617\ )\ \{}
+\DoxyCodeLine{00618\ \ \ \ \ TPrecision\ largest\_mag\ =\ 0.;}
+\DoxyCodeLine{00619\ \ \ \ \ \textcolor{keywordflow}{for}\ (}
+\DoxyCodeLine{00620\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ offset\ =\ col\_offsets[col\_ind];}
+\DoxyCodeLine{00621\ \ \ \ \ \ \ \ \ offset\ <\ col\_offsets[col\_ind+1];}
+\DoxyCodeLine{00622\ \ \ \ \ \ \ \ \ ++offset}
+\DoxyCodeLine{00623\ \ \ \ \ )\ \{}
+\DoxyCodeLine{00624\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{namespacecascade_1_1abs__ns_ab08ce3a88268964a87b50e39d0644268}{abs\_ns::abs}}(vals[offset])\ >\ largest\_mag)\ \{}
+\DoxyCodeLine{00625\ \ \ \ \ \ \ \ \ \ \ \ \ largest\_mag\ =\ \mbox{\hyperlink{namespacecascade_1_1abs__ns_ab08ce3a88268964a87b50e39d0644268}{abs\_ns::abs}}(vals[offset]);}
+\DoxyCodeLine{00626\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00627\ \ \ \ \ \}}
+\DoxyCodeLine{00628\ \ \ \ \ \textcolor{keywordflow}{return}\ largest\_mag;}
+\DoxyCodeLine{00629\ \}}
+\DoxyCodeLine{00630\ }
+\DoxyCodeLine{00631\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix,\ \textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00632\ \mbox{\hyperlink{structcascade_1_1ilu__subrtns_1_1_i_l_u_triplet}{ILUTriplet<TMatrix,\ TPrecision>}}\ \mbox{\hyperlink{namespacecascade_1_1ilu__subrtns_a15aedf28168828aa02d92f396c63bbbf}{construct\_square\_ILUTP}}(}
+\DoxyCodeLine{00633\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{NoFillMatrixSparse<TPrecision>}}\ \&\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}},\ \textcolor{keywordtype}{double}\ tau,\ \textcolor{keywordtype}{int}\ p,\ \textcolor{keywordtype}{bool}\ to\_pivot}
+\DoxyCodeLine{00634\ )\ \{}
+\DoxyCodeLine{00635\ }
+\DoxyCodeLine{00636\ \ \ \ \ \textcolor{keywordflow}{if}\ (p\ <\ 1)\ \{}
+\DoxyCodeLine{00637\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00638\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}construct\_square\_ILUTP:\ must\ at\ least\ keep\ pivot\ for\ p\ drop\ rule"{}}}
+\DoxyCodeLine{00639\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00640\ \ \ \ \ \}}
+\DoxyCodeLine{00641\ }
+\DoxyCodeLine{00642\ \ \ \ \ \textcolor{keywordtype}{int}\ *col\_offsets\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(malloc((\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}.cols()+1)*\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int})));}
+\DoxyCodeLine{00643\ \ \ \ \ \textcolor{keywordtype}{int}\ *row\_indices\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(malloc(\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}.non\_zeros()*\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int})));}
+\DoxyCodeLine{00644\ \ \ \ \ TPrecision\ *vals\ =\ \textcolor{keyword}{static\_cast<}TPrecision\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{00645\ \ \ \ \ \ \ \ \ malloc(\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}.non\_zeros()*\textcolor{keyword}{sizeof}(TPrecision))}
+\DoxyCodeLine{00646\ \ \ \ \ );}
+\DoxyCodeLine{00647\ }
+\DoxyCodeLine{00648\ \ \ \ \ \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}.copy\_data\_to\_ptr(}
+\DoxyCodeLine{00649\ \ \ \ \ \ \ \ \ col\_offsets,\ row\_indices,\ vals,}
+\DoxyCodeLine{00650\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}.rows(),\ \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}.cols(),\ \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}.non\_zeros()}
+\DoxyCodeLine{00651\ \ \ \ \ );}
+\DoxyCodeLine{00652\ }
+\DoxyCodeLine{00653\ \ \ \ \ std::vector<TPrecision>\ col\_inf\_norm(\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}.cols());}
+\DoxyCodeLine{00654\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ j=0;\ j<\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}.cols();\ ++j)\ \{}
+\DoxyCodeLine{00655\ \ \ \ \ \ \ \ \ col\_inf\_norm[j]\ =\ \mbox{\hyperlink{namespacecascade_1_1ilu__subrtns_a27cb00a282d74b6016d4d6e0e22928fd}{get\_largest\_magnitude\_in\_col}}(j,\ col\_offsets,\ vals);}
+\DoxyCodeLine{00656\ \ \ \ \ \}}
+\DoxyCodeLine{00657\ }
+\DoxyCodeLine{00658\ \ \ \ \ free(col\_offsets);}
+\DoxyCodeLine{00659\ \ \ \ \ free(row\_indices);}
+\DoxyCodeLine{00660\ \ \ \ \ free(vals);}
+\DoxyCodeLine{00661\ }
+\DoxyCodeLine{00662\ \ \ \ \ DropRuleTauFunc<TPrecision>\ drop\_rule\_tau\_U\ =\ (}
+\DoxyCodeLine{00663\ \ \ \ \ \ \ \ \ [\&col\_inf\_norm,\ tau](TPrecision\ val,\ \textcolor{keywordtype}{int}\ \_,\ \textcolor{keywordtype}{int}\ col)\ -\/>\ \textcolor{keywordtype}{bool}\ \{}
+\DoxyCodeLine{00664\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{namespacecascade_1_1abs__ns_ab08ce3a88268964a87b50e39d0644268}{abs\_ns::abs}}(val)\ <=\ tau*col\_inf\_norm[col];}
+\DoxyCodeLine{00665\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00666\ \ \ \ \ );}
+\DoxyCodeLine{00667\ }
+\DoxyCodeLine{00668\ \ \ \ \ DropRuleTauFunc<TPrecision>\ drop\_rule\_tau\_L\ =\ (}
+\DoxyCodeLine{00669\ \ \ \ \ \ \ \ \ [tau](TPrecision\ val,\ \textcolor{keywordtype}{int}\ \_,\ \textcolor{keywordtype}{int}\ col)\ -\/>\ \textcolor{keywordtype}{bool}\ \{}
+\DoxyCodeLine{00670\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{namespacecascade_1_1abs__ns_ab08ce3a88268964a87b50e39d0644268}{abs\_ns::abs}}(val)\ <=\ tau;}
+\DoxyCodeLine{00671\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00672\ \ \ \ \ );}
+\DoxyCodeLine{00673\ }
+\DoxyCodeLine{00674\ \ \ \ \ DropRulePFunc<TPrecision>\ drop\_rule\_p\ =\ [p](}
+\DoxyCodeLine{00675\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ col\_ind,\ \textcolor{keywordtype}{int}\ pivot\_ind,\ TPrecision\ *col\_ptr,\ \textcolor{keywordtype}{int}\ m\_dim}
+\DoxyCodeLine{00676\ \ \ \ \ )\ \{}
+\DoxyCodeLine{00677\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00678\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap}{heap::PSizeHeap<TPrecision>}}\ \mbox{\hyperlink{namespacecascade_1_1heap}{heap}}(p-\/1);}
+\DoxyCodeLine{00679\ }
+\DoxyCodeLine{00680\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<m\_dim;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00681\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (}
+\DoxyCodeLine{00682\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}\ !=\ pivot\_ind)\ \&\&}
+\DoxyCodeLine{00683\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (col\_ptr[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ !=\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(0.))}
+\DoxyCodeLine{00684\ \ \ \ \ \ \ \ \ \ \ \ \ )\ \{}
+\DoxyCodeLine{00685\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_1_1heap}{heap}}.push(col\_ptr[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}],\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}});}
+\DoxyCodeLine{00686\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ col\_ptr[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ =\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(0.);}
+\DoxyCodeLine{00687\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00688\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00689\ }
+\DoxyCodeLine{00690\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ k=0;\ k<\mbox{\hyperlink{namespacecascade_1_1heap}{heap}}.count;\ ++k)\ \{}
+\DoxyCodeLine{00691\ \ \ \ \ \ \ \ \ \ \ \ \ col\_ptr[\mbox{\hyperlink{namespacecascade_1_1heap}{heap}}.heap[k].row]\ =\ \mbox{\hyperlink{namespacecascade_1_1heap}{heap}}.heap[k].orig\_val;}
+\DoxyCodeLine{00692\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00693\ }
+\DoxyCodeLine{00694\ \ \ \ \ \};}
+\DoxyCodeLine{00695\ }
+\DoxyCodeLine{00696\ \ \ \ \ \textcolor{comment}{//\ Use\ (Li,\ 2011)\ strategy\ of\ tau*col\_inf\_norm\ injection\ for\ zero\ pivot}}
+\DoxyCodeLine{00697\ \ \ \ \ HandleZeroBreakdownFunc<TPrecision>\ handle\_breakdown\ =\ (}
+\DoxyCodeLine{00698\ \ \ \ \ \ \ \ \ [\&col\_inf\_norm,\ tau](\textcolor{keywordtype}{int}\ col\_ind,\ \textcolor{keywordtype}{int}\ pivot\_ind)\ -\/>\ TPrecision\ \{}
+\DoxyCodeLine{00699\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ tau*col\_inf\_norm[col\_ind];}
+\DoxyCodeLine{00700\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00701\ \ \ \ \ );}
+\DoxyCodeLine{00702\ }
+\DoxyCodeLine{00703\ \ \ \ \ \textcolor{keywordflow}{return}\ sparse\_construct\_drop\_rule\_ILU<TMatrix,\ TPrecision>(}
+\DoxyCodeLine{00704\ \ \ \ \ \ \ \ \ to\_pivot,}
+\DoxyCodeLine{00705\ \ \ \ \ \ \ \ \ drop\_rule\_tau\_U,}
+\DoxyCodeLine{00706\ \ \ \ \ \ \ \ \ drop\_rule\_tau\_L,}
+\DoxyCodeLine{00707\ \ \ \ \ \ \ \ \ drop\_rule\_p,}
+\DoxyCodeLine{00708\ \ \ \ \ \ \ \ \ handle\_breakdown,}
+\DoxyCodeLine{00709\ \ \ \ \ \ \ \ \ p*\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}.cols(),}
+\DoxyCodeLine{00710\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}}
+\DoxyCodeLine{00711\ \ \ \ \ );}
+\DoxyCodeLine{00712\ }
+\DoxyCodeLine{00713\ \}}
+\DoxyCodeLine{00714\ }
+\DoxyCodeLine{00715\ \}}
+\DoxyCodeLine{00716\ }
+\DoxyCodeLine{00717\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

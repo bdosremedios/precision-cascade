@@ -1,0 +1,148 @@
+\doxysection{Solve\+\_\+\+Group Struct Reference}
+\hypertarget{struct_solve___group}{}\label{struct_solve___group}\index{Solve\_Group@{Solve\_Group}}
+
+
+{\ttfamily \#include $<$Solve\+\_\+\+Group.\+h$>$}
+
+
+
+Collaboration diagram for Solve\+\_\+\+Group\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=329pt]{struct_solve___group__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct_solve___group_a63fe5b68d7367bcbaaff4ef5c0ed5ffc}{Solve\+\_\+\+Group}} (std\+::string arg\+\_\+id, std\+::vector$<$ std\+::string $>$ arg\+\_\+solvers\+\_\+to\+\_\+use, std\+::string arg\+\_\+matrix\+\_\+type, int arg\+\_\+experiment\+\_\+iterations, int arg\+\_\+solver\+\_\+max\+\_\+outer\+\_\+iterations, int arg\+\_\+solver\+\_\+max\+\_\+inner\+\_\+iterations, double arg\+\_\+solver\+\_\+target\+\_\+relres, \mbox{\hyperlink{struct_preconditioner___spec}{Preconditioner\+\_\+\+Spec}} arg\+\_\+precond\+\_\+specs, std\+::vector$<$ std\+::string $>$ arg\+\_\+matrices\+\_\+to\+\_\+test)
+\item 
+void \mbox{\hyperlink{struct_solve___group_a802dbe1cc097d383734c965fe7fbb3c9}{record\+\_\+json}} (std\+::string file\+\_\+name, fs\+::path output\+\_\+data\+\_\+dir, \mbox{\hyperlink{class_experiment___log}{Experiment\+\_\+\+Log}} logger) const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+const std\+::string \mbox{\hyperlink{struct_solve___group_a517d13a63d310880ad85f4c6c629d4ee}{id}}
+\item 
+const int \mbox{\hyperlink{struct_solve___group_a1bab50520e61ddfffb220d0fa44e98a1}{experiment\+\_\+iterations}}
+\item 
+const std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{struct_solve___group_a32f39a972fb82ea90955516b7c8ed214}{solvers\+\_\+to\+\_\+use}}
+\item 
+const std\+::string \mbox{\hyperlink{struct_solve___group_adf825c3fed9265184b4b3fff636a76ef}{matrix\+\_\+type}}
+\item 
+const \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{cascade\+::\+Solve\+Arg\+Pkg}} \mbox{\hyperlink{struct_solve___group_a20f3c45ccfd54b25ffba473f2753c7de}{solver\+\_\+args}}
+\item 
+const \mbox{\hyperlink{struct_preconditioner___spec}{Preconditioner\+\_\+\+Spec}} \mbox{\hyperlink{struct_solve___group_ae5acf7e2a9817ab7488873a290b3e89c}{precond\+\_\+specs}}
+\item 
+const std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{struct_solve___group_adf3fce33693f987fba82fd5e16809b42}{matrices\+\_\+to\+\_\+test}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const std\+::unordered\+\_\+set$<$ std\+::string $>$ \mbox{\hyperlink{struct_solve___group_a5aa44f59f68c30b372cee4a0109163f9}{valid\+\_\+fp\+\_\+solver\+\_\+ids}}
+\item 
+static const std\+::unordered\+\_\+set$<$ std\+::string $>$ \mbox{\hyperlink{struct_solve___group_a0dd70f3e9deee69a1aae5dfb3ba6faed}{valid\+\_\+vp\+\_\+solver\+\_\+ids}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{struct_solve___group_a63fe5b68d7367bcbaaff4ef5c0ed5ffc}\index{Solve\_Group@{Solve\_Group}!Solve\_Group@{Solve\_Group}}
+\index{Solve\_Group@{Solve\_Group}!Solve\_Group@{Solve\_Group}}
+\doxysubsubsection{\texorpdfstring{Solve\_Group()}{Solve\_Group()}}
+{\footnotesize\ttfamily \label{struct_solve___group_a63fe5b68d7367bcbaaff4ef5c0ed5ffc} 
+Solve\+\_\+\+Group\+::\+Solve\+\_\+\+Group (\begin{DoxyParamCaption}\item[{std\+::string}]{arg\+\_\+id}{, }\item[{std\+::vector$<$ std\+::string $>$}]{arg\+\_\+solvers\+\_\+to\+\_\+use}{, }\item[{std\+::string}]{arg\+\_\+matrix\+\_\+type}{, }\item[{int}]{arg\+\_\+experiment\+\_\+iterations}{, }\item[{int}]{arg\+\_\+solver\+\_\+max\+\_\+outer\+\_\+iterations}{, }\item[{int}]{arg\+\_\+solver\+\_\+max\+\_\+inner\+\_\+iterations}{, }\item[{double}]{arg\+\_\+solver\+\_\+target\+\_\+relres}{, }\item[{\mbox{\hyperlink{struct_preconditioner___spec}{Preconditioner\+\_\+\+Spec}}}]{arg\+\_\+precond\+\_\+specs}{, }\item[{std\+::vector$<$ std\+::string $>$}]{arg\+\_\+matrices\+\_\+to\+\_\+test}{}\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{struct_solve___group_a802dbe1cc097d383734c965fe7fbb3c9}\index{Solve\_Group@{Solve\_Group}!record\_json@{record\_json}}
+\index{record\_json@{record\_json}!Solve\_Group@{Solve\_Group}}
+\doxysubsubsection{\texorpdfstring{record\_json()}{record\_json()}}
+{\footnotesize\ttfamily \label{struct_solve___group_a802dbe1cc097d383734c965fe7fbb3c9} 
+void Solve\+\_\+\+Group\+::record\+\_\+json (\begin{DoxyParamCaption}\item[{std\+::string}]{file\+\_\+name}{, }\item[{fs\+::path}]{output\+\_\+data\+\_\+dir}{, }\item[{\mbox{\hyperlink{class_experiment___log}{Experiment\+\_\+\+Log}}}]{logger}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{struct_solve___group_a1bab50520e61ddfffb220d0fa44e98a1}\index{Solve\_Group@{Solve\_Group}!experiment\_iterations@{experiment\_iterations}}
+\index{experiment\_iterations@{experiment\_iterations}!Solve\_Group@{Solve\_Group}}
+\doxysubsubsection{\texorpdfstring{experiment\_iterations}{experiment\_iterations}}
+{\footnotesize\ttfamily \label{struct_solve___group_a1bab50520e61ddfffb220d0fa44e98a1} 
+const int Solve\+\_\+\+Group\+::experiment\+\_\+iterations}
+
+\Hypertarget{struct_solve___group_a517d13a63d310880ad85f4c6c629d4ee}\index{Solve\_Group@{Solve\_Group}!id@{id}}
+\index{id@{id}!Solve\_Group@{Solve\_Group}}
+\doxysubsubsection{\texorpdfstring{id}{id}}
+{\footnotesize\ttfamily \label{struct_solve___group_a517d13a63d310880ad85f4c6c629d4ee} 
+const std\+::string Solve\+\_\+\+Group\+::id}
+
+\Hypertarget{struct_solve___group_adf3fce33693f987fba82fd5e16809b42}\index{Solve\_Group@{Solve\_Group}!matrices\_to\_test@{matrices\_to\_test}}
+\index{matrices\_to\_test@{matrices\_to\_test}!Solve\_Group@{Solve\_Group}}
+\doxysubsubsection{\texorpdfstring{matrices\_to\_test}{matrices\_to\_test}}
+{\footnotesize\ttfamily \label{struct_solve___group_adf3fce33693f987fba82fd5e16809b42} 
+const std\+::vector$<$std\+::string$>$ Solve\+\_\+\+Group\+::matrices\+\_\+to\+\_\+test}
+
+\Hypertarget{struct_solve___group_adf825c3fed9265184b4b3fff636a76ef}\index{Solve\_Group@{Solve\_Group}!matrix\_type@{matrix\_type}}
+\index{matrix\_type@{matrix\_type}!Solve\_Group@{Solve\_Group}}
+\doxysubsubsection{\texorpdfstring{matrix\_type}{matrix\_type}}
+{\footnotesize\ttfamily \label{struct_solve___group_adf825c3fed9265184b4b3fff636a76ef} 
+const std\+::string Solve\+\_\+\+Group\+::matrix\+\_\+type}
+
+\Hypertarget{struct_solve___group_ae5acf7e2a9817ab7488873a290b3e89c}\index{Solve\_Group@{Solve\_Group}!precond\_specs@{precond\_specs}}
+\index{precond\_specs@{precond\_specs}!Solve\_Group@{Solve\_Group}}
+\doxysubsubsection{\texorpdfstring{precond\_specs}{precond\_specs}}
+{\footnotesize\ttfamily \label{struct_solve___group_ae5acf7e2a9817ab7488873a290b3e89c} 
+const \mbox{\hyperlink{struct_preconditioner___spec}{Preconditioner\+\_\+\+Spec}} Solve\+\_\+\+Group\+::precond\+\_\+specs}
+
+\Hypertarget{struct_solve___group_a20f3c45ccfd54b25ffba473f2753c7de}\index{Solve\_Group@{Solve\_Group}!solver\_args@{solver\_args}}
+\index{solver\_args@{solver\_args}!Solve\_Group@{Solve\_Group}}
+\doxysubsubsection{\texorpdfstring{solver\_args}{solver\_args}}
+{\footnotesize\ttfamily \label{struct_solve___group_a20f3c45ccfd54b25ffba473f2753c7de} 
+const \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{cascade\+::\+Solve\+Arg\+Pkg}} Solve\+\_\+\+Group\+::solver\+\_\+args}
+
+\Hypertarget{struct_solve___group_a32f39a972fb82ea90955516b7c8ed214}\index{Solve\_Group@{Solve\_Group}!solvers\_to\_use@{solvers\_to\_use}}
+\index{solvers\_to\_use@{solvers\_to\_use}!Solve\_Group@{Solve\_Group}}
+\doxysubsubsection{\texorpdfstring{solvers\_to\_use}{solvers\_to\_use}}
+{\footnotesize\ttfamily \label{struct_solve___group_a32f39a972fb82ea90955516b7c8ed214} 
+const std\+::vector$<$std\+::string$>$ Solve\+\_\+\+Group\+::solvers\+\_\+to\+\_\+use}
+
+\Hypertarget{struct_solve___group_a5aa44f59f68c30b372cee4a0109163f9}\index{Solve\_Group@{Solve\_Group}!valid\_fp\_solver\_ids@{valid\_fp\_solver\_ids}}
+\index{valid\_fp\_solver\_ids@{valid\_fp\_solver\_ids}!Solve\_Group@{Solve\_Group}}
+\doxysubsubsection{\texorpdfstring{valid\_fp\_solver\_ids}{valid\_fp\_solver\_ids}}
+{\footnotesize\ttfamily \label{struct_solve___group_a5aa44f59f68c30b372cee4a0109163f9} 
+const std\+::unordered\+\_\+set$<$ std\+::string $>$ Solve\+\_\+\+Group\+::valid\+\_\+fp\+\_\+solver\+\_\+ids\hspace{0.3cm}{\ttfamily [static]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}FP16"{}},\ \textcolor{stringliteral}{"{}FP32"{}},\ \textcolor{stringliteral}{"{}FP64"{}}}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+\Hypertarget{struct_solve___group_a0dd70f3e9deee69a1aae5dfb3ba6faed}\index{Solve\_Group@{Solve\_Group}!valid\_vp\_solver\_ids@{valid\_vp\_solver\_ids}}
+\index{valid\_vp\_solver\_ids@{valid\_vp\_solver\_ids}!Solve\_Group@{Solve\_Group}}
+\doxysubsubsection{\texorpdfstring{valid\_vp\_solver\_ids}{valid\_vp\_solver\_ids}}
+{\footnotesize\ttfamily \label{struct_solve___group_a0dd70f3e9deee69a1aae5dfb3ba6faed} 
+const std\+::unordered\+\_\+set$<$ std\+::string $>$ Solve\+\_\+\+Group\+::valid\+\_\+vp\+\_\+solver\+\_\+ids\hspace{0.3cm}{\ttfamily [static]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}OuterRestartCount"{}},}
+\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}RelativeResidualThreshold"{}},}
+\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}CheckStagnation"{}},}
+\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}StagnationToThreshold"{}},}
+\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}SD\_OuterRestartCount"{}},}
+\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}SD\_RelativeResidualThreshold"{}},}
+\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}SD\_CheckStagnation"{}}}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/dosre/dev/precision-\/cascade/experimentation/include/exp\+\_\+spec/\mbox{\hyperlink{_solve___group_8h}{Solve\+\_\+\+Group.\+h}}\item 
+C\+:/\+Users/dosre/dev/precision-\/cascade/experimentation/src/exp\+\_\+spec/\mbox{\hyperlink{_solve___group_8cpp}{Solve\+\_\+\+Group.\+cpp}}\end{DoxyCompactItemize}

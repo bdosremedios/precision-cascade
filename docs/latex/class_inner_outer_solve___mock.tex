@@ -1,0 +1,264 @@
+\doxysection{Inner\+Outer\+Solve\+\_\+\+Mock\texorpdfstring{$<$}{<} TMatrix \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{class_inner_outer_solve___mock}{}\label{class_inner_outer_solve___mock}\index{InnerOuterSolve\_Mock$<$ TMatrix $>$@{InnerOuterSolve\_Mock$<$ TMatrix $>$}}
+
+
+{\ttfamily \#include $<$test\+\_\+\+Inner\+Outer\+Solve.\+h$>$}
+
+
+
+Inheritance diagram for Inner\+Outer\+Solve\+\_\+\+Mock\texorpdfstring{$<$}{<} TMatrix \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=209pt]{class_inner_outer_solve___mock__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Inner\+Outer\+Solve\+\_\+\+Mock\texorpdfstring{$<$}{<} TMatrix \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_inner_outer_solve___mock__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_inner_outer_solve___mock_a0593ad364d934e3f37146e053d11e01a}{deal\+\_\+with\+\_\+nan\+\_\+inner\+\_\+solve}} () override
+\item 
+void \mbox{\hyperlink{class_inner_outer_solve___mock_acee867ba8ecca009818b3f771d56aae4}{initialize\+\_\+inner\+\_\+outer\+\_\+solver}} () override
+\item 
+void \mbox{\hyperlink{class_inner_outer_solve___mock_a950cca29f8d38c9235b3c44fdfc69fd1}{outer\+\_\+iterate\+\_\+setup}} () override
+\item 
+void \mbox{\hyperlink{class_inner_outer_solve___mock_aa8051bff60a901e27f9489d7e6d8a7ec}{outer\+\_\+iterate\+\_\+complete}} () override
+\item 
+\mbox{\hyperlink{class_inner_outer_solve___mock_ad55eba3ced62b5190e76416871fbcf27}{Inner\+Outer\+Solve\+\_\+\+Mock}} (\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ double $>$ arg\+\_\+soln\+\_\+addition, const \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{Generic\+Linear\+System}}$<$ TMatrix $>$ \texorpdfstring{$\ast$}{*}const arg\+\_\+gen\+\_\+lin\+\_\+sys, const \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{Solve\+Arg\+Pkg}} \&arg\+\_\+pkg)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcascade_1_1_inner_outer_solve}{cascade\+::\+Inner\+Outer\+Solve$<$ TMatrix $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcascade_1_1_inner_outer_solve_aed9ed1d37ae889a5241ffa236bacf683}{Inner\+Outer\+Solve}} (const \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{Generic\+Linear\+System}}$<$ TMatrix $>$ \texorpdfstring{$\ast$}{*}const arg\+\_\+gen\+\_\+lin\+\_\+sys, const \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{Solve\+Arg\+Pkg}} \&arg\+\_\+pkg)
+\item 
+\mbox{\hyperlink{classcascade_1_1_inner_outer_solve_ac984a3d16d4686244d6c7b93722eff81}{Inner\+Outer\+Solve}} (const \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{Generic\+Linear\+System}}$<$ TMatrix $>$ \texorpdfstring{$\ast$}{*}const, const \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{Solve\+Arg\+Pkg}} \&\&)
+\item 
+std\+::vector$<$ std\+::vector$<$ double $>$ $>$ \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a130e5d558458cf2e17fb4515b71d1920}{get\+\_\+inner\+\_\+res\+\_\+norm\+\_\+history}} () const
+\item 
+std\+::vector$<$ int $>$ \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a04dcdc5afeed9f7e7856a052b2aec7e2}{get\+\_\+inner\+\_\+iterations}} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve}{cascade\+::\+Generic\+Iterative\+Solve$<$ TMatrix $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ double $>$ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_acf565e09e0814d4042fd70b3ac7bb421}{get\+\_\+generic\+\_\+soln}} () const
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ double $>$ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a8d7d082955e1609d2c7a3c530b56d33d}{get\+\_\+curr\+\_\+res}} () const
+\item 
+double \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a5f211c8b5ec76b8b75be570354f4304b}{get\+\_\+relres}} () const
+\item 
+std\+::vector$<$ double $>$ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a032d213b4fd1bfd44a26437693951461}{get\+\_\+res\+\_\+norm\+\_\+history}} () const
+\item 
+bool \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a3b57afd2d2bcdc09c18dc55e74c84a05}{check\+\_\+initiated}} () const
+\item 
+bool \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_afcb2e1dff111432c5368b06ba6eed9ae}{check\+\_\+converged}} () const
+\item 
+bool \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a398371669311bb7ac240ab4476064626}{check\+\_\+terminated}} () const
+\item 
+int \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_acb0768c3ff633d870011471cf278b3d5}{get\+\_\+iteration}} () const
+\item 
+void \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_af41faca795cfa8cd244053e67bc0c054}{solve}} ()
+\item 
+void \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a20e7a5589025548c697d936feccdc5df}{reset}} ()
+\item 
+std\+::string \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a86dcc3693c91ab3a0920cffdaf3fcb61}{get\+\_\+info\+\_\+string}} ()
+\item 
+void \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a3b7788cda7cbcb3a0af3c14f5e2ba314}{view\+\_\+relres\+\_\+plot}} (std\+::string const \&arg="{}normal"{}) const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{class_inner_outer_solve___mock_a6f81871de113ac94e1fcc07393482c90}{init\+\_\+inner\+\_\+outer\+\_\+hit}} = false
+\item 
+int \mbox{\hyperlink{class_inner_outer_solve___mock_a0303f3b01fa2f17ae998aa32e4d33e7e}{outer\+\_\+iterate\+\_\+setup\+\_\+hit\+\_\+count}} = 0
+\item 
+int \mbox{\hyperlink{class_inner_outer_solve___mock_abb4a43da73d5c1c64f14b4ce2f151e8a}{outer\+\_\+iterate\+\_\+complete\+\_\+hit\+\_\+count}} = 0
+\item 
+\mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{Solve\+Arg\+Pkg}} \mbox{\hyperlink{class_inner_outer_solve___mock_aa617207e8f3d045795f9b5edb1aff65c}{moving\+\_\+args}}
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ double $>$ \mbox{\hyperlink{class_inner_outer_solve___mock_a6dc0fa49070c478b140e0965b2ae31af}{soln\+\_\+addition}}
+\item 
+int \mbox{\hyperlink{class_inner_outer_solve___mock_a9187a353d8a3b49fe3922ffd79f1ddc7}{iterations\+\_\+to\+\_\+converge}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classcascade_1_1_inner_outer_solve}{cascade\+::\+Inner\+Outer\+Solve$<$ TMatrix $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a30ae357e9e361b54a58e6584eddc8cfd}{iterate}} () override
+\item 
+void \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a5f2326e837bf3ae1727b8a9c06ce120d}{derived\+\_\+generic\+\_\+reset}} () override
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve}{cascade\+::\+Generic\+Iterative\+Solve$<$ TMatrix $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ae28a35abd17ffaf91056f55a70c1da63}{Generic\+Iterative\+Solve}} (const \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{Generic\+Linear\+System}}$<$ TMatrix $>$ \texorpdfstring{$\ast$}{*}const arg\+\_\+gen\+\_\+lin\+\_\+sys\+\_\+ptr, const \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{Solve\+Arg\+Pkg}} \&arg\+\_\+pkg)
+\item 
+virtual \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ double $>$ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a024e8c2961e5f20b65233cbe57f3577b}{calc\+\_\+residual}} (const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ double $>$ \&arg\+\_\+x) const
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ double $>$ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a493f3c6099e85cfbfdb949c118631e37}{make\+\_\+guess}} (const \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{Generic\+Linear\+System}}$<$ TMatrix $>$ \texorpdfstring{$\ast$}{*}const arg\+\_\+gen\+\_\+lin\+\_\+sys\+\_\+ptr) const
+\item 
+\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_aa871df4d5961a554389e5483c7acddcb}{Generic\+Iterative\+Solve}} (const \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{Generic\+Linear\+System}}$<$ TMatrix $>$ \texorpdfstring{$\ast$}{*}const, const \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{Solve\+Arg\+Pkg}} \&\&)=delete
+\item 
+\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a70ea79c12631de5e57c70f9968d2433e}{Generic\+Iterative\+Solve}} (const \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve}{Generic\+Iterative\+Solve}} \&)=delete
+\item 
+\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve}{Generic\+Iterative\+Solve}} \& \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_aa0e3a601fd8376c521fbf01ab4928efd}{operator=}} (\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve}{Generic\+Iterative\+Solve}} \&)=delete
+\item 
+virtual \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a472bc38bf12f043d9bc49748e5e9b5b3}{\texorpdfstring{$\sim$}{\string~}\+Generic\+Iterative\+Solve}} ()=default
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcascade_1_1_inner_outer_solve}{cascade\+::\+Inner\+Outer\+Solve$<$ TMatrix $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_af1d337b62dd4c7ddff0f59c0afa240b7}{max\+\_\+inner\+\_\+iter}}
+\item 
+std\+::vector$<$ std\+::vector$<$ double $>$ $>$ \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_ab45a2c176d26b8bbd1c995aa201af2aa}{inner\+\_\+res\+\_\+norm\+\_\+history}}
+\item 
+std\+::vector$<$ int $>$ \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_ad57cb6dd5269b440cf506c381651a936}{inner\+\_\+iterations}}
+\item 
+\mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{Solve\+Arg\+Pkg}} \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a2dc06a4a8950278f0617afd1f77744dd}{inner\+\_\+solve\+\_\+arg\+\_\+pkg}}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve}{Generic\+Iterative\+Solve}}$<$ TMatrix $>$ $>$ \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a89076f801630b485f9631cca7211ccdd}{inner\+\_\+solver}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve}{cascade\+::\+Generic\+Iterative\+Solve$<$ TMatrix $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+const \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{Generic\+Linear\+System}}$<$ TMatrix $>$ \texorpdfstring{$\ast$}{*}const \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a3afc6c73083d839f1b451aa255a8d3ff}{gen\+\_\+lin\+\_\+sys\+\_\+ptr}}
+\item 
+const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ double $>$ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ac743d15e9e6f1077c76394d7a17a6bb3}{init\+\_\+guess}}
+\item 
+const double \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ae99012b6307e103fcc722f874e15be10}{target\+\_\+rel\+\_\+res}}
+\item 
+int \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_aa533db25c700e1ae8eb6a75bd33f43cd}{max\+\_\+iter}}
+\item 
+int \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a4cca74e9067ffd782e886b1abe476cb1}{curr\+\_\+iter}}
+\item 
+bool \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a4c2a0d9fde848b0948ee101c924883c5}{initiated}}
+\item 
+bool \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a4ac0b0b64e3ba72f23234b5a90ecce71}{converged}}
+\item 
+bool \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_af57186d3571c8fb922a182d26d7912b7}{terminated}}
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ double $>$ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a0d73c5b3c750a46e0b198b2952547448}{generic\+\_\+soln}} = \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$double$>$(\mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}}())
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ double $>$ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a1853ac2a74547799dd50f7a0a8f84bf3}{curr\+\_\+res}} = \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$double$>$(\mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}}())
+\item 
+\mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ double $>$ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ae91c9163fad3360f581d3966f254572c}{curr\+\_\+res\+\_\+norm}}
+\item 
+std\+::vector$<$ double $>$ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a420e914718105bdb175fe95dcb45191a}{res\+\_\+norm\+\_\+history}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_inner_outer_solve___mock_ad55eba3ced62b5190e76416871fbcf27}\index{InnerOuterSolve\_Mock$<$ TMatrix $>$@{InnerOuterSolve\_Mock$<$ TMatrix $>$}!InnerOuterSolve\_Mock@{InnerOuterSolve\_Mock}}
+\index{InnerOuterSolve\_Mock@{InnerOuterSolve\_Mock}!InnerOuterSolve\_Mock$<$ TMatrix $>$@{InnerOuterSolve\_Mock$<$ TMatrix $>$}}
+\doxysubsubsection{\texorpdfstring{InnerOuterSolve\_Mock()}{InnerOuterSolve\_Mock()}}
+{\footnotesize\ttfamily \label{class_inner_outer_solve___mock_ad55eba3ced62b5190e76416871fbcf27} 
+template$<$template$<$ typename $>$ typename TMatrix$>$ \\
+\mbox{\hyperlink{class_inner_outer_solve___mock}{Inner\+Outer\+Solve\+\_\+\+Mock}}$<$ TMatrix $>$\mbox{\hyperlink{class_inner_outer_solve___mock}{\+::\+Inner\+Outer\+Solve\+\_\+\+Mock}} (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ double $>$}]{arg\+\_\+soln\+\_\+addition}{, }\item[{const \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{Generic\+Linear\+System}}$<$ TMatrix $>$ \texorpdfstring{$\ast$}{*}const}]{arg\+\_\+gen\+\_\+lin\+\_\+sys}{, }\item[{const \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{Solve\+Arg\+Pkg}} \&}]{arg\+\_\+pkg}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_inner_outer_solve___mock_a0593ad364d934e3f37146e053d11e01a}\index{InnerOuterSolve\_Mock$<$ TMatrix $>$@{InnerOuterSolve\_Mock$<$ TMatrix $>$}!deal\_with\_nan\_inner\_solve@{deal\_with\_nan\_inner\_solve}}
+\index{deal\_with\_nan\_inner\_solve@{deal\_with\_nan\_inner\_solve}!InnerOuterSolve\_Mock$<$ TMatrix $>$@{InnerOuterSolve\_Mock$<$ TMatrix $>$}}
+\doxysubsubsection{\texorpdfstring{deal\_with\_nan\_inner\_solve()}{deal\_with\_nan\_inner\_solve()}}
+{\footnotesize\ttfamily \label{class_inner_outer_solve___mock_a0593ad364d934e3f37146e053d11e01a} 
+template$<$template$<$ typename $>$ typename TMatrix$>$ \\
+void \mbox{\hyperlink{class_inner_outer_solve___mock}{Inner\+Outer\+Solve\+\_\+\+Mock}}$<$ TMatrix $>$\+::deal\+\_\+with\+\_\+nan\+\_\+inner\+\_\+solve (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_aabf9a184ea188e52273c6d3465a847c6}{cascade\+::\+Inner\+Outer\+Solve$<$ TMatrix $>$}}.
+
+\Hypertarget{class_inner_outer_solve___mock_acee867ba8ecca009818b3f771d56aae4}\index{InnerOuterSolve\_Mock$<$ TMatrix $>$@{InnerOuterSolve\_Mock$<$ TMatrix $>$}!initialize\_inner\_outer\_solver@{initialize\_inner\_outer\_solver}}
+\index{initialize\_inner\_outer\_solver@{initialize\_inner\_outer\_solver}!InnerOuterSolve\_Mock$<$ TMatrix $>$@{InnerOuterSolve\_Mock$<$ TMatrix $>$}}
+\doxysubsubsection{\texorpdfstring{initialize\_inner\_outer\_solver()}{initialize\_inner\_outer\_solver()}}
+{\footnotesize\ttfamily \label{class_inner_outer_solve___mock_acee867ba8ecca009818b3f771d56aae4} 
+template$<$template$<$ typename $>$ typename TMatrix$>$ \\
+void \mbox{\hyperlink{class_inner_outer_solve___mock}{Inner\+Outer\+Solve\+\_\+\+Mock}}$<$ TMatrix $>$\+::initialize\+\_\+inner\+\_\+outer\+\_\+solver (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a268a6759193accae043b006d11695377}{cascade\+::\+Inner\+Outer\+Solve$<$ TMatrix $>$}}.
+
+\Hypertarget{class_inner_outer_solve___mock_aa8051bff60a901e27f9489d7e6d8a7ec}\index{InnerOuterSolve\_Mock$<$ TMatrix $>$@{InnerOuterSolve\_Mock$<$ TMatrix $>$}!outer\_iterate\_complete@{outer\_iterate\_complete}}
+\index{outer\_iterate\_complete@{outer\_iterate\_complete}!InnerOuterSolve\_Mock$<$ TMatrix $>$@{InnerOuterSolve\_Mock$<$ TMatrix $>$}}
+\doxysubsubsection{\texorpdfstring{outer\_iterate\_complete()}{outer\_iterate\_complete()}}
+{\footnotesize\ttfamily \label{class_inner_outer_solve___mock_aa8051bff60a901e27f9489d7e6d8a7ec} 
+template$<$template$<$ typename $>$ typename TMatrix$>$ \\
+void \mbox{\hyperlink{class_inner_outer_solve___mock}{Inner\+Outer\+Solve\+\_\+\+Mock}}$<$ TMatrix $>$\+::outer\+\_\+iterate\+\_\+complete (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a27be2afd8f0ee485338e859a7889faba}{cascade\+::\+Inner\+Outer\+Solve$<$ TMatrix $>$}}.
+
+\Hypertarget{class_inner_outer_solve___mock_a950cca29f8d38c9235b3c44fdfc69fd1}\index{InnerOuterSolve\_Mock$<$ TMatrix $>$@{InnerOuterSolve\_Mock$<$ TMatrix $>$}!outer\_iterate\_setup@{outer\_iterate\_setup}}
+\index{outer\_iterate\_setup@{outer\_iterate\_setup}!InnerOuterSolve\_Mock$<$ TMatrix $>$@{InnerOuterSolve\_Mock$<$ TMatrix $>$}}
+\doxysubsubsection{\texorpdfstring{outer\_iterate\_setup()}{outer\_iterate\_setup()}}
+{\footnotesize\ttfamily \label{class_inner_outer_solve___mock_a950cca29f8d38c9235b3c44fdfc69fd1} 
+template$<$template$<$ typename $>$ typename TMatrix$>$ \\
+void \mbox{\hyperlink{class_inner_outer_solve___mock}{Inner\+Outer\+Solve\+\_\+\+Mock}}$<$ TMatrix $>$\+::outer\+\_\+iterate\+\_\+setup (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_aa4189c972f291b46ce2e521952ea71c0}{cascade\+::\+Inner\+Outer\+Solve$<$ TMatrix $>$}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{class_inner_outer_solve___mock_a6f81871de113ac94e1fcc07393482c90}\index{InnerOuterSolve\_Mock$<$ TMatrix $>$@{InnerOuterSolve\_Mock$<$ TMatrix $>$}!init\_inner\_outer\_hit@{init\_inner\_outer\_hit}}
+\index{init\_inner\_outer\_hit@{init\_inner\_outer\_hit}!InnerOuterSolve\_Mock$<$ TMatrix $>$@{InnerOuterSolve\_Mock$<$ TMatrix $>$}}
+\doxysubsubsection{\texorpdfstring{init\_inner\_outer\_hit}{init\_inner\_outer\_hit}}
+{\footnotesize\ttfamily \label{class_inner_outer_solve___mock_a6f81871de113ac94e1fcc07393482c90} 
+template$<$template$<$ typename $>$ typename TMatrix$>$ \\
+bool \mbox{\hyperlink{class_inner_outer_solve___mock}{Inner\+Outer\+Solve\+\_\+\+Mock}}$<$ TMatrix $>$\+::init\+\_\+inner\+\_\+outer\+\_\+hit = false}
+
+\Hypertarget{class_inner_outer_solve___mock_a9187a353d8a3b49fe3922ffd79f1ddc7}\index{InnerOuterSolve\_Mock$<$ TMatrix $>$@{InnerOuterSolve\_Mock$<$ TMatrix $>$}!iterations\_to\_converge@{iterations\_to\_converge}}
+\index{iterations\_to\_converge@{iterations\_to\_converge}!InnerOuterSolve\_Mock$<$ TMatrix $>$@{InnerOuterSolve\_Mock$<$ TMatrix $>$}}
+\doxysubsubsection{\texorpdfstring{iterations\_to\_converge}{iterations\_to\_converge}}
+{\footnotesize\ttfamily \label{class_inner_outer_solve___mock_a9187a353d8a3b49fe3922ffd79f1ddc7} 
+template$<$template$<$ typename $>$ typename TMatrix$>$ \\
+int \mbox{\hyperlink{class_inner_outer_solve___mock}{Inner\+Outer\+Solve\+\_\+\+Mock}}$<$ TMatrix $>$\+::iterations\+\_\+to\+\_\+converge}
+
+\Hypertarget{class_inner_outer_solve___mock_aa617207e8f3d045795f9b5edb1aff65c}\index{InnerOuterSolve\_Mock$<$ TMatrix $>$@{InnerOuterSolve\_Mock$<$ TMatrix $>$}!moving\_args@{moving\_args}}
+\index{moving\_args@{moving\_args}!InnerOuterSolve\_Mock$<$ TMatrix $>$@{InnerOuterSolve\_Mock$<$ TMatrix $>$}}
+\doxysubsubsection{\texorpdfstring{moving\_args}{moving\_args}}
+{\footnotesize\ttfamily \label{class_inner_outer_solve___mock_aa617207e8f3d045795f9b5edb1aff65c} 
+template$<$template$<$ typename $>$ typename TMatrix$>$ \\
+\mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{Solve\+Arg\+Pkg}} \mbox{\hyperlink{class_inner_outer_solve___mock}{Inner\+Outer\+Solve\+\_\+\+Mock}}$<$ TMatrix $>$\+::moving\+\_\+args}
+
+\Hypertarget{class_inner_outer_solve___mock_abb4a43da73d5c1c64f14b4ce2f151e8a}\index{InnerOuterSolve\_Mock$<$ TMatrix $>$@{InnerOuterSolve\_Mock$<$ TMatrix $>$}!outer\_iterate\_complete\_hit\_count@{outer\_iterate\_complete\_hit\_count}}
+\index{outer\_iterate\_complete\_hit\_count@{outer\_iterate\_complete\_hit\_count}!InnerOuterSolve\_Mock$<$ TMatrix $>$@{InnerOuterSolve\_Mock$<$ TMatrix $>$}}
+\doxysubsubsection{\texorpdfstring{outer\_iterate\_complete\_hit\_count}{outer\_iterate\_complete\_hit\_count}}
+{\footnotesize\ttfamily \label{class_inner_outer_solve___mock_abb4a43da73d5c1c64f14b4ce2f151e8a} 
+template$<$template$<$ typename $>$ typename TMatrix$>$ \\
+int \mbox{\hyperlink{class_inner_outer_solve___mock}{Inner\+Outer\+Solve\+\_\+\+Mock}}$<$ TMatrix $>$\+::outer\+\_\+iterate\+\_\+complete\+\_\+hit\+\_\+count = 0}
+
+\Hypertarget{class_inner_outer_solve___mock_a0303f3b01fa2f17ae998aa32e4d33e7e}\index{InnerOuterSolve\_Mock$<$ TMatrix $>$@{InnerOuterSolve\_Mock$<$ TMatrix $>$}!outer\_iterate\_setup\_hit\_count@{outer\_iterate\_setup\_hit\_count}}
+\index{outer\_iterate\_setup\_hit\_count@{outer\_iterate\_setup\_hit\_count}!InnerOuterSolve\_Mock$<$ TMatrix $>$@{InnerOuterSolve\_Mock$<$ TMatrix $>$}}
+\doxysubsubsection{\texorpdfstring{outer\_iterate\_setup\_hit\_count}{outer\_iterate\_setup\_hit\_count}}
+{\footnotesize\ttfamily \label{class_inner_outer_solve___mock_a0303f3b01fa2f17ae998aa32e4d33e7e} 
+template$<$template$<$ typename $>$ typename TMatrix$>$ \\
+int \mbox{\hyperlink{class_inner_outer_solve___mock}{Inner\+Outer\+Solve\+\_\+\+Mock}}$<$ TMatrix $>$\+::outer\+\_\+iterate\+\_\+setup\+\_\+hit\+\_\+count = 0}
+
+\Hypertarget{class_inner_outer_solve___mock_a6dc0fa49070c478b140e0965b2ae31af}\index{InnerOuterSolve\_Mock$<$ TMatrix $>$@{InnerOuterSolve\_Mock$<$ TMatrix $>$}!soln\_addition@{soln\_addition}}
+\index{soln\_addition@{soln\_addition}!InnerOuterSolve\_Mock$<$ TMatrix $>$@{InnerOuterSolve\_Mock$<$ TMatrix $>$}}
+\doxysubsubsection{\texorpdfstring{soln\_addition}{soln\_addition}}
+{\footnotesize\ttfamily \label{class_inner_outer_solve___mock_a6dc0fa49070c478b140e0965b2ae31af} 
+template$<$template$<$ typename $>$ typename TMatrix$>$ \\
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$double$>$ \mbox{\hyperlink{class_inner_outer_solve___mock}{Inner\+Outer\+Solve\+\_\+\+Mock}}$<$ TMatrix $>$\+::soln\+\_\+addition}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/dosre/dev/precision-\/cascade/test/src/test\+\_\+solvers/test\+\_\+nested/\mbox{\hyperlink{test___inner_outer_solve_8h}{test\+\_\+\+Inner\+Outer\+Solve.\+h}}\end{DoxyCompactItemize}

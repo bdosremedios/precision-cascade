@@ -1,0 +1,193 @@
+\doxysection{PGMRES\+\_\+\+Solve\+\_\+\+Test Class Reference}
+\hypertarget{class_p_g_m_r_e_s___solve___test}{}\label{class_p_g_m_r_e_s___solve___test}\index{PGMRES\_Solve\_Test@{PGMRES\_Solve\_Test}}
+
+
+Inheritance diagram for PGMRES\+\_\+\+Solve\+\_\+\+Test\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=194pt]{class_p_g_m_r_e_s___solve___test__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for PGMRES\+\_\+\+Solve\+\_\+\+Test\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_p_g_m_r_e_s___solve___test__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_p_g_m_r_e_s___solve___test_a866b14861844fa4a82e29b75d8c9ce96}{Set\+Up}} ()
+\item 
+{\footnotesize template$<$template$<$ typename $>$ typename TMatrix$>$ }\\void \mbox{\hyperlink{class_p_g_m_r_e_s___solve___test_a357288aa437a13dd2df374eee01fcc21}{Test\+Match\+Identity}} ()
+\item 
+{\footnotesize template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ }\\void \mbox{\hyperlink{class_p_g_m_r_e_s___solve___test_a29ffe6400e4dd44962f8477347019403}{Test\+Precond\+Single\+Iter}} (const \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{Solve\+Arg\+Pkg}} \&args)
+\item 
+{\footnotesize template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ }\\void \mbox{\hyperlink{class_p_g_m_r_e_s___solve___test_a14686d9112af9999da0d869d9d2cf382}{Preconditioned\+Solve\+Test}} (const fs\+::path \&A\+\_\+file\+\_\+path, const fs\+::path \&Asqr\+\_\+file\+\_\+path, const fs\+::path \&b\+\_\+file\+\_\+path, const \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{Solve\+Arg\+Pkg}} \&args)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+const int \mbox{\hyperlink{class_p_g_m_r_e_s___solve___test_a32350514771999762820945d5598cb12}{manual\+\_\+n}} = 45
+\item 
+const \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{Solve\+Arg\+Pkg}} \mbox{\hyperlink{class_p_g_m_r_e_s___solve___test_ac79cffa4a22d822dbffba6a356c055bb}{dbl\+\_\+manual\+\_\+args}}
+\item 
+const \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{Solve\+Arg\+Pkg}} \mbox{\hyperlink{class_p_g_m_r_e_s___solve___test_a087673f77ceee6a325f312cc595a1161}{sgl\+\_\+manual\+\_\+args}}
+\item 
+const \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{Solve\+Arg\+Pkg}} \mbox{\hyperlink{class_p_g_m_r_e_s___solve___test_ab4e58ce389eca00b528883f0d94b68ab}{hlf\+\_\+manual\+\_\+args}}
+\item 
+const \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{Solve\+Arg\+Pkg}} \mbox{\hyperlink{class_p_g_m_r_e_s___solve___test_ab52b46580cc96526eb199e6c28e49a9c}{dbl\+\_\+gen\+\_\+args}}
+\item 
+const \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{Solve\+Arg\+Pkg}} \mbox{\hyperlink{class_p_g_m_r_e_s___solve___test_abea06df519ea7f71c0e909446e1e0bb3}{sgl\+\_\+gen\+\_\+args}}
+\item 
+const \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{Solve\+Arg\+Pkg}} \mbox{\hyperlink{class_p_g_m_r_e_s___solve___test_a34c7807a1570bf583d327c1bbfa6a1e1}{hlf\+\_\+gen\+\_\+args}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{class_test_base}{Test\+Base}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{Solve\+Arg\+Pkg}} \mbox{\hyperlink{class_test_base_abdaa0f95eb7b43e1740b4e5ad0a066c4}{default\+\_\+args}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Static Public Attributes inherited from \mbox{\hyperlink{class_test_base}{Test\+Base}}}
+\begin{DoxyCompactItemize}
+\item 
+static fs\+::path \mbox{\hyperlink{class_test_base_a0f82f8d088952dd8628f858d546730a5}{data\+\_\+dir}}
+\item 
+static fs\+::path \mbox{\hyperlink{class_test_base_a2d8e6876b192f2b5ee8a9d7d4b858511}{read\+\_\+matrix\+\_\+dir}}
+\item 
+static fs\+::path \mbox{\hyperlink{class_test_base_a69f61918fdc50d7db89ca81b1c4d5258}{solve\+\_\+matrix\+\_\+dir}}
+\item 
+static bool \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_test_base_a6179ef066e2e309121d220ac54bb5bf0}{show\+\_\+plots}} = new bool
+\item 
+static bool \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_test_base_a9f80f99b679cb7b8858e024a85e5319e}{print\+\_\+errors}} = new bool
+\item 
+static \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \mbox{\hyperlink{class_test_base_aefc07d9429356dd9aaa81ee68051a238}{bundle}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_p_g_m_r_e_s___solve___test_a14686d9112af9999da0d869d9d2cf382}\index{PGMRES\_Solve\_Test@{PGMRES\_Solve\_Test}!PreconditionedSolveTest@{PreconditionedSolveTest}}
+\index{PreconditionedSolveTest@{PreconditionedSolveTest}!PGMRES\_Solve\_Test@{PGMRES\_Solve\_Test}}
+\doxysubsubsection{\texorpdfstring{PreconditionedSolveTest()}{PreconditionedSolveTest()}}
+{\footnotesize\ttfamily \label{class_p_g_m_r_e_s___solve___test_a14686d9112af9999da0d869d9d2cf382} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+void PGMRES\+\_\+\+Solve\+\_\+\+Test\+::\+Preconditioned\+Solve\+Test (\begin{DoxyParamCaption}\item[{const fs\+::path \&}]{A\+\_\+file\+\_\+path}{, }\item[{const fs\+::path \&}]{Asqr\+\_\+file\+\_\+path}{, }\item[{const fs\+::path \&}]{b\+\_\+file\+\_\+path}{, }\item[{const \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{Solve\+Arg\+Pkg}} \&}]{args}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{class_p_g_m_r_e_s___solve___test_a866b14861844fa4a82e29b75d8c9ce96}\index{PGMRES\_Solve\_Test@{PGMRES\_Solve\_Test}!SetUp@{SetUp}}
+\index{SetUp@{SetUp}!PGMRES\_Solve\_Test@{PGMRES\_Solve\_Test}}
+\doxysubsubsection{\texorpdfstring{SetUp()}{SetUp()}}
+{\footnotesize\ttfamily \label{class_p_g_m_r_e_s___solve___test_a866b14861844fa4a82e29b75d8c9ce96} 
+void PGMRES\+\_\+\+Solve\+\_\+\+Test\+::\+Set\+Up (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{class_p_g_m_r_e_s___solve___test_a357288aa437a13dd2df374eee01fcc21}\index{PGMRES\_Solve\_Test@{PGMRES\_Solve\_Test}!TestMatchIdentity@{TestMatchIdentity}}
+\index{TestMatchIdentity@{TestMatchIdentity}!PGMRES\_Solve\_Test@{PGMRES\_Solve\_Test}}
+\doxysubsubsection{\texorpdfstring{TestMatchIdentity()}{TestMatchIdentity()}}
+{\footnotesize\ttfamily \label{class_p_g_m_r_e_s___solve___test_a357288aa437a13dd2df374eee01fcc21} 
+template$<$template$<$ typename $>$ typename TMatrix$>$ \\
+void PGMRES\+\_\+\+Solve\+\_\+\+Test\+::\+Test\+Match\+Identity (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{class_p_g_m_r_e_s___solve___test_a29ffe6400e4dd44962f8477347019403}\index{PGMRES\_Solve\_Test@{PGMRES\_Solve\_Test}!TestPrecondSingleIter@{TestPrecondSingleIter}}
+\index{TestPrecondSingleIter@{TestPrecondSingleIter}!PGMRES\_Solve\_Test@{PGMRES\_Solve\_Test}}
+\doxysubsubsection{\texorpdfstring{TestPrecondSingleIter()}{TestPrecondSingleIter()}}
+{\footnotesize\ttfamily \label{class_p_g_m_r_e_s___solve___test_a29ffe6400e4dd44962f8477347019403} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+void PGMRES\+\_\+\+Solve\+\_\+\+Test\+::\+Test\+Precond\+Single\+Iter (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{Solve\+Arg\+Pkg}} \&}]{args}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{class_p_g_m_r_e_s___solve___test_ab52b46580cc96526eb199e6c28e49a9c}\index{PGMRES\_Solve\_Test@{PGMRES\_Solve\_Test}!dbl\_gen\_args@{dbl\_gen\_args}}
+\index{dbl\_gen\_args@{dbl\_gen\_args}!PGMRES\_Solve\_Test@{PGMRES\_Solve\_Test}}
+\doxysubsubsection{\texorpdfstring{dbl\_gen\_args}{dbl\_gen\_args}}
+{\footnotesize\ttfamily \label{class_p_g_m_r_e_s___solve___test_ab52b46580cc96526eb199e6c28e49a9c} 
+const \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{Solve\+Arg\+Pkg}} PGMRES\+\_\+\+Solve\+\_\+\+Test\+::dbl\+\_\+gen\+\_\+args}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{SolveArgPkg}}(}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 80,\ 10,\ \mbox{\hyperlink{class_tol_a0614ab8d3e57c3d340fcdc9853dae00c}{Tol<double>::krylov\_conv\_tol}}()}
+\DoxyCodeLine{\ \ \ \ )}
+
+\end{DoxyCode}
+\Hypertarget{class_p_g_m_r_e_s___solve___test_ac79cffa4a22d822dbffba6a356c055bb}\index{PGMRES\_Solve\_Test@{PGMRES\_Solve\_Test}!dbl\_manual\_args@{dbl\_manual\_args}}
+\index{dbl\_manual\_args@{dbl\_manual\_args}!PGMRES\_Solve\_Test@{PGMRES\_Solve\_Test}}
+\doxysubsubsection{\texorpdfstring{dbl\_manual\_args}{dbl\_manual\_args}}
+{\footnotesize\ttfamily \label{class_p_g_m_r_e_s___solve___test_ac79cffa4a22d822dbffba6a356c055bb} 
+const \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{Solve\+Arg\+Pkg}} PGMRES\+\_\+\+Solve\+\_\+\+Test\+::dbl\+\_\+manual\+\_\+args}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{SolveArgPkg}}(}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{class_p_g_m_r_e_s___solve___test_a32350514771999762820945d5598cb12}{manual\_n}},\ 10,\ \mbox{\hyperlink{class_tol_a0614ab8d3e57c3d340fcdc9853dae00c}{Tol<double>::krylov\_conv\_tol}}()}
+\DoxyCodeLine{\ \ \ \ )}
+
+\end{DoxyCode}
+\Hypertarget{class_p_g_m_r_e_s___solve___test_a34c7807a1570bf583d327c1bbfa6a1e1}\index{PGMRES\_Solve\_Test@{PGMRES\_Solve\_Test}!hlf\_gen\_args@{hlf\_gen\_args}}
+\index{hlf\_gen\_args@{hlf\_gen\_args}!PGMRES\_Solve\_Test@{PGMRES\_Solve\_Test}}
+\doxysubsubsection{\texorpdfstring{hlf\_gen\_args}{hlf\_gen\_args}}
+{\footnotesize\ttfamily \label{class_p_g_m_r_e_s___solve___test_a34c7807a1570bf583d327c1bbfa6a1e1} 
+const \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{Solve\+Arg\+Pkg}} PGMRES\+\_\+\+Solve\+\_\+\+Test\+::hlf\+\_\+gen\+\_\+args}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{SolveArgPkg}}(}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 80,\ 10,\ \mbox{\hyperlink{class_tol_a0614ab8d3e57c3d340fcdc9853dae00c}{Tol<half>::krylov\_conv\_tol}}()}
+\DoxyCodeLine{\ \ \ \ )}
+
+\end{DoxyCode}
+\Hypertarget{class_p_g_m_r_e_s___solve___test_ab4e58ce389eca00b528883f0d94b68ab}\index{PGMRES\_Solve\_Test@{PGMRES\_Solve\_Test}!hlf\_manual\_args@{hlf\_manual\_args}}
+\index{hlf\_manual\_args@{hlf\_manual\_args}!PGMRES\_Solve\_Test@{PGMRES\_Solve\_Test}}
+\doxysubsubsection{\texorpdfstring{hlf\_manual\_args}{hlf\_manual\_args}}
+{\footnotesize\ttfamily \label{class_p_g_m_r_e_s___solve___test_ab4e58ce389eca00b528883f0d94b68ab} 
+const \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{Solve\+Arg\+Pkg}} PGMRES\+\_\+\+Solve\+\_\+\+Test\+::hlf\+\_\+manual\+\_\+args}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{SolveArgPkg}}(}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{class_p_g_m_r_e_s___solve___test_a32350514771999762820945d5598cb12}{manual\_n}},\ 10,\ \mbox{\hyperlink{class_tol_a0614ab8d3e57c3d340fcdc9853dae00c}{Tol<half>::krylov\_conv\_tol}}()}
+\DoxyCodeLine{\ \ \ \ )}
+
+\end{DoxyCode}
+\Hypertarget{class_p_g_m_r_e_s___solve___test_a32350514771999762820945d5598cb12}\index{PGMRES\_Solve\_Test@{PGMRES\_Solve\_Test}!manual\_n@{manual\_n}}
+\index{manual\_n@{manual\_n}!PGMRES\_Solve\_Test@{PGMRES\_Solve\_Test}}
+\doxysubsubsection{\texorpdfstring{manual\_n}{manual\_n}}
+{\footnotesize\ttfamily \label{class_p_g_m_r_e_s___solve___test_a32350514771999762820945d5598cb12} 
+const int PGMRES\+\_\+\+Solve\+\_\+\+Test\+::manual\+\_\+n = 45}
+
+\Hypertarget{class_p_g_m_r_e_s___solve___test_abea06df519ea7f71c0e909446e1e0bb3}\index{PGMRES\_Solve\_Test@{PGMRES\_Solve\_Test}!sgl\_gen\_args@{sgl\_gen\_args}}
+\index{sgl\_gen\_args@{sgl\_gen\_args}!PGMRES\_Solve\_Test@{PGMRES\_Solve\_Test}}
+\doxysubsubsection{\texorpdfstring{sgl\_gen\_args}{sgl\_gen\_args}}
+{\footnotesize\ttfamily \label{class_p_g_m_r_e_s___solve___test_abea06df519ea7f71c0e909446e1e0bb3} 
+const \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{Solve\+Arg\+Pkg}} PGMRES\+\_\+\+Solve\+\_\+\+Test\+::sgl\+\_\+gen\+\_\+args}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{SolveArgPkg}}(}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 80,\ 10,\ \mbox{\hyperlink{class_tol_a0614ab8d3e57c3d340fcdc9853dae00c}{Tol<float>::krylov\_conv\_tol}}()}
+\DoxyCodeLine{\ \ \ \ )}
+
+\end{DoxyCode}
+\Hypertarget{class_p_g_m_r_e_s___solve___test_a087673f77ceee6a325f312cc595a1161}\index{PGMRES\_Solve\_Test@{PGMRES\_Solve\_Test}!sgl\_manual\_args@{sgl\_manual\_args}}
+\index{sgl\_manual\_args@{sgl\_manual\_args}!PGMRES\_Solve\_Test@{PGMRES\_Solve\_Test}}
+\doxysubsubsection{\texorpdfstring{sgl\_manual\_args}{sgl\_manual\_args}}
+{\footnotesize\ttfamily \label{class_p_g_m_r_e_s___solve___test_a087673f77ceee6a325f312cc595a1161} 
+const \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{Solve\+Arg\+Pkg}} PGMRES\+\_\+\+Solve\+\_\+\+Test\+::sgl\+\_\+manual\+\_\+args}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{SolveArgPkg}}(}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{class_p_g_m_r_e_s___solve___test_a32350514771999762820945d5598cb12}{manual\_n}},\ 10,\ \mbox{\hyperlink{class_tol_a0614ab8d3e57c3d340fcdc9853dae00c}{Tol<float>::krylov\_conv\_tol}}()}
+\DoxyCodeLine{\ \ \ \ )}
+
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/dosre/dev/precision-\/cascade/test/src/test\+\_\+solvers/test\+\_\+\+GMRES/\mbox{\hyperlink{test___p_g_m_r_e_s_8cpp}{test\+\_\+\+PGMRES.\+cpp}}\end{DoxyCompactItemize}

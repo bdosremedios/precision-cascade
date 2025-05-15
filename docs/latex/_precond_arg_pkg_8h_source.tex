@@ -1,0 +1,76 @@
+\doxysection{Precond\+Arg\+Pkg.\+h}
+\hypertarget{_precond_arg_pkg_8h_source}{}\label{_precond_arg_pkg_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/include/tools/arg\_pkgs/PrecondArgPkg.h@{C:/Users/dosre/dev/precision-\/cascade/include/tools/arg\_pkgs/PrecondArgPkg.h}}
+\mbox{\hyperlink{_precond_arg_pkg_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ PRECONDARGPKG\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ PRECONDARGPKG\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{types_8h}{../../types/types.h}}"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{implemented__preconditioners_8h}{../../preconditioners/implemented\_preconditioners.h}}"{}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <cuda\_fp16.h>}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacecascade}{cascade}}\ \{}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix,\ \textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00014\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structcascade_1_1_precond_arg_pkg_ab929561d0eeab6f7e92971fa9f79f4bb}{PrecondArgPkg}}}
+\DoxyCodeLine{00015\ \{}
+\DoxyCodeLine{00016\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \ \ \ \ std::shared\_ptr<Preconditioner<TMatrix,\ TPrecision>>\ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg_a21c0dde1db079e0efd3bd1063b66b657}{left\_precond}};}
+\DoxyCodeLine{00019\ \ \ \ \ std::shared\_ptr<Preconditioner<TMatrix,\ TPrecision>>\ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg_acc6ee2f664140095037fb963a709b5aa}{right\_precond}};}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg_ab929561d0eeab6f7e92971fa9f79f4bb}{PrecondArgPkg}}(}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ std::shared\_ptr<\mbox{\hyperlink{classcascade_1_1_preconditioner}{Preconditioner<TMatrix,\ TPrecision>}}>\ arg\_left\_precond\ =\ (}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ std::make\_shared<\mbox{\hyperlink{classcascade_1_1_no_preconditioner}{NoPreconditioner<TMatrix,\ TPrecision>}}>()}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ ),}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ std::shared\_ptr<\mbox{\hyperlink{classcascade_1_1_preconditioner}{Preconditioner<TMatrix,\ TPrecision>}}>\ arg\_right\_precond\ =\ (}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ std::make\_shared<\mbox{\hyperlink{classcascade_1_1_no_preconditioner}{NoPreconditioner<TMatrix,\ TPrecision>}}>()}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00028\ \ \ \ \ ):}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg_a21c0dde1db079e0efd3bd1063b66b657}{left\_precond}}(arg\_left\_precond),}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg_acc6ee2f664140095037fb963a709b5aa}{right\_precond}}(arg\_right\_precond)}
+\DoxyCodeLine{00031\ \ \ \ \ \{\};}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg_ab929561d0eeab6f7e92971fa9f79f4bb}{PrecondArgPkg<TMatrix,\ double>}}\ *\ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg_ac66304df528b35dc751fe2e8eb4a8da1}{cast\_dbl\_ptr}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{new}\ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg_ab929561d0eeab6f7e92971fa9f79f4bb}{PrecondArgPkg<TMatrix,\ double>}}(}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ std::shared\_ptr<\mbox{\hyperlink{classcascade_1_1_preconditioner}{Preconditioner<TMatrix,\ double>}}>(}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg_a21c0dde1db079e0efd3bd1063b66b657}{left\_precond}}-\/>cast\_dbl\_ptr()}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ ),}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ std::shared\_ptr<\mbox{\hyperlink{classcascade_1_1_preconditioner}{Preconditioner<TMatrix,\ double>}}>(}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg_acc6ee2f664140095037fb963a709b5aa}{right\_precond}}-\/>cast\_dbl\_ptr()}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00042\ \ \ \ \ \}}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg_ab929561d0eeab6f7e92971fa9f79f4bb}{PrecondArgPkg<TMatrix,\ float>}}\ *\ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg_a48fce6e1fac1bfece0497ccf1bef2d4c}{cast\_sgl\_ptr}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{new}\ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg_ab929561d0eeab6f7e92971fa9f79f4bb}{PrecondArgPkg<TMatrix,\ float>}}(}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ std::shared\_ptr<\mbox{\hyperlink{classcascade_1_1_preconditioner}{Preconditioner<TMatrix,\ float>}}>(}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg_a21c0dde1db079e0efd3bd1063b66b657}{left\_precond}}-\/>cast\_sgl\_ptr()}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ ),}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ std::shared\_ptr<\mbox{\hyperlink{classcascade_1_1_preconditioner}{Preconditioner<TMatrix,\ float>}}>(}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg_acc6ee2f664140095037fb963a709b5aa}{right\_precond}}-\/>cast\_sgl\_ptr()}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00053\ \ \ \ \ \}}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg_ab929561d0eeab6f7e92971fa9f79f4bb}{PrecondArgPkg<TMatrix,\ \_\_half>}}\ *\ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg_aef6ec15f421a1416c6416331e9a89bda}{cast\_hlf\_ptr}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{new}\ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg_ab929561d0eeab6f7e92971fa9f79f4bb}{PrecondArgPkg<TMatrix,\ \_\_half>}}(}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ std::shared\_ptr<\mbox{\hyperlink{classcascade_1_1_preconditioner}{Preconditioner<TMatrix,\ \_\_half>}}>(}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg_a21c0dde1db079e0efd3bd1063b66b657}{left\_precond}}-\/>cast\_hlf\_ptr()}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ ),}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ std::shared\_ptr<\mbox{\hyperlink{classcascade_1_1_preconditioner}{Preconditioner<TMatrix,\ \_\_half>}}>(}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg_acc6ee2f664140095037fb963a709b5aa}{right\_precond}}-\/>cast\_hlf\_ptr()}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00064\ \ \ \ \ \}}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \};}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \}}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

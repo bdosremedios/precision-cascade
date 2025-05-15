@@ -1,0 +1,201 @@
+\doxysection{Benchmark\+Base Class Reference}
+\hypertarget{class_benchmark_base}{}\label{class_benchmark_base}\index{BenchmarkBase@{BenchmarkBase}}
+
+
+{\ttfamily \#include $<$benchmark.\+h$>$}
+
+
+
+Inheritance diagram for Benchmark\+Base\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_benchmark_base__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Benchmark\+Base\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=298pt]{class_benchmark_base__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_benchmark_base_a617c273fadfcb5d269f12386db080dde}{benchmark\+\_\+n\+\_\+runs}} (int n, std\+::function$<$ void(\mbox{\hyperlink{class_benchmark___accum_clock}{Benchmark\+\_\+\+Accum\+Clock}} \&)$>$ f, \mbox{\hyperlink{class_benchmark___accum_clock}{Benchmark\+\_\+\+Accum\+Clock}} \&benchmark\+\_\+clock, std\+::string label="{}"{})
+\item 
+{\footnotesize template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ }\\void \mbox{\hyperlink{class_benchmark_base_a9771cb4046b877f9a213771ec9f1df38}{benchmark\+\_\+exec\+\_\+func}} (std\+::vector$<$ int $>$ m\+\_\+dimensions, std\+::function$<$ TMatrix$<$ TPrecision $>$(int, int)$>$ make\+\_\+A, std\+::function$<$ void(\mbox{\hyperlink{class_benchmark___accum_clock}{Benchmark\+\_\+\+Accum\+Clock}} \&, TMatrix$<$ TPrecision $>$ \&)$>$ exec\+\_\+func, std\+::string label)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+const int \mbox{\hyperlink{class_benchmark_base_a5da4e27784b60ab7f6b26aa4d97c029b}{n\+\_\+runs}} = (\mbox{\hyperlink{class_benchmark_base_abcb949e75b3a451b3b2aec2403150e28}{prototyping\+\_\+speed\+\_\+up}}) ? 2 \+: 5
+\item 
+std\+::vector$<$ int $>$ \mbox{\hyperlink{class_benchmark_base_a1937d13b1092ec3a86c7260c05d78edd}{dense\+\_\+dims}}
+\item 
+std\+::vector$<$ int $>$ \mbox{\hyperlink{class_benchmark_base_a1a0864766c6cce696135d84a03701c14}{sparse\+\_\+dims}}
+\item 
+std\+::vector$<$ int $>$ \mbox{\hyperlink{class_benchmark_base_a52cc02031184a7a35bc40e589dff435c}{ilu\+\_\+dims}}
+\item 
+const bool \mbox{\hyperlink{class_benchmark_base_a9ede88ea295975774f98b9f590b59c02}{pivot\+\_\+ilu}} = true
+\item 
+const int \mbox{\hyperlink{class_benchmark_base_ae548186eaad394bfa1f7e8eda2269f22}{run\+\_\+fast\+\_\+tests\+\_\+count}} = 200
+\item 
+const int \mbox{\hyperlink{class_benchmark_base_acea7dbff2a592190949240700d413cfd}{dense\+\_\+subset\+\_\+cols}} = 200
+\item 
+const int \mbox{\hyperlink{class_benchmark_base_aa39adcf2e02d80a4e640eefade754281}{gmres\+\_\+iters}} = (\mbox{\hyperlink{class_benchmark_base_abcb949e75b3a451b3b2aec2403150e28}{prototyping\+\_\+speed\+\_\+up}}) ? 5 \+: 200
+\item 
+const int \mbox{\hyperlink{class_benchmark_base_aad1cc09fc411f40380b33fbd9cdf2900}{nested\+\_\+gmres\+\_\+inner\+\_\+iters}} = \mbox{\hyperlink{class_benchmark_base_aa39adcf2e02d80a4e640eefade754281}{gmres\+\_\+iters}}
+\item 
+const int \mbox{\hyperlink{class_benchmark_base_a59e0610c2842e95a61ce86960353ccd9}{nested\+\_\+gmres\+\_\+outer\+\_\+iters}} = (\mbox{\hyperlink{class_benchmark_base_abcb949e75b3a451b3b2aec2403150e28}{prototyping\+\_\+speed\+\_\+up}}) ? 5 \+: 300
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static bool \mbox{\hyperlink{class_benchmark_base_abcb949e75b3a451b3b2aec2403150e28}{prototyping\+\_\+speed\+\_\+up}} = false
+\item 
+static \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \mbox{\hyperlink{class_benchmark_base_aa7bdcad1019b0c4fb742b58a194ad12a}{bundle}}
+\item 
+static fs\+::path \mbox{\hyperlink{class_benchmark_base_a36d0f9205a06d32814c7a28aa87114f1}{data\+\_\+dir}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_benchmark_base_a9771cb4046b877f9a213771ec9f1df38}\index{BenchmarkBase@{BenchmarkBase}!benchmark\_exec\_func@{benchmark\_exec\_func}}
+\index{benchmark\_exec\_func@{benchmark\_exec\_func}!BenchmarkBase@{BenchmarkBase}}
+\doxysubsubsection{\texorpdfstring{benchmark\_exec\_func()}{benchmark\_exec\_func()}}
+{\footnotesize\ttfamily \label{class_benchmark_base_a9771cb4046b877f9a213771ec9f1df38} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+void Benchmark\+Base\+::benchmark\+\_\+exec\+\_\+func (\begin{DoxyParamCaption}\item[{std\+::vector$<$ int $>$}]{m\+\_\+dimensions}{, }\item[{std\+::function$<$ TMatrix$<$ TPrecision $>$(int, int)$>$}]{make\+\_\+A}{, }\item[{std\+::function$<$ void(\mbox{\hyperlink{class_benchmark___accum_clock}{Benchmark\+\_\+\+Accum\+Clock}} \&, TMatrix$<$ TPrecision $>$ \&)$>$}]{exec\+\_\+func}{, }\item[{std\+::string}]{label}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{class_benchmark_base_a617c273fadfcb5d269f12386db080dde}\index{BenchmarkBase@{BenchmarkBase}!benchmark\_n\_runs@{benchmark\_n\_runs}}
+\index{benchmark\_n\_runs@{benchmark\_n\_runs}!BenchmarkBase@{BenchmarkBase}}
+\doxysubsubsection{\texorpdfstring{benchmark\_n\_runs()}{benchmark\_n\_runs()}}
+{\footnotesize\ttfamily \label{class_benchmark_base_a617c273fadfcb5d269f12386db080dde} 
+void Benchmark\+Base\+::benchmark\+\_\+n\+\_\+runs (\begin{DoxyParamCaption}\item[{int}]{n}{, }\item[{std\+::function$<$ void(\mbox{\hyperlink{class_benchmark___accum_clock}{Benchmark\+\_\+\+Accum\+Clock}} \&)$>$}]{f}{, }\item[{\mbox{\hyperlink{class_benchmark___accum_clock}{Benchmark\+\_\+\+Accum\+Clock}} \&}]{benchmark\+\_\+clock}{, }\item[{std\+::string}]{label}{ = {\ttfamily "{}"{}}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{class_benchmark_base_aa7bdcad1019b0c4fb742b58a194ad12a}\index{BenchmarkBase@{BenchmarkBase}!bundle@{bundle}}
+\index{bundle@{bundle}!BenchmarkBase@{BenchmarkBase}}
+\doxysubsubsection{\texorpdfstring{bundle}{bundle}}
+{\footnotesize\ttfamily \label{class_benchmark_base_aa7bdcad1019b0c4fb742b58a194ad12a} 
+\mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} Benchmark\+Base\+::bundle\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{class_benchmark_base_a36d0f9205a06d32814c7a28aa87114f1}\index{BenchmarkBase@{BenchmarkBase}!data\_dir@{data\_dir}}
+\index{data\_dir@{data\_dir}!BenchmarkBase@{BenchmarkBase}}
+\doxysubsubsection{\texorpdfstring{data\_dir}{data\_dir}}
+{\footnotesize\ttfamily \label{class_benchmark_base_a36d0f9205a06d32814c7a28aa87114f1} 
+fs\+::path Benchmark\+Base\+::data\+\_\+dir\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{class_benchmark_base_a1937d13b1092ec3a86c7260c05d78edd}\index{BenchmarkBase@{BenchmarkBase}!dense\_dims@{dense\_dims}}
+\index{dense\_dims@{dense\_dims}!BenchmarkBase@{BenchmarkBase}}
+\doxysubsubsection{\texorpdfstring{dense\_dims}{dense\_dims}}
+{\footnotesize\ttfamily \label{class_benchmark_base_a1937d13b1092ec3a86c7260c05d78edd} 
+std\+::vector$<$int$>$ Benchmark\+Base\+::dense\+\_\+dims}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ (}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ (\mbox{\hyperlink{class_benchmark_base_abcb949e75b3a451b3b2aec2403150e28}{prototyping\_speed\_up}})\ ?}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ std::vector<int>(\{1024\})\ :}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ std::\mbox{\hyperlink{create__read__matrices_8m_a7ea82552101f041fad7635b3ed036a84}{vector}}<int>(\{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ 2500,\ 5000,\ 7500,\ 10000,\ 12500,\ 15000,\ 17500,\ 20000}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \})}
+\DoxyCodeLine{\ \ \ \ )}
+
+\end{DoxyCode}
+\Hypertarget{class_benchmark_base_acea7dbff2a592190949240700d413cfd}\index{BenchmarkBase@{BenchmarkBase}!dense\_subset\_cols@{dense\_subset\_cols}}
+\index{dense\_subset\_cols@{dense\_subset\_cols}!BenchmarkBase@{BenchmarkBase}}
+\doxysubsubsection{\texorpdfstring{dense\_subset\_cols}{dense\_subset\_cols}}
+{\footnotesize\ttfamily \label{class_benchmark_base_acea7dbff2a592190949240700d413cfd} 
+const int Benchmark\+Base\+::dense\+\_\+subset\+\_\+cols = 200}
+
+\Hypertarget{class_benchmark_base_aa39adcf2e02d80a4e640eefade754281}\index{BenchmarkBase@{BenchmarkBase}!gmres\_iters@{gmres\_iters}}
+\index{gmres\_iters@{gmres\_iters}!BenchmarkBase@{BenchmarkBase}}
+\doxysubsubsection{\texorpdfstring{gmres\_iters}{gmres\_iters}}
+{\footnotesize\ttfamily \label{class_benchmark_base_aa39adcf2e02d80a4e640eefade754281} 
+const int Benchmark\+Base\+::gmres\+\_\+iters = (\mbox{\hyperlink{class_benchmark_base_abcb949e75b3a451b3b2aec2403150e28}{prototyping\+\_\+speed\+\_\+up}}) ? 5 \+: 200}
+
+\Hypertarget{class_benchmark_base_a52cc02031184a7a35bc40e589dff435c}\index{BenchmarkBase@{BenchmarkBase}!ilu\_dims@{ilu\_dims}}
+\index{ilu\_dims@{ilu\_dims}!BenchmarkBase@{BenchmarkBase}}
+\doxysubsubsection{\texorpdfstring{ilu\_dims}{ilu\_dims}}
+{\footnotesize\ttfamily \label{class_benchmark_base_a52cc02031184a7a35bc40e589dff435c} 
+std\+::vector$<$int$>$ Benchmark\+Base\+::ilu\+\_\+dims}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ (}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ (\mbox{\hyperlink{class_benchmark_base_abcb949e75b3a451b3b2aec2403150e28}{prototyping\_speed\_up}})\ ?}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ std::vector<int>(\{1024\})\ :}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ std::\mbox{\hyperlink{create__read__matrices_8m_a7ea82552101f041fad7635b3ed036a84}{vector}}<int>(\{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ 2154,\ 50991,\ 80708,\ 105655,\ 127930,\ 148406,\ 167554,\ 185664}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \})}
+\DoxyCodeLine{\ \ \ \ )}
+
+\end{DoxyCode}
+\Hypertarget{class_benchmark_base_a5da4e27784b60ab7f6b26aa4d97c029b}\index{BenchmarkBase@{BenchmarkBase}!n\_runs@{n\_runs}}
+\index{n\_runs@{n\_runs}!BenchmarkBase@{BenchmarkBase}}
+\doxysubsubsection{\texorpdfstring{n\_runs}{n\_runs}}
+{\footnotesize\ttfamily \label{class_benchmark_base_a5da4e27784b60ab7f6b26aa4d97c029b} 
+const int Benchmark\+Base\+::n\+\_\+runs = (\mbox{\hyperlink{class_benchmark_base_abcb949e75b3a451b3b2aec2403150e28}{prototyping\+\_\+speed\+\_\+up}}) ? 2 \+: 5}
+
+\Hypertarget{class_benchmark_base_aad1cc09fc411f40380b33fbd9cdf2900}\index{BenchmarkBase@{BenchmarkBase}!nested\_gmres\_inner\_iters@{nested\_gmres\_inner\_iters}}
+\index{nested\_gmres\_inner\_iters@{nested\_gmres\_inner\_iters}!BenchmarkBase@{BenchmarkBase}}
+\doxysubsubsection{\texorpdfstring{nested\_gmres\_inner\_iters}{nested\_gmres\_inner\_iters}}
+{\footnotesize\ttfamily \label{class_benchmark_base_aad1cc09fc411f40380b33fbd9cdf2900} 
+const int Benchmark\+Base\+::nested\+\_\+gmres\+\_\+inner\+\_\+iters = \mbox{\hyperlink{class_benchmark_base_aa39adcf2e02d80a4e640eefade754281}{gmres\+\_\+iters}}}
+
+\Hypertarget{class_benchmark_base_a59e0610c2842e95a61ce86960353ccd9}\index{BenchmarkBase@{BenchmarkBase}!nested\_gmres\_outer\_iters@{nested\_gmres\_outer\_iters}}
+\index{nested\_gmres\_outer\_iters@{nested\_gmres\_outer\_iters}!BenchmarkBase@{BenchmarkBase}}
+\doxysubsubsection{\texorpdfstring{nested\_gmres\_outer\_iters}{nested\_gmres\_outer\_iters}}
+{\footnotesize\ttfamily \label{class_benchmark_base_a59e0610c2842e95a61ce86960353ccd9} 
+const int Benchmark\+Base\+::nested\+\_\+gmres\+\_\+outer\+\_\+iters = (\mbox{\hyperlink{class_benchmark_base_abcb949e75b3a451b3b2aec2403150e28}{prototyping\+\_\+speed\+\_\+up}}) ? 5 \+: 300}
+
+\Hypertarget{class_benchmark_base_a9ede88ea295975774f98b9f590b59c02}\index{BenchmarkBase@{BenchmarkBase}!pivot\_ilu@{pivot\_ilu}}
+\index{pivot\_ilu@{pivot\_ilu}!BenchmarkBase@{BenchmarkBase}}
+\doxysubsubsection{\texorpdfstring{pivot\_ilu}{pivot\_ilu}}
+{\footnotesize\ttfamily \label{class_benchmark_base_a9ede88ea295975774f98b9f590b59c02} 
+const bool Benchmark\+Base\+::pivot\+\_\+ilu = true}
+
+\Hypertarget{class_benchmark_base_abcb949e75b3a451b3b2aec2403150e28}\index{BenchmarkBase@{BenchmarkBase}!prototyping\_speed\_up@{prototyping\_speed\_up}}
+\index{prototyping\_speed\_up@{prototyping\_speed\_up}!BenchmarkBase@{BenchmarkBase}}
+\doxysubsubsection{\texorpdfstring{prototyping\_speed\_up}{prototyping\_speed\_up}}
+{\footnotesize\ttfamily \label{class_benchmark_base_abcb949e75b3a451b3b2aec2403150e28} 
+bool Benchmark\+Base\+::prototyping\+\_\+speed\+\_\+up = false\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{class_benchmark_base_ae548186eaad394bfa1f7e8eda2269f22}\index{BenchmarkBase@{BenchmarkBase}!run\_fast\_tests\_count@{run\_fast\_tests\_count}}
+\index{run\_fast\_tests\_count@{run\_fast\_tests\_count}!BenchmarkBase@{BenchmarkBase}}
+\doxysubsubsection{\texorpdfstring{run\_fast\_tests\_count}{run\_fast\_tests\_count}}
+{\footnotesize\ttfamily \label{class_benchmark_base_ae548186eaad394bfa1f7e8eda2269f22} 
+const int Benchmark\+Base\+::run\+\_\+fast\+\_\+tests\+\_\+count = 200}
+
+\Hypertarget{class_benchmark_base_a1a0864766c6cce696135d84a03701c14}\index{BenchmarkBase@{BenchmarkBase}!sparse\_dims@{sparse\_dims}}
+\index{sparse\_dims@{sparse\_dims}!BenchmarkBase@{BenchmarkBase}}
+\doxysubsubsection{\texorpdfstring{sparse\_dims}{sparse\_dims}}
+{\footnotesize\ttfamily \label{class_benchmark_base_a1a0864766c6cce696135d84a03701c14} 
+std\+::vector$<$int$>$ Benchmark\+Base\+::sparse\+\_\+dims}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ (}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ (\mbox{\hyperlink{class_benchmark_base_abcb949e75b3a451b3b2aec2403150e28}{prototyping\_speed\_up}})\ ?}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ std::vector<int>(\{1024\})\ :}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ std::\mbox{\hyperlink{create__read__matrices_8m_a7ea82552101f041fad7635b3ed036a84}{vector}}<int>(\{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ 2154,\ 50991,\ 80708,\ 105655,\ 127930,\ 148406,\ 167554,\ 185664}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \})}
+\DoxyCodeLine{\ \ \ \ )}
+
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/dosre/dev/precision-\/cascade/benchmark/include/\mbox{\hyperlink{benchmark_8h}{benchmark.\+h}}\item 
+C\+:/\+Users/dosre/dev/precision-\/cascade/benchmark/main/\mbox{\hyperlink{benchmark_8cpp}{benchmark.\+cpp}}\end{DoxyCompactItemize}

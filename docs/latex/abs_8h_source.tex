@@ -1,0 +1,29 @@
+\doxysection{abs.\+h}
+\hypertarget{abs_8h_source}{}\label{abs_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/include/tools/abs.h@{C:/Users/dosre/dev/precision-\/cascade/include/tools/abs.h}}
+\mbox{\hyperlink{abs_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ ABS\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ ABS\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <cuda\_fp16.h>}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <stdexcept>}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacecascade_1_1abs__ns}{cascade::abs\_ns}}\ \{}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00011\ \ \ \ \ TPrecision\ \mbox{\hyperlink{namespacecascade_1_1abs__ns_ab08ce3a88268964a87b50e39d0644268}{abs}}(\textcolor{keyword}{const}\ TPrecision\ \&val)\ \{}
+\DoxyCodeLine{00012\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00013\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}abs:\ reached\ umimplimented\ default\ function"{}}}
+\DoxyCodeLine{00014\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00015\ \ \ \ \ \}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{template}\ <>\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{namespacecascade_1_1abs__ns_ab08ce3a88268964a87b50e39d0644268}{abs}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \&);}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{template}\ <>\ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{namespacecascade_1_1abs__ns_ab08ce3a88268964a87b50e39d0644268}{abs}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ \&);}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{template}\ <>\ \_\_half\ \mbox{\hyperlink{namespacecascade_1_1abs__ns_ab08ce3a88268964a87b50e39d0644268}{abs}}(\textcolor{keyword}{const}\ \_\_half\ \&);}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

@@ -1,0 +1,148 @@
+\doxysection{Scalar.\+h}
+\hypertarget{_scalar_8h_source}{}\label{_scalar_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/include/types/Scalar/Scalar.h@{C:/Users/dosre/dev/precision-\/cascade/include/types/Scalar/Scalar.h}}
+\mbox{\hyperlink{_scalar_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ SCALAR\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ SCALAR\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{cuda__check_8h}{tools/cuda\_check.h}}"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_type_identity_8h}{tools/TypeIdentity.h}}"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}Scalar\_gpu\_kernels.cuh"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <cuda\_runtime.h>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <cublas\_v2.h>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <cuda\_fp16.h>}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <stdexcept>}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacecascade}{cascade}}\ \{}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1_vector}{Vector}};}
+\DoxyCodeLine{00017\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1_matrix_dense}{MatrixDense}};}
+\DoxyCodeLine{00018\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{NoFillMatrixSparse}};}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00021\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1_scalar_aa8162a272860b938341c8d145304aba2}{Scalar}}}
+\DoxyCodeLine{00022\ \{}
+\DoxyCodeLine{00023\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1_scalar_aa8162a272860b938341c8d145304aba2}{Scalar}};}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1_scalar_a879f896329da9659f538e8dc9d386087}{Vector}};}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1_scalar_ab9253591cf0eb1909958cc45f111e864}{MatrixDense}};}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1_scalar_a5745ed2b7f9b7aabace454239b4229f3}{NoFillMatrixSparse}};}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ TPrecision\ *d\_scalar\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar_aa8162a272860b938341c8d145304aba2}{Scalar<\_\_half>}}\ to\_half()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00033\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar_aa8162a272860b938341c8d145304aba2}{Scalar<float>}}\ to\_float()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00034\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar_aa8162a272860b938341c8d145304aba2}{Scalar<double>}}\ to\_double()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{comment}{//\ Use\ argument\ overload\ for\ type\ specification\ rather\ than\ explicit}}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{comment}{//\ specialization\ due\ to\ limitation\ in\ g++}}
+\DoxyCodeLine{00038\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar_aa8162a272860b938341c8d145304aba2}{Scalar<\_\_half>}}\ \mbox{\hyperlink{classcascade_1_1_scalar_a9497b2f08c9c6418ee0dbe940ce7ad4b}{cast}}(\mbox{\hyperlink{structcascade_1_1_type_identity}{TypeIdentity<\_\_half>}}\ \_)\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ to\_half();\ \}}
+\DoxyCodeLine{00039\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<float>}}\ \mbox{\hyperlink{classcascade_1_1_scalar_a9497b2f08c9c6418ee0dbe940ce7ad4b}{cast}}(\mbox{\hyperlink{structcascade_1_1_type_identity}{TypeIdentity<float>}}\ \_)\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ to\_float();\ \}}
+\DoxyCodeLine{00040\ \ \ \ \ Scalar<double>\ \mbox{\hyperlink{classcascade_1_1_scalar_a9497b2f08c9c6418ee0dbe940ce7ad4b}{cast}}(TypeIdentity<double>\ \_)\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ to\_double();\ \}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar_abb57dd14cc478fc780dc6969d4965c7f}{Scalar}}()\ \{\ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaMalloc(\&d\_scalar,\ \textcolor{keyword}{sizeof}(TPrecision)));\ \}}
+\DoxyCodeLine{00045\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar_a1fdeb8dbe8f88cd77b00aa4c6e31948d}{Scalar}}(\textcolor{keyword}{const}\ TPrecision\ \&val):\ \mbox{\hyperlink{classcascade_1_1_scalar_aa8162a272860b938341c8d145304aba2}{Scalar}}()\ \{\ \mbox{\hyperlink{classcascade_1_1_scalar_aeec9a126606f944094da781310e11250}{set\_scalar}}(val);\ \}}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classcascade_1_1_scalar_af30a5d81dce9cb125e1630e75c43d0b8}{\string~Scalar}}()\ \{\ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaFree(d\_scalar));\ \}}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar_aa8162a272860b938341c8d145304aba2}{Scalar<TPrecision>}}\ \&\ \mbox{\hyperlink{classcascade_1_1_scalar_adbbff51b53759c1e49b7c7c7afb6d907}{operator=}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_scalar_aa8162a272860b938341c8d145304aba2}{Scalar<TPrecision>}}\ \&other)\ \{}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{this}\ !=\ \&other)\ \{}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaMemcpy(}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ d\_scalar,}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ other.d\_scalar,}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{sizeof}(TPrecision),}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cudaMemcpyDeviceToDevice}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ ));}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00059\ \ \ \ \ \}}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar_a28fc544adf158d61c1684c71aaae7161}{Scalar}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_scalar_aa8162a272860b938341c8d145304aba2}{Scalar}}\ \&other):\ \mbox{\hyperlink{classcascade_1_1_scalar_aa8162a272860b938341c8d145304aba2}{Scalar}}()\ \{\ *\textcolor{keyword}{this}\ =\ other;\ \}}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_scalar_aeec9a126606f944094da781310e11250}{set\_scalar}}(\textcolor{keyword}{const}\ TPrecision\ \&val)\ \{}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaMemcpy(}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ d\_scalar,}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ \&val,}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{sizeof}(TPrecision),}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ cudaMemcpyHostToDevice}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ ));}
+\DoxyCodeLine{00070\ \ \ \ \ \}}
+\DoxyCodeLine{00071\ \ \ \ \ TPrecision\ \mbox{\hyperlink{classcascade_1_1_scalar_a4537497b4bb37855975b1fc62fe73517}{get\_scalar}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ TPrecision\ h\_scalar;}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaMemcpy(}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ \&h\_scalar,}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ d\_scalar,}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{sizeof}(TPrecision),}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ cudaMemcpyDeviceToHost}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ ));}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ h\_scalar;}
+\DoxyCodeLine{00080\ \ \ \ \ \}}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Cast\_TPrecision>}
+\DoxyCodeLine{00083\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar_aa8162a272860b938341c8d145304aba2}{Scalar<Cast\_TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_scalar_a9497b2f08c9c6418ee0dbe940ce7ad4b}{cast}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_scalar_a9497b2f08c9c6418ee0dbe940ce7ad4b}{cast}}(\mbox{\hyperlink{structcascade_1_1_type_identity}{TypeIdentity<Cast\_TPrecision>}}());}
+\DoxyCodeLine{00085\ \ \ \ \ \}}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar_aa8162a272860b938341c8d145304aba2}{Scalar<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_scalar_aa9dab95dcdcdb2e432868e5f3c8eab69}{operator+}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_scalar_aa8162a272860b938341c8d145304aba2}{Scalar}}\&\ other)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00088\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar_aa8162a272860b938341c8d145304aba2}{Scalar<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_scalar_a53ec87ab005df36344bbe43c3a1d97ea}{operator-\/}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_scalar_aa8162a272860b938341c8d145304aba2}{Scalar}}\&\ other)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar_aa8162a272860b938341c8d145304aba2}{Scalar<TPrecision>}}\ \&\ \mbox{\hyperlink{classcascade_1_1_scalar_acfd27fb5d68069e4c660288b0b2d59b4}{operator+=}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_scalar_aa8162a272860b938341c8d145304aba2}{Scalar}}\&\ other);}
+\DoxyCodeLine{00091\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar_aa8162a272860b938341c8d145304aba2}{Scalar<TPrecision>}}\ \&\ \mbox{\hyperlink{classcascade_1_1_scalar_af63114ecb05d16f31d805a450cc57101}{operator-\/=}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_scalar_aa8162a272860b938341c8d145304aba2}{Scalar}}\&\ other);}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar_aa8162a272860b938341c8d145304aba2}{Scalar<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_scalar_aebae5a0f887fb637cc48b5c8ee5512ab}{operator*}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_scalar_aa8162a272860b938341c8d145304aba2}{Scalar}}\&\ other)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00094\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar_aa8162a272860b938341c8d145304aba2}{Scalar<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_scalar_a8159eb283ef2d0452666416ece96b5f1}{operator/}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_scalar_aa8162a272860b938341c8d145304aba2}{Scalar}}\&\ other)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar_aa8162a272860b938341c8d145304aba2}{Scalar<TPrecision>}}\ \&\ \mbox{\hyperlink{classcascade_1_1_scalar_a89d4820141753a7cf753ac1cfcb6cfb2}{operator*=}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_scalar_aa8162a272860b938341c8d145304aba2}{Scalar}}\&\ other);}
+\DoxyCodeLine{00097\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar_aa8162a272860b938341c8d145304aba2}{Scalar<TPrecision>}}\ \&\ \mbox{\hyperlink{classcascade_1_1_scalar_ae9316c8a6f3c68ad7760b47da3147adf}{operator/=}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_scalar_aa8162a272860b938341c8d145304aba2}{Scalar}}\&\ other);}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar_aa8162a272860b938341c8d145304aba2}{Scalar<TPrecision>}}\ \&\ \mbox{\hyperlink{classcascade_1_1_scalar_a2db9e2b5a5c4c92fd59c157cdbdefe94}{abs}}();}
+\DoxyCodeLine{00100\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar_aa8162a272860b938341c8d145304aba2}{Scalar<TPrecision>}}\ \&\ \mbox{\hyperlink{classcascade_1_1_scalar_ac569e05f3aeec5771aef6c9c6218f440}{sqrt}}();}
+\DoxyCodeLine{00101\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar_aa8162a272860b938341c8d145304aba2}{Scalar<TPrecision>}}\ \&\ \mbox{\hyperlink{classcascade_1_1_scalar_aeee85d43f02044951bfa1183cf9fdec4}{reciprocol}}();}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcascade_1_1_scalar_ae53c5e986b154dd67f3fe265e03f03eb}{operator==}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_scalar_aa8162a272860b938341c8d145304aba2}{Scalar}}\&\ other)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \};}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<\_\_half>}}\ SCALAR\_ONE\_H(\textcolor{keyword}{static\_cast<}\_\_half\textcolor{keyword}{>}(1.));\ }
+\DoxyCodeLine{00108\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<float>}}\ SCALAR\_ONE\_F(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(1.));\ }
+\DoxyCodeLine{00109\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<double>}}\ SCALAR\_ONE\_D(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{double}\textcolor{keyword}{>}(1.));}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00112\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1_s_c_a_l_a_r___o_n_e}{SCALAR\_ONE}}}
+\DoxyCodeLine{00113\ \{\ }
+\DoxyCodeLine{00114\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_s_c_a_l_a_r___o_n_e_a4968e9c2f5094d3e2263814c1168978d}{get}}();}
+\DoxyCodeLine{00116\ \};}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<\_\_half>}}\ SCALAR\_ZERO\_H(\textcolor{keyword}{static\_cast<}\_\_half\textcolor{keyword}{>}(0.));\ }
+\DoxyCodeLine{00119\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<float>}}\ SCALAR\_ZERO\_F(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(0.));\ }
+\DoxyCodeLine{00120\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<double>}}\ SCALAR\_ZERO\_D(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{double}\textcolor{keyword}{>}(0.));}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00122\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00123\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1_s_c_a_l_a_r___z_e_r_o}{SCALAR\_ZERO}}}
+\DoxyCodeLine{00124\ \{}
+\DoxyCodeLine{00125\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00126\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_s_c_a_l_a_r___z_e_r_o_a42bda0cc64eb019027b0bdd12dc422fa}{get}}();}
+\DoxyCodeLine{00127\ \};}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<\_\_half>}}\ SCALAR\_MINUS\_ONE\_H(\textcolor{keyword}{static\_cast<}\_\_half\textcolor{keyword}{>}(-\/1.));\ }
+\DoxyCodeLine{00130\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<float>}}\ SCALAR\_MINUS\_ONE\_F(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(-\/1.));\ }
+\DoxyCodeLine{00131\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<double>}}\ SCALAR\_MINUS\_ONE\_D(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{double}\textcolor{keyword}{>}(-\/1.));}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00134\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1_s_c_a_l_a_r___m_i_n_u_s___o_n_e}{SCALAR\_MINUS\_ONE}}}
+\DoxyCodeLine{00135\ \{}
+\DoxyCodeLine{00136\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00137\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_s_c_a_l_a_r___m_i_n_u_s___o_n_e_a0aedb86170e8e77696d16ab5441e235a}{get}}();}
+\DoxyCodeLine{00138\ \};}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ \}}
+\DoxyCodeLine{00141\ }
+\DoxyCodeLine{00142\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

@@ -1,0 +1,237 @@
+\doxysection{cascade\+::Typed\+Iterative\+Solve\texorpdfstring{$<$}{<} TMatrix, TPrecision \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcascade_1_1_typed_iterative_solve}{}\label{classcascade_1_1_typed_iterative_solve}\index{cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$@{cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$}}
+
+
+{\ttfamily \#include $<$Iterative\+Solve.\+h$>$}
+
+
+
+Inheritance diagram for cascade\+::Typed\+Iterative\+Solve\texorpdfstring{$<$}{<} TMatrix, TPrecision \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcascade_1_1_typed_iterative_solve__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for cascade\+::Typed\+Iterative\+Solve\texorpdfstring{$<$}{<} TMatrix, TPrecision \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcascade_1_1_typed_iterative_solve__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a14722b6e9f4ffc75f0ff01ce74d9522a}{Typed\+Iterative\+Solve}} (const \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf}{Typed\+Linear\+System\+\_\+\+Intf}}$<$ TMatrix, TPrecision $>$ \texorpdfstring{$\ast$}{*}const arg\+\_\+typed\+\_\+lin\+\_\+sys\+\_\+ptr, const \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{Solve\+Arg\+Pkg}} \&arg\+\_\+pkg)
+\item 
+\mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_ab1b43668f69c8bb4fb01d2fab5563e85}{Typed\+Iterative\+Solve}} (const \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf}{Typed\+Linear\+System\+\_\+\+Intf}}$<$ TMatrix, TPrecision $>$ \texorpdfstring{$\ast$}{*}const, const \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{Solve\+Arg\+Pkg}} \&\&)=delete
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a50313b9a5deefd450b2eb34799808bbe}{get\+\_\+typed\+\_\+soln}} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve}{cascade\+::\+Generic\+Iterative\+Solve$<$ TMatrix $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ double $>$ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_acf565e09e0814d4042fd70b3ac7bb421}{get\+\_\+generic\+\_\+soln}} () const
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ double $>$ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a8d7d082955e1609d2c7a3c530b56d33d}{get\+\_\+curr\+\_\+res}} () const
+\item 
+double \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a5f211c8b5ec76b8b75be570354f4304b}{get\+\_\+relres}} () const
+\item 
+std\+::vector$<$ double $>$ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a032d213b4fd1bfd44a26437693951461}{get\+\_\+res\+\_\+norm\+\_\+history}} () const
+\item 
+bool \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a3b57afd2d2bcdc09c18dc55e74c84a05}{check\+\_\+initiated}} () const
+\item 
+bool \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_afcb2e1dff111432c5368b06ba6eed9ae}{check\+\_\+converged}} () const
+\item 
+bool \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a398371669311bb7ac240ab4476064626}{check\+\_\+terminated}} () const
+\item 
+int \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_acb0768c3ff633d870011471cf278b3d5}{get\+\_\+iteration}} () const
+\item 
+void \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_af41faca795cfa8cd244053e67bc0c054}{solve}} ()
+\item 
+void \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a20e7a5589025548c697d936feccdc5df}{reset}} ()
+\item 
+std\+::string \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a86dcc3693c91ab3a0920cffdaf3fcb61}{get\+\_\+info\+\_\+string}} ()
+\item 
+void \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a3b7788cda7cbcb3a0af3c14f5e2ba314}{view\+\_\+relres\+\_\+plot}} (std\+::string const \&arg="{}normal"{}) const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a830ae1f4f78aba3a31be60469020345c}{typed\+\_\+iterate}} ()=0
+\item 
+virtual void \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_af41009941845facf0b5b94f3f386dd12}{derived\+\_\+typed\+\_\+reset}} ()=0
+\item 
+virtual \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ double $>$ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_ac2465bf097bd061d78bb22ce11e96108}{calc\+\_\+residual}} (const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ double $>$ \&arg\+\_\+x) const override
+\item 
+void \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a2769d02baf204ac37d5a4b49a9180951}{iterate}} () override
+\item 
+void \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a1b8f4c3c91554e8202194612a21bc070}{derived\+\_\+generic\+\_\+reset}} () override
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve}{cascade\+::\+Generic\+Iterative\+Solve$<$ TMatrix $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ae28a35abd17ffaf91056f55a70c1da63}{Generic\+Iterative\+Solve}} (const \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{Generic\+Linear\+System}}$<$ TMatrix $>$ \texorpdfstring{$\ast$}{*}const arg\+\_\+gen\+\_\+lin\+\_\+sys\+\_\+ptr, const \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{Solve\+Arg\+Pkg}} \&arg\+\_\+pkg)
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ double $>$ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a493f3c6099e85cfbfdb949c118631e37}{make\+\_\+guess}} (const \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{Generic\+Linear\+System}}$<$ TMatrix $>$ \texorpdfstring{$\ast$}{*}const arg\+\_\+gen\+\_\+lin\+\_\+sys\+\_\+ptr) const
+\item 
+\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_aa871df4d5961a554389e5483c7acddcb}{Generic\+Iterative\+Solve}} (const \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{Generic\+Linear\+System}}$<$ TMatrix $>$ \texorpdfstring{$\ast$}{*}const, const \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{Solve\+Arg\+Pkg}} \&\&)=delete
+\item 
+\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a70ea79c12631de5e57c70f9968d2433e}{Generic\+Iterative\+Solve}} (const \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve}{Generic\+Iterative\+Solve}} \&)=delete
+\item 
+\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve}{Generic\+Iterative\+Solve}} \& \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_aa0e3a601fd8376c521fbf01ab4928efd}{operator=}} (\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve}{Generic\+Iterative\+Solve}} \&)=delete
+\item 
+virtual \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a472bc38bf12f043d9bc49748e5e9b5b3}{\texorpdfstring{$\sim$}{\string~}\+Generic\+Iterative\+Solve}} ()=default
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+const \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf}{Typed\+Linear\+System\+\_\+\+Intf}}$<$ TMatrix, TPrecision $>$ \texorpdfstring{$\ast$}{*}const \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a0b3ac2f20041b20ac6740bc35255038f}{typed\+\_\+lin\+\_\+sys\+\_\+ptr}}
+\item 
+const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a5a6714c87f60e0f88a92e4ee472d8e76}{init\+\_\+guess\+\_\+typed}}
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a78f7ec0a1549d8f02aea2f45003967eb}{typed\+\_\+soln}} = \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$TPrecision$>$(\mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}}())
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve}{cascade\+::\+Generic\+Iterative\+Solve$<$ TMatrix $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+const \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{Generic\+Linear\+System}}$<$ TMatrix $>$ \texorpdfstring{$\ast$}{*}const \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a3afc6c73083d839f1b451aa255a8d3ff}{gen\+\_\+lin\+\_\+sys\+\_\+ptr}}
+\item 
+const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ double $>$ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ac743d15e9e6f1077c76394d7a17a6bb3}{init\+\_\+guess}}
+\item 
+const double \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ae99012b6307e103fcc722f874e15be10}{target\+\_\+rel\+\_\+res}}
+\item 
+int \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_aa533db25c700e1ae8eb6a75bd33f43cd}{max\+\_\+iter}}
+\item 
+int \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a4cca74e9067ffd782e886b1abe476cb1}{curr\+\_\+iter}}
+\item 
+bool \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a4c2a0d9fde848b0948ee101c924883c5}{initiated}}
+\item 
+bool \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a4ac0b0b64e3ba72f23234b5a90ecce71}{converged}}
+\item 
+bool \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_af57186d3571c8fb922a182d26d7912b7}{terminated}}
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ double $>$ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a0d73c5b3c750a46e0b198b2952547448}{generic\+\_\+soln}} = \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$double$>$(\mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}}())
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ double $>$ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a1853ac2a74547799dd50f7a0a8f84bf3}{curr\+\_\+res}} = \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$double$>$(\mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}}())
+\item 
+\mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ double $>$ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ae91c9163fad3360f581d3966f254572c}{curr\+\_\+res\+\_\+norm}}
+\item 
+std\+::vector$<$ double $>$ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a420e914718105bdb175fe95dcb45191a}{res\+\_\+norm\+\_\+history}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcascade_1_1_typed_iterative_solve_a14722b6e9f4ffc75f0ff01ce74d9522a}\index{cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$@{cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$}!TypedIterativeSolve@{TypedIterativeSolve}}
+\index{TypedIterativeSolve@{TypedIterativeSolve}!cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$@{cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{TypedIterativeSolve()}{TypedIterativeSolve()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_typed_iterative_solve_a14722b6e9f4ffc75f0ff01ce74d9522a} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_typed_iterative_solve}{cascade\+::\+Typed\+Iterative\+Solve}}$<$ TMatrix, TPrecision $>$\+::\+Typed\+Iterative\+Solve (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf}{Typed\+Linear\+System\+\_\+\+Intf}}$<$ TMatrix, TPrecision $>$ \texorpdfstring{$\ast$}{*}const}]{arg\+\_\+typed\+\_\+lin\+\_\+sys\+\_\+ptr}{, }\item[{const \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{Solve\+Arg\+Pkg}} \&}]{arg\+\_\+pkg}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_typed_iterative_solve_ab1b43668f69c8bb4fb01d2fab5563e85}\index{cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$@{cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$}!TypedIterativeSolve@{TypedIterativeSolve}}
+\index{TypedIterativeSolve@{TypedIterativeSolve}!cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$@{cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{TypedIterativeSolve()}{TypedIterativeSolve()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_typed_iterative_solve_ab1b43668f69c8bb4fb01d2fab5563e85} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_typed_iterative_solve}{cascade\+::\+Typed\+Iterative\+Solve}}$<$ TMatrix, TPrecision $>$\+::\+Typed\+Iterative\+Solve (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf}{Typed\+Linear\+System\+\_\+\+Intf}}$<$ TMatrix, TPrecision $>$ \texorpdfstring{$\ast$}{*} const}]{}{, }\item[{const \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{Solve\+Arg\+Pkg}} \&\&}]{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [delete]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcascade_1_1_typed_iterative_solve_ac2465bf097bd061d78bb22ce11e96108}\index{cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$@{cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$}!calc\_residual@{calc\_residual}}
+\index{calc\_residual@{calc\_residual}!cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$@{cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{calc\_residual()}{calc\_residual()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_typed_iterative_solve_ac2465bf097bd061d78bb22ce11e96108} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+virtual \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ double $>$ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve}{cascade\+::\+Typed\+Iterative\+Solve}}$<$ TMatrix, TPrecision $>$\+::calc\+\_\+residual (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ double $>$ \&}]{arg\+\_\+x}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a024e8c2961e5f20b65233cbe57f3577b}{cascade\+::\+Generic\+Iterative\+Solve$<$ TMatrix $>$}}.
+
+\Hypertarget{classcascade_1_1_typed_iterative_solve_a1b8f4c3c91554e8202194612a21bc070}\index{cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$@{cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$}!derived\_generic\_reset@{derived\_generic\_reset}}
+\index{derived\_generic\_reset@{derived\_generic\_reset}!cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$@{cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{derived\_generic\_reset()}{derived\_generic\_reset()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_typed_iterative_solve_a1b8f4c3c91554e8202194612a21bc070} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+void \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve}{cascade\+::\+Typed\+Iterative\+Solve}}$<$ TMatrix, TPrecision $>$\+::derived\+\_\+generic\+\_\+reset (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a9fa6076d64ad944f48f19097ebba7e46}{cascade\+::\+Generic\+Iterative\+Solve$<$ TMatrix $>$}}.
+
+\Hypertarget{classcascade_1_1_typed_iterative_solve_af41009941845facf0b5b94f3f386dd12}\index{cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$@{cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$}!derived\_typed\_reset@{derived\_typed\_reset}}
+\index{derived\_typed\_reset@{derived\_typed\_reset}!cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$@{cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{derived\_typed\_reset()}{derived\_typed\_reset()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_typed_iterative_solve_af41009941845facf0b5b94f3f386dd12} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+virtual void \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve}{cascade\+::\+Typed\+Iterative\+Solve}}$<$ TMatrix, TPrecision $>$\+::derived\+\_\+typed\+\_\+reset (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}, {\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a02e2113c07c1ddea95e72321bc34fa49}{cascade\+::\+GMRESSolve$<$ TMatrix, TPrecision $>$}}, \mbox{\hyperlink{classcascade_1_1_jacobi_solve_a275e5cf8454107f44c8efaae024eff8d}{cascade\+::\+Jacobi\+Solve$<$ TMatrix, TPrecision $>$}}, and \mbox{\hyperlink{classcascade_1_1_s_o_r_solve_ad5e5509f3cd719283513d8402ca59b99}{cascade\+::\+SORSolve$<$ TMatrix, TPrecision $>$}}.
+
+\Hypertarget{classcascade_1_1_typed_iterative_solve_a50313b9a5deefd450b2eb34799808bbe}\index{cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$@{cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$}!get\_typed\_soln@{get\_typed\_soln}}
+\index{get\_typed\_soln@{get\_typed\_soln}!cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$@{cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{get\_typed\_soln()}{get\_typed\_soln()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_typed_iterative_solve_a50313b9a5deefd450b2eb34799808bbe} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve}{cascade\+::\+Typed\+Iterative\+Solve}}$<$ TMatrix, TPrecision $>$\+::get\+\_\+typed\+\_\+soln (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_typed_iterative_solve_a2769d02baf204ac37d5a4b49a9180951}\index{cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$@{cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$}!iterate@{iterate}}
+\index{iterate@{iterate}!cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$@{cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{iterate()}{iterate()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_typed_iterative_solve_a2769d02baf204ac37d5a4b49a9180951} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+void \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve}{cascade\+::\+Typed\+Iterative\+Solve}}$<$ TMatrix, TPrecision $>$\+::iterate (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a379116382849b3947433abc9d9368bee}{cascade\+::\+Generic\+Iterative\+Solve$<$ TMatrix $>$}}.
+
+\Hypertarget{classcascade_1_1_typed_iterative_solve_a830ae1f4f78aba3a31be60469020345c}\index{cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$@{cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$}!typed\_iterate@{typed\_iterate}}
+\index{typed\_iterate@{typed\_iterate}!cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$@{cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{typed\_iterate()}{typed\_iterate()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_typed_iterative_solve_a830ae1f4f78aba3a31be60469020345c} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+virtual void \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve}{cascade\+::\+Typed\+Iterative\+Solve}}$<$ TMatrix, TPrecision $>$\+::typed\+\_\+iterate (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}, {\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a35fa9d9e7cc75138677ce7eebb1e1866}{cascade\+::\+GMRESSolve$<$ TMatrix, TPrecision $>$}}, \mbox{\hyperlink{classcascade_1_1_jacobi_solve_ab1fbc6f3f36f96642fc52e4242f6bbdb}{cascade\+::\+Jacobi\+Solve$<$ TMatrix, TPrecision $>$}}, and \mbox{\hyperlink{classcascade_1_1_s_o_r_solve_a110257dd37e9dd050baf57a84424f336}{cascade\+::\+SORSolve$<$ TMatrix, TPrecision $>$}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classcascade_1_1_typed_iterative_solve_a5a6714c87f60e0f88a92e4ee472d8e76}\index{cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$@{cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$}!init\_guess\_typed@{init\_guess\_typed}}
+\index{init\_guess\_typed@{init\_guess\_typed}!cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$@{cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{init\_guess\_typed}{init\_guess\_typed}}
+{\footnotesize\ttfamily \label{classcascade_1_1_typed_iterative_solve_a5a6714c87f60e0f88a92e4ee472d8e76} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$TPrecision$>$ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve}{cascade\+::\+Typed\+Iterative\+Solve}}$<$ TMatrix, TPrecision $>$\+::init\+\_\+guess\+\_\+typed\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classcascade_1_1_typed_iterative_solve_a0b3ac2f20041b20ac6740bc35255038f}\index{cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$@{cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$}!typed\_lin\_sys\_ptr@{typed\_lin\_sys\_ptr}}
+\index{typed\_lin\_sys\_ptr@{typed\_lin\_sys\_ptr}!cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$@{cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{typed\_lin\_sys\_ptr}{typed\_lin\_sys\_ptr}}
+{\footnotesize\ttfamily \label{classcascade_1_1_typed_iterative_solve_a0b3ac2f20041b20ac6740bc35255038f} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+const \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf}{Typed\+Linear\+System\+\_\+\+Intf}}$<$TMatrix, TPrecision$>$\texorpdfstring{$\ast$}{*} const \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve}{cascade\+::\+Typed\+Iterative\+Solve}}$<$ TMatrix, TPrecision $>$\+::typed\+\_\+lin\+\_\+sys\+\_\+ptr\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classcascade_1_1_typed_iterative_solve_a78f7ec0a1549d8f02aea2f45003967eb}\index{cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$@{cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$}!typed\_soln@{typed\_soln}}
+\index{typed\_soln@{typed\_soln}!cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$@{cascade::TypedIterativeSolve$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{typed\_soln}{typed\_soln}}
+{\footnotesize\ttfamily \label{classcascade_1_1_typed_iterative_solve_a78f7ec0a1549d8f02aea2f45003967eb} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$TPrecision$>$ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve}{cascade\+::\+Typed\+Iterative\+Solve}}$<$ TMatrix, TPrecision $>$\+::typed\+\_\+soln = \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$TPrecision$>$(\mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}}())\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/dosre/dev/precision-\/cascade/include/solvers/\mbox{\hyperlink{_iterative_solve_8h}{Iterative\+Solve.\+h}}\end{DoxyCompactItemize}

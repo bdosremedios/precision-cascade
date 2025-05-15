@@ -1,0 +1,141 @@
+\doxysection{Preconditioner\+\_\+\+Spec Struct Reference}
+\hypertarget{struct_preconditioner___spec}{}\label{struct_preconditioner___spec}\index{Preconditioner\_Spec@{Preconditioner\_Spec}}
+
+
+{\ttfamily \#include $<$Preconditioner\+\_\+\+Spec.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct_preconditioner___spec_aa866859ec3131c11a57f6cfd89d2c0eb}{Preconditioner\+\_\+\+Spec}} ()
+\item 
+\mbox{\hyperlink{struct_preconditioner___spec_a36e3ca6a921a7d0496ccc827438e1cd4}{Preconditioner\+\_\+\+Spec}} (std\+::string arg\+\_\+name)
+\item 
+\mbox{\hyperlink{struct_preconditioner___spec_a9fac7bb45be879d9ce9f3b9b6db5d815}{Preconditioner\+\_\+\+Spec}} (std\+::string arg\+\_\+name, double arg\+\_\+ilutp\+\_\+tau, int arg\+\_\+ilutp\+\_\+p)
+\item 
+bool \mbox{\hyperlink{struct_preconditioner___spec_a31d09e3557d38aa15fd1a07b0edf63f7}{is\+\_\+default}} () const
+\item 
+\mbox{\hyperlink{struct_preconditioner___spec_a97a526604b3ab7ac57ab31048fd79bee}{Preconditioner\+\_\+\+Spec}} (const \mbox{\hyperlink{struct_preconditioner___spec}{Preconditioner\+\_\+\+Spec}} \&other)
+\item 
+void \mbox{\hyperlink{struct_preconditioner___spec_a84f27bf43a224922426650019bfffc4d}{operator=}} (const \mbox{\hyperlink{struct_preconditioner___spec}{Preconditioner\+\_\+\+Spec}} \&other)
+\item 
+bool \mbox{\hyperlink{struct_preconditioner___spec_a2c92d991a715d229be99cfe27f604201}{operator==}} (const \mbox{\hyperlink{struct_preconditioner___spec}{Preconditioner\+\_\+\+Spec}} \&other) const
+\item 
+std\+::string \mbox{\hyperlink{struct_preconditioner___spec_ad0abc51d2af541f8dcd8ffcc0905911f}{get\+\_\+spec\+\_\+string}} () const
+\item 
+std\+::string \mbox{\hyperlink{struct_preconditioner___spec_a1fa853a6c5c6c773b56cf92c646be775}{get\+\_\+info\+\_\+string}} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string \mbox{\hyperlink{struct_preconditioner___spec_acadac00ef2fcb1c56be096fc874e608e}{name}} = "{}"{}
+\item 
+double \mbox{\hyperlink{struct_preconditioner___spec_a075153d5bcda802edf343edfa5a24bfd}{ilutp\+\_\+tau}} = -\/1.\+0
+\item 
+int \mbox{\hyperlink{struct_preconditioner___spec_a090e8e32a0dc192413f603723148c3a4}{ilutp\+\_\+p}} = -\/1
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const std\+::unordered\+\_\+set$<$ std\+::string $>$ \mbox{\hyperlink{struct_preconditioner___spec_afa74ec87d3cb5639c1280e03ea08380b}{valid\+\_\+precond\+\_\+ids}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{struct_preconditioner___spec_aa866859ec3131c11a57f6cfd89d2c0eb}\index{Preconditioner\_Spec@{Preconditioner\_Spec}!Preconditioner\_Spec@{Preconditioner\_Spec}}
+\index{Preconditioner\_Spec@{Preconditioner\_Spec}!Preconditioner\_Spec@{Preconditioner\_Spec}}
+\doxysubsubsection{\texorpdfstring{Preconditioner\_Spec()}{Preconditioner\_Spec()}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+{\footnotesize\ttfamily \label{struct_preconditioner___spec_aa866859ec3131c11a57f6cfd89d2c0eb} 
+Preconditioner\+\_\+\+Spec\+::\+Preconditioner\+\_\+\+Spec (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{struct_preconditioner___spec_a36e3ca6a921a7d0496ccc827438e1cd4}\index{Preconditioner\_Spec@{Preconditioner\_Spec}!Preconditioner\_Spec@{Preconditioner\_Spec}}
+\index{Preconditioner\_Spec@{Preconditioner\_Spec}!Preconditioner\_Spec@{Preconditioner\_Spec}}
+\doxysubsubsection{\texorpdfstring{Preconditioner\_Spec()}{Preconditioner\_Spec()}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily \label{struct_preconditioner___spec_a36e3ca6a921a7d0496ccc827438e1cd4} 
+Preconditioner\+\_\+\+Spec\+::\+Preconditioner\+\_\+\+Spec (\begin{DoxyParamCaption}\item[{std\+::string}]{arg\+\_\+name}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{struct_preconditioner___spec_a9fac7bb45be879d9ce9f3b9b6db5d815}\index{Preconditioner\_Spec@{Preconditioner\_Spec}!Preconditioner\_Spec@{Preconditioner\_Spec}}
+\index{Preconditioner\_Spec@{Preconditioner\_Spec}!Preconditioner\_Spec@{Preconditioner\_Spec}}
+\doxysubsubsection{\texorpdfstring{Preconditioner\_Spec()}{Preconditioner\_Spec()}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
+{\footnotesize\ttfamily \label{struct_preconditioner___spec_a9fac7bb45be879d9ce9f3b9b6db5d815} 
+Preconditioner\+\_\+\+Spec\+::\+Preconditioner\+\_\+\+Spec (\begin{DoxyParamCaption}\item[{std\+::string}]{arg\+\_\+name}{, }\item[{double}]{arg\+\_\+ilutp\+\_\+tau}{, }\item[{int}]{arg\+\_\+ilutp\+\_\+p}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{struct_preconditioner___spec_a97a526604b3ab7ac57ab31048fd79bee}\index{Preconditioner\_Spec@{Preconditioner\_Spec}!Preconditioner\_Spec@{Preconditioner\_Spec}}
+\index{Preconditioner\_Spec@{Preconditioner\_Spec}!Preconditioner\_Spec@{Preconditioner\_Spec}}
+\doxysubsubsection{\texorpdfstring{Preconditioner\_Spec()}{Preconditioner\_Spec()}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily \label{struct_preconditioner___spec_a97a526604b3ab7ac57ab31048fd79bee} 
+Preconditioner\+\_\+\+Spec\+::\+Preconditioner\+\_\+\+Spec (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_preconditioner___spec}{Preconditioner\+\_\+\+Spec}} \&}]{other}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{struct_preconditioner___spec_a1fa853a6c5c6c773b56cf92c646be775}\index{Preconditioner\_Spec@{Preconditioner\_Spec}!get\_info\_string@{get\_info\_string}}
+\index{get\_info\_string@{get\_info\_string}!Preconditioner\_Spec@{Preconditioner\_Spec}}
+\doxysubsubsection{\texorpdfstring{get\_info\_string()}{get\_info\_string()}}
+{\footnotesize\ttfamily \label{struct_preconditioner___spec_a1fa853a6c5c6c773b56cf92c646be775} 
+std\+::string Preconditioner\+\_\+\+Spec\+::get\+\_\+info\+\_\+string (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{struct_preconditioner___spec_ad0abc51d2af541f8dcd8ffcc0905911f}\index{Preconditioner\_Spec@{Preconditioner\_Spec}!get\_spec\_string@{get\_spec\_string}}
+\index{get\_spec\_string@{get\_spec\_string}!Preconditioner\_Spec@{Preconditioner\_Spec}}
+\doxysubsubsection{\texorpdfstring{get\_spec\_string()}{get\_spec\_string()}}
+{\footnotesize\ttfamily \label{struct_preconditioner___spec_ad0abc51d2af541f8dcd8ffcc0905911f} 
+std\+::string Preconditioner\+\_\+\+Spec\+::get\+\_\+spec\+\_\+string (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{struct_preconditioner___spec_a31d09e3557d38aa15fd1a07b0edf63f7}\index{Preconditioner\_Spec@{Preconditioner\_Spec}!is\_default@{is\_default}}
+\index{is\_default@{is\_default}!Preconditioner\_Spec@{Preconditioner\_Spec}}
+\doxysubsubsection{\texorpdfstring{is\_default()}{is\_default()}}
+{\footnotesize\ttfamily \label{struct_preconditioner___spec_a31d09e3557d38aa15fd1a07b0edf63f7} 
+bool Preconditioner\+\_\+\+Spec\+::is\+\_\+default (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{struct_preconditioner___spec_a84f27bf43a224922426650019bfffc4d}\index{Preconditioner\_Spec@{Preconditioner\_Spec}!operator=@{operator=}}
+\index{operator=@{operator=}!Preconditioner\_Spec@{Preconditioner\_Spec}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}}
+{\footnotesize\ttfamily \label{struct_preconditioner___spec_a84f27bf43a224922426650019bfffc4d} 
+void Preconditioner\+\_\+\+Spec\+::operator= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_preconditioner___spec}{Preconditioner\+\_\+\+Spec}} \&}]{other}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{struct_preconditioner___spec_a2c92d991a715d229be99cfe27f604201}\index{Preconditioner\_Spec@{Preconditioner\_Spec}!operator==@{operator==}}
+\index{operator==@{operator==}!Preconditioner\_Spec@{Preconditioner\_Spec}}
+\doxysubsubsection{\texorpdfstring{operator==()}{operator==()}}
+{\footnotesize\ttfamily \label{struct_preconditioner___spec_a2c92d991a715d229be99cfe27f604201} 
+bool Preconditioner\+\_\+\+Spec\+::operator== (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_preconditioner___spec}{Preconditioner\+\_\+\+Spec}} \&}]{other}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{struct_preconditioner___spec_a090e8e32a0dc192413f603723148c3a4}\index{Preconditioner\_Spec@{Preconditioner\_Spec}!ilutp\_p@{ilutp\_p}}
+\index{ilutp\_p@{ilutp\_p}!Preconditioner\_Spec@{Preconditioner\_Spec}}
+\doxysubsubsection{\texorpdfstring{ilutp\_p}{ilutp\_p}}
+{\footnotesize\ttfamily \label{struct_preconditioner___spec_a090e8e32a0dc192413f603723148c3a4} 
+int Preconditioner\+\_\+\+Spec\+::ilutp\+\_\+p = -\/1}
+
+\Hypertarget{struct_preconditioner___spec_a075153d5bcda802edf343edfa5a24bfd}\index{Preconditioner\_Spec@{Preconditioner\_Spec}!ilutp\_tau@{ilutp\_tau}}
+\index{ilutp\_tau@{ilutp\_tau}!Preconditioner\_Spec@{Preconditioner\_Spec}}
+\doxysubsubsection{\texorpdfstring{ilutp\_tau}{ilutp\_tau}}
+{\footnotesize\ttfamily \label{struct_preconditioner___spec_a075153d5bcda802edf343edfa5a24bfd} 
+double Preconditioner\+\_\+\+Spec\+::ilutp\+\_\+tau = -\/1.\+0}
+
+\Hypertarget{struct_preconditioner___spec_acadac00ef2fcb1c56be096fc874e608e}\index{Preconditioner\_Spec@{Preconditioner\_Spec}!name@{name}}
+\index{name@{name}!Preconditioner\_Spec@{Preconditioner\_Spec}}
+\doxysubsubsection{\texorpdfstring{name}{name}}
+{\footnotesize\ttfamily \label{struct_preconditioner___spec_acadac00ef2fcb1c56be096fc874e608e} 
+std\+::string Preconditioner\+\_\+\+Spec\+::name = "{}"{}}
+
+\Hypertarget{struct_preconditioner___spec_afa74ec87d3cb5639c1280e03ea08380b}\index{Preconditioner\_Spec@{Preconditioner\_Spec}!valid\_precond\_ids@{valid\_precond\_ids}}
+\index{valid\_precond\_ids@{valid\_precond\_ids}!Preconditioner\_Spec@{Preconditioner\_Spec}}
+\doxysubsubsection{\texorpdfstring{valid\_precond\_ids}{valid\_precond\_ids}}
+{\footnotesize\ttfamily \label{struct_preconditioner___spec_afa74ec87d3cb5639c1280e03ea08380b} 
+const std\+::unordered\+\_\+set$<$ std\+::string $>$ Preconditioner\+\_\+\+Spec\+::valid\+\_\+precond\+\_\+ids\hspace{0.3cm}{\ttfamily [static]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}none"{}},\ \textcolor{stringliteral}{"{}jacobi"{}},\ \textcolor{stringliteral}{"{}ilu0"{}},\ \textcolor{stringliteral}{"{}ilutp"{}}}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/dosre/dev/precision-\/cascade/experimentation/include/exp\+\_\+spec/\mbox{\hyperlink{_preconditioner___spec_8h}{Preconditioner\+\_\+\+Spec.\+h}}\item 
+C\+:/\+Users/dosre/dev/precision-\/cascade/experimentation/src/exp\+\_\+spec/\mbox{\hyperlink{_preconditioner___spec_8cpp}{Preconditioner\+\_\+\+Spec.\+cpp}}\end{DoxyCompactItemize}

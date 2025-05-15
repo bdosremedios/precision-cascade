@@ -1,0 +1,19 @@
+var searchData=
+[
+  ['a_0',['A',['../classcascade_1_1_generic_linear_system.html#a3a828a28accccc68c83f24032c1780dd',1,'cascade::GenericLinearSystem::A'],['../create__solve__matrices_8m.html#a0729bd378d4d070df165f95044ca3c0e',1,'A:&#160;create_solve_matrices.m']]],
+  ['a_5f20_5frand_1',['A_20_rand',['../create__solve__matrices_8m.html#aef4f41d905762b7f8d5ef4c3a134a43b',1,'create_solve_matrices.m']]],
+  ['a_5f2_5ftemp_2',['A_2_temp',['../create__solve__matrices_8m.html#ace9a237e5b9f0eb7b0b823cede953e56',1,'create_solve_matrices.m']]],
+  ['a_5f3eigs_3',['A_3eigs',['../create__solve__matrices_8m.html#aee722c574c82299edcccf5e983b141d1',1,'create_solve_matrices.m']]],
+  ['a_5f5_5feasysoln_4',['A_5_easysoln',['../create__solve__matrices_8m.html#ad15da9b2dbdcd1f1b21f809b0a5ec8d3',1,'create_solve_matrices.m']]],
+  ['a_5finv_5ftest_5',['A_inv_test',['../create__solve__matrices_8m.html#aea2a53e05719ab605bd08d7360beabf5',1,'create_solve_matrices.m']]],
+  ['abs_5fval_6',['abs_val',['../structcascade_1_1heap_1_1_col_val_info.html#abf857fdb5260ffe6466e7033e78e50e3',1,'cascade::heap::ColValInfo']]],
+  ['ainv_5finv_5ftest_7',['Ainv_inv_test',['../create__solve__matrices_8m.html#ad611d7eb93997c4fd20a7d05417d0748',1,'create_solve_matrices.m']]],
+  ['all_5fconverged_8',['all_converged',['../classutils__experimentation_1_1_convergence___experiment.html#aed48c84e55e497ad69f653536439dbea',1,'utils_experimentation::Convergence_Experiment']]],
+  ['all_5finitiated_9',['all_initiated',['../classutils__experimentation_1_1_convergence___experiment.html#a84543027181ac07a92b1b7f53fa78e34',1,'utils_experimentation::Convergence_Experiment']]],
+  ['all_5fterminated_10',['all_terminated',['../classutils__experimentation_1_1_convergence___experiment.html#a59cee35745a8a6eb9f326a765e08fa04',1,'utils_experimentation::Convergence_Experiment']]],
+  ['asqr_5finv_5ftest_11',['Asqr_inv_test',['../create__solve__matrices_8m.html#af237c5666688e55dc6f2ae2653984349',1,'create_solve_matrices.m']]],
+  ['average_5felapsed_5ftime_5fms_12',['average_elapsed_time_ms',['../classutils__experimentation_1_1_convergence___experiment.html#a5abc7d135a7b2fdbb664ee5133e32713',1,'utils_experimentation::Convergence_Experiment']]],
+  ['average_5ffinal_5frelres_13',['average_final_relres',['../classutils__experimentation_1_1_convergence___experiment.html#a8e9fc7898337388d8155b587f9588ed7',1,'utils_experimentation::Convergence_Experiment']]],
+  ['average_5finner_5fiteration_5fcount_14',['average_inner_iteration_count',['../classutils__experimentation_1_1_convergence___experiment.html#a04723871a203412733f2026ea1f72df1',1,'utils_experimentation::Convergence_Experiment']]],
+  ['average_5fouter_5fiteration_5fcount_15',['average_outer_iteration_count',['../classutils__experimentation_1_1_convergence___experiment.html#af00734483623f349a98994cd05468ffb',1,'utils_experimentation::Convergence_Experiment']]]
+];

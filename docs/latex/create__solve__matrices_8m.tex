@@ -1,0 +1,1479 @@
+\doxysection{C\+:/\+Users/dosre/dev/precision-\/cascade/scripts/matlab/create\+\_\+solve\+\_\+matrices.m File Reference}
+\hypertarget{create__solve__matrices_8m}{}\label{create__solve__matrices_8m}\index{C:/Users/dosre/dev/precision-\/cascade/scripts/matlab/create\_solve\_matrices.m@{C:/Users/dosre/dev/precision-\/cascade/scripts/matlab/create\_solve\_matrices.m}}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+Specific \mbox{\hyperlink{create__solve__matrices_8m_a0f069227489ad5ff8305f96f8499e6b2}{function}} test matrices Create Toy \mbox{\hyperlink{create__solve__matrices_8m_a98e96b4ef3f571259998593b3d765155}{Matrix}} (Well-\/conditioned \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}} for testing but that \% does not converge before 5 iterations) A\+\_\+5\+\_\+toy
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a40a61be0aa09254b3c8efc8536235019}{writematrix}} (A\+\_\+5\+\_\+toy, "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}\+A\+\_\+5\+\_\+toy.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a81c8b6d118db50aa7d492efebd621ad8}{writematrix}} (\mbox{\hyperlink{create__solve__matrices_8m_a58a6983b9d66587f90f6ff1b3dfe885b}{b\+\_\+5\+\_\+toy}}, "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}b\+\_\+5\+\_\+toy.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a6acee412387b15257995966a0da3df8b}{fprintf}} ("{}5x5 Toy Mat Condition Number A\+: \%0.\+5g\textbackslash{}n"{}, cond(A\+\_\+5\+\_\+toy))
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a8b8596cbb439fbaf7b04e65d2ccc971d}{writematrix}} (\mbox{\hyperlink{create__solve__matrices_8m_ad15da9b2dbdcd1f1b21f809b0a5ec8d3}{A\+\_\+5\+\_\+easysoln}}, "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}\+A\+\_\+5\+\_\+easysoln.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a11657473648d8575658154863a88b601}{writematrix}} (\mbox{\hyperlink{create__solve__matrices_8m_a481b7ca99ec79ebbc924834656dba44a}{b\+\_\+5\+\_\+easysoln}}, "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}b\+\_\+5\+\_\+easysoln.\+csv"{})
+\item 
+Create backsubstitution test with matrices to test backsub in GMRES \mbox{\hyperlink{create__solve__matrices_8m_a4fa51d14d24a680d9c1f1930d51fc66f}{specifically}} (Well-\/conditioned \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}} for testing) A\+\_\+7\+\_\+backsub
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a6f4618ddc10f578911aa4c7614fc9b19}{zeros}} (1, 7)
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_adc09d7d56c7bb52455798f4a2a7c6e47}{writematrix}} (A\+\_\+7\+\_\+backsub, "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}\+A\+\_\+7\+\_\+dummy\+\_\+backsub.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a2db3587fc75e38369011445d3c6c7ee5}{writematrix}} (\mbox{\hyperlink{create__solve__matrices_8m_a19137e175b2ed1f88f1bc81c3fc0673a}{b\+\_\+7\+\_\+backsub}}, "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}b\+\_\+7\+\_\+dummy\+\_\+backsub.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a72ea8d956035ab5ed71784c6d204c7a4}{writematrix}} (\mbox{\hyperlink{create__solve__matrices_8m_aef62c913ed13d1f68ee11e7b01fd6218}{Q\+\_\+8\+\_\+backsub}}, "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}\+Q\+\_\+8\+\_\+backsub.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a7f60777918045ac8d659c26b6d930d45}{writematrix}} (\mbox{\hyperlink{create__solve__matrices_8m_a35d02e87afe69478b76446a7f7ebe571}{R\+\_\+8\+\_\+backsub}}, "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}\+R\+\_\+8\+\_\+backsub.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a5aa85ea8dae99029c44647d230da54cd}{rho\+\_\+e1}} (1)
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_aaf729c663b6f59a9f87070431c1ce5a4}{writematrix}} (\mbox{\hyperlink{create__solve__matrices_8m_a35555c30538b98b701fb2c84ac2064a1}{x\+\_\+1}}, "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}x\+\_\+1\+\_\+backsub.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a851fb9993223e015928b888928b3b8d9}{writematrix}} (\mbox{\hyperlink{create__solve__matrices_8m_a529780c7e18890757a3ddb0e33539b37}{x\+\_\+2}}, "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}x\+\_\+2\+\_\+backsub.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a3c2f46f7a2937f1fb4ac62b8bb0aa94f}{writematrix}} (\mbox{\hyperlink{create__solve__matrices_8m_aff981b25c7a589e5b90db6bd700e40f8}{x\+\_\+3}}, "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}x\+\_\+3\+\_\+backsub.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_aceeadf187da23c3ec73d437def24b06c}{writematrix}} (\mbox{\hyperlink{create__solve__matrices_8m_ab8f0cc7672627b664d721ea3a8c06ee4}{x\+\_\+4}}, "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}x\+\_\+4\+\_\+backsub.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a6f9f2f2d85dece8efcfbd4465640b024}{writematrix}} (\mbox{\hyperlink{create__solve__matrices_8m_a7ff75d3e51c0dea7ea9a7265fb1071af}{x\+\_\+5}}, "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}x\+\_\+5\+\_\+backsub.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a8f879d3b022819633c673adda4a4b748}{writematrix}} (\mbox{\hyperlink{create__solve__matrices_8m_a101cf2c31b0d57ee7ac1823df7016708}{x\+\_\+6}}, "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}x\+\_\+6\+\_\+backsub.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a1c1727e2c7cd3ff33d56dc14082dde82}{writematrix}} (\mbox{\hyperlink{create__solve__matrices_8m_a439cf51fce18c8a719c263adb0e4fea5}{x\+\_\+7}}, "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}x\+\_\+7\+\_\+backsub.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a3e0e7d3e0611967aace7cacd06067b17}{fprintf}} (... "{}GMRES QR Triag. Solve Test Condition Number A\+: \%0.\+5g\textbackslash{}n"{},... cond(A\+\_\+7\+\_\+backsub) ...)
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a0427d21b345f713e0f1c61880122bc98}{fprintf}} (... "{}GMRES QR Triag. Solve Test Condition Number R\+: \%0.\+5g\textbackslash{}n"{},... cond(\mbox{\hyperlink{create__solve__matrices_8m_a35d02e87afe69478b76446a7f7ebe571}{R\+\_\+8\+\_\+backsub}}(1\+:7, 1\+:7)) ...)
+\item 
+id \mbox{\hyperlink{create__solve__matrices_8m_a329626dffc42c84371831246a2ddac71}{e}} ()
+\item 
+Create convection diffusion with rhs \mbox{\hyperlink{create__solve__matrices_8m_a391214706f3ac1bcd2ff251f18ce3f78}{sin}} (x) cos(y)\mbox{[}A\+\_\+convdiff64
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_abd65c00020088455d5abe04bf24ea7a4}{writematrix}} (full(A\+\_\+convdiff64), "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}conv\+\_\+diff\+\_\+64\+\_\+\+A.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_ae9137b982c4d6ae8994701aac7e524e7}{writematrix}} (... full(A\+\_\+convdiff64 \texorpdfstring{$\ast$}{*}A\+\_\+convdiff64),... "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}conv\+\_\+diff\+\_\+64\+\_\+\+Asqr.\+csv"{} ...)
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_acd6693b338f413cb2be762849bb0c663}{writematrix}} (full(\mbox{\hyperlink{create__solve__matrices_8m_a2238761f54cf558ea17a1de67d35b37b}{b\+\_\+convdiff64}}), "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}conv\+\_\+diff\+\_\+64\+\_\+b.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_ad69f4a3873771cc970e1bd150692d53e}{writematrix}} (full(\mbox{\hyperlink{create__solve__matrices_8m_a5d6f79fae7b8690b67c7b70668538bde}{x\+\_\+convdiff64}}), "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}conv\+\_\+diff\+\_\+64\+\_\+x.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a5521680fdfe0e326c10a14e160492244}{fprintf}} (... "{}Conv-\/Diff 64x64 Condition Number A\+: \%0.\+5g\textbackslash{}n"{},... condest(A\+\_\+convdiff64) ...)
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a8da9082337b50bca7f49eada8ee9bc83}{writematrix}} (full(A\+\_\+convdiff256), "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}conv\+\_\+diff\+\_\+256\+\_\+\+A.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_ac8d8eff0e171ddec7611b8ea8d0df17d}{writematrix}} (... full(A\+\_\+convdiff256 \texorpdfstring{$\ast$}{*}A\+\_\+convdiff256),... "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}conv\+\_\+diff\+\_\+256\+\_\+\+Asqr.\+csv"{} ...)
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_aae74a32daba573b5a9b7362030affd35}{writematrix}} (full(\mbox{\hyperlink{create__solve__matrices_8m_aa439a2abc3969d88f7db411c2c9fb241}{b\+\_\+convdiff256}}), "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}conv\+\_\+diff\+\_\+256\+\_\+b.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_ada428f710630cfe8c846c73cf37172c3}{writematrix}} (full(\mbox{\hyperlink{create__solve__matrices_8m_ab9964a65d938ae9c5435d234cbfc2d1a}{x\+\_\+convdiff256}}), "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}conv\+\_\+diff\+\_\+256\+\_\+x.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a2c133f5347b9e1b8adf22aaade894f9d}{fprintf}} (... "{}Conv-\/Diff 256x256 Condition Number A\+: \%0.\+5g\textbackslash{}n"{},... condest(A\+\_\+convdiff256) ...)
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a73f1d62ab58888d36def16522705ee0f}{writematrix}} (full(A\+\_\+convdiff1024), "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}conv\+\_\+diff\+\_\+1024\+\_\+\+A.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a20de79ea4df4eb186eb720a5b3f758e6}{writematrix}} (... full(A\+\_\+convdiff1024 \texorpdfstring{$\ast$}{*}A\+\_\+convdiff1024),... "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}conv\+\_\+diff\+\_\+1024\+\_\+\+Asqr.\+csv"{} ...)
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_acc1974f2f59a83406398c89ec3d77de5}{writematrix}} (full(\mbox{\hyperlink{create__solve__matrices_8m_ad4e5a373ebb41e79d9c316e9d22bd2ab}{b\+\_\+convdiff1024}}), "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}conv\+\_\+diff\+\_\+1024\+\_\+b.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_aebbfe8ed979927a633bbf3b21757e531}{writematrix}} (full(\mbox{\hyperlink{create__solve__matrices_8m_a079ffd8ce3d576144f9e78b4c33d9c36}{x\+\_\+convdiff1024}}), "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}conv\+\_\+diff\+\_\+1024\+\_\+x.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a0f0902e4cc8325b768dce7a1dc376273}{fprintf}} (... "{}Conv-\/Diff 1024x1024 Condition Number A\+: \%0.\+5g\textbackslash{}n"{},... condest(A\+\_\+convdiff1024) ...)
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a9b95492c86142ca8903ae88d366b57aa}{writematrix}} (\mbox{\hyperlink{create__solve__matrices_8m_aef4f41d905762b7f8d5ef4c3a134a43b}{A\+\_\+20\+\_\+rand}}, "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}\+A\+\_\+20\+\_\+rand.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_ad5d933bc30b13aa6e1cd72cec2236486}{writematrix}} (\mbox{\hyperlink{create__solve__matrices_8m_a0119ec3f9c75f997774b9ab27efbb90a}{b\+\_\+20\+\_\+rand}}, "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}b\+\_\+20\+\_\+rand.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_abd6e67417a159351c4c14ec3178078f7}{writematrix}} (\mbox{\hyperlink{create__solve__matrices_8m_a2acd3702cddf2b95963513ea3801e669}{x\+\_\+20\+\_\+rand}}, "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}x\+\_\+20\+\_\+rand.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a944bb40c5b92ee026301f014f1f5c4f0}{fprintf}} ("{}Slow 20x20 Condition Number A\+: \%0.\+5g\textbackslash{}n"{}, cond(\mbox{\hyperlink{create__solve__matrices_8m_aef4f41d905762b7f8d5ef4c3a134a43b}{A\+\_\+20\+\_\+rand}}))
+\item 
+abs(\mbox{\hyperlink{create__solve__matrices_8m_adadea81f70951450b2e9f06af712569f}{randn}}(10, 1)+10) \mbox{\hyperlink{create__solve__matrices_8m_a118cebd470f8248543425a8d103c652a}{diag}} ()
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a7dfb8acb8e054019937ef7d60038bc86}{zeros}} (2, 2)\mbox{]}
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a300b3cd0240777607fc795c4bd07c808}{zeros}} (2, 10)
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a53016ef7e8a9f7cf9afd9c59e5e052e6}{B\+\_\+saddle}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{create__solve__matrices_8m_a0f9c420ac4d16d33df0dd14acd8529d2}{inv}} (A\+\_\+saddle) \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_a53016ef7e8a9f7cf9afd9c59e5e052e6}{B\+\_\+saddle}}\textquotesingle{}\mbox{]}
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a4c6ca979b0a106c6a063ce60de2b473c}{writematrix}} (\mbox{\hyperlink{create__solve__matrices_8m_aee722c574c82299edcccf5e983b141d1}{A\+\_\+3eigs}}, "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}\+A\+\_\+25\+\_\+3eigs.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a81414a5d4befa0d1bf9b999110da4426}{writematrix}} (\mbox{\hyperlink{create__solve__matrices_8m_a862a1df43efaf4355d633596ca6f608d}{b\+\_\+3eigs}}, "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}b\+\_\+25\+\_\+3eigs.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a49975007f6ff903375e2f03db5e015e0}{writematrix}} (\mbox{\hyperlink{create__solve__matrices_8m_ae5e9149bfe32112d1f8a0f17a59ea870}{x\+\_\+3eigs}}, "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}x\+\_\+25\+\_\+3eigs.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a8f316b518d5e75a56ab201796c0583d0}{writematrix}} (\mbox{\hyperlink{create__solve__matrices_8m_afb0b31d116785ef6c93fc5530735192f}{saddle}}, "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}\+A\+\_\+25\+\_\+saddle.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a0462604829d1a78023f7f34d7d40edfc}{writematrix}} (\mbox{\hyperlink{create__solve__matrices_8m_a5d2a954cd21bb50b549216e3b3fcb95a}{b\+\_\+saddle}}, "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}b\+\_\+25\+\_\+saddle.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_ae6ad625612c156cb3f93659fbb0febaf}{writematrix}} (\mbox{\hyperlink{create__solve__matrices_8m_a90ca253f197ba9f7452b8cc349324047}{x\+\_\+saddle}}, "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}x\+\_\+25\+\_\+saddle.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a3ba48a420b12d2fb6ab012d247d3c617}{writematrix}} (\mbox{\hyperlink{create__solve__matrices_8m_a3a916a9ef785eddd08b2f5bd7bb49676}{inv\+\_\+pre\+\_\+cond}}, "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}\+A\+\_\+25\+\_\+invprecond\+\_\+saddle.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a5e9e32ad46a3070d6f4fa5c7e9e6b0f7}{fprintf}} ("{}Saddle Condition Number A\+: \%0.\+5g\textbackslash{}n"{}, cond(\mbox{\hyperlink{create__solve__matrices_8m_afb0b31d116785ef6c93fc5530735192f}{saddle}}))
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a9078a26772727d8371b02d3bceeaf676}{fprintf}} ("{}Precond Saddle Condition Number A\+: \%0.\+5g\textbackslash{}n"{}, cond(\mbox{\hyperlink{create__solve__matrices_8m_aee722c574c82299edcccf5e983b141d1}{A\+\_\+3eigs}}))
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_ab8bd5195e0cac37c7552127f0817f486}{writematrix}} (\mbox{\hyperlink{create__solve__matrices_8m_adf905597140d076f7158688a575824dd}{U\+\_\+tri\+\_\+90}}, "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}\+U\+\_\+tri\+\_\+90.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_ad7ae4bbef35b1812eec341c38cb06176}{writematrix}} (\mbox{\hyperlink{create__solve__matrices_8m_a77ffef809975894d431b42109ee8c1e7}{x\+\_\+90}}, "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}x\+\_\+tri\+\_\+90.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a99dc7896ed2792c57b790b93cf76e88d}{writematrix}} (\mbox{\hyperlink{create__solve__matrices_8m_a84f3606d9b615febcb815f055b5b02b3}{Ub\+\_\+90}}, "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}\+Ub\+\_\+tri\+\_\+90.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a275997b912d78e22624742a3ec08f2a9}{writematrix}} (\mbox{\hyperlink{create__solve__matrices_8m_af86938b9aa98f6e81f2e88260d6ad115}{L\+\_\+tri\+\_\+90}}, "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}\+L\+\_\+tri\+\_\+90.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_af842c8fdfba6e5fb91635145b4f9864c}{writematrix}} (\mbox{\hyperlink{create__solve__matrices_8m_a4cf3400b8fde7af67ec8bb9cd45ccc87}{Lb\+\_\+90}}, "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}\+Lb\+\_\+tri\+\_\+90.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_ac7baee1f25519fe7e9c382b9ed0d9c9d}{fprintf}} ("{}Triag. Solve Test Condition Number A\+: \%0.\+5g\textbackslash{}n"{}, cond(\mbox{\hyperlink{create__solve__matrices_8m_ace9a237e5b9f0eb7b0b823cede953e56}{A\+\_\+2\+\_\+temp}}))
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a1de5cc220ef744a92f92ed69a93817c1}{fprintf}} ("{}Triag. Solve Test Condition Number U\+: \%0.\+5g\textbackslash{}n"{}, cond(\mbox{\hyperlink{create__solve__matrices_8m_adf905597140d076f7158688a575824dd}{U\+\_\+tri\+\_\+90}}))
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a52adc1b3258c9d595a3997b7329bc723}{fprintf}} ("{}Triag. Solve Test Condition Number L\+: \%0.\+5g\textbackslash{}n"{}, cond(\mbox{\hyperlink{create__solve__matrices_8m_af86938b9aa98f6e81f2e88260d6ad115}{L\+\_\+tri\+\_\+90}}))
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a6f8b486dda82dd5d4bd409cf65e67168}{writematrix}} (\mbox{\hyperlink{create__solve__matrices_8m_aea2a53e05719ab605bd08d7360beabf5}{A\+\_\+inv\+\_\+test}}, "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}\+A\+\_\+inv\+\_\+45.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_ab938a20ea8619871ddcff1d2f61ded99}{writematrix}} (\mbox{\hyperlink{create__solve__matrices_8m_af237c5666688e55dc6f2ae2653984349}{Asqr\+\_\+inv\+\_\+test}}, "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}\+Asqr\+\_\+inv\+\_\+45.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a1e0e23d056b06cdf8eb81d20724c73ea}{writematrix}} (\mbox{\hyperlink{create__solve__matrices_8m_ad611d7eb93997c4fd20a7d05417d0748}{Ainv\+\_\+inv\+\_\+test}}, "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}\+Ainv\+\_\+inv\+\_\+45.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_adbc2a969a2d142cfea2a8fa6622a0389}{writematrix}} (\mbox{\hyperlink{create__solve__matrices_8m_ae3b1363861525c6856ddf53922941969}{b\+\_\+inv\+\_\+test}}, "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}b\+\_\+inv\+\_\+45.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a3bbc976cf06396ecf8cd0901894ef0cc}{fprintf}} (... "{}Precond Test Condition Number A\+: \%0.\+5g\textbackslash{}n"{},... cond(\mbox{\hyperlink{create__solve__matrices_8m_aea2a53e05719ab605bd08d7360beabf5}{A\+\_\+inv\+\_\+test}}) ...)
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a0d54426f53eeecd586ad94758a3713b3}{fprintf}} (... "{}Precond Test Condition Number \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}\texorpdfstring{$^\wedge$}{\string^}2\+: \%0.\+5g\textbackslash{}n"{},... cond(\mbox{\hyperlink{create__solve__matrices_8m_af237c5666688e55dc6f2ae2653984349}{Asqr\+\_\+inv\+\_\+test}}) ...)
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a316c3314f9fb90205fc18a7ad3f83315}{fprintf}} (... "{}Precond Test Condition Number \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}\texorpdfstring{$^\wedge$}{\string^}(-\/1)\+: \%0.\+5g\textbackslash{}n"{},... cond(\mbox{\hyperlink{create__solve__matrices_8m_ad611d7eb93997c4fd20a7d05417d0748}{Ainv\+\_\+inv\+\_\+test}}) ...)
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_acbd58841b150cb85bdfc66969cea4fef}{fprintf}} (... "{}Precond Test Condition Number \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}\texorpdfstring{$^\wedge$}{\string^}(-\/1)\texorpdfstring{$\ast$}{*}A\+: \%0.\+5g\textbackslash{}n"{},... cond(\mbox{\hyperlink{create__solve__matrices_8m_ad611d7eb93997c4fd20a7d05417d0748}{Ainv\+\_\+inv\+\_\+test}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_aea2a53e05719ab605bd08d7360beabf5}{A\+\_\+inv\+\_\+test}}) ...)
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_afc95fb4c05c569959dca74484b00c8f5}{fprintf}} (... "{}Precond Test Condition Number \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}\texorpdfstring{$^\wedge$}{\string^}(-\/1)\texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}\texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}\texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}\texorpdfstring{$^\wedge$}{\string^}(-\/1)\+: \%0.\+5g\textbackslash{}n"{},... cond(\mbox{\hyperlink{create__solve__matrices_8m_ad611d7eb93997c4fd20a7d05417d0748}{Ainv\+\_\+inv\+\_\+test}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_aea2a53e05719ab605bd08d7360beabf5}{A\+\_\+inv\+\_\+test}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_aea2a53e05719ab605bd08d7360beabf5}{A\+\_\+inv\+\_\+test}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_ad611d7eb93997c4fd20a7d05417d0748}{Ainv\+\_\+inv\+\_\+test}}) ...)
+\item 
+id \mbox{\hyperlink{create__solve__matrices_8m_ab783ba1c052d77a440f16906e4afb023}{ilu\+\_\+n}} ()
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_acc1577cd16b3bd635957d1a52f121b05}{writematrix}} (\mbox{\hyperlink{create__solve__matrices_8m_acefe99ac397314d83cf7839941239069}{ilu\+\_\+A}}, "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}ilu\+\_\+\+A.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a6a6cb6ec8f04c1f0c69adf97f8b7d268}{writematrix}} (full(ilu\+\_\+L), "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}ilu\+\_\+\+L.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_aced5c6d57c12baab842fef2564e1479d}{writematrix}} (full(ilu\+\_\+U), "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}ilu\+\_\+\+U.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a4b25a020d52bf673af19d08bc5cc40b9}{writematrix}} (full(ilu\+\_\+\+L\+\_\+pivot), "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}ilu\+\_\+\+L\+\_\+pivot.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a62a5bba2b497a19027717cd38df766f0}{writematrix}} (full(ilu\+\_\+\+U\+\_\+pivot), "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}ilu\+\_\+\+U\+\_\+pivot.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a457f03aabf14510533be9af884a415a8}{writematrix}} (full(ilu\+\_\+\+P\+\_\+pivot), "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}ilu\+\_\+\+P\+\_\+pivot.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a0a270c130022b2cfa905df100c69ec72}{fprintf}} ("{}ILU Test Condition Number Dense A\+: \%g\textbackslash{}n"{}, condest(\mbox{\hyperlink{create__solve__matrices_8m_acefe99ac397314d83cf7839941239069}{ilu\+\_\+A}}))
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_aa0a1375820ffa2e2a4ee1038425afe95}{fprintf}} ("{}ILU Test Condition Number Dense L\+: \%g\textbackslash{}n"{}, condest(ilu\+\_\+L))
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a3fb99ca85c0cb86e9042d3771479f5a8}{fprintf}} ("{}ILU Test Condition Number Dense U\+: \%g\textbackslash{}n"{}, condest(ilu\+\_\+U))
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a373d53e0902c354bc1cf2fc1c0e33499}{fprintf}} (... "{}ILU Test Condition Number Dense Pivot L\+: \%g\textbackslash{}n"{},... condest(ilu\+\_\+\+L\+\_\+pivot) ...)
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a0c6876b79d1110a01cef382499116557}{fprintf}} (... "{}ILU Test Condition Number Dense Pivot U\+: \%g\textbackslash{}n"{},... condest(ilu\+\_\+\+U\+\_\+pivot) ...)
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a015814038fbc3dfa0df3c80a2dad9817}{writematrix}} (full(\mbox{\hyperlink{create__solve__matrices_8m_a912971ddf4afcd00ad442914c8cf03e8}{ilu\+\_\+sparse\+\_\+A}}), "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}ilu\+\_\+sparse\+\_\+\+A.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a67a4adda529174da9497f73fac5ce3d0}{writematrix}} (full(ilu\+\_\+sparse\+\_\+L), "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}ilu\+\_\+sparse\+\_\+\+L.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a488361c17f5e29cf36c1febd3323622c}{writematrix}} (full(ilu\+\_\+sparse\+\_\+U), "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}ilu\+\_\+sparse\+\_\+\+U.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_acff723a790049db102f2882e72e000a6}{writematrix}} (full(ilu\+\_\+sparse\+\_\+\+L\+\_\+pivot), "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}ilu\+\_\+sparse\+\_\+\+L\+\_\+pivot.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a6683aabf225c618150b3fbe056bfec5a}{writematrix}} (full(ilu\+\_\+sparse\+\_\+\+U\+\_\+pivot), "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}ilu\+\_\+sparse\+\_\+\+U\+\_\+pivot.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a9d4dec3f40865e70ebe5db31b40debe7}{writematrix}} (full(ilu\+\_\+sparse\+\_\+\+P\+\_\+pivot), "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}ilu\+\_\+sparse\+\_\+\+P\+\_\+pivot.\+csv"{})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_aefe73c923b63f1a3179b023522303f76}{fprintf}} ("{}ILU error 4\+: \%g\textbackslash{}n"{}, norm(full(ilu\+\_\+\+L\+\_\+4 \texorpdfstring{$\ast$}{*}ilu\+\_\+\+U\+\_\+4-\/\mbox{\hyperlink{create__solve__matrices_8m_a912971ddf4afcd00ad442914c8cf03e8}{ilu\+\_\+sparse\+\_\+A}})))
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a5675307b680c8dfd091694c18d37528f}{fprintf}} ("{}ILU error 3\+: \%g\textbackslash{}n"{}, norm(full(ilu\+\_\+\+L\+\_\+3 \texorpdfstring{$\ast$}{*}ilu\+\_\+\+U\+\_\+3-\/\mbox{\hyperlink{create__solve__matrices_8m_a912971ddf4afcd00ad442914c8cf03e8}{ilu\+\_\+sparse\+\_\+A}})))
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a3f3c0977c1ff2be0c4e9c01e1ee105b7}{fprintf}} ("{}ILU error 2\+: \%g\textbackslash{}n"{}, norm(full(ilu\+\_\+\+L\+\_\+2 \texorpdfstring{$\ast$}{*}ilu\+\_\+\+U\+\_\+2-\/\mbox{\hyperlink{create__solve__matrices_8m_a912971ddf4afcd00ad442914c8cf03e8}{ilu\+\_\+sparse\+\_\+A}})))
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a78bb7879ea5fda3e0d8c10a9404b9200}{fprintf}} ("{}ILU error 1\+: \%g\textbackslash{}n"{}, norm(full(ilu\+\_\+\+L\+\_\+1 \texorpdfstring{$\ast$}{*}ilu\+\_\+\+U\+\_\+1-\/\mbox{\hyperlink{create__solve__matrices_8m_a912971ddf4afcd00ad442914c8cf03e8}{ilu\+\_\+sparse\+\_\+A}})))
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_afef1f283e717751a2742088b5aa70399}{fprintf}} ("{}ILU error 0\+: \%g\textbackslash{}n"{}, norm(full(ilu\+\_\+\+L\+\_\+0 \texorpdfstring{$\ast$}{*}ilu\+\_\+\+U\+\_\+0-\/\mbox{\hyperlink{create__solve__matrices_8m_a912971ddf4afcd00ad442914c8cf03e8}{ilu\+\_\+sparse\+\_\+A}})))
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a907d02e5e476e0e2932d610e65cb7ff7}{fprintf}} ("{}ILU Test Condition Number Sparse A\+: \%g\textbackslash{}n"{}, condest(\mbox{\hyperlink{create__solve__matrices_8m_a912971ddf4afcd00ad442914c8cf03e8}{ilu\+\_\+sparse\+\_\+A}}))
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_abcd502fbf4e36c4e23986e70113e0303}{fprintf}} ("{}ILU Test Condition Number Sparse L\+: \%g\textbackslash{}n"{}, condest(ilu\+\_\+sparse\+\_\+L))
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_acc2acf3341dea0688841c2264bdbebf4}{fprintf}} ("{}ILU Test Condition Number Sparse U\+: \%g\textbackslash{}n"{}, condest(ilu\+\_\+sparse\+\_\+U))
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a77d40692d9b328b6c1f027cbb938a3df}{fprintf}} ("{}ILU Test Condition Number Sparse Pivot L\+: \%g\textbackslash{}n"{}, condest(ilu\+\_\+sparse\+\_\+\+L\+\_\+pivot))
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a501adf3254366b77264b4c5dee9c44dc}{fprintf}} ("{}ILU Test Condition Number Sparse Pivot U\+: \%g\textbackslash{}n"{}, condest(ilu\+\_\+sparse\+\_\+\+U\+\_\+pivot))
+\item 
+n, 1 \mbox{\hyperlink{create__solve__matrices_8m_adadea81f70951450b2e9f06af712569f}{randn}} ()
+\item 
+n\texorpdfstring{$^\wedge$}{\string^}2, n\texorpdfstring{$^\wedge$}{\string^}2 \mbox{\hyperlink{create__solve__matrices_8m_af56b53f9cec763b615b692a7c59bb52d}{sparse}} ()
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a82503893f4ad52de13cc027026f7e5d9}{D}} (1\+:n, 1)
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a537a79a38660c784946fff861b2bd493}{D}} (n\texorpdfstring{$^\wedge$}{\string^}2-\/n+1\+:n\texorpdfstring{$^\wedge$}{\string^}2, 1)
+\item 
+n, 1 \mbox{\hyperlink{create__solve__matrices_8m_af5f71163c619daf69d229316f9c45545}{ones}} ()
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_aeb4d2534cd3faf5c34f1f2c4584f2845}{low\+\_\+D}} (1, 1)=0
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a9c033687ab290e1da982045848a3b025}{low\+\_\+D}} (n, 1)
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a30ce4d5dca1220138776977501e9f7a8}{low\+\_\+D}} (n\texorpdfstring{$^\wedge$}{\string^}2-\/n\+:n\texorpdfstring{$^\wedge$}{\string^}2)=0
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a8fc98a6d1408dc0ae561fed9a30aa7e9}{high\+\_\+D}} (1, 1)
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_ab770cc0600a2e9e1cf18e01a3469107f}{high\+\_\+D}} (n, 1)=0
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_abe18ea9eb2356f80fd956e8cf5fc412f}{high\+\_\+D}} (n\texorpdfstring{$^\wedge$}{\string^}2-\/n+1\+:n\texorpdfstring{$^\wedge$}{\string^}2)=0
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a87f7a8b5a7460ff0b0adb064a7310c5a}{C}} (1\+:2 \texorpdfstring{$\ast$}{*}n)=0
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a7476a923793b3b567ff50effd4c6ea1c}{E}} (n\texorpdfstring{$^\wedge$}{\string^}2-\/2 \texorpdfstring{$\ast$}{*}n+1\+:n\texorpdfstring{$^\wedge$}{\string^}2)=0
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_ab610cd553341d462f582d362dff7f83d}{b}} (1\+:n, 1)=0
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_acc2c81a9a7ec6b42d582d4ada3225973}{b}} (1\+:n, n)=0
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a58a6983b9d66587f90f6ff1b3dfe885b}{b\+\_\+5\+\_\+toy}} = \mbox{[}3
+\item 
+Create \mbox{\hyperlink{create__solve__matrices_8m_a98e96b4ef3f571259998593b3d765155}{Matrix}} with solution can be found trivially \mbox{\hyperlink{create__solve__matrices_8m_ad15da9b2dbdcd1f1b21f809b0a5ec8d3}{A\+\_\+5\+\_\+easysoln}} = \mbox{[}1, 0, 0, 0, 0
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a481b7ca99ec79ebbc924834656dba44a}{b\+\_\+5\+\_\+easysoln}} = \mbox{[}1
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a19137e175b2ed1f88f1bc81c3fc0673a}{b\+\_\+7\+\_\+backsub}} = A\+\_\+7\+\_\+backsub\texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_adadea81f70951450b2e9f06af712569f}{randn}}(7, 1)
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_ab8ec92cc3ea8422c9349409bae98d2a0}{rho}} = norm(\mbox{\hyperlink{create__solve__matrices_8m_a19137e175b2ed1f88f1bc81c3fc0673a}{b\+\_\+7\+\_\+backsub}})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_aef62c913ed13d1f68ee11e7b01fd6218}{Q\+\_\+8\+\_\+backsub}} = \mbox{[}Q\+\_\+7\+\_\+backsub, \mbox{\hyperlink{create__solve__matrices_8m_a6f4618ddc10f578911aa4c7614fc9b19}{zeros}}(7, 1)
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a35d02e87afe69478b76446a7f7ebe571}{R\+\_\+8\+\_\+backsub}} = \mbox{[}R\+\_\+7\+\_\+backsub
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_ad92146f3c64a51422673e9879294956e}{rho\+\_\+e1}} = \mbox{\hyperlink{create__solve__matrices_8m_a6f4618ddc10f578911aa4c7614fc9b19}{zeros}}(7, 1)
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a35555c30538b98b701fb2c84ac2064a1}{x\+\_\+1}} = \mbox{\hyperlink{create__solve__matrices_8m_a35d02e87afe69478b76446a7f7ebe571}{R\+\_\+8\+\_\+backsub}}(1\+:1, 1\+:1) \textbackslash{} (\mbox{\hyperlink{create__solve__matrices_8m_aef62c913ed13d1f68ee11e7b01fd6218}{Q\+\_\+8\+\_\+backsub}}(1\+:1, 1\+:1)\textquotesingle{}\texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_ad92146f3c64a51422673e9879294956e}{rho\+\_\+e1}}(1\+:1))
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a529780c7e18890757a3ddb0e33539b37}{x\+\_\+2}} = \mbox{\hyperlink{create__solve__matrices_8m_a35d02e87afe69478b76446a7f7ebe571}{R\+\_\+8\+\_\+backsub}}(1\+:2, 1\+:2) \textbackslash{} (\mbox{\hyperlink{create__solve__matrices_8m_aef62c913ed13d1f68ee11e7b01fd6218}{Q\+\_\+8\+\_\+backsub}}(1\+:2, 1\+:2)\textquotesingle{}\texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_ad92146f3c64a51422673e9879294956e}{rho\+\_\+e1}}(1\+:2))
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_aff981b25c7a589e5b90db6bd700e40f8}{x\+\_\+3}} = \mbox{\hyperlink{create__solve__matrices_8m_a35d02e87afe69478b76446a7f7ebe571}{R\+\_\+8\+\_\+backsub}}(1\+:3, 1\+:3) \textbackslash{} (\mbox{\hyperlink{create__solve__matrices_8m_aef62c913ed13d1f68ee11e7b01fd6218}{Q\+\_\+8\+\_\+backsub}}(1\+:3, 1\+:3)\textquotesingle{}\texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_ad92146f3c64a51422673e9879294956e}{rho\+\_\+e1}}(1\+:3))
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_ab8f0cc7672627b664d721ea3a8c06ee4}{x\+\_\+4}} = \mbox{\hyperlink{create__solve__matrices_8m_a35d02e87afe69478b76446a7f7ebe571}{R\+\_\+8\+\_\+backsub}}(1\+:4, 1\+:4) \textbackslash{} (\mbox{\hyperlink{create__solve__matrices_8m_aef62c913ed13d1f68ee11e7b01fd6218}{Q\+\_\+8\+\_\+backsub}}(1\+:4, 1\+:4)\textquotesingle{}\texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_ad92146f3c64a51422673e9879294956e}{rho\+\_\+e1}}(1\+:4))
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a7ff75d3e51c0dea7ea9a7265fb1071af}{x\+\_\+5}} = \mbox{\hyperlink{create__solve__matrices_8m_a35d02e87afe69478b76446a7f7ebe571}{R\+\_\+8\+\_\+backsub}}(1\+:5, 1\+:5) \textbackslash{} (\mbox{\hyperlink{create__solve__matrices_8m_aef62c913ed13d1f68ee11e7b01fd6218}{Q\+\_\+8\+\_\+backsub}}(1\+:5, 1\+:5)\textquotesingle{}\texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_ad92146f3c64a51422673e9879294956e}{rho\+\_\+e1}}(1\+:5))
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a101cf2c31b0d57ee7ac1823df7016708}{x\+\_\+6}} = \mbox{\hyperlink{create__solve__matrices_8m_a35d02e87afe69478b76446a7f7ebe571}{R\+\_\+8\+\_\+backsub}}(1\+:6, 1\+:6) \textbackslash{} (\mbox{\hyperlink{create__solve__matrices_8m_aef62c913ed13d1f68ee11e7b01fd6218}{Q\+\_\+8\+\_\+backsub}}(1\+:6, 1\+:6)\textquotesingle{}\texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_ad92146f3c64a51422673e9879294956e}{rho\+\_\+e1}}(1\+:6))
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a439cf51fce18c8a719c263adb0e4fea5}{x\+\_\+7}} = \mbox{\hyperlink{create__solve__matrices_8m_a35d02e87afe69478b76446a7f7ebe571}{R\+\_\+8\+\_\+backsub}}(1\+:7, 1\+:7) \textbackslash{} (\mbox{\hyperlink{create__solve__matrices_8m_aef62c913ed13d1f68ee11e7b01fd6218}{Q\+\_\+8\+\_\+backsub}}(1\+:7, 1\+:7)\textquotesingle{}\texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_ad92146f3c64a51422673e9879294956e}{rho\+\_\+e1}}(1\+:7))
+\item 
+Create convection diffusion with rhs \mbox{\hyperlink{create__solve__matrices_8m_a2238761f54cf558ea17a1de67d35b37b}{b\+\_\+convdiff64}}
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a5d6f79fae7b8690b67c7b70668538bde}{x\+\_\+convdiff64}}
+\item 
+Create convection diffusion with rhs \mbox{\hyperlink{create__solve__matrices_8m_aa439a2abc3969d88f7db411c2c9fb241}{b\+\_\+convdiff256}}
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_ab9964a65d938ae9c5435d234cbfc2d1a}{x\+\_\+convdiff256}}
+\item 
+Create convection diffusion with rhs \mbox{\hyperlink{create__solve__matrices_8m_ad4e5a373ebb41e79d9c316e9d22bd2ab}{b\+\_\+convdiff1024}}
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a079ffd8ce3d576144f9e78b4c33d9c36}{x\+\_\+convdiff1024}}
+\item 
+Create \mbox{\hyperlink{create__solve__matrices_8m_a98e96b4ef3f571259998593b3d765155}{Matrix}} random which should converge slowest \mbox{\hyperlink{create__solve__matrices_8m_aef4f41d905762b7f8d5ef4c3a134a43b}{A\+\_\+20\+\_\+rand}} = \mbox{\hyperlink{create__solve__matrices_8m_adadea81f70951450b2e9f06af712569f}{randn}}(20, 20)
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_ac81ea39453a3d5bb226e7b855e6ae7e2}{xtrue\+\_\+20\+\_\+rand}} = \mbox{\hyperlink{create__solve__matrices_8m_adadea81f70951450b2e9f06af712569f}{randn}}(20, 1)
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a0119ec3f9c75f997774b9ab27efbb90a}{b\+\_\+20\+\_\+rand}} = \mbox{\hyperlink{create__solve__matrices_8m_aef4f41d905762b7f8d5ef4c3a134a43b}{A\+\_\+20\+\_\+rand}}\texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_ac81ea39453a3d5bb226e7b855e6ae7e2}{xtrue\+\_\+20\+\_\+rand}}
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a2acd3702cddf2b95963513ea3801e669}{x\+\_\+20\+\_\+rand}}
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a53016ef7e8a9f7cf9afd9c59e5e052e6}{B\+\_\+saddle}} = \mbox{\hyperlink{create__solve__matrices_8m_adadea81f70951450b2e9f06af712569f}{randn}}(2, 10)
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_afb0b31d116785ef6c93fc5530735192f}{saddle}} = \mbox{[}A\+\_\+saddle, \mbox{\hyperlink{create__solve__matrices_8m_a53016ef7e8a9f7cf9afd9c59e5e052e6}{B\+\_\+saddle}}\textquotesingle{}
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a18134689f572fd7aa049bab47305ca6a}{pre\+\_\+cond}} = \mbox{[}A\+\_\+saddle, \mbox{\hyperlink{create__solve__matrices_8m_a6f4618ddc10f578911aa4c7614fc9b19}{zeros}}(10, 2)
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a3a916a9ef785eddd08b2f5bd7bb49676}{inv\+\_\+pre\+\_\+cond}} = \mbox{\hyperlink{create__solve__matrices_8m_a0f9c420ac4d16d33df0dd14acd8529d2}{inv}}(\mbox{\hyperlink{create__solve__matrices_8m_a18134689f572fd7aa049bab47305ca6a}{pre\+\_\+cond}})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a02114ec3d1f03f24c655290fc57f25ed}{xtrue\+\_\+saddle}} = \mbox{\hyperlink{create__solve__matrices_8m_adadea81f70951450b2e9f06af712569f}{randn}}(12, 1)
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a5d2a954cd21bb50b549216e3b3fcb95a}{b\+\_\+saddle}} = \mbox{\hyperlink{create__solve__matrices_8m_afb0b31d116785ef6c93fc5530735192f}{saddle}}\texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_a02114ec3d1f03f24c655290fc57f25ed}{xtrue\+\_\+saddle}}
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_aee722c574c82299edcccf5e983b141d1}{A\+\_\+3eigs}} = \mbox{\hyperlink{create__solve__matrices_8m_a3a916a9ef785eddd08b2f5bd7bb49676}{inv\+\_\+pre\+\_\+cond}}\texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_afb0b31d116785ef6c93fc5530735192f}{saddle}}
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a862a1df43efaf4355d633596ca6f608d}{b\+\_\+3eigs}} = \mbox{\hyperlink{create__solve__matrices_8m_a3a916a9ef785eddd08b2f5bd7bb49676}{inv\+\_\+pre\+\_\+cond}}\texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_a5d2a954cd21bb50b549216e3b3fcb95a}{b\+\_\+saddle}}
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_ae5e9149bfe32112d1f8a0f17a59ea870}{x\+\_\+3eigs}}
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a90ca253f197ba9f7452b8cc349324047}{x\+\_\+saddle}}
+\item 
+Create lower upper triangular to check substitution solve \mbox{\hyperlink{create__solve__matrices_8m_ace9a237e5b9f0eb7b0b823cede953e56}{A\+\_\+2\+\_\+temp}} = generate\+\_\+well\+\_\+cond\+\_\+rand\+\_\+matrix(90, 15)
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_adf905597140d076f7158688a575824dd}{U\+\_\+tri\+\_\+90}} = triu(\mbox{\hyperlink{create__solve__matrices_8m_ace9a237e5b9f0eb7b0b823cede953e56}{A\+\_\+2\+\_\+temp}})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a77ffef809975894d431b42109ee8c1e7}{x\+\_\+90}} = 2\texorpdfstring{$\ast$}{*}(randi(2, 90, 1)-\/1.\+5)
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a84f3606d9b615febcb815f055b5b02b3}{Ub\+\_\+90}} = \mbox{\hyperlink{create__solve__matrices_8m_adf905597140d076f7158688a575824dd}{U\+\_\+tri\+\_\+90}}\texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_a77ffef809975894d431b42109ee8c1e7}{x\+\_\+90}}
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_af86938b9aa98f6e81f2e88260d6ad115}{L\+\_\+tri\+\_\+90}} = tril(\mbox{\hyperlink{create__solve__matrices_8m_ace9a237e5b9f0eb7b0b823cede953e56}{A\+\_\+2\+\_\+temp}})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a4cf3400b8fde7af67ec8bb9cd45ccc87}{Lb\+\_\+90}} = \mbox{\hyperlink{create__solve__matrices_8m_af86938b9aa98f6e81f2e88260d6ad115}{L\+\_\+tri\+\_\+90}}\texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_a77ffef809975894d431b42109ee8c1e7}{x\+\_\+90}}
+\item 
+Create \mbox{\hyperlink{create__solve__matrices_8m_a98e96b4ef3f571259998593b3d765155}{Matrix}} and Inverse to test inverse preconditioner \mbox{\hyperlink{create__solve__matrices_8m_aea2a53e05719ab605bd08d7360beabf5}{A\+\_\+inv\+\_\+test}} = generate\+\_\+well\+\_\+cond\+\_\+rand\+\_\+matrix(45, 10)
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_af237c5666688e55dc6f2ae2653984349}{Asqr\+\_\+inv\+\_\+test}} = \mbox{\hyperlink{create__solve__matrices_8m_aea2a53e05719ab605bd08d7360beabf5}{A\+\_\+inv\+\_\+test}}\texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_aea2a53e05719ab605bd08d7360beabf5}{A\+\_\+inv\+\_\+test}}
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_ad611d7eb93997c4fd20a7d05417d0748}{Ainv\+\_\+inv\+\_\+test}} = \mbox{\hyperlink{create__solve__matrices_8m_a0f9c420ac4d16d33df0dd14acd8529d2}{inv}}(\mbox{\hyperlink{create__solve__matrices_8m_aea2a53e05719ab605bd08d7360beabf5}{A\+\_\+inv\+\_\+test}})
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_ae3b1363861525c6856ddf53922941969}{b\+\_\+inv\+\_\+test}} = \mbox{\hyperlink{create__solve__matrices_8m_adadea81f70951450b2e9f06af712569f}{randn}}(45, 1)
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_acefe99ac397314d83cf7839941239069}{ilu\+\_\+A}} = generate\+\_\+well\+\_\+cond\+\_\+rand\+\_\+matrix(\mbox{\hyperlink{create__solve__matrices_8m_ab783ba1c052d77a440f16906e4afb023}{ilu\+\_\+n}}, 10)
+\item 
+options \mbox{\hyperlink{create__solve__matrices_8m_a5ae5cead668983598a035f7353c715cd}{type}} = "{}ilutp"{}
+\item 
+options \mbox{\hyperlink{create__solve__matrices_8m_ab25b2c0e3b2f3e6ae272c83f8001ddac}{droptol}} = 0
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a912971ddf4afcd00ad442914c8cf03e8}{ilu\+\_\+sparse\+\_\+A}} = generate\+\_\+well\+\_\+cond\+\_\+sparse\+\_\+rand\+\_\+matrix(\mbox{\hyperlink{create__solve__matrices_8m_ab783ba1c052d77a440f16906e4afb023}{ilu\+\_\+n}}, 5)
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a0f069227489ad5ff8305f96f8499e6b2}{function}} \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a1aabac6d068eef6a7bad3fdf50a05cc8}{d}} = (d+diag\+\_\+coeff\+\_\+offset\texorpdfstring{$\ast$}{*}d./abs(d))
+\item 
+end \mbox{\hyperlink{create__solve__matrices_8m_a0f069227489ad5ff8305f96f8499e6b2}{function}} \mbox{[}\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}, \mbox{\hyperlink{create__solve__matrices_8m_a0f44e457fae26e14bb4ac1ebb3a75dad}{b}}\mbox{]}
+\item 
+Add on \mbox{\hyperlink{benchmark_8cpp_a0ddf1224851353fc92bfbff6f499fa97}{main}} diagonal \mbox{\hyperlink{create__solve__matrices_8m_aca3da37e34a2e14095d9b885807de89d}{D}} = 4\texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_af5f71163c619daf69d229316f9c45545}{ones}}(n\texorpdfstring{$^\wedge$}{\string^}2, 1)
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a7141b76dab2e4a58c7a37f6c45dada6d}{low\+\_\+D}} = repmat(low\+\_\+D, n-\/1, 1)
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_ad0d158f0de5e7206b212fc04af4b5a69}{high\+\_\+D}} = repmat(high\+\_\+D, n-\/1, 1)
+\item 
+Calculate h \texorpdfstring{$\ast$}{*}f as \mbox{\hyperlink{create__solve__matrices_8m_a0f44e457fae26e14bb4ac1ebb3a75dad}{b}} \mbox{[}X, Y\mbox{]} = meshgrid(0\+:h\+:1, 0\+:h\+:1)
+\item 
+\mbox{\hyperlink{create__solve__matrices_8m_a6277e2a7446059985dc9bcf0a4ac1a8f}{u}} = \mbox{\hyperlink{create__solve__matrices_8m_a391214706f3ac1bcd2ff251f18ce3f78}{sin}}(pi\texorpdfstring{$\ast$}{*}X).\texorpdfstring{$\ast$}{*}cos(pi\texorpdfstring{$\ast$}{*}Y)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{create__solve__matrices_8m_ab610cd553341d462f582d362dff7f83d}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!b@{b}}
+\index{b@{b}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{b()}{b()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_ab610cd553341d462f582d362dff7f83d} 
+b (\begin{DoxyParamCaption}\item[{1\+:n}]{}{, }\item[{1}]{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+\Hypertarget{create__solve__matrices_8m_acc2c81a9a7ec6b42d582d4ada3225973}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!b@{b}}
+\index{b@{b}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{b()}{b()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_acc2c81a9a7ec6b42d582d4ada3225973} 
+b (\begin{DoxyParamCaption}\item[{1\+:n}]{}{, }\item[{n}]{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+\Hypertarget{create__solve__matrices_8m_a87f7a8b5a7460ff0b0adb064a7310c5a}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!C@{C}}
+\index{C@{C}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{C()}{C()}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a87f7a8b5a7460ff0b0adb064a7310c5a} 
+C (\begin{DoxyParamCaption}\item[{1\+:2 \texorpdfstring{$\ast$}{*}}]{n}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+\Hypertarget{create__solve__matrices_8m_a82503893f4ad52de13cc027026f7e5d9}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!D@{D}}
+\index{D@{D}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{D()}{D()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a82503893f4ad52de13cc027026f7e5d9} 
+D (\begin{DoxyParamCaption}\item[{1\+:n}]{}{, }\item[{1}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a537a79a38660c784946fff861b2bd493}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!D@{D}}
+\index{D@{D}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{D()}{D()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a537a79a38660c784946fff861b2bd493} 
+D (\begin{DoxyParamCaption}\item[{n\texorpdfstring{$^\wedge$}{\string^}2-\/n+1\+:n\texorpdfstring{$^\wedge$}{\string^}}]{2}{, }\item[{1}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a118cebd470f8248543425a8d103c652a}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!diag@{diag}}
+\index{diag@{diag}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{diag()}{diag()}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a118cebd470f8248543425a8d103c652a} 
+abs(\mbox{\hyperlink{create__solve__matrices_8m_adadea81f70951450b2e9f06af712569f}{randn}}(10, 1)+10) diag (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+\Hypertarget{create__solve__matrices_8m_a7476a923793b3b567ff50effd4c6ea1c}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!E@{E}}
+\index{E@{E}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{E()}{E()}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a7476a923793b3b567ff50effd4c6ea1c} 
+E (\begin{DoxyParamCaption}\item[{n\texorpdfstring{$^\wedge$}{\string^}2-\/2 \texorpdfstring{$\ast$}{*}n+1\+:n\texorpdfstring{$^\wedge$}{\string^}}]{2}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+\Hypertarget{create__solve__matrices_8m_a329626dffc42c84371831246a2ddac71}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!e@{e}}
+\index{e@{e}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{e()}{e()}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a329626dffc42c84371831246a2ddac71} 
+id e (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+\Hypertarget{create__solve__matrices_8m_a6acee412387b15257995966a0da3df8b}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!fprintf@{fprintf}}
+\index{fprintf@{fprintf}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{fprintf()}{fprintf()}\hspace{0.1cm}{\footnotesize\ttfamily [1/32]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a6acee412387b15257995966a0da3df8b} 
+fprintf (\begin{DoxyParamCaption}\item[{"{}5x5 Toy Mat Condition Number A\+: \%0.\+5g\textbackslash{}n"{}}]{}{, }\item[{cond(A\+\_\+5\+\_\+toy)}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_afef1f283e717751a2742088b5aa70399}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!fprintf@{fprintf}}
+\index{fprintf@{fprintf}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{fprintf()}{fprintf()}\hspace{0.1cm}{\footnotesize\ttfamily [2/32]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_afef1f283e717751a2742088b5aa70399} 
+fprintf (\begin{DoxyParamCaption}\item[{"{}ILU error 0\+: \%g\textbackslash{}n"{}}]{}{, }\item[{norm(full(ilu\+\_\+\+L\+\_\+0 \texorpdfstring{$\ast$}{*}ilu\+\_\+\+U\+\_\+0-\/\mbox{\hyperlink{create__solve__matrices_8m_a912971ddf4afcd00ad442914c8cf03e8}{ilu\+\_\+sparse\+\_\+A}}))}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a78bb7879ea5fda3e0d8c10a9404b9200}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!fprintf@{fprintf}}
+\index{fprintf@{fprintf}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{fprintf()}{fprintf()}\hspace{0.1cm}{\footnotesize\ttfamily [3/32]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a78bb7879ea5fda3e0d8c10a9404b9200} 
+fprintf (\begin{DoxyParamCaption}\item[{"{}ILU error 1\+: \%g\textbackslash{}n"{}}]{}{, }\item[{norm(full(ilu\+\_\+\+L\+\_\+1 \texorpdfstring{$\ast$}{*}ilu\+\_\+\+U\+\_\+1-\/\mbox{\hyperlink{create__solve__matrices_8m_a912971ddf4afcd00ad442914c8cf03e8}{ilu\+\_\+sparse\+\_\+A}}))}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a3f3c0977c1ff2be0c4e9c01e1ee105b7}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!fprintf@{fprintf}}
+\index{fprintf@{fprintf}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{fprintf()}{fprintf()}\hspace{0.1cm}{\footnotesize\ttfamily [4/32]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a3f3c0977c1ff2be0c4e9c01e1ee105b7} 
+fprintf (\begin{DoxyParamCaption}\item[{"{}ILU error 2\+: \%g\textbackslash{}n"{}}]{}{, }\item[{norm(full(ilu\+\_\+\+L\+\_\+2 \texorpdfstring{$\ast$}{*}ilu\+\_\+\+U\+\_\+2-\/\mbox{\hyperlink{create__solve__matrices_8m_a912971ddf4afcd00ad442914c8cf03e8}{ilu\+\_\+sparse\+\_\+A}}))}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a5675307b680c8dfd091694c18d37528f}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!fprintf@{fprintf}}
+\index{fprintf@{fprintf}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{fprintf()}{fprintf()}\hspace{0.1cm}{\footnotesize\ttfamily [5/32]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a5675307b680c8dfd091694c18d37528f} 
+fprintf (\begin{DoxyParamCaption}\item[{"{}ILU error 3\+: \%g\textbackslash{}n"{}}]{}{, }\item[{norm(full(ilu\+\_\+\+L\+\_\+3 \texorpdfstring{$\ast$}{*}ilu\+\_\+\+U\+\_\+3-\/\mbox{\hyperlink{create__solve__matrices_8m_a912971ddf4afcd00ad442914c8cf03e8}{ilu\+\_\+sparse\+\_\+A}}))}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_aefe73c923b63f1a3179b023522303f76}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!fprintf@{fprintf}}
+\index{fprintf@{fprintf}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{fprintf()}{fprintf()}\hspace{0.1cm}{\footnotesize\ttfamily [6/32]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_aefe73c923b63f1a3179b023522303f76} 
+fprintf (\begin{DoxyParamCaption}\item[{"{}ILU error 4\+: \%g\textbackslash{}n"{}}]{}{, }\item[{norm(full(ilu\+\_\+\+L\+\_\+4 \texorpdfstring{$\ast$}{*}ilu\+\_\+\+U\+\_\+4-\/\mbox{\hyperlink{create__solve__matrices_8m_a912971ddf4afcd00ad442914c8cf03e8}{ilu\+\_\+sparse\+\_\+A}}))}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a0a270c130022b2cfa905df100c69ec72}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!fprintf@{fprintf}}
+\index{fprintf@{fprintf}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{fprintf()}{fprintf()}\hspace{0.1cm}{\footnotesize\ttfamily [7/32]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a0a270c130022b2cfa905df100c69ec72} 
+fprintf (\begin{DoxyParamCaption}\item[{"{}ILU Test Condition Number Dense A\+: \%g\textbackslash{}n"{}}]{}{, }\item[{condest(\mbox{\hyperlink{create__solve__matrices_8m_acefe99ac397314d83cf7839941239069}{ilu\+\_\+A}})}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_aa0a1375820ffa2e2a4ee1038425afe95}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!fprintf@{fprintf}}
+\index{fprintf@{fprintf}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{fprintf()}{fprintf()}\hspace{0.1cm}{\footnotesize\ttfamily [8/32]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_aa0a1375820ffa2e2a4ee1038425afe95} 
+fprintf (\begin{DoxyParamCaption}\item[{"{}ILU Test Condition Number Dense L\+: \%g\textbackslash{}n"{}}]{}{, }\item[{condest(ilu\+\_\+L)}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a3fb99ca85c0cb86e9042d3771479f5a8}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!fprintf@{fprintf}}
+\index{fprintf@{fprintf}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{fprintf()}{fprintf()}\hspace{0.1cm}{\footnotesize\ttfamily [9/32]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a3fb99ca85c0cb86e9042d3771479f5a8} 
+fprintf (\begin{DoxyParamCaption}\item[{"{}ILU Test Condition Number Dense U\+: \%g\textbackslash{}n"{}}]{}{, }\item[{condest(ilu\+\_\+U)}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a907d02e5e476e0e2932d610e65cb7ff7}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!fprintf@{fprintf}}
+\index{fprintf@{fprintf}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{fprintf()}{fprintf()}\hspace{0.1cm}{\footnotesize\ttfamily [10/32]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a907d02e5e476e0e2932d610e65cb7ff7} 
+fprintf (\begin{DoxyParamCaption}\item[{"{}ILU Test Condition Number Sparse A\+: \%g\textbackslash{}n"{}}]{}{, }\item[{condest(\mbox{\hyperlink{create__solve__matrices_8m_a912971ddf4afcd00ad442914c8cf03e8}{ilu\+\_\+sparse\+\_\+A}})}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_abcd502fbf4e36c4e23986e70113e0303}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!fprintf@{fprintf}}
+\index{fprintf@{fprintf}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{fprintf()}{fprintf()}\hspace{0.1cm}{\footnotesize\ttfamily [11/32]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_abcd502fbf4e36c4e23986e70113e0303} 
+fprintf (\begin{DoxyParamCaption}\item[{"{}ILU Test Condition Number Sparse L\+: \%g\textbackslash{}n"{}}]{}{, }\item[{condest(ilu\+\_\+sparse\+\_\+L)}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a77d40692d9b328b6c1f027cbb938a3df}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!fprintf@{fprintf}}
+\index{fprintf@{fprintf}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{fprintf()}{fprintf()}\hspace{0.1cm}{\footnotesize\ttfamily [12/32]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a77d40692d9b328b6c1f027cbb938a3df} 
+fprintf (\begin{DoxyParamCaption}\item[{"{}ILU Test Condition Number Sparse Pivot L\+: \%g\textbackslash{}n"{}}]{}{, }\item[{condest(ilu\+\_\+sparse\+\_\+\+L\+\_\+pivot)}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a501adf3254366b77264b4c5dee9c44dc}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!fprintf@{fprintf}}
+\index{fprintf@{fprintf}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{fprintf()}{fprintf()}\hspace{0.1cm}{\footnotesize\ttfamily [13/32]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a501adf3254366b77264b4c5dee9c44dc} 
+fprintf (\begin{DoxyParamCaption}\item[{"{}ILU Test Condition Number Sparse Pivot U\+: \%g\textbackslash{}n"{}}]{}{, }\item[{condest(ilu\+\_\+sparse\+\_\+\+U\+\_\+pivot)}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_acc2acf3341dea0688841c2264bdbebf4}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!fprintf@{fprintf}}
+\index{fprintf@{fprintf}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{fprintf()}{fprintf()}\hspace{0.1cm}{\footnotesize\ttfamily [14/32]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_acc2acf3341dea0688841c2264bdbebf4} 
+fprintf (\begin{DoxyParamCaption}\item[{"{}ILU Test Condition Number Sparse U\+: \%g\textbackslash{}n"{}}]{}{, }\item[{condest(ilu\+\_\+sparse\+\_\+U)}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a9078a26772727d8371b02d3bceeaf676}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!fprintf@{fprintf}}
+\index{fprintf@{fprintf}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{fprintf()}{fprintf()}\hspace{0.1cm}{\footnotesize\ttfamily [15/32]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a9078a26772727d8371b02d3bceeaf676} 
+fprintf (\begin{DoxyParamCaption}\item[{"{}Precond Saddle Condition Number A\+: \%0.\+5g\textbackslash{}n"{}}]{}{, }\item[{cond(\mbox{\hyperlink{create__solve__matrices_8m_aee722c574c82299edcccf5e983b141d1}{A\+\_\+3eigs}})}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a5e9e32ad46a3070d6f4fa5c7e9e6b0f7}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!fprintf@{fprintf}}
+\index{fprintf@{fprintf}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{fprintf()}{fprintf()}\hspace{0.1cm}{\footnotesize\ttfamily [16/32]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a5e9e32ad46a3070d6f4fa5c7e9e6b0f7} 
+fprintf (\begin{DoxyParamCaption}\item[{"{}Saddle Condition Number A\+: \%0.\+5g\textbackslash{}n"{}}]{}{, }\item[{cond(\mbox{\hyperlink{create__solve__matrices_8m_afb0b31d116785ef6c93fc5530735192f}{saddle}})}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a944bb40c5b92ee026301f014f1f5c4f0}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!fprintf@{fprintf}}
+\index{fprintf@{fprintf}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{fprintf()}{fprintf()}\hspace{0.1cm}{\footnotesize\ttfamily [17/32]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a944bb40c5b92ee026301f014f1f5c4f0} 
+fprintf (\begin{DoxyParamCaption}\item[{"{}Slow 20x20 Condition Number A\+: \%0.\+5g\textbackslash{}n"{}}]{}{, }\item[{cond(\mbox{\hyperlink{create__solve__matrices_8m_aef4f41d905762b7f8d5ef4c3a134a43b}{A\+\_\+20\+\_\+rand}})}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_ac7baee1f25519fe7e9c382b9ed0d9c9d}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!fprintf@{fprintf}}
+\index{fprintf@{fprintf}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{fprintf()}{fprintf()}\hspace{0.1cm}{\footnotesize\ttfamily [18/32]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_ac7baee1f25519fe7e9c382b9ed0d9c9d} 
+fprintf (\begin{DoxyParamCaption}\item[{"{}Triag. Solve Test Condition Number A\+: \%0.\+5g\textbackslash{}n"{}}]{}{, }\item[{cond(\mbox{\hyperlink{create__solve__matrices_8m_ace9a237e5b9f0eb7b0b823cede953e56}{A\+\_\+2\+\_\+temp}})}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a52adc1b3258c9d595a3997b7329bc723}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!fprintf@{fprintf}}
+\index{fprintf@{fprintf}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{fprintf()}{fprintf()}\hspace{0.1cm}{\footnotesize\ttfamily [19/32]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a52adc1b3258c9d595a3997b7329bc723} 
+fprintf (\begin{DoxyParamCaption}\item[{"{}Triag. Solve Test Condition Number L\+: \%0.\+5g\textbackslash{}n"{}}]{}{, }\item[{cond(\mbox{\hyperlink{create__solve__matrices_8m_af86938b9aa98f6e81f2e88260d6ad115}{L\+\_\+tri\+\_\+90}})}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a1de5cc220ef744a92f92ed69a93817c1}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!fprintf@{fprintf}}
+\index{fprintf@{fprintf}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{fprintf()}{fprintf()}\hspace{0.1cm}{\footnotesize\ttfamily [20/32]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a1de5cc220ef744a92f92ed69a93817c1} 
+fprintf (\begin{DoxyParamCaption}\item[{"{}Triag. Solve Test Condition Number U\+: \%0.\+5g\textbackslash{}n"{}}]{}{, }\item[{cond(\mbox{\hyperlink{create__solve__matrices_8m_adf905597140d076f7158688a575824dd}{U\+\_\+tri\+\_\+90}})}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a0f0902e4cc8325b768dce7a1dc376273}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!fprintf@{fprintf}}
+\index{fprintf@{fprintf}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{fprintf()}{fprintf()}\hspace{0.1cm}{\footnotesize\ttfamily [21/32]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a0f0902e4cc8325b768dce7a1dc376273} 
+fprintf (\begin{DoxyParamCaption}\item[{... "{}Conv-\/Diff 1024x1024 Condition Number A\+: \%0.\+5g\textbackslash{}n"{}}]{}{, }\item[{... condest(A\+\_\+convdiff1024)}]{...}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a2c133f5347b9e1b8adf22aaade894f9d}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!fprintf@{fprintf}}
+\index{fprintf@{fprintf}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{fprintf()}{fprintf()}\hspace{0.1cm}{\footnotesize\ttfamily [22/32]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a2c133f5347b9e1b8adf22aaade894f9d} 
+fprintf (\begin{DoxyParamCaption}\item[{... "{}Conv-\/Diff 256x256 Condition Number A\+: \%0.\+5g\textbackslash{}n"{}}]{}{, }\item[{... condest(A\+\_\+convdiff256)}]{...}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a5521680fdfe0e326c10a14e160492244}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!fprintf@{fprintf}}
+\index{fprintf@{fprintf}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{fprintf()}{fprintf()}\hspace{0.1cm}{\footnotesize\ttfamily [23/32]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a5521680fdfe0e326c10a14e160492244} 
+fprintf (\begin{DoxyParamCaption}\item[{... "{}Conv-\/Diff 64x64 Condition Number A\+: \%0.\+5g\textbackslash{}n"{}}]{}{, }\item[{... condest(A\+\_\+convdiff64)}]{...}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a3e0e7d3e0611967aace7cacd06067b17}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!fprintf@{fprintf}}
+\index{fprintf@{fprintf}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{fprintf()}{fprintf()}\hspace{0.1cm}{\footnotesize\ttfamily [24/32]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a3e0e7d3e0611967aace7cacd06067b17} 
+fprintf (\begin{DoxyParamCaption}\item[{... "{}GMRES QR Triag. Solve Test Condition Number A\+: \%0.\+5g\textbackslash{}n"{}}]{}{, }\item[{... cond(A\+\_\+7\+\_\+backsub)}]{...}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a0427d21b345f713e0f1c61880122bc98}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!fprintf@{fprintf}}
+\index{fprintf@{fprintf}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{fprintf()}{fprintf()}\hspace{0.1cm}{\footnotesize\ttfamily [25/32]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a0427d21b345f713e0f1c61880122bc98} 
+fprintf (\begin{DoxyParamCaption}\item[{... "{}GMRES QR Triag. Solve Test Condition Number R\+: \%0.\+5g\textbackslash{}n"{}}]{}{, }\item[{... cond(\mbox{\hyperlink{create__solve__matrices_8m_a35d02e87afe69478b76446a7f7ebe571}{R\+\_\+8\+\_\+backsub}}(1\+:7, 1\+:7))}]{...}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a373d53e0902c354bc1cf2fc1c0e33499}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!fprintf@{fprintf}}
+\index{fprintf@{fprintf}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{fprintf()}{fprintf()}\hspace{0.1cm}{\footnotesize\ttfamily [26/32]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a373d53e0902c354bc1cf2fc1c0e33499} 
+fprintf (\begin{DoxyParamCaption}\item[{... "{}ILU Test Condition Number Dense Pivot L\+: \%g\textbackslash{}n"{}}]{}{, }\item[{... condest(ilu\+\_\+\+L\+\_\+pivot)}]{...}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a0c6876b79d1110a01cef382499116557}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!fprintf@{fprintf}}
+\index{fprintf@{fprintf}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{fprintf()}{fprintf()}\hspace{0.1cm}{\footnotesize\ttfamily [27/32]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a0c6876b79d1110a01cef382499116557} 
+fprintf (\begin{DoxyParamCaption}\item[{... "{}ILU Test Condition Number Dense Pivot U\+: \%g\textbackslash{}n"{}}]{}{, }\item[{... condest(ilu\+\_\+\+U\+\_\+pivot)}]{...}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a3bbc976cf06396ecf8cd0901894ef0cc}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!fprintf@{fprintf}}
+\index{fprintf@{fprintf}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{fprintf()}{fprintf()}\hspace{0.1cm}{\footnotesize\ttfamily [28/32]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a3bbc976cf06396ecf8cd0901894ef0cc} 
+fprintf (\begin{DoxyParamCaption}\item[{... "{}Precond Test Condition Number A\+: \%0.\+5g\textbackslash{}n"{}}]{}{, }\item[{... cond(\mbox{\hyperlink{create__solve__matrices_8m_aea2a53e05719ab605bd08d7360beabf5}{A\+\_\+inv\+\_\+test}})}]{...}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_afc95fb4c05c569959dca74484b00c8f5}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!fprintf@{fprintf}}
+\index{fprintf@{fprintf}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{fprintf()}{fprintf()}\hspace{0.1cm}{\footnotesize\ttfamily [29/32]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_afc95fb4c05c569959dca74484b00c8f5} 
+fprintf (\begin{DoxyParamCaption}\item[{... "{}Precond Test Condition Number \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}\texorpdfstring{$^\wedge$}{\string^}(-\/1)\texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}\texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}\texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}\texorpdfstring{$^\wedge$}{\string^}(-\/1)\+: \%0.\+5g\textbackslash{}n"{}}]{}{, }\item[{... cond(\mbox{\hyperlink{create__solve__matrices_8m_ad611d7eb93997c4fd20a7d05417d0748}{Ainv\+\_\+inv\+\_\+test}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_aea2a53e05719ab605bd08d7360beabf5}{A\+\_\+inv\+\_\+test}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_aea2a53e05719ab605bd08d7360beabf5}{A\+\_\+inv\+\_\+test}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_ad611d7eb93997c4fd20a7d05417d0748}{Ainv\+\_\+inv\+\_\+test}})}]{...}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_acbd58841b150cb85bdfc66969cea4fef}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!fprintf@{fprintf}}
+\index{fprintf@{fprintf}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{fprintf()}{fprintf()}\hspace{0.1cm}{\footnotesize\ttfamily [30/32]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_acbd58841b150cb85bdfc66969cea4fef} 
+fprintf (\begin{DoxyParamCaption}\item[{... "{}Precond Test Condition Number \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}\texorpdfstring{$^\wedge$}{\string^}(-\/1)\texorpdfstring{$\ast$}{*}A\+: \%0.\+5g\textbackslash{}n"{}}]{}{, }\item[{... cond(\mbox{\hyperlink{create__solve__matrices_8m_ad611d7eb93997c4fd20a7d05417d0748}{Ainv\+\_\+inv\+\_\+test}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_aea2a53e05719ab605bd08d7360beabf5}{A\+\_\+inv\+\_\+test}})}]{...}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a316c3314f9fb90205fc18a7ad3f83315}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!fprintf@{fprintf}}
+\index{fprintf@{fprintf}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{fprintf()}{fprintf()}\hspace{0.1cm}{\footnotesize\ttfamily [31/32]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a316c3314f9fb90205fc18a7ad3f83315} 
+fprintf (\begin{DoxyParamCaption}\item[{... "{}Precond Test Condition Number \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}\texorpdfstring{$^\wedge$}{\string^}(-\/1)\+: \%0.\+5g\textbackslash{}n"{}}]{}{, }\item[{... cond(\mbox{\hyperlink{create__solve__matrices_8m_ad611d7eb93997c4fd20a7d05417d0748}{Ainv\+\_\+inv\+\_\+test}})}]{...}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a0d54426f53eeecd586ad94758a3713b3}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!fprintf@{fprintf}}
+\index{fprintf@{fprintf}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{fprintf()}{fprintf()}\hspace{0.1cm}{\footnotesize\ttfamily [32/32]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a0d54426f53eeecd586ad94758a3713b3} 
+fprintf (\begin{DoxyParamCaption}\item[{... "{}Precond Test Condition Number \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}\texorpdfstring{$^\wedge$}{\string^}2\+: \%0.\+5g\textbackslash{}n"{}}]{}{, }\item[{... cond(\mbox{\hyperlink{create__solve__matrices_8m_af237c5666688e55dc6f2ae2653984349}{Asqr\+\_\+inv\+\_\+test}})}]{...}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a8fc98a6d1408dc0ae561fed9a30aa7e9}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!high\_D@{high\_D}}
+\index{high\_D@{high\_D}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{high\_D()}{high\_D()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a8fc98a6d1408dc0ae561fed9a30aa7e9} 
+high\+\_\+D (\begin{DoxyParamCaption}\item[{1}]{}{, }\item[{1}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_ab770cc0600a2e9e1cf18e01a3469107f}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!high\_D@{high\_D}}
+\index{high\_D@{high\_D}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{high\_D()}{high\_D()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_ab770cc0600a2e9e1cf18e01a3469107f} 
+high\+\_\+D (\begin{DoxyParamCaption}\item[{n}]{}{, }\item[{1}]{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+\Hypertarget{create__solve__matrices_8m_abe18ea9eb2356f80fd956e8cf5fc412f}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!high\_D@{high\_D}}
+\index{high\_D@{high\_D}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{high\_D()}{high\_D()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_abe18ea9eb2356f80fd956e8cf5fc412f} 
+high\+\_\+D (\begin{DoxyParamCaption}\item[{n\texorpdfstring{$^\wedge$}{\string^}2-\/n+1\+:n\texorpdfstring{$^\wedge$}{\string^}}]{2}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+\Hypertarget{create__solve__matrices_8m_ab783ba1c052d77a440f16906e4afb023}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!ilu\_n@{ilu\_n}}
+\index{ilu\_n@{ilu\_n}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{ilu\_n()}{ilu\_n()}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_ab783ba1c052d77a440f16906e4afb023} 
+id ilu\+\_\+n (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+\Hypertarget{create__solve__matrices_8m_a0f9c420ac4d16d33df0dd14acd8529d2}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!inv@{inv}}
+\index{inv@{inv}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{inv()}{inv()}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a0f9c420ac4d16d33df0dd14acd8529d2} 
+\mbox{\hyperlink{create__solve__matrices_8m_a53016ef7e8a9f7cf9afd9c59e5e052e6}{B\+\_\+saddle}} \texorpdfstring{$\ast$}{*} inv (\begin{DoxyParamCaption}\item[{A\+\_\+saddle}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_aeb4d2534cd3faf5c34f1f2c4584f2845}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!low\_D@{low\_D}}
+\index{low\_D@{low\_D}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{low\_D()}{low\_D()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_aeb4d2534cd3faf5c34f1f2c4584f2845} 
+low\+\_\+D (\begin{DoxyParamCaption}\item[{1}]{}{, }\item[{1}]{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+\Hypertarget{create__solve__matrices_8m_a9c033687ab290e1da982045848a3b025}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!low\_D@{low\_D}}
+\index{low\_D@{low\_D}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{low\_D()}{low\_D()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a9c033687ab290e1da982045848a3b025} 
+low\+\_\+D (\begin{DoxyParamCaption}\item[{n}]{}{, }\item[{1}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a30ce4d5dca1220138776977501e9f7a8}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!low\_D@{low\_D}}
+\index{low\_D@{low\_D}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{low\_D()}{low\_D()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a30ce4d5dca1220138776977501e9f7a8} 
+low\+\_\+D (\begin{DoxyParamCaption}\item[{n\texorpdfstring{$^\wedge$}{\string^}2-\/n\+:n\texorpdfstring{$^\wedge$}{\string^}}]{2}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+\Hypertarget{create__solve__matrices_8m_a98e96b4ef3f571259998593b3d765155}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!Matrix@{Matrix}}
+\index{Matrix@{Matrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{Matrix()}{Matrix()}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a98e96b4ef3f571259998593b3d765155} 
+Specific \mbox{\hyperlink{create__solve__matrices_8m_a0f069227489ad5ff8305f96f8499e6b2}{function}} test matrices Create Toy Matrix (\begin{DoxyParamCaption}\item[{Well-\/conditioned \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}} for testing but that \% does not converge before 5}]{iterations}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_af5f71163c619daf69d229316f9c45545}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!ones@{ones}}
+\index{ones@{ones}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{ones()}{ones()}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_af5f71163c619daf69d229316f9c45545} 
+n n ones (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+\Hypertarget{create__solve__matrices_8m_adadea81f70951450b2e9f06af712569f}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!randn@{randn}}
+\index{randn@{randn}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{randn()}{randn()}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_adadea81f70951450b2e9f06af712569f} 
+n, 1 randn (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+\Hypertarget{create__solve__matrices_8m_a5aa85ea8dae99029c44647d230da54cd}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!rho\_e1@{rho\_e1}}
+\index{rho\_e1@{rho\_e1}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{rho\_e1()}{rho\_e1()}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a5aa85ea8dae99029c44647d230da54cd} 
+rho\+\_\+e1 (\begin{DoxyParamCaption}\item[{1}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a391214706f3ac1bcd2ff251f18ce3f78}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!sin@{sin}}
+\index{sin@{sin}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{sin()}{sin()}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a391214706f3ac1bcd2ff251f18ce3f78} 
+Create convection diffusion with rhs sin (\begin{DoxyParamCaption}\item[{x}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_af56b53f9cec763b615b692a7c59bb52d}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!sparse@{sparse}}
+\index{sparse@{sparse}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{sparse()}{sparse()}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_af56b53f9cec763b615b692a7c59bb52d} 
+n\texorpdfstring{$^\wedge$}{\string^}2, n\texorpdfstring{$^\wedge$}{\string^}2 sparse (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+\Hypertarget{create__solve__matrices_8m_a4fa51d14d24a680d9c1f1930d51fc66f}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!specifically@{specifically}}
+\index{specifically@{specifically}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{specifically()}{specifically()}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a4fa51d14d24a680d9c1f1930d51fc66f} 
+Create backsubstitution test with matrices to test backsub in GMRES specifically (\begin{DoxyParamCaption}\item[{Well-\/conditioned \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}} for}]{testing}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a20de79ea4df4eb186eb720a5b3f758e6}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [1/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a20de79ea4df4eb186eb720a5b3f758e6} 
+writematrix (\begin{DoxyParamCaption}\item[{... }]{full}{A\+\_\+convdiff1024 \texorpdfstring{$\ast$}{*}\+A\+\_\+convdiff1024, }\item[{... "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}conv\+\_\+diff\+\_\+1024\+\_\+\+Asqr.\+csv"{}}]{...}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_ac8d8eff0e171ddec7611b8ea8d0df17d}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [2/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_ac8d8eff0e171ddec7611b8ea8d0df17d} 
+writematrix (\begin{DoxyParamCaption}\item[{... }]{full}{A\+\_\+convdiff256 \texorpdfstring{$\ast$}{*}\+A\+\_\+convdiff256, }\item[{... "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}conv\+\_\+diff\+\_\+256\+\_\+\+Asqr.\+csv"{}}]{...}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_ae9137b982c4d6ae8994701aac7e524e7}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [3/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_ae9137b982c4d6ae8994701aac7e524e7} 
+writematrix (\begin{DoxyParamCaption}\item[{... }]{full}{A\+\_\+convdiff64 \texorpdfstring{$\ast$}{*}\+A\+\_\+convdiff64, }\item[{... "{}solve\+\_\+matrices\textbackslash{}\textbackslash{}conv\+\_\+diff\+\_\+64\+\_\+\+Asqr.\+csv"{}}]{...}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a9b95492c86142ca8903ae88d366b57aa}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [4/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a9b95492c86142ca8903ae88d366b57aa} 
+writematrix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{create__solve__matrices_8m_aef4f41d905762b7f8d5ef4c3a134a43b}{A\+\_\+20\+\_\+rand}}}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}\+A\+\_\+20\+\_\+rand.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a4c6ca979b0a106c6a063ce60de2b473c}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [5/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a4c6ca979b0a106c6a063ce60de2b473c} 
+writematrix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{create__solve__matrices_8m_aee722c574c82299edcccf5e983b141d1}{A\+\_\+3eigs}}}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}\+A\+\_\+25\+\_\+3eigs.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a8b8596cbb439fbaf7b04e65d2ccc971d}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [6/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a8b8596cbb439fbaf7b04e65d2ccc971d} 
+writematrix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{create__solve__matrices_8m_ad15da9b2dbdcd1f1b21f809b0a5ec8d3}{A\+\_\+5\+\_\+easysoln}}}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}\+A\+\_\+5\+\_\+easysoln.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a40a61be0aa09254b3c8efc8536235019}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [7/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a40a61be0aa09254b3c8efc8536235019} 
+writematrix (\begin{DoxyParamCaption}\item[{A\+\_\+5\+\_\+toy}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}\+A\+\_\+5\+\_\+toy.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_adc09d7d56c7bb52455798f4a2a7c6e47}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [8/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_adc09d7d56c7bb52455798f4a2a7c6e47} 
+writematrix (\begin{DoxyParamCaption}\item[{A\+\_\+7\+\_\+backsub}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}\+A\+\_\+7\+\_\+dummy\+\_\+backsub.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a6f8b486dda82dd5d4bd409cf65e67168}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [9/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a6f8b486dda82dd5d4bd409cf65e67168} 
+writematrix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{create__solve__matrices_8m_aea2a53e05719ab605bd08d7360beabf5}{A\+\_\+inv\+\_\+test}}}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}\+A\+\_\+inv\+\_\+45.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a1e0e23d056b06cdf8eb81d20724c73ea}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [10/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a1e0e23d056b06cdf8eb81d20724c73ea} 
+writematrix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{create__solve__matrices_8m_ad611d7eb93997c4fd20a7d05417d0748}{Ainv\+\_\+inv\+\_\+test}}}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}\+Ainv\+\_\+inv\+\_\+45.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_ab938a20ea8619871ddcff1d2f61ded99}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [11/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_ab938a20ea8619871ddcff1d2f61ded99} 
+writematrix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{create__solve__matrices_8m_af237c5666688e55dc6f2ae2653984349}{Asqr\+\_\+inv\+\_\+test}}}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}\+Asqr\+\_\+inv\+\_\+45.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_ad5d933bc30b13aa6e1cd72cec2236486}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [12/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_ad5d933bc30b13aa6e1cd72cec2236486} 
+writematrix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{create__solve__matrices_8m_a0119ec3f9c75f997774b9ab27efbb90a}{b\+\_\+20\+\_\+rand}}}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}b\+\_\+20\+\_\+rand.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a81414a5d4befa0d1bf9b999110da4426}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [13/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a81414a5d4befa0d1bf9b999110da4426} 
+writematrix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{create__solve__matrices_8m_a862a1df43efaf4355d633596ca6f608d}{b\+\_\+3eigs}}}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}b\+\_\+25\+\_\+3eigs.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a11657473648d8575658154863a88b601}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [14/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a11657473648d8575658154863a88b601} 
+writematrix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{create__solve__matrices_8m_a481b7ca99ec79ebbc924834656dba44a}{b\+\_\+5\+\_\+easysoln}}}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}b\+\_\+5\+\_\+easysoln.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a81c8b6d118db50aa7d492efebd621ad8}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [15/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a81c8b6d118db50aa7d492efebd621ad8} 
+writematrix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{create__solve__matrices_8m_a58a6983b9d66587f90f6ff1b3dfe885b}{b\+\_\+5\+\_\+toy}}}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}b\+\_\+5\+\_\+toy.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a2db3587fc75e38369011445d3c6c7ee5}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [16/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a2db3587fc75e38369011445d3c6c7ee5} 
+writematrix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{create__solve__matrices_8m_a19137e175b2ed1f88f1bc81c3fc0673a}{b\+\_\+7\+\_\+backsub}}}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}b\+\_\+7\+\_\+dummy\+\_\+backsub.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_adbc2a969a2d142cfea2a8fa6622a0389}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [17/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_adbc2a969a2d142cfea2a8fa6622a0389} 
+writematrix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{create__solve__matrices_8m_ae3b1363861525c6856ddf53922941969}{b\+\_\+inv\+\_\+test}}}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}b\+\_\+inv\+\_\+45.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a0462604829d1a78023f7f34d7d40edfc}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [18/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a0462604829d1a78023f7f34d7d40edfc} 
+writematrix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{create__solve__matrices_8m_a5d2a954cd21bb50b549216e3b3fcb95a}{b\+\_\+saddle}}}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}b\+\_\+25\+\_\+saddle.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a73f1d62ab58888d36def16522705ee0f}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [19/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a73f1d62ab58888d36def16522705ee0f} 
+writematrix (\begin{DoxyParamCaption}\item[{full(A\+\_\+convdiff1024)}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}conv\+\_\+diff\+\_\+1024\+\_\+\+A.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a8da9082337b50bca7f49eada8ee9bc83}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [20/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a8da9082337b50bca7f49eada8ee9bc83} 
+writematrix (\begin{DoxyParamCaption}\item[{full(A\+\_\+convdiff256)}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}conv\+\_\+diff\+\_\+256\+\_\+\+A.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_abd65c00020088455d5abe04bf24ea7a4}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [21/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_abd65c00020088455d5abe04bf24ea7a4} 
+writematrix (\begin{DoxyParamCaption}\item[{full(A\+\_\+convdiff64)}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}conv\+\_\+diff\+\_\+64\+\_\+\+A.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_acc1974f2f59a83406398c89ec3d77de5}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [22/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_acc1974f2f59a83406398c89ec3d77de5} 
+writematrix (\begin{DoxyParamCaption}\item[{full(\mbox{\hyperlink{create__solve__matrices_8m_ad4e5a373ebb41e79d9c316e9d22bd2ab}{b\+\_\+convdiff1024}})}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}conv\+\_\+diff\+\_\+1024\+\_\+b.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_aae74a32daba573b5a9b7362030affd35}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [23/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_aae74a32daba573b5a9b7362030affd35} 
+writematrix (\begin{DoxyParamCaption}\item[{full(\mbox{\hyperlink{create__solve__matrices_8m_aa439a2abc3969d88f7db411c2c9fb241}{b\+\_\+convdiff256}})}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}conv\+\_\+diff\+\_\+256\+\_\+b.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_acd6693b338f413cb2be762849bb0c663}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [24/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_acd6693b338f413cb2be762849bb0c663} 
+writematrix (\begin{DoxyParamCaption}\item[{full(\mbox{\hyperlink{create__solve__matrices_8m_a2238761f54cf558ea17a1de67d35b37b}{b\+\_\+convdiff64}})}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}conv\+\_\+diff\+\_\+64\+\_\+b.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a6a6cb6ec8f04c1f0c69adf97f8b7d268}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [25/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a6a6cb6ec8f04c1f0c69adf97f8b7d268} 
+writematrix (\begin{DoxyParamCaption}\item[{full(ilu\+\_\+L)}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}ilu\+\_\+\+L.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a4b25a020d52bf673af19d08bc5cc40b9}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [26/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a4b25a020d52bf673af19d08bc5cc40b9} 
+writematrix (\begin{DoxyParamCaption}\item[{full(ilu\+\_\+\+L\+\_\+pivot)}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}ilu\+\_\+\+L\+\_\+pivot.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a457f03aabf14510533be9af884a415a8}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [27/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a457f03aabf14510533be9af884a415a8} 
+writematrix (\begin{DoxyParamCaption}\item[{full(ilu\+\_\+\+P\+\_\+pivot)}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}ilu\+\_\+\+P\+\_\+pivot.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a015814038fbc3dfa0df3c80a2dad9817}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [28/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a015814038fbc3dfa0df3c80a2dad9817} 
+writematrix (\begin{DoxyParamCaption}\item[{full(\mbox{\hyperlink{create__solve__matrices_8m_a912971ddf4afcd00ad442914c8cf03e8}{ilu\+\_\+sparse\+\_\+A}})}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}ilu\+\_\+sparse\+\_\+\+A.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a67a4adda529174da9497f73fac5ce3d0}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [29/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a67a4adda529174da9497f73fac5ce3d0} 
+writematrix (\begin{DoxyParamCaption}\item[{full(ilu\+\_\+sparse\+\_\+L)}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}ilu\+\_\+sparse\+\_\+\+L.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_acff723a790049db102f2882e72e000a6}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [30/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_acff723a790049db102f2882e72e000a6} 
+writematrix (\begin{DoxyParamCaption}\item[{full(ilu\+\_\+sparse\+\_\+\+L\+\_\+pivot)}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}ilu\+\_\+sparse\+\_\+\+L\+\_\+pivot.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a9d4dec3f40865e70ebe5db31b40debe7}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [31/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a9d4dec3f40865e70ebe5db31b40debe7} 
+writematrix (\begin{DoxyParamCaption}\item[{full(ilu\+\_\+sparse\+\_\+\+P\+\_\+pivot)}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}ilu\+\_\+sparse\+\_\+\+P\+\_\+pivot.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a488361c17f5e29cf36c1febd3323622c}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [32/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a488361c17f5e29cf36c1febd3323622c} 
+writematrix (\begin{DoxyParamCaption}\item[{full(ilu\+\_\+sparse\+\_\+U)}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}ilu\+\_\+sparse\+\_\+\+U.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a6683aabf225c618150b3fbe056bfec5a}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [33/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a6683aabf225c618150b3fbe056bfec5a} 
+writematrix (\begin{DoxyParamCaption}\item[{full(ilu\+\_\+sparse\+\_\+\+U\+\_\+pivot)}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}ilu\+\_\+sparse\+\_\+\+U\+\_\+pivot.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_aced5c6d57c12baab842fef2564e1479d}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [34/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_aced5c6d57c12baab842fef2564e1479d} 
+writematrix (\begin{DoxyParamCaption}\item[{full(ilu\+\_\+U)}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}ilu\+\_\+\+U.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a62a5bba2b497a19027717cd38df766f0}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [35/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a62a5bba2b497a19027717cd38df766f0} 
+writematrix (\begin{DoxyParamCaption}\item[{full(ilu\+\_\+\+U\+\_\+pivot)}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}ilu\+\_\+\+U\+\_\+pivot.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_aebbfe8ed979927a633bbf3b21757e531}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [36/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_aebbfe8ed979927a633bbf3b21757e531} 
+writematrix (\begin{DoxyParamCaption}\item[{full(\mbox{\hyperlink{create__solve__matrices_8m_a079ffd8ce3d576144f9e78b4c33d9c36}{x\+\_\+convdiff1024}})}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}conv\+\_\+diff\+\_\+1024\+\_\+x.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_ada428f710630cfe8c846c73cf37172c3}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [37/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_ada428f710630cfe8c846c73cf37172c3} 
+writematrix (\begin{DoxyParamCaption}\item[{full(\mbox{\hyperlink{create__solve__matrices_8m_ab9964a65d938ae9c5435d234cbfc2d1a}{x\+\_\+convdiff256}})}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}conv\+\_\+diff\+\_\+256\+\_\+x.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_ad69f4a3873771cc970e1bd150692d53e}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [38/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_ad69f4a3873771cc970e1bd150692d53e} 
+writematrix (\begin{DoxyParamCaption}\item[{full(\mbox{\hyperlink{create__solve__matrices_8m_a5d6f79fae7b8690b67c7b70668538bde}{x\+\_\+convdiff64}})}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}conv\+\_\+diff\+\_\+64\+\_\+x.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_acc1577cd16b3bd635957d1a52f121b05}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [39/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_acc1577cd16b3bd635957d1a52f121b05} 
+writematrix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{create__solve__matrices_8m_acefe99ac397314d83cf7839941239069}{ilu\+\_\+A}}}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}ilu\+\_\+\+A.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a3ba48a420b12d2fb6ab012d247d3c617}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [40/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a3ba48a420b12d2fb6ab012d247d3c617} 
+writematrix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{create__solve__matrices_8m_a3a916a9ef785eddd08b2f5bd7bb49676}{inv\+\_\+pre\+\_\+cond}}}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}\+A\+\_\+25\+\_\+invprecond\+\_\+saddle.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a275997b912d78e22624742a3ec08f2a9}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [41/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a275997b912d78e22624742a3ec08f2a9} 
+writematrix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{create__solve__matrices_8m_af86938b9aa98f6e81f2e88260d6ad115}{L\+\_\+tri\+\_\+90}}}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}\+L\+\_\+tri\+\_\+90.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_af842c8fdfba6e5fb91635145b4f9864c}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [42/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_af842c8fdfba6e5fb91635145b4f9864c} 
+writematrix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{create__solve__matrices_8m_a4cf3400b8fde7af67ec8bb9cd45ccc87}{Lb\+\_\+90}}}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}\+Lb\+\_\+tri\+\_\+90.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a72ea8d956035ab5ed71784c6d204c7a4}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [43/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a72ea8d956035ab5ed71784c6d204c7a4} 
+writematrix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{create__solve__matrices_8m_aef62c913ed13d1f68ee11e7b01fd6218}{Q\+\_\+8\+\_\+backsub}}}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}\+Q\+\_\+8\+\_\+backsub.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a7f60777918045ac8d659c26b6d930d45}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [44/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a7f60777918045ac8d659c26b6d930d45} 
+writematrix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{create__solve__matrices_8m_a35d02e87afe69478b76446a7f7ebe571}{R\+\_\+8\+\_\+backsub}}}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}\+R\+\_\+8\+\_\+backsub.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a8f316b518d5e75a56ab201796c0583d0}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [45/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a8f316b518d5e75a56ab201796c0583d0} 
+writematrix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{create__solve__matrices_8m_afb0b31d116785ef6c93fc5530735192f}{saddle}}}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}\+A\+\_\+25\+\_\+saddle.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_ab8bd5195e0cac37c7552127f0817f486}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [46/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_ab8bd5195e0cac37c7552127f0817f486} 
+writematrix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{create__solve__matrices_8m_adf905597140d076f7158688a575824dd}{U\+\_\+tri\+\_\+90}}}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}\+U\+\_\+tri\+\_\+90.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a99dc7896ed2792c57b790b93cf76e88d}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [47/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a99dc7896ed2792c57b790b93cf76e88d} 
+writematrix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{create__solve__matrices_8m_a84f3606d9b615febcb815f055b5b02b3}{Ub\+\_\+90}}}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}\+Ub\+\_\+tri\+\_\+90.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_aaf729c663b6f59a9f87070431c1ce5a4}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [48/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_aaf729c663b6f59a9f87070431c1ce5a4} 
+writematrix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{create__solve__matrices_8m_a35555c30538b98b701fb2c84ac2064a1}{x\+\_\+1}}}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}x\+\_\+1\+\_\+backsub.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a851fb9993223e015928b888928b3b8d9}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [49/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a851fb9993223e015928b888928b3b8d9} 
+writematrix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{create__solve__matrices_8m_a529780c7e18890757a3ddb0e33539b37}{x\+\_\+2}}}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}x\+\_\+2\+\_\+backsub.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_abd6e67417a159351c4c14ec3178078f7}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [50/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_abd6e67417a159351c4c14ec3178078f7} 
+writematrix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{create__solve__matrices_8m_a2acd3702cddf2b95963513ea3801e669}{x\+\_\+20\+\_\+rand}}}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}x\+\_\+20\+\_\+rand.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a3c2f46f7a2937f1fb4ac62b8bb0aa94f}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [51/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a3c2f46f7a2937f1fb4ac62b8bb0aa94f} 
+writematrix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{create__solve__matrices_8m_aff981b25c7a589e5b90db6bd700e40f8}{x\+\_\+3}}}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}x\+\_\+3\+\_\+backsub.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a49975007f6ff903375e2f03db5e015e0}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [52/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a49975007f6ff903375e2f03db5e015e0} 
+writematrix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{create__solve__matrices_8m_ae5e9149bfe32112d1f8a0f17a59ea870}{x\+\_\+3eigs}}}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}x\+\_\+25\+\_\+3eigs.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_aceeadf187da23c3ec73d437def24b06c}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [53/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_aceeadf187da23c3ec73d437def24b06c} 
+writematrix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{create__solve__matrices_8m_ab8f0cc7672627b664d721ea3a8c06ee4}{x\+\_\+4}}}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}x\+\_\+4\+\_\+backsub.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a6f9f2f2d85dece8efcfbd4465640b024}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [54/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a6f9f2f2d85dece8efcfbd4465640b024} 
+writematrix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{create__solve__matrices_8m_a7ff75d3e51c0dea7ea9a7265fb1071af}{x\+\_\+5}}}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}x\+\_\+5\+\_\+backsub.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a8f879d3b022819633c673adda4a4b748}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [55/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a8f879d3b022819633c673adda4a4b748} 
+writematrix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{create__solve__matrices_8m_a101cf2c31b0d57ee7ac1823df7016708}{x\+\_\+6}}}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}x\+\_\+6\+\_\+backsub.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a1c1727e2c7cd3ff33d56dc14082dde82}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [56/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a1c1727e2c7cd3ff33d56dc14082dde82} 
+writematrix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{create__solve__matrices_8m_a439cf51fce18c8a719c263adb0e4fea5}{x\+\_\+7}}}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}x\+\_\+7\+\_\+backsub.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_ad7ae4bbef35b1812eec341c38cb06176}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [57/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_ad7ae4bbef35b1812eec341c38cb06176} 
+writematrix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{create__solve__matrices_8m_a77ffef809975894d431b42109ee8c1e7}{x\+\_\+90}}}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}x\+\_\+tri\+\_\+90.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_ae6ad625612c156cb3f93659fbb0febaf}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}\hspace{0.1cm}{\footnotesize\ttfamily [58/58]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_ae6ad625612c156cb3f93659fbb0febaf} 
+writematrix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{create__solve__matrices_8m_a90ca253f197ba9f7452b8cc349324047}{x\+\_\+saddle}}}]{}{, }\item[{"{}solve\+\_\+matrices\textbackslash{}\textbackslash{}x\+\_\+25\+\_\+saddle.\+csv"{}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a6f4618ddc10f578911aa4c7614fc9b19}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!zeros@{zeros}}
+\index{zeros@{zeros}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{zeros()}{zeros()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a6f4618ddc10f578911aa4c7614fc9b19} 
+zeros (\begin{DoxyParamCaption}\item[{1}]{}{, }\item[{7}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a300b3cd0240777607fc795c4bd07c808}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!zeros@{zeros}}
+\index{zeros@{zeros}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{zeros()}{zeros()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a300b3cd0240777607fc795c4bd07c808} 
+zeros (\begin{DoxyParamCaption}\item[{2}]{}{, }\item[{10}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{create__solve__matrices_8m_a7dfb8acb8e054019937ef7d60038bc86}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!zeros@{zeros}}
+\index{zeros@{zeros}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{zeros()}{zeros()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a7dfb8acb8e054019937ef7d60038bc86} 
+zeros (\begin{DoxyParamCaption}\item[{2}]{}{, }\item[{2}]{}{}\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!A@{A}}
+\index{A@{A}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{A}{A}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e} 
+end \mbox{\hyperlink{create__solve__matrices_8m_a0f069227489ad5ff8305f96f8499e6b2}{function}} A}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ generate\_well\_cond\_rand\_matrix(n,\ diag\_coeff\_offset)}
+\DoxyCodeLine{\ \ \ \ \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}\ =\ \mbox{\hyperlink{create__solve__matrices_8m_adadea81f70951450b2e9f06af712569f}{randn}}(n,\ n)}
+
+\end{DoxyCode}
+\Hypertarget{create__solve__matrices_8m_aef4f41d905762b7f8d5ef4c3a134a43b}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!A\_20\_rand@{A\_20\_rand}}
+\index{A\_20\_rand@{A\_20\_rand}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{A\_20\_rand}{A\_20\_rand}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_aef4f41d905762b7f8d5ef4c3a134a43b} 
+Create \mbox{\hyperlink{create__solve__matrices_8m_a98e96b4ef3f571259998593b3d765155}{Matrix}} random which should converge slowest A\+\_\+20\+\_\+rand = \mbox{\hyperlink{create__solve__matrices_8m_adadea81f70951450b2e9f06af712569f}{randn}}(20, 20)}
+
+\Hypertarget{create__solve__matrices_8m_ace9a237e5b9f0eb7b0b823cede953e56}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!A\_2\_temp@{A\_2\_temp}}
+\index{A\_2\_temp@{A\_2\_temp}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{A\_2\_temp}{A\_2\_temp}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_ace9a237e5b9f0eb7b0b823cede953e56} 
+Create lower upper triangular to check substitution solve A\+\_\+2\+\_\+temp = generate\+\_\+well\+\_\+cond\+\_\+rand\+\_\+matrix(90, 15)}
+
+\Hypertarget{create__solve__matrices_8m_aee722c574c82299edcccf5e983b141d1}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!A\_3eigs@{A\_3eigs}}
+\index{A\_3eigs@{A\_3eigs}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{A\_3eigs}{A\_3eigs}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_aee722c574c82299edcccf5e983b141d1} 
+A\+\_\+3eigs = \mbox{\hyperlink{create__solve__matrices_8m_a3a916a9ef785eddd08b2f5bd7bb49676}{inv\+\_\+pre\+\_\+cond}}\texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_afb0b31d116785ef6c93fc5530735192f}{saddle}}}
+
+\Hypertarget{create__solve__matrices_8m_ad15da9b2dbdcd1f1b21f809b0a5ec8d3}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!A\_5\_easysoln@{A\_5\_easysoln}}
+\index{A\_5\_easysoln@{A\_5\_easysoln}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{A\_5\_easysoln}{A\_5\_easysoln}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_ad15da9b2dbdcd1f1b21f809b0a5ec8d3} 
+Create \mbox{\hyperlink{create__solve__matrices_8m_a98e96b4ef3f571259998593b3d765155}{Matrix}} with solution can be found trivially A\+\_\+5\+\_\+easysoln = \mbox{[}1, 0, 0, 0, 0}
+
+\Hypertarget{create__solve__matrices_8m_aea2a53e05719ab605bd08d7360beabf5}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!A\_inv\_test@{A\_inv\_test}}
+\index{A\_inv\_test@{A\_inv\_test}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{A\_inv\_test}{A\_inv\_test}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_aea2a53e05719ab605bd08d7360beabf5} 
+Create \mbox{\hyperlink{create__solve__matrices_8m_a98e96b4ef3f571259998593b3d765155}{Matrix}} and Inverse to test inverse preconditioner A\+\_\+inv\+\_\+test = generate\+\_\+well\+\_\+cond\+\_\+rand\+\_\+matrix(45, 10)}
+
+\Hypertarget{create__solve__matrices_8m_ad611d7eb93997c4fd20a7d05417d0748}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!Ainv\_inv\_test@{Ainv\_inv\_test}}
+\index{Ainv\_inv\_test@{Ainv\_inv\_test}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{Ainv\_inv\_test}{Ainv\_inv\_test}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_ad611d7eb93997c4fd20a7d05417d0748} 
+Ainv\+\_\+inv\+\_\+test = \mbox{\hyperlink{create__solve__matrices_8m_a0f9c420ac4d16d33df0dd14acd8529d2}{inv}}(\mbox{\hyperlink{create__solve__matrices_8m_aea2a53e05719ab605bd08d7360beabf5}{A\+\_\+inv\+\_\+test}})}
+
+\Hypertarget{create__solve__matrices_8m_af237c5666688e55dc6f2ae2653984349}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!Asqr\_inv\_test@{Asqr\_inv\_test}}
+\index{Asqr\_inv\_test@{Asqr\_inv\_test}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{Asqr\_inv\_test}{Asqr\_inv\_test}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_af237c5666688e55dc6f2ae2653984349} 
+Asqr\+\_\+inv\+\_\+test = \mbox{\hyperlink{create__solve__matrices_8m_aea2a53e05719ab605bd08d7360beabf5}{A\+\_\+inv\+\_\+test}}\texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_aea2a53e05719ab605bd08d7360beabf5}{A\+\_\+inv\+\_\+test}}}
+
+\Hypertarget{create__solve__matrices_8m_a0f44e457fae26e14bb4ac1ebb3a75dad}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!b@{b}}
+\index{b@{b}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{b}{b}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a0f44e457fae26e14bb4ac1ebb3a75dad} 
+b = meshgrid(0\+:h\+:1, 0\+:h\+:1)}
+
+\Hypertarget{create__solve__matrices_8m_a0119ec3f9c75f997774b9ab27efbb90a}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!b\_20\_rand@{b\_20\_rand}}
+\index{b\_20\_rand@{b\_20\_rand}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{b\_20\_rand}{b\_20\_rand}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a0119ec3f9c75f997774b9ab27efbb90a} 
+b\+\_\+20\+\_\+rand = \mbox{\hyperlink{create__solve__matrices_8m_aef4f41d905762b7f8d5ef4c3a134a43b}{A\+\_\+20\+\_\+rand}}\texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_ac81ea39453a3d5bb226e7b855e6ae7e2}{xtrue\+\_\+20\+\_\+rand}}}
+
+\Hypertarget{create__solve__matrices_8m_a862a1df43efaf4355d633596ca6f608d}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!b\_3eigs@{b\_3eigs}}
+\index{b\_3eigs@{b\_3eigs}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{b\_3eigs}{b\_3eigs}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a862a1df43efaf4355d633596ca6f608d} 
+b\+\_\+3eigs = \mbox{\hyperlink{create__solve__matrices_8m_a3a916a9ef785eddd08b2f5bd7bb49676}{inv\+\_\+pre\+\_\+cond}}\texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_a5d2a954cd21bb50b549216e3b3fcb95a}{b\+\_\+saddle}}}
+
+\Hypertarget{create__solve__matrices_8m_a481b7ca99ec79ebbc924834656dba44a}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!b\_5\_easysoln@{b\_5\_easysoln}}
+\index{b\_5\_easysoln@{b\_5\_easysoln}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{b\_5\_easysoln}{b\_5\_easysoln}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a481b7ca99ec79ebbc924834656dba44a} 
+b\+\_\+5\+\_\+easysoln = \mbox{[}1}
+
+\Hypertarget{create__solve__matrices_8m_a58a6983b9d66587f90f6ff1b3dfe885b}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!b\_5\_toy@{b\_5\_toy}}
+\index{b\_5\_toy@{b\_5\_toy}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{b\_5\_toy}{b\_5\_toy}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a58a6983b9d66587f90f6ff1b3dfe885b} 
+b\+\_\+5\+\_\+toy = \mbox{[}3}
+
+\Hypertarget{create__solve__matrices_8m_a19137e175b2ed1f88f1bc81c3fc0673a}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!b\_7\_backsub@{b\_7\_backsub}}
+\index{b\_7\_backsub@{b\_7\_backsub}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{b\_7\_backsub}{b\_7\_backsub}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a19137e175b2ed1f88f1bc81c3fc0673a} 
+b\+\_\+7\+\_\+backsub = A\+\_\+7\+\_\+backsub\texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_adadea81f70951450b2e9f06af712569f}{randn}}(7, 1)}
+
+\Hypertarget{create__solve__matrices_8m_ad4e5a373ebb41e79d9c316e9d22bd2ab}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!b\_convdiff1024@{b\_convdiff1024}}
+\index{b\_convdiff1024@{b\_convdiff1024}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{b\_convdiff1024}{b\_convdiff1024}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_ad4e5a373ebb41e79d9c316e9d22bd2ab} 
+Create convection diffusion with rhs b\+\_\+convdiff1024}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ generate\_conv\_diff\_rhs\_sinxcosy(\ ...}
+\DoxyCodeLine{\ \ \ \ 32,\ 0.5,\ 0.5\ ...}
+\DoxyCodeLine{)}
+
+\end{DoxyCode}
+\Hypertarget{create__solve__matrices_8m_aa439a2abc3969d88f7db411c2c9fb241}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!b\_convdiff256@{b\_convdiff256}}
+\index{b\_convdiff256@{b\_convdiff256}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{b\_convdiff256}{b\_convdiff256}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_aa439a2abc3969d88f7db411c2c9fb241} 
+Create convection diffusion with rhs b\+\_\+convdiff256}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ generate\_conv\_diff\_rhs\_sinxcosy(\ ...}
+\DoxyCodeLine{\ \ \ \ 16,\ 0.5,\ 0.5\ ...}
+\DoxyCodeLine{)}
+
+\end{DoxyCode}
+\Hypertarget{create__solve__matrices_8m_a2238761f54cf558ea17a1de67d35b37b}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!b\_convdiff64@{b\_convdiff64}}
+\index{b\_convdiff64@{b\_convdiff64}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{b\_convdiff64}{b\_convdiff64}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a2238761f54cf558ea17a1de67d35b37b} 
+Create convection diffusion with rhs b\+\_\+convdiff64}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ generate\_conv\_diff\_rhs\_sinxcosy(\ ...}
+\DoxyCodeLine{\ \ \ \ 8,\ 0.5,\ 0.5\ ...}
+\DoxyCodeLine{)}
+
+\end{DoxyCode}
+\Hypertarget{create__solve__matrices_8m_ae3b1363861525c6856ddf53922941969}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!b\_inv\_test@{b\_inv\_test}}
+\index{b\_inv\_test@{b\_inv\_test}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{b\_inv\_test}{b\_inv\_test}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_ae3b1363861525c6856ddf53922941969} 
+b\+\_\+inv\+\_\+test = \mbox{\hyperlink{create__solve__matrices_8m_adadea81f70951450b2e9f06af712569f}{randn}}(45, 1)}
+
+\Hypertarget{create__solve__matrices_8m_a53016ef7e8a9f7cf9afd9c59e5e052e6}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!B\_saddle@{B\_saddle}}
+\index{B\_saddle@{B\_saddle}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{B\_saddle}{B\_saddle}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a53016ef7e8a9f7cf9afd9c59e5e052e6} 
+B\+\_\+saddle = \mbox{\hyperlink{create__solve__matrices_8m_adadea81f70951450b2e9f06af712569f}{randn}}(2, 10)}
+
+\Hypertarget{create__solve__matrices_8m_a5d2a954cd21bb50b549216e3b3fcb95a}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!b\_saddle@{b\_saddle}}
+\index{b\_saddle@{b\_saddle}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{b\_saddle}{b\_saddle}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a5d2a954cd21bb50b549216e3b3fcb95a} 
+b\+\_\+saddle = \mbox{\hyperlink{create__solve__matrices_8m_afb0b31d116785ef6c93fc5530735192f}{saddle}}\texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_a02114ec3d1f03f24c655290fc57f25ed}{xtrue\+\_\+saddle}}}
+
+\Hypertarget{create__solve__matrices_8m_aca3da37e34a2e14095d9b885807de89d}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!D@{D}}
+\index{D@{D}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{D}{D}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_aca3da37e34a2e14095d9b885807de89d} 
+Add on \mbox{\hyperlink{benchmark_8cpp_a0ddf1224851353fc92bfbff6f499fa97}{main}} diagonal D = 4\texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_af5f71163c619daf69d229316f9c45545}{ones}}(n\texorpdfstring{$^\wedge$}{\string^}2, 1)}
+
+\Hypertarget{create__solve__matrices_8m_a1aabac6d068eef6a7bad3fdf50a05cc8}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!d@{d}}
+\index{d@{d}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{d}{d}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a1aabac6d068eef6a7bad3fdf50a05cc8} 
+d = (d+diag\+\_\+coeff\+\_\+offset\texorpdfstring{$\ast$}{*}d./abs(d))}
+
+\Hypertarget{create__solve__matrices_8m_ab25b2c0e3b2f3e6ae272c83f8001ddac}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!droptol@{droptol}}
+\index{droptol@{droptol}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{droptol}{droptol}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_ab25b2c0e3b2f3e6ae272c83f8001ddac} 
+options0 droptol = 0}
+
+\Hypertarget{create__solve__matrices_8m_a0f069227489ad5ff8305f96f8499e6b2}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!function@{function}}
+\index{function@{function}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{function}{function}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a0f069227489ad5ff8305f96f8499e6b2} 
+end function\mbox{[}\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}, \mbox{\hyperlink{create__solve__matrices_8m_a0f44e457fae26e14bb4ac1ebb3a75dad}{b}}\mbox{]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ generate\_conv\_diff\_rhs\_sinxcosy(n,\ sigma,\ tau)}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \%\ Calc\ h}
+\DoxyCodeLine{\ \ \ \ h\ =\ 1/(n-\/1)}
+
+\end{DoxyCode}
+\Hypertarget{create__solve__matrices_8m_ad0d158f0de5e7206b212fc04af4b5a69}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!high\_D@{high\_D}}
+\index{high\_D@{high\_D}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{high\_D}{high\_D}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_ad0d158f0de5e7206b212fc04af4b5a69} 
+high\+\_\+D = repmat(high\+\_\+D, n-\/1, 1)}
+
+\Hypertarget{create__solve__matrices_8m_acefe99ac397314d83cf7839941239069}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!ilu\_A@{ilu\_A}}
+\index{ilu\_A@{ilu\_A}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{ilu\_A}{ilu\_A}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_acefe99ac397314d83cf7839941239069} 
+ilu\+\_\+A = generate\+\_\+well\+\_\+cond\+\_\+rand\+\_\+matrix(\mbox{\hyperlink{create__solve__matrices_8m_ab783ba1c052d77a440f16906e4afb023}{ilu\+\_\+n}}, 10)}
+
+\Hypertarget{create__solve__matrices_8m_a912971ddf4afcd00ad442914c8cf03e8}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!ilu\_sparse\_A@{ilu\_sparse\_A}}
+\index{ilu\_sparse\_A@{ilu\_sparse\_A}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{ilu\_sparse\_A}{ilu\_sparse\_A}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a912971ddf4afcd00ad442914c8cf03e8} 
+ilu\+\_\+sparse\+\_\+A = generate\+\_\+well\+\_\+cond\+\_\+sparse\+\_\+rand\+\_\+matrix(\mbox{\hyperlink{create__solve__matrices_8m_ab783ba1c052d77a440f16906e4afb023}{ilu\+\_\+n}}, 5)}
+
+\Hypertarget{create__solve__matrices_8m_a3a916a9ef785eddd08b2f5bd7bb49676}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!inv\_pre\_cond@{inv\_pre\_cond}}
+\index{inv\_pre\_cond@{inv\_pre\_cond}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{inv\_pre\_cond}{inv\_pre\_cond}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a3a916a9ef785eddd08b2f5bd7bb49676} 
+inv\+\_\+pre\+\_\+cond = \mbox{\hyperlink{create__solve__matrices_8m_a0f9c420ac4d16d33df0dd14acd8529d2}{inv}}(\mbox{\hyperlink{create__solve__matrices_8m_a18134689f572fd7aa049bab47305ca6a}{pre\+\_\+cond}})}
+
+\Hypertarget{create__solve__matrices_8m_af86938b9aa98f6e81f2e88260d6ad115}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!L\_tri\_90@{L\_tri\_90}}
+\index{L\_tri\_90@{L\_tri\_90}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{L\_tri\_90}{L\_tri\_90}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_af86938b9aa98f6e81f2e88260d6ad115} 
+L\+\_\+tri\+\_\+90 = tril(\mbox{\hyperlink{create__solve__matrices_8m_ace9a237e5b9f0eb7b0b823cede953e56}{A\+\_\+2\+\_\+temp}})}
+
+\Hypertarget{create__solve__matrices_8m_a4cf3400b8fde7af67ec8bb9cd45ccc87}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!Lb\_90@{Lb\_90}}
+\index{Lb\_90@{Lb\_90}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{Lb\_90}{Lb\_90}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a4cf3400b8fde7af67ec8bb9cd45ccc87} 
+Lb\+\_\+90 = \mbox{\hyperlink{create__solve__matrices_8m_af86938b9aa98f6e81f2e88260d6ad115}{L\+\_\+tri\+\_\+90}}\texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_a77ffef809975894d431b42109ee8c1e7}{x\+\_\+90}}}
+
+\Hypertarget{create__solve__matrices_8m_a7141b76dab2e4a58c7a37f6c45dada6d}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!low\_D@{low\_D}}
+\index{low\_D@{low\_D}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{low\_D}{low\_D}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a7141b76dab2e4a58c7a37f6c45dada6d} 
+low\+\_\+D = repmat(low\+\_\+D, n-\/1, 1)}
+
+\Hypertarget{create__solve__matrices_8m_a18134689f572fd7aa049bab47305ca6a}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!pre\_cond@{pre\_cond}}
+\index{pre\_cond@{pre\_cond}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{pre\_cond}{pre\_cond}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a18134689f572fd7aa049bab47305ca6a} 
+pre\+\_\+cond = \mbox{[}A\+\_\+saddle, \mbox{\hyperlink{create__solve__matrices_8m_a6f4618ddc10f578911aa4c7614fc9b19}{zeros}}(10, 2)}
+
+\Hypertarget{create__solve__matrices_8m_aef62c913ed13d1f68ee11e7b01fd6218}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!Q\_8\_backsub@{Q\_8\_backsub}}
+\index{Q\_8\_backsub@{Q\_8\_backsub}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{Q\_8\_backsub}{Q\_8\_backsub}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_aef62c913ed13d1f68ee11e7b01fd6218} 
+Q\+\_\+8\+\_\+backsub = \mbox{[}Q\+\_\+7\+\_\+backsub, \mbox{\hyperlink{create__solve__matrices_8m_a6f4618ddc10f578911aa4c7614fc9b19}{zeros}}(7, 1)}
+
+\Hypertarget{create__solve__matrices_8m_a35d02e87afe69478b76446a7f7ebe571}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!R\_8\_backsub@{R\_8\_backsub}}
+\index{R\_8\_backsub@{R\_8\_backsub}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{R\_8\_backsub}{R\_8\_backsub}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a35d02e87afe69478b76446a7f7ebe571} 
+R\+\_\+8\+\_\+backsub = \mbox{[}R\+\_\+7\+\_\+backsub}
+
+\Hypertarget{create__solve__matrices_8m_ab8ec92cc3ea8422c9349409bae98d2a0}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!rho@{rho}}
+\index{rho@{rho}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{rho}{rho}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_ab8ec92cc3ea8422c9349409bae98d2a0} 
+rho = norm(\mbox{\hyperlink{create__solve__matrices_8m_a19137e175b2ed1f88f1bc81c3fc0673a}{b\+\_\+7\+\_\+backsub}})}
+
+\Hypertarget{create__solve__matrices_8m_ad92146f3c64a51422673e9879294956e}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!rho\_e1@{rho\_e1}}
+\index{rho\_e1@{rho\_e1}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{rho\_e1}{rho\_e1}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_ad92146f3c64a51422673e9879294956e} 
+rho\+\_\+e1 = \mbox{\hyperlink{create__solve__matrices_8m_a6f4618ddc10f578911aa4c7614fc9b19}{zeros}}(7, 1)}
+
+\Hypertarget{create__solve__matrices_8m_afb0b31d116785ef6c93fc5530735192f}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!saddle@{saddle}}
+\index{saddle@{saddle}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{saddle}{saddle}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_afb0b31d116785ef6c93fc5530735192f} 
+saddle = \mbox{[}A\+\_\+saddle, \mbox{\hyperlink{create__solve__matrices_8m_a53016ef7e8a9f7cf9afd9c59e5e052e6}{B\+\_\+saddle}}\textquotesingle{}}
+
+\Hypertarget{create__solve__matrices_8m_a5ae5cead668983598a035f7353c715cd}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!type@{type}}
+\index{type@{type}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{type}{type}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a5ae5cead668983598a035f7353c715cd} 
+options0 type = "{}ilutp"{}}
+
+\Hypertarget{create__solve__matrices_8m_a6277e2a7446059985dc9bcf0a4ac1a8f}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!u@{u}}
+\index{u@{u}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{u}{u}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a6277e2a7446059985dc9bcf0a4ac1a8f} 
+u = \mbox{\hyperlink{create__solve__matrices_8m_a391214706f3ac1bcd2ff251f18ce3f78}{sin}}(pi\texorpdfstring{$\ast$}{*}X).\texorpdfstring{$\ast$}{*}cos(pi\texorpdfstring{$\ast$}{*}Y)}
+
+\Hypertarget{create__solve__matrices_8m_adf905597140d076f7158688a575824dd}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!U\_tri\_90@{U\_tri\_90}}
+\index{U\_tri\_90@{U\_tri\_90}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{U\_tri\_90}{U\_tri\_90}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_adf905597140d076f7158688a575824dd} 
+U\+\_\+tri\+\_\+90 = triu(\mbox{\hyperlink{create__solve__matrices_8m_ace9a237e5b9f0eb7b0b823cede953e56}{A\+\_\+2\+\_\+temp}})}
+
+\Hypertarget{create__solve__matrices_8m_a84f3606d9b615febcb815f055b5b02b3}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!Ub\_90@{Ub\_90}}
+\index{Ub\_90@{Ub\_90}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{Ub\_90}{Ub\_90}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a84f3606d9b615febcb815f055b5b02b3} 
+Ub\+\_\+90 = \mbox{\hyperlink{create__solve__matrices_8m_adf905597140d076f7158688a575824dd}{U\+\_\+tri\+\_\+90}}\texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_a77ffef809975894d431b42109ee8c1e7}{x\+\_\+90}}}
+
+\Hypertarget{create__solve__matrices_8m_a35555c30538b98b701fb2c84ac2064a1}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!x\_1@{x\_1}}
+\index{x\_1@{x\_1}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{x\_1}{x\_1}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a35555c30538b98b701fb2c84ac2064a1} 
+x\+\_\+1 = \mbox{\hyperlink{create__solve__matrices_8m_a35d02e87afe69478b76446a7f7ebe571}{R\+\_\+8\+\_\+backsub}}(1\+:1, 1\+:1) \textbackslash{} (\mbox{\hyperlink{create__solve__matrices_8m_aef62c913ed13d1f68ee11e7b01fd6218}{Q\+\_\+8\+\_\+backsub}}(1\+:1, 1\+:1)\textquotesingle{}\texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_ad92146f3c64a51422673e9879294956e}{rho\+\_\+e1}}(1\+:1))}
+
+\Hypertarget{create__solve__matrices_8m_a529780c7e18890757a3ddb0e33539b37}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!x\_2@{x\_2}}
+\index{x\_2@{x\_2}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{x\_2}{x\_2}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a529780c7e18890757a3ddb0e33539b37} 
+x\+\_\+2 = \mbox{\hyperlink{create__solve__matrices_8m_a35d02e87afe69478b76446a7f7ebe571}{R\+\_\+8\+\_\+backsub}}(1\+:2, 1\+:2) \textbackslash{} (\mbox{\hyperlink{create__solve__matrices_8m_aef62c913ed13d1f68ee11e7b01fd6218}{Q\+\_\+8\+\_\+backsub}}(1\+:2, 1\+:2)\textquotesingle{}\texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_ad92146f3c64a51422673e9879294956e}{rho\+\_\+e1}}(1\+:2))}
+
+\Hypertarget{create__solve__matrices_8m_a2acd3702cddf2b95963513ea3801e669}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!x\_20\_rand@{x\_20\_rand}}
+\index{x\_20\_rand@{x\_20\_rand}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{x\_20\_rand}{x\_20\_rand}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a2acd3702cddf2b95963513ea3801e669} 
+x\+\_\+20\+\_\+rand}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ gmres(\ ...}
+\DoxyCodeLine{\ \ \ \ \mbox{\hyperlink{create__solve__matrices_8m_aef4f41d905762b7f8d5ef4c3a134a43b}{A\_20\_rand}},\ \mbox{\hyperlink{create__solve__matrices_8m_a0119ec3f9c75f997774b9ab27efbb90a}{b\_20\_rand}},\ ...}
+\DoxyCodeLine{\ \ \ \ [],\ convergence\_tolerance\_double,\ 20\ ...}
+\DoxyCodeLine{)}
+
+\end{DoxyCode}
+\Hypertarget{create__solve__matrices_8m_aff981b25c7a589e5b90db6bd700e40f8}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!x\_3@{x\_3}}
+\index{x\_3@{x\_3}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{x\_3}{x\_3}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_aff981b25c7a589e5b90db6bd700e40f8} 
+x\+\_\+3 = \mbox{\hyperlink{create__solve__matrices_8m_a35d02e87afe69478b76446a7f7ebe571}{R\+\_\+8\+\_\+backsub}}(1\+:3, 1\+:3) \textbackslash{} (\mbox{\hyperlink{create__solve__matrices_8m_aef62c913ed13d1f68ee11e7b01fd6218}{Q\+\_\+8\+\_\+backsub}}(1\+:3, 1\+:3)\textquotesingle{}\texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_ad92146f3c64a51422673e9879294956e}{rho\+\_\+e1}}(1\+:3))}
+
+\Hypertarget{create__solve__matrices_8m_ae5e9149bfe32112d1f8a0f17a59ea870}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!x\_3eigs@{x\_3eigs}}
+\index{x\_3eigs@{x\_3eigs}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{x\_3eigs}{x\_3eigs}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_ae5e9149bfe32112d1f8a0f17a59ea870} 
+x\+\_\+3eigs}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ gmres(\ ...}
+\DoxyCodeLine{\ \ \ \ \mbox{\hyperlink{create__solve__matrices_8m_aee722c574c82299edcccf5e983b141d1}{A\_3eigs}},\ \mbox{\hyperlink{create__solve__matrices_8m_a862a1df43efaf4355d633596ca6f608d}{b\_3eigs}},\ [],\ convergence\_tolerance\_double,\ 3\ ...}
+\DoxyCodeLine{)}
+
+\end{DoxyCode}
+\Hypertarget{create__solve__matrices_8m_ab8f0cc7672627b664d721ea3a8c06ee4}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!x\_4@{x\_4}}
+\index{x\_4@{x\_4}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{x\_4}{x\_4}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_ab8f0cc7672627b664d721ea3a8c06ee4} 
+x\+\_\+4 = \mbox{\hyperlink{create__solve__matrices_8m_a35d02e87afe69478b76446a7f7ebe571}{R\+\_\+8\+\_\+backsub}}(1\+:4, 1\+:4) \textbackslash{} (\mbox{\hyperlink{create__solve__matrices_8m_aef62c913ed13d1f68ee11e7b01fd6218}{Q\+\_\+8\+\_\+backsub}}(1\+:4, 1\+:4)\textquotesingle{}\texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_ad92146f3c64a51422673e9879294956e}{rho\+\_\+e1}}(1\+:4))}
+
+\Hypertarget{create__solve__matrices_8m_a7ff75d3e51c0dea7ea9a7265fb1071af}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!x\_5@{x\_5}}
+\index{x\_5@{x\_5}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{x\_5}{x\_5}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a7ff75d3e51c0dea7ea9a7265fb1071af} 
+x\+\_\+5 = \mbox{\hyperlink{create__solve__matrices_8m_a35d02e87afe69478b76446a7f7ebe571}{R\+\_\+8\+\_\+backsub}}(1\+:5, 1\+:5) \textbackslash{} (\mbox{\hyperlink{create__solve__matrices_8m_aef62c913ed13d1f68ee11e7b01fd6218}{Q\+\_\+8\+\_\+backsub}}(1\+:5, 1\+:5)\textquotesingle{}\texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_ad92146f3c64a51422673e9879294956e}{rho\+\_\+e1}}(1\+:5))}
+
+\Hypertarget{create__solve__matrices_8m_a101cf2c31b0d57ee7ac1823df7016708}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!x\_6@{x\_6}}
+\index{x\_6@{x\_6}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{x\_6}{x\_6}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a101cf2c31b0d57ee7ac1823df7016708} 
+x\+\_\+6 = \mbox{\hyperlink{create__solve__matrices_8m_a35d02e87afe69478b76446a7f7ebe571}{R\+\_\+8\+\_\+backsub}}(1\+:6, 1\+:6) \textbackslash{} (\mbox{\hyperlink{create__solve__matrices_8m_aef62c913ed13d1f68ee11e7b01fd6218}{Q\+\_\+8\+\_\+backsub}}(1\+:6, 1\+:6)\textquotesingle{}\texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_ad92146f3c64a51422673e9879294956e}{rho\+\_\+e1}}(1\+:6))}
+
+\Hypertarget{create__solve__matrices_8m_a439cf51fce18c8a719c263adb0e4fea5}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!x\_7@{x\_7}}
+\index{x\_7@{x\_7}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{x\_7}{x\_7}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a439cf51fce18c8a719c263adb0e4fea5} 
+x\+\_\+7 = \mbox{\hyperlink{create__solve__matrices_8m_a35d02e87afe69478b76446a7f7ebe571}{R\+\_\+8\+\_\+backsub}}(1\+:7, 1\+:7) \textbackslash{} (\mbox{\hyperlink{create__solve__matrices_8m_aef62c913ed13d1f68ee11e7b01fd6218}{Q\+\_\+8\+\_\+backsub}}(1\+:7, 1\+:7)\textquotesingle{}\texorpdfstring{$\ast$}{*}\mbox{\hyperlink{create__solve__matrices_8m_ad92146f3c64a51422673e9879294956e}{rho\+\_\+e1}}(1\+:7))}
+
+\Hypertarget{create__solve__matrices_8m_a77ffef809975894d431b42109ee8c1e7}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!x\_90@{x\_90}}
+\index{x\_90@{x\_90}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{x\_90}{x\_90}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a77ffef809975894d431b42109ee8c1e7} 
+x\+\_\+90 = 2\texorpdfstring{$\ast$}{*}(randi(2, 90, 1)-\/1.\+5)}
+
+\Hypertarget{create__solve__matrices_8m_a079ffd8ce3d576144f9e78b4c33d9c36}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!x\_convdiff1024@{x\_convdiff1024}}
+\index{x\_convdiff1024@{x\_convdiff1024}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{x\_convdiff1024}{x\_convdiff1024}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a079ffd8ce3d576144f9e78b4c33d9c36} 
+x\+\_\+convdiff1024}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ gmres(\ ...}
+\DoxyCodeLine{\ \ \ \ A\_convdiff1024,\ \mbox{\hyperlink{create__solve__matrices_8m_ad4e5a373ebb41e79d9c316e9d22bd2ab}{b\_convdiff1024}},\ ...}
+\DoxyCodeLine{\ \ \ \ [],\ convergence\_tolerance\_double,\ 1024\ ...}
+\DoxyCodeLine{)}
+
+\end{DoxyCode}
+\Hypertarget{create__solve__matrices_8m_ab9964a65d938ae9c5435d234cbfc2d1a}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!x\_convdiff256@{x\_convdiff256}}
+\index{x\_convdiff256@{x\_convdiff256}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{x\_convdiff256}{x\_convdiff256}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_ab9964a65d938ae9c5435d234cbfc2d1a} 
+x\+\_\+convdiff256}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ gmres(\ ...}
+\DoxyCodeLine{\ \ \ \ A\_convdiff256,\ \mbox{\hyperlink{create__solve__matrices_8m_aa439a2abc3969d88f7db411c2c9fb241}{b\_convdiff256}},\ ...}
+\DoxyCodeLine{\ \ \ \ [],\ convergence\_tolerance\_double,\ 256\ ...}
+\DoxyCodeLine{)}
+
+\end{DoxyCode}
+\Hypertarget{create__solve__matrices_8m_a5d6f79fae7b8690b67c7b70668538bde}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!x\_convdiff64@{x\_convdiff64}}
+\index{x\_convdiff64@{x\_convdiff64}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{x\_convdiff64}{x\_convdiff64}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a5d6f79fae7b8690b67c7b70668538bde} 
+x\+\_\+convdiff64}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ gmres(\ ...}
+\DoxyCodeLine{\ \ \ \ A\_convdiff64,\ \mbox{\hyperlink{create__solve__matrices_8m_a2238761f54cf558ea17a1de67d35b37b}{b\_convdiff64}},\ ...}
+\DoxyCodeLine{\ \ \ \ [],\ convergence\_tolerance\_double,\ 64\ ...}
+\DoxyCodeLine{)}
+
+\end{DoxyCode}
+\Hypertarget{create__solve__matrices_8m_a90ca253f197ba9f7452b8cc349324047}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!x\_saddle@{x\_saddle}}
+\index{x\_saddle@{x\_saddle}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{x\_saddle}{x\_saddle}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a90ca253f197ba9f7452b8cc349324047} 
+x\+\_\+saddle}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ gmres(\ ...}
+\DoxyCodeLine{\ \ \ \ \mbox{\hyperlink{create__solve__matrices_8m_afb0b31d116785ef6c93fc5530735192f}{saddle}},\ \mbox{\hyperlink{create__solve__matrices_8m_a5d2a954cd21bb50b549216e3b3fcb95a}{b\_saddle}},\ [],\ convergence\_tolerance\_double,\ 3,\ \mbox{\hyperlink{create__solve__matrices_8m_a18134689f572fd7aa049bab47305ca6a}{pre\_cond}}\ ...}
+\DoxyCodeLine{)}
+
+\end{DoxyCode}
+\Hypertarget{create__solve__matrices_8m_ac81ea39453a3d5bb226e7b855e6ae7e2}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!xtrue\_20\_rand@{xtrue\_20\_rand}}
+\index{xtrue\_20\_rand@{xtrue\_20\_rand}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{xtrue\_20\_rand}{xtrue\_20\_rand}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_ac81ea39453a3d5bb226e7b855e6ae7e2} 
+xtrue\+\_\+20\+\_\+rand = \mbox{\hyperlink{create__solve__matrices_8m_adadea81f70951450b2e9f06af712569f}{randn}}(20, 1)}
+
+\Hypertarget{create__solve__matrices_8m_a02114ec3d1f03f24c655290fc57f25ed}\index{create\_solve\_matrices.m@{create\_solve\_matrices.m}!xtrue\_saddle@{xtrue\_saddle}}
+\index{xtrue\_saddle@{xtrue\_saddle}!create\_solve\_matrices.m@{create\_solve\_matrices.m}}
+\doxysubsubsection{\texorpdfstring{xtrue\_saddle}{xtrue\_saddle}}
+{\footnotesize\ttfamily \label{create__solve__matrices_8m_a02114ec3d1f03f24c655290fc57f25ed} 
+xtrue\+\_\+saddle = \mbox{\hyperlink{create__solve__matrices_8m_adadea81f70951450b2e9f06af712569f}{randn}}(12, 1)}
+

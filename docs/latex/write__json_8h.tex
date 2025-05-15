@@ -1,0 +1,47 @@
+\doxysection{C\+:/\+Users/dosre/dev/precision-\/cascade/experimentation/include/exp\+\_\+tools/write\+\_\+json.h File Reference}
+\hypertarget{write__json_8h}{}\label{write__json_8h}\index{C:/Users/dosre/dev/precision-\/cascade/experimentation/include/exp\_tools/write\_json.h@{C:/Users/dosre/dev/precision-\/cascade/experimentation/include/exp\_tools/write\_json.h}}
+{\ttfamily \#include "{}exp\+\_\+tools/\+Experiment\+\_\+\+Log.\+h"{}}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$filesystem$>$}\newline
+{\ttfamily \#include $<$fstream$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$sstream$>$}\newline
+{\ttfamily \#include $<$iomanip$>$}\newline
+Include dependency graph for write\+\_\+json.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{write__json_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{write__json_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespacewrite__json}{write\+\_\+json}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::ofstream \mbox{\hyperlink{namespacewrite__json_a036d71555c40b412ce74423de41a8e94}{write\+\_\+json\+::open\+\_\+json\+\_\+ofstream}} (std\+::string file\+\_\+name, fs\+::path \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a13add80719a6702ceb6fef9d0d670f6e}{save\+\_\+dir}}, \mbox{\hyperlink{class_experiment___log}{Experiment\+\_\+\+Log}} logger)
+\item 
+void \mbox{\hyperlink{namespacewrite__json_a05c898f4d70f346484014efa15c3ba17}{write\+\_\+json\+::start\+\_\+json}} (std\+::ofstream \&file\+\_\+out)
+\item 
+void \mbox{\hyperlink{namespacewrite__json_a736ebde2c15c1460f6dcee265ed05029}{write\+\_\+json\+::end\+\_\+json}} (std\+::ofstream \&file\+\_\+out)
+\item 
+std\+::string \mbox{\hyperlink{namespacewrite__json_a18119165ccd450e9fa265b35dd73acac}{write\+\_\+json\+::bool\+\_\+to\+\_\+string}} (bool \mbox{\hyperlink{create__solve__matrices_8m_a0f44e457fae26e14bb4ac1ebb3a75dad}{b}})
+\item 
+std\+::string \mbox{\hyperlink{namespacewrite__json_ac7352e0be3c6a4249fc9dc9182ea1fd5}{write\+\_\+json\+::dbl\+\_\+vector\+\_\+to\+\_\+jsonarray\+\_\+str}} (std\+::vector$<$ double $>$ vec, int padding\+\_\+level)
+\item 
+std\+::string \mbox{\hyperlink{namespacewrite__json_aea6deb983e678cfb67ace39bb88a4627}{write\+\_\+json\+::int\+\_\+vector\+\_\+to\+\_\+jsonarray\+\_\+str}} (std\+::vector$<$ int $>$ vec, int padding\+\_\+level)
+\item 
+std\+::string \mbox{\hyperlink{namespacewrite__json_afb7db649c1c9e945dbd098ddc751bfb0}{write\+\_\+json\+::str\+\_\+vector\+\_\+to\+\_\+jsonarray\+\_\+str}} (std\+::vector$<$ std\+::string $>$ vec, int padding\+\_\+level)
+\end{DoxyCompactItemize}

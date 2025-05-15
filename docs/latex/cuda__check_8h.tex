@@ -1,0 +1,38 @@
+\doxysection{C\+:/\+Users/dosre/dev/precision-\/cascade/include/tools/cuda\+\_\+check.h File Reference}
+\hypertarget{cuda__check_8h}{}\label{cuda__check_8h}\index{C:/Users/dosre/dev/precision-\/cascade/include/tools/cuda\_check.h@{C:/Users/dosre/dev/precision-\/cascade/include/tools/cuda\_check.h}}
+{\ttfamily \#include $<$cuda\+\_\+runtime.\+h$>$}\newline
+{\ttfamily \#include $<$cublas\+\_\+v2.\+h$>$}\newline
+{\ttfamily \#include $<$cusparse.\+h$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+Include dependency graph for cuda\+\_\+check.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{cuda__check_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{cuda__check_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespacecascade}{cascade}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{cascade\+::check\+\_\+cuda\+\_\+error}} (cuda\+Error\+\_\+t error)
+\item 
+void \mbox{\hyperlink{namespacecascade_a58669c50dd46c33b2be3031c8d1204c3}{cascade\+::check\+\_\+kernel\+\_\+launch}} (cuda\+Error\+\_\+t error, std\+::string function\+\_\+name, std\+::string kernel\+\_\+name, int n\+\_\+blocks, int n\+\_\+threads)
+\item 
+void \mbox{\hyperlink{namespacecascade_adf5601c3547abfb7e2b4aa3f1fb99bc9}{cascade\+::check\+\_\+cublas\+\_\+status}} (cublas\+Status\+\_\+t status)
+\item 
+void \mbox{\hyperlink{namespacecascade_a4352e164c9116b8f38bfd19534dd8390}{cascade\+::check\+\_\+cusparse\+\_\+status}} (cusparse\+Status\+\_\+t status)
+\end{DoxyCompactItemize}

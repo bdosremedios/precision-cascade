@@ -1,0 +1,113 @@
+\doxysection{benchmark\+\_\+\+Sparse.\+h}
+\hypertarget{benchmark___sparse_8h_source}{}\label{benchmark___sparse_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/benchmark/include/benchmark\_Sparse.h@{C:/Users/dosre/dev/precision-\/cascade/benchmark/include/benchmark\_Sparse.h}}
+\mbox{\hyperlink{benchmark___sparse_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ BENCHMARK\_SPARSE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ BENCHMARK\_SPARSE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{benchmark_8h}{benchmark.h}}"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{types_8h}{types/types.h}}"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_benchmark___sparse}{Benchmark\_Sparse}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_benchmark_base}{BenchmarkBase}}}
+\DoxyCodeLine{00009\ \{}
+\DoxyCodeLine{00010\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \ \ \ \ std::function<NoFillMatrixSparse<double>\ (\textcolor{keywordtype}{int},\ \textcolor{keywordtype}{int})>\ \mbox{\hyperlink{class_benchmark___sparse_ae7fa0d08b687e97b75fbc45df38a6ec6}{make\_A\_dbl}}\ =\ [\textcolor{keyword}{this}]\ (}
+\DoxyCodeLine{00013\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ m,\ \textcolor{keywordtype}{int}\ n}
+\DoxyCodeLine{00014\ \ \ \ \ )\ -\/>\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{NoFillMatrixSparse<double>}}\ \{}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (m\ !=\ n)\ \{}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}make\_A\_dbl:\ require\ square\ dimensions"{}}}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_ae48661d2f11b5e2affe1bddbb43a8464}{NoFillMatrixSparse<double>::Random}}(}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_benchmark_base_aa7bdcad1019b0c4fb742b58a194ad12a}{BenchmarkBase::bundle}},\ m,\ m,}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ ((sqrt(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{double}\textcolor{keyword}{>}(m))/\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{double}\textcolor{keyword}{>}(m)\ >\ 1)\ ?}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ \ 1\ :}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \ sqrt(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{double}\textcolor{keyword}{>}(m))/\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{double}\textcolor{keyword}{>}(m))}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ std::function<NoFillMatrixSparse<float>\ (\textcolor{keywordtype}{int},\ \textcolor{keywordtype}{int})>\ \mbox{\hyperlink{class_benchmark___sparse_ac280c605fafe8f86b3a21c10c357824f}{make\_A\_sgl}}\ =\ [\textcolor{keyword}{this}]\ (}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ m,\ \textcolor{keywordtype}{int}\ n}
+\DoxyCodeLine{00033\ \ \ \ \ )\ -\/>\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{NoFillMatrixSparse<float>}}\ \{}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_benchmark___sparse_ae7fa0d08b687e97b75fbc45df38a6ec6}{make\_A\_dbl}}(m,\ n).cast<\textcolor{keywordtype}{float}>();}
+\DoxyCodeLine{00035\ \ \ \ \ \};}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ std::function<NoFillMatrixSparse<\_\_half>\ (\textcolor{keywordtype}{int},\ \textcolor{keywordtype}{int})>\ \mbox{\hyperlink{class_benchmark___sparse_a85a96af3978387c221e20b94be76f399}{make\_A\_hlf}}\ =\ [\textcolor{keyword}{this}]\ (}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ m,\ \textcolor{keywordtype}{int}\ n}
+\DoxyCodeLine{00039\ \ \ \ \ )\ -\/>\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{NoFillMatrixSparse<\_\_half>}}\ \{}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_benchmark___sparse_ae7fa0d08b687e97b75fbc45df38a6ec6}{make\_A\_dbl}}(m,\ n).cast<\_\_half>();}
+\DoxyCodeLine{00041\ \ \ \ \ \};}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ std::function<NoFillMatrixSparse<double>\ (\textcolor{keywordtype}{int},\ \textcolor{keywordtype}{int})>\ \mbox{\hyperlink{class_benchmark___sparse_a9363a385a1e7d9f41cc9465c38d92cbf}{make\_low\_tri\_A\_dbl}}\ =\ [\textcolor{keyword}{this}]\ (}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ m,\ \textcolor{keywordtype}{int}\ n}
+\DoxyCodeLine{00045\ \ \ \ \ )\ -\/>\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{NoFillMatrixSparse<double>}}\ \{}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (m\ !=\ n)\ \{}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}make\_low\_tri\_A\_dbl:\ require\ square\ dimensions"{}}}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a54289b8be0aeabaec036894ab4ee65d1}{NoFillMatrixSparse<double>::Random\_LT}}(}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_benchmark_base_aa7bdcad1019b0c4fb742b58a194ad12a}{BenchmarkBase::bundle}},\ m,\ m,}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ (sqrt(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{double}\textcolor{keyword}{>}(m))/\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{double}\textcolor{keyword}{>}(m)\ >\ 1)\ ?}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ 1\ :}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ sqrt(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{double}\textcolor{keyword}{>}(m))/\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{double}\textcolor{keyword}{>}(m)}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ \};}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ std::function<NoFillMatrixSparse<float>\ (\textcolor{keywordtype}{int},\ \textcolor{keywordtype}{int})>\ \mbox{\hyperlink{class_benchmark___sparse_a3b7f3f948f86f85bfa191645598f687b}{make\_low\_tri\_A\_sgl}}\ =\ [\textcolor{keyword}{this}]\ (}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ m,\ \textcolor{keywordtype}{int}\ n}
+\DoxyCodeLine{00064\ \ \ \ \ )\ -\/>\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{NoFillMatrixSparse<float>}}\ \{}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_benchmark___sparse_a9363a385a1e7d9f41cc9465c38d92cbf}{make\_low\_tri\_A\_dbl}}(m,\ n).cast<\textcolor{keywordtype}{float}>();}
+\DoxyCodeLine{00066\ \ \ \ \ \};}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \ \ \ \ std::function<NoFillMatrixSparse<\_\_half>\ (\textcolor{keywordtype}{int},\ \textcolor{keywordtype}{int})>\ \mbox{\hyperlink{class_benchmark___sparse_a50a79fc32accd950fd750ea872a216d3}{make\_low\_tri\_A\_hlf}}\ =\ [\textcolor{keyword}{this}]\ (}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ m,\ \textcolor{keywordtype}{int}\ n}
+\DoxyCodeLine{00070\ \ \ \ \ )\ -\/>\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{NoFillMatrixSparse<\_\_half>}}\ \{}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_benchmark___sparse_a9363a385a1e7d9f41cc9465c38d92cbf}{make\_low\_tri\_A\_dbl}}(m,\ n).cast<\_\_half>();}
+\DoxyCodeLine{00072\ \ \ \ \ \};}
+\DoxyCodeLine{00073\ \ \ \ \ }
+\DoxyCodeLine{00074\ \ \ \ \ std::function<NoFillMatrixSparse<double>\ (\textcolor{keywordtype}{int},\ \textcolor{keywordtype}{int})>\ \mbox{\hyperlink{class_benchmark___sparse_a4d22fecd9af1831108a2051aeb754359}{make\_upp\_tri\_A\_dbl}}\ =\ [\textcolor{keyword}{this}]\ (}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ m,\ \textcolor{keywordtype}{int}\ n}
+\DoxyCodeLine{00076\ \ \ \ \ )\ -\/>\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{NoFillMatrixSparse<double>}}\ \{}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (m\ !=\ n)\ \{}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}make\_upp\_tri\_A\_dbl:\ require\ square\ dimensions"{}}}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a13be07646a28e10b0d76d4ac0c8f18ff}{NoFillMatrixSparse<double>::Random\_UT}}(}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_benchmark_base_aa7bdcad1019b0c4fb742b58a194ad12a}{BenchmarkBase::bundle}},\ m,\ m,}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ (sqrt(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{double}\textcolor{keyword}{>}(m))/\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{double}\textcolor{keyword}{>}(m)\ >\ 1)\ ?}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ 1\ :}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ sqrt(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{double}\textcolor{keyword}{>}(m))/\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{double}\textcolor{keyword}{>}(m)}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \ \ \ \ \};}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \ \ std::function<NoFillMatrixSparse<float>\ (\textcolor{keywordtype}{int},\ \textcolor{keywordtype}{int})>\ \mbox{\hyperlink{class_benchmark___sparse_a827dc572f750ce1c5cc4c05a30f6e3ae}{make\_upp\_tri\_A\_sgl}}\ =\ [\textcolor{keyword}{this}]\ (}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ m,\ \textcolor{keywordtype}{int}\ n}
+\DoxyCodeLine{00095\ \ \ \ \ )\ -\/>\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{NoFillMatrixSparse<float>}}\ \{}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_benchmark___sparse_a4d22fecd9af1831108a2051aeb754359}{make\_upp\_tri\_A\_dbl}}(m,\ n).cast<\textcolor{keywordtype}{float}>();}
+\DoxyCodeLine{00097\ \ \ \ \ \};}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \ \ \ \ std::function<NoFillMatrixSparse<\_\_half>\ (\textcolor{keywordtype}{int},\ \textcolor{keywordtype}{int})>\ \mbox{\hyperlink{class_benchmark___sparse_af02c51c9dacd52f1dda2b9dc8a06e55f}{make\_upp\_tri\_A\_hlf}}\ =\ [\textcolor{keyword}{this}]\ (}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ m,\ \textcolor{keywordtype}{int}\ n}
+\DoxyCodeLine{00101\ \ \ \ \ )\ -\/>\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{NoFillMatrixSparse<\_\_half>}}\ \{}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_benchmark___sparse_a4d22fecd9af1831108a2051aeb754359}{make\_upp\_tri\_A\_dbl}}(m,\ n).cast<\_\_half>();}
+\DoxyCodeLine{00103\ \ \ \ \ \};}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \};}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

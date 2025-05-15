@@ -1,0 +1,171 @@
+\doxysection{Heap.\+h}
+\hypertarget{_heap_8h_source}{}\label{_heap_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/include/tools/Heap.h@{C:/Users/dosre/dev/precision-\/cascade/include/tools/Heap.h}}
+\mbox{\hyperlink{_heap_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ HEAP\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ HEAP\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{abs_8h}{tools/abs.h}}"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <utility>}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacecascade_1_1heap}{cascade::heap}}\ \{}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00012\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info_ad984ac46c95c8ecbd9f4cb1a6c91b560}{ColValInfo}}}
+\DoxyCodeLine{00013\ \{}
+\DoxyCodeLine{00014\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \ \ TPrecision\ \mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info_abf857fdb5260ffe6466e7033e78e50e3}{abs\_val}};}
+\DoxyCodeLine{00017\ \ \ \ \ TPrecision\ \mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info_af8579b9a2080bcc59105c53992fb9264}{orig\_val}};}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info_a76bddd81def5544c3618ed9be3e59e5b}{row}};}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ \mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info_ad984ac46c95c8ecbd9f4cb1a6c91b560}{ColValInfo}}()\ \{}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info_abf857fdb5260ffe6466e7033e78e50e3}{abs\_val}}\ =\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(-\/1);}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info_af8579b9a2080bcc59105c53992fb9264}{orig\_val}}\ =\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(-\/1);}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info_a76bddd81def5544c3618ed9be3e59e5b}{row}}\ =\ -\/1;}
+\DoxyCodeLine{00024\ \ \ \ \ \}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info_a3393425a3ebb35327ddd6f8d5da09327}{ColValInfo}}(TPrecision\ arg\_val,\ \textcolor{keywordtype}{int}\ arg\_row)\ \{}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info_abf857fdb5260ffe6466e7033e78e50e3}{abs\_val}}\ =\ \mbox{\hyperlink{namespacecascade_1_1abs__ns_ab08ce3a88268964a87b50e39d0644268}{abs\_ns::abs}}(arg\_val);}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info_af8579b9a2080bcc59105c53992fb9264}{orig\_val}}\ =\ arg\_val;}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info_a76bddd81def5544c3618ed9be3e59e5b}{row}}\ =\ arg\_row;}
+\DoxyCodeLine{00030\ \ \ \ \ \}}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info_ad984ac46c95c8ecbd9f4cb1a6c91b560}{ColValInfo}}\ \&\ \mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info_ab9092b47dab309762910b9a1b9bddac3}{operator=}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info_ad984ac46c95c8ecbd9f4cb1a6c91b560}{ColValInfo}}\ \&other)\ \{}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info_abf857fdb5260ffe6466e7033e78e50e3}{abs\_val}}\ =\ other.\mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info_abf857fdb5260ffe6466e7033e78e50e3}{abs\_val}};}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info_af8579b9a2080bcc59105c53992fb9264}{orig\_val}}\ =\ other.\mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info_af8579b9a2080bcc59105c53992fb9264}{orig\_val}};}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info_a76bddd81def5544c3618ed9be3e59e5b}{row}}\ =\ other.\mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info_a76bddd81def5544c3618ed9be3e59e5b}{row}};}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00037\ \ \ \ \ \}}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info_a8341e5105eb3a3b0ac92848ae20ca843}{ColValInfo}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info_ad984ac46c95c8ecbd9f4cb1a6c91b560}{ColValInfo}}\ \&other)\ \{}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ *\textcolor{keyword}{this}\ =\ other;}
+\DoxyCodeLine{00041\ \ \ \ \ \}}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info_a375998d36689ec9bf6303dae5753850c}{operator>}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info_ad984ac46c95c8ecbd9f4cb1a6c91b560}{ColValInfo}}\ \&other)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info_abf857fdb5260ffe6466e7033e78e50e3}{abs\_val}}\ >\ other.\mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info_abf857fdb5260ffe6466e7033e78e50e3}{abs\_val}};}
+\DoxyCodeLine{00045\ \ \ \ \ \}}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info_aa581579ae3bc34529822f194a90d15af}{operator<=}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info_ad984ac46c95c8ecbd9f4cb1a6c91b560}{ColValInfo}}\ \&other)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ !\mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info_a375998d36689ec9bf6303dae5753850c}{operator>}}(other);}
+\DoxyCodeLine{00049\ \ \ \ \ \}}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info_ac79db68094523e14b3342b61a328cbfe}{operator==}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info_ad984ac46c95c8ecbd9f4cb1a6c91b560}{ColValInfo}}\ \&other)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ (\mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info_abf857fdb5260ffe6466e7033e78e50e3}{abs\_val}}\ ==\ other.\mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info_abf857fdb5260ffe6466e7033e78e50e3}{abs\_val}})\ \&\&}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ (\mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info_af8579b9a2080bcc59105c53992fb9264}{orig\_val}}\ ==\ other.\mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info_af8579b9a2080bcc59105c53992fb9264}{orig\_val}})\ \&\&}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ (\mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info_a76bddd81def5544c3618ed9be3e59e5b}{row}}\ ==\ other.\mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info_a76bddd81def5544c3618ed9be3e59e5b}{row}})}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00057\ \ \ \ \ \}}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \};}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00063\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_ab03ca3ec2feac46d2af4852a88449a23}{PSizeHeap}}}
+\DoxyCodeLine{00064\ \{}
+\DoxyCodeLine{00065\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordtype}{int}\ calc\_parent\_ind(\textcolor{keywordtype}{int}\ curr\_ind)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (curr\_ind-\/1)/2;}
+\DoxyCodeLine{00069\ \ \ \ \ \}}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keywordtype}{int}\ calc\_child\_ind\_L(\textcolor{keywordtype}{int}\ curr\_ind)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 2*curr\_ind\ +\ 1;}
+\DoxyCodeLine{00073\ \ \ \ \ \}}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keywordtype}{void}\ heap\_swap(\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}},\ \textcolor{keywordtype}{int}\ j)\ \{}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info}{ColValInfo<TPrecision>}}\ temp\ =\ \mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_a6210cde409a5144cca9f6f0021129444}{heap}}[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}];}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_a6210cde409a5144cca9f6f0021129444}{heap}}[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ =\ \mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_a6210cde409a5144cca9f6f0021129444}{heap}}[j];}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_a6210cde409a5144cca9f6f0021129444}{heap}}[j]\ =\ temp;}
+\DoxyCodeLine{00079\ \ \ \ \ \}}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keywordtype}{void}\ no\_replace\_push(\mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info}{ColValInfo<TPrecision>}}\ new\_val)\ \{}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_a6210cde409a5144cca9f6f0021129444}{heap}}[\mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_a7e093480d45999d9f02009b56f8e64c3}{count}}]\ =\ new\_val;}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ curr\_ind\ =\ \mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_a7e093480d45999d9f02009b56f8e64c3}{count}};}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ parent\_ind\ =\ calc\_parent\_ind(curr\_ind);}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ ((curr\_ind\ >\ 0)\ \&\&\ (\mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_a6210cde409a5144cca9f6f0021129444}{heap}}[parent\_ind]\ >\ \mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_a6210cde409a5144cca9f6f0021129444}{heap}}[curr\_ind]))\ \{}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ heap\_swap(parent\_ind,\ curr\_ind);}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ curr\_ind\ =\ parent\_ind;}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ parent\_ind\ =\ calc\_parent\_ind(curr\_ind);}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \ \ \}}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keywordtype}{void}\ replace\_min\_push(\mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info}{ColValInfo<TPrecision>}}\ new\_val)\ \{}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_a6210cde409a5144cca9f6f0021129444}{heap}}[0]\ =\ new\_val;}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ curr\_ind\ =\ 0;}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ child\_ind\_L\ =\ calc\_child\_ind\_L(curr\_ind);}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (child\_ind\_L\ <\ \mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_a9b94908c98b12a3f6d90f1477f32c861}{p}})\ \{}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ min\_child\ =\ child\_ind\_L;}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ((child\_ind\_L+1)\ <\ \mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_a9b94908c98b12a3f6d90f1477f32c861}{p}})\ \&\&}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (\mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_a6210cde409a5144cca9f6f0021129444}{heap}}[child\_ind\_L]\ >\ \mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_a6210cde409a5144cca9f6f0021129444}{heap}}[child\_ind\_L+1])}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ )\ \{}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ min\_child\ =\ child\_ind\_L+1;}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_a6210cde409a5144cca9f6f0021129444}{heap}}[curr\_ind]\ >\ \mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_a6210cde409a5144cca9f6f0021129444}{heap}}[min\_child])\ \{}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ heap\_swap(curr\_ind,\ min\_child);}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ curr\_ind\ =\ min\_child;}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ child\_ind\_L\ =\ calc\_child\_ind\_L(curr\_ind);}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00120\ \ \ \ \ }
+\DoxyCodeLine{00121\ \ \ \ \ \}}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_a9b94908c98b12a3f6d90f1477f32c861}{p}};}
+\DoxyCodeLine{00126\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_a7e093480d45999d9f02009b56f8e64c3}{count}}\ =\ 0;}
+\DoxyCodeLine{00127\ \ \ \ \ std::vector<ColValInfo<TPrecision>>\ \mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_a6210cde409a5144cca9f6f0021129444}{heap}};}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_ab03ca3ec2feac46d2af4852a88449a23}{PSizeHeap}}(\textcolor{keywordtype}{int}\ arg\_p):}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_a9b94908c98b12a3f6d90f1477f32c861}{p}}(arg\_p)}
+\DoxyCodeLine{00131\ \ \ \ \ \{}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_a9b94908c98b12a3f6d90f1477f32c861}{p}}\ <\ 0)\ \{}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}PSizeHeap:\ invalid\ row\ size"{}});}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_a6210cde409a5144cca9f6f0021129444}{heap}}.resize(\mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_a9b94908c98b12a3f6d90f1477f32c861}{p}});}
+\DoxyCodeLine{00136\ \ \ \ \ \}}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00138\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_a20c0d8cfb02a4e0cd788e627e3230d53}{push}}(TPrecision\ val,\ \textcolor{keywordtype}{int}\ row)\ \{}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_a9b94908c98b12a3f6d90f1477f32c861}{p}}\ >\ 0)\ \{}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcascade_1_1heap_1_1_col_val_info}{ColValInfo<TPrecision>}}\ new\_val(val,\ row);}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_a7e093480d45999d9f02009b56f8e64c3}{count}}\ <\ \mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_a9b94908c98b12a3f6d90f1477f32c861}{p}})\ \{}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ no\_replace\_push(new\_val);}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_a7e093480d45999d9f02009b56f8e64c3}{count}}++;}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (new\_val\ >\ \mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_a6210cde409a5144cca9f6f0021129444}{heap}}[0])\ \{}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ replace\_min\_push(new\_val);}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00150\ \ \ \ \ \}}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_a5a5a60a3d1abd879b8377ae6b1c55243}{PSizeHeap}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_ab03ca3ec2feac46d2af4852a88449a23}{PSizeHeap}}\ \&other):\ \mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_ab03ca3ec2feac46d2af4852a88449a23}{PSizeHeap}}(other.\mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_a9b94908c98b12a3f6d90f1477f32c861}{p}})\ \{}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_a7e093480d45999d9f02009b56f8e64c3}{count}}\ =\ other.\mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_a7e093480d45999d9f02009b56f8e64c3}{count}};}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<\mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_a7e093480d45999d9f02009b56f8e64c3}{count}};\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_a6210cde409a5144cca9f6f0021129444}{heap}}[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ =\ other.\mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_a6210cde409a5144cca9f6f0021129444}{heap}}[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}];}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00157\ \ \ \ \ \}}
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00159\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_ab03ca3ec2feac46d2af4852a88449a23}{PSizeHeap}}\ \&\mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_a36a86ffb1791c2c77b71a413973b3e40}{operator=}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1heap_1_1_p_size_heap_ab03ca3ec2feac46d2af4852a88449a23}{PSizeHeap}}\ \&other)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00160\ }
+\DoxyCodeLine{00161\ \};}
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ \}}
+\DoxyCodeLine{00164\ }
+\DoxyCodeLine{00165\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

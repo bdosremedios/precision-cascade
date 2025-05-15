@@ -1,0 +1,75 @@
+\doxysection{Solve\+Arg\+Pkg.\+h}
+\hypertarget{_solve_arg_pkg_8h_source}{}\label{_solve_arg_pkg_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/include/tools/arg\_pkgs/SolveArgPkg.h@{C:/Users/dosre/dev/precision-\/cascade/include/tools/arg\_pkgs/SolveArgPkg.h}}
+\mbox{\hyperlink{_solve_arg_pkg_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ SOLVEARGPKG\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ SOLVEARGPKG\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{types_8h}{../../types/types.h}}"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacecascade}{cascade}}\ \{}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_a08f75cdeb51f5e5851fb78e46cb61aa2}{SolveArgPkg}}}
+\DoxyCodeLine{00011\ \{}
+\DoxyCodeLine{00012\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_a7dba3f56ae566a3b8b85184548f5bd63}{default\_max\_iter}}\ =\ -\/1;}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_ac0381686573093c8888cbd093b113e11}{default\_max\_inner\_iter}}\ =\ -\/1;}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_a4c5c34f73226feb90ebd8441a11e2c85}{default\_target\_rel\_res}}\ =\ -\/1;}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<double>}}\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_af5e56c74fa5aca7bc024e2bcf1dc351a}{default\_init\_guess}}\ =\ (}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector_a7da078322ccb03812f330b72cf4ad907}{Vector<double>::Zero}}(\mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}(),\ 0)}
+\DoxyCodeLine{00019\ \ \ \ \ );}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_a4b857259507a3e588cfbfe5b8ab3fb99}{max\_iter}};}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_a29566456b91344970f0b99dacdc6c12e}{max\_inner\_iter}};}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_a28bc18414f041afa364d59aacac00dd7}{target\_rel\_res}};}
+\DoxyCodeLine{00024\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<double>}}\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_a8cefb021763ca9ce35f0c5fb0bc95c06}{init\_guess}};}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_ae50ac6653b9c19a06795256332afc1f2}{check\_default\_max\_iter}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_a4b857259507a3e588cfbfe5b8ab3fb99}{max\_iter}}\ ==\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_a7dba3f56ae566a3b8b85184548f5bd63}{default\_max\_iter}};}
+\DoxyCodeLine{00028\ \ \ \ \ \}}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_a66ec12ca4c3dff5812dbda9159485bda}{check\_default\_max\_inner\_iter}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_a4b857259507a3e588cfbfe5b8ab3fb99}{max\_iter}}\ ==\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_ac0381686573093c8888cbd093b113e11}{default\_max\_inner\_iter}};}
+\DoxyCodeLine{00031\ \ \ \ \ \}}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_add3f982902dd4098dfbefc4c4b302bcc}{check\_default\_target\_rel\_res}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_a28bc18414f041afa364d59aacac00dd7}{target\_rel\_res}}\ ==\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_a4c5c34f73226feb90ebd8441a11e2c85}{default\_target\_rel\_res}};}
+\DoxyCodeLine{00034\ \ \ \ \ \}}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_aac58076117a85ceeb00b12efd4e3f013}{check\_default\_init\_guess}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_a8cefb021763ca9ce35f0c5fb0bc95c06}{init\_guess}}.rows()\ !=\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_af5e56c74fa5aca7bc024e2bcf1dc351a}{default\_init\_guess}}.rows())\ \{}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_a8cefb021763ca9ce35f0c5fb0bc95c06}{init\_guess}}.cols()\ !=\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_af5e56c74fa5aca7bc024e2bcf1dc351a}{default\_init\_guess}}.cols())\ \{}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_a8cefb021763ca9ce35f0c5fb0bc95c06}{init\_guess}}\ ==\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_af5e56c74fa5aca7bc024e2bcf1dc351a}{default\_init\_guess}};}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00043\ \ \ \ \ \}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_a08f75cdeb51f5e5851fb78e46cb61aa2}{SolveArgPkg}}(}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ arg\_max\_iter\ =\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_a7dba3f56ae566a3b8b85184548f5bd63}{default\_max\_iter}},}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ arg\_max\_inner\_iter\ =\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_ac0381686573093c8888cbd093b113e11}{default\_max\_inner\_iter}},}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ arg\_target\_rel\_res\ =\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_a4c5c34f73226feb90ebd8441a11e2c85}{default\_target\_rel\_res}},}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<double>}}\ arg\_init\_guess\ =\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_af5e56c74fa5aca7bc024e2bcf1dc351a}{default\_init\_guess}}}
+\DoxyCodeLine{00050\ \ \ \ \ ):}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_a4b857259507a3e588cfbfe5b8ab3fb99}{max\_iter}}(arg\_max\_iter),}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_a29566456b91344970f0b99dacdc6c12e}{max\_inner\_iter}}(arg\_max\_inner\_iter),}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_a28bc18414f041afa364d59aacac00dd7}{target\_rel\_res}}(arg\_target\_rel\_res),}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_a8cefb021763ca9ce35f0c5fb0bc95c06}{init\_guess}}(arg\_init\_guess)}
+\DoxyCodeLine{00055\ \ \ \ \ \{\};}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ std::string\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_a647c40a06b8e41da1776088be98f4bad}{get\_info\_string}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}(}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Max\ iter:\ "{}}\ +\ std::to\_string(\mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_a4b857259507a3e588cfbfe5b8ab3fb99}{max\_iter}})\ +\ \textcolor{stringliteral}{"{}\ |\ "{}}}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Max\ inner\ iter:\ "{}}\ +\ std::to\_string(\mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_a29566456b91344970f0b99dacdc6c12e}{max\_inner\_iter}})\ +\ \textcolor{stringliteral}{"{}\ |\ "{}}}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Target\ rel-\/res:\ "{}}\ +\ std::to\_string(\mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_a28bc18414f041afa364d59aacac00dd7}{target\_rel\_res}})}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00063\ \ \ \ \ \}}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \};}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \}}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

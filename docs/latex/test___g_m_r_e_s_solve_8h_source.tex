@@ -1,0 +1,45 @@
+\doxysection{test\+\_\+\+GMRESSolve.\+h}
+\hypertarget{test___g_m_r_e_s_solve_8h_source}{}\label{test___g_m_r_e_s_solve_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/test/src/test\_solvers/test\_GMRES/test\_GMRESSolve.h@{C:/Users/dosre/dev/precision-\/cascade/test/src/test\_solvers/test\_GMRES/test\_GMRESSolve.h}}
+\mbox{\hyperlink{test___g_m_r_e_s_solve_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ TEST\_GMRES\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ TEST\_GMRES\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{test_8h}{test.h}}"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_g_m_r_e_s_solve_8h}{solvers/GMRES/GMRESSolve.h}}"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix,\ \textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00009\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_g_m_r_e_s_solve_testing_mock}{GMRESSolveTestingMock}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a937b1a4a6b87b2ab52912ff64741d360}{GMRESSolve}}<TMatrix,\ TPrecision>\ \{}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a937b1a4a6b87b2ab52912ff64741d360}{GMRESSolve}}<TMatrix,\ TPrecision>\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a937b1a4a6b87b2ab52912ff64741d360}{::GMRESSolve}};}
+\DoxyCodeLine{00014\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a937b1a4a6b87b2ab52912ff64741d360}{GMRESSolve}}<TMatrix,\ TPrecision>\mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a78f7ec0a1549d8f02aea2f45003967eb}{::typed\_soln}};}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a937b1a4a6b87b2ab52912ff64741d360}{GMRESSolve}}<TMatrix,\ TPrecision>\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_aec159a1e115c674a66364b83fc81a48e}{::Q\_kry\_basis}};}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a937b1a4a6b87b2ab52912ff64741d360}{GMRESSolve}}<TMatrix,\ TPrecision>\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a176d37b9624c1c709f2971489437c3f1}{::H\_k}};}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a937b1a4a6b87b2ab52912ff64741d360}{GMRESSolve}}<TMatrix,\ TPrecision>\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a523d595b4c8c786e87f6b5a160589262}{::H\_Q}};}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a937b1a4a6b87b2ab52912ff64741d360}{GMRESSolve}}<TMatrix,\ TPrecision>\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a8cae7f446a9de769946c5432343b3edb}{::H\_R}};}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a937b1a4a6b87b2ab52912ff64741d360}{GMRESSolve}}<TMatrix,\ TPrecision>\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a258ed521206877ba097c5d2760586db5}{::curr\_kry\_dim}};}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a937b1a4a6b87b2ab52912ff64741d360}{GMRESSolve}}<TMatrix,\ TPrecision>\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_ac54c52a68a98dfb18498f96e86e7baf9}{::max\_kry\_dim}};}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a937b1a4a6b87b2ab52912ff64741d360}{GMRESSolve}}<TMatrix,\ TPrecision>\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a0df551e704e9b0a10d9b9d9fdd40fdd4}{::next\_q}};}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a937b1a4a6b87b2ab52912ff64741d360}{GMRESSolve}}<TMatrix,\ TPrecision>\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a4b8ed44e4dc379aa9a73fe88f9c08136}{::rho}};}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a937b1a4a6b87b2ab52912ff64741d360}{GMRESSolve}}<TMatrix,\ TPrecision>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_aa533db25c700e1ae8eb6a75bd33f43cd}{::max\_iter}};}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a937b1a4a6b87b2ab52912ff64741d360}{GMRESSolve}}<TMatrix,\ TPrecision>\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_ac3f70dfee7b3b46c7722e63707919e48}{::update\_QR\_fact}};}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a937b1a4a6b87b2ab52912ff64741d360}{GMRESSolve}}<TMatrix,\ TPrecision>\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_af976146b9da9484fcdfe5b223e70409a}{::update\_x\_minimizing\_res}};}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a937b1a4a6b87b2ab52912ff64741d360}{GMRESSolve}}<TMatrix,\ TPrecision>\mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a2769d02baf204ac37d5a4b49a9180951}{::iterate}};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_g_m_r_e_s_solve_testing_mock_ab601b90cd92a5d50be9d2b034d881cca}{iterate\_no\_soln\_solve}}()\ \{}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a0fd83180e332d7fb9348ef953de11d87}{update\_subspace\_k}}();}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_a731cdc7b6464b4f9082f971e21849c25}{update\_nextq\_and\_Hkplus1}}();}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classcascade_1_1_g_m_r_e_s_solve_afc3e2afd35eeb72821c96c25bdca3adf}{check\_termination}}();}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \};}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

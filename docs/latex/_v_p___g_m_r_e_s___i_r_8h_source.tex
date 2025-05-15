@@ -1,0 +1,613 @@
+\doxysection{VP\+\_\+\+GMRES\+\_\+\+IR.\+h}
+\hypertarget{_v_p___g_m_r_e_s___i_r_8h_source}{}\label{_v_p___g_m_r_e_s___i_r_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/include/solvers/nested/GMRES\_IR/VP\_GMRES\_IR.h@{C:/Users/dosre/dev/precision-\/cascade/include/solvers/nested/GMRES\_IR/VP\_GMRES\_IR.h}}
+\mbox{\hyperlink{_v_p___g_m_r_e_s___i_r_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ VP\_GMRES\_IR\_SOLVE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ VP\_GMRES\_IR\_SOLVE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_iterative_refinement_base_8h}{../IterativeRefinementBase.h}}"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_g_m_r_e_s_solve_8h}{../../GMRES/GMRESSolve.h}}"{}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <cuda\_fp16.h>}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacecascade}{cascade}}\ \{}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix>}
+\DoxyCodeLine{00012\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_af365d8dcc81903492db76f4eac9d33f3}{VP\_GMRES\_IR\_Solve}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcascade_1_1_iterative_refinement_base_a7d1f990f4f43204329d401d2cf2ca5aa}{IterativeRefinementBase}}<TMatrix>}
+\DoxyCodeLine{00013\ \{}
+\DoxyCodeLine{00014\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_typed_linear_system}{TypedLinearSystem<TMatrix,\ double>}}\ *\ innerlinsys\_dbl\_ptr\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00017\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_typed_linear_system}{TypedLinearSystem<TMatrix,\ float>}}\ *\ innerlinsys\_sgl\_ptr\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00018\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_typed_linear_system}{TypedLinearSystem<TMatrix,\ \_\_half>}}\ *\ innerlinsys\_hlf\_ptr\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_typed_linear_system___mut_addl_r_h_s}{TypedLinearSystem\_MutAddlRHS<TMatrix,\ double>}}\ *\ mutrhs\_innerlinsys\_dbl\_ptr\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00021\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_typed_linear_system___mut_addl_r_h_s}{TypedLinearSystem\_MutAddlRHS<TMatrix,\ float>}}\ *\ mutrhs\_innerlinsys\_sgl\_ptr\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00022\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_typed_linear_system___mut_addl_r_h_s}{TypedLinearSystem\_MutAddlRHS<TMatrix,\ \_\_half>}}\ *\ mutrhs\_innerlinsys\_hlf\_ptr\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{PrecondArgPkg<TMatrix,\ double>}}\ orig\_inner\_precond\_arg\_pkg\_dbl;}
+\DoxyCodeLine{00025\ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{PrecondArgPkg<TMatrix,\ float>}}\ *\ inner\_precond\_arg\_pkg\_sgl\_ptr\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00026\ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{PrecondArgPkg<TMatrix,\ \_\_half>}}\ *\ inner\_precond\_arg\_pkg\_hlf\_ptr\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{bool}\ hlf\_ptrs\_instantiated()\ \{}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ (innerlinsys\_hlf\_ptr\ !=\ \textcolor{keyword}{nullptr})\ \&\&}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ (mutrhs\_innerlinsys\_hlf\_ptr\ !=\ \textcolor{keyword}{nullptr})\ \&\&}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ (inner\_precond\_arg\_pkg\_hlf\_ptr\ !=\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00034\ \ \ \ \ \};}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{bool}\ hlf\_ptrs\_empty()\ \{}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ (innerlinsys\_hlf\_ptr\ ==\ \textcolor{keyword}{nullptr})\ \&\&}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ (mutrhs\_innerlinsys\_hlf\_ptr\ ==\ \textcolor{keyword}{nullptr})\ \&\&}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ (inner\_precond\_arg\_pkg\_hlf\_ptr\ ==\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00042\ \ \ \ \ \};}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{bool}\ sgl\_ptrs\_instantiated()\ \{}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ (innerlinsys\_sgl\_ptr\ !=\ \textcolor{keyword}{nullptr})\ \&\&}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ (mutrhs\_innerlinsys\_sgl\_ptr\ !=\ \textcolor{keyword}{nullptr})\ \&\&}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ (inner\_precond\_arg\_pkg\_sgl\_ptr\ !=\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00050\ \ \ \ \ \};}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{bool}\ sgl\_ptrs\_empty()\ \{}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ (innerlinsys\_sgl\_ptr\ ==\ \textcolor{keyword}{nullptr})\ \&\&}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ (mutrhs\_innerlinsys\_sgl\_ptr\ ==\ \textcolor{keyword}{nullptr})\ \&\&}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ (inner\_precond\_arg\_pkg\_sgl\_ptr\ ==\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00058\ \ \ \ \ \};}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keywordtype}{bool}\ dbl\_ptrs\_instantiated()\ \{}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ (innerlinsys\_dbl\_ptr\ !=\ \textcolor{keyword}{nullptr})\ \&\&}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ (mutrhs\_innerlinsys\_dbl\_ptr\ !=\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00065\ \ \ \ \ \};}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordtype}{bool}\ dbl\_ptrs\_empty()\ \{}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ (innerlinsys\_dbl\_ptr\ ==\ \textcolor{keyword}{nullptr})\ \&\&}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ (mutrhs\_innerlinsys\_dbl\_ptr\ ==\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00072\ \ \ \ \ \};}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keywordtype}{void}\ delete\_hlf\_ptrs()\ \{}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ innerlinsys\_hlf\_ptr;}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ innerlinsys\_hlf\_ptr\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ mutrhs\_innerlinsys\_hlf\_ptr;}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ mutrhs\_innerlinsys\_hlf\_ptr\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ inner\_precond\_arg\_pkg\_hlf\_ptr;}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ inner\_precond\_arg\_pkg\_hlf\_ptr\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \ \ \}}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{keywordtype}{void}\ delete\_sgl\_ptrs()\ \{}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ innerlinsys\_sgl\_ptr;}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ innerlinsys\_sgl\_ptr\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ mutrhs\_innerlinsys\_sgl\_ptr;}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ mutrhs\_innerlinsys\_sgl\_ptr\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ inner\_precond\_arg\_pkg\_sgl\_ptr;}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ inner\_precond\_arg\_pkg\_sgl\_ptr\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \ \ \ \ \}}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{keywordtype}{void}\ delete\_dbl\_ptrs()\ \{}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ innerlinsys\_dbl\_ptr;}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ innerlinsys\_dbl\_ptr\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ mutrhs\_innerlinsys\_dbl\_ptr;}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ mutrhs\_innerlinsys\_dbl\_ptr\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \ \ \ \ \}}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keywordtype}{void}\ delete\_ptrs()\ \{}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ delete\_hlf\_ptrs();}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ delete\_sgl\_ptrs();}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ delete\_dbl\_ptrs();}
+\DoxyCodeLine{00114\ \ \ \ \ \}}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00117\ \ \ \ \ \textcolor{keywordtype}{void}\ setup\_systems()\ \{}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (std::is\_same<TPrecision,\ \_\_half>::value)\ \{}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (hlf\_ptrs\_empty())\ \{}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ innerlinsys\_hlf\_ptr\ =\ (}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{new}\ \mbox{\hyperlink{classcascade_1_1_typed_linear_system}{TypedLinearSystem<TMatrix,\ \_\_half>}}(}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a3afc6c73083d839f1b451aa255a8d3ff}{gen\_lin\_sys\_ptr}}}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mutrhs\_innerlinsys\_hlf\_ptr\ =\ (}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{new}\ \mbox{\hyperlink{classcascade_1_1_typed_linear_system___mut_addl_r_h_s}{TypedLinearSystem\_MutAddlRHS<TMatrix,\ \_\_half>}}(}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ innerlinsys\_hlf\_ptr,\ this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a1853ac2a74547799dd50f7a0a8f84bf3}{curr\_res}}}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ inner\_precond\_arg\_pkg\_hlf\_ptr\ =\ (}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ orig\_inner\_precond\_arg\_pkg\_dbl.cast\_hlf\_ptr()}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (hlf\_ptrs\_instantiated())\ \{}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mutrhs\_innerlinsys\_hlf\_ptr-\/>set\_rhs(this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a1853ac2a74547799dd50f7a0a8f84bf3}{curr\_res}});}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ delete\_ptrs();}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}VP\_GMRES\_IR\_Solve:\ mismatching\ ptrs\ in\ "{}}}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}setup\_systems<\_\_half>"{}}}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (std::is\_same<TPrecision,\ float>::value)\ \{}
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (sgl\_ptrs\_empty())\ \{}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ delete\_hlf\_ptrs();}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ innerlinsys\_sgl\_ptr\ =\ (}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{new}\ \mbox{\hyperlink{classcascade_1_1_typed_linear_system}{TypedLinearSystem<TMatrix,\ float>}}(this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a3afc6c73083d839f1b451aa255a8d3ff}{gen\_lin\_sys\_ptr}})}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mutrhs\_innerlinsys\_sgl\_ptr\ =\ (}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{new}\ \mbox{\hyperlink{classcascade_1_1_typed_linear_system___mut_addl_r_h_s}{TypedLinearSystem\_MutAddlRHS<TMatrix,\ float>}}(}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ innerlinsys\_sgl\_ptr,\ this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a1853ac2a74547799dd50f7a0a8f84bf3}{curr\_res}}}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ inner\_precond\_arg\_pkg\_sgl\_ptr\ =\ (}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ orig\_inner\_precond\_arg\_pkg\_dbl.cast\_sgl\_ptr()}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (sgl\_ptrs\_instantiated())\ \{}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mutrhs\_innerlinsys\_sgl\_ptr-\/>set\_rhs(this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a1853ac2a74547799dd50f7a0a8f84bf3}{curr\_res}});}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ delete\_ptrs();}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}VP\_GMRES\_IR\_Solve:\ mismatching\ ptrs\ in\ "{}}}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}setup\_systems<float>"{}}}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00169\ }
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (std::is\_same<TPrecision,\ double>::value)\ \{}
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (dbl\_ptrs\_empty())\ \{}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ delete\_sgl\_ptrs();}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ innerlinsys\_dbl\_ptr\ =\ (}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{new}\ \mbox{\hyperlink{classcascade_1_1_typed_linear_system}{TypedLinearSystem<TMatrix,\ double>}}(}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a3afc6c73083d839f1b451aa255a8d3ff}{gen\_lin\_sys\_ptr}}}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mutrhs\_innerlinsys\_dbl\_ptr\ =\ (}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{new}\ \mbox{\hyperlink{classcascade_1_1_typed_linear_system___mut_addl_r_h_s}{TypedLinearSystem\_MutAddlRHS<TMatrix,\ double>}}(}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ innerlinsys\_dbl\_ptr,\ this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a1853ac2a74547799dd50f7a0a8f84bf3}{curr\_res}}}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (dbl\_ptrs\_instantiated())\ \{}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mutrhs\_innerlinsys\_dbl\_ptr-\/>set\_rhs(this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a1853ac2a74547799dd50f7a0a8f84bf3}{curr\_res}});}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ delete\_ptrs();}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}VP\_GMRES\_IR\_Solve:\ mismatching\ ptrs\ in\ "{}}}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}setup\_systems<double>"{}}}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00193\ }
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}VP\_GMRES\_IR\_Solve:\ Invalid\ TPrecision\ used\ in\ "{}}}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}setup\_systems<TPrecision>"{}}}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00200\ }
+\DoxyCodeLine{00201\ }
+\DoxyCodeLine{00202\ \ \ \ \ \}}
+\DoxyCodeLine{00203\ }
+\DoxyCodeLine{00204\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00205\ \ \ \ \ \textcolor{keywordtype}{void}\ setup\_inner\_solve()\ \{}
+\DoxyCodeLine{00206\ }
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ setup\_systems<TPrecision>();}
+\DoxyCodeLine{00208\ }
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (std::is\_same<TPrecision,\ \_\_half>::value)\ \{}
+\DoxyCodeLine{00210\ }
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a89076f801630b485f9631cca7211ccdd}{inner\_solver}}\ =\ std::make\_shared<GMRESSolve<TMatrix,\ \_\_half>>(}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mutrhs\_innerlinsys\_hlf\_ptr,}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a2dc06a4a8950278f0617afd1f77744dd}{inner\_solve\_arg\_pkg}},}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *this-\/>inner\_precond\_arg\_pkg\_hlf\_ptr}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00216\ }
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (std::is\_same<TPrecision,\ float>::value)\ \{}
+\DoxyCodeLine{00218\ }
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a89076f801630b485f9631cca7211ccdd}{inner\_solver}}\ =\ std::make\_shared<GMRESSolve<TMatrix,\ float>>(}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mutrhs\_innerlinsys\_sgl\_ptr,}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a2dc06a4a8950278f0617afd1f77744dd}{inner\_solve\_arg\_pkg}},}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *this-\/>inner\_precond\_arg\_pkg\_sgl\_ptr}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00224\ }
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (std::is\_same<TPrecision,\ double>::value)\ \{}
+\DoxyCodeLine{00226\ }
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a89076f801630b485f9631cca7211ccdd}{inner\_solver}}\ =\ std::make\_shared<GMRESSolve<TMatrix,\ double>>(}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mutrhs\_innerlinsys\_dbl\_ptr,}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a2dc06a4a8950278f0617afd1f77744dd}{inner\_solve\_arg\_pkg}},}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ orig\_inner\_precond\_arg\_pkg\_dbl}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00232\ }
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}VP\_GMRES\_IR\_Solve:\ Invalid\ TPrecision\ used\ in\ "{}}}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}setup\_inner\_solve<TPrecision>"{}}}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00239\ }
+\DoxyCodeLine{00240\ \ \ \ \ \}}
+\DoxyCodeLine{00241\ }
+\DoxyCodeLine{00242\ \ \ \ \ \textcolor{keywordtype}{void}\ choose\_phase\_solver()\ \{}
+\DoxyCodeLine{00243\ }
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_a0c57dc4f001938589faadb4f30554272}{cascade\_phase}}\ ==\ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_a637947ecc03c6a8ac61594d956edc448}{HLF\_PHASE}})\ \{}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \ \ \ \ setup\_inner\_solve<\_\_half>();}
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_a0c57dc4f001938589faadb4f30554272}{cascade\_phase}}\ ==\ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_ad4090349f648e6d9c1e974be5a39de60}{SGL\_PHASE}})\ \{}
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \ \ \ \ setup\_inner\_solve<float>();}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_a0c57dc4f001938589faadb4f30554272}{cascade\_phase}}\ ==\ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_aa0a3d35865b6c5f0bcb0ab608819e5cc}{DBL\_PHASE}})\ \{}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \ \ \ \ setup\_inner\_solve<double>();}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}VP\_GMRES\_IR\_Solve:\ Invalid\ cascade\_phase\ in\ VP\_GMRES\_IR\_Solver"{}}}
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00255\ }
+\DoxyCodeLine{00256\ \ \ \ \ \}}
+\DoxyCodeLine{00257\ }
+\DoxyCodeLine{00258\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00259\ }
+\DoxyCodeLine{00260\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_ac0d4bb83e2d99fd48d6b8adb158717f1}{u\_hlf}}\ =\ pow(2,\ -\/10);}
+\DoxyCodeLine{00261\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_abdf749eefe69ae5c032c3e5edd9b6a7b}{u\_sgl}}\ =\ pow(2,\ -\/23);}
+\DoxyCodeLine{00262\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_ab7a99c88aff10d0cf0805fcf666ec90c}{u\_dbl}}\ =\ pow(2,\ -\/52);}
+\DoxyCodeLine{00263\ }
+\DoxyCodeLine{00264\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_a637947ecc03c6a8ac61594d956edc448}{HLF\_PHASE}}\ =\ 0;}
+\DoxyCodeLine{00265\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_ad4090349f648e6d9c1e974be5a39de60}{SGL\_PHASE}}\ =\ 1;}
+\DoxyCodeLine{00266\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_aa0a3d35865b6c5f0bcb0ab608819e5cc}{DBL\_PHASE}}\ =\ 2;}
+\DoxyCodeLine{00267\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_ac1fdefe5af85dddfaed3d43883233e10}{INIT\_PHASE}};}
+\DoxyCodeLine{00268\ }
+\DoxyCodeLine{00269\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_a0c57dc4f001938589faadb4f30554272}{cascade\_phase}};}
+\DoxyCodeLine{00270\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_a165232f3c576540835697e9d20aafb42}{hlf\_sgl\_cascade\_change}}\ =\ -\/1;}
+\DoxyCodeLine{00271\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_ae97834504cd8bc2c1825aae0558d5c49}{sgl\_dbl\_cascade\_change}}\ =\ -\/1;}
+\DoxyCodeLine{00272\ }
+\DoxyCodeLine{00273\ \ \ \ \ \textcolor{comment}{/*\ Determine\ which\ phase\ should\ be\ used\ based\ on\ current\ phase\ and\ current}}
+\DoxyCodeLine{00274\ \textcolor{comment}{\ \ \ \ \ \ \ convergence\ progress\ */}}
+\DoxyCodeLine{00275\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_a3aca6735a2c1f53c87226c4ea5e0d02c}{determine\_next\_phase}}()\ =\ 0;}
+\DoxyCodeLine{00276\ }
+\DoxyCodeLine{00277\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_aa8f084858401d1b6e66a63050f077fde}{initialize\_inner\_outer\_solver}}()\textcolor{keyword}{\ override\ }\{}
+\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Initialize\ inner\ outer\ solver\ in\ lowest\ precision\ \_\_half\ phase}}
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_a0c57dc4f001938589faadb4f30554272}{cascade\_phase}}\ =\ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_ac1fdefe5af85dddfaed3d43883233e10}{INIT\_PHASE}};}
+\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (\mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_a0c57dc4f001938589faadb4f30554272}{cascade\_phase}})\ \{}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_a637947ecc03c6a8ac61594d956edc448}{HLF\_PHASE}}:}
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ setup\_inner\_solve<\_\_half>();\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_ad4090349f648e6d9c1e974be5a39de60}{SGL\_PHASE}}:}
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ setup\_inner\_solve<float>();\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_aa0a3d35865b6c5f0bcb0ab608819e5cc}{DBL\_PHASE}}:}
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ setup\_inner\_solve<double>();\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00288\ \ \ \ \ \}}
+\DoxyCodeLine{00289\ }
+\DoxyCodeLine{00290\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_aff769b5ab0ef43285421e3f6721b4c5b}{outer\_iterate\_setup}}()\textcolor{keyword}{\ override\ }\{}
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Specify\ inner\_solver\ for\ outer\_iterate\_calc\ and\ setup}}
+\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ next\_phase\ =\ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_a3aca6735a2c1f53c87226c4ea5e0d02c}{determine\_next\_phase}}();}
+\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((\mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_a0c57dc4f001938589faadb4f30554272}{cascade\_phase}}\ ==\ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_a637947ecc03c6a8ac61594d956edc448}{HLF\_PHASE}})\ \&\&\ (next\_phase\ ==\ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_ad4090349f648e6d9c1e974be5a39de60}{SGL\_PHASE}}))\ \{}
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_a165232f3c576540835697e9d20aafb42}{hlf\_sgl\_cascade\_change}}\ =\ this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_acb0768c3ff633d870011471cf278b3d5}{get\_iteration}}();}
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((cascade\_phase\ ==\ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_ad4090349f648e6d9c1e974be5a39de60}{SGL\_PHASE}})\ \&\&\ (next\_phase\ ==\ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_aa0a3d35865b6c5f0bcb0ab608819e5cc}{DBL\_PHASE}}))\ \{}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_ae97834504cd8bc2c1825aae0558d5c49}{sgl\_dbl\_cascade\_change}}\ =\ this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_acb0768c3ff633d870011471cf278b3d5}{get\_iteration}}();}
+\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ cascade\_phase\ =\ next\_phase;}
+\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ choose\_phase\_solver();}
+\DoxyCodeLine{00301\ \ \ \ \ \}}
+\DoxyCodeLine{00302\ }
+\DoxyCodeLine{00303\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_a624ca7d7d8eb6ca405105471131fc5f6}{derived\_generic\_reset}}()\textcolor{keyword}{\ override\ }\{}
+\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a5f2326e837bf3ae1727b8a9c06ce120d}{InnerOuterSolve<TMatrix>::derived\_generic\_reset}}();}
+\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_a0c57dc4f001938589faadb4f30554272}{cascade\_phase}}\ =\ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_ac1fdefe5af85dddfaed3d43883233e10}{INIT\_PHASE}};}
+\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_aa8f084858401d1b6e66a63050f077fde}{initialize\_inner\_outer\_solver}}();}
+\DoxyCodeLine{00307\ \ \ \ \ \}}
+\DoxyCodeLine{00308\ \ \ \ \ }
+\DoxyCodeLine{00309\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00310\ }
+\DoxyCodeLine{00311\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_af365d8dcc81903492db76f4eac9d33f3}{VP\_GMRES\_IR\_Solve}}(}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{GenericLinearSystem<TMatrix>}}\ *\ \textcolor{keyword}{const}\ arg\_gen\_lin\_sys\_ptr,}
+\DoxyCodeLine{00313\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{SolveArgPkg}}\ \&arg\_solve\_arg\_pkg,}
+\DoxyCodeLine{00314\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{PrecondArgPkg<TMatrix,\ double>}}\ arg\_inner\_precond\_arg\_pkg\_dbl\ =\ (}
+\DoxyCodeLine{00315\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{PrecondArgPkg<TMatrix,\ double>}}()}
+\DoxyCodeLine{00316\ \ \ \ \ \ \ \ \ ),}
+\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ arg\_init\_phase\ =\ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_a637947ecc03c6a8ac61594d956edc448}{VP\_GMRES\_IR\_Solve::HLF\_PHASE}}}
+\DoxyCodeLine{00318\ \ \ \ \ ):}
+\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_iterative_refinement_base_a7d1f990f4f43204329d401d2cf2ca5aa}{IterativeRefinementBase}}<TMatrix>(arg\_gen\_lin\_sys\_ptr,\ arg\_solve\_arg\_pkg),}
+\DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ orig\_inner\_precond\_arg\_pkg\_dbl(arg\_inner\_precond\_arg\_pkg\_dbl),}
+\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_ac1fdefe5af85dddfaed3d43883233e10}{INIT\_PHASE}}(arg\_init\_phase)}
+\DoxyCodeLine{00322\ \ \ \ \ \{}
+\DoxyCodeLine{00323\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_aa8f084858401d1b6e66a63050f077fde}{initialize\_inner\_outer\_solver}}();}
+\DoxyCodeLine{00324\ \ \ \ \ \}}
+\DoxyCodeLine{00325\ }
+\DoxyCodeLine{00326\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_abd57b0b48ef5b036643d00f4014ac6a9}{\string~VP\_GMRES\_IR\_Solve}}()\ \{}
+\DoxyCodeLine{00327\ \ \ \ \ \ \ \ \ delete\_ptrs();}
+\DoxyCodeLine{00328\ \ \ \ \ \}}
+\DoxyCodeLine{00329\ }
+\DoxyCodeLine{00330\ \ \ \ \ \textcolor{comment}{//\ Forbid\ rvalue\ instantiation}}
+\DoxyCodeLine{00331\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_abfc7786c53c1f9ac37bf587ff04d0f27}{VP\_GMRES\_IR\_Solve}}(}
+\DoxyCodeLine{00332\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{GenericLinearSystem<TMatrix>}}\ *\ \textcolor{keyword}{const},}
+\DoxyCodeLine{00333\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{SolveArgPkg}}\ \&\&,}
+\DoxyCodeLine{00334\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{PrecondArgPkg<TMatrix,\ double>}}}
+\DoxyCodeLine{00335\ \ \ \ \ )\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00336\ }
+\DoxyCodeLine{00337\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_a7e0b10d896f2bb385f054362d9663b73}{get\_hlf\_sgl\_cascade\_change}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_a165232f3c576540835697e9d20aafb42}{hlf\_sgl\_cascade\_change}};\ \}}
+\DoxyCodeLine{00338\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_af2cb2f2933cdf79ef1ddc8c1051ae163}{get\_sgl\_dbl\_cascade\_change}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_ae97834504cd8bc2c1825aae0558d5c49}{sgl\_dbl\_cascade\_change}};\ \}}
+\DoxyCodeLine{00339\ }
+\DoxyCodeLine{00340\ \};}
+\DoxyCodeLine{00341\ }
+\DoxyCodeLine{00342\ \textcolor{comment}{//\ Set\ solver\ to\ spend\ 20\%\ in\ half\ phase\ and\ 40\%\ in\ single\ phase\ and\ 40\%\ time}}
+\DoxyCodeLine{00343\ \textcolor{comment}{//\ in\ double}}
+\DoxyCodeLine{00344\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix>}
+\DoxyCodeLine{00345\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1_outer_restart_count_a60a193ec27598072118e4404ced9f329}{OuterRestartCount}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_af365d8dcc81903492db76f4eac9d33f3}{VP\_GMRES\_IR\_Solve}}<TMatrix>}
+\DoxyCodeLine{00346\ \{}
+\DoxyCodeLine{00347\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00348\ }
+\DoxyCodeLine{00349\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classcascade_1_1_outer_restart_count_aefd2ccf9aa21c5716a1d56a1f9d746dd}{hlf\_iters}};}
+\DoxyCodeLine{00350\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classcascade_1_1_outer_restart_count_a1526ef5ebe62181af5edd072178d1f25}{sgl\_iters}};}
+\DoxyCodeLine{00351\ }
+\DoxyCodeLine{00352\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classcascade_1_1_outer_restart_count_a2168a092b118e7edd9600ed735350051}{determine\_next\_phase}}()\textcolor{keyword}{\ override\ }\{}
+\DoxyCodeLine{00353\ }
+\DoxyCodeLine{00354\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (this-\/>cascade\_phase\ ==\ this-\/>HLF\_PHASE)\ \{}
+\DoxyCodeLine{00355\ }
+\DoxyCodeLine{00356\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_acb0768c3ff633d870011471cf278b3d5}{get\_iteration}}()\ >\ hlf\_iters)\ \{}
+\DoxyCodeLine{00357\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ this-\/>SGL\_PHASE;}
+\DoxyCodeLine{00358\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00359\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ this-\/>cascade\_phase;}
+\DoxyCodeLine{00360\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00361\ }
+\DoxyCodeLine{00362\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (this-\/>cascade\_phase\ ==\ this-\/>SGL\_PHASE)\ \{}
+\DoxyCodeLine{00363\ }
+\DoxyCodeLine{00364\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_acb0768c3ff633d870011471cf278b3d5}{get\_iteration}}()\ >\ hlf\_iters+\mbox{\hyperlink{classcascade_1_1_outer_restart_count_a1526ef5ebe62181af5edd072178d1f25}{sgl\_iters}})\ \{}
+\DoxyCodeLine{00365\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ this-\/>DBL\_PHASE;}
+\DoxyCodeLine{00366\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00367\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ this-\/>cascade\_phase;}
+\DoxyCodeLine{00368\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00369\ }
+\DoxyCodeLine{00370\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00371\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ this-\/>DBL\_PHASE;}
+\DoxyCodeLine{00372\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00373\ \ \ \ \ \}}
+\DoxyCodeLine{00374\ }
+\DoxyCodeLine{00375\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00376\ }
+\DoxyCodeLine{00377\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_outer_restart_count_a60a193ec27598072118e4404ced9f329}{OuterRestartCount}}(}
+\DoxyCodeLine{00378\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{GenericLinearSystem<TMatrix>}}\ *\ \textcolor{keyword}{const}\ arg\_gen\_lin\_sys\_ptr,}
+\DoxyCodeLine{00379\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{SolveArgPkg}}\ \&arg\_solve\_arg\_pkg,}
+\DoxyCodeLine{00380\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{PrecondArgPkg<TMatrix,\ double>}}\ arg\_inner\_precond\_arg\_pkg\_dbl\ =\ (}
+\DoxyCodeLine{00381\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{PrecondArgPkg<TMatrix,\ double>}}()}
+\DoxyCodeLine{00382\ \ \ \ \ \ \ \ \ ),}
+\DoxyCodeLine{00383\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ arg\_init\_phase\ =\ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_a637947ecc03c6a8ac61594d956edc448}{VP\_GMRES\_IR\_Solve<TMatrix>::HLF\_PHASE}}}
+\DoxyCodeLine{00384\ \ \ \ \ ):}
+\DoxyCodeLine{00385\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_af365d8dcc81903492db76f4eac9d33f3}{VP\_GMRES\_IR\_Solve}}<TMatrix>(}
+\DoxyCodeLine{00386\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_gen\_lin\_sys\_ptr,}
+\DoxyCodeLine{00387\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_solve\_arg\_pkg,}
+\DoxyCodeLine{00388\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_inner\_precond\_arg\_pkg\_dbl,}
+\DoxyCodeLine{00389\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_init\_phase}
+\DoxyCodeLine{00390\ \ \ \ \ \ \ \ \ ),}
+\DoxyCodeLine{00391\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_outer_restart_count_aefd2ccf9aa21c5716a1d56a1f9d746dd}{hlf\_iters}}(arg\_solve\_arg\_pkg.\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_aa533db25c700e1ae8eb6a75bd33f43cd}{max\_iter}}/5),}
+\DoxyCodeLine{00392\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_outer_restart_count_a1526ef5ebe62181af5edd072178d1f25}{sgl\_iters}}(arg\_solve\_arg\_pkg.\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_aa533db25c700e1ae8eb6a75bd33f43cd}{max\_iter}}*2/5)}
+\DoxyCodeLine{00393\ \ \ \ \ \{\}}
+\DoxyCodeLine{00394\ }
+\DoxyCodeLine{00395\ \};}
+\DoxyCodeLine{00396\ }
+\DoxyCodeLine{00397\ }
+\DoxyCodeLine{00398\ \textcolor{comment}{//\ Set\ solver\ to\ 60\%\ in\ single\ phase\ and\ 40\%\ time\ in\ double}}
+\DoxyCodeLine{00399\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix>}
+\DoxyCodeLine{00400\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1_s_d___outer_restart_count_ac956825770016094efdf6fd4305092c1}{SD\_OuterRestartCount}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcascade_1_1_outer_restart_count_a60a193ec27598072118e4404ced9f329}{OuterRestartCount}}<TMatrix>}
+\DoxyCodeLine{00401\ \{}
+\DoxyCodeLine{00402\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00403\ }
+\DoxyCodeLine{00404\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_s_d___outer_restart_count_ac956825770016094efdf6fd4305092c1}{SD\_OuterRestartCount}}(}
+\DoxyCodeLine{00405\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{GenericLinearSystem<TMatrix>}}\ *\ \textcolor{keyword}{const}\ arg\_gen\_lin\_sys\_ptr,}
+\DoxyCodeLine{00406\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{SolveArgPkg}}\ \&arg\_solve\_arg\_pkg,}
+\DoxyCodeLine{00407\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{PrecondArgPkg<TMatrix,\ double>}}\ arg\_inner\_precond\_arg\_pkg\_dbl\ =\ (}
+\DoxyCodeLine{00408\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{PrecondArgPkg<TMatrix,\ double>}}()}
+\DoxyCodeLine{00409\ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00410\ \ \ \ \ ):}
+\DoxyCodeLine{00411\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_outer_restart_count_a60a193ec27598072118e4404ced9f329}{OuterRestartCount}}<TMatrix>(}
+\DoxyCodeLine{00412\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_gen\_lin\_sys\_ptr,}
+\DoxyCodeLine{00413\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_solve\_arg\_pkg,}
+\DoxyCodeLine{00414\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_inner\_precond\_arg\_pkg\_dbl,}
+\DoxyCodeLine{00415\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve}{VP\_GMRES\_IR\_Solve}}<TMatrix>::\mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_ad4090349f648e6d9c1e974be5a39de60}{SGL\_PHASE}}}
+\DoxyCodeLine{00416\ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00417\ \ \ \ \ \{\}}
+\DoxyCodeLine{00418\ }
+\DoxyCodeLine{00419\ \};}
+\DoxyCodeLine{00420\ }
+\DoxyCodeLine{00421\ }
+\DoxyCodeLine{00422\ \textcolor{comment}{//\ Set\ solver\ to\ change\ phase\ when\ relative\ residual\ reaches\ an\ order\ of}}
+\DoxyCodeLine{00423\ \textcolor{comment}{//\ magnitude\ above\ roundoff}}
+\DoxyCodeLine{00424\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix>}
+\DoxyCodeLine{00425\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1_relative_residual_threshold}{RelativeResidualThreshold}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_af365d8dcc81903492db76f4eac9d33f3}{VP\_GMRES\_IR\_Solve}}<TMatrix>}
+\DoxyCodeLine{00426\ \{}
+\DoxyCodeLine{00427\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00428\ }
+\DoxyCodeLine{00429\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcascade_1_1_relative_residual_threshold_a378299cca1e3ac055e2b4d426fc774ed}{tol\_hlf}}\ =\ 10.*std::pow(2.,\ -\/10);}
+\DoxyCodeLine{00430\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcascade_1_1_relative_residual_threshold_a4b00f4e5ff431413bad0f331f7c775f0}{tol\_sgl}}\ =\ 10.*std::pow(2.,\ -\/23);}
+\DoxyCodeLine{00431\ }
+\DoxyCodeLine{00432\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classcascade_1_1_relative_residual_threshold_afee2aba1ce02edb9e825b6f0858c20ec}{determine\_next\_phase}}()\textcolor{keyword}{\ override\ }\{}
+\DoxyCodeLine{00433\ }
+\DoxyCodeLine{00434\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (this-\/>cascade\_phase\ ==\ this-\/>HLF\_PHASE)\ \{}
+\DoxyCodeLine{00435\ }
+\DoxyCodeLine{00436\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a5f211c8b5ec76b8b75be570354f4304b}{get\_relres}}()\ <=\ tol\_hlf)\ \{}
+\DoxyCodeLine{00437\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ this-\/>SGL\_PHASE;}
+\DoxyCodeLine{00438\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00439\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ this-\/>cascade\_phase;}
+\DoxyCodeLine{00440\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00441\ }
+\DoxyCodeLine{00442\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (this-\/>cascade\_phase\ ==\ this-\/>SGL\_PHASE)\ \{}
+\DoxyCodeLine{00443\ }
+\DoxyCodeLine{00444\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a5f211c8b5ec76b8b75be570354f4304b}{get\_relres}}()\ <=\ tol\_sgl)\ \{}
+\DoxyCodeLine{00445\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ this-\/>DBL\_PHASE;}
+\DoxyCodeLine{00446\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00447\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ this-\/>cascade\_phase;}
+\DoxyCodeLine{00448\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00449\ }
+\DoxyCodeLine{00450\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00451\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ this-\/>DBL\_PHASE;}
+\DoxyCodeLine{00452\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00453\ \ \ \ \ \}}
+\DoxyCodeLine{00454\ }
+\DoxyCodeLine{00455\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00456\ }
+\DoxyCodeLine{00457\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve}{VP\_GMRES\_IR\_Solve}}<TMatrix>\mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve}{::VP\_GMRES\_IR\_Solve}};}
+\DoxyCodeLine{00458\ }
+\DoxyCodeLine{00459\ \};}
+\DoxyCodeLine{00460\ }
+\DoxyCodeLine{00461\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix>}
+\DoxyCodeLine{00462\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1_s_d___relative_residual_threshold_a89e9aa7d0c8b0d83e755f4a557090c4e}{SD\_RelativeResidualThreshold}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcascade_1_1_relative_residual_threshold}{RelativeResidualThreshold}}<TMatrix>}
+\DoxyCodeLine{00463\ \{}
+\DoxyCodeLine{00464\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00465\ }
+\DoxyCodeLine{00466\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_s_d___relative_residual_threshold_a89e9aa7d0c8b0d83e755f4a557090c4e}{SD\_RelativeResidualThreshold}}(}
+\DoxyCodeLine{00467\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{GenericLinearSystem<TMatrix>}}\ *\ \textcolor{keyword}{const}\ arg\_gen\_lin\_sys\_ptr,}
+\DoxyCodeLine{00468\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{SolveArgPkg}}\ \&arg\_solve\_arg\_pkg,}
+\DoxyCodeLine{00469\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{PrecondArgPkg<TMatrix,\ double>}}\ arg\_inner\_precond\_arg\_pkg\_dbl\ =\ (}
+\DoxyCodeLine{00470\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{PrecondArgPkg<TMatrix,\ double>}}()}
+\DoxyCodeLine{00471\ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00472\ \ \ \ \ ):}
+\DoxyCodeLine{00473\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_relative_residual_threshold}{RelativeResidualThreshold}}<TMatrix>(}
+\DoxyCodeLine{00474\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_gen\_lin\_sys\_ptr,}
+\DoxyCodeLine{00475\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_solve\_arg\_pkg,}
+\DoxyCodeLine{00476\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_inner\_precond\_arg\_pkg\_dbl,}
+\DoxyCodeLine{00477\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve}{VP\_GMRES\_IR\_Solve}}<TMatrix>::\mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_ad4090349f648e6d9c1e974be5a39de60}{SGL\_PHASE}}}
+\DoxyCodeLine{00478\ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00479\ \ \ \ \ \{\}}
+\DoxyCodeLine{00480\ }
+\DoxyCodeLine{00481\ \};}
+\DoxyCodeLine{00482\ }
+\DoxyCodeLine{00483\ \textcolor{comment}{//\ Set\ solver\ to\ check\ for\ stagnation\ where\ the\ average\ change\ in\ elements}}
+\DoxyCodeLine{00484\ \textcolor{comment}{//\ is\ of\ order\ of\ being\ in\ a\ ball\ 2x\ times\ the\ size\ of\ roundoff}}
+\DoxyCodeLine{00485\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix>}
+\DoxyCodeLine{00486\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1_check_stagnation}{CheckStagnation}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_af365d8dcc81903492db76f4eac9d33f3}{VP\_GMRES\_IR\_Solve}}<TMatrix>}
+\DoxyCodeLine{00487\ \{}
+\DoxyCodeLine{00488\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00489\ }
+\DoxyCodeLine{00490\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classcascade_1_1_check_stagnation_a1bb9ecbc91506defaee857360a7d5ebb}{determine\_next\_phase}}()\textcolor{keyword}{\ override\ }\{}
+\DoxyCodeLine{00491\ }
+\DoxyCodeLine{00492\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ size\ =\ this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a420e914718105bdb175fe95dcb45191a}{res\_norm\_history}}.size();}
+\DoxyCodeLine{00493\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ relative\_progress;}
+\DoxyCodeLine{00494\ }
+\DoxyCodeLine{00495\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (size\ <\ 2)\ \{}
+\DoxyCodeLine{00496\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ this-\/>INIT\_PHASE;}
+\DoxyCodeLine{00497\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00498\ \ \ \ \ \ \ \ \ \ \ \ \ relative\_progress\ =\ -\/1.*(}
+\DoxyCodeLine{00499\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a420e914718105bdb175fe95dcb45191a}{res\_norm\_history}}[size-\/1]\ -\/}
+\DoxyCodeLine{00500\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a420e914718105bdb175fe95dcb45191a}{res\_norm\_history}}[size-\/2])\ /}
+\DoxyCodeLine{00501\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a420e914718105bdb175fe95dcb45191a}{res\_norm\_history}}[size-\/2]}
+\DoxyCodeLine{00502\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00503\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00504\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00505\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (this-\/>cascade\_phase\ ==\ this-\/>HLF\_PHASE)\ \{}
+\DoxyCodeLine{00506\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (relative\_progress\ >\ 2.*this-\/>u\_hlf)\ \{}
+\DoxyCodeLine{00507\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ this-\/>cascade\_phase;}
+\DoxyCodeLine{00508\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00509\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ this-\/>SGL\_PHASE;}
+\DoxyCodeLine{00510\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00511\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (this-\/>cascade\_phase\ ==\ this-\/>SGL\_PHASE)\ \{}
+\DoxyCodeLine{00512\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (relative\_progress\ >\ 2.*this-\/>u\_sgl)\ \{}
+\DoxyCodeLine{00513\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ this-\/>cascade\_phase;}
+\DoxyCodeLine{00514\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00515\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ this-\/>DBL\_PHASE;}
+\DoxyCodeLine{00516\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00517\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00518\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ this-\/>DBL\_PHASE;}
+\DoxyCodeLine{00519\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00520\ }
+\DoxyCodeLine{00521\ \ \ \ \ \}}
+\DoxyCodeLine{00522\ }
+\DoxyCodeLine{00523\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00524\ }
+\DoxyCodeLine{00525\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve}{VP\_GMRES\_IR\_Solve}}<TMatrix>\mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve}{::VP\_GMRES\_IR\_Solve}};}
+\DoxyCodeLine{00526\ }
+\DoxyCodeLine{00527\ \};}
+\DoxyCodeLine{00528\ }
+\DoxyCodeLine{00529\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix>}
+\DoxyCodeLine{00530\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1_s_d___check_stagnation_ae375d4862d72d4629135a3151a90533a}{SD\_CheckStagnation}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcascade_1_1_check_stagnation}{CheckStagnation}}<TMatrix>}
+\DoxyCodeLine{00531\ \{}
+\DoxyCodeLine{00532\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00533\ }
+\DoxyCodeLine{00534\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_s_d___check_stagnation_ae375d4862d72d4629135a3151a90533a}{SD\_CheckStagnation}}(}
+\DoxyCodeLine{00535\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{GenericLinearSystem<TMatrix>}}\ *\ \textcolor{keyword}{const}\ arg\_gen\_lin\_sys\_ptr,}
+\DoxyCodeLine{00536\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{SolveArgPkg}}\ \&arg\_solve\_arg\_pkg,}
+\DoxyCodeLine{00537\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{PrecondArgPkg<TMatrix,\ double>}}\ arg\_inner\_precond\_arg\_pkg\_dbl\ =\ (}
+\DoxyCodeLine{00538\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{PrecondArgPkg<TMatrix,\ double>}}()}
+\DoxyCodeLine{00539\ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00540\ \ \ \ \ ):}
+\DoxyCodeLine{00541\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_check_stagnation}{CheckStagnation}}<TMatrix>(}
+\DoxyCodeLine{00542\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_gen\_lin\_sys\_ptr,}
+\DoxyCodeLine{00543\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_solve\_arg\_pkg,}
+\DoxyCodeLine{00544\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_inner\_precond\_arg\_pkg\_dbl,}
+\DoxyCodeLine{00545\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve}{VP\_GMRES\_IR\_Solve}}<TMatrix>::\mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_ad4090349f648e6d9c1e974be5a39de60}{SGL\_PHASE}}}
+\DoxyCodeLine{00546\ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00547\ \ \ \ \ \{\}}
+\DoxyCodeLine{00548\ }
+\DoxyCodeLine{00549\ \};}
+\DoxyCodeLine{00550\ }
+\DoxyCodeLine{00551\ \textcolor{comment}{//\ Set\ solver\ to\ use\ threshold\ for\ the\ first\ phase\ to\ partially\ mitigate\ risk}}
+\DoxyCodeLine{00552\ \textcolor{comment}{//\ of\ long\ time\ spend\ in\ low\ speed\ half\ cascade\ phase,\ then\ convert\ to}}
+\DoxyCodeLine{00553\ \textcolor{comment}{//\ stagnation\ check\ on\ the\ more\ bundled\ single\ phase\ to\ squeeze\ as\ much\ time}}
+\DoxyCodeLine{00554\ \textcolor{comment}{//\ out\ of\ that\ phase\ as\ possible}}
+\DoxyCodeLine{00555\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix>}
+\DoxyCodeLine{00556\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1_stagnation_to_threshold}{StagnationToThreshold}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_af365d8dcc81903492db76f4eac9d33f3}{VP\_GMRES\_IR\_Solve}}<TMatrix>}
+\DoxyCodeLine{00557\ \{}
+\DoxyCodeLine{00558\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00559\ }
+\DoxyCodeLine{00560\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcascade_1_1_stagnation_to_threshold_a04555db9379d93cc86dd27a4025034b9}{tol\_sgl}}\ =\ 10.*std::pow(2.,\ -\/23);}
+\DoxyCodeLine{00561\ }
+\DoxyCodeLine{00562\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classcascade_1_1_stagnation_to_threshold_a34135e1fedfd2a9a4bd122ec10a6e99f}{determine\_next\_phase}}()\textcolor{keyword}{\ override\ }\{}
+\DoxyCodeLine{00563\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00564\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (this-\/>cascade\_phase\ ==\ this-\/>HLF\_PHASE)\ \{}
+\DoxyCodeLine{00565\ }
+\DoxyCodeLine{00566\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ size\ =\ this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a420e914718105bdb175fe95dcb45191a}{res\_norm\_history}}.size();}
+\DoxyCodeLine{00567\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ relative\_progress;}
+\DoxyCodeLine{00568\ }
+\DoxyCodeLine{00569\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (size\ <\ 2)\ \{}
+\DoxyCodeLine{00570\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ this-\/>cascade\_phase;}
+\DoxyCodeLine{00571\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00572\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ relative\_progress\ =\ -\/1.*(}
+\DoxyCodeLine{00573\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a420e914718105bdb175fe95dcb45191a}{res\_norm\_history}}[size-\/1]\ -\/}
+\DoxyCodeLine{00574\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a420e914718105bdb175fe95dcb45191a}{res\_norm\_history}}[size-\/2])\ /}
+\DoxyCodeLine{00575\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a420e914718105bdb175fe95dcb45191a}{res\_norm\_history}}[size-\/2]}
+\DoxyCodeLine{00576\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00577\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00578\ }
+\DoxyCodeLine{00579\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (relative\_progress\ >\ 2.*this-\/>u\_hlf)\ \{}
+\DoxyCodeLine{00580\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ this-\/>cascade\_phase;}
+\DoxyCodeLine{00581\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00582\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ this-\/>SGL\_PHASE;}
+\DoxyCodeLine{00583\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00584\ \ \ \ \ }
+\DoxyCodeLine{00585\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (this-\/>cascade\_phase\ ==\ this-\/>SGL\_PHASE)\ \{}
+\DoxyCodeLine{00586\ }
+\DoxyCodeLine{00587\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a5f211c8b5ec76b8b75be570354f4304b}{get\_relres}}()\ <=\ tol\_sgl)\ \{}
+\DoxyCodeLine{00588\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ this-\/>DBL\_PHASE;}
+\DoxyCodeLine{00589\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00590\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ this-\/>cascade\_phase;}
+\DoxyCodeLine{00591\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00592\ }
+\DoxyCodeLine{00593\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00594\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ this-\/>DBL\_PHASE;}
+\DoxyCodeLine{00595\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00596\ }
+\DoxyCodeLine{00597\ \ \ \ \ \}}
+\DoxyCodeLine{00598\ }
+\DoxyCodeLine{00599\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00600\ }
+\DoxyCodeLine{00601\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve}{VP\_GMRES\_IR\_Solve}}<TMatrix>\mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve}{::VP\_GMRES\_IR\_Solve}};}
+\DoxyCodeLine{00602\ }
+\DoxyCodeLine{00603\ \};}
+\DoxyCodeLine{00604\ }
+\DoxyCodeLine{00605\ \}}
+\DoxyCodeLine{00606\ }
+\DoxyCodeLine{00607\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

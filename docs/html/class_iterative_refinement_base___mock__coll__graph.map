@@ -1,0 +1,17 @@
+<map id="IterativeRefinementBase_Mock&lt; TMatrix &gt;" name="IterativeRefinementBase_Mock&lt; TMatrix &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="295,419,461,461"/>
+<area shape="rect" id="Node000002" href="$classcascade_1_1_iterative_refinement_base.html" title=" " alt="" coords="212,327,405,369"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="336,380,364,417,360,420,331,383"/>
+<area shape="rect" id="Node000003" href="$classcascade_1_1_inner_outer_solve.html" title=" " alt="" coords="216,235,388,277"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="307,293,310,326,305,327,302,293"/>
+<area shape="rect" id="Node000004" href="$classcascade_1_1_generic_iterative_solve.html" title=" " alt="" coords="44,128,214,171"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="177,177,269,232,266,236,174,181"/>
+<area shape="rect" id="Node000005" href="$classcascade_1_1_vector.html" title=" " alt="" coords="227,5,404,32"/>
+<area shape="poly" id="edge8_Node000001_Node000005" title=" " alt="" coords="405,37,428,54,443,77,448,98,447,148,447,350,444,370,434,390,407,420,403,417,430,387,439,369,442,349,442,148,443,98,438,79,424,58,402,41"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="270,41,238,58,210,81,184,106,155,130,152,126,180,102,207,77,236,54,268,36"/>
+<area shape="rect" id="Node000007" href="$structcascade_1_1_solve_arg_pkg.html" title=" " alt="" coords="238,136,392,163"/>
+<area shape="poly" id="edge7_Node000007_Node000005" title=" " alt="" coords="318,48,318,136,313,136,313,48"/>
+<area shape="rect" id="Node000006" href="$classcascade_1_1_scalar.html" title=" " alt="" coords="5,5,183,32"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="93,47,92,75,97,103,111,126,107,129,93,105,87,75,87,47"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="309,178,306,195,304,234,298,234,300,194,304,177"/>
+</map>

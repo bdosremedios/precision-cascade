@@ -1,0 +1,64 @@
+\doxysection{Matrix\+Inverse\+Preconditioner.\+h}
+\hypertarget{_matrix_inverse_preconditioner_8h_source}{}\label{_matrix_inverse_preconditioner_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/include/preconditioners/MatrixInversePreconditioner.h@{C:/Users/dosre/dev/precision-\/cascade/include/preconditioners/MatrixInversePreconditioner.h}}
+\mbox{\hyperlink{_matrix_inverse_preconditioner_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ MATRIX\_INVERSE\_PRECONDITIONER\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ MATRIX\_INVERSE\_PRECONDITIONER\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_preconditioner_8h}{Preconditioner.h}}"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacecascade}{cascade}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix,\ \textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00009\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1_matrix_inverse_preconditioner_a2492adfc140f75d613e004b47aeccf8d}{MatrixInversePreconditioner}}:}
+\DoxyCodeLine{00010\ \ \ \ \ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcascade_1_1_preconditioner_a875e73c4c3ccc05c2622dbdf5ee9d4a7}{Preconditioner}}<TMatrix,\ TPrecision>}
+\DoxyCodeLine{00011\ \{}
+\DoxyCodeLine{00012\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \ \ \ \ TMatrix<TPrecision>\ \mbox{\hyperlink{classcascade_1_1_matrix_inverse_preconditioner_ae45389a896cd9ee29886a834585c6b2c}{inv\_M}};}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_matrix_inverse_preconditioner_a2492adfc140f75d613e004b47aeccf8d}{MatrixInversePreconditioner}}(}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ TMatrix<TPrecision>\ \textcolor{keyword}{const}\ \&arg\_inv\_M}
+\DoxyCodeLine{00020\ \ \ \ \ ):\ \mbox{\hyperlink{classcascade_1_1_matrix_inverse_preconditioner_ae45389a896cd9ee29886a834585c6b2c}{inv\_M}}(arg\_inv\_M)\ \{\}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_matrix_inverse_preconditioner_a49ff10812aaaddc6b4594c69009679ed}{action\_inv\_M}}(}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ \textcolor{keyword}{const}\ \&vec}
+\DoxyCodeLine{00024\ \ \ \ \ )\textcolor{keyword}{\ const\ override\ }\{}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_matrix_inverse_preconditioner_ae45389a896cd9ee29886a834585c6b2c}{inv\_M}}*vec;}
+\DoxyCodeLine{00026\ \ \ \ \ \}}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcascade_1_1_matrix_inverse_preconditioner_a1710b3135b15d8cfa2a447ce597f5404}{check\_compatibility\_left}}(\textcolor{keywordtype}{int}\ \textcolor{keyword}{const}\ \&arg\_m)\textcolor{keyword}{\ const\ override\ }\{}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ((\mbox{\hyperlink{classcascade_1_1_matrix_inverse_preconditioner_ae45389a896cd9ee29886a834585c6b2c}{inv\_M}}.cols()\ ==\ arg\_m)\ \&\&\ (\mbox{\hyperlink{classcascade_1_1_matrix_inverse_preconditioner_ae45389a896cd9ee29886a834585c6b2c}{inv\_M}}.rows()\ ==\ arg\_m));}
+\DoxyCodeLine{00030\ \ \ \ \ \};}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcascade_1_1_matrix_inverse_preconditioner_a585885c6f642a9cfe5fc1dc103e030c7}{check\_compatibility\_right}}(\textcolor{keywordtype}{int}\ \textcolor{keyword}{const}\ \&arg\_n)\textcolor{keyword}{\ const\ override\ }\{}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ((\mbox{\hyperlink{classcascade_1_1_matrix_inverse_preconditioner_ae45389a896cd9ee29886a834585c6b2c}{inv\_M}}.cols()\ ==\ arg\_n)\ \&\&\ (\mbox{\hyperlink{classcascade_1_1_matrix_inverse_preconditioner_ae45389a896cd9ee29886a834585c6b2c}{inv\_M}}.rows()\ ==\ arg\_n));}
+\DoxyCodeLine{00034\ \ \ \ \ \};}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_matrix_inverse_preconditioner_a2492adfc140f75d613e004b47aeccf8d}{MatrixInversePreconditioner<TMatrix,\ double>}}\ *\ \mbox{\hyperlink{classcascade_1_1_matrix_inverse_preconditioner_a310f1a17960769e8f7104bad29532d5d}{cast\_dbl\_ptr}}()\textcolor{keyword}{\ const\ override\ }\{}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classcascade_1_1_matrix_inverse_preconditioner_a2492adfc140f75d613e004b47aeccf8d}{MatrixInversePreconditioner<TMatrix,\ double>}}(}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_matrix_inverse_preconditioner_ae45389a896cd9ee29886a834585c6b2c}{inv\_M}}.template\ cast<double>()}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00040\ \ \ \ \ \}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_matrix_inverse_preconditioner_a2492adfc140f75d613e004b47aeccf8d}{MatrixInversePreconditioner<TMatrix,\ float>}}\ *\ \mbox{\hyperlink{classcascade_1_1_matrix_inverse_preconditioner_ad3c9b3e2e4e9c707e2d59b8410e1b071}{cast\_sgl\_ptr}}()\textcolor{keyword}{\ const\ override\ }\{}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classcascade_1_1_matrix_inverse_preconditioner_a2492adfc140f75d613e004b47aeccf8d}{MatrixInversePreconditioner<TMatrix,\ float>}}(}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_matrix_inverse_preconditioner_ae45389a896cd9ee29886a834585c6b2c}{inv\_M}}.template\ cast<float>()}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00046\ \ \ \ \ \}}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_matrix_inverse_preconditioner_a2492adfc140f75d613e004b47aeccf8d}{MatrixInversePreconditioner<TMatrix,\ \_\_half>}}\ *\ \mbox{\hyperlink{classcascade_1_1_matrix_inverse_preconditioner_a5a94062575ade3ed254043db84445fde}{cast\_hlf\_ptr}}()\textcolor{keyword}{\ const\ override\ }\{}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classcascade_1_1_matrix_inverse_preconditioner_a2492adfc140f75d613e004b47aeccf8d}{MatrixInversePreconditioner<TMatrix,\ \_\_half>}}(}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_matrix_inverse_preconditioner_ae45389a896cd9ee29886a834585c6b2c}{inv\_M}}.template\ cast<\_\_half>()}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00052\ \ \ \ \ \}}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \};}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \}}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

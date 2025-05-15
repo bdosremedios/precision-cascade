@@ -1,0 +1,43 @@
+\doxysection{template\+\_\+check.\+h}
+\hypertarget{template__check_8h_source}{}\label{template__check_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/include/types/template\_check.h@{C:/Users/dosre/dev/precision-\/cascade/include/types/template\_check.h}}
+\mbox{\hyperlink{template__check_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ TEMPLATE\_CHECK\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ TEMPLATE\_CHECK\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_vector_8h}{Vector/Vector.h}}"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_matrix_dense_8h}{MatrixDense/MatrixDense.h}}"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_no_fill_matrix_sparse_8h}{MatrixSparse/NoFillMatrixSparse.h}}"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacecascade}{cascade}}\ \{}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{comment}{//\ https://stackoverflow.com/questions/38630445/stdis-\/same-\/equivalent-\/for-\/unspecialised-\/template-\/types}}
+\DoxyCodeLine{00011\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename},\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}...>\ \textcolor{keyword}{typename}>\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structcascade_1_1is__same__template}{is\_same\_template}}\ :\ std::false\_type\{\};}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00015\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structcascade_1_1is__same__template}{is\_same\_template}}<T,T>\ :\ std::true\_type\{\};}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ M>}
+\DoxyCodeLine{00018\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecascade_ae671925a9ea8dbbfb8b92d3bb580a9dd}{assert\_valid\_type}}()\ \{}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{static\_assert}(}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ ((\mbox{\hyperlink{structcascade_1_1is__same__template}{is\_same\_template<M,\ NoFillMatrixSparse>::value}})\ ||\ (\mbox{\hyperlink{structcascade_1_1is__same__template}{is\_same\_template<M,\ MatrixDense>::value}})),}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}M\ argument\ must\ be\ type\ NoFillMatrixSparse\ or\ MatrixDense"{}}}
+\DoxyCodeLine{00022\ \ \ \ \ );}
+\DoxyCodeLine{00023\ \}}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ M>}
+\DoxyCodeLine{00026\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecascade_a018dba452c2dc633b595bb4f0e89a7f9}{assert\_valid\_type\_or\_vec}}()\ \{}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{static\_assert}(}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ ((\mbox{\hyperlink{structcascade_1_1is__same__template}{is\_same\_template<M,\ NoFillMatrixSparse>::value}})\ ||}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ (\mbox{\hyperlink{structcascade_1_1is__same__template}{is\_same\_template<M,\ MatrixDense>::value}})\ ||}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ (\mbox{\hyperlink{structcascade_1_1is__same__template}{is\_same\_template<M,\ Vector>::value}})),}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}M\ argument\ must\ be\ type\ NoFillMatrixSparse\ or\ MatrixDense\ or\ Vector"{}}}
+\DoxyCodeLine{00032\ \ \ \ \ );}
+\DoxyCodeLine{00033\ \}}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \}}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

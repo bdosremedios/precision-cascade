@@ -1,0 +1,82 @@
+\doxysection{C\+:/\+Users/dosre/dev/precision-\/cascade/experimentation/src/exp\+\_\+read/exp\+\_\+read.cpp File Reference}
+\hypertarget{exp__read_8cpp}{}\label{exp__read_8cpp}\index{C:/Users/dosre/dev/precision-\/cascade/experimentation/src/exp\_read/exp\_read.cpp@{C:/Users/dosre/dev/precision-\/cascade/experimentation/src/exp\_read/exp\_read.cpp}}
+{\ttfamily \#include "{}exp\+\_\+read/exp\+\_\+read.\+h"{}}\newline
+{\ttfamily \#include $<$fstream$>$}\newline
+Include dependency graph for exp\+\_\+read.\+cpp\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{exp__read_8cpp__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{exp__read_8cpp_a0c9b0e74e318a41468370de14b299a38}{extract\+\_\+integer}} (json\+::iterator member)
+\item 
+\mbox{\hyperlink{create__read__matrices_8m_a7ea82552101f041fad7635b3ed036a84}{std\+::vector}}$<$ std\+::string $>$ \mbox{\hyperlink{exp__read_8cpp_ac7f2d767014fcdab295c315274bb9382}{extract\+\_\+solvers\+\_\+to\+\_\+use}} (json\+::iterator member)
+\item 
+std\+::string \mbox{\hyperlink{exp__read_8cpp_a3f7e7da41ace39829275ac15f941c26c}{extract\+\_\+matrix\+\_\+type}} (json\+::iterator member)
+\item 
+\mbox{\hyperlink{struct_preconditioner___spec}{Preconditioner\+\_\+\+Spec}} \mbox{\hyperlink{exp__read_8cpp_a0a758ae72dfd2e84de1c5b6a2d46c159}{extract\+\_\+preconditioner\+\_\+spec}} (json\+::iterator member)
+\item 
+double \mbox{\hyperlink{exp__read_8cpp_a8e434f9ffff48a7c7df78eea738bd5e4}{extract\+\_\+double}} (json\+::iterator member)
+\item 
+\mbox{\hyperlink{create__read__matrices_8m_a7ea82552101f041fad7635b3ed036a84}{std\+::vector}}$<$ std\+::string $>$ \mbox{\hyperlink{exp__read_8cpp_ae9da0d78ac27b9a231e2f0e7a029a735}{extract\+\_\+string\+\_\+vector}} (json\+::iterator member)
+\item 
+\mbox{\hyperlink{struct_solve___group}{Solve\+\_\+\+Group}} \mbox{\hyperlink{exp__read_8cpp_adcb9074b32de0fea0ec2bfbe15f610e1}{check\+\_\+and\+\_\+extract\+\_\+solve\+\_\+group}} (std\+::string id, \mbox{\hyperlink{exp__read_8h_ab701e3ac61a85b337ec5c1abaad6742d}{json}} cand\+\_\+obj)
+\item 
+\mbox{\hyperlink{struct_experiment___spec}{Experiment\+\_\+\+Spec}} \mbox{\hyperlink{exp__read_8cpp_a14094ecab66d8cbb8bd7873a6bf4ff0e}{parse\+\_\+experiment\+\_\+spec}} (fs\+::path exp\+\_\+spec\+\_\+path)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{exp__read_8cpp_adcb9074b32de0fea0ec2bfbe15f610e1}\index{exp\_read.cpp@{exp\_read.cpp}!check\_and\_extract\_solve\_group@{check\_and\_extract\_solve\_group}}
+\index{check\_and\_extract\_solve\_group@{check\_and\_extract\_solve\_group}!exp\_read.cpp@{exp\_read.cpp}}
+\doxysubsubsection{\texorpdfstring{check\_and\_extract\_solve\_group()}{check\_and\_extract\_solve\_group()}}
+{\footnotesize\ttfamily \label{exp__read_8cpp_adcb9074b32de0fea0ec2bfbe15f610e1} 
+\mbox{\hyperlink{struct_solve___group}{Solve\+\_\+\+Group}} check\+\_\+and\+\_\+extract\+\_\+solve\+\_\+group (\begin{DoxyParamCaption}\item[{std\+::string}]{id}{, }\item[{\mbox{\hyperlink{exp__read_8h_ab701e3ac61a85b337ec5c1abaad6742d}{json}}}]{cand\+\_\+obj}{}\end{DoxyParamCaption})}
+
+\Hypertarget{exp__read_8cpp_a8e434f9ffff48a7c7df78eea738bd5e4}\index{exp\_read.cpp@{exp\_read.cpp}!extract\_double@{extract\_double}}
+\index{extract\_double@{extract\_double}!exp\_read.cpp@{exp\_read.cpp}}
+\doxysubsubsection{\texorpdfstring{extract\_double()}{extract\_double()}}
+{\footnotesize\ttfamily \label{exp__read_8cpp_a8e434f9ffff48a7c7df78eea738bd5e4} 
+double extract\+\_\+double (\begin{DoxyParamCaption}\item[{json\+::iterator}]{member}{}\end{DoxyParamCaption})}
+
+\Hypertarget{exp__read_8cpp_a0c9b0e74e318a41468370de14b299a38}\index{exp\_read.cpp@{exp\_read.cpp}!extract\_integer@{extract\_integer}}
+\index{extract\_integer@{extract\_integer}!exp\_read.cpp@{exp\_read.cpp}}
+\doxysubsubsection{\texorpdfstring{extract\_integer()}{extract\_integer()}}
+{\footnotesize\ttfamily \label{exp__read_8cpp_a0c9b0e74e318a41468370de14b299a38} 
+int extract\+\_\+integer (\begin{DoxyParamCaption}\item[{json\+::iterator}]{member}{}\end{DoxyParamCaption})}
+
+\Hypertarget{exp__read_8cpp_a3f7e7da41ace39829275ac15f941c26c}\index{exp\_read.cpp@{exp\_read.cpp}!extract\_matrix\_type@{extract\_matrix\_type}}
+\index{extract\_matrix\_type@{extract\_matrix\_type}!exp\_read.cpp@{exp\_read.cpp}}
+\doxysubsubsection{\texorpdfstring{extract\_matrix\_type()}{extract\_matrix\_type()}}
+{\footnotesize\ttfamily \label{exp__read_8cpp_a3f7e7da41ace39829275ac15f941c26c} 
+std\+::string extract\+\_\+matrix\+\_\+type (\begin{DoxyParamCaption}\item[{json\+::iterator}]{member}{}\end{DoxyParamCaption})}
+
+\Hypertarget{exp__read_8cpp_a0a758ae72dfd2e84de1c5b6a2d46c159}\index{exp\_read.cpp@{exp\_read.cpp}!extract\_preconditioner\_spec@{extract\_preconditioner\_spec}}
+\index{extract\_preconditioner\_spec@{extract\_preconditioner\_spec}!exp\_read.cpp@{exp\_read.cpp}}
+\doxysubsubsection{\texorpdfstring{extract\_preconditioner\_spec()}{extract\_preconditioner\_spec()}}
+{\footnotesize\ttfamily \label{exp__read_8cpp_a0a758ae72dfd2e84de1c5b6a2d46c159} 
+\mbox{\hyperlink{struct_preconditioner___spec}{Preconditioner\+\_\+\+Spec}} extract\+\_\+preconditioner\+\_\+spec (\begin{DoxyParamCaption}\item[{json\+::iterator}]{member}{}\end{DoxyParamCaption})}
+
+\Hypertarget{exp__read_8cpp_ac7f2d767014fcdab295c315274bb9382}\index{exp\_read.cpp@{exp\_read.cpp}!extract\_solvers\_to\_use@{extract\_solvers\_to\_use}}
+\index{extract\_solvers\_to\_use@{extract\_solvers\_to\_use}!exp\_read.cpp@{exp\_read.cpp}}
+\doxysubsubsection{\texorpdfstring{extract\_solvers\_to\_use()}{extract\_solvers\_to\_use()}}
+{\footnotesize\ttfamily \label{exp__read_8cpp_ac7f2d767014fcdab295c315274bb9382} 
+\mbox{\hyperlink{create__read__matrices_8m_a7ea82552101f041fad7635b3ed036a84}{std\+::vector}}$<$ std\+::string $>$ extract\+\_\+solvers\+\_\+to\+\_\+use (\begin{DoxyParamCaption}\item[{json\+::iterator}]{member}{}\end{DoxyParamCaption})}
+
+\Hypertarget{exp__read_8cpp_ae9da0d78ac27b9a231e2f0e7a029a735}\index{exp\_read.cpp@{exp\_read.cpp}!extract\_string\_vector@{extract\_string\_vector}}
+\index{extract\_string\_vector@{extract\_string\_vector}!exp\_read.cpp@{exp\_read.cpp}}
+\doxysubsubsection{\texorpdfstring{extract\_string\_vector()}{extract\_string\_vector()}}
+{\footnotesize\ttfamily \label{exp__read_8cpp_ae9da0d78ac27b9a231e2f0e7a029a735} 
+\mbox{\hyperlink{create__read__matrices_8m_a7ea82552101f041fad7635b3ed036a84}{std\+::vector}}$<$ std\+::string $>$ extract\+\_\+string\+\_\+vector (\begin{DoxyParamCaption}\item[{json\+::iterator}]{member}{}\end{DoxyParamCaption})}
+
+\Hypertarget{exp__read_8cpp_a14094ecab66d8cbb8bd7873a6bf4ff0e}\index{exp\_read.cpp@{exp\_read.cpp}!parse\_experiment\_spec@{parse\_experiment\_spec}}
+\index{parse\_experiment\_spec@{parse\_experiment\_spec}!exp\_read.cpp@{exp\_read.cpp}}
+\doxysubsubsection{\texorpdfstring{parse\_experiment\_spec()}{parse\_experiment\_spec()}}
+{\footnotesize\ttfamily \label{exp__read_8cpp_a14094ecab66d8cbb8bd7873a6bf4ff0e} 
+\mbox{\hyperlink{struct_experiment___spec}{Experiment\+\_\+\+Spec}} parse\+\_\+experiment\+\_\+spec (\begin{DoxyParamCaption}\item[{fs\+::path}]{exp\+\_\+spec\+\_\+path}{}\end{DoxyParamCaption})}
+

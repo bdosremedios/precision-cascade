@@ -1,0 +1,49 @@
+\doxysection{C\+:/\+Users/dosre/dev/precision-\/cascade/experimentation/include/exp\+\_\+run/exp\+\_\+generate\+\_\+data.h File Reference}
+\hypertarget{exp__generate__data_8h}{}\label{exp__generate__data_8h}\index{C:/Users/dosre/dev/precision-\/cascade/experimentation/include/exp\_run/exp\_generate\_data.h@{C:/Users/dosre/dev/precision-\/cascade/experimentation/include/exp\_run/exp\_generate\_data.h}}
+{\ttfamily \#include "{}exp\+\_\+data/exp\+\_\+data.\+h"{}}\newline
+{\ttfamily \#include "{}exp\+\_\+tools/exp\+\_\+tools.\+h"{}}\newline
+{\ttfamily \#include "{}tools/arg\+\_\+pkgs/\+Precond\+Arg\+Pkg.\+h"{}}\newline
+{\ttfamily \#include "{}tools/arg\+\_\+pkgs/\+Linear\+System.\+h"{}}\newline
+{\ttfamily \#include $<$stdexcept$>$}\newline
+{\ttfamily \#include $<$memory$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+Include dependency graph for exp\+\_\+generate\+\_\+data.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{exp__generate__data_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{exp__generate__data_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$template$<$ typename $>$ typename TMatrix$>$ }\\\mbox{\hyperlink{struct_preconditioner___data}{Preconditioner\+\_\+\+Data}}$<$ TMatrix $>$ \mbox{\hyperlink{exp__generate__data_8h_a7a336dc0bcb641678bd8fa8805a9931b}{calc\+\_\+preconditioner}} (const \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{cascade\+::\+Generic\+Linear\+System}}$<$ TMatrix $>$ \&gen\+\_\+lin\+\_\+sys, \mbox{\hyperlink{struct_preconditioner___spec}{Preconditioner\+\_\+\+Spec}} precond\+\_\+specs, \mbox{\hyperlink{class_experiment___log}{Experiment\+\_\+\+Log}} logger)
+\item 
+{\footnotesize template$<$template$<$ template$<$ typename $>$ typename $>$ typename TSolver, template$<$ typename $>$ typename TMatrix$>$ }\\\mbox{\hyperlink{struct_solve___data}{Solve\+\_\+\+Data}}$<$ TSolver, TMatrix $>$ \mbox{\hyperlink{exp__generate__data_8h_a31a06c107d715725ccaa0721261c79a9}{execute\+\_\+solve}} (std\+::string solver\+\_\+id, std\+::shared\+\_\+ptr$<$ TSolver$<$ TMatrix $>$ $>$ arg\+\_\+solver\+\_\+ptr, \mbox{\hyperlink{class_experiment___log}{Experiment\+\_\+\+Log}} logger, bool show\+\_\+plots)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{exp__generate__data_8h_a7a336dc0bcb641678bd8fa8805a9931b}\index{exp\_generate\_data.h@{exp\_generate\_data.h}!calc\_preconditioner@{calc\_preconditioner}}
+\index{calc\_preconditioner@{calc\_preconditioner}!exp\_generate\_data.h@{exp\_generate\_data.h}}
+\doxysubsubsection{\texorpdfstring{calc\_preconditioner()}{calc\_preconditioner()}}
+{\footnotesize\ttfamily \label{exp__generate__data_8h_a7a336dc0bcb641678bd8fa8805a9931b} 
+template$<$template$<$ typename $>$ typename TMatrix$>$ \\
+\mbox{\hyperlink{struct_preconditioner___data}{Preconditioner\+\_\+\+Data}}$<$ TMatrix $>$ calc\+\_\+preconditioner (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{cascade\+::\+Generic\+Linear\+System}}$<$ TMatrix $>$ \&}]{gen\+\_\+lin\+\_\+sys}{, }\item[{\mbox{\hyperlink{struct_preconditioner___spec}{Preconditioner\+\_\+\+Spec}}}]{precond\+\_\+specs}{, }\item[{\mbox{\hyperlink{class_experiment___log}{Experiment\+\_\+\+Log}}}]{logger}{}\end{DoxyParamCaption})}
+
+\Hypertarget{exp__generate__data_8h_a31a06c107d715725ccaa0721261c79a9}\index{exp\_generate\_data.h@{exp\_generate\_data.h}!execute\_solve@{execute\_solve}}
+\index{execute\_solve@{execute\_solve}!exp\_generate\_data.h@{exp\_generate\_data.h}}
+\doxysubsubsection{\texorpdfstring{execute\_solve()}{execute\_solve()}}
+{\footnotesize\ttfamily \label{exp__generate__data_8h_a31a06c107d715725ccaa0721261c79a9} 
+template$<$template$<$ template$<$ typename $>$ typename $>$ typename TSolver, template$<$ typename $>$ typename TMatrix$>$ \\
+\mbox{\hyperlink{struct_solve___data}{Solve\+\_\+\+Data}}$<$ TSolver, TMatrix $>$ execute\+\_\+solve (\begin{DoxyParamCaption}\item[{std\+::string}]{solver\+\_\+id}{, }\item[{std\+::shared\+\_\+ptr$<$ TSolver$<$ TMatrix $>$ $>$}]{arg\+\_\+solver\+\_\+ptr}{, }\item[{\mbox{\hyperlink{class_experiment___log}{Experiment\+\_\+\+Log}}}]{logger}{, }\item[{bool}]{show\+\_\+plots}{}\end{DoxyParamCaption})}
+

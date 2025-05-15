@@ -1,0 +1,452 @@
+\doxysection{cascade\+::Matrix\+Dense\texorpdfstring{$<$}{<} TPrecision \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcascade_1_1_matrix_dense}{}\label{classcascade_1_1_matrix_dense}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+
+
+{\ttfamily \#include $<$Matrix\+Dense.\+h$>$}
+
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classcascade_1_1_matrix_dense_1_1_block}{Block}}
+\item 
+class \mbox{\hyperlink{classcascade_1_1_matrix_dense_1_1_col}{Col}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcascade_1_1_matrix_dense_a9632474bc710057c8d85ac2550f4d3fe}{Matrix\+Dense}} (const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&arg\+\_\+cu\+\_\+handles, int arg\+\_\+m\+\_\+rows, int arg\+\_\+n\+\_\+cols)
+\item 
+\mbox{\hyperlink{classcascade_1_1_matrix_dense_a288d62ceb3425580aaa4f6bd6e193b59}{Matrix\+Dense}} (const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&arg\+\_\+cu\+\_\+handles)
+\item 
+\mbox{\hyperlink{classcascade_1_1_matrix_dense_a546c29965c67cf34fdecddd12b04334d}{Matrix\+Dense}} (const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&arg\+\_\+cu\+\_\+handles, std\+::initializer\+\_\+list$<$ std\+::initializer\+\_\+list$<$ TPrecision $>$ $>$ li)
+\item 
+\mbox{\hyperlink{classcascade_1_1_matrix_dense_ad987f7f6ddbbe241f83ead785706a789}{Matrix\+Dense}} (const \mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \&other)
+\item 
+\mbox{\hyperlink{classcascade_1_1_matrix_dense_a254bb93c0c14770e6a797f0f7b008a07}{\texorpdfstring{$\sim$}{\string~}\+Matrix\+Dense}} ()
+\item 
+\mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \& \mbox{\hyperlink{classcascade_1_1_matrix_dense_ae5bf4e79d2578988d33be9f69a1153b8}{operator=}} (const \mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}} \&other)
+\item 
+\mbox{\hyperlink{classcascade_1_1_matrix_dense_a08ad4eff6d4c2fc3af0aea816b5e40d0}{Matrix\+Dense}} (const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&source\+\_\+cu\+\_\+handles, TPrecision \texorpdfstring{$\ast$}{*}h\+\_\+mat, int source\+\_\+m\+\_\+rows, int source\+\_\+n\+\_\+cols)
+\item 
+void \mbox{\hyperlink{classcascade_1_1_matrix_dense_afe3bd80931df815af827c19a7e39f4dc}{copy\+\_\+data\+\_\+to\+\_\+ptr}} (TPrecision \texorpdfstring{$\ast$}{*}h\+\_\+mat, int target\+\_\+m\+\_\+rows, int target\+\_\+n\+\_\+cols) const
+\item 
+\mbox{\hyperlink{classcascade_1_1_matrix_dense_ac2c90051e98e179c7e438e7b7badd8bb}{Matrix\+Dense}} (const \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$ \&sparse\+\_\+mat)
+\item 
+const \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense_a45ecc9004d670654fb0a2c6afb9e3681}{get\+\_\+elem}} (int row, int col) const
+\item 
+void \mbox{\hyperlink{classcascade_1_1_matrix_dense_af5c51918cb8fe974ff82e0838722b636}{set\+\_\+elem}} (int row, int col, \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ val)
+\item 
+\mbox{\hyperlink{classcascade_1_1_matrix_dense_1_1_col}{Col}} \mbox{\hyperlink{classcascade_1_1_matrix_dense_acc2b26bddba8bf34afdd675165f9992b}{get\+\_\+col}} (int col) const
+\item 
+\mbox{\hyperlink{classcascade_1_1_matrix_dense_1_1_block}{Block}} \mbox{\hyperlink{classcascade_1_1_matrix_dense_a14a76c7ee0f2fd943de8afc01a3a4e69}{get\+\_\+block}} (int start\+\_\+row, int start\+\_\+col, int block\+\_\+rows, int block\+\_\+cols) const
+\item 
+\mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \mbox{\hyperlink{classcascade_1_1_matrix_dense_a466c5ec9a5b8b06ec55c5e0af945cb97}{get\+\_\+cu\+\_\+handles}} () const
+\item 
+int \mbox{\hyperlink{classcascade_1_1_matrix_dense_a346043c3bc51b4d2316e65e5b17f7150}{rows}} () const
+\item 
+int \mbox{\hyperlink{classcascade_1_1_matrix_dense_acb12c7631dadb6593fa4b4491e509e6a}{cols}} () const
+\item 
+int \mbox{\hyperlink{classcascade_1_1_matrix_dense_a0d2cd28bfe740faa8dd99f47d5f3972b}{non\+\_\+zeros}} () const
+\item 
+std\+::string \mbox{\hyperlink{classcascade_1_1_matrix_dense_a7d335596d70af562b29a48a67f5deda7}{get\+\_\+matrix\+\_\+string}} () const
+\item 
+std\+::string \mbox{\hyperlink{classcascade_1_1_matrix_dense_af39091d4fc097be1c9b7c42e3103a04b}{get\+\_\+info\+\_\+string}} () const
+\item 
+{\footnotesize template$<$typename Cast\+\_\+\+TPrecision$>$ }\\\mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ Cast\+\_\+\+TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense_ac65ff74524e6b0ffcc15562d47890430}{cast}} () const
+\item 
+\mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense_a78cd9eca4c5b12641e5dc69df349a5e6}{operator\texorpdfstring{$\ast$}{*}}} (const \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \&scalar) const
+\item 
+\mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense_abda0d514a37701e94cbecfb41ec31656}{operator/}} (const \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \&scalar) const
+\item 
+\mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \& \mbox{\hyperlink{classcascade_1_1_matrix_dense_a1a11e7201ad647dc553b51ceb12fe573}{operator\texorpdfstring{$\ast$}{*}=}} (const \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \&scalar)
+\item 
+\mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \& \mbox{\hyperlink{classcascade_1_1_matrix_dense_ac75c62060751897303247fed5768eacb}{operator/=}} (const \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \&scalar)
+\item 
+\mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense_afe902001d3cc826dea4ce3abba4060c1}{get\+\_\+max\+\_\+mag\+\_\+elem}} () const
+\item 
+void \mbox{\hyperlink{classcascade_1_1_matrix_dense_a11a6d1796672ec90d8abbd6e56f2bd9d}{normalize\+\_\+magnitude}} ()
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense_a68d75e4ae55082455526e6aeb7890f0e}{operator\texorpdfstring{$\ast$}{*}}} (const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&vec) const
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense_a2e757ece493422e88353466d13d79383}{mult\+\_\+subset\+\_\+cols}} (int start, int \mbox{\hyperlink{classcascade_1_1_matrix_dense_acb12c7631dadb6593fa4b4491e509e6a}{cols}}, const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&vec) const
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense_ad7445f3ce4f9f801b0df4b062107ee5e}{transpose\+\_\+prod}} (const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&vec) const
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense_a4ef16b4b3b8fe4e4b8c817d7cd7dd723}{transpose\+\_\+prod\+\_\+subset\+\_\+cols}} (int start, int \mbox{\hyperlink{classcascade_1_1_matrix_dense_acb12c7631dadb6593fa4b4491e509e6a}{cols}}, const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&vec) const
+\item 
+\mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense_af1df204aa5ccc49573d478f50a8c60a6}{transpose}} () const
+\item 
+\mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense_a34f53011c318aee62ea456fa3eab5a47}{operator\texorpdfstring{$\ast$}{*}}} (const \mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \&\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a34079cedfcd0dcc6476bf9f1076e8cbd}{mat}}) const
+\item 
+\mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense_af01b8a2043b71b826de2855e75a7bd06}{operator+}} (const \mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \&\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a34079cedfcd0dcc6476bf9f1076e8cbd}{mat}}) const
+\item 
+\mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense_a9ad80231bbd23411d5f2cb4ab1184a38}{operator-\/}} (const \mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \&\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a34079cedfcd0dcc6476bf9f1076e8cbd}{mat}}) const
+\item 
+\mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense_a7996810305d78183147b7c44040c78e3}{norm}} () const
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense_a5630c58a4ced888a6ac31150e84fd545}{back\+\_\+sub}} (const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&arg\+\_\+rhs) const
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense_ae6ca9b19c00e3b1a8488f93bf187ad65}{frwd\+\_\+sub}} (const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&arg\+\_\+rhs) const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense_a3aa7327a735cc8cae13592a4f6ff7222}{Zero}} (const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&arg\+\_\+cu\+\_\+handles, int arg\+\_\+m, int arg\+\_\+n)
+\item 
+static \mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense_a8ffe57a3335cdd25e872ef3497fec157}{Ones}} (const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&arg\+\_\+cu\+\_\+handles, int arg\+\_\+m, int arg\+\_\+n)
+\item 
+static \mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense_adb0d633847fb1ae6b9dcad8518d2adde}{Identity}} (const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&arg\+\_\+cu\+\_\+handles, int arg\+\_\+m, int arg\+\_\+n)
+\item 
+static \mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense_ac78e0e1c9c4d2194d97d3b6140e99899}{Random}} (const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&arg\+\_\+cu\+\_\+handles, int arg\+\_\+m, int arg\+\_\+n)
+\item 
+static \mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense_aaf9130f2d377aafda17e1c973cb6d18f}{Random\+\_\+\+UT}} (const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&arg\+\_\+cu\+\_\+handles, int arg\+\_\+m, int arg\+\_\+n)
+\item 
+static \mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense_a0400f3b9ea5ab6a6ff84506688006732}{Random\+\_\+\+LT}} (const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&arg\+\_\+cu\+\_\+handles, int arg\+\_\+m, int arg\+\_\+n)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename$>$ }\\class \mbox{\hyperlink{classcascade_1_1_matrix_dense_ab9253591cf0eb1909958cc45f111e864}{Matrix\+Dense}}
+\item 
+class \mbox{\hyperlink{classcascade_1_1_matrix_dense_aea823826a9223deca66cf0409a8e7819}{Vector$<$ TPrecision $>$}}
+\item 
+class \mbox{\hyperlink{classcascade_1_1_matrix_dense_ad8115e3d6acf82a6570298abb1773d87}{No\+Fill\+Matrix\+Sparse$<$ TPrecision $>$}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcascade_1_1_matrix_dense_a9632474bc710057c8d85ac2550f4d3fe}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!MatrixDense@{MatrixDense}}
+\index{MatrixDense@{MatrixDense}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{MatrixDense()}{MatrixDense()}\hspace{0.1cm}{\footnotesize\ttfamily [1/6]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_a9632474bc710057c8d85ac2550f4d3fe} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::\+Matrix\+Dense (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&}]{arg\+\_\+cu\+\_\+handles}{, }\item[{int}]{arg\+\_\+m\+\_\+rows}{, }\item[{int}]{arg\+\_\+n\+\_\+cols}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_matrix_dense_a288d62ceb3425580aaa4f6bd6e193b59}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!MatrixDense@{MatrixDense}}
+\index{MatrixDense@{MatrixDense}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{MatrixDense()}{MatrixDense()}\hspace{0.1cm}{\footnotesize\ttfamily [2/6]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_a288d62ceb3425580aaa4f6bd6e193b59} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::\+Matrix\+Dense (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&}]{arg\+\_\+cu\+\_\+handles}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_matrix_dense_a546c29965c67cf34fdecddd12b04334d}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!MatrixDense@{MatrixDense}}
+\index{MatrixDense@{MatrixDense}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{MatrixDense()}{MatrixDense()}\hspace{0.1cm}{\footnotesize\ttfamily [3/6]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_a546c29965c67cf34fdecddd12b04334d} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::\+Matrix\+Dense (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&}]{arg\+\_\+cu\+\_\+handles}{, }\item[{std\+::initializer\+\_\+list$<$ std\+::initializer\+\_\+list$<$ TPrecision $>$ $>$}]{li}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_matrix_dense_ad987f7f6ddbbe241f83ead785706a789}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!MatrixDense@{MatrixDense}}
+\index{MatrixDense@{MatrixDense}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{MatrixDense()}{MatrixDense()}\hspace{0.1cm}{\footnotesize\ttfamily [4/6]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_ad987f7f6ddbbe241f83ead785706a789} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::\+Matrix\+Dense (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \&}]{other}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_matrix_dense_a254bb93c0c14770e6a797f0f7b008a07}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!````~MatrixDense@{\texorpdfstring{$\sim$}{\string~}MatrixDense}}
+\index{````~MatrixDense@{\texorpdfstring{$\sim$}{\string~}MatrixDense}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}MatrixDense()}{\string~MatrixDense()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_a254bb93c0c14770e6a797f0f7b008a07} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::\texorpdfstring{$\sim$}{\string~}\mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}} (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_matrix_dense_a08ad4eff6d4c2fc3af0aea816b5e40d0}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!MatrixDense@{MatrixDense}}
+\index{MatrixDense@{MatrixDense}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{MatrixDense()}{MatrixDense()}\hspace{0.1cm}{\footnotesize\ttfamily [5/6]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_a08ad4eff6d4c2fc3af0aea816b5e40d0} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::\+Matrix\+Dense (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&}]{source\+\_\+cu\+\_\+handles}{, }\item[{TPrecision \texorpdfstring{$\ast$}{*}}]{h\+\_\+mat}{, }\item[{int}]{source\+\_\+m\+\_\+rows}{, }\item[{int}]{source\+\_\+n\+\_\+cols}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_matrix_dense_ac2c90051e98e179c7e438e7b7badd8bb}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!MatrixDense@{MatrixDense}}
+\index{MatrixDense@{MatrixDense}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{MatrixDense()}{MatrixDense()}\hspace{0.1cm}{\footnotesize\ttfamily [6/6]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_ac2c90051e98e179c7e438e7b7badd8bb} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::\+Matrix\+Dense (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$ \&}]{sparse\+\_\+mat}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcascade_1_1_matrix_dense_a5630c58a4ced888a6ac31150e84fd545}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!back\_sub@{back\_sub}}
+\index{back\_sub@{back\_sub}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{back\_sub()}{back\_sub()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_a5630c58a4ced888a6ac31150e84fd545} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::back\+\_\+sub (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&}]{arg\+\_\+rhs}{}\end{DoxyParamCaption}) const}
+
+\Hypertarget{classcascade_1_1_matrix_dense_ac65ff74524e6b0ffcc15562d47890430}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!cast@{cast}}
+\index{cast@{cast}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{cast()}{cast()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_ac65ff74524e6b0ffcc15562d47890430} 
+template$<$typename TPrecision$>$ \\
+template$<$typename Cast\+\_\+\+TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ Cast\+\_\+\+TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::cast (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_matrix_dense_acb12c7631dadb6593fa4b4491e509e6a}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!cols@{cols}}
+\index{cols@{cols}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{cols()}{cols()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_acb12c7631dadb6593fa4b4491e509e6a} 
+template$<$typename TPrecision$>$ \\
+int \mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::cols (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_matrix_dense_afe3bd80931df815af827c19a7e39f4dc}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!copy\_data\_to\_ptr@{copy\_data\_to\_ptr}}
+\index{copy\_data\_to\_ptr@{copy\_data\_to\_ptr}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{copy\_data\_to\_ptr()}{copy\_data\_to\_ptr()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_afe3bd80931df815af827c19a7e39f4dc} 
+template$<$typename TPrecision$>$ \\
+void \mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::copy\+\_\+data\+\_\+to\+\_\+ptr (\begin{DoxyParamCaption}\item[{TPrecision \texorpdfstring{$\ast$}{*}}]{h\+\_\+mat}{, }\item[{int}]{target\+\_\+m\+\_\+rows}{, }\item[{int}]{target\+\_\+n\+\_\+cols}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_matrix_dense_ae6ca9b19c00e3b1a8488f93bf187ad65}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!frwd\_sub@{frwd\_sub}}
+\index{frwd\_sub@{frwd\_sub}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{frwd\_sub()}{frwd\_sub()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_ae6ca9b19c00e3b1a8488f93bf187ad65} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::frwd\+\_\+sub (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&}]{arg\+\_\+rhs}{}\end{DoxyParamCaption}) const}
+
+\Hypertarget{classcascade_1_1_matrix_dense_a14a76c7ee0f2fd943de8afc01a3a4e69}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!get\_block@{get\_block}}
+\index{get\_block@{get\_block}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{get\_block()}{get\_block()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_a14a76c7ee0f2fd943de8afc01a3a4e69} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_matrix_dense_1_1_block}{Block}} \mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::get\+\_\+block (\begin{DoxyParamCaption}\item[{int}]{start\+\_\+row}{, }\item[{int}]{start\+\_\+col}{, }\item[{int}]{block\+\_\+rows}{, }\item[{int}]{block\+\_\+cols}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_matrix_dense_acc2b26bddba8bf34afdd675165f9992b}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!get\_col@{get\_col}}
+\index{get\_col@{get\_col}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{get\_col()}{get\_col()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_acc2b26bddba8bf34afdd675165f9992b} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_matrix_dense_1_1_col}{Col}} \mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::get\+\_\+col (\begin{DoxyParamCaption}\item[{int}]{col}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_matrix_dense_a466c5ec9a5b8b06ec55c5e0af945cb97}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!get\_cu\_handles@{get\_cu\_handles}}
+\index{get\_cu\_handles@{get\_cu\_handles}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{get\_cu\_handles()}{get\_cu\_handles()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_a466c5ec9a5b8b06ec55c5e0af945cb97} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::get\+\_\+cu\+\_\+handles (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_matrix_dense_a45ecc9004d670654fb0a2c6afb9e3681}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!get\_elem@{get\_elem}}
+\index{get\_elem@{get\_elem}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{get\_elem()}{get\_elem()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_a45ecc9004d670654fb0a2c6afb9e3681} 
+template$<$typename TPrecision$>$ \\
+const \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::get\+\_\+elem (\begin{DoxyParamCaption}\item[{int}]{row}{, }\item[{int}]{col}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_matrix_dense_af39091d4fc097be1c9b7c42e3103a04b}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!get\_info\_string@{get\_info\_string}}
+\index{get\_info\_string@{get\_info\_string}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{get\_info\_string()}{get\_info\_string()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_af39091d4fc097be1c9b7c42e3103a04b} 
+template$<$typename TPrecision$>$ \\
+std\+::string \mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::get\+\_\+info\+\_\+string (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_matrix_dense_a7d335596d70af562b29a48a67f5deda7}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!get\_matrix\_string@{get\_matrix\_string}}
+\index{get\_matrix\_string@{get\_matrix\_string}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{get\_matrix\_string()}{get\_matrix\_string()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_a7d335596d70af562b29a48a67f5deda7} 
+template$<$typename TPrecision$>$ \\
+std\+::string \mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::get\+\_\+matrix\+\_\+string (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_matrix_dense_afe902001d3cc826dea4ce3abba4060c1}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!get\_max\_mag\_elem@{get\_max\_mag\_elem}}
+\index{get\_max\_mag\_elem@{get\_max\_mag\_elem}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{get\_max\_mag\_elem()}{get\_max\_mag\_elem()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_afe902001d3cc826dea4ce3abba4060c1} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::get\+\_\+max\+\_\+mag\+\_\+elem (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_matrix_dense_adb0d633847fb1ae6b9dcad8518d2adde}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!Identity@{Identity}}
+\index{Identity@{Identity}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{Identity()}{Identity()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_adb0d633847fb1ae6b9dcad8518d2adde} 
+template$<$typename TPrecision$>$ \\
+static \mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::\+Identity (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&}]{arg\+\_\+cu\+\_\+handles}{, }\item[{int}]{arg\+\_\+m}{, }\item[{int}]{arg\+\_\+n}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+\Hypertarget{classcascade_1_1_matrix_dense_a2e757ece493422e88353466d13d79383}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!mult\_subset\_cols@{mult\_subset\_cols}}
+\index{mult\_subset\_cols@{mult\_subset\_cols}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{mult\_subset\_cols()}{mult\_subset\_cols()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_a2e757ece493422e88353466d13d79383} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::mult\+\_\+subset\+\_\+cols (\begin{DoxyParamCaption}\item[{int}]{start}{, }\item[{int}]{cols}{, }\item[{const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&}]{vec}{}\end{DoxyParamCaption}) const}
+
+\Hypertarget{classcascade_1_1_matrix_dense_a0d2cd28bfe740faa8dd99f47d5f3972b}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!non\_zeros@{non\_zeros}}
+\index{non\_zeros@{non\_zeros}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{non\_zeros()}{non\_zeros()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_a0d2cd28bfe740faa8dd99f47d5f3972b} 
+template$<$typename TPrecision$>$ \\
+int \mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::non\+\_\+zeros (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_matrix_dense_a7996810305d78183147b7c44040c78e3}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!norm@{norm}}
+\index{norm@{norm}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{norm()}{norm()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_a7996810305d78183147b7c44040c78e3} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::norm (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+\Hypertarget{classcascade_1_1_matrix_dense_a11a6d1796672ec90d8abbd6e56f2bd9d}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!normalize\_magnitude@{normalize\_magnitude}}
+\index{normalize\_magnitude@{normalize\_magnitude}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{normalize\_magnitude()}{normalize\_magnitude()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_a11a6d1796672ec90d8abbd6e56f2bd9d} 
+template$<$typename TPrecision$>$ \\
+void \mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::normalize\+\_\+magnitude (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_matrix_dense_a8ffe57a3335cdd25e872ef3497fec157}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!Ones@{Ones}}
+\index{Ones@{Ones}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{Ones()}{Ones()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_a8ffe57a3335cdd25e872ef3497fec157} 
+template$<$typename TPrecision$>$ \\
+static \mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::\+Ones (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&}]{arg\+\_\+cu\+\_\+handles}{, }\item[{int}]{arg\+\_\+m}{, }\item[{int}]{arg\+\_\+n}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+\Hypertarget{classcascade_1_1_matrix_dense_a34f53011c318aee62ea456fa3eab5a47}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!operator\texorpdfstring{$\ast$}{*}@{operator\texorpdfstring{$\ast$}{*}}}
+\index{operator\texorpdfstring{$\ast$}{*}@{operator\texorpdfstring{$\ast$}{*}}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{operator\texorpdfstring{$\ast$}{*}()}{operator*()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_a34f53011c318aee62ea456fa3eab5a47} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::operator\texorpdfstring{$\ast$}{*} (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \&}]{mat}{}\end{DoxyParamCaption}) const}
+
+\Hypertarget{classcascade_1_1_matrix_dense_a78cd9eca4c5b12641e5dc69df349a5e6}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!operator\texorpdfstring{$\ast$}{*}@{operator\texorpdfstring{$\ast$}{*}}}
+\index{operator\texorpdfstring{$\ast$}{*}@{operator\texorpdfstring{$\ast$}{*}}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{operator\texorpdfstring{$\ast$}{*}()}{operator*()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_a78cd9eca4c5b12641e5dc69df349a5e6} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::operator\texorpdfstring{$\ast$}{*} (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \&}]{scalar}{}\end{DoxyParamCaption}) const}
+
+\Hypertarget{classcascade_1_1_matrix_dense_a68d75e4ae55082455526e6aeb7890f0e}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!operator\texorpdfstring{$\ast$}{*}@{operator\texorpdfstring{$\ast$}{*}}}
+\index{operator\texorpdfstring{$\ast$}{*}@{operator\texorpdfstring{$\ast$}{*}}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{operator\texorpdfstring{$\ast$}{*}()}{operator*()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_a68d75e4ae55082455526e6aeb7890f0e} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::operator\texorpdfstring{$\ast$}{*} (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&}]{vec}{}\end{DoxyParamCaption}) const}
+
+\Hypertarget{classcascade_1_1_matrix_dense_a1a11e7201ad647dc553b51ceb12fe573}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!operator\texorpdfstring{$\ast$}{*}=@{operator\texorpdfstring{$\ast$}{*}=}}
+\index{operator\texorpdfstring{$\ast$}{*}=@{operator\texorpdfstring{$\ast$}{*}=}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{operator\texorpdfstring{$\ast$}{*}=()}{operator*=()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_a1a11e7201ad647dc553b51ceb12fe573} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \& \mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::operator\texorpdfstring{$\ast$}{*}= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \&}]{scalar}{}\end{DoxyParamCaption})}
+
+\Hypertarget{classcascade_1_1_matrix_dense_af01b8a2043b71b826de2855e75a7bd06}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!operator+@{operator+}}
+\index{operator+@{operator+}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{operator+()}{operator+()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_af01b8a2043b71b826de2855e75a7bd06} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::operator+ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \&}]{mat}{}\end{DoxyParamCaption}) const}
+
+\Hypertarget{classcascade_1_1_matrix_dense_a9ad80231bbd23411d5f2cb4ab1184a38}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!operator-\/@{operator-\/}}
+\index{operator-\/@{operator-\/}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{operator-\/()}{operator-()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_a9ad80231bbd23411d5f2cb4ab1184a38} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::operator-\/ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \&}]{mat}{}\end{DoxyParamCaption}) const}
+
+\Hypertarget{classcascade_1_1_matrix_dense_abda0d514a37701e94cbecfb41ec31656}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!operator/@{operator/}}
+\index{operator/@{operator/}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{operator/()}{operator/()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_abda0d514a37701e94cbecfb41ec31656} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::operator/ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \&}]{scalar}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_matrix_dense_ac75c62060751897303247fed5768eacb}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!operator/=@{operator/=}}
+\index{operator/=@{operator/=}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{operator/=()}{operator/=()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_ac75c62060751897303247fed5768eacb} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \& \mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::operator/= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \&}]{scalar}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_matrix_dense_ae5bf4e79d2578988d33be9f69a1153b8}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!operator=@{operator=}}
+\index{operator=@{operator=}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_ae5bf4e79d2578988d33be9f69a1153b8} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \& \mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::operator= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \&}]{other}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_matrix_dense_ac78e0e1c9c4d2194d97d3b6140e99899}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!Random@{Random}}
+\index{Random@{Random}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{Random()}{Random()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_ac78e0e1c9c4d2194d97d3b6140e99899} 
+template$<$typename TPrecision$>$ \\
+static \mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::\+Random (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&}]{arg\+\_\+cu\+\_\+handles}{, }\item[{int}]{arg\+\_\+m}{, }\item[{int}]{arg\+\_\+n}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+\Hypertarget{classcascade_1_1_matrix_dense_a0400f3b9ea5ab6a6ff84506688006732}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!Random\_LT@{Random\_LT}}
+\index{Random\_LT@{Random\_LT}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{Random\_LT()}{Random\_LT()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_a0400f3b9ea5ab6a6ff84506688006732} 
+template$<$typename TPrecision$>$ \\
+static \mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::\+Random\+\_\+\+LT (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&}]{arg\+\_\+cu\+\_\+handles}{, }\item[{int}]{arg\+\_\+m}{, }\item[{int}]{arg\+\_\+n}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+\Hypertarget{classcascade_1_1_matrix_dense_aaf9130f2d377aafda17e1c973cb6d18f}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!Random\_UT@{Random\_UT}}
+\index{Random\_UT@{Random\_UT}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{Random\_UT()}{Random\_UT()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_aaf9130f2d377aafda17e1c973cb6d18f} 
+template$<$typename TPrecision$>$ \\
+static \mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::\+Random\+\_\+\+UT (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&}]{arg\+\_\+cu\+\_\+handles}{, }\item[{int}]{arg\+\_\+m}{, }\item[{int}]{arg\+\_\+n}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+\Hypertarget{classcascade_1_1_matrix_dense_a346043c3bc51b4d2316e65e5b17f7150}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!rows@{rows}}
+\index{rows@{rows}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{rows()}{rows()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_a346043c3bc51b4d2316e65e5b17f7150} 
+template$<$typename TPrecision$>$ \\
+int \mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::rows (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_matrix_dense_af5c51918cb8fe974ff82e0838722b636}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!set\_elem@{set\_elem}}
+\index{set\_elem@{set\_elem}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{set\_elem()}{set\_elem()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_af5c51918cb8fe974ff82e0838722b636} 
+template$<$typename TPrecision$>$ \\
+void \mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::set\+\_\+elem (\begin{DoxyParamCaption}\item[{int}]{row}{, }\item[{int}]{col}{, }\item[{\mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$}]{val}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_matrix_dense_af1df204aa5ccc49573d478f50a8c60a6}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!transpose@{transpose}}
+\index{transpose@{transpose}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{transpose()}{transpose()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_af1df204aa5ccc49573d478f50a8c60a6} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::transpose (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_matrix_dense_ad7445f3ce4f9f801b0df4b062107ee5e}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!transpose\_prod@{transpose\_prod}}
+\index{transpose\_prod@{transpose\_prod}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{transpose\_prod()}{transpose\_prod()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_ad7445f3ce4f9f801b0df4b062107ee5e} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::transpose\+\_\+prod (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&}]{vec}{}\end{DoxyParamCaption}) const}
+
+\Hypertarget{classcascade_1_1_matrix_dense_a4ef16b4b3b8fe4e4b8c817d7cd7dd723}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!transpose\_prod\_subset\_cols@{transpose\_prod\_subset\_cols}}
+\index{transpose\_prod\_subset\_cols@{transpose\_prod\_subset\_cols}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{transpose\_prod\_subset\_cols()}{transpose\_prod\_subset\_cols()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_a4ef16b4b3b8fe4e4b8c817d7cd7dd723} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::transpose\+\_\+prod\+\_\+subset\+\_\+cols (\begin{DoxyParamCaption}\item[{int}]{start}{, }\item[{int}]{cols}{, }\item[{const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&}]{vec}{}\end{DoxyParamCaption}) const}
+
+\Hypertarget{classcascade_1_1_matrix_dense_a3aa7327a735cc8cae13592a4f6ff7222}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!Zero@{Zero}}
+\index{Zero@{Zero}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{Zero()}{Zero()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_a3aa7327a735cc8cae13592a4f6ff7222} 
+template$<$typename TPrecision$>$ \\
+static \mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{cascade\+::\+Matrix\+Dense}}$<$ TPrecision $>$\+::\+Zero (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&}]{arg\+\_\+cu\+\_\+handles}{, }\item[{int}]{arg\+\_\+m}{, }\item[{int}]{arg\+\_\+n}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+\doxysubsection{Friends And Related Symbol Documentation}
+\Hypertarget{classcascade_1_1_matrix_dense_ab9253591cf0eb1909958cc45f111e864}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!MatrixDense@{MatrixDense}}
+\index{MatrixDense@{MatrixDense}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{MatrixDense}{MatrixDense}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_ab9253591cf0eb1909958cc45f111e864} 
+template$<$typename TPrecision$>$ \\
+template$<$typename$>$ \\
+friend class \mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}\hspace{0.3cm}{\ttfamily [friend]}}
+
+\Hypertarget{classcascade_1_1_matrix_dense_ad8115e3d6acf82a6570298abb1773d87}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!NoFillMatrixSparse$<$ TPrecision $>$@{NoFillMatrixSparse$<$ TPrecision $>$}}
+\index{NoFillMatrixSparse$<$ TPrecision $>$@{NoFillMatrixSparse$<$ TPrecision $>$}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{NoFillMatrixSparse$<$ TPrecision $>$}{NoFillMatrixSparse< TPrecision >}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_ad8115e3d6acf82a6570298abb1773d87} 
+template$<$typename TPrecision$>$ \\
+friend class \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$\hspace{0.3cm}{\ttfamily [friend]}}
+
+\Hypertarget{classcascade_1_1_matrix_dense_aea823826a9223deca66cf0409a8e7819}\index{cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}!Vector$<$ TPrecision $>$@{Vector$<$ TPrecision $>$}}
+\index{Vector$<$ TPrecision $>$@{Vector$<$ TPrecision $>$}!cascade::MatrixDense$<$ TPrecision $>$@{cascade::MatrixDense$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{Vector$<$ TPrecision $>$}{Vector< TPrecision >}}
+{\footnotesize\ttfamily \label{classcascade_1_1_matrix_dense_aea823826a9223deca66cf0409a8e7819} 
+template$<$typename TPrecision$>$ \\
+friend class \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/dosre/dev/precision-\/cascade/include/types/\+Matrix\+Dense/\mbox{\hyperlink{_matrix_dense_8h}{Matrix\+Dense.\+h}}\end{DoxyCompactItemize}

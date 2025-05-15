@@ -1,0 +1,510 @@
+\doxysection{read\+\_\+matrix.\+h}
+\hypertarget{read__matrix_8h_source}{}\label{read__matrix_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/include/tools/read\_matrix.h@{C:/Users/dosre/dev/precision-\/cascade/include/tools/read\_matrix.h}}
+\mbox{\hyperlink{read__matrix_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ MATRIX\_READER\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ MATRIX\_READER\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{cu_handle_bundle_8h}{tools/cuHandleBundle.h}}"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{types_8h}{types/types.h}}"{}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <cassert>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <filesystem>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <fstream>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <sstream>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <stdlib.h>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <time.h>}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{keyword}{namespace\ }fs\ =\ std::filesystem;}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacecascade}{cascade}}\ \{}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacecascade_1_1helper}{helper}}\ \{}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ std::ifstream\ \mbox{\hyperlink{namespacecascade_1_1helper_a47f438eed728ec7b0f2c7eb3ab91c659}{open\_ifstream}}(fs::path\ path,\ fs::path\ correct\_extension);}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecascade_1_1helper_a3b356b8d769d3c544e99cda42cb58618}{scan\_csv\_dim}}(fs::path\ path,\ \textcolor{keywordtype}{int}\ *m\_rows\_ptr,\ \textcolor{keywordtype}{int}\ *n\_cols\_ptr);}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00027\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacecascade_1_1helper_a8127cede47e1a56f7de2b48d1134d2be}{scan\_csv\_vals}}(}
+\DoxyCodeLine{00028\ \ \ \ \ fs::path\ path,\ TPrecision\ *mat\_ptr,\ \textcolor{keywordtype}{int}\ m\_rows,\ \textcolor{keywordtype}{int}\ n\_cols}
+\DoxyCodeLine{00029\ )\ \{}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ std::ifstream\ file\_in\ =\ \mbox{\hyperlink{namespacecascade_1_1helper_a47f438eed728ec7b0f2c7eb3ab91c659}{open\_ifstream}}(path,\ fs::path(\textcolor{stringliteral}{"{}.csv"{}}));}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ std::string\ temp\_str;}
+\DoxyCodeLine{00034\ \ \ \ \ TPrecision\ temp\_num;}
+\DoxyCodeLine{00035\ \ \ \ \ std::string\ line\_string;}
+\DoxyCodeLine{00036\ \ \ \ \ std::stringstream\ line\_stream;}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{int}\ row\ =\ 0;}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordflow}{while}\ (std::getline(file\_in,\ line\_string))\ \{}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ line\_stream.clear();}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ line\_stream\ <<\ line\_string;}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ col\ =\ 0;}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (std::getline(line\_stream,\ temp\_str,\ \textcolor{charliteral}{','}))\ \{}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ temp\_num\ =\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(stod(temp\_str));}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{catch}\ (std::invalid\_argument\ \mbox{\hyperlink{create__solve__matrices_8m_a329626dffc42c84371831246a2ddac71}{e}})\ \{}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}scan\_csv\_vals:\ error\ in:\ "{}}\ +\ path.string()\ +\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}}}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Invalid\ argument\ in\ file,\ failed\ to\ convert\ to\ numeric"{}}}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((0\ <=\ row)\ \&\&\ (row\ <\ m\_rows)\ \&\&\ (0\ <=\ col)\ \&\&\ (col\ <\ n\_cols))\ \{}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mat\_ptr[row+col*m\_rows]\ =\ temp\_num;}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}scan\_csv\_vals:\ error\ in:\ "{}}\ +\ path.string()\ +\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}}}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Invalid\ row\ or\ col\ encountered"{}}}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ col++;}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ row++;}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ \}}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \}}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacecascade_1_1helper_a1b5c41bda096f68bd966e622aa1c01ba}{no\_whitespace}}(std::string\ \&str);}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00078\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{NoFillMatrixSparse<TPrecision>}}\ \mbox{\hyperlink{namespacecascade_1_1helper_a64d92ef9b54c6e4b6a230eca0e652ce4}{read\_coord\_body\_MTX}}(}
+\DoxyCodeLine{00079\ \ \ \ \ std::ifstream\ \&file\_in,}
+\DoxyCodeLine{00080\ \ \ \ \ std::stringstream\ \&line\_in,}
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ \&cu\_handles,}
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keywordtype}{bool}\ symmetric}
+\DoxyCodeLine{00083\ )\ \{}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \ \ std::string\ line\_str;}
+\DoxyCodeLine{00086\ \ \ \ \ std::string\ line\_str\_portion;}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{comment}{//\ Read\ matrix\ dimensions\ and\ initiate\ data\ storage}}
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keywordtype}{int}\ m\_rows;}
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keywordtype}{int}\ n\_cols;}
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{keywordtype}{int}\ entries;}
+\DoxyCodeLine{00092\ \ \ \ \ std::string\ mtx\_dim\_error(}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}read\_coord\_body\_MTX:\ matrix\ dimensions\ incorrect\ to\ expected\ format"{}}}
+\DoxyCodeLine{00094\ \ \ \ \ );}
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ !std::getline(line\_in,\ line\_str\_portion,\ \textcolor{charliteral}{'\ '})\ ||}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \ \ \ \ !\mbox{\hyperlink{namespacecascade_1_1helper_a1b5c41bda096f68bd966e622aa1c01ba}{no\_whitespace}}(line\_str\_portion)}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ )\ \{}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}"{}});}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ m\_rows\ =\ stoi(line\_str\_portion);}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ !std::getline(line\_in,\ line\_str\_portion,\ \textcolor{charliteral}{'\ '})\ ||}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \ \ \ \ !\mbox{\hyperlink{namespacecascade_1_1helper_a1b5c41bda096f68bd966e622aa1c01ba}{no\_whitespace}}(line\_str\_portion)}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ )\ \{}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}"{}});}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ n\_cols\ =\ stoi(line\_str\_portion);}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ !std::getline(line\_in,\ line\_str\_portion)\ ||}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ !\mbox{\hyperlink{namespacecascade_1_1helper_a1b5c41bda096f68bd966e622aa1c01ba}{no\_whitespace}}(line\_str\_portion)}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ )\ \{}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}"{}});}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ entries\ =\ stoi(line\_str\_portion);}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((m\_rows\ <\ 0)\ ||\ (n\_cols\ <\ 0)\ ||\ (entries\ <\ 0))\ \{}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}"{}});}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00120\ \ \ \ \ \}\ \textcolor{keywordflow}{catch}\ (std::invalid\_argument\ \mbox{\hyperlink{create__solve__matrices_8m_a329626dffc42c84371831246a2ddac71}{e}})\ \{}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(mtx\_dim\_error);}
+\DoxyCodeLine{00122\ \ \ \ \ \}}
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ \ \ \ \ \textcolor{keywordtype}{int}\ total\_nnz\ =\ 0;}
+\DoxyCodeLine{00125\ \ \ \ \ std::vector<std::vector<int>>\ vec\_row\_indices(n\_cols);}
+\DoxyCodeLine{00126\ \ \ \ \ std::vector<std::vector<TPrecision>>\ vec\_vals(n\_cols);}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \ \ \ \ \textcolor{comment}{//\ Load\ data\ and\ check\ validity}}
+\DoxyCodeLine{00129\ \ \ \ \ \textcolor{keywordtype}{int}\ last\_i\ =\ -\/1;}
+\DoxyCodeLine{00130\ \ \ \ \ \textcolor{keywordtype}{int}\ last\_j\ =\ -\/1;}
+\DoxyCodeLine{00131\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ entry=0;\ entry<entries;\ ++entry)\ \{}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ std::getline(file\_in,\ line\_str);}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \ \ \ \ line\_in.clear();}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ line\_in\ <<\ line\_str;}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ !std::getline(line\_in,\ line\_str\_portion,\ \textcolor{charliteral}{'\ '})\ ||}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ !\mbox{\hyperlink{namespacecascade_1_1helper_a1b5c41bda096f68bd966e622aa1c01ba}{no\_whitespace}}(line\_str\_portion)}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \ \ \ \ )\ \{}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}"{}});}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}\ =\ stoi(line\_str\_portion)-\/1;\ \textcolor{comment}{//\ 1-\/indexing\ correction}}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ !std::getline(line\_in,\ line\_str\_portion,\ \textcolor{charliteral}{'\ '})\ ||}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ !\mbox{\hyperlink{namespacecascade_1_1helper_a1b5c41bda096f68bd966e622aa1c01ba}{no\_whitespace}}(line\_str\_portion)}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ )\ \{}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}"{}});}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ j\ =\ stoi(line\_str\_portion)-\/1;\ \textcolor{comment}{//\ 1-\/indexing\ correction}}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ !std::getline(line\_in,\ line\_str\_portion)\ ||}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ !\mbox{\hyperlink{namespacecascade_1_1helper_a1b5c41bda096f68bd966e622aa1c01ba}{no\_whitespace}}(line\_str\_portion)}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ )\ \{}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}"{}});}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \ \ TPrecision\ val\ =\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(stod(line\_str\_portion));}
+\DoxyCodeLine{00160\ }
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Check\ validity\ of\ entry\ values}}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (j\ ==\ last\_j)\ \&\&}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ((\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}\ <=\ last\_i)\ ||\ (\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}\ <\ 0)\ ||\ (\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}\ >=\ m\_rows))}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \ \ \ \ )\ \{}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}read\_coord\_body\_MTX:\ invalid\ row\ order\ encountered"{}}}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ ((j\ <\ last\_j)\ ||\ (j\ <\ 0)\ ||\ (j\ >=\ n\_cols))\ \{}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}read\_coord\_body\_MTX:\ invalid\ column\ encountered"{}}}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ ((\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}\ <\ 0)\ ||\ (\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}\ >=\ m\_rows))\ \{}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}read\_coord\_body\_MTX:\ invalid\ row\ encountered"{}}}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (symmetric\ \&\&\ (j\ >\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}))\ \{}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}read\_coord\_body\_MTX:\ above\ diagonal\ entry\ in\ symmetric"{}}}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \ \ \ \ last\_i\ =\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}};}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \ \ \ \ last\_j\ =\ j;}
+\DoxyCodeLine{00184\ }
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (val\ !=\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(0.))\ \{}
+\DoxyCodeLine{00186\ }
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ vec\_row\_indices[j].push\_back(\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}});}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ vec\_vals[j].push\_back(val);}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ++total\_nnz;}
+\DoxyCodeLine{00190\ }
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (symmetric\ \&\&\ (\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}\ >\ j))\ \{}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ vec\_row\_indices[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}].push\_back(j);}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ vec\_vals[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}].push\_back(val);}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ++total\_nnz;}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00196\ }
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00198\ }
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{catch}\ (std::invalid\_argument\ \mbox{\hyperlink{create__solve__matrices_8m_a329626dffc42c84371831246a2ddac71}{e}})\ \{}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}read\_coord\_body\_MTX:\ Invalid\ entry\ in\ file\ entry:\ "{}}\ +\ }
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::to\_string(entry)}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00205\ }
+\DoxyCodeLine{00206\ \ \ \ \ \}}
+\DoxyCodeLine{00207\ }
+\DoxyCodeLine{00208\ \ \ \ \ \textcolor{keywordtype}{int}\ curr\_nnz\ =\ 0;}
+\DoxyCodeLine{00209\ \ \ \ \ \textcolor{keywordtype}{int}\ *h\_col\_offsets\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(malloc((n\_cols+1)*\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int})));}
+\DoxyCodeLine{00210\ \ \ \ \ \textcolor{keywordtype}{int}\ *h\_row\_indices\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\ *\textcolor{keyword}{>}(malloc(total\_nnz*\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int})));}
+\DoxyCodeLine{00211\ \ \ \ \ TPrecision\ *h\_vals\ =\ \textcolor{keyword}{static\_cast<}TPrecision\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ malloc(total\_nnz*\textcolor{keyword}{sizeof}(TPrecision))}
+\DoxyCodeLine{00213\ \ \ \ \ );}
+\DoxyCodeLine{00214\ }
+\DoxyCodeLine{00215\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ j=0;\ j<n\_cols;\ ++j)\ \{}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ h\_col\_offsets[j]\ =\ curr\_nnz;}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<vec\_row\_indices[j].size();\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \ \ \ \ h\_row\_indices[curr\_nnz+\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ =\ vec\_row\_indices[j][\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}];}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \ \ \ \ h\_vals[curr\_nnz+\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ =\ vec\_vals[j][\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}];}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ curr\_nnz\ +=\ vec\_row\_indices[j].size();}
+\DoxyCodeLine{00222\ \ \ \ \ \}}
+\DoxyCodeLine{00223\ \ \ \ \ assert(curr\_nnz\ ==\ total\_nnz);}
+\DoxyCodeLine{00224\ \ \ \ \ h\_col\_offsets[n\_cols]\ =\ curr\_nnz;}
+\DoxyCodeLine{00225\ }
+\DoxyCodeLine{00226\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{NoFillMatrixSparse<TPrecision>}}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a34079cedfcd0dcc6476bf9f1076e8cbd}{mat}}(}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ cu\_handles,}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ h\_col\_offsets,\ h\_row\_indices,\ h\_vals,}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ m\_rows,\ n\_cols,\ total\_nnz}
+\DoxyCodeLine{00230\ \ \ \ \ );}
+\DoxyCodeLine{00231\ }
+\DoxyCodeLine{00232\ \ \ \ \ free(h\_col\_offsets);}
+\DoxyCodeLine{00233\ \ \ \ \ free(h\_row\_indices);}
+\DoxyCodeLine{00234\ \ \ \ \ free(h\_vals);}
+\DoxyCodeLine{00235\ }
+\DoxyCodeLine{00236\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a34079cedfcd0dcc6476bf9f1076e8cbd}{mat}};}
+\DoxyCodeLine{00237\ }
+\DoxyCodeLine{00238\ \}}
+\DoxyCodeLine{00239\ }
+\DoxyCodeLine{00240\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00241\ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{MatrixDense<TPrecision>}}\ \mbox{\hyperlink{namespacecascade_1_1helper_a2557683de8ae915ccfce0d7b3329fe54}{read\_array\_body\_MTX}}(}
+\DoxyCodeLine{00242\ \ \ \ \ std::ifstream\ \&file\_in,}
+\DoxyCodeLine{00243\ \ \ \ \ std::stringstream\ \&line\_in,}
+\DoxyCodeLine{00244\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ \&cu\_handles}
+\DoxyCodeLine{00245\ )\ \{}
+\DoxyCodeLine{00246\ }
+\DoxyCodeLine{00247\ \ \ \ \ std::string\ line\_str;}
+\DoxyCodeLine{00248\ \ \ \ \ std::string\ line\_str\_portion;}
+\DoxyCodeLine{00249\ }
+\DoxyCodeLine{00250\ \ \ \ \ \textcolor{comment}{//\ Read\ matrix\ dimensions\ and\ initiate\ data\ storage}}
+\DoxyCodeLine{00251\ \ \ \ \ \textcolor{keywordtype}{int}\ m\_rows;}
+\DoxyCodeLine{00252\ \ \ \ \ \textcolor{keywordtype}{int}\ n\_cols;}
+\DoxyCodeLine{00253\ \ \ \ \ std::string\ mtx\_dim\_error(}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}read\_array\_body\_MTX:\ matrix\ dimensions\ incorrect\ to\ expected\ format"{}}}
+\DoxyCodeLine{00255\ \ \ \ \ );}
+\DoxyCodeLine{00256\ }
+\DoxyCodeLine{00257\ \ \ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \ \ \ \ !std::getline(line\_in,\ line\_str\_portion,\ \textcolor{charliteral}{'\ '})\ ||}
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \ \ \ \ !\mbox{\hyperlink{namespacecascade_1_1helper_a1b5c41bda096f68bd966e622aa1c01ba}{no\_whitespace}}(line\_str\_portion)}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ )\ \{}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}"{}});}
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ m\_rows\ =\ stoi(line\_str\_portion);}
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (}
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \ \ \ \ !std::getline(line\_in,\ line\_str\_portion)\ ||}
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \ \ \ \ !\mbox{\hyperlink{namespacecascade_1_1helper_a1b5c41bda096f68bd966e622aa1c01ba}{no\_whitespace}}(line\_str\_portion)}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ )\ \{}
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}"{}});}
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ n\_cols\ =\ stoi(line\_str\_portion);}
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((m\_rows\ <\ 0)\ ||\ (n\_cols\ <\ 0))\ \{}
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}"{}});}
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00275\ \ \ \ \ \}\ \textcolor{keywordflow}{catch}\ (std::invalid\_argument\ \mbox{\hyperlink{create__solve__matrices_8m_a329626dffc42c84371831246a2ddac71}{e}})\ \{}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(mtx\_dim\_error);}
+\DoxyCodeLine{00277\ \ \ \ \ \}}
+\DoxyCodeLine{00278\ }
+\DoxyCodeLine{00279\ \ \ \ \ \textcolor{keywordtype}{int}\ expected\_nnz\ =\ m\_rows*n\_cols;}
+\DoxyCodeLine{00280\ \ \ \ \ TPrecision\ *h\_mat\ =\ \textcolor{keyword}{static\_cast<}TPrecision\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ malloc(expected\_nnz*\textcolor{keyword}{sizeof}(TPrecision))}
+\DoxyCodeLine{00282\ \ \ \ \ );}
+\DoxyCodeLine{00283\ }
+\DoxyCodeLine{00284\ \ \ \ \ \textcolor{comment}{//\ Load\ data\ and\ check\ validity}}
+\DoxyCodeLine{00285\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ entry=0;\ entry<expected\_nnz;\ ++entry)\ \{}
+\DoxyCodeLine{00286\ }
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{00288\ }
+\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ \ \ \ \ std::getline(file\_in,\ line\_str);}
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \ \ \ \ line\_in.clear();}
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \ \ \ \ line\_in\ <<\ line\_str;}
+\DoxyCodeLine{00292\ }
+\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (}
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ !std::getline(line\_in,\ line\_str\_portion)\ ||}
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ !\mbox{\hyperlink{namespacecascade_1_1helper_a1b5c41bda096f68bd966e622aa1c01ba}{no\_whitespace}}(line\_str\_portion)}
+\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \ \ \ \ )\ \{}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}"{}});}
+\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ \ \ \ \ h\_mat[entry]\ =\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(stod(line\_str\_portion));}
+\DoxyCodeLine{00300\ }
+\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{catch}\ (std::invalid\_argument\ \mbox{\hyperlink{create__solve__matrices_8m_a329626dffc42c84371831246a2ddac71}{e}})\ \{}
+\DoxyCodeLine{00302\ }
+\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ \ \ \ \ free(h\_mat);}
+\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}read\_array\_body\_MTX:\ Invalid\ entry\ in\ file\ entry:\ "{}}\ +\ }
+\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::to\_string(entry)}
+\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00308\ }
+\DoxyCodeLine{00309\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00310\ }
+\DoxyCodeLine{00311\ \ \ \ \ \}}
+\DoxyCodeLine{00312\ }
+\DoxyCodeLine{00313\ \ \ \ \ std::getline(file\_in,\ line\_str);}
+\DoxyCodeLine{00314\ \ \ \ \ \textcolor{keywordflow}{if}\ ((line\_str\ !=\ \textcolor{stringliteral}{"{}"{}})\ ||\ std::getline(file\_in,\ line\_str))\ \{}
+\DoxyCodeLine{00315\ }
+\DoxyCodeLine{00316\ \ \ \ \ \ \ \ \ free(h\_mat);}
+\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00318\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}read\_array\_body\_MTX:\ Invalid\ end\ of\ file"{}}}
+\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00320\ }
+\DoxyCodeLine{00321\ \ \ \ \ \}}
+\DoxyCodeLine{00322\ }
+\DoxyCodeLine{00323\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{MatrixDense<TPrecision>}}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a34079cedfcd0dcc6476bf9f1076e8cbd}{mat}}(cu\_handles,\ h\_mat,\ m\_rows,\ n\_cols);}
+\DoxyCodeLine{00324\ }
+\DoxyCodeLine{00325\ \ \ \ \ free(h\_mat);}
+\DoxyCodeLine{00326\ }
+\DoxyCodeLine{00327\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a34079cedfcd0dcc6476bf9f1076e8cbd}{mat}};}
+\DoxyCodeLine{00328\ }
+\DoxyCodeLine{00329\ \}}
+\DoxyCodeLine{00330\ \ \ \ \ }
+\DoxyCodeLine{00331\ \}}
+\DoxyCodeLine{00332\ }
+\DoxyCodeLine{00333\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix,\ \textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00334\ TMatrix<TPrecision>\ \mbox{\hyperlink{namespacecascade_a0a2d9826160a93e11c354402937ce21a}{read\_matrixCSV}}(}
+\DoxyCodeLine{00335\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ \&cu\_handles,\ fs::path\ \textcolor{keyword}{const}\ path}
+\DoxyCodeLine{00336\ )\ \{}
+\DoxyCodeLine{00337\ }
+\DoxyCodeLine{00338\ \ \ \ \ \textcolor{keywordtype}{int}\ m\_rows;}
+\DoxyCodeLine{00339\ \ \ \ \ \textcolor{keywordtype}{int}\ n\_cols;}
+\DoxyCodeLine{00340\ \ \ \ \ \mbox{\hyperlink{namespacecascade_1_1helper_a3b356b8d769d3c544e99cda42cb58618}{helper::scan\_csv\_dim}}(path,\ \&m\_rows,\ \&n\_cols);}
+\DoxyCodeLine{00341\ }
+\DoxyCodeLine{00342\ \ \ \ \ TPrecision\ *h\_mat\ =\ \textcolor{keyword}{static\_cast<}TPrecision\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{00343\ \ \ \ \ \ \ \ \ malloc(m\_rows*n\_cols*\textcolor{keyword}{sizeof}(TPrecision))}
+\DoxyCodeLine{00344\ \ \ \ \ );}
+\DoxyCodeLine{00345\ }
+\DoxyCodeLine{00346\ \ \ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_1_1helper_a8127cede47e1a56f7de2b48d1134d2be}{helper::scan\_csv\_vals}}(path,\ h\_mat,\ m\_rows,\ n\_cols);}
+\DoxyCodeLine{00348\ \ \ \ \ \}\ \textcolor{keywordflow}{catch}\ (std::runtime\_error\ \mbox{\hyperlink{create__solve__matrices_8m_a329626dffc42c84371831246a2ddac71}{e}})\ \{}
+\DoxyCodeLine{00349\ \ \ \ \ \ \ \ \ free(h\_mat);}
+\DoxyCodeLine{00350\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ \mbox{\hyperlink{create__solve__matrices_8m_a329626dffc42c84371831246a2ddac71}{e}};}
+\DoxyCodeLine{00351\ \ \ \ \ \}}
+\DoxyCodeLine{00352\ }
+\DoxyCodeLine{00353\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{MatrixDense<TPrecision>}}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a34079cedfcd0dcc6476bf9f1076e8cbd}{mat}}(cu\_handles,\ h\_mat,\ m\_rows,\ n\_cols);}
+\DoxyCodeLine{00354\ }
+\DoxyCodeLine{00355\ \ \ \ \ free(h\_mat);}
+\DoxyCodeLine{00356\ }
+\DoxyCodeLine{00357\ \ \ \ \ \textcolor{keywordflow}{return}\ TMatrix<TPrecision>(\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a34079cedfcd0dcc6476bf9f1076e8cbd}{mat}});}
+\DoxyCodeLine{00358\ }
+\DoxyCodeLine{00359\ \}}
+\DoxyCodeLine{00360\ }
+\DoxyCodeLine{00361\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00362\ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ \mbox{\hyperlink{namespacecascade_a8986a22cb4ae293cf6ebfca14df5241c}{read\_vectorCSV}}(}
+\DoxyCodeLine{00363\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ \&cu\_handles,\ fs::path\ \textcolor{keyword}{const}\ path}
+\DoxyCodeLine{00364\ )\ \{}
+\DoxyCodeLine{00365\ }
+\DoxyCodeLine{00366\ \ \ \ \ \textcolor{keywordtype}{int}\ m\_rows;}
+\DoxyCodeLine{00367\ \ \ \ \ \textcolor{keywordtype}{int}\ n\_cols;}
+\DoxyCodeLine{00368\ \ \ \ \ \mbox{\hyperlink{namespacecascade_1_1helper_a3b356b8d769d3c544e99cda42cb58618}{helper::scan\_csv\_dim}}(path,\ \&m\_rows,\ \&n\_cols);}
+\DoxyCodeLine{00369\ }
+\DoxyCodeLine{00370\ \ \ \ \ \textcolor{keywordflow}{if}\ (n\_cols\ !=\ 1)\ \{}
+\DoxyCodeLine{00371\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error\ (}
+\DoxyCodeLine{00372\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}read\_vectorCSV:\ invalid\ csv\ for\ vector\ since\ does\ not\ have\ 1\ col"{}}}
+\DoxyCodeLine{00373\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00374\ \ \ \ \ \}}
+\DoxyCodeLine{00375\ }
+\DoxyCodeLine{00376\ \ \ \ \ TPrecision\ *h\_vec\ =\ \textcolor{keyword}{static\_cast<}TPrecision\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{00377\ \ \ \ \ \ \ \ \ malloc(m\_rows*\textcolor{keyword}{sizeof}(TPrecision))}
+\DoxyCodeLine{00378\ \ \ \ \ );}
+\DoxyCodeLine{00379\ }
+\DoxyCodeLine{00380\ \ \ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{00381\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_1_1helper_a8127cede47e1a56f7de2b48d1134d2be}{helper::scan\_csv\_vals}}(path,\ h\_vec,\ m\_rows,\ 1);}
+\DoxyCodeLine{00382\ \ \ \ \ \}\ \textcolor{keywordflow}{catch}\ (std::runtime\_error\ \mbox{\hyperlink{create__solve__matrices_8m_a329626dffc42c84371831246a2ddac71}{e}})\ \{}
+\DoxyCodeLine{00383\ \ \ \ \ \ \ \ \ free(h\_vec);}
+\DoxyCodeLine{00384\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ \mbox{\hyperlink{create__solve__matrices_8m_a329626dffc42c84371831246a2ddac71}{e}};}
+\DoxyCodeLine{00385\ \ \ \ \ \}}
+\DoxyCodeLine{00386\ }
+\DoxyCodeLine{00387\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ vec(cu\_handles,\ h\_vec,\ m\_rows);}
+\DoxyCodeLine{00388\ }
+\DoxyCodeLine{00389\ \ \ \ \ free(h\_vec);}
+\DoxyCodeLine{00390\ }
+\DoxyCodeLine{00391\ \ \ \ \ \textcolor{keywordflow}{return}\ vec;}
+\DoxyCodeLine{00392\ }
+\DoxyCodeLine{00393\ \}}
+\DoxyCodeLine{00394\ }
+\DoxyCodeLine{00395\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix,\ \textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00396\ TMatrix<TPrecision>\ \mbox{\hyperlink{namespacecascade_a4550f61256132a6b807fc0412e4c5450}{read\_matrixMTX}}(}
+\DoxyCodeLine{00397\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ \&cu\_handles,\ fs::path\ \textcolor{keyword}{const}\ \&path}
+\DoxyCodeLine{00398\ )\ \{}
+\DoxyCodeLine{00399\ }
+\DoxyCodeLine{00400\ \ \ \ \ std::ifstream\ file\_in\ =\ \mbox{\hyperlink{namespacecascade_1_1helper_a47f438eed728ec7b0f2c7eb3ab91c659}{helper::open\_ifstream}}(path,\ fs::path(\textcolor{stringliteral}{"{}.mtx"{}}));}
+\DoxyCodeLine{00401\ }
+\DoxyCodeLine{00402\ \ \ \ \ std::string\ line\_str;}
+\DoxyCodeLine{00403\ \ \ \ \ std::string\ line\_str\_portion;}
+\DoxyCodeLine{00404\ \ \ \ \ std::stringstream\ line\_in;}
+\DoxyCodeLine{00405\ }
+\DoxyCodeLine{00406\ \ \ \ \ \textcolor{comment}{//\ Read\ first\ line\ to\ affirm\ format\ and\ get\ symmetry}}
+\DoxyCodeLine{00407\ \ \ \ \ std::string\ first\_line\_error(}
+\DoxyCodeLine{00408\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}read\_matrixMTX:\ first\ line\ incorrect\ to\ expected\ format"{}}}
+\DoxyCodeLine{00409\ \ \ \ \ );}
+\DoxyCodeLine{00410\ \ \ \ \ std::getline(file\_in,\ line\_str);}
+\DoxyCodeLine{00411\ \ \ \ \ line\_in.clear();}
+\DoxyCodeLine{00412\ \ \ \ \ line\_in\ <<\ line\_str;}
+\DoxyCodeLine{00413\ }
+\DoxyCodeLine{00414\ \ \ \ \ \textcolor{keywordflow}{if}\ (}
+\DoxyCodeLine{00415\ \ \ \ \ \ \ \ \ !(std::getline(line\_in,\ line\_str\_portion,\ \textcolor{charliteral}{'\ '}))\ ||}
+\DoxyCodeLine{00416\ \ \ \ \ \ \ \ \ (line\_str\_portion\ !=\ \textcolor{stringliteral}{"{}\%\%MatrixMarket"{}})}
+\DoxyCodeLine{00417\ \ \ \ \ )\ \{}
+\DoxyCodeLine{00418\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(first\_line\_error+\textcolor{stringliteral}{"{}\ \%\%MatrixMarket"{}});}
+\DoxyCodeLine{00419\ \ \ \ \ \}}
+\DoxyCodeLine{00420\ }
+\DoxyCodeLine{00421\ \ \ \ \ \textcolor{keywordflow}{if}\ (}
+\DoxyCodeLine{00422\ \ \ \ \ \ \ \ \ !(std::getline(line\_in,\ line\_str\_portion,\ \textcolor{charliteral}{'\ '}))\ ||}
+\DoxyCodeLine{00423\ \ \ \ \ \ \ \ \ (line\_str\_portion\ !=\ \textcolor{stringliteral}{"{}matrix"{}})}
+\DoxyCodeLine{00424\ \ \ \ \ )\ \{}
+\DoxyCodeLine{00425\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(first\_line\_error+\textcolor{stringliteral}{"{}\ matrix"{}});}
+\DoxyCodeLine{00426\ \ \ \ \ \}}
+\DoxyCodeLine{00427\ }
+\DoxyCodeLine{00428\ \ \ \ \ \textcolor{keywordflow}{if}\ (}
+\DoxyCodeLine{00429\ \ \ \ \ \ \ \ \ !(std::getline(line\_in,\ line\_str\_portion,\ \textcolor{charliteral}{'\ '}))\ ||}
+\DoxyCodeLine{00430\ \ \ \ \ \ \ \ \ ((line\_str\_portion\ !=\ \textcolor{stringliteral}{"{}coordinate"{}})\ \&\&}
+\DoxyCodeLine{00431\ \ \ \ \ \ \ \ \ \ (line\_str\_portion\ !=\ \textcolor{stringliteral}{"{}array"{}}))}
+\DoxyCodeLine{00432\ \ \ \ \ )\ \{}
+\DoxyCodeLine{00433\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(first\_line\_error+\textcolor{stringliteral}{"{}\ coordinate\ or\ array"{}});}
+\DoxyCodeLine{00434\ \ \ \ \ \}}
+\DoxyCodeLine{00435\ \ \ \ \ \textcolor{keywordtype}{bool}\ coord\_format\ =\ (line\_str\_portion\ ==\ \textcolor{stringliteral}{"{}coordinate"{}});}
+\DoxyCodeLine{00436\ }
+\DoxyCodeLine{00437\ \ \ \ \ \textcolor{keywordflow}{if}\ (}
+\DoxyCodeLine{00438\ \ \ \ \ \ \ \ \ !(std::getline(line\_in,\ line\_str\_portion,\ \textcolor{charliteral}{'\ '}))\ ||}
+\DoxyCodeLine{00439\ \ \ \ \ \ \ \ \ ((line\_str\_portion\ !=\ \textcolor{stringliteral}{"{}real"{}})\ \&\&}
+\DoxyCodeLine{00440\ \ \ \ \ \ \ \ \ \ (line\_str\_portion\ !=\ \textcolor{stringliteral}{"{}integer"{}}))}
+\DoxyCodeLine{00441\ \ \ \ \ )\ \{}
+\DoxyCodeLine{00442\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(first\_line\_error+\textcolor{stringliteral}{"{}\ real\ or\ integer"{}});}
+\DoxyCodeLine{00443\ \ \ \ \ \}}
+\DoxyCodeLine{00444\ }
+\DoxyCodeLine{00445\ \ \ \ \ \textcolor{comment}{//\ Read\ symmetry\ of\ mtx}}
+\DoxyCodeLine{00446\ \ \ \ \ \textcolor{keywordtype}{bool}\ symmetric;}
+\DoxyCodeLine{00447\ \ \ \ \ std::getline(line\_in,\ line\_str\_portion);}
+\DoxyCodeLine{00448\ \ \ \ \ \textcolor{keywordflow}{if}\ (line\_str\_portion\ ==\ \textcolor{stringliteral}{"{}general"{}})\ \{}
+\DoxyCodeLine{00449\ \ \ \ \ \ \ \ \ symmetric\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00450\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ ((line\_str\_portion\ ==\ \textcolor{stringliteral}{"{}symmetric"{}})\ \&\&\ coord\_format)\ \{}
+\DoxyCodeLine{00451\ \ \ \ \ \ \ \ \ symmetric\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00452\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00453\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(first\_line\_error);}
+\DoxyCodeLine{00454\ \ \ \ \ \}}
+\DoxyCodeLine{00455\ }
+\DoxyCodeLine{00456\ \ \ \ \ \textcolor{comment}{//\ Skip\ word\ description\ \%}}
+\DoxyCodeLine{00457\ \ \ \ \ std::getline(file\_in,\ line\_str);}
+\DoxyCodeLine{00458\ \ \ \ \ \textcolor{keywordflow}{while}\ (line\_str[0]\ ==\ \textcolor{charliteral}{'\%'})\ \{\ std::getline(file\_in,\ line\_str);\ \}}
+\DoxyCodeLine{00459\ \ \ \ \ line\_in.clear();}
+\DoxyCodeLine{00460\ \ \ \ \ line\_in\ <<\ line\_str;}
+\DoxyCodeLine{00461\ }
+\DoxyCodeLine{00462\ \ \ \ \ \textcolor{keywordflow}{if}\ (coord\_format)\ \{}
+\DoxyCodeLine{00463\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ TMatrix<TPrecision>(}
+\DoxyCodeLine{00464\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_1_1helper_a64d92ef9b54c6e4b6a230eca0e652ce4}{helper::read\_coord\_body\_MTX<TPrecision>}}(}
+\DoxyCodeLine{00465\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ file\_in,\ line\_in,\ cu\_handles,\ symmetric}
+\DoxyCodeLine{00466\ \ \ \ \ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00467\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00468\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00469\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ TMatrix<TPrecision>(\ }
+\DoxyCodeLine{00470\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_1_1helper_a2557683de8ae915ccfce0d7b3329fe54}{helper::read\_array\_body\_MTX<TPrecision>}}(}
+\DoxyCodeLine{00471\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ file\_in,\ line\_in,\ cu\_handles}
+\DoxyCodeLine{00472\ \ \ \ \ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00473\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00474\ \ \ \ \ \}}
+\DoxyCodeLine{00475\ }
+\DoxyCodeLine{00476\ \}}
+\DoxyCodeLine{00477\ }
+\DoxyCodeLine{00478\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00479\ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ \mbox{\hyperlink{namespacecascade_ad804d308ed18649e2e8573161b22472b}{read\_vectorMTX}}(}
+\DoxyCodeLine{00480\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ \&cu\_handles,}
+\DoxyCodeLine{00481\ \ \ \ \ fs::path\ \textcolor{keyword}{const}\ \&path,}
+\DoxyCodeLine{00482\ \ \ \ \ std::string\ selection}
+\DoxyCodeLine{00483\ )\ \{}
+\DoxyCodeLine{00484\ }
+\DoxyCodeLine{00485\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{NoFillMatrixSparse<TPrecision>}}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a34079cedfcd0dcc6476bf9f1076e8cbd}{mat}}(}
+\DoxyCodeLine{00486\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_a4550f61256132a6b807fc0412e4c5450}{read\_matrixMTX<NoFillMatrixSparse,\ TPrecision>}}(cu\_handles,\ path)}
+\DoxyCodeLine{00487\ \ \ \ \ );}
+\DoxyCodeLine{00488\ \ \ \ \ }
+\DoxyCodeLine{00489\ \ \ \ \ \textcolor{keywordflow}{if}\ (selection\ ==\ \textcolor{stringliteral}{"{}first"{}})\ \{}
+\DoxyCodeLine{00490\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a34079cedfcd0dcc6476bf9f1076e8cbd}{mat}}.get\_col(0).copy\_to\_vec();}
+\DoxyCodeLine{00491\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (selection\ ==\ \textcolor{stringliteral}{"{}random"{}})\ \{}
+\DoxyCodeLine{00492\ \ \ \ \ \ \ \ \ srand(time(NULL));}
+\DoxyCodeLine{00493\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a34079cedfcd0dcc6476bf9f1076e8cbd}{mat}}.get\_col(rand()\ \%\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a34079cedfcd0dcc6476bf9f1076e8cbd}{mat}}.cols()).copy\_to\_vec();}
+\DoxyCodeLine{00494\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00495\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00496\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}read\_vectorMTX:\ invalid\ selection\ "{}}\ +\ selection}
+\DoxyCodeLine{00497\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00498\ \ \ \ \ \}}
+\DoxyCodeLine{00499\ }
+\DoxyCodeLine{00500\ \}}
+\DoxyCodeLine{00501\ }
+\DoxyCodeLine{00502\ \}}
+\DoxyCodeLine{00503\ }
+\DoxyCodeLine{00504\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

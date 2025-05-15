@@ -1,0 +1,524 @@
+\doxysection{Vector.\+h}
+\hypertarget{_vector_8h_source}{}\label{_vector_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/include/types/Vector/Vector.h@{C:/Users/dosre/dev/precision-\/cascade/include/types/Vector/Vector.h}}
+\mbox{\hyperlink{_vector_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ VECTOR\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ VECTOR\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{cuda__check_8h}{tools/cuda\_check.h}}"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{cu_handle_bundle_8h}{tools/cuHandleBundle.h}}"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{abs_8h}{tools/abs.h}}"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_scalar_8h}{types/Scalar/Scalar.h}}"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_matrix_dense_8h}{types/MatrixDense/MatrixDense.h}}"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_no_fill_matrix_sparse_8h}{types/MatrixSparse/NoFillMatrixSparse.h}}"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}Vector\_gpu\_kernels.cuh"{}}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <cuda\_runtime.h>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <cublas\_v2.h>}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ <cstdlib>}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ <stdexcept>}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ <iomanip>}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ <sstream>}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#include\ <initializer\_list>}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#include\ <random>}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacecascade}{cascade}}\ \{}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00026\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector}}}
+\DoxyCodeLine{00027\ \{}
+\DoxyCodeLine{00028\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ check\_n(\textcolor{keywordtype}{int}\ n)\ \{}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (n\ !=\ 1)\ \{}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Vector:\ invalid\ number\ of\ columns\ for\ vector"{}}}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00036\ \ \ \ \ \}}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{comment}{/*\ Allow\ all\ similar\ type\ Matrices\ and\ different\ type\ variants\ of\ self\ to}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ \ \ \ \ \ \ access\ private\ methods\ */}}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector}};}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{friend}\ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{MatrixDense<TPrecision>}};}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keyword}{friend}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{NoFillMatrixSparse<TPrecision>}};}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ cu\_handles;}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordtype}{int}\ m\_rows\ =\ 0;}
+\DoxyCodeLine{00046\ \ \ \ \ TPrecision\ *d\_vec\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ mem\_size()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ m\_rows*\textcolor{keyword}{sizeof}(TPrecision);}
+\DoxyCodeLine{00050\ \ \ \ \ \}}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{void}\ allocate\_d\_vec()\ \{}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaMalloc(\&d\_vec,\ mem\_size()));}
+\DoxyCodeLine{00054\ \ \ \ \ \}}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keywordtype}{void}\ check\_vecvec\_op\_compatibility(\textcolor{keyword}{const}\ Vector<TPrecision>\ \&other)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_rows\ !=\ other.m\_rows)\ \{}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Vector:\ incompatible\ vector\ sizes\ for\ vec-\/vec\ operation"{}}}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00062\ \ \ \ \ \}}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector<\_\_half>}}\ to\_half()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00065\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector<float>}}\ to\_float()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00066\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector<double>}}\ to\_double()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{comment}{//\ Use\ argument\ overload\ for\ type\ specification\ rather\ than\ explicit}}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{comment}{//\ specialization\ due\ to\ limitation\ in\ g++}}
+\DoxyCodeLine{00070\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector<\_\_half>}}\ \mbox{\hyperlink{classcascade_1_1_vector_afa4c1fbe514aa339a56e339200c3e1be}{cast}}(TypeIdentity<\_\_half>\ \_\_)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ to\_half();}
+\DoxyCodeLine{00072\ \ \ \ \ \}}
+\DoxyCodeLine{00073\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector<float>}}\ \mbox{\hyperlink{classcascade_1_1_vector_afa4c1fbe514aa339a56e339200c3e1be}{cast}}(TypeIdentity<float>\ \_\_)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ to\_float();}
+\DoxyCodeLine{00075\ \ \ \ \ \}}
+\DoxyCodeLine{00076\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector<double>}}\ \mbox{\hyperlink{classcascade_1_1_vector_afa4c1fbe514aa339a56e339200c3e1be}{cast}}(TypeIdentity<double>\ \_\_)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ to\_double();}
+\DoxyCodeLine{00078\ \ \ \ \ \}}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector_a066259e37a1041e40082c3d4848016d7}{Vector}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ \&arg\_cu\_handles,\ \textcolor{keywordtype}{int}\ arg\_m,\ \textcolor{keywordtype}{int}\ arg\_n):}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ cu\_handles(arg\_cu\_handles),\ m\_rows(arg\_m)}
+\DoxyCodeLine{00084\ \ \ \ \ \{\ }
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ check\_n(arg\_n);}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ allocate\_d\_vec();}
+\DoxyCodeLine{00087\ \ \ \ \ \}}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector_aed1b9e4d6d489c94de60098fb70ce4fe}{Vector}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ \&arg\_cu\_handles,\ \textcolor{keywordtype}{int}\ arg\_m):}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector}}(arg\_cu\_handles,\ arg\_m,\ 1)}
+\DoxyCodeLine{00091\ \ \ \ \ \{\}}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector_a4168cc490dc225ff913f98ac85a7d81f}{Vector}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ \&arg\_cu\_handles):}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector}}(arg\_cu\_handles,\ 0)}
+\DoxyCodeLine{00095\ \ \ \ \ \{\}}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector_ad3a77a7aa5199f0660ecd7ac5c4d3cdf}{Vector}}(}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ \&arg\_cu\_handles,}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ std::initializer\_list<TPrecision>\ li}
+\DoxyCodeLine{00100\ \ \ \ \ ):}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector}}(arg\_cu\_handles,\ li.size())}
+\DoxyCodeLine{00102\ \ \ \ \ \{}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ TPrecision\ *h\_vec\ =\ \textcolor{keyword}{static\_cast<}TPrecision\ *\textcolor{keyword}{>}(malloc(mem\_size()));}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }loop\_vars\ \{}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}};}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{typename}\ std::initializer\_list<TPrecision>::const\_iterator\ curr;}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ loop\_vars\ vars\ =\ \{0,\ std::cbegin(li)\};}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ vars.curr\ !=\ std::cend(li);}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ ++vars.curr,\ ++vars.i}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ )\ \{}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ h\_vec[vars.i]\ =\ *vars.curr;}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_rows\ >\ 0)\ \{}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_adf5601c3547abfb7e2b4aa3f1fb99bc9}{check\_cublas\_status}}(cublasSetVector(}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_rows,\ \textcolor{keyword}{sizeof}(TPrecision),\ h\_vec,\ 1,\ d\_vec,\ 1}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \ \ \ \ ));}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ free(h\_vec);}
+\DoxyCodeLine{00123\ \ \ \ \ \}}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \ \ \ \ \textcolor{comment}{/*\ Dynamic\ Memory\ Constructor\ (assumes\ outer\ code\ handles\ dynamic\ memory}}
+\DoxyCodeLine{00126\ \textcolor{comment}{\ \ \ \ \ \ \ properly)\ */}}
+\DoxyCodeLine{00127\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector_a23a50b11eeecb197f8d5001e2c75c3e5}{Vector}}(}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ \&arg\_cu\_handles,}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ TPrecision\ *h\_vec,}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ m\_elem}
+\DoxyCodeLine{00131\ \ \ \ \ ):}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector}}(arg\_cu\_handles,\ m\_elem)}
+\DoxyCodeLine{00133\ \ \ \ \ \{}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_elem\ >\ 0)\ \{}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_adf5601c3547abfb7e2b4aa3f1fb99bc9}{check\_cublas\_status}}(cublasSetVector(}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_rows,\ \textcolor{keyword}{sizeof}(TPrecision),\ h\_vec,\ 1,\ d\_vec,\ 1}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ ));}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00139\ \ \ \ \ \}}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector_aa2f355404d7c3239b6a59621828808c6}{Vector}}(}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ \&arg\_cu\_handles,}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ TPrecision\ *h\_vec,}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ m\_elem,}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ n\_elem}
+\DoxyCodeLine{00146\ \ \ \ \ ):}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector}}(arg\_cu\_handles,\ m\_elem)}
+\DoxyCodeLine{00148\ \ \ \ \ \{}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ check\_n(n\_elem);}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_elem\ >\ 0)\ \{}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_adf5601c3547abfb7e2b4aa3f1fb99bc9}{check\_cublas\_status}}(cublasSetVector(}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_rows,\ \textcolor{keyword}{sizeof}(TPrecision),\ h\_vec,\ 1,\ d\_vec,\ 1}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ ));}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00155\ \ \ \ \ \}}
+\DoxyCodeLine{00156\ }
+\DoxyCodeLine{00157\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_vector_af430d5e77934cddbd187160bb25507e3}{copy\_data\_to\_ptr}}(TPrecision\ *h\_vec,\ \textcolor{keywordtype}{int}\ m\_elem)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_elem\ !=\ m\_rows)\ \{}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Vector:\ invalid\ m\_elem\ dim\ for\ copy\_data\_to\_ptr"{}}}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00164\ }
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_rows\ >\ 0)\ \{}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_adf5601c3547abfb7e2b4aa3f1fb99bc9}{check\_cublas\_status}}(cublasGetVector(}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_rows,\ \textcolor{keyword}{sizeof}(TPrecision),\ d\_vec,\ 1,\ h\_vec,\ 1}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \ \ \ \ ));}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00170\ }
+\DoxyCodeLine{00171\ \ \ \ \ \}}
+\DoxyCodeLine{00172\ }
+\DoxyCodeLine{00173\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classcascade_1_1_vector_a7f2d64af21d813a46ba6ed0b494fee5d}{\string~Vector}}()\ \{\ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaFree(d\_vec));\ \}}
+\DoxyCodeLine{00174\ }
+\DoxyCodeLine{00175\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector<TPrecision>}}\ \&\ \mbox{\hyperlink{classcascade_1_1_vector_aa31229a0c1b1815b0f435f3845b5c7a1}{operator=}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector<TPrecision>}}\ \&other)\ \{}
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{this}\ !=\ \&other)\ \{}
+\DoxyCodeLine{00178\ }
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \ \ \ \ cu\_handles\ =\ other.cu\_handles;}
+\DoxyCodeLine{00180\ }
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_rows\ !=\ other.m\_rows)\ \{}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaFree(d\_vec));}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_rows\ =\ other.m\_rows;}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ allocate\_d\_vec();}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00186\ }
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaMemcpy(}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ d\_vec,\ other.d\_vec,\ mem\_size(),\ cudaMemcpyDeviceToDevice}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \ \ \ \ ));}
+\DoxyCodeLine{00190\ }
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00192\ }
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00194\ }
+\DoxyCodeLine{00195\ \ \ \ \ \}}
+\DoxyCodeLine{00196\ }
+\DoxyCodeLine{00197\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector_a14b3cd86dae6f22ca1d7928839d67599}{Vector}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector<TPrecision>}}\ \&other)\ \{\ *\textcolor{keyword}{this}\ =\ other;\ \}}
+\DoxyCodeLine{00198\ }
+\DoxyCodeLine{00199\ \ \ \ \ \textcolor{comment}{//\ Static\ Matrix\ Creation}}
+\DoxyCodeLine{00200\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_vector_a7da078322ccb03812f330b72cf4ad907}{Zero}}(}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ \&arg\_cu\_handles,\ \textcolor{keywordtype}{int}\ arg\_m}
+\DoxyCodeLine{00202\ \ \ \ \ )\ \{}
+\DoxyCodeLine{00203\ }
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ TPrecision\ *h\_vec\ =\ \textcolor{keyword}{static\_cast<}TPrecision\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \ \ \ \ malloc(arg\_m*\textcolor{keyword}{sizeof}(TPrecision))}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00207\ }
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<arg\_m;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{\ h\_vec[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ =\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(0);\ \}}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector<TPrecision>}}\ created\_vec(arg\_cu\_handles,\ h\_vec,\ arg\_m);}
+\DoxyCodeLine{00210\ }
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ free(h\_vec);}
+\DoxyCodeLine{00212\ }
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ created\_vec;}
+\DoxyCodeLine{00214\ }
+\DoxyCodeLine{00215\ \ \ \ \ \}}
+\DoxyCodeLine{00216\ }
+\DoxyCodeLine{00217\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_vector_a0053e39502e0b1c812c61f77c5b91bce}{Zero}}(}
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ \&arg\_cu\_handles,\ \textcolor{keywordtype}{int}\ arg\_m,\ \textcolor{keywordtype}{int}\ arg\_n}
+\DoxyCodeLine{00219\ \ \ \ \ )\ \{}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ check\_n(arg\_n);}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_vector_a7da078322ccb03812f330b72cf4ad907}{Zero}}(arg\_cu\_handles,\ arg\_m);}
+\DoxyCodeLine{00222\ \ \ \ \ \}}
+\DoxyCodeLine{00223\ }
+\DoxyCodeLine{00224\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_vector_a3da96a5940cddfd486e752749a50f769}{Ones}}(}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ \&arg\_cu\_handles,\ \textcolor{keywordtype}{int}\ arg\_m}
+\DoxyCodeLine{00226\ \ \ \ \ )\ \{}
+\DoxyCodeLine{00227\ }
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ TPrecision\ *h\_vec\ =\ \textcolor{keyword}{static\_cast<}TPrecision\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \ \ \ \ malloc(arg\_m*\textcolor{keyword}{sizeof}(TPrecision))}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00231\ }
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<arg\_m;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{\ h\_vec[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ =\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(1);\ \}}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector<TPrecision>}}\ created\_vec(arg\_cu\_handles,\ h\_vec,\ arg\_m);}
+\DoxyCodeLine{00234\ }
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ free(h\_vec);}
+\DoxyCodeLine{00236\ }
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ created\_vec;}
+\DoxyCodeLine{00238\ }
+\DoxyCodeLine{00239\ \ \ \ \ \}}
+\DoxyCodeLine{00240\ }
+\DoxyCodeLine{00241\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_vector_a6edd1008698fe9708396a2b39ec9301e}{Ones}}(}
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ \&arg\_cu\_handles,\ \textcolor{keywordtype}{int}\ arg\_m,\ \textcolor{keywordtype}{int}\ arg\_n}
+\DoxyCodeLine{00243\ \ \ \ \ )\ \{}
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ check\_n(arg\_n);}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_vector_a3da96a5940cddfd486e752749a50f769}{Ones}}(arg\_cu\_handles,\ arg\_m);}
+\DoxyCodeLine{00246\ \ \ \ \ \}}
+\DoxyCodeLine{00247\ }
+\DoxyCodeLine{00248\ \ \ \ \ \textcolor{comment}{//\ Needed\ for\ testing\ (don't\ need\ to\ optimize\ performance)}}
+\DoxyCodeLine{00249\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_vector_a2ff3307e7e428a007e1b7caf8bf9e560}{Random}}(}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ \&arg\_cu\_handles,\ \textcolor{keywordtype}{int}\ arg\_m}
+\DoxyCodeLine{00251\ \ \ \ \ )\ \{}
+\DoxyCodeLine{00252\ }
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ std::random\_device\ rd;}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ std::mt19937\ gen(rd());}
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ std::uniform\_real\_distribution<double>\ dist(-\/1.,\ 1.);}
+\DoxyCodeLine{00256\ }
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ TPrecision\ *h\_vec\ =\ \textcolor{keyword}{static\_cast<}TPrecision\ *\textcolor{keyword}{>}(}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \ \ \ \ malloc(arg\_m*\textcolor{keyword}{sizeof}(TPrecision))}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00260\ }
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<arg\_m;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \ \ \ \ h\_vec[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ =\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(dist(gen));}
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00264\ }
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector<TPrecision>}}\ created\_vec(arg\_cu\_handles,\ h\_vec,\ arg\_m);}
+\DoxyCodeLine{00266\ }
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ free(h\_vec);}
+\DoxyCodeLine{00268\ }
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ created\_vec;}
+\DoxyCodeLine{00270\ }
+\DoxyCodeLine{00271\ \ \ \ \ \}}
+\DoxyCodeLine{00272\ }
+\DoxyCodeLine{00273\ \ \ \ \ \textcolor{comment}{//\ Needed\ for\ testing\ (don't\ need\ to\ optimize\ performance)}}
+\DoxyCodeLine{00274\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_vector_a5ec4defb2a2919257d8a2a1e96a76e43}{Random}}(}
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ \&arg\_cu\_handles,\ \textcolor{keywordtype}{int}\ arg\_m,\ \textcolor{keywordtype}{int}\ arg\_n}
+\DoxyCodeLine{00276\ \ \ \ \ )\ \{}
+\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ check\_n(arg\_n);}
+\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_vector_a2ff3307e7e428a007e1b7caf8bf9e560}{Random}}(arg\_cu\_handles,\ arg\_m);}
+\DoxyCodeLine{00279\ \ \ \ \ \}}
+\DoxyCodeLine{00280\ }
+\DoxyCodeLine{00281\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_vector_a3128648f50666a08c526283fb422f212}{get\_elem}}(\textcolor{keywordtype}{int}\ row,\ \textcolor{keywordtype}{int}\ col)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00282\ }
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (col\ !=\ 0)\ \{}
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Vector:\ invalid\ vector\ col\ access\ in\ get\_elem"{}}}
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((row\ <\ 0)\ ||\ (row\ >=\ m\_rows))\ \{}
+\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Vector:\ invalid\ vector\ row\ access\ in\ get\_elem"{}}}
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00293\ }
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<TPrecision>}}\ elem;}
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaMemcpy(}
+\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \ \ \ \ elem.d\_scalar,\ d\_vec+row,\ \textcolor{keyword}{sizeof}(TPrecision),\ cudaMemcpyDeviceToHost}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ ));}
+\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ elem;}
+\DoxyCodeLine{00299\ }
+\DoxyCodeLine{00300\ \ \ \ \ \}}
+\DoxyCodeLine{00301\ }
+\DoxyCodeLine{00302\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_vector_abd443d9c2e0f04185f12a23590aaa5d2}{get\_elem}}(\textcolor{keywordtype}{int}\ row)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_vector_a3128648f50666a08c526283fb422f212}{get\_elem}}(row,\ 0);}
+\DoxyCodeLine{00304\ \ \ \ \ \}}
+\DoxyCodeLine{00305\ }
+\DoxyCodeLine{00306\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_vector_a19e561a4cf16c573edada12cfecaf66d}{set\_elem}}(\textcolor{keywordtype}{int}\ row,\ \textcolor{keywordtype}{int}\ col,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<TPrecision>}}\ \&val)\ \{}
+\DoxyCodeLine{00307\ }
+\DoxyCodeLine{00308\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (col\ !=\ 0)\ \{}
+\DoxyCodeLine{00309\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00310\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Vector:\ invalid\ vector\ col\ access\ in\ set\_elem"{}}}
+\DoxyCodeLine{00311\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00313\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((row\ <\ 0)\ ||\ (row\ >=\ m\_rows))\ \{}
+\DoxyCodeLine{00314\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00315\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Vector:\ invalid\ vector\ row\ access\ in\ set\_elem"{}}}
+\DoxyCodeLine{00316\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00318\ }
+\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaMemcpy(}
+\DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ \ \ \ \ d\_vec+row,}
+\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ \ \ \ \ val.d\_scalar,}
+\DoxyCodeLine{00322\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{sizeof}(TPrecision),}
+\DoxyCodeLine{00323\ \ \ \ \ \ \ \ \ \ \ \ \ cudaMemcpyHostToDevice}
+\DoxyCodeLine{00324\ \ \ \ \ \ \ \ \ ));}
+\DoxyCodeLine{00325\ }
+\DoxyCodeLine{00326\ \ \ \ \ \}}
+\DoxyCodeLine{00327\ }
+\DoxyCodeLine{00328\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_vector_ae48dc09de9a2c72345fd912bd56db865}{set\_elem}}(\textcolor{keywordtype}{int}\ row,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<TPrecision>}}\ \&val)\ \{}
+\DoxyCodeLine{00329\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector_a19e561a4cf16c573edada12cfecaf66d}{set\_elem}}(row,\ 0,\ val);}
+\DoxyCodeLine{00330\ \ \ \ \ \}}
+\DoxyCodeLine{00331\ }
+\DoxyCodeLine{00332\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_vector_a2418692236112c0b50e2d7655da7de7c}{get\_slice}}(\textcolor{keywordtype}{int}\ start,\ \textcolor{keywordtype}{int}\ m\_elem)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00333\ }
+\DoxyCodeLine{00334\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((m\_elem\ <\ 0)\ ||\ ((start+m\_elem)\ >\ m\_rows))\ \{}
+\DoxyCodeLine{00335\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}Vector:\ get\_slice\ size\ invalid"{}});}
+\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00337\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((start\ <\ 0)\ ||\ (start\ >=\ m\_rows))\ \{}
+\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}Vector:\ invalid\ get\_slice\ start"{}});}
+\DoxyCodeLine{00339\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00340\ }
+\DoxyCodeLine{00341\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector<TPrecision>}}\ created\_vec(cu\_handles,\ m\_elem);}
+\DoxyCodeLine{00342\ }
+\DoxyCodeLine{00343\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_elem\ >\ 0)\ \{}
+\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaMemcpy(}
+\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ created\_vec.d\_vec,}
+\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ d\_vec+start,}
+\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_elem*\textcolor{keyword}{sizeof}(TPrecision),}
+\DoxyCodeLine{00348\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cudaMemcpyDeviceToDevice}
+\DoxyCodeLine{00349\ \ \ \ \ \ \ \ \ \ \ \ \ ));}
+\DoxyCodeLine{00350\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00351\ }
+\DoxyCodeLine{00352\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ created\_vec;}
+\DoxyCodeLine{00353\ }
+\DoxyCodeLine{00354\ \ \ \ \ \}}
+\DoxyCodeLine{00355\ }
+\DoxyCodeLine{00356\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_vector_a689ce0992c50c2d73f975ae9643eeb63}{set\_slice}}(\textcolor{keywordtype}{int}\ start,\ \textcolor{keywordtype}{int}\ m\_elem,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector<TPrecision>}}\ \&other)\ \{}
+\DoxyCodeLine{00357\ }
+\DoxyCodeLine{00358\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((m\_elem\ <\ 0)\ ||\ ((start+m\_elem)\ >\ m\_rows))\ \{}
+\DoxyCodeLine{00359\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00360\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Vector:\ set\_slice\ size\ invalid"{}}}
+\DoxyCodeLine{00361\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00362\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00363\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((start\ <\ 0)\ ||\ (start\ >=\ m\_rows))\ \{}
+\DoxyCodeLine{00364\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00365\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Vector:\ invalid\ set\_slice\ start"{}}}
+\DoxyCodeLine{00366\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00367\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00368\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (other.\mbox{\hyperlink{classcascade_1_1_vector_a66cff08224d9808fc55bc5b53bdd4fdb}{rows}}()\ !=\ m\_elem)\ \{}
+\DoxyCodeLine{00369\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00370\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Vector:\ set\_slice\ given\ slice\ does\ not\ match\ m\_elem"{}}}
+\DoxyCodeLine{00371\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00372\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00373\ }
+\DoxyCodeLine{00374\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_elem\ >\ 0)\ \{}
+\DoxyCodeLine{00375\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_a3e88b875e4807000676fa229c7956554}{check\_cuda\_error}}(cudaMemcpy(}
+\DoxyCodeLine{00376\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ d\_vec+start,}
+\DoxyCodeLine{00377\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ other.d\_vec,}
+\DoxyCodeLine{00378\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_elem*\textcolor{keyword}{sizeof}(TPrecision),}
+\DoxyCodeLine{00379\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cudaMemcpyDeviceToDevice}
+\DoxyCodeLine{00380\ \ \ \ \ \ \ \ \ \ \ \ \ ));}
+\DoxyCodeLine{00381\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00382\ }
+\DoxyCodeLine{00383\ \ \ \ \ \}}
+\DoxyCodeLine{00384\ }
+\DoxyCodeLine{00385\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classcascade_1_1_vector_a66cff08224d9808fc55bc5b53bdd4fdb}{rows}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ m\_rows;\ \}}
+\DoxyCodeLine{00386\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classcascade_1_1_vector_adee3982ea575f654551665ea77ea69f1}{cols}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ 1;\ \}}
+\DoxyCodeLine{00387\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classcascade_1_1_vector_a1441bc98b3a852e0db036e8182c37109}{non\_zeros}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00388\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00389\ \ \ \ \ \ \ \ \ TPrecision\ *h\_vec\ =\ \textcolor{keyword}{static\_cast<}TPrecision\ *\textcolor{keyword}{>}(malloc(mem\_size()));}
+\DoxyCodeLine{00390\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector_af430d5e77934cddbd187160bb25507e3}{copy\_data\_to\_ptr}}(h\_vec,\ m\_rows);}
+\DoxyCodeLine{00391\ }
+\DoxyCodeLine{00392\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ nnz\ =\ 0;}
+\DoxyCodeLine{00393\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<m\_rows;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00394\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (h\_vec[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ !=\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(0.))\ \ \{}
+\DoxyCodeLine{00395\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ++nnz;}
+\DoxyCodeLine{00396\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00397\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00398\ }
+\DoxyCodeLine{00399\ \ \ \ \ \ \ \ \ free(h\_vec);}
+\DoxyCodeLine{00400\ }
+\DoxyCodeLine{00401\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ nnz;}
+\DoxyCodeLine{00402\ }
+\DoxyCodeLine{00403\ \ \ \ \ \}}
+\DoxyCodeLine{00404\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ \mbox{\hyperlink{classcascade_1_1_vector_a20755c576afdbb33ae077b4494c41f0a}{get\_cu\_handles}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ cu\_handles;\ \}}
+\DoxyCodeLine{00405\ \ \ \ \ std::string\ \mbox{\hyperlink{classcascade_1_1_vector_a95b8d9c35adb89eaad7987fc11eecb8f}{get\_vector\_string}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00406\ }
+\DoxyCodeLine{00407\ \ \ \ \ \ \ \ \ TPrecision\ *h\_vec\ =\ \textcolor{keyword}{static\_cast<}TPrecision\ *\textcolor{keyword}{>}(malloc(mem\_size()));}
+\DoxyCodeLine{00408\ }
+\DoxyCodeLine{00409\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector_af430d5e77934cddbd187160bb25507e3}{copy\_data\_to\_ptr}}(h\_vec,\ m\_rows);}
+\DoxyCodeLine{00410\ }
+\DoxyCodeLine{00411\ \ \ \ \ \ \ \ \ std::stringstream\ acc\_strm;}
+\DoxyCodeLine{00412\ \ \ \ \ \ \ \ \ acc\_strm\ <<\ std::setprecision(8);}
+\DoxyCodeLine{00413\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<m\_rows-\/1;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00414\ \ \ \ \ \ \ \ \ \ \ \ \ acc\_strm\ <<\ static\_cast<double>(h\_vec[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}])\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{00415\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00416\ \ \ \ \ \ \ \ \ acc\_strm\ <<\ static\_cast<double>(h\_vec[m\_rows-\/1]);}
+\DoxyCodeLine{00417\ }
+\DoxyCodeLine{00418\ \ \ \ \ \ \ \ \ free(h\_vec);}
+\DoxyCodeLine{00419\ }
+\DoxyCodeLine{00420\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ acc\_strm.str();}
+\DoxyCodeLine{00421\ \ \ \ \ }
+\DoxyCodeLine{00422\ \ \ \ \ \}}
+\DoxyCodeLine{00423\ \ \ \ \ std::string\ \mbox{\hyperlink{classcascade_1_1_vector_a2e64ec62bc20d27ce49c25e6f0e6791b}{get\_info\_string}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00424\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ non\_zeros\_count\ =\ \mbox{\hyperlink{classcascade_1_1_vector_a1441bc98b3a852e0db036e8182c37109}{non\_zeros}}();}
+\DoxyCodeLine{00425\ \ \ \ \ \ \ \ \ std::stringstream\ acc\_strm;}
+\DoxyCodeLine{00426\ \ \ \ \ \ \ \ \ acc\_strm\ <<\ std::setprecision(3);}
+\DoxyCodeLine{00427\ \ \ \ \ \ \ \ \ acc\_strm\ <<\ \textcolor{stringliteral}{"{}Rows:\ "{}}\ <<\ m\_rows\ <<\ \textcolor{stringliteral}{"{}\ |\ "{}}}
+\DoxyCodeLine{00428\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{}Non-\/zeroes:\ "{}}\ <<\ non\_zeros\_count\ <<\ \textcolor{stringliteral}{"{}\ |\ "{}}}
+\DoxyCodeLine{00429\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{}Fill\ ratio:\ "{}}}
+\DoxyCodeLine{00430\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ (\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{double}\textcolor{keyword}{>}(non\_zeros\_count)\ /}
+\DoxyCodeLine{00431\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{double}\textcolor{keyword}{>}(\mbox{\hyperlink{classcascade_1_1_vector_a66cff08224d9808fc55bc5b53bdd4fdb}{rows}}()*\mbox{\hyperlink{classcascade_1_1_vector_adee3982ea575f654551665ea77ea69f1}{cols}}()))\ <<\ \textcolor{stringliteral}{"{}\ |\ "{}}}
+\DoxyCodeLine{00432\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{}Max\ magnitude:\ "{}}}
+\DoxyCodeLine{00433\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{double}\textcolor{keyword}{>}(\mbox{\hyperlink{classcascade_1_1_vector_af0b801464b11483caca0bbe8a765e3b8}{get\_max\_mag\_elem}}().get\_scalar());}
+\DoxyCodeLine{00434\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ acc\_strm.str();}
+\DoxyCodeLine{00435\ \ \ \ \ \}}
+\DoxyCodeLine{00436\ }
+\DoxyCodeLine{00437\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcascade_1_1_vector_a6ed6d61b68d3e4ab42cae97a82163b67}{operator==}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector<TPrecision>}}\ \&other)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00438\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00439\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{this}\ ==\ \&other)\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};\ \}}
+\DoxyCodeLine{00440\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_rows\ !=\ other.m\_rows)\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};\ \}}
+\DoxyCodeLine{00441\ }
+\DoxyCodeLine{00442\ \ \ \ \ \ \ \ \ TPrecision\ *h\_vec\_self\ =\ \textcolor{keyword}{static\_cast<}TPrecision\ *\textcolor{keyword}{>}(malloc(mem\_size()));}
+\DoxyCodeLine{00443\ \ \ \ \ \ \ \ \ TPrecision\ *h\_vec\_other\ =\ \textcolor{keyword}{static\_cast<}TPrecision\ *\textcolor{keyword}{>}(malloc(mem\_size()));}
+\DoxyCodeLine{00444\ }
+\DoxyCodeLine{00445\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_rows\ >\ 0)\ \{}
+\DoxyCodeLine{00446\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_adf5601c3547abfb7e2b4aa3f1fb99bc9}{check\_cublas\_status}}(cublasGetVector(}
+\DoxyCodeLine{00447\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_rows,\ \textcolor{keyword}{sizeof}(TPrecision),}
+\DoxyCodeLine{00448\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ d\_vec,\ 1,\ h\_vec\_self,\ 1)}
+\DoxyCodeLine{00449\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00450\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_adf5601c3547abfb7e2b4aa3f1fb99bc9}{check\_cublas\_status}}(cublasGetVector(}
+\DoxyCodeLine{00451\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_rows,\ \textcolor{keyword}{sizeof}(TPrecision),}
+\DoxyCodeLine{00452\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ other.d\_vec,\ 1,\ h\_vec\_other,\ 1)}
+\DoxyCodeLine{00453\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00454\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00455\ }
+\DoxyCodeLine{00456\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ is\_equal\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00457\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<m\_rows;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00458\ \ \ \ \ \ \ \ \ \ \ \ \ is\_equal\ =\ is\_equal\ \&\&\ (h\_vec\_self[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ ==\ h\_vec\_other[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]);}
+\DoxyCodeLine{00459\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00460\ }
+\DoxyCodeLine{00461\ \ \ \ \ \ \ \ \ free(h\_vec\_self);}
+\DoxyCodeLine{00462\ \ \ \ \ \ \ \ \ free(h\_vec\_other);}
+\DoxyCodeLine{00463\ }
+\DoxyCodeLine{00464\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ is\_equal;}
+\DoxyCodeLine{00465\ }
+\DoxyCodeLine{00466\ \ \ \ \ \}}
+\DoxyCodeLine{00467\ }
+\DoxyCodeLine{00468\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Cast\_TPrecision>}
+\DoxyCodeLine{00469\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector<Cast\_TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_vector_afa4c1fbe514aa339a56e339200c3e1be}{cast}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00470\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_vector_afa4c1fbe514aa339a56e339200c3e1be}{cast}}(\mbox{\hyperlink{structcascade_1_1_type_identity}{TypeIdentity<Cast\_TPrecision>}}());}
+\DoxyCodeLine{00471\ \ \ \ \ \}}
+\DoxyCodeLine{00472\ }
+\DoxyCodeLine{00473\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_vector_aee88056e82acb1c1da52521fc360d941}{operator*}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<TPrecision>}}\ \&scalar)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00474\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_vector_a448b533a11b1afe593486a66971a865c}{operator/}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<TPrecision>}}\ \&scalar)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00475\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<TPrecision>}}\ temp(scalar);}
+\DoxyCodeLine{00476\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_vector_aee88056e82acb1c1da52521fc360d941}{operator*}}(temp.\mbox{\hyperlink{classcascade_1_1_scalar_aeee85d43f02044951bfa1183cf9fdec4}{reciprocol}}());}
+\DoxyCodeLine{00477\ \ \ \ \ \}}
+\DoxyCodeLine{00478\ }
+\DoxyCodeLine{00479\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector<TPrecision>}}\ \&\ \mbox{\hyperlink{classcascade_1_1_vector_ab17c5f49aa9ea192666b3fbba97036ef}{operator*=}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<TPrecision>}}\ \&scalar);}
+\DoxyCodeLine{00480\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector<TPrecision>}}\ \&\ \mbox{\hyperlink{classcascade_1_1_vector_a5e14d0c1dd6527886aafc510c9d94750}{operator/=}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<TPrecision>}}\ \&scalar)\ \{}
+\DoxyCodeLine{00481\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<TPrecision>}}\ temp(scalar);}
+\DoxyCodeLine{00482\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_vector_ab17c5f49aa9ea192666b3fbba97036ef}{operator*=}}(temp.\mbox{\hyperlink{classcascade_1_1_scalar_aeee85d43f02044951bfa1183cf9fdec4}{reciprocol}}());}
+\DoxyCodeLine{00483\ \ \ \ \ \}}
+\DoxyCodeLine{00484\ }
+\DoxyCodeLine{00485\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_vector_a9eccb24d1b780b582b1707aaa8906786}{operator+}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector<TPrecision>}}\ \&vec)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00486\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_vector_a8e4b8fd4eb9f737c403ca974da7e3aeb}{operator-\/}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector<TPrecision>}}\ \&vec)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00487\ }
+\DoxyCodeLine{00488\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector<TPrecision>}}\ \&\ \mbox{\hyperlink{classcascade_1_1_vector_a5fc358c965a72d1f212d25783bd9d1ec}{operator+=}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector<TPrecision>}}\ \&vec);}
+\DoxyCodeLine{00489\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector<TPrecision>}}\ \&\ \mbox{\hyperlink{classcascade_1_1_vector_a7f89eb9fd71e5d1ef5d180172224de58}{operator-\/=}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector<TPrecision>}}\ \&vec);}
+\DoxyCodeLine{00490\ \ \ \ \ }
+\DoxyCodeLine{00491\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_vector_a6e47a95b9a1b426ee667ffc8b06da3d5}{dot}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector<TPrecision>}}\ \&vec)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00492\ }
+\DoxyCodeLine{00493\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_vector_a4f8f80b9cf0016c7bdd22fd4f7d01834}{norm}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00494\ }
+\DoxyCodeLine{00495\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_vector_af0b801464b11483caca0bbe8a765e3b8}{get\_max\_mag\_elem}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00496\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00497\ \ \ \ \ \ \ \ \ TPrecision\ *h\_vec\ =\ \textcolor{keyword}{static\_cast<}TPrecision\ *\textcolor{keyword}{>}(malloc(mem\_size()));}
+\DoxyCodeLine{00498\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector_af430d5e77934cddbd187160bb25507e3}{copy\_data\_to\_ptr}}(h\_vec,\ m\_rows);}
+\DoxyCodeLine{00499\ }
+\DoxyCodeLine{00500\ \ \ \ \ \ \ \ \ TPrecision\ max\_mag\ =\ \textcolor{keyword}{static\_cast<}TPrecision\textcolor{keyword}{>}(0.);}
+\DoxyCodeLine{00501\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<m\_rows;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00502\ \ \ \ \ \ \ \ \ \ \ \ \ TPrecision\ temp\ =\ \mbox{\hyperlink{namespacecascade_1_1abs__ns_ab08ce3a88268964a87b50e39d0644268}{abs\_ns::abs}}(h\_vec[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]);}
+\DoxyCodeLine{00503\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (temp\ >\ max\_mag)\ \{}
+\DoxyCodeLine{00504\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ max\_mag\ =\ temp;}
+\DoxyCodeLine{00505\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00506\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00507\ }
+\DoxyCodeLine{00508\ \ \ \ \ \ \ \ \ free(h\_vec);}
+\DoxyCodeLine{00509\ }
+\DoxyCodeLine{00510\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<TPrecision>}}(max\_mag);}
+\DoxyCodeLine{00511\ }
+\DoxyCodeLine{00512\ \ \ \ \ \}}
+\DoxyCodeLine{00513\ }
+\DoxyCodeLine{00514\ \};}
+\DoxyCodeLine{00515\ }
+\DoxyCodeLine{00516\ \}}
+\DoxyCodeLine{00517\ }
+\DoxyCodeLine{00518\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

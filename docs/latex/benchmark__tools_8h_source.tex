@@ -1,0 +1,43 @@
+\doxysection{benchmark\+\_\+tools.\+h}
+\hypertarget{benchmark__tools_8h_source}{}\label{benchmark__tools_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/benchmark/include/benchmark\_tools.h@{C:/Users/dosre/dev/precision-\/cascade/benchmark/include/benchmark\_tools.h}}
+\mbox{\hyperlink{benchmark__tools_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ BENCHMARK\_TOOLS\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ BENCHMARK\_TOOLS\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <chrono>}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_benchmark___accum_clock_a14a0c11381780ab2d6ba533ea5115fcd}{Benchmark\_AccumClock}}}
+\DoxyCodeLine{00008\ \{}
+\DoxyCodeLine{00009\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \ \ \ \ \textcolor{keywordtype}{bool}\ clock\_ticking\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keyword}{using\ }acc\_clock\_duration\ =\ std::chrono::microseconds;}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \ \ \ \ std::chrono::high\_resolution\_clock\ clock;}
+\DoxyCodeLine{00016\ \ \ \ \ std::chrono::time\_point<std::chrono::high\_resolution\_clock>\ start;}
+\DoxyCodeLine{00017\ \ \ \ \ std::chrono::time\_point<std::chrono::high\_resolution\_clock>\ stop;}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \ \ std::vector<acc\_clock\_duration>\ prev\_durations;}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ \mbox{\hyperlink{class_benchmark___accum_clock_a14a0c11381780ab2d6ba533ea5115fcd}{Benchmark\_AccumClock}}()\ \{\}}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_benchmark___accum_clock_a6b5bf927b651c0d9936eb78e1e8aa53b}{clock\_start}}();}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_benchmark___accum_clock_ab14d48a350c1a4e884f09966a91f107e}{clock\_stop}}();}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_benchmark___accum_clock_a992056fde467cfce2a21d2c6f5ef9e1d}{get\_count}}();}
+\DoxyCodeLine{00029\ \ \ \ \ acc\_clock\_duration\ \mbox{\hyperlink{class_benchmark___accum_clock_aaa0e3bc7837d3cf663cc1eda5bb6b2da}{get\_avg}}();}
+\DoxyCodeLine{00030\ \ \ \ \ acc\_clock\_duration\ \mbox{\hyperlink{class_benchmark___accum_clock_a1c99bdc9ca9723126ceb0070197b93da}{get\_median}}();}
+\DoxyCodeLine{00031\ \ \ \ \ acc\_clock\_duration\ \mbox{\hyperlink{class_benchmark___accum_clock_a4ec6112f90c18d8de84648c14719bacb}{get\_total}}();}
+\DoxyCodeLine{00032\ \ \ \ \ acc\_clock\_duration\ \mbox{\hyperlink{class_benchmark___accum_clock_a1dc8856c5027a6ad173c8818802ef75e}{get\_min}}();}
+\DoxyCodeLine{00033\ \ \ \ \ acc\_clock\_duration\ \mbox{\hyperlink{class_benchmark___accum_clock_a8df1b6ecf037144d15596b08f362b90f}{get\_max}}();}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \};}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

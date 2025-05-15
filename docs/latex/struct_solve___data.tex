@@ -1,0 +1,144 @@
+\doxysection{Solve\+\_\+\+Data\texorpdfstring{$<$}{<} TSolver, TMatrix \texorpdfstring{$>$}{>} Struct Template Reference}
+\hypertarget{struct_solve___data}{}\label{struct_solve___data}\index{Solve\_Data$<$ TSolver, TMatrix $>$@{Solve\_Data$<$ TSolver, TMatrix $>$}}
+
+
+{\ttfamily \#include $<$Solve\+\_\+\+Data.\+h$>$}
+
+
+
+Inheritance diagram for Solve\+\_\+\+Data\texorpdfstring{$<$}{<} TSolver, TMatrix \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=204pt]{struct_solve___data__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Solve\+\_\+\+Data\texorpdfstring{$<$}{<} TSolver, TMatrix \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=204pt]{struct_solve___data__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct_solve___data_ac290480c0025f50b10aa36a9eab96055}{Solve\+\_\+\+Data}} ()
+\item 
+\mbox{\hyperlink{struct_solve___data_afa7ca50a80f97c2034e43f099084cda4}{Solve\+\_\+\+Data}} (std\+::string arg\+\_\+solver\+\_\+id, \mbox{\hyperlink{class_experiment___clock}{Experiment\+\_\+\+Clock}} arg\+\_\+clock, std\+::shared\+\_\+ptr$<$ TSolver$<$ TMatrix $>$ $>$ arg\+\_\+solver\+\_\+ptr)
+\item 
+\mbox{\hyperlink{struct_solve___data_aa909767cb5bcfab4be77e23d9db648f0}{\texorpdfstring{$\sim$}{\string~}\+Solve\+\_\+\+Data}} ()=default
+\item 
+\mbox{\hyperlink{struct_solve___data_aece1104c8e497d3ab27b9fdff38d1298}{Solve\+\_\+\+Data}} (const \mbox{\hyperlink{struct_solve___data}{Solve\+\_\+\+Data}} \&other)
+\item 
+void \mbox{\hyperlink{struct_solve___data_a2e445ec5e121a9b271a245ac969c7f18}{operator=}} (const \mbox{\hyperlink{struct_solve___data}{Solve\+\_\+\+Data}} \&other)
+\item 
+std\+::string \mbox{\hyperlink{struct_solve___data_a734e251ce627d5276900316fd36de5c5}{get\+\_\+info\+\_\+string}} () const override
+\item 
+void \mbox{\hyperlink{struct_solve___data_a93d7bf4539ee013a4d6bb0e3bea39616}{record\+\_\+json}} (std\+::string file\+\_\+name, fs\+::path output\+\_\+data\+\_\+dir, \mbox{\hyperlink{class_experiment___log}{Experiment\+\_\+\+Log}} logger) const override
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{struct_timed___experiment___data}{Timed\+\_\+\+Experiment\+\_\+\+Data}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct_timed___experiment___data_a34a72a60b1823ae1022e831042c94993}{Timed\+\_\+\+Experiment\+\_\+\+Data}} ()
+\item 
+\mbox{\hyperlink{struct_timed___experiment___data_a590e009d56e304f00960797d2511d583}{Timed\+\_\+\+Experiment\+\_\+\+Data}} (std\+::string arg\+\_\+id, \mbox{\hyperlink{class_experiment___clock}{Experiment\+\_\+\+Clock}} arg\+\_\+clock)
+\item 
+\mbox{\hyperlink{struct_timed___experiment___data_a854e9388172eb6934c4dfa7a0d059c91}{Timed\+\_\+\+Experiment\+\_\+\+Data}} (const \mbox{\hyperlink{struct_timed___experiment___data}{Timed\+\_\+\+Experiment\+\_\+\+Data}} \&other)=default
+\item 
+\mbox{\hyperlink{struct_timed___experiment___data}{Timed\+\_\+\+Experiment\+\_\+\+Data}} \& \mbox{\hyperlink{struct_timed___experiment___data_afe97216053898a543d093b9363c32931}{operator=}} (const \mbox{\hyperlink{struct_timed___experiment___data}{Timed\+\_\+\+Experiment\+\_\+\+Data}} \&other)=default
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::shared\+\_\+ptr$<$ TSolver$<$ TMatrix $>$ $>$ \mbox{\hyperlink{struct_solve___data_ad73d00a6001bbd6966e8864182ef678f}{solver\+\_\+ptr}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{struct_timed___experiment___data}{Timed\+\_\+\+Experiment\+\_\+\+Data}}}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string \mbox{\hyperlink{struct_timed___experiment___data_a11e8d9245def869e6589129debf3ab35}{id}}
+\item 
+\mbox{\hyperlink{class_experiment___clock}{Experiment\+\_\+\+Clock}} \mbox{\hyperlink{struct_timed___experiment___data_a6588b3058ce7826aacbcc781cfe898ae}{clock}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{struct_solve___data_ac290480c0025f50b10aa36a9eab96055}\index{Solve\_Data$<$ TSolver, TMatrix $>$@{Solve\_Data$<$ TSolver, TMatrix $>$}!Solve\_Data@{Solve\_Data}}
+\index{Solve\_Data@{Solve\_Data}!Solve\_Data$<$ TSolver, TMatrix $>$@{Solve\_Data$<$ TSolver, TMatrix $>$}}
+\doxysubsubsection{\texorpdfstring{Solve\_Data()}{Solve\_Data()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily \label{struct_solve___data_ac290480c0025f50b10aa36a9eab96055} 
+template$<$template$<$ template$<$ typename $>$ typename $>$ typename TSolver, template$<$ typename $>$ typename TMatrix$>$ \\
+\mbox{\hyperlink{struct_solve___data}{Solve\+\_\+\+Data}}$<$ TSolver, TMatrix $>$\mbox{\hyperlink{struct_solve___data}{\+::\+Solve\+\_\+\+Data}} (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{struct_solve___data_afa7ca50a80f97c2034e43f099084cda4}\index{Solve\_Data$<$ TSolver, TMatrix $>$@{Solve\_Data$<$ TSolver, TMatrix $>$}!Solve\_Data@{Solve\_Data}}
+\index{Solve\_Data@{Solve\_Data}!Solve\_Data$<$ TSolver, TMatrix $>$@{Solve\_Data$<$ TSolver, TMatrix $>$}}
+\doxysubsubsection{\texorpdfstring{Solve\_Data()}{Solve\_Data()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily \label{struct_solve___data_afa7ca50a80f97c2034e43f099084cda4} 
+template$<$template$<$ template$<$ typename $>$ typename $>$ typename TSolver, template$<$ typename $>$ typename TMatrix$>$ \\
+\mbox{\hyperlink{struct_solve___data}{Solve\+\_\+\+Data}}$<$ TSolver, TMatrix $>$\mbox{\hyperlink{struct_solve___data}{\+::\+Solve\+\_\+\+Data}} (\begin{DoxyParamCaption}\item[{std\+::string}]{arg\+\_\+solver\+\_\+id}{, }\item[{\mbox{\hyperlink{class_experiment___clock}{Experiment\+\_\+\+Clock}}}]{arg\+\_\+clock}{, }\item[{std\+::shared\+\_\+ptr$<$ TSolver$<$ TMatrix $>$ $>$}]{arg\+\_\+solver\+\_\+ptr}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{struct_solve___data_aa909767cb5bcfab4be77e23d9db648f0}\index{Solve\_Data$<$ TSolver, TMatrix $>$@{Solve\_Data$<$ TSolver, TMatrix $>$}!````~Solve\_Data@{\texorpdfstring{$\sim$}{\string~}Solve\_Data}}
+\index{````~Solve\_Data@{\texorpdfstring{$\sim$}{\string~}Solve\_Data}!Solve\_Data$<$ TSolver, TMatrix $>$@{Solve\_Data$<$ TSolver, TMatrix $>$}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}Solve\_Data()}{\string~Solve\_Data()}}
+{\footnotesize\ttfamily \label{struct_solve___data_aa909767cb5bcfab4be77e23d9db648f0} 
+template$<$template$<$ template$<$ typename $>$ typename $>$ typename TSolver, template$<$ typename $>$ typename TMatrix$>$ \\
+\mbox{\hyperlink{struct_solve___data}{Solve\+\_\+\+Data}}$<$ TSolver, TMatrix $>$\+::\texorpdfstring{$\sim$}{\string~}\mbox{\hyperlink{struct_solve___data}{Solve\+\_\+\+Data}} (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+\Hypertarget{struct_solve___data_aece1104c8e497d3ab27b9fdff38d1298}\index{Solve\_Data$<$ TSolver, TMatrix $>$@{Solve\_Data$<$ TSolver, TMatrix $>$}!Solve\_Data@{Solve\_Data}}
+\index{Solve\_Data@{Solve\_Data}!Solve\_Data$<$ TSolver, TMatrix $>$@{Solve\_Data$<$ TSolver, TMatrix $>$}}
+\doxysubsubsection{\texorpdfstring{Solve\_Data()}{Solve\_Data()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily \label{struct_solve___data_aece1104c8e497d3ab27b9fdff38d1298} 
+template$<$template$<$ template$<$ typename $>$ typename $>$ typename TSolver, template$<$ typename $>$ typename TMatrix$>$ \\
+\mbox{\hyperlink{struct_solve___data}{Solve\+\_\+\+Data}}$<$ TSolver, TMatrix $>$\mbox{\hyperlink{struct_solve___data}{\+::\+Solve\+\_\+\+Data}} (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_solve___data}{Solve\+\_\+\+Data}}$<$ TSolver, TMatrix $>$ \&}]{other}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{struct_solve___data_a734e251ce627d5276900316fd36de5c5}\index{Solve\_Data$<$ TSolver, TMatrix $>$@{Solve\_Data$<$ TSolver, TMatrix $>$}!get\_info\_string@{get\_info\_string}}
+\index{get\_info\_string@{get\_info\_string}!Solve\_Data$<$ TSolver, TMatrix $>$@{Solve\_Data$<$ TSolver, TMatrix $>$}}
+\doxysubsubsection{\texorpdfstring{get\_info\_string()}{get\_info\_string()}}
+{\footnotesize\ttfamily \label{struct_solve___data_a734e251ce627d5276900316fd36de5c5} 
+template$<$template$<$ template$<$ typename $>$ typename $>$ typename TSolver, template$<$ typename $>$ typename TMatrix$>$ \\
+std\+::string \mbox{\hyperlink{struct_solve___data}{Solve\+\_\+\+Data}}$<$ TSolver, TMatrix $>$\+::get\+\_\+info\+\_\+string (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{struct_timed___experiment___data_a6aab397580db33c8bb8ce6527b43cbdd}{Timed\+\_\+\+Experiment\+\_\+\+Data}}.
+
+\Hypertarget{struct_solve___data_a2e445ec5e121a9b271a245ac969c7f18}\index{Solve\_Data$<$ TSolver, TMatrix $>$@{Solve\_Data$<$ TSolver, TMatrix $>$}!operator=@{operator=}}
+\index{operator=@{operator=}!Solve\_Data$<$ TSolver, TMatrix $>$@{Solve\_Data$<$ TSolver, TMatrix $>$}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}}
+{\footnotesize\ttfamily \label{struct_solve___data_a2e445ec5e121a9b271a245ac969c7f18} 
+template$<$template$<$ template$<$ typename $>$ typename $>$ typename TSolver, template$<$ typename $>$ typename TMatrix$>$ \\
+void \mbox{\hyperlink{struct_solve___data}{Solve\+\_\+\+Data}}$<$ TSolver, TMatrix $>$\+::operator= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_solve___data}{Solve\+\_\+\+Data}}$<$ TSolver, TMatrix $>$ \&}]{other}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{struct_solve___data_a93d7bf4539ee013a4d6bb0e3bea39616}\index{Solve\_Data$<$ TSolver, TMatrix $>$@{Solve\_Data$<$ TSolver, TMatrix $>$}!record\_json@{record\_json}}
+\index{record\_json@{record\_json}!Solve\_Data$<$ TSolver, TMatrix $>$@{Solve\_Data$<$ TSolver, TMatrix $>$}}
+\doxysubsubsection{\texorpdfstring{record\_json()}{record\_json()}}
+{\footnotesize\ttfamily \label{struct_solve___data_a93d7bf4539ee013a4d6bb0e3bea39616} 
+template$<$template$<$ template$<$ typename $>$ typename $>$ typename TSolver, template$<$ typename $>$ typename TMatrix$>$ \\
+void \mbox{\hyperlink{struct_solve___data}{Solve\+\_\+\+Data}}$<$ TSolver, TMatrix $>$\+::record\+\_\+json (\begin{DoxyParamCaption}\item[{std\+::string}]{file\+\_\+name}{, }\item[{fs\+::path}]{output\+\_\+data\+\_\+dir}{, }\item[{\mbox{\hyperlink{class_experiment___log}{Experiment\+\_\+\+Log}}}]{logger}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{struct_timed___experiment___data_a2ca7a2c797b8fdaef09bec1b166f85b8}{Timed\+\_\+\+Experiment\+\_\+\+Data}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{struct_solve___data_ad73d00a6001bbd6966e8864182ef678f}\index{Solve\_Data$<$ TSolver, TMatrix $>$@{Solve\_Data$<$ TSolver, TMatrix $>$}!solver\_ptr@{solver\_ptr}}
+\index{solver\_ptr@{solver\_ptr}!Solve\_Data$<$ TSolver, TMatrix $>$@{Solve\_Data$<$ TSolver, TMatrix $>$}}
+\doxysubsubsection{\texorpdfstring{solver\_ptr}{solver\_ptr}}
+{\footnotesize\ttfamily \label{struct_solve___data_ad73d00a6001bbd6966e8864182ef678f} 
+template$<$template$<$ template$<$ typename $>$ typename $>$ typename TSolver, template$<$ typename $>$ typename TMatrix$>$ \\
+std\+::shared\+\_\+ptr$<$TSolver$<$TMatrix$>$ $>$ \mbox{\hyperlink{struct_solve___data}{Solve\+\_\+\+Data}}$<$ TSolver, TMatrix $>$\+::solver\+\_\+ptr}
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/dosre/dev/precision-\/cascade/experimentation/include/exp\+\_\+data/\mbox{\hyperlink{_solve___data_8h}{Solve\+\_\+\+Data.\+h}}\end{DoxyCompactItemize}

@@ -1,0 +1,40 @@
+\doxysection{test\+\_\+\+VP\+\_\+\+GMRES\+\_\+\+IR\+\_\+component.\+h}
+\hypertarget{test___v_p___g_m_r_e_s___i_r__component_8h_source}{}\label{test___v_p___g_m_r_e_s___i_r__component_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/test/src/test\_solvers/test\_nested/test\_VP\_GMRES\_IR\_component.h@{C:/Users/dosre/dev/precision-\/cascade/test/src/test\_solvers/test\_nested/test\_VP\_GMRES\_IR\_component.h}}
+\mbox{\hyperlink{test___v_p___g_m_r_e_s___i_r__component_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ TEST\_VP\_GMRES\_IR\_COMPONENT\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ TEST\_VP\_GMRES\_IR\_COMPONENT\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{test_8h}{test.h}}"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_v_p___g_m_r_e_s___i_r_8h}{solvers/nested/GMRES\_IR/VP\_GMRES\_IR.h}}"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix>}
+\DoxyCodeLine{00009\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_v_p___g_m_r_e_s___i_r___solve___testing_mock}{VP\_GMRES\_IR\_Solve\_TestingMock}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_af365d8dcc81903492db76f4eac9d33f3}{VP\_GMRES\_IR\_Solve}}<TMatrix>}
+\DoxyCodeLine{00010\ \{}
+\DoxyCodeLine{00011\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_af365d8dcc81903492db76f4eac9d33f3}{VP\_GMRES\_IR\_Solve}}<TMatrix>\mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_a0c57dc4f001938589faadb4f30554272}{::cascade\_phase}};}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_af365d8dcc81903492db76f4eac9d33f3}{VP\_GMRES\_IR\_Solve}}<TMatrix>\mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_ac1fdefe5af85dddfaed3d43883233e10}{::INIT\_PHASE}};}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_af365d8dcc81903492db76f4eac9d33f3}{VP\_GMRES\_IR\_Solve}}<TMatrix>\mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_a637947ecc03c6a8ac61594d956edc448}{::HLF\_PHASE}};}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_af365d8dcc81903492db76f4eac9d33f3}{VP\_GMRES\_IR\_Solve}}<TMatrix>\mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_ad4090349f648e6d9c1e974be5a39de60}{::SGL\_PHASE}};}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_af365d8dcc81903492db76f4eac9d33f3}{VP\_GMRES\_IR\_Solve}}<TMatrix>\mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_aa0a3d35865b6c5f0bcb0ab608819e5cc}{::DBL\_PHASE}};}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_af365d8dcc81903492db76f4eac9d33f3}{VP\_GMRES\_IR\_Solve}}<TMatrix>\mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a89076f801630b485f9631cca7211ccdd}{::inner\_solver}};}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_af365d8dcc81903492db76f4eac9d33f3}{VP\_GMRES\_IR\_Solve}}<TMatrix>\mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_aff769b5ab0ef43285421e3f6721b4c5b}{::outer\_iterate\_setup}};}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_af365d8dcc81903492db76f4eac9d33f3}{VP\_GMRES\_IR\_Solve}}<TMatrix>\mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_af365d8dcc81903492db76f4eac9d33f3}{::VP\_GMRES\_IR\_Solve}};}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_v_p___g_m_r_e_s___i_r___solve___testing_mock_af7867485477a430724efe777d02b821d}{set\_phase\_to\_use}};}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_v_p___g_m_r_e_s___i_r___solve___testing_mock_adf01e63916c6c4dca335f3de56bc6453}{determine\_next\_phase}}()\textcolor{keyword}{\ override\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_v_p___g_m_r_e_s___i_r___solve___testing_mock_af7867485477a430724efe777d02b821d}{set\_phase\_to\_use}};\ \}}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_v_p___g_m_r_e_s___i_r___solve___testing_mock_a2f763e787ccede2fa222c3da77d326b7}{is\_in\_half\_phase}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ this-\/>\mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_a0c57dc4f001938589faadb4f30554272}{cascade\_phase}}\ ==\ \mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve_a637947ecc03c6a8ac61594d956edc448}{VP\_GMRES\_IR\_Solve<TMatrix>::HLF\_PHASE}};}
+\DoxyCodeLine{00030\ \ \ \ \ \}}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \};}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

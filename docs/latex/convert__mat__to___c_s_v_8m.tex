@@ -1,0 +1,85 @@
+\doxysection{C\+:/\+Users/dosre/dev/precision-\/cascade/scripts/matlab/convert\+\_\+mat\+\_\+to\+\_\+\+CSV.m File Reference}
+\hypertarget{convert__mat__to___c_s_v_8m}{}\label{convert__mat__to___c_s_v_8m}\index{C:/Users/dosre/dev/precision-\/cascade/scripts/matlab/convert\_mat\_to\_CSV.m@{C:/Users/dosre/dev/precision-\/cascade/scripts/matlab/convert\_mat\_to\_CSV.m}}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{convert__mat__to___c_s_v_8m_ad070c53926f82b7a620a42a566322556}{writematrix}} (full(\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a34079cedfcd0dcc6476bf9f1076e8cbd}{mat}}), \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a13add80719a6702ceb6fef9d0d670f6e}{save\+\_\+dir}}+\mbox{\hyperlink{convert__mat__to___c_s_v_8m_ab74e6bf80237ddc4109968cedc58c151}{name}}+"{}.csv"{})
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a2e64f4d2313a478221c2bc95a79b31fe}{mat\+\_\+dir}} = "{}ssget/\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a34079cedfcd0dcc6476bf9f1076e8cbd}{mat}}/HB/"{}
+\item 
+\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a13add80719a6702ceb6fef9d0d670f6e}{save\+\_\+dir}} = "{}experiment\+\_\+matrices/"{}
+\item 
+\mbox{\hyperlink{convert__mat__to___c_s_v_8m_afafecb95aca5e0525fd6959a5602fb89}{files}} = dir(\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a2e64f4d2313a478221c2bc95a79b31fe}{mat\+\_\+dir}})
+\item 
+for \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}
+\item 
+\mbox{\hyperlink{convert__mat__to___c_s_v_8m_ab74e6bf80237ddc4109968cedc58c151}{name}} = extract\+Before(file\+\_\+name, "{}.mat"{})
+\item 
+\mbox{\hyperlink{convert__mat__to___c_s_v_8m_ac0d361ecb3331eb775e62fd7e6847944}{mat\+\_\+file}} = load(\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a2e64f4d2313a478221c2bc95a79b31fe}{mat\+\_\+dir}} + file\+\_\+name)
+\item 
+\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a34079cedfcd0dcc6476bf9f1076e8cbd}{mat}} = \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{mat\+\_\+file.\+A}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{convert__mat__to___c_s_v_8m_ad070c53926f82b7a620a42a566322556}\index{convert\_mat\_to\_CSV.m@{convert\_mat\_to\_CSV.m}!writematrix@{writematrix}}
+\index{writematrix@{writematrix}!convert\_mat\_to\_CSV.m@{convert\_mat\_to\_CSV.m}}
+\doxysubsubsection{\texorpdfstring{writematrix()}{writematrix()}}
+{\footnotesize\ttfamily \label{convert__mat__to___c_s_v_8m_ad070c53926f82b7a620a42a566322556} 
+writematrix (\begin{DoxyParamCaption}\item[{full(\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a34079cedfcd0dcc6476bf9f1076e8cbd}{mat}})}]{}{, }\item[{\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a13add80719a6702ceb6fef9d0d670f6e}{save\+\_\+dir}}+\mbox{\hyperlink{convert__mat__to___c_s_v_8m_ab74e6bf80237ddc4109968cedc58c151}{name}}+"{}.csv"{}}]{}{}\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{convert__mat__to___c_s_v_8m_afafecb95aca5e0525fd6959a5602fb89}\index{convert\_mat\_to\_CSV.m@{convert\_mat\_to\_CSV.m}!files@{files}}
+\index{files@{files}!convert\_mat\_to\_CSV.m@{convert\_mat\_to\_CSV.m}}
+\doxysubsubsection{\texorpdfstring{files}{files}}
+{\footnotesize\ttfamily \label{convert__mat__to___c_s_v_8m_afafecb95aca5e0525fd6959a5602fb89} 
+files = dir(\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a2e64f4d2313a478221c2bc95a79b31fe}{mat\+\_\+dir}})}
+
+\Hypertarget{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}\index{convert\_mat\_to\_CSV.m@{convert\_mat\_to\_CSV.m}!i@{i}}
+\index{i@{i}!convert\_mat\_to\_CSV.m@{convert\_mat\_to\_CSV.m}}
+\doxysubsubsection{\texorpdfstring{i}{i}}
+{\footnotesize\ttfamily \label{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426} 
+for i}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ 1:length(\mbox{\hyperlink{convert__mat__to___c_s_v_8m_afafecb95aca5e0525fd6959a5602fb89}{files}})}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ file\_name\ =\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_afafecb95aca5e0525fd6959a5602fb89}{files}}(\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})}
+
+\end{DoxyCode}
+\Hypertarget{convert__mat__to___c_s_v_8m_a34079cedfcd0dcc6476bf9f1076e8cbd}\index{convert\_mat\_to\_CSV.m@{convert\_mat\_to\_CSV.m}!mat@{mat}}
+\index{mat@{mat}!convert\_mat\_to\_CSV.m@{convert\_mat\_to\_CSV.m}}
+\doxysubsubsection{\texorpdfstring{mat}{mat}}
+{\footnotesize\ttfamily \label{convert__mat__to___c_s_v_8m_a34079cedfcd0dcc6476bf9f1076e8cbd} 
+mat = \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{mat\+\_\+file.\+A}}}
+
+\Hypertarget{convert__mat__to___c_s_v_8m_a2e64f4d2313a478221c2bc95a79b31fe}\index{convert\_mat\_to\_CSV.m@{convert\_mat\_to\_CSV.m}!mat\_dir@{mat\_dir}}
+\index{mat\_dir@{mat\_dir}!convert\_mat\_to\_CSV.m@{convert\_mat\_to\_CSV.m}}
+\doxysubsubsection{\texorpdfstring{mat\_dir}{mat\_dir}}
+{\footnotesize\ttfamily \label{convert__mat__to___c_s_v_8m_a2e64f4d2313a478221c2bc95a79b31fe} 
+mat\+\_\+dir = "{}ssget/\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a34079cedfcd0dcc6476bf9f1076e8cbd}{mat}}/HB/"{}}
+
+\Hypertarget{convert__mat__to___c_s_v_8m_ac0d361ecb3331eb775e62fd7e6847944}\index{convert\_mat\_to\_CSV.m@{convert\_mat\_to\_CSV.m}!mat\_file@{mat\_file}}
+\index{mat\_file@{mat\_file}!convert\_mat\_to\_CSV.m@{convert\_mat\_to\_CSV.m}}
+\doxysubsubsection{\texorpdfstring{mat\_file}{mat\_file}}
+{\footnotesize\ttfamily \label{convert__mat__to___c_s_v_8m_ac0d361ecb3331eb775e62fd7e6847944} 
+mat\+\_\+file = load(\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a2e64f4d2313a478221c2bc95a79b31fe}{mat\+\_\+dir}} + file\+\_\+name)}
+
+\Hypertarget{convert__mat__to___c_s_v_8m_ab74e6bf80237ddc4109968cedc58c151}\index{convert\_mat\_to\_CSV.m@{convert\_mat\_to\_CSV.m}!name@{name}}
+\index{name@{name}!convert\_mat\_to\_CSV.m@{convert\_mat\_to\_CSV.m}}
+\doxysubsubsection{\texorpdfstring{name}{name}}
+{\footnotesize\ttfamily \label{convert__mat__to___c_s_v_8m_ab74e6bf80237ddc4109968cedc58c151} 
+name = extract\+Before(file\+\_\+name, "{}.mat"{})}
+
+\Hypertarget{convert__mat__to___c_s_v_8m_a13add80719a6702ceb6fef9d0d670f6e}\index{convert\_mat\_to\_CSV.m@{convert\_mat\_to\_CSV.m}!save\_dir@{save\_dir}}
+\index{save\_dir@{save\_dir}!convert\_mat\_to\_CSV.m@{convert\_mat\_to\_CSV.m}}
+\doxysubsubsection{\texorpdfstring{save\_dir}{save\_dir}}
+{\footnotesize\ttfamily \label{convert__mat__to___c_s_v_8m_a13add80719a6702ceb6fef9d0d670f6e} 
+save\+\_\+dir = "{}experiment\+\_\+matrices/"{}}
+

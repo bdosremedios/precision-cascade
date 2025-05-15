@@ -1,0 +1,371 @@
+\doxysection{Iterative\+Solve.\+h}
+\hypertarget{_iterative_solve_8h_source}{}\label{_iterative_solve_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/include/solvers/IterativeSolve.h@{C:/Users/dosre/dev/precision-\/cascade/include/solvers/IterativeSolve.h}}
+\mbox{\hyperlink{_iterative_solve_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ ITERATIVE\_SOLVE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ ITERATIVE\_SOLVE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{types_8h}{types/types.h}}"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{argument__pkgs_8h}{tools/arg\_pkgs/argument\_pkgs.h}}"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{implemented__preconditioners_8h}{preconditioners/implemented\_preconditioners.h}}"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <cmath>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <algorithm>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <iomanip>}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacecascade}{cascade}}\ \{}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix>}
+\DoxyCodeLine{00018\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ae28a35abd17ffaf91056f55a70c1da63}{GenericIterativeSolve}}}
+\DoxyCodeLine{00019\ \{}
+\DoxyCodeLine{00020\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{void}\ check\_compatibility()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a3afc6c73083d839f1b451aa255a8d3ff}{gen\_lin\_sys\_ptr}}-\/>get\_n()\ !=\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ac743d15e9e6f1077c76394d7a17a6bb3}{init\_guess}}.rows())\ \{}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}GenericIterativeSolve:\ initial\ guess\ not\ compatible"{}}}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a3afc6c73083d839f1b451aa255a8d3ff}{gen\_lin\_sys\_ptr}}-\/>get\_m()\ !=\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a3afc6c73083d839f1b451aa255a8d3ff}{gen\_lin\_sys\_ptr}}-\/>get\_n())\ \{}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}GenericIterativeSolve:\ A\ is\ not\ square"{}}}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00033\ \ \ \ \ \}}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{void}\ set\_self\_to\_initial\_state()\ \{}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a4c2a0d9fde848b0948ee101c924883c5}{initiated}}\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a4ac0b0b64e3ba72f23234b5a90ecce71}{converged}}\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_af57186d3571c8fb922a182d26d7912b7}{terminated}}\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a4cca74e9067ffd782e886b1abe476cb1}{curr\_iter}}\ =\ 0;}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a0d73c5b3c750a46e0b198b2952547448}{generic\_soln}}\ =\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ac743d15e9e6f1077c76394d7a17a6bb3}{init\_guess}};}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ initialize\_instantiate\_residual();}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \}}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keywordtype}{void}\ initialize\_instantiate\_residual()\ \{}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a420e914718105bdb175fe95dcb45191a}{res\_norm\_history}}.clear();}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a1853ac2a74547799dd50f7a0a8f84bf3}{curr\_res}}\ =\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a024e8c2961e5f20b65233cbe57f3577b}{calc\_residual}}(\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ac743d15e9e6f1077c76394d7a17a6bb3}{init\_guess}});}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ae91c9163fad3360f581d3966f254572c}{curr\_res\_norm}}\ =\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a1853ac2a74547799dd50f7a0a8f84bf3}{curr\_res}}.norm();}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a420e914718105bdb175fe95dcb45191a}{res\_norm\_history}}.push\_back(\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ae91c9163fad3360f581d3966f254572c}{curr\_res\_norm}}.get\_scalar());}
+\DoxyCodeLine{00053\ \ \ \ \ \}}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{void}\ update\_residual()\ \{}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a1853ac2a74547799dd50f7a0a8f84bf3}{curr\_res}}\ =\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a024e8c2961e5f20b65233cbe57f3577b}{calc\_residual}}(\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a0d73c5b3c750a46e0b198b2952547448}{generic\_soln}});}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ae91c9163fad3360f581d3966f254572c}{curr\_res\_norm}}\ =\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a1853ac2a74547799dd50f7a0a8f84bf3}{curr\_res}}.norm();}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a420e914718105bdb175fe95dcb45191a}{res\_norm\_history}}.push\_back(\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ae91c9163fad3360f581d3966f254572c}{curr\_res\_norm}}.get\_scalar());}
+\DoxyCodeLine{00059\ \ \ \ \ \}}
+\DoxyCodeLine{00060\ \ \ \ \ }
+\DoxyCodeLine{00061\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{GenericLinearSystem<TMatrix>}}\ *\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a3afc6c73083d839f1b451aa255a8d3ff}{gen\_lin\_sys\_ptr}};}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<double>}}\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ac743d15e9e6f1077c76394d7a17a6bb3}{init\_guess}};}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ae99012b6307e103fcc722f874e15be10}{target\_rel\_res}};}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_aa533db25c700e1ae8eb6a75bd33f43cd}{max\_iter}};\ \textcolor{comment}{//\ mutable\ to\ allow\ setting\ by\ derived\ solvers}}
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a4cca74e9067ffd782e886b1abe476cb1}{curr\_iter}};}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a4c2a0d9fde848b0948ee101c924883c5}{initiated}};}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a4ac0b0b64e3ba72f23234b5a90ecce71}{converged}};}
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_af57186d3571c8fb922a182d26d7912b7}{terminated}};}
+\DoxyCodeLine{00072\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<double>}}\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a0d73c5b3c750a46e0b198b2952547448}{generic\_soln}}\ =\ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<double>}}(\mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}());}
+\DoxyCodeLine{00073\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<double>}}\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a1853ac2a74547799dd50f7a0a8f84bf3}{curr\_res}}\ =\ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<double>}}(\mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}());}
+\DoxyCodeLine{00074\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar<double>}}\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ae91c9163fad3360f581d3966f254572c}{curr\_res\_norm}};}
+\DoxyCodeLine{00075\ \ \ \ \ std::vector<double>\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a420e914718105bdb175fe95dcb45191a}{res\_norm\_history}};}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ae28a35abd17ffaf91056f55a70c1da63}{GenericIterativeSolve}}(}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{GenericLinearSystem<TMatrix>}}\ *\ \textcolor{keyword}{const}\ arg\_gen\_lin\_sys\_ptr,}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{SolveArgPkg}}\ \&arg\_pkg}
+\DoxyCodeLine{00080\ \ \ \ \ ):}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a3afc6c73083d839f1b451aa255a8d3ff}{gen\_lin\_sys\_ptr}}(arg\_gen\_lin\_sys\_ptr),}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ac743d15e9e6f1077c76394d7a17a6bb3}{init\_guess}}(}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_pkg.check\_default\_init\_guess()\ ?}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a493f3c6099e85cfbfdb949c118631e37}{make\_guess}}(\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a3afc6c73083d839f1b451aa255a8d3ff}{gen\_lin\_sys\_ptr}})\ :\ arg\_pkg.\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ac743d15e9e6f1077c76394d7a17a6bb3}{init\_guess}}}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ ),}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_aa533db25c700e1ae8eb6a75bd33f43cd}{max\_iter}}(}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_pkg.check\_default\_max\_iter()\ ?}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ 100\ :\ arg\_pkg.\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_aa533db25c700e1ae8eb6a75bd33f43cd}{max\_iter}}}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ ),}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ae99012b6307e103fcc722f874e15be10}{target\_rel\_res}}(}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_pkg.check\_default\_target\_rel\_res()\ ?}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ \ \ 1\mbox{\hyperlink{create__solve__matrices_8m_a329626dffc42c84371831246a2ddac71}{e}}-\/10\ :\ arg\_pkg.\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ae99012b6307e103fcc722f874e15be10}{target\_rel\_res}}}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00094\ \ \ \ \ \{}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_ae671925a9ea8dbbfb8b92d3bb580a9dd}{assert\_valid\_type<TMatrix>}}();}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ check\_compatibility();}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ set\_self\_to\_initial\_state();}
+\DoxyCodeLine{00098\ \ \ \ \ \}}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a379116382849b3947433abc9d9368bee}{iterate}}()\ =\ 0;}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a9fa6076d64ad944f48f19097ebba7e46}{derived\_generic\_reset}}()\ =\ 0;}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<double>}}\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a024e8c2961e5f20b65233cbe57f3577b}{calc\_residual}}(}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<double>}}\ \&arg\_x}
+\DoxyCodeLine{00106\ \ \ \ \ )\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a3afc6c73083d839f1b451aa255a8d3ff}{gen\_lin\_sys\_ptr}}-\/>get\_b()\ -\/\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a3afc6c73083d839f1b451aa255a8d3ff}{gen\_lin\_sys\_ptr}}-\/>get\_A()*arg\_x;}
+\DoxyCodeLine{00108\ \ \ \ \ \}}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<double>}}\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a493f3c6099e85cfbfdb949c118631e37}{make\_guess}}(}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{GenericLinearSystem<TMatrix>}}\ *\ \textcolor{keyword}{const}\ arg\_gen\_lin\_sys\_ptr}
+\DoxyCodeLine{00112\ \ \ \ \ )\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_vector_a3da96a5940cddfd486e752749a50f769}{Vector<double>::Ones}}(}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_gen\_lin\_sys\_ptr-\/>\mbox{\hyperlink{classcascade_1_1_generic_linear_system_a85d0549e1b2354c846ada0683fa9e3d8}{get\_cu\_handles}}(),}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_gen\_lin\_sys\_ptr-\/>\mbox{\hyperlink{classcascade_1_1_generic_linear_system_a3cef88ac6edf5abf916d647bf2cc859a}{get\_n}}()}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00117\ \ \ \ \ \}}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{comment}{//\ Forbid\ rvalue\ instantiation}}
+\DoxyCodeLine{00120\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_aa871df4d5961a554389e5483c7acddcb}{GenericIterativeSolve}}(}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{GenericLinearSystem<TMatrix>}}\ *\ \textcolor{keyword}{const},}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{SolveArgPkg}}\ \&\&}
+\DoxyCodeLine{00123\ \ \ \ \ )\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \ \ \ \ \textcolor{comment}{//\ Disable\ copy\ constructor\ and\ copy\ assignment}}
+\DoxyCodeLine{00126\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a70ea79c12631de5e57c70f9968d2433e}{GenericIterativeSolve}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ae28a35abd17ffaf91056f55a70c1da63}{GenericIterativeSolve}}\ \&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00127\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ae28a35abd17ffaf91056f55a70c1da63}{GenericIterativeSolve}}\ \&\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_aa0e3a601fd8376c521fbf01ab4928efd}{operator=}}(\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ae28a35abd17ffaf91056f55a70c1da63}{GenericIterativeSolve}}\ \&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \ \ \ \ \textcolor{comment}{/*\ Virtual\ destructor\ to\ determine\ destructors\ at\ runtime\ for\ correctness\ in}}
+\DoxyCodeLine{00130\ \textcolor{comment}{\ \ \ \ \ \ \ dynamic\ memory\ usage*/}}
+\DoxyCodeLine{00131\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a472bc38bf12f043d9bc49748e5e9b5b3}{\string~GenericIterativeSolve}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<double>}}\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_acf565e09e0814d4042fd70b3ac7bb421}{get\_generic\_soln}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a0d73c5b3c750a46e0b198b2952547448}{generic\_soln}};}
+\DoxyCodeLine{00137\ \ \ \ \ \};}
+\DoxyCodeLine{00138\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<double>}}\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a8d7d082955e1609d2c7a3c530b56d33d}{get\_curr\_res}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a1853ac2a74547799dd50f7a0a8f84bf3}{curr\_res}};}
+\DoxyCodeLine{00140\ \ \ \ \ \};}
+\DoxyCodeLine{00141\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a5f211c8b5ec76b8b75be570354f4304b}{get\_relres}}()\textcolor{keyword}{\ const\ }\{\ }
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ae91c9163fad3360f581d3966f254572c}{curr\_res\_norm}}.get\_scalar()/\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a420e914718105bdb175fe95dcb45191a}{res\_norm\_history}}[0];}
+\DoxyCodeLine{00143\ \ \ \ \ \}}
+\DoxyCodeLine{00144\ \ \ \ \ std::vector<double>\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a032d213b4fd1bfd44a26437693951461}{get\_res\_norm\_history}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a420e914718105bdb175fe95dcb45191a}{res\_norm\_history}};}
+\DoxyCodeLine{00146\ \ \ \ \ \};}
+\DoxyCodeLine{00147\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a3b57afd2d2bcdc09c18dc55e74c84a05}{check\_initiated}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a4c2a0d9fde848b0948ee101c924883c5}{initiated}};\ \};}
+\DoxyCodeLine{00148\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_afcb2e1dff111432c5368b06ba6eed9ae}{check\_converged}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a4ac0b0b64e3ba72f23234b5a90ecce71}{converged}};\ \};}
+\DoxyCodeLine{00149\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a398371669311bb7ac240ab4476064626}{check\_terminated}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_af57186d3571c8fb922a182d26d7912b7}{terminated}};\ \};}
+\DoxyCodeLine{00150\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_acb0768c3ff633d870011471cf278b3d5}{get\_iteration}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a4cca74e9067ffd782e886b1abe476cb1}{curr\_iter}};\ \};}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ \ \ \ \ \textcolor{comment}{//\ Perform\ solve\ with\ iterate()\ scheme\ updating\ generic\_soln}}
+\DoxyCodeLine{00153\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_af41faca795cfa8cd244053e67bc0c054}{solve}}()\ \{}
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a4c2a0d9fde848b0948ee101c924883c5}{initiated}})\ \{}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Can\ not\ safely\ call\ solve\ without\ after\ a\ initiation\ without\ "{}}}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}reset"{}}}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a4c2a0d9fde848b0948ee101c924883c5}{initiated}}\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Set\ res\_hist\ size\ here\ since\ max\_iter\ is\ mutable\ before\ solve}}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ initialize\_instantiate\_residual();}
+\DoxyCodeLine{00164\ }
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \ \ \ \ !\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a4ac0b0b64e3ba72f23234b5a90ecce71}{converged}}\ \&\&}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \ \ \ \ ((\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a4cca74e9067ffd782e886b1abe476cb1}{curr\_iter}}\ <\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_aa533db25c700e1ae8eb6a75bd33f43cd}{max\_iter}})\ \&\&\ (\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a5f211c8b5ec76b8b75be570354f4304b}{get\_relres}}()\ >\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ae99012b6307e103fcc722f874e15be10}{target\_rel\_res}}))}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ )\ \{}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \ \ \ \ ++\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a4cca74e9067ffd782e886b1abe476cb1}{curr\_iter}};}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a379116382849b3947433abc9d9368bee}{iterate}}();}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \ \ \ \ update\_residual();}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_af57186d3571c8fb922a182d26d7912b7}{terminated}})\ \{\ \textcolor{keywordflow}{break};\ \}}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00174\ }
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_af57186d3571c8fb922a182d26d7912b7}{terminated}}\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a4ac0b0b64e3ba72f23234b5a90ecce71}{converged}}\ =\ (}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \ \ \ \ (\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a5f211c8b5ec76b8b75be570354f4304b}{get\_relres}}()\ <=\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ae99012b6307e103fcc722f874e15be10}{target\_rel\_res}})\ ||}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \ \ \ \ ((\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a4cca74e9067ffd782e886b1abe476cb1}{curr\_iter}}\ ==\ 0)\ \&\&}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \ \ \ \ \ ((\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a1853ac2a74547799dd50f7a0a8f84bf3}{curr\_res}}.norm()\ /}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a3afc6c73083d839f1b451aa255a8d3ff}{gen\_lin\_sys\_ptr}}-\/>get\_b().norm()).get\_scalar()\ <=\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ae99012b6307e103fcc722f874e15be10}{target\_rel\_res}}))}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00183\ \ \ \ \ \}}
+\DoxyCodeLine{00184\ }
+\DoxyCodeLine{00185\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a20e7a5589025548c697d936feccdc5df}{reset}}()\ \{}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ set\_self\_to\_initial\_state();}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a9fa6076d64ad944f48f19097ebba7e46}{derived\_generic\_reset}}();}
+\DoxyCodeLine{00188\ \ \ \ \ \}}
+\DoxyCodeLine{00189\ }
+\DoxyCodeLine{00190\ \ \ \ \ std::string\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a86dcc3693c91ab3a0920cffdaf3fcb61}{get\_info\_string}}()\ \{}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ std::stringstream\ acc\_strm;}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ acc\_strm\ <<\ std::setprecision(3);}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ acc\_strm\ <<\ \textcolor{stringliteral}{"{}Initiated:\ "{}}\ <<\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a4c2a0d9fde848b0948ee101c924883c5}{initiated}}\ <<\ \textcolor{stringliteral}{"{}\ |\ "{}}}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{}Converged:\ "{}}\ <<\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a4ac0b0b64e3ba72f23234b5a90ecce71}{converged}}\ <<\ \textcolor{stringliteral}{"{}\ |\ "{}}}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{}Current\ iter:\ "{}}\ <<\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a4cca74e9067ffd782e886b1abe476cb1}{curr\_iter}}\ <<\ \textcolor{stringliteral}{"{}\ |\ "{}}}
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{}Current\ rel-\/res:\ "{}}\ <<\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a5f211c8b5ec76b8b75be570354f4304b}{get\_relres}}();}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ acc\_strm.str();}
+\DoxyCodeLine{00198\ \ \ \ \ \}}
+\DoxyCodeLine{00199\ }
+\DoxyCodeLine{00200\ \ \ \ \ \textcolor{comment}{//\ Rudimentarily\ plot\ relative\ residual}}
+\DoxyCodeLine{00201\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a3b7788cda7cbcb3a0af3c14f5e2ba314}{view\_relres\_plot}}(std::string\ \textcolor{keyword}{const}\ \&arg=\textcolor{stringliteral}{"{}normal"{}})\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00202\ }
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ max\ max\_length\ entries\ to\ plot}}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ max\_length(70);}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ std::vector<double>\ plot\_y;}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a420e914718105bdb175fe95dcb45191a}{res\_norm\_history}}.size()\ >\ max\_length)\ \{}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ h\ =\ (\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a420e914718105bdb175fe95dcb45191a}{res\_norm\_history}}.size()-\/1.0)/(max\_length-\/1.0);}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<max\_length;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ plot\_y.push\_back(\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a420e914718105bdb175fe95dcb45191a}{res\_norm\_history}}[\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}*h)]);}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \ \ \ \ plot\_y\ =\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a420e914718105bdb175fe95dcb45191a}{res\_norm\_history}};}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ length\ =\ plot\_y.size();}
+\DoxyCodeLine{00215\ }
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Normalize\ to\ first\ residual\ norm}}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ r\_0\ =\ plot\_y[0];}
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<length;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{\ plot\_y[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ /=\ r\_0;\ \}}
+\DoxyCodeLine{00219\ }
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ want\ log\ plot\ then\ take\ log\ of\ everything}}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (arg\ ==\ \textcolor{stringliteral}{"{}log"{}})\ \{}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<length;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{\ plot\_y[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ =\ log(plot\_y[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}])/log(10);\ \}}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00224\ }
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Find\ which\ in\ height\ buckets\ each\ plot\ point\ should\ be\ in}}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ height(12);}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ std::vector<double>\ plot\_y\_bucket\_index;}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ std::vector<double>\ bucket\_ends;}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ min\_\ =\ *std::min\_element(plot\_y.cbegin(),\ plot\_y.cend());}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ max\_\ =\ *std::max\_element(plot\_y.cbegin(),\ plot\_y.cend());}
+\DoxyCodeLine{00231\ }
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ minimal\ of\ target\ relres\ and\ minimum\ if\ initiated\ for\ bottom\ of\ plot}}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a4c2a0d9fde848b0948ee101c924883c5}{initiated}})\ \{}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (arg\ ==\ \textcolor{stringliteral}{"{}log"{}})\ \{}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ min\_\ =\ std::min(min\_,\ log(\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ae99012b6307e103fcc722f874e15be10}{target\_rel\_res}})/log(10));}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ min\_\ =\ std::min(min\_,\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ae99012b6307e103fcc722f874e15be10}{target\_rel\_res}});}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00240\ }
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ bucket\_width\ =\ (max\_-\/min\_)/\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{double}\textcolor{keyword}{>}(height);}
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{double}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=1;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<height;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \ \ \ \ bucket\_ends.push\_back(\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}*bucket\_width\ +\ min\_);}
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ bucket\_ends.push\_back(max\_);}
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{double}\ y:\ plot\_y)\ \{}
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<height;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (y\ <=\ bucket\_ends[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}])\ \{}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ plot\_y\_bucket\_index.push\_back(\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}});}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00254\ }
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Iterate\ over\ grid\ and\ mark\ typed\_soln\ wherever\ there\ is\ a\ plot\ entry}}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ min\_length(3);}
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}Display\ of\ Relative\ Residual\ L-\/2\ Norm:\ "{}}\ <<\ std::endl;}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (arg\ ==\ \textcolor{stringliteral}{"{}log"{}})\ \{}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ std::setprecision(3)\ <<\ std::pow(10,\ max\_);}
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ std::setprecision(3)\ <<\ max\_;}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ std::string(std::max(min\_length,\ length-\/1),\ \textcolor{charliteral}{'-\/'})}
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ std::endl;}
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=height-\/1;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}>=0;\ -\/-\/\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ j=-\/1;\ j<length;\ ++j)\ \{}
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((j\ >=\ 0)\ \&\&\ (plot\_y\_bucket\_index[j]\ ==\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}))\ \{}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}*"{}};}
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}\ "{}};}
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ std::endl;}
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (arg\ ==\ \textcolor{stringliteral}{"{}log"{}})\ \{}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ std::setprecision(3)\ <<\ std::pow(10,\ min\_);}
+\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ std::setprecision(3)\ <<\ min\_;}
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ std::string(std::max(min\_length,\ length-\/4),\ \textcolor{charliteral}{'-\/'})}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ std::endl;}
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}Iter:\ 0"{}}}
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ std::string(std::max(min\_length,\ length-\/10),\ \textcolor{charliteral}{'\ '})}
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{}Iter:\ "{}}}
+\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a4cca74e9067ffd782e886b1abe476cb1}{curr\_iter}}\ <<\ std::endl;}
+\DoxyCodeLine{00286\ }
+\DoxyCodeLine{00287\ \ \ \ \ \}}
+\DoxyCodeLine{00288\ }
+\DoxyCodeLine{00289\ \};}
+\DoxyCodeLine{00290\ }
+\DoxyCodeLine{00291\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix,\ \textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00292\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a14722b6e9f4ffc75f0ff01ce74d9522a}{TypedIterativeSolve}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ae28a35abd17ffaf91056f55a70c1da63}{GenericIterativeSolve}}<TMatrix>}
+\DoxyCodeLine{00293\ \{}
+\DoxyCodeLine{00294\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00295\ }
+\DoxyCodeLine{00296\ \ \ \ \ \textcolor{keywordtype}{void}\ update\_generic\_soln()\ \{}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ this-\/>generic\_soln\ =\ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a78f7ec0a1549d8f02aea2f45003967eb}{typed\_soln}}.template\ cast<double>();}
+\DoxyCodeLine{00298\ \ \ \ \ \}}
+\DoxyCodeLine{00299\ \ \ \ \ }
+\DoxyCodeLine{00300\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00301\ }
+\DoxyCodeLine{00302\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf}{TypedLinearSystem\_Intf<TMatrix,\ TPrecision>}}\ *\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a0b3ac2f20041b20ac6740bc35255038f}{typed\_lin\_sys\_ptr}};}
+\DoxyCodeLine{00303\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a5a6714c87f60e0f88a92e4ee472d8e76}{init\_guess\_typed}};}
+\DoxyCodeLine{00304\ }
+\DoxyCodeLine{00305\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a78f7ec0a1549d8f02aea2f45003967eb}{typed\_soln}}\ =\ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}(\mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}());}
+\DoxyCodeLine{00306\ }
+\DoxyCodeLine{00307\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a830ae1f4f78aba3a31be60469020345c}{typed\_iterate}}()\ =\ 0;}
+\DoxyCodeLine{00308\ }
+\DoxyCodeLine{00309\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_af41009941845facf0b5b94f3f386dd12}{derived\_typed\_reset}}()\ =\ 0;}
+\DoxyCodeLine{00310\ }
+\DoxyCodeLine{00311\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<double>}}\ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_ac2465bf097bd061d78bb22ce11e96108}{calc\_residual}}(}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<double>}}\ \&arg\_x}
+\DoxyCodeLine{00313\ \ \ \ \ )\textcolor{keyword}{\ const\ override\ }\{}
+\DoxyCodeLine{00314\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a0b3ac2f20041b20ac6740bc35255038f}{typed\_lin\_sys\_ptr}}-\/>get\_b()\ -\/\ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a0b3ac2f20041b20ac6740bc35255038f}{typed\_lin\_sys\_ptr}}-\/>get\_A()*arg\_x;}
+\DoxyCodeLine{00315\ \ \ \ \ \}}
+\DoxyCodeLine{00316\ }
+\DoxyCodeLine{00317\ \ \ \ \ \textcolor{comment}{//\ Perform\ iteration\ updating\ typed\_soln\ and\ then\ using\ that\ to}}
+\DoxyCodeLine{00318\ \ \ \ \ \textcolor{comment}{//\ update\ generic\_soln()}}
+\DoxyCodeLine{00319\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a2769d02baf204ac37d5a4b49a9180951}{iterate}}()\textcolor{keyword}{\ override\ }\{}
+\DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a830ae1f4f78aba3a31be60469020345c}{typed\_iterate}}();}
+\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ update\_generic\_soln();}
+\DoxyCodeLine{00322\ \ \ \ \ \}}
+\DoxyCodeLine{00323\ }
+\DoxyCodeLine{00324\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a1b8f4c3c91554e8202194612a21bc070}{derived\_generic\_reset}}()\textcolor{keyword}{\ override\ }\{}
+\DoxyCodeLine{00325\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a78f7ec0a1549d8f02aea2f45003967eb}{typed\_soln}}\ =\ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a5a6714c87f60e0f88a92e4ee472d8e76}{init\_guess\_typed}};}
+\DoxyCodeLine{00326\ \ \ \ \ \ \ \ \ update\_generic\_soln();}
+\DoxyCodeLine{00327\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_af41009941845facf0b5b94f3f386dd12}{derived\_typed\_reset}}();}
+\DoxyCodeLine{00328\ \ \ \ \ \}}
+\DoxyCodeLine{00329\ }
+\DoxyCodeLine{00330\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00331\ }
+\DoxyCodeLine{00332\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a14722b6e9f4ffc75f0ff01ce74d9522a}{TypedIterativeSolve}}(}
+\DoxyCodeLine{00333\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf}{TypedLinearSystem\_Intf<TMatrix,\ TPrecision>}}\ *\ \textcolor{keyword}{const}\ arg\_typed\_lin\_sys\_ptr,}
+\DoxyCodeLine{00334\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{SolveArgPkg}}\ \&arg\_pkg}
+\DoxyCodeLine{00335\ \ \ \ \ ):\ }
+\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a0b3ac2f20041b20ac6740bc35255038f}{typed\_lin\_sys\_ptr}}(arg\_typed\_lin\_sys\_ptr),}
+\DoxyCodeLine{00337\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a5a6714c87f60e0f88a92e4ee472d8e76}{init\_guess\_typed}}(}
+\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ \ \ \ \ (arg\_pkg.check\_default\_init\_guess())\ ?\ }
+\DoxyCodeLine{00339\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a493f3c6099e85cfbfdb949c118631e37}{make\_guess}}(}
+\DoxyCodeLine{00340\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ arg\_typed\_lin\_sys\_ptr-\/>get\_gen\_lin\_sys\_ptr()}
+\DoxyCodeLine{00341\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ).template\ cast<TPrecision>()\ :}
+\DoxyCodeLine{00342\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ arg\_pkg.\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ac743d15e9e6f1077c76394d7a17a6bb3}{init\_guess}}.template\ cast<TPrecision>()}
+\DoxyCodeLine{00343\ \ \ \ \ \ \ \ \ ),}
+\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ae28a35abd17ffaf91056f55a70c1da63}{GenericIterativeSolve}}<TMatrix>(}
+\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_typed\_lin\_sys\_ptr-\/>get\_gen\_lin\_sys\_ptr(),}
+\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_pkg}
+\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00348\ \ \ \ \ \{}
+\DoxyCodeLine{00349\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a78f7ec0a1549d8f02aea2f45003967eb}{typed\_soln}}\ =\ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a5a6714c87f60e0f88a92e4ee472d8e76}{init\_guess\_typed}};}
+\DoxyCodeLine{00350\ \ \ \ \ \ \ \ \ update\_generic\_soln();}
+\DoxyCodeLine{00351\ \ \ \ \ \}}
+\DoxyCodeLine{00352\ }
+\DoxyCodeLine{00353\ \ \ \ \ \textcolor{comment}{//\ Forbid\ rvalue\ instantiation}}
+\DoxyCodeLine{00354\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_ab1b43668f69c8bb4fb01d2fab5563e85}{TypedIterativeSolve}}(}
+\DoxyCodeLine{00355\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf}{TypedLinearSystem\_Intf<TMatrix,\ TPrecision>}}\ *\ \textcolor{keyword}{const},}
+\DoxyCodeLine{00356\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{SolveArgPkg}}\ \&\&}
+\DoxyCodeLine{00357\ \ \ \ \ )\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00358\ }
+\DoxyCodeLine{00359\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a50313b9a5deefd450b2eb34799808bbe}{get\_typed\_soln}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_typed_iterative_solve_a78f7ec0a1549d8f02aea2f45003967eb}{typed\_soln}};\ \};}
+\DoxyCodeLine{00360\ }
+\DoxyCodeLine{00361\ \};}
+\DoxyCodeLine{00362\ }
+\DoxyCodeLine{00363\ \}}
+\DoxyCodeLine{00364\ }
+\DoxyCodeLine{00365\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

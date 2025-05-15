@@ -1,0 +1,13 @@
+<map id="cascade::CheckStagnation&lt; TMatrix &gt;" name="cascade::CheckStagnation&lt; TMatrix &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="18,368,197,411"/>
+<area shape="rect" id="Node000006" href="$classcascade_1_1_s_d___check_stagnation.html" title=" " alt="" coords="5,459,210,501"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="110,426,110,458,105,458,105,426"/>
+<area shape="rect" id="Node000002" href="$classcascade_1_1_v_p___g_m_r_e_s___i_r___solve.html" title=" " alt="" coords="21,277,194,320"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="110,336,110,368,105,368,105,336"/>
+<area shape="rect" id="Node000003" href="$classcascade_1_1_iterative_refinement_base.html" title=" " alt="" coords="11,187,204,229"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="110,245,110,277,105,277,105,245"/>
+<area shape="rect" id="Node000004" href="$classcascade_1_1_inner_outer_solve.html" title=" " alt="" coords="21,96,194,139"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="110,154,110,186,105,186,105,154"/>
+<area shape="rect" id="Node000005" href="$classcascade_1_1_generic_iterative_solve.html" title=" " alt="" coords="22,5,193,48"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="110,64,110,96,105,96,105,64"/>
+</map>

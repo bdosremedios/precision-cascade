@@ -1,0 +1,17 @@
+var searchData=
+[
+  ['parse_5fexperiment_5fspec_0',['parse_experiment_spec',['../exp__read_8h.html#a14094ecab66d8cbb8bd7873a6bf4ff0e',1,'parse_experiment_spec(fs::path exp_spec_path):&#160;exp_read.cpp'],['../exp__read_8cpp.html#a14094ecab66d8cbb8bd7873a6bf4ff0e',1,'parse_experiment_spec(fs::path exp_spec_path):&#160;exp_read.cpp']]],
+  ['plot_5fconvergence_5fdata_1',['plot_convergence_data',['../classutils__experimentation_1_1_convergence___experiment.html#a9cb672238f88f19b3bd58e44140dbdd8',1,'utils_experimentation::Convergence_Experiment']]],
+  ['plot_5fdata_2',['plot_data',['../namespaceutils__benchmark.html#a7a9b93e8f89a7291eb06136620bbfe08',1,'utils_benchmark']]],
+  ['plot_5fouter_5fconvergence_5fdata_3',['plot_outer_convergence_data',['../classutils__experimentation_1_1_convergence___experiment.html#ae6b7f560526a648a4a2f30bdf8fe499a',1,'utils_experimentation::Convergence_Experiment']]],
+  ['precondargpkg_4',['PrecondArgPkg',['../structcascade_1_1_precond_arg_pkg.html#ab929561d0eeab6f7e92971fa9f79f4bb',1,'cascade::PrecondArgPkg']]],
+  ['preconditionedminimumitertest_5',['PreconditionedMinimumIterTest',['../class_preconditioned___v_p___g_m_r_e_s___i_r___test.html#a7bd82ee6b39948098e0c41bbfe19b253',1,'Preconditioned_VP_GMRES_IR_Test']]],
+  ['preconditionedsingleitertest_6',['PreconditionedSingleIterTest',['../class_preconditioned___f_p___g_m_r_e_s___i_r___test.html#ac36af6d593065e9c1b5f8106067a4d82',1,'Preconditioned_FP_GMRES_IR_Test']]],
+  ['preconditionedsolvetest_7',['PreconditionedSolveTest',['../class_p_g_m_r_e_s___solve___test.html#a14686d9112af9999da0d869d9d2cf382',1,'PGMRES_Solve_Test::PreconditionedSolveTest()'],['../class_preconditioned___f_p___g_m_r_e_s___i_r___test.html#a144ae984ae9747acdfa40f197fd73003',1,'Preconditioned_FP_GMRES_IR_Test::PreconditionedSolveTest()'],['../class_preconditioned___v_p___g_m_r_e_s___i_r___test.html#a78d5718025dbbf07e792bfa51da56094',1,'Preconditioned_VP_GMRES_IR_Test::PreconditionedSolveTest()']]],
+  ['preconditioner_8',['Preconditioner',['../classcascade_1_1_preconditioner.html#a875e73c4c3ccc05c2622dbdf5ee9d4a7',1,'cascade::Preconditioner']]],
+  ['preconditioner_5fdata_9',['Preconditioner_Data',['../struct_preconditioner___data.html#aecab2d16b1c4a27f2e60abc078ba7a10',1,'Preconditioner_Data']]],
+  ['preconditioner_5fspec_10',['Preconditioner_Spec',['../struct_preconditioner___spec.html#aa866859ec3131c11a57f6cfd89d2c0eb',1,'Preconditioner_Spec::Preconditioner_Spec()'],['../struct_preconditioner___spec.html#a36e3ca6a921a7d0496ccc827438e1cd4',1,'Preconditioner_Spec::Preconditioner_Spec(std::string arg_name)'],['../struct_preconditioner___spec.html#a9fac7bb45be879d9ce9f3b9b6db5d815',1,'Preconditioner_Spec::Preconditioner_Spec(std::string arg_name, double arg_ilutp_tau, int arg_ilutp_p)'],['../struct_preconditioner___spec.html#a97a526604b3ab7ac57ab31048fd79bee',1,'Preconditioner_Spec::Preconditioner_Spec(const Preconditioner_Spec &amp;other)']]],
+  ['preprocess_5ftrsv_11',['preprocess_trsv',['../classcascade_1_1_no_fill_matrix_sparse.html#ad29f4c22db3043f849592ee13b71c0ca',1,'cascade::NoFillMatrixSparse']]],
+  ['psizeheap_12',['PSizeHeap',['../classcascade_1_1heap_1_1_p_size_heap.html#ab03ca3ec2feac46d2af4852a88449a23',1,'cascade::heap::PSizeHeap::PSizeHeap(int arg_p)'],['../classcascade_1_1heap_1_1_p_size_heap.html#a5a5a60a3d1abd879b8377ae6b1c55243',1,'cascade::heap::PSizeHeap::PSizeHeap(const PSizeHeap &amp;other)']]],
+  ['push_13',['push',['../classcascade_1_1heap_1_1_p_size_heap.html#a20c0d8cfb02a4e0cd788e627e3230d53',1,'cascade::heap::PSizeHeap']]]
+];

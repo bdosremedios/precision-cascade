@@ -1,0 +1,88 @@
+\doxysection{Benchmark\+\_\+\+Matrix\+Dense Class Reference}
+\hypertarget{class_benchmark___matrix_dense}{}\label{class_benchmark___matrix_dense}\index{Benchmark\_MatrixDense@{Benchmark\_MatrixDense}}
+
+
+Inheritance diagram for Benchmark\+\_\+\+Matrix\+Dense\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=206pt]{class_benchmark___matrix_dense__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Benchmark\+\_\+\+Matrix\+Dense\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=298pt]{class_benchmark___matrix_dense__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_benchmark_base}{Benchmark\+Base}}}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_benchmark_base_a617c273fadfcb5d269f12386db080dde}{benchmark\+\_\+n\+\_\+runs}} (int n, std\+::function$<$ void(\mbox{\hyperlink{class_benchmark___accum_clock}{Benchmark\+\_\+\+Accum\+Clock}} \&)$>$ f, \mbox{\hyperlink{class_benchmark___accum_clock}{Benchmark\+\_\+\+Accum\+Clock}} \&benchmark\+\_\+clock, std\+::string label="{}"{})
+\item 
+{\footnotesize template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ }\\void \mbox{\hyperlink{class_benchmark_base_a9771cb4046b877f9a213771ec9f1df38}{benchmark\+\_\+exec\+\_\+func}} (std\+::vector$<$ int $>$ m\+\_\+dimensions, std\+::function$<$ TMatrix$<$ TPrecision $>$(int, int)$>$ make\+\_\+A, std\+::function$<$ void(\mbox{\hyperlink{class_benchmark___accum_clock}{Benchmark\+\_\+\+Accum\+Clock}} \&, TMatrix$<$ TPrecision $>$ \&)$>$ exec\+\_\+func, std\+::string label)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{class_benchmark___dense}{Benchmark\+\_\+\+Dense}}}
+\begin{DoxyCompactItemize}
+\item 
+std\+::function$<$ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ double $>$(int, int)$>$ \mbox{\hyperlink{class_benchmark___dense_ac9cd3dd6d3f2dc971235a9cf65945f61}{make\+\_\+\+A\+\_\+dbl}}
+\item 
+std\+::function$<$ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ float $>$(int, int)$>$ \mbox{\hyperlink{class_benchmark___dense_abb16f0f5a935136198f406e6350f3d68}{make\+\_\+\+A\+\_\+sgl}}
+\item 
+std\+::function$<$ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ \+\_\+\+\_\+half $>$(int, int)$>$ \mbox{\hyperlink{class_benchmark___dense_a1aae64b3ad08deb009c2aec780926d25}{make\+\_\+\+A\+\_\+hlf}}
+\item 
+std\+::function$<$ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ double $>$(int, int)$>$ \mbox{\hyperlink{class_benchmark___dense_afde7b9720b0b47620a1ed78ac4dadb40}{make\+\_\+low\+\_\+tri\+\_\+\+A\+\_\+dbl}}
+\item 
+std\+::function$<$ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ float $>$(int, int)$>$ \mbox{\hyperlink{class_benchmark___dense_ac7d422f2000749a129092a4d3a04ec97}{make\+\_\+low\+\_\+tri\+\_\+\+A\+\_\+sgl}}
+\item 
+std\+::function$<$ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ \+\_\+\+\_\+half $>$(int, int)$>$ \mbox{\hyperlink{class_benchmark___dense_a81aa9b6eec7fc67d35047aaa87ba25e3}{make\+\_\+low\+\_\+tri\+\_\+\+A\+\_\+hlf}}
+\item 
+std\+::function$<$ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ double $>$(int, int)$>$ \mbox{\hyperlink{class_benchmark___dense_a281592a44d6c2b128c10108cae2944a3}{make\+\_\+upp\+\_\+tri\+\_\+\+A\+\_\+dbl}}
+\item 
+std\+::function$<$ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ float $>$(int, int)$>$ \mbox{\hyperlink{class_benchmark___dense_a5e2809a423eac731eb4410570c9cbe06}{make\+\_\+upp\+\_\+tri\+\_\+\+A\+\_\+sgl}}
+\item 
+std\+::function$<$ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ \+\_\+\+\_\+half $>$(int, int)$>$ \mbox{\hyperlink{class_benchmark___dense_afb68875d3ce7f19da1782c1d11e85158}{make\+\_\+upp\+\_\+tri\+\_\+\+A\+\_\+hlf}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{class_benchmark_base}{Benchmark\+Base}}}
+\begin{DoxyCompactItemize}
+\item 
+const int \mbox{\hyperlink{class_benchmark_base_a5da4e27784b60ab7f6b26aa4d97c029b}{n\+\_\+runs}} = (\mbox{\hyperlink{class_benchmark_base_abcb949e75b3a451b3b2aec2403150e28}{prototyping\+\_\+speed\+\_\+up}}) ? 2 \+: 5
+\item 
+std\+::vector$<$ int $>$ \mbox{\hyperlink{class_benchmark_base_a1937d13b1092ec3a86c7260c05d78edd}{dense\+\_\+dims}}
+\item 
+std\+::vector$<$ int $>$ \mbox{\hyperlink{class_benchmark_base_a1a0864766c6cce696135d84a03701c14}{sparse\+\_\+dims}}
+\item 
+std\+::vector$<$ int $>$ \mbox{\hyperlink{class_benchmark_base_a52cc02031184a7a35bc40e589dff435c}{ilu\+\_\+dims}}
+\item 
+const bool \mbox{\hyperlink{class_benchmark_base_a9ede88ea295975774f98b9f590b59c02}{pivot\+\_\+ilu}} = true
+\item 
+const int \mbox{\hyperlink{class_benchmark_base_ae548186eaad394bfa1f7e8eda2269f22}{run\+\_\+fast\+\_\+tests\+\_\+count}} = 200
+\item 
+const int \mbox{\hyperlink{class_benchmark_base_acea7dbff2a592190949240700d413cfd}{dense\+\_\+subset\+\_\+cols}} = 200
+\item 
+const int \mbox{\hyperlink{class_benchmark_base_aa39adcf2e02d80a4e640eefade754281}{gmres\+\_\+iters}} = (\mbox{\hyperlink{class_benchmark_base_abcb949e75b3a451b3b2aec2403150e28}{prototyping\+\_\+speed\+\_\+up}}) ? 5 \+: 200
+\item 
+const int \mbox{\hyperlink{class_benchmark_base_aad1cc09fc411f40380b33fbd9cdf2900}{nested\+\_\+gmres\+\_\+inner\+\_\+iters}} = \mbox{\hyperlink{class_benchmark_base_aa39adcf2e02d80a4e640eefade754281}{gmres\+\_\+iters}}
+\item 
+const int \mbox{\hyperlink{class_benchmark_base_a59e0610c2842e95a61ce86960353ccd9}{nested\+\_\+gmres\+\_\+outer\+\_\+iters}} = (\mbox{\hyperlink{class_benchmark_base_abcb949e75b3a451b3b2aec2403150e28}{prototyping\+\_\+speed\+\_\+up}}) ? 5 \+: 300
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Attributes inherited from \mbox{\hyperlink{class_benchmark_base}{Benchmark\+Base}}}
+\begin{DoxyCompactItemize}
+\item 
+static bool \mbox{\hyperlink{class_benchmark_base_abcb949e75b3a451b3b2aec2403150e28}{prototyping\+\_\+speed\+\_\+up}} = false
+\item 
+static \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \mbox{\hyperlink{class_benchmark_base_aa7bdcad1019b0c4fb742b58a194ad12a}{bundle}}
+\item 
+static fs\+::path \mbox{\hyperlink{class_benchmark_base_a36d0f9205a06d32814c7a28aa87114f1}{data\+\_\+dir}}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/dosre/dev/precision-\/cascade/benchmark/src/benchmark\+\_\+types/\mbox{\hyperlink{benchmark___matrix_dense_8cpp}{benchmark\+\_\+\+Matrix\+Dense.\+cpp}}\end{DoxyCompactItemize}

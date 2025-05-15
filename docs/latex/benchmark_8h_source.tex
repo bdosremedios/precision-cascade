@@ -1,0 +1,151 @@
+\doxysection{benchmark.\+h}
+\hypertarget{benchmark_8h_source}{}\label{benchmark_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/benchmark/include/benchmark.h@{C:/Users/dosre/dev/precision-\/cascade/benchmark/include/benchmark.h}}
+\mbox{\hyperlink{benchmark_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ BENCHMARK\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ BENCHMARK\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{benchmark__tools_8h}{benchmark\_tools.h}}"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{cu_handle_bundle_8h}{tools/cuHandleBundle.h}}"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{types_8h}{types/types.h}}"{}}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <gtest/gtest.h>}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <filesystem>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <fstream>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <functional>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <cmath>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{namespace\ }fs\ =\ std::filesystem;}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespacecascade}{cascade}};}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_benchmark_base}{BenchmarkBase}}:\ \textcolor{keyword}{public}\ testing::Test}
+\DoxyCodeLine{00022\ \{}
+\DoxyCodeLine{00023\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_benchmark_base_abcb949e75b3a451b3b2aec2403150e28}{prototyping\_speed\_up}};}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_benchmark_base_a5da4e27784b60ab7f6b26aa4d97c029b}{n\_runs}}\ =\ (\mbox{\hyperlink{class_benchmark_base_abcb949e75b3a451b3b2aec2403150e28}{prototyping\_speed\_up}})\ ?\ 2\ :\ 5;}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ \mbox{\hyperlink{class_benchmark_base_aa7bdcad1019b0c4fb742b58a194ad12a}{bundle}};}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{static}\ fs::path\ \mbox{\hyperlink{class_benchmark_base_a36d0f9205a06d32814c7a28aa87114f1}{data\_dir}};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ std::vector<int>\ \mbox{\hyperlink{class_benchmark_base_a1937d13b1092ec3a86c7260c05d78edd}{dense\_dims}}\ =\ (}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ (\mbox{\hyperlink{class_benchmark_base_abcb949e75b3a451b3b2aec2403150e28}{prototyping\_speed\_up}})\ ?}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ std::vector<int>(\{1024\})\ :}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ std::\mbox{\hyperlink{create__read__matrices_8m_a7ea82552101f041fad7635b3ed036a84}{vector}}<int>(\{}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ 2500,\ 5000,\ 7500,\ 10000,\ 12500,\ 15000,\ 17500,\ 20000}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \})}
+\DoxyCodeLine{00037\ \ \ \ \ );}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ std::vector<int>\ \mbox{\hyperlink{class_benchmark_base_a1a0864766c6cce696135d84a03701c14}{sparse\_dims}}\ =\ (}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ (\mbox{\hyperlink{class_benchmark_base_abcb949e75b3a451b3b2aec2403150e28}{prototyping\_speed\_up}})\ ?}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ std::vector<int>(\{1024\})\ :}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ std::\mbox{\hyperlink{create__read__matrices_8m_a7ea82552101f041fad7635b3ed036a84}{vector}}<int>(\{}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ 2154,\ 50991,\ 80708,\ 105655,\ 127930,\ 148406,\ 167554,\ 185664}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \})}
+\DoxyCodeLine{00045\ \ \ \ \ );}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ std::vector<int>\ \mbox{\hyperlink{class_benchmark_base_a52cc02031184a7a35bc40e589dff435c}{ilu\_dims}}\ =\ (}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ (\mbox{\hyperlink{class_benchmark_base_abcb949e75b3a451b3b2aec2403150e28}{prototyping\_speed\_up}})\ ?}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ std::vector<int>(\{1024\})\ :}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ std::\mbox{\hyperlink{create__read__matrices_8m_a7ea82552101f041fad7635b3ed036a84}{vector}}<int>(\{}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ 2154,\ 50991,\ 80708,\ 105655,\ 127930,\ 148406,\ 167554,\ 185664}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \})}
+\DoxyCodeLine{00053\ \ \ \ \ );}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_benchmark_base_a9ede88ea295975774f98b9f590b59c02}{pivot\_ilu}}\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_benchmark_base_ae548186eaad394bfa1f7e8eda2269f22}{run\_fast\_tests\_count}}\ =\ 200;}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_benchmark_base_acea7dbff2a592190949240700d413cfd}{dense\_subset\_cols}}\ =\ 200;}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_benchmark_base_aa39adcf2e02d80a4e640eefade754281}{gmres\_iters}}\ =\ (\mbox{\hyperlink{class_benchmark_base_abcb949e75b3a451b3b2aec2403150e28}{prototyping\_speed\_up}})\ ?\ 5\ :\ 200;}
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_benchmark_base_aad1cc09fc411f40380b33fbd9cdf2900}{nested\_gmres\_inner\_iters}}\ =\ \mbox{\hyperlink{class_benchmark_base_aa39adcf2e02d80a4e640eefade754281}{gmres\_iters}};}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_benchmark_base_a59e0610c2842e95a61ce86960353ccd9}{nested\_gmres\_outer\_iters}}\ =\ (\mbox{\hyperlink{class_benchmark_base_abcb949e75b3a451b3b2aec2403150e28}{prototyping\_speed\_up}})\ ?\ 5\ :\ 300;}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_benchmark_base_a617c273fadfcb5d269f12386db080dde}{benchmark\_n\_runs}}(}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ n,}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ std::function<\textcolor{keywordtype}{void}\ (\mbox{\hyperlink{class_benchmark___accum_clock}{Benchmark\_AccumClock}}\ \&)>\ f,}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_benchmark___accum_clock}{Benchmark\_AccumClock}}\ \&benchmark\_clock,}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ std::string\ label=\textcolor{stringliteral}{"{}"{}}}
+\DoxyCodeLine{00069\ \ \ \ \ )\ \{}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<n;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ f(benchmark\_clock);}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ std::string\ label\_formatted\ =\ (}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ (label\ ==\ \textcolor{stringliteral}{"{}"{}})\ ?\ \textcolor{stringliteral}{"{}"{}}\ :\ (\textcolor{stringliteral}{"{}\ "{}}\ +\ label)}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}[Benchmark"{}}\ <<\ label\_formatted\ <<\ \textcolor{stringliteral}{"{}]\ runs:\ "{}}}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ std::to\_string(benchmark\_clock.\mbox{\hyperlink{class_benchmark___accum_clock_a992056fde467cfce2a21d2c6f5ef9e1d}{get\_count}}())}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{}\ |\ avg:\ "{}}}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ std::to\_string(benchmark\_clock.\mbox{\hyperlink{class_benchmark___accum_clock_aaa0e3bc7837d3cf663cc1eda5bb6b2da}{get\_avg}}().count())}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{}\ |\ median:\ "{}}}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ std::to\_string(benchmark\_clock.\mbox{\hyperlink{class_benchmark___accum_clock_a1c99bdc9ca9723126ceb0070197b93da}{get\_median}}().count())}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{}\ |\ total:\ "{}}}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ std::to\_string(benchmark\_clock.\mbox{\hyperlink{class_benchmark___accum_clock_a4ec6112f90c18d8de84648c14719bacb}{get\_total}}().count())}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ std::endl;}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \ \ \ \ \}}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix,\ \textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00092\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_benchmark_base_a9771cb4046b877f9a213771ec9f1df38}{benchmark\_exec\_func}}(}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ std::vector<int>\ m\_dimensions,}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ std::function<TMatrix<TPrecision>\ (\textcolor{keywordtype}{int},\ \textcolor{keywordtype}{int})>\ make\_A,}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ std::function<\textcolor{keywordtype}{void}\ (\mbox{\hyperlink{class_benchmark___accum_clock}{Benchmark\_AccumClock}}\ \&,\ TMatrix<TPrecision>\ \&)>\ exec\_func,}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ std::string\ label}
+\DoxyCodeLine{00097\ \ \ \ \ )\ \{}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ fs::path\ file\_path\ =\ \mbox{\hyperlink{class_benchmark_base_a36d0f9205a06d32814c7a28aa87114f1}{data\_dir}}\ /\ fs::path(label\ +\ \textcolor{stringliteral}{"{}.csv"{}});}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ std::ofstream\ f\_out;}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ f\_out.open(file\_path);}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!(f\_out.is\_open()))\ \{}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}benchmark\_n\_runs:\ "{}}\ +\ file\_path.string()\ +\ \textcolor{stringliteral}{"{}\ did\ not\ open"{}}}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ f\_out\ <<\ \textcolor{stringliteral}{"{}dim,med,avg,tot,min,max"{}}\ <<\ std::endl;\ }
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ m\ :\ m\_dimensions)\ \{}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_benchmark___accum_clock}{Benchmark\_AccumClock}}\ curr\_clock;}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ TMatrix<TPrecision>\ \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}\ =\ make\_A(m,\ m);}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \ \ \ \ std::function<void(\mbox{\hyperlink{class_benchmark___accum_clock}{Benchmark\_AccumClock}}\ \&)>\ test\_func\ =\ (}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ [exec\_func,\ \&\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}](\mbox{\hyperlink{class_benchmark___accum_clock}{Benchmark\_AccumClock}}\ \&arg\_clock)\ \{}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ exec\_func(arg\_clock,\ \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}});}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_benchmark_base_a617c273fadfcb5d269f12386db080dde}{benchmark\_n\_runs}}(}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_benchmark_base_a5da4e27784b60ab7f6b26aa4d97c029b}{n\_runs}},}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ test\_func,}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ curr\_clock,}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ label\ +\ \textcolor{stringliteral}{"{}\_"{}}\ +\ std::to\_string(m)}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ f\_out\ <<\ m\ <<\ \textcolor{stringliteral}{"{},"{}}}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ curr\_clock.\mbox{\hyperlink{class_benchmark___accum_clock_a1c99bdc9ca9723126ceb0070197b93da}{get\_median}}().count()\ <<\ \textcolor{stringliteral}{"{},"{}}}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ curr\_clock.\mbox{\hyperlink{class_benchmark___accum_clock_aaa0e3bc7837d3cf663cc1eda5bb6b2da}{get\_avg}}().count()\ <<\ \textcolor{stringliteral}{"{},"{}}}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ curr\_clock.\mbox{\hyperlink{class_benchmark___accum_clock_a4ec6112f90c18d8de84648c14719bacb}{get\_total}}().count()\ <<\ \textcolor{stringliteral}{"{},"{}}}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ curr\_clock.\mbox{\hyperlink{class_benchmark___accum_clock_a1dc8856c5027a6ad173c8818802ef75e}{get\_min}}().count()\ <<\ \textcolor{stringliteral}{"{},"{}}}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ curr\_clock.\mbox{\hyperlink{class_benchmark___accum_clock_a8df1b6ecf037144d15596b08f362b90f}{get\_max}}().count()}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ std::endl;\ }
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ f\_out.close();}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ \ \ \ \ \}}
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00143\ \};}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

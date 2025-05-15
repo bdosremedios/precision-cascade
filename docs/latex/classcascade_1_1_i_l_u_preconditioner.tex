@@ -1,0 +1,206 @@
+\doxysection{cascade\+::ILUPreconditioner\texorpdfstring{$<$}{<} TMatrix, TPrecision \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcascade_1_1_i_l_u_preconditioner}{}\label{classcascade_1_1_i_l_u_preconditioner}\index{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$@{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$}}
+
+
+{\ttfamily \#include $<$ILUPreconditioner.\+h$>$}
+
+
+
+Inheritance diagram for cascade\+::ILUPreconditioner\texorpdfstring{$<$}{<} TMatrix, TPrecision \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=217pt]{classcascade_1_1_i_l_u_preconditioner__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for cascade\+::ILUPreconditioner\texorpdfstring{$<$}{<} TMatrix, TPrecision \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=217pt]{classcascade_1_1_i_l_u_preconditioner__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_a8c91d557be24d1622bf557d6728f8ef1}{ILUPreconditioner}} (const TMatrix$<$ TPrecision $>$ \&arg\+\_\+L, const TMatrix$<$ TPrecision $>$ \&arg\+\_\+U)
+\item 
+\mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_acf6c8ce1b5cf5663b1dfcf41d131f897}{ILUPreconditioner}} (const TMatrix$<$ TPrecision $>$ \&arg\+\_\+L, const TMatrix$<$ TPrecision $>$ \&arg\+\_\+U, const TMatrix$<$ TPrecision $>$ \&arg\+\_\+P)
+\item 
+\mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_a39fa0cdd1ad2b39b53a50c3ca5acc4d9}{ILUPreconditioner}} (const \mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \&\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}})
+\item 
+\mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_a852a313892e0692c1f27f70ed0381600}{ILUPreconditioner}} (const \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$ \&\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}})
+\item 
+\mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_a89290db52f5945a6d434317ac7f56b20}{ILUPreconditioner}} (const \mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \&\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}, const TPrecision \&tau, const int \&p, const bool \&to\+\_\+pivot)
+\item 
+\mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_a6da1812316b1e2212413aae18ada41f7}{ILUPreconditioner}} (const \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$ \&\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}, const TPrecision \&tau, const int \&p, const bool \&to\+\_\+pivot)
+\item 
+TMatrix$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_a7a8202bbdc19b313fe25255b4f6918d9}{get\+\_\+L}} () const
+\item 
+TMatrix$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_a74d276fe2d7749ea651e60ae66747548}{get\+\_\+U}} () const
+\item 
+TMatrix$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_a498d601de9bcea527c297446b8a1d447}{get\+\_\+P}} () const
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_a18a591d486fc1bf6ab40b61be900518e}{action\+\_\+inv\+\_\+M}} (const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&vec) const override
+\item 
+bool \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_ab2e83c22bed966557abb9f80265ae1f9}{check\+\_\+compatibility\+\_\+left}} (const int \&arg\+\_\+m) const override
+\item 
+bool \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_a8bc624bdfc184e2b0f1a56b9ff702ad2}{check\+\_\+compatibility\+\_\+right}} (const int \&arg\+\_\+n) const override
+\item 
+\mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner}{ILUPreconditioner}}$<$ TMatrix, double $>$ \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_aae09d233469c4d24dfb8fe0e585be2d6}{cast\+\_\+dbl\+\_\+ptr}} () const override
+\item 
+\mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner}{ILUPreconditioner}}$<$ TMatrix, float $>$ \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_ae7b7dd2cd2ce4e597fec27f8449a6ba2}{cast\+\_\+sgl\+\_\+ptr}} () const override
+\item 
+\mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner}{ILUPreconditioner}}$<$ TMatrix, \+\_\+\+\_\+half $>$ \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_ad2f02cf30f012c2d530616f2453ea251}{cast\+\_\+hlf\+\_\+ptr}} () const override
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classcascade_1_1_preconditioner}{cascade\+::\+Preconditioner$<$ TMatrix, TPrecision $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcascade_1_1_preconditioner_a875e73c4c3ccc05c2622dbdf5ee9d4a7}{Preconditioner}} ()=default
+\item 
+virtual \mbox{\hyperlink{classcascade_1_1_preconditioner_a718c8a4a71dd31bc72767fc504534e83}{\texorpdfstring{$\sim$}{\string~}\+Preconditioner}} ()=default
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcascade_1_1_i_l_u_preconditioner_a8c91d557be24d1622bf557d6728f8ef1}\index{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$@{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$}!ILUPreconditioner@{ILUPreconditioner}}
+\index{ILUPreconditioner@{ILUPreconditioner}!cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$@{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{ILUPreconditioner()}{ILUPreconditioner()}\hspace{0.1cm}{\footnotesize\ttfamily [1/6]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_i_l_u_preconditioner_a8c91d557be24d1622bf557d6728f8ef1} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner}{cascade\+::\+ILUPreconditioner}}$<$ TMatrix, TPrecision $>$\+::\+ILUPreconditioner (\begin{DoxyParamCaption}\item[{const TMatrix$<$ TPrecision $>$ \&}]{arg\+\_\+L}{, }\item[{const TMatrix$<$ TPrecision $>$ \&}]{arg\+\_\+U}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_i_l_u_preconditioner_acf6c8ce1b5cf5663b1dfcf41d131f897}\index{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$@{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$}!ILUPreconditioner@{ILUPreconditioner}}
+\index{ILUPreconditioner@{ILUPreconditioner}!cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$@{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{ILUPreconditioner()}{ILUPreconditioner()}\hspace{0.1cm}{\footnotesize\ttfamily [2/6]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_i_l_u_preconditioner_acf6c8ce1b5cf5663b1dfcf41d131f897} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner}{cascade\+::\+ILUPreconditioner}}$<$ TMatrix, TPrecision $>$\+::\+ILUPreconditioner (\begin{DoxyParamCaption}\item[{const TMatrix$<$ TPrecision $>$ \&}]{arg\+\_\+L}{, }\item[{const TMatrix$<$ TPrecision $>$ \&}]{arg\+\_\+U}{, }\item[{const TMatrix$<$ TPrecision $>$ \&}]{arg\+\_\+P}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_i_l_u_preconditioner_a39fa0cdd1ad2b39b53a50c3ca5acc4d9}\index{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$@{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$}!ILUPreconditioner@{ILUPreconditioner}}
+\index{ILUPreconditioner@{ILUPreconditioner}!cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$@{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{ILUPreconditioner()}{ILUPreconditioner()}\hspace{0.1cm}{\footnotesize\ttfamily [3/6]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_i_l_u_preconditioner_a39fa0cdd1ad2b39b53a50c3ca5acc4d9} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner}{cascade\+::\+ILUPreconditioner}}$<$ TMatrix, TPrecision $>$\+::\+ILUPreconditioner (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \&}]{A}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_i_l_u_preconditioner_a852a313892e0692c1f27f70ed0381600}\index{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$@{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$}!ILUPreconditioner@{ILUPreconditioner}}
+\index{ILUPreconditioner@{ILUPreconditioner}!cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$@{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{ILUPreconditioner()}{ILUPreconditioner()}\hspace{0.1cm}{\footnotesize\ttfamily [4/6]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_i_l_u_preconditioner_a852a313892e0692c1f27f70ed0381600} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner}{cascade\+::\+ILUPreconditioner}}$<$ TMatrix, TPrecision $>$\+::\+ILUPreconditioner (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$ \&}]{A}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_i_l_u_preconditioner_a89290db52f5945a6d434317ac7f56b20}\index{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$@{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$}!ILUPreconditioner@{ILUPreconditioner}}
+\index{ILUPreconditioner@{ILUPreconditioner}!cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$@{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{ILUPreconditioner()}{ILUPreconditioner()}\hspace{0.1cm}{\footnotesize\ttfamily [5/6]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_i_l_u_preconditioner_a89290db52f5945a6d434317ac7f56b20} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner}{cascade\+::\+ILUPreconditioner}}$<$ TMatrix, TPrecision $>$\+::\+ILUPreconditioner (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \&}]{A}{, }\item[{const TPrecision \&}]{tau}{, }\item[{const int \&}]{p}{, }\item[{const bool \&}]{to\+\_\+pivot}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_i_l_u_preconditioner_a6da1812316b1e2212413aae18ada41f7}\index{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$@{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$}!ILUPreconditioner@{ILUPreconditioner}}
+\index{ILUPreconditioner@{ILUPreconditioner}!cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$@{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{ILUPreconditioner()}{ILUPreconditioner()}\hspace{0.1cm}{\footnotesize\ttfamily [6/6]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_i_l_u_preconditioner_a6da1812316b1e2212413aae18ada41f7} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner}{cascade\+::\+ILUPreconditioner}}$<$ TMatrix, TPrecision $>$\+::\+ILUPreconditioner (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$ \&}]{A}{, }\item[{const TPrecision \&}]{tau}{, }\item[{const int \&}]{p}{, }\item[{const bool \&}]{to\+\_\+pivot}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcascade_1_1_i_l_u_preconditioner_a18a591d486fc1bf6ab40b61be900518e}\index{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$@{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$}!action\_inv\_M@{action\_inv\_M}}
+\index{action\_inv\_M@{action\_inv\_M}!cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$@{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{action\_inv\_M()}{action\_inv\_M()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_i_l_u_preconditioner_a18a591d486fc1bf6ab40b61be900518e} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner}{cascade\+::\+ILUPreconditioner}}$<$ TMatrix, TPrecision $>$\+::action\+\_\+inv\+\_\+M (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&}]{vec}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classcascade_1_1_preconditioner_a21b224ac802e0fe2e4b3aed0bf264a94}{cascade\+::\+Preconditioner$<$ TMatrix, TPrecision $>$}}.
+
+\Hypertarget{classcascade_1_1_i_l_u_preconditioner_aae09d233469c4d24dfb8fe0e585be2d6}\index{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$@{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$}!cast\_dbl\_ptr@{cast\_dbl\_ptr}}
+\index{cast\_dbl\_ptr@{cast\_dbl\_ptr}!cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$@{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{cast\_dbl\_ptr()}{cast\_dbl\_ptr()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_i_l_u_preconditioner_aae09d233469c4d24dfb8fe0e585be2d6} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner}{ILUPreconditioner}}$<$ TMatrix, double $>$ \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner}{cascade\+::\+ILUPreconditioner}}$<$ TMatrix, TPrecision $>$\+::cast\+\_\+dbl\+\_\+ptr (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classcascade_1_1_preconditioner_a2e7a015dbb3b414e80fc491c8460e90b}{cascade\+::\+Preconditioner$<$ TMatrix, TPrecision $>$}}.
+
+\Hypertarget{classcascade_1_1_i_l_u_preconditioner_ad2f02cf30f012c2d530616f2453ea251}\index{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$@{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$}!cast\_hlf\_ptr@{cast\_hlf\_ptr}}
+\index{cast\_hlf\_ptr@{cast\_hlf\_ptr}!cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$@{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{cast\_hlf\_ptr()}{cast\_hlf\_ptr()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_i_l_u_preconditioner_ad2f02cf30f012c2d530616f2453ea251} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner}{ILUPreconditioner}}$<$ TMatrix, \+\_\+\+\_\+half $>$ \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner}{cascade\+::\+ILUPreconditioner}}$<$ TMatrix, TPrecision $>$\+::cast\+\_\+hlf\+\_\+ptr (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classcascade_1_1_preconditioner_a0d0f39fedcc1b3f11c01671efcc10c0a}{cascade\+::\+Preconditioner$<$ TMatrix, TPrecision $>$}}.
+
+\Hypertarget{classcascade_1_1_i_l_u_preconditioner_ae7b7dd2cd2ce4e597fec27f8449a6ba2}\index{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$@{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$}!cast\_sgl\_ptr@{cast\_sgl\_ptr}}
+\index{cast\_sgl\_ptr@{cast\_sgl\_ptr}!cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$@{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{cast\_sgl\_ptr()}{cast\_sgl\_ptr()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_i_l_u_preconditioner_ae7b7dd2cd2ce4e597fec27f8449a6ba2} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner}{ILUPreconditioner}}$<$ TMatrix, float $>$ \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner}{cascade\+::\+ILUPreconditioner}}$<$ TMatrix, TPrecision $>$\+::cast\+\_\+sgl\+\_\+ptr (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classcascade_1_1_preconditioner_a347820a28ad209fd8adc8ee60692dbb8}{cascade\+::\+Preconditioner$<$ TMatrix, TPrecision $>$}}.
+
+\Hypertarget{classcascade_1_1_i_l_u_preconditioner_ab2e83c22bed966557abb9f80265ae1f9}\index{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$@{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$}!check\_compatibility\_left@{check\_compatibility\_left}}
+\index{check\_compatibility\_left@{check\_compatibility\_left}!cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$@{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{check\_compatibility\_left()}{check\_compatibility\_left()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_i_l_u_preconditioner_ab2e83c22bed966557abb9f80265ae1f9} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+bool \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner}{cascade\+::\+ILUPreconditioner}}$<$ TMatrix, TPrecision $>$\+::check\+\_\+compatibility\+\_\+left (\begin{DoxyParamCaption}\item[{const int \&}]{arg\+\_\+m}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classcascade_1_1_preconditioner_aa4b26517fd95484368e0a206d84e3b4e}{cascade\+::\+Preconditioner$<$ TMatrix, TPrecision $>$}}.
+
+\Hypertarget{classcascade_1_1_i_l_u_preconditioner_a8bc624bdfc184e2b0f1a56b9ff702ad2}\index{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$@{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$}!check\_compatibility\_right@{check\_compatibility\_right}}
+\index{check\_compatibility\_right@{check\_compatibility\_right}!cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$@{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{check\_compatibility\_right()}{check\_compatibility\_right()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_i_l_u_preconditioner_a8bc624bdfc184e2b0f1a56b9ff702ad2} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+bool \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner}{cascade\+::\+ILUPreconditioner}}$<$ TMatrix, TPrecision $>$\+::check\+\_\+compatibility\+\_\+right (\begin{DoxyParamCaption}\item[{const int \&}]{arg\+\_\+n}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classcascade_1_1_preconditioner_a8131081c22cec99957d37de6e4b5e395}{cascade\+::\+Preconditioner$<$ TMatrix, TPrecision $>$}}.
+
+\Hypertarget{classcascade_1_1_i_l_u_preconditioner_a7a8202bbdc19b313fe25255b4f6918d9}\index{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$@{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$}!get\_L@{get\_L}}
+\index{get\_L@{get\_L}!cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$@{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{get\_L()}{get\_L()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_i_l_u_preconditioner_a7a8202bbdc19b313fe25255b4f6918d9} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+TMatrix$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner}{cascade\+::\+ILUPreconditioner}}$<$ TMatrix, TPrecision $>$\+::get\+\_\+L (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_i_l_u_preconditioner_a498d601de9bcea527c297446b8a1d447}\index{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$@{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$}!get\_P@{get\_P}}
+\index{get\_P@{get\_P}!cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$@{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{get\_P()}{get\_P()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_i_l_u_preconditioner_a498d601de9bcea527c297446b8a1d447} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+TMatrix$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner}{cascade\+::\+ILUPreconditioner}}$<$ TMatrix, TPrecision $>$\+::get\+\_\+P (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_i_l_u_preconditioner_a74d276fe2d7749ea651e60ae66747548}\index{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$@{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$}!get\_U@{get\_U}}
+\index{get\_U@{get\_U}!cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$@{cascade::ILUPreconditioner$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{get\_U()}{get\_U()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_i_l_u_preconditioner_a74d276fe2d7749ea651e60ae66747548} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+TMatrix$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner}{cascade\+::\+ILUPreconditioner}}$<$ TMatrix, TPrecision $>$\+::get\+\_\+U (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/dosre/dev/precision-\/cascade/include/preconditioners/\mbox{\hyperlink{_i_l_u_preconditioner_8h}{ILUPreconditioner.\+h}}\end{DoxyCompactItemize}

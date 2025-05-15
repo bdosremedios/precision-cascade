@@ -1,0 +1,58 @@
+\doxysection{C\+:/\+Users/dosre/dev/precision-\/cascade/include/tools/read\+\_\+matrix.h File Reference}
+\hypertarget{read__matrix_8h}{}\label{read__matrix_8h}\index{C:/Users/dosre/dev/precision-\/cascade/include/tools/read\_matrix.h@{C:/Users/dosre/dev/precision-\/cascade/include/tools/read\_matrix.h}}
+{\ttfamily \#include "{}tools/cu\+Handle\+Bundle.\+h"{}}\newline
+{\ttfamily \#include "{}types/types.\+h"{}}\newline
+{\ttfamily \#include $<$cassert$>$}\newline
+{\ttfamily \#include $<$filesystem$>$}\newline
+{\ttfamily \#include $<$fstream$>$}\newline
+{\ttfamily \#include $<$sstream$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$memory$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$time.\+h$>$}\newline
+Include dependency graph for read\+\_\+matrix.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{read__matrix_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{read__matrix_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespacecascade}{cascade}}
+\item 
+namespace \mbox{\hyperlink{namespacecascade_1_1helper}{cascade\+::helper}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::ifstream \mbox{\hyperlink{namespacecascade_1_1helper_a47f438eed728ec7b0f2c7eb3ab91c659}{cascade\+::helper\+::open\+\_\+ifstream}} (fs\+::path path, fs\+::path correct\+\_\+extension)
+\item 
+void \mbox{\hyperlink{namespacecascade_1_1helper_a3b356b8d769d3c544e99cda42cb58618}{cascade\+::helper\+::scan\+\_\+csv\+\_\+dim}} (fs\+::path path, int \texorpdfstring{$\ast$}{*}m\+\_\+rows\+\_\+ptr, int \texorpdfstring{$\ast$}{*}n\+\_\+cols\+\_\+ptr)
+\item 
+{\footnotesize template$<$typename TPrecision$>$ }\\void \mbox{\hyperlink{namespacecascade_1_1helper_a8127cede47e1a56f7de2b48d1134d2be}{cascade\+::helper\+::scan\+\_\+csv\+\_\+vals}} (fs\+::path path, TPrecision \texorpdfstring{$\ast$}{*}mat\+\_\+ptr, int m\+\_\+rows, int n\+\_\+cols)
+\item 
+bool \mbox{\hyperlink{namespacecascade_1_1helper_a1b5c41bda096f68bd966e622aa1c01ba}{cascade\+::helper\+::no\+\_\+whitespace}} (std\+::string \&str)
+\item 
+{\footnotesize template$<$typename TPrecision$>$ }\\\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$ \mbox{\hyperlink{namespacecascade_1_1helper_a64d92ef9b54c6e4b6a230eca0e652ce4}{cascade\+::helper\+::read\+\_\+coord\+\_\+body\+\_\+\+MTX}} (std\+::ifstream \&file\+\_\+in, std\+::stringstream \&line\+\_\+in, const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&cu\+\_\+handles, bool symmetric)
+\item 
+{\footnotesize template$<$typename TPrecision$>$ }\\\mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \mbox{\hyperlink{namespacecascade_1_1helper_a2557683de8ae915ccfce0d7b3329fe54}{cascade\+::helper\+::read\+\_\+array\+\_\+body\+\_\+\+MTX}} (std\+::ifstream \&file\+\_\+in, std\+::stringstream \&line\+\_\+in, const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&cu\+\_\+handles)
+\item 
+{\footnotesize template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ }\\TMatrix$<$ TPrecision $>$ \mbox{\hyperlink{namespacecascade_a0a2d9826160a93e11c354402937ce21a}{cascade\+::read\+\_\+matrix\+CSV}} (const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&cu\+\_\+handles, fs\+::path const path)
+\item 
+{\footnotesize template$<$typename TPrecision$>$ }\\\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{namespacecascade_a8986a22cb4ae293cf6ebfca14df5241c}{cascade\+::read\+\_\+vector\+CSV}} (const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&cu\+\_\+handles, fs\+::path const path)
+\item 
+{\footnotesize template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ }\\TMatrix$<$ TPrecision $>$ \mbox{\hyperlink{namespacecascade_a4550f61256132a6b807fc0412e4c5450}{cascade\+::read\+\_\+matrix\+MTX}} (const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&cu\+\_\+handles, fs\+::path const \&path)
+\item 
+{\footnotesize template$<$typename TPrecision$>$ }\\\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{namespacecascade_ad804d308ed18649e2e8573161b22472b}{cascade\+::read\+\_\+vector\+MTX}} (const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&cu\+\_\+handles, fs\+::path const \&path, std\+::string selection)
+\end{DoxyCompactItemize}

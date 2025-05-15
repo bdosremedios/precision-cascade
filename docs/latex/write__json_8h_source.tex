@@ -1,0 +1,47 @@
+\doxysection{write\+\_\+json.\+h}
+\hypertarget{write__json_8h_source}{}\label{write__json_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/experimentation/include/exp\_tools/write\_json.h@{C:/Users/dosre/dev/precision-\/cascade/experimentation/include/exp\_tools/write\_json.h}}
+\mbox{\hyperlink{write__json_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ WRITE\_JSON\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ WRITE\_JSON\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_experiment___log_8h}{exp\_tools/Experiment\_Log.h}}"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <filesystem>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <fstream>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <sstream>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <iomanip>}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{namespace\ }fs\ =\ std::filesystem;}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacewrite__json}{write\_json}}\ \{}
+\DoxyCodeLine{00016\ \ \ \ \ }
+\DoxyCodeLine{00017\ std::ofstream\ \mbox{\hyperlink{namespacewrite__json_a036d71555c40b412ce74423de41a8e94}{open\_json\_ofstream}}(}
+\DoxyCodeLine{00018\ \ \ \ \ std::string\ file\_name,\ fs::path\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a13add80719a6702ceb6fef9d0d670f6e}{save\_dir}},\ \mbox{\hyperlink{class_experiment___log}{Experiment\_Log}}\ logger}
+\DoxyCodeLine{00019\ );}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacewrite__json_a05c898f4d70f346484014efa15c3ba17}{start\_json}}(std::ofstream\ \&file\_out);}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacewrite__json_a736ebde2c15c1460f6dcee265ed05029}{end\_json}}(std::ofstream\ \&file\_out);}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ std::string\ \mbox{\hyperlink{namespacewrite__json_a18119165ccd450e9fa265b35dd73acac}{bool\_to\_string}}(\textcolor{keywordtype}{bool}\ \mbox{\hyperlink{create__solve__matrices_8m_a0f44e457fae26e14bb4ac1ebb3a75dad}{b}});}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ std::string\ \mbox{\hyperlink{namespacewrite__json_ac7352e0be3c6a4249fc9dc9182ea1fd5}{dbl\_vector\_to\_jsonarray\_str}}(}
+\DoxyCodeLine{00028\ \ \ \ \ std::vector<double>\ vec,\ \textcolor{keywordtype}{int}\ padding\_level}
+\DoxyCodeLine{00029\ );}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ std::string\ \mbox{\hyperlink{namespacewrite__json_aea6deb983e678cfb67ace39bb88a4627}{int\_vector\_to\_jsonarray\_str}}(}
+\DoxyCodeLine{00032\ \ \ \ \ std::vector<int>\ vec,\ \textcolor{keywordtype}{int}\ padding\_level}
+\DoxyCodeLine{00033\ );}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ std::string\ \mbox{\hyperlink{namespacewrite__json_afb7db649c1c9e945dbd098ddc751bfb0}{str\_vector\_to\_jsonarray\_str}}(}
+\DoxyCodeLine{00036\ \ \ \ \ std::vector<std::string>\ vec,\ \textcolor{keywordtype}{int}\ padding\_level}
+\DoxyCodeLine{00037\ );}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \}}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

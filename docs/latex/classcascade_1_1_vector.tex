@@ -1,0 +1,410 @@
+\doxysection{cascade\+::Vector\texorpdfstring{$<$}{<} TPrecision \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcascade_1_1_vector}{}\label{classcascade_1_1_vector}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+
+
+{\ttfamily \#include $<$Vector.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector_a066259e37a1041e40082c3d4848016d7}{Vector}} (const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&arg\+\_\+cu\+\_\+handles, int arg\+\_\+m, int arg\+\_\+n)
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector_aed1b9e4d6d489c94de60098fb70ce4fe}{Vector}} (const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&arg\+\_\+cu\+\_\+handles, int arg\+\_\+m)
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector_a4168cc490dc225ff913f98ac85a7d81f}{Vector}} (const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&arg\+\_\+cu\+\_\+handles)
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector_ad3a77a7aa5199f0660ecd7ac5c4d3cdf}{Vector}} (const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&arg\+\_\+cu\+\_\+handles, std\+::initializer\+\_\+list$<$ TPrecision $>$ li)
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector_a23a50b11eeecb197f8d5001e2c75c3e5}{Vector}} (const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&arg\+\_\+cu\+\_\+handles, const TPrecision \texorpdfstring{$\ast$}{*}h\+\_\+vec, const int m\+\_\+elem)
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector_aa2f355404d7c3239b6a59621828808c6}{Vector}} (const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&arg\+\_\+cu\+\_\+handles, const TPrecision \texorpdfstring{$\ast$}{*}h\+\_\+vec, const int m\+\_\+elem, const int n\+\_\+elem)
+\item 
+void \mbox{\hyperlink{classcascade_1_1_vector_af430d5e77934cddbd187160bb25507e3}{copy\+\_\+data\+\_\+to\+\_\+ptr}} (TPrecision \texorpdfstring{$\ast$}{*}h\+\_\+vec, int m\+\_\+elem) const
+\item 
+virtual \mbox{\hyperlink{classcascade_1_1_vector_a7f2d64af21d813a46ba6ed0b494fee5d}{\texorpdfstring{$\sim$}{\string~}\+Vector}} ()
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \& \mbox{\hyperlink{classcascade_1_1_vector_aa31229a0c1b1815b0f435f3845b5c7a1}{operator=}} (const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&other)
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector_a14b3cd86dae6f22ca1d7928839d67599}{Vector}} (const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&other)
+\item 
+const \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_vector_a3128648f50666a08c526283fb422f212}{get\+\_\+elem}} (int row, int col) const
+\item 
+const \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_vector_abd443d9c2e0f04185f12a23590aaa5d2}{get\+\_\+elem}} (int row) const
+\item 
+void \mbox{\hyperlink{classcascade_1_1_vector_a19e561a4cf16c573edada12cfecaf66d}{set\+\_\+elem}} (int row, int col, const \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \&val)
+\item 
+void \mbox{\hyperlink{classcascade_1_1_vector_ae48dc09de9a2c72345fd912bd56db865}{set\+\_\+elem}} (int row, const \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \&val)
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_vector_a2418692236112c0b50e2d7655da7de7c}{get\+\_\+slice}} (int start, int m\+\_\+elem) const
+\item 
+void \mbox{\hyperlink{classcascade_1_1_vector_a689ce0992c50c2d73f975ae9643eeb63}{set\+\_\+slice}} (int start, int m\+\_\+elem, const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&other)
+\item 
+int \mbox{\hyperlink{classcascade_1_1_vector_a66cff08224d9808fc55bc5b53bdd4fdb}{rows}} () const
+\item 
+int \mbox{\hyperlink{classcascade_1_1_vector_adee3982ea575f654551665ea77ea69f1}{cols}} () const
+\item 
+int \mbox{\hyperlink{classcascade_1_1_vector_a1441bc98b3a852e0db036e8182c37109}{non\+\_\+zeros}} () const
+\item 
+\mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \mbox{\hyperlink{classcascade_1_1_vector_a20755c576afdbb33ae077b4494c41f0a}{get\+\_\+cu\+\_\+handles}} () const
+\item 
+std\+::string \mbox{\hyperlink{classcascade_1_1_vector_a95b8d9c35adb89eaad7987fc11eecb8f}{get\+\_\+vector\+\_\+string}} () const
+\item 
+std\+::string \mbox{\hyperlink{classcascade_1_1_vector_a2e64ec62bc20d27ce49c25e6f0e6791b}{get\+\_\+info\+\_\+string}} () const
+\item 
+bool \mbox{\hyperlink{classcascade_1_1_vector_a6ed6d61b68d3e4ab42cae97a82163b67}{operator==}} (const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&other) const
+\item 
+{\footnotesize template$<$typename Cast\+\_\+\+TPrecision$>$ }\\\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ Cast\+\_\+\+TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_vector_afa4c1fbe514aa339a56e339200c3e1be}{cast}} () const
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_vector_aee88056e82acb1c1da52521fc360d941}{operator\texorpdfstring{$\ast$}{*}}} (const \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \&scalar) const
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_vector_a448b533a11b1afe593486a66971a865c}{operator/}} (const \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \&scalar) const
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \& \mbox{\hyperlink{classcascade_1_1_vector_ab17c5f49aa9ea192666b3fbba97036ef}{operator\texorpdfstring{$\ast$}{*}=}} (const \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \&scalar)
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \& \mbox{\hyperlink{classcascade_1_1_vector_a5e14d0c1dd6527886aafc510c9d94750}{operator/=}} (const \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \&scalar)
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_vector_a9eccb24d1b780b582b1707aaa8906786}{operator+}} (const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&vec) const
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_vector_a8e4b8fd4eb9f737c403ca974da7e3aeb}{operator-\/}} (const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&vec) const
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \& \mbox{\hyperlink{classcascade_1_1_vector_a5fc358c965a72d1f212d25783bd9d1ec}{operator+=}} (const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&vec)
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \& \mbox{\hyperlink{classcascade_1_1_vector_a7f89eb9fd71e5d1ef5d180172224de58}{operator-\/=}} (const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&vec)
+\item 
+\mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_vector_a6e47a95b9a1b426ee667ffc8b06da3d5}{dot}} (const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&vec) const
+\item 
+\mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_vector_a4f8f80b9cf0016c7bdd22fd4f7d01834}{norm}} () const
+\item 
+\mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_vector_af0b801464b11483caca0bbe8a765e3b8}{get\+\_\+max\+\_\+mag\+\_\+elem}} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_vector_a7da078322ccb03812f330b72cf4ad907}{Zero}} (const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&arg\+\_\+cu\+\_\+handles, int arg\+\_\+m)
+\item 
+static \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_vector_a0053e39502e0b1c812c61f77c5b91bce}{Zero}} (const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&arg\+\_\+cu\+\_\+handles, int arg\+\_\+m, int arg\+\_\+n)
+\item 
+static \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_vector_a3da96a5940cddfd486e752749a50f769}{Ones}} (const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&arg\+\_\+cu\+\_\+handles, int arg\+\_\+m)
+\item 
+static \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_vector_a6edd1008698fe9708396a2b39ec9301e}{Ones}} (const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&arg\+\_\+cu\+\_\+handles, int arg\+\_\+m, int arg\+\_\+n)
+\item 
+static \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_vector_a2ff3307e7e428a007e1b7caf8bf9e560}{Random}} (const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&arg\+\_\+cu\+\_\+handles, int arg\+\_\+m)
+\item 
+static \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_vector_a5ec4defb2a2919257d8a2a1e96a76e43}{Random}} (const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&arg\+\_\+cu\+\_\+handles, int arg\+\_\+m, int arg\+\_\+n)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename$>$ }\\class \mbox{\hyperlink{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}{Vector}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcascade_1_1_vector_a066259e37a1041e40082c3d4848016d7}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!Vector@{Vector}}
+\index{Vector@{Vector}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{Vector()}{Vector()}\hspace{0.1cm}{\footnotesize\ttfamily [1/7]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_a066259e37a1041e40082c3d4848016d7} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::\+Vector (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&}]{arg\+\_\+cu\+\_\+handles}{, }\item[{int}]{arg\+\_\+m}{, }\item[{int}]{arg\+\_\+n}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_vector_aed1b9e4d6d489c94de60098fb70ce4fe}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!Vector@{Vector}}
+\index{Vector@{Vector}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{Vector()}{Vector()}\hspace{0.1cm}{\footnotesize\ttfamily [2/7]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_aed1b9e4d6d489c94de60098fb70ce4fe} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::\+Vector (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&}]{arg\+\_\+cu\+\_\+handles}{, }\item[{int}]{arg\+\_\+m}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_vector_a4168cc490dc225ff913f98ac85a7d81f}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!Vector@{Vector}}
+\index{Vector@{Vector}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{Vector()}{Vector()}\hspace{0.1cm}{\footnotesize\ttfamily [3/7]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_a4168cc490dc225ff913f98ac85a7d81f} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::\+Vector (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&}]{arg\+\_\+cu\+\_\+handles}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_vector_ad3a77a7aa5199f0660ecd7ac5c4d3cdf}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!Vector@{Vector}}
+\index{Vector@{Vector}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{Vector()}{Vector()}\hspace{0.1cm}{\footnotesize\ttfamily [4/7]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_ad3a77a7aa5199f0660ecd7ac5c4d3cdf} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::\+Vector (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&}]{arg\+\_\+cu\+\_\+handles}{, }\item[{std\+::initializer\+\_\+list$<$ TPrecision $>$}]{li}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_vector_a23a50b11eeecb197f8d5001e2c75c3e5}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!Vector@{Vector}}
+\index{Vector@{Vector}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{Vector()}{Vector()}\hspace{0.1cm}{\footnotesize\ttfamily [5/7]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_a23a50b11eeecb197f8d5001e2c75c3e5} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::\+Vector (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&}]{arg\+\_\+cu\+\_\+handles}{, }\item[{const TPrecision \texorpdfstring{$\ast$}{*}}]{h\+\_\+vec}{, }\item[{const int}]{m\+\_\+elem}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_vector_aa2f355404d7c3239b6a59621828808c6}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!Vector@{Vector}}
+\index{Vector@{Vector}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{Vector()}{Vector()}\hspace{0.1cm}{\footnotesize\ttfamily [6/7]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_aa2f355404d7c3239b6a59621828808c6} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::\+Vector (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&}]{arg\+\_\+cu\+\_\+handles}{, }\item[{const TPrecision \texorpdfstring{$\ast$}{*}}]{h\+\_\+vec}{, }\item[{const int}]{m\+\_\+elem}{, }\item[{const int}]{n\+\_\+elem}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_vector_a7f2d64af21d813a46ba6ed0b494fee5d}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!````~Vector@{\texorpdfstring{$\sim$}{\string~}Vector}}
+\index{````~Vector@{\texorpdfstring{$\sim$}{\string~}Vector}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}Vector()}{\string~Vector()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_a7f2d64af21d813a46ba6ed0b494fee5d} 
+template$<$typename TPrecision$>$ \\
+virtual \mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::\texorpdfstring{$\sim$}{\string~}\mbox{\hyperlink{classcascade_1_1_vector}{Vector}} (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+\Hypertarget{classcascade_1_1_vector_a14b3cd86dae6f22ca1d7928839d67599}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!Vector@{Vector}}
+\index{Vector@{Vector}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{Vector()}{Vector()}\hspace{0.1cm}{\footnotesize\ttfamily [7/7]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_a14b3cd86dae6f22ca1d7928839d67599} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::\+Vector (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&}]{other}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcascade_1_1_vector_afa4c1fbe514aa339a56e339200c3e1be}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!cast@{cast}}
+\index{cast@{cast}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{cast()}{cast()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_afa4c1fbe514aa339a56e339200c3e1be} 
+template$<$typename TPrecision$>$ \\
+template$<$typename Cast\+\_\+\+TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ Cast\+\_\+\+TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::cast (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_vector_adee3982ea575f654551665ea77ea69f1}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!cols@{cols}}
+\index{cols@{cols}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{cols()}{cols()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_adee3982ea575f654551665ea77ea69f1} 
+template$<$typename TPrecision$>$ \\
+int \mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::cols (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_vector_af430d5e77934cddbd187160bb25507e3}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!copy\_data\_to\_ptr@{copy\_data\_to\_ptr}}
+\index{copy\_data\_to\_ptr@{copy\_data\_to\_ptr}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{copy\_data\_to\_ptr()}{copy\_data\_to\_ptr()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_af430d5e77934cddbd187160bb25507e3} 
+template$<$typename TPrecision$>$ \\
+void \mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::copy\+\_\+data\+\_\+to\+\_\+ptr (\begin{DoxyParamCaption}\item[{TPrecision \texorpdfstring{$\ast$}{*}}]{h\+\_\+vec}{, }\item[{int}]{m\+\_\+elem}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_vector_a6e47a95b9a1b426ee667ffc8b06da3d5}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!dot@{dot}}
+\index{dot@{dot}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{dot()}{dot()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_a6e47a95b9a1b426ee667ffc8b06da3d5} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::dot (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&}]{vec}{}\end{DoxyParamCaption}) const}
+
+\Hypertarget{classcascade_1_1_vector_a20755c576afdbb33ae077b4494c41f0a}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!get\_cu\_handles@{get\_cu\_handles}}
+\index{get\_cu\_handles@{get\_cu\_handles}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{get\_cu\_handles()}{get\_cu\_handles()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_a20755c576afdbb33ae077b4494c41f0a} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::get\+\_\+cu\+\_\+handles (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_vector_abd443d9c2e0f04185f12a23590aaa5d2}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!get\_elem@{get\_elem}}
+\index{get\_elem@{get\_elem}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{get\_elem()}{get\_elem()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_abd443d9c2e0f04185f12a23590aaa5d2} 
+template$<$typename TPrecision$>$ \\
+const \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::get\+\_\+elem (\begin{DoxyParamCaption}\item[{int}]{row}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_vector_a3128648f50666a08c526283fb422f212}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!get\_elem@{get\_elem}}
+\index{get\_elem@{get\_elem}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{get\_elem()}{get\_elem()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_a3128648f50666a08c526283fb422f212} 
+template$<$typename TPrecision$>$ \\
+const \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::get\+\_\+elem (\begin{DoxyParamCaption}\item[{int}]{row}{, }\item[{int}]{col}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_vector_a2e64ec62bc20d27ce49c25e6f0e6791b}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!get\_info\_string@{get\_info\_string}}
+\index{get\_info\_string@{get\_info\_string}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{get\_info\_string()}{get\_info\_string()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_a2e64ec62bc20d27ce49c25e6f0e6791b} 
+template$<$typename TPrecision$>$ \\
+std\+::string \mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::get\+\_\+info\+\_\+string (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_vector_af0b801464b11483caca0bbe8a765e3b8}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!get\_max\_mag\_elem@{get\_max\_mag\_elem}}
+\index{get\_max\_mag\_elem@{get\_max\_mag\_elem}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{get\_max\_mag\_elem()}{get\_max\_mag\_elem()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_af0b801464b11483caca0bbe8a765e3b8} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::get\+\_\+max\+\_\+mag\+\_\+elem (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_vector_a2418692236112c0b50e2d7655da7de7c}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!get\_slice@{get\_slice}}
+\index{get\_slice@{get\_slice}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{get\_slice()}{get\_slice()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_a2418692236112c0b50e2d7655da7de7c} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::get\+\_\+slice (\begin{DoxyParamCaption}\item[{int}]{start}{, }\item[{int}]{m\+\_\+elem}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_vector_a95b8d9c35adb89eaad7987fc11eecb8f}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!get\_vector\_string@{get\_vector\_string}}
+\index{get\_vector\_string@{get\_vector\_string}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{get\_vector\_string()}{get\_vector\_string()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_a95b8d9c35adb89eaad7987fc11eecb8f} 
+template$<$typename TPrecision$>$ \\
+std\+::string \mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::get\+\_\+vector\+\_\+string (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_vector_a1441bc98b3a852e0db036e8182c37109}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!non\_zeros@{non\_zeros}}
+\index{non\_zeros@{non\_zeros}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{non\_zeros()}{non\_zeros()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_a1441bc98b3a852e0db036e8182c37109} 
+template$<$typename TPrecision$>$ \\
+int \mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::non\+\_\+zeros (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_vector_a4f8f80b9cf0016c7bdd22fd4f7d01834}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!norm@{norm}}
+\index{norm@{norm}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{norm()}{norm()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_a4f8f80b9cf0016c7bdd22fd4f7d01834} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::norm (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+\Hypertarget{classcascade_1_1_vector_a3da96a5940cddfd486e752749a50f769}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!Ones@{Ones}}
+\index{Ones@{Ones}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{Ones()}{Ones()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_a3da96a5940cddfd486e752749a50f769} 
+template$<$typename TPrecision$>$ \\
+static \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::\+Ones (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&}]{arg\+\_\+cu\+\_\+handles}{, }\item[{int}]{arg\+\_\+m}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+\Hypertarget{classcascade_1_1_vector_a6edd1008698fe9708396a2b39ec9301e}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!Ones@{Ones}}
+\index{Ones@{Ones}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{Ones()}{Ones()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_a6edd1008698fe9708396a2b39ec9301e} 
+template$<$typename TPrecision$>$ \\
+static \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::\+Ones (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&}]{arg\+\_\+cu\+\_\+handles}{, }\item[{int}]{arg\+\_\+m}{, }\item[{int}]{arg\+\_\+n}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+\Hypertarget{classcascade_1_1_vector_aee88056e82acb1c1da52521fc360d941}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!operator\texorpdfstring{$\ast$}{*}@{operator\texorpdfstring{$\ast$}{*}}}
+\index{operator\texorpdfstring{$\ast$}{*}@{operator\texorpdfstring{$\ast$}{*}}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{operator\texorpdfstring{$\ast$}{*}()}{operator*()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_aee88056e82acb1c1da52521fc360d941} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::operator\texorpdfstring{$\ast$}{*} (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \&}]{scalar}{}\end{DoxyParamCaption}) const}
+
+\Hypertarget{classcascade_1_1_vector_ab17c5f49aa9ea192666b3fbba97036ef}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!operator\texorpdfstring{$\ast$}{*}=@{operator\texorpdfstring{$\ast$}{*}=}}
+\index{operator\texorpdfstring{$\ast$}{*}=@{operator\texorpdfstring{$\ast$}{*}=}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{operator\texorpdfstring{$\ast$}{*}=()}{operator*=()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_ab17c5f49aa9ea192666b3fbba97036ef} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \& \mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::operator\texorpdfstring{$\ast$}{*}= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \&}]{scalar}{}\end{DoxyParamCaption})}
+
+\Hypertarget{classcascade_1_1_vector_a9eccb24d1b780b582b1707aaa8906786}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!operator+@{operator+}}
+\index{operator+@{operator+}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{operator+()}{operator+()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_a9eccb24d1b780b582b1707aaa8906786} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::operator+ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&}]{vec}{}\end{DoxyParamCaption}) const}
+
+\Hypertarget{classcascade_1_1_vector_a5fc358c965a72d1f212d25783bd9d1ec}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!operator+=@{operator+=}}
+\index{operator+=@{operator+=}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{operator+=()}{operator+=()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_a5fc358c965a72d1f212d25783bd9d1ec} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \& \mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::operator+= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&}]{vec}{}\end{DoxyParamCaption})}
+
+\Hypertarget{classcascade_1_1_vector_a8e4b8fd4eb9f737c403ca974da7e3aeb}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!operator-\/@{operator-\/}}
+\index{operator-\/@{operator-\/}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{operator-\/()}{operator-()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_a8e4b8fd4eb9f737c403ca974da7e3aeb} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::operator-\/ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&}]{vec}{}\end{DoxyParamCaption}) const}
+
+\Hypertarget{classcascade_1_1_vector_a7f89eb9fd71e5d1ef5d180172224de58}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!operator-\/=@{operator-\/=}}
+\index{operator-\/=@{operator-\/=}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{operator-\/=()}{operator-=()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_a7f89eb9fd71e5d1ef5d180172224de58} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \& \mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::operator-\/= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&}]{vec}{}\end{DoxyParamCaption})}
+
+\Hypertarget{classcascade_1_1_vector_a448b533a11b1afe593486a66971a865c}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!operator/@{operator/}}
+\index{operator/@{operator/}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{operator/()}{operator/()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_a448b533a11b1afe593486a66971a865c} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::operator/ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \&}]{scalar}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_vector_a5e14d0c1dd6527886aafc510c9d94750}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!operator/=@{operator/=}}
+\index{operator/=@{operator/=}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{operator/=()}{operator/=()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_a5e14d0c1dd6527886aafc510c9d94750} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \& \mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::operator/= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \&}]{scalar}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_vector_aa31229a0c1b1815b0f435f3845b5c7a1}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!operator=@{operator=}}
+\index{operator=@{operator=}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_aa31229a0c1b1815b0f435f3845b5c7a1} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \& \mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::operator= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&}]{other}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_vector_a6ed6d61b68d3e4ab42cae97a82163b67}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!operator==@{operator==}}
+\index{operator==@{operator==}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{operator==()}{operator==()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_a6ed6d61b68d3e4ab42cae97a82163b67} 
+template$<$typename TPrecision$>$ \\
+bool \mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::operator== (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&}]{other}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_vector_a2ff3307e7e428a007e1b7caf8bf9e560}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!Random@{Random}}
+\index{Random@{Random}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{Random()}{Random()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_a2ff3307e7e428a007e1b7caf8bf9e560} 
+template$<$typename TPrecision$>$ \\
+static \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::\+Random (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&}]{arg\+\_\+cu\+\_\+handles}{, }\item[{int}]{arg\+\_\+m}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+\Hypertarget{classcascade_1_1_vector_a5ec4defb2a2919257d8a2a1e96a76e43}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!Random@{Random}}
+\index{Random@{Random}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{Random()}{Random()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_a5ec4defb2a2919257d8a2a1e96a76e43} 
+template$<$typename TPrecision$>$ \\
+static \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::\+Random (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&}]{arg\+\_\+cu\+\_\+handles}{, }\item[{int}]{arg\+\_\+m}{, }\item[{int}]{arg\+\_\+n}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+\Hypertarget{classcascade_1_1_vector_a66cff08224d9808fc55bc5b53bdd4fdb}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!rows@{rows}}
+\index{rows@{rows}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{rows()}{rows()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_a66cff08224d9808fc55bc5b53bdd4fdb} 
+template$<$typename TPrecision$>$ \\
+int \mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::rows (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_vector_ae48dc09de9a2c72345fd912bd56db865}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!set\_elem@{set\_elem}}
+\index{set\_elem@{set\_elem}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{set\_elem()}{set\_elem()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_ae48dc09de9a2c72345fd912bd56db865} 
+template$<$typename TPrecision$>$ \\
+void \mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::set\+\_\+elem (\begin{DoxyParamCaption}\item[{int}]{row}{, }\item[{const \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \&}]{val}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_vector_a19e561a4cf16c573edada12cfecaf66d}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!set\_elem@{set\_elem}}
+\index{set\_elem@{set\_elem}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{set\_elem()}{set\_elem()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_a19e561a4cf16c573edada12cfecaf66d} 
+template$<$typename TPrecision$>$ \\
+void \mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::set\+\_\+elem (\begin{DoxyParamCaption}\item[{int}]{row}{, }\item[{int}]{col}{, }\item[{const \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \&}]{val}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_vector_a689ce0992c50c2d73f975ae9643eeb63}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!set\_slice@{set\_slice}}
+\index{set\_slice@{set\_slice}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{set\_slice()}{set\_slice()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_a689ce0992c50c2d73f975ae9643eeb63} 
+template$<$typename TPrecision$>$ \\
+void \mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::set\+\_\+slice (\begin{DoxyParamCaption}\item[{int}]{start}{, }\item[{int}]{m\+\_\+elem}{, }\item[{const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&}]{other}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_vector_a7da078322ccb03812f330b72cf4ad907}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!Zero@{Zero}}
+\index{Zero@{Zero}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{Zero()}{Zero()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_a7da078322ccb03812f330b72cf4ad907} 
+template$<$typename TPrecision$>$ \\
+static \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::\+Zero (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&}]{arg\+\_\+cu\+\_\+handles}{, }\item[{int}]{arg\+\_\+m}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+\Hypertarget{classcascade_1_1_vector_a0053e39502e0b1c812c61f77c5b91bce}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!Zero@{Zero}}
+\index{Zero@{Zero}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{Zero()}{Zero()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_a0053e39502e0b1c812c61f77c5b91bce} 
+template$<$typename TPrecision$>$ \\
+static \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_vector}{cascade\+::\+Vector}}$<$ TPrecision $>$\+::\+Zero (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&}]{arg\+\_\+cu\+\_\+handles}{, }\item[{int}]{arg\+\_\+m}{, }\item[{int}]{arg\+\_\+n}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+\doxysubsection{Friends And Related Symbol Documentation}
+\Hypertarget{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087}\index{cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}!Vector@{Vector}}
+\index{Vector@{Vector}!cascade::Vector$<$ TPrecision $>$@{cascade::Vector$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{Vector}{Vector}}
+{\footnotesize\ttfamily \label{classcascade_1_1_vector_a879f896329da9659f538e8dc9d386087} 
+template$<$typename TPrecision$>$ \\
+template$<$typename$>$ \\
+friend class \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/dosre/dev/precision-\/cascade/include/types/\+Scalar/\mbox{\hyperlink{_scalar_8h}{Scalar.\+h}}\item 
+C\+:/\+Users/dosre/dev/precision-\/cascade/include/types/\+Vector/\mbox{\hyperlink{_vector_8h}{Vector.\+h}}\end{DoxyCompactItemize}

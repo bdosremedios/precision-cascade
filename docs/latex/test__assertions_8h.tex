@@ -1,0 +1,360 @@
+\doxysection{C\+:/\+Users/dosre/dev/precision-\/cascade/test/include/test\+\_\+assertions.h File Reference}
+\hypertarget{test__assertions_8h}{}\label{test__assertions_8h}\index{C:/Users/dosre/dev/precision-\/cascade/test/include/test\_assertions.h@{C:/Users/dosre/dev/precision-\/cascade/test/include/test\_assertions.h}}
+{\ttfamily \#include "{}tools/cuda\+\_\+check.\+h"{}}\newline
+{\ttfamily \#include "{}tools/abs.\+h"{}}\newline
+{\ttfamily \#include "{}types/types.\+h"{}}\newline
+{\ttfamily \#include "{}gtest/gtest.\+h"{}}\newline
+{\ttfamily \#include $<$functional$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+Include dependency graph for test\+\_\+assertions.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{test__assertions_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{test__assertions_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{test__assertions_8h_aca4e6442fcc7a8739b2490a8325e5281}{CHECK\+\_\+\+FUNC\+\_\+\+HAS\+\_\+\+RUNTIME\+\_\+\+ERROR}}(to\+\_\+print,  func)
+\item 
+\#define \mbox{\hyperlink{test__assertions_8h_a86b80022d71fafd5b8178deb451dddba}{ASSERT\+\_\+\+VECTOR\+\_\+\+NEAR}}(test,  target,  tol)
+\item 
+\#define \mbox{\hyperlink{test__assertions_8h_ae02fca346232f7b98962436e499205d3}{ASSERT\+\_\+\+VECTOR\+\_\+\+ZERO}}(test,  tol)
+\item 
+\#define \mbox{\hyperlink{test__assertions_8h_a5b6f90f04c9476df88adc673dc7c24f4}{ASSERT\+\_\+\+VECTOR\+\_\+\+EQ}}(test,  target)
+\item 
+\#define \mbox{\hyperlink{test__assertions_8h_a79813397f63227b21d4a607261f41d17}{ASSERT\+\_\+\+MATRIX\+\_\+\+NEAR}}(test,  target,  tol)
+\item 
+\#define \mbox{\hyperlink{test__assertions_8h_aac13d9953bf096da1a1c92eedfbbd861}{ASSERT\+\_\+\+MATRIX\+\_\+\+LT}}(test,  target)
+\item 
+\#define \mbox{\hyperlink{test__assertions_8h_a4ad9fd242c872bac88873ff2f3691a05}{ASSERT\+\_\+\+MATRIX\+\_\+\+GT}}(test,  target)
+\item 
+\#define \mbox{\hyperlink{test__assertions_8h_a5df0c6ee52dea97674c4880af6c37bb9}{ASSERT\+\_\+\+MATRIX\+\_\+\+EQ}}(test,  target)
+\item 
+\#define \mbox{\hyperlink{test__assertions_8h_a794d60b5ae1f452c1b6ae1f8c29084ff}{ASSERT\+\_\+\+MATRIX\+\_\+\+SAMESPARSITY}}(test,  target,  zero\+\_\+tol)
+\item 
+\#define \mbox{\hyperlink{test__assertions_8h_aa2a8276200881ed822e8d351e406abfc}{ASSERT\+\_\+\+MATRIX\+\_\+\+ZERO}}(test,  tol)
+\item 
+\#define \mbox{\hyperlink{test__assertions_8h_a8bece0c641063878427ca3bfca67c708}{ASSERT\+\_\+\+MATRIX\+\_\+\+IDENTITY}}(test,  tol)
+\item 
+\#define \mbox{\hyperlink{test__assertions_8h_a75f7d31e4a2ed6985065875fda255055}{ASSERT\+\_\+\+MATRIX\+\_\+\+LOWTRI}}(test,  tol)
+\item 
+\#define \mbox{\hyperlink{test__assertions_8h_a6f9f7f93568cf2f5aef32c9cabb5999a}{ASSERT\+\_\+\+MATRIX\+\_\+\+UPPTRI}}(test,  tol)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{test__assertions_8h_ac0a687969f00e4cfdd8474f4ba5ba0a4}{\+\_\+\+CHECK\+\_\+\+FUNC\+\_\+\+HAS\+\_\+\+RUNTIME\+\_\+\+ERROR}} (bool \texorpdfstring{$\ast$}{*}to\+\_\+print, \mbox{\hyperlink{create__solve__matrices_8m_a0f069227489ad5ff8305f96f8499e6b2}{std\+::function}}$<$ void()$>$ func, const char \texorpdfstring{$\ast$}{*}file, int line, std\+::string message)
+\item 
+{\footnotesize template$<$typename TPrecision$>$ }\\void \mbox{\hyperlink{test__assertions_8h_a86c65c7607518435be9552a7821364ca}{\+\_\+\+ASSERT\+\_\+\+VECTOR\+\_\+\+NEAR}} (const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&test, const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&target, TPrecision tol, const char \texorpdfstring{$\ast$}{*}file, int line, std\+::string message)
+\item 
+{\footnotesize template$<$typename TPrecision$>$ }\\void \mbox{\hyperlink{test__assertions_8h_ab394388c16e70ae37c82ad8937eb80ce}{\+\_\+\+ASSERT\+\_\+\+VECTOR\+\_\+\+ZERO}} (const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&test, TPrecision tol, const char \texorpdfstring{$\ast$}{*}file, int line, std\+::string message)
+\item 
+{\footnotesize template$<$typename TPrecision$>$ }\\void \mbox{\hyperlink{test__assertions_8h_aa5b40bddf3eb7cc8b835463eb86df0bf}{\+\_\+\+ASSERT\+\_\+\+VECTOR\+\_\+\+EQ}} (const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&test, const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&target, const char \texorpdfstring{$\ast$}{*}file, int line, std\+::string message)
+\item 
+{\footnotesize template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ }\\void \mbox{\hyperlink{test__assertions_8h_a9f37d8e2f6aba2d9ef3a5db96b6ee03b}{\+\_\+\+ASSERT\+\_\+\+MATRIX\+\_\+\+NEAR}} (const TMatrix$<$ TPrecision $>$ \&test, const TMatrix$<$ TPrecision $>$ \&target, TPrecision tol, const char \texorpdfstring{$\ast$}{*}file, int line, std\+::string message)
+\item 
+{\footnotesize template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ }\\void \mbox{\hyperlink{test__assertions_8h_a1147bca9fc4c9798ceb9073e24cf7914}{\+\_\+\+ASSERT\+\_\+\+MATRIX\+\_\+\+LT}} (const TMatrix$<$ TPrecision $>$ \&test, const TMatrix$<$ TPrecision $>$ \&target, const char \texorpdfstring{$\ast$}{*}file, int line, std\+::string message)
+\item 
+{\footnotesize template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ }\\void \mbox{\hyperlink{test__assertions_8h_ae8b4e2f34ed53ca0a13bbf6f1a3f93b1}{\+\_\+\+ASSERT\+\_\+\+MATRIX\+\_\+\+GT}} (const TMatrix$<$ TPrecision $>$ \&test, const TMatrix$<$ TPrecision $>$ \&target, const char \texorpdfstring{$\ast$}{*}file, int line, std\+::string message)
+\item 
+{\footnotesize template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ }\\void \mbox{\hyperlink{test__assertions_8h_ab60247d4582e0357fe010f146c17e374}{\+\_\+\+ASSERT\+\_\+\+MATRIX\+\_\+\+EQ}} (const TMatrix$<$ TPrecision $>$ \&test, const TMatrix$<$ TPrecision $>$ \&target, const char \texorpdfstring{$\ast$}{*}file, int line, std\+::string message)
+\item 
+{\footnotesize template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ }\\void \mbox{\hyperlink{test__assertions_8h_aaa9e5bb91844642dd18cea1b87428f72}{\+\_\+\+ASSERT\+\_\+\+MATRIX\+\_\+\+SAMESPARSITY}} (const TMatrix$<$ TPrecision $>$ \&test, const TMatrix$<$ TPrecision $>$ \&target, TPrecision zero\+\_\+tol, const char \texorpdfstring{$\ast$}{*}file, int line, std\+::string message)
+\item 
+{\footnotesize template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ }\\void \mbox{\hyperlink{test__assertions_8h_a87ecf761ed08869a2e168c7889893a6d}{\+\_\+\+ASSERT\+\_\+\+MATRIX\+\_\+\+ZERO}} (const TMatrix$<$ TPrecision $>$ \&test, TPrecision tol, const char \texorpdfstring{$\ast$}{*}file, int line, std\+::string message)
+\item 
+{\footnotesize template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ }\\void \mbox{\hyperlink{test__assertions_8h_abc54ccf8e5de846a219b7767d2ee9275}{\+\_\+\+ASSERT\+\_\+\+MATRIX\+\_\+\+IDENTITY}} (const TMatrix$<$ TPrecision $>$ \&test, TPrecision tol, const char \texorpdfstring{$\ast$}{*}file, int line, std\+::string message)
+\item 
+{\footnotesize template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ }\\void \mbox{\hyperlink{test__assertions_8h_ac5aac93ce55ebb4cc32776eca79de5db}{\+\_\+\+ASSERT\+\_\+\+MATRIX\+\_\+\+LOWTRI}} (const TMatrix$<$ TPrecision $>$ \&test, TPrecision tol, const char \texorpdfstring{$\ast$}{*}file, int line, std\+::string message)
+\item 
+{\footnotesize template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ }\\void \mbox{\hyperlink{test__assertions_8h_a6d23bc36aaff6f86bb24061df2119d03}{\+\_\+\+ASSERT\+\_\+\+MATRIX\+\_\+\+UPPTRI}} (const TMatrix$<$ TPrecision $>$ \&test, TPrecision tol, const char \texorpdfstring{$\ast$}{*}file, int line, std\+::string message)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{test__assertions_8h_a5df0c6ee52dea97674c4880af6c37bb9}\index{test\_assertions.h@{test\_assertions.h}!ASSERT\_MATRIX\_EQ@{ASSERT\_MATRIX\_EQ}}
+\index{ASSERT\_MATRIX\_EQ@{ASSERT\_MATRIX\_EQ}!test\_assertions.h@{test\_assertions.h}}
+\doxysubsubsection{\texorpdfstring{ASSERT\_MATRIX\_EQ}{ASSERT\_MATRIX\_EQ}}
+{\footnotesize\ttfamily \label{test__assertions_8h_a5df0c6ee52dea97674c4880af6c37bb9} 
+\#define ASSERT\+\_\+\+MATRIX\+\_\+\+EQ(\begin{DoxyParamCaption}\item[{}]{test}{, }\item[{}]{target}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{test__assertions_8h_ab60247d4582e0357fe010f146c17e374}{\_ASSERT\_MATRIX\_EQ}}(\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ test,\ target,\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \_\_FILE\_\_,\ \_\_LINE\_\_,\ \textcolor{stringliteral}{"{}AssertionError\ for\ ASSERT\_MATRIX\_EQ"{}}\ \(\backslash\)}
+\DoxyCodeLine{)}
+
+\end{DoxyCode}
+\Hypertarget{test__assertions_8h_a4ad9fd242c872bac88873ff2f3691a05}\index{test\_assertions.h@{test\_assertions.h}!ASSERT\_MATRIX\_GT@{ASSERT\_MATRIX\_GT}}
+\index{ASSERT\_MATRIX\_GT@{ASSERT\_MATRIX\_GT}!test\_assertions.h@{test\_assertions.h}}
+\doxysubsubsection{\texorpdfstring{ASSERT\_MATRIX\_GT}{ASSERT\_MATRIX\_GT}}
+{\footnotesize\ttfamily \label{test__assertions_8h_a4ad9fd242c872bac88873ff2f3691a05} 
+\#define ASSERT\+\_\+\+MATRIX\+\_\+\+GT(\begin{DoxyParamCaption}\item[{}]{test}{, }\item[{}]{target}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{test__assertions_8h_ae8b4e2f34ed53ca0a13bbf6f1a3f93b1}{\_ASSERT\_MATRIX\_GT}}(\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ test,\ target,\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \_\_FILE\_\_,\ \_\_LINE\_\_,\ \textcolor{stringliteral}{"{}AssertionError\ for\ ASSERT\_MATRIX\_GT"{}}\ \(\backslash\)}
+\DoxyCodeLine{)}
+
+\end{DoxyCode}
+\Hypertarget{test__assertions_8h_a8bece0c641063878427ca3bfca67c708}\index{test\_assertions.h@{test\_assertions.h}!ASSERT\_MATRIX\_IDENTITY@{ASSERT\_MATRIX\_IDENTITY}}
+\index{ASSERT\_MATRIX\_IDENTITY@{ASSERT\_MATRIX\_IDENTITY}!test\_assertions.h@{test\_assertions.h}}
+\doxysubsubsection{\texorpdfstring{ASSERT\_MATRIX\_IDENTITY}{ASSERT\_MATRIX\_IDENTITY}}
+{\footnotesize\ttfamily \label{test__assertions_8h_a8bece0c641063878427ca3bfca67c708} 
+\#define ASSERT\+\_\+\+MATRIX\+\_\+\+IDENTITY(\begin{DoxyParamCaption}\item[{}]{test}{, }\item[{}]{tol}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{test__assertions_8h_abc54ccf8e5de846a219b7767d2ee9275}{\_ASSERT\_MATRIX\_IDENTITY}}(\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ test,\ tol,\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \_\_FILE\_\_,\ \_\_LINE\_\_,\ \textcolor{stringliteral}{"{}AssertionError\ for\ ASSERT\_MATRIX\_IDENTITY"{}}\ \(\backslash\)}
+\DoxyCodeLine{)}
+
+\end{DoxyCode}
+\Hypertarget{test__assertions_8h_a75f7d31e4a2ed6985065875fda255055}\index{test\_assertions.h@{test\_assertions.h}!ASSERT\_MATRIX\_LOWTRI@{ASSERT\_MATRIX\_LOWTRI}}
+\index{ASSERT\_MATRIX\_LOWTRI@{ASSERT\_MATRIX\_LOWTRI}!test\_assertions.h@{test\_assertions.h}}
+\doxysubsubsection{\texorpdfstring{ASSERT\_MATRIX\_LOWTRI}{ASSERT\_MATRIX\_LOWTRI}}
+{\footnotesize\ttfamily \label{test__assertions_8h_a75f7d31e4a2ed6985065875fda255055} 
+\#define ASSERT\+\_\+\+MATRIX\+\_\+\+LOWTRI(\begin{DoxyParamCaption}\item[{}]{test}{, }\item[{}]{tol}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{test__assertions_8h_ac5aac93ce55ebb4cc32776eca79de5db}{\_ASSERT\_MATRIX\_LOWTRI}}(\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ test,\ tol,\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \_\_FILE\_\_,\ \_\_LINE\_\_,\ \textcolor{stringliteral}{"{}AssertionError\ for\ ASSERT\_MATRIX\_LOWTRI"{}}\ \(\backslash\)}
+\DoxyCodeLine{)}
+
+\end{DoxyCode}
+\Hypertarget{test__assertions_8h_aac13d9953bf096da1a1c92eedfbbd861}\index{test\_assertions.h@{test\_assertions.h}!ASSERT\_MATRIX\_LT@{ASSERT\_MATRIX\_LT}}
+\index{ASSERT\_MATRIX\_LT@{ASSERT\_MATRIX\_LT}!test\_assertions.h@{test\_assertions.h}}
+\doxysubsubsection{\texorpdfstring{ASSERT\_MATRIX\_LT}{ASSERT\_MATRIX\_LT}}
+{\footnotesize\ttfamily \label{test__assertions_8h_aac13d9953bf096da1a1c92eedfbbd861} 
+\#define ASSERT\+\_\+\+MATRIX\+\_\+\+LT(\begin{DoxyParamCaption}\item[{}]{test}{, }\item[{}]{target}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{test__assertions_8h_a1147bca9fc4c9798ceb9073e24cf7914}{\_ASSERT\_MATRIX\_LT}}(\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ test,\ target,\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \_\_FILE\_\_,\ \_\_LINE\_\_,\ \textcolor{stringliteral}{"{}AssertionError\ for\ ASSERT\_MATRIX\_LT"{}}\ \(\backslash\)}
+\DoxyCodeLine{)}
+
+\end{DoxyCode}
+\Hypertarget{test__assertions_8h_a79813397f63227b21d4a607261f41d17}\index{test\_assertions.h@{test\_assertions.h}!ASSERT\_MATRIX\_NEAR@{ASSERT\_MATRIX\_NEAR}}
+\index{ASSERT\_MATRIX\_NEAR@{ASSERT\_MATRIX\_NEAR}!test\_assertions.h@{test\_assertions.h}}
+\doxysubsubsection{\texorpdfstring{ASSERT\_MATRIX\_NEAR}{ASSERT\_MATRIX\_NEAR}}
+{\footnotesize\ttfamily \label{test__assertions_8h_a79813397f63227b21d4a607261f41d17} 
+\#define ASSERT\+\_\+\+MATRIX\+\_\+\+NEAR(\begin{DoxyParamCaption}\item[{}]{test}{, }\item[{}]{target}{, }\item[{}]{tol}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{test__assertions_8h_a9f37d8e2f6aba2d9ef3a5db96b6ee03b}{\_ASSERT\_MATRIX\_NEAR}}(\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ test,\ target,\ tol,\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \_\_FILE\_\_,\ \_\_LINE\_\_,\ \textcolor{stringliteral}{"{}AssertionError\ for\ ASSERT\_MATRIX\_NEAR"{}}\ \(\backslash\)}
+\DoxyCodeLine{)}
+
+\end{DoxyCode}
+\Hypertarget{test__assertions_8h_a794d60b5ae1f452c1b6ae1f8c29084ff}\index{test\_assertions.h@{test\_assertions.h}!ASSERT\_MATRIX\_SAMESPARSITY@{ASSERT\_MATRIX\_SAMESPARSITY}}
+\index{ASSERT\_MATRIX\_SAMESPARSITY@{ASSERT\_MATRIX\_SAMESPARSITY}!test\_assertions.h@{test\_assertions.h}}
+\doxysubsubsection{\texorpdfstring{ASSERT\_MATRIX\_SAMESPARSITY}{ASSERT\_MATRIX\_SAMESPARSITY}}
+{\footnotesize\ttfamily \label{test__assertions_8h_a794d60b5ae1f452c1b6ae1f8c29084ff} 
+\#define ASSERT\+\_\+\+MATRIX\+\_\+\+SAMESPARSITY(\begin{DoxyParamCaption}\item[{}]{test}{, }\item[{}]{target}{, }\item[{}]{zero\+\_\+tol}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{test__assertions_8h_aaa9e5bb91844642dd18cea1b87428f72}{\_ASSERT\_MATRIX\_SAMESPARSITY}}(\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ test,\ target,\ zero\_tol,\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \_\_FILE\_\_,\ \_\_LINE\_\_,\ \textcolor{stringliteral}{"{}AssertionError\ for\ ASSERT\_MATRIX\_SAMESPARSITY"{}}\ \(\backslash\)}
+\DoxyCodeLine{)}
+
+\end{DoxyCode}
+\Hypertarget{test__assertions_8h_a6f9f7f93568cf2f5aef32c9cabb5999a}\index{test\_assertions.h@{test\_assertions.h}!ASSERT\_MATRIX\_UPPTRI@{ASSERT\_MATRIX\_UPPTRI}}
+\index{ASSERT\_MATRIX\_UPPTRI@{ASSERT\_MATRIX\_UPPTRI}!test\_assertions.h@{test\_assertions.h}}
+\doxysubsubsection{\texorpdfstring{ASSERT\_MATRIX\_UPPTRI}{ASSERT\_MATRIX\_UPPTRI}}
+{\footnotesize\ttfamily \label{test__assertions_8h_a6f9f7f93568cf2f5aef32c9cabb5999a} 
+\#define ASSERT\+\_\+\+MATRIX\+\_\+\+UPPTRI(\begin{DoxyParamCaption}\item[{}]{test}{, }\item[{}]{tol}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{test__assertions_8h_a6d23bc36aaff6f86bb24061df2119d03}{\_ASSERT\_MATRIX\_UPPTRI}}(\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ test,\ tol,\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \_\_FILE\_\_,\ \_\_LINE\_\_,\ \textcolor{stringliteral}{"{}AssertionError\ for\ ASSERT\_MATRIX\_UPPTRI"{}}\ \(\backslash\)}
+\DoxyCodeLine{)}
+
+\end{DoxyCode}
+\Hypertarget{test__assertions_8h_aa2a8276200881ed822e8d351e406abfc}\index{test\_assertions.h@{test\_assertions.h}!ASSERT\_MATRIX\_ZERO@{ASSERT\_MATRIX\_ZERO}}
+\index{ASSERT\_MATRIX\_ZERO@{ASSERT\_MATRIX\_ZERO}!test\_assertions.h@{test\_assertions.h}}
+\doxysubsubsection{\texorpdfstring{ASSERT\_MATRIX\_ZERO}{ASSERT\_MATRIX\_ZERO}}
+{\footnotesize\ttfamily \label{test__assertions_8h_aa2a8276200881ed822e8d351e406abfc} 
+\#define ASSERT\+\_\+\+MATRIX\+\_\+\+ZERO(\begin{DoxyParamCaption}\item[{}]{test}{, }\item[{}]{tol}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{test__assertions_8h_a87ecf761ed08869a2e168c7889893a6d}{\_ASSERT\_MATRIX\_ZERO}}(\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ test,\ tol,\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \_\_FILE\_\_,\ \_\_LINE\_\_,\ \textcolor{stringliteral}{"{}AssertionError\ for\ ASSERT\_MATRIX\_ZERO"{}}\ \(\backslash\)}
+\DoxyCodeLine{)}
+
+\end{DoxyCode}
+\Hypertarget{test__assertions_8h_a5b6f90f04c9476df88adc673dc7c24f4}\index{test\_assertions.h@{test\_assertions.h}!ASSERT\_VECTOR\_EQ@{ASSERT\_VECTOR\_EQ}}
+\index{ASSERT\_VECTOR\_EQ@{ASSERT\_VECTOR\_EQ}!test\_assertions.h@{test\_assertions.h}}
+\doxysubsubsection{\texorpdfstring{ASSERT\_VECTOR\_EQ}{ASSERT\_VECTOR\_EQ}}
+{\footnotesize\ttfamily \label{test__assertions_8h_a5b6f90f04c9476df88adc673dc7c24f4} 
+\#define ASSERT\+\_\+\+VECTOR\+\_\+\+EQ(\begin{DoxyParamCaption}\item[{}]{test}{, }\item[{}]{target}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{test__assertions_8h_aa5b40bddf3eb7cc8b835463eb86df0bf}{\_ASSERT\_VECTOR\_EQ}}(\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ test,\ target,\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \_\_FILE\_\_,\ \_\_LINE\_\_,\ \textcolor{stringliteral}{"{}AssertionError\ for\ ASSERT\_VECTOR\_EQ"{}}\ \(\backslash\)}
+\DoxyCodeLine{)}
+
+\end{DoxyCode}
+\Hypertarget{test__assertions_8h_a86b80022d71fafd5b8178deb451dddba}\index{test\_assertions.h@{test\_assertions.h}!ASSERT\_VECTOR\_NEAR@{ASSERT\_VECTOR\_NEAR}}
+\index{ASSERT\_VECTOR\_NEAR@{ASSERT\_VECTOR\_NEAR}!test\_assertions.h@{test\_assertions.h}}
+\doxysubsubsection{\texorpdfstring{ASSERT\_VECTOR\_NEAR}{ASSERT\_VECTOR\_NEAR}}
+{\footnotesize\ttfamily \label{test__assertions_8h_a86b80022d71fafd5b8178deb451dddba} 
+\#define ASSERT\+\_\+\+VECTOR\+\_\+\+NEAR(\begin{DoxyParamCaption}\item[{}]{test}{, }\item[{}]{target}{, }\item[{}]{tol}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{test__assertions_8h_a86c65c7607518435be9552a7821364ca}{\_ASSERT\_VECTOR\_NEAR}}(\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ test,\ target,\ tol,\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \_\_FILE\_\_,\ \_\_LINE\_\_,\ \textcolor{stringliteral}{"{}AssertionError\ for\ ASSERT\_VECTOR\_NEAR"{}}\ \(\backslash\)}
+\DoxyCodeLine{)}
+
+\end{DoxyCode}
+\Hypertarget{test__assertions_8h_ae02fca346232f7b98962436e499205d3}\index{test\_assertions.h@{test\_assertions.h}!ASSERT\_VECTOR\_ZERO@{ASSERT\_VECTOR\_ZERO}}
+\index{ASSERT\_VECTOR\_ZERO@{ASSERT\_VECTOR\_ZERO}!test\_assertions.h@{test\_assertions.h}}
+\doxysubsubsection{\texorpdfstring{ASSERT\_VECTOR\_ZERO}{ASSERT\_VECTOR\_ZERO}}
+{\footnotesize\ttfamily \label{test__assertions_8h_ae02fca346232f7b98962436e499205d3} 
+\#define ASSERT\+\_\+\+VECTOR\+\_\+\+ZERO(\begin{DoxyParamCaption}\item[{}]{test}{, }\item[{}]{tol}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{test__assertions_8h_ab394388c16e70ae37c82ad8937eb80ce}{\_ASSERT\_VECTOR\_ZERO}}(\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ test,\ tol,\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \_\_FILE\_\_,\ \_\_LINE\_\_,\ \textcolor{stringliteral}{"{}AssertionError\ for\ \_ASSERT\_VECTOR\_ZERO"{}}\ \(\backslash\)}
+\DoxyCodeLine{)}
+
+\end{DoxyCode}
+\Hypertarget{test__assertions_8h_aca4e6442fcc7a8739b2490a8325e5281}\index{test\_assertions.h@{test\_assertions.h}!CHECK\_FUNC\_HAS\_RUNTIME\_ERROR@{CHECK\_FUNC\_HAS\_RUNTIME\_ERROR}}
+\index{CHECK\_FUNC\_HAS\_RUNTIME\_ERROR@{CHECK\_FUNC\_HAS\_RUNTIME\_ERROR}!test\_assertions.h@{test\_assertions.h}}
+\doxysubsubsection{\texorpdfstring{CHECK\_FUNC\_HAS\_RUNTIME\_ERROR}{CHECK\_FUNC\_HAS\_RUNTIME\_ERROR}}
+{\footnotesize\ttfamily \label{test__assertions_8h_aca4e6442fcc7a8739b2490a8325e5281} 
+\#define CHECK\+\_\+\+FUNC\+\_\+\+HAS\+\_\+\+RUNTIME\+\_\+\+ERROR(\begin{DoxyParamCaption}\item[{}]{to\+\_\+print}{, }\item[{}]{func}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{test__assertions_8h_ac0a687969f00e4cfdd8474f4ba5ba0a4}{\_CHECK\_FUNC\_HAS\_RUNTIME\_ERROR}}(\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ to\_print,\ func,\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \_\_FILE\_\_,\ \_\_LINE\_\_,\ \textcolor{stringliteral}{"{}AssertionError\ for\ CHECK\_FUNC\_HAS\_RUNTIME\_ERROR"{}}\ \(\backslash\)}
+\DoxyCodeLine{)}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{test__assertions_8h_ab60247d4582e0357fe010f146c17e374}\index{test\_assertions.h@{test\_assertions.h}!\_ASSERT\_MATRIX\_EQ@{\_ASSERT\_MATRIX\_EQ}}
+\index{\_ASSERT\_MATRIX\_EQ@{\_ASSERT\_MATRIX\_EQ}!test\_assertions.h@{test\_assertions.h}}
+\doxysubsubsection{\texorpdfstring{\_ASSERT\_MATRIX\_EQ()}{\_ASSERT\_MATRIX\_EQ()}}
+{\footnotesize\ttfamily \label{test__assertions_8h_ab60247d4582e0357fe010f146c17e374} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+void \+\_\+\+ASSERT\+\_\+\+MATRIX\+\_\+\+EQ (\begin{DoxyParamCaption}\item[{const TMatrix$<$ TPrecision $>$ \&}]{test}{, }\item[{const TMatrix$<$ TPrecision $>$ \&}]{target}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{file}{, }\item[{int}]{line}{, }\item[{std\+::string}]{message}{}\end{DoxyParamCaption})}
+
+\Hypertarget{test__assertions_8h_ae8b4e2f34ed53ca0a13bbf6f1a3f93b1}\index{test\_assertions.h@{test\_assertions.h}!\_ASSERT\_MATRIX\_GT@{\_ASSERT\_MATRIX\_GT}}
+\index{\_ASSERT\_MATRIX\_GT@{\_ASSERT\_MATRIX\_GT}!test\_assertions.h@{test\_assertions.h}}
+\doxysubsubsection{\texorpdfstring{\_ASSERT\_MATRIX\_GT()}{\_ASSERT\_MATRIX\_GT()}}
+{\footnotesize\ttfamily \label{test__assertions_8h_ae8b4e2f34ed53ca0a13bbf6f1a3f93b1} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+void \+\_\+\+ASSERT\+\_\+\+MATRIX\+\_\+\+GT (\begin{DoxyParamCaption}\item[{const TMatrix$<$ TPrecision $>$ \&}]{test}{, }\item[{const TMatrix$<$ TPrecision $>$ \&}]{target}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{file}{, }\item[{int}]{line}{, }\item[{std\+::string}]{message}{}\end{DoxyParamCaption})}
+
+\Hypertarget{test__assertions_8h_abc54ccf8e5de846a219b7767d2ee9275}\index{test\_assertions.h@{test\_assertions.h}!\_ASSERT\_MATRIX\_IDENTITY@{\_ASSERT\_MATRIX\_IDENTITY}}
+\index{\_ASSERT\_MATRIX\_IDENTITY@{\_ASSERT\_MATRIX\_IDENTITY}!test\_assertions.h@{test\_assertions.h}}
+\doxysubsubsection{\texorpdfstring{\_ASSERT\_MATRIX\_IDENTITY()}{\_ASSERT\_MATRIX\_IDENTITY()}}
+{\footnotesize\ttfamily \label{test__assertions_8h_abc54ccf8e5de846a219b7767d2ee9275} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+void \+\_\+\+ASSERT\+\_\+\+MATRIX\+\_\+\+IDENTITY (\begin{DoxyParamCaption}\item[{const TMatrix$<$ TPrecision $>$ \&}]{test}{, }\item[{TPrecision}]{tol}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{file}{, }\item[{int}]{line}{, }\item[{std\+::string}]{message}{}\end{DoxyParamCaption})}
+
+\Hypertarget{test__assertions_8h_ac5aac93ce55ebb4cc32776eca79de5db}\index{test\_assertions.h@{test\_assertions.h}!\_ASSERT\_MATRIX\_LOWTRI@{\_ASSERT\_MATRIX\_LOWTRI}}
+\index{\_ASSERT\_MATRIX\_LOWTRI@{\_ASSERT\_MATRIX\_LOWTRI}!test\_assertions.h@{test\_assertions.h}}
+\doxysubsubsection{\texorpdfstring{\_ASSERT\_MATRIX\_LOWTRI()}{\_ASSERT\_MATRIX\_LOWTRI()}}
+{\footnotesize\ttfamily \label{test__assertions_8h_ac5aac93ce55ebb4cc32776eca79de5db} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+void \+\_\+\+ASSERT\+\_\+\+MATRIX\+\_\+\+LOWTRI (\begin{DoxyParamCaption}\item[{const TMatrix$<$ TPrecision $>$ \&}]{test}{, }\item[{TPrecision}]{tol}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{file}{, }\item[{int}]{line}{, }\item[{std\+::string}]{message}{}\end{DoxyParamCaption})}
+
+\Hypertarget{test__assertions_8h_a1147bca9fc4c9798ceb9073e24cf7914}\index{test\_assertions.h@{test\_assertions.h}!\_ASSERT\_MATRIX\_LT@{\_ASSERT\_MATRIX\_LT}}
+\index{\_ASSERT\_MATRIX\_LT@{\_ASSERT\_MATRIX\_LT}!test\_assertions.h@{test\_assertions.h}}
+\doxysubsubsection{\texorpdfstring{\_ASSERT\_MATRIX\_LT()}{\_ASSERT\_MATRIX\_LT()}}
+{\footnotesize\ttfamily \label{test__assertions_8h_a1147bca9fc4c9798ceb9073e24cf7914} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+void \+\_\+\+ASSERT\+\_\+\+MATRIX\+\_\+\+LT (\begin{DoxyParamCaption}\item[{const TMatrix$<$ TPrecision $>$ \&}]{test}{, }\item[{const TMatrix$<$ TPrecision $>$ \&}]{target}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{file}{, }\item[{int}]{line}{, }\item[{std\+::string}]{message}{}\end{DoxyParamCaption})}
+
+\Hypertarget{test__assertions_8h_a9f37d8e2f6aba2d9ef3a5db96b6ee03b}\index{test\_assertions.h@{test\_assertions.h}!\_ASSERT\_MATRIX\_NEAR@{\_ASSERT\_MATRIX\_NEAR}}
+\index{\_ASSERT\_MATRIX\_NEAR@{\_ASSERT\_MATRIX\_NEAR}!test\_assertions.h@{test\_assertions.h}}
+\doxysubsubsection{\texorpdfstring{\_ASSERT\_MATRIX\_NEAR()}{\_ASSERT\_MATRIX\_NEAR()}}
+{\footnotesize\ttfamily \label{test__assertions_8h_a9f37d8e2f6aba2d9ef3a5db96b6ee03b} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+void \+\_\+\+ASSERT\+\_\+\+MATRIX\+\_\+\+NEAR (\begin{DoxyParamCaption}\item[{const TMatrix$<$ TPrecision $>$ \&}]{test}{, }\item[{const TMatrix$<$ TPrecision $>$ \&}]{target}{, }\item[{TPrecision}]{tol}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{file}{, }\item[{int}]{line}{, }\item[{std\+::string}]{message}{}\end{DoxyParamCaption})}
+
+\Hypertarget{test__assertions_8h_aaa9e5bb91844642dd18cea1b87428f72}\index{test\_assertions.h@{test\_assertions.h}!\_ASSERT\_MATRIX\_SAMESPARSITY@{\_ASSERT\_MATRIX\_SAMESPARSITY}}
+\index{\_ASSERT\_MATRIX\_SAMESPARSITY@{\_ASSERT\_MATRIX\_SAMESPARSITY}!test\_assertions.h@{test\_assertions.h}}
+\doxysubsubsection{\texorpdfstring{\_ASSERT\_MATRIX\_SAMESPARSITY()}{\_ASSERT\_MATRIX\_SAMESPARSITY()}}
+{\footnotesize\ttfamily \label{test__assertions_8h_aaa9e5bb91844642dd18cea1b87428f72} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+void \+\_\+\+ASSERT\+\_\+\+MATRIX\+\_\+\+SAMESPARSITY (\begin{DoxyParamCaption}\item[{const TMatrix$<$ TPrecision $>$ \&}]{test}{, }\item[{const TMatrix$<$ TPrecision $>$ \&}]{target}{, }\item[{TPrecision}]{zero\+\_\+tol}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{file}{, }\item[{int}]{line}{, }\item[{std\+::string}]{message}{}\end{DoxyParamCaption})}
+
+\Hypertarget{test__assertions_8h_a6d23bc36aaff6f86bb24061df2119d03}\index{test\_assertions.h@{test\_assertions.h}!\_ASSERT\_MATRIX\_UPPTRI@{\_ASSERT\_MATRIX\_UPPTRI}}
+\index{\_ASSERT\_MATRIX\_UPPTRI@{\_ASSERT\_MATRIX\_UPPTRI}!test\_assertions.h@{test\_assertions.h}}
+\doxysubsubsection{\texorpdfstring{\_ASSERT\_MATRIX\_UPPTRI()}{\_ASSERT\_MATRIX\_UPPTRI()}}
+{\footnotesize\ttfamily \label{test__assertions_8h_a6d23bc36aaff6f86bb24061df2119d03} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+void \+\_\+\+ASSERT\+\_\+\+MATRIX\+\_\+\+UPPTRI (\begin{DoxyParamCaption}\item[{const TMatrix$<$ TPrecision $>$ \&}]{test}{, }\item[{TPrecision}]{tol}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{file}{, }\item[{int}]{line}{, }\item[{std\+::string}]{message}{}\end{DoxyParamCaption})}
+
+\Hypertarget{test__assertions_8h_a87ecf761ed08869a2e168c7889893a6d}\index{test\_assertions.h@{test\_assertions.h}!\_ASSERT\_MATRIX\_ZERO@{\_ASSERT\_MATRIX\_ZERO}}
+\index{\_ASSERT\_MATRIX\_ZERO@{\_ASSERT\_MATRIX\_ZERO}!test\_assertions.h@{test\_assertions.h}}
+\doxysubsubsection{\texorpdfstring{\_ASSERT\_MATRIX\_ZERO()}{\_ASSERT\_MATRIX\_ZERO()}}
+{\footnotesize\ttfamily \label{test__assertions_8h_a87ecf761ed08869a2e168c7889893a6d} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+void \+\_\+\+ASSERT\+\_\+\+MATRIX\+\_\+\+ZERO (\begin{DoxyParamCaption}\item[{const TMatrix$<$ TPrecision $>$ \&}]{test}{, }\item[{TPrecision}]{tol}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{file}{, }\item[{int}]{line}{, }\item[{std\+::string}]{message}{}\end{DoxyParamCaption})}
+
+\Hypertarget{test__assertions_8h_aa5b40bddf3eb7cc8b835463eb86df0bf}\index{test\_assertions.h@{test\_assertions.h}!\_ASSERT\_VECTOR\_EQ@{\_ASSERT\_VECTOR\_EQ}}
+\index{\_ASSERT\_VECTOR\_EQ@{\_ASSERT\_VECTOR\_EQ}!test\_assertions.h@{test\_assertions.h}}
+\doxysubsubsection{\texorpdfstring{\_ASSERT\_VECTOR\_EQ()}{\_ASSERT\_VECTOR\_EQ()}}
+{\footnotesize\ttfamily \label{test__assertions_8h_aa5b40bddf3eb7cc8b835463eb86df0bf} 
+template$<$typename TPrecision$>$ \\
+void \+\_\+\+ASSERT\+\_\+\+VECTOR\+\_\+\+EQ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&}]{test}{, }\item[{const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&}]{target}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{file}{, }\item[{int}]{line}{, }\item[{std\+::string}]{message}{}\end{DoxyParamCaption})}
+
+\Hypertarget{test__assertions_8h_a86c65c7607518435be9552a7821364ca}\index{test\_assertions.h@{test\_assertions.h}!\_ASSERT\_VECTOR\_NEAR@{\_ASSERT\_VECTOR\_NEAR}}
+\index{\_ASSERT\_VECTOR\_NEAR@{\_ASSERT\_VECTOR\_NEAR}!test\_assertions.h@{test\_assertions.h}}
+\doxysubsubsection{\texorpdfstring{\_ASSERT\_VECTOR\_NEAR()}{\_ASSERT\_VECTOR\_NEAR()}}
+{\footnotesize\ttfamily \label{test__assertions_8h_a86c65c7607518435be9552a7821364ca} 
+template$<$typename TPrecision$>$ \\
+void \+\_\+\+ASSERT\+\_\+\+VECTOR\+\_\+\+NEAR (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&}]{test}{, }\item[{const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&}]{target}{, }\item[{TPrecision}]{tol}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{file}{, }\item[{int}]{line}{, }\item[{std\+::string}]{message}{}\end{DoxyParamCaption})}
+
+\Hypertarget{test__assertions_8h_ab394388c16e70ae37c82ad8937eb80ce}\index{test\_assertions.h@{test\_assertions.h}!\_ASSERT\_VECTOR\_ZERO@{\_ASSERT\_VECTOR\_ZERO}}
+\index{\_ASSERT\_VECTOR\_ZERO@{\_ASSERT\_VECTOR\_ZERO}!test\_assertions.h@{test\_assertions.h}}
+\doxysubsubsection{\texorpdfstring{\_ASSERT\_VECTOR\_ZERO()}{\_ASSERT\_VECTOR\_ZERO()}}
+{\footnotesize\ttfamily \label{test__assertions_8h_ab394388c16e70ae37c82ad8937eb80ce} 
+template$<$typename TPrecision$>$ \\
+void \+\_\+\+ASSERT\+\_\+\+VECTOR\+\_\+\+ZERO (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&}]{test}{, }\item[{TPrecision}]{tol}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{file}{, }\item[{int}]{line}{, }\item[{std\+::string}]{message}{}\end{DoxyParamCaption})}
+
+\Hypertarget{test__assertions_8h_ac0a687969f00e4cfdd8474f4ba5ba0a4}\index{test\_assertions.h@{test\_assertions.h}!\_CHECK\_FUNC\_HAS\_RUNTIME\_ERROR@{\_CHECK\_FUNC\_HAS\_RUNTIME\_ERROR}}
+\index{\_CHECK\_FUNC\_HAS\_RUNTIME\_ERROR@{\_CHECK\_FUNC\_HAS\_RUNTIME\_ERROR}!test\_assertions.h@{test\_assertions.h}}
+\doxysubsubsection{\texorpdfstring{\_CHECK\_FUNC\_HAS\_RUNTIME\_ERROR()}{\_CHECK\_FUNC\_HAS\_RUNTIME\_ERROR()}}
+{\footnotesize\ttfamily \label{test__assertions_8h_ac0a687969f00e4cfdd8474f4ba5ba0a4} 
+void \+\_\+\+CHECK\+\_\+\+FUNC\+\_\+\+HAS\+\_\+\+RUNTIME\+\_\+\+ERROR (\begin{DoxyParamCaption}\item[{bool \texorpdfstring{$\ast$}{*}}]{to\+\_\+print}{, }\item[{\mbox{\hyperlink{create__solve__matrices_8m_a0f069227489ad5ff8305f96f8499e6b2}{std\+::function}}$<$ void()$>$}]{func}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{file}{, }\item[{int}]{line}{, }\item[{std\+::string}]{message}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+

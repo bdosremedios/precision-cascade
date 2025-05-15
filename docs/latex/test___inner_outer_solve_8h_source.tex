@@ -1,0 +1,113 @@
+\doxysection{test\+\_\+\+Inner\+Outer\+Solve.\+h}
+\hypertarget{test___inner_outer_solve_8h_source}{}\label{test___inner_outer_solve_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/test/src/test\_solvers/test\_nested/test\_InnerOuterSolve.h@{C:/Users/dosre/dev/precision-\/cascade/test/src/test\_solvers/test\_nested/test\_InnerOuterSolve.h}}
+\mbox{\hyperlink{test___inner_outer_solve_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ TEST\_INNEROUTERSOLVE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ TEST\_INNEROUTERSOLVE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{test_8h}{test.h}}"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_iterative_solve_8h}{solvers/IterativeSolve.h}}"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_inner_outer_solve_8h}{solvers/nested/InnerOuterSolve.h}}"{}}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespacecascade}{cascade}};}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix>}
+\DoxyCodeLine{00012\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_inner_solver___mock_a60046501d3456c1210ded0521bb38282}{InnerSolver\_Mock}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ae28a35abd17ffaf91056f55a70c1da63}{GenericIterativeSolve}}<TMatrix>}
+\DoxyCodeLine{00013\ \{}
+\DoxyCodeLine{00014\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<double>}}\ \mbox{\hyperlink{class_inner_solver___mock_adb23327cb6134d667ba75d8cb9b1c992}{incr\_soln}};}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \ \ \ \ \mbox{\hyperlink{class_inner_solver___mock_a60046501d3456c1210ded0521bb38282}{InnerSolver\_Mock}}(}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ iterations\_to\_converge,}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<double>}}\ arg\_soln,}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{GenericLinearSystem<TMatrix>}}\ *\ \textcolor{keyword}{const}\ arg\_gen\_lin\_sys,}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{SolveArgPkg}}\ \&arg\_pkg}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ ):}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_inner_solver___mock_adb23327cb6134d667ba75d8cb9b1c992}{incr\_soln}}(}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_soln\ *}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}<double>(}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ static\_cast<double>(1.)\ /}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ static\_cast<double>(iterations\_to\_converge)}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ ),}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ae28a35abd17ffaf91056f55a70c1da63}{GenericIterativeSolve}}<TMatrix>(arg\_gen\_lin\_sys,\ arg\_pkg)}
+\DoxyCodeLine{00033\ \ \ \ \ \{\}}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_inner_solver___mock_a5e1e79c042f953760bac3553e9d1c2c2}{derived\_generic\_reset}}()\textcolor{keyword}{\ override\ }\{\}}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_inner_solver___mock_a50d49a7d1783fa468bdb1356b1686798}{iterate}}()\textcolor{keyword}{\ override\ }\{}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a0d73c5b3c750a46e0b198b2952547448}{generic\_soln}}\ +=\ \mbox{\hyperlink{class_inner_solver___mock_adb23327cb6134d667ba75d8cb9b1c992}{incr\_soln}};}
+\DoxyCodeLine{00039\ \ \ \ \ \}}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \};}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix>}
+\DoxyCodeLine{00044\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_inner_outer_solve___mock_ad55eba3ced62b5190e76416871fbcf27}{InnerOuterSolve\_Mock}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_aed9ed1d37ae889a5241ffa236bacf683}{InnerOuterSolve}}<TMatrix>}
+\DoxyCodeLine{00045\ \{}
+\DoxyCodeLine{00046\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_inner_outer_solve___mock_a6f81871de113ac94e1fcc07393482c90}{init\_inner\_outer\_hit}}\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_inner_outer_solve___mock_a0303f3b01fa2f17ae998aa32e4d33e7e}{outer\_iterate\_setup\_hit\_count}}\ =\ 0;}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_inner_outer_solve___mock_abb4a43da73d5c1c64f14b4ce2f151e8a}{outer\_iterate\_complete\_hit\_count}}\ =\ 0;}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{SolveArgPkg}}\ \mbox{\hyperlink{class_inner_outer_solve___mock_aa617207e8f3d045795f9b5edb1aff65c}{moving\_args}};}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<double>}}\ \mbox{\hyperlink{class_inner_outer_solve___mock_a6dc0fa49070c478b140e0965b2ae31af}{soln\_addition}};}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_inner_outer_solve___mock_a9187a353d8a3b49fe3922ffd79f1ddc7}{iterations\_to\_converge}};}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classcascade_1_1_inner_outer_solve_aed9ed1d37ae889a5241ffa236bacf683}{InnerOuterSolve}}<TMatrix>\mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a30ae357e9e361b54a58e6584eddc8cfd}{::iterate}};}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_inner_outer_solve___mock_a0593ad364d934e3f37146e053d11e01a}{deal\_with\_nan\_inner\_solve}}()\textcolor{keyword}{\ override\ }\{\};}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_inner_outer_solve___mock_acee867ba8ecca009818b3f771d56aae4}{initialize\_inner\_outer\_solver}}()\textcolor{keyword}{\ override\ }\{}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_inner_outer_solve___mock_a6f81871de113ac94e1fcc07393482c90}{init\_inner\_outer\_hit}}\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a89076f801630b485f9631cca7211ccdd}{inner\_solver}}\ =\ std::make\_shared<InnerSolver\_Mock<TMatrix>>(}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_inner_outer_solve___mock_a9187a353d8a3b49fe3922ffd79f1ddc7}{iterations\_to\_converge}},}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_inner_outer_solve___mock_a6dc0fa49070c478b140e0965b2ae31af}{soln\_addition}},}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a3afc6c73083d839f1b451aa255a8d3ff}{gen\_lin\_sys\_ptr}},}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_inner_outer_solve___mock_aa617207e8f3d045795f9b5edb1aff65c}{moving\_args}}}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00069\ \ \ \ \ \}}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_inner_outer_solve___mock_a950cca29f8d38c9235b3c44fdfc69fd1}{outer\_iterate\_setup}}()\textcolor{keyword}{\ override\ }\{}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_inner_outer_solve___mock_a0303f3b01fa2f17ae998aa32e4d33e7e}{outer\_iterate\_setup\_hit\_count}}\ +=\ 1;}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a89076f801630b485f9631cca7211ccdd}{inner\_solver}}\ =\ std::make\_shared<InnerSolver\_Mock<TMatrix>>(}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_inner_outer_solve___mock_a9187a353d8a3b49fe3922ffd79f1ddc7}{iterations\_to\_converge}},}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_inner_outer_solve___mock_a6dc0fa49070c478b140e0965b2ae31af}{soln\_addition}},}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a3afc6c73083d839f1b451aa255a8d3ff}{gen\_lin\_sys\_ptr}},}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_inner_outer_solve___mock_aa617207e8f3d045795f9b5edb1aff65c}{moving\_args}}}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00079\ \ \ \ \ \}}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_inner_outer_solve___mock_aa8051bff60a901e27f9489d7e6d8a7ec}{outer\_iterate\_complete}}()\textcolor{keyword}{\ override\ }\{}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_inner_outer_solve___mock_abb4a43da73d5c1c64f14b4ce2f151e8a}{outer\_iterate\_complete\_hit\_count}}\ +=\ 1;}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a0d73c5b3c750a46e0b198b2952547448}{generic\_soln}}\ =\ this-\/>\mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a89076f801630b485f9631cca7211ccdd}{inner\_solver}}-\/>get\_generic\_soln();}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_inner_outer_solve___mock_aa617207e8f3d045795f9b5edb1aff65c}{moving\_args}}.init\_guess\ =\ this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a0d73c5b3c750a46e0b198b2952547448}{generic\_soln}};}
+\DoxyCodeLine{00085\ \ \ \ \ \}}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \ \ \ \ \mbox{\hyperlink{class_inner_outer_solve___mock_ad55eba3ced62b5190e76416871fbcf27}{InnerOuterSolve\_Mock}}(}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<double>}}\ arg\_soln\_addition,}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{GenericLinearSystem<TMatrix>}}\ *\ \textcolor{keyword}{const}\ arg\_gen\_lin\_sys,}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{SolveArgPkg}}\ \&arg\_pkg}
+\DoxyCodeLine{00091\ \ \ \ \ ):}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_inner_outer_solve___mock_a6dc0fa49070c478b140e0965b2ae31af}{soln\_addition}}(arg\_soln\_addition),}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_aed9ed1d37ae889a5241ffa236bacf683}{InnerOuterSolve}}<TMatrix>(arg\_gen\_lin\_sys,\ arg\_pkg),}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_inner_outer_solve___mock_a9187a353d8a3b49fe3922ffd79f1ddc7}{iterations\_to\_converge}}(arg\_pkg.\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_aa533db25c700e1ae8eb6a75bd33f43cd}{max\_iter}}\ *\ arg\_pkg.\mbox{\hyperlink{classcascade_1_1_inner_outer_solve_af1d337b62dd4c7ddff0f59c0afa240b7}{max\_inner\_iter}}),}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_inner_outer_solve___mock_aa617207e8f3d045795f9b5edb1aff65c}{moving\_args}}(}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_pkg.\mbox{\hyperlink{classcascade_1_1_inner_outer_solve_af1d337b62dd4c7ddff0f59c0afa240b7}{max\_inner\_iter}},}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{SolveArgPkg}}::default\_max\_inner\_iter,}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_pkg.\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ae99012b6307e103fcc722f874e15be10}{target\_rel\_res}},}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_pkg.\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ac743d15e9e6f1077c76394d7a17a6bb3}{init\_guess}}}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00101\ \ \ \ \ \{}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_inner_outer_solve___mock_acee867ba8ecca009818b3f771d56aae4}{initialize\_inner\_outer\_solver}}();}
+\DoxyCodeLine{00103\ \ \ \ \ \}}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \};}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

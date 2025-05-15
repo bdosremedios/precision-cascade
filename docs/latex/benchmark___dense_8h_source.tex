@@ -1,0 +1,102 @@
+\doxysection{benchmark\+\_\+\+Dense.\+h}
+\hypertarget{benchmark___dense_8h_source}{}\label{benchmark___dense_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/benchmark/include/benchmark\_Dense.h@{C:/Users/dosre/dev/precision-\/cascade/benchmark/include/benchmark\_Dense.h}}
+\mbox{\hyperlink{benchmark___dense_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ BENCHMARK\_DENSE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ BENCHMARK\_DENSE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{benchmark_8h}{benchmark.h}}"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <filesystem>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <fstream>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <functional>}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{namespace\ }fs\ =\ std::filesystem;}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_benchmark___dense}{Benchmark\_Dense}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_benchmark_base}{BenchmarkBase}}}
+\DoxyCodeLine{00013\ \{}
+\DoxyCodeLine{00014\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \ \ std::function<MatrixDense<double>\ (\textcolor{keywordtype}{int},\ \textcolor{keywordtype}{int})>\ \mbox{\hyperlink{class_benchmark___dense_ac9cd3dd6d3f2dc971235a9cf65945f61}{make\_A\_dbl}}\ =\ [\textcolor{keyword}{this}]\ (}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ m,\ \textcolor{keywordtype}{int}\ n}
+\DoxyCodeLine{00018\ \ \ \ \ )\ -\/>\ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{MatrixDense<double>}}\ \{}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (m\ !=\ n)\ \{}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}make\_A\_dbl:\ require\ square\ dimensions"{}}}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_matrix_dense_ac78e0e1c9c4d2194d97d3b6140e99899}{MatrixDense<double>::Random}}(\mbox{\hyperlink{class_benchmark_base_aa7bdcad1019b0c4fb742b58a194ad12a}{BenchmarkBase::bundle}},\ m,\ m);}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \};}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ std::function<MatrixDense<float>\ (\textcolor{keywordtype}{int},\ \textcolor{keywordtype}{int})>\ \mbox{\hyperlink{class_benchmark___dense_abb16f0f5a935136198f406e6350f3d68}{make\_A\_sgl}}\ =\ [\textcolor{keyword}{this}]\ (}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ m,\ \textcolor{keywordtype}{int}\ n}
+\DoxyCodeLine{00032\ \ \ \ \ )\ -\/>\ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{MatrixDense<float>}}\ \{}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_benchmark___dense_ac9cd3dd6d3f2dc971235a9cf65945f61}{make\_A\_dbl}}(m,\ m).cast<\textcolor{keywordtype}{float}>();}
+\DoxyCodeLine{00034\ \ \ \ \ \};}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ std::function<MatrixDense<\_\_half>\ (\textcolor{keywordtype}{int},\ \textcolor{keywordtype}{int})>\ \mbox{\hyperlink{class_benchmark___dense_a1aae64b3ad08deb009c2aec780926d25}{make\_A\_hlf}}\ =\ [\textcolor{keyword}{this}]\ (}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ m,\ \textcolor{keywordtype}{int}\ n}
+\DoxyCodeLine{00038\ \ \ \ \ )\ -\/>\ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{MatrixDense<\_\_half>}}\ \{}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_benchmark___dense_ac9cd3dd6d3f2dc971235a9cf65945f61}{make\_A\_dbl}}(m,\ m).cast<\_\_half>();}
+\DoxyCodeLine{00040\ \ \ \ \ \};}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ std::function<MatrixDense<double>\ (\textcolor{keywordtype}{int},\ \textcolor{keywordtype}{int})>\ \mbox{\hyperlink{class_benchmark___dense_afde7b9720b0b47620a1ed78ac4dadb40}{make\_low\_tri\_A\_dbl}}\ =\ [\textcolor{keyword}{this}]\ (}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ m,\ \textcolor{keywordtype}{int}\ n}
+\DoxyCodeLine{00044\ \ \ \ \ )\ -\/>\ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{MatrixDense<double>}}\ \{}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (m\ !=\ n)\ \{}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}make\_low\_tri\_A\_dbl:\ require\ square\ dimensions"{}}}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_matrix_dense_a0400f3b9ea5ab6a6ff84506688006732}{MatrixDense<double>::Random\_LT}}(\mbox{\hyperlink{class_benchmark_base_aa7bdcad1019b0c4fb742b58a194ad12a}{BenchmarkBase::bundle}},\ m,\ m);}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \};}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ std::function<MatrixDense<float>\ (\textcolor{keywordtype}{int},\ \textcolor{keywordtype}{int})>\ \mbox{\hyperlink{class_benchmark___dense_ac7d422f2000749a129092a4d3a04ec97}{make\_low\_tri\_A\_sgl}}\ =\ [\textcolor{keyword}{this}]\ (}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ m,\ \textcolor{keywordtype}{int}\ n}
+\DoxyCodeLine{00058\ \ \ \ \ )\ -\/>\ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{MatrixDense<float>}}\ \{}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_benchmark___dense_afde7b9720b0b47620a1ed78ac4dadb40}{make\_low\_tri\_A\_dbl}}(m,\ m).cast<\textcolor{keywordtype}{float}>();}
+\DoxyCodeLine{00060\ \ \ \ \ \};}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ std::function<MatrixDense<\_\_half>\ (\textcolor{keywordtype}{int},\ \textcolor{keywordtype}{int})>\ \mbox{\hyperlink{class_benchmark___dense_a81aa9b6eec7fc67d35047aaa87ba25e3}{make\_low\_tri\_A\_hlf}}\ =\ [\textcolor{keyword}{this}]\ (}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ m,\ \textcolor{keywordtype}{int}\ n}
+\DoxyCodeLine{00064\ \ \ \ \ )\ -\/>\ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{MatrixDense<\_\_half>}}\ \{}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_benchmark___dense_afde7b9720b0b47620a1ed78ac4dadb40}{make\_low\_tri\_A\_dbl}}(m,\ m).cast<\_\_half>();}
+\DoxyCodeLine{00066\ \ \ \ \ \};}
+\DoxyCodeLine{00067\ \ \ \ \ }
+\DoxyCodeLine{00068\ \ \ \ \ std::function<MatrixDense<double>\ (\textcolor{keywordtype}{int},\ \textcolor{keywordtype}{int})>\ \mbox{\hyperlink{class_benchmark___dense_a281592a44d6c2b128c10108cae2944a3}{make\_upp\_tri\_A\_dbl}}\ =\ [\textcolor{keyword}{this}]\ (}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ m,\ \textcolor{keywordtype}{int}\ n}
+\DoxyCodeLine{00070\ \ \ \ \ )\ -\/>\ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{MatrixDense<double>}}\ \{}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (m\ !=\ n)\ \{}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}make\_upp\_tri\_A\_dbl:\ require\ square\ dimensions"{}}}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_matrix_dense_aaf9130f2d377aafda17e1c973cb6d18f}{MatrixDense<double>::Random\_UT}}(\mbox{\hyperlink{class_benchmark_base_aa7bdcad1019b0c4fb742b58a194ad12a}{BenchmarkBase::bundle}},\ m,\ m);}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ \ \ \ \ \};}
+\DoxyCodeLine{00081\ \ \ \ \ }
+\DoxyCodeLine{00082\ \ \ \ \ std::function<MatrixDense<float>\ (\textcolor{keywordtype}{int},\ \textcolor{keywordtype}{int})>\ \mbox{\hyperlink{class_benchmark___dense_a5e2809a423eac731eb4410570c9cbe06}{make\_upp\_tri\_A\_sgl}}\ =\ [\textcolor{keyword}{this}]\ (}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ m,\ \textcolor{keywordtype}{int}\ n}
+\DoxyCodeLine{00084\ \ \ \ \ )\ -\/>\ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{MatrixDense<float>}}\ \{}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_benchmark___dense_a281592a44d6c2b128c10108cae2944a3}{make\_upp\_tri\_A\_dbl}}(m,\ m).cast<\textcolor{keywordtype}{float}>();}
+\DoxyCodeLine{00086\ \ \ \ \ \};}
+\DoxyCodeLine{00087\ \ \ \ \ }
+\DoxyCodeLine{00088\ \ \ \ \ std::function<MatrixDense<\_\_half>\ (\textcolor{keywordtype}{int},\ \textcolor{keywordtype}{int})>\ \mbox{\hyperlink{class_benchmark___dense_afb68875d3ce7f19da1782c1d11e85158}{make\_upp\_tri\_A\_hlf}}\ =\ [\textcolor{keyword}{this}]\ (}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ m,\ \textcolor{keywordtype}{int}\ n}
+\DoxyCodeLine{00090\ \ \ \ \ )\ -\/>\ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{MatrixDense<\_\_half>}}\ \{}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_benchmark___dense_a281592a44d6c2b128c10108cae2944a3}{make\_upp\_tri\_A\_dbl}}(m,\ m).cast<\_\_half>();}
+\DoxyCodeLine{00092\ \ \ \ \ \};}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \};}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

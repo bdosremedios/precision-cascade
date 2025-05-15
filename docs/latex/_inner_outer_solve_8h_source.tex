@@ -1,0 +1,95 @@
+\doxysection{Inner\+Outer\+Solve.\+h}
+\hypertarget{_inner_outer_solve_8h_source}{}\label{_inner_outer_solve_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/include/solvers/nested/InnerOuterSolve.h@{C:/Users/dosre/dev/precision-\/cascade/include/solvers/nested/InnerOuterSolve.h}}
+\mbox{\hyperlink{_inner_outer_solve_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ INNEROUTERSOLVE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ INNEROUTERSOLVE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_iterative_solve_8h}{../IterativeSolve.h}}"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacecascade}{cascade}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix>}
+\DoxyCodeLine{00009\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1_inner_outer_solve_aed9ed1d37ae889a5241ffa236bacf683}{InnerOuterSolve}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ae28a35abd17ffaf91056f55a70c1da63}{GenericIterativeSolve}}<TMatrix>}
+\DoxyCodeLine{00010\ \{}
+\DoxyCodeLine{00011\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_af1d337b62dd4c7ddff0f59c0afa240b7}{max\_inner\_iter}};\ \textcolor{comment}{//\ mutable\ to\ allow\ setting\ by\ derived\ solvers}}
+\DoxyCodeLine{00014\ \ \ \ \ std::vector<std::vector<double>>\ \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_ab45a2c176d26b8bbd1c995aa201af2aa}{inner\_res\_norm\_history}};}
+\DoxyCodeLine{00015\ \ \ \ \ std::vector<int>\ \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_ad57cb6dd5269b440cf506c381651a936}{inner\_iterations}};}
+\DoxyCodeLine{00016\ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{SolveArgPkg}}\ \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a2dc06a4a8950278f0617afd1f77744dd}{inner\_solve\_arg\_pkg}};}
+\DoxyCodeLine{00017\ \ \ \ \ std::shared\_ptr<GenericIterativeSolve<TMatrix>>\ \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a89076f801630b485f9631cca7211ccdd}{inner\_solver}};}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a30ae357e9e361b54a58e6584eddc8cfd}{iterate}}()\textcolor{keyword}{\ override\ }\{}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_aa4189c972f291b46ce2e521952ea71c0}{outer\_iterate\_setup}}();}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a89076f801630b485f9631cca7211ccdd}{inner\_solver}}-\/>solve();}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!std::isnan(\mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a89076f801630b485f9631cca7211ccdd}{inner\_solver}}-\/>get\_relres()))\ \{}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_ab45a2c176d26b8bbd1c995aa201af2aa}{inner\_res\_norm\_history}}.push\_back(\mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a89076f801630b485f9631cca7211ccdd}{inner\_solver}}-\/>get\_res\_norm\_history());}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_ad57cb6dd5269b440cf506c381651a936}{inner\_iterations}}.push\_back(\mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a89076f801630b485f9631cca7211ccdd}{inner\_solver}}-\/>get\_iteration());}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a27be2afd8f0ee485338e859a7889faba}{outer\_iterate\_complete}}();}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_aabf9a184ea188e52273c6d3465a847c6}{deal\_with\_nan\_inner\_solve}}();}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00029\ \ \ \ \ \};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a5f2326e837bf3ae1727b8a9c06ce120d}{derived\_generic\_reset}}()\textcolor{keyword}{\ override\ }\{}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_ab45a2c176d26b8bbd1c995aa201af2aa}{inner\_res\_norm\_history}}.clear();}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_ad57cb6dd5269b440cf506c381651a936}{inner\_iterations}}.clear();}
+\DoxyCodeLine{00034\ \ \ \ \ \}}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{comment}{//\ Initialize\ inner\ outer\ solver;}}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a268a6759193accae043b006d11695377}{initialize\_inner\_outer\_solver}}()\ =\ 0;}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{comment}{//\ Specify\ inner\_solver\ for\ outer\_iterate\_calc\ and\ setup}}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_aa4189c972f291b46ce2e521952ea71c0}{outer\_iterate\_setup}}()\ =\ 0;}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{comment}{//\ Update\ generic\_soln\ and\ inner\_res\_norm\_history\ according\ to\ derived}}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a27be2afd8f0ee485338e859a7889faba}{outer\_iterate\_complete}}()\ =\ 0;}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{comment}{//\ Special\ case\ of\ nan\ result\ inner\ solve}}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_aabf9a184ea188e52273c6d3465a847c6}{deal\_with\_nan\_inner\_solve}}()\ =\ 0;}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_aed9ed1d37ae889a5241ffa236bacf683}{InnerOuterSolve}}(}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{GenericLinearSystem<TMatrix>}}\ *\ \textcolor{keyword}{const}\ arg\_gen\_lin\_sys,}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{SolveArgPkg}}\ \&arg\_pkg}
+\DoxyCodeLine{00053\ \ \ \ \ ):\ }
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_af1d337b62dd4c7ddff0f59c0afa240b7}{max\_inner\_iter}}(arg\_pkg.\mbox{\hyperlink{classcascade_1_1_inner_outer_solve_af1d337b62dd4c7ddff0f59c0afa240b7}{max\_inner\_iter}}),}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ae28a35abd17ffaf91056f55a70c1da63}{GenericIterativeSolve}}<TMatrix>(arg\_gen\_lin\_sys,\ arg\_pkg)}
+\DoxyCodeLine{00056\ \ \ \ \ \{}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_aa533db25c700e1ae8eb6a75bd33f43cd}{max\_iter}}\ =\ (}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ (arg\_pkg.\mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_ae50ac6653b9c19a06795256332afc1f2}{check\_default\_max\_iter}}())\ ?}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ 10\ :\ arg\_pkg.\mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_a4b857259507a3e588cfbfe5b8ab3fb99}{max\_iter}}}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Create\ inner\_solve\_arg\_pkg\ matching\ arg\_pkg\ except\ with\ inner}}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ iteration,\ set\ that\ as\ the\ inner\ solver's\ outer\ iteration}}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a2dc06a4a8950278f0617afd1f77744dd}{inner\_solve\_arg\_pkg}}\ =\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{SolveArgPkg}}(}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_af1d337b62dd4c7ddff0f59c0afa240b7}{max\_inner\_iter}},}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg_ac0381686573093c8888cbd093b113e11}{SolveArgPkg::default\_max\_inner\_iter}},}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ae99012b6307e103fcc722f874e15be10}{target\_rel\_res}},}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_ac743d15e9e6f1077c76394d7a17a6bb3}{init\_guess}}}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00069\ \ \ \ \ \}}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{comment}{//\ Forbid\ rvalue\ instantiation}}
+\DoxyCodeLine{00072\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_ac984a3d16d4686244d6c7b93722eff81}{InnerOuterSolve}}(}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{GenericLinearSystem<TMatrix>}}\ *\ \textcolor{keyword}{const},}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{SolveArgPkg}}\ \&\&}
+\DoxyCodeLine{00075\ \ \ \ \ );}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \ \ std::vector<std::vector<double>>\ \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a130e5d558458cf2e17fb4515b71d1920}{get\_inner\_res\_norm\_history}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_ab45a2c176d26b8bbd1c995aa201af2aa}{inner\_res\_norm\_history}};}
+\DoxyCodeLine{00079\ \ \ \ \ \};}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ \ \ std::vector<int>\ \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a04dcdc5afeed9f7e7856a052b2aec7e2}{get\_inner\_iterations}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_ad57cb6dd5269b440cf506c381651a936}{inner\_iterations}};}
+\DoxyCodeLine{00083\ \ \ \ \ \};}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \};}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \}}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

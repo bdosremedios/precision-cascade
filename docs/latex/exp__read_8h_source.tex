@@ -1,0 +1,100 @@
+\doxysection{exp\+\_\+read.\+h}
+\hypertarget{exp__read_8h_source}{}\label{exp__read_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/experimentation/include/exp\_read/exp\_read.h@{C:/Users/dosre/dev/precision-\/cascade/experimentation/include/exp\_read/exp\_read.h}}
+\mbox{\hyperlink{exp__read_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ EXP\_READ\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ EXP\_READ\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{exp__spec_8h}{exp\_spec/exp\_spec.h}}"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_experiment___log_8h}{exp\_tools/Experiment\_Log.h}}"{}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{types_8h}{types/types.h}}"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{cu_handle_bundle_8h}{tools/cuHandleBundle.h}}"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{read__matrix_8h}{tools/read\_matrix.h}}"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_linear_system_8h}{tools/arg\_pkgs/LinearSystem.h}}"{}}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <nlohmann/json.hpp>}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <filesystem>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ <unordered\_set>}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{keyword}{namespace\ }fs\ =\ std::filesystem;}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{using\ }\mbox{\hyperlink{exp__read_8h_ab701e3ac61a85b337ec5c1abaad6742d}{json}}\ =\ nlohmann::json;}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{exp__read_8h_a0c9b0e74e318a41468370de14b299a38}{extract\_integer}}(json::iterator\ member);}
+\DoxyCodeLine{00024\ std::vector<std::string>\ \mbox{\hyperlink{exp__read_8h_ac7f2d767014fcdab295c315274bb9382}{extract\_solvers\_to\_use}}(json::iterator\ member);}
+\DoxyCodeLine{00025\ std::string\ \mbox{\hyperlink{exp__read_8h_a3f7e7da41ace39829275ac15f941c26c}{extract\_matrix\_type}}(json::iterator\ member);}
+\DoxyCodeLine{00026\ \mbox{\hyperlink{struct_preconditioner___spec}{Preconditioner\_Spec}}\ \mbox{\hyperlink{exp__read_8h_a0a758ae72dfd2e84de1c5b6a2d46c159}{extract\_preconditioner\_spec}}(}
+\DoxyCodeLine{00027\ \ \ \ \ json::iterator\ member}
+\DoxyCodeLine{00028\ );}
+\DoxyCodeLine{00029\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{exp__read_8h_a8e434f9ffff48a7c7df78eea738bd5e4}{extract\_double}}(json::iterator\ member);}
+\DoxyCodeLine{00030\ std::vector<std::string>\ \mbox{\hyperlink{exp__read_8h_ae9da0d78ac27b9a231e2f0e7a029a735}{extract\_string\_vector}}(json::iterator\ member);}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \mbox{\hyperlink{struct_solve___group}{Solve\_Group}}\ \mbox{\hyperlink{exp__read_8h_ae245363c7ac838e89df184e9cffc510b}{extract\_solve\_group}}(std::string\ \textcolor{keywordtype}{id},\ \mbox{\hyperlink{exp__read_8h_ab701e3ac61a85b337ec5c1abaad6742d}{json}}\ cand\_obj);}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \mbox{\hyperlink{struct_experiment___spec}{Experiment\_Spec}}\ \mbox{\hyperlink{exp__read_8h_a14094ecab66d8cbb8bd7873a6bf4ff0e}{parse\_experiment\_spec}}(fs::path\ exp\_spec\_path);}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix>}
+\DoxyCodeLine{00037\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{cascade::GenericLinearSystem<TMatrix>}}\ \mbox{\hyperlink{exp__read_8h_a7ed8b601c4d247f26032eca531099318}{load\_lin\_sys}}(}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cascade::cuHandleBundle}}\ \&cu\_handles,}
+\DoxyCodeLine{00039\ \ \ \ \ fs::path\ input\_dir,}
+\DoxyCodeLine{00040\ \ \ \ \ std::string\ matrix\_name,}
+\DoxyCodeLine{00041\ \ \ \ \ \mbox{\hyperlink{class_experiment___log}{Experiment\_Log}}\ logger}
+\DoxyCodeLine{00042\ )\ \{}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ fs::path\ matrix\_path\ =\ input\_dir\ /\ fs::path(matrix\_name);}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ logger.\mbox{\hyperlink{class_experiment___log_a033ee25bf73e58f7acfa53a4e4d6dfb4}{info}}(\textcolor{stringliteral}{"{}Load\ linear\ system\ from:\ "{}}\ +\ matrix\_path.string());}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ TMatrix<double>\ \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}(cu\_handles);}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordflow}{if}\ (matrix\_path.extension()\ ==\ \textcolor{stringliteral}{"{}.mtx"{}})\ \{}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}\ =\ \mbox{\hyperlink{namespacecascade_a4550f61256132a6b807fc0412e4c5450}{cascade::read\_matrixMTX<TMatrix,\ double>}}(cu\_handles,\ matrix\_path);}
+\DoxyCodeLine{00051\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (matrix\_path.extension()\ ==\ \textcolor{stringliteral}{"{}.csv"{}})\ \{}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}\ =\ \mbox{\hyperlink{namespacecascade_a0a2d9826160a93e11c354402937ce21a}{cascade::read\_matrixCSV<TMatrix,\ double>}}(cu\_handles,\ matrix\_path);}
+\DoxyCodeLine{00053\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}load\_lin\_sys:\ invalid\ extension"{}});}
+\DoxyCodeLine{00055\ \ \ \ \ \}}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_scalar}{cascade::Scalar<double>}}\ A\_max\_mag\ =\ \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}.get\_max\_mag\_elem();}
+\DoxyCodeLine{00058\ \ \ \ \ \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}\ /=\ A\_max\_mag;}
+\DoxyCodeLine{00059\ \ \ \ \ logger.\mbox{\hyperlink{class_experiment___log_a033ee25bf73e58f7acfa53a4e4d6dfb4}{info}}(\textcolor{stringliteral}{"{}A\ matrix\ info:\ "{}}\ +\ \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}.get\_info\_string());}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{comment}{//\ Search\ for\ a\ rhs\ and\ if\ none\ is\ found\ generate\ one\ randomly}}
+\DoxyCodeLine{00062\ \ \ \ \ fs::path\ potential\_b\_path(}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ input\_dir\ /}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ fs::path(}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ matrix\_path.stem().string()\ +\ \textcolor{stringliteral}{"{}\_b"{}}\ +}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ matrix\_path.extension().string()}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00068\ \ \ \ \ );}
+\DoxyCodeLine{00069\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{cascade::Vector<double>}}\ \mbox{\hyperlink{create__solve__matrices_8m_a0f44e457fae26e14bb4ac1ebb3a75dad}{b}}(cu\_handles);}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keywordflow}{if}\ (fs::exists(potential\_b\_path))\ \{}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (potential\_b\_path.extension()\ ==\ \textcolor{stringliteral}{"{}.mtx"{}})\ \{}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{create__solve__matrices_8m_a0f44e457fae26e14bb4ac1ebb3a75dad}{b}}\ =\ \mbox{\hyperlink{namespacecascade_ad804d308ed18649e2e8573161b22472b}{cascade::read\_vectorMTX<double>}}(}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cu\_handles,\ potential\_b\_path,\ \textcolor{stringliteral}{"{}random"{}}}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (potential\_b\_path.extension()\ ==\ \textcolor{stringliteral}{"{}.csv"{}})\ \{}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{create__solve__matrices_8m_a0f44e457fae26e14bb4ac1ebb3a75dad}{b}}\ =\ \mbox{\hyperlink{namespacecascade_a8986a22cb4ae293cf6ebfca14df5241c}{cascade::read\_vectorCSV<double>}}(}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cu\_handles,\ potential\_b\_path}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}load\_lin\_sys:\ invalid\ extension\ found\ on\ potential\_b\_path\ file"{}}}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{create__solve__matrices_8m_a0f44e457fae26e14bb4ac1ebb3a75dad}{b}}\ /=\ A\_max\_mag;}
+\DoxyCodeLine{00085\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{create__solve__matrices_8m_a0f44e457fae26e14bb4ac1ebb3a75dad}{b}}\ =\ \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}*\mbox{\hyperlink{classcascade_1_1_vector_a2ff3307e7e428a007e1b7caf8bf9e560}{cascade::Vector<double>::Random}}(cu\_handles,\ \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}.cols());}
+\DoxyCodeLine{00087\ \ \ \ \ \}}
+\DoxyCodeLine{00088\ \ \ \ \ logger.\mbox{\hyperlink{class_experiment___log_a033ee25bf73e58f7acfa53a4e4d6dfb4}{info}}(\textcolor{stringliteral}{"{}b\ vector\ info:\ "{}}\ +\ \mbox{\hyperlink{create__solve__matrices_8m_a0f44e457fae26e14bb4ac1ebb3a75dad}{b}}.get\_info\_string());}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{cascade::GenericLinearSystem<TMatrix>}}(\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}},\ \mbox{\hyperlink{create__solve__matrices_8m_a0f44e457fae26e14bb4ac1ebb3a75dad}{b}});}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \}}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

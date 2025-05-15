@@ -1,0 +1,85 @@
+\doxysection{test.\+h}
+\hypertarget{test_8h_source}{}\label{test_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/test/include/test.h@{C:/Users/dosre/dev/precision-\/cascade/test/include/test.h}}
+\mbox{\hyperlink{test_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ TEST\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ TEST\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{test__assertions_8h}{test\_assertions.h}}"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{test__toolkit_8h}{test\_toolkit.h}}"{}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{cu_handle_bundle_8h}{tools/cuHandleBundle.h}}"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{read__matrix_8h}{tools/read\_matrix.h}}"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_solve_arg_pkg_8h}{tools/arg\_pkgs/SolveArgPkg.h}}"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{types_8h}{types/types.h}}"{}}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ "{}gtest/gtest.h"{}}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#if\ defined(WIN32)\ \&\&\ defined(\_DEBUG)}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#define\ \_CRTDBG\_MAP\_ALLOC}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ <stdlib.h>}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ <crtdbg.h>}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#include\ <filesystem>}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#include\ <cmath>}}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespacecascade}{cascade}};}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \textcolor{keyword}{namespace\ }fs\ =\ std::filesystem;}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_test_base}{TestBase}}:\ \textcolor{keyword}{public}\ testing::Test}
+\DoxyCodeLine{00030\ \{}
+\DoxyCodeLine{00031\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\ \ \ \ \#if\ defined(WIN32)\ \&\&\ defined(\_DEBUG)}}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \_CrtMemState\ init\_state\ =\ \{0\};}
+\DoxyCodeLine{00036\ \ \ \ \ \_CrtMemState\ final\_state\ =\ \{0\};}
+\DoxyCodeLine{00037\ \ \ \ \ \_CrtMemState\ state\_diff\ =\ \{0\};}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ SetUp()\ \{}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \_CrtMemCheckpoint(\&init\_state);}
+\DoxyCodeLine{00041\ \ \ \ \ \}}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ TearDown()\ \{}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \_CrtMemCheckpoint(\&final\_state);}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_CrtMemDifference(\&state\_diff,\ \&init\_state,\ \&final\_state))\ \{}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ \_CrtSetReportMode(\_CRT\_WARN,\ \_CRTDBG\_MODE\_FILE);}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \_CrtSetReportFile(\_CRT\_WARN,\ \_CRTDBG\_FILE\_STDOUT);}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ \_CrtMemDumpStatistics(\&state\_diff);}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \_CrtMemDumpAllObjectsSince(\&init\_state);}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (state\_diff.lSizes[1]\ ==\ 56)\ \{}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}LIKELY\ FALSE\ POSITIVE:\ 56\ byte\ normal\ block\ leak\ "{}}}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}likely\ caused\ by\ GoogleTest"{}}}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ std::endl;}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FAIL();}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ \}}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keyword}{static}\ fs::path\ \mbox{\hyperlink{class_test_base_a0f82f8d088952dd8628f858d546730a5}{data\_dir}};}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keyword}{static}\ fs::path\ \mbox{\hyperlink{class_test_base_a2d8e6876b192f2b5ee8a9d7d4b858511}{read\_matrix\_dir}};}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keyword}{static}\ fs::path\ \mbox{\hyperlink{class_test_base_a69f61918fdc50d7db89ca81b1c4d5258}{solve\_matrix\_dir}};}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{SolveArgPkg}}\ \mbox{\hyperlink{class_test_base_abdaa0f95eb7b43e1740b4e5ad0a066c4}{default\_args}};}
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ *\mbox{\hyperlink{class_test_base_a6179ef066e2e309121d220ac54bb5bf0}{show\_plots}};}
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ *\mbox{\hyperlink{class_test_base_a9f80f99b679cb7b8858e024a85e5319e}{print\_errors}};}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}\ \mbox{\hyperlink{class_test_base_aefc07d9429356dd9aaa81ee68051a238}{bundle}};}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \};}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

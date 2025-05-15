@@ -1,0 +1,126 @@
+\doxysection{cascade\+::Preconditioner\texorpdfstring{$<$}{<} TMatrix, TPrecision \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcascade_1_1_preconditioner}{}\label{classcascade_1_1_preconditioner}\index{cascade::Preconditioner$<$ TMatrix, TPrecision $>$@{cascade::Preconditioner$<$ TMatrix, TPrecision $>$}}
+
+
+{\ttfamily \#include $<$Preconditioner.\+h$>$}
+
+
+
+Inheritance diagram for cascade\+::Preconditioner\texorpdfstring{$<$}{<} TMatrix, TPrecision \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcascade_1_1_preconditioner__inherit__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcascade_1_1_preconditioner_a875e73c4c3ccc05c2622dbdf5ee9d4a7}{Preconditioner}} ()=default
+\item 
+virtual \mbox{\hyperlink{classcascade_1_1_preconditioner_a718c8a4a71dd31bc72767fc504534e83}{\texorpdfstring{$\sim$}{\string~}\+Preconditioner}} ()=default
+\item 
+virtual \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_preconditioner_a21b224ac802e0fe2e4b3aed0bf264a94}{action\+\_\+inv\+\_\+M}} (\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ const \&vec) const =0
+\item 
+virtual bool \mbox{\hyperlink{classcascade_1_1_preconditioner_aa4b26517fd95484368e0a206d84e3b4e}{check\+\_\+compatibility\+\_\+left}} (int const \&m) const =0
+\item 
+virtual bool \mbox{\hyperlink{classcascade_1_1_preconditioner_a8131081c22cec99957d37de6e4b5e395}{check\+\_\+compatibility\+\_\+right}} (int const \&n) const =0
+\item 
+virtual \mbox{\hyperlink{classcascade_1_1_preconditioner}{Preconditioner}}$<$ TMatrix, double $>$ \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcascade_1_1_preconditioner_a2e7a015dbb3b414e80fc491c8460e90b}{cast\+\_\+dbl\+\_\+ptr}} () const =0
+\item 
+virtual \mbox{\hyperlink{classcascade_1_1_preconditioner}{Preconditioner}}$<$ TMatrix, float $>$ \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcascade_1_1_preconditioner_a347820a28ad209fd8adc8ee60692dbb8}{cast\+\_\+sgl\+\_\+ptr}} () const =0
+\item 
+virtual \mbox{\hyperlink{classcascade_1_1_preconditioner}{Preconditioner}}$<$ TMatrix, \+\_\+\+\_\+half $>$ \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcascade_1_1_preconditioner_a0d0f39fedcc1b3f11c01671efcc10c0a}{cast\+\_\+hlf\+\_\+ptr}} () const =0
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcascade_1_1_preconditioner_a875e73c4c3ccc05c2622dbdf5ee9d4a7}\index{cascade::Preconditioner$<$ TMatrix, TPrecision $>$@{cascade::Preconditioner$<$ TMatrix, TPrecision $>$}!Preconditioner@{Preconditioner}}
+\index{Preconditioner@{Preconditioner}!cascade::Preconditioner$<$ TMatrix, TPrecision $>$@{cascade::Preconditioner$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{Preconditioner()}{Preconditioner()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_preconditioner_a875e73c4c3ccc05c2622dbdf5ee9d4a7} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_preconditioner}{cascade\+::\+Preconditioner}}$<$ TMatrix, TPrecision $>$\+::\+Preconditioner (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+\Hypertarget{classcascade_1_1_preconditioner_a718c8a4a71dd31bc72767fc504534e83}\index{cascade::Preconditioner$<$ TMatrix, TPrecision $>$@{cascade::Preconditioner$<$ TMatrix, TPrecision $>$}!````~Preconditioner@{\texorpdfstring{$\sim$}{\string~}Preconditioner}}
+\index{````~Preconditioner@{\texorpdfstring{$\sim$}{\string~}Preconditioner}!cascade::Preconditioner$<$ TMatrix, TPrecision $>$@{cascade::Preconditioner$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}Preconditioner()}{\string~Preconditioner()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_preconditioner_a718c8a4a71dd31bc72767fc504534e83} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+virtual \mbox{\hyperlink{classcascade_1_1_preconditioner}{cascade\+::\+Preconditioner}}$<$ TMatrix, TPrecision $>$\+::\texorpdfstring{$\sim$}{\string~}\mbox{\hyperlink{classcascade_1_1_preconditioner}{Preconditioner}} (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}, {\ttfamily [default]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcascade_1_1_preconditioner_a21b224ac802e0fe2e4b3aed0bf264a94}\index{cascade::Preconditioner$<$ TMatrix, TPrecision $>$@{cascade::Preconditioner$<$ TMatrix, TPrecision $>$}!action\_inv\_M@{action\_inv\_M}}
+\index{action\_inv\_M@{action\_inv\_M}!cascade::Preconditioner$<$ TMatrix, TPrecision $>$@{cascade::Preconditioner$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{action\_inv\_M()}{action\_inv\_M()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_preconditioner_a21b224ac802e0fe2e4b3aed0bf264a94} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+virtual \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_preconditioner}{cascade\+::\+Preconditioner}}$<$ TMatrix, TPrecision $>$\+::action\+\_\+inv\+\_\+M (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ const \&}]{vec}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_a18a591d486fc1bf6ab40b61be900518e}{cascade\+::\+ILUPreconditioner$<$ TMatrix, TPrecision $>$}}, \mbox{\hyperlink{classcascade_1_1_matrix_inverse_preconditioner_a49ff10812aaaddc6b4594c69009679ed}{cascade\+::\+Matrix\+Inverse\+Preconditioner$<$ TMatrix, TPrecision $>$}}, and \mbox{\hyperlink{classcascade_1_1_no_preconditioner_a78dcc53c5be0f191284d9248a34b2b7a}{cascade\+::\+No\+Preconditioner$<$ TMatrix, TPrecision $>$}}.
+
+\Hypertarget{classcascade_1_1_preconditioner_a2e7a015dbb3b414e80fc491c8460e90b}\index{cascade::Preconditioner$<$ TMatrix, TPrecision $>$@{cascade::Preconditioner$<$ TMatrix, TPrecision $>$}!cast\_dbl\_ptr@{cast\_dbl\_ptr}}
+\index{cast\_dbl\_ptr@{cast\_dbl\_ptr}!cascade::Preconditioner$<$ TMatrix, TPrecision $>$@{cascade::Preconditioner$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{cast\_dbl\_ptr()}{cast\_dbl\_ptr()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_preconditioner_a2e7a015dbb3b414e80fc491c8460e90b} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+virtual \mbox{\hyperlink{classcascade_1_1_preconditioner}{Preconditioner}}$<$ TMatrix, double $>$ \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcascade_1_1_preconditioner}{cascade\+::\+Preconditioner}}$<$ TMatrix, TPrecision $>$\+::cast\+\_\+dbl\+\_\+ptr (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_aae09d233469c4d24dfb8fe0e585be2d6}{cascade\+::\+ILUPreconditioner$<$ TMatrix, TPrecision $>$}}, \mbox{\hyperlink{classcascade_1_1_matrix_inverse_preconditioner_a310f1a17960769e8f7104bad29532d5d}{cascade\+::\+Matrix\+Inverse\+Preconditioner$<$ TMatrix, TPrecision $>$}}, and \mbox{\hyperlink{classcascade_1_1_no_preconditioner_a5f91af1c17229deb4cd893857645a90c}{cascade\+::\+No\+Preconditioner$<$ TMatrix, TPrecision $>$}}.
+
+\Hypertarget{classcascade_1_1_preconditioner_a0d0f39fedcc1b3f11c01671efcc10c0a}\index{cascade::Preconditioner$<$ TMatrix, TPrecision $>$@{cascade::Preconditioner$<$ TMatrix, TPrecision $>$}!cast\_hlf\_ptr@{cast\_hlf\_ptr}}
+\index{cast\_hlf\_ptr@{cast\_hlf\_ptr}!cascade::Preconditioner$<$ TMatrix, TPrecision $>$@{cascade::Preconditioner$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{cast\_hlf\_ptr()}{cast\_hlf\_ptr()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_preconditioner_a0d0f39fedcc1b3f11c01671efcc10c0a} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+virtual \mbox{\hyperlink{classcascade_1_1_preconditioner}{Preconditioner}}$<$ TMatrix, \+\_\+\+\_\+half $>$ \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcascade_1_1_preconditioner}{cascade\+::\+Preconditioner}}$<$ TMatrix, TPrecision $>$\+::cast\+\_\+hlf\+\_\+ptr (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_ad2f02cf30f012c2d530616f2453ea251}{cascade\+::\+ILUPreconditioner$<$ TMatrix, TPrecision $>$}}, \mbox{\hyperlink{classcascade_1_1_matrix_inverse_preconditioner_a5a94062575ade3ed254043db84445fde}{cascade\+::\+Matrix\+Inverse\+Preconditioner$<$ TMatrix, TPrecision $>$}}, and \mbox{\hyperlink{classcascade_1_1_no_preconditioner_a2f62b5596de3607ada91b105bd1f147b}{cascade\+::\+No\+Preconditioner$<$ TMatrix, TPrecision $>$}}.
+
+\Hypertarget{classcascade_1_1_preconditioner_a347820a28ad209fd8adc8ee60692dbb8}\index{cascade::Preconditioner$<$ TMatrix, TPrecision $>$@{cascade::Preconditioner$<$ TMatrix, TPrecision $>$}!cast\_sgl\_ptr@{cast\_sgl\_ptr}}
+\index{cast\_sgl\_ptr@{cast\_sgl\_ptr}!cascade::Preconditioner$<$ TMatrix, TPrecision $>$@{cascade::Preconditioner$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{cast\_sgl\_ptr()}{cast\_sgl\_ptr()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_preconditioner_a347820a28ad209fd8adc8ee60692dbb8} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+virtual \mbox{\hyperlink{classcascade_1_1_preconditioner}{Preconditioner}}$<$ TMatrix, float $>$ \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcascade_1_1_preconditioner}{cascade\+::\+Preconditioner}}$<$ TMatrix, TPrecision $>$\+::cast\+\_\+sgl\+\_\+ptr (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_ae7b7dd2cd2ce4e597fec27f8449a6ba2}{cascade\+::\+ILUPreconditioner$<$ TMatrix, TPrecision $>$}}, \mbox{\hyperlink{classcascade_1_1_matrix_inverse_preconditioner_ad3c9b3e2e4e9c707e2d59b8410e1b071}{cascade\+::\+Matrix\+Inverse\+Preconditioner$<$ TMatrix, TPrecision $>$}}, and \mbox{\hyperlink{classcascade_1_1_no_preconditioner_ade7d88df9874910fba19a25ab05281ad}{cascade\+::\+No\+Preconditioner$<$ TMatrix, TPrecision $>$}}.
+
+\Hypertarget{classcascade_1_1_preconditioner_aa4b26517fd95484368e0a206d84e3b4e}\index{cascade::Preconditioner$<$ TMatrix, TPrecision $>$@{cascade::Preconditioner$<$ TMatrix, TPrecision $>$}!check\_compatibility\_left@{check\_compatibility\_left}}
+\index{check\_compatibility\_left@{check\_compatibility\_left}!cascade::Preconditioner$<$ TMatrix, TPrecision $>$@{cascade::Preconditioner$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{check\_compatibility\_left()}{check\_compatibility\_left()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_preconditioner_aa4b26517fd95484368e0a206d84e3b4e} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+virtual bool \mbox{\hyperlink{classcascade_1_1_preconditioner}{cascade\+::\+Preconditioner}}$<$ TMatrix, TPrecision $>$\+::check\+\_\+compatibility\+\_\+left (\begin{DoxyParamCaption}\item[{int const \&}]{m}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_ab2e83c22bed966557abb9f80265ae1f9}{cascade\+::\+ILUPreconditioner$<$ TMatrix, TPrecision $>$}}, \mbox{\hyperlink{classcascade_1_1_matrix_inverse_preconditioner_a1710b3135b15d8cfa2a447ce597f5404}{cascade\+::\+Matrix\+Inverse\+Preconditioner$<$ TMatrix, TPrecision $>$}}, and \mbox{\hyperlink{classcascade_1_1_no_preconditioner_ad3233af9c9e4bf9820d3a2bfff1e0536}{cascade\+::\+No\+Preconditioner$<$ TMatrix, TPrecision $>$}}.
+
+\Hypertarget{classcascade_1_1_preconditioner_a8131081c22cec99957d37de6e4b5e395}\index{cascade::Preconditioner$<$ TMatrix, TPrecision $>$@{cascade::Preconditioner$<$ TMatrix, TPrecision $>$}!check\_compatibility\_right@{check\_compatibility\_right}}
+\index{check\_compatibility\_right@{check\_compatibility\_right}!cascade::Preconditioner$<$ TMatrix, TPrecision $>$@{cascade::Preconditioner$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{check\_compatibility\_right()}{check\_compatibility\_right()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_preconditioner_a8131081c22cec99957d37de6e4b5e395} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+virtual bool \mbox{\hyperlink{classcascade_1_1_preconditioner}{cascade\+::\+Preconditioner}}$<$ TMatrix, TPrecision $>$\+::check\+\_\+compatibility\+\_\+right (\begin{DoxyParamCaption}\item[{int const \&}]{n}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_a8bc624bdfc184e2b0f1a56b9ff702ad2}{cascade\+::\+ILUPreconditioner$<$ TMatrix, TPrecision $>$}}, \mbox{\hyperlink{classcascade_1_1_matrix_inverse_preconditioner_a585885c6f642a9cfe5fc1dc103e030c7}{cascade\+::\+Matrix\+Inverse\+Preconditioner$<$ TMatrix, TPrecision $>$}}, and \mbox{\hyperlink{classcascade_1_1_no_preconditioner_a5ccb22bc714c5f44a820ed92818c2b0d}{cascade\+::\+No\+Preconditioner$<$ TMatrix, TPrecision $>$}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/dosre/dev/precision-\/cascade/include/preconditioners/\mbox{\hyperlink{_preconditioner_8h}{Preconditioner.\+h}}\end{DoxyCompactItemize}

@@ -1,0 +1,23 @@
+\doxysection{Type\+Identity.\+h}
+\hypertarget{_type_identity_8h_source}{}\label{_type_identity_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/include/tools/TypeIdentity.h@{C:/Users/dosre/dev/precision-\/cascade/include/tools/TypeIdentity.h}}
+\mbox{\hyperlink{_type_identity_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ TYPEIDENTITY\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ TYPEIDENTITY\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacecascade}{cascade}}\ \{}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ solution\ from\ https://stackoverflow.com/questions/3052579/explicit-\/}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//\ specialization-\/in-\/non-\/namespace-\/scope\ for\ explicit\ specialization\ in}}
+\DoxyCodeLine{00008\ \textcolor{comment}{//\ non-\/namespace\ scope}}
+\DoxyCodeLine{00009\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix>}
+\DoxyCodeLine{00010\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structcascade_1_1_t_matrix_identity}{TMatrixIdentity}}\ \{\ \textcolor{keyword}{typedef}\ TMatrix<double>\ \mbox{\hyperlink{structcascade_1_1_t_matrix_identity_aaa49b39e786e5e1fc17d8fc8808e2f8f}{\_}};\ \};}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00013\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structcascade_1_1_type_identity}{TypeIdentity}}\ \{\ \textcolor{keyword}{typedef}\ TPrecision\ \mbox{\hyperlink{structcascade_1_1_type_identity_a126fc71f04f73bbb7f6f3d7dd4e5c9ef}{\_}};\ \};}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

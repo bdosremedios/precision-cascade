@@ -1,0 +1,82 @@
+\doxysection{FP\+\_\+\+GMRES\+\_\+\+IR.\+h}
+\hypertarget{_f_p___g_m_r_e_s___i_r_8h_source}{}\label{_f_p___g_m_r_e_s___i_r_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/include/solvers/nested/GMRES\_IR/FP\_GMRES\_IR.h@{C:/Users/dosre/dev/precision-\/cascade/include/solvers/nested/GMRES\_IR/FP\_GMRES\_IR.h}}
+\mbox{\hyperlink{_f_p___g_m_r_e_s___i_r_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ FP\_GMRES\_IR\_SOLVE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ FP\_GMRES\_IR\_SOLVE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_iterative_refinement_base_8h}{../IterativeRefinementBase.h}}"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_g_m_r_e_s_solve_8h}{../../GMRES/GMRESSolve.h}}"{}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacecascade}{cascade}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix,\ \textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00010\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1_f_p___g_m_r_e_s___i_r___solve_a91f48989f91c2bb0c93b0308bd847c7e}{FP\_GMRES\_IR\_Solve}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcascade_1_1_iterative_refinement_base_a7d1f990f4f43204329d401d2cf2ca5aa}{IterativeRefinementBase}}<TMatrix>}
+\DoxyCodeLine{00011\ \{}
+\DoxyCodeLine{00012\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keywordtype}{void}\ set\_inner\_solve()\ \{}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_f_p___g_m_r_e_s___i_r___solve_a9b09a0a6c1118b3260c8548daa162e96}{mutrhs\_innerlinsys\_ptr}}.set\_rhs(this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a1853ac2a74547799dd50f7a0a8f84bf3}{curr\_res}});}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a89076f801630b485f9631cca7211ccdd}{inner\_solver}}\ =\ std::make\_shared<GMRESSolve<TMatrix,\ TPrecision>>(}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \ \ \ \ \&\mbox{\hyperlink{classcascade_1_1_f_p___g_m_r_e_s___i_r___solve_a9b09a0a6c1118b3260c8548daa162e96}{mutrhs\_innerlinsys\_ptr}},}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a2dc06a4a8950278f0617afd1f77744dd}{inner\_solve\_arg\_pkg}},}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_f_p___g_m_r_e_s___i_r___solve_a904646dc9c9d95b6fe36fdaf3ec9a246}{inner\_precond\_arg\_pkg}}}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classcascade_1_1_f_p___g_m_r_e_s___i_r___solve_ac5e97587a7e09d65b3211c0a27e3210d}{basis\_zero\_tol}};}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{PrecondArgPkg<TMatrix,\ TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_f_p___g_m_r_e_s___i_r___solve_a904646dc9c9d95b6fe36fdaf3ec9a246}{inner\_precond\_arg\_pkg}};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_typed_linear_system___mut_addl_r_h_s}{TypedLinearSystem\_MutAddlRHS<TMatrix,\ TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_f_p___g_m_r_e_s___i_r___solve_a9b09a0a6c1118b3260c8548daa162e96}{mutrhs\_innerlinsys\_ptr}};}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_f_p___g_m_r_e_s___i_r___solve_ae10dbc2a371af71fa3632fff9634cd15}{initialize\_inner\_outer\_solver}}()\textcolor{keyword}{\ override\ }\{\ set\_inner\_solve();\ \}}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_f_p___g_m_r_e_s___i_r___solve_aaa15daeaa9be3dbcc3e0088e9f592a94}{outer\_iterate\_setup}}()\textcolor{keyword}{\ override\ }\{\ set\_inner\_solve();\ \}}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classcascade_1_1_f_p___g_m_r_e_s___i_r___solve_a082b6b41d52f6aa83331c40c13e06d5c}{derived\_generic\_reset}}()\textcolor{keyword}{\ override\ }\{}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_inner_outer_solve_a5f2326e837bf3ae1727b8a9c06ce120d}{InnerOuterSolve<TMatrix>::derived\_generic\_reset}}();}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ set\_inner\_solve();}
+\DoxyCodeLine{00039\ \ \ \ \ \}}
+\DoxyCodeLine{00040\ \ \ \ \ }
+\DoxyCodeLine{00041\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classcascade_1_1_iterative_refinement_base}{IterativeRefinementBase}}<TMatrix>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a3afc6c73083d839f1b451aa255a8d3ff}{::gen\_lin\_sys\_ptr}};}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_f_p___g_m_r_e_s___i_r___solve_a91f48989f91c2bb0c93b0308bd847c7e}{FP\_GMRES\_IR\_Solve}}(}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_typed_linear_system}{TypedLinearSystem<TMatrix,\ TPrecision>}}\ *\ \textcolor{keyword}{const}\ arg\_outer\_typed\_lin\_sys\_ptr,}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ arg\_basis\_zero\_tol,}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{SolveArgPkg}}\ \&arg\_solve\_arg\_pkg,}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{PrecondArgPkg<TMatrix,\ TPrecision>}}\ arg\_inner\_precond\_arg\_pkg\ =\ (}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{PrecondArgPkg<TMatrix,\ TPrecision>}}()}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00052\ \ \ \ \ ):}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_f_p___g_m_r_e_s___i_r___solve_ac5e97587a7e09d65b3211c0a27e3210d}{basis\_zero\_tol}}(arg\_basis\_zero\_tol),}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_f_p___g_m_r_e_s___i_r___solve_a904646dc9c9d95b6fe36fdaf3ec9a246}{inner\_precond\_arg\_pkg}}(arg\_inner\_precond\_arg\_pkg),}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_iterative_refinement_base_a7d1f990f4f43204329d401d2cf2ca5aa}{IterativeRefinementBase}}<TMatrix>(}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_outer\_typed\_lin\_sys\_ptr-\/>get\_gen\_lin\_sys\_ptr(),}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_solve\_arg\_pkg}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ ),}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_f_p___g_m_r_e_s___i_r___solve_a9b09a0a6c1118b3260c8548daa162e96}{mutrhs\_innerlinsys\_ptr}}(arg\_outer\_typed\_lin\_sys\_ptr,\ this-\/>\mbox{\hyperlink{classcascade_1_1_generic_iterative_solve_a1853ac2a74547799dd50f7a0a8f84bf3}{curr\_res}})}
+\DoxyCodeLine{00060\ \ \ \ \ \{}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_f_p___g_m_r_e_s___i_r___solve_ae10dbc2a371af71fa3632fff9634cd15}{initialize\_inner\_outer\_solver}}();}
+\DoxyCodeLine{00062\ \ \ \ \ \}}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{comment}{//\ Forbid\ rvalue\ instantiation}}
+\DoxyCodeLine{00065\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_f_p___g_m_r_e_s___i_r___solve_a94630ecb20a01f15b1c56a3767612b1e}{FP\_GMRES\_IR\_Solve}}(}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_typed_linear_system}{TypedLinearSystem<TMatrix,\ TPrecision>}}\ *\ \textcolor{keyword}{const},}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double},}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcascade_1_1_solve_arg_pkg}{SolveArgPkg}}\ \&\&,}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structcascade_1_1_precond_arg_pkg}{PrecondArgPkg<TMatrix,\ TPrecision>}}}
+\DoxyCodeLine{00070\ \ \ \ \ )\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \};}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \}}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

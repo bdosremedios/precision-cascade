@@ -1,0 +1,147 @@
+\doxysection{cascade\+::Typed\+Linear\+System\+\_\+\+Intf\texorpdfstring{$<$}{<} TMatrix, TPrecision \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcascade_1_1_typed_linear_system___intf}{}\label{classcascade_1_1_typed_linear_system___intf}\index{cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$@{cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$}}
+
+
+{\ttfamily \#include $<$Linear\+System.\+h$>$}
+
+
+
+Inheritance diagram for cascade\+::Typed\+Linear\+System\+\_\+\+Intf\texorpdfstring{$<$}{<} TMatrix, TPrecision \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classcascade_1_1_typed_linear_system___intf__inherit__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_a88d8481086b8e3fb9e4430c2057e7db3}{Typed\+Linear\+System\+\_\+\+Intf}} (const \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{Generic\+Linear\+System}}$<$ TMatrix $>$ \texorpdfstring{$\ast$}{*}const arg\+\_\+gen\+\_\+lin\+\_\+sys\+\_\+ptr)
+\item 
+const \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{Generic\+Linear\+System}}$<$ TMatrix $>$ \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_a253a6acdf4f0413e0d015d5b9f3ed543}{get\+\_\+gen\+\_\+lin\+\_\+sys\+\_\+ptr}} () const
+\item 
+const TMatrix$<$ double $>$ \& \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_ac13bcd3a039bcb38f0d671cc57e03c8a}{get\+\_\+A}} () const
+\item 
+virtual const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ double $>$ \& \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_ac9a3d2d4fdb399c2623754483ff0e57b}{get\+\_\+b}} () const
+\item 
+const int \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_a33e98c9ec940d3f90f8c1cb1d37fd85b}{get\+\_\+m}} () const
+\item 
+const int \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_a0d01dd7fdf970b6d7cf0e03e6c13a312}{get\+\_\+n}} () const
+\item 
+const int \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_a04fc40610d648d460efc611b8afde06e}{get\+\_\+nnz}} () const
+\item 
+const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_ac4c6ddc322eb1882704b57b1b3ba9591}{get\+\_\+cu\+\_\+handles}} () const
+\item 
+virtual const TMatrix$<$ TPrecision $>$ \& \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_aa5ba053905ef5cd4df95a75ac13a0832}{get\+\_\+\+A\+\_\+typed}} () const =0
+\item 
+virtual const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \& \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_a1fdebf5d311c07c4e1c18314ef2d2c52}{get\+\_\+b\+\_\+typed}} () const =0
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+const \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{Generic\+Linear\+System}}$<$ TMatrix $>$ \texorpdfstring{$\ast$}{*}const \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf_a30186543537979cae0bd0a125aecb8a1}{gen\+\_\+lin\+\_\+sys\+\_\+ptr}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcascade_1_1_typed_linear_system___intf_a88d8481086b8e3fb9e4430c2057e7db3}\index{cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$@{cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$}!TypedLinearSystem\_Intf@{TypedLinearSystem\_Intf}}
+\index{TypedLinearSystem\_Intf@{TypedLinearSystem\_Intf}!cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$@{cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{TypedLinearSystem\_Intf()}{TypedLinearSystem\_Intf()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_typed_linear_system___intf_a88d8481086b8e3fb9e4430c2057e7db3} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf}{cascade\+::\+Typed\+Linear\+System\+\_\+\+Intf}}$<$ TMatrix, TPrecision $>$\+::\+Typed\+Linear\+System\+\_\+\+Intf (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{Generic\+Linear\+System}}$<$ TMatrix $>$ \texorpdfstring{$\ast$}{*}const}]{arg\+\_\+gen\+\_\+lin\+\_\+sys\+\_\+ptr}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcascade_1_1_typed_linear_system___intf_ac13bcd3a039bcb38f0d671cc57e03c8a}\index{cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$@{cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$}!get\_A@{get\_A}}
+\index{get\_A@{get\_A}!cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$@{cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{get\_A()}{get\_A()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_typed_linear_system___intf_ac13bcd3a039bcb38f0d671cc57e03c8a} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+const TMatrix$<$ double $>$ \& \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf}{cascade\+::\+Typed\+Linear\+System\+\_\+\+Intf}}$<$ TMatrix, TPrecision $>$\+::get\+\_\+A (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_typed_linear_system___intf_aa5ba053905ef5cd4df95a75ac13a0832}\index{cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$@{cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$}!get\_A\_typed@{get\_A\_typed}}
+\index{get\_A\_typed@{get\_A\_typed}!cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$@{cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{get\_A\_typed()}{get\_A\_typed()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_typed_linear_system___intf_aa5ba053905ef5cd4df95a75ac13a0832} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+virtual const TMatrix$<$ TPrecision $>$ \& \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf}{cascade\+::\+Typed\+Linear\+System\+\_\+\+Intf}}$<$ TMatrix, TPrecision $>$\+::get\+\_\+\+A\+\_\+typed (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{classcascade_1_1_typed_linear_system_a697448053f40b7660517b46aed4b212a}{cascade\+::\+Typed\+Linear\+System$<$ TMatrix, TPrecision $>$}}, \mbox{\hyperlink{classcascade_1_1_typed_linear_system_a697448053f40b7660517b46aed4b212a}{cascade\+::\+Typed\+Linear\+System$<$ TMatrix, \+\_\+\+\_\+half $>$}}, \mbox{\hyperlink{classcascade_1_1_typed_linear_system_a697448053f40b7660517b46aed4b212a}{cascade\+::\+Typed\+Linear\+System$<$ TMatrix, double $>$}}, \mbox{\hyperlink{classcascade_1_1_typed_linear_system_3_01_t_matrix_00_01double_01_4_ae9203edcaaa6c79ebc785f2ef1f5c7fb}{cascade\+::\+Typed\+Linear\+System$<$ TMatrix, double $>$}}, \mbox{\hyperlink{classcascade_1_1_typed_linear_system_a697448053f40b7660517b46aed4b212a}{cascade\+::\+Typed\+Linear\+System$<$ TMatrix, float $>$}}, \mbox{\hyperlink{classcascade_1_1_typed_linear_system___mut_addl_r_h_s_a874ba60313a2dd85a042eb5c68fffd8d}{cascade\+::\+Typed\+Linear\+System\+\_\+\+Mut\+Addl\+RHS$<$ TMatrix, TPrecision $>$}}, \mbox{\hyperlink{classcascade_1_1_typed_linear_system___mut_addl_r_h_s_a874ba60313a2dd85a042eb5c68fffd8d}{cascade\+::\+Typed\+Linear\+System\+\_\+\+Mut\+Addl\+RHS$<$ TMatrix, \+\_\+\+\_\+half $>$}}, \mbox{\hyperlink{classcascade_1_1_typed_linear_system___mut_addl_r_h_s_a874ba60313a2dd85a042eb5c68fffd8d}{cascade\+::\+Typed\+Linear\+System\+\_\+\+Mut\+Addl\+RHS$<$ TMatrix, double $>$}}, and \mbox{\hyperlink{classcascade_1_1_typed_linear_system___mut_addl_r_h_s_a874ba60313a2dd85a042eb5c68fffd8d}{cascade\+::\+Typed\+Linear\+System\+\_\+\+Mut\+Addl\+RHS$<$ TMatrix, float $>$}}.
+
+\Hypertarget{classcascade_1_1_typed_linear_system___intf_ac9a3d2d4fdb399c2623754483ff0e57b}\index{cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$@{cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$}!get\_b@{get\_b}}
+\index{get\_b@{get\_b}!cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$@{cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{get\_b()}{get\_b()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_typed_linear_system___intf_ac9a3d2d4fdb399c2623754483ff0e57b} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+virtual const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ double $>$ \& \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf}{cascade\+::\+Typed\+Linear\+System\+\_\+\+Intf}}$<$ TMatrix, TPrecision $>$\+::get\+\_\+b (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented in \mbox{\hyperlink{classcascade_1_1_typed_linear_system___mut_addl_r_h_s_a73d67b8b7f0b0a7c3c9d3009d33e52da}{cascade\+::\+Typed\+Linear\+System\+\_\+\+Mut\+Addl\+RHS$<$ TMatrix, TPrecision $>$}}, \mbox{\hyperlink{classcascade_1_1_typed_linear_system___mut_addl_r_h_s_a73d67b8b7f0b0a7c3c9d3009d33e52da}{cascade\+::\+Typed\+Linear\+System\+\_\+\+Mut\+Addl\+RHS$<$ TMatrix, \+\_\+\+\_\+half $>$}}, \mbox{\hyperlink{classcascade_1_1_typed_linear_system___mut_addl_r_h_s_a73d67b8b7f0b0a7c3c9d3009d33e52da}{cascade\+::\+Typed\+Linear\+System\+\_\+\+Mut\+Addl\+RHS$<$ TMatrix, double $>$}}, and \mbox{\hyperlink{classcascade_1_1_typed_linear_system___mut_addl_r_h_s_a73d67b8b7f0b0a7c3c9d3009d33e52da}{cascade\+::\+Typed\+Linear\+System\+\_\+\+Mut\+Addl\+RHS$<$ TMatrix, float $>$}}.
+
+\Hypertarget{classcascade_1_1_typed_linear_system___intf_a1fdebf5d311c07c4e1c18314ef2d2c52}\index{cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$@{cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$}!get\_b\_typed@{get\_b\_typed}}
+\index{get\_b\_typed@{get\_b\_typed}!cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$@{cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{get\_b\_typed()}{get\_b\_typed()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_typed_linear_system___intf_a1fdebf5d311c07c4e1c18314ef2d2c52} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+virtual const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \& \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf}{cascade\+::\+Typed\+Linear\+System\+\_\+\+Intf}}$<$ TMatrix, TPrecision $>$\+::get\+\_\+b\+\_\+typed (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{classcascade_1_1_typed_linear_system_a6d3b6be6d5f6086ed0970548e7bc814f}{cascade\+::\+Typed\+Linear\+System$<$ TMatrix, TPrecision $>$}}, \mbox{\hyperlink{classcascade_1_1_typed_linear_system_a6d3b6be6d5f6086ed0970548e7bc814f}{cascade\+::\+Typed\+Linear\+System$<$ TMatrix, \+\_\+\+\_\+half $>$}}, \mbox{\hyperlink{classcascade_1_1_typed_linear_system_a6d3b6be6d5f6086ed0970548e7bc814f}{cascade\+::\+Typed\+Linear\+System$<$ TMatrix, double $>$}}, \mbox{\hyperlink{classcascade_1_1_typed_linear_system_3_01_t_matrix_00_01double_01_4_a72f4bb43fa9a4368ecf77a6449ac8cbf}{cascade\+::\+Typed\+Linear\+System$<$ TMatrix, double $>$}}, \mbox{\hyperlink{classcascade_1_1_typed_linear_system_a6d3b6be6d5f6086ed0970548e7bc814f}{cascade\+::\+Typed\+Linear\+System$<$ TMatrix, float $>$}}, \mbox{\hyperlink{classcascade_1_1_typed_linear_system___mut_addl_r_h_s_a15f71e7ad59d60a9385edfc36c01b716}{cascade\+::\+Typed\+Linear\+System\+\_\+\+Mut\+Addl\+RHS$<$ TMatrix, TPrecision $>$}}, \mbox{\hyperlink{classcascade_1_1_typed_linear_system___mut_addl_r_h_s_a15f71e7ad59d60a9385edfc36c01b716}{cascade\+::\+Typed\+Linear\+System\+\_\+\+Mut\+Addl\+RHS$<$ TMatrix, \+\_\+\+\_\+half $>$}}, \mbox{\hyperlink{classcascade_1_1_typed_linear_system___mut_addl_r_h_s_a15f71e7ad59d60a9385edfc36c01b716}{cascade\+::\+Typed\+Linear\+System\+\_\+\+Mut\+Addl\+RHS$<$ TMatrix, double $>$}}, and \mbox{\hyperlink{classcascade_1_1_typed_linear_system___mut_addl_r_h_s_a15f71e7ad59d60a9385edfc36c01b716}{cascade\+::\+Typed\+Linear\+System\+\_\+\+Mut\+Addl\+RHS$<$ TMatrix, float $>$}}.
+
+\Hypertarget{classcascade_1_1_typed_linear_system___intf_ac4c6ddc322eb1882704b57b1b3ba9591}\index{cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$@{cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$}!get\_cu\_handles@{get\_cu\_handles}}
+\index{get\_cu\_handles@{get\_cu\_handles}!cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$@{cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{get\_cu\_handles()}{get\_cu\_handles()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_typed_linear_system___intf_ac4c6ddc322eb1882704b57b1b3ba9591} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf}{cascade\+::\+Typed\+Linear\+System\+\_\+\+Intf}}$<$ TMatrix, TPrecision $>$\+::get\+\_\+cu\+\_\+handles (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_typed_linear_system___intf_a253a6acdf4f0413e0d015d5b9f3ed543}\index{cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$@{cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$}!get\_gen\_lin\_sys\_ptr@{get\_gen\_lin\_sys\_ptr}}
+\index{get\_gen\_lin\_sys\_ptr@{get\_gen\_lin\_sys\_ptr}!cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$@{cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{get\_gen\_lin\_sys\_ptr()}{get\_gen\_lin\_sys\_ptr()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_typed_linear_system___intf_a253a6acdf4f0413e0d015d5b9f3ed543} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+const \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{Generic\+Linear\+System}}$<$ TMatrix $>$ \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf}{cascade\+::\+Typed\+Linear\+System\+\_\+\+Intf}}$<$ TMatrix, TPrecision $>$\+::get\+\_\+gen\+\_\+lin\+\_\+sys\+\_\+ptr (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_typed_linear_system___intf_a33e98c9ec940d3f90f8c1cb1d37fd85b}\index{cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$@{cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$}!get\_m@{get\_m}}
+\index{get\_m@{get\_m}!cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$@{cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{get\_m()}{get\_m()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_typed_linear_system___intf_a33e98c9ec940d3f90f8c1cb1d37fd85b} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+const int \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf}{cascade\+::\+Typed\+Linear\+System\+\_\+\+Intf}}$<$ TMatrix, TPrecision $>$\+::get\+\_\+m (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_typed_linear_system___intf_a0d01dd7fdf970b6d7cf0e03e6c13a312}\index{cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$@{cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$}!get\_n@{get\_n}}
+\index{get\_n@{get\_n}!cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$@{cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{get\_n()}{get\_n()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_typed_linear_system___intf_a0d01dd7fdf970b6d7cf0e03e6c13a312} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+const int \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf}{cascade\+::\+Typed\+Linear\+System\+\_\+\+Intf}}$<$ TMatrix, TPrecision $>$\+::get\+\_\+n (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_typed_linear_system___intf_a04fc40610d648d460efc611b8afde06e}\index{cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$@{cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$}!get\_nnz@{get\_nnz}}
+\index{get\_nnz@{get\_nnz}!cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$@{cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{get\_nnz()}{get\_nnz()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_typed_linear_system___intf_a04fc40610d648d460efc611b8afde06e} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+const int \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf}{cascade\+::\+Typed\+Linear\+System\+\_\+\+Intf}}$<$ TMatrix, TPrecision $>$\+::get\+\_\+nnz (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classcascade_1_1_typed_linear_system___intf_a30186543537979cae0bd0a125aecb8a1}\index{cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$@{cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$}!gen\_lin\_sys\_ptr@{gen\_lin\_sys\_ptr}}
+\index{gen\_lin\_sys\_ptr@{gen\_lin\_sys\_ptr}!cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$@{cascade::TypedLinearSystem\_Intf$<$ TMatrix, TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{gen\_lin\_sys\_ptr}{gen\_lin\_sys\_ptr}}
+{\footnotesize\ttfamily \label{classcascade_1_1_typed_linear_system___intf_a30186543537979cae0bd0a125aecb8a1} 
+template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ \\
+const \mbox{\hyperlink{classcascade_1_1_generic_linear_system}{Generic\+Linear\+System}}$<$TMatrix$>$\texorpdfstring{$\ast$}{*} const \mbox{\hyperlink{classcascade_1_1_typed_linear_system___intf}{cascade\+::\+Typed\+Linear\+System\+\_\+\+Intf}}$<$ TMatrix, TPrecision $>$\+::gen\+\_\+lin\+\_\+sys\+\_\+ptr\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/dosre/dev/precision-\/cascade/include/tools/arg\+\_\+pkgs/\mbox{\hyperlink{_linear_system_8h}{Linear\+System.\+h}}\end{DoxyCompactItemize}

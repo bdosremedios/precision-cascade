@@ -1,0 +1,398 @@
+\doxysection{cascade\+::No\+Fill\+Matrix\+Sparse\texorpdfstring{$<$}{<} TPrecision \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classcascade_1_1_no_fill_matrix_sparse}{}\label{classcascade_1_1_no_fill_matrix_sparse}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+
+
+{\ttfamily \#include $<$No\+Fill\+Matrix\+Sparse.\+h$>$}
+
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_1_1_block}{Block}}
+\item 
+class \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_1_1_col}{Col}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5a1d223482ab64fdcd45feeefa330ad4}{No\+Fill\+Matrix\+Sparse}} (const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&arg\+\_\+cu\+\_\+handles, int arg\+\_\+m\+\_\+rows, int arg\+\_\+n\+\_\+cols)
+\item 
+\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_ae51936f139854074601a0e689e28451e}{No\+Fill\+Matrix\+Sparse}} (const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&arg\+\_\+cu\+\_\+handles)
+\item 
+\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_af8a71c0dda8067f0cf410d849fd50e4b}{No\+Fill\+Matrix\+Sparse}} (const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&arg\+\_\+cu\+\_\+handles, std\+::initializer\+\_\+list$<$ std\+::initializer\+\_\+list$<$ TPrecision $>$ $>$ li)
+\item 
+\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a2a0a382e1dc09315f8c615cf4151e88c}{No\+Fill\+Matrix\+Sparse}} (const \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}} \&other)
+\item 
+\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a4a4ec99b5aa7b0b839a7cd70a079162a}{\texorpdfstring{$\sim$}{\string~}\+No\+Fill\+Matrix\+Sparse}} ()
+\item 
+\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}} \& \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a843cbceb21d82fdef27d51a3e5a715b8}{operator=}} (const \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}} \&other)
+\item 
+\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a547cbf7074f5bf4b12497ea8904d2f62}{No\+Fill\+Matrix\+Sparse}} (const \mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \&source\+\_\+mat)
+\item 
+\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a2b527e172b80bd741208dc7de6976e0b}{No\+Fill\+Matrix\+Sparse}} (const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&source\+\_\+cu\+\_\+handles, int \texorpdfstring{$\ast$}{*}h\+\_\+col\+\_\+offsets, int \texorpdfstring{$\ast$}{*}h\+\_\+row\+\_\+indices, TPrecision \texorpdfstring{$\ast$}{*}h\+\_\+vals, int source\+\_\+m\+\_\+rows, int source\+\_\+n\+\_\+cols, int source\+\_\+nnz)
+\item 
+void \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a3139f91b63d91498caa64f7022d210c6}{copy\+\_\+data\+\_\+to\+\_\+ptr}} (int \texorpdfstring{$\ast$}{*}arg\+\_\+h\+\_\+col\+\_\+offsets, int \texorpdfstring{$\ast$}{*}arg\+\_\+h\+\_\+row\+\_\+indices, TPrecision \texorpdfstring{$\ast$}{*}arg\+\_\+h\+\_\+values, int target\+\_\+m\+\_\+rows, int target\+\_\+n\+\_\+cols, int target\+\_\+nnz) const
+\item 
+const \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_ae49e781aa33dc780bb42d5ddce91dfb0}{get\+\_\+elem}} (int row, int col) const
+\item 
+\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_1_1_col}{Col}} \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a699d948355663fcc24807b84f595fdcc}{get\+\_\+col}} (int col) const
+\item 
+\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_1_1_block}{Block}} \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a67870d16b06421d39235d624a6637f11}{get\+\_\+block}} (int start\+\_\+row, int start\+\_\+col, int block\+\_\+rows, int block\+\_\+cols) const
+\item 
+\mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a53c7790e128457a37837ed1283a83b4e}{get\+\_\+cu\+\_\+handles}} () const
+\item 
+int \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a96073f4b32736ec5a026393401a4adc7}{rows}} () const
+\item 
+int \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a82ef73765687020d4e71b8f315184b26}{cols}} () const
+\item 
+int \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a547921f00f782f506d3066e46b35330b}{non\+\_\+zeros}} () const
+\item 
+std\+::string \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a359332e34ba27fa35d5ac02744d1a236}{get\+\_\+matrix\+\_\+string}} () const
+\item 
+std\+::string \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_acc712a597e5586b62f428030f3d72b11}{get\+\_\+info\+\_\+string}} () const
+\item 
+{\footnotesize template$<$typename Cast\+\_\+\+TPrecision$>$ }\\\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}}$<$ Cast\+\_\+\+TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a801f509410f4b119f8130b61a1e303c7}{cast}} () const
+\item 
+\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_acd2e0fe66093276d38bd30d6e3e55401}{operator\texorpdfstring{$\ast$}{*}}} (const \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \&scalar) const
+\item 
+\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a80410aa80296a0c72b2cfb478949c5de}{operator/}} (const \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \&scalar) const
+\item 
+\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$ \& \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_ac8c015b939708d1c46c7f5539ce4bb9a}{operator\texorpdfstring{$\ast$}{*}=}} (const \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \&scalar)
+\item 
+\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$ \& \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_acb25cbddf7427e5f5e329f67c12716ed}{operator/=}} (const \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \&scalar)
+\item 
+\mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_aa17da4df4e2cba95f5eff53ffe6b808d}{get\+\_\+max\+\_\+mag\+\_\+elem}} () const
+\item 
+void \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a2f07e12797bd592503f6479924220dd4}{normalize\+\_\+magnitude}} ()
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a32457929412b564eabbe06ae6ad6de74}{operator\texorpdfstring{$\ast$}{*}}} (const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&vec) const
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_aa2901f6ce31aec8e8a14899dfd8bf69c}{transpose\+\_\+prod}} (const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&vec) const
+\item 
+\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a3286fc11d773c5ca46300ce763262c57}{transpose}} () const
+\item 
+bool \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_ad4db4e239bb74a62504f60728c0f445b}{get\+\_\+has\+\_\+fast\+\_\+trsv}} () const
+\item 
+void \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_ad29f4c22db3043f849592ee13b71c0ca}{preprocess\+\_\+trsv}} (bool is\+\_\+upptri)
+\item 
+void \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_ab6cb00c13703d4f2796776b8fa864992}{clear\+\_\+preprocess\+\_\+trsv}} ()
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_acb4b94de1fca1cc3f10fdfc3b3141048}{back\+\_\+sub}} (const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&arg\+\_\+rhs) const
+\item 
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a61f10b38e190f7e3bf38f9efd5f484a6}{frwd\+\_\+sub}} (const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&arg\+\_\+rhs) const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a24baeedb7f03649f50d346ed5de9ad7b}{Zero}} (const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&arg\+\_\+cu\+\_\+handles, int arg\+\_\+m\+\_\+rows, int arg\+\_\+n\+\_\+cols)
+\item 
+static \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a99eafe27496570e358f93debec8b567f}{Ones}} (const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&arg\+\_\+cu\+\_\+handles, int arg\+\_\+m\+\_\+rows, int arg\+\_\+n\+\_\+cols)
+\item 
+static \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a89ab618bf0e8556074d2d9e9c725c769}{Identity}} (const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&arg\+\_\+cu\+\_\+handles, int arg\+\_\+m\+\_\+rows, int arg\+\_\+n\+\_\+cols)
+\item 
+static \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_ae48661d2f11b5e2affe1bddbb43a8464}{Random}} (const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&arg\+\_\+cu\+\_\+handles, int arg\+\_\+m\+\_\+rows, int arg\+\_\+n\+\_\+cols, double fill\+\_\+prob)
+\item 
+static \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a13be07646a28e10b0d76d4ac0c8f18ff}{Random\+\_\+\+UT}} (const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&arg\+\_\+cu\+\_\+handles, int arg\+\_\+m\+\_\+rows, int arg\+\_\+n\+\_\+cols, double fill\+\_\+prob)
+\item 
+static \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a54289b8be0aeabaec036894ab4ee65d1}{Random\+\_\+\+LT}} (const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&arg\+\_\+cu\+\_\+handles, int arg\+\_\+m\+\_\+rows, int arg\+\_\+n\+\_\+cols, double fill\+\_\+prob)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename$>$ }\\class \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}{No\+Fill\+Matrix\+Sparse}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcascade_1_1_no_fill_matrix_sparse_a5a1d223482ab64fdcd45feeefa330ad4}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}!NoFillMatrixSparse@{NoFillMatrixSparse}}
+\index{NoFillMatrixSparse@{NoFillMatrixSparse}!cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{NoFillMatrixSparse()}{NoFillMatrixSparse()}\hspace{0.1cm}{\footnotesize\ttfamily [1/6]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_no_fill_matrix_sparse_a5a1d223482ab64fdcd45feeefa330ad4} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{cascade\+::\+No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$\+::\+No\+Fill\+Matrix\+Sparse (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&}]{arg\+\_\+cu\+\_\+handles}{, }\item[{int}]{arg\+\_\+m\+\_\+rows}{, }\item[{int}]{arg\+\_\+n\+\_\+cols}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_no_fill_matrix_sparse_ae51936f139854074601a0e689e28451e}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}!NoFillMatrixSparse@{NoFillMatrixSparse}}
+\index{NoFillMatrixSparse@{NoFillMatrixSparse}!cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{NoFillMatrixSparse()}{NoFillMatrixSparse()}\hspace{0.1cm}{\footnotesize\ttfamily [2/6]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_no_fill_matrix_sparse_ae51936f139854074601a0e689e28451e} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{cascade\+::\+No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$\+::\+No\+Fill\+Matrix\+Sparse (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&}]{arg\+\_\+cu\+\_\+handles}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_no_fill_matrix_sparse_af8a71c0dda8067f0cf410d849fd50e4b}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}!NoFillMatrixSparse@{NoFillMatrixSparse}}
+\index{NoFillMatrixSparse@{NoFillMatrixSparse}!cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{NoFillMatrixSparse()}{NoFillMatrixSparse()}\hspace{0.1cm}{\footnotesize\ttfamily [3/6]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_no_fill_matrix_sparse_af8a71c0dda8067f0cf410d849fd50e4b} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{cascade\+::\+No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$\+::\+No\+Fill\+Matrix\+Sparse (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&}]{arg\+\_\+cu\+\_\+handles}{, }\item[{std\+::initializer\+\_\+list$<$ std\+::initializer\+\_\+list$<$ TPrecision $>$ $>$}]{li}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_no_fill_matrix_sparse_a2a0a382e1dc09315f8c615cf4151e88c}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}!NoFillMatrixSparse@{NoFillMatrixSparse}}
+\index{NoFillMatrixSparse@{NoFillMatrixSparse}!cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{NoFillMatrixSparse()}{NoFillMatrixSparse()}\hspace{0.1cm}{\footnotesize\ttfamily [4/6]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_no_fill_matrix_sparse_a2a0a382e1dc09315f8c615cf4151e88c} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{cascade\+::\+No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$\+::\+No\+Fill\+Matrix\+Sparse (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$ \&}]{other}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_no_fill_matrix_sparse_a4a4ec99b5aa7b0b839a7cd70a079162a}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}!````~NoFillMatrixSparse@{\texorpdfstring{$\sim$}{\string~}NoFillMatrixSparse}}
+\index{````~NoFillMatrixSparse@{\texorpdfstring{$\sim$}{\string~}NoFillMatrixSparse}!cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}NoFillMatrixSparse()}{\string~NoFillMatrixSparse()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_no_fill_matrix_sparse_a4a4ec99b5aa7b0b839a7cd70a079162a} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{cascade\+::\+No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$\+::\texorpdfstring{$\sim$}{\string~}\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}} (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_no_fill_matrix_sparse_a547cbf7074f5bf4b12497ea8904d2f62}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}!NoFillMatrixSparse@{NoFillMatrixSparse}}
+\index{NoFillMatrixSparse@{NoFillMatrixSparse}!cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{NoFillMatrixSparse()}{NoFillMatrixSparse()}\hspace{0.1cm}{\footnotesize\ttfamily [5/6]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_no_fill_matrix_sparse_a547cbf7074f5bf4b12497ea8904d2f62} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{cascade\+::\+No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$\+::\+No\+Fill\+Matrix\+Sparse (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_matrix_dense}{Matrix\+Dense}}$<$ TPrecision $>$ \&}]{source\+\_\+mat}{}\end{DoxyParamCaption})}
+
+\Hypertarget{classcascade_1_1_no_fill_matrix_sparse_a2b527e172b80bd741208dc7de6976e0b}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}!NoFillMatrixSparse@{NoFillMatrixSparse}}
+\index{NoFillMatrixSparse@{NoFillMatrixSparse}!cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{NoFillMatrixSparse()}{NoFillMatrixSparse()}\hspace{0.1cm}{\footnotesize\ttfamily [6/6]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_no_fill_matrix_sparse_a2b527e172b80bd741208dc7de6976e0b} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{cascade\+::\+No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$\+::\+No\+Fill\+Matrix\+Sparse (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&}]{source\+\_\+cu\+\_\+handles}{, }\item[{int \texorpdfstring{$\ast$}{*}}]{h\+\_\+col\+\_\+offsets}{, }\item[{int \texorpdfstring{$\ast$}{*}}]{h\+\_\+row\+\_\+indices}{, }\item[{TPrecision \texorpdfstring{$\ast$}{*}}]{h\+\_\+vals}{, }\item[{int}]{source\+\_\+m\+\_\+rows}{, }\item[{int}]{source\+\_\+n\+\_\+cols}{, }\item[{int}]{source\+\_\+nnz}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcascade_1_1_no_fill_matrix_sparse_acb4b94de1fca1cc3f10fdfc3b3141048}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}!back\_sub@{back\_sub}}
+\index{back\_sub@{back\_sub}!cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{back\_sub()}{back\_sub()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_no_fill_matrix_sparse_acb4b94de1fca1cc3f10fdfc3b3141048} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{cascade\+::\+No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$\+::back\+\_\+sub (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&}]{arg\+\_\+rhs}{}\end{DoxyParamCaption}) const}
+
+\Hypertarget{classcascade_1_1_no_fill_matrix_sparse_a801f509410f4b119f8130b61a1e303c7}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}!cast@{cast}}
+\index{cast@{cast}!cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{cast()}{cast()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_no_fill_matrix_sparse_a801f509410f4b119f8130b61a1e303c7} 
+template$<$typename TPrecision$>$ \\
+template$<$typename Cast\+\_\+\+TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}}$<$ Cast\+\_\+\+TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{cascade\+::\+No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$\+::cast (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_no_fill_matrix_sparse_ab6cb00c13703d4f2796776b8fa864992}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}!clear\_preprocess\_trsv@{clear\_preprocess\_trsv}}
+\index{clear\_preprocess\_trsv@{clear\_preprocess\_trsv}!cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{clear\_preprocess\_trsv()}{clear\_preprocess\_trsv()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_no_fill_matrix_sparse_ab6cb00c13703d4f2796776b8fa864992} 
+template$<$typename TPrecision$>$ \\
+void \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{cascade\+::\+No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$\+::clear\+\_\+preprocess\+\_\+trsv (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_no_fill_matrix_sparse_a82ef73765687020d4e71b8f315184b26}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}!cols@{cols}}
+\index{cols@{cols}!cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{cols()}{cols()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_no_fill_matrix_sparse_a82ef73765687020d4e71b8f315184b26} 
+template$<$typename TPrecision$>$ \\
+int \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{cascade\+::\+No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$\+::cols (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_no_fill_matrix_sparse_a3139f91b63d91498caa64f7022d210c6}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}!copy\_data\_to\_ptr@{copy\_data\_to\_ptr}}
+\index{copy\_data\_to\_ptr@{copy\_data\_to\_ptr}!cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{copy\_data\_to\_ptr()}{copy\_data\_to\_ptr()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_no_fill_matrix_sparse_a3139f91b63d91498caa64f7022d210c6} 
+template$<$typename TPrecision$>$ \\
+void \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{cascade\+::\+No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$\+::copy\+\_\+data\+\_\+to\+\_\+ptr (\begin{DoxyParamCaption}\item[{int \texorpdfstring{$\ast$}{*}}]{arg\+\_\+h\+\_\+col\+\_\+offsets}{, }\item[{int \texorpdfstring{$\ast$}{*}}]{arg\+\_\+h\+\_\+row\+\_\+indices}{, }\item[{TPrecision \texorpdfstring{$\ast$}{*}}]{arg\+\_\+h\+\_\+values}{, }\item[{int}]{target\+\_\+m\+\_\+rows}{, }\item[{int}]{target\+\_\+n\+\_\+cols}{, }\item[{int}]{target\+\_\+nnz}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_no_fill_matrix_sparse_a61f10b38e190f7e3bf38f9efd5f484a6}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}!frwd\_sub@{frwd\_sub}}
+\index{frwd\_sub@{frwd\_sub}!cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{frwd\_sub()}{frwd\_sub()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_no_fill_matrix_sparse_a61f10b38e190f7e3bf38f9efd5f484a6} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{cascade\+::\+No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$\+::frwd\+\_\+sub (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&}]{arg\+\_\+rhs}{}\end{DoxyParamCaption}) const}
+
+\Hypertarget{classcascade_1_1_no_fill_matrix_sparse_a67870d16b06421d39235d624a6637f11}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}!get\_block@{get\_block}}
+\index{get\_block@{get\_block}!cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{get\_block()}{get\_block()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_no_fill_matrix_sparse_a67870d16b06421d39235d624a6637f11} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_1_1_block}{Block}} \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{cascade\+::\+No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$\+::get\+\_\+block (\begin{DoxyParamCaption}\item[{int}]{start\+\_\+row}{, }\item[{int}]{start\+\_\+col}{, }\item[{int}]{block\+\_\+rows}{, }\item[{int}]{block\+\_\+cols}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_no_fill_matrix_sparse_a699d948355663fcc24807b84f595fdcc}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}!get\_col@{get\_col}}
+\index{get\_col@{get\_col}!cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{get\_col()}{get\_col()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_no_fill_matrix_sparse_a699d948355663fcc24807b84f595fdcc} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse_1_1_col}{Col}} \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{cascade\+::\+No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$\+::get\+\_\+col (\begin{DoxyParamCaption}\item[{int}]{col}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_no_fill_matrix_sparse_a53c7790e128457a37837ed1283a83b4e}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}!get\_cu\_handles@{get\_cu\_handles}}
+\index{get\_cu\_handles@{get\_cu\_handles}!cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{get\_cu\_handles()}{get\_cu\_handles()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_no_fill_matrix_sparse_a53c7790e128457a37837ed1283a83b4e} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{cascade\+::\+No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$\+::get\+\_\+cu\+\_\+handles (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_no_fill_matrix_sparse_ae49e781aa33dc780bb42d5ddce91dfb0}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}!get\_elem@{get\_elem}}
+\index{get\_elem@{get\_elem}!cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{get\_elem()}{get\_elem()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_no_fill_matrix_sparse_ae49e781aa33dc780bb42d5ddce91dfb0} 
+template$<$typename TPrecision$>$ \\
+const \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{cascade\+::\+No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$\+::get\+\_\+elem (\begin{DoxyParamCaption}\item[{int}]{row}{, }\item[{int}]{col}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_no_fill_matrix_sparse_ad4db4e239bb74a62504f60728c0f445b}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}!get\_has\_fast\_trsv@{get\_has\_fast\_trsv}}
+\index{get\_has\_fast\_trsv@{get\_has\_fast\_trsv}!cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{get\_has\_fast\_trsv()}{get\_has\_fast\_trsv()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_no_fill_matrix_sparse_ad4db4e239bb74a62504f60728c0f445b} 
+template$<$typename TPrecision$>$ \\
+bool \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{cascade\+::\+No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$\+::get\+\_\+has\+\_\+fast\+\_\+trsv (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_no_fill_matrix_sparse_acc712a597e5586b62f428030f3d72b11}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}!get\_info\_string@{get\_info\_string}}
+\index{get\_info\_string@{get\_info\_string}!cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{get\_info\_string()}{get\_info\_string()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_no_fill_matrix_sparse_acc712a597e5586b62f428030f3d72b11} 
+template$<$typename TPrecision$>$ \\
+std\+::string \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{cascade\+::\+No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$\+::get\+\_\+info\+\_\+string (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_no_fill_matrix_sparse_a359332e34ba27fa35d5ac02744d1a236}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}!get\_matrix\_string@{get\_matrix\_string}}
+\index{get\_matrix\_string@{get\_matrix\_string}!cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{get\_matrix\_string()}{get\_matrix\_string()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_no_fill_matrix_sparse_a359332e34ba27fa35d5ac02744d1a236} 
+template$<$typename TPrecision$>$ \\
+std\+::string \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{cascade\+::\+No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$\+::get\+\_\+matrix\+\_\+string (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_no_fill_matrix_sparse_aa17da4df4e2cba95f5eff53ffe6b808d}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}!get\_max\_mag\_elem@{get\_max\_mag\_elem}}
+\index{get\_max\_mag\_elem@{get\_max\_mag\_elem}!cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{get\_max\_mag\_elem()}{get\_max\_mag\_elem()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_no_fill_matrix_sparse_aa17da4df4e2cba95f5eff53ffe6b808d} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{cascade\+::\+No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$\+::get\+\_\+max\+\_\+mag\+\_\+elem (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_no_fill_matrix_sparse_a89ab618bf0e8556074d2d9e9c725c769}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}!Identity@{Identity}}
+\index{Identity@{Identity}!cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{Identity()}{Identity()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_no_fill_matrix_sparse_a89ab618bf0e8556074d2d9e9c725c769} 
+template$<$typename TPrecision$>$ \\
+static \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{cascade\+::\+No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$\+::\+Identity (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&}]{arg\+\_\+cu\+\_\+handles}{, }\item[{int}]{arg\+\_\+m\+\_\+rows}{, }\item[{int}]{arg\+\_\+n\+\_\+cols}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+\Hypertarget{classcascade_1_1_no_fill_matrix_sparse_a547921f00f782f506d3066e46b35330b}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}!non\_zeros@{non\_zeros}}
+\index{non\_zeros@{non\_zeros}!cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{non\_zeros()}{non\_zeros()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_no_fill_matrix_sparse_a547921f00f782f506d3066e46b35330b} 
+template$<$typename TPrecision$>$ \\
+int \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{cascade\+::\+No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$\+::non\+\_\+zeros (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_no_fill_matrix_sparse_a2f07e12797bd592503f6479924220dd4}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}!normalize\_magnitude@{normalize\_magnitude}}
+\index{normalize\_magnitude@{normalize\_magnitude}!cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{normalize\_magnitude()}{normalize\_magnitude()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_no_fill_matrix_sparse_a2f07e12797bd592503f6479924220dd4} 
+template$<$typename TPrecision$>$ \\
+void \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{cascade\+::\+No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$\+::normalize\+\_\+magnitude (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_no_fill_matrix_sparse_a99eafe27496570e358f93debec8b567f}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}!Ones@{Ones}}
+\index{Ones@{Ones}!cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{Ones()}{Ones()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_no_fill_matrix_sparse_a99eafe27496570e358f93debec8b567f} 
+template$<$typename TPrecision$>$ \\
+static \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{cascade\+::\+No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$\+::\+Ones (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&}]{arg\+\_\+cu\+\_\+handles}{, }\item[{int}]{arg\+\_\+m\+\_\+rows}{, }\item[{int}]{arg\+\_\+n\+\_\+cols}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+\Hypertarget{classcascade_1_1_no_fill_matrix_sparse_acd2e0fe66093276d38bd30d6e3e55401}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}!operator\texorpdfstring{$\ast$}{*}@{operator\texorpdfstring{$\ast$}{*}}}
+\index{operator\texorpdfstring{$\ast$}{*}@{operator\texorpdfstring{$\ast$}{*}}!cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{operator\texorpdfstring{$\ast$}{*}()}{operator*()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_no_fill_matrix_sparse_acd2e0fe66093276d38bd30d6e3e55401} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{cascade\+::\+No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$\+::operator\texorpdfstring{$\ast$}{*} (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \&}]{scalar}{}\end{DoxyParamCaption}) const}
+
+\Hypertarget{classcascade_1_1_no_fill_matrix_sparse_a32457929412b564eabbe06ae6ad6de74}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}!operator\texorpdfstring{$\ast$}{*}@{operator\texorpdfstring{$\ast$}{*}}}
+\index{operator\texorpdfstring{$\ast$}{*}@{operator\texorpdfstring{$\ast$}{*}}!cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{operator\texorpdfstring{$\ast$}{*}()}{operator*()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classcascade_1_1_no_fill_matrix_sparse_a32457929412b564eabbe06ae6ad6de74} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{cascade\+::\+No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$\+::operator\texorpdfstring{$\ast$}{*} (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&}]{vec}{}\end{DoxyParamCaption}) const}
+
+\Hypertarget{classcascade_1_1_no_fill_matrix_sparse_ac8c015b939708d1c46c7f5539ce4bb9a}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}!operator\texorpdfstring{$\ast$}{*}=@{operator\texorpdfstring{$\ast$}{*}=}}
+\index{operator\texorpdfstring{$\ast$}{*}=@{operator\texorpdfstring{$\ast$}{*}=}!cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{operator\texorpdfstring{$\ast$}{*}=()}{operator*=()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_no_fill_matrix_sparse_ac8c015b939708d1c46c7f5539ce4bb9a} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$ \& \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{cascade\+::\+No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$\+::operator\texorpdfstring{$\ast$}{*}= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \&}]{scalar}{}\end{DoxyParamCaption})}
+
+\Hypertarget{classcascade_1_1_no_fill_matrix_sparse_a80410aa80296a0c72b2cfb478949c5de}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}!operator/@{operator/}}
+\index{operator/@{operator/}!cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{operator/()}{operator/()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_no_fill_matrix_sparse_a80410aa80296a0c72b2cfb478949c5de} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{cascade\+::\+No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$\+::operator/ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \&}]{scalar}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_no_fill_matrix_sparse_acb25cbddf7427e5f5e329f67c12716ed}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}!operator/=@{operator/=}}
+\index{operator/=@{operator/=}!cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{operator/=()}{operator/=()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_no_fill_matrix_sparse_acb25cbddf7427e5f5e329f67c12716ed} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$ \& \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{cascade\+::\+No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$\+::operator/= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_scalar}{Scalar}}$<$ TPrecision $>$ \&}]{scalar}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_no_fill_matrix_sparse_a843cbceb21d82fdef27d51a3e5a715b8}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}!operator=@{operator=}}
+\index{operator=@{operator=}!cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_no_fill_matrix_sparse_a843cbceb21d82fdef27d51a3e5a715b8} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}} \& \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{cascade\+::\+No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$\+::operator= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$ \&}]{other}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_no_fill_matrix_sparse_ad29f4c22db3043f849592ee13b71c0ca}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}!preprocess\_trsv@{preprocess\_trsv}}
+\index{preprocess\_trsv@{preprocess\_trsv}!cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{preprocess\_trsv()}{preprocess\_trsv()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_no_fill_matrix_sparse_ad29f4c22db3043f849592ee13b71c0ca} 
+template$<$typename TPrecision$>$ \\
+void \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{cascade\+::\+No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$\+::preprocess\+\_\+trsv (\begin{DoxyParamCaption}\item[{bool}]{is\+\_\+upptri}{}\end{DoxyParamCaption})}
+
+\Hypertarget{classcascade_1_1_no_fill_matrix_sparse_ae48661d2f11b5e2affe1bddbb43a8464}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}!Random@{Random}}
+\index{Random@{Random}!cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{Random()}{Random()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_no_fill_matrix_sparse_ae48661d2f11b5e2affe1bddbb43a8464} 
+template$<$typename TPrecision$>$ \\
+static \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{cascade\+::\+No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$\+::\+Random (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&}]{arg\+\_\+cu\+\_\+handles}{, }\item[{int}]{arg\+\_\+m\+\_\+rows}{, }\item[{int}]{arg\+\_\+n\+\_\+cols}{, }\item[{double}]{fill\+\_\+prob}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+\Hypertarget{classcascade_1_1_no_fill_matrix_sparse_a54289b8be0aeabaec036894ab4ee65d1}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}!Random\_LT@{Random\_LT}}
+\index{Random\_LT@{Random\_LT}!cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{Random\_LT()}{Random\_LT()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_no_fill_matrix_sparse_a54289b8be0aeabaec036894ab4ee65d1} 
+template$<$typename TPrecision$>$ \\
+static \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{cascade\+::\+No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$\+::\+Random\+\_\+\+LT (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&}]{arg\+\_\+cu\+\_\+handles}{, }\item[{int}]{arg\+\_\+m\+\_\+rows}{, }\item[{int}]{arg\+\_\+n\+\_\+cols}{, }\item[{double}]{fill\+\_\+prob}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+\Hypertarget{classcascade_1_1_no_fill_matrix_sparse_a13be07646a28e10b0d76d4ac0c8f18ff}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}!Random\_UT@{Random\_UT}}
+\index{Random\_UT@{Random\_UT}!cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{Random\_UT()}{Random\_UT()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_no_fill_matrix_sparse_a13be07646a28e10b0d76d4ac0c8f18ff} 
+template$<$typename TPrecision$>$ \\
+static \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{cascade\+::\+No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$\+::\+Random\+\_\+\+UT (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&}]{arg\+\_\+cu\+\_\+handles}{, }\item[{int}]{arg\+\_\+m\+\_\+rows}{, }\item[{int}]{arg\+\_\+n\+\_\+cols}{, }\item[{double}]{fill\+\_\+prob}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+\Hypertarget{classcascade_1_1_no_fill_matrix_sparse_a96073f4b32736ec5a026393401a4adc7}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}!rows@{rows}}
+\index{rows@{rows}!cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{rows()}{rows()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_no_fill_matrix_sparse_a96073f4b32736ec5a026393401a4adc7} 
+template$<$typename TPrecision$>$ \\
+int \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{cascade\+::\+No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$\+::rows (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_no_fill_matrix_sparse_a3286fc11d773c5ca46300ce763262c57}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}!transpose@{transpose}}
+\index{transpose@{transpose}!cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{transpose()}{transpose()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_no_fill_matrix_sparse_a3286fc11d773c5ca46300ce763262c57} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{cascade\+::\+No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$\+::transpose (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classcascade_1_1_no_fill_matrix_sparse_aa2901f6ce31aec8e8a14899dfd8bf69c}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}!transpose\_prod@{transpose\_prod}}
+\index{transpose\_prod@{transpose\_prod}!cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{transpose\_prod()}{transpose\_prod()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_no_fill_matrix_sparse_aa2901f6ce31aec8e8a14899dfd8bf69c} 
+template$<$typename TPrecision$>$ \\
+\mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{cascade\+::\+No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$\+::transpose\+\_\+prod (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1_vector}{Vector}}$<$ TPrecision $>$ \&}]{vec}{}\end{DoxyParamCaption}) const}
+
+\Hypertarget{classcascade_1_1_no_fill_matrix_sparse_a24baeedb7f03649f50d346ed5de9ad7b}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}!Zero@{Zero}}
+\index{Zero@{Zero}!cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{Zero()}{Zero()}}
+{\footnotesize\ttfamily \label{classcascade_1_1_no_fill_matrix_sparse_a24baeedb7f03649f50d346ed5de9ad7b} 
+template$<$typename TPrecision$>$ \\
+static \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{cascade\+::\+No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$\+::\+Zero (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cu\+Handle\+Bundle}} \&}]{arg\+\_\+cu\+\_\+handles}{, }\item[{int}]{arg\+\_\+m\+\_\+rows}{, }\item[{int}]{arg\+\_\+n\+\_\+cols}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+\doxysubsection{Friends And Related Symbol Documentation}
+\Hypertarget{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3}\index{cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}!NoFillMatrixSparse@{NoFillMatrixSparse}}
+\index{NoFillMatrixSparse@{NoFillMatrixSparse}!cascade::NoFillMatrixSparse$<$ TPrecision $>$@{cascade::NoFillMatrixSparse$<$ TPrecision $>$}}
+\doxysubsubsection{\texorpdfstring{NoFillMatrixSparse}{NoFillMatrixSparse}}
+{\footnotesize\ttfamily \label{classcascade_1_1_no_fill_matrix_sparse_a5745ed2b7f9b7aabace454239b4229f3} 
+template$<$typename TPrecision$>$ \\
+template$<$typename$>$ \\
+friend class \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}}\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/dosre/dev/precision-\/cascade/include/types/\+Matrix\+Sparse/\mbox{\hyperlink{_no_fill_matrix_sparse_8h}{No\+Fill\+Matrix\+Sparse.\+h}}\end{DoxyCompactItemize}

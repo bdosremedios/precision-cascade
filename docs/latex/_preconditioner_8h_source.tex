@@ -1,0 +1,34 @@
+\doxysection{Preconditioner.\+h}
+\hypertarget{_preconditioner_8h_source}{}\label{_preconditioner_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/include/preconditioners/Preconditioner.h@{C:/Users/dosre/dev/precision-\/cascade/include/preconditioners/Preconditioner.h}}
+\mbox{\hyperlink{_preconditioner_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ PRECONDITIONER\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ PRECONDITIONER\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{types_8h}{../types/types.h}}"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacecascade}{cascade}}\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix,\ \textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00009\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1_preconditioner_a875e73c4c3ccc05c2622dbdf5ee9d4a7}{Preconditioner}}}
+\DoxyCodeLine{00010\ \{}
+\DoxyCodeLine{00011\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_preconditioner_a875e73c4c3ccc05c2622dbdf5ee9d4a7}{Preconditioner}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classcascade_1_1_preconditioner_a718c8a4a71dd31bc72767fc504534e83}{\string~Preconditioner}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_preconditioner_a21b224ac802e0fe2e4b3aed0bf264a94}{action\_inv\_M}}(\mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ \textcolor{keyword}{const}\ \&vec)\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcascade_1_1_preconditioner_aa4b26517fd95484368e0a206d84e3b4e}{check\_compatibility\_left}}(\textcolor{keywordtype}{int}\ \textcolor{keyword}{const}\ \&m)\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcascade_1_1_preconditioner_a8131081c22cec99957d37de6e4b5e395}{check\_compatibility\_right}}(\textcolor{keywordtype}{int}\ \textcolor{keyword}{const}\ \&n)\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classcascade_1_1_preconditioner_a875e73c4c3ccc05c2622dbdf5ee9d4a7}{Preconditioner<TMatrix,\ double>}}\ *\ \mbox{\hyperlink{classcascade_1_1_preconditioner_a2e7a015dbb3b414e80fc491c8460e90b}{cast\_dbl\_ptr}}()\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classcascade_1_1_preconditioner_a875e73c4c3ccc05c2622dbdf5ee9d4a7}{Preconditioner<TMatrix,\ float>}}\ *\ \mbox{\hyperlink{classcascade_1_1_preconditioner_a347820a28ad209fd8adc8ee60692dbb8}{cast\_sgl\_ptr}}()\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classcascade_1_1_preconditioner_a875e73c4c3ccc05c2622dbdf5ee9d4a7}{Preconditioner<TMatrix,\ \_\_half>}}\ *\ \mbox{\hyperlink{classcascade_1_1_preconditioner_a0d0f39fedcc1b3f11c01671efcc10c0a}{cast\_hlf\_ptr}}()\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \};}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \}}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

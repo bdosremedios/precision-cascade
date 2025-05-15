@@ -1,0 +1,172 @@
+\doxysection{ILUPreconditioner.\+h}
+\hypertarget{_i_l_u_preconditioner_8h_source}{}\label{_i_l_u_preconditioner_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/include/preconditioners/ILUPreconditioner.h@{C:/Users/dosre/dev/precision-\/cascade/include/preconditioners/ILUPreconditioner.h}}
+\mbox{\hyperlink{_i_l_u_preconditioner_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ ILU\_PRECONDITIONER\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ ILU\_PRECONDITIONER\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_preconditioner_8h}{Preconditioner.h}}"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_i_l_u__subroutines_8h}{tools/ILU\_subroutines.h}}"{}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacecascade}{cascade}}\ \{}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix,\ \textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00010\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_a8c91d557be24d1622bf557d6728f8ef1}{ILUPreconditioner}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classcascade_1_1_preconditioner_a875e73c4c3ccc05c2622dbdf5ee9d4a7}{Preconditioner}}<TMatrix,\ TPrecision>}
+\DoxyCodeLine{00011\ \{}
+\DoxyCodeLine{00012\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keywordtype}{int}\ m;}
+\DoxyCodeLine{00015\ \ \ \ \ TMatrix<TPrecision>\ L\ =\ TMatrix<TPrecision>(\mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}());}
+\DoxyCodeLine{00016\ \ \ \ \ TMatrix<TPrecision>\ U\ =\ TMatrix<TPrecision>(\mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}());}
+\DoxyCodeLine{00017\ \ \ \ \ TMatrix<TPrecision>\ P\ =\ TMatrix<TPrecision>(\mbox{\hyperlink{classcascade_1_1cu_handle_bundle}{cuHandleBundle}}());}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{comment}{//\ ILU\ constructor\ taking\ premade\ L\ and\ U\ and\ no\ permutation}}
+\DoxyCodeLine{00022\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_a8c91d557be24d1622bf557d6728f8ef1}{ILUPreconditioner}}(}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ TMatrix<TPrecision>\ \&arg\_L,}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ TMatrix<TPrecision>\ \&arg\_U}
+\DoxyCodeLine{00025\ \ \ \ \ ):}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_a8c91d557be24d1622bf557d6728f8ef1}{ILUPreconditioner}}(}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_L,}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_U,}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ TMatrix<TPrecision>::Identity(}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ arg\_L.get\_cu\_handles(),\ arg\_L.rows(),\ arg\_L.rows()}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00033\ \ \ \ \ \{\}}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{comment}{//\ ILU\ constructor\ taking\ premade\ L,\ U,\ and\ P}}
+\DoxyCodeLine{00036\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_acf6c8ce1b5cf5663b1dfcf41d131f897}{ILUPreconditioner}}(}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ TMatrix<TPrecision>\ \&arg\_L,}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ TMatrix<TPrecision>\ \&arg\_U,}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ TMatrix<TPrecision>\ \&arg\_P}
+\DoxyCodeLine{00040\ \ \ \ \ ):}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ m(arg\_L.rows()),\ L(arg\_L),\ U(arg\_U),\ P(arg\_P)}
+\DoxyCodeLine{00042\ \ \ \ \ \{}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (arg\_L.rows()\ !=\ arg\_L.cols())\ \{}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ throw\ std::runtime\_error(\textcolor{stringliteral}{"{}ILU(L,\ U,\ P):\ Non\ square\ matrix\ L"{}});}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ if\ (arg\_U.rows()\ !=\ arg\_U.cols())\ \{}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ throw\ std::runtime\_error(\textcolor{stringliteral}{"{}ILU(L,\ U,\ P):\ Non\ square\ matrix\ U"{}});}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ if\ (arg\_P.rows()\ !=\ arg\_P.cols())\ \{}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ throw\ std::runtime\_error(\textcolor{stringliteral}{"{}ILU(L,\ U,\ P):\ Non\ square\ matrix\ P"{}});}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ if\ (arg\_L.rows()\ !=\ arg\_U.rows())\ \{}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ throw\ std::runtime\_error(\textcolor{stringliteral}{"{}ILU(L,\ U,\ P):\ L\ and\ U\ dim\ mismatch"{}});}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ if\ (arg\_L.rows()\ !=\ arg\_P.rows())\ \{}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ throw\ std::runtime\_error(\textcolor{stringliteral}{"{}ILU(L,\ U,\ P):\ L\ and\ P\ dim\ mismatch"{}});}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00058\ \ \ \ \ \}}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{comment}{//\ ILU(0)\ constructors}}
+\DoxyCodeLine{00061\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_a39fa0cdd1ad2b39b53a50c3ca5acc4d9}{ILUPreconditioner}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{MatrixDense<TPrecision>}}\ \&\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}):}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ m(\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}.rows())}
+\DoxyCodeLine{00063\ \ \ \ \ \{}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcascade_1_1ilu__subrtns_1_1_i_l_u_triplet}{ilu\_subrtns::ILUTriplet<MatrixDense,\ TPrecision>}}\ ret\ =\ (}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_1_1ilu__subrtns_a2378e26d8cafc63a96ac26da68ba8af1}{ilu\_subrtns::construct\_square\_ILU\_0<MatrixDense,\ TPrecision>}}(}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{NoFillMatrixSparse<TPrecision>}}(\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}})}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ L\ =\ ret.\mbox{\hyperlink{structcascade_1_1ilu__subrtns_1_1_i_l_u_triplet_a2d75c9aafbdad28313c4e1e18cf8d466}{L}};\ U\ =\ ret.\mbox{\hyperlink{structcascade_1_1ilu__subrtns_1_1_i_l_u_triplet_af656b57ab0eab4b9eaf12f235bb7327c}{U}};\ P\ =\ ret.\mbox{\hyperlink{structcascade_1_1ilu__subrtns_1_1_i_l_u_triplet_a68fa75e8c90773bb258b3106c8b9c5d7}{P}};}
+\DoxyCodeLine{00070\ \ \ \ \ \}}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_a852a313892e0692c1f27f70ed0381600}{ILUPreconditioner}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{NoFillMatrixSparse<TPrecision>}}\ \&\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}):}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ m(\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}.rows())}
+\DoxyCodeLine{00074\ \ \ \ \ \{}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcascade_1_1ilu__subrtns_1_1_i_l_u_triplet}{ilu\_subrtns::ILUTriplet<NoFillMatrixSparse,\ TPrecision>}}\ ret\ =\ (}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_1_1ilu__subrtns_a2378e26d8cafc63a96ac26da68ba8af1}{ilu\_subrtns::construct\_square\_ILU\_0<NoFillMatrixSparse,\ TPrecision>}}(}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ L\ =\ ret.\mbox{\hyperlink{structcascade_1_1ilu__subrtns_1_1_i_l_u_triplet_a2d75c9aafbdad28313c4e1e18cf8d466}{L}};\ U\ =\ ret.\mbox{\hyperlink{structcascade_1_1ilu__subrtns_1_1_i_l_u_triplet_af656b57ab0eab4b9eaf12f235bb7327c}{U}};\ P\ =\ ret.\mbox{\hyperlink{structcascade_1_1ilu__subrtns_1_1_i_l_u_triplet_a68fa75e8c90773bb258b3106c8b9c5d7}{P}};}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ L.preprocess\_trsv(\textcolor{keyword}{false});}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ U.preprocess\_trsv(\textcolor{keyword}{true});}
+\DoxyCodeLine{00083\ \ \ \ \ \}}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{comment}{/*\ ILUT(tau,\ p),\ constructors\ tau\ threshold\ to\ drop\ and\ p\ number\ of\ entries}}
+\DoxyCodeLine{00086\ \textcolor{comment}{\ \ \ \ \ \ \ to\ keep\ */}}
+\DoxyCodeLine{00087\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_a89290db52f5945a6d434317ac7f56b20}{ILUPreconditioner}}(}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_matrix_dense}{MatrixDense<TPrecision>}}\ \&\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}},}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ TPrecision\ \&tau,}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ \&p,}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ \&to\_pivot}
+\DoxyCodeLine{00092\ \ \ \ \ ):}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ m(\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}.rows())}
+\DoxyCodeLine{00094\ \ \ \ \ \{}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcascade_1_1ilu__subrtns_1_1_i_l_u_triplet}{ilu\_subrtns::ILUTriplet<MatrixDense,\ TPrecision>}}\ ret\ =\ (}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_1_1ilu__subrtns_a15aedf28168828aa02d92f396c63bbbf}{ilu\_subrtns::construct\_square\_ILUTP<MatrixDense,\ TPrecision>}}(}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{NoFillMatrixSparse<TPrecision>}}(\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}),\ tau,\ p,\ to\_pivot}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ L\ =\ ret.\mbox{\hyperlink{structcascade_1_1ilu__subrtns_1_1_i_l_u_triplet_a2d75c9aafbdad28313c4e1e18cf8d466}{L}};\ U\ =\ ret.\mbox{\hyperlink{structcascade_1_1ilu__subrtns_1_1_i_l_u_triplet_af656b57ab0eab4b9eaf12f235bb7327c}{U}};\ P\ =\ ret.\mbox{\hyperlink{structcascade_1_1ilu__subrtns_1_1_i_l_u_triplet_a68fa75e8c90773bb258b3106c8b9c5d7}{P}};}
+\DoxyCodeLine{00101\ \ \ \ \ \}}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_a6da1812316b1e2212413aae18ada41f7}{ILUPreconditioner}}(}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{NoFillMatrixSparse<TPrecision>}}\ \&\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}},}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ TPrecision\ \&tau,}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ \&p,}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ \&to\_pivot}
+\DoxyCodeLine{00108\ \ \ \ \ ):}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ m(\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}.rows())}
+\DoxyCodeLine{00110\ \ \ \ \ \{}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcascade_1_1ilu__subrtns_1_1_i_l_u_triplet}{ilu\_subrtns::ILUTriplet<NoFillMatrixSparse,\ TPrecision>}}\ ret\ =\ (}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacecascade_1_1ilu__subrtns_a15aedf28168828aa02d92f396c63bbbf}{ilu\_subrtns::construct\_square\_ILUTP<NoFillMatrixSparse,\ TPrecision>}}(}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}},\ tau,\ p,\ to\_pivot}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ L\ =\ ret.\mbox{\hyperlink{structcascade_1_1ilu__subrtns_1_1_i_l_u_triplet_a2d75c9aafbdad28313c4e1e18cf8d466}{L}};\ U\ =\ ret.\mbox{\hyperlink{structcascade_1_1ilu__subrtns_1_1_i_l_u_triplet_af656b57ab0eab4b9eaf12f235bb7327c}{U}};\ P\ =\ ret.\mbox{\hyperlink{structcascade_1_1ilu__subrtns_1_1_i_l_u_triplet_a68fa75e8c90773bb258b3106c8b9c5d7}{P}};}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ L.preprocess\_trsv(\textcolor{keyword}{false});}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ U.preprocess\_trsv(\textcolor{keyword}{true});}
+\DoxyCodeLine{00119\ \ \ \ \ \}}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \ \ \ \ TMatrix<TPrecision>\ \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_a7a8202bbdc19b313fe25255b4f6918d9}{get\_L}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ L;\ \}}
+\DoxyCodeLine{00122\ \ \ \ \ TMatrix<TPrecision>\ \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_a74d276fe2d7749ea651e60ae66747548}{get\_U}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ U;\ \}}
+\DoxyCodeLine{00123\ \ \ \ \ TMatrix<TPrecision>\ \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_a498d601de9bcea527c297446b8a1d447}{get\_P}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ P;\ \}}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_a18a591d486fc1bf6ab40b61be900518e}{action\_inv\_M}}(}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classcascade_1_1_vector}{Vector<TPrecision>}}\ \&vec}
+\DoxyCodeLine{00127\ \ \ \ \ )\textcolor{keyword}{\ const\ override\ }\{}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ U.back\_sub(L.frwd\_sub(P*vec));}
+\DoxyCodeLine{00129\ \ \ \ \ \}}
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_ab2e83c22bed966557abb9f80265ae1f9}{check\_compatibility\_left}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ \&arg\_m)\textcolor{keyword}{\ const\ override\ }\{}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ arg\_m\ ==\ m;}
+\DoxyCodeLine{00133\ \ \ \ \ \};}
+\DoxyCodeLine{00134\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_a8bc624bdfc184e2b0f1a56b9ff702ad2}{check\_compatibility\_right}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ \&arg\_n)\textcolor{keyword}{\ const\ override\ }\{}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ arg\_n\ ==\ m;}
+\DoxyCodeLine{00136\ \ \ \ \ \};}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00138\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_a8c91d557be24d1622bf557d6728f8ef1}{ILUPreconditioner<TMatrix,\ double>}}\ *\ \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_aae09d233469c4d24dfb8fe0e585be2d6}{cast\_dbl\_ptr}}()\textcolor{keyword}{\ const\ override\ }\{}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_a8c91d557be24d1622bf557d6728f8ef1}{ILUPreconditioner<TMatrix,\ double>}}(}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ L.template\ cast<double>(),}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \ \ \ \ U.template\ cast<double>(),}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \ \ \ \ P.template\ cast<double>()}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00144\ \ \ \ \ \}}
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_a8c91d557be24d1622bf557d6728f8ef1}{ILUPreconditioner<TMatrix,\ float>}}\ *\ \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_ae7b7dd2cd2ce4e597fec27f8449a6ba2}{cast\_sgl\_ptr}}()\textcolor{keyword}{\ const\ override\ }\{}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_a8c91d557be24d1622bf557d6728f8ef1}{ILUPreconditioner<TMatrix,\ float>}}(}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ L.template\ cast<float>(),}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ U.template\ cast<float>(),}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \ \ \ \ P.template\ cast<float>()}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00152\ \ \ \ \ \}}
+\DoxyCodeLine{00153\ }
+\DoxyCodeLine{00154\ \ \ \ \ \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_a8c91d557be24d1622bf557d6728f8ef1}{ILUPreconditioner<TMatrix,\ \_\_half>}}\ *\ \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_ad2f02cf30f012c2d530616f2453ea251}{cast\_hlf\_ptr}}()\textcolor{keyword}{\ const\ override\ }\{}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classcascade_1_1_i_l_u_preconditioner_a8c91d557be24d1622bf557d6728f8ef1}{ILUPreconditioner<TMatrix,\ \_\_half>}}(}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ L.template\ cast<\_\_half>(),}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \ \ \ \ U.template\ cast<\_\_half>(),}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ P.template\ cast<\_\_half>()}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00160\ \ \ \ \ \}}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00162\ \};}
+\DoxyCodeLine{00163\ \ \ \ \ }
+\DoxyCodeLine{00164\ \}}
+\DoxyCodeLine{00165\ }
+\DoxyCodeLine{00166\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

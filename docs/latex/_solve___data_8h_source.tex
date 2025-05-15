@@ -1,0 +1,155 @@
+\doxysection{Solve\+\_\+\+Data.\+h}
+\hypertarget{_solve___data_8h_source}{}\label{_solve___data_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/experimentation/include/exp\_data/Solve\_Data.h@{C:/Users/dosre/dev/precision-\/cascade/experimentation/include/exp\_data/Solve\_Data.h}}
+\mbox{\hyperlink{_solve___data_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ SOLVE\_DATA\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ SOLVE\_DATA\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_timed___experiment___data_8h}{Timed\_Experiment\_Data.h}}"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{write__json_8h}{exp\_tools/write\_json.h}}"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_f_p___g_m_r_e_s___i_r_8h}{solvers/nested/GMRES\_IR/FP\_GMRES\_IR.h}}"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_v_p___g_m_r_e_s___i_r_8h}{solvers/nested/GMRES\_IR/VP\_GMRES\_IR.h}}"{}}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{template}\ <}
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TSolver,}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix}
+\DoxyCodeLine{00014\ >}
+\DoxyCodeLine{00015\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_solve___data_ac290480c0025f50b10aa36a9eab96055}{Solve\_Data}}:}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keyword}{public}\ \mbox{\hyperlink{struct_timed___experiment___data_a34a72a60b1823ae1022e831042c94993}{Timed\_Experiment\_Data}}}
+\DoxyCodeLine{00017\ \{}
+\DoxyCodeLine{00018\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{void}\ record\_basic\_solver\_data(std::ofstream\ \&file\_out)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ file\_out\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)t\(\backslash\)"{}id\(\backslash\)"{}\ :\ \(\backslash\)"{}"{}}\ <<\ \textcolor{keywordtype}{id}\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)"{},\(\backslash\)n"{}};}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ file\_out\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)t\(\backslash\)"{}solver\_class\(\backslash\)"{}\ :\ \(\backslash\)"{}"{}}}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{keyword}{typeid}(*solver\_ptr).name()}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{}\(\backslash\)"{},\(\backslash\)n"{}};}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ file\_out\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)t\(\backslash\)"{}initiated\(\backslash\)"{}\ :\ \(\backslash\)"{}"{}}}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \mbox{\hyperlink{namespacewrite__json_a18119165ccd450e9fa265b35dd73acac}{write\_json::bool\_to\_string}}(\mbox{\hyperlink{struct_solve___data_ad73d00a6001bbd6966e8864182ef678f}{solver\_ptr}}-\/>check\_initiated())}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{}\(\backslash\)"{},\(\backslash\)n"{}};}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ file\_out\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)t\(\backslash\)"{}converged\(\backslash\)"{}\ :\ \(\backslash\)"{}"{}}}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \mbox{\hyperlink{namespacewrite__json_a18119165ccd450e9fa265b35dd73acac}{write\_json::bool\_to\_string}}(\mbox{\hyperlink{struct_solve___data_ad73d00a6001bbd6966e8864182ef678f}{solver\_ptr}}-\/>check\_converged())}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{}\(\backslash\)"{},\(\backslash\)n"{}};}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ file\_out\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)t\(\backslash\)"{}terminated\(\backslash\)"{}\ :\ \(\backslash\)"{}"{}}}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \mbox{\hyperlink{namespacewrite__json_a18119165ccd450e9fa265b35dd73acac}{write\_json::bool\_to\_string}}(\mbox{\hyperlink{struct_solve___data_ad73d00a6001bbd6966e8864182ef678f}{solver\_ptr}}-\/>check\_terminated())}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{}\(\backslash\)"{},\(\backslash\)n"{}};}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ file\_out\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)t\(\backslash\)"{}outer\_iterations\(\backslash\)"{}\ :\ "{}}}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \mbox{\hyperlink{struct_solve___data_ad73d00a6001bbd6966e8864182ef678f}{solver\_ptr}}-\/>get\_iteration()}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{},\(\backslash\)n"{}};}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ file\_out\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)t\(\backslash\)"{}inner\_iterations\(\backslash\)"{}\ :\ "{}}}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \mbox{\hyperlink{namespacewrite__json_aea6deb983e678cfb67ace39bb88a4627}{write\_json::int\_vector\_to\_jsonarray\_str}}(}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_solve___data_ad73d00a6001bbd6966e8864182ef678f}{solver\_ptr}}-\/>get\_inner\_iterations(),\ 0}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{},\(\backslash\)n"{}};}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ file\_out\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)t\(\backslash\)"{}elapsed\_time\_ms\(\backslash\)"{}\ :\ "{}}\ <<\ \mbox{\hyperlink{struct_timed___experiment___data_a6588b3058ce7826aacbcc781cfe898ae}{clock}}.get\_elapsed\_time\_ms()}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{},\(\backslash\)n"{}};}
+\DoxyCodeLine{00044\ \ \ \ \ \}}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{void}\ record\_residual\_solver\_data(std::ofstream\ \&file\_out)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ file\_out\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)t\(\backslash\)"{}outer\_res\_norm\_history\(\backslash\)"{}\ :\ "{}}}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \mbox{\hyperlink{namespacewrite__json_ac7352e0be3c6a4249fc9dc9182ea1fd5}{write\_json::dbl\_vector\_to\_jsonarray\_str}}(}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_solve___data_ad73d00a6001bbd6966e8864182ef678f}{solver\_ptr}}-\/>get\_res\_norm\_history(),\ 0}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{},\(\backslash\)n"{}};}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ file\_out\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)t\(\backslash\)"{}inner\_res\_norm\_history\(\backslash\)"{}\ :\ [\(\backslash\)n"{}};}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ std::vector<std::vector<double>>\ inner\_res\_norm\_history(}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_solve___data_ad73d00a6001bbd6966e8864182ef678f}{solver\_ptr}}-\/>get\_inner\_res\_norm\_history()}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<inner\_res\_norm\_history.size()-\/1;\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ file\_out\ <<\ \mbox{\hyperlink{namespacewrite__json_ac7352e0be3c6a4249fc9dc9182ea1fd5}{write\_json::dbl\_vector\_to\_jsonarray\_str}}(}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ inner\_res\_norm\_history[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}],}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 2}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{},\(\backslash\)n"{}};}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ file\_out\ <<\ \mbox{\hyperlink{namespacewrite__json_ac7352e0be3c6a4249fc9dc9182ea1fd5}{write\_json::dbl\_vector\_to\_jsonarray\_str}}(}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ inner\_res\_norm\_history[inner\_res\_norm\_history.size()-\/1],}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 2}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ file\_out\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)t]\(\backslash\)n"{}};}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ \}}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keywordtype}{void}\ record\_solver\_data(}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ std::ofstream\ \&file\_out,}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::shared\_ptr<\mbox{\hyperlink{classcascade_1_1_inner_outer_solve}{cascade::InnerOuterSolve<TMatrix>}}>\ \&\mbox{\hyperlink{struct_solve___data_ad73d00a6001bbd6966e8864182ef678f}{solver\_ptr}}}
+\DoxyCodeLine{00079\ \ \ \ \ )\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ record\_basic\_solver\_data(file\_out);}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ record\_residual\_solver\_data(file\_out);}
+\DoxyCodeLine{00082\ \ \ \ \ \}}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keywordtype}{void}\ record\_solver\_data(}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ std::ofstream\ \&file\_out,}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::shared\_ptr<\mbox{\hyperlink{classcascade_1_1_v_p___g_m_r_e_s___i_r___solve}{cascade::VP\_GMRES\_IR\_Solve<TMatrix>}}>\ \&\mbox{\hyperlink{struct_solve___data_ad73d00a6001bbd6966e8864182ef678f}{solver\_ptr}}}
+\DoxyCodeLine{00087\ \ \ \ \ )\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ record\_basic\_solver\_data(file\_out);}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ file\_out\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)t\(\backslash\)"{}hlf\_sgl\_cascade\_change\(\backslash\)"{}\ :\ "{}}}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \mbox{\hyperlink{struct_solve___data_ad73d00a6001bbd6966e8864182ef678f}{solver\_ptr}}-\/>get\_hlf\_sgl\_cascade\_change()}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{},\(\backslash\)n"{}};}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ file\_out\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)t\(\backslash\)"{}sgl\_dbl\_cascade\_change\(\backslash\)"{}\ :\ "{}}}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \mbox{\hyperlink{struct_solve___data_ad73d00a6001bbd6966e8864182ef678f}{solver\_ptr}}-\/>get\_sgl\_dbl\_cascade\_change()}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{},\(\backslash\)n"{}};}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ record\_residual\_solver\_data(file\_out);}
+\DoxyCodeLine{00096\ \ \ \ \ \}}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \ \ \ \ std::shared\_ptr<TSolver<TMatrix>>\ \mbox{\hyperlink{struct_solve___data_ad73d00a6001bbd6966e8864182ef678f}{solver\_ptr}};}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \mbox{\hyperlink{struct_solve___data_ac290480c0025f50b10aa36a9eab96055}{Solve\_Data}}():\ \mbox{\hyperlink{struct_timed___experiment___data_a34a72a60b1823ae1022e831042c94993}{Timed\_Experiment\_Data}}(),\ \mbox{\hyperlink{struct_solve___data_ad73d00a6001bbd6966e8864182ef678f}{solver\_ptr}}(nullptr)\ \{\}}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \ \ \ \ \mbox{\hyperlink{struct_solve___data_afa7ca50a80f97c2034e43f099084cda4}{Solve\_Data}}(}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ std::string\ arg\_solver\_id,}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_experiment___clock}{Experiment\_Clock}}\ arg\_clock,}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ std::shared\_ptr<TSolver<TMatrix>>\ arg\_solver\_ptr}
+\DoxyCodeLine{00108\ \ \ \ \ ):}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_timed___experiment___data_a34a72a60b1823ae1022e831042c94993}{Timed\_Experiment\_Data}}(arg\_solver\_id,\ arg\_clock),}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_solve___data_ad73d00a6001bbd6966e8864182ef678f}{solver\_ptr}}(arg\_solver\_ptr)\ }
+\DoxyCodeLine{00111\ \ \ \ \ \{\}}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \ \ \ \ \mbox{\hyperlink{struct_solve___data_aa909767cb5bcfab4be77e23d9db648f0}{\string~Solve\_Data}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \ \ \ \ \mbox{\hyperlink{struct_solve___data_aece1104c8e497d3ab27b9fdff38d1298}{Solve\_Data}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_solve___data_ac290480c0025f50b10aa36a9eab96055}{Solve\_Data}}\ \&other)\ \{}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ *\textcolor{keyword}{this}\ =\ other;}
+\DoxyCodeLine{00117\ \ \ \ \ \}}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_solve___data_a2e445ec5e121a9b271a245ac969c7f18}{operator=}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_solve___data_ac290480c0025f50b10aa36a9eab96055}{Solve\_Data}}\ \&other)\ \{}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{id}\ =\ other.\mbox{\hyperlink{struct_timed___experiment___data_a11e8d9245def869e6589129debf3ab35}{id}};}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_timed___experiment___data_a6588b3058ce7826aacbcc781cfe898ae}{clock}}\ =\ other.\mbox{\hyperlink{struct_timed___experiment___data_a6588b3058ce7826aacbcc781cfe898ae}{clock}};}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_solve___data_ad73d00a6001bbd6966e8864182ef678f}{solver\_ptr}}\ =\ other.\mbox{\hyperlink{struct_solve___data_ad73d00a6001bbd6966e8864182ef678f}{solver\_ptr}};}
+\DoxyCodeLine{00123\ \ \ \ \ \}}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \ \ \ \ std::string\ \mbox{\hyperlink{struct_solve___data_a734e251ce627d5276900316fd36de5c5}{get\_info\_string}}()\textcolor{keyword}{\ const\ override\ }\{}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{struct_timed___experiment___data_a6588b3058ce7826aacbcc781cfe898ae}{clock}}.get\_info\_string()\ +\ \textcolor{stringliteral}{"{}\ |\ "{}}\ +\ \mbox{\hyperlink{struct_solve___data_ad73d00a6001bbd6966e8864182ef678f}{solver\_ptr}}-\/>get\_info\_string();}
+\DoxyCodeLine{00127\ \ \ \ \ \}}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_solve___data_a93d7bf4539ee013a4d6bb0e3bea39616}{record\_json}}(}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ std::string\ file\_name,}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ fs::path\ output\_data\_dir,}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_experiment___log}{Experiment\_Log}}\ logger}
+\DoxyCodeLine{00133\ \ \ \ \ )\textcolor{keyword}{\ const\ override\ }\{}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ std::ofstream\ file\_out\ =\ \mbox{\hyperlink{namespacewrite__json_a036d71555c40b412ce74423de41a8e94}{write\_json::open\_json\_ofstream}}(}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \ \ \ \ file\_name,\ output\_data\_dir,\ logger}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacewrite__json_a05c898f4d70f346484014efa15c3ba17}{write\_json::start\_json}}(file\_out);}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ record\_solver\_data(file\_out,\ \mbox{\hyperlink{struct_solve___data_ad73d00a6001bbd6966e8864182ef678f}{solver\_ptr}});}
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacewrite__json_a736ebde2c15c1460f6dcee265ed05029}{write\_json::end\_json}}(file\_out);}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \ \ \ \ \}}
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00147\ \};}
+\DoxyCodeLine{00148\ }
+\DoxyCodeLine{00149\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

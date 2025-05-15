@@ -1,0 +1,48 @@
+\doxysection{test\+\_\+\+Iterative\+Solve.\+h}
+\hypertarget{test___iterative_solve_8h_source}{}\label{test___iterative_solve_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/test/src/test\_solvers/test\_IterativeSolve/test\_IterativeSolve.h@{C:/Users/dosre/dev/precision-\/cascade/test/src/test\_solvers/test\_IterativeSolve/test\_IterativeSolve.h}}
+\mbox{\hyperlink{test___iterative_solve_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ TEST\_ITERATIVESOLVE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ TEST\_ITERATIVESOLVE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_iterative_solve_8h}{solvers/IterativeSolve.h}}"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{template}\ <\textcolor{keyword}{template}<\textcolor{keyword}{typename}>\ \textcolor{keyword}{typename}\ TMatrix,\ \textcolor{keyword}{typename}\ TPrecision>}
+\DoxyCodeLine{00007\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_typed_iterative_solve_testing_mock_a6668cfc6a9a4b1da3788cb7e146f752f}{TypedIterativeSolveTestingMock}}:}
+\DoxyCodeLine{00008\ \ \ \ \ \textcolor{keyword}{public}\ TypedIterativeSolve<TMatrix,\ TPrecision>}
+\DoxyCodeLine{00009\ \{}
+\DoxyCodeLine{00010\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_typed_iterative_solve_testing_mock_a55170366168dc54c5c3d35363df08523}{typed\_iterate}}()\textcolor{keyword}{\ override\ }\{\ this-\/>typed\_soln\ =\ \mbox{\hyperlink{class_typed_iterative_solve_testing_mock_a3e3ea086483f2c361687806c704d0f09}{soln}};\ \}}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_typed_iterative_solve_testing_mock_a6ea531bec0dee59d4cef98b34ebfe071}{derived\_typed\_reset}}()\textcolor{keyword}{\ override\ }\{\}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \ \ \ \ Vector<TPrecision>\ \mbox{\hyperlink{class_typed_iterative_solve_testing_mock_a3e3ea086483f2c361687806c704d0f09}{soln}};}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{using\ }TypedIterativeSolve<TMatrix,\ TPrecision>::gen\_lin\_sys\_ptr;}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{using\ }TypedIterativeSolve<TMatrix,\ TPrecision>::init\_guess;}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{using\ }TypedIterativeSolve<TMatrix,\ TPrecision>::typed\_lin\_sys\_ptr;}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{using\ }TypedIterativeSolve<TMatrix,\ TPrecision>::init\_guess\_typed;}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{using\ }TypedIterativeSolve<TMatrix,\ TPrecision>::max\_iter;}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{using\ }TypedIterativeSolve<TMatrix,\ TPrecision>::target\_rel\_res;}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \mbox{\hyperlink{class_typed_iterative_solve_testing_mock_a6668cfc6a9a4b1da3788cb7e146f752f}{TypedIterativeSolveTestingMock}}(}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ TypedLinearSystem<TMatrix,\ TPrecision>\ *\ \textcolor{keyword}{const}\ arg\_typed\_lin\_sys\_ptr,}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ Vector<TPrecision>\ \&arg\_soln\_typed,}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ SolveArgPkg\ \&arg\_pkg}
+\DoxyCodeLine{00032\ \ \ \ \ ):}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_typed_iterative_solve_testing_mock_a3e3ea086483f2c361687806c704d0f09}{soln}}(arg\_soln\_typed),}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ TypedIterativeSolve<TMatrix,\ TPrecision>::TypedIterativeSolve(}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_typed\_lin\_sys\_ptr,}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ arg\_pkg}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{00038\ \ \ \ \ \{\}}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \};}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

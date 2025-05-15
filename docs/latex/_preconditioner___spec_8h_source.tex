@@ -1,0 +1,111 @@
+\doxysection{Preconditioner\+\_\+\+Spec.\+h}
+\hypertarget{_preconditioner___spec_8h_source}{}\label{_preconditioner___spec_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/experimentation/include/exp\_spec/Preconditioner\_Spec.h@{C:/Users/dosre/dev/precision-\/cascade/experimentation/include/exp\_spec/Preconditioner\_Spec.h}}
+\mbox{\hyperlink{_preconditioner___spec_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ PRECONDITIONER\_SPEC\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ PRECONDITIONER\_SPEC\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <iomanip>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <sstream>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <unordered\_set>}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_preconditioner___spec_aa866859ec3131c11a57f6cfd89d2c0eb}{Preconditioner\_Spec}}}
+\DoxyCodeLine{00010\ \{}
+\DoxyCodeLine{00011\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keywordtype}{void}\ check\_name\_validity(std::string\ \mbox{\hyperlink{struct_preconditioner___spec_acadac00ef2fcb1c56be096fc874e608e}{name}})\ \{}
+\DoxyCodeLine{00014\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{struct_preconditioner___spec_afa74ec87d3cb5639c1280e03ea08380b}{valid\_precond\_ids}}.count(\mbox{\hyperlink{struct_preconditioner___spec_acadac00ef2fcb1c56be096fc874e608e}{name}})\ ==\ 0)\ \{}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Preconditioner\_Spec:\ given\ name\ is\ not\ a\ valid\ preconditioner"{}}}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00019\ \ \ \ \ \}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ std::string\ \mbox{\hyperlink{struct_preconditioner___spec_acadac00ef2fcb1c56be096fc874e608e}{name}}\ =\ \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{struct_preconditioner___spec_a075153d5bcda802edf343edfa5a24bfd}{ilutp\_tau}}\ =\ -\/1.0;}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_preconditioner___spec_a090e8e32a0dc192413f603723148c3a4}{ilutp\_p}}\ =\ -\/1;}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ std::unordered\_set<std::string>\ \mbox{\hyperlink{struct_preconditioner___spec_afa74ec87d3cb5639c1280e03ea08380b}{valid\_precond\_ids}};}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \mbox{\hyperlink{struct_preconditioner___spec_aa866859ec3131c11a57f6cfd89d2c0eb}{Preconditioner\_Spec}}()\ \{\}}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \mbox{\hyperlink{struct_preconditioner___spec_a36e3ca6a921a7d0496ccc827438e1cd4}{Preconditioner\_Spec}}(std::string\ arg\_name):\ \mbox{\hyperlink{struct_preconditioner___spec_acadac00ef2fcb1c56be096fc874e608e}{name}}(arg\_name)\ \{}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ check\_name\_validity(\mbox{\hyperlink{struct_preconditioner___spec_acadac00ef2fcb1c56be096fc874e608e}{name}});}
+\DoxyCodeLine{00033\ \ \ \ \ \}}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \mbox{\hyperlink{struct_preconditioner___spec_a9fac7bb45be879d9ce9f3b9b6db5d815}{Preconditioner\_Spec}}(}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ std::string\ arg\_name,\ \textcolor{keywordtype}{double}\ arg\_ilutp\_tau,\ \textcolor{keywordtype}{int}\ arg\_ilutp\_p}
+\DoxyCodeLine{00037\ \ \ \ \ ):}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_preconditioner___spec_acadac00ef2fcb1c56be096fc874e608e}{name}}(arg\_name),\ \mbox{\hyperlink{struct_preconditioner___spec_a075153d5bcda802edf343edfa5a24bfd}{ilutp\_tau}}(arg\_ilutp\_tau),\ \mbox{\hyperlink{struct_preconditioner___spec_a090e8e32a0dc192413f603723148c3a4}{ilutp\_p}}(arg\_ilutp\_p)}
+\DoxyCodeLine{00039\ \ \ \ \ \{}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ check\_name\_validity(\mbox{\hyperlink{struct_preconditioner___spec_acadac00ef2fcb1c56be096fc874e608e}{name}});}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (arg\_name\ !=\ \textcolor{stringliteral}{"{}ilutp"{}})\ \{}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Preconditioner\_Spec:\ 3\ arg\ constructor\ only\ usable\ for\ ilutp"{}}}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((arg\_ilutp\_tau\ <\ 0.)\ ||\ (arg\_ilutp\_p\ <\ 1))\ \{}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Preconditioner\_Spec:\ invalid\ ilutp\ number\ args"{}}}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00051\ \ \ \ \ \}}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_preconditioner___spec_a31d09e3557d38aa15fd1a07b0edf63f7}{is\_default}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ((\mbox{\hyperlink{struct_preconditioner___spec_acadac00ef2fcb1c56be096fc874e608e}{name}}\ ==\ \textcolor{stringliteral}{"{}"{}})\ \&\&\ (\mbox{\hyperlink{struct_preconditioner___spec_a075153d5bcda802edf343edfa5a24bfd}{ilutp\_tau}}\ ==\ -\/1.0)\ \&\&\ (\mbox{\hyperlink{struct_preconditioner___spec_a090e8e32a0dc192413f603723148c3a4}{ilutp\_p}}\ ==\ -\/1));}
+\DoxyCodeLine{00055\ \ \ \ \ \}}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ \mbox{\hyperlink{struct_preconditioner___spec_a97a526604b3ab7ac57ab31048fd79bee}{Preconditioner\_Spec}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_preconditioner___spec_aa866859ec3131c11a57f6cfd89d2c0eb}{Preconditioner\_Spec}}\ \&other)\ \{}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ *\textcolor{keyword}{this}\ =\ other;}
+\DoxyCodeLine{00059\ \ \ \ \ \}}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_preconditioner___spec_a84f27bf43a224922426650019bfffc4d}{operator=}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_preconditioner___spec_aa866859ec3131c11a57f6cfd89d2c0eb}{Preconditioner\_Spec}}\ \&other)\ \{}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_preconditioner___spec_acadac00ef2fcb1c56be096fc874e608e}{name}}\ =\ other.\mbox{\hyperlink{struct_preconditioner___spec_acadac00ef2fcb1c56be096fc874e608e}{name}};}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_preconditioner___spec_a075153d5bcda802edf343edfa5a24bfd}{ilutp\_tau}}\ =\ other.\mbox{\hyperlink{struct_preconditioner___spec_a075153d5bcda802edf343edfa5a24bfd}{ilutp\_tau}};}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_preconditioner___spec_a090e8e32a0dc192413f603723148c3a4}{ilutp\_p}}\ =\ other.\mbox{\hyperlink{struct_preconditioner___spec_a090e8e32a0dc192413f603723148c3a4}{ilutp\_p}};}
+\DoxyCodeLine{00065\ \ \ \ \ \}}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_preconditioner___spec_a2c92d991a715d229be99cfe27f604201}{operator==}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_preconditioner___spec_aa866859ec3131c11a57f6cfd89d2c0eb}{Preconditioner\_Spec}}\ \&other)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ (\mbox{\hyperlink{struct_preconditioner___spec_acadac00ef2fcb1c56be096fc874e608e}{name}}\ ==\ other.\mbox{\hyperlink{struct_preconditioner___spec_acadac00ef2fcb1c56be096fc874e608e}{name}})\ \&\&}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ (\mbox{\hyperlink{struct_preconditioner___spec_a075153d5bcda802edf343edfa5a24bfd}{ilutp\_tau}}\ ==\ other.\mbox{\hyperlink{struct_preconditioner___spec_a075153d5bcda802edf343edfa5a24bfd}{ilutp\_tau}})\ \&\&}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ (\mbox{\hyperlink{struct_preconditioner___spec_a090e8e32a0dc192413f603723148c3a4}{ilutp\_p}}\ ==\ other.\mbox{\hyperlink{struct_preconditioner___spec_a090e8e32a0dc192413f603723148c3a4}{ilutp\_p}})}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00073\ \ \ \ \ \}}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \ \ \ \ std::string\ \mbox{\hyperlink{struct_preconditioner___spec_ad0abc51d2af541f8dcd8ffcc0905911f}{get\_spec\_string}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((\mbox{\hyperlink{struct_preconditioner___spec_a075153d5bcda802edf343edfa5a24bfd}{ilutp\_tau}}\ ==\ -\/1.0)\ \&\&\ (\mbox{\hyperlink{struct_preconditioner___spec_a090e8e32a0dc192413f603723148c3a4}{ilutp\_p}}\ ==\ -\/1))\ \{}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{struct_preconditioner___spec_acadac00ef2fcb1c56be096fc874e608e}{name}}\ +\ \textcolor{stringliteral}{"{}\_NA\_NA"{}};}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ std::stringstream\ ilutp\_tau\_strm;}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ ilutp\_tau\_strm\ <<\ std::setprecision(3);}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ \ \ ilutp\_tau\_strm\ <<\ \mbox{\hyperlink{struct_preconditioner___spec_a075153d5bcda802edf343edfa5a24bfd}{ilutp\_tau}};}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ ilutp\_tau\_str\ =\ ilutp\_tau\_strm.str();}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}=0;\ \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}<ilutp\_tau\_str.size();\ ++\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}})\ \{}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ilutp\_tau\_str[\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}}]\ ==\ \textcolor{charliteral}{'.'})\ \{}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ilutp\_tau\_str.erase(\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}},\ 1);}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ -\/-\/\mbox{\hyperlink{convert__mat__to___c_s_v_8m_a6f6ccfcf58b31cb6412107d9d5281426}{i}};}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{struct_preconditioner___spec_acadac00ef2fcb1c56be096fc874e608e}{name}}\ +\ \textcolor{stringliteral}{"{}\_"{}}\ +\ ilutp\_tau\_str\ +\ \textcolor{stringliteral}{"{}\_"{}}\ +\ std::to\_string(\mbox{\hyperlink{struct_preconditioner___spec_a090e8e32a0dc192413f603723148c3a4}{ilutp\_p}});}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00091\ \ \ \ \ \}}
+\DoxyCodeLine{00092\ \ \ \ \ }
+\DoxyCodeLine{00093\ \ \ \ \ std::string\ \mbox{\hyperlink{struct_preconditioner___spec_a1fa853a6c5c6c773b56cf92c646be775}{get\_info\_string}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Name:\ "{}}\ +\ \mbox{\hyperlink{struct_preconditioner___spec_acadac00ef2fcb1c56be096fc874e608e}{name}}\ +\ \textcolor{stringliteral}{"{}\ |\ "{}}\ +}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}ILUTP\ Tau:\ "{}}\ +}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ ((\mbox{\hyperlink{struct_preconditioner___spec_a075153d5bcda802edf343edfa5a24bfd}{ilutp\_tau}}\ !=\ -\/1.0)\ ?\ std::to\_string(\mbox{\hyperlink{struct_preconditioner___spec_a075153d5bcda802edf343edfa5a24bfd}{ilutp\_tau}})\ :\ \textcolor{stringliteral}{"{}N/A"{}})\ +\ \textcolor{stringliteral}{"{}\ |\ "{}}\ +}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}ILUTP\ P\ Non-\/zeros:\ "{}}\ +}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ ((\mbox{\hyperlink{struct_preconditioner___spec_a090e8e32a0dc192413f603723148c3a4}{ilutp\_p}}\ !=\ -\/1)\ ?\ std::to\_string(\mbox{\hyperlink{struct_preconditioner___spec_a090e8e32a0dc192413f603723148c3a4}{ilutp\_p}})\ :\ \textcolor{stringliteral}{"{}N/A"{}})}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00101\ \ \ \ \ \}}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \};}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

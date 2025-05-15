@@ -1,0 +1,64 @@
+\doxysection{write\+\_\+json Namespace Reference}
+\hypertarget{namespacewrite__json}{}\label{namespacewrite__json}\index{write\_json@{write\_json}}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::ofstream \mbox{\hyperlink{namespacewrite__json_a036d71555c40b412ce74423de41a8e94}{open\+\_\+json\+\_\+ofstream}} (std\+::string file\+\_\+name, fs\+::path \mbox{\hyperlink{convert__mat__to___c_s_v_8m_a13add80719a6702ceb6fef9d0d670f6e}{save\+\_\+dir}}, \mbox{\hyperlink{class_experiment___log}{Experiment\+\_\+\+Log}} logger)
+\item 
+void \mbox{\hyperlink{namespacewrite__json_a05c898f4d70f346484014efa15c3ba17}{start\+\_\+json}} (std\+::ofstream \&file\+\_\+out)
+\item 
+void \mbox{\hyperlink{namespacewrite__json_a736ebde2c15c1460f6dcee265ed05029}{end\+\_\+json}} (std\+::ofstream \&file\+\_\+out)
+\item 
+std\+::string \mbox{\hyperlink{namespacewrite__json_a18119165ccd450e9fa265b35dd73acac}{bool\+\_\+to\+\_\+string}} (bool \mbox{\hyperlink{create__solve__matrices_8m_a0f44e457fae26e14bb4ac1ebb3a75dad}{b}})
+\item 
+std\+::string \mbox{\hyperlink{namespacewrite__json_ac7352e0be3c6a4249fc9dc9182ea1fd5}{dbl\+\_\+vector\+\_\+to\+\_\+jsonarray\+\_\+str}} (std\+::vector$<$ double $>$ vec, int padding\+\_\+level)
+\item 
+std\+::string \mbox{\hyperlink{namespacewrite__json_aea6deb983e678cfb67ace39bb88a4627}{int\+\_\+vector\+\_\+to\+\_\+jsonarray\+\_\+str}} (std\+::vector$<$ int $>$ vec, int padding\+\_\+level)
+\item 
+std\+::string \mbox{\hyperlink{namespacewrite__json_afb7db649c1c9e945dbd098ddc751bfb0}{str\+\_\+vector\+\_\+to\+\_\+jsonarray\+\_\+str}} (std\+::vector$<$ std\+::string $>$ vec, int padding\+\_\+level)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{namespacewrite__json_a18119165ccd450e9fa265b35dd73acac}\index{write\_json@{write\_json}!bool\_to\_string@{bool\_to\_string}}
+\index{bool\_to\_string@{bool\_to\_string}!write\_json@{write\_json}}
+\doxysubsubsection{\texorpdfstring{bool\_to\_string()}{bool\_to\_string()}}
+{\footnotesize\ttfamily \label{namespacewrite__json_a18119165ccd450e9fa265b35dd73acac} 
+std\+::string write\+\_\+json\+::bool\+\_\+to\+\_\+string (\begin{DoxyParamCaption}\item[{bool}]{b}{}\end{DoxyParamCaption})}
+
+\Hypertarget{namespacewrite__json_ac7352e0be3c6a4249fc9dc9182ea1fd5}\index{write\_json@{write\_json}!dbl\_vector\_to\_jsonarray\_str@{dbl\_vector\_to\_jsonarray\_str}}
+\index{dbl\_vector\_to\_jsonarray\_str@{dbl\_vector\_to\_jsonarray\_str}!write\_json@{write\_json}}
+\doxysubsubsection{\texorpdfstring{dbl\_vector\_to\_jsonarray\_str()}{dbl\_vector\_to\_jsonarray\_str()}}
+{\footnotesize\ttfamily \label{namespacewrite__json_ac7352e0be3c6a4249fc9dc9182ea1fd5} 
+std\+::string write\+\_\+json\+::dbl\+\_\+vector\+\_\+to\+\_\+jsonarray\+\_\+str (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$}]{vec}{, }\item[{int}]{padding\+\_\+level}{}\end{DoxyParamCaption})}
+
+\Hypertarget{namespacewrite__json_a736ebde2c15c1460f6dcee265ed05029}\index{write\_json@{write\_json}!end\_json@{end\_json}}
+\index{end\_json@{end\_json}!write\_json@{write\_json}}
+\doxysubsubsection{\texorpdfstring{end\_json()}{end\_json()}}
+{\footnotesize\ttfamily \label{namespacewrite__json_a736ebde2c15c1460f6dcee265ed05029} 
+void write\+\_\+json\+::end\+\_\+json (\begin{DoxyParamCaption}\item[{std\+::ofstream \&}]{file\+\_\+out}{}\end{DoxyParamCaption})}
+
+\Hypertarget{namespacewrite__json_aea6deb983e678cfb67ace39bb88a4627}\index{write\_json@{write\_json}!int\_vector\_to\_jsonarray\_str@{int\_vector\_to\_jsonarray\_str}}
+\index{int\_vector\_to\_jsonarray\_str@{int\_vector\_to\_jsonarray\_str}!write\_json@{write\_json}}
+\doxysubsubsection{\texorpdfstring{int\_vector\_to\_jsonarray\_str()}{int\_vector\_to\_jsonarray\_str()}}
+{\footnotesize\ttfamily \label{namespacewrite__json_aea6deb983e678cfb67ace39bb88a4627} 
+std\+::string write\+\_\+json\+::int\+\_\+vector\+\_\+to\+\_\+jsonarray\+\_\+str (\begin{DoxyParamCaption}\item[{std\+::vector$<$ int $>$}]{vec}{, }\item[{int}]{padding\+\_\+level}{}\end{DoxyParamCaption})}
+
+\Hypertarget{namespacewrite__json_a036d71555c40b412ce74423de41a8e94}\index{write\_json@{write\_json}!open\_json\_ofstream@{open\_json\_ofstream}}
+\index{open\_json\_ofstream@{open\_json\_ofstream}!write\_json@{write\_json}}
+\doxysubsubsection{\texorpdfstring{open\_json\_ofstream()}{open\_json\_ofstream()}}
+{\footnotesize\ttfamily \label{namespacewrite__json_a036d71555c40b412ce74423de41a8e94} 
+std\+::ofstream write\+\_\+json\+::open\+\_\+json\+\_\+ofstream (\begin{DoxyParamCaption}\item[{std\+::string}]{file\+\_\+name}{, }\item[{fs\+::path}]{save\+\_\+dir}{, }\item[{\mbox{\hyperlink{class_experiment___log}{Experiment\+\_\+\+Log}}}]{logger}{}\end{DoxyParamCaption})}
+
+\Hypertarget{namespacewrite__json_a05c898f4d70f346484014efa15c3ba17}\index{write\_json@{write\_json}!start\_json@{start\_json}}
+\index{start\_json@{start\_json}!write\_json@{write\_json}}
+\doxysubsubsection{\texorpdfstring{start\_json()}{start\_json()}}
+{\footnotesize\ttfamily \label{namespacewrite__json_a05c898f4d70f346484014efa15c3ba17} 
+void write\+\_\+json\+::start\+\_\+json (\begin{DoxyParamCaption}\item[{std\+::ofstream \&}]{file\+\_\+out}{}\end{DoxyParamCaption})}
+
+\Hypertarget{namespacewrite__json_afb7db649c1c9e945dbd098ddc751bfb0}\index{write\_json@{write\_json}!str\_vector\_to\_jsonarray\_str@{str\_vector\_to\_jsonarray\_str}}
+\index{str\_vector\_to\_jsonarray\_str@{str\_vector\_to\_jsonarray\_str}!write\_json@{write\_json}}
+\doxysubsubsection{\texorpdfstring{str\_vector\_to\_jsonarray\_str()}{str\_vector\_to\_jsonarray\_str()}}
+{\footnotesize\ttfamily \label{namespacewrite__json_afb7db649c1c9e945dbd098ddc751bfb0} 
+std\+::string write\+\_\+json\+::str\+\_\+vector\+\_\+to\+\_\+jsonarray\+\_\+str (\begin{DoxyParamCaption}\item[{std\+::vector$<$ std\+::string $>$}]{vec}{, }\item[{int}]{padding\+\_\+level}{}\end{DoxyParamCaption})}
+

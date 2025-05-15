@@ -1,0 +1,46 @@
+\doxysection{C\+:/\+Users/dosre/dev/precision-\/cascade/include/tools/\+ILU\+\_\+subroutines.h File Reference}
+\hypertarget{_i_l_u__subroutines_8h}{}\label{_i_l_u__subroutines_8h}\index{C:/Users/dosre/dev/precision-\/cascade/include/tools/ILU\_subroutines.h@{C:/Users/dosre/dev/precision-\/cascade/include/tools/ILU\_subroutines.h}}
+{\ttfamily \#include "{}types/types.\+h"{}}\newline
+{\ttfamily \#include "{}tools/abs.\+h"{}}\newline
+{\ttfamily \#include "{}tools/\+Sort.\+h"{}}\newline
+{\ttfamily \#include "{}tools/\+Heap.\+h"{}}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$unordered\+\_\+set$>$}\newline
+{\ttfamily \#include $<$functional$>$}\newline
+Include dependency graph for ILU\+\_\+subroutines.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_i_l_u__subroutines_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_i_l_u__subroutines_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structcascade_1_1ilu__subrtns_1_1_i_l_u_triplet}{cascade\+::ilu\+\_\+subrtns\+::\+ILUTriplet$<$ TMatrix, TPrecision $>$}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespacecascade}{cascade}}
+\item 
+namespace \mbox{\hyperlink{namespacecascade_1_1ilu__subrtns}{cascade\+::ilu\+\_\+subrtns}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ }\\\mbox{\hyperlink{structcascade_1_1ilu__subrtns_1_1_i_l_u_triplet}{ILUTriplet}}$<$ TMatrix, TPrecision $>$ \mbox{\hyperlink{namespacecascade_1_1ilu__subrtns_a2378e26d8cafc63a96ac26da68ba8af1}{cascade\+::ilu\+\_\+subrtns\+::construct\+\_\+square\+\_\+\+ILU\+\_\+0}} (const \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$ \&\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}})
+\item 
+{\footnotesize template$<$typename TPrecision$>$ }\\TPrecision \mbox{\hyperlink{namespacecascade_1_1ilu__subrtns_a27cb00a282d74b6016d4d6e0e22928fd}{cascade\+::ilu\+\_\+subrtns\+::get\+\_\+largest\+\_\+magnitude\+\_\+in\+\_\+col}} (int col\+\_\+ind, int \texorpdfstring{$\ast$}{*}col\+\_\+offsets, TPrecision \texorpdfstring{$\ast$}{*}vals)
+\item 
+{\footnotesize template$<$template$<$ typename $>$ typename TMatrix, typename TPrecision$>$ }\\\mbox{\hyperlink{structcascade_1_1ilu__subrtns_1_1_i_l_u_triplet}{ILUTriplet}}$<$ TMatrix, TPrecision $>$ \mbox{\hyperlink{namespacecascade_1_1ilu__subrtns_a15aedf28168828aa02d92f396c63bbbf}{cascade\+::ilu\+\_\+subrtns\+::construct\+\_\+square\+\_\+\+ILUTP}} (const \mbox{\hyperlink{classcascade_1_1_no_fill_matrix_sparse}{No\+Fill\+Matrix\+Sparse}}$<$ TPrecision $>$ \&\mbox{\hyperlink{create__solve__matrices_8m_a0729bd378d4d070df165f95044ca3c0e}{A}}, double tau, int p, bool to\+\_\+pivot)
+\end{DoxyCompactItemize}

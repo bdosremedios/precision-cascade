@@ -1,0 +1,19 @@
+var searchData=
+[
+  ['x_5f1_0',['x_1',['../create__solve__matrices_8m.html#a35555c30538b98b701fb2c84ac2064a1',1,'create_solve_matrices.m']]],
+  ['x_5f2_1',['x_2',['../create__solve__matrices_8m.html#a529780c7e18890757a3ddb0e33539b37',1,'create_solve_matrices.m']]],
+  ['x_5f20_5frand_2',['x_20_rand',['../create__solve__matrices_8m.html#a2acd3702cddf2b95963513ea3801e669',1,'create_solve_matrices.m']]],
+  ['x_5f3_3',['x_3',['../create__solve__matrices_8m.html#aff981b25c7a589e5b90db6bd700e40f8',1,'create_solve_matrices.m']]],
+  ['x_5f3eigs_4',['x_3eigs',['../create__solve__matrices_8m.html#ae5e9149bfe32112d1f8a0f17a59ea870',1,'create_solve_matrices.m']]],
+  ['x_5f4_5',['x_4',['../create__solve__matrices_8m.html#ab8f0cc7672627b664d721ea3a8c06ee4',1,'create_solve_matrices.m']]],
+  ['x_5f5_6',['x_5',['../create__solve__matrices_8m.html#a7ff75d3e51c0dea7ea9a7265fb1071af',1,'create_solve_matrices.m']]],
+  ['x_5f6_7',['x_6',['../create__solve__matrices_8m.html#a101cf2c31b0d57ee7ac1823df7016708',1,'create_solve_matrices.m']]],
+  ['x_5f7_8',['x_7',['../create__solve__matrices_8m.html#a439cf51fce18c8a719c263adb0e4fea5',1,'create_solve_matrices.m']]],
+  ['x_5f90_9',['x_90',['../create__solve__matrices_8m.html#a77ffef809975894d431b42109ee8c1e7',1,'create_solve_matrices.m']]],
+  ['x_5fconvdiff1024_10',['x_convdiff1024',['../create__solve__matrices_8m.html#a079ffd8ce3d576144f9e78b4c33d9c36',1,'create_solve_matrices.m']]],
+  ['x_5fconvdiff256_11',['x_convdiff256',['../create__solve__matrices_8m.html#ab9964a65d938ae9c5435d234cbfc2d1a',1,'create_solve_matrices.m']]],
+  ['x_5fconvdiff64_12',['x_convdiff64',['../create__solve__matrices_8m.html#a5d6f79fae7b8690b67c7b70668538bde',1,'create_solve_matrices.m']]],
+  ['x_5fsaddle_13',['x_saddle',['../create__solve__matrices_8m.html#a90ca253f197ba9f7452b8cc349324047',1,'create_solve_matrices.m']]],
+  ['xtrue_5f20_5frand_14',['xtrue_20_rand',['../create__solve__matrices_8m.html#ac81ea39453a3d5bb226e7b855e6ae7e2',1,'create_solve_matrices.m']]],
+  ['xtrue_5fsaddle_15',['xtrue_saddle',['../create__solve__matrices_8m.html#a02114ec3d1f03f24c655290fc57f25ed',1,'create_solve_matrices.m']]]
+];

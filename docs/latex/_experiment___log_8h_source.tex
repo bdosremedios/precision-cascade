@@ -1,0 +1,45 @@
+\doxysection{Experiment\+\_\+\+Log.\+h}
+\hypertarget{_experiment___log_8h_source}{}\label{_experiment___log_8h_source}\index{C:/Users/dosre/dev/precision-\/cascade/experimentation/include/exp\_tools/Experiment\_Log.h@{C:/Users/dosre/dev/precision-\/cascade/experimentation/include/exp\_tools/Experiment\_Log.h}}
+\mbox{\hyperlink{_experiment___log_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ EXPERIMENT\_LOG\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ EXPERIMENT\_LOG\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}spdlog/spdlog.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}spdlog/sinks/basic\_file\_sink.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}spdlog/sinks/stdout\_sinks.h"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <filesystem>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <fstream>}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{namespace\ }fs\ =\ std::filesystem;}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_experiment___log_a6643b26cb894c26da3222b470c47f670}{Experiment\_Log}}}
+\DoxyCodeLine{00016\ \{}
+\DoxyCodeLine{00017\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{void}\ clear\_file(fs::path\ file);}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ std::shared\_ptr<spdlog::logger>\ \mbox{\hyperlink{class_experiment___log_ae63530425c8f9cbf2ae3ac7bee2cb6c5}{logger}};}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \mbox{\hyperlink{class_experiment___log_a6643b26cb894c26da3222b470c47f670}{Experiment\_Log}}();}
+\DoxyCodeLine{00026\ \ \ \ \ \mbox{\hyperlink{class_experiment___log_a6643b26cb894c26da3222b470c47f670}{Experiment\_Log}}(}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ std::string\ logger\_name,\ fs::path\ log\_file,\ \textcolor{keywordtype}{bool}\ print\_to\_stdout}
+\DoxyCodeLine{00028\ \ \ \ \ );}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_experiment___log_a033ee25bf73e58f7acfa53a4e4d6dfb4}{info}}(std::string\ s);}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_experiment___log_ad04cecaf30cbea1f678b8c8d6b732be1}{warn}}(std::string\ s);}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_experiment___log_a88e22e6495da256aa612d786f923e1a4}{critical}}(std::string\ s);}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \};}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

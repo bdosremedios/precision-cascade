@@ -1,0 +1,19 @@
+var searchData=
+[
+  ['d_0',['D',['../create__solve__matrices_8m.html#aca3da37e34a2e14095d9b885807de89d',1,'create_solve_matrices.m']]],
+  ['d_1',['d',['../create__solve__matrices_8m.html#a1aabac6d068eef6a7bad3fdf50a05cc8',1,'create_solve_matrices.m']]],
+  ['data_5fdir_2',['data_dir',['../class_benchmark_base.html#a36d0f9205a06d32814c7a28aa87114f1',1,'BenchmarkBase::data_dir'],['../class_test_base.html#a0f82f8d088952dd8628f858d546730a5',1,'TestBase::data_dir']]],
+  ['dbl_5fgen_5fargs_3',['dbl_gen_args',['../class_p_g_m_r_e_s___solve___test.html#ab52b46580cc96526eb199e6c28e49a9c',1,'PGMRES_Solve_Test']]],
+  ['dbl_5fgmres_5fir_5fargs_4',['dbl_GMRES_IR_args',['../class_f_p___g_m_r_e_s___i_r___test.html#af915ebe21b29aced5e2f180c54ef276a',1,'FP_GMRES_IR_Test::dbl_GMRES_IR_args'],['../class_preconditioned___f_p___g_m_r_e_s___i_r___test.html#ac9b67bb050bb9c00aa79a004431864c3',1,'Preconditioned_FP_GMRES_IR_Test::dbl_GMRES_IR_args'],['../class_v_p___g_m_r_e_s___i_r___solve___test.html#a570577fb735e494d59047cbea5017a3b',1,'VP_GMRES_IR_Solve_Test::dbl_GMRES_IR_args']]],
+  ['dbl_5fmanual_5fargs_5',['dbl_manual_args',['../class_p_g_m_r_e_s___solve___test.html#ac79cffa4a22d822dbffba6a356c055bb',1,'PGMRES_Solve_Test']]],
+  ['dbl_5fphase_6',['DBL_PHASE',['../classcascade_1_1_v_p___g_m_r_e_s___i_r___solve.html#aa0a3d35865b6c5f0bcb0ab608819e5cc',1,'cascade::VP_GMRES_IR_Solve']]],
+  ['default_5fargs_7',['default_args',['../class_test_base.html#abdaa0f95eb7b43e1740b4e5ad0a066c4',1,'TestBase']]],
+  ['default_5finit_5fguess_8',['default_init_guess',['../structcascade_1_1_solve_arg_pkg.html#af5e56c74fa5aca7bc024e2bcf1dc351a',1,'cascade::SolveArgPkg']]],
+  ['default_5fmax_5finner_5fiter_9',['default_max_inner_iter',['../structcascade_1_1_solve_arg_pkg.html#ac0381686573093c8888cbd093b113e11',1,'cascade::SolveArgPkg']]],
+  ['default_5fmax_5fiter_10',['default_max_iter',['../structcascade_1_1_solve_arg_pkg.html#a7dba3f56ae566a3b8b85184548f5bd63',1,'cascade::SolveArgPkg']]],
+  ['default_5ftarget_5frel_5fres_11',['default_target_rel_res',['../structcascade_1_1_solve_arg_pkg.html#a4c5c34f73226feb90ebd8441a11e2c85',1,'cascade::SolveArgPkg']]],
+  ['dense_5fdims_12',['dense_dims',['../class_benchmark_base.html#a1937d13b1092ec3a86c7260c05d78edd',1,'BenchmarkBase']]],
+  ['dense_5fsubset_5fcols_13',['dense_subset_cols',['../class_benchmark_base.html#acea7dbff2a592190949240700d413cfd',1,'BenchmarkBase']]],
+  ['double_5fprecise_14',['double_precise',['../create__read__matrices_8m.html#a72f7e69c4e33840cf6f475e1a483c369',1,'create_read_matrices.m']]],
+  ['droptol_15',['droptol',['../create__solve__matrices_8m.html#ab25b2c0e3b2f3e6ae272c83f8001ddac',1,'create_solve_matrices.m']]]
+];

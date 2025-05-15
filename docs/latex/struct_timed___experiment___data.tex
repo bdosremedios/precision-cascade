@@ -1,0 +1,118 @@
+\doxysection{Timed\+\_\+\+Experiment\+\_\+\+Data Struct Reference}
+\hypertarget{struct_timed___experiment___data}{}\label{struct_timed___experiment___data}\index{Timed\_Experiment\_Data@{Timed\_Experiment\_Data}}
+
+
+{\ttfamily \#include $<$Timed\+\_\+\+Experiment\+\_\+\+Data.\+h$>$}
+
+
+
+Inheritance diagram for Timed\+\_\+\+Experiment\+\_\+\+Data\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=314pt]{struct_timed___experiment___data__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Timed\+\_\+\+Experiment\+\_\+\+Data\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=204pt]{struct_timed___experiment___data__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct_timed___experiment___data_a34a72a60b1823ae1022e831042c94993}{Timed\+\_\+\+Experiment\+\_\+\+Data}} ()
+\item 
+\mbox{\hyperlink{struct_timed___experiment___data_a590e009d56e304f00960797d2511d583}{Timed\+\_\+\+Experiment\+\_\+\+Data}} (std\+::string arg\+\_\+id, \mbox{\hyperlink{class_experiment___clock}{Experiment\+\_\+\+Clock}} arg\+\_\+clock)
+\item 
+\mbox{\hyperlink{struct_timed___experiment___data_a854e9388172eb6934c4dfa7a0d059c91}{Timed\+\_\+\+Experiment\+\_\+\+Data}} (const \mbox{\hyperlink{struct_timed___experiment___data}{Timed\+\_\+\+Experiment\+\_\+\+Data}} \&other)=default
+\item 
+\mbox{\hyperlink{struct_timed___experiment___data}{Timed\+\_\+\+Experiment\+\_\+\+Data}} \& \mbox{\hyperlink{struct_timed___experiment___data_afe97216053898a543d093b9363c32931}{operator=}} (const \mbox{\hyperlink{struct_timed___experiment___data}{Timed\+\_\+\+Experiment\+\_\+\+Data}} \&other)=default
+\item 
+virtual std\+::string \mbox{\hyperlink{struct_timed___experiment___data_a6aab397580db33c8bb8ce6527b43cbdd}{get\+\_\+info\+\_\+string}} () const =0
+\item 
+virtual void \mbox{\hyperlink{struct_timed___experiment___data_a2ca7a2c797b8fdaef09bec1b166f85b8}{record\+\_\+json}} (std\+::string file\+\_\+name, fs\+::path output\+\_\+data\+\_\+dir, \mbox{\hyperlink{class_experiment___log}{Experiment\+\_\+\+Log}} logger) const =0
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string \mbox{\hyperlink{struct_timed___experiment___data_a11e8d9245def869e6589129debf3ab35}{id}}
+\item 
+\mbox{\hyperlink{class_experiment___clock}{Experiment\+\_\+\+Clock}} \mbox{\hyperlink{struct_timed___experiment___data_a6588b3058ce7826aacbcc781cfe898ae}{clock}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{struct_timed___experiment___data_a34a72a60b1823ae1022e831042c94993}\index{Timed\_Experiment\_Data@{Timed\_Experiment\_Data}!Timed\_Experiment\_Data@{Timed\_Experiment\_Data}}
+\index{Timed\_Experiment\_Data@{Timed\_Experiment\_Data}!Timed\_Experiment\_Data@{Timed\_Experiment\_Data}}
+\doxysubsubsection{\texorpdfstring{Timed\_Experiment\_Data()}{Timed\_Experiment\_Data()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily \label{struct_timed___experiment___data_a34a72a60b1823ae1022e831042c94993} 
+Timed\+\_\+\+Experiment\+\_\+\+Data\+::\+Timed\+\_\+\+Experiment\+\_\+\+Data (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{struct_timed___experiment___data_a590e009d56e304f00960797d2511d583}\index{Timed\_Experiment\_Data@{Timed\_Experiment\_Data}!Timed\_Experiment\_Data@{Timed\_Experiment\_Data}}
+\index{Timed\_Experiment\_Data@{Timed\_Experiment\_Data}!Timed\_Experiment\_Data@{Timed\_Experiment\_Data}}
+\doxysubsubsection{\texorpdfstring{Timed\_Experiment\_Data()}{Timed\_Experiment\_Data()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily \label{struct_timed___experiment___data_a590e009d56e304f00960797d2511d583} 
+Timed\+\_\+\+Experiment\+\_\+\+Data\+::\+Timed\+\_\+\+Experiment\+\_\+\+Data (\begin{DoxyParamCaption}\item[{std\+::string}]{arg\+\_\+id}{, }\item[{\mbox{\hyperlink{class_experiment___clock}{Experiment\+\_\+\+Clock}}}]{arg\+\_\+clock}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{struct_timed___experiment___data_a854e9388172eb6934c4dfa7a0d059c91}\index{Timed\_Experiment\_Data@{Timed\_Experiment\_Data}!Timed\_Experiment\_Data@{Timed\_Experiment\_Data}}
+\index{Timed\_Experiment\_Data@{Timed\_Experiment\_Data}!Timed\_Experiment\_Data@{Timed\_Experiment\_Data}}
+\doxysubsubsection{\texorpdfstring{Timed\_Experiment\_Data()}{Timed\_Experiment\_Data()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily \label{struct_timed___experiment___data_a854e9388172eb6934c4dfa7a0d059c91} 
+Timed\+\_\+\+Experiment\+\_\+\+Data\+::\+Timed\+\_\+\+Experiment\+\_\+\+Data (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_timed___experiment___data}{Timed\+\_\+\+Experiment\+\_\+\+Data}} \&}]{other}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{struct_timed___experiment___data_a6aab397580db33c8bb8ce6527b43cbdd}\index{Timed\_Experiment\_Data@{Timed\_Experiment\_Data}!get\_info\_string@{get\_info\_string}}
+\index{get\_info\_string@{get\_info\_string}!Timed\_Experiment\_Data@{Timed\_Experiment\_Data}}
+\doxysubsubsection{\texorpdfstring{get\_info\_string()}{get\_info\_string()}}
+{\footnotesize\ttfamily \label{struct_timed___experiment___data_a6aab397580db33c8bb8ce6527b43cbdd} 
+virtual std\+::string Timed\+\_\+\+Experiment\+\_\+\+Data\+::get\+\_\+info\+\_\+string (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{struct_preconditioner___data_a3844a24ad89886d9a168bed52fd71b56}{Preconditioner\+\_\+\+Data$<$ TMatrix $>$}}, and \mbox{\hyperlink{struct_solve___data_a734e251ce627d5276900316fd36de5c5}{Solve\+\_\+\+Data$<$ TSolver, TMatrix $>$}}.
+
+\Hypertarget{struct_timed___experiment___data_afe97216053898a543d093b9363c32931}\index{Timed\_Experiment\_Data@{Timed\_Experiment\_Data}!operator=@{operator=}}
+\index{operator=@{operator=}!Timed\_Experiment\_Data@{Timed\_Experiment\_Data}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}}
+{\footnotesize\ttfamily \label{struct_timed___experiment___data_afe97216053898a543d093b9363c32931} 
+\mbox{\hyperlink{struct_timed___experiment___data}{Timed\+\_\+\+Experiment\+\_\+\+Data}} \& Timed\+\_\+\+Experiment\+\_\+\+Data\+::operator= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_timed___experiment___data}{Timed\+\_\+\+Experiment\+\_\+\+Data}} \&}]{other}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+\Hypertarget{struct_timed___experiment___data_a2ca7a2c797b8fdaef09bec1b166f85b8}\index{Timed\_Experiment\_Data@{Timed\_Experiment\_Data}!record\_json@{record\_json}}
+\index{record\_json@{record\_json}!Timed\_Experiment\_Data@{Timed\_Experiment\_Data}}
+\doxysubsubsection{\texorpdfstring{record\_json()}{record\_json()}}
+{\footnotesize\ttfamily \label{struct_timed___experiment___data_a2ca7a2c797b8fdaef09bec1b166f85b8} 
+virtual void Timed\+\_\+\+Experiment\+\_\+\+Data\+::record\+\_\+json (\begin{DoxyParamCaption}\item[{std\+::string}]{file\+\_\+name}{, }\item[{fs\+::path}]{output\+\_\+data\+\_\+dir}{, }\item[{\mbox{\hyperlink{class_experiment___log}{Experiment\+\_\+\+Log}}}]{logger}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{struct_preconditioner___data_ad1a6857103a47f5dbc0323d21dfdb957}{Preconditioner\+\_\+\+Data$<$ TMatrix $>$}}, and \mbox{\hyperlink{struct_solve___data_a93d7bf4539ee013a4d6bb0e3bea39616}{Solve\+\_\+\+Data$<$ TSolver, TMatrix $>$}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{struct_timed___experiment___data_a6588b3058ce7826aacbcc781cfe898ae}\index{Timed\_Experiment\_Data@{Timed\_Experiment\_Data}!clock@{clock}}
+\index{clock@{clock}!Timed\_Experiment\_Data@{Timed\_Experiment\_Data}}
+\doxysubsubsection{\texorpdfstring{clock}{clock}}
+{\footnotesize\ttfamily \label{struct_timed___experiment___data_a6588b3058ce7826aacbcc781cfe898ae} 
+\mbox{\hyperlink{class_experiment___clock}{Experiment\+\_\+\+Clock}} Timed\+\_\+\+Experiment\+\_\+\+Data\+::clock}
+
+\Hypertarget{struct_timed___experiment___data_a11e8d9245def869e6589129debf3ab35}\index{Timed\_Experiment\_Data@{Timed\_Experiment\_Data}!id@{id}}
+\index{id@{id}!Timed\_Experiment\_Data@{Timed\_Experiment\_Data}}
+\doxysubsubsection{\texorpdfstring{id}{id}}
+{\footnotesize\ttfamily \label{struct_timed___experiment___data_a11e8d9245def869e6589129debf3ab35} 
+std\+::string Timed\+\_\+\+Experiment\+\_\+\+Data\+::id}
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/dosre/dev/precision-\/cascade/experimentation/include/exp\+\_\+data/\mbox{\hyperlink{_timed___experiment___data_8h}{Timed\+\_\+\+Experiment\+\_\+\+Data.\+h}}\end{DoxyCompactItemize}
