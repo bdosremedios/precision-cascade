@@ -36,10 +36,13 @@ public:
             )
         );
 
-        double norm_diff = (
-            (MatrixDense<double>(L) * MatrixDense<double>(U) -
-             MatrixDense<double>(A)).norm().get_scalar()
+        MatrixDense<double> delta_A(
+            (MatrixDense<double>(ilu_precond.get_L()) *
+             MatrixDense<double>(ilu_precond.get_U())) -
+             MatrixDense<double>(A)
         );
+
+        double norm_diff = delta_A.norm().get_scalar();
         ASSERT_NEAR(
             (MatrixDense<double>(ilu_precond.get_L()) *
              MatrixDense<double>(ilu_precond.get_U()) -
@@ -47,6 +50,17 @@ public:
             norm_diff,
             1e-10
         );
+
+        // Test compliant with Higham 2002 ch.9 Thm 9.3
+        MatrixDense<double> dense_gen_L(ilu_precond.get_L());
+        MatrixDense<double> dense_gen_U(ilu_precond.get_U());
+        dense_gen_L.abs();
+        dense_gen_U.abs();
+        MatrixDense<double> dense_comp(dense_gen_L*dense_gen_U);
+        dense_comp *= Scalar<double>(Tol<double>::gamma(dense_comp.rows()));
+        delta_A.abs();
+        ASSERT_MATRIX_LT(delta_A, dense_comp);
+
         ASSERT_MATRIX_NEAR(
             ilu_precond.get_L(),
             L,

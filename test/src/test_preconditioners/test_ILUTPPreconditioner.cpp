@@ -186,10 +186,23 @@ public:
         ASSERT_MATRIX_LOWTRI(ilu_precond.get_L(), Tol<double>::roundoff());
         ASSERT_MATRIX_UPPTRI(ilu_precond.get_U(), Tol<double>::roundoff());
 
+        // Test compliant with Higham 2002 ch.9 Thm 9.3
+        MatrixDense<double> transpose_P(ilu_precond.get_P().transpose());
+        MatrixDense<double> dense_gen_L(ilu_precond.get_L());
+        MatrixDense<double> dense_gen_U(ilu_precond.get_U());
+        MatrixDense<double> delta_A(
+            (transpose_P*dense_gen_L*dense_gen_U) - MatrixDense<double>(A)
+        );
+        dense_gen_L.abs();
+        dense_gen_U.abs();
+        MatrixDense<double> dense_comp(transpose_P*dense_gen_L*dense_gen_U);
+        dense_comp *= Scalar<double>(Tol<double>::gamma(dense_comp.rows()));
+        delta_A.abs();
+        ASSERT_MATRIX_LT(delta_A, dense_comp);
+
         // Test validity of permutation matrix P
         TMatrix<double> P_squared(
-            MatrixDense<double>(ilu_precond.get_P()) *
-            MatrixDense<double>(ilu_precond.get_P().transpose())
+            MatrixDense<double>(ilu_precond.get_P())*transpose_P
         );
         ASSERT_MATRIX_IDENTITY(P_squared, Tol<double>::dbl_ilu_elem_tol());
 
