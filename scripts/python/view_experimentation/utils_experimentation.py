@@ -19,7 +19,7 @@ class SolverFormatInfo:
         "OuterRestartCount",
         "RelativeResidualThreshold",
         "CheckStagnation",
-        "ThresholdToStagnation"
+        "StagnationToThreshold"
     }
 
     fp_ids = {"FP64", "FP32", "FP16"}
@@ -28,7 +28,7 @@ class SolverFormatInfo:
         "HSD_OuterRestartCount",
         "HSD_RelativeResidualThreshold",
         "HSD_CheckStagnation",
-        "HSD_ThresholdToStagnation"
+        "HSD_StagnationToThreshold"
     }
 
     sd_vp_ids = {
@@ -44,11 +44,13 @@ class SolverFormatInfo:
         "HSD_OuterRestartCount": (cat20[6], ",-"),
         "HSD_RelativeResidualThreshold": (cat20[8], ",-"),
         "HSD_CheckStagnation": (cat20[10], ",-"),
-        "HSD_ThresholdToStagnation": (cat20[12], ",-"),
+        "HSD_StagnationToThreshold": (cat20[12], ",-"),
         "SD_OuterRestartCount": (cat20[14], ",-"),
         "SD_RelativeResidualThreshold": (cat20[16], ",-"),
         "SD_CheckStagnation": (cat20[18], ",-"),
     }
+
+    valid_solvers = set(list(hsd_needed_on_ids) + list(fp_ids) + list(sd_vp_ids))
 
     @staticmethod
     def add_hsd_if_needed(id: str) -> str:

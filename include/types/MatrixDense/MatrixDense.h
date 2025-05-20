@@ -691,6 +691,37 @@ public:
     MatrixDense<TPrecision> operator-(const MatrixDense<TPrecision> &mat) const;
 
     // Needed for testing (don't need to optimize performance)
+    void abs() {
+
+        TPrecision *h_mat = static_cast<TPrecision *>(
+            malloc(m_rows*n_cols*sizeof(TPrecision))
+        );
+
+        if ((m_rows > 0) && (n_cols > 0)) {
+            check_cublas_status(cublasGetMatrix(
+                m_rows, n_cols, sizeof(TPrecision),
+                d_mat, m_rows, h_mat, m_rows
+            ));
+        }
+
+        for (int i=0; i<m_rows; ++i) {
+            for (int j=0; j<n_cols; ++j) {
+                h_mat[i+j*m_rows] = abs_ns::abs(h_mat[i+j*m_rows]);
+            }
+        }
+
+        if ((m_rows > 0) && (n_cols > 0)) {
+            check_cublas_status(cublasSetMatrix(
+                m_rows, n_cols, sizeof(TPrecision),
+                h_mat, m_rows, d_mat, m_rows
+            ));
+        }
+
+        free(h_mat);
+
+    }
+
+    // Needed for testing (don't need to optimize performance)
     Scalar<TPrecision> norm() const;
 
     // Correct triangularity assumed

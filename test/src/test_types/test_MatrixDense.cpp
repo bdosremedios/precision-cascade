@@ -1375,6 +1375,58 @@ public:
 
     }
 
+    template <typename TPrecision>
+    void TestAbs() {
+
+        // Test manually
+        constexpr int m_manual(4);
+        constexpr int n_manual(3);
+        MatrixDense<TPrecision> mat(
+            TestBase::bundle,
+            {{static_cast<TPrecision>(1), static_cast<TPrecision>(-2),
+              static_cast<TPrecision>(3), static_cast<TPrecision>(-4)},
+             {static_cast<TPrecision>(-5), static_cast<TPrecision>(-6),
+              static_cast<TPrecision>(-7), static_cast<TPrecision>(-8)},
+             {static_cast<TPrecision>(9), static_cast<TPrecision>(10),
+              static_cast<TPrecision>(11), static_cast<TPrecision>(12)}}
+        );
+        mat.abs();
+        MatrixDense<TPrecision> test(
+            TestBase::bundle,
+            {{static_cast<TPrecision>(1), static_cast<TPrecision>(2),
+              static_cast<TPrecision>(3), static_cast<TPrecision>(4)},
+             {static_cast<TPrecision>(5), static_cast<TPrecision>(6),
+              static_cast<TPrecision>(7), static_cast<TPrecision>(8)},
+             {static_cast<TPrecision>(9), static_cast<TPrecision>(10),
+              static_cast<TPrecision>(11), static_cast<TPrecision>(12)}}
+        );
+        ASSERT_MATRIX_EQ(mat, test);
+
+    }
+
+    template <typename TPrecision>
+    void TestRandomAbs() {
+
+        constexpr int m_rand(4);
+        constexpr int n_rand(3);
+        MatrixDense<TPrecision> mat(MatrixDense<TPrecision>::Random(
+            TestBase::bundle, m_rand, n_rand
+        ));
+
+        mat.abs();
+
+        for (int i=0; i<m_rand; ++i) {
+            for (int j=0; j<n_rand; ++j) {
+                Scalar<TPrecision> abs_elem(mat.get_elem(i, j).get_scalar());
+                ASSERT_EQ(
+                    mat.get_elem(i, j).get_scalar(),
+                    abs_elem.abs().get_scalar()
+                );
+            }
+        }
+
+    }
+
 };
 
 TEST_F(MatrixDense_Test, TestCoeffAccess) {
@@ -1630,6 +1682,18 @@ TEST_F(MatrixDense_Test, TestRandomTranspose) {
     TestRandomTranspose<__half>();
     TestRandomTranspose<float>();
     TestRandomTranspose<double>();
+}
+
+TEST_F(MatrixDense_Test, TestAbs) {
+    TestAbs<__half>();
+    TestAbs<float>();
+    TestAbs<double>();
+}
+
+TEST_F(MatrixDense_Test, TestRandomAbs) {
+    TestRandomAbs<__half>();
+    TestRandomAbs<float>();
+    TestRandomAbs<double>();
 }
 
 TEST_F(MatrixDense_Test, TestMatMat) {
