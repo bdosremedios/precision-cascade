@@ -1201,20 +1201,19 @@ public:
                 TestBase::bundle, m_rand, n_rand, fill_ratio_rand
             )
         );
+        Vector<TPrecision> rand_mat_0(rand_mat.get_col(0).copy_to_vec());
+        Vector<TPrecision> rand_mat_1(rand_mat.get_col(1).copy_to_vec());
+        Vector<TPrecision> rand_mat_2(rand_mat.get_col(2).copy_to_vec());
+        Vector<TPrecision> rand_mat_3(rand_mat.get_col(3).copy_to_vec());
+
         ASSERT_VECTOR_NEAR(
             rand_mat*Vector<TPrecision>(
                 TestBase::bundle,
                 {static_cast<TPrecision>(1), static_cast<TPrecision>(0),
                  static_cast<TPrecision>(0), static_cast<TPrecision>(0)}
             ),
-            Vector<TPrecision>(
-                TestBase::bundle,
-                {rand_mat.get_elem(0, 0).get_scalar(),
-                 rand_mat.get_elem(1, 0).get_scalar(),
-                 rand_mat.get_elem(2, 0).get_scalar()}
-            ),
-            (static_cast<TPrecision>(2.) *
-             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
+            rand_mat_0,
+            rand_mat_0.abs()*Tol<TPrecision>::gamma_T(4)
         );
         ASSERT_VECTOR_NEAR(
             rand_mat*Vector<TPrecision>(
@@ -1222,14 +1221,8 @@ public:
                 {static_cast<TPrecision>(0), static_cast<TPrecision>(1),
                  static_cast<TPrecision>(0), static_cast<TPrecision>(0)}
             ),
-            Vector<TPrecision>(
-                TestBase::bundle,
-                {rand_mat.get_elem(0, 1).get_scalar(),
-                 rand_mat.get_elem(1, 1).get_scalar(),
-                 rand_mat.get_elem(2, 1).get_scalar()}
-            ),
-            (static_cast<TPrecision>(2.) *
-             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
+            rand_mat_1,
+            rand_mat_1.abs()*Tol<TPrecision>::gamma_T(4)
         );
         ASSERT_VECTOR_NEAR(
             rand_mat*Vector<TPrecision>(
@@ -1237,14 +1230,8 @@ public:
                 {static_cast<TPrecision>(0), static_cast<TPrecision>(0),
                  static_cast<TPrecision>(1), static_cast<TPrecision>(0)}
             ),
-            Vector<TPrecision>(
-                TestBase::bundle,
-                {rand_mat.get_elem(0, 2).get_scalar(),
-                 rand_mat.get_elem(1, 2).get_scalar(),
-                 rand_mat.get_elem(2, 2).get_scalar()}
-            ),
-            (static_cast<TPrecision>(2.) *
-             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
+            rand_mat_2,
+            rand_mat_2.abs()*Tol<TPrecision>::gamma_T(4)
         );
         ASSERT_VECTOR_NEAR(
             rand_mat*Vector<TPrecision>(
@@ -1252,50 +1239,27 @@ public:
                 {static_cast<TPrecision>(0), static_cast<TPrecision>(0),
                  static_cast<TPrecision>(0), static_cast<TPrecision>(1)}
             ),
-            Vector<TPrecision>(
-                TestBase::bundle,
-                {rand_mat.get_elem(0, 3).get_scalar(),
-                 rand_mat.get_elem(1, 3).get_scalar(),
-                 rand_mat.get_elem(2, 3).get_scalar()}
-            ),
-            (static_cast<TPrecision>(2.) *
-             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
+            rand_mat_3,
+            rand_mat_3.abs()*Tol<TPrecision>::gamma_T(4)
         );
         ASSERT_VECTOR_NEAR(
             rand_mat*Vector<TPrecision>(
                 TestBase::bundle,
-                {static_cast<TPrecision>(1), static_cast<TPrecision>(0.1),
+                {static_cast<TPrecision>(-1), static_cast<TPrecision>(-0.1),
                  static_cast<TPrecision>(0.01), static_cast<TPrecision>(0.001)}
             ),
-            Vector<TPrecision>(
-                TestBase::bundle,
-                {((static_cast<TPrecision>(1) *
-                   rand_mat.get_elem(0, 0).get_scalar()) +
-                  (static_cast<TPrecision>(0.1) *
-                   rand_mat.get_elem(0, 1).get_scalar()) +
-                  (static_cast<TPrecision>(0.01) *
-                   rand_mat.get_elem(0, 2).get_scalar()) +
-                  (static_cast<TPrecision>(0.001) *
-                   rand_mat.get_elem(0, 3).get_scalar())),
-                 ((static_cast<TPrecision>(1) *
-                   rand_mat.get_elem(1, 0).get_scalar()) +
-                  (static_cast<TPrecision>(0.1) *
-                   rand_mat.get_elem(1, 1).get_scalar()) +
-                  (static_cast<TPrecision>(0.01) *
-                   rand_mat.get_elem(1, 2).get_scalar())+
-                  (static_cast<TPrecision>(0.001) *
-                   rand_mat.get_elem(1, 3).get_scalar())),
-                 ((static_cast<TPrecision>(1) *
-                   rand_mat.get_elem(2, 0).get_scalar()) +
-                  (static_cast<TPrecision>(0.1) *
-                   rand_mat.get_elem(2, 1).get_scalar()) +
-                  (static_cast<TPrecision>(0.01) *
-                   rand_mat.get_elem(2, 2).get_scalar())+
-                  (static_cast<TPrecision>(0.001) *
-                   rand_mat.get_elem(2, 3).get_scalar()))}
+            (
+                rand_mat_0*static_cast<TPrecision>(-1) +
+                rand_mat_1*static_cast<TPrecision>(-0.1) +
+                rand_mat_2*static_cast<TPrecision>(0.01) +
+                rand_mat_3*static_cast<TPrecision>(0.001)
             ),
-            (static_cast<TPrecision>(2.) *
-             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
+            (
+                rand_mat_0.abs()*static_cast<TPrecision>(1) +
+                rand_mat_1.abs()*static_cast<TPrecision>(0.1) +
+                rand_mat_2.abs()*static_cast<TPrecision>(0.01) +
+                rand_mat_3.abs()*static_cast<TPrecision>(0.001)
+            )*Tol<TPrecision>::gamma_T(4)
         );
 
     }
@@ -1312,6 +1276,11 @@ public:
                 TestBase::bundle, m_rand, n_rand, fill_ratio_rand
             )
         );
+        NoFillMatrixSparse<TPrecision> trans_rand_mat = rand_mat.transpose();
+        Vector<TPrecision> trans_mat_0(trans_rand_mat.get_col(0).copy_to_vec());
+        Vector<TPrecision> trans_mat_1(trans_rand_mat.get_col(1).copy_to_vec());
+        Vector<TPrecision> trans_mat_2(trans_rand_mat.get_col(2).copy_to_vec());
+
         ASSERT_VECTOR_NEAR(
             rand_mat.transpose_prod(
                 Vector<TPrecision>(
@@ -1320,13 +1289,8 @@ public:
                      static_cast<TPrecision>(0)}
                 )
             ),
-            Vector<TPrecision>(
-                TestBase::bundle,
-                {rand_mat.get_elem(0, 0).get_scalar(),
-                 rand_mat.get_elem(0, 1).get_scalar()}
-            ),
-            (static_cast<TPrecision>(2.) *
-             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
+            trans_mat_0,
+            trans_mat_0.abs()*Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             rand_mat.transpose_prod(
@@ -1336,13 +1300,8 @@ public:
                      static_cast<TPrecision>(0)}
                 )
             ),
-            Vector<TPrecision>(
-                TestBase::bundle,
-                {rand_mat.get_elem(1, 0).get_scalar(),
-                 rand_mat.get_elem(1, 1).get_scalar()}
-            ),
-            (static_cast<TPrecision>(2.) *
-             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
+            trans_mat_1,
+            trans_mat_1.abs()*Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             rand_mat.transpose_prod(
@@ -1352,39 +1311,27 @@ public:
                      static_cast<TPrecision>(1)}
                 )
             ),
-            Vector<TPrecision>(
-                TestBase::bundle,
-                {rand_mat.get_elem(2, 0).get_scalar(),
-                 rand_mat.get_elem(2, 1).get_scalar()}
-            ),
-            (static_cast<TPrecision>(2.) *
-             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
+            trans_mat_2,
+            trans_mat_2.abs()*Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             rand_mat.transpose_prod(
                 Vector<TPrecision>(
                     TestBase::bundle,
-                    {static_cast<TPrecision>(1), static_cast<TPrecision>(0.1),
+                    {static_cast<TPrecision>(1.), static_cast<TPrecision>(0.1),
                      static_cast<TPrecision>(0.01)}
                 )
             ),
-            Vector<TPrecision>(
-                TestBase::bundle,
-                {((static_cast<TPrecision>(1) *
-                   rand_mat.get_elem(0, 0).get_scalar()) +
-                  (static_cast<TPrecision>(0.1) *
-                   rand_mat.get_elem(1, 0).get_scalar()) +
-                  (static_cast<TPrecision>(0.01) *
-                   rand_mat.get_elem(2, 0).get_scalar())),
-                 ((static_cast<TPrecision>(1) *
-                   rand_mat.get_elem(0, 1).get_scalar()) +
-                  (static_cast<TPrecision>(0.1) *
-                   rand_mat.get_elem(1, 1).get_scalar()) +
-                  (static_cast<TPrecision>(0.01) *
-                   rand_mat.get_elem(2, 1).get_scalar()))}
+            (
+                trans_mat_0*static_cast<TPrecision>(1.) +
+                trans_mat_1*static_cast<TPrecision>(0.1) +
+                trans_mat_2*static_cast<TPrecision>(0.01)
             ),
-            (static_cast<TPrecision>(2.) *
-             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
+            (
+                trans_mat_0.abs()*static_cast<TPrecision>(1.) +
+                trans_mat_1.abs()*static_cast<TPrecision>(0.1) +
+                trans_mat_2.abs()*static_cast<TPrecision>(0.01)
+            )*Tol<TPrecision>::gamma_T(3)
         );
 
     }

@@ -1,5 +1,6 @@
 #include "test.h"
 
+#include "tools/abs.h"
 #include "types/Scalar/Scalar.h"
 
 class Scalar_Test: public TestBase
@@ -66,339 +67,145 @@ public:
     template <typename TPrecision>
     void TestAddSub() {
 
-        Scalar<TPrecision> scalar_1(static_cast<TPrecision>(3.2));
-        Scalar<TPrecision> scalar_2(static_cast<TPrecision>(5.));
-        Scalar<TPrecision> scalar_3(static_cast<TPrecision>(-4.));
+        TPrecision val_1 = static_cast<TPrecision>(3.2);
+        TPrecision val_2 = static_cast<TPrecision>(5.);
+        TPrecision val_3 = static_cast<TPrecision>(-4.);
 
-        ASSERT_NEAR(
-            (scalar_1+scalar_2).get_scalar(),
-            static_cast<TPrecision>(8.2),
-            (min_1_mag(static_cast<TPrecision>(8.2)) *
-             Tol<TPrecision>::roundoff_T())
-        );
-        ASSERT_NEAR(
-            (scalar_1+scalar_3).get_scalar(),
-            static_cast<TPrecision>(-0.8),
-            (min_1_mag(static_cast<TPrecision>(-0.8)) *
-             Tol<TPrecision>::roundoff_T())
-        );
-        ASSERT_NEAR(
-            (scalar_2+scalar_3).get_scalar(),
-            static_cast<TPrecision>(1.),
-            (min_1_mag(static_cast<TPrecision>(1.)) *
-             Tol<TPrecision>::roundoff_T())
-        );
-        ASSERT_NEAR(
-            (scalar_1+scalar_1).get_scalar(),
-            static_cast<TPrecision>(6.4),
-            (min_1_mag(static_cast<TPrecision>(6.4)) *
-             Tol<TPrecision>::roundoff_T())
+        Scalar<TPrecision> scalar_1(val_1);
+        Scalar<TPrecision> scalar_2(val_2);
+        Scalar<TPrecision> scalar_3(val_3);
+
+        ASSERT_EQ((scalar_1+scalar_2).get_scalar(), val_1+val_2);
+        ASSERT_EQ((scalar_1+scalar_3).get_scalar(), val_1+val_3);
+        ASSERT_EQ((scalar_2+scalar_3).get_scalar(), val_2+val_3);
+        ASSERT_EQ((scalar_1+scalar_1).get_scalar(), val_1+val_1);
+        
+        ASSERT_EQ((scalar_2+scalar_1).get_scalar(), val_2+val_1);
+        ASSERT_EQ((scalar_3+scalar_1).get_scalar(), val_3+val_1);
+        ASSERT_EQ((scalar_3+scalar_2).get_scalar(), val_3+val_2);
+
+        ASSERT_EQ((scalar_1-scalar_2).get_scalar(), val_1-val_2);
+        ASSERT_EQ((scalar_1-scalar_3).get_scalar(), val_1-val_3);
+        ASSERT_EQ((scalar_2-scalar_3).get_scalar(), val_2-val_3);
+        ASSERT_EQ(
+            (scalar_1-scalar_1).get_scalar(), static_cast<TPrecision>(0.)
         );
         
-        ASSERT_NEAR(
-            (scalar_2+scalar_1).get_scalar(),
-            static_cast<TPrecision>(8.2),
-            (min_1_mag(static_cast<TPrecision>(8.2)) *
-             Tol<TPrecision>::roundoff_T())
-        );
-        ASSERT_NEAR(
-            (scalar_3+scalar_1).get_scalar(),
-            static_cast<TPrecision>(-0.8),
-            (min_1_mag(static_cast<TPrecision>(-0.8)) *
-             Tol<TPrecision>::roundoff_T())
-        );
-        ASSERT_NEAR(
-            (scalar_3+scalar_2).get_scalar(),
-            static_cast<TPrecision>(1.),
-            (min_1_mag(static_cast<TPrecision>(1.)) *
-             Tol<TPrecision>::roundoff_T())
-        );
-
-        ASSERT_NEAR(
-            (scalar_1-scalar_2).get_scalar(),
-            static_cast<TPrecision>(-1.8),
-            (min_1_mag(static_cast<TPrecision>(-1.8)) *
-             Tol<TPrecision>::roundoff_T())
-        );
-        ASSERT_NEAR(
-            (scalar_1-scalar_3).get_scalar(),
-            static_cast<TPrecision>(7.2),
-            (min_1_mag(static_cast<TPrecision>(7.2)) *
-             Tol<TPrecision>::roundoff_T())
-        );
-        ASSERT_NEAR(
-            (scalar_2-scalar_3).get_scalar(),
-            static_cast<TPrecision>(9.),
-            (min_1_mag(static_cast<TPrecision>(9.)) *
-             Tol<TPrecision>::roundoff_T())
-        );
-        ASSERT_NEAR(
-            (scalar_1-scalar_1).get_scalar(),
-            static_cast<TPrecision>(0.),
-            (min_1_mag(static_cast<TPrecision>(0.)) *
-             Tol<TPrecision>::roundoff_T())
-        );
-        
-        ASSERT_NEAR(
-            (scalar_2-scalar_1).get_scalar(),
-            static_cast<TPrecision>(1.8),
-            (min_1_mag(static_cast<TPrecision>(1.8)) *
-             Tol<TPrecision>::roundoff_T())
-        );
-        ASSERT_NEAR(
-            (scalar_3-scalar_1).get_scalar(),
-            static_cast<TPrecision>(-7.2),
-            (min_1_mag(static_cast<TPrecision>(-7.2)) *
-             Tol<TPrecision>::roundoff_T())
-        );
-        ASSERT_NEAR(
-            (scalar_3-scalar_2).get_scalar(),
-            static_cast<TPrecision>(-9.),
-            (min_1_mag(static_cast<TPrecision>(-9.)) *
-             Tol<TPrecision>::roundoff_T())
-        );
+        ASSERT_EQ((scalar_2-scalar_1).get_scalar(), val_2-val_1);
+        ASSERT_EQ((scalar_3-scalar_1).get_scalar(), val_3-val_1);
+        ASSERT_EQ((scalar_3-scalar_2).get_scalar(), val_3-val_2);
 
     }
     
     template <typename TPrecision>
     void TestAddSubAssignment() {
 
-        Scalar<TPrecision> scalar_1(static_cast<TPrecision>(3.2));
-        Scalar<TPrecision> scalar_2(static_cast<TPrecision>(5.));
-        Scalar<TPrecision> scalar_3(static_cast<TPrecision>(-4.));
+        TPrecision val_1 = static_cast<TPrecision>(3.2);
+        TPrecision val_2 = static_cast<TPrecision>(5.);
+        TPrecision val_3 = static_cast<TPrecision>(-4.);
+
+        Scalar<TPrecision> scalar_1(val_1);
+        Scalar<TPrecision> scalar_2(val_2);
+        Scalar<TPrecision> scalar_3(val_3);
 
         scalar_2 += scalar_1;
-        ASSERT_NEAR(
-            scalar_2.get_scalar(),
-            static_cast<TPrecision>(8.2),
-            (min_1_mag(static_cast<TPrecision>(8.2)) *
-             Tol<TPrecision>::roundoff_T())
-        );
+        ASSERT_EQ(scalar_2.get_scalar(), val_2+val_1);
         scalar_3 += scalar_1;
-        ASSERT_NEAR(
-            scalar_3.get_scalar(),
-            static_cast<TPrecision>(-0.8),
-            (min_1_mag(static_cast<TPrecision>(-0.8)) *
-             Tol<TPrecision>::roundoff_T())
-        );
+        ASSERT_EQ(scalar_3.get_scalar(), val_3+val_1);
         scalar_3 += scalar_1;
-        ASSERT_NEAR(
-            scalar_3.get_scalar(),
-            static_cast<TPrecision>(2.4),
-            (min_1_mag(static_cast<TPrecision>(2.4)) *
-             Tol<TPrecision>::roundoff_T())
-        );
+        ASSERT_EQ(scalar_3.get_scalar(), val_3+val_1+val_1);
         scalar_1 += scalar_1;
-        ASSERT_NEAR(
-            scalar_1.get_scalar(),
-            static_cast<TPrecision>(6.4),
-            (min_1_mag(static_cast<TPrecision>(6.4)) *
-             Tol<TPrecision>::roundoff_T())
-        );
+        ASSERT_EQ(scalar_1.get_scalar(), val_1+val_1);
 
-        scalar_1.set_scalar(static_cast<TPrecision>(3.2));
-        scalar_2.set_scalar(static_cast<TPrecision>(5.));
-        scalar_3.set_scalar(static_cast<TPrecision>(-4.));
+        scalar_1.set_scalar(val_1);
+        scalar_2.set_scalar(val_2);
+        scalar_3.set_scalar(val_3);
+
         scalar_2 -= scalar_1;
-        ASSERT_NEAR(
-            scalar_2.get_scalar(),
-            static_cast<TPrecision>(1.8),
-            (min_1_mag(static_cast<TPrecision>(1.8)) *
-             Tol<TPrecision>::roundoff_T())
-        );
+        ASSERT_EQ(scalar_2.get_scalar(), val_2-val_1);
         scalar_3 -= scalar_1;
-        ASSERT_NEAR(
-            scalar_3.get_scalar(),
-            static_cast<TPrecision>(-7.2),
-            (min_1_mag(static_cast<TPrecision>(-7.2)) *
-             Tol<TPrecision>::roundoff_T())
-        );
+        ASSERT_EQ(scalar_3.get_scalar(), val_3-val_1);
         scalar_3 -= scalar_1;
-        ASSERT_NEAR(
-            scalar_3.get_scalar(),
-            static_cast<TPrecision>(-10.4),
-            (min_1_mag(static_cast<TPrecision>(-10.4)) *
-             Tol<TPrecision>::roundoff_T())
-        );
+        ASSERT_EQ(scalar_3.get_scalar(), val_3-val_1-val_1);
         scalar_1 -= scalar_1;
-        ASSERT_NEAR(
-            scalar_1.get_scalar(),
-            static_cast<TPrecision>(0.),
-            (min_1_mag(static_cast<TPrecision>(0.)) *
-             Tol<TPrecision>::roundoff_T())
-        );
+        ASSERT_EQ(scalar_1.get_scalar(), static_cast<TPrecision>(0.));
 
     }
 
     template <typename TPrecision>
     void TestMultDiv() {
 
-        Scalar<TPrecision> scalar_1(static_cast<TPrecision>(-3.));
-        Scalar<TPrecision> scalar_2(static_cast<TPrecision>(2.4));
-        Scalar<TPrecision> scalar_3(static_cast<TPrecision>(5.));
-        Scalar<TPrecision> scalar_4(static_cast<TPrecision>(0.));
+        TPrecision val_1 = static_cast<TPrecision>(-3.);
+        TPrecision val_2 = static_cast<TPrecision>(2.4);
+        TPrecision val_3 = static_cast<TPrecision>(5.);
+        TPrecision val_4 = static_cast<TPrecision>(0.);
 
-        ASSERT_NEAR(
-            (scalar_1*scalar_1).get_scalar(),
-            static_cast<TPrecision>(9.),
-            (min_1_mag(static_cast<TPrecision>(9.)) *
-             Tol<TPrecision>::roundoff_T())
-        );
-        ASSERT_NEAR(
-            (scalar_1*scalar_2).get_scalar(),
-            static_cast<TPrecision>(-7.2),
-            (min_1_mag(static_cast<TPrecision>(-7.2)) *
-             Tol<TPrecision>::roundoff_T())
-        );
-        ASSERT_NEAR(
-            (scalar_1*scalar_3).get_scalar(),
-            static_cast<TPrecision>(-15.),
-            (min_1_mag(static_cast<TPrecision>(-15.)) *
-             Tol<TPrecision>::roundoff_T())
-        );
-        ASSERT_NEAR(
-            (scalar_1*scalar_4).get_scalar(),
-            static_cast<TPrecision>(0.),
-            (min_1_mag(static_cast<TPrecision>(0.)) *
-             Tol<TPrecision>::roundoff_T())
+        Scalar<TPrecision> scalar_1(val_1);
+        Scalar<TPrecision> scalar_2(val_2);
+        Scalar<TPrecision> scalar_3(val_3);
+        Scalar<TPrecision> scalar_4(val_4);
+
+        ASSERT_EQ((scalar_1*scalar_1).get_scalar(), val_1*val_1);
+        ASSERT_EQ((scalar_1*scalar_2).get_scalar(), val_1*val_2);
+        ASSERT_EQ((scalar_1*scalar_3).get_scalar(), val_1*val_3);
+        ASSERT_EQ(
+            (scalar_1*scalar_4).get_scalar(), static_cast<TPrecision>(0.)
         );
 
-        ASSERT_NEAR(
-            (scalar_2*scalar_1).get_scalar(),
-            static_cast<TPrecision>(-7.2),
-            (min_1_mag(static_cast<TPrecision>(-7.2)) *
-             Tol<TPrecision>::roundoff_T())
-        );
-        ASSERT_NEAR(
-            (scalar_2*scalar_2).get_scalar(),
-            static_cast<TPrecision>(5.76),
-            (min_1_mag(static_cast<TPrecision>(5.76)) *
-             Tol<TPrecision>::roundoff_T())
-        );
-        ASSERT_NEAR(
-            (scalar_2*scalar_3).get_scalar(),
-            static_cast<TPrecision>(12.),
-            (min_1_mag(static_cast<TPrecision>(12.)) *
-             Tol<TPrecision>::roundoff_T())
-        );
-        ASSERT_NEAR(
-            (scalar_2*scalar_4).get_scalar(),
-            static_cast<TPrecision>(0.),
-            (min_1_mag(static_cast<TPrecision>(0.)) *
-             Tol<TPrecision>::roundoff_T())
+        ASSERT_EQ((scalar_2*scalar_1).get_scalar(), val_2*val_1);
+        ASSERT_EQ((scalar_2*scalar_2).get_scalar(), val_2*val_2);
+        ASSERT_EQ((scalar_2*scalar_3).get_scalar(), val_2*val_3);
+        ASSERT_EQ(
+            (scalar_2*scalar_4).get_scalar(), static_cast<TPrecision>(0.)
         );
 
-        ASSERT_NEAR(
-            (scalar_1/scalar_1).get_scalar(),
-            static_cast<TPrecision>(1.),
-            (static_cast<TPrecision>(2) *
-             min_1_mag(static_cast<TPrecision>(1.)) *
-             Tol<TPrecision>::roundoff_T())
-        );
-        ASSERT_NEAR(
-            (scalar_1/scalar_2).get_scalar(),
-            static_cast<TPrecision>(-1.25),
-            (static_cast<TPrecision>(2) *
-             min_1_mag(static_cast<TPrecision>(-1.25)) *
-             Tol<TPrecision>::roundoff_T())
-        );
-        ASSERT_NEAR(
-            (scalar_1/scalar_3).get_scalar(),
-            static_cast<TPrecision>(-3./5.),
-            (static_cast<TPrecision>(2) *
-             min_1_mag(static_cast<TPrecision>(-3./5.)) *
-             Tol<TPrecision>::roundoff_T())
+        ASSERT_EQ((scalar_1/scalar_1).get_scalar(), val_1/val_1);
+        ASSERT_EQ((scalar_1/scalar_2).get_scalar(), val_1/val_2);
+        ASSERT_EQ((scalar_1/scalar_3).get_scalar(), val_1/val_3);
+        ASSERT_EQ(
+            (scalar_4/scalar_1).get_scalar(), static_cast<TPrecision>(0.)
         );
 
-        ASSERT_NEAR(
-            (scalar_2/scalar_1).get_scalar(),
-            static_cast<TPrecision>(-0.8),
-            (static_cast<TPrecision>(2) *
-             min_1_mag(static_cast<TPrecision>(-0.8)) *
-             Tol<TPrecision>::roundoff_T())
-        );
-        ASSERT_NEAR(
-            (scalar_2/scalar_2).get_scalar(),
-            static_cast<TPrecision>(1.),
-            (static_cast<TPrecision>(2) *
-             min_1_mag(static_cast<TPrecision>(1.)) *
-             Tol<TPrecision>::roundoff_T())
-        );
-        ASSERT_NEAR(
-            (scalar_2/scalar_3).get_scalar(),
-            static_cast<TPrecision>(0.48),
-            (static_cast<TPrecision>(2) *
-             min_1_mag(static_cast<TPrecision>(0.48)) *
-             Tol<TPrecision>::roundoff_T())
-        );
+        ASSERT_EQ((scalar_2/scalar_1).get_scalar(), val_2/val_1);
+        ASSERT_EQ((scalar_2/scalar_2).get_scalar(), val_2/val_2);
+        ASSERT_EQ((scalar_2/scalar_3).get_scalar(), val_2/val_3);
 
     }
 
     template <typename TPrecision>
     void TestMultDivAssignment() {
 
-        Scalar<TPrecision> scalar_1(static_cast<TPrecision>(-3.));
-        Scalar<TPrecision> scalar_2(static_cast<TPrecision>(2.4));
-        Scalar<TPrecision> scalar_3(static_cast<TPrecision>(5.));
-        Scalar<TPrecision> scalar_4(static_cast<TPrecision>(0.));
+        TPrecision val_1 = static_cast<TPrecision>(-3.);
+        TPrecision val_2 = static_cast<TPrecision>(2.4);
+        TPrecision val_3 = static_cast<TPrecision>(5.);
+        TPrecision val_4 = static_cast<TPrecision>(0.);
+
+        Scalar<TPrecision> scalar_1(val_1);
+        Scalar<TPrecision> scalar_2(val_2);
+        Scalar<TPrecision> scalar_3(val_3);
+        Scalar<TPrecision> scalar_4(val_4);
 
         scalar_2 *= scalar_1;
-        ASSERT_NEAR(
-            scalar_2.get_scalar(),
-            static_cast<TPrecision>(-7.2),
-            (min_1_mag(static_cast<TPrecision>(-7.2)) *
-             Tol<TPrecision>::roundoff_T())
-        );
+        ASSERT_EQ(scalar_2.get_scalar(), val_2*val_1);
         scalar_3 *= scalar_1;
-        ASSERT_NEAR(
-            scalar_3.get_scalar(),
-            static_cast<TPrecision>(-15.),
-            (min_1_mag(static_cast<TPrecision>(-15.)) *
-             Tol<TPrecision>::roundoff_T())
-        );
+        ASSERT_EQ(scalar_3.get_scalar(), val_3*val_1);
         scalar_4 *= scalar_1;
-        ASSERT_NEAR(
-            scalar_4.get_scalar(),
-            static_cast<TPrecision>(0.),
-            (min_1_mag(static_cast<TPrecision>(0.)) *
-             Tol<TPrecision>::roundoff_T())
-        );
+        ASSERT_EQ(scalar_4.get_scalar(), static_cast<TPrecision>(0.));
         scalar_1 *= scalar_1;
-        ASSERT_NEAR(
-            scalar_1.get_scalar(),
-            static_cast<TPrecision>(9.),
-            (min_1_mag(static_cast<TPrecision>(9.)) *
-             Tol<TPrecision>::roundoff_T())
-        );
+        ASSERT_EQ(scalar_1.get_scalar(), val_1*val_1);
 
-        scalar_1.set_scalar(static_cast<TPrecision>(-3.));
-        scalar_2.set_scalar(static_cast<TPrecision>(2.4));
-        scalar_3.set_scalar(static_cast<TPrecision>(5.));
+        scalar_1.set_scalar(val_1);
+        scalar_2.set_scalar(val_2);
+        scalar_3.set_scalar(val_3);
 
         scalar_2 /= scalar_1;
-        ASSERT_NEAR(
-            scalar_2.get_scalar(),
-            static_cast<TPrecision>(-0.8),
-            (static_cast<TPrecision>(2) *
-             min_1_mag(static_cast<TPrecision>(-0.8)) *
-             Tol<TPrecision>::roundoff_T())
-        );
+        ASSERT_EQ(scalar_2.get_scalar(), val_2/val_1);
         scalar_3 /= scalar_1;
-        ASSERT_NEAR(
-            scalar_3.get_scalar(),
-            static_cast<TPrecision>(5./-3.),
-            (static_cast<TPrecision>(2) *
-             min_1_mag(static_cast<TPrecision>(5./-3.)) *
-             Tol<TPrecision>::roundoff_T())
-        );
+        ASSERT_EQ(scalar_3.get_scalar(), val_3/val_1);
         scalar_1 /= scalar_1;
-        ASSERT_NEAR(
-            scalar_1.get_scalar(),
-            static_cast<TPrecision>(1.),
-            (static_cast<TPrecision>(2) *
-             min_1_mag(static_cast<TPrecision>(1.)) *
-             Tol<TPrecision>::roundoff_T())
-        );
+        ASSERT_EQ(scalar_1.get_scalar(), val_1/val_1);
+        scalar_4 /= scalar_1;
+        ASSERT_EQ(scalar_4.get_scalar(), static_cast<TPrecision>(0.));
 
     }
 
@@ -451,33 +258,33 @@ public:
         ASSERT_NEAR(
             scalar_1.sqrt().get_scalar(),
             static_cast<TPrecision>(3.),
-            Tol<TPrecision>::roundoff_T()
+            static_cast<TPrecision>(3.)*Tol<TPrecision>::roundoff_T()
         );
         ASSERT_NEAR(
             scalar_2.sqrt().get_scalar(),
             static_cast<TPrecision>(0.8),
-            Tol<TPrecision>::roundoff_T()
+            static_cast<TPrecision>(0.8)*Tol<TPrecision>::roundoff_T()
         );
         ASSERT_NEAR(
             scalar_3.sqrt().get_scalar(),
             static_cast<TPrecision>(10.),
-            Tol<TPrecision>::roundoff_T()
+            static_cast<TPrecision>(10.)*Tol<TPrecision>::roundoff_T()
         );
 
         ASSERT_NEAR(
             scalar_1.get_scalar(),
             static_cast<TPrecision>(3.),
-            Tol<TPrecision>::roundoff_T()
+            static_cast<TPrecision>(3.)*Tol<TPrecision>::roundoff_T()
         );
         ASSERT_NEAR(
             scalar_2.get_scalar(),
             static_cast<TPrecision>(0.8),
-            Tol<TPrecision>::roundoff_T()
+            static_cast<TPrecision>(0.8)*Tol<TPrecision>::roundoff_T()
         );
         ASSERT_NEAR(
             scalar_3.get_scalar(),
             static_cast<TPrecision>(10.),
-            Tol<TPrecision>::roundoff_T()
+            static_cast<TPrecision>(10.)*Tol<TPrecision>::roundoff_T()
         );
 
     }
@@ -485,40 +292,35 @@ public:
     template <typename TPrecision>
     void TestReciprocol() {
 
-        Scalar<TPrecision> scalar_1(static_cast<TPrecision>(9.));
-        Scalar<TPrecision> scalar_2(static_cast<TPrecision>(0.64));
-        Scalar<TPrecision> scalar_3(static_cast<TPrecision>(100.));
+        TPrecision val_1 = static_cast<TPrecision>(9.);
+        TPrecision val_2 = static_cast<TPrecision>(0.64);
+        TPrecision val_3 = static_cast<TPrecision>(100.);
 
-        ASSERT_NEAR(
+        Scalar<TPrecision> scalar_1(val_1);
+        Scalar<TPrecision> scalar_2(val_2);
+        Scalar<TPrecision> scalar_3(val_3);
+
+        ASSERT_EQ(
             scalar_1.reciprocol().get_scalar(),
-            static_cast<TPrecision>(1./9.),
-            Tol<TPrecision>::roundoff_T()
+            static_cast<TPrecision>(1.)/val_1
         );
-        ASSERT_NEAR(
+        ASSERT_EQ(
             scalar_2.reciprocol().get_scalar(),
-            static_cast<TPrecision>(1./.64),
-            Tol<TPrecision>::roundoff_T()
+            static_cast<TPrecision>(1.)/val_2
         );
-        ASSERT_NEAR(
+        ASSERT_EQ(
             scalar_3.reciprocol().get_scalar(),
-            static_cast<TPrecision>(1./100.),
-            Tol<TPrecision>::roundoff_T()
+            static_cast<TPrecision>(1.)/val_3
         );
 
-        ASSERT_NEAR(
-            scalar_1.get_scalar(),
-            static_cast<TPrecision>(1./9.),
-            Tol<TPrecision>::roundoff_T()
+        ASSERT_EQ(
+            scalar_1.get_scalar(), static_cast<TPrecision>(1.)/val_1
         );
-        ASSERT_NEAR(
-            scalar_2.get_scalar(),
-            static_cast<TPrecision>(1./.64),
-            Tol<TPrecision>::roundoff_T()
+        ASSERT_EQ(
+            scalar_2.get_scalar(), static_cast<TPrecision>(1.)/val_2
         );
-        ASSERT_NEAR(
-            scalar_3.get_scalar(),
-            static_cast<TPrecision>(1./100.),
-            Tol<TPrecision>::roundoff_T()
+        ASSERT_EQ(
+            scalar_3.get_scalar(), static_cast<TPrecision>(1.)/val_3
         );
 
     }
@@ -531,17 +333,13 @@ public:
         Scalar<double> half_to_double(scalar_half.cast<double>());
 
         ASSERT_EQ(scalar_half, half_to_half);
-        ASSERT_NEAR(
+        ASSERT_EQ(
             half_to_float.get_scalar(),
-            static_cast<float>(3.2),
-            (min_1_mag(static_cast<float>(3.2)) *
-             static_cast<float>(Tol<half>::roundoff_T()))
+            static_cast<float>(static_cast<__half>(3.2))
         );
-        ASSERT_NEAR(
+        ASSERT_EQ(
             half_to_double.get_scalar(),
-            static_cast<double>(3.2),
-            (min_1_mag(static_cast<double>(3.2)) *
-             static_cast<double>(Tol<half>::roundoff_T()))
+            static_cast<double>(static_cast<__half>(3.2))
         );
 
         Scalar<float> scalar_float(static_cast<float>(-40.6));
@@ -553,14 +351,11 @@ public:
         ASSERT_NEAR(
             float_to_half.get_scalar(),
             static_cast<__half>(-40.6),
-            (min_1_mag(static_cast<__half>(-40.6)) *
-             Tol<__half>::roundoff_T())
+            static_cast<__half>(40.6)*Tol<__half>::roundoff_T()
         );
-        ASSERT_NEAR(
+        ASSERT_EQ(
             float_to_double.get_scalar(),
-            static_cast<double>(-40.6),
-            (min_1_mag(static_cast<double>(-40.6)) *
-             static_cast<double>(Tol<float>::roundoff_T()))
+            static_cast<double>(static_cast<float>(-40.6))
         );
 
         Scalar<double> scalar_double(static_cast<double>(2.6));
@@ -572,12 +367,12 @@ public:
         ASSERT_NEAR(
             double_to_half.get_scalar(),
             static_cast<__half>(2.6),
-            (min_1_mag(static_cast<__half>(2.6))*Tol<__half>::roundoff_T())
+            static_cast<__half>(2.6)*Tol<__half>::roundoff_T()
         );
         ASSERT_NEAR(
             double_to_float.get_scalar(),
             static_cast<float>(2.6),
-            (min_1_mag(static_cast<float>(2.6))*Tol<float>::roundoff_T())
+            static_cast<float>(2.6)*Tol<float>::roundoff_T()
         );
 
     }

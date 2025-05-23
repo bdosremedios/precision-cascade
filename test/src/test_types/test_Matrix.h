@@ -1063,70 +1063,84 @@ protected:
         // Test manually
         TMatrix<TPrecision> mat(
             TestBase::bundle,
-            {{static_cast<TPrecision>(1), static_cast<TPrecision>(2),
-              static_cast<TPrecision>(3)},
-             {static_cast<TPrecision>(4), static_cast<TPrecision>(5),
-              static_cast<TPrecision>(6)},
-             {static_cast<TPrecision>(7), static_cast<TPrecision>(8),
-              static_cast<TPrecision>(9)},
-             {static_cast<TPrecision>(3), static_cast<TPrecision>(2),
-              static_cast<TPrecision>(1)}}
+            {{static_cast<TPrecision>(1), static_cast<TPrecision>(2), static_cast<TPrecision>(-3)},
+             {static_cast<TPrecision>(4), static_cast<TPrecision>(5), static_cast<TPrecision>(6)},
+             {static_cast<TPrecision>(-7), static_cast<TPrecision>(-8), static_cast<TPrecision>(-9)},
+             {static_cast<TPrecision>(-3), static_cast<TPrecision>(2), static_cast<TPrecision>(1)}}
         );
         ASSERT_VECTOR_NEAR(
             mat*Vector<TPrecision>(
                 TestBase::bundle,
-                {static_cast<TPrecision>(1), static_cast<TPrecision>(0),
+                {static_cast<TPrecision>(1),
+                 static_cast<TPrecision>(0),
                  static_cast<TPrecision>(0)}
             ),
-            Vector<TPrecision>(
-                TestBase::bundle,
-                {static_cast<TPrecision>(1), static_cast<TPrecision>(4),
-                 static_cast<TPrecision>(7), static_cast<TPrecision>(3)}
-            ),
-            (static_cast<TPrecision>(2.) *
-             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
+            mat.get_col(0).copy_to_vec(),
+            mat.get_col(0).copy_to_vec().abs()*Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat*Vector<TPrecision>(
                 TestBase::bundle,
-                {static_cast<TPrecision>(0), static_cast<TPrecision>(1),
+                {static_cast<TPrecision>(0),
+                 static_cast<TPrecision>(1),
                  static_cast<TPrecision>(0)}
             ),
-            Vector<TPrecision>(
-                TestBase::bundle,
-                {static_cast<TPrecision>(2), static_cast<TPrecision>(5),
-                 static_cast<TPrecision>(8), static_cast<TPrecision>(2)}
-            ),
-            (static_cast<TPrecision>(2.) *
-             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
+            mat.get_col(1).copy_to_vec(),
+            mat.get_col(1).copy_to_vec().abs()*Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat*Vector<TPrecision>(
                 TestBase::bundle,
-                {static_cast<TPrecision>(0), static_cast<TPrecision>(0),
-                 static_cast<TPrecision>(1)}
+                {static_cast<TPrecision>(0),
+                 static_cast<TPrecision>(0),
+                 static_cast<TPrecision>(-1)}
             ),
-            Vector<TPrecision>(
-                TestBase::bundle,
-                {static_cast<TPrecision>(3), static_cast<TPrecision>(6),
-                 static_cast<TPrecision>(9), static_cast<TPrecision>(1)}
-            ),
-            (static_cast<TPrecision>(2.) *
-             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
+            mat.get_col(2).copy_to_vec()*static_cast<TPrecision>(-1.),
+            mat.get_col(2).copy_to_vec().abs()*Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat*Vector<TPrecision>(
                 TestBase::bundle,
-                {static_cast<TPrecision>(1), static_cast<TPrecision>(0.1),
+                {static_cast<TPrecision>(1),
+                 static_cast<TPrecision>(0.1),
                  static_cast<TPrecision>(0.01)}
             ),
             Vector<TPrecision>(
                 TestBase::bundle,
-                {static_cast<TPrecision>(1.23), static_cast<TPrecision>(4.56),
-                 static_cast<TPrecision>(7.89), static_cast<TPrecision>(3.21)}
+                {static_cast<TPrecision>(1.17),
+                 static_cast<TPrecision>(4.56),
+                 static_cast<TPrecision>(-7.89),
+                 static_cast<TPrecision>(-2.79)}
             ),
-            (static_cast<TPrecision>(2.) *
-             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
+            Vector<TPrecision>(
+                TestBase::bundle,
+                {static_cast<TPrecision>(1.23),
+                 static_cast<TPrecision>(4.56),
+                 static_cast<TPrecision>(7.89),
+                 static_cast<TPrecision>(3.21)}
+            )*Tol<TPrecision>::gamma_T(3)
+        );
+        ASSERT_VECTOR_NEAR(
+            mat*Vector<TPrecision>(
+                TestBase::bundle,
+                {static_cast<TPrecision>(1),
+                 static_cast<TPrecision>(-0.1),
+                 static_cast<TPrecision>(0.01)}
+            ),
+            Vector<TPrecision>(
+                TestBase::bundle,
+                {static_cast<TPrecision>(0.77),
+                 static_cast<TPrecision>(3.56),
+                 static_cast<TPrecision>(-6.29),
+                 static_cast<TPrecision>(-3.19)}
+            ),
+            Vector<TPrecision>(
+                TestBase::bundle,
+                {static_cast<TPrecision>(1.23),
+                 static_cast<TPrecision>(4.56),
+                 static_cast<TPrecision>(7.89),
+                 static_cast<TPrecision>(3.21)}
+            )*Tol<TPrecision>::gamma_T(3)
         );
 
     }
@@ -1178,80 +1192,122 @@ protected:
 
     template <typename TPrecision>
     void TestTransposeMatVec() {
-
         // Test manually
         TMatrix<TPrecision> mat(
             TestBase::bundle,
-            {{static_cast<TPrecision>(1), static_cast<TPrecision>(2),
-              static_cast<TPrecision>(3), static_cast<TPrecision>(4)},
-             {static_cast<TPrecision>(5), static_cast<TPrecision>(6),
-              static_cast<TPrecision>(7), static_cast<TPrecision>(8)},
-             {static_cast<TPrecision>(9), static_cast<TPrecision>(1),
-              static_cast<TPrecision>(2), static_cast<TPrecision>(3)}}
+            {{static_cast<TPrecision>(1), static_cast<TPrecision>(4), static_cast<TPrecision>(-7), static_cast<TPrecision>(-3)},
+             {static_cast<TPrecision>(2), static_cast<TPrecision>(5), static_cast<TPrecision>(-8), static_cast<TPrecision>(2)},
+             {static_cast<TPrecision>(-3), static_cast<TPrecision>(6), static_cast<TPrecision>(-9), static_cast<TPrecision>(1)}}
         );
         ASSERT_VECTOR_NEAR(
-            mat.transpose_prod(
-                Vector<TPrecision>(
-                    TestBase::bundle,
-                    {static_cast<TPrecision>(1), static_cast<TPrecision>(0),
-                     static_cast<TPrecision>(0)}
-                )
+            mat.transpose_prod(Vector<TPrecision>(
+                TestBase::bundle,
+                {static_cast<TPrecision>(1),
+                 static_cast<TPrecision>(0),
+                 static_cast<TPrecision>(0)}
+            )),
+            Vector<TPrecision>(
+                TestBase::bundle,
+                {static_cast<TPrecision>(1),
+                 static_cast<TPrecision>(4),
+                 static_cast<TPrecision>(-7),
+                 static_cast<TPrecision>(-3)}
             ),
             Vector<TPrecision>(
                 TestBase::bundle,
-                {static_cast<TPrecision>(1), static_cast<TPrecision>(2),
-                 static_cast<TPrecision>(3), static_cast<TPrecision>(4)}
-            ),
-            (static_cast<TPrecision>(2.) *
-             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
+                {static_cast<TPrecision>(1),
+                 static_cast<TPrecision>(4),
+                 static_cast<TPrecision>(7),
+                 static_cast<TPrecision>(3)}
+            )*Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
-            mat.transpose_prod(
-                Vector<TPrecision>(
-                    TestBase::bundle,
-                    {static_cast<TPrecision>(0), static_cast<TPrecision>(1),
-                     static_cast<TPrecision>(0)}
-                )
+            mat.transpose_prod(Vector<TPrecision>(
+                TestBase::bundle,
+                {static_cast<TPrecision>(0),
+                 static_cast<TPrecision>(1),
+                 static_cast<TPrecision>(0)}
+            )),
+            Vector<TPrecision>(
+                TestBase::bundle,
+                {static_cast<TPrecision>(2),
+                 static_cast<TPrecision>(5),
+                 static_cast<TPrecision>(-8),
+                 static_cast<TPrecision>(2)}
             ),
             Vector<TPrecision>(
                 TestBase::bundle,
-                {static_cast<TPrecision>(5), static_cast<TPrecision>(6),
-                 static_cast<TPrecision>(7), static_cast<TPrecision>(8)}
-            ),
-            (static_cast<TPrecision>(2.) *
-             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
+                {static_cast<TPrecision>(2),
+                 static_cast<TPrecision>(5),
+                 static_cast<TPrecision>(8),
+                 static_cast<TPrecision>(2)}
+            )*Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
-            mat.transpose_prod(
-                Vector<TPrecision>(
-                    TestBase::bundle,
-                    {static_cast<TPrecision>(0), static_cast<TPrecision>(0),
-                     static_cast<TPrecision>(1)}
-                )
+            mat.transpose_prod(Vector<TPrecision>(
+                TestBase::bundle,
+                {static_cast<TPrecision>(0),
+                 static_cast<TPrecision>(0),
+                 static_cast<TPrecision>(-1)}
+            )),
+            Vector<TPrecision>(
+                TestBase::bundle,
+                {static_cast<TPrecision>(3),
+                 static_cast<TPrecision>(-6),
+                 static_cast<TPrecision>(9),
+                 static_cast<TPrecision>(-1)}
             ),
             Vector<TPrecision>(
                 TestBase::bundle,
-                {static_cast<TPrecision>(9), static_cast<TPrecision>(1),
-                 static_cast<TPrecision>(2), static_cast<TPrecision>(3)}
-            ),
-            (static_cast<TPrecision>(2.) *
-             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
+                {static_cast<TPrecision>(3),
+                 static_cast<TPrecision>(6),
+                 static_cast<TPrecision>(9),
+                 static_cast<TPrecision>(1)}
+            )*Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
-            mat.transpose_prod(
-                Vector<TPrecision>(
-                    TestBase::bundle,
-                    {static_cast<TPrecision>(1), static_cast<TPrecision>(0.1),
-                     static_cast<TPrecision>(0.01)}
-                )
+            mat.transpose_prod(Vector<TPrecision>(
+                TestBase::bundle,
+                {static_cast<TPrecision>(1),
+                 static_cast<TPrecision>(0.1),
+                 static_cast<TPrecision>(0.01)}
+            )),
+            Vector<TPrecision>(
+                TestBase::bundle,
+                {static_cast<TPrecision>(1.17),
+                 static_cast<TPrecision>(4.56),
+                 static_cast<TPrecision>(-7.89),
+                 static_cast<TPrecision>(-2.79)}
             ),
             Vector<TPrecision>(
                 TestBase::bundle,
-                {static_cast<TPrecision>(1.59), static_cast<TPrecision>(2.61),
-                 static_cast<TPrecision>(3.72), static_cast<TPrecision>(4.83)}
+                {static_cast<TPrecision>(1.23),
+                 static_cast<TPrecision>(4.56),
+                 static_cast<TPrecision>(7.89),
+                 static_cast<TPrecision>(3.21)}
+            )*Tol<TPrecision>::gamma_T(3)
+        );
+        ASSERT_VECTOR_NEAR(
+            mat.transpose_prod(Vector<TPrecision>(
+                TestBase::bundle,
+                {static_cast<TPrecision>(1),
+                 static_cast<TPrecision>(-0.1),
+                 static_cast<TPrecision>(0.01)}
+            )),
+            Vector<TPrecision>(
+                TestBase::bundle,
+                {static_cast<TPrecision>(0.77),
+                 static_cast<TPrecision>(3.56),
+                 static_cast<TPrecision>(-6.29),
+                 static_cast<TPrecision>(-3.19)}
             ),
-            (static_cast<TPrecision>(2.) *
-             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
+            Vector<TPrecision>(
+                TestBase::bundle,
+                {static_cast<TPrecision>(1.23),
+                 static_cast<TPrecision>(4.56),
+                 static_cast<TPrecision>(7.89),
+                 static_cast<TPrecision>(3.21)}
+            )*Tol<TPrecision>::gamma_T(3)
         );
 
     }
@@ -1394,23 +1450,10 @@ protected:
         );
         TMatrix<TPrecision> mat2(
             TestBase::bundle,
-            {{static_cast<TPrecision>(7), static_cast<TPrecision>(2),
-              static_cast<TPrecision>(-3)},
-             {static_cast<TPrecision>(10), static_cast<TPrecision>(-4),
-              static_cast<TPrecision>(-3)}}
+            {{static_cast<TPrecision>(7), static_cast<TPrecision>(2), static_cast<TPrecision>(-3)},
+             {static_cast<TPrecision>(10), static_cast<TPrecision>(-4), static_cast<TPrecision>(-3)}}
         );
-        TMatrix<TPrecision> test_mat(
-            TestBase::bundle,
-            {{static_cast<TPrecision>(47), static_cast<TPrecision>(-14),
-              static_cast<TPrecision>(-15)},
-             {static_cast<TPrecision>(-47), static_cast<TPrecision>(14),
-              static_cast<TPrecision>(15)},
-             {static_cast<TPrecision>(-41), static_cast<TPrecision>(2),
-              static_cast<TPrecision>(15)},
-             {static_cast<TPrecision>(1070), static_cast<TPrecision>(-380),
-              static_cast<TPrecision>(-330)}}
-        );
-        ASSERT_MATRIX_EQ(mat1*mat2, test_mat);
+
         ASSERT_MATRIX_EQ(
             mat1*TMatrix<TPrecision>::Identity(TestBase::bundle, 2, 2),
             mat1
@@ -1418,6 +1461,24 @@ protected:
         ASSERT_MATRIX_EQ(
             mat2*TMatrix<TPrecision>::Identity(TestBase::bundle, 3, 3),
             mat2
+        );
+
+        TMatrix<TPrecision> target_mat(
+            TestBase::bundle,
+            {{static_cast<TPrecision>(47), static_cast<TPrecision>(-14), static_cast<TPrecision>(-15)},
+             {static_cast<TPrecision>(-47), static_cast<TPrecision>(14), static_cast<TPrecision>(15)},
+             {static_cast<TPrecision>(-41), static_cast<TPrecision>(2), static_cast<TPrecision>(15)},
+             {static_cast<TPrecision>(1070), static_cast<TPrecision>(-380), static_cast<TPrecision>(-330)}}
+        );
+        TMatrix<TPrecision> elem_abs_MM_prod(
+            TestBase::bundle,
+            {{static_cast<TPrecision>(47), static_cast<TPrecision>(18), static_cast<TPrecision>(15)},
+             {static_cast<TPrecision>(47), static_cast<TPrecision>(18), static_cast<TPrecision>(15)},
+             {static_cast<TPrecision>(41), static_cast<TPrecision>(14), static_cast<TPrecision>(15)},
+             {static_cast<TPrecision>(1070), static_cast<TPrecision>(420), static_cast<TPrecision>(330)}}
+        );
+        ASSERT_MATRIX_NEAR(
+            mat1*mat2, target_mat, elem_abs_MM_prod*Tol<TPrecision>::gamma_T(2)
         );
 
     }
@@ -1677,9 +1738,10 @@ protected:
                 ASSERT_NEAR(
                     dbl_to_sgl.get_elem(i, j).get_scalar(),
                     static_cast<float>(mat_dbl.get_elem(i, j).get_scalar()),
-                    (min_1_mag(static_cast<float>(
-                     mat_dbl.get_elem(i, j).get_scalar())) *
-                     Tol<float>::roundoff_T())
+                    abs_ns::abs(
+                        static_cast<float>(mat_dbl.get_elem(i, j).get_scalar())*
+                        Tol<float>::roundoff_T()
+                    )
                 );
             }
         }
@@ -1692,9 +1754,10 @@ protected:
                 ASSERT_NEAR(
                     dbl_to_hlf.get_elem(i, j).get_scalar(),
                     static_cast<__half>(mat_dbl.get_elem(i, j).get_scalar()),
-                    (min_1_mag(static_cast<__half>(
-                     mat_dbl.get_elem(i, j).get_scalar())) *
-                     Tol<__half>::roundoff_T())
+                    abs_ns::abs(
+                        static_cast<__half>(mat_dbl.get_elem(i, j).get_scalar())*
+                        Tol<__half>::roundoff_T()
+                    )
                 );
             }
         }
@@ -1713,12 +1776,9 @@ protected:
         ASSERT_EQ(sgl_to_dbl.cols(), n);
         for (int i=0; i<m; ++i) {
             for (int j=0; j<n; ++j) {
-                ASSERT_NEAR(
+                ASSERT_EQ(
                     sgl_to_dbl.get_elem(i, j).get_scalar(),
-                    static_cast<double>(mat_sgl.get_elem(i, j).get_scalar()),
-                    (min_1_mag(static_cast<double>(
-                     mat_sgl.get_elem(i, j).get_scalar())) *
-                     static_cast<double>(Tol<float>::roundoff_T()))
+                    static_cast<double>(mat_sgl.get_elem(i, j).get_scalar())
                 );
             }
         }
@@ -1731,9 +1791,10 @@ protected:
                 ASSERT_NEAR(
                     sgl_to_hlf.get_elem(i, j).get_scalar(),
                     static_cast<__half>(mat_sgl.get_elem(i, j).get_scalar()),
-                    (min_1_mag(static_cast<__half>(
-                     mat_sgl.get_elem(i, j).get_scalar())) *
-                     Tol<__half>::roundoff_T())
+                    abs_ns::abs(
+                        static_cast<__half>(mat_sgl.get_elem(i, j).get_scalar())*
+                        Tol<__half>::roundoff_T()
+                    )
                 );
             }
         }
@@ -1752,12 +1813,9 @@ protected:
         ASSERT_EQ(hlf_to_sgl.cols(), n);
         for (int i=0; i<m; ++i) {
             for (int j=0; j<n; ++j) {
-                ASSERT_NEAR(
+                ASSERT_EQ(
                     hlf_to_sgl.get_elem(i, j).get_scalar(),
-                    static_cast<float>(mat_hlf.get_elem(i, j).get_scalar()),
-                    (min_1_mag(static_cast<float>(
-                     mat_hlf.get_elem(i, j).get_scalar())) *
-                     static_cast<float>(Tol<__half>::roundoff_T()))
+                    static_cast<float>(mat_hlf.get_elem(i, j).get_scalar())
                 );
             }
         }
@@ -1767,12 +1825,9 @@ protected:
         ASSERT_EQ(hlf_to_dbl.cols(), n);
         for (int i=0; i<m; ++i) {
             for (int j=0; j<n; ++j) {
-                ASSERT_NEAR(
+                ASSERT_EQ(
                     hlf_to_dbl.get_elem(i, j).get_scalar(),
-                    static_cast<double>(mat_hlf.get_elem(i, j).get_scalar()),
-                    (min_1_mag(static_cast<double>(
-                     mat_hlf.get_elem(i, j).get_scalar())) *
-                     static_cast<double>(Tol<__half>::roundoff_T()))
+                    static_cast<double>(mat_hlf.get_elem(i, j).get_scalar())
                 );
             }
         }
@@ -1785,6 +1840,26 @@ template <template <typename> typename TMatrix>
 class Matrix_Substitution_Test: public TestBase
 {
 public:
+
+    template <typename TPrecision>    
+    TPrecision get_tri_cond_number(TMatrix<TPrecision> const &mat) {
+
+        int n = mat.rows();
+        TPrecision min_val = abs_ns::abs(mat.get_elem(0, 0).get_scalar());
+        TPrecision max_val = abs_ns::abs(mat.get_elem(0, 0).get_scalar());
+        for (int i=0; i<n; ++i) {
+            TPrecision comp_val = abs_ns::abs(mat.get_elem(i, i).get_scalar());
+            if (min_val > comp_val) {
+                min_val = comp_val;
+            }
+            if (max_val < comp_val) {
+                max_val = comp_val;
+            }
+        }
+
+        return max_val/min_val;
+
+    }
 
     template <typename TPrecision>
     void TestForwardSubstitution() {
@@ -1803,10 +1878,12 @@ public:
 
         Vector<TPrecision> test_soln(L_tri.frwd_sub(Lb_tri));
 
-        ASSERT_VECTOR_NEAR(
-            test_soln,
-            x_tri,
-            x_tri.get_max_mag_elem().get_scalar()*Tol<TPrecision>::gamma_T(n)
+        TPrecision cond_no = get_tri_cond_number<TPrecision>(L_tri);
+
+        ASSERT_LE(
+            (test_soln-x_tri).get_max_mag_elem().get_scalar(),
+            (x_tri.get_max_mag_elem().get_scalar()*
+             Tol<TPrecision>::substitution_tol_T(cond_no, n))
         );
 
     }
@@ -1828,10 +1905,12 @@ public:
 
         Vector<TPrecision> test_soln(L_tri.frwd_sub(Lb_tri));
 
-        ASSERT_VECTOR_NEAR(
-            test_soln,
-            x_tri,
-            x_tri.get_max_mag_elem().get_scalar()*Tol<TPrecision>::gamma_T(n)
+        TPrecision cond_no = get_tri_cond_number<TPrecision>(L_tri);
+
+        ASSERT_LE(
+            (test_soln-x_tri).get_max_mag_elem().get_scalar(),
+            (x_tri.get_max_mag_elem().get_scalar()*
+             Tol<TPrecision>::substitution_tol_T(cond_no, n))
         );
 
     }
@@ -1856,10 +1935,12 @@ public:
 
         Vector<TPrecision> test_soln(L_tri.frwd_sub(Lb_tri));
 
-        ASSERT_VECTOR_NEAR(
-            test_soln,
-            x_tri,
-            x_tri.get_max_mag_elem().get_scalar()*Tol<TPrecision>::gamma_T(n)
+        TPrecision cond_no = get_tri_cond_number<TPrecision>(L_tri);
+
+        ASSERT_LE(
+            (test_soln-x_tri).get_max_mag_elem().get_scalar(),
+            (x_tri.get_max_mag_elem().get_scalar()*
+             Tol<TPrecision>::substitution_tol_T(cond_no, n))
         );
 
     }
@@ -1886,15 +1967,18 @@ public:
 
         Vector<TPrecision> test_soln(L_tri.frwd_sub(Lb_tri));
 
-        TPrecision min_tol = Tol<TPrecision>::gamma_T(n);
-        if (abs_ns::abs(min_tol) > static_cast<TPrecision>(0.1)) {
-            min_tol = 0.2;
+        TPrecision cond_no = get_tri_cond_number<TPrecision>(L_tri);
+
+        // Set cap on subsitution_tol in case it is negative with high n
+        // if negative set to more conservative n/4
+        TPrecision sub_tol = Tol<TPrecision>::substitution_tol_T(cond_no, n);
+        if (sub_tol < static_cast<TPrecision>(0)) {
+            sub_tol = Tol<TPrecision>::substitution_tol_T(cond_no, n/4);
         }
 
-        ASSERT_VECTOR_NEAR(
-            test_soln,
-            x_tri,
-            x_tri.get_max_mag_elem().get_scalar()*min_tol
+        ASSERT_LE(
+            (test_soln-x_tri).get_max_mag_elem().get_scalar(), 
+            x_tri.get_max_mag_elem().get_scalar()*sub_tol
         );
 
     }
@@ -1916,10 +2000,12 @@ public:
     
         Vector<TPrecision> test_soln(U_tri.back_sub(Ub_tri));
 
-        ASSERT_VECTOR_NEAR(
-            test_soln,
-            x_tri,
-            x_tri.get_max_mag_elem().get_scalar()*Tol<TPrecision>::gamma_T(n)
+        TPrecision cond_no = get_tri_cond_number<TPrecision>(U_tri);
+
+        ASSERT_LE(
+            (test_soln-x_tri).get_max_mag_elem().get_scalar(),
+            (x_tri.get_max_mag_elem().get_scalar()*
+             Tol<TPrecision>::substitution_tol_T(cond_no, n))
         );
 
     }
@@ -1940,10 +2026,12 @@ public:
     
         Vector<TPrecision> test_soln(U_tri.back_sub(Ub_tri));
 
-        ASSERT_VECTOR_NEAR(
-            test_soln,
-            x_tri,
-            x_tri.get_max_mag_elem().get_scalar()*Tol<TPrecision>::gamma_T(n)
+        TPrecision cond_no = get_tri_cond_number<TPrecision>(U_tri);
+
+        ASSERT_LE(
+            (test_soln-x_tri).get_max_mag_elem().get_scalar(),
+            (x_tri.get_max_mag_elem().get_scalar()*
+             Tol<TPrecision>::substitution_tol_T(cond_no, n))
         );
 
     }
@@ -1968,10 +2056,12 @@ public:
 
         Vector<TPrecision> test_soln(U_tri.back_sub(Ub_tri));
 
-        ASSERT_VECTOR_NEAR(
-            test_soln,
-            x_tri,
-            x_tri.get_max_mag_elem().get_scalar()*Tol<TPrecision>::gamma_T(n)
+        TPrecision cond_no = get_tri_cond_number<TPrecision>(U_tri);
+
+        ASSERT_LE(
+            (test_soln-x_tri).get_max_mag_elem().get_scalar(),
+            (x_tri.get_max_mag_elem().get_scalar()*
+             Tol<TPrecision>::substitution_tol_T(cond_no, n))
         );
 
     }
@@ -1994,15 +2084,18 @@ public:
     
         Vector<TPrecision> test_soln(U_tri.back_sub(Ub_tri));
 
-        TPrecision min_tol = Tol<TPrecision>::gamma_T(n);
-        if (abs_ns::abs(min_tol) > static_cast<TPrecision>(0.3)) {
-            min_tol = static_cast<TPrecision>(0.3);
+        TPrecision cond_no = get_tri_cond_number<TPrecision>(U_tri);
+
+        // Set cap on subsitution_tol in case it is negative with high n
+        // if negative set to more conservative n/4
+        TPrecision sub_tol = Tol<TPrecision>::substitution_tol_T(cond_no, n);
+        if (sub_tol < static_cast<TPrecision>(0)) {
+            sub_tol = Tol<TPrecision>::substitution_tol_T(cond_no, n/4);
         }
 
-        ASSERT_VECTOR_NEAR(
-            test_soln,
-            x_tri,
-            x_tri.get_max_mag_elem().get_scalar()*min_tol
+        ASSERT_LE(
+            static_cast<double>((test_soln-x_tri).get_max_mag_elem().get_scalar()),
+            static_cast<double>(x_tri.get_max_mag_elem().get_scalar()*sub_tol)
         );
 
     }

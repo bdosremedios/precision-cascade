@@ -66,6 +66,29 @@ void _ASSERT_VECTOR_NEAR(
 
 }
 
+template <typename TPrecision>
+void _ASSERT_VECTOR_NEAR(
+    const Vector<TPrecision> &test,
+    const Vector<TPrecision> &target,
+    const Vector<TPrecision> &abs_tol,
+    const char* file, int line, std::string message
+) {
+
+    testing::ScopedTrace scope(file, line, message);
+
+    ASSERT_EQ(test.rows(), target.rows());
+    ASSERT_EQ(abs_tol.rows(), target.rows());
+
+    for (int i=0; i<target.rows(); ++i) {
+        ASSERT_NEAR(
+            test.get_elem(i).get_scalar(),
+            target.get_elem(i).get_scalar(),
+            abs_tol.get_elem(i).get_scalar()
+        );
+    }
+
+}
+
 #define ASSERT_VECTOR_ZERO(test, tol) \
 _ASSERT_VECTOR_ZERO( \
     test, tol, \
@@ -111,6 +134,7 @@ _ASSERT_MATRIX_NEAR( \
     test, target, tol, \
     __FILE__, __LINE__, "AssertionError for ASSERT_MATRIX_NEAR" \
 )
+
 template <template <typename> typename TMatrix, typename TPrecision>
 void _ASSERT_MATRIX_NEAR(
     const TMatrix<TPrecision> &test,
@@ -130,6 +154,33 @@ void _ASSERT_MATRIX_NEAR(
                 test.get_elem(i, j).get_scalar(),
                 target.get_elem(i, j).get_scalar(),
                 tol
+            );
+        }
+    }
+
+}
+
+template <template <typename> typename TMatrix, typename TPrecision>
+void _ASSERT_MATRIX_NEAR(
+    const TMatrix<TPrecision> &test,
+    const TMatrix<TPrecision> &target,
+    const TMatrix<TPrecision> abs_tol,
+    const char* file, int line, std::string message
+) {
+
+    testing::ScopedTrace scope(file, line, message);
+
+    ASSERT_EQ(test.rows(), target.rows());
+    ASSERT_EQ(test.cols(), target.cols());
+    ASSERT_EQ(abs_tol.rows(), target.rows());
+    ASSERT_EQ(abs_tol.cols(), target.cols());
+
+    for (int i=0; i<target.rows(); ++i) {
+        for (int j=0; j<target.cols(); ++j) {
+            ASSERT_NEAR(
+                test.get_elem(i, j).get_scalar(),
+                target.get_elem(i, j).get_scalar(),
+                abs_tol.get_elem(i, j).get_scalar()
             );
         }
     }

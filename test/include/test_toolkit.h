@@ -24,11 +24,6 @@ TPrecision mat_max_mag(const TMatrix<TPrecision> &A) {
 }
 
 template <typename TPrecision>
-TPrecision min_1_mag(const TPrecision &val) {
-    return std::max(abs_ns::abs(val), static_cast<TPrecision>(1.));
-}
-
-template <typename TPrecision>
 class Tol
 {
 public:

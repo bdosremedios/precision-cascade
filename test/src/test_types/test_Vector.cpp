@@ -1,5 +1,6 @@
 #include "test.h"
 
+#include "tools/abs.h"
 #include "types/Vector/Vector.h"
 
 #include <utility>
@@ -667,29 +668,58 @@ public:
 
         Vector<TPrecision> vec_1(
             TestBase::bundle,
-            {static_cast<TPrecision>(-42.), static_cast<TPrecision>(0.),
+            {static_cast<TPrecision>(-42.),
+             static_cast<TPrecision>(0.),
              static_cast<TPrecision>(0.6)}
         );
         Vector<TPrecision> vec_2(
             TestBase::bundle,
-            {static_cast<TPrecision>(-38.), static_cast<TPrecision>(0.5),
+            {static_cast<TPrecision>(-38.),
+             static_cast<TPrecision>(0.5),
              static_cast<TPrecision>(-0.6)}
         );
 
         Vector<TPrecision> vec_add = vec_1+vec_2;
-        ASSERT_EQ(vec_add.get_elem(0), static_cast<TPrecision>(-80.));
-        ASSERT_EQ(vec_add.get_elem(1), static_cast<TPrecision>(0.5));
-        ASSERT_EQ(vec_add.get_elem(2), static_cast<TPrecision>(0.));
+        ASSERT_EQ(
+            vec_add.get_elem(0).get_scalar(),
+            static_cast<TPrecision>(-42.)+static_cast<TPrecision>(-38.)
+        );
+        ASSERT_EQ(
+            vec_add.get_elem(1).get_scalar(),
+            static_cast<TPrecision>(0.)+static_cast<TPrecision>(0.5)
+        );
+        ASSERT_EQ(
+            vec_add.get_elem(2).get_scalar(),
+            static_cast<TPrecision>(0.6)+static_cast<TPrecision>(-0.6)
+        );
 
         Vector<TPrecision> vec_sub_1 = vec_1-vec_2;
-        ASSERT_EQ(vec_sub_1.get_elem(0), static_cast<TPrecision>(-4.));
-        ASSERT_EQ(vec_sub_1.get_elem(1), static_cast<TPrecision>(-0.5));
-        ASSERT_EQ(vec_sub_1.get_elem(2), static_cast<TPrecision>(1.2));
+        ASSERT_EQ(
+            vec_sub_1.get_elem(0).get_scalar(),
+            static_cast<TPrecision>(-42.)-static_cast<TPrecision>(-38.)
+        );
+        ASSERT_EQ(
+            vec_sub_1.get_elem(1).get_scalar(),
+            static_cast<TPrecision>(0.)-static_cast<TPrecision>(0.5)
+        );
+        ASSERT_EQ(
+            vec_sub_1.get_elem(2).get_scalar(),
+            static_cast<TPrecision>(0.6)-static_cast<TPrecision>(-0.6)
+        );
 
         Vector<TPrecision> vec_sub_2 = vec_2-vec_1;
-        ASSERT_EQ(vec_sub_2.get_elem(0), static_cast<TPrecision>(4.));
-        ASSERT_EQ(vec_sub_2.get_elem(1), static_cast<TPrecision>(0.5));
-        ASSERT_EQ(vec_sub_2.get_elem(2), static_cast<TPrecision>(-1.2));
+        ASSERT_EQ(
+            vec_sub_2.get_elem(0).get_scalar(),
+            static_cast<TPrecision>(-38.)-static_cast<TPrecision>(-42.)
+        );
+        ASSERT_EQ(
+            vec_sub_2.get_elem(1).get_scalar(),
+            static_cast<TPrecision>(0.5)-static_cast<TPrecision>(0.)
+        );
+        ASSERT_EQ(
+            vec_sub_2.get_elem(2).get_scalar(),
+            static_cast<TPrecision>(-0.6)-static_cast<TPrecision>(0.6)
+        );
 
     }
 
@@ -727,20 +757,30 @@ public:
         // Pre-calculated
         Vector<TPrecision> vec_1_dot(
             TestBase::bundle,
-            {static_cast<TPrecision>(-4.), static_cast<TPrecision>(3.4),
-             static_cast<TPrecision>(0.), static_cast<TPrecision>(-2.1),
+            {static_cast<TPrecision>(-4.),
+             static_cast<TPrecision>(3.4),
+             static_cast<TPrecision>(0.),
+             static_cast<TPrecision>(-2.1),
              static_cast<TPrecision>(1.8)}
         );
         Vector<TPrecision> vec_2_dot(
             TestBase::bundle,
-            {static_cast<TPrecision>(9.), static_cast<TPrecision>(10.),
-             static_cast<TPrecision>(1.5), static_cast<TPrecision>(-4.5),
+            {static_cast<TPrecision>(9.),
+             static_cast<TPrecision>(10.),
+             static_cast<TPrecision>(1.5),
+             static_cast<TPrecision>(-4.5),
              static_cast<TPrecision>(2.)}
         );
         ASSERT_NEAR(
-            static_cast<double>(vec_1_dot.dot(vec_2_dot).get_scalar()),
-            11.05,
-            11.05*Tol<TPrecision>::gamma(5)
+            vec_1_dot.dot(vec_2_dot).get_scalar(),
+            static_cast<TPrecision>(11.05),
+            Tol<TPrecision>::gamma_T(5)*(
+                static_cast<TPrecision>(4.)*static_cast<TPrecision>(9.) +
+                static_cast<TPrecision>(3.4)*static_cast<TPrecision>(10.) +
+                static_cast<TPrecision>(0.)*static_cast<TPrecision>(1.5) +
+                static_cast<TPrecision>(2.1)*static_cast<TPrecision>(4.5) +
+                static_cast<TPrecision>(1.8)*static_cast<TPrecision>(2.)
+            )
         );
 
         // Random
@@ -751,18 +791,21 @@ public:
             TestBase::bundle, 10
         ));
         TPrecision acc = static_cast<TPrecision>(0.);
+        TPrecision abs_acc = static_cast<TPrecision>(0.);
         for (int i=0; i<10; ++i) {
             acc += (
                 vec_1_dot_r.get_elem(i).get_scalar() *
                 vec_2_dot_r.get_elem(i).get_scalar()
             );
+            abs_acc += (
+                abs_ns::abs(vec_1_dot_r.get_elem(i).get_scalar()) *
+                abs_ns::abs(vec_2_dot_r.get_elem(i).get_scalar())
+            );
         }
         ASSERT_NEAR(
             vec_1_dot_r.dot(vec_2_dot_r).get_scalar(),
             acc,
-            (static_cast<TPrecision>(2.) *
-             static_cast<TPrecision>(10.) *
-             Tol<TPrecision>::gamma_T(10))
+            abs_acc*Tol<TPrecision>::gamma_T(10)
         );
 
     }
@@ -777,22 +820,36 @@ public:
              static_cast<TPrecision>(-0.6), static_cast<TPrecision>(4.),
              static_cast<TPrecision>(0.)}
         );
+        Scalar<TPrecision> abs_self_dot_prod(       
+            static_cast<TPrecision>(8.)*static_cast<TPrecision>(8.) +
+            static_cast<TPrecision>(0.8)*static_cast<TPrecision>(0.8) +
+            static_cast<TPrecision>(-0.6)*static_cast<TPrecision>(-0.6) +
+            static_cast<TPrecision>(4.)*static_cast<TPrecision>(4.) +
+            static_cast<TPrecision>(0.)*static_cast<TPrecision>(0.)
+        );
         ASSERT_NEAR(
             vec_norm.norm().get_scalar(),
             static_cast<TPrecision>(9.),
-            (static_cast<TPrecision>(9.) *
-             static_cast<TPrecision>(Tol<TPrecision>::gamma(5)))
+            Tol<TPrecision>::gamma_T(5)*abs_self_dot_prod.sqrt().get_scalar()
         );
 
         // Random
         Vector<TPrecision> vec_norm_r(Vector<TPrecision>::Random(
             TestBase::bundle, 10
         ));
+        TPrecision abs_self_dot_prod_r = static_cast<TPrecision>(0.);
+        for (int i=0; i<10; ++i) {
+            abs_self_dot_prod_r += (
+                abs_ns::abs(vec_norm_r.get_elem(i).get_scalar()) *
+                abs_ns::abs(vec_norm_r.get_elem(i).get_scalar())
+            );
+        }
+        Scalar<TPrecision> scalar_abs_self_dot_prod_r(abs_self_dot_prod_r);
         ASSERT_NEAR(
             vec_norm_r.norm().get_scalar(),
             vec_norm_r.dot(vec_norm_r).sqrt().get_scalar(),
-            (vec_norm_r.dot(vec_norm_r).sqrt().get_scalar() *
-             Tol<TPrecision>::gamma_T(10))
+            (Tol<TPrecision>::gamma_T(10)*
+             scalar_abs_self_dot_prod_r.sqrt().get_scalar())
         );
 
     }
@@ -862,9 +919,10 @@ public:
             ASSERT_NEAR(
                 dbl_to_hlf.get_elem(i).get_scalar(),
                 static_cast<__half>(vec_dbl.get_elem(i).get_scalar()),
-                (min_1_mag(static_cast<__half>(
-                 vec_dbl.get_elem(i).get_scalar())) *
-                 Tol<__half>::roundoff_T())
+                abs_ns::abs(
+                    static_cast<__half>(vec_dbl.get_elem(i).get_scalar())*
+                    Tol<__half>::roundoff_T()
+                )
             );
         }
         Vector<float> dbl_to_sgl(vec_dbl.cast<float>());
@@ -873,9 +931,10 @@ public:
             ASSERT_NEAR(
                 dbl_to_sgl.get_elem(i).get_scalar(),
                 static_cast<float>(vec_dbl.get_elem(i).get_scalar()),
-                (min_1_mag(static_cast<float>(
-                 vec_dbl.get_elem(i).get_scalar())) *
-                 Tol<float>::roundoff_T())
+                abs_ns::abs(
+                    static_cast<float>(vec_dbl.get_elem(i).get_scalar())*
+                    Tol<float>::roundoff_T()
+                )
             );
         }
 
@@ -889,20 +948,18 @@ public:
             ASSERT_NEAR(
                 sgl_to_hlf.get_elem(i).get_scalar(),
                 static_cast<__half>(vec_sgl.get_elem(i).get_scalar()),
-                (min_1_mag(static_cast<__half>(
-                 vec_sgl.get_elem(i).get_scalar()))*
-                 Tol<__half>::roundoff_T())
+                abs_ns::abs(
+                    static_cast<__half>(vec_sgl.get_elem(i).get_scalar())*
+                    Tol<__half>::roundoff_T()
+                )
             );
         }
         Vector<double> sgl_to_dbl(vec_sgl.cast<double>());
         ASSERT_EQ(sgl_to_dbl.rows(), m);
         for (int i=0; i<m; ++i) {
-            ASSERT_NEAR(
+            ASSERT_EQ(
                 sgl_to_dbl.get_elem(i).get_scalar(),
-                static_cast<double>(vec_sgl.get_elem(i).get_scalar()),
-                (min_1_mag(static_cast<double>(
-                 vec_sgl.get_elem(i).get_scalar()))*
-                 static_cast<double>(Tol<float>::roundoff_T()))
+                static_cast<double>(vec_sgl.get_elem(i).get_scalar())
             );
         }
 
@@ -913,23 +970,17 @@ public:
         Vector<float> hlf_to_sgl(vec_hlf.cast<float>());
         ASSERT_EQ(hlf_to_sgl.rows(), m);
         for (int i=0; i<m; ++i) {
-            ASSERT_NEAR(
+            ASSERT_EQ(
                 hlf_to_sgl.get_elem(i).get_scalar(),
-                static_cast<float>(vec_hlf.get_elem(i).get_scalar()),
-                (min_1_mag(static_cast<float>(
-                 vec_hlf.get_elem(i).get_scalar())) *
-                 static_cast<float>(Tol<__half>::roundoff_T()))
+                static_cast<float>(vec_hlf.get_elem(i).get_scalar())
             );
         }
         Vector<double> hlf_to_dbl(vec_hlf.cast<double>());
         ASSERT_EQ(hlf_to_dbl.rows(), m);
         for (int i=0; i<m; ++i) {
-            ASSERT_NEAR(
+            ASSERT_EQ(
                 hlf_to_dbl.get_elem(i).get_scalar(),
-                static_cast<double>(vec_hlf.get_elem(i).get_scalar()),
-                (min_1_mag(static_cast<double>(
-                 vec_hlf.get_elem(i).get_scalar())) *
-                 static_cast<double>(Tol<__half>::roundoff_T()))
+                static_cast<double>(vec_hlf.get_elem(i).get_scalar())
             );
         }
 
@@ -990,6 +1041,47 @@ public:
         ASSERT_FALSE(vec_to_compare == vec_smaller);
         ASSERT_FALSE(vec_to_compare == vec_bigger);
         ASSERT_TRUE(vec_empty_1 == vec_empty_2);
+
+    }
+
+    template <typename TPrecision>
+    void TestAbs() {
+
+        // Test manually
+        constexpr int m_manual(4);
+        Vector<TPrecision> vec(
+            TestBase::bundle,
+            {static_cast<TPrecision>(1),
+             static_cast<TPrecision>(-5),
+             static_cast<TPrecision>(-9)}
+        );
+        Vector<TPrecision> test(
+            TestBase::bundle,
+            {static_cast<TPrecision>(1),
+             static_cast<TPrecision>(5),
+             static_cast<TPrecision>(9)}
+        );
+        ASSERT_MATRIX_EQ(vec.abs(), test);
+
+    }
+
+    template <typename TPrecision>
+    void TestRandomAbs() {
+
+        constexpr int m_rand(4);
+        Vector<TPrecision> vec(Vector<TPrecision>::Random(
+            TestBase::bundle, m_rand
+        ));
+
+        Vector<TPrecision> test_vec = vec.abs();
+
+        for (int i=0; i<m_rand; ++i) {
+            Scalar<TPrecision> abs_elem(vec.get_elem(i).get_scalar());
+            ASSERT_EQ(
+                test_vec.get_elem(i).get_scalar(),
+                abs_elem.abs().get_scalar()
+            );
+        }
 
     }
 
@@ -1135,4 +1227,16 @@ TEST_F(Vector_Test, TestBooleanEqual) {
     TestBooleanEqual<__half>();
     TestBooleanEqual<float>();
     TestBooleanEqual<double>();
+}
+
+TEST_F(Vector_Test, TestAbs) {
+    TestAbs<__half>();
+    TestAbs<float>();
+    TestAbs<double>();
+}
+
+TEST_F(Vector_Test, TestRandomAbs) {
+    TestRandomAbs<__half>();
+    TestRandomAbs<float>();
+    TestRandomAbs<double>();
 }

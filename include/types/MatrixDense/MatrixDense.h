@@ -691,7 +691,7 @@ public:
     MatrixDense<TPrecision> operator-(const MatrixDense<TPrecision> &mat) const;
 
     // Needed for testing (don't need to optimize performance)
-    void abs() {
+    MatrixDense<TPrecision> abs() const {
 
         TPrecision *h_mat = static_cast<TPrecision *>(
             malloc(m_rows*n_cols*sizeof(TPrecision))
@@ -710,14 +710,11 @@ public:
             }
         }
 
-        if ((m_rows > 0) && (n_cols > 0)) {
-            check_cublas_status(cublasSetMatrix(
-                m_rows, n_cols, sizeof(TPrecision),
-                h_mat, m_rows, d_mat, m_rows
-            ));
-        }
+        MatrixDense<TPrecision> ret_val(cu_handles, h_mat, m_rows, n_cols);
 
         free(h_mat);
+
+        return ret_val;
 
     }
 

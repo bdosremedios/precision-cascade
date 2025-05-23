@@ -1,5 +1,6 @@
 #include "test_Matrix.h"
 
+#include "tools/abs.h"
 #include "types/MatrixDense/MatrixDense.h"
 
 class MatrixDense_Test: public Matrix_Test<MatrixDense>
@@ -522,8 +523,12 @@ public:
                  rand_mat.get_elem(1, 0).get_scalar(),
                  rand_mat.get_elem(2, 0).get_scalar()}
             ),
-            (static_cast<TPrecision>(2.) *
-             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
+            Vector<TPrecision>(
+                TestBase::bundle,
+                {abs_ns::abs(rand_mat.get_elem(0, 0).get_scalar()),
+                 abs_ns::abs(rand_mat.get_elem(1, 0).get_scalar()),
+                 abs_ns::abs(rand_mat.get_elem(2, 0).get_scalar())}
+            )*Tol<TPrecision>::gamma_T(4)
         );
         ASSERT_VECTOR_NEAR(
             rand_mat*Vector<TPrecision>(
@@ -537,8 +542,12 @@ public:
                  rand_mat.get_elem(1, 1).get_scalar(),
                  rand_mat.get_elem(2, 1).get_scalar()}
             ),
-            (static_cast<TPrecision>(2.) *
-             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
+            Vector<TPrecision>(
+                TestBase::bundle,
+                {abs_ns::abs(rand_mat.get_elem(0, 1).get_scalar()),
+                 abs_ns::abs(rand_mat.get_elem(1, 1).get_scalar()),
+                 abs_ns::abs(rand_mat.get_elem(2, 1).get_scalar())}
+            )*Tol<TPrecision>::gamma_T(4)
         );
         ASSERT_VECTOR_NEAR(
             rand_mat*Vector<TPrecision>(
@@ -552,8 +561,12 @@ public:
                  rand_mat.get_elem(1, 2).get_scalar(),
                  rand_mat.get_elem(2, 2).get_scalar()}
             ),
-            (static_cast<TPrecision>(2.) *
-             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
+            Vector<TPrecision>(
+                TestBase::bundle,
+                {abs_ns::abs(rand_mat.get_elem(0, 2).get_scalar()),
+                 abs_ns::abs(rand_mat.get_elem(1, 2).get_scalar()),
+                 abs_ns::abs(rand_mat.get_elem(2, 2).get_scalar())}
+            )*Tol<TPrecision>::gamma_T(4)
         );
         ASSERT_VECTOR_NEAR(
             rand_mat*Vector<TPrecision>(
@@ -567,44 +580,75 @@ public:
                  rand_mat.get_elem(1, 3).get_scalar(),
                  rand_mat.get_elem(2, 3).get_scalar()}
             ),
-            (static_cast<TPrecision>(2.) *
-             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
+            Vector<TPrecision>(
+                TestBase::bundle,
+                {abs_ns::abs(rand_mat.get_elem(0, 3).get_scalar()),
+                 abs_ns::abs(rand_mat.get_elem(1, 3).get_scalar()),
+                 abs_ns::abs(rand_mat.get_elem(2, 3).get_scalar())}
+            )*Tol<TPrecision>::gamma_T(4)
         );
         ASSERT_VECTOR_NEAR(
             rand_mat*Vector<TPrecision>(
                 TestBase::bundle,
-                {static_cast<TPrecision>(1), static_cast<TPrecision>(0.1),
-                 static_cast<TPrecision>(0.01), static_cast<TPrecision>(0.001)}
+                {static_cast<TPrecision>(-1),
+                 static_cast<TPrecision>(-0.1),
+                 static_cast<TPrecision>(0.01),
+                 static_cast<TPrecision>(0.001)}
             ),
             Vector<TPrecision>(
                 TestBase::bundle,
-                {(static_cast<TPrecision>(1) *
+                {(static_cast<TPrecision>(-1) *
                   rand_mat.get_elem(0, 0).get_scalar() +
-                  static_cast<TPrecision>(0.1) *
+                  static_cast<TPrecision>(-0.1) *
                   rand_mat.get_elem(0, 1).get_scalar() +
                   static_cast<TPrecision>(0.01) *
                   rand_mat.get_elem(0, 2).get_scalar() +
                   static_cast<TPrecision>(0.001) *
                   rand_mat.get_elem(0, 3).get_scalar()),
-                 (static_cast<TPrecision>(1) *
+                 (static_cast<TPrecision>(-1) *
                   rand_mat.get_elem(1, 0).get_scalar() +
-                  static_cast<TPrecision>(0.1) *
+                  static_cast<TPrecision>(-0.1) *
                   rand_mat.get_elem(1, 1).get_scalar() +
                   static_cast<TPrecision>(0.01) *
                   rand_mat.get_elem(1, 2).get_scalar()+
                   static_cast<TPrecision>(0.001) *
                   rand_mat.get_elem(1, 3).get_scalar()),
-                 (static_cast<TPrecision>(1) *
+                 (static_cast<TPrecision>(-1) *
                   rand_mat.get_elem(2, 0).get_scalar() +
-                  static_cast<TPrecision>(0.1) *
+                  static_cast<TPrecision>(-0.1) *
                   rand_mat.get_elem(2, 1).get_scalar() +
                   static_cast<TPrecision>(0.01) *
                   rand_mat.get_elem(2, 2).get_scalar()+
                   static_cast<TPrecision>(0.001) *
                   rand_mat.get_elem(2, 3).get_scalar())}
             ),
-            (static_cast<TPrecision>(2.) *
-             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
+            Vector<TPrecision>(
+                TestBase::bundle,
+                {(static_cast<TPrecision>(1) *
+                  abs_ns::abs(rand_mat.get_elem(0, 0).get_scalar()) +
+                  static_cast<TPrecision>(0.1) *
+                  abs_ns::abs(rand_mat.get_elem(0, 1).get_scalar()) +
+                  static_cast<TPrecision>(0.01) *
+                  abs_ns::abs(rand_mat.get_elem(0, 2).get_scalar()) +
+                  static_cast<TPrecision>(0.001) *
+                  abs_ns::abs(rand_mat.get_elem(0, 3).get_scalar())),
+                 (static_cast<TPrecision>(1) *
+                  abs_ns::abs(rand_mat.get_elem(1, 0).get_scalar()) +
+                  static_cast<TPrecision>(0.1) *
+                  abs_ns::abs(rand_mat.get_elem(1, 1).get_scalar()) +
+                  static_cast<TPrecision>(0.01) *
+                  abs_ns::abs(rand_mat.get_elem(1, 2).get_scalar())+
+                  static_cast<TPrecision>(0.001) *
+                  abs_ns::abs(rand_mat.get_elem(1, 3).get_scalar())),
+                 (static_cast<TPrecision>(1) *
+                  abs_ns::abs(rand_mat.get_elem(2, 0).get_scalar()) +
+                  static_cast<TPrecision>(0.1) *
+                  abs_ns::abs(rand_mat.get_elem(2, 1).get_scalar()) +
+                  static_cast<TPrecision>(0.01) *
+                  abs_ns::abs(rand_mat.get_elem(2, 2).get_scalar())+
+                  static_cast<TPrecision>(0.001) *
+                  abs_ns::abs(rand_mat.get_elem(2, 3).get_scalar()))}
+            )*Tol<TPrecision>::gamma_T(4)
         );
 
     }
@@ -615,14 +659,10 @@ public:
         // Test manually
         MatrixDense<TPrecision> mat(
             TestBase::bundle,
-            {{static_cast<TPrecision>(1), static_cast<TPrecision>(2),
-              static_cast<TPrecision>(3)},
-             {static_cast<TPrecision>(4), static_cast<TPrecision>(5),
-              static_cast<TPrecision>(6)},
-             {static_cast<TPrecision>(7), static_cast<TPrecision>(8),
-              static_cast<TPrecision>(9)},
-             {static_cast<TPrecision>(3), static_cast<TPrecision>(2),
-              static_cast<TPrecision>(1)}}
+            {{static_cast<TPrecision>(-1), static_cast<TPrecision>(2), static_cast<TPrecision>(-3)},
+             {static_cast<TPrecision>(4), static_cast<TPrecision>(5), static_cast<TPrecision>(-6)},
+             {static_cast<TPrecision>(7), static_cast<TPrecision>(-8), static_cast<TPrecision>(-9)},
+             {static_cast<TPrecision>(-3), static_cast<TPrecision>(-2), static_cast<TPrecision>(-1)}}
         );
         Vector<TPrecision> mat_0(mat.get_col(0).copy_to_vec());
         Vector<TPrecision> mat_1(mat.get_col(1).copy_to_vec());
@@ -645,34 +685,40 @@ public:
         ASSERT_VECTOR_NEAR(
             mat.mult_subset_cols(0, 2, vec_2_0_1),
             mat_1,
-            Tol<TPrecision>::gamma_T(2)
+            mat_1.abs()*Tol<TPrecision>::gamma_T(2)
         );
         ASSERT_VECTOR_NEAR(
             mat.mult_subset_cols(0, 2, vec_2_1_0),
             mat_0,
-            Tol<TPrecision>::gamma_T(2)
+            mat_0.abs()*Tol<TPrecision>::gamma_T(2)
         );
         ASSERT_VECTOR_NEAR(
             mat.mult_subset_cols(0, 2, vec_2_1_01),
             mat_0+mat_1*Scalar<TPrecision>(static_cast<TPrecision>(0.1)),
-            Tol<TPrecision>::gamma_T(2)
+            (
+                mat_0.abs() +
+                mat_1.abs()*Scalar<TPrecision>(static_cast<TPrecision>(0.1))
+            )*Tol<TPrecision>::gamma_T(2)
         );
 
         // Test multiplication of last 2 columns
         ASSERT_VECTOR_NEAR(
             mat.mult_subset_cols(1, 2, vec_2_0_1),
             mat_2,
-            Tol<TPrecision>::gamma_T(2)
+            mat_2.abs()*Tol<TPrecision>::gamma_T(2)
         );
         ASSERT_VECTOR_NEAR(
             mat.mult_subset_cols(1, 2, vec_2_1_0),
             mat_1,
-            Tol<TPrecision>::gamma_T(2)
+            mat_1.abs()*Tol<TPrecision>::gamma_T(2)
         );
         ASSERT_VECTOR_NEAR(
             mat.mult_subset_cols(1, 2, vec_2_1_01),
             mat_1+mat_2*Scalar<TPrecision>(static_cast<TPrecision>(0.1)),
-            Tol<TPrecision>::gamma_T(2)
+            (
+                mat_1.abs() +
+                mat_2.abs()*Scalar<TPrecision>(static_cast<TPrecision>(0.1))
+            )*Tol<TPrecision>::gamma_T(2)
         );
 
         // Test multiplication of all columns
@@ -686,7 +732,11 @@ public:
             mat_0*Scalar<TPrecision>(static_cast<TPrecision>(0.01)) +
             mat_1*Scalar<TPrecision>(static_cast<TPrecision>(0.1)) +
             mat_2*Scalar<TPrecision>(static_cast<TPrecision>(1.)),
-            Tol<TPrecision>::gamma_T(3)
+            (
+                mat_0.abs()*Scalar<TPrecision>(static_cast<TPrecision>(0.01)) +
+                mat_1.abs()*Scalar<TPrecision>(static_cast<TPrecision>(0.1)) +
+                mat_2.abs()*Scalar<TPrecision>(static_cast<TPrecision>(1.))
+            )*Tol<TPrecision>::gamma_T(2)
         );
 
         // Test multiplication of individual
@@ -696,17 +746,29 @@ public:
         ASSERT_VECTOR_NEAR(
             mat.mult_subset_cols(0, 1, vec_1_2),
             mat_0*Scalar<TPrecision>(static_cast<TPrecision>(2.)),
-            Tol<TPrecision>::roundoff_T()
+            (
+                mat_0.abs() *
+                static_cast<TPrecision>(2.) *
+                Tol<TPrecision>::roundoff_T()
+            )
         );
         ASSERT_VECTOR_NEAR(
             mat.mult_subset_cols(1, 1, vec_1_2),
             mat_1*Scalar<TPrecision>(static_cast<TPrecision>(2.)),
-            Tol<TPrecision>::roundoff_T()
+            (
+                mat_1.abs() *
+                static_cast<TPrecision>(2.) *
+                Tol<TPrecision>::roundoff_T()
+            )
         );
         ASSERT_VECTOR_NEAR(
             mat.mult_subset_cols(2, 1, vec_1_2),
             mat_2*Scalar<TPrecision>(static_cast<TPrecision>(2.)),
-            Tol<TPrecision>::roundoff_T()
+            (
+                mat_2.abs() *
+                static_cast<TPrecision>(2.) *
+                Tol<TPrecision>::roundoff_T()
+            )
         );
 
     }
@@ -739,34 +801,40 @@ public:
         ASSERT_VECTOR_NEAR(
             mat.mult_subset_cols(0, 2, vec_2_0_1),
             mat_1,
-            Tol<TPrecision>::gamma_T(2)
+            mat_1.abs()*Tol<TPrecision>::gamma_T(2)
         );
         ASSERT_VECTOR_NEAR(
             mat.mult_subset_cols(0, 2, vec_2_1_0),
             mat_0,
-            Tol<TPrecision>::gamma_T(2)
+            mat_0.abs()*Tol<TPrecision>::gamma_T(2)
         );
         ASSERT_VECTOR_NEAR(
             mat.mult_subset_cols(0, 2, vec_2_1_01),
             mat_0+mat_1*Scalar<TPrecision>(static_cast<TPrecision>(0.1)),
-            Tol<TPrecision>::gamma_T(2)
+            (
+                mat_0.abs() +
+                mat_1.abs()*Scalar<TPrecision>(static_cast<TPrecision>(0.1))
+            )*Tol<TPrecision>::gamma_T(2)
         );
 
         // Test multiplication of last 2 columns
         ASSERT_VECTOR_NEAR(
             mat.mult_subset_cols(1, 2, vec_2_0_1),
             mat_2,
-            Tol<TPrecision>::gamma_T(2)
+            mat_2.abs()*Tol<TPrecision>::gamma_T(2)
         );
         ASSERT_VECTOR_NEAR(
             mat.mult_subset_cols(1, 2, vec_2_1_0),
             mat_1,
-            Tol<TPrecision>::gamma_T(2)
+            mat_1.abs()*Tol<TPrecision>::gamma_T(2)
         );
         ASSERT_VECTOR_NEAR(
             mat.mult_subset_cols(1, 2, vec_2_1_01),
             mat_1+mat_2*Scalar<TPrecision>(static_cast<TPrecision>(0.1)),
-            Tol<TPrecision>::gamma_T(2)
+            (
+                mat_1.abs() +
+                mat_2.abs()*Scalar<TPrecision>(static_cast<TPrecision>(0.1))
+            )*Tol<TPrecision>::gamma_T(2)
         );
 
         // Test multiplication of all columns
@@ -780,7 +848,11 @@ public:
             mat_0*Scalar<TPrecision>(static_cast<TPrecision>(0.01)) +
             mat_1*Scalar<TPrecision>(static_cast<TPrecision>(0.1)) +
             mat_2*Scalar<TPrecision>(static_cast<TPrecision>(1.)),
-            Tol<TPrecision>::gamma_T(3)
+            (
+                mat_0.abs()*Scalar<TPrecision>(static_cast<TPrecision>(0.01)) +
+                mat_1.abs()*Scalar<TPrecision>(static_cast<TPrecision>(0.1)) +
+                mat_2.abs()*Scalar<TPrecision>(static_cast<TPrecision>(1.))
+            )*Tol<TPrecision>::gamma_T(3)
         );
 
         // Test multiplication of individual
@@ -790,17 +862,17 @@ public:
         ASSERT_VECTOR_NEAR(
             mat.mult_subset_cols(0, 1, vec_1_2),
             mat_0*Scalar<TPrecision>(static_cast<TPrecision>(2.)),
-            Tol<TPrecision>::roundoff_T()
+            mat_0.abs()*Tol<TPrecision>::roundoff_T()
         );
         ASSERT_VECTOR_NEAR(
             mat.mult_subset_cols(1, 1, vec_1_2),
             mat_1*Scalar<TPrecision>(static_cast<TPrecision>(2.)),
-            Tol<TPrecision>::roundoff_T()
+            mat_1.abs()*Tol<TPrecision>::roundoff_T()
         );
         ASSERT_VECTOR_NEAR(
             mat.mult_subset_cols(2, 1, vec_1_2),
             mat_2*Scalar<TPrecision>(static_cast<TPrecision>(2.)),
-            Tol<TPrecision>::roundoff_T()
+            mat_2.abs()*Tol<TPrecision>::roundoff_T()
         );
 
     }
@@ -818,9 +890,10 @@ public:
             TestBase::bundle, n
         ));
 
-        ASSERT_VECTOR_EQ(
+        ASSERT_VECTOR_NEAR(
             mat.mult_subset_cols(0, n, vec),
-            mat*vec
+            mat*vec,
+            mat.abs()*vec.abs()*Tol<TPrecision>::gamma_T(n)
         );
 
     }
@@ -891,6 +964,12 @@ public:
         MatrixDense<TPrecision> rand_mat(MatrixDense<TPrecision>::Random(
             TestBase::bundle, m_rand, n_rand
         ));
+        MatrixDense<TPrecision> rand_mat_trans(rand_mat.transpose());
+
+        Vector<TPrecision> trans_mat_0(rand_mat_trans.get_col(0).copy_to_vec());
+        Vector<TPrecision> trans_mat_1(rand_mat_trans.get_col(1).copy_to_vec());
+        Vector<TPrecision> trans_mat_2(rand_mat_trans.get_col(2).copy_to_vec());
+
         ASSERT_VECTOR_NEAR(
             rand_mat.transpose_prod(
                 Vector<TPrecision>(
@@ -899,13 +978,8 @@ public:
                      static_cast<TPrecision>(0)}
                 )
             ),
-            Vector<TPrecision>(
-                TestBase::bundle,
-                {rand_mat.get_elem(0, 0).get_scalar(),
-                 rand_mat.get_elem(0, 1).get_scalar()}
-            ),
-            (static_cast<TPrecision>(2.) *
-             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
+            trans_mat_0,
+            trans_mat_0.abs()*static_cast<TPrecision>(Tol<TPrecision>::gamma(2))
         );
         ASSERT_VECTOR_NEAR(
             rand_mat.transpose_prod(
@@ -915,13 +989,8 @@ public:
                      static_cast<TPrecision>(0)}
                 )
             ),
-            Vector<TPrecision>(
-                TestBase::bundle,
-                {rand_mat.get_elem(1, 0).get_scalar(),
-                 rand_mat.get_elem(1, 1).get_scalar()}
-            ),
-            (static_cast<TPrecision>(2.) *
-             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
+            trans_mat_1,
+            trans_mat_1.abs()*Tol<TPrecision>::gamma_T(2)
         );
         ASSERT_VECTOR_NEAR(
             rand_mat.transpose_prod(
@@ -931,13 +1000,8 @@ public:
                      static_cast<TPrecision>(1)}
                 )
             ),
-            Vector<TPrecision>(
-                TestBase::bundle,
-                {rand_mat.get_elem(2, 0).get_scalar(),
-                 rand_mat.get_elem(2, 1).get_scalar()}
-            ),
-            (static_cast<TPrecision>(2.) *
-             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
+            trans_mat_2,
+            trans_mat_2.abs()*Tol<TPrecision>::gamma_T(2)
         );
         ASSERT_VECTOR_NEAR(
             rand_mat.transpose_prod(
@@ -947,23 +1011,16 @@ public:
                      static_cast<TPrecision>(0.01)}
                 )
             ),
-            Vector<TPrecision>(
-                TestBase::bundle,
-                {(static_cast<TPrecision>(1) *
-                  rand_mat.get_elem(0, 0).get_scalar() +
-                  static_cast<TPrecision>(0.1) *
-                  rand_mat.get_elem(1, 0).get_scalar() +
-                  (static_cast<TPrecision>(0.01) *
-                   rand_mat.get_elem(2, 0).get_scalar())),
-                 (static_cast<TPrecision>(1) *
-                  rand_mat.get_elem(0, 1).get_scalar() +
-                  static_cast<TPrecision>(0.1) *
-                  rand_mat.get_elem(1, 1).get_scalar() +
-                  (static_cast<TPrecision>(0.01) *
-                   rand_mat.get_elem(2, 1).get_scalar()))}
+            (
+                trans_mat_0*static_cast<TPrecision>(1) +
+                trans_mat_1*static_cast<TPrecision>(0.1) +
+                trans_mat_2*static_cast<TPrecision>(0.01)
             ),
-            (static_cast<TPrecision>(2.) *
-             static_cast<TPrecision>(Tol<TPrecision>::gamma(3)))
+            (
+                trans_mat_0.abs()*static_cast<TPrecision>(1) +
+                trans_mat_1.abs()*static_cast<TPrecision>(0.1) +
+                trans_mat_2.abs()*static_cast<TPrecision>(0.01)
+            )*Tol<TPrecision>::gamma_T(2)
         );
 
     }
@@ -974,12 +1031,9 @@ public:
         // Test manually
         MatrixDense<TPrecision> mat(
             TestBase::bundle,
-            {{static_cast<TPrecision>(1), static_cast<TPrecision>(2),
-              static_cast<TPrecision>(3), static_cast<TPrecision>(4)},
-             {static_cast<TPrecision>(5), static_cast<TPrecision>(6),
-              static_cast<TPrecision>(7), static_cast<TPrecision>(8)},
-             {static_cast<TPrecision>(9), static_cast<TPrecision>(1),
-              static_cast<TPrecision>(2), static_cast<TPrecision>(3)}}
+            {{static_cast<TPrecision>(1), static_cast<TPrecision>(2), static_cast<TPrecision>(3), static_cast<TPrecision>(-4)},
+             {static_cast<TPrecision>(-5), static_cast<TPrecision>(-6), static_cast<TPrecision>(-7), static_cast<TPrecision>(-8)},
+             {static_cast<TPrecision>(-9), static_cast<TPrecision>(1), static_cast<TPrecision>(2), static_cast<TPrecision>(3)}}
         );
         MatrixDense<TPrecision> trans_mat = mat.transpose();
         Vector<TPrecision> mat_r0(trans_mat.get_col(0).copy_to_vec());
@@ -1011,51 +1065,62 @@ public:
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(0, 2, vec_3_1_0_0),
             mat_r0.get_slice(0, 2),
-            Tol<TPrecision>::gamma_T(3)
+            mat_r0.get_slice(0, 2).abs()*Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(0, 2, vec_3_0_1_0),
             mat_r1.get_slice(0, 2),
-            Tol<TPrecision>::gamma_T(3)
+            mat_r1.get_slice(0, 2).abs()*Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(0, 2, vec_3_0_0_1),
             mat_r2.get_slice(0, 2),
-            Tol<TPrecision>::gamma_T(3)
+            mat_r2.get_slice(0, 2).abs()*Tol<TPrecision>::gamma_T(3)
         );
+
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(0, 2, vec_3_001_01_1),
             (mat_r0.get_slice(0, 2) *
              Scalar<TPrecision>(static_cast<TPrecision>(0.01))) +
             (mat_r1.get_slice(0, 2) *
              Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
-            mat_r2.get_slice(0, 2),
-            Tol<TPrecision>::gamma_T(3)
+            (mat_r2.get_slice(0, 2) *
+             Scalar<TPrecision>(static_cast<TPrecision>(1.))),
+            (
+                (mat_r0.get_slice(0, 2).abs() *
+                 Scalar<TPrecision>(static_cast<TPrecision>(0.01))) +
+                (mat_r1.get_slice(0, 2).abs() *
+                 Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
+                (mat_r2.get_slice(0, 2).abs() *
+                 Scalar<TPrecision>(static_cast<TPrecision>(1.)))
+            )*Tol<TPrecision>::gamma_T(3)
         );
 
         // Test multiplication of last 2 columns
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(2, 2, vec_3_1_0_0),
             mat_r0.get_slice(2, 2),
-            Tol<TPrecision>::gamma_T(3)
+            mat_r0.get_slice(2, 2).abs()*Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(2, 2, vec_3_0_1_0),
             mat_r1.get_slice(2, 2),
-            Tol<TPrecision>::gamma_T(3)
+            mat_r1.get_slice(2, 2).abs()*Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(2, 2, vec_3_0_0_1),
             mat_r2.get_slice(2, 2),
-            Tol<TPrecision>::gamma_T(3)
+            mat_r2.get_slice(2, 2).abs()*Tol<TPrecision>::gamma_T(3)
         );
+
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(2, 2, vec_3_001_01_1),
             (mat_r0.get_slice(2, 2) *
              Scalar<TPrecision>(static_cast<TPrecision>(0.01))) +
             (mat_r1.get_slice(2, 2) *
              Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
-            mat_r2.get_slice(2, 2),
+            (mat_r2.get_slice(2, 2) *
+             Scalar<TPrecision>(static_cast<TPrecision>(1.))),
             Tol<TPrecision>::gamma_T(3)
         );
 
@@ -1063,17 +1128,17 @@ public:
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(0, 4, vec_3_1_0_0),
             mat_r0.get_slice(0, 4),
-            Tol<TPrecision>::gamma_T(3)
+            mat_r0.abs()*Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(0, 4, vec_3_0_1_0),
             mat_r1.get_slice(0, 4),
-            Tol<TPrecision>::gamma_T(3)
+            mat_r1.abs()*Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(0, 4, vec_3_0_0_1),
             mat_r2.get_slice(0, 4),
-            Tol<TPrecision>::gamma_T(3)
+            mat_r2.abs()*Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(0, 4, vec_3_001_01_1),
@@ -1081,8 +1146,16 @@ public:
              Scalar<TPrecision>(static_cast<TPrecision>(0.01))) +
             (mat_r1.get_slice(0, 4) *
              Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
-            mat_r2.get_slice(0, 4),
-            Tol<TPrecision>::gamma_T(3)
+            (mat_r2.get_slice(0, 4) *
+             Scalar<TPrecision>(static_cast<TPrecision>(1.))),
+            (
+                (mat_r0.get_slice(0, 4).abs() *
+                 Scalar<TPrecision>(static_cast<TPrecision>(0.01))) +
+                (mat_r1.get_slice(0, 4).abs() *
+                 Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
+                (mat_r2.get_slice(0, 4).abs() *
+                 Scalar<TPrecision>(static_cast<TPrecision>(1.)))
+            )*Tol<TPrecision>::gamma_T(3)
         );
 
         // Test multiplication of individual
@@ -1092,8 +1165,16 @@ public:
              Scalar<TPrecision>(static_cast<TPrecision>(0.01))) +
             (mat_r1.get_slice(0, 1) *
              Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
-            mat_r2.get_slice(0, 1),
-            Tol<TPrecision>::roundoff_T()
+            (mat_r2.get_slice(0, 1) *
+             Scalar<TPrecision>(static_cast<TPrecision>(1.))),
+            (
+                (mat_r0.get_slice(0, 1).abs() *
+                 Scalar<TPrecision>(static_cast<TPrecision>(0.01))) +
+                (mat_r1.get_slice(0, 1).abs() *
+                 Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
+                (mat_r2.get_slice(0, 1).abs() *
+                 Scalar<TPrecision>(static_cast<TPrecision>(1.)))
+            )*Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(1, 1, vec_3_001_01_1),
@@ -1101,8 +1182,16 @@ public:
              Scalar<TPrecision>(static_cast<TPrecision>(0.01))) +
             (mat_r1.get_slice(1, 1) *
              Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
-            mat_r2.get_slice(1, 1),
-            Tol<TPrecision>::gamma_T(3)
+            (mat_r2.get_slice(1, 1) *
+             Scalar<TPrecision>(static_cast<TPrecision>(1.))),
+            (
+                (mat_r0.get_slice(1, 1).abs() *
+                 Scalar<TPrecision>(static_cast<TPrecision>(0.01))) +
+                (mat_r1.get_slice(1, 1).abs() *
+                 Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
+                (mat_r2.get_slice(1, 1).abs() *
+                 Scalar<TPrecision>(static_cast<TPrecision>(1.)))
+            )*Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(2, 1, vec_3_001_01_1),
@@ -1111,7 +1200,14 @@ public:
             (mat_r1.get_slice(2, 1) *
              Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
             mat_r2.get_slice(2, 1),
-            Tol<TPrecision>::gamma_T(3)
+            (
+                (mat_r0.get_slice(2, 1).abs() *
+                 Scalar<TPrecision>(static_cast<TPrecision>(0.01))) +
+                (mat_r1.get_slice(2, 1).abs() *
+                 Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
+                (mat_r2.get_slice(2, 1).abs() *
+                 Scalar<TPrecision>(static_cast<TPrecision>(1.)))
+            )*Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(3, 1, vec_3_001_01_1),
@@ -1119,8 +1215,16 @@ public:
              Scalar<TPrecision>(static_cast<TPrecision>(0.01))) +
             (mat_r1.get_slice(3, 1) *
              Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
-            mat_r2.get_slice(3, 1),
-            Tol<TPrecision>::gamma_T(3)
+            (mat_r2.get_slice(3, 1) *
+             Scalar<TPrecision>(static_cast<TPrecision>(1.))),
+            (
+                (mat_r0.get_slice(3, 1).abs() *
+                 Scalar<TPrecision>(static_cast<TPrecision>(0.01))) +
+                (mat_r1.get_slice(3, 1).abs() *
+                 Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
+                (mat_r2.get_slice(3, 1).abs() *
+                 Scalar<TPrecision>(static_cast<TPrecision>(1.)))
+            )*Tol<TPrecision>::gamma_T(3)
         );
 
     }
@@ -1162,17 +1266,17 @@ public:
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(0, 2, vec_3_1_0_0),
             mat_r0.get_slice(0, 2),
-            Tol<TPrecision>::gamma_T(3)
+            mat_r0.get_slice(0, 2).abs()*Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(0, 2, vec_3_0_1_0),
             mat_r1.get_slice(0, 2),
-            Tol<TPrecision>::gamma_T(3)
+            mat_r1.get_slice(0, 2).abs()*Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(0, 2, vec_3_0_0_1),
             mat_r2.get_slice(0, 2),
-            Tol<TPrecision>::gamma_T(3)
+            mat_r2.get_slice(0, 2).abs()*Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(0, 2, vec_3_001_01_1),
@@ -1180,25 +1284,33 @@ public:
              Scalar<TPrecision>(static_cast<TPrecision>(0.01))) +
             (mat_r1.get_slice(0, 2) *
              Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
-            mat_r2.get_slice(0, 2),
-            Tol<TPrecision>::gamma_T(3)
+            (mat_r2.get_slice(0, 2) *
+             Scalar<TPrecision>(static_cast<TPrecision>(1.))),
+            (
+                (mat_r0.get_slice(0, 2).abs() *
+                 Scalar<TPrecision>(static_cast<TPrecision>(0.01))) +
+                (mat_r1.get_slice(0, 2).abs() *
+                 Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
+                (mat_r2.get_slice(0, 2).abs() *
+                 Scalar<TPrecision>(static_cast<TPrecision>(1.)))
+            )*Tol<TPrecision>::gamma_T(3)
         );
 
         // Test multiplication of last 2 columns
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(2, 2, vec_3_1_0_0),
             mat_r0.get_slice(2, 2),
-            Tol<TPrecision>::gamma_T(3)
+            mat_r0.get_slice(2, 2).abs()*Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(2, 2, vec_3_0_1_0),
             mat_r1.get_slice(2, 2),
-            Tol<TPrecision>::gamma_T(3)
+            mat_r1.get_slice(2, 2).abs()*Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(2, 2, vec_3_0_0_1),
             mat_r2.get_slice(2, 2),
-            Tol<TPrecision>::gamma_T(3)
+            mat_r2.get_slice(2, 2).abs()*Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(2, 2, vec_3_001_01_1),
@@ -1206,25 +1318,33 @@ public:
              Scalar<TPrecision>(static_cast<TPrecision>(0.01))) +
             (mat_r1.get_slice(2, 2) *
              Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
-            mat_r2.get_slice(2, 2),
-            Tol<TPrecision>::gamma_T(3)
+            (mat_r2.get_slice(2, 2) *
+             Scalar<TPrecision>(static_cast<TPrecision>(1.))),
+            (
+                (mat_r0.get_slice(2, 2).abs() *
+                 Scalar<TPrecision>(static_cast<TPrecision>(0.01))) +
+                (mat_r1.get_slice(2, 2).abs() *
+                 Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
+                (mat_r2.get_slice(2, 2).abs() *
+                 Scalar<TPrecision>(static_cast<TPrecision>(1.)))
+            )*Tol<TPrecision>::gamma_T(3)
         );
 
         // Test multiplication of all columns
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(0, 4, vec_3_1_0_0),
             mat_r0.get_slice(0, 4),
-            Tol<TPrecision>::gamma_T(3)
+            mat_r0.get_slice(0, 4).abs()*Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(0, 4, vec_3_0_1_0),
             mat_r1.get_slice(0, 4),
-            Tol<TPrecision>::gamma_T(3)
+            mat_r1.get_slice(0, 4).abs()*Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(0, 4, vec_3_0_0_1),
             mat_r2.get_slice(0, 4),
-            Tol<TPrecision>::gamma_T(3)
+            mat_r2.get_slice(0, 4).abs()*Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(0, 4, vec_3_001_01_1),
@@ -1232,8 +1352,16 @@ public:
              Scalar<TPrecision>(static_cast<TPrecision>(0.01))) +
             (mat_r1.get_slice(0, 4) *
              Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
-            mat_r2.get_slice(0, 4),
-            Tol<TPrecision>::gamma_T(3)
+            (mat_r2.get_slice(0, 4) *
+             Scalar<TPrecision>(static_cast<TPrecision>(1.))) ,
+            (
+                (mat_r0.get_slice(0, 4).abs() *
+                 Scalar<TPrecision>(static_cast<TPrecision>(0.01))) +
+                (mat_r1.get_slice(0, 4).abs() *
+                 Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
+                (mat_r2.get_slice(0, 4).abs() *
+                 Scalar<TPrecision>(static_cast<TPrecision>(1.)))
+            )*Tol<TPrecision>::gamma_T(3)
         );
 
         // Test multiplication of individual
@@ -1243,8 +1371,16 @@ public:
              Scalar<TPrecision>(static_cast<TPrecision>(0.01))) +
             (mat_r1.get_slice(0, 1) *
              Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
-            mat_r2.get_slice(0, 1),
-            Tol<TPrecision>::roundoff_T()
+            (mat_r2.get_slice(0, 1) *
+             Scalar<TPrecision>(static_cast<TPrecision>(1.))),
+            (
+                (mat_r0.get_slice(0, 1).abs() *
+                 Scalar<TPrecision>(static_cast<TPrecision>(0.01))) +
+                (mat_r1.get_slice(0, 1).abs() *
+                 Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
+                (mat_r2.get_slice(0, 1).abs() *
+                 Scalar<TPrecision>(static_cast<TPrecision>(1.)))
+            )*Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(1, 1, vec_3_001_01_1),
@@ -1252,8 +1388,16 @@ public:
              Scalar<TPrecision>(static_cast<TPrecision>(0.01))) +
             (mat_r1.get_slice(1, 1) *
              Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
-            mat_r2.get_slice(1, 1),
-            Tol<TPrecision>::gamma_T(3)
+            (mat_r2.get_slice(1, 1) *
+             Scalar<TPrecision>(static_cast<TPrecision>(1.))),
+            (
+                (mat_r0.get_slice(1, 1).abs() *
+                 Scalar<TPrecision>(static_cast<TPrecision>(0.01))) +
+                (mat_r1.get_slice(1, 1).abs() *
+                 Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
+                (mat_r2.get_slice(1, 1).abs() *
+                 Scalar<TPrecision>(static_cast<TPrecision>(1.)))
+            )*Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(2, 1, vec_3_001_01_1),
@@ -1261,8 +1405,16 @@ public:
              Scalar<TPrecision>(static_cast<TPrecision>(0.01))) +
             (mat_r1.get_slice(2, 1) *
              Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
-            mat_r2.get_slice(2, 1),
-            Tol<TPrecision>::gamma_T(3)
+            (mat_r2.get_slice(2, 1) *
+             Scalar<TPrecision>(static_cast<TPrecision>(1.))),
+            (
+                (mat_r0.get_slice(2, 1).abs() *
+                 Scalar<TPrecision>(static_cast<TPrecision>(0.01))) +
+                (mat_r1.get_slice(2, 1).abs() *
+                 Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
+                (mat_r2.get_slice(2, 1).abs() *
+                 Scalar<TPrecision>(static_cast<TPrecision>(1.)))
+            )*Tol<TPrecision>::gamma_T(3)
         );
         ASSERT_VECTOR_NEAR(
             mat.transpose_prod_subset_cols(3, 1, vec_3_001_01_1),
@@ -1270,8 +1422,16 @@ public:
              Scalar<TPrecision>(static_cast<TPrecision>(0.01))) +
             (mat_r1.get_slice(3, 1) *
              Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
-            mat_r2.get_slice(3, 1),
-            Tol<TPrecision>::gamma_T(3)
+            (mat_r2.get_slice(3, 1) *
+             Scalar<TPrecision>(static_cast<TPrecision>(1.))),
+            (
+                (mat_r0.get_slice(3, 1).abs() *
+                 Scalar<TPrecision>(static_cast<TPrecision>(0.01))) +
+                (mat_r1.get_slice(3, 1).abs() *
+                 Scalar<TPrecision>(static_cast<TPrecision>(0.1))) +
+                (mat_r2.get_slice(3, 1).abs() *
+                 Scalar<TPrecision>(static_cast<TPrecision>(1.)))
+            )*Tol<TPrecision>::gamma_T(3)
         );
 
     }
@@ -1390,7 +1550,6 @@ public:
              {static_cast<TPrecision>(9), static_cast<TPrecision>(10),
               static_cast<TPrecision>(11), static_cast<TPrecision>(12)}}
         );
-        mat.abs();
         MatrixDense<TPrecision> test(
             TestBase::bundle,
             {{static_cast<TPrecision>(1), static_cast<TPrecision>(2),
@@ -1400,7 +1559,7 @@ public:
              {static_cast<TPrecision>(9), static_cast<TPrecision>(10),
               static_cast<TPrecision>(11), static_cast<TPrecision>(12)}}
         );
-        ASSERT_MATRIX_EQ(mat, test);
+        ASSERT_MATRIX_EQ(mat.abs(), test);
 
     }
 
@@ -1413,13 +1572,13 @@ public:
             TestBase::bundle, m_rand, n_rand
         ));
 
-        mat.abs();
+        MatrixDense<TPrecision> test_mat = mat.abs();
 
         for (int i=0; i<m_rand; ++i) {
             for (int j=0; j<n_rand; ++j) {
                 Scalar<TPrecision> abs_elem(mat.get_elem(i, j).get_scalar());
                 ASSERT_EQ(
-                    mat.get_elem(i, j).get_scalar(),
+                    test_mat.get_elem(i, j).get_scalar(),
                     abs_elem.abs().get_scalar()
                 );
             }

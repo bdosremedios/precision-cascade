@@ -511,6 +511,24 @@ public:
 
     }
 
+    // Needed for testing (don't need to optimize performance)
+    Vector<TPrecision> abs() const {
+
+        TPrecision *h_vec = static_cast<TPrecision *>(malloc(mem_size()));
+        copy_data_to_ptr(h_vec, m_rows);
+
+        for (int i=0; i<m_rows; ++i) {
+            h_vec[i] = abs_ns::abs(h_vec[i]);
+        }
+
+        Vector<TPrecision> ret_val(cu_handles, h_vec, m_rows);
+
+        free(h_vec);
+
+        return ret_val;
+
+    }
+
 };
 
 }

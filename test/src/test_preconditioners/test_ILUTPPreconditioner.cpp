@@ -193,12 +193,11 @@ public:
         MatrixDense<double> delta_A(
             (transpose_P*dense_gen_L*dense_gen_U) - MatrixDense<double>(A)
         );
-        dense_gen_L.abs();
-        dense_gen_U.abs();
-        MatrixDense<double> dense_comp(transpose_P*dense_gen_L*dense_gen_U);
+        MatrixDense<double> dense_comp(
+            transpose_P*dense_gen_L.abs()*dense_gen_U.abs()
+        );
         dense_comp *= Scalar<double>(Tol<double>::gamma(dense_comp.rows()));
-        delta_A.abs();
-        ASSERT_MATRIX_LT(delta_A, dense_comp);
+        ASSERT_MATRIX_LT(delta_A.abs(), dense_comp);
 
         // Test validity of permutation matrix P
         TMatrix<double> P_squared(
