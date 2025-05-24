@@ -47,7 +47,7 @@ public:
     static TPrecision substitution_tol_T(double cond, int n) {
         return static_cast<TPrecision>(substitution_tol(cond, n));
     }
-    static double loss_of_ortho_tol(double cond, int n) { // 1967 Giraud
+    static double loss_of_ortho_tol(double cond, int n) { // 1967 Bjorck
         double scale_c_on_n = (
             1.74*std::sqrt(static_cast<double>(n))*(static_cast<double>(n)+1)
         );
