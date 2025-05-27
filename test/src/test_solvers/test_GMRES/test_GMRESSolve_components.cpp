@@ -278,7 +278,8 @@ public:
             ASSERT_MATRIX_UPPTRI(test_mock.H_R, 0.);
 
             // Test that QR reconstruction H_k is within compliance of
-            // Higham 2002, Thm 19.10
+            // Higham 2002, Thm 19.10, slightly more conservative since same
+            // bound but inexect float Q matrix
             MatrixDense<double> reconstruct_H_k_err_accum(
                 test_mock.H_Q.abs()*test_mock.H_R.abs()*Tol<double>::gamma_T(n)
             );
@@ -287,7 +288,7 @@ public:
                 ASSERT_LE(
                     diff.get_col(j).copy_to_vec().norm().get_scalar(),
                     (
-                        Tol<double>::gamma_tilde_T(2*n-2) *
+                        Tol<double>::gamma_tilde_T(n+1+n-2) *
                         save_H_k.get_col(j).copy_to_vec().norm().get_scalar()
                     )
                 );
