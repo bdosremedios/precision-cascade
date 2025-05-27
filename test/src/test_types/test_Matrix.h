@@ -1834,6 +1834,34 @@ protected:
 
     }
 
+    template <typename TPrecision>
+    void TestAbs() {
+
+        // Test manually
+        constexpr int m_manual(4);
+        constexpr int n_manual(3);
+        TMatrix<TPrecision> mat(
+            TestBase::bundle,
+            {{static_cast<TPrecision>(1), static_cast<TPrecision>(-2),
+              static_cast<TPrecision>(3), static_cast<TPrecision>(-4)},
+             {static_cast<TPrecision>(-5), static_cast<TPrecision>(0),
+              static_cast<TPrecision>(-7), static_cast<TPrecision>(-8)},
+             {static_cast<TPrecision>(0), static_cast<TPrecision>(10),
+              static_cast<TPrecision>(11), static_cast<TPrecision>(12)}}
+        );
+        TMatrix<TPrecision> test(
+            TestBase::bundle,
+            {{static_cast<TPrecision>(1), static_cast<TPrecision>(2),
+              static_cast<TPrecision>(3), static_cast<TPrecision>(4)},
+             {static_cast<TPrecision>(5), static_cast<TPrecision>(0),
+              static_cast<TPrecision>(7), static_cast<TPrecision>(8)},
+             {static_cast<TPrecision>(0), static_cast<TPrecision>(10),
+              static_cast<TPrecision>(11), static_cast<TPrecision>(12)}}
+        );
+        ASSERT_MATRIX_EQ(mat.abs(), test);
+
+    }
+
 };
 
 template <template <typename> typename TMatrix>

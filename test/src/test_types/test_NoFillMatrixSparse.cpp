@@ -1361,6 +1361,32 @@ public:
 
     }
 
+    template <typename TPrecision>
+    void TestRandomAbs() {
+
+        constexpr int m_rand(4);
+        constexpr int n_rand(3);
+        const double fill_ratio_rand(0.5);
+        NoFillMatrixSparse<TPrecision> mat(
+            NoFillMatrixSparse<TPrecision>::Random(
+                TestBase::bundle, m_rand, n_rand, fill_ratio_rand
+            )
+        );
+
+        NoFillMatrixSparse<TPrecision> test_mat = mat.abs();
+
+        for (int i=0; i<m_rand; ++i) {
+            for (int j=0; j<n_rand; ++j) {
+                Scalar<TPrecision> abs_elem(mat.get_elem(i, j).get_scalar());
+                ASSERT_EQ(
+                    test_mat.get_elem(i, j).get_scalar(),
+                    abs_elem.abs().get_scalar()
+                );
+            }
+        }
+
+    }
+
 };
 
 TEST_F(NoFillMatrixSparse_Test, TestPropertyAccess) {
@@ -1573,6 +1599,18 @@ TEST_F(NoFillMatrixSparse_Test, TestRandomTranspose) {
     TestRandomTranspose<__half>();
     TestRandomTranspose<float>();
     TestRandomTranspose<double>();
+}
+
+TEST_F(NoFillMatrixSparse_Test, TestAbs) {
+    TestAbs<__half>();
+    TestAbs<float>();
+    TestAbs<double>();
+}
+
+TEST_F(NoFillMatrixSparse_Test, TestRandomAbs) {
+    TestRandomAbs<__half>();
+    TestRandomAbs<float>();
+    TestRandomAbs<double>();
 }
 
 TEST_F(NoFillMatrixSparse_Test, TestCast) {

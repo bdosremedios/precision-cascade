@@ -28,37 +28,35 @@ class Tol
 {
 public:
 
-    // Basic error tolerance
+    // Basic roundoff unit
     static double roundoff();
     static TPrecision roundoff_T() {
         return static_cast<TPrecision>(roundoff());
     }
+
+    // Gamma accumulation coefficient 2002 Higham Ch.3
     static double gamma(int n) {
-        return n*roundoff()/(1-n*roundoff()); // 2002 Higham Ch.3
+        return n*roundoff()/(1-n*roundoff());
     }
     static TPrecision gamma_T(int n) {
         return static_cast<TPrecision>(gamma(n));
     }
 
-    // Algorithm accumulation error tolerance
+    // Gamma tilde for Given's rotation QR error Higham 2002 Ch.19
+    static double gamma_tilde(int r) {
+        return std::pow((1+std::sqrt(2)*gamma(6)), r)-1.;
+    }
+    static double gamma_tilde_T(int r) {
+        return static_cast<TPrecision>(gamma_tilde(r));
+    }
+
+    // Triangular substitution error tolerance 2002 Higham Ch.8
     static double substitution_tol(double cond, int n) {
-        return cond*gamma(n)/(1-cond*gamma(n)); // 2002 Higham Ch.8
+        return cond*gamma(n)/(1-cond*gamma(n));
     }
     static TPrecision substitution_tol_T(double cond, int n) {
         return static_cast<TPrecision>(substitution_tol(cond, n));
     }
-    static double loss_of_ortho_tol(double cond, int n) { // 1967 Bjorck
-        double scale_c_on_n = (
-            1.74*std::sqrt(static_cast<double>(n))*(static_cast<double>(n)+1)
-        );
-        return scale_c_on_n*cond*roundoff();
-    }
-    static TPrecision loss_of_ortho_tol_T(TPrecision cond, int n) {
-        return static_cast<TPrecision>(loss_of_ortho_tol(cond, n));
-    }
-
-    // Special case values
-    static double matlab_dbl_near() { return std::pow(10, -14); }
 
     // Preconditioner error test tolerance
     static TPrecision inv_elem_tol() {

@@ -1536,34 +1536,6 @@ public:
     }
 
     template <typename TPrecision>
-    void TestAbs() {
-
-        // Test manually
-        constexpr int m_manual(4);
-        constexpr int n_manual(3);
-        MatrixDense<TPrecision> mat(
-            TestBase::bundle,
-            {{static_cast<TPrecision>(1), static_cast<TPrecision>(-2),
-              static_cast<TPrecision>(3), static_cast<TPrecision>(-4)},
-             {static_cast<TPrecision>(-5), static_cast<TPrecision>(-6),
-              static_cast<TPrecision>(-7), static_cast<TPrecision>(-8)},
-             {static_cast<TPrecision>(9), static_cast<TPrecision>(10),
-              static_cast<TPrecision>(11), static_cast<TPrecision>(12)}}
-        );
-        MatrixDense<TPrecision> test(
-            TestBase::bundle,
-            {{static_cast<TPrecision>(1), static_cast<TPrecision>(2),
-              static_cast<TPrecision>(3), static_cast<TPrecision>(4)},
-             {static_cast<TPrecision>(5), static_cast<TPrecision>(6),
-              static_cast<TPrecision>(7), static_cast<TPrecision>(8)},
-             {static_cast<TPrecision>(9), static_cast<TPrecision>(10),
-              static_cast<TPrecision>(11), static_cast<TPrecision>(12)}}
-        );
-        ASSERT_MATRIX_EQ(mat.abs(), test);
-
-    }
-
-    template <typename TPrecision>
     void TestRandomAbs() {
 
         constexpr int m_rand(4);

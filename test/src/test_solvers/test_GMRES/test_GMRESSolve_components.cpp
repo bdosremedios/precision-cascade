@@ -1,5 +1,7 @@
 #include "test.h"
 
+#include "tools/abs.h"
+
 #include "test_GMRESSolve.h"
 
 class GMRESSolve_Component_Test: public TestBase
@@ -53,15 +55,13 @@ public:
     template <template <typename> typename TMatrix>
     void KrylovInitAndUpdate() {
 
-        const double approx_cond_A_upbound(5.5);
-        const int n(5);
-
-        TMatrix<double> A(read_matrixCSV<TMatrix, double>(
-            TestBase::bundle, solve_matrix_dir / fs::path("A_5_toy.csv")
-        ));
-        Vector<double> b(read_vectorCSV<double>(
-            TestBase::bundle, solve_matrix_dir / fs::path("b_5_toy.csv")
-        ));
+        const int n(16);
+        TMatrix<double> A(
+            CommonMatRandomInterface<TMatrix, double>::rand_matrix(
+                TestBase::bundle, n, n
+            )
+        );
+        Vector<double> b(Vector<double>::Random(TestBase::bundle, n));
 
         GenericLinearSystem<TMatrix> gen_lin_sys(A, b);
         TypedLinearSystem<TMatrix, double> typed_lin_sys(&gen_lin_sys);
@@ -89,11 +89,10 @@ public:
 
         Vector<double> next_q(test_mock.Q_kry_basis.get_col(0).copy_to_vec());
         Vector<double> norm_residual(r_0/r_0.norm());
-        ASSERT_VECTOR_NEAR(
-            next_q,
-            norm_residual,
-            2*(norm_residual.get_max_mag_elem().get_scalar() *
-               Tol<double>::roundoff())
+        ASSERT_VECTOR_EQ(next_q, norm_residual);
+
+        Vector<double> next_q_err_accum(
+            A.abs()*next_q.abs()*Tol<double>::gamma_T(n)
         );
         next_q = A*next_q;
         next_q -= (
@@ -103,13 +102,15 @@ public:
         ASSERT_NEAR(
             next_q.norm().get_scalar(),
             test_mock.H_k.get_elem(1).get_scalar(),
-            (test_mock.H_k.get_elem(1).get_scalar() *
-             Tol<double>::roundoff())
+            (
+                abs_ns::abs(test_mock.H_k.get_elem(1).get_scalar()) *
+                Tol<double>::gamma_T(n)
+            )
         );
         ASSERT_VECTOR_NEAR(
             test_mock.next_q,
             next_q,
-            2*next_q.get_max_mag_elem().get_scalar()*Tol<double>::roundoff()
+            next_q_err_accum+next_q.abs()*Tol<double>::roundoff_T()
         );
 
         // Save basis to check that they remain unchanged
@@ -141,33 +142,64 @@ public:
                         q
                     ).get_scalar(),
                     0.,
-                    Tol<double>::loss_of_ortho_tol(approx_cond_A_upbound, k)
+                    Tol<double>::gamma_T(n)
                 );
             }
 
+
+            // Loss of orthogonality condition on CGS2 is Giraud 2005, a
+            // polynomial of n and k+1 scaling roundoff unit u of
+            // O(n*((k+1)^(3/2))) which we test by just scaling roundoff by that
+            // factor
+            MatrixDense<double> Q_kry_submatrix(
+                test_mock.Q_kry_basis.get_block(0, 0, n, k+1).copy_to_mat()
+            );
+            ASSERT_LE(
+                (
+                    MatrixDense<double>::Identity(TestBase::bundle, k+1, k+1) -
+                    Q_kry_submatrix.transpose()*Q_kry_submatrix
+                ).norm().get_scalar(),
+                (n*std::pow((k+1), 1.5))*Tol<double>::roundoff_T()
+            );
+
             // Confirm that Hessenberg matrix column corresponding to new basis
-            // vector approximately constructs the next basis vector
+            // vector constructs the next basis vector
             Vector<double> construct_q(
                 test_mock.Q_kry_basis.get_col(k).copy_to_vec()
             );
+            Vector<double> construct_q_MV_error_accum(
+                A.abs()*construct_q.abs()*Tol<double>::gamma_T(n)
+            );
             construct_q = A*construct_q;
-            for (int i=0; i<=k; ++i) {
-                ASSERT_NEAR(
-                    test_mock.Q_kry_basis.get_col(i).copy_to_vec().dot(
-                        construct_q
-                    ).get_scalar(),
-                    test_mock.H_k.get_elem(i).get_scalar(),
-                    Tol<double>::gamma(n)
-                );
-                construct_q -= (
-                    test_mock.Q_kry_basis.get_col(i).copy_to_vec() *
-                    test_mock.H_k.get_elem(i)
-                );
-            }
+            // Accumulate matrix vector product error through dot product
+            // error in similar analysis to Higham 2002
+            double u_accum = (
+                Tol<double>::roundoff_T() +
+                construct_q_MV_error_accum.get_max_mag_elem().abs().get_scalar()
+            );
+            ASSERT_VECTOR_NEAR(
+                test_mock.H_k.get_slice(0, k+1),
+                test_mock.Q_kry_basis.transpose_prod_subset_cols(
+                    0, k+1, construct_q
+                ),
+                (
+                    test_mock.Q_kry_basis.abs().transpose_prod_subset_cols(
+                        0, k+1, construct_q.abs()
+                    )*
+                    ((n*u_accum)/(1-n*u_accum))
+                )
+            );
+            construct_q -= test_mock.Q_kry_basis.mult_subset_cols(
+                0, k+1, test_mock.H_k.get_slice(0, k+1)
+            );
             ASSERT_NEAR(
-                construct_q.norm().get_scalar(),
                 test_mock.H_k.get_elem(k+1).get_scalar(),
-                Tol<double>::gamma(n)
+                construct_q.norm().get_scalar(),
+                std::max(
+                    abs_ns::abs(construct_q.norm().get_scalar()) *
+                    Tol<double>::gamma_T(n),
+                    2*Tol<double>::roundoff_T()
+                )
             );
 
         }
@@ -177,15 +209,13 @@ public:
     template <template <typename> typename TMatrix>
     void H_QR_Update() {
 
-        const double approx_cond_A_upbound(5.5);
-        const int n(5);
-
-        TMatrix<double> A(read_matrixCSV<TMatrix, double>(
-            TestBase::bundle, solve_matrix_dir / fs::path("A_5_toy.csv")
-        ));
-        Vector<double> b(read_vectorCSV<double>(
-            TestBase::bundle, solve_matrix_dir / fs::path("b_5_toy.csv")
-        ));
+        const int n(16);
+        TMatrix<double> A(
+            CommonMatRandomInterface<TMatrix, double>::rand_matrix(
+                TestBase::bundle, n, n
+            )
+        );
+        Vector<double> b(Vector<double>::Random(TestBase::bundle, n));
 
         GenericLinearSystem<TMatrix> gen_lin_sys(A, b);
         TypedLinearSystem<TMatrix, double> typed_lin_sys(&gen_lin_sys);
@@ -204,6 +234,9 @@ public:
         MatrixDense<double> save_H_R(
             MatrixDense<double>::Zero(TestBase::bundle, n+1, n)
         );
+        MatrixDense<double> save_H_k(
+            MatrixDense<double>::Zero(TestBase::bundle, n+1, n)
+        );
 
         for (int kry_dim=1; kry_dim<=n; ++kry_dim) {
 
@@ -212,6 +245,8 @@ public:
             // Perform iteration and update QR_fact
             test_mock.iterate_no_soln_solve();
             test_mock.update_QR_fact();
+
+            save_H_k.get_col(k).set_from_vec(test_mock.H_k);
 
             // Check that previous columns are unchanged by new update
             for (int i=0; i<k; ++i) {
@@ -233,21 +268,30 @@ public:
                 test_mock.H_R.get_col(k).copy_to_vec()
             );
 
-            // Test that k+1 by k+1 block of H_Q is orthogonal
-            MatrixDense<double> H_Q_block(
-                test_mock.H_Q.get_block(0, 0, k+2, k+2).copy_to_mat()
-            );
-            MatrixDense<double> orthog_check(H_Q_block*H_Q_block.transpose());
+            // Test that H_Q is orthonormal
             ASSERT_MATRIX_IDENTITY(
-                orthog_check,
-                Tol<double>::loss_of_ortho_tol(approx_cond_A_upbound, k+2)
+                test_mock.H_Q*test_mock.H_Q.transpose(),
+                Tol<double>::gamma_T(k+1)
             );
 
-            // Test that k+1 by k block of H_R is uppertriangular
-            ASSERT_MATRIX_UPPTRI(
-                test_mock.H_R.get_block(0, 0, k+2, k+1).copy_to_mat(),
-                Tol<double>::roundoff()
+            // Test that H_R is uppertriangular
+            ASSERT_MATRIX_UPPTRI(test_mock.H_R, 0.);
+
+            // Test that QR reconstruction H_k is within compliance of
+            // Higham 2002, Thm 19.10
+            MatrixDense<double> reconstruct_H_k_err_accum(
+                test_mock.H_Q.abs()*test_mock.H_R.abs()*Tol<double>::gamma_T(n)
             );
+            MatrixDense<double> diff(test_mock.H_Q*test_mock.H_R-save_H_k);
+            for (int j=0; j<kry_dim; ++j) {
+                ASSERT_LE(
+                    diff.get_col(j).copy_to_vec().norm().get_scalar(),
+                    (
+                        Tol<double>::gamma_tilde_T(2*n-2) *
+                        save_H_k.get_col(j).copy_to_vec().norm().get_scalar()
+                    )
+                );
+            }
 
         }
 
@@ -320,14 +364,14 @@ public:
             // Solve with backsubstitution
             test_mock.update_x_minimizing_res();
 
-            for (int i=0; i<kry_dim; ++i) {
-                ASSERT_NEAR(
-                    test_mock.typed_soln.get_elem(i).get_scalar(),
-                    test_soln.get_elem(i).get_scalar(),
-                    2*(abs_ns::abs(test_soln.get_max_mag_elem().get_scalar()) *
-                       Tol<double>::substitution_tol(approx_R_cond_upbnd, n))
-                );
-            }
+            ASSERT_LE(
+                (
+                    test_mock.typed_soln.get_slice(0, kry_dim) -
+                    test_soln
+                ).get_max_mag_elem().get_scalar(),
+                (test_soln.get_max_mag_elem().get_scalar() *
+                 Tol<double>::substitution_tol_T(approx_R_cond_upbnd, n))
+            );
 
         }
 

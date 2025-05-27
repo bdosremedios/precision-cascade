@@ -1295,6 +1295,41 @@ public:
 
     }
 
+    // Needed for testing (don't need to optimize performance)
+    NoFillMatrixSparse<TPrecision> abs() const {
+
+        TPrecision *h_values = static_cast<TPrecision *>(
+            malloc(mem_size_values())
+        );
+        if (nnz > 0) {
+            check_cuda_error(cudaMemcpy(
+                h_values,
+                d_values,
+                mem_size_values(),
+                cudaMemcpyDeviceToHost
+            ));
+        }
+
+        for (int i=0; i<nnz; ++i) {
+            h_values[i] = abs_ns::abs(h_values[i]);
+        }
+
+        NoFillMatrixSparse<TPrecision> ret_val(*this);
+        if (nnz > 0) {
+            check_cuda_error(cudaMemcpy(
+                ret_val.d_values,
+                h_values,
+                mem_size_values(),
+                cudaMemcpyHostToDevice
+            ));
+        }
+
+        free(h_values);
+
+        return ret_val;
+
+    }
+
     bool get_has_fast_trsv() const {
         return !(
             trsv_level_set_cnt.empty() ||
