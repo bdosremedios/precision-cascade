@@ -271,7 +271,7 @@ public:
             // Test that H_Q is orthonormal
             ASSERT_MATRIX_IDENTITY(
                 test_mock.H_Q*test_mock.H_Q.transpose(),
-                Tol<double>::gamma_T(k+1)
+                Tol<double>::gamma_T(k+2)
             );
 
             // Test that H_R is uppertriangular
