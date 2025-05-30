@@ -65,7 +65,6 @@ def plot_data(
             color=cat20extract[clridx]
         )
 
-    ax.set_xlabel("Relevant Non-Zeros")
     if not disable_y:
         ax.set_ylabel("Seconds")
     ax.grid(True)
