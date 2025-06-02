@@ -27,9 +27,8 @@ ILU0_MATRICES = [
     "Zhao1", "Zhao2"
 ]
 
-SETUPS = ["ilu0", "ilutp_1em2", "ilutp_1em4", "unpreconditioned_dense", "unpreconditioned"]
-INNER_ITERS = [10, 20, 30, 40, 50, 100, 150, 200]
-SOLVERS = [
+RAW_SETUPS = ["ilu0", "ilutp_1em2", "ilutp_1em4", "unpreconditioned_dense", "unpreconditioned"]
+RAW_SOLVERS = [
     "FP16",
     "FP32",
     "FP64",
@@ -42,12 +41,19 @@ SOLVERS = [
     "StagnationToThreshold"
 ]
 
+SETUP_TO_ID_MAPPING = {
+    "ilu0": "ilu0",
+    "ilutp_1em2": "ilutp1em2",
+    "ilutp_1em4": "ilutp1em4",
+    "unpreconditioned_dense": "unpreconddense",
+    "unpreconditioned": "unprecond"
+}
 SETUP_MATRIX_MAPPING = {
     "ilu0": ILU0_MATRICES,
-    "ilutp_1em2": SMALL_MATRICES,
-    "ilutp_1em4": SMALL_MATRICES,
-    "unpreconditioned_dense": SMALL_MATRICES,
-    "unpreconditioned": ALL_MATRICES
+    "ilutp1em2": SMALL_MATRICES,
+    "ilutp1em4": SMALL_MATRICES,
+    "unpreconddense": SMALL_MATRICES,
+    "unprecond": ALL_MATRICES
 }
 SOLVER_TO_ID_MAPPING = {
     "FP16": "FP FP16",
@@ -61,3 +67,11 @@ SOLVER_TO_ID_MAPPING = {
     "RelativeResidualThreshold": "PC HSD RRT",
     "StagnationToThreshold": "PC HSD S2T"
 }
+
+INNER_ITERS = [10, 20, 30, 40, 50, 100, 150, 200]
+SETUPS = ["ilu0", "ilutp1em2", "ilutp1em4", "unpreconddense", "unprecond"]
+SOLVERS = [
+    "FP FP16", "FP FP32", "FP FP64",
+    "PC SD ORC", "PC SD CS", "PC SD RRT",
+    "PC HSD ORC", "PC HSD CS", "PC HSD RRT", "PC HSD S2T"
+]
