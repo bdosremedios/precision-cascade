@@ -27,3 +27,30 @@ SOLVER_FMT_DICT = {
     "PC SD RRT": ",-",
     "PC SD CS": ",-",
 }
+
+SETUP_NAME_MAPPING = {
+    "ilu0": "ILU(0)",
+    "ilutp1em2": "ILUTP($20$, $10^{-2}$)",
+    "ilutp1em4": "ILUTP($20$, $10^{-4}$)",
+    "unpreconddense": "Unpreconditioned Dense",
+    "unprecond": "Unpreconditioned Sparse"
+}
+SOLVER_ID_ORDER = [
+    "FP FP16", "FP FP32", "FP FP64",
+    "PC HSD ORC", "PC HSD CS", "PC HSD RRT", "PC HSD S2T",
+    "PC SD ORC", "PC SD CS", "PC SD RRT"
+]
+
+def plot_exp_iters_conv_traj(ax, solver_exp_iteration_data, n_iterations, label, color):
+    first = True
+    for i in range(n_iterations):
+        plot_data = solver_exp_iteration_data[
+            solver_exp_iteration_data["experiment_iter"] == i
+        ]
+        if len(plot_data) > 0:
+            kwargs = {
+                "color": color,
+                "label": label if first else None
+            }
+            ax.semilogy(plot_data.iloc[0]["inner_relres"], **kwargs)
+            first = False

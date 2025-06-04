@@ -68,10 +68,12 @@ SOLVER_TO_ID_MAPPING = {
     "StagnationToThreshold": "PC HSD S2T"
 }
 
-INNER_ITERS = [10, 20, 30, 40, 50, 100, 150, 200]
-SETUPS = ["ilu0", "ilutp1em2", "ilutp1em4", "unpreconddense", "unprecond"]
-SOLVERS = [
-    "FP FP16", "FP FP32", "FP FP64",
-    "PC SD ORC", "PC SD CS", "PC SD RRT",
+N_EXPERIMENT_ITERATIONS = 3
+RESTART_PARAMS = [10, 20, 30, 40, 50, 100, 150, 200]
+SETUPS = ["unprecond", "unpreconddense", "ilu0", "ilutp1em2", "ilutp1em4"]
+FP_SOLVERS = ["FP FP16", "FP FP32", "FP FP64"]
+GMRES_M_SOLVERS = [
+    "FP FP64", "PC SD ORC", "PC SD CS", "PC SD RRT",
     "PC HSD ORC", "PC HSD CS", "PC HSD RRT", "PC HSD S2T"
 ]
+SOLVERS = list(set(FP_SOLVERS + GMRES_M_SOLVERS))
