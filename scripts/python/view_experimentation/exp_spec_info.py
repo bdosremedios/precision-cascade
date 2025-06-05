@@ -69,6 +69,7 @@ SOLVER_TO_ID_MAPPING = {
 }
 
 N_EXPERIMENT_ITERATIONS = 3
+REL_RES_TOL = float(1e-12)
 RESTART_PARAMS = [10, 20, 30, 40, 50, 100, 150, 200]
 SETUPS = ["unprecond", "unpreconddense", "ilu0", "ilutp1em2", "ilutp1em4"]
 FP_SOLVERS = ["FP FP16", "FP FP32", "FP FP64"]
