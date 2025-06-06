@@ -1,5 +1,7 @@
 import pandas as pd
 
+INDEX_COLS = ["setup", "matrix", "restart_param", "solver"]
+
 def df_sel_setup(df, setup) -> pd.DataFrame:
     return df[df["setup"] == setup]
 
