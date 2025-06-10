@@ -23,6 +23,19 @@ SOLVER_CLR_DICT = {
     "PC SD CS": cat20[18],
 }
 
+SOLVER_SECONDARY_CLR_DICT = {
+    "FP FP64": cat20[1],
+    "FP FP32": cat20[3],
+    "FP FP16": cat20[5],
+    "PC HSD ORC": cat20[7],
+    "PC HSD RRT": cat20[9],
+    "PC HSD CS": cat20[11],
+    "PC HSD S2T": cat20[13],
+    "PC SD ORC": cat20[15],
+    "PC SD RRT": cat20[17],
+    "PC SD CS": cat20[19],
+}
+
 SOLVER_FMT_DICT = {
     "FP FP64": ",-",
     "FP FP32": ",-",
