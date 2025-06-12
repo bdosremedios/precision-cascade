@@ -11,29 +11,16 @@ from bokeh.palettes import Category20
 cat20 = Category20[20]
 
 SOLVER_CLR_DICT = {
-    "FP FP64": cat20[0],
-    "FP FP32": cat20[2],
-    "FP FP16": cat20[4],
-    "PC HSD ORC": cat20[6],
-    "PC HSD RRT": cat20[8],
-    "PC HSD CS": cat20[10],
-    "PC HSD S2T": cat20[12],
-    "PC SD ORC": cat20[14],
-    "PC SD RRT": cat20[16],
-    "PC SD CS": cat20[18],
-}
-
-SOLVER_SECONDARY_CLR_DICT = {
-    "FP FP64": cat20[1],
-    "FP FP32": cat20[3],
-    "FP FP16": cat20[5],
-    "PC HSD ORC": cat20[7],
-    "PC HSD RRT": cat20[9],
-    "PC HSD CS": cat20[11],
-    "PC HSD S2T": cat20[13],
-    "PC SD ORC": cat20[15],
-    "PC SD RRT": cat20[17],
-    "PC SD CS": cat20[19],
+    "FP FP64": "#CC6677",
+    "FP FP32": "#332288",
+    "FP FP16": "#DDCC77",
+    "PC HSD ORC": "#117733",
+    "PC HSD RRT": "#88CCEE",
+    "PC HSD CS": "#882255",
+    "PC HSD S2T": "#44AA99",
+    "PC SD ORC": "#999933",
+    "PC SD RRT": "#AA4499",
+    "PC SD CS": "#000000",
 }
 
 SOLVER_FMT_DICT = {
